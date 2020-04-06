@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <WF_Flow>
     <No>001</No>
@@ -54,7 +54,7 @@
     <IsBatchStart>0</IsBatchStart>
     <BatchStartFields />
     <IsAutoSendSubFlowOver>0</IsAutoSendSubFlowOver>
-    <Ver />
+    <Ver>2020-04-05 18:22:56</Ver>
     <FlowDeleteRole>0</FlowDeleteRole>
     <OrgNo />
     <AtPara />
@@ -164,8 +164,8 @@
     <HisSubFlows />
     <PTable />
     <GroupStaNDs>@101@102@104</GroupStaNDs>
-    <X>61</X>
-    <Y>49</Y>
+    <X>52</X>
+    <Y>46</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -276,9 +276,9 @@
     <HisSubFlows />
     <PTable />
     <GroupStaNDs>@101@102@104</GroupStaNDs>
-    <X>241</X>
-    <Y>188</Y>
-    <FocusField />
+    <X>244</X>
+    <Y>221</Y>
+    <FocusField>审核意见:@BMJLSP_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
     <DoOutTimeCond />
@@ -381,16 +381,16 @@
     <TurnToDealDoc />
     <NodePosType>1</NodePosType>
     <IsCCFlow>0</IsCCFlow>
-    <HisStas />
-    <HisDeptStrs />
-    <HisToNDs />
+    <HisStas>@01</HisStas>
+    <HisDeptStrs>@01</HisDeptStrs>
+    <HisToNDs>@104</HisToNDs>
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
-    <GroupStaNDs>@101@102@103@104</GroupStaNDs>
-    <X>453</X>
-    <Y>53</Y>
-    <FocusField />
+    <GroupStaNDs>@103</GroupStaNDs>
+    <X>421</X>
+    <Y>84</Y>
+    <FocusField>审核意见:@ZJLSP_Note</FocusField>
     <JumpToNodes />
     <RefOneFrmTreeType />
     <DoOutTimeCond />
@@ -500,8 +500,8 @@
     <HisSubFlows />
     <PTable />
     <GroupStaNDs>@101@102@104</GroupStaNDs>
-    <X>629</X>
-    <Y>174</Y>
+    <X>580</X>
+    <Y>190</Y>
     <FocusField />
     <JumpToNodes />
     <RefOneFrmTreeType />
@@ -684,7 +684,7 @@
     <DTFrom>2020-04-05 17:34</DTFrom>
     <DTTo>2020-04-05 17:34</DTTo>
     <IsBUnit>0</IsBUnit>
-    <FocusField />
+    <FocusField>审核意见:@BMJLSP_Note</FocusField>
     <IsGuestNode>0</IsGuestNode>
     <NodeAppType>0</NodeAppType>
     <FWCSta>0</FWCSta>
@@ -830,7 +830,7 @@
     <DTFrom>2020-04-05 17:34</DTFrom>
     <DTTo>2020-04-05 17:34</DTTo>
     <IsBUnit>0</IsBUnit>
-    <FocusField />
+    <FocusField>审核意见:@ZJLSP_Note</FocusField>
     <IsGuestNode>0</IsGuestNode>
     <NodeAppType>0</NodeAppType>
     <FWCSta>0</FWCSta>
@@ -1221,7 +1221,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2020-04-05 17:37:19</Ver>
+    <Ver>2020-04-05 18:22:56</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
     <OrgNo />
@@ -1255,7 +1255,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2020-04-05 17:40:48</Ver>
+    <Ver>2020-04-05 20:44:37</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
     <OrgNo />
@@ -1289,7 +1289,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2020-04-05 17:41:05</Ver>
+    <Ver>2020-04-05 20:45:03</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
     <OrgNo />
@@ -1323,7 +1323,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2020-04-05 17:41:21</Ver>
+    <Ver>2020-04-05 20:45:19</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
     <OrgNo />
@@ -1357,7 +1357,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2020-04-05 17:34:34</Ver>
+    <Ver>2020-04-05 20:52:19</Ver>
     <FlowCtrls />
     <AtPara>@IsHaveCA=0</AtPara>
     <OrgNo />
@@ -1387,7 +1387,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -1402,7 +1402,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1001</Idx>
     <CSS>0</CSS>
@@ -1448,7 +1448,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1008</Idx>
     <CSS>0</CSS>
@@ -1494,7 +1494,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1003</Idx>
     <CSS>0</CSS>
@@ -1540,7 +1540,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1000</Idx>
     <CSS>0</CSS>
@@ -1560,7 +1560,7 @@
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>50</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey>BP.Port.Depts</UIBindKey>
     <UIRefKey />
     <UIRefKeyText />
@@ -1586,7 +1586,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1004</Idx>
     <CSS>0</CSS>
@@ -1632,7 +1632,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1005</Idx>
     <CSS>0</CSS>
@@ -1678,7 +1678,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1006</Idx>
     <CSS>0</CSS>
@@ -1724,7 +1724,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -1770,7 +1770,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1007</Idx>
     <CSS>0</CSS>
@@ -1816,7 +1816,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1009</Idx>
     <CSS>0</CSS>
@@ -1862,7 +1862,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1010</Idx>
     <CSS>0</CSS>
@@ -1879,7 +1879,7 @@
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
     <LGTypeText>普通</LGTypeText>
-    <UIWidth>100</UIWidth>
+    <UIWidth>145</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
@@ -1893,7 +1893,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -1908,7 +1908,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -1954,7 +1954,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1002</Idx>
     <CSS>0</CSS>
@@ -2000,7 +2000,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -2046,7 +2046,7 @@
     <ColSpan>3</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -2092,7 +2092,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -2138,7 +2138,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>105</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -2184,7 +2184,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>118</GroupID>
+    <GroupID>115</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -2230,7 +2230,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>118</GroupID>
+    <GroupID>115</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -2276,7 +2276,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>118</GroupID>
+    <GroupID>115</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -2307,7 +2307,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -2322,7 +2322,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1001</Idx>
     <CSS>0</CSS>
@@ -2368,7 +2368,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1008</Idx>
     <CSS>0</CSS>
@@ -2414,7 +2414,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1003</Idx>
     <CSS>0</CSS>
@@ -2460,7 +2460,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1000</Idx>
     <CSS>0</CSS>
@@ -2480,7 +2480,7 @@
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>50</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey>BP.Port.Depts</UIBindKey>
     <UIRefKey />
     <UIRefKeyText />
@@ -2506,7 +2506,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1004</Idx>
     <CSS>0</CSS>
@@ -2552,7 +2552,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1005</Idx>
     <CSS>0</CSS>
@@ -2598,7 +2598,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1006</Idx>
     <CSS>0</CSS>
@@ -2644,7 +2644,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -2690,7 +2690,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1007</Idx>
     <CSS>0</CSS>
@@ -2736,7 +2736,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1009</Idx>
     <CSS>0</CSS>
@@ -2782,7 +2782,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1010</Idx>
     <CSS>0</CSS>
@@ -2813,7 +2813,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -2828,7 +2828,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -2874,7 +2874,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1002</Idx>
     <CSS>0</CSS>
@@ -2920,7 +2920,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -2966,7 +2966,7 @@
     <ColSpan>3</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -3012,7 +3012,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -3058,7 +3058,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>116</GroupID>
+    <GroupID>113</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -3104,7 +3104,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>120</GroupID>
+    <GroupID>117</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -3150,7 +3150,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>120</GroupID>
+    <GroupID>117</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -3196,7 +3196,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>120</GroupID>
+    <GroupID>117</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -3227,7 +3227,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -3242,7 +3242,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1001</Idx>
     <CSS>0</CSS>
@@ -3288,7 +3288,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1008</Idx>
     <CSS>0</CSS>
@@ -3334,7 +3334,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1003</Idx>
     <CSS>0</CSS>
@@ -3380,7 +3380,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1000</Idx>
     <CSS>0</CSS>
@@ -3400,7 +3400,7 @@
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>50</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey>BP.Port.Depts</UIBindKey>
     <UIRefKey />
     <UIRefKeyText />
@@ -3426,7 +3426,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1004</Idx>
     <CSS>0</CSS>
@@ -3472,7 +3472,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1005</Idx>
     <CSS>0</CSS>
@@ -3518,7 +3518,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1006</Idx>
     <CSS>0</CSS>
@@ -3564,7 +3564,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -3610,7 +3610,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1007</Idx>
     <CSS>0</CSS>
@@ -3656,7 +3656,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1009</Idx>
     <CSS>0</CSS>
@@ -3702,7 +3702,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1010</Idx>
     <CSS>0</CSS>
@@ -3733,7 +3733,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -3748,7 +3748,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -3794,7 +3794,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1002</Idx>
     <CSS>0</CSS>
@@ -3840,7 +3840,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -3886,7 +3886,7 @@
     <ColSpan>3</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -3932,7 +3932,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -3978,7 +3978,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>119</GroupID>
+    <GroupID>116</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -4024,7 +4024,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>122</GroupID>
+    <GroupID>119</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -4070,7 +4070,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>122</GroupID>
+    <GroupID>119</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -4116,7 +4116,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>122</GroupID>
+    <GroupID>119</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -4162,7 +4162,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>124</GroupID>
+    <GroupID>121</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -4208,7 +4208,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>124</GroupID>
+    <GroupID>121</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -4254,7 +4254,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>124</GroupID>
+    <GroupID>121</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -4285,7 +4285,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -4300,7 +4300,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1001</Idx>
     <CSS>0</CSS>
@@ -4346,7 +4346,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1008</Idx>
     <CSS>0</CSS>
@@ -4392,7 +4392,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1003</Idx>
     <CSS>0</CSS>
@@ -4438,7 +4438,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1000</Idx>
     <CSS>0</CSS>
@@ -4458,7 +4458,7 @@
     <UIWidth>100</UIWidth>
     <UIHeight>23</UIHeight>
     <MinLen>0</MinLen>
-    <MaxLen>50</MaxLen>
+    <MaxLen>100</MaxLen>
     <UIBindKey>BP.Port.Depts</UIBindKey>
     <UIRefKey />
     <UIRefKeyText />
@@ -4484,7 +4484,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1004</Idx>
     <CSS>0</CSS>
@@ -4530,7 +4530,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1005</Idx>
     <CSS>0</CSS>
@@ -4576,7 +4576,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1006</Idx>
     <CSS>0</CSS>
@@ -4622,7 +4622,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -4668,7 +4668,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1007</Idx>
     <CSS>0</CSS>
@@ -4714,7 +4714,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1009</Idx>
     <CSS>0</CSS>
@@ -4760,7 +4760,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1010</Idx>
     <CSS>0</CSS>
@@ -4791,7 +4791,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -4806,7 +4806,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -4852,7 +4852,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1002</Idx>
     <CSS>0</CSS>
@@ -4898,7 +4898,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -4944,7 +4944,7 @@
     <ColSpan>3</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -4990,7 +4990,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -5036,7 +5036,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>123</GroupID>
+    <GroupID>120</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -5082,7 +5082,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>125</GroupID>
+    <GroupID>122</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -5128,7 +5128,7 @@
     <ColSpan>4</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>125</GroupID>
+    <GroupID>122</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -5174,7 +5174,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>125</GroupID>
+    <GroupID>122</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -5220,7 +5220,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -5266,9 +5266,147 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_BMJLSP_Checker</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>115</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_BMJLSP_Note</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>115</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_BMJLSP_RDT</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>BMJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>115</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
     <CSS>0</CSS>
     <AtPara />
   </Sys_MapAttr>
@@ -5297,7 +5435,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -5312,11 +5450,57 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1001</Idx>
     <CSS>0</CSS>
     <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_Dao</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>Dao</KeyOfEn>
+    <Name>到</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>100</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1008</Idx>
+    <CSS>0</CSS>
+    <AtPara>@FontSize=12</AtPara>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND1Rpt_Emps</MyPK>
@@ -5358,7 +5542,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1003</Idx>
     <CSS>0</CSS>
@@ -5404,7 +5588,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1000</Idx>
     <CSS>0</CSS>
@@ -5450,7 +5634,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1004</Idx>
     <CSS>0</CSS>
@@ -5496,7 +5680,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1005</Idx>
     <CSS>0</CSS>
@@ -5542,7 +5726,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
@@ -5588,7 +5772,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -5634,7 +5818,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -5680,7 +5864,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
@@ -5726,7 +5910,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
@@ -5772,7 +5956,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -5818,7 +6002,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -5864,7 +6048,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
@@ -5910,7 +6094,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -5956,7 +6140,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1006</Idx>
     <CSS>0</CSS>
@@ -6002,7 +6186,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -6048,7 +6232,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -6094,7 +6278,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -6140,7 +6324,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
@@ -6186,7 +6370,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -6232,7 +6416,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-100</Idx>
     <CSS>0</CSS>
@@ -6278,11 +6462,149 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-101</Idx>
     <CSS>0</CSS>
     <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_QingJiaRiQiCong</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>QingJiaRiQiCong</KeyOfEn>
+    <Name>请假日期从</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>100</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1007</Idx>
+    <CSS>0</CSS>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_QingJiaTianShu</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>QingJiaTianShu</KeyOfEn>
+    <Name>请假天数</Name>
+    <DefVal>10002</DefVal>
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>100</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1009</Idx>
+    <CSS>0</CSS>
+    <AtPara>@IsSum=0@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_QingJiaYuanYin</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>QingJiaYuanYin</KeyOfEn>
+    <Name>请假原因</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>123</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>100</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1010</Idx>
+    <CSS>0</CSS>
+    <AtPara>@IsRichText=0@FontSize=12@IsSupperText=0</AtPara>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>ND1Rpt_RDT</MyPK>
@@ -6309,7 +6631,7 @@
     <UIIsInput>0</UIIsInput>
     <IsSecret>0</IsSecret>
     <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
+    <IsSupperText>1</IsSupperText>
     <FontSize>0</FontSize>
     <IsSigan>0</IsSigan>
     <X>5</X>
@@ -6324,7 +6646,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>999</Idx>
     <CSS>0</CSS>
@@ -6370,7 +6692,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1002</Idx>
     <CSS>0</CSS>
@@ -6416,7 +6738,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <CSS>0</CSS>
@@ -6462,7 +6784,7 @@
     <ColSpan>3</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>3</Idx>
     <CSS>0</CSS>
@@ -6508,7 +6830,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <CSS>0</CSS>
@@ -6554,7 +6876,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>107</GroupID>
+    <GroupID>100</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -6600,7 +6922,7 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>109</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
@@ -6646,14 +6968,152 @@
     <ColSpan>1</ColSpan>
     <TextColSpan>1</TextColSpan>
     <RowSpan>1</RowSpan>
-    <GroupID>111</GroupID>
+    <GroupID>106</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>-1</Idx>
     <CSS>0</CSS>
     <AtPara />
   </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_ZJLSP_Checker</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_Checker</KeyOfEn>
+    <Name>审核人</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>1</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>103</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_ZJLSP_Note</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_Note</KeyOfEn>
+    <Name>审核意见</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>69</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>4</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>103</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND1Rpt_ZJLSP_RDT</MyPK>
+    <FK_MapData>ND1Rpt</FK_MapData>
+    <KeyOfEn>ZJLSP_RDT</KeyOfEn>
+    <Name>审核日期</Name>
+    <DefVal />
+    <DefValType>0</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>1</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>103</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <CSS>0</CSS>
+    <AtPara />
+  </Sys_MapAttr>
   <Sys_GroupField>
-    <OID>107</OID>
+    <OID>105</OID>
     <Lab>填写请假申请单</Lab>
     <FrmID>ND101</FrmID>
     <CtrlType />
@@ -6663,17 +7123,7 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>109</OID>
-    <Lab>基础信息</Lab>
-    <FrmID>ND1Rpt</FrmID>
-    <CtrlType />
-    <CtrlID />
-    <Idx>1</Idx>
-    <GUID />
-    <AtPara />
-  </Sys_GroupField>
-  <Sys_GroupField>
-    <OID>111</OID>
+    <OID>106</OID>
     <Lab>流程信息</Lab>
     <FrmID>ND1Rpt</FrmID>
     <CtrlType />
@@ -6683,7 +7133,7 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>116</OID>
+    <OID>113</OID>
     <Lab>填写请假申请单</Lab>
     <FrmID>ND102</FrmID>
     <CtrlType />
@@ -6693,7 +7143,7 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>118</OID>
+    <OID>115</OID>
     <Lab>部门经理审批</Lab>
     <FrmID>ND102</FrmID>
     <CtrlType />
@@ -6703,7 +7153,7 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>119</OID>
+    <OID>116</OID>
     <Lab>填写请假申请单</Lab>
     <FrmID>ND103</FrmID>
     <CtrlType />
@@ -6713,9 +7163,39 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
-    <OID>120</OID>
+    <OID>117</OID>
     <Lab>部门经理审批</Lab>
     <FrmID>ND103</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>2</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>119</OID>
+    <Lab>总经理审批</Lab>
+    <FrmID>ND103</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>3</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>120</OID>
+    <Lab>填写请假申请单</Lab>
+    <FrmID>ND104</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_GroupField>
+    <OID>121</OID>
+    <Lab>部门经理审批</Lab>
+    <FrmID>ND104</FrmID>
     <CtrlType />
     <CtrlID />
     <Idx>2</Idx>
@@ -6725,36 +7205,6 @@
   <Sys_GroupField>
     <OID>122</OID>
     <Lab>总经理审批</Lab>
-    <FrmID>ND103</FrmID>
-    <CtrlType />
-    <CtrlID />
-    <Idx>3</Idx>
-    <GUID />
-    <AtPara />
-  </Sys_GroupField>
-  <Sys_GroupField>
-    <OID>123</OID>
-    <Lab>填写请假申请单</Lab>
-    <FrmID>ND104</FrmID>
-    <CtrlType />
-    <CtrlID />
-    <Idx>1</Idx>
-    <GUID />
-    <AtPara />
-  </Sys_GroupField>
-  <Sys_GroupField>
-    <OID>124</OID>
-    <Lab>部门经理审批</Lab>
-    <FrmID>ND104</FrmID>
-    <CtrlType />
-    <CtrlID />
-    <Idx>2</Idx>
-    <GUID />
-    <AtPara />
-  </Sys_GroupField>
-  <Sys_GroupField>
-    <OID>125</OID>
-    <Lab>总经理审批</Lab>
     <FrmID>ND104</FrmID>
     <CtrlType />
     <CtrlID />
@@ -6763,60 +7213,8 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_FrmLine>
-    <MyPK>07ab5caf-2c75-45b7-87b8-4af860f07bbd</MyPK>
+    <MyPK>03737254-bbc2-480c-840c-bc55b1c03d8f</MyPK>
     <FK_MapData>ND101</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>145f818b-0531-49b0-80fb-15237476b560</MyPK>
-    <FK_MapData>ND104</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>1b21a6a8-1a3d-46c8-bd28-2ed72a99f92b</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>2394b1f8-c254-4f19-ba3c-85cbdad7e11e</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>482.73</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>2a1ca916-eb7b-4bd7-b632-558202bbecd0</MyPK>
-    <FK_MapData>ND102</FK_MapData>
     <X1>81.82</X1>
     <Y1>40</Y1>
     <X2>81.82</X2>
@@ -6828,163 +7226,7 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>33bf2566-c0a7-4192-864f-fa35272ade35</MyPK>
-    <FK_MapData>ND104</FK_MapData>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>4659b56f-687e-4cfd-8240-dadea059d2f2</MyPK>
-    <FK_MapData>ND103</FK_MapData>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>482.73</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>5876606c-ef5e-4b85-9d8a-a9f63f6584c4</MyPK>
-    <FK_MapData>ND103</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>480.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>5b14e447-33ea-424d-ac28-fc2e1059c6a6</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>5be68d3a-be08-4103-8a55-82c5c6792e37</MyPK>
-    <FK_MapData>ND103</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>67dae0bd-4c18-4fcc-ae80-be15ecbb286c</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>84ecb9b1-628c-4f8c-8198-2b4e9f3df46d</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>481.82</Y1>
-    <X2>720</X2>
-    <Y2>481.82</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>883734c5-2df5-478a-b71b-78f49dfd6de8</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <X1>719.09</X1>
-    <Y1>40</Y1>
-    <X2>719.09</X2>
-    <Y2>482.73</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>8c5b4313-5139-4402-91db-336c4e2455a2</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>120.91</Y1>
-    <X2>717.91</X2>
-    <Y2>120.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>9495c1de-291b-4187-af03-a16a07950a0c</MyPK>
-    <FK_MapData>ND104</FK_MapData>
-    <X1>83.36</X1>
-    <Y1>40.91</Y1>
-    <X2>717.91</X2>
-    <Y2>40.91</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>a44578f0-3842-46c7-a3a3-efaa7b9a41c5</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>481.82</Y1>
-    <X2>720</X2>
-    <Y2>481.82</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>a8d14c60-d738-41e3-8425-ee452c88d7fa</MyPK>
-    <FK_MapData>ND103</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>481.82</Y1>
-    <X2>720</X2>
-    <Y2>481.82</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>b6773414-3b6b-4f84-9044-8033e5cf1610</MyPK>
+    <MyPK>12ec3e04-b1fb-4b0c-933b-a30c5f4bcacc</MyPK>
     <FK_MapData>ND102</FK_MapData>
     <X1>83.36</X1>
     <Y1>40.91</Y1>
@@ -6997,21 +7239,8 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>c0bde9f0-b95e-4776-ba6e-64b0c6f6f997</MyPK>
+    <MyPK>1b1564af-f968-4673-9727-a7bdfa490822</MyPK>
     <FK_MapData>ND103</FK_MapData>
-    <X1>81.55</X1>
-    <Y1>80</Y1>
-    <X2>718.82</X2>
-    <Y2>80</Y2>
-    <X>9</X>
-    <Y>9</Y>
-    <BorderWidth>2</BorderWidth>
-    <BorderColor>Black</BorderColor>
-    <GUID />
-  </Sys_FrmLine>
-  <Sys_FrmLine>
-    <MyPK>d0fc10fa-7cfa-4248-9d8a-9d34239eb165</MyPK>
-    <FK_MapData>ND104</FK_MapData>
     <X1>81.82</X1>
     <Y1>481.82</Y1>
     <X2>720</X2>
@@ -7023,7 +7252,33 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>d7c9cff2-d728-4d92-999f-c68543fae7d9</MyPK>
+    <MyPK>249320ef-c4f9-4217-8839-817d958725a1</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>481.82</Y1>
+    <X2>720</X2>
+    <Y2>481.82</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>326236aa-f3ac-434f-b85e-1729c28a1e42</MyPK>
+    <FK_MapData>ND101</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>482.73</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>3b350a74-2963-4ad6-9138-2c72b147df97</MyPK>
     <FK_MapData>ND104</FK_MapData>
     <X1>719.09</X1>
     <Y1>40</Y1>
@@ -7036,12 +7291,12 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>da63dd68-dc03-40e8-b9a2-03fdaad17943</MyPK>
+    <MyPK>3fc94b77-3ba7-4a11-98ae-225c90522887</MyPK>
     <FK_MapData>ND104</FK_MapData>
-    <X1>81.82</X1>
-    <Y1>40</Y1>
-    <X2>81.82</X2>
-    <Y2>480.91</Y2>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -7049,7 +7304,7 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>e2979f1f-80d5-4e38-949f-f43ad1afee35</MyPK>
+    <MyPK>4207a9a7-3cf2-4a5a-a574-c93935d40853</MyPK>
     <FK_MapData>ND103</FK_MapData>
     <X1>83.36</X1>
     <Y1>40.91</Y1>
@@ -7062,12 +7317,207 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLine>
-    <MyPK>e7af0246-437f-449f-9e23-2faeb8103bea</MyPK>
+    <MyPK>46d1c1db-a2f5-427d-9e2f-823e038e8be3</MyPK>
     <FK_MapData>ND101</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>561a2185-8e43-4879-83fd-0286347ff716</MyPK>
+    <FK_MapData>ND101</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>738d68df-537a-4925-8121-8a99d94d7bc7</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>482.73</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>75678900-840c-4094-b58a-d772611ad20f</MyPK>
+    <FK_MapData>ND101</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>481.82</Y1>
+    <X2>720</X2>
+    <Y2>481.82</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>90155513-f1d7-4b3b-8774-bf7680f76710</MyPK>
+    <FK_MapData>ND102</FK_MapData>
     <X1>81.82</X1>
     <Y1>40</Y1>
     <X2>81.82</X2>
     <Y2>480.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>9943e556-e875-42cd-a402-6c9ae474f5b6</MyPK>
+    <FK_MapData>ND104</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>481.82</Y1>
+    <X2>720</X2>
+    <Y2>481.82</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>a059f4a1-8745-4e9c-8b80-373318429c4a</MyPK>
+    <FK_MapData>ND104</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>480.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>a15faab0-f7cb-4c13-9208-23f6f2155842</MyPK>
+    <FK_MapData>ND104</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>40.91</Y1>
+    <X2>717.91</X2>
+    <Y2>40.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ab0c71b3-44eb-47bd-b6a8-76b53d459050</MyPK>
+    <FK_MapData>ND104</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>b2225af9-110c-4f87-825b-dac8cfd45386</MyPK>
+    <FK_MapData>ND103</FK_MapData>
+    <X1>719.09</X1>
+    <Y1>40</Y1>
+    <X2>719.09</X2>
+    <Y2>482.73</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>c53227eb-830b-48fa-b1d0-a093150677af</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>c5c1daf0-774d-41c0-acf5-dc03985caa1b</MyPK>
+    <FK_MapData>ND103</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>120.91</Y1>
+    <X2>717.91</X2>
+    <Y2>120.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>cfa9338e-943d-4d46-a9a3-4c0c2efa0e76</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>d5f267a2-d744-499a-a4b1-140881a7741c</MyPK>
+    <FK_MapData>ND103</FK_MapData>
+    <X1>81.82</X1>
+    <Y1>40</Y1>
+    <X2>81.82</X2>
+    <Y2>480.91</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>e4aa1157-46cd-4864-b1b3-ab5620fcd23e</MyPK>
+    <FK_MapData>ND103</FK_MapData>
+    <X1>81.55</X1>
+    <Y1>80</Y1>
+    <X2>718.82</X2>
+    <Y2>80</Y2>
+    <X>9</X>
+    <Y>9</Y>
+    <BorderWidth>2</BorderWidth>
+    <BorderColor>Black</BorderColor>
+    <GUID />
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>ffbbca4a-b904-4fca-b3c6-ec774ffc4330</MyPK>
+    <FK_MapData>ND101</FK_MapData>
+    <X1>83.36</X1>
+    <Y1>40.91</Y1>
+    <X2>717.91</X2>
+    <Y2>40.91</Y2>
     <X>9</X>
     <Y>9</Y>
     <BorderWidth>2</BorderWidth>
@@ -7075,8 +7525,8 @@
     <GUID />
   </Sys_FrmLine>
   <Sys_FrmLab>
-    <MyPK>0edd4828-84d3-4ba9-b5b5-d1c80be20057</MyPK>
-    <FK_MapData>ND104</FK_MapData>
+    <MyPK>07baf850-06b1-4b5d-a493-21da08a10ccb</MyPK>
+    <FK_MapData>ND101</FK_MapData>
     <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
     <X>605</X>
     <Y>490</Y>
@@ -7090,37 +7540,7 @@
     <GUID />
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>25fdcc3b-b6e9-4d59-9ebd-88b90c1c9e53</MyPK>
-    <FK_MapData>ND103</FK_MapData>
-    <Text>填写xxxx申请单</Text>
-    <X>79.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>757da605-4d64-4052-a219-69fd60990d53</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <Text>填写xxxx申请单</Text>
-    <X>79.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>9434c8aa-d612-468e-8bd3-09e3a9adc148</MyPK>
+    <MyPK>22253254-ba73-440d-ba07-8b26cda77fc4</MyPK>
     <FK_MapData>ND103</FK_MapData>
     <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
     <X>605</X>
@@ -7135,53 +7555,8 @@
     <GUID />
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>b2504439-dda5-4cc6-b4b2-4912a9de1999</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
-    <X>605</X>
-    <Y>490</Y>
-    <FontSize>14</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight />
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>c99e673f-7b16-4433-9fe1-8582aa1006b5</MyPK>
+    <MyPK>2dd5db9c-c661-4661-a6c2-2f56b829b9d3</MyPK>
     <FK_MapData>ND104</FK_MapData>
-    <Text>填写xxxx申请单</Text>
-    <X>79.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>dda9d062-7d21-4a7f-a525-8248944364c9</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <Text>填写xxxx申请单</Text>
-    <X>79.67</X>
-    <Y>4.27</Y>
-    <FontSize>23</FontSize>
-    <FontColor>#FF000000</FontColor>
-    <FontName>Portable User Interface</FontName>
-    <FontStyle>Normal</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-    <GUID />
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>feb8d3c2-3ffe-42c9-84f3-b4b90acacb58</MyPK>
-    <FK_MapData>ND101</FK_MapData>
     <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
     <X>605</X>
     <Y>490</Y>
@@ -7194,104 +7569,79 @@
     <IsItalic>0</IsItalic>
     <GUID />
   </Sys_FrmLab>
-  <Sys_FrmImg>
-    <MyPK>078f7357-27af-4d42-9379-d4bdd7547aaa</MyPK>
+  <Sys_FrmLab>
+    <MyPK>4d5782d4-0469-4c4a-be37-d741ed8a8306</MyPK>
+    <FK_MapData>ND101</FK_MapData>
+    <Text>填写xxxx申请单</Text>
+    <X>79.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>50799d46-ec2f-44fc-a1c7-e5744253126d</MyPK>
     <FK_MapData>ND103</FK_MapData>
-    <KeyOfEn />
-    <ImgAppType>0</ImgAppType>
-    <X>579.26</X>
-    <Y>-2.55</Y>
-    <H>40</H>
-    <W>137</W>
-    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
-    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
-    <LinkURL>http://ccflow.org</LinkURL>
-    <LinkTarget>_blank</LinkTarget>
+    <Text>填写xxxx申请单</Text>
+    <X>79.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
     <GUID />
-    <Tag0 />
-    <ImgSrcType>0</ImgSrcType>
-    <IsEdit>1</IsEdit>
-    <Name />
-    <EnPK />
-    <ColSpan>0</ColSpan>
-    <TextColSpan>1</TextColSpan>
-    <RowSpan>1</RowSpan>
-    <GroupID>0</GroupID>
-    <GroupIDText>0</GroupIDText>
-  </Sys_FrmImg>
-  <Sys_FrmImg>
-    <MyPK>12d740a1-f023-4ef6-918f-45229554383d</MyPK>
-    <FK_MapData>ND102</FK_MapData>
-    <KeyOfEn />
-    <ImgAppType>0</ImgAppType>
-    <X>579.26</X>
-    <Y>-2.55</Y>
-    <H>40</H>
-    <W>137</W>
-    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
-    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
-    <LinkURL>http://ccflow.org</LinkURL>
-    <LinkTarget>_blank</LinkTarget>
-    <GUID />
-    <Tag0 />
-    <ImgSrcType>0</ImgSrcType>
-    <IsEdit>1</IsEdit>
-    <Name />
-    <EnPK />
-    <ColSpan>0</ColSpan>
-    <TextColSpan>1</TextColSpan>
-    <RowSpan>1</RowSpan>
-    <GroupID>0</GroupID>
-    <GroupIDText>0</GroupIDText>
-  </Sys_FrmImg>
-  <Sys_FrmImg>
-    <MyPK>220991c1-1517-4bbc-85db-ccbeacc4215b</MyPK>
-    <FK_MapData>ND101</FK_MapData>
-    <KeyOfEn />
-    <ImgAppType>0</ImgAppType>
-    <X>579.26</X>
-    <Y>-2.55</Y>
-    <H>40</H>
-    <W>137</W>
-    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
-    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
-    <LinkURL>http://ccflow.org</LinkURL>
-    <LinkTarget>_blank</LinkTarget>
-    <GUID />
-    <Tag0 />
-    <ImgSrcType>0</ImgSrcType>
-    <IsEdit>1</IsEdit>
-    <Name />
-    <EnPK />
-    <ColSpan>0</ColSpan>
-    <TextColSpan>1</TextColSpan>
-    <RowSpan>1</RowSpan>
-    <GroupID>0</GroupID>
-    <GroupIDText>0</GroupIDText>
-  </Sys_FrmImg>
-  <Sys_FrmImg>
-    <MyPK>f96823de-2a31-4f66-8a85-95cbb4a2f379</MyPK>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>754fc004-f713-41f7-bd49-303cb7bb97fb</MyPK>
     <FK_MapData>ND104</FK_MapData>
-    <KeyOfEn />
-    <ImgAppType>0</ImgAppType>
-    <X>579.26</X>
-    <Y>-2.55</Y>
-    <H>40</H>
-    <W>137</W>
-    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
-    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
-    <LinkURL>http://ccflow.org</LinkURL>
-    <LinkTarget>_blank</LinkTarget>
+    <Text>填写xxxx申请单</Text>
+    <X>79.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
     <GUID />
-    <Tag0 />
-    <ImgSrcType>0</ImgSrcType>
-    <IsEdit>1</IsEdit>
-    <Name />
-    <EnPK />
-    <ColSpan>0</ColSpan>
-    <TextColSpan>1</TextColSpan>
-    <RowSpan>1</RowSpan>
-    <GroupID>0</GroupID>
-    <GroupIDText>0</GroupIDText>
-  </Sys_FrmImg>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>856b994c-1987-45a1-9001-4db9367096a2</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
+    <X>605</X>
+    <Y>490</Y>
+    <FontSize>14</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>a1791990-ebc2-4976-a38a-972d9fd0ee14</MyPK>
+    <FK_MapData>ND102</FK_MapData>
+    <Text>填写xxxx申请单</Text>
+    <X>79.67</X>
+    <Y>4.27</Y>
+    <FontSize>23</FontSize>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+    <GUID />
+  </Sys_FrmLab>
 </NewDataSet>

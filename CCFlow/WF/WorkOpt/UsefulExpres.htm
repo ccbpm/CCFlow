@@ -1,0 +1,285 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>词汇选择</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+    <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <!--<script src="../../Scripts/jquery/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>-->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <style type="text/css">
+        .bs-checkbox {
+            width: 20px
+        }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            color: #555;
+            cursor: default;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            border-bottom-color: transparent;
+        }
+    </style>
+    <script type="text/javascript">
+        var nodeID = GetQueryString("FK_Node");
+    
+        $(function () {
+            $('#myModal').modal('hide');
+            LoadGridData(1, 10);
+        });
+
+        function GetSearchData() {
+            var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+            //获得数据
+            var data = workCheck.FWCNewDuanYu;
+            var dataInfo = {}
+            var mainData = [];
+            if (data != null && data != "") {
+                var strs = data.split("@");
+                $.each(strs, function (i, item) {
+                    if(item!="")
+                        mainData.push({ "MYPK": i, "CURVALUE": item });
+                })
+            }
+            dataInfo.rows = mainData;
+            dataInfo.total = mainData.length;
+
+            return dataInfo;
+        }
+        function LoadGridData() {
+            $("#newsGrid").html("");
+            $('#newsGrid').bootstrapTable('load', []);
+            var data = GetSearchData();
+          
+          
+            $('#newsGrid').bootstrapTable({
+                columns: [
+                { checkbox: true, width: 1,
+                  cellStyle: {css: { "width": "1px" } }
+                },
+                { field: 'CURVALUE', title: '', align: 'left' }
+                ],
+                idField: 'MYPK',
+                selectOnCheck: false,
+                clickToSelect: true,
+                checkOnSelect: true,
+                singleSelect: false,
+                data: data,
+                width: 'auto',
+                height: 'auto',
+                striped: true,
+                showHeader:false,
+                showFooter:false,
+                sidePagination:'server',//在服务器分页
+               
+             });
+             $('#newsGrid').bootstrapTable('load', data);
+        }
+        var insEdit = true;
+        //添加数据
+        function btnOpenWindow() {
+            insEdit = true;
+           
+            $('#TextArea').val('');
+            $('#myModal').modal('show');
+            $('#TextArea').focus();
+        }
+        function AddWorks() {
+            var params;
+            if (insEdit) {//添加
+                var text = $('#TextArea').val();
+                text = replaceTrim(text);
+                if (text == "") {
+                    alert("请输入数据");
+                    $('#TextArea').val('');
+                    $('#TextArea').focus();
+                    return;
+                }
+                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
+                    alert("常用短语中已存在，不能重复添加");
+                    return;
+                }
+                workCheck.FWCNewDuanYu += "@" + text + "@";
+                workCheck.SetValByKey(nodeID);
+                workCheck.Update();
+                $('#myModal').modal('hide');
+                LoadGridData();
+                    
+            } else {//编辑
+                var text = $('#TextArea').val();
+                text = replaceTrim(text);
+                //没有输入数据
+                if (text == "") {
+                    alert("请输入数据");
+                    $('#TextArea').val('');
+                    $('#TextArea').focus();
+                    return;
+                }
+                //输入数据没有改变
+                if (text == againText) {
+                    alert("数据没有任何改变哦");
+                    return;
+                }
+
+                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
+                    alert("常用短语中已存在，不能重复添加");
+                    return;
+                }
+                workCheck.FWCNewDuanYu = workCheck.FWCNewDuanYu.replace("@" + againText + "@", "@" + text + "@");
+                workCheck.SetValByKey(nodeID);
+                workCheck.Update();
+                $('#myModal').modal('hide');
+                LoadGridData();
+            }
+
+        }
+
+        var againText;
+        var defValPK;
+        //编辑词汇
+        function btnEdit() {
+            insEdit = false;
+            var rows = $('#newsGrid').bootstrapTable('getAllSelections');
+            if (rows.length == 1) {
+                againText = rows[0].CURVALUE;
+                defValPK = rows[0].MYPK;
+                $('#TextArea').val(rows[0].CURVALUE);
+                $('#myModal').modal('show');
+                $('#TextArea').focus();
+            }
+            else {
+                alert("请选择一条数据");
+            }
+        }
+        //字符的操作
+        function replaceTrim(val) {//去除空格
+            val = val.replace(/[ ]/g, "");
+            val = val.replace(/<\/?.+?>/g, "");
+            val = val.replace(/[\r\n]/g, "");
+            return val;
+        }
+        //删除
+        function btnDelete() {
+            
+            var rows = $('#newsGrid').bootstrapTable('getAllSelections');
+
+            if (rows.length >= 1) {
+                if (confirm('确定要删除这' + rows.length + '条数据吗？') == false)
+                    return;
+
+                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                var duanyuan = workCheck.FWCNewDuanYu;
+                $.each(rows, function (i, item) {
+                    duanyuan = duanyuan.replace("@" + item.CURVALUE+"@", "");
+                });
+                workCheck.FWCNewDuanYu = duanyuan;
+                workCheck.SetPKVal(nodeID);
+                workCheck.Update();
+                LoadGridData();
+            }
+            else {
+                alert("请选择一条数据");
+            }
+        }
+        //关闭主窗体
+        function btnClose() {
+            window.parent.$('#bootStrapdlg').modal('hide'); ;
+        }
+        //返回数据
+        function btnOk() {
+            var rows = $('#newsGrid').bootstrapTable('getAllSelections');
+            if (rows.length == 0) {
+                alert("请选择数据");
+                return;
+            }
+            var str = '';
+         
+            $.each(rows, function (n, value) {
+                str += value.CURVALUE + ",";
+            });
+
+            str = str.substr(0, str.length - 1);
+            
+            str = str.replace(/{/g, "｛");
+            str = str.replace(/}/g, "｝");
+            str = str.replace(/\[/g, "【");
+            str = str.replace(/\]/g, "】");
+            str = str.replace(/\"/g, "”");
+            str = str.replace(/\'/g, "‘");
+
+            if (str == '') {
+                alert("1.没有选中项<br />2.选中的文件不包含任何数据!");
+                return;
+            }
+
+
+            window.parent.ChangeWorkCheck(str);
+          
+
+        }
+    </script>
+</head>
+<body>
+    <div style=" border: 1px solid #ddd;">
+        <!--button按钮-->
+        <div>
+            <div id="tools" style="text-align: left; float: left;margin:3px 5px">
+                <button class=" btn btn-info btn-xs" type="button" id="btnAdd" onclick='btnOpenWindow()'><i class="glyphicon-plus"></i> 添加数据</button>
+                <button class=" btn btn-info btn-xs" type="button" id="btnEdit" onclick='btnEdit()'><i class="fa fa-edit"></i> 编辑</button>
+                <button class=" btn btn-info btn-xs" type="button" id="btnDel" onclick='btnDelete()'><i class="fa fa-remove"></i> 删除</button>
+
+            </div>
+
+        </div>
+
+        <!--table页面-->
+        <div style="padding: 5px;">
+            <table id="newsGrid" fit="true"></table>
+        </div>
+        <!-- 显示分页信息 -->
+        <div style="text-align: left;">
+            <ul class="pagination" id="page_nav"></ul>
+            <ul class="pagination controls" id="page_info"></ul>
+            <div style="clear: both;">
+            </div>
+        </div>
+
+        <div>
+            <div style="float: right; margin:3px 5px">
+                <button class=" btn btn-success btn-xs" type="button" onclick='btnOk()' id='btnOk'><i class="fa fa-check"></i> 确定</button>
+                <button class=" btn btn-danger btn-xs" type="button" onclick='btnClose()' id='btnClose'><i class="fa fa-mail-reply"></i> 取消</button>
+            </div>
+        </div>
+    </div>
+    <!--bootstrap弹出页面-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">请输入</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px; overflow: hidden;"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="AddWorks()">保存</a></button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+</body>
+</html>

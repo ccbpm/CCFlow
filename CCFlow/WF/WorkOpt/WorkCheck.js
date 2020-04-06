@@ -183,6 +183,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
             _Html += "<option value='不同意'>不同意</option>";
         }
         _Html += "</select><font color=Gray>内容不要超过2000字</font>";
+        _Html += "<input name='' type='button' value='添加常用短语' onclick='AddDuanYu(\""+pageData.FK_Node+"\");'>"
         _Html += "</div>";
         _Html += "</td>";
 
@@ -707,5 +708,36 @@ function WorkCheck_CheckPass() {
     isCanSend = true;
     //签名成功后，就需要把图片显示出来.
 
+}
+
+
+function AddDuanYu(nodeID) {
+    var url = basePath + "/WF/WorkOpt/UsefulExpres.htm?FK_Node=" + nodeID;
+    var W = document.body.clientWidth/2;
+    var H = document.body.clientHeight-40;
+    OpenBootStrapModal(url, "UsefulExpresIFrame", "常用短语", W, H, null, false, null, null, function () {
+        //修改下来框常用短语
+        var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+        var str = workCheck.FWCNewDuanYu;
+        var duanYu;
+        if (str == null || str == undefined || DuanYu == "")
+            return;
+        var duanYu = str.split("@");
+        if (duanYu.length > 0) {
+            var _Html = "<option value=''>常用短语</option>";
+            for (var i = 0; i < duanYu.length; i++) {
+                if (duanYu[i] == "") {
+                    continue;
+                }
+                _Html += "<option value='" + duanYu[i] + "'>" + duanYu[i] + "</option>";
+            }
+            $("#DuanYu").html(_Html)
+        }
+    });
+}
+
+function ChangeWorkCheck(str) {
+    $("#WorkCheck_Doc").val(str);
+    $('#bootStrapdlg').modal('hide');
 }
 

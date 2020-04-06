@@ -241,6 +241,9 @@
             box-sizing: border-box;
             outline: none;
         }
+        .NewChild{
+           
+        }
     </style>
     <script type="text/javascript">
         //然浏览器最大化.
@@ -373,7 +376,7 @@
 
             // alert(html);
             tbody.append($(html));
-
+            $(".NewChild").hide();
             //contentTable
             $('#contentTable').children().remove();
             $('#contentTable').append(tbody);
@@ -1019,7 +1022,10 @@
                 window.location.href = window.location.href;
             });
         }
-
+        function ShowNew() {
+            $(".NewChild").fadeToggle("slow");
+            
+        }
         function GroupField(mypk, OID) {
 
             // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
@@ -1608,27 +1614,30 @@
                     导入/导出
                 </a>
 
-                <a href="javascript:AddF();" class="easyui-linkbutton btn-light-yellow">
+                <a href="javascript:ShowNew()" class="easyui-linkbutton btn-light-yellow">
+                    新建
+                </a>
+                <a style="display:none" href="javascript:AddF();" class="NewChild easyui-linkbutton btn-light-yellow">
                     新建字段
+                </a>
+                <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
+        隐藏字段
+    </a>-->
+                <a href="javascript:GroupFieldNew();" class="NewChild easyui-linkbutton btn-light-green">
+                    新建字段分组
+                </a>
+                <a href="javascript:GroupFieldFWCNew();" class="NewChild easyui-linkbutton btn-light-red">
+                    &nbsp;&nbsp;新建审核分组
+                </a>
+                <a href="javascript:NewMapDtl();" class="NewChild easyui-linkbutton btn-light-blue">
+                    新建从表
+                </a> <a href="javascript:NewAth();" class="NewChild easyui-linkbutton btn-light-green">
+                    新建附件
+                </a><a href="javascript:NewFrame();" class="NewChild easyui-linkbutton btn-light-yellow">
+                    新建框架
                 </a>
                 <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
                     批量修改字段
-                </a>
-                <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
-                    隐藏字段
-                </a>-->
-                <a href="javascript:GroupFieldNew();" class="easyui-linkbutton btn-light-green">
-                    新建字段分组
-                </a>
-                <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton btn-light-red">
-                    &nbsp;&nbsp;新建审核分组
-                </a>
-                <a href="javascript:NewMapDtl();" class="easyui-linkbutton btn-light-blue">
-                    新建从表
-                </a> <a href="javascript:NewAth();" class="easyui-linkbutton btn-light-green">
-                    新建附件
-                </a><a href="javascript:NewFrame();" class="easyui-linkbutton btn-light-yellow">
-                    新建框架
                 </a>
                 <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent">节点表单组件</a>
                 <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">

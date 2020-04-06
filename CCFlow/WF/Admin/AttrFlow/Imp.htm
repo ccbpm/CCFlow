@@ -25,6 +25,7 @@
         });
         //流程导入.
         function Imp_Done() {
+            $(".Btn_Do").val("正在导入...");
             var fk_flowSort = GetQueryString("FK_FlowSort");
             var fk_flow = GetQueryString("FK_Flow");
             var impWay = GetRadioValue("RB_ImpType");

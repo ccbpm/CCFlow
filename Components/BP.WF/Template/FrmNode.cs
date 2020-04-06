@@ -282,11 +282,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用节点组件?
         /// </summary>
-        public bool IsEnableFWC
+        public FrmWorkCheckSta IsEnableFWC
         {
             get
             {
-                return this.GetValBooleanByKey(FrmNodeAttr.IsEnableFWC);
+                return (FrmWorkCheckSta)this.GetValIntByKey(FrmNodeAttr.IsEnableFWC);
             }
             set
             {
@@ -591,6 +591,17 @@ namespace BP.WF.Template
                 return 0;
             }
         }
+        public string CheckField
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmWorkCheckAttr.CheckField);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.CheckField, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -623,7 +634,7 @@ namespace BP.WF.Template
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
-                    this.IsEnableFWC = true;
+                    this.IsEnableFWC = node.FrmWorkCheckSta;
 
                 }
                 return;
@@ -680,7 +691,9 @@ namespace BP.WF.Template
 
                 //@2019.09.30 by zhoupeng.
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
-              //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+                //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+                //签批字段不可见
+                map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
 
                 this._enMap = map;
                 return this._enMap;

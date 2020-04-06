@@ -1175,8 +1175,21 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE SYS_MAPDTL SET FK_NODE=0 WHERE NO IN " + dtlNos);
             }
 
-            #region 升级填充数据.
-            //pop自动填充
+            #region 升级审核组件
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                sql = "UPDATE WF_FrmNode F INNRT JOIN(SELECT FWCSta,NodeID FROM WF_Node ) N on F.FK_Node = N.NodeID and  F.IsEnableFWC =1 SET F.IsEnableFWC = N.FWCSta;";
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                sql = "UPDATE    F SET IsEnableFWC = N. FWCSta  FROM WF_FrmNode F,WF_Node N    WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                sql = "UPDATE WF_FrmNode F  SET (IsEnableFWC)=(SELECT FWCSta FROM WF_Node N WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1)";
+            DBAccess.RunSQL(sql);
+
+
+
+            #endregion 升级审核组件
+
+                #region 升级填充数据.
+                //pop自动填充
             MapExts exts = new MapExts();
             QueryObject qo = new QueryObject(exts);
             qo.AddWhere(MapExtAttr.ExtType, " LIKE ", "Pop%");

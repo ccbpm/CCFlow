@@ -637,7 +637,17 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmWorkCheckAttr.FWCView, value);
             }
         }
-
+        public string CheckField
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmWorkCheckAttr.CheckField);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.CheckField, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -780,8 +790,9 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, FrmWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
+                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='ND@NodeID'", true);
 
-                map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
+               // map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
                 map.AddTBString(FrmWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
 
@@ -839,7 +850,6 @@ namespace BP.WF.Template
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
             fl.Update();
-
             base.afterInsertUpdateAction();
         }
     }

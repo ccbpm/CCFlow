@@ -1462,7 +1462,7 @@ namespace BP.WF.HttpHandler
                     int nodeID = int.Parse(fl.No + "01");
                     FrmNode fn = new FrmNode();
                     fn.FK_Frm = "ND" + nodeID;
-                    fn.IsEnableFWC = false;
+                    fn.IsEnableFWC = FrmWorkCheckSta.Disable;
                     fn.FK_Node = nodeID;
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Default;
@@ -1471,7 +1471,7 @@ namespace BP.WF.HttpHandler
                     nodeID = int.Parse(fl.No + "02");
                     fn = new FrmNode();
                     fn.FK_Frm = "ND" + nodeID;
-                    fn.IsEnableFWC = false;
+                    fn.IsEnableFWC = FrmWorkCheckSta.Disable;
                     fn.FK_Node = nodeID;
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Default;

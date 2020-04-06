@@ -41,6 +41,32 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(FrmNodeAttr.FK_Flow);
             }
         }
+
+        /// <summary>
+        /// 是否启用节点组件?
+        /// </summary>
+        public FrmWorkCheckSta IsEnableFWC
+        {
+            get
+            {
+                return (FrmWorkCheckSta)this.GetValIntByKey(FrmNodeAttr.IsEnableFWC);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.IsEnableFWC, value);
+            }
+        }
+
+        /// <summary>
+        /// 签批字段
+        /// </summary>
+        public string CheckField
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmWorkCheckAttr.CheckField);
+            }
+        }
         #endregion
 
         #region 基本属性
@@ -87,7 +113,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 map.AddMyPK();
-
+               
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
 
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 0, 4, 20);
@@ -107,8 +133,10 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmNodeAttr.FrmSln, "控制该表单数据元素权限的方案，如果是自定义方案，就要设置每个表单元素的权限.");
 
 
-                map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
-                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;显示审核组件的前提是启用了节点表单的审核组件，审核组件的状态也是根据节点审核组件的状态决定的");
+                //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
+                map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
+                true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
+                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
 
                 //map.AddDDLSysEnum( BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 
@@ -140,6 +168,9 @@ namespace BP.WF.Template
 
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
                 map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+
+                //签批字段不可见
+                map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
 
 
                 RefMethod rm = new RefMethod();
@@ -191,12 +222,28 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "审核组件设置";
+                //rm.Icon = ../../Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoFrmNodeWorkCheck";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单组件";
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+        /// <summary>
+        /// 审核组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrmNodeWorkCheck()
+        {
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.WorkCheckFrm&PKVal=" + this.FK_Node+ "&CheckField=" + this.CheckField+"&FK_Frm="+this.FK_Frm+ "&t=" + DataType.CurrentDataTime;
+        }
 
         /// <summary>
         /// 改变表单类型
@@ -214,6 +261,15 @@ namespace BP.WF.Template
             return str;
         }
 
+        protected override void afterInsertUpdateAction()
+        {
+            Node node = new Node();
+            node.NodeID = this.FK_Node;
+            node.RetrieveFromDBSources();
+            node.FrmWorkCheckSta = this.IsEnableFWC;
+            node.Update();
+            base.afterInsertUpdateAction();
+        }
 
         #region 表单元素权限.
         public string DoDtls()

@@ -1382,8 +1382,7 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-                if (nd != null && fn.IsEnableFWC == true
-                    && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                if (nd != null && fn.IsEnableFWC != FrmWorkCheckSta.Disable)
                 {
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
@@ -1461,7 +1460,7 @@ namespace BP.WF.HttpHandler
 
 
                     #region 没有审核组件分组就增加上审核组件分组.
-                    if (fn.IsEnableFWC == true)
+                    if (fn.IsEnableFWC !=FrmWorkCheckSta.Disable)
                     {
                         //如果启用了审核组件，并且 节点表单与当前一致。
                         if (md.HisFrmType == FrmType.FoolForm)

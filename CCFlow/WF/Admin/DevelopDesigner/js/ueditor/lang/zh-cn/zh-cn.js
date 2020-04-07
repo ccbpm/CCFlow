@@ -187,8 +187,12 @@ UE.I18N['zh-cn'] = {
         'paste':"粘贴(Ctrl + v)",
         'pastemsg': "浏览器不支持,请使用 'Ctrl + v'",
         "text": "插入基本字段",
-        "enum": "插入枚举",
+        "textarea": "插入大文本",
+        "enumRadio": "插入单选枚举",
+        "enumSelect": "插入下拉框枚举",
+        "enumCheckBox": "插入复选框枚举",
         "select": "插入外键",
+        "impFrmFields":"插入回收字段"
     },
     'copymsg': "浏览器不支持,请使用 'Ctrl + c'",
     'pastemsg': "浏览器不支持,请使用 'Ctrl + v'",

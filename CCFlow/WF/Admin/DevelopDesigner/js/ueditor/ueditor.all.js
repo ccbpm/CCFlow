@@ -21872,8 +21872,14 @@ UE.plugins['contextmenu'] = function () {
                 },
                 '-',*/
                 { label: lang['text'], cmdName: 'text' },
-                { label: lang['enum'], cmdName: 'enum' },
+                { label: lang['textarea'], cmdName: 'textarea' },
+                '-',
+                { label: lang['enumRadio'], cmdName: 'enum', value: 'Radio' },
+                { label: lang['enumSelect'], cmdName: 'enum', value:  'Select' },
+                { label: lang['enumCheckBox'], cmdName: 'enum', value:  'CheckBox' },
                 { label: lang['select'], cmdName: 'select' },
+                '-',
+                { label: lang['impFrmFields'], cmdName: 'impfrmfields' },
                 '-',
                 {
                     label:lang.unlink,

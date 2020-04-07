@@ -46,7 +46,11 @@ namespace BP.Sys
         /// <summary>
         /// JS请求数据.
         /// </summary>
-        JQuery = 6
+        JQuery = 6,
+        /// <summary>
+        /// 系统字典表
+        /// </summary>
+        SysDict=7
     }
     /// <summary>
     /// 编码表类型
@@ -949,8 +953,41 @@ namespace BP.Sys
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
 
+            #region  如果是 系统字典表.
+            if (this.SrcType == Sys.SrcType.SysDict &&
+                (SystemConfig.CCBPMRunModel==0 || SystemConfig.CCBPMRunModel == 1))
+            {
+                //创建dict.
+                Dict dict = new Dict();
+                dict.TableID = this.No;
+                dict.TableName = this.Name;
+                dict.OrgNo = WebUser.OrgNo;
+                dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                dict.Insert();
 
-            #region 如果是本地类. @于庆海.
+                if (this.CodeStruct == CodeStruct.NoName)
+                {
+                    DictDtl dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.BH = "001";
+                    dtl.Name = "Item1";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.BH = "002";
+                    dtl.Name = "Item2";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+                }
+            }
+            #endregion  如果是 系统字典表.
+
+
+
+
+            #region 如果是本地类. 
             if (this.SrcType == Sys.SrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);

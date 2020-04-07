@@ -232,6 +232,7 @@
     <Compile Include="Sys\Contrast.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sys\DictDtl.cs" />
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
+    <Compile Include="Sys\Dict.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />
     <Compile Include="Sys\FrmUI\MapFrameExt.cs" />

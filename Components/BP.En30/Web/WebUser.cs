@@ -674,7 +674,7 @@ namespace BP.Web
                 if (val == null)
                 {
                     if (WebUser.No == null)
-                        throw new Exception("@err-005 OrgNo 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
+                        throw new Exception("@err-005 OrgNo 登录信息丢失.");
 
                     string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
                     SetSessionByKey("OrgNo", no);

@@ -27,31 +27,7 @@ A.GuestNo,A.GuestName,A.BillNo,A.FlowNote,A.TodoEmps,A.TodoEmpsNum,0 as TodoSta,
 '@IsCC=1'||A.AtPara as AtPara,
 1 as MyNum
   FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0;
-
-/****** 对象:  View V_FlowStarter    脚本日期:  2015-04-10 ******/;
-/*  V_FlowStarter */;
-CREATE VIEW V_FlowStarter
-(FK_Flow,FlowName,FK_Emp)
-AS
-SELECT A.FK_Flow, A.FlowName, C.FK_Emp FROM WF_Node A, WF_NodeStation B, Port_DeptEmpStation C 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
-AND  A.NodeID=B.FK_Node AND B.FK_Station=C.FK_Station   AND  ( A.DeliveryWay=0 OR A.DeliveryWay=14 )
-UNION  
-SELECT A.FK_Flow, A.FlowName, C.No FROM WF_Node A, WF_NodeDept B, Port_Emp C 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
-AND  A.NodeID=B.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 
-UNION  
-SELECT A.FK_Flow, A.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
-AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
-UNION 
-SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 
- UNION   
-SELECT A.FK_Flow, A.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C, Port_Emp D,  Port_DeptEmpStation E
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND A.NodeID=C.FK_Node AND B.FK_Dept=D.FK_Dept
-  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
-
+ 
 /****** 对象:  View V_FlowStarterBPM    脚本日期:  2015-04-10 ******/;
 
 CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)

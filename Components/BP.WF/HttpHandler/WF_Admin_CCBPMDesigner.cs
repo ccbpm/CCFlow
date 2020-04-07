@@ -944,7 +944,6 @@ namespace BP.WF.HttpHandler
                 fs.ParentNo = "0";
                 fs.Name = "流程树";
                 fs.Insert();
-
                 dt.Rows.Add("F99", "F0", "流程树", 0, 1, "FLOWTYPE", -1);
             }
             else

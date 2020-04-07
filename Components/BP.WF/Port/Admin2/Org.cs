@@ -149,7 +149,7 @@ namespace BP.WF.Port.Admin2
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Warning = "修改管理员";
+                rm.Title = "修改管理员";
                 rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
                 rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);

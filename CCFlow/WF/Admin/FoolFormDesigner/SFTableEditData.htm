@@ -25,6 +25,10 @@
 
         function InitPage() {
             var fk_sftable = GetQueryString("FK_SFTable");
+            var QueryType = GetQueryString("QueryType");
+            if (QueryType == "Sql") {
+                $("#Btns").hide();
+            }
             var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
             var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");
             maxIndx = ens.length;

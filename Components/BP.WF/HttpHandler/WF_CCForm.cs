@@ -4681,6 +4681,11 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
+                    //如果是绑定表单树中的表单，重新赋值绑定表单的名字
+                    if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    {
+                        fk_mapdata = nd.NodeFrmID;
+                    }
                     FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, fk_mapdata);
                     /*if (fn.FrmSln == FrmSln.Default)
                     {

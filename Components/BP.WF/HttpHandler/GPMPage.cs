@@ -292,12 +292,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GPM_Search()
         {
-            var SearchNo = this.GetRequestVal("SearchNo");
-            var SearchDept = this.GetRequestVal("SearchDept");
-            var SearchEmp = this.GetRequestVal("SearchEmp");
-            var SearchTel = this.GetRequestVal("SearchTel");
+            var searchKey = this.GetRequestVal("searchKey");
+            //var SearchDept = this.GetRequestVal("SearchDept");
+            //var SearchEmp = this.GetRequestVal("SearchEmp");
+            //var SearchTel = this.GetRequestVal("SearchTel");
             var sql = "SELECT e.No AS No,e.Name AS Name,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
-                "where d.No=e.FK_Dept AND e.No LIKE '%" + SearchNo + "%' AND e.NAME LIKE '%" + SearchEmp + "%' AND d.Name LIKE '%" + SearchDept + "%' AND e.Tel LIKE '%" + SearchTel + "%'";
+                "where d.No=e.FK_Dept AND (e.No LIKE '%" + searchKey + "%' or e.NAME LIKE '%" + searchKey + "%' or d.Name LIKE '%" + searchKey + "%' or e.Tel LIKE '%" + searchKey + "%')";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }

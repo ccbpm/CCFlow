@@ -624,7 +624,7 @@ namespace BP.WF.Template
         public FrmNode(string fk_flow, int fk_node, string fk_frm)
         {
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
-           
+
             if (i == 0)
             {
                 this.IsPrint = false;
@@ -652,7 +652,6 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 map.AddMyPK();
-
                 map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 200, 200);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点编号", true, false);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);

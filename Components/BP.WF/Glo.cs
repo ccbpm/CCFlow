@@ -728,9 +728,6 @@ namespace BP.WF
             DataTable dtFlows = ds.Tables[0];
             DataTable dtSeries = ds.Tables[1];
 
-
-
-
             json += "]";
 
             return "";

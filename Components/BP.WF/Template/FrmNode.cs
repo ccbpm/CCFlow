@@ -2,7 +2,6 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-using BP.En;
 using BP.Port;
 using BP.Sys;
 
@@ -720,6 +719,7 @@ namespace BP.WF.Template
 
             if (this.FK_Flow.Length == 0)
                 throw new Exception("@流程编号为空");
+
 
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
 

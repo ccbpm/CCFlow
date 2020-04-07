@@ -524,6 +524,7 @@ namespace BP.WF.Template
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
                 //map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                  //  true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
+
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
                     true, true, FrmWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
@@ -575,7 +576,10 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, FrmWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
-                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'", true);
+
+                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
+                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", sql, true);
+
                 //map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
                 map.AddTBString(FrmWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);

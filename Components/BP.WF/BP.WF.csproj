@@ -327,6 +327,7 @@
     <Compile Include="Template\NodeSimple.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Template\NodeWorkCheck.cs" />
     <Compile Include="Template\Part\FlowRefEmp.cs" />
     <Compile Include="Template\PowerModel.cs" />
     <Compile Include="Template\SQLTemplate.cs" />
@@ -343,7 +344,6 @@
     <Compile Include="Template\TestCase.cs" />
     <Compile Include="Template\Part\Part.cs" />
     <Compile Include="Template\Part\PartParentSubGuide.cs" />
-    <Compile Include="Template\WorkCheckFrm.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />

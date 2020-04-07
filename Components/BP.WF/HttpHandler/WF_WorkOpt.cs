@@ -2191,6 +2191,7 @@ namespace BP.WF.HttpHandler
                         case ActionType.UnSend:
                         //case ActionType.ForwardFL:
                         case ActionType.ForwardHL:
+                        case ActionType.SubThreadForward:
                         case ActionType.TeampUp:
                         case ActionType.Return:
                         case ActionType.StartChildenFlow:

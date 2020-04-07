@@ -132,9 +132,7 @@ namespace BP.WF.Template
                     "@0=默认方案@1=只读方案@2=自定义方案");
                 map.SetHelperAlert(FrmNodeAttr.FrmSln, "控制该表单数据元素权限的方案，如果是自定义方案，就要设置每个表单元素的权限.");
 
-
                 //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
-
 
                 map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                 true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");

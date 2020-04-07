@@ -355,7 +355,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     }
 
     if (shap == 'WorkCheck') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=审核组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=审核组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }
@@ -1271,7 +1271,7 @@ UE.plugins['component'] = function () {
                     alert('非节点表单,不能添加审核组件');
                     return;
                 }
-                var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + mypk + '&tab=审核组件';
+                var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + mypk + '&tab=审核组件';
                 OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                     //加载js
                     // $("<script type='text/javascript' src='../../WorkOpt/SubFlow.js'></script>").appendTo("head");
@@ -1353,7 +1353,7 @@ UE.plugins['component'] = function () {
 
                 if (dataType == "WorkCheck") {
                     var nodeID = GetQueryString("FK_Node");
-                    var frmCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                    var frmCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
                     frmCheck.FWCSta = 0;//禁用
                     frmCheck.Update();
                 }

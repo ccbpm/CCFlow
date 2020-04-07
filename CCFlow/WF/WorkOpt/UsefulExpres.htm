@@ -38,7 +38,7 @@
         });
 
         function GetSearchData() {
-            var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+            var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
             //获得数据
             var data = workCheck.FWCNewDuanYu;
             var dataInfo = {}
@@ -104,7 +104,7 @@
                     $('#TextArea').focus();
                     return;
                 }
-                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
                 if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
                     alert("常用短语中已存在，不能重复添加");
                     return;
@@ -131,7 +131,7 @@
                     return;
                 }
 
-                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
                 if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
                     alert("常用短语中已存在，不能重复添加");
                     return;
@@ -178,7 +178,7 @@
                 if (confirm('确定要删除这' + rows.length + '条数据吗？') == false)
                     return;
 
-                var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
+                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
                 var duanyuan = workCheck.FWCNewDuanYu;
                 $.each(rows, function (i, item) {
                     duanyuan = duanyuan.replace("@" + item.CURVALUE+"@", "");

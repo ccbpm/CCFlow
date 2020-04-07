@@ -286,7 +286,7 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'FrmCheck') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }

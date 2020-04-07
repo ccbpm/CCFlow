@@ -577,8 +577,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, FrmWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
 
-                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
-                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", sql, true);
+             
 
                 //map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 

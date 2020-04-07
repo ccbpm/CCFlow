@@ -124,8 +124,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true);
-
-                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
+                map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20, true);
 
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
@@ -135,8 +134,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
-               
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
+                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
 
                 /**map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.SetHelperAlert(MapAttrAttr.UIVisible, "对于不可见的字段可以在隐藏功能的栏目里找到这些字段进行编辑或者删除.");
@@ -208,9 +206,6 @@ namespace BP.Sys.FrmUI
         /// <returns>执行结果</returns>
         public string DoSetTextBox()
         {
-            this.UIContralType = UIContralType.TB;
-            this.Update();
-
             MapAttrString en = new MapAttrString(this.MyPK);
             en.UIContralType = UIContralType.TB;
             en.UIIsEnable = true;
@@ -334,6 +329,8 @@ namespace BP.Sys.FrmUI
             }
             #endregion 自动扩展字段长度.
 
+            //强制设置为签批组件.
+            this.UIContralType =  UIContralType.SignCheck;
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");

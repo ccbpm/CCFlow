@@ -134,15 +134,19 @@ namespace BP.WF.Template
 
 
                 //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
+
+
                 map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                 true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
                 map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
 
+                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
+                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", sql, true);
+
+
                 //map.AddDDLSysEnum( BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 
-                //显示的
-                map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
-                map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
+            
 
                 //add 2016.3.25.
                 map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);
@@ -160,18 +164,15 @@ namespace BP.WF.Template
                     "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
 
                 map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
-
-
                 map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
                 #endregion 表单启用规则.
-
 
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
                 map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
 
-                //签批字段不可见
-                map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
-
+                //显示的
+                map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
+                map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
                 RefMethod rm = new RefMethod();
                 //@袁丽娜

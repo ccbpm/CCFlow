@@ -88,6 +88,17 @@ namespace BP.Sys
                 this.SetValByKey(DictDtlAttr.Name, value);
             }
         }
+        public string ParentNo
+        {
+            get
+            {
+                return this.GetValStrByKey(DictDtlAttr.ParentNo);
+            }
+            set
+            {
+                this.SetValByKey(DictDtlAttr.ParentNo, value);
+            }
+        }
         #endregion 属性.
 
 

@@ -955,7 +955,7 @@ namespace BP.Sys
 
             #region  如果是 系统字典表.
             if (this.SrcType == Sys.SrcType.SysDict &&
-                (SystemConfig.CCBPMRunModel==0 || SystemConfig.CCBPMRunModel == 1))
+                (SystemConfig.CCBPMRunModel == 0 || SystemConfig.CCBPMRunModel == 1))
             {
                 //创建dict.
                 Dict dict = new Dict();
@@ -979,6 +979,40 @@ namespace BP.Sys
                     dtl.BH = "002";
                     dtl.Name = "Item2";
                     dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.BH = "003";
+                    dtl.Name = "Item3";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+                }
+
+                if (this.CodeStruct == CodeStruct.Tree)
+                {
+                    DictDtl dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.BH = "001";
+                    dtl.Name = "Item1";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "0";
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.BH = "002";
+                    dtl.Name = "Item2";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "001";
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.BH = "003";
+                    dtl.Name = "Item3";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "001";
                     dtl.Insert();
                 }
             }

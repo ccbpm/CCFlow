@@ -5,31 +5,31 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
     var _Html = "";
     //文本
     if (dataType == "Text")
-        _Html = "<input type='text' value= ''  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= ''  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>"+name;
     if (dataType == "Textarea") {
-        _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>";
+        _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>" + name;
     }
     //int型
     if (dataType == "Int")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
     //Float型
     if (dataType == "Float")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
     //浮点型
     if (dataType == "Double")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
     //金额
     if (dataType == "Money")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>";
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
     //日期
     if (dataType == "Date")
-        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"   leipiplugins="text" style="width:120px"/>';
+        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"   leipiplugins="text" style="width:120px"/>' + name;
     //时间
     if (dataType == "DateTime")
-        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>';
+        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>' + name;
     //复选框
     if (dataType == "CheckBox")
-        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name+"</label>" ;
+        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name + "</label>" + name;
 
     if (dataType == "Radio") {
         //获取枚举值
@@ -78,6 +78,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         _Html += "<option value=''>" + keyOfEn + "</option>";
         _Html += "</select>";
         _Html += "</span>";
+        _Html += name;
     }
     if (dataType == "EnumSelect") {
         //获取枚举值
@@ -92,6 +93,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
         }
         _Html += "</select>";
         _Html += "</span>";
+        _Html += name;
     }
     if (dataType == "HandWriting")//手写签字版
          _Html = "<img src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' data-type='HandWriting' data-key='" + mapAttr.MyPK + "'  leipiplugins='component'/>";

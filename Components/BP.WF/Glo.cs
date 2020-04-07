@@ -997,7 +997,6 @@ namespace BP.WF
             BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
             de.CheckPhysicsTable();
 
-
             BP.GPM.Emp emp1 = new BP.GPM.Emp();
             emp1.CheckPhysicsTable();
 
@@ -1009,6 +1008,40 @@ namespace BP.WF
 
             FlowOrg fo = new FlowOrg();
             fo.CheckPhysicsTable();
+
+            BP.Sys.SysEnumMain sem = new SysEnumMain();
+            sem.CheckPhysicsTable();
+
+            BP.Sys.SysEnum myse = new SysEnum();
+            myse.CheckPhysicsTable();
+
+            //检查表.
+            BP.Sys.GloVar gv = new GloVar();
+            gv.CheckPhysicsTable();
+
+            //检查表.
+            BP.Sys.EnCfg cfg = new BP.Sys.EnCfg();
+            cfg.CheckPhysicsTable();
+
+            //检查表.
+            BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
+            frmTree.CheckPhysicsTable();
+
+            BP.Sys.SFTable sf = new SFTable();
+            sf.CheckPhysicsTable();
+
+            BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
+            sb.CheckPhysicsTable();
+
+            BP.WF.Template.PushMsg pm = new PushMsg();
+            pm.CheckPhysicsTable();
+
+            //修复数据表.
+            BP.Sys.GroupField gf = new GroupField();
+            gf.CheckPhysicsTable();
+
+
+        
 
             if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
                 DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
@@ -1071,30 +1104,6 @@ namespace BP.WF
 
 
 
-            //检查表.
-            BP.Sys.GloVar gv = new GloVar();
-            gv.CheckPhysicsTable();
-
-            //检查表.
-            BP.Sys.EnCfg cfg = new BP.Sys.EnCfg();
-            cfg.CheckPhysicsTable();
-
-            //检查表.
-            BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
-            frmTree.CheckPhysicsTable();
-
-            BP.Sys.SFTable sf = new SFTable();
-            sf.CheckPhysicsTable();
-
-            BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
-            sb.CheckPhysicsTable();
-
-            BP.WF.Template.PushMsg pm = new PushMsg();
-            pm.CheckPhysicsTable();
-
-            //修复数据表.
-            BP.Sys.GroupField gf = new GroupField();
-            gf.CheckPhysicsTable();
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();

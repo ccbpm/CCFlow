@@ -1439,14 +1439,14 @@
         function EditDtl(mypk) {
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageData.fk_mapdata + '&No=' + mypk;
 
-            OpenEasyUiDialog(url, "eudlgframe", '从表', 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '从表', 950, 600, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
 
         function EditM2M(dtlKey) {
             var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + pageData.fk_mapdata + '&NoOfObj=' + dtlKey;
-            // OpenEasyUiDialog(url, 'dtl', '属性', 800, 500, "icon-edit");
+            // OpenEasyUiDialog(url, 'dtl', '属性', 950, 600, "icon-edit");
         }
 
 
@@ -1454,7 +1454,7 @@
         function MapM2M() {
             var url = 'MapM2M.htm?DoType=List&FK_MapData=' + pageData.fk_mapdata;
 
-            OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '多选', 950, 600, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -1462,7 +1462,7 @@
         function MapM2MM() {
             var url = 'MapM2MM.htm?FK_MapData=' + pageData.fk_mapdata;
 
-            OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '多选', 950, 600, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -1471,7 +1471,7 @@
         function EditAth(ath) {
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + ath;
 
-            OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '附件', 950, 600, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

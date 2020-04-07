@@ -1474,6 +1474,7 @@ namespace BP.WF.Template
                     athDesc.FK_MapData = this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
+                    athDesc.IsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();
@@ -1530,6 +1531,7 @@ namespace BP.WF.Template
                     athDesc.FK_MapData = this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
+                    athDesc.IsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();

@@ -874,7 +874,7 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf)
+            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true)
             {
                 qo.addAnd();
                 qo.AddWhere("Starter", "=", WebUser.No);

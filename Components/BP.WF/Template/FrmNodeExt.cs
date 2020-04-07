@@ -143,10 +143,7 @@ namespace BP.WF.Template
                 string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
                 map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", sql, true);
 
-
                 //map.AddDDLSysEnum( BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
-
-            
 
                 //add 2016.3.25.
                 map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);

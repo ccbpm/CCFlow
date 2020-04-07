@@ -23,7 +23,6 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
-       
 
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
@@ -356,11 +355,11 @@ namespace BP.WF
                         json += "}";
                     }
 
-                    
+
 
                     json += "]},";
 
-                    json += GetSubFlowJson(sub,workID);
+                    json += GetSubFlowJson(sub, workID);
 
                 }
 
@@ -372,7 +371,7 @@ namespace BP.WF
         }
 
 
-        private static string GetSubFlowJson(SubFlow sub,Int64 workID)
+        private static string GetSubFlowJson(SubFlow sub, Int64 workID)
         {
             //获取子流程的子流程
             SubFlows ssubFlows = new SubFlows();
@@ -867,7 +866,7 @@ namespace BP.WF
                 return Platform.CCFlow;
             }
         }
-       
+
         /// <summary>
         /// 短消息写入类型
         /// </summary>
@@ -977,7 +976,7 @@ namespace BP.WF
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
-            if (DBAccess.IsExitsTableCol("Sys_GroupField","EnName")==true)
+            if (DBAccess.IsExitsTableCol("Sys_GroupField", "EnName") == true)
                 DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID is null");
 
 
@@ -1067,7 +1066,7 @@ namespace BP.WF
                 }
             }
 
-            
+
 
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
@@ -1183,13 +1182,10 @@ namespace BP.WF
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "UPDATE WF_FrmNode F  SET (IsEnableFWC)=(SELECT FWCSta FROM WF_Node N WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1)";
             DBAccess.RunSQL(sql);
-
-
-
             #endregion 升级审核组件
 
-                #region 升级填充数据.
-                //pop自动填充
+            #region 升级填充数据.
+            //pop自动填充
             MapExts exts = new MapExts();
             QueryObject qo = new QueryObject(exts);
             qo.AddWhere(MapExtAttr.ExtType, " LIKE ", "Pop%");
@@ -1408,7 +1404,7 @@ namespace BP.WF
                         DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
 
                     }
-                        DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows BLOB");
+                    DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows BLOB");
 
                 }
 
@@ -1456,7 +1452,7 @@ namespace BP.WF
 
                 //删除垃圾数据.
                 BP.Sys.MapExt.DeleteDB();
-
+                
                 //升级傻瓜表单.
                 MapFrmFool mff = new MapFrmFool();
                 mff.CheckPhysicsTable();
@@ -2084,7 +2080,7 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQL(sql);
 
                 errInfo = " 当前用户没有[插入数据]的权限. ";
-                sql = "INSERT INTO AA (OID) VALUES(100)"; 
+                sql = "INSERT INTO AA (OID) VALUES(100)";
                 BP.DA.DBAccess.RunSQL(sql);
 
                 errInfo = " 当前用户没有[update 表数据]的权限. ";
@@ -3450,7 +3446,7 @@ namespace BP.WF
                 return CCBPMRunModel.Single;
             }
         }
-        
+
         /// <summary>
         /// 短信时间发送到
         /// 默认到 20 点结束.
@@ -4236,9 +4232,9 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
-            if (Glo.CCBPMRunModel!= CCBPMRunModel.Single)
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
-                
+
             if (exp.Contains("@") == false)
                 return exp;
 
@@ -4916,8 +4912,8 @@ namespace BP.WF
                 return Glo.IntallPath + "\\Data\\Node\\";
             }
         }
-      
-        
+
+
         public static void ClearDBData()
         {
             string sql = "DELETE FROM WF_GenerWorkFlow WHERE fk_flow not in (select no from wf_flow )";
@@ -5926,7 +5922,7 @@ namespace BP.WF
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
 
                 //workID相同或者是协作模式
-                if (pkval.Equals(ctrlWayId) ==true || athDesc.AthUploadWay == AthUploadWay.Interwork)
+                if (pkval.Equals(ctrlWayId) == true || athDesc.AthUploadWay == AthUploadWay.Interwork)
                     dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
                 else if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
@@ -5968,7 +5964,7 @@ namespace BP.WF
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
                 }
-                
+
                 if (isContantSelf == false)
                 {
                     qo.addAnd();
@@ -6678,7 +6674,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception("err@发送消息连接服务器失败.设置的url=["+ serverUrl + "]"+ex.Message);
+                throw new Exception("err@发送消息连接服务器失败.设置的url=[" + serverUrl + "]" + ex.Message);
             }
             return res;
         }

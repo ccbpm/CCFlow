@@ -509,7 +509,7 @@ namespace BP.WF
 
 
             //删除.
-            Template.FrmWorkCheck fwc = new Template.FrmWorkCheck(this.HisNode.NodeID);
+            Template.NodeWorkCheck fwc = new Template.NodeWorkCheck(this.HisNode.NodeID);
             if (fwc.FWCIsShowReturnMsg == false)
                 BP.WF.Dev2Interface.DeleteCheckInfo(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID);
 

@@ -754,7 +754,7 @@ namespace BP.WF
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
 
             //删除审核组件设置“协作模式下操作员显示顺序”为“按照接受人员列表先后顺序(官职大小)”，而生成的待审核轨迹信息
-            FrmWorkCheck fwc = new FrmWorkCheck(nd.NodeID);
+            NodeWorkCheck fwc = new NodeWorkCheck(nd.NodeID);
             if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
             {
                 BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +

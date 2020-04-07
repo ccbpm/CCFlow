@@ -322,7 +322,7 @@ namespace BP.WF.HttpHandler
                         if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //判断一下审核意见是否有默认值
-                            FrmWorkCheck workCheck = new FrmWorkCheck("ND" + nd.NodeID);
+                            NodeWorkCheck workCheck = new NodeWorkCheck("ND" + nd.NodeID);
                             string msg = "同意";
                             if (workCheck.FWCIsFullInfo == true)
                                 msg = workCheck.FWCDefInfo;
@@ -922,7 +922,7 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
                     // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
                     if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                     {
                         /*如果不等于启用, */
@@ -1370,7 +1370,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
 
                     // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
                     if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                     {
                         dr = dt.NewRow();
@@ -1925,7 +1925,7 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<a data-role='button'    value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" ></a>";
                     // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
                     if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                     {
                         /*如果不等于启用, */

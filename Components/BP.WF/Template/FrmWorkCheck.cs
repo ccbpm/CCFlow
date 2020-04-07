@@ -7,224 +7,7 @@ using BP.WF;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 附件类型
-    /// </summary>
-    public enum FWCAth
-    {
-        /// <summary>
-        /// 使用附件
-        /// </summary>
-        None,
-        /// <summary>
-        /// 多附件
-        /// </summary>
-        MinAth,
-        /// <summary>
-        /// 单附件
-        /// </summary>
-        SingerAth,
-        /// <summary>
-        /// 图片附件
-        /// </summary>
-        ImgAth
-    }
-    /// <summary>
-    /// 类型
-    /// </summary>
-    public enum FWCType
-    {
-        /// <summary>
-        /// 审核组件
-        /// </summary>
-        Check,
-        /// <summary>
-        /// 日志组件
-        /// </summary>
-        DailyLog,
-        /// <summary>
-        /// 周报
-        /// </summary>
-        WeekLog,
-        /// <summary>
-        /// 月报
-        /// </summary>
-        MonthLog
-    }
-    /// <summary>
-    /// 显示格式
-    /// </summary>
-    public enum FrmWorkShowModel
-    {
-        /// <summary>
-        /// 表格
-        /// </summary>
-        Table,
-        /// <summary>
-        /// 自由显示
-        /// </summary>
-        Free
-    }
-    /// <summary>
-    /// 显示控制方式
-    /// </summary>
-    public enum SFShowCtrl
-    {
-        /// <summary>
-        /// 所有的子线程都可以看到
-        /// </summary>
-        All,
-        /// <summary>
-        /// 仅仅查看我自己的
-        /// </summary>
-        MySelf
-    }
-  
-    /// <summary>
-    /// 审核组件状态
-    /// </summary>
-    public enum FrmWorkCheckSta
-    {
-        /// <summary>
-        /// 不可用
-        /// </summary>
-        Disable,
-        /// <summary>
-        /// 可用
-        /// </summary>
-        Enable,
-        /// <summary>
-        /// 只读
-        /// </summary>
-        Readonly
-    }
-    /// <summary>
-    /// 协作模式下操作员显示顺序
-    /// </summary>
-    public enum FWCOrderModel
-    {
-        /// <summary>
-        /// 按审批时间先后排序
-        /// </summary>
-        RDT = 0,
-        /// <summary>
-        /// 按照接受人员列表先后顺序(官职大小)
-        /// </summary>
-        SqlAccepter = 1
-    }
-    /// <summary>
-    /// 审核组件
-    /// </summary>
-    public class FrmWorkCheckAttr : EntityNoAttr
-    {
-        /// <summary>
-        /// 傻瓜表单审核标签
-        /// </summary>
-        public const string FWCLab = "FWCLab";
-        /// <summary>
-        /// 是否可以审批
-        /// </summary>
-        public const string FWCSta = "FWCSta";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string FWC_X = "FWC_X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string FWC_Y = "FWC_Y";
-        /// <summary>
-        /// H
-        /// </summary>
-        public const string FWC_H = "FWC_H";
-        /// <summary>
-        /// W
-        /// </summary>
-        public const string FWC_W = "FWC_W";
-        /// <summary>
-        /// 应用类型
-        /// </summary>
-        public const string FWCType = "FWCType";
-        /// <summary>
-        /// 附件
-        /// </summary>
-        public const string FWCAth = "FWCAth";
-        /// <summary>
-        /// 显示方式.
-        /// </summary>
-        public const string FWCShowModel = "FWCShowModel";
-        /// <summary>
-        /// 轨迹图是否显示?
-        /// </summary>
-        public const string FWCTrackEnable = "FWCTrackEnable";
-        /// <summary>
-        /// 历史审核信息是否显示?
-        /// </summary>
-        public const string FWCListEnable = "FWCListEnable";
-        /// <summary>
-        /// 是否显示所有的步骤？
-        /// </summary>
-        public const string FWCIsShowAllStep = "FWCIsShowAllStep";
-        /// <summary>
-        /// 默认审核信息
-        /// </summary>
-        public const string FWCDefInfo = "FWCDefInfo";
-        /// <summary>
-        /// 节点意见名称
-        /// </summary>
-        public const string FWCNodeName = "FWCNodeName";
-
-        /// <summary>
-        /// 如果用户未审核是否按照默认意见填充？
-        /// </summary>
-        public const string FWCIsFullInfo = "FWCIsFullInfo";
-        /// <summary>
-        /// 操作名词(审核，审定，审阅，批示)
-        /// </summary>
-        public const string FWCOpLabel = "FWCOpLabel";
-        /// <summary>
-        /// 操作人是否显示数字签名
-        /// </summary>
-        public const string SigantureEnabel = "SigantureEnabel";
-        /// <summary>
-        /// 操作字段
-        /// </summary>
-        public const string FWCFields = "FWCFields";
-        /// <summary>
-        /// 自定短语
-        /// </summary>
-        public const string FWCNewDuanYu = "FWCNewDuanYu";
-        /// <summary>
-        /// 是否显示未审核的轨迹
-        /// </summary>
-        public const string FWCIsShowTruck = "FWCIsShowTruck";
-        /// <summary>
-        /// 是否显示退回信息
-        /// </summary>
-        public const string FWCIsShowReturnMsg = "FWCIsShowReturnMsg";
-        /// <summary>
-        /// 协作模式下操作员显示顺序
-        /// </summary>
-        public const string FWCOrderModel = "FWCOrderModel";
-        /// <summary>
-        /// 审核意见显示模式()
-        /// </summary>
-        public const string FWCMsgShow = "FWCMsgShow";
-        /// <summary>
-        /// 审核意见版本号控制
-        /// </summary>
-        public const string FWCVer = "FWCVer";
-
-        /// <summary>
-        /// 签批字段
-        /// </summary>
-        public const string CheckField = "CheckField";
-        /// <summary>
-        /// 审核意见立场 不同意、不通过、同意、赞成
-        /// </summary>
-        public const string FWCView = "FWCView";
-    }
-    /// <summary>
-    /// 审核组件
+    /// 绑定表单的审核组件
     /// </summary>
     public class FrmWorkCheck : Entity
     {
@@ -265,11 +48,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FrmWorkCheckSta)this.GetValIntByKey(FrmWorkCheckAttr.FWCSta);
+                return (FrmWorkCheckSta)this.GetValIntByKey(NodeWorkCheckAttr.FWCSta);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCSta, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCSta, (int)value);
             }
         }
         /// <summary>
@@ -279,11 +62,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FrmWorkShowModel)this.GetValIntByKey(FrmWorkCheckAttr.FWCShowModel);
+                return (FrmWorkShowModel)this.GetValIntByKey(NodeWorkCheckAttr.FWCShowModel);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCShowModel, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCShowModel, (int)value);
             }
         }
         /// <summary>
@@ -293,11 +76,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+                return (FWCAth)this.GetValIntByKey(NodeWorkCheckAttr.FWCAth);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCAth, (int)value);
             }
         }
         /// <summary>
@@ -307,11 +90,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FWCType)this.GetValIntByKey(FrmWorkCheckAttr.FWCType);
+                return (FWCType)this.GetValIntByKey(NodeWorkCheckAttr.FWCType);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCType, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCType, (int)value);
             }
         }
         /// <summary>
@@ -321,7 +104,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStrByKey(FrmWorkCheckAttr.FWCLab);
+                return this.GetValStrByKey(NodeWorkCheckAttr.FWCLab);
             }
         }
         /// <summary>
@@ -331,7 +114,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValRefTextByKey(FrmWorkCheckAttr.FWCType);
+                return this.GetValRefTextByKey(NodeWorkCheckAttr.FWCType);
             }
         }
         /// <summary>
@@ -341,11 +124,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_Y);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWC_Y, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWC_Y, value);
             }
         }
         /// <summary>
@@ -355,11 +138,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_X);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_X);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWC_X, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWC_X, value);
             }
         }
         /// <summary>
@@ -369,11 +152,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_W);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_W);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWC_W, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWC_W, value);
             }
         }
         public string FWC_Wstr
@@ -392,11 +175,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_H);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_H);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWC_H, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWC_H, value);
             }
         }
         public string FWC_Hstr
@@ -415,11 +198,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCTrackEnable);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCTrackEnable);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCTrackEnable, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCTrackEnable, value);
             }
         }
         /// <summary>
@@ -429,11 +212,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCListEnable);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCListEnable);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCListEnable, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCListEnable, value);
             }
         }
         /// <summary>
@@ -443,11 +226,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsShowAllStep);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsShowAllStep);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCIsShowAllStep, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCIsShowAllStep, value);
             }
         }
         /// <summary>
@@ -457,11 +240,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsShowTruck);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsShowTruck);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCIsShowTruck, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCIsShowTruck, value);
             }
         }
         /// <summary>
@@ -471,11 +254,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsShowReturnMsg);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCIsShowReturnMsg, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg, value);
             }
         }
         /// <summary>
@@ -485,11 +268,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsFullInfo);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsFullInfo);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCIsFullInfo, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCIsFullInfo, value);
             }
         }
         /// <summary>
@@ -499,11 +282,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.FWCDefInfo);
+                return this.GetValStringByKey(NodeWorkCheckAttr.FWCDefInfo);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCDefInfo, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCDefInfo, value);
             }
         }
         /// <summary>
@@ -523,7 +306,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string str = this.GetValStringByKey(FrmWorkCheckAttr.FWCNodeName);
+                string str = this.GetValStringByKey(NodeWorkCheckAttr.FWCNodeName);
                 if (DataType.IsNullOrEmpty(str))
                     return this.Name;
                 return str;
@@ -536,11 +319,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.FWCOpLabel);
+                return this.GetValStringByKey(NodeWorkCheckAttr.FWCOpLabel);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCOpLabel, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCOpLabel, value);
             }
         }
         /// <summary>
@@ -550,11 +333,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.FWCFields);
+                return this.GetValStringByKey(NodeWorkCheckAttr.FWCFields);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCFields, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCFields, value);
             }
         }
         /// <summary>
@@ -564,11 +347,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.FWCNewDuanYu);
+                return this.GetValStringByKey(NodeWorkCheckAttr.FWCNewDuanYu);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCNewDuanYu, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCNewDuanYu, value);
             }
         }
         /// <summary>
@@ -578,11 +361,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(FrmWorkCheckAttr.SigantureEnabel);
+                return this.GetValBooleanByKey(NodeWorkCheckAttr.SigantureEnabel);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.SigantureEnabel, value);
+                this.SetValByKey(NodeWorkCheckAttr.SigantureEnabel, value);
             }
         }
 
@@ -593,11 +376,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FWCOrderModel)this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel, 0);
+                return (FWCOrderModel)this.GetValIntByKey(NodeWorkCheckAttr.FWCOrderModel, 0);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCOrderModel, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCOrderModel, (int)value);
             }
         }
         /// <summary>
@@ -607,11 +390,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FrmWorkCheckSta)this.GetValIntByKey(FrmWorkCheckAttr.FWCSta, 0);
+                return (FrmWorkCheckSta)this.GetValIntByKey(NodeWorkCheckAttr.FWCSta, 0);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCSta, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCSta, (int)value);
             }
         }
 
@@ -619,35 +402,37 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWCVer, 0);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCVer, 0);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCVer,value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCVer,value);
             }
         }
         public string FWCView
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.FWCView);
+                return this.GetValStringByKey(NodeWorkCheckAttr.FWCView);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCView, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCView, value);
             }
         }
+
         public string CheckField
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.CheckField);
+                return this.GetValStringByKey(NodeWorkCheckAttr.CheckField);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.CheckField, value);
+                this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
             }
         }
+
         #endregion
 
         #region 构造方法
@@ -734,46 +519,47 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
-                map.AddTBString(FrmWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);
+                map.AddTBString(NodeWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
-                   true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
-                    true, true, FrmWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
+                //map.AddDDLSysEnum(NodeWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
+                 //  true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
 
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCType, (int)FWCType.Check, "审核组件", true, true,
-                    FrmWorkCheckAttr.FWCType, "@0=审核组件@1=日志组件@2=周报组件@3=月报组件");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
+                    true, true, NodeWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
-                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCType, (int)FWCType.Check, "审核组件", true, true,
+                    NodeWorkCheckAttr.FWCType, "@0=审核组件@1=日志组件@2=周报组件@3=月报组件");
 
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCAth, (int)FWCAth.None, "附件上传", true, true,
-                   FrmWorkCheckAttr.FWCAth, "@0=不启用@1=多附件@2=单附件(暂不支持)@3=图片附件(暂不支持)");
-                map.SetHelperAlert(FrmWorkCheckAttr.FWCAth,
+                map.AddTBString(NodeWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
+
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCAth, (int)FWCAth.None, "附件上传", true, true,
+                   NodeWorkCheckAttr.FWCAth, "@0=不启用@1=多附件@2=单附件(暂不支持)@3=图片附件(暂不支持)");
+                map.SetHelperAlert(NodeWorkCheckAttr.FWCAth,
                     "在审核期间，是否启用上传附件？启用什么样的附件？注意：附件的属性在节点表单里配置。"); //使用alert的方式显示帮助信息.
 
-                map.AddBoolean(FrmWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
+                map.AddBoolean(NodeWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
 
-                map.AddBoolean(FrmWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
 
-                map.AddTBString(FrmWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
-                map.AddTBString(FrmWorkCheckAttr.FWCDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
-                map.AddBoolean(FrmWorkCheckAttr.SigantureEnabel, false, "操作人是否显示为图片签名？", true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
+                map.AddTBString(NodeWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
+                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
+                map.AddBoolean(NodeWorkCheckAttr.SigantureEnabel, false, "操作人是否显示为图片签名？", true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
 
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 300, "位置X", true, false);
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 500, "位置Y", true, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_X, 300, "位置X", true, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_Y, 500, "位置Y", true, false);
 
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);
 
-                map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 50, 10, true);
-                map.AddTBString(FrmWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
+                map.AddTBString(NodeWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 50, 10, true);
+                map.AddTBString(NodeWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
 
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
-                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
 
                 //增加如下字段是为了查询与排序的需要.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 3, 10);
@@ -781,22 +567,21 @@ namespace BP.WF.Template
 
 
                 //协作模式下审核人显示顺序. add for yantai zongheng.
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
-                  FrmWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
+                  NodeWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
 
                 //for tianye , 多人审核的时候，不让其看到其他人的意见.
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
-                  FrmWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
+                  NodeWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
 
-                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, FrmWorkCheckAttr.FWCVer,
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, NodeWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
 
-                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='ND@NodeID'";
-                map.AddDDLSQL(FrmWorkCheckAttr.CheckField, null, "签批字段", sql, true);
+             
 
-               // map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
+                //map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
-                map.AddTBString(FrmWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
+                map.AddTBString(NodeWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
@@ -840,20 +625,10 @@ namespace BP.WF.Template
                     workCheckAth.Insert();
                 }
             }
-
-           
-
             return base.beforeUpdateInsertAction();
         }
 
-        protected override void afterInsertUpdateAction()
-        {
-            Node fl = new Node();
-            fl.NodeID = this.NodeID;
-            fl.RetrieveFromDBSources();
-            fl.Update();
-            base.afterInsertUpdateAction();
-        }
+       
     }
     /// <summary>
     /// 审核组件s

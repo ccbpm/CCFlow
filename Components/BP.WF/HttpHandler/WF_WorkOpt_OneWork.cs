@@ -129,7 +129,7 @@ namespace BP.WF.HttpHandler
             }
 
             //把节点审核配置信息.
-            FrmWorkCheck fwc = new FrmWorkCheck(gwf.FK_Node);
+            NodeWorkCheck fwc = new NodeWorkCheck(gwf.FK_Node);
             ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
             //返回结果.
@@ -639,7 +639,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //把节点审核配置信息.
-                FrmWorkCheck fwc = new FrmWorkCheck(gwf.FK_Node);
+                NodeWorkCheck fwc = new NodeWorkCheck(gwf.FK_Node);
                 ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
 
@@ -819,7 +819,7 @@ namespace BP.WF.HttpHandler
                     String fk_Node = dt.Rows[0]["FK_Node"].ToString();
 
                     //把节点审核配置信息.
-                    FrmWorkCheck fwc = new FrmWorkCheck(fk_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(fk_Node);
                     ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
 

@@ -137,11 +137,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+                return (FWCAth)this.GetValIntByKey(NodeWorkCheckAttr.FWCAth);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCAth, (int)value);
             }
         }
 
@@ -1557,7 +1557,7 @@ namespace BP.WF.Template
             frmTransferCustom.RetrieveFromDBSources();
             Cash2019.UpdateRow(frmTransferCustom.ToString(), this.NodeID.ToString(), frmTransferCustom.Row);
 
-            FrmWorkCheck frmWorkCheck = new FrmWorkCheck();
+            NodeWorkCheck frmWorkCheck = new NodeWorkCheck();
             frmWorkCheck.NodeID = this.NodeID;
             frmWorkCheck.RetrieveFromDBSources();
             Cash2019.UpdateRow(frmWorkCheck.ToString(), this.NodeID.ToString(), frmWorkCheck.Row);

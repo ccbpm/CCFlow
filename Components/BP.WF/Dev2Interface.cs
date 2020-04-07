@@ -9674,7 +9674,7 @@ namespace BP.WF
         /// <param name="checkNote">填写意见</param>
         public static void Node_DoCCCheckNote(string fk_flow, int fk_node, Int64 workid, Int64 fid, string checkNote)
         {
-            FrmWorkCheck fwc = new FrmWorkCheck(fk_node);
+            NodeWorkCheck fwc = new NodeWorkCheck(fk_node);
 
             BP.WF.Dev2Interface.WriteTrackWorkCheck(fk_flow, fk_node, workid,
                 fid, checkNote, fwc.FWCOpLabel);

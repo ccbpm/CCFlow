@@ -534,11 +534,11 @@ namespace BP.WF
         {
             get
             {
-                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+                return (FWCAth)this.GetValIntByKey(NodeWorkCheckAttr.FWCAth);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCAth, (int)value);
             }
         }
 
@@ -839,11 +839,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWCVer, 0);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCVer, 0);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCVer, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCVer, value);
             }
         }
         /// <summary>
@@ -2647,7 +2647,7 @@ namespace BP.WF
         {
             get
             {
-                string str = this.GetValStringByKey(FrmWorkCheckAttr.FWCNodeName);
+                string str = this.GetValStringByKey(NodeWorkCheckAttr.FWCNodeName);
                 if (DataType.IsNullOrEmpty(str))
                     return this.Name;
                 return str;
@@ -2662,21 +2662,21 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCOrderModel);
             }
         }
         public float FWC_H
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_H);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_H);
             }
         }
         public float FWC_W
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_W);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_W);
             }
         }
         /// <summary>
@@ -2722,8 +2722,8 @@ namespace BP.WF
                 #region 审核组件.
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
                 map.AddTBFloat(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
-                map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
-                map.AddTBInt(FrmWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
+                map.AddTBInt(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
+                map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
                 #endregion 审核组件.
 
@@ -2758,7 +2758,7 @@ namespace BP.WF
 
                 #endregion 考核属性.
 
-                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
+                map.AddTBString(NodeWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
                 map.AddTBString(NodeAttr.Doc, null, "描述", true, false, 0, 100, 10);
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true);
 

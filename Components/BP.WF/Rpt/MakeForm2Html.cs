@@ -582,7 +582,7 @@ namespace BP.WF
             #region 审核组件
             if (flowNo != null)
             {
-                FrmWorkCheck fwc = new FrmWorkCheck(frmID);
+                NodeWorkCheck fwc = new NodeWorkCheck(frmID);
                 if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
                     x = fwc.FWC_X + wtX;
@@ -1283,7 +1283,7 @@ namespace BP.WF
                 //#region 审核组件
                 if (gf.CtrlType == "FWC" && flowNo != null)
                 {
-                    FrmWorkCheck fwc = new FrmWorkCheck(frmID);
+                    NodeWorkCheck fwc = new NodeWorkCheck(frmID);
 
                     String sql = "";
                     DataTable dtTrack = null;

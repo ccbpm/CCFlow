@@ -594,11 +594,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(FrmWorkCheckAttr.CheckField);
+                return this.GetValStringByKey(NodeWorkCheckAttr.CheckField);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.CheckField, value);
+                this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
             }
         }
         #endregion
@@ -692,7 +692,7 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
                 //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
                 //签批字段不可见
-                map.AddTBString(FrmWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
+                map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
 
                 this._enMap = map;
                 return this._enMap;

@@ -1400,11 +1400,11 @@ namespace BP.WF.HttpHandler
                 return null;
 
             #region 定义变量.
-            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
-            FrmWorkCheck frmWorkCheck = null;
+            NodeWorkCheck wcDesc = new NodeWorkCheck(this.FK_Node);
+            NodeWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;
             Nodes nds = new Nodes(this.FK_Flow);
-            FrmWorkChecks fwcs = new FrmWorkChecks();
+            NodeWorkChecks fwcs = new NodeWorkChecks();
             Node nd = null;
             WorkCheck wc = null;
             Tracks tks = null;
@@ -1420,7 +1420,7 @@ namespace BP.WF.HttpHandler
             if (this.GetRequestVal("IsReadonly") != null && this.GetRequestVal("IsReadonly").Equals("1"))
                 isReadonly = true;
             DataTable nodeEmps = new DataTable();
-            FrmWorkCheck fwc = null;
+            NodeWorkCheck fwc = null;
             DataTable dt = null;
             int idx = 0;
             int noneEmpIdx = 0;
@@ -1550,7 +1550,7 @@ namespace BP.WF.HttpHandler
                     if (nd == null)
                         continue;
 
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
                     //求出主键
                     long pkVal = this.WorkID;
                     if (nd.HisRunModel == RunModel.SubThread)
@@ -1640,7 +1640,7 @@ namespace BP.WF.HttpHandler
                     row["NodeID"] = tk.NDFrom;
 
                     row["NodeName"] = tk.NDFromT;
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
 
                     // zhoupeng 增加了判断，在会签的时候最后会签人发送前不能填写意见.
                     if (tk.NDFrom == this.FK_Node && tk.EmpFrom == BP.Web.WebUser.No && isCanDo && isDoc == false)
@@ -1756,7 +1756,7 @@ namespace BP.WF.HttpHandler
                                     // 发起多个子流程时，发起人只显示一次
                                     if (mysubtk.NDFrom == int.Parse(fk_flow + "01") && biaoji == 1)
                                         continue;
-                                    FrmWorkCheck subFrmCheck = new FrmWorkCheck("ND" + mysubtk.NDFrom);
+                                    NodeWorkCheck subFrmCheck = new NodeWorkCheck("ND" + mysubtk.NDFrom);
                                     row = tkDt.NewRow();
                                     row["NodeID"] = mysubtk.NDFrom;
                                     row["NodeName"] = string.Format("(子流程){0}", mysubtk.NDFromT);
@@ -1894,7 +1894,7 @@ namespace BP.WF.HttpHandler
             if (tks == null)
                 tks = wc.HisWorkChecks;
 
-            foreach (FrmWorkCheck item in fwcs)
+            foreach (NodeWorkCheck item in fwcs)
             {
                 if (item.FWCIsShowTruck == false)
                     continue;  //不需要显示历史记录.
@@ -1965,11 +1965,11 @@ namespace BP.WF.HttpHandler
                 return "err@登录信息丢失,请重新登录.";
 
             #region 定义变量.
-            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node); // 当前节点的审核组件
-            FrmWorkCheck frmWorkCheck = null;
+            NodeWorkCheck wcDesc = new NodeWorkCheck(this.FK_Node); // 当前节点的审核组件
+            NodeWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;    //附件数据
             Nodes nds = new Nodes(this.FK_Flow); //该流程的所有节点
-            FrmWorkChecks fwcs = new FrmWorkChecks();
+            NodeWorkChecks fwcs = new NodeWorkChecks();
             Node nd = null;
             WorkCheck wc = null;
             Tracks tks = null;
@@ -1986,7 +1986,7 @@ namespace BP.WF.HttpHandler
                 isReadonly = true;
 
             DataTable nodeEmps = new DataTable();
-            FrmWorkCheck fwc = null;
+            NodeWorkCheck fwc = null;
             DataTable dt = null;
             int idx = 0;
             int noneEmpIdx = 0;
@@ -2115,7 +2115,7 @@ namespace BP.WF.HttpHandler
                     if (nd == null)
                         continue;
 
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
                     //求出主键
                     long pkVal = this.WorkID;
                     if (nd.HisRunModel == RunModel.SubThread)
@@ -2180,7 +2180,7 @@ namespace BP.WF.HttpHandler
                     //if (tk.NDFrom == this.FK_Node&& checkerPassed.IndexOf("," + tk.EmpFrom + ",") < 0 && (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12))
                     //    continue;
 
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
 
                     //历史审核信息现在存放在流程前进的节点中
                     switch (tk.HisActionType)
@@ -2411,7 +2411,7 @@ namespace BP.WF.HttpHandler
             if (tks == null)
                 tks = wc.HisWorkChecks;
 
-            foreach (FrmWorkCheck item in fwcs)
+            foreach (NodeWorkCheck item in fwcs)
             {
                 if (item.FWCIsShowTruck == false)
                     continue;  //不需要显示历史记录.
@@ -2579,7 +2579,7 @@ namespace BP.WF.HttpHandler
             //    return "";
 
             string val = string.Empty;
-            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
+            NodeWorkCheck wcDesc = new NodeWorkCheck(this.FK_Node);
             if (DataType.IsNullOrEmpty(wcDesc.FWCFields) == false)
             {
                 //循环属性获取值

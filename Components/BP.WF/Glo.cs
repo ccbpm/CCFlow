@@ -955,7 +955,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20200405;
+        public static int Ver = 20200406;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1181,6 +1181,9 @@ namespace BP.WF
                 sql = "UPDATE    F SET IsEnableFWC = N. FWCSta  FROM WF_FrmNode F,WF_Node N    WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "UPDATE WF_FrmNode F  SET (IsEnableFWC)=(SELECT FWCSta FROM WF_Node N WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1)";
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                sql = "UPDATE WF_FrmNode SET IsEnableFWC=(SELECT FWCSta FROM WF_Node N Where N.NodeID=WF_FrmNode.FK_Node AND WF_FrmNode.IsEnableFWC=1)";
+            
             DBAccess.RunSQL(sql);
             #endregion 升级审核组件
 
@@ -1714,7 +1717,7 @@ namespace BP.WF
                 #endregion
 
                 #region 检查必要的升级。
-                FrmWorkCheck fwc = new FrmWorkCheck();
+                NodeWorkCheck fwc = new NodeWorkCheck();
                 fwc.CheckPhysicsTable();
 
                 Flow myfl = new Flow();
@@ -2269,7 +2272,7 @@ namespace BP.WF
             CC cc = new CC();
             cc.CheckPhysicsTable();
 
-            BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();
+            BP.WF.Template.NodeWorkCheck fwc = new NodeWorkCheck();
             fwc.CheckPhysicsTable();
 
             MapAttr attr = new MapAttr();

@@ -5516,7 +5516,7 @@ namespace BP.WF
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
                             BP.WF.Template.CC cc = new CC(); // 抄送相关的信息.
                             //cc.CheckPhysicsTable();
-                            BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();
+                            BP.WF.Template.NodeWorkCheck fwc = new NodeWorkCheck();
 
                             foreach (DataColumn dc in dt.Columns)
                             {

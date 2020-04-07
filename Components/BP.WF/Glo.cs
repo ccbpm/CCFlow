@@ -1040,50 +1040,50 @@ namespace BP.WF
 
         
 
-            if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
-                DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
+            //if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+            //    DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
 
-            sql = " ";
-            sql += "CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)";
-            sql += " AS ";
+            //sql = " ";
+            //sql += "CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)";
+            //sql += " AS ";
 
-            //--按照绑定的岗位计算
-            sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c  ";
-            sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  ";
-            sql += " AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14) ";
+            ////--按照绑定的岗位计算
+            //sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c  ";
+            //sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  ";
+            //sql += " AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14) ";
 
-            sql += " UNION ";
+            //sql += " UNION ";
 
-            //--按绑定的部门
-            sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c  ";
-            sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) ";
-            sql += " AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 ";
+            ////--按绑定的部门
+            //sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c  ";
+            //sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) ";
+            //sql += " AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 ";
 
 
-            sql += " UNION ";
-            //--按本节点绑定的人员
-            sql += " SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B  ";
-            sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  ";
-            sql += " AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3 ";
+            //sql += " UNION ";
+            ////--按本节点绑定的人员
+            //sql += " SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B  ";
+            //sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  ";
+            //sql += " AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3 ";
 
-            sql += " UNION ";
-            //--所有人都可以发起.
-            sql += " SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B  ";
-            sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 ";
-            sql += " UNION ";
+            //sql += " UNION ";
+            ////--所有人都可以发起.
+            //sql += " SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B  ";
+            //sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 ";
+            //sql += " UNION ";
 
-            //-- 按岗位与部门交集计算
-            sql += " SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept ";
-            sql += " B, WF_NodeStation C,  Port_DeptEmpStation E ";
-            sql += " WHERE a.NodePosType=0  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  AND  A.NodeID=B.FK_Node  ";
-            sql += " AND A.NodeID=C.FK_Node  AND B.FK_Dept=E.FK_Dept  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ";
+            ////-- 按岗位与部门交集计算
+            //sql += " SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept ";
+            //sql += " B, WF_NodeStation C,  Port_DeptEmpStation E ";
+            //sql += " WHERE a.NodePosType=0  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  AND  A.NodeID=B.FK_Node  ";
+            //sql += " AND A.NodeID=C.FK_Node  AND B.FK_Dept=E.FK_Dept  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ";
 
-            sql += " UNION ";
-            //--按照设置的组织计算
-            sql += " SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C ";
-            sql += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
-            sql += " AND  A.DeliveryWay=22 ";
-            DBAccess.RunSQL(sql); //创建视图.
+            //sql += " UNION ";
+            ////--按照设置的组织计算
+            //sql += " SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C ";
+            //sql += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
+            //sql += " AND  A.DeliveryWay=22 ";
+            //DBAccess.RunSQL(sql); //创建视图.
 
             #endregion 升级优化集团版的应用
 
@@ -1767,8 +1767,8 @@ namespace BP.WF
                 if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
                     BP.DA.DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
 
-                if (DBAccess.IsExitsObject("V_FlowStarter") == true)
-                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarter");
+                if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+                    BP.DA.DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
 
                 if (DBAccess.IsExitsObject("V_TOTALCH") == true)
                     BP.DA.DBAccess.RunSQL("DROP VIEW V_TOTALCH");

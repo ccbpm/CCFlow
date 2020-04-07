@@ -1007,6 +1007,9 @@ namespace BP.WF
             BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             fs.CheckPhysicsTable();
 
+            FlowOrg fo = new FlowOrg();
+            fo.CheckPhysicsTable();
+
             if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
                 DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
 

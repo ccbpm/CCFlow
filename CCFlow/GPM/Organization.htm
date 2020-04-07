@@ -619,15 +619,9 @@
         }
         //按人员查询
         function SearchEmp() {
-            var searchDept = $("#searchDept").val();
-            var searchEmp = $("#searchEmp").val();
-            var searchNo = $("#searchNo").val();
-            var searchTel = $("#searchTel").val();
+            var searchKey = $("#searchKey").val();
             var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            handler.AddPara("SearchDept",searchDept);
-            handler.AddPara("SearchEmp",searchEmp);
-            handler.AddPara("SearchNo",searchNo);
-            handler.AddPara("SearchTel",searchTel);
+            handler.AddPara("searchKey",searchKey);
             var emps = handler.DoMethodReturnJSON("GPM_Search");
 
             var html = "";
@@ -670,10 +664,7 @@
             
         }
         function Reset() {
-            $("#searchNo").val("");
-            $("#searchDept").val("");
-            $("#searchEmp").val("");
-            $("#searchTel").val("");
+            $("#searchKey").val("");
         }
 
     </script>
@@ -693,10 +684,7 @@
     </div>
     
     <div data-options="region:'north',split:true" style="padding:6px 0 6px 6px">
-        编号:<input id="searchNo" name="searchNo" type="text" />
-        名称:<input id="searchEmp" name="searchEmp" type="text" />
-        部门:<input id="searchDept" name="searchDept" type="text" />
-        电话:<input id="searchTel" name="searchTel" type="text" />
+        关键字:<input id="searchKey" name="searchKey" type="text" />
         <button class="btn btn-default btn-sm" id="SearchBtn" onclick="SearchEmp()" >查询</button>
         <button class="btn btn-default btn-sm" id="ResetBtn" onclick="Reset()">重置</button>
 
@@ -714,7 +702,7 @@
                 <img src="../WF/Admin/Portal/Img/ico-flow-import.png">增加子级
             </div>
             <div class="edit">
-                <img src="../WF/Admin/Portal/Img/ico-flow-prototype.png">编辑
+                <img src="../WF/Admin/Portal/Img/ico-flow-prototype.png">修改名称
             </div>
 
             <div class="delete">

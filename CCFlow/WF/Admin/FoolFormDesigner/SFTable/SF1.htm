@@ -9,7 +9,7 @@
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../../Scripts/PinYin.js" type="text/javascript"> </script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="SFTable.js" type="text/javascript"></script>
     <base target="_self" />
@@ -17,6 +17,8 @@
 
         //页面启动函数.
         $(function () {
+
+
 
             $("#Msg").html("正在加载,请稍后......");
 
@@ -59,20 +61,24 @@
         function Save() {
 
             var en = new Entity("BP.Sys.SFTable");
-            en.CopyForm();
-
-            if (en.IsExits() == true) {
-                alert("编号已经存在[" + en.No + "]请使用其他的编号.");
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
+                en.CopyForm();
+                if (en.IsExits() == true) {
+                    alert("编号已经存在[" + en.No + "]请使用其他的编号.");
+                    return;
+                }
+                var sfType = GetQueryString("SFType");
+                en.SrcType = sfType; //自定义数据表.
+                en.Insert();
+                alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
+            } else {
+                alert("不支持的运行模式");
                 return;
             }
 
-            en.SrcType = 1; //自定义数据表.
-            en.Insert();
-
-            alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
-
             window.location.href = "Default.htm";
-            window.location.href = "../SFTableEditData.htm?FK_SFTable="+en.No;
+            window.location.href = "../SFTableEditData.htm?FK_SFTable=" + en.No;
 
         }
     </script>
@@ -108,19 +114,21 @@
             <td>
                 <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
                 <label for="RB_QP">
-                    全拼</label>
+                    全拼
+                </label>
                 <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
                 <label for="RB_JP">
-                    简拼</label>
+                    简拼
+                </label>
             </td>
         </tr>
         <!--
-<tr>
-<td> 数据源 </td>
-<td > <select id="DDL_FK_DBSrc" /> </td>
-<td> 从那个数据源来查找数据 </td>
-</tr>
--->
+        <tr>
+        <td> 数据源 </td>
+        <td > <select id="DDL_FK_DBSrc" /> </td>
+        <td> 从那个数据源来查找数据 </td>
+        </tr>
+        -->
         <tr>
             <td>
                 数据格式

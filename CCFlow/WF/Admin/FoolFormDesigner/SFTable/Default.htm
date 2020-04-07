@@ -4,7 +4,7 @@
     <title>创建数据表向导</title>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
@@ -18,10 +18,10 @@
     <fieldset>
         <legend>外键表</legend>
         <ul>
+            <li><a href="SF1.htm?SFType=7">创建通用的系统字典表(数据存储到:Sys_Dict,Sys_DictDtl里面)</a></li>
             <li><a href="SF1.htm?SFType=1">创建本地数据表(外键表)</a></li>
             <!--<a href="SF2.htm?SFType=2"></a>-->
             <li><a href="SF2.htm?SFType=2">把现有的表或者视图作为外键表注册到表单数据字典.</a>(新版本暂不支持该功能)</li>
-
             <li><a href="SF0.htm?SFType=0">BP类(外键表)</a></li>
         </ul>
     </fieldset>
@@ -30,8 +30,12 @@
         <ul>
             <li><a href="SF3.htm?SFType=3">SQL查询表</a></li>
             <!--<li> <a href="SF4.htm?SFType=4">WebServices</a></li>-->
-            <li><a href="SF6_Handler.htm?SFType=5">微服务Handler外部数据源,(需要重写 \DataUser\SFTableHandler.ashx
-                或者 SFTableHandler.do 文件.)</a></li>
+            <li>
+                <a href="SF6_Handler.htm?SFType=5">
+                    微服务Handler外部数据源,(需要重写 \DataUser\SFTableHandler.ashx
+                    或者 SFTableHandler.do 文件.)
+                </a>
+            </li>
             <li><a href="SF7_JQuery.htm?SFType=6">JavaScript外部数据源(需要重写\DataUser\SFTable.js 文件.)</a></li>
         </ul>
     </fieldset>
@@ -43,6 +47,6 @@
         </ul>
     </fieldset>
     <!--
-<a href="../CreateSFGuide.htm?DoType=New&FromApp=SL&s=0.5799617608442691">旧版本</a>-->
+    <a href="../CreateSFGuide.htm?DoType=New&FromApp=SL&s=0.5799617608442691">旧版本</a>-->
 </body>
 </html>

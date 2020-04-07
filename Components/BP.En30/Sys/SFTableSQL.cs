@@ -95,7 +95,7 @@ namespace BP.Sys
             if (this.IsClass)
                 return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
             else
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No+ "&&QueryType=Sql";
         }
 
         /// <summary>

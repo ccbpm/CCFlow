@@ -1185,7 +1185,7 @@ namespace BP.WF
 
             #region 升级审核组件
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sql = "UPDATE WF_FrmNode F INNRT JOIN(SELECT FWCSta,NodeID FROM WF_Node ) N on F.FK_Node = N.NodeID and  F.IsEnableFWC =1 SET F.IsEnableFWC = N.FWCSta;";
+                sql = "UPDATE WF_FrmNode F INNER JOIN(SELECT FWCSta,NodeID FROM WF_Node ) N on F.FK_Node = N.NodeID and  F.IsEnableFWC =1 SET F.IsEnableFWC = N.FWCSta;";
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "UPDATE    F SET IsEnableFWC = N. FWCSta  FROM WF_FrmNode F,WF_Node N    WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

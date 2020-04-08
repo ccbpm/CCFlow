@@ -58,6 +58,32 @@ function InitBar(key) {
 
 }
 
+
+/*
+ * 获取节点绑定的岗位
+ */
+function getStas() {
+    var ens = new Entities("BP.WF.Template.NodeStations");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    return ens;
+
+}
+/*
+ * 获取节点绑定的部门
+ */
+function getDepts() {
+    var ens = new Entities("BP.WF.Template.NodeDepts");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    return ens;
+
+}
+
 function OldVer() {
 
     var nodeID = GetQueryString("FK_Node");

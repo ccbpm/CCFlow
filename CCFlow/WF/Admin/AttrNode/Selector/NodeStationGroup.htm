@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-	<title>延续子流程</title>
+	<title>选择岗位</title>
 	 <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -35,12 +35,23 @@
 	        var stas = new Entities("BP.WF.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
+            if (stas.length == 0) {
+                $("#Msg").html("<span style='color:red;margin:10px'>组织编号为"+orgNo+"下面没有设置岗位</span>");
+                return;
+            }
+
+
 	        //查询出来数据.	       
 	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station WHERE OrgNo ='" + orgNo + "') group by No,Name";
 	       
 	        //获得要增加的流程集合.
-	        var stationTypes = DBAccess.RunSQLReturnTable(sql);
-	       
+			var stationTypes = DBAccess.RunSQLReturnTable(sql);
+			if (stationTypes.length == 0) {
+                $("#Msg").html("<span style='color:red;margin:10px'>组织编号为" + orgNo +"下的岗位对应的岗位类型不正确</span>");
+				return;
+            }
+
+
 	        BindGroupModel(stationTypes, stas, ens);
 
 	    });

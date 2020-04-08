@@ -40,7 +40,7 @@
             var data = handler.DoMethodReturnJSON("SystemClass_Init");
 
             var html = "<table class='table  table-hover' border=0 style='width:98%;' id='tab'>";
-            html += "<caption>系统实体表结构</caption>";
+          //  html += "<caption>系统实体表结构</caption>";
             html += "<tr>";
             html += "<th>序号</th>";
             html += "<th>类名</th>";
@@ -214,8 +214,18 @@
 </head>
 <body style="padding: 15px; margin: 15px;">
     <form id="cc">
-    <div style="padding: 10px;" id="Msg">
-        <img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......</div>
+
+        <div style="float: left">
+            <h4>&nbsp;&nbsp;&nbsp;类表结构</h4>
+        </div>
+        <div style="float: right; padding-right:20px;">
+           <a href="http://ccflow.org/docs" target="_blank" >下载Excel</a>
+        </div>
+
+
+        <div style="padding: 10px;" id="Msg">
+            <img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......
+        </div>
     </form>
 </body>
 </html>

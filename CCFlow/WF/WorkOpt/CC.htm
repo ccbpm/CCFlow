@@ -104,7 +104,7 @@
                 var u = new WebUser();
                 dept = u.FK_Dept;
             }
-            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&IsSelectMore=1" + "&s=" + Math.random();
             //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
@@ -162,60 +162,66 @@
             var workID = GetQueryString("WorkID");
 
             var webUser = new WebUser();
-
-            var emp = new Entity("BP.Port.Emp", empStr);
-
-            var empName = emp.Name;
-            var empDeptNo = emp.FK_Dept;
-            var empDeptName = emp.FK_DeptText;
-
-            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-
-            var title = gwf.Title;
-            var nodeName = gwf.NodeName;
-            var flowName = gwf.FlowName;
-
-            var cc = new Entity("BP.WF.Template.CCList");
-
-            //当前人员的信息.
-            cc.Rec = webUser.No;
-            cc.RecName = webUser.Name;
-
-            //抄送给人员的信息.
-            cc.CCTo = empStr;
-            cc.CCToName = empName;
-
-            cc.FK_Node = GetQueryString("FK_Node");
-            cc.WorkID = GetQueryString("WorkID");
-
-            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
-
-            if (cc.IsExits() == true) {
-                alert('该人员[' + cc.CCToName + ']已经存在.');
+            if (empStr == null || empStr == "")
                 return;
-            }
+            var empNos = empStr.split(",");
+            $.each(empNos, function (i, empNo) {
+                if (empNo != "") {
+                    var emp = new Entity("BP.Port.Emp", empNo);
 
-            //抄送给部门的信息.
-            cc.CCToDept = empDeptNo;
-            cc.CCToDeptName = empDeptName;
+                    var empName = emp.Name;
+                    var empDeptNo = emp.FK_Dept;
+                    var empDeptName = emp.FK_DeptText;
 
-            cc.WorkID = GetQueryString("WorkID");
-            cc.FK_Node = GetQueryString("FK_Node");
+                    var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
 
-            cc.NodeName = nodeName;
-            cc.FK_Flow = GetQueryString("FK_Flow");
-            cc.FlowName = flowName;
-            cc.Title = title;
-            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+                    var title = gwf.Title;
+                    var nodeName = gwf.NodeName;
+                    var flowName = gwf.FlowName;
+
+                    var cc = new Entity("BP.WF.Template.CCList");
+
+                    //当前人员的信息.
+                    cc.Rec = webUser.No;
+                    cc.RecName = webUser.Name;
+
+                    //抄送给人员的信息.
+                    cc.CCTo = empNo;
+                    cc.CCToName = empName;
+
+                    cc.FK_Node = GetQueryString("FK_Node");
+                    cc.WorkID = GetQueryString("WorkID");
+
+                    cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+
+                    if (cc.IsExits() == true) {
+                        alert('该人员[' + cc.CCToName + ']已经存在.');
+                        return;
+                    }
+
+                    //抄送给部门的信息.
+                    cc.CCToDept = empDeptNo;
+                    cc.CCToDeptName = empDeptName;
+
+                    cc.WorkID = GetQueryString("WorkID");
+                    cc.FK_Node = GetQueryString("FK_Node");
+
+                    cc.NodeName = nodeName;
+                    cc.FK_Flow = GetQueryString("FK_Flow");
+                    cc.FlowName = flowName;
+                    cc.Title = title;
+                    cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
 
 
-            if (cc.IsExits() == true) {
-                alert('该人员已经存在.');
-                return;
-            }
+                    if (cc.IsExits() == true) {
+                        alert('该人员已经存在.');
+                        return;
+                    }
 
-            cc.Insert();
-
+                    cc.Insert();
+                }
+                
+            });
             window.location.href = window.location.href;
 
             $(".foot").hide();

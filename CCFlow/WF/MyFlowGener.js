@@ -2315,7 +2315,7 @@ function SetPageSize(w, h) {
 function initModal(modalType, toNode) {
 
     //初始化退回窗口的SRC.
-    var html = '<div style="width:100%; height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+    var html = '<div style=" height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog">'
         + '<div class="modal-content" style="border-radius:0px;width:900px;height:560px;text-align:left;">'
         + '<div class="modal-header">'
@@ -2446,6 +2446,7 @@ function initModal(modalType, toNode) {
             //发送选择接收节点和接收人                
             case "sendAccepter":
                 $('#modalHeader').text("选择接受人");
+                SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":

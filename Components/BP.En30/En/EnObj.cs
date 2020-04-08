@@ -454,7 +454,7 @@ namespace BP.En
                             //执行SQL获取默认值
                             string sql = gloVar.Val;
                             sql = DealExp(sql, null, null);
-                            
+
                             //这里有异常就要跑出来
                             string val = DBAccess.RunSQLReturnString(sql);
                             this.SetValByKey(attr.Key, val);
@@ -1016,7 +1016,8 @@ namespace BP.En
         {
             try
             {
-                return int.Parse(this.GetValStrByKey(key));
+                string str = this.GetValStrByKey(key);
+                return string.IsNullOrWhiteSpace(str) ? 0 : int.Parse(this.GetValStrByKey(key));
             }
             catch (Exception ex)
             {
@@ -1133,7 +1134,8 @@ namespace BP.En
         {
             try
             {
-                return float.Parse(float.Parse(this.Row.GetValByKey(key).ToString()).ToString("0.00"));
+                string str = this.Row.GetValByKey(key).ToString();
+                return string.IsNullOrWhiteSpace(str) ? 0 : float.Parse(float.Parse(str).ToString("0.00"));
             }
             catch
             {
@@ -1176,7 +1178,8 @@ namespace BP.En
         {
             try
             {
-                return decimal.Round(decimal.Parse(this.GetValStrByKey(key)), 4);
+                string str = this.GetValStrByKey(key);
+                return string.IsNullOrWhiteSpace(str) ? 0 : decimal.Round(decimal.Parse(this.GetValStrByKey(key)), 4);
             }
             catch (Exception ex)
             {

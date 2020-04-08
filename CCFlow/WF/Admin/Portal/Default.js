@@ -1207,11 +1207,30 @@ function CopyFrm() {
     }
 
     var frmID = window.prompt('新的表单ID', node.id);
-    var frmName = window.prompt('新的表单名称', node.text);
     if (frmID == null || frmID == "") {
         alert("表单ID不能为空");
         return;
     }
+    var mapData = new Entity("BP.Sys.MapData")
+    mapData.SetPKVal(frmID);
+    if (mapData.RetrieveFromDBSources() != 0) {
+        alert("表单的ID已经存在，不能重复使用");
+        return;
+    }
+
+   
+    var frmName = window.prompt('新的表单名称', node.text);
+    if (frmName == null || frmName == "") {
+        alert("表单名称不能为空");
+        return;
+    }
+    var ens = new Entities("BP.Sys.MapDatas");
+    ens.Retrieve("Name", frmName);
+    if (ens.length > 0) {
+        alert("表单的名称已经存在，不能重复使用防止不能区分表单");
+        return;
+    }
+   
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
     handler.AddPara("FromFrmID", node.id);

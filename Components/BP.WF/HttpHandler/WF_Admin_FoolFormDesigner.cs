@@ -1113,7 +1113,7 @@ namespace BP.WF.HttpHandler
                 attr.MinLen = 0;
                 attr.MaxLen = 50;
                 attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
+                attr.UIContralType = uiContralType;
                 attr.Insert();
 
                 if (isSupperText == true)

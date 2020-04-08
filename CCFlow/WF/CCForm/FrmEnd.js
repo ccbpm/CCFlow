@@ -30,7 +30,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
         //为树形结构的外键或者外部数据源
-        if (mapAttr.AtPara.indexOf("@CodeStruct=1") != -1) {
+        if (mapAttr.AtPara !=null && mapAttr.AtPara.indexOf("@CodeStruct=1") != -1) {
             var parentNo = GetPara(mapAttr.AtPara, "ParentNo");
             var pushData = frmData[mapAttr.KeyOfEn];
             if (pushData == undefined)

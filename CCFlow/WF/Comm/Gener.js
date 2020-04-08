@@ -2720,6 +2720,8 @@ $(function () {
 
     if (url.indexOf('login.htm') == -1
         && url.indexOf('dbinstall.htm') == -1
+        && url.indexOf('registeradminer.htm') == -1
+        && url.indexOf('registerorg.htm') == -1
         && url.indexOf('reguser.htm') == -1
         && url.indexOf('port.htm') == -1) {
 

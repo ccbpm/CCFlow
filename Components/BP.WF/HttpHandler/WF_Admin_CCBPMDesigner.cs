@@ -833,14 +833,14 @@ namespace BP.WF.HttpHandler
 
             string sql = @"SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort  " +
                            "union " +
-                           "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX ";
+                           "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX,NO ";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle
                 || BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
                         "  union " +
-                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX";
+                        "SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME as NAME,IDX,0 ISPARENT,'FLOW' TTYPE,0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX,NO";
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -849,7 +849,7 @@ namespace BP.WF.HttpHandler
                      "  " +
                      "union " +
                      "SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow " +
-                     " ) A  ORDER BY DTYPE, IDX";
+                     " ) A  ORDER BY DTYPE, IDX,NO";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

@@ -1358,8 +1358,21 @@ namespace BP.WF
 		/// </summary>
         protected override void afterDelete()
         {
-            // . clear bad worker .  
-            DBAccess.RunSQLReturnTable("DELETE FROM WF_GenerWorkerlist WHERE WorkID in  ( select WorkID from WF_GenerWorkerlist WHERE WorkID not in (select WorkID from WF_GenerWorkFlow) )");
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                case DBType.Oracle:
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID in  ( select WorkID from WF_GenerWorkerlist WHERE WorkID not in (select WorkID from WF_GenerWorkFlow) )");
+                    break;
+                case DBType.MySQL:
+                    DBAccess.RunSQL("DELETE A FROM WF_GenerWorkerlist A, WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
+                    break;
+                case DBType.PostgreSQL:
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist A USING WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
+                    break;
+                default:break;
+
+            }
 
             WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID,this.FID);
             wf.DoDeleteWorkFlowByReal(true); /* 删除下面的工作。*/

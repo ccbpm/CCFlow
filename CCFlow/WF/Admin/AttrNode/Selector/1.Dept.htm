@@ -2,9 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -13,77 +15,99 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+
+        <div id="AdminModel">
+            <fieldset v-show="adminModel===1">
+                <legend>设置(超级管理员)</legend>
+                <ul>
+                    <li><a href="#" @click="OpenNew()"> 设置/更改部门</a></li>
+                    <!-- <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>-->
+                    <li>该部门下所有的人员都可以处理该节点的工作。</li>
+                </ul>
+            </fieldset>
+        </div>
+        <div id="OrgModel">
+            <fieldset v-show="orgModel===1">
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li><a href="#" @click="SetGroupDepts()">设置集团部门</a> </li>
+                    <li><a href="#" @click="SetOrgDepts()">设置本组织部门</a> </li>
+                </ul>
+            </fieldset>
+        </div>
+
+        <fieldset>
+            <legend>已经选择的部门</legend>
+            <div id="dept">
+                <ul>
+                    <li v-show="depts.length===0">未设置</li>
+                    <template v-for="dept in depts">
+                        <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                    </template>
+                </ul>
+
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">帮助</legend>
+            <ul>
+                <li>节点绑定部门就是该节点下绑定部门里面的所有人员都可以接受该工作.</li>
+            </ul>
+        </fieldset>
+    </div>
     <script type="text/javascript">
-        //初始化页面
-        $(function () {
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel: 0,
+                depts: [],
+                webuser: null,
+                deliverWay: SelectorModel.Dept
+            },
+            methods: {
+                OpenNew: function () {
 
-            InitBar(SelectorModel.Dept);
+                    var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
 
-            var ens = new Entities("BP.WF.Template.NodeDepts");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+                    url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    var H = document.documentElement.clientHeight - 30;
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, H, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+                SetGroupDepts: function () {
+                    OpenNodDeptGroup(this.webuser.GroupNo);
 
-            var html = "<ul>";
-            if (ens.length == 0)
-                html += "<li >未设置</li>";
+                },
+                SetOrgDepts: function () {
+                    OpenNodDeptGroup(this.webuser.FK_Dept);
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.depts = getDepts();
 
-            var idx = 0;
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
+                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
 
-                html += "<li>" + en.FK_DeptText + "</li>";
-
-            }
-
-            html += "</ul>";
-            document.getElementById("dept").innerHTML = html;
-
-            //根据用户的信息，判断是否启用那个设置工具。
-            var user = new WebUser();
-
-            $("#OrgModel").hide();
-            $("#AdminModel").hide();
-
-            if (user.No == "admin") {
-                /*调用通用的.*/
-                $("#AdminModel").show();
-
-            } else {
-                /*调用集团模式的.*/
-                $("#OrgModel").show();
             }
         });
-        //弹出新页面
-        function OpenNew() {
-
-            var nodeID = GetQueryString("FK_Node");
-            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
-
-            url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
-
-            OpenEasyUiDialogExt(url, "绑定部门", 800, 500, true);
-        }
-        function OpenOld() {
-            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '绑定部门', 800, 500, true);
-        }
-
-        //设置本组织岗位.
-        function SetOrgDepts() {
-            var user = new WebUser();
-            OpenNodDeptGroup(user.FK_Dept);
-        }
-
-        //设置集团岗位.
-        function SetGroupDepts() {
-            var user = new WebUser();
-            OpenNodDeptGroup(user.GroupNo);
-        }
-
         function OpenNodDeptGroup(orgNo) {
             var url = "NodeDeptGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExt(url, "绑定部门", 500, 600, true);
+            var H = document.documentElement.clientHeight - 30;
+            OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, H, function () {
+                Baseinfo.depts = getDepts();
+            });
         }
 
         //保存
@@ -91,49 +115,11 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
-            node.SelectorModel = SelectorModel.Dept;
+            node.SelectorModel = Baseinfo.deliverWay;
             node.Update();
             alert("保存成功.");
         }
     </script>
-</head>
-<body>
-    <div id="bar"> </div>
-
-    <div id="AdminModel">
-        <fieldset>
-            <legend>设置(超级管理员)</legend>
-            <ul>
-                <li><a href="javascript:OpenNew()"> 设置/更改部门</a></li>
-                <!-- <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>-->
-                <li>该部门下所有的人员都是可以选择的范围。</li>
-            </ul>
-        </fieldset>
-    </div>
-    <div id="OrgModel">
-        <fieldset>
-            <legend>设置（组织管理员）</legend>
-            <ul>
-                <li><a href="javascript:SetGroupDepts()">设置集团部门</a> </li>
-                <li><a href="javascript:SetOrgDepts()">设置本组织部门</a> </li>
-            </ul>
-        </fieldset>
-    </div>
-
-    <fieldset>
-        <legend>已经选择的部门</legend>
-        <div id="dept"> </div>
-    </fieldset>
-
-
-    <fieldset>
-        <legend id="help">帮助</legend>
-        <ul>
-            <li>可以设置一个或者多个部门.</li>
-            <li>每个部门下的人员都是上一个节点可以选择的人员范围.</li>
-        </ul>
-        <img src="../AccepterRole/4.BySelected-1.png" style="width:50%" class="HelpImg" />
-    </fieldset>
-
 </body>
+
 </html>

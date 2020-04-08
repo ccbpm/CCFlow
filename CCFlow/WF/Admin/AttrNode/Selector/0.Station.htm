@@ -16,114 +16,116 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+
+</head>
+<body>
+    <div id="App">
+        <!--<model-component></model-component>-->
+        <div id="bar">
+        </div>
+        <div id="AdminModel">
+            <fieldset v-show="adminModel===1">
+                <legend>设置岗位</legend>
+                <ul>
+                    <li><a href="#" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                    <li><a href="#" @click="OpenNew()">设置/更改岗位（左右树结构）</a> </li>
+
+                </ul>
+            </fieldset>
+        </div>
+        <div id="OrgModel">
+            <fieldset v-show="orgModel===1">
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
+                    <li><a href="#" @click="SetOrgStations()">设置本组织岗位</a> </li>
+                </ul>
+            </fieldset>
+        </div>
+        <fieldset>
+            <legend>已经设置的岗位</legend>
+            <div id="stas">
+
+                <ul>
+                    <li v-show="stas.length===0">未设置</li>
+                    <template v-for="sta in stas">
+                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                    </template>
+
+                </ul>
+
+
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">帮助</legend>
+            <ul>
+                <li>可以设置一个或者多个岗位。</li>
+                <li>每个岗位下的人员都是上一个节点可以选择的人员范围.</li>
+            </ul>
+            <img src="../AccepterRole/4.BySelected-1.png" style="width:50%" class="HelpImg" />
+        </fieldset>
+    </div>
     <script type="text/javascript">
-        //初始化页面
-        $(function () {
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel: 0,
+                stas: [],
+                webuser: null,
+                deliverWay: SelectorModel.Station
+            },
+            methods: {
+                OpenDot2DotStations: function () {
+                    OpenDot2DotStations();
+                },
+                OpenNew: function () {
+                    var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                    var H = document.documentElement.clientHeight - 30;
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, H, function () {
+                        Baseinfo.stas = getStas();
+                    });
+                },
+                SetGroupStations: function () {
+                    OpenNodStationGroup(this.webuser.GroupNo);
 
-            InitBar(SelectorModel.Station);
+                },
+                SetOrgStations: function () {
+                    OpenNodStationGroup(this.webuser.FK_Dept);
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.stas = getStas();
 
-            var ens = new Entities("BP.WF.Template.NodeStations");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "<ul>";
-            if (ens.length == 0)
-                html += "<li >未设置岗位</li>";
-            var idx = 0;
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_StationText + "</li>";
-            }
-
-            html += "</ul>";
-            document.getElementById("stas").innerHTML = html;
-
-            //根据用户的信息，判断是否启用那个设置工具。
-            var user = new WebUser();
-
-            $("#OrgModel").hide();
-            $("#AdminModel").hide();
-
-            if (user.No == "admin") {
-                /*调用通用的.*/
-                $("#AdminModel").show();
-
-            } else {
-                /*调用集团模式的.*/
-                $("#OrgModel").show();
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
+                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
             }
         });
 
-        function OpenNew() {
-            var nodeID = GetQueryString("FK_Node");
-            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-            OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-        }
-
-
-        //设置本组织岗位.
-        function SetOrgStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.FK_Dept);
-        }
-
-        //设置集团岗位.
-        function SetGroupStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.GroupNo);
-        }
-
         function OpenNodStationGroup(orgNo) {
             var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExt(url, "绑定岗位", 500, 600, true);
+            var H = document.documentElement.clientHeight - 30;
+            OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, H, function () {
+                Baseinfo.stas = getStas();
+            });
         }
 
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
-            node.SelectorModel = SelectorModel.Station;
+            node.SelectorModel = Baseinfo.deliverWay;
             node.Update();
             alert("保存成功.");
         }
     </script>
-</head>
-<body>
-    <div id="bar"> </div>
-
-    <div id="AdminModel">
-        <fieldset>
-            <legend>设置岗位</legend>
-            <ul>
-                <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-                <li> <a href="javascript:OpenNew()">设置/更改岗位（左右树结构）</a> </li>
-            </ul>
-        </fieldset>
-    </div>
-    <div id="OrgModel">
-        <fieldset>
-            <legend>设置（组织管理员）</legend>
-            <ul>
-                <li> <a href="javascript:SetGroupStations()">设置集团岗位</a> </li>
-                <li> <a href="javascript:SetOrgStations()">设置本组织岗位</a> </li>
-            </ul>
-        </fieldset>
-    </div>
-
-    <fieldset>
-        <legend>已经绑定的岗位</legend>
-        <div id="stas"></div>
-    </fieldset>
-
-
-    <fieldset>
-        <legend id="help">帮助</legend>
-        <ul>
-            <li>可以设置一个或者多个岗位。</li>
-            <li>每个岗位下的人员都是上一个节点可以选择的人员范围.</li>
-        </ul>
-        <img src="../AccepterRole/4.BySelected-1.png" style="width:50%" class="HelpImg" />
-    </fieldset>
-
-
+    
 </body>
 </html>

@@ -153,7 +153,7 @@ namespace BP.WF.Template
         }
         public override int RetrieveAll()
         {
-            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 return this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
 
             int i = base.RetrieveAll(FlowSortAttr.Idx);

@@ -2015,6 +2015,7 @@ function Save() {
         if (dataType != null && dataType != undefined && dataType != "") {
             //判断是否保存在Sys_MapAttr中，没有则保存
             var keyOfEn = tag.getAttribute("data-key");
+            var bindkey = tag.getAttribute("data-bindkey");
             if (dataType == "Radio")
                 keyOfEn = $($(tag).parent()[0]).parent()[0].getAttribute("data-key");//获取父级的data-key
             if (keyOfEn != null && keyOfEn != undefined && keyOfEn != "") {
@@ -2036,6 +2037,7 @@ function Save() {
                     mapAttr = new Entity("BP.Sys.MapAttr");
 
                     mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
+                   
                     mapAttr.FK_MapData = pageParam.fk_mapdata;
                     mapAttr.KeyOfEn = keyOfEn;
                     mapAttr.Name = name;
@@ -2053,20 +2055,33 @@ function Save() {
                         dataType = 7;
                     if (dataType == "CheckBox")
                         dataType = 4;
+                    if (dataType == "SignCheck") {
+                        dataType = 1;
+                        mapAttr.UIContralType = 14;
+                    }
+
                     mapAttr.MyDataType = dataType;
                     if (dataType == 4) {
-                        mapAttr.UIContralType = 2//checkbox
-                        mapAttr.LGType = 0;
-                    }
-                    else if (dataType == "Radio" || dataType == "Select") {
+                        //枚举复选框
+                        if (bindkey == null || bindkey == undefined) {
+                            mapAttr.UIContralType = 2//checkbox
+                            mapAttr.MyDataType = 1;
+                            mapAttr.LGType = 1;
+                        } else {
+                            mapAttr.UIContralType = 2//checkbox
+                            mapAttr.LGType = 0;
+                        }
+                           
+                    }else if (dataType == "Radio" || dataType == "Select") {
                         mapAttr.UIContralType = 1;//下拉框
                         mapAttr.LGType = 1;//枚举
                     } else {
-                        mapAttr.UIContralType = 0;//TB
                         mapAttr.LGType = 0;
                     }
                     mapAttr.Insert();
                 }
+                    
+                
             }
            
 

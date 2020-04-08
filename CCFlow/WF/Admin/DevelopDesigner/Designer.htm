@@ -37,39 +37,64 @@
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" />
     <style>
         body {
-            padding-right: 22px!important;
+            padding-right: 22px !important;
             background-color: #f7f6f9;
         }
+
+        /*@media screen and (min-width: 1200px) {
+            .cs-sidebar {
+                width: 180px
+            }
+        }
+        /* 设置了浏览器宽度不大于1200px时 abc 显示900px宽度 */
+
+        /*@media screen and (max-width: 901px) {
+            .cs-sidebar {
+                width: 160px;
+            }
+        }
+        /* 设置了浏览器宽度不大于901px时 abc 显示200px宽度 */
+
+        /*@media screen and (max-width: 500px) {
+            .cs-sidebar {
+                width: 100px;
+            }
+        }*/
         .cs-sidebar {
             padding-left: 8px;
             top: 46px;
             left: 14px;
-            width: 260px;
+            width: 180px;
             font-size: 13px;
             border: 0;
             background-color: #fff;
             box-shadow: 0 0 12px rgba(0,0,0,.1);
             border-radius: 4px;
         }
+
         .cs-sidebar .figurePanel {
             position: relative;
             padding: 10px 20px 10px 18px;
             background-color: #fff;
             border: 0;
         }
+
         .cs-sidebar .figurePanel img {
             position: absolute;
             right: 20px;
             top: 50%;
             transform: translateY(-50%);
         }
+
         .cs-sidebar .navlist li {
             background-color: #fff;
             cursor: pointer;
         }
+
         .cs-sidebar .navlist li:hover {
             background-color: #e4eef8;
         }
+
         .cs-sidebar .navlist li div {
             padding: 10px 0 10px 20px;
             height: 38px;
@@ -79,13 +104,16 @@
             background-size: 16px 16px;
             box-sizing: border-box;
         }
+
         .cs-tree .content-wrapper {
-            margin-left: 298px;
+            margin-left: 208px;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
+
         .cs-tree .tab-content {
             border: 0;
         }
+
         .cs-btn-group {
             padding: 8px 0 8px 8px;
             background-color: #f7f6f9;
@@ -93,28 +121,29 @@
             text-align: right;
         }
 
-        .cs-btn-group input[type="button"] {
-            margin: 0 0 0 6px;
-            padding: 0 14px;
-            color: #fff;
-            font-size: 13px;
-            line-height: 14px;
-            height: 26px;
-            border: 0 none;
-            border-radius: 3px;
-            background-image: none;
-            box-sizing: border-box;
-        }
+            .cs-btn-group input[type="button"] {
+                margin: 0 0 0 6px;
+                padding: 0 14px;
+                color: #fff;
+                font-size: 13px;
+                line-height: 14px;
+                height: 26px;
+                border: 0 none;
+                border-radius: 3px;
+                background-image: none;
+                box-sizing: border-box;
+            }
+
         .cs-btn-group span.l-btn-left.l-btn-left {
             padding: 0;
             background-image: none;
         }
-        .SignCheck {
-            border:thin solid #CCCCCC;
-            width:98%;
-            height:28px;
-        }
 
+        .SignCheck {
+            border: thin solid #CCCCCC;
+            width: 98%;
+            height: 28px;
+        }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini cs-tree" style="overflow:hidden;">
@@ -131,8 +160,8 @@
     <!--左边导航-->
     <div class="main-sidebar cs-sidebar">
         <div class="sidebar">
-            <div id="sidebar-menu" style="height:600px;">
-                <div id="figures" style="height: 100%; overflow: auto; position: relative;">
+            <div id="sidebar-menu" style="height:800px;">
+                <div id="figures" style="height: 97%; overflow-y: auto; position: relative;">
                     <div class="figurePanel">
                         <img src="../CCFormDesigner/Img/ico-menu-hide.png" align="middle" id="basicimg" />
                         <div>基本控件</div>
@@ -164,7 +193,7 @@
                     <div id="Data">
                         <ul class="navlist">
                             <li>
-                                <div id="TextBox" style="background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('text','Text');">
+                                <div id="TextBox" style="        background-image: url(../CCFormDesigner/Controls/Data/TextBox.png);" class="" onclick="leipiFormDesign.exec('text','Text');">
                                     <span class="navlistspan">文本类型</span>
                                 </div>
                             </li>

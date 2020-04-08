@@ -801,7 +801,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1) {
 
         //判断外键是否为树形结构
-        if (mapAttr.AtPara.indexOf("@CodeStruct=1") != -1)
+        if (mapAttr.AtPara!=null && mapAttr.AtPara.indexOf("@CodeStruct=1") != -1)
             return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:60%'></select>";
 
         if (mapAttr.UIIsEnable == 0) {

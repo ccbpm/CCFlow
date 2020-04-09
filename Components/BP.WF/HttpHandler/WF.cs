@@ -2085,13 +2085,13 @@ namespace BP.WF.HttpHandler
 
             System.Data.DataTable dt = null;
             if (sta == "-1")
-                dt = BP.WF.Dev2Interface.DB_CCList(BP.Web.WebUser.No);
+                dt = BP.WF.Dev2Interface.DB_CCList();
 
             if (sta == "0")
                 dt = BP.WF.Dev2Interface.DB_CCList_UnRead(BP.Web.WebUser.No);
 
             if (sta == "1")
-                dt = BP.WF.Dev2Interface.DB_CCList_Read(BP.Web.WebUser.No);
+                dt = BP.WF.Dev2Interface.DB_CCList_Read();
 
             if (sta == "2")
                 dt = BP.WF.Dev2Interface.DB_CCList_Delete(BP.Web.WebUser.No);

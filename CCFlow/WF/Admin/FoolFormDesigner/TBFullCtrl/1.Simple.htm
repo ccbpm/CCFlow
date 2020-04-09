@@ -100,30 +100,35 @@
             <tr>
                 <td colspan="2">
                     数据源: <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> 帮助: </a>
-                         <div id='sqlexp' style='color: Gray; display: none'>
-                             <ul>
-                                 <li>填充SQL帮助:</li>
-                                 <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-                                 <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                                 <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                                 <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
-                                 <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
-                             </ul>
-                             <fieldset>
-                                 <legend>主表运行效果</legend>
-                                 <img src="1.Simple.png" style="width:90%;" />
-                             </fieldset>
-
-                             <fieldset>
-                                 <legend>从表运行效果</legend>
-                                 <img src="1.Simple-1.png" style="width:90%;" />
-                             </fieldset>
-                         </div>
+                    
                 </td>
             </tr>
             <tr>
                 <td colspan="2" style="width: 100%;">
                     <textarea rows="4" name="TB_Tag4" id="TB_Tag4" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>填充SQL帮助:</li>
+                            <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                            <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                            <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                            <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
+                            <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
+                        </ul>
+                        <fieldset>
+                            <legend>主表运行效果</legend>
+                            <img src="1.Simple.png" style="width:90%;" />
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>从表运行效果</legend>
+                            <img src="1.Simple-1.png" style="width:90%;" />
+                        </fieldset>
+                    </div>
                 </td>
             </tr>
         </table>

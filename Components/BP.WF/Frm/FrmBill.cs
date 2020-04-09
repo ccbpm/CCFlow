@@ -41,6 +41,17 @@ namespace BP.Frm
         /// </summary>
         ByStationDept = 3
     }
+    public enum SearchDataRoleByDeptStation
+    {
+        /// <summary>
+        /// 只查询自己创建的
+        /// </summary>
+        ByOnlySelf = 0,
+        /// <summary>
+        /// 查询本部门创建的包含兼职部门
+        /// </summary>
+        ByDept = 1
+    }
     /// <summary>
     /// 实体表单 - Attr
     /// </summary>

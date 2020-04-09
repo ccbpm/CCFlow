@@ -1098,7 +1098,7 @@ namespace BP.WF.HttpHandler
                
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                if (uiContralType == UIContralType.SignCheck)
+                if (uiContralType == UIContralType.SignCheck || uiContralType == UIContralType.FlowBBS)
                 {
                     attr.UIIsEnable = false;
                     attr.UIVisible = false;

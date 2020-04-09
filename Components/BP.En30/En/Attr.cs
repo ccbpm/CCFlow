@@ -118,6 +118,10 @@ namespace BP.En
 		/// 签批组件
 		/// </summary>
 		SignCheck = 14,
+		/// <summary>
+		/// 评论组件
+		/// </summary>
+		FlowBBS = 15,
         /// <summary>
         /// 流程进度图
         /// </summary>

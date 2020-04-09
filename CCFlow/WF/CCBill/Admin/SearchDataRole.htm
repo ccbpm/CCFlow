@@ -29,9 +29,19 @@
             //创建实体.
             var frmID = GetQueryString("FrmID");
             var en = new Entity("BP.Frm.FrmBill", frmID);
-            en.SetPara("SearchDataRole", $("input[type=radio]:checked").val())
+            en.SetPara("SearchDataRole", $("input[name='RBPara_SearchDataRole']:checked").val());
             en.SetPKVal(frmID);
             en.Update();
+
+            if ($("input[name='RBPara_SearchDataRole']:checked").val() == "3") {
+                var a = $("input[name='RBPara_SearchDataRoleByDeptStation']:checked").val();
+                if (a != undefined) {
+                    en = new Entity("BP.Frm.FrmBill", frmID);
+                    en.SetPara("SearchDataRoleByDeptStation", $("input[name='RBPara_SearchDataRoleByDeptStation']:checked").val())
+                    en.SetPKVal(frmID);
+                    en.Update();
+                }
+            }
             window.location.href = window.location.href;
         }
 
@@ -159,6 +169,16 @@
                 <ul>
                     <li>选择岗位，然后设置岗位关联可以查询的部门.</li>
                     <li><a href="javaScript:void(0)" onclick="OpenStation()">设置岗位</a></li>
+                    <li>不属于此范围时：</li>
+                    <li>
+                        <input type="radio" value="0" id="RBPara_SearchDataRoleByDeptStation_0" name="RBPara_SearchDataRoleByDeptStation" />
+                        只可以查询自己创建的数据
+                    </li>
+                    <li>
+                        <input type="radio" value="1" id="RBPara_SearchDataRoleByDeptStation_1" name="RBPara_SearchDataRoleByDeptStation" />
+                        只可以查询本部门创建的数据
+                    </li>
+
                 </ul>
                 <table id="stationDept" style="width:90%">
                 </table>

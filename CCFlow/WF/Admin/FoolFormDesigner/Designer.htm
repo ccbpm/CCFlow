@@ -241,66 +241,8 @@
             box-sizing: border-box;
             outline: none;
         }
-        .NewChild{
-           
-        }
-        ul {
-            list-style: none;
-            position: absolute;
-            z-index: 100;
-            top:10px;
-            
-        }
-        .nav{
-            right:952px;
-            top:8px;
-            margin-bottom:4px;
-            
-        }
-        .nav span{
-            top:0px;
-        }
-        ul span{
-            line-height:20px;
-        }
-        .l-btn-text{
-            margin-bottom:20px;
-        }
-        .nav > li {
-            float: right;
-            list-style: none;
-        }
 
-        ul a {
-            display: block;
-            text-decoration: none;
-            padding-bottom:4px;
-            width: 100px;
-            height: 30px;
-            font-size:14px;
-            text-align: center;
-            line-height: 30px;
-            color: black;
-            border:1px solid black;
-            background-color:#F1F1F1;
-            border-radius: 10px;
-            margin-bottom:5px;
-        }
-
-        .drop-down-content {
-            padding: 0;
-            display: none;
-            /*position: absolute;*/
-        }
-        .nav .drop-down:hover .drop-down-content {
-            display: block;
-        }
-        .tabs-header:not(:nth-child(1)){
-            width:90% !important;
-            border:none !important;
-        }
-        .headTiele label{
-           color:red;
+        .NewChild {
         }
     </style>
     <script type="text/javascript">
@@ -434,7 +376,7 @@
 
             // alert(html);
             tbody.append($(html));
-            
+            $(".NewChild").hide();
             //contentTable
             $('#contentTable').children().remove();
             $('#contentTable').append(tbody);
@@ -1080,7 +1022,10 @@
                 window.location.href = window.location.href;
             });
         }
-        
+        function ShowNew() {
+            $(".NewChild").fadeToggle("slow");
+
+        }
         function GroupField(mypk, OID) {
 
             // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
@@ -1106,7 +1051,7 @@
             if (ftype == 1) {
 
 
-                if (uiContralType == 0 ) {
+                if (uiContralType == 0) {
                     title = '字段String属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
                 }
@@ -1501,7 +1446,7 @@
 
         function EditM2M(dtlKey) {
             var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + pageData.fk_mapdata + '&NoOfObj=' + dtlKey;
-            // OpenEasyUiDialog(url, 'dtl', '属性', 950, 600, "icon-edit");
+            // OpenEasyUiDialog(url, 'dtl', '属性', 800, 500, "icon-edit");
         }
 
 
@@ -1669,14 +1614,28 @@
                     导入/导出
                 </a>
 
-
-                <a href="javascript:AddF();" class=" easyui-linkbutton btn-light-yellow">
+                <a href="javascript:ShowNew()" class="easyui-linkbutton btn-light-yellow">
+                    新建
+                </a>
+                <a style="display:none" href="javascript:AddF();" class="NewChild easyui-linkbutton btn-light-yellow">
                     新建字段
                 </a>
                 <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
-        隐藏字段
-    </a>-->
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    隐藏字段
+                </a>-->
+                <a href="javascript:GroupFieldNew();" class="NewChild easyui-linkbutton btn-light-green">
+                    新建字段分组
+                </a>
+                <a href="javascript:GroupFieldFWCNew();" class="NewChild easyui-linkbutton btn-light-red">
+                    &nbsp;&nbsp;新建审核分组
+                </a>
+                <a href="javascript:NewMapDtl();" class="NewChild easyui-linkbutton btn-light-blue">
+                    新建从表
+                </a> <a href="javascript:NewAth();" class="NewChild easyui-linkbutton btn-light-green">
+                    新建附件
+                </a><a href="javascript:NewFrame();" class="NewChild easyui-linkbutton btn-light-yellow">
+                    新建框架
+                </a>
                 <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
                     批量修改字段
                 </a>
@@ -1684,46 +1643,6 @@
                 <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
                     手机表单
                 </a>
-                <ul class="nav" style="position:fixed;z-index:10000;display:block;float:right;">
-
-                    <li class="drop-down user-menu">
-
-                        <a style="padding-top:5px;" class="easyui-linkbutton btn-light-blue">
-                            新建其他
-                        </a>
-                        <ul style="list-style:none;top:0px;" class="drop-down-content">
-                            <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
-                <li><a id="OrgName" href="#">组织名称：</a></li>-->
-                            <li>
-                                <a href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-green">
-                                    新建从表
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:NewAth();" class=" easyui-linkbutton btn-light-blue">
-                                    新建附件
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
-                                    新建框架
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:GroupFieldNew();" class=" easyui-linkbutton btn-light-green">
-                                    新建字段分组
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:GroupFieldFWCNew();" class=" easyui-linkbutton btn-light-red">
-                                    新建审核分组
-                                </a>
-                            </li>
-                        </ul>
-
-                    </li>
-
-                </ul>
 
             </div>
         </div>

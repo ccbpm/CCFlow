@@ -852,6 +852,23 @@ namespace BP.WF.Template
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
             fl.Update();
+
+            if(this.FWCLab.Equals("审核组件") == false)
+            {
+                GroupFields groupFields = new GroupFields();
+                groupFields.Retrieve(GroupFieldAttr.FrmID, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
+                if (groupFields.Count == 1)
+                {
+                    GroupField gf = groupFields[0] as GroupField;
+                    if (gf.Lab.Equals(this.FWCLab) == false)
+                    {
+                        gf.Lab = this.FWCLab;
+                        gf.Update();
+                    }
+
+                }
+            }
+
             base.afterInsertUpdateAction();
         }
     }

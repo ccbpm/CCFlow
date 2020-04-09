@@ -53,7 +53,7 @@
 
         .btn {
             background: #2884fa !important;
-            border-radius: 20px !important;
+            border-radius: 3px !important;
             color: white !important;
             padding: 4px 17px !important;
         }
@@ -188,16 +188,17 @@
             //是否是单选？  =0 是多选   =1 是单选.
             var isSimplate = data.Selector[0].IsSimpleSelector;
 
-            var html = "<table border=0 width='98%'>";
+            var html = "<table border=0 width='98%' style='margin: auto;margin-top:5px'>";
 
             if (isSimplate == "0") { //
-                html += "<tr><th><label><input  type='checkbox' name='selectAll' id='selectAll' onclick='selectAll()'  value='全选' /><b>全选</b></label></th></tr>";
+                html += "<tr><th>&nbsp;&nbsp;<label><input  type='checkbox' name='selectAll' id='selectAll' onclick='selectAll()'  value='全选' /><b>&nbsp;全选</b></label></th></tr>";
             }
 
             if (depts == null) {
 
                 $.each(emps, function (i, emp) {
 
+                    html += "<tr><td>";
                     //检查该人员是否被选择.
                     var isSele = false;
                     $.each(selected, function (idx, sele) {
@@ -208,17 +209,17 @@
                     //多选.
                     if (isSimplate == "0") {
                         if (isSele == true)
-                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> &nbsp;<font color=green>" + emp.Name + "</font></label>";
                         else
-                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />&nbsp;" + emp.Name + "</label>";
                     }
 
                     //单选.
                     if (isSimplate == "1") {
                         if (isSele == true)
-                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> &nbsp;<font color=green>" + emp.Name + "</font></label>";
                         else
-                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
+                            html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />&nbsp;" + emp.Name + "</label>";
                     }
                 });
 
@@ -469,7 +470,7 @@
     </div>
     <div id="table">
     </div>
-    <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
+    <div style="position: fixed; bottom: 5px; right: 5px;" class="foot">
         <button id="btnOKAndClose" class="btn btn-info" style="display:none" onclick="SaveNodeEmps()">确定</button>
         <button id="btnSave" class="btn btn-info" onclick="SendNode()">发送</button>
         <button id="btnCancel" class="btn btn-info" onclick="Close()">

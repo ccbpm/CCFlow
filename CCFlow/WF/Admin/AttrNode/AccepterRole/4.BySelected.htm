@@ -105,7 +105,7 @@
                 if (node.IsEnableStaRange == 1)
                      this.isEnableStaRange = true;
                 this.nodeExt = new Entity("BP.WF.Template.NodeExt", this.nodeId);
-                if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) //组长模式
+                if (this.nodeExt.HuiQianRole == 4 && this.nodeExt.HuiQianLeaderRole == 0) //组长模式
                      this.isSimpleSelector = false;
                 }
         });

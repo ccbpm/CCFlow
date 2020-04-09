@@ -46,7 +46,9 @@
                     var en = mapAttrs[i];
                     if (en.UIVisible == 0 || en.GroupID != group.OID)
                         continue;
-
+                    if (en.MyDataType==2 && en.DefValType == 0 && en.DefVal=='10002') {
+                        en.DefVal = "";
+                    }
                     var html = "";
                     html += "<tr >";
                     html += "<td class=Idx>" + (i + 1) + "</td>";

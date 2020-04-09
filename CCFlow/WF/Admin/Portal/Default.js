@@ -760,7 +760,7 @@ function DeleteFlow() {
 
     if (window.confirm("你确定要删除名称为“" + currFlow.text + "”的流程吗？") == false)
         return;
-
+    $("#ShowMsg").show();
     //执行删除流程.
     var en = new Entity("BP.WF.Flow", currFlow.id);
     var data = en.DoMethodReturnString("DoDelete");
@@ -777,6 +777,7 @@ function DeleteFlow() {
         $('#tabs').tabs('close', currFlow.text);
     }
     $('#flowTree').tree('remove', currFlow.target);
+    $("#ShowMsg").hide();
 }
 
 //流程属性,树上的.

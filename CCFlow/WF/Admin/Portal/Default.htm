@@ -109,11 +109,13 @@
     </script>
 </head>
 <body class="easyui-layout" data-options="fit: true">
-    <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: block;
-        width: 32px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
+    <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
+        width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
         font-weight: bold;">
-        <img alt="" src="./Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+        <img alt="" src="Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
+        正在删除，请稍后...
     </div>
+    
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
         z-index: 21006;">
     </div>
@@ -136,7 +138,7 @@
                     <span id="UserName" href="#"></span>
                     <ul style="list-style:none;" class="drop-down-content">
                         <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
-                    <li><a id="OrgName" href="#">组织名称：</a></li>-->
+                        <li><a id="OrgName" href="#">组织名称：</a></li>-->
                         <li><a href="/WF/Admin/Portal/SelectOneOrg.html">切换组织</a></li>
                         <li><a href="#" onclick="addTab('', '个人中心', '/WF/Setting/Default.htm', '')">个人中心</a></li>
                         <li><a href="#" onclick="LoginOut()">退出登录</a></li>
@@ -151,13 +153,13 @@
 
         <div id="tab-tools" style="height: 32px!important;">
             <!--<a href="#" class="easyui-linkbutton" id="Login2App" data-options="plain:true" onclick="Login2App()">
-            <img alt='使用普通用户,登录前台demo系统' class="ico" src='../../AppClassic/Img/ico-user.png' />登录前台
-        </a>
+                <img alt='使用普通用户,登录前台demo系统' class="ico" src='../../AppClassic/Img/ico-user.png' />登录前台
+            </a>
 
-        <a href="#" class="easyui-linkbutton" data-options="plain:true"
-           onclick="LoginOut()">
-            <img alt='退出ccbpm流程设计器' class="ico" src='../../AppClassic/Img/ico-exit.png' />退出
-        </a>-->
+            <a href="#" class="easyui-linkbutton" data-options="plain:true"
+               onclick="LoginOut()">
+                <img alt='退出ccbpm流程设计器' class="ico" src='../../AppClassic/Img/ico-exit.png' />退出
+            </a>-->
 
 
         </div>

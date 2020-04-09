@@ -107,7 +107,10 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmNodeAttr.FrmSln, "控制该表单数据元素权限的方案，如果是自定义方案，就要设置每个表单元素的权限.");
 
 
-                map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
+                //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
+                map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
+                true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
+
                 map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;显示审核组件的前提是启用了节点表单的审核组件，审核组件的状态也是根据节点审核组件的状态决定的");
 
                 //map.AddDDLSysEnum( BP.WF.Template.NodeWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);

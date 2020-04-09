@@ -168,7 +168,11 @@ UE.plugins['text'] = function () {
             if(type == "SignCheck")
                 html = popup.formatHtml(
                     '<nobr>签批组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
-            else if(type == "Text")
+            else if(type == "FlowBBS")
+                 html = popup.formatHtml(
+                    '<nobr>评论组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
+
+            else if (type == "Text")
                 html = popup.formatHtml(
                     '<nobr>文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             else if (type == "Int")
@@ -246,6 +250,12 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         return;
     }
 
+    if (shap == 'FlowBBS') {
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFlowBBS&PKVal=' + fk_mapdata + '_' + mypk;
+        CCForm_ShowDialog(url, '字段评论组件的属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
+        return;
+    }
+
 
     if (shap == 'Textarea') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + fk_mapdata + '_' + mypk;
@@ -256,60 +266,60 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     
     if (shap == 'Date') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Date属性');
+        CCForm_ShowDialog(url, '字段Date属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'DateTime') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段DateTime属性');
+        CCForm_ShowDialog(url, '字段DateTime属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'Money') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Money属性');
+        CCForm_ShowDialog(url, '字段Money属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'Double') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Double属性');
+        CCForm_ShowDialog(url, '字段Double属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'Int') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Int属性');
+        CCForm_ShowDialog(url, '字段Int属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'Float') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Float属性');
+        CCForm_ShowDialog(url, '字段Float属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'Radio' || shap == 'EnumSelect' || shap=='EnumCheckBox') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段Enum属性');
+        CCForm_ShowDialog(url, '字段Enum属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'CheckBox') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段 Boolen 属性');
+        CCForm_ShowDialog(url, '字段 Boolen 属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
     if (shap == 'BPClass' || shap == "CreateTable" || shap == "TableOrView") {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段外键属性');
+        CCForm_ShowDialog(url, '字段外键属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
     if (shap == 'SQL' || shap == "Handler" || shap == "JQuery") {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + fk_mapdata + '_' + mypk;
-        CCForm_ShowDialog(url, '字段外部数据源属性');
+        CCForm_ShowDialog(url, '字段外部数据源属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
 
@@ -317,19 +327,19 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         var url = '../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + mypk;
         var W = leipiEditor.body.clientWidth - 40;
         var H = leipiEditor.body.clientHeight - 40;
-        CCForm_ShowDialog(url, '从表/明细表' + mypk + '属性', W, H);
+        CCForm_ShowDialog(url, '从表/明细表', W, H, shap,  mypk, anchorEl);
         return;
     }
 
     if (shap == 'Img') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '图片' + mypk + '属性');
+        CCForm_ShowDialog(url, '图片' + mypk + '属性', null, null, shap, mypk, anchorEl);
         return;
     }
 
     if (shap == 'Button') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '按钮' + fmypk + '属性');
+        CCForm_ShowDialog(url, '按钮' + fmypk + '属性', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -337,39 +347,41 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
     if (shap == 'AthMulti') {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '多附件属性');
+        CCForm_ShowDialog(url, '多附件属性', null, null, shap, mypk, anchorEl);
         return;
     }
 
     if (shap == 'AthImg') {
         var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '图片附件');
+        CCForm_ShowDialog(url, '图片附件', null, null, shap, mypk, anchorEl);
         return;
     }
 
     //流程类的组件.
     if (shap == 'FlowChart') {
         var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmTrack&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=轨迹组件';
-        CCForm_ShowDialog(url, '轨迹组件');
+        CCForm_ShowDialog(url, '轨迹组件', null, null, shap, fk_mapdata.replace('ND', ''), anchorEl);
         return;
     }
 
     if (shap == 'WorkCheck') {
         var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=审核组件';
-        CCForm_ShowDialog(url, '审核组件');
+        CCForm_ShowDialog(url, '审核组件', null, null, shap, fk_mapdata.replace('ND', ''), anchorEl);
+
         return;
     }
 
     if (shap == 'SubFlow') {
         var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=子线程组件';
-        CCForm_ShowDialog(url, '父子流程组件');
+        CCForm_ShowDialog(url, '父子流程组件', null, null, shap, fk_mapdata.replace('ND', ''), anchorEl);
+
         return;
     }
 
 
     if (shap == 'HyperLink') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmLink&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '超链接属性');
+        CCForm_ShowDialog(url, '超链接属性', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -384,7 +396,8 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         mypk = mypk.replace('_3', "");
 
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapData + "_" + mypk;
-        CCForm_ShowDialog(url, '单选按钮属性');
+
+        CCForm_ShowDialog(url, '单选按钮属性', null, null, shap, fk_mapData + "_" + mypk, anchorEl);
         return;
     }
 
@@ -392,7 +405,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
 
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '框架');
+        CCForm_ShowDialog(url, '框架', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -400,19 +413,20 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
 
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '签字版');
+        CCForm_ShowDialog(url, '签字版', null, null, shap, mypk, anchorEl);
         return;
     }
 
     if (shap == 'Score') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '评分');
+        CCForm_ShowDialog(url, '评分', null, null, shap, mypk, anchorEl);
+
         return;
     }
 
     if (shap == 'Map') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
-        CCForm_ShowDialog(url, '地图');
+        CCForm_ShowDialog(url, '地图', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -429,43 +443,135 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
     if (h==null || h == undefined)
         h = 460;
 
-    if (shap == "Text" || shap =="Textarea") {
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
-
-            var  mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
-            if (mapAttr.UIContralType == 14) {
-                //修改显示的样式
-                UE.dom.domUtils.setAttributes(anchorEl, {
-                    "data-type": "SignCheck",
-                    "leipiplugins":'text'
-                });
-            }
-        });
-    } else if (shap == "SignCheck") {
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
-
-            var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
-            if (mapAttr.UIContralType == 0) {
-                var attributes;
-                if (mapAttr.UIHeight  <= 23 ) {
-                    attributes = { "data-type": "Text" };
+    //弹出框编辑属性
+    OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
+        switch (shap) {
+            case "Text":
+            case 'SignCheck':
+            case "FlowBBS":
+            case "Textarea":
+            case "Date":
+            case "DateTime":
+            case "Money":
+            case "Double":
+            case "Int":
+            case "Float":
+            case "CheckBox":
+            case "Radio":
+            case "EnumSelect":
+            case "EnumCheckBox":
+            case "BPClass":
+            case "CreateTable":
+            case "TableOrView":
+            case "SQL":
+            case "Handler":
+            case "JQuery":
+            case "Map":
+            case "Score":
+            case "HandWriting":
+                var en = new Entity("BP.Sys.MapAttr");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0) {
+                    //删除富文本中html
+                    UE.dom.domUtils.remove(anchorEl, false);
                 } else {
-                    attributes = {
-                        "data-type": "Textarea",
-                        "leipiplugins": 'textarea'
-                    };
-                    UE.dom.domUtils.setStyle(anchorEl, 'width', '528px');
-                    UE.dom.domUtils.setStyle(anchorEl, 'height', '59px');
+                    if (shap == "Text" || shap == "Textarea") {
+                        if (en.UIContralType == 14) { //签批组件
+                            //修改显示的样式
+                            UE.dom.domUtils.setAttributes(anchorEl, {
+                                "data-type": "SignCheck",
+                                "leipiplugins": shap
+                            });
+                        }
+
+                        if (en.UIContralType == 15) {//评论组件
+                            //修改显示的样式
+                            UE.dom.domUtils.setAttributes(anchorEl, {
+                                "data-type": "FlowBBS",
+                                "leipiplugins": shap
+                            });
+                        }
+                    }
+
+                    if (shap == "SignCheck" || shap == "FlowBBS") {
+                        if (en.UIContralType == 0) {
+                            var attributes;
+                            if (en.UIHeight <= 23) {
+                                attributes = { "data-type": "Text" };
+                            } else {
+                                attributes = {
+                                    "data-type": "Textarea",
+                                    "leipiplugins": 'textarea'
+                                };
+                                UE.dom.domUtils.setStyle(anchorEl, 'width', '528px');
+                                UE.dom.domUtils.setStyle(anchorEl, 'height', '59px');
+                            }
+                            //修改显示的样式
+                            UE.dom.domUtils.setAttributes(anchorEl, attributes);
+                        }
+                    }
+
+
                 }
-                //修改显示的样式
-                UE.dom.domUtils.setAttributes(anchorEl, attributes);
-            }
-        });
+                break;
+            case "Dtl":
+                var en = new Entity("BP.Sys.MapDtl");
+                en.SetPKVal(mypk);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+            case "Img":
+                var en = new Entity("BP.Sys.FrmUI.ExtImg");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+            case "Button":
+                break;
+            case "AthMulti":
+                var en = new Entity("BP.Sys.FrmAttachment");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+            case "AthImg":
+                var en = new Entity("BP.Sys.FrmImgAth");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+            case "FlowChart":
+                break;
+            case "WorkCheck":
+                var nodeID = GetQueryString("FK_Node");
+                var frmCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
+                if (frmCheck.FWCSta == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+            case "SubFlow":
+                var nodeID = GetQueryString("FK_Node");
+                var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+                if (subFlow.SFSta == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+            case "HyperLink":
+                break;
+            case "IFrame":
+                var en = new Entity("BP.Sys.FrmUI.MapFrameExt");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+                break;
+           
 
-    }else {
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
 
-    }
+
+        }
+        
+        
+
+    });
+
+   
    
 }
 
@@ -752,7 +858,11 @@ UE.plugins['textarea'] = function () {
             if (type == "SignCheck")
                 html = popup.formatHtml(
                     '<nobr>签批组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
-            else
+            else if (type == "FlowBBS")
+                html = popup.formatHtml(
+                    '<nobr>评论组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
+
+            else 
                 html = popup.formatHtml(
                     '<nobr>多行文本框: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span>&nbsp;&nbsp;<span onclick=$$._setwidth() class="edui-clickable">宽度</span></nobr>');
             if (html) {
@@ -1308,6 +1418,7 @@ UE.plugins['component'] = function () {
         className: 'edui-bubble',
         _edittext: function () {
             baidu.editor.plugins[thePlugins].editdom = popup.anchorEl;
+
             me.execCommand("edit", this.anchorEl.getAttribute("data-type"), this.anchorEl);
             this.hide();
         },

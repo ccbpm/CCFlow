@@ -122,6 +122,9 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr)
     if (dataType == "SignCheck")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%'/>";
 
+    if (dataType == "FlowBBS")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%'/>";
+
 
     editor.execCommand('insertHtml', _Html);
 }
@@ -186,6 +189,9 @@ function GetDataType(mapAttr) {
 
         if (mapAttr.UIContralType == 14)//签批组件
             return "SignCheck";
+
+        if (mapAttr.UIContralType == 15)//评论组件
+            return "FlowBBS";
     }
 
 }

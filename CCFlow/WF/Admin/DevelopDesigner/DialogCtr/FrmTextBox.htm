@@ -56,6 +56,9 @@
             if (PageTransfer_value == "SignCheck")
                 $("#RB_SignCheck").attr("checked", true);
 
+            if (PageTransfer_value == "FlowBBS")
+                $("#RB_FlowBBS").attr("checked", true);
+
             $('#TB_Name').blur(function () //文本失去焦点时触发的事件
             {
                 var name = document.getElementById("TB_Name").value;
@@ -110,14 +113,26 @@
                 return false;
             }
 
+            if (dataType == "FlowBBS" || FieldType == 15) {
+                var ens = new Entities("BP.Sys.MapAttrs");
+                ens.Retrieve("FK_MapData", fk_mapData, "UIContralType", 15);
+                if (ens.length > 0) {
+                    $.messager.alert('错误', '表单中只能存在一个评论组件，表单'+fk_mapData+'已经存在评论组件不能再增加', 'error');
+                    return false;
+                }
+            }
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", fk_mapData);
             handler.AddPara("KeyOfEn",KeyOfEn);
             handler.AddPara("name",name);
-            handler.AddPara("FType", FieldType == 14 ? 1 : FieldType);
+            handler.AddPara("FType", FieldType == 14 || FieldType == 15 ? 1 : FieldType);
             handler.AddPara("IsSupperText", dataType == "Textarea" ? 1 : 0)
             if (dataType == "SignCheck" || FieldType == 14)
                 handler.AddPara("UIContralType", 14);
+            if (dataType == "FlowBBS" || FieldType == 15)
+                handler.AddPara("UIContralType", 15);
+
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
             if (data.indexOf("err@") != -1) {
                  $.messager.alert('错误', data.replace('err@',''), 'error');
@@ -136,6 +151,8 @@
             if (FieldType == "1") {
                 if (dataType == "SignCheck")
                     return "SignCheck";
+                if (dataType == "FlowBBS")
+                    return "FlowBBS";
                 return "Text";
             } else if (FieldType == "2") {
                 return "Int";
@@ -153,6 +170,8 @@
                 return "Money";
             } else if (FieldType == "14") {
                 return "SignCheck";
+            } else if (FieldType == "15") {
+                return "FlowBBS";
             }
 
         }
@@ -199,6 +218,7 @@
                     <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
                     <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
                     <input id="RB_SignCheck" type="radio" name="Field_Type" value="14" /><label for="RB_SignCheck">签批组件</label><br />
+                    <input id="RB_FlowBBS" type="radio" name="Field_Type" value="15" /><label for="RB_SignCheck">评论组件</label><br />
                 </td>
             </tr>
             <tr>

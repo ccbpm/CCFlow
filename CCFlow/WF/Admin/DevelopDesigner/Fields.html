@@ -101,21 +101,27 @@
 
         function InitData() {
             var frmID = GetQueryString("FrmID");
-                var ens = new Entities("BP.Sys.MapAttrs");
-                ens.Retrieve("FK_MapData", frmID, "Idx");
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            var ens = new Entities("BP.Sys.MapAttrs");
+            ens.Retrieve("FK_MapData", frmID, "Idx");
 
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-                handler.AddPara("FrmID", frmID);
-                var html = handler.DoMethodReturnString("Fields_Init");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+            handler.AddPara("FrmID", frmID);
+            var html = handler.DoMethodReturnString("Fields_Init");
 
-                var list = ens.GetEns();
-                var deldate = [];
-                list.data.map(function (item, index) {
-                    if (item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) && index > 6) {
-                        item.contralType = GetFieldType(item);
-                        deldate.push(item);
-                    }
-                });
+            var list = ens.GetEns();
+            var deldate = [];
+            var fields = "";
+            if (mapData.EntityType == 0)
+                fields = "OID,RDT.FID";
+            else
+             fields ="BillNo,Title,AtPara,BillState,RDT,Starter,StarterName,FK_Dept,OrgNo,OID"
+            list.data.map(function (item, index) {
+                if (fields.indexOf(item.KeyOfEn)==-1 && item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) ) {
+                    item.contralType = GetFieldType(item);
+                    deldate.push(item);
+                }
+            });
             return deldate;
                
         }

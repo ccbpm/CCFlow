@@ -1864,18 +1864,22 @@ namespace BP.WF
                     PushMsg pushMsg = null;
                     if (pms.Count > 0)
                         pushMsg = pms[0] as PushMsg;
+                    string mytemp = "";
+                    if (pushMsg != null)
+                    {
+                        string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                        mytemp = pushMsg.SMSDoc;
+                        mytemp = mytemp.Replace("{Title}", title);
+                        mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                        mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                        mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
+                        mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
 
-                    string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
-                    string mytemp = pushMsg.SMSDoc;
-                    mytemp = mytemp.Replace("{Title}", title);
-                    mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
-                    mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
-                    mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
-                    mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
-
-                    /*如果仍然有没有替换下来的变量.*/
-                    if (mytemp.Contains("@") == true)
-                        mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
+                        /*如果仍然有没有替换下来的变量.*/
+                        if (mytemp.Contains("@") == true)
+                            mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
+                    }
+                    
 
                     foreach (CCList cc in cclist)
                     {
@@ -2614,6 +2618,7 @@ namespace BP.WF
                 wk.OID = BP.DA.DBAccess.GenerOID("WorkID");
                 wk.BeforeSave();
                 wk.DirectInsert();
+              
 
                 //获得它的工作者。
                 WorkNode town = new WorkNode(wk, nd);
@@ -9159,7 +9164,20 @@ namespace BP.WF
             if (heLiuWK.RetrieveFromDBSources() == 0) //查询出来数据.
                 heLiuWK.DirectInsert();
 
-            heLiuWK.Copy(this.HisWork); // 执行copy.
+            //根据Node判断该节点是否绑定表单库的表单
+            bool isNewWork = true;
+            bool isCopyData = true;
+
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                FrmNode frmNode = new FrmNode(nd.FK_Flow, nd.NodeID, nd.NodeFrmID);
+                //分流节点和子线程的节点绑定的表单相同
+                if (nd.NodeFrmID.Equals(this.HisNode.NodeFrmID)==true)
+                    isCopyData = false;
+
+            }
+            if(isCopyData == true)
+                heLiuWK.Copy(this.HisWork); // 执行copy.
 
             heLiuWK.OID = this.HisWork.FID;
             heLiuWK.FID = 0;

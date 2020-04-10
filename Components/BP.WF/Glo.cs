@@ -3892,19 +3892,19 @@ namespace BP.WF
                     try
                     {
                         gedtls = new GEDtls(dtl.No);
-                        if (dtl.DtlOpenType == DtlOpenType.ForFID)
-                        {
-                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
-                                continue;
-                        }
-                        else
-                        {
-                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
-                                continue;
-                        }
+                        //if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                        //{
+                        //    if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                        //        continue;
+                        //}
+                        //else
+                        //{
+                        //    if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                        //        continue;
+                        //}
 
 
-                        //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                        gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
                     }
                     catch (Exception ex)
                     {

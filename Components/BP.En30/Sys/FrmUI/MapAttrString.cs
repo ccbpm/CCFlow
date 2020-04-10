@@ -238,11 +238,8 @@ namespace BP.Sys.FrmUI
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");
                 map.SetHelperAlert(MapAttrAttr.IsSigan, "图片签名,需要的是当前是只读的并且默认值为@WebUser.No,其他签名需要个性化的编写数字签章的集成代码.");
 
-
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
-
-
                 #endregion 傻瓜表单
 
                 #region 基本功能.
@@ -260,25 +257,13 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
-                //rm = new RefMethod();
-                //rm.Title = "脚本验证";
-                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "超链接";
-                //rm.ClassMethodName = this.ToString() + ".DoLink()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
+           
                 rm = new RefMethod();
                 rm.Title = "快速录入";
                 rm.ClassMethodName = this.ToString() + ".DoFastEnter()";
@@ -311,7 +296,6 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
                 #endregion 基本功能.
 
                 #region 输入多选.
@@ -337,37 +321,7 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
                 #endregion 输入多选
 
-                #region Pop 自动填充.
-                //rm = new RefMethod();
-                //rm.GroupName = "Pop自动填充";
-                //rm.Title = "简单列表模式";
-                //rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.GroupName = "Pop自动填充";
-                //rm.Title = "多条件查询列表模式";
-                //rm.ClassMethodName = this.ToString() + ".DoPopFullCtrlAdv()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-                #endregion Pop 自动填充.
-
                 #region 高级设置.
-                //rm = new RefMethod();
-                //rm.Title = "扩展控件";
-                //rm.ClassMethodName = this.ToString() + ".DoEditFExtContral()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "扩展控件2019";
-                //rm.ClassMethodName = this.ToString() + ".DoEditFExtContral2019()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
@@ -382,8 +336,6 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "您确定要设置为签批组件吗？";
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
-
-
                 #endregion 执行的方法.
 
                 this._enMap = map;

@@ -27,7 +27,6 @@ namespace BP.WF
         public static void Frm_GenerBill(string templeteFullFile, string saveToDir, string saveFileName,
             BillFileType fileType, DataSet ds, string fk_mapData)
         {
-
             MapData md = new MapData(fk_mapData);
             GEEntity entity = md.GenerGEEntityByDataSet(ds);
 

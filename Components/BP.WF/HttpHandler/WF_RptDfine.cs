@@ -1812,6 +1812,11 @@ namespace BP.WF.HttpHandler
                 if (idx != 0)
                     qo.addRightBracket();
             }
+            else
+            {
+                qo.AddHD();
+                isFirst = false;
+            }
             #endregion
 
             #region Url传参条件

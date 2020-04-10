@@ -40,6 +40,7 @@ namespace BP.Frm
         /// 根据岗位设定的部门的集合
         /// </summary>
         ByStationDept = 3
+
     }
     public enum SearchDataRoleByDeptStation
     {

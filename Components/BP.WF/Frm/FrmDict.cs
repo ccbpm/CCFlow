@@ -396,6 +396,15 @@ namespace BP.Frm
                 rm.RefAttrKey = FrmDictAttr.BtnSearchLabel;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "数据查询权限规则";
+                rm.ClassMethodName = this.ToString() + ".DoSearchDataRole()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+
+
                 #endregion
 
                 #region 报表定义.
@@ -766,7 +775,17 @@ namespace BP.Frm
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
         }
-       
+
+
+        /// <summary>
+        /// 数据查询权限规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchDataRole()
+        {
+            return "../../CCBill/Admin/SearchDataRole.htm?s=34&FrmID=" + this.No;
+        }
+
         #endregion 权限控制.
 
         public string DoMethod()

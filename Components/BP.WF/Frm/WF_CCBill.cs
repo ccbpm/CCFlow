@@ -483,20 +483,25 @@ namespace BP.Frm
             SearchDataRole searchDataRole = (SearchDataRole)md.GetParaInt("SearchDataRole");
             if (searchDataRole != SearchDataRole.ByOnlySelf)
             {
-                //增加部门的查询条件
-                if(dt.Rows.Contains("FK_Dept") == false)
+                DataTable dd = GetDeptDataTable(searchDataRole, md);
+                if(dd.Rows.Count ==0 && md.GetParaInt("SearchDataRoleByDeptStation")==1)
+                    dd = GetDeptAndSubLevel();
+                if(dd.Rows.Count != 0)
                 {
-                    dr = dt.NewRow();
-                    dr["Field"] = "FK_Dept";
-                    dr["Name"] ="部门";
-                    dr["Width"] = 120;
-                    dt.Rows.Add(dr);
+                    //增加部门的查询条件
+                    if (dt.Rows.Contains("FK_Dept") == false)
+                    {
+                        dr = dt.NewRow();
+                        dr["Field"] = "FK_Dept";
+                        dr["Name"] = "部门";
+                        dr["Width"] = 120;
+                        dt.Rows.Add(dr);
+                    }
+
+                    dd.TableName = "FK_Dept";
+                    ds.Tables.Add(dd);
+
                 }
-
-                DataTable dd = GetDeptDataTable(searchDataRole,md);
-                dd.TableName = "FK_Dept";
-                ds.Tables.Add(dd);
-
             }
            
             return BP.Tools.Json.ToJson(ds);
@@ -874,7 +879,8 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true)
+            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
+                ||(md.GetParaInt("SearchDataRoleByDeptStation")==0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept"))==true))
             {
                 qo.addAnd();
                 qo.AddWhere("Starter", "=", WebUser.No);

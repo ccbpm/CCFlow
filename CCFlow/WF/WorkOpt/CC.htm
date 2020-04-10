@@ -158,68 +158,61 @@
 
         //确定  执行抄送操作
         function DoCC(empStr) {
-
+            var fk_node = GetQueryString("FK_Node");
+            var fk_flow = GetQueryString("FK_Flow");
             var workID = GetQueryString("WorkID");
+            var fid = GetQueryString("FID");
 
             var webUser = new WebUser();
             if (empStr == null || empStr == "")
                 return;
             var empNos = empStr.split(",");
             $.each(empNos, function (i, empNo) {
-                if (empNo != "") {
-                    var emp = new Entity("BP.Port.Emp", empNo);
 
-                    var empName = emp.Name;
-                    var empDeptNo = emp.FK_Dept;
-                    var empDeptName = emp.FK_DeptText;
+                if (empNo == "")
+                    return;
 
-                    var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-
-                    var title = gwf.Title;
-                    var nodeName = gwf.NodeName;
-                    var flowName = gwf.FlowName;
-
-                    var cc = new Entity("BP.WF.Template.CCList");
-
-                    //当前人员的信息.
-                    cc.Rec = webUser.No;
-                    cc.RecName = webUser.Name;
-
-                    //抄送给人员的信息.
-                    cc.CCTo = empNo;
-                    cc.CCToName = empName;
-
-                    cc.FK_Node = GetQueryString("FK_Node");
-                    cc.WorkID = GetQueryString("WorkID");
-
-                    cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
-
-                    if (cc.IsExits() == true) {
-                        alert('该人员[' + cc.CCToName + ']已经存在.');
-                        return;
-                    }
-
-                    //抄送给部门的信息.
-                    cc.CCToDept = empDeptNo;
-                    cc.CCToDeptName = empDeptName;
-
-                    cc.WorkID = GetQueryString("WorkID");
-                    cc.FK_Node = GetQueryString("FK_Node");
-
-                    cc.NodeName = nodeName;
-                    cc.FK_Flow = GetQueryString("FK_Flow");
-                    cc.FlowName = flowName;
-                    cc.Title = title;
-                    cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
-
-
-                    if (cc.IsExits() == true) {
-                        alert('该人员已经存在.');
-                        return;
-                    }
-
-                    cc.Insert();
+                var cc = new Entity("BP.WF.Template.CCList");
+                cc.MyPK = workID + "_" + fk_node + "_" + empNo;
+                if (cc.IsExits() == true) {
+                    alert('该人员[' + cc.CCToName + ']已经存在.');
+                    return;
                 }
+
+               
+                var emp = new Entity("BP.Port.Emp", empNo);
+                var empName = emp.Name;
+                var empDeptNo = emp.FK_Dept;
+                var empDeptName = emp.FK_DeptText;
+
+                var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+                var title = gwf.Title;
+                var nodeName = gwf.NodeName;
+                var flowName = gwf.FlowName;
+
+                cc = new Entity("BP.WF.Template.CCList");  
+                cc.MyPK = workID + "_" + fk_node + "_" + empNo;
+                //当前人员的信息.
+                cc.Rec = webUser.No;
+                cc.RecName = webUser.Name;
+
+                //抄送给人员的信息.
+                cc.CCTo = empNo;
+                cc.CCToName = empName;
+                //抄送给部门的信息.
+                cc.CCToDept = empDeptNo;
+                cc.CCToDeptName = empDeptName;
+
+                cc.WorkID = workID;
+                cc.FID = gwf.FID;
+                cc.PWorkID = gwf.PWorkID;
+                cc.FK_Node = fk_node;
+                cc.NodeName = nodeName;
+                cc.FK_Flow = fk_flow;
+                cc.FlowName = flowName;
+                cc.Title = title;
+                cc.Insert();
+                
                 
             });
             window.location.href = window.location.href;
@@ -227,142 +220,7 @@
             $(".foot").hide();
         }
 
-        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
-        function SaveAndClose() {
-
-            // var url = "CCToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-            // window.location.href = url;
-            // return;
-
-            var toNode = GetQueryString("ToNode");
-            if (toNode == undefined || toNode == "undefined")
-                toNode = "0";
-
-            $("#Btn_CC").attr("disabled", "disabled");
-            $("#Btn_CC").val("执行中...");
-            $("#Btn_SelectEmps").attr("disabled", "disabled");
-
-
-            //执行数据初始化工作.
-            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            hand.AddUrlData();
-            var data = hand.DoMethodReturnString("CC_SaveAndClose");
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                window.location.href = data;
-                return;
-            }
-
-            //如果需要发送,就执行发送.
-            if (data.indexOf('Send@') == 0) {
-                SendIt();
-                return;
-            }
-
-            //提示信息后关闭窗口.
-            if (data.indexOf('close@') == 0) {
-
-                alert(data.replace('close@', ''));
-
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                    window.parent.returnWorkWindowClose("");
-                    window.parent.close();
-
-                } else {
-
-                    $('body').append($('<div>' + "已取消操作" + '</div>'));
-
-                    window.close();
-                }
-                return;
-            }
-
-            //提示信息.
-            if (data.indexOf('info@') == 0) {
-                alert(data.replace('info@', ''));
-
-                $("#Btn_CC").attr("disabled", false);
-                $("#Btn_CC").val("执行抄送");
-                $("#Btn_SelectEmps").attr("disabled", false);
-
-                return;
-            }
-
-            alert(data);
-            window.close();
-            return;
-        }
-
-        //执行发送.
-        function SendIt() {
-
-            //执行数据初始化工作.
-            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            hand.AddUrlData();
-            var data = hand.DoMethodReturnString("AccepterOfGener_Send");
-
-            if (data.indexOf('err@') == 0) {
-                $(".Msg").show();
-                $(".Msg").html(data);
-                return;
-            }
-
-            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-
-            data = data.replace("'WFRpt", "'../WFRpt");
-            data = data.replace("'WFRpt", "'../WFRpt");
-
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-            data = data.replace("'./WorkOpt/", "");
-
-
-            data = data.replace('@', '<br/>@');
-            data = data.replace(/@/g, '<br/>&nbsp;@');
-
-            data = data.replace('@', '<br/>@');
-            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
-
-            $("#btns").attr("display", "block");
-
-            $(".Msg").show();
-            $(".Msg").html(data);
-
-            $("#labInfo").empty();
-            $("#next").empty();
-
-            //  display
-
-            //隐藏table.
-            document.getElementById("Table1").style.display = "none";
-            document.getElementById("TB_Emps").style.display = "none";
-            document.getElementById("Btn_SelectEmps").style.display = "none";
-
-            //document.getElementById("Btn_AddEmps").style.display = "none";
-
-            var ctrl = document.getElementById("Btn_Send");
-            if (ctrl != null)
-                ctrl.style.display = "none";
-
-            ctrl = document.getElementById("labInfo");
-            if (ctrl != null)
-                ctrl.style.display = "none";
-
-            ctrl = document.getElementById("Btn_Close");
-            if (ctrl != null)
-                ctrl.style.display = "none";
-        }
-
+        
         //取消移交
         function CloseAll() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
@@ -484,6 +342,7 @@
             输入关键字: <input type="text" id="TB_Emps" title="查张三,您可输入: zs或zhangs或zhangsan"
                           placeholder="查张三,您可输入:zs或zhangs或zhangsan" name="TB_Emps" value='' style="width: 300px;" />
             <input type="button" id="Btn_SelectEmps" value='选择抄送人' />
+            <br/>
             <br /><img src="../Img/CC.png" style="width:27px;" /><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>
@@ -495,12 +354,13 @@
 
                 <div id="HelpInfo" style="">
                     <ul>
-                        1、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。
-                        <br />2、被抄送人，可以在抄送列表里查看抄送信息。
-                        <br />3、可以使用人员名称拼音，支持全拼和简拼。
-                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
-                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
-                    </ul>
+                        <span style="color:#337ab7"> 1、此处只是添加被抄送人不执行抄送动作，只有在发送成功后执行抄送动作并在提示信息中显示抄送成功的信息</span>
+                            <br />2、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。
+                            <br />3、被抄送人，可以在抄送列表里查看抄送信息。
+                            <br />4、可以使用人员名称拼音，支持全拼和简拼。
+                            <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+                            <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
+                        </span></ul>
                 </div>
             </div>
         </div>

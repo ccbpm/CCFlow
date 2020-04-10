@@ -190,7 +190,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
 
     if (node == null || frmNode == null)
         return $('');
-    if (node.FormType == 5 && frmNode.IsEnableFWC != 1)
+    if (node.FormType == 5 && frmNode.IsEnableFWC ==0)
         return $('');
 
     var pos = PreaseFlowCtrls(mapData.FlowCtrls, "FrmCheck");

@@ -86,6 +86,7 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
         isShowCheck = true;
     }
 
+
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
     var SignType = checkData.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。

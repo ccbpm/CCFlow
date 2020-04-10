@@ -148,6 +148,21 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             }
             var _Html = "<div>" + GetWorkCheck_Node(checkData, mapAttr.KeyOfEn, checkField) + "</div>";
             $("#TB_" + mapAttr.KeyOfEn).after(_Html);
+            continue;
+        }
+
+        if (mapAttr.UIContralType == 15) {//评论组件
+            $("#TB_" + mapAttr.KeyOfEn).hide();
+            //获取所有的评论内容
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("FlowBBSList");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                console.log(data);
+            }
+            $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
+            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn);
         }
 
     }
@@ -1285,4 +1300,84 @@ function findChildren(jsonArray, parentNo) {
     }
     _(jsonTree);
     return jsonTree;
+}
+
+
+function ShowFlowBBS(data, keyOfEn) {
+    var isHaveMySelf = false;
+    var _Html = "";
+    var str = "";
+    var strT = "";
+   
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].EmpNo == webUser.No)
+            isHaveMySelf = true;
+        if (str.indexOf('@' + data[i].FK_Dept + '@') == -1)
+            str += '@' + data[i].FK_Dept + '@';
+            strT += '@' + data[i].FK_DeptName + '@';
+    }
+    _Html += "<div>";
+    var strs = str.split("@"); //生成数组.
+    var strTs = strT.split("@");
+    for (var idx = 0; idx < strs.length; idx++) {
+        var dept = strs[idx];
+        if (dept == "" || dept == null)
+            continue;
+        _Html += "<div class='row' style='margin-left:10px;margin-right:10px'>";
+        _Html += "<label style='font-size:13px;font-weight:bold'>" + strTs[idx] + "</label>";
+        for (var i = 0; i < data.length; i++) {
+            var bbs = data[i];
+            if (bbs.FK_Dept != dept)
+                continue;
+            _Html += "<div class='row' style='margin-left:0px;margin-right:0px'>";
+            _Html += "<div col-xs-12 style='margin-top:5px'>" + bbs.Msg;
+            _Html += "</div>";
+            _Html += "<div col-xs-8 style='text-align:right'>" +bbs.EmpName + "&nbsp;&nbsp;" + bbs.RDT;
+            _Html += "</div>";
+            _Html += "</div>";
+        }
+        _Html += "</div>";
+    }
+    _Html += "</div>";
+    //只读状态并且当前登陆人的的抄送列表还未发生评论
+    if (pageData.IsReadonly == "1" && isHaveMySelf == false) {
+        _Html += "<div style='line-height: 1px;border-top: 2px solid #ddd;margin-top: 4px;margin-bottom: 4px;margin-left: -6px;margin-right: -6px;'></div>";
+        _Html += "<div>";
+        _Html +="<textarea rows='5' id='TB_Msg' name='TB_Msg' cols='60'></textarea>";
+        _Html += "<br/>";
+        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论' onclick='BBSSubmit();' />";
+        _Html += "</div>";
+         
+    }
+    
+    $("#FlowBBS").html(_Html);
+}
+
+function BBSSubmit() {
+
+    if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
+        alert("请填写评论内容!");
+        return;
+    }
+  
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+    handler.AddUrlData();
+    handler.AddFormData();
+    var data = handler.DoMethodReturnString("FlowBBS_Save");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+    alert("提交评论成功");
+
+    //获取所有的评论内容
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("FlowBBSList");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        console.log(data);
+    }
+    ShowFlowBBS(JSON.parse(data));
+   
 }

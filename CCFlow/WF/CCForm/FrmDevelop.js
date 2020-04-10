@@ -576,7 +576,7 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
 
     if (node == null)
         return $('');
-    if (frmNode !=null && node.FormType == 5 && frmNode.IsEnableFWC != 1)
+    if (frmNode !=null && node.FormType == 5 && frmNode.IsEnableFWC == 0)
         return $('');
 
     var currentURL = window.location.href;

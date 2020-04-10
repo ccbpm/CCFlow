@@ -135,7 +135,7 @@ function GenerFoolFrm(mapData, frmData) {
 
         //审核组件,有节点信息,并且当前节点状态不是禁用的,就可以显示.
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
-            if (node.FormType != 5 || (node.FormType == 5 && frmNode && frmNode.IsEnableFWC == 1)) {
+            if (node.FormType != 5 || (node.FormType == 5 && frmNode && frmNode.IsEnableFWC !=0)) {
                 html += "<tr>";
                 html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
                 html += "</tr>";

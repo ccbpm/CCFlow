@@ -115,7 +115,7 @@
             mapAttr.Insert();
             alert('字段插入成功' + mapAttr.MyPK);
             var MapExts = new Entities("BP.Sys.MapExts");
-            MapExts.Retrieve("FK_MapData", fk_mapdata);
+            MapExts.Retrieve("FK_MapData", fk_mapdata, "AttrOfOper", field);
             for (var i = 0; i < MapExts.length; i++) {
                 var mapExt = MapExts[i];
                 var en = new Entity("BP.Sys.MapExt", mapExt);

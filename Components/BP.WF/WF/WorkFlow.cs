@@ -1195,7 +1195,7 @@ namespace BP.WF
 
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, null, null, 0, null,
-                    emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null);
+                    emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null,this.HisGenerWorkFlow.FID,this.HisGenerWorkFlow.PWorkID);
 
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();

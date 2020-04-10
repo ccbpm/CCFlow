@@ -1112,12 +1112,50 @@ namespace BP.WF.HttpHandler
         public string FlowBBSList()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
+            string sql = "SELECT E.No As EmpNo,E.Name AS EmpName,E.FK_Dept,D.Name As FK_DeptName ,T.Msg,T.RDT FROM ND" + int.Parse(this.FK_Flow) + "Track T,Port_Emp E,Port_Dept D WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+            sql += " AND T.EmpFrom = E.No AND E.FK_Dept = D.No";
+            if (this.FID != 0)
+            {
+                sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID)";
+                ps.Add("FID", this.FID);
+            }
+            else
+            {
+                sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID)";
+                ps.Add("WorkID", this.WorkID);
+            }
+             
+           
+
+            ps.SQL = sql;
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
-            ps.Add("WorkID", this.WorkID);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["EMPNO"].ColumnName = "EmpNo";
+                dt.Columns["EMPNAME"].ColumnName = "EmpName";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["FK_DEPTNAME"].ColumnName = "FK_DeptName";
+                dt.Columns["MSG"].ColumnName = "Msg";
+                dt.Columns["RDT"].ColumnName = "RDT";
+               
+            }
+
+            if ( SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["empno"].ColumnName = "EmpNo";
+                dt.Columns["empname"].ColumnName = "EmpName";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["fk_deptname"].ColumnName = "FK_DeptName";
+                dt.Columns["msg"].ColumnName = "Msg";
+                dt.Columns["rdt"].ColumnName = "RDT";
+
+            }
+
 
             //转化成json
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// 查看某一用户的评论.

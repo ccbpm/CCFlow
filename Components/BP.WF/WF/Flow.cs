@@ -6408,7 +6408,7 @@ namespace BP.WF
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
-                //为创建节点设置默认值 @于庆海. 
+                //为创建节点设置默认值 
                 string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true)
                 {

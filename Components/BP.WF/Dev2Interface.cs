@@ -7445,7 +7445,7 @@ namespace BP.WF
             Hashtable htWork, int toNodeID, string nextWorkers)
         {
 
-            return Node_SendWork(fk_flow, workID, htWork, null, toNodeID, nextWorkers, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null);
+            return Node_SendWork(fk_flow, workID, htWork, null, toNodeID, nextWorkers, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null,0,0);
         }
         /// <summary>
         /// 发送工作
@@ -7460,7 +7460,7 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable htWork, DataSet workDtls, int toNodeID, string nextWorkers)
         {
-            return Node_SendWork(fk_flow, workID, htWork, workDtls, toNodeID, nextWorkers, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null);
+            return Node_SendWork(fk_flow, workID, htWork, workDtls, toNodeID, nextWorkers, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null,0,0);
         }
         /// <summary>
         /// 发送工作
@@ -7478,20 +7478,21 @@ namespace BP.WF
         /// <param name="execUserDeptName">执行人部门编号</param>
         /// <returns>发送的结果对象</returns>
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable htWork, DataSet workDtls, int toNodeID,
-            string toEmps, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title)
+            string toEmps, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title,Int64 fid,Int64 pworkid)
         {
 
             //给临时的发送变量赋值，解决带有参数的转向。
             Glo.SendHTOfTemp = htWork;
 
             int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
+            Node nd = new Node(currNodeId);
             if (htWork != null)
             {
-                BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
+                BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls,fid,pworkid);
             }
 
             // 变量.
-            Node nd = new Node(currNodeId);
+           
             Work sw = nd.HisWork;
             sw.OID = workID;
             sw.RetrieveFromDBSources();
@@ -8456,7 +8457,7 @@ namespace BP.WF
         /// <returns>返回保存的信息</returns>
         public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID)
         {
-            return Node_SaveWork(fk_flow, fk_node, workID, new Hashtable(), null);
+            return Node_SaveWork(fk_flow, fk_node, workID, new Hashtable(), null,0,0);
         }
         /// <summary>
         /// 保存
@@ -8467,7 +8468,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID, Hashtable wk)
         {
-            return Node_SaveWork(fk_flow, fk_node, workID, wk, null);
+            return Node_SaveWork(fk_flow, fk_node, workID, wk, null,0,0);
         }
         /// <summary>
         /// 保存
@@ -8476,7 +8477,7 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="htWork">工作数据</param>
         /// <returns>返回执行信息</returns>
-        public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID, Hashtable htWork, DataSet dsDtls)
+        public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID, Hashtable htWork, DataSet dsDtls,Int64 fid,Int64 pworkid)
         {
             if (htWork == null)
                 throw new Exception("参数错误，htWork 不能为空, 保存失败。");
@@ -8484,6 +8485,30 @@ namespace BP.WF
             try
             {
                 Node nd = new Node(fk_node);
+               
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode frmNode = new FrmNode(fk_flow, nd.NodeID, nd.NodeFrmID);
+                    switch (frmNode.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            workID = fid;
+                            break;
+                        case WhoIsPK.PWorkID:
+                            workID = pworkid;
+                            break;
+                        case WhoIsPK.P2WorkID:
+                            GenerWorkFlow gwf = new GenerWorkFlow(pworkid);
+                            workID = gwf.PWorkID;
+                            break;
+                        case WhoIsPK.P3WorkID:
+                            string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
+                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 Work wk = nd.HisWork;
                 if (workID != 0)
                 {

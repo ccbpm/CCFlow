@@ -2310,7 +2310,7 @@ namespace BP.WF.HttpHandler
                 if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID,this.PWorkID);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;
 
@@ -2503,7 +2503,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node,
-                    this.WorkID, this.GetMainTableHT(), null);
+                    this.WorkID, this.GetMainTableHT(), null,this.FID,this.PWorkID);
 
                 if (this.PWorkID != 0)
                 {
@@ -3107,7 +3107,35 @@ namespace BP.WF.HttpHandler
             {
                 DataSet ds = new DataSet();
 
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                Int64 workID = this.WorkID;
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    //获取绑定的表单
+                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
+                    switch (frmnode.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            workID = this.FID;
+                            break;
+                        case WhoIsPK.PWorkID:
+                            workID = this.PWorkID;
+                            break;
+                        case WhoIsPK.P2WorkID:
+                            GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
+                            workID = gwff.PWorkID;
+                            break;
+                        case WhoIsPK.P3WorkID:
+                            string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
                     this.FID, BP.Web.WebUser.No);
 
                 //Node nd = new Node(this.FK_Node);

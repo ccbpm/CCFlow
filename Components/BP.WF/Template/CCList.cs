@@ -530,13 +530,13 @@ namespace BP.WF.Template
         /// <summary>
         /// 查询出来所有的抄送信息
         /// </summary>
-        /// <param name="flowNo"></param>
+        /// <param name="fk_node"></param>
         /// <param name="workid"></param>
         /// <param name="fid"></param>
-        public CCLists(string flowNo, Int64 workid, Int64 fid)
+        public CCLists(int fk_node, Int64 workid, Int64 fid)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(CCListAttr.FK_Flow, flowNo);
+            qo.AddWhere(CCListAttr.FK_Node, fk_node);
             qo.addAnd();
             if (fid != 0)
                 qo.AddWhereIn(CCListAttr.WorkID, "(" + workid + "," + fid + ")");

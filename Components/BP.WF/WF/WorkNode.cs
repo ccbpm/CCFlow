@@ -1853,7 +1853,7 @@ namespace BP.WF
             if (this.HisNode.HisCCRole == CCRole.HandCC)
             {
                 //获取抄送人员列表
-                CCLists cclist = new CCLists(node.FK_Flow, this.WorkID, this.HisWork.FID);
+                CCLists cclist = new CCLists(node.NodeID, this.WorkID, this.HisWork.FID);
                 if (cclist.Count == 0)
                     ccMsg1 = "@没有选择抄送人。";
                 if (cclist.Count > 0)
@@ -3494,21 +3494,29 @@ namespace BP.WF
             */
 
             #region 设置父流程状态 设置当前的节点为:
+            //根据Node判断该节点是否绑定表单库的表单
+            bool isCopyData = true;
+            //分流节点和子线程的节点绑定的表单相同
+            if (toNode.HisFormType == NodeFormType.RefOneFrmTree && toNode.NodeFrmID.Equals(this.HisNode.NodeFrmID) == true)
+                isCopyData = false;
+            if(isCopyData == true)
+            {
+                Work mainWK = town.HisWork;
+                mainWK.OID = this.HisWork.FID;
+                mainWK.RetrieveFromDBSources();
 
-            Work mainWK = town.HisWork;
-            mainWK.OID = this.HisWork.FID;
-            mainWK.RetrieveFromDBSources();
+                // 复制报表上面的数据到合流点上去。
+                DataTable dt = DBAccess.RunSQLReturnTable("SELECT * FROM " + this.HisFlow.PTable + " WHERE OID=" + dbStr + "OID",
+                    "OID", this.HisWork.FID);
+                foreach (DataColumn dc in dt.Columns)
+                    mainWK.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
 
-            // 复制报表上面的数据到合流点上去。
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT * FROM " + this.HisFlow.PTable + " WHERE OID=" + dbStr + "OID",
-                "OID", this.HisWork.FID);
-            foreach (DataColumn dc in dt.Columns)
-                mainWK.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
-
-            mainWK.Rec = WebUser.No;
-            mainWK.Emps = emps;
-            mainWK.OID = this.HisWork.FID;
-            mainWK.Save();
+                mainWK.Rec = WebUser.No;
+                mainWK.Emps = emps;
+                mainWK.OID = this.HisWork.FID;
+                mainWK.Save();
+            }
+           
 
             // 产生合流汇总从表数据.
             this.GenerHieLiuHuiZhongDtlData_2013(toNode);
@@ -9165,17 +9173,11 @@ namespace BP.WF
                 heLiuWK.DirectInsert();
 
             //根据Node判断该节点是否绑定表单库的表单
-            bool isNewWork = true;
             bool isCopyData = true;
-
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                FrmNode frmNode = new FrmNode(nd.FK_Flow, nd.NodeID, nd.NodeFrmID);
-                //分流节点和子线程的节点绑定的表单相同
-                if (nd.NodeFrmID.Equals(this.HisNode.NodeFrmID)==true)
+            //分流节点和子线程的节点绑定的表单相同
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree && nd.NodeFrmID.Equals(this.HisNode.NodeFrmID) == true)
                     isCopyData = false;
 
-            }
             if(isCopyData == true)
                 heLiuWK.Copy(this.HisWork); // 执行copy.
 

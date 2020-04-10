@@ -1340,7 +1340,7 @@ function ShowFlowBBS(data, keyOfEn) {
     }
     _Html += "</div>";
     //只读状态并且当前登陆人的的抄送列表还未发生评论
-    if (pageData.IsReadonly == "1" && isHaveMySelf == false) {
+    if (pageData.IsReadonly == "1" && isHaveMySelf == false && GetQueryString("CCSta")=="1") {
         _Html += "<div style='line-height: 1px;border-top: 2px solid #ddd;margin-top: 4px;margin-bottom: 4px;margin-left: -6px;margin-right: -6px;'></div>";
         _Html += "<div>";
         _Html +="<textarea rows='5' id='TB_Msg' name='TB_Msg' cols='60'></textarea>";

@@ -666,7 +666,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             });
 
             if (mapAttr.DefVal == -1)
-                operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>-无(不选择)-</option>";
+                operations += "<option selected='selected' value='" + mapAttr.DefVal + "'>-无(不选择)-</option>";
             $.each(enums, function (i, obj) {
                 operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
             });

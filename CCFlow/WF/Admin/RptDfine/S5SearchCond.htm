@@ -132,7 +132,9 @@
                     fields += "*" + item.id + "," + item.getAttribute("data-name");
                 }
             }
-            handler.AddPara("RptStringSearchKeys", fields + "*");
+            if (fields != "")
+                fields = fields + "*";
+            handler.AddPara("RptStringSearchKeys", fields);
 
 
             var data = handler.DoMethodReturnString("S5SearchCond_Save");

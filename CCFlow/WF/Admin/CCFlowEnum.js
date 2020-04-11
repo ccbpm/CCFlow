@@ -143,6 +143,26 @@ if (typeof BlockModel == "undefined") {
         /// </summary>
         BlockModel.ByOtherBlock = 7 
 }
+//发送后转向
+if (typeof TurntoWay == "undefined") {
+    var TurntoWay = {}
+    /// <summary>
+    /// 提示CCFlow默认信息
+    /// </summary>
+    TurntoWay.TurntoDefault = 0,
+        /// <summary>
+        /// 提示指定信息
+        /// </summary>
+        TurntoWay.TurntoMessage = 1,
+        /// <summary>
+        /// 转向指定的URL
+        /// </summary>
+        TurntoWay.TurntoUrl = 2,
+        /// <summary>
+        /// 发送完成立即关闭
+        /// </summary>
+        TurntoWay.TurntoClose = 3
+}
 //前置导航
 if (typeof StartGuideWay == "undefined") {
     var StartGuideWay = {}

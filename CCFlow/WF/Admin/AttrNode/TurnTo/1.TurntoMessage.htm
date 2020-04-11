@@ -28,8 +28,10 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.TurntoWay = TurntoWay.TurntoMessage;
+            node.TurnToDeal = TurntoWay.TurntoMessage;
+            node.TurnToDealDoc = $("#TB_SpecMsg").val();
             node.Update();
+   
             alert("保存完毕");
             window.location.href = window.location.href;
         }

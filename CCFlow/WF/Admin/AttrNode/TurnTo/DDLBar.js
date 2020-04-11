@@ -16,30 +16,20 @@ function InitPage() {
 
     var fk_node = GetQueryString("FK_Node");
     var node = new Entity("BP.WF.Node", fk_node);
-
+    InitBar(node.TurnToDeal);
     //调用公共类库的方法:执行批量主表赋值
     GenerFullAllCtrlsVal(node);
-
-    $("#TB_Alert").val(node.BlockAlert);
-    switch (parseInt(node.TurntoWay)) {
+   
+    switch (parseInt(node.TurnToDeal)) {
         case 0:
             break;
         case 1:
+            $("#TB_SpecMsg").val(node.TurnToDealDoc);
             break;
         case 2:
-            $("#TB_SpecMsg").val(node.BlockExp);
+            $("#TB_SpecURL").val(node.TurnToDealDoc);
             break;
         case 3:
-            $("#TB_SQL").val(node.BlockExp);
-            break;
-        case 4:
-            $("#TB_Exp").val(node.BlockExp);
-            break;
-        case 5:
-            $("#TB_SpecSubFlowNode").val(node.BlockExp);
-            break;
-        case 6:
-            $("#TB_SameLevelSubFlow").val(node.BlockExp);
             break;
         default:
             break;
@@ -88,6 +78,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
+    
     window.location.href = url + "?FK_Node=" + nodeID;
 }
 //高级设置.

@@ -25,61 +25,13 @@
 
             $("#Msg").html("");
         });
-
-
-
-        function Btn_Save_Click() {
-            var frmData = $("#cc").serialize();
-
-
-            var fk_node = GetQueryString("FK_Node");
-
-            var node = new Entity("BP.WF.Node", fk_node);
-            var turnToDeal = $("input[name='TurnToDeal']:checked").val();
-            node.TurnToDeal = turnToDeal;
-
-            if (node.TurnToDeal == 1) {
-                $("#TB_SpecURL").val("");
-                node.TurnToDealDoc = $("#TB_SpecMsg").val();
-            }
-
-            if (node.TurnToDeal == 2) {
-                $("#TB_SpecMsg").val("");
-                node.TurnToDealDoc = $("#TB_SpecURL").val();
-            }
-
-            if (node.TurnToDeal == 0 || node.TurnToDeal == 3) {
-                $("#TB_SpecMsg").val("");
-                $("#TB_SpecURL").val("");
-            }
-
-            if (node.TurnToDeal != 0 && node.TurnToDeal != 3) {
-                if (node.TurnToDealDoc == '') {
-                    alert('执行内容没有填写');
-                    return;
-                }
-            }
-
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.TurnToDeal = TurntoWay.TurntoClose;
             node.Update();
-
+            alert("保存完毕");
             window.location.href = window.location.href;
-
-        }
-
-        function rb_onchange(obj) {
-
-            if (obj == 1) {
-
-                document.getElementById("TB_SpecURL").readOnly = true;
-                document.getElementById("TB_SpecMsg").readOnly = false;
-            } else if (obj == 2) {
-
-                document.getElementById("TB_SpecMsg").readOnly = true;
-                document.getElementById("TB_SpecURL").readOnly = false;
-            } else {
-                document.getElementById("TB_SpecMsg").readOnly = true;
-                document.getElementById("TB_SpecURL").readOnly = true;
-            }
         }
     </script>
 </head>
@@ -94,8 +46,7 @@
         </div>-->
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_TurnToDeal_3" name="TurnToDeal" runat="server" value="3"
-                       onClick="rb_onchange(3)" /><label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
+                <label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
             </legend>
 
             <ul style="color: Gray">

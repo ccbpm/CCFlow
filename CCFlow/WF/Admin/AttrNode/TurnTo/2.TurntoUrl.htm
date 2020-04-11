@@ -29,7 +29,8 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.TurntoWay = TurntoWay.TurntoUrl;
+            node.TurnToDeal = TurntoWay.TurntoUrl;
+            node.TurnToDealDoc = $("#TB_SpecURL").val();
             node.Update();
             alert("保存完毕");
             window.location.href = window.location.href;
@@ -47,8 +48,7 @@
     </div>-->
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
-                       onClick="rb_onchange(2)" /><label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
+                <label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
             </legend>
             <br />
             <div id="SpecUrl" style="display: none">

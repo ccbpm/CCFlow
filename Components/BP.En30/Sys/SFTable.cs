@@ -849,7 +849,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=动态Json");
+                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
@@ -923,9 +923,22 @@ namespace BP.Sys
         public string DoEdit()
         {
             if (this.IsClass)
+            {
+
                 return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+            }
             else
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+            {
+                if ( this.SrcType == Sys.SrcType.SysDict)
+                {
+                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SysDictEditData.htm?FK_SFTable=" + this.No;
+                }
+                else
+                {
+                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+
+                }
+            }
         }
         public string IsCanDelete()
         {
@@ -962,7 +975,15 @@ namespace BP.Sys
                 dict.TableID = this.No;
                 dict.TableName = this.Name;
                 dict.OrgNo = WebUser.OrgNo;
-                dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
+                if (SystemConfig.CCBPMRunModel == 0)
+                {
+                    dict.MyPK = this.No;
+                }
+                else
+                {
+                    dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                }
                 dict.Insert();
 
                 if (this.CodeStruct == CodeStruct.NoName)

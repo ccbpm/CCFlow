@@ -35,6 +35,10 @@ namespace BP.Sys
         /// 0=EntityNoName, 1=EntityTree
         /// </summary>
         public const string DictType = "DictType";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
     /// <summary>
     /// 系统字典表
@@ -89,6 +93,17 @@ namespace BP.Sys
                 this.SetValByKey(DictAttr.DictType, value);
             }
         }
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(DictAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(DictAttr.Idx, value);
+            }
+        }
         #endregion 属性.
 
 
@@ -133,6 +148,7 @@ namespace BP.Sys
                     "@0=编号名称@1=树结构");
 
                 map.AddTBString(DictAttr.OrgNo, null, "OrgNo", true, false, 0, 200, 20);
+                map.AddTBInt(DictAttr.Idx, 0, "顺序号", false, false);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "编辑数据";

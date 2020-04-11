@@ -34,7 +34,12 @@ namespace BP.Sys
         /// 列选择
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
+
     /// <summary>
     /// 系统字典表
     /// </summary>
@@ -99,11 +104,22 @@ namespace BP.Sys
                 this.SetValByKey(DictDtlAttr.ParentNo, value);
             }
         }
-        #endregion 属性.
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(DictDtlAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(DictDtlAttr.Idx, value);
+            }
+        }
+    #endregion 属性.
 
 
-        #region 构造方法
-        public override UAC HisUAC
+    #region 构造方法
+    public override UAC HisUAC
         {
             get
             {
@@ -147,8 +163,8 @@ namespace BP.Sys
 
                 //用户注销组织的时候，方便删除数据.
                 map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 200, 20);
-
-                this._enMap = map;
+                map.AddTBInt(DictAttr.Idx, 0, "顺序号", false, false);
+            this._enMap = map;
                 return this._enMap;
             }
         }
@@ -225,3 +241,4 @@ namespace BP.Sys
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
     }
 }
+

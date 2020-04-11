@@ -103,7 +103,7 @@
 
                 newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
 
-                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
 
@@ -185,7 +185,7 @@
         }
 
         //删除.
-        function Del(no, name) {
+        function Del(no, SrcType) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
@@ -194,6 +194,14 @@
             handler.AddPara("FK_SFTable", no);
             var data = handler.DoMethodReturnString("SFList_Delete");
 
+            //删除系统字典表
+            if (SrcType == 7) {
+                var en = new Entity("BP.Sys.Dict", no);
+                en.Delete();
+                var ens = new Entities("BP.Sys.DictDtls");
+                ens.Delete("DictMyPK",no);
+
+            }
             if (data.indexOf('err@') >= 0) {
                 alert(data);
                 return;

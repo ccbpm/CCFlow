@@ -354,6 +354,12 @@ namespace BP.Sys
                 string sql = "SELECT No, Name FROM " + this.No;
                 return src.RunSQLReturnTable(sql);
             }
+
+            if(this.SrcType == Sys.SrcType.SysDict)
+            {
+                DictDtls dictDtls = new DictDtls(this.No);
+                return dictDtls.ToDataTableField();
+            }
             #endregion
 
             return null;

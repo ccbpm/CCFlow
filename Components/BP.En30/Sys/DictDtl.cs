@@ -204,6 +204,13 @@ namespace BP.Sys
         public DictDtls()
         {
         }
+
+        public DictDtls(string dictMyPK)
+        {
+            this.Retrieve(DictDtlAttr.DictMyPK, dictMyPK);
+        }
+
+
         /// <summary>
         /// 得到它的 Entity
         /// </summary>

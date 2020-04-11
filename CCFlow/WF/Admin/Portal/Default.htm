@@ -84,7 +84,7 @@
     <script>
          //页面启动函数.
         $(function () {
-
+            $("#ShowMsg").hide();
             var webUser = new WebUser();
             if (webUser.No == "") {
                 window.location.href = "Login.htm";
@@ -103,6 +103,8 @@
             else {
                 $("#OrgNo").hide();
                 $("#OrgName").hide();
+                $("#Login2App").show();
+                $("#org").hide();
             }
             return;
         });
@@ -113,7 +115,7 @@
         width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
         font-weight: bold;">
         <img alt="" src="Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
-        正在删除，请稍后...
+        请稍后...
     </div>
     
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
@@ -139,7 +141,8 @@
                     <ul style="list-style:none;" class="drop-down-content">
                         <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
                         <li><a id="OrgName" href="#">组织名称：</a></li>-->
-                        <li><a href="/WF/Admin/Portal/SelectOneOrg.html">切换组织</a></li>
+                        <li><a id="org" href="/WF/Admin/Portal/SelectOneOrg.html">切换组织</a></li>
+                        <li><a href="#" id="Login2App" data-options="plain:true" onclick="Login2App()">登陆前台</a></li>
                         <li><a href="#" onclick="addTab('', '个人中心', '/WF/Setting/Default.htm', '')">个人中心</a></li>
                         <li><a href="#" onclick="LoginOut()">退出登录</a></li>
                         <li><a target="_blank" href="http://ccflow.org">关于</a></li>

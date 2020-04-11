@@ -30,13 +30,13 @@ function InitPage() {
             $("#TB_SpecSubFlow").val(node.BlockExp);
             break;
         case 3:
-            $("#TB_SQL").val(node.BlockExp);
+            $("#TB_SpecSubFlowNode").val(node.BlockExp);
             break;
         case 4:
             $("#TB_Exp").val(node.BlockExp);
             break;
         case 5:
-            $("#TB_SpecSubFlowNode").val(node.BlockExp);
+            $("#TB_SQL").val(node.BlockExp);
             break;
         case 6:
             $("#TB_SameLevelSubFlow").val(node.BlockExp);

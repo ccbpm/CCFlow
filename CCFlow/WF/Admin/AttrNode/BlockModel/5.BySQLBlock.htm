@@ -34,8 +34,8 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.BlockModel = BlockModel.BySQLBlock;
-            if (!$("#TB_SQL").val());
-            node.BlockExp = $("#TB_SQL").val();
+            if (!editor.getValue());
+            node.BlockExp = editor.getValue();
             node.Update();
             alert("保存完毕");
             window.location.href = window.location.href;

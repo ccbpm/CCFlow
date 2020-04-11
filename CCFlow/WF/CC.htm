@@ -81,7 +81,7 @@
                 var batchUrl = "";
                 var url = "";
 
-                batchUrl = './WFRpt.htm?FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + data[i].FK_Node + '&WorkID=' + data[i].WorkID + '&FID=' + data[i].FID;
+                batchUrl = './WFRpt.htm?FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + data[i].FK_Node + '&WorkID=' + data[i].WorkID + '&FID=' + data[i].FID +"&CCSta=1";
                 url = '../WF/WorkOpt/CCCheckNote.htm?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FID=0&FK_Node=' + data[i].FK_Node;
 
                 row += "<tr>";

@@ -1330,7 +1330,7 @@ function ShowFlowBBS(data, keyOfEn) {
             if (bbs.FK_Dept != dept)
                 continue;
             _Html += "<div class='row' style='margin-left:0px;margin-right:0px'>";
-            _Html += "<div col-xs-12 style='margin-top:5px'>" + bbs.Msg;
+            _Html += "<div col-xs-12 style='margin-top:5px'><font color=green>" + bbs.Msg+"</font>";
             _Html += "</div>";
             _Html += "<div col-xs-8 style='text-align:right'>" +bbs.EmpName + "&nbsp;&nbsp;" + bbs.RDT;
             _Html += "</div>";

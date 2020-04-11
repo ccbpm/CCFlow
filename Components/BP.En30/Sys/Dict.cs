@@ -183,7 +183,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEdit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/DictEditData.htm?FK_Dict=" + this.MyPK;
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SysDictEditData.htm?FK_Dict=" + this.MyPK;
         }
         protected override bool beforeInsert()
         {

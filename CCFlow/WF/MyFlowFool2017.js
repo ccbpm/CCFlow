@@ -1263,7 +1263,7 @@ function cleanAll(KeyOfEn, frmType) {
         return;
 
     //获取他的值
-    if (mapAttrs[KeyOfEn].length > 0) {
+    if (mapAttrs[KeyOfEn]!=undefined && mapAttrs[KeyOfEn].length > 0) {
         var FKMapAttrs = mapAttrs[KeyOfEn][0];
         for (var i = 0; i < FKMapAttrs.length; i++) {
             if (frmType != null && frmType !== undefined && frmType == 8)

@@ -439,49 +439,56 @@ namespace BP.Frm
         }
         #endregion
 
-        protected override void afterInsert()
+        protected  void InsertCtrlModel()
         {
             //保存权限表
             CtrlModel ctrl = new CtrlModel();
-
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnNew";
-            ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            ctrl.IsEnableAll = true;
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
+            
+            
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSave";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSubmit";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnDelete";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSearch";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
-            base.afterInsert();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
+           
         }
 
         protected override void afterInsertUpdateAction()
         {
+            InsertCtrlModel();
             CheckEnityTypeAttrsFor_EntityNoName();
 
             base.afterInsertUpdateAction();

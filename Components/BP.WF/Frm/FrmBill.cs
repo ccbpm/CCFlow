@@ -507,7 +507,7 @@ namespace BP.Frm
                 return this._enMap;
             }
         }
-        protected override void afterInsert()
+        protected void InsertCtrlModel()
         {
             //保存权限表
             CtrlModel ctrl = new CtrlModel();
@@ -516,40 +516,46 @@ namespace BP.Frm
             ctrl.CtrlObj = "BtnNew";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSave";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSubmit";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnDelete";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSearch";
             ctrl.IsEnableAll = true;
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
-            ctrl.Save();
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
             base.afterInsert();
         }
 
         protected override void afterInsertUpdateAction()
         {
+            InsertCtrlModel();
             CheckEnityTypeAttrsFor_Bill();
 
             base.afterInsertUpdateAction();

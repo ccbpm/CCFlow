@@ -53,7 +53,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(FrmNodeAttr.IsEnableFWC, value);
+                this.SetValByKey(FrmNodeAttr.IsEnableFWC, (int)value);
             }
         }
 

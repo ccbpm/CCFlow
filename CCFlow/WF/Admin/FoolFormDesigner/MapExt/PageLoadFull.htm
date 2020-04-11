@@ -31,7 +31,7 @@
         $(function () {
 
             var frmID = GetQueryString("FK_MapData");
-
+            
             //定义主键值.
             var pkval = "PageLoadFull_" + frmID;
 
@@ -133,7 +133,6 @@
             //求从表个数
             var mapDtls = new Entities("BP.Sys.MapDtls");
             mapDtls.Retrieve("FK_MapData", frmID, "FK_Node", 0);
-
             var sqls = "";
             for (var i = 0; i < mapDtls.length; i++) {
                 var mapDtl = mapDtls[i];

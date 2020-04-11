@@ -16,7 +16,7 @@ $(function () {
     }
     //设置状态.
     SetState();
-
+    
     $("#pmfun,#nodeMenu").hover(function () {
         var mLeft = $("#jqContextMenu").css("left").replace('px', '');
         var mTop = $("#jqContextMenu").css("top").replace('px', '');
@@ -27,10 +27,11 @@ $(function () {
     }, function () {
         $("#nodeMenu").hide();
     });
-
+    
     //节点类型--普通
     $('#Node_Ordinary').on('click', function () {
         var nodeID = document.getElementById("leipi_active_id");
+        
         SetNodeRunModel(nodeID.value, 0);
 
     });
@@ -376,7 +377,7 @@ $(function () {
         }
         /*步骤右键*/
         , processMenus: {
-
+            
             "pmBegin": function (t) {
                 var activeId = _canvas.getActiveId(); //右键当前的ID
                 alert("设为第一步:" + activeId);
@@ -444,7 +445,9 @@ $(function () {
                 NodeFrmFree(activeId); cAlert
             },
             "pmNodeAccepterRole": function (t) {
+               
                 var activeId = _canvas.getActiveId(); //右键当前的ID
+                
                 NodeAccepterRole(activeId);
             }
         },
@@ -500,7 +503,8 @@ $(function () {
         }
         , fnDbClick: function () {
             //和 pmAttribute 一样
-            var activeId = _canvas.getActiveId(); //右键当前的ID
+            var activeId = _canvas.getActiveId(); //右键当前的ID\
+           
             NodeAttr(activeId);
 
         }

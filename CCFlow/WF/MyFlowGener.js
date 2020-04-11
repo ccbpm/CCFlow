@@ -951,7 +951,7 @@ function GenerCheckIDs() {
 //发送
 function Send(isHuiQian) {
     SetPageSize(80, 80);
-
+    
     //保存前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
@@ -1077,10 +1077,10 @@ function Send(isHuiQian) {
 }
 
 function execSend(toNodeID) {
-
+    
     //先设置按钮等不可用.
     setToobarDisiable();
-
+    
     //判断是否启用审核组件
     var iframe = document.getElementById("FWC");
     if (iframe)
@@ -1164,6 +1164,7 @@ function execSend(toNodeID) {
 
         var url = data;
         url = url.replace('url@', '');
+        
         window.location.href = url;
         return;
     }

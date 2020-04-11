@@ -71,7 +71,7 @@
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
 
-            document.getElementById("TB_SQL").value = docs;
+            editor.setValue(docs);
             document.getElementById("TB_Note").value = data.Note;
 
         });
@@ -85,7 +85,7 @@
             var fk_Node = GetQueryString("FK_Node");
 
             var toNodeID = GetQueryString("ToNodeID");
-            var sqlVal = document.getElementById("TB_SQL").value;
+            var sqlVal = editor.getValue();
             var note = document.getElementById("TB_Note").value;
 
             if (sqlVal == "") {

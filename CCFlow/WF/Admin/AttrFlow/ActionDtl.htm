@@ -83,7 +83,7 @@
             if (en.EventDoType == 7) {
                 en.DoDoc = $("#DDL_Doc").val();
             } else {
-                en.DoDoc = $("#TB_SQL").val();
+                en.DoDoc = editor.getValue();
             }
 
             if (en.DoDoc == "") {

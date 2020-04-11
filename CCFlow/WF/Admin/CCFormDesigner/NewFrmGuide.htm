@@ -88,6 +88,9 @@
             data = JSON.parse(data);
 
             var tables = data["Tables"];
+            for (var i = 0; i < tables.length; i++) {
+                
+            }
             GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
             return;
 

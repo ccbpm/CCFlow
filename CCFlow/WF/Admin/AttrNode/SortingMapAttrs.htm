@@ -255,11 +255,47 @@
                
                 //1.1 在面板里添加表格
                 var htmlstr = ""
-                htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%'>";
+                htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%;border:none'>";
                 htmlstr += "</table>";
 
                 $("#p").append(htmlstr);
+                 //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
+                var backHtml = "";
+                if (trdtl[0].tdDtl == "1") {
+                    backHtml = "<tr style='border:none'><td style='border:none' colspan=6>";
+                    backHtml += "<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
 
+                    //新建分组
+                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
+                    //保存
+                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].No + "') class=btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
+                    backHtml += "</td></tr>";
+                }
+                else {
+                    backHtml += "<tr ><td colspan='6' npwrap>";
+                    backHtml += "<table  class='Table'  border='0' cellpadding='0' cellspacing='0' style='width:100%;border:none'>";
+                    backHtml += "<tr style='border:none'><td style='float:right;border:none'>";
+                    //重置
+                    backHtml += "<a href='#' onclick=From_ReSet('" + trdtl[0].FK_MapData + "') class='btn ' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-reload l-btn-icon-left'>智能重置顺序</span></span></a>";
+
+                    //预览
+                    backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='btn ' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
+                    //复制排序
+                    if (dtNodes != null && dtNodes != undefined && dtNodes.length > 0)
+                        backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='btn ' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
+
+                    //新建分组
+                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].FK_MapData + "') class='btn ' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
+
+                    //保存
+                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].FK_MapData + "') class='btn ' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
+                    backHtml += "</td>";
+
+                    backHtml += "</tr>";
+                    backHtml += "</table>";
+                    backHtml += "</td></tr>";
+                }
+                $("#t1").append(backHtml);
                 //1.1.1在表格里添加分组
                 for (var i = 0, length = dtGroups.length; i < length; i++) {
                     //1.1.1-01、当前分组标题行tr
@@ -505,43 +541,7 @@
                         $("#t1").append(tr);
                     }
                 }
-                //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
-                var backHtml = "";
-                if (trdtl[0].tdDtl == "1") {
-                    backHtml = "<tr><td colspan=6>";
-                    backHtml += "<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'>返回</span></span></a>";
-
-                    //新建分组
-                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
-                    //保存
-                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].No + "') class=btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
-                    backHtml += "</td></tr>";
-                }
-                else {
-                    backHtml += "<tr><td colspan='6' npwrap>";
-                    backHtml += "<table  class='Table'  border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
-                    backHtml += "<tr><td>";
-                    //重置
-                    backHtml += "<a href='#' onclick=From_ReSet('" + trdtl[0].FK_MapData + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-reload l-btn-icon-left'>智能重置顺序</span></span></a>";
-
-                    //预览
-                    backHtml += "<a href='#' onclick=Form_View('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"> <span class='l-btn-left'><span class='l-btn-text icon-search l-btn-icon-left'>预览</span></span></a>";
-                    //复制排序
-                    if (dtNodes != null && dtNodes != undefined && dtNodes.length > 0)
-                        backHtml += "<a href='#' onclick=Form_Copy('" + trdtl[0].FK_MapData + "','" + FK_Flow + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-copy l-btn-icon-left'>复制排序</span></span></a>";
-
-                    //新建分组
-                    backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].FK_MapData + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'>新建分组</span></span></a>";
-
-                    //保存
-                    backHtml += "<a href='#' onclick=From_Save('" + trdtl[0].FK_MapData + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-save l-btn-icon-left'>保存</span></span></a>";
-                    backHtml += "</td>";
-
-                    backHtml += "</tr>";
-                    backHtml += "</table>";
-                    backHtml += "</td></tr>";
-                }
-                $("#t1").append(backHtml);
+               
                 $("#t1").append("</table>");
 
                 //用于复制到其他节点

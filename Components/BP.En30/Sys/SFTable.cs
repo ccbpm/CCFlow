@@ -309,8 +309,7 @@ namespace BP.Sys
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                if (runObj.Contains("@") == true && ht == null)
-                    throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
+                
 
                 if (runObj.Contains("@") == true && ht != null)
                 {

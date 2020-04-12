@@ -191,6 +191,8 @@ namespace BP.Frm
         {
             //创建entity 并执行copy方法.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
+            Attrs attrs = rpt.EnMap.Attrs;
+
             try
             {
                 //执行保存.
@@ -200,20 +202,6 @@ namespace BP.Frm
             {
                 return "err@方法：MyBill_SaveIt错误，在执行 CopyFromRequest 期间" + ex.Message;
             }
-
-            ////执行copy ，这部分与上一个方法重复了.
-            //try
-            //{
-            //    Hashtable ht = this.GetMainTableHT();
-            //    foreach (string item in ht.Keys)
-            //    {
-            //        rpt.SetValByKey(item, ht[item]);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return "err@方法：MyBill_SaveIt错误，在执行  GetMainTableHT 期间" + ex.Message;
-            //}
 
             //执行保存.
             try
@@ -226,7 +214,7 @@ namespace BP.Frm
             }
             catch (Exception ex)
             {
-                return "err@方法：MyBill_SaveIt错误，在执行 SaveWork 期间" + ex.Message;
+                return "err@方法：MyBill_SaveIt 错误，在执行 SaveWork 期间出现错误:" + ex.Message;
             }
         }
         public string MyBill_Submit()
@@ -234,12 +222,6 @@ namespace BP.Frm
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
             rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
-
-            Hashtable ht = GetMainTableHT();
-            foreach (string item in ht.Keys)
-            {
-                rpt.SetValByKey(item, ht[item]);
-            }
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Over);
@@ -255,7 +237,6 @@ namespace BP.Frm
         /// <returns></returns>
         public string MyDict_SaveIt()
         {
-            //  throw new Exception("dddssds");
             //执行保存.
             MapData md = new MapData(this.FrmID);
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
@@ -263,12 +244,6 @@ namespace BP.Frm
 
             //执行保存前事件
             md.DoEvent(FrmEventList.SaveBefore, rpt, null);
-
-            Hashtable ht = GetMainTableHT();
-            foreach (string item in ht.Keys)
-            {
-                rpt.SetValByKey(item, ht[item]);
-            }
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Editing);
@@ -295,12 +270,7 @@ namespace BP.Frm
 
             //执行保存前事件
             md.DoEvent(FrmEventList.SaveBefore, rpt, null);
-
-            Hashtable ht = GetMainTableHT();
-            foreach (string item in ht.Keys)
-            {
-                rpt.SetValByKey(item, ht[item]);
-            }
+           
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Over);
@@ -321,51 +291,7 @@ namespace BP.Frm
             qo.DoQuery();
             return BP.Tools.Json.ToJson(rpts.ToDataTableField());
         }
-        private Hashtable GetMainTableHT()
-        {
-            Hashtable htMain = new Hashtable();
-            foreach (string key in HttpContextHelper.RequestParamKeys)
-            {
-                if (key == null || key == "")
-                    continue;
-                string mykey = key.Replace("TB_", "");
-                mykey = key.Replace("DDL_", "");
-                mykey = key.Replace("CB_", "");
-                mykey = key.Replace("RB_", "");
-
-
-                if (key.Contains("TB_"))
-                {
-
-                    string val = HttpContextHelper.RequestParams(key);
-                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                    {
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-                    }
-                    continue;
-                }
-
-                if (key.Contains("DDL_"))
-                {
-                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("CB_"))
-                {
-                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("RB_"))
-                {
-                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-            }
-            return htMain;
-        }
+      
 
         public string MyBill_SaveAsDraft()
         {

@@ -1048,7 +1048,7 @@ function GenerDB(dbSrc, selectVal, dbType) {
     //处理sql，url参数.
     dbSrc = dbSrc.replace(/~/g, "'");
 
-    dbSrc = dbSrc.replace('@Key', selectVal);
+    dbSrc = dbSrc.replace(/@Key/g, selectVal);
 
     dbSrc = DealExp(dbSrc);
     dbSrc = DealSQL(dbSrc, selectVal, kvs);

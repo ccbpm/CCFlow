@@ -2199,22 +2199,31 @@ namespace BP.DA
             }
         }
         /// <summary>
-        /// 判断是否是Num 字串。
+        /// 判断是否是数值类型@hongyan
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static bool IsNumStr(string str)
+        public static bool IsNumStr(string value)
         {
-            try
-            {
-                decimal d = decimal.Parse(str);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
         }
+        ///// <summary>
+        ///// 判断是否是Num 字串。
+        ///// </summary>
+        ///// <param name="str"></param>
+        ///// <returns></returns>
+        //public static bool IsNumStr(string str)
+        //{
+        //    try
+        //    {
+        //        decimal d = decimal.Parse(str);
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
         /// <summary>
         /// 是不时奇数
         /// </summary>

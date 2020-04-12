@@ -1174,6 +1174,7 @@ namespace BP.Sys
         {
             HttpContextHelper.ResponseWrite("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
         }
+
         public static BP.En.Entity CopyFromRequest(BP.En.Entity en)
         {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
@@ -1196,10 +1197,7 @@ namespace BP.Sys
                 }
             }
 
-
-            //如果不使用clone 就会导致 “集合已修改;可能无法执行枚举操作。”的错误。
-            Hashtable ht = en.Row.Clone() as Hashtable;
-
+            Attrs attrs = en.EnMap.Attrs;
             /*说明已经找到了这个字段信息。*/
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
@@ -1223,10 +1221,17 @@ namespace BP.Sys
                 if (en.Row.ContainsKey(attrKey) == false)
                     continue; //判断是否存在?
 
-                string val = HttpContextHelper.RequestParams(key);
+                var val = HttpContextHelper.RequestParams(key);
+                Attr attr = attrs.GetAttrByKey(attrKey);
+                if (val == null)
+                    val = attr.DefaultVal.ToString(); //如果此值为空,就让其设置默认值.
 
-                //其他的属性.
-                en.Row[attrKey] = val;
+                //如果是数值类型的值.
+                if (attr.IsNum && DataType.IsNumStr(val.ToString()) == false)
+                    throw new Exception( "err@["+en.ToString()+","+en.EnDesc+"]输入错误:" + attr.Key + "," + attr.Desc + ",应该是数值类型，但是输入了[" + val.ToString() + "]");
+
+                //设置他的属性.
+                en.SetValByKey(attrKey, val);
             }
             return en;
         }

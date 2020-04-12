@@ -291,11 +291,11 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "常用字段";
-                rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "常用字段";
+                //rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
                 #endregion 基本功能.
 
                 #region 输入多选.

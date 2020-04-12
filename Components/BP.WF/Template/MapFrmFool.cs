@@ -238,8 +238,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                
-
                 rm = new RefMethod();
                 rm.Title = "表单body属性"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBodyAttr";
@@ -305,6 +303,12 @@ namespace BP.WF.Template
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
+                rm = new RefMethod();
+                rm.Title = "改变表单类型";
+                rm.GroupName = "高级功能";
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";
@@ -326,31 +330,17 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                //@李国文.
-                rm = new RefMethod();
-                rm.Title = "改变表单类型";
-                rm.GroupName = "高级功能";
-                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
-                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
-                map.AddRefMethod(rm);
-
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.FrmOrgs(), 
-                    new BP.WF.Port.Admin2.Orgs(),
-                    BP.WF.Template.FrmOrgAttr.FrmID,
-                    BP.WF.Template.FrmOrgAttr.OrgNo, "适用组织");
-
-
-                //rm = new RefMethod();
-                //rm.Title = "绑定组织";
-                //rm.GroupName = "高级功能";
-                //rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
-                //rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
-                //map.AddRefMethod(rm);
-
+                if (BP.WF.Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                {
+                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.FrmOrgs(),
+                        new BP.WF.Port.Admin2.Orgs(),
+                        BP.WF.Template.FrmOrgAttr.FrmID,
+                        BP.WF.Template.FrmOrgAttr.OrgNo, "适用组织");
+                }
                 #endregion
 
-                #region 方法 - 开发接口.
+                #region 开发接口.
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
@@ -371,7 +361,6 @@ namespace BP.WF.Template
                 rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
-
 
                 #region 实验中的功能
                 rm = new RefMethod();

@@ -104,9 +104,10 @@ namespace BP.Frm
             string doc = func.MethodDoc_SQL;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
-           
+
             #region 替换参数变量.
-            if(doc.Contains("@") == true) {
+            if (doc.Contains("@") == true)
+            {
                 MapAttrs attrs = new MapAttrs();
                 attrs.Retrieve(MapAttrAttr.FK_MapData, this.MyPK);
                 foreach (MapAttr item in attrs)
@@ -172,7 +173,7 @@ namespace BP.Frm
         public string MyBill_CreateBlankBillID()
         {
             string billNo = this.GetRequestVal("BillNo");
-            return BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null,billNo).ToString();
+            return BP.Frm.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null, billNo).ToString();
         }
         /// <summary>
         /// 创建空白的DictID.
@@ -183,27 +184,50 @@ namespace BP.Frm
             return BP.Frm.Dev2Interface.CreateBlankDictID(this.FrmID, BP.Web.WebUser.No, null).ToString();
         }
         /// <summary>
-        /// 执行保存
+        /// 执行保存 @hongyan
         /// </summary>
         /// <returns></returns>
         public string MyBill_SaveIt()
         {
-            //执行保存.
+            //创建entity 并执行copy方法.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
-
-            Hashtable ht = GetMainTableHT();
-            foreach (string item in ht.Keys)
+            try
             {
-                rpt.SetValByKey(item, ht[item]);
+                //执行保存.
+                rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+            }
+            catch (Exception ex)
+            {
+                return "err@方法：MyBill_SaveIt错误，在执行 CopyFromRequest 期间" + ex.Message;
             }
 
-            rpt.OID = this.WorkID;
-            rpt.SetValByKey("BillState", (int)BillState.Editing);
-            rpt.Update();
+            ////执行copy ，这部分与上一个方法重复了.
+            //try
+            //{
+            //    Hashtable ht = this.GetMainTableHT();
+            //    foreach (string item in ht.Keys)
+            //    {
+            //        rpt.SetValByKey(item, ht[item]);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return "err@方法：MyBill_SaveIt错误，在执行  GetMainTableHT 期间" + ex.Message;
+            //}
 
-            string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
-            return str;
+            //执行保存.
+            try
+            {
+                rpt.OID = this.WorkID;
+                rpt.SetValByKey("BillState", (int)BillState.Editing);
+                rpt.Update();
+                string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+                return str;
+            }
+            catch (Exception ex)
+            {
+                return "err@方法：MyBill_SaveIt错误，在执行 SaveWork 期间" + ex.Message;
+            }
         }
         public string MyBill_Submit()
         {
@@ -302,8 +326,13 @@ namespace BP.Frm
             Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null)
+                if (key == null || key == "")
                     continue;
+                string mykey = key.Replace("TB_", "");
+                mykey = key.Replace("DDL_", "");
+                mykey = key.Replace("CB_", "");
+                mykey = key.Replace("RB_", "");
+
 
                 if (key.Contains("TB_"))
                 {
@@ -416,7 +445,7 @@ namespace BP.Frm
                 dr["Width"] = mapattr.UIWidth;
                 dt.Rows.Add(dr);
 
-               
+
                 Attr attr = mapattr.HisAttr;
 
                 if (mapattr == null)
@@ -443,8 +472,8 @@ namespace BP.Frm
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL 
-                    && DataType.IsNullOrEmpty(attr.UIBindKey)==false
+                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL
+                    && DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
                     DataTable dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
@@ -484,9 +513,9 @@ namespace BP.Frm
             if (searchDataRole != SearchDataRole.ByOnlySelf)
             {
                 DataTable dd = GetDeptDataTable(searchDataRole, md);
-                if(dd.Rows.Count ==0 && md.GetParaInt("SearchDataRoleByDeptStation")==1)
+                if (dd.Rows.Count == 0 && md.GetParaInt("SearchDataRoleByDeptStation") == 1)
                     dd = GetDeptAndSubLevel();
-                if(dd.Rows.Count != 0)
+                if (dd.Rows.Count != 0)
                 {
                     //增加部门的查询条件
                     if (dt.Rows.Contains("FK_Dept") == false)
@@ -503,13 +532,13 @@ namespace BP.Frm
 
                 }
             }
-           
+
             return BP.Tools.Json.ToJson(ds);
 
         }
         #endregion 查询条件
 
-        private DataTable GetDeptDataTable(SearchDataRole searchDataRole,MapData md)
+        private DataTable GetDeptDataTable(SearchDataRole searchDataRole, MapData md)
         {
             //增加部门的外键
             DataTable dt = new DataTable();
@@ -555,24 +584,24 @@ namespace BP.Frm
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.PrimaryKey = new DataColumn[] { dt.Columns["No"] };
             DataTable dd = dt.Copy();
-            foreach(DataRow dr in dd.Rows)
+            foreach (DataRow dr in dd.Rows)
             {
                 GetSubLevelDeptByParentNo(dt, dr[0].ToString());
             }
             return dt;
         }
 
-        private void GetSubLevelDeptByParentNo( DataTable dt,string parentNo)
+        private void GetSubLevelDeptByParentNo(DataTable dt, string parentNo)
         {
             string sql = "SELECT No,Name FROM Port_Dept Where ParentNo='" + parentNo + "'";
             DataTable dd = DBAccess.RunSQLReturnTable(sql);
-            
+
             foreach (DataRow dr in dd.Rows)
             {
                 if (dt.Rows.Contains(dr[0].ToString()) == true)
                     continue;
                 dt.Rows.Add(dr.ItemArray);
-               
+
                 GetSubLevelDeptByParentNo(dt, dr[0].ToString());
 
             }
@@ -697,7 +726,9 @@ namespace BP.Frm
                 }
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
-            }else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false){
+            }
+            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
+            {
                 string field = "";//字段名
                 string fieldValue = "";//字段值
                 int idx = 0;
@@ -710,8 +741,8 @@ namespace BP.Frm
                         continue;
 
                     //字段名
-                    string[] items  = str.Split(',');
-                    if (items.Length==2 && DataType.IsNullOrEmpty(items[0]) == true)
+                    string[] items = str.Split(',');
+                    if (items.Length == 2 && DataType.IsNullOrEmpty(items[0]) == true)
                         continue;
                     field = items[0];
                     //字段名对应的字段值
@@ -744,7 +775,7 @@ namespace BP.Frm
                 if (idx != 0)
                     qo.addRightBracket();
             }
-           
+
             #endregion 关键字段查询
 
             #region 时间段的查询
@@ -829,11 +860,12 @@ namespace BP.Frm
             #region 设置隐藏字段的过滤查询
             FrmBill frmBill = new FrmBill(this.FrmID);
             string hidenField = frmBill.GetParaString("HidenField");
-           
-            if(WebUser.No.Equals("admin") == false&&DataType.IsNullOrEmpty(hidenField) == false)
+
+            if (WebUser.No.Equals("admin") == false && DataType.IsNullOrEmpty(hidenField) == false)
             {
                 hidenField = hidenField.Replace("[%]", "%");
-                foreach (string field in hidenField.Split(';')){
+                foreach (string field in hidenField.Split(';'))
+                {
                     if (field == "")
                         continue;
                     if (field.Split(',').Length != 3)
@@ -866,7 +898,7 @@ namespace BP.Frm
                     qo.addRightBracket();
                     continue;
                 }
-                
+
             }
 
             #endregion 设置隐藏字段的查询
@@ -875,12 +907,12 @@ namespace BP.Frm
 
             if (isFirst == false)
                 qo.addAnd();
-           
+
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
-                ||(md.GetParaInt("SearchDataRoleByDeptStation")==0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept"))==true))
+            if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
+                || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
             {
                 qo.addAnd();
                 qo.AddWhere("Starter", "=", WebUser.No);
@@ -1357,7 +1389,7 @@ namespace BP.Frm
 
             #endregion 设置隐藏字段的查询
 
-           
+
 
             if (isFirst == false)
                 qo.addAnd();
@@ -1438,7 +1470,7 @@ namespace BP.Frm
             if (impWay == 0)
             {
                 rpts.ClearTable();
-                GEEntity myen = new  GEEntity(this.FrmID);
+                GEEntity myen = new GEEntity(this.FrmID);
 
                 foreach (DataRow dr in dt.Rows)
                 {

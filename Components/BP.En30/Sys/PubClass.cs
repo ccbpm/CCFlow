@@ -1186,8 +1186,13 @@ namespace BP.Sys
                     if (str == null || str == "")
                         continue;
 
+                    //@hongyan
+                    string key = str.Replace("CB_", "");
+                    if (en.Row.ContainsKey(key) == false)
+                        continue; //判断是否存在?
+
                     //设置该属性为false.
-                    en.Row[str.Replace("CB_", "")] = 0;
+                    en.Row[key] = 0;
                 }
             }
 
@@ -1213,6 +1218,10 @@ namespace BP.Sys
                     attrKey = attrKey.Replace("RB_", "");
                 else
                     continue;
+
+                //@hongyan
+                if (en.Row.ContainsKey(attrKey) == false)
+                    continue; //判断是否存在?
 
                 string val = HttpContextHelper.RequestParams(key);
 

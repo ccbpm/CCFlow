@@ -25,19 +25,19 @@ namespace CCFlow.SDKFlowDemo
             //获得部门列表, 开窗返回值json. 这里一定要确定获取的顶级部门的ParentNo=0.
             if (doType == "ReqDepts")
             {
-                if (BP.WF.Glo.CCBPMRunModel == BP.WF.CCBPMRunModel.SAAS)
+                if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'  ";
 
-                if (BP.WF.Glo.CCBPMRunModel == BP.WF.CCBPMRunModel.GroupInc)
+                if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
 
-                if (BP.WF.Glo.CCBPMRunModel == BP.WF.CCBPMRunModel.Single)
+                if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 //对saas模式单独的处理.
-                if (BP.WF.Glo.CCBPMRunModel == BP.WF.CCBPMRunModel.SAAS)
+                if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -59,7 +59,12 @@ namespace CCFlow.SDKFlowDemo
             if (doType == "SearchEmps")
             {
                 string key = context.Request.QueryString["Keyword"];
-                sql = "SELECT No,Name  FROM Port_Emp WHERE No like '%" + key + "%' OR Name like '%" + key + "%' ";
+
+                if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+                    sql = "SELECT No,Name  FROM Port_Emp WHERE (No like '%" + key + "%' OR Name like '%" + key + "%') AND OrgNo='" + BP.Web.WebUser.OrgNo + "'  ";
+                else
+                    sql = "SELECT No,Name  FROM Port_Emp WHERE No like '%" + key + "%' OR Name like '%" + key + "%' ";
+
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);
@@ -88,29 +93,29 @@ namespace CCFlow.SDKFlowDemo
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);
             }
-            if (doType == "DtlImpReqAll" )
+            if (doType == "DtlImpReqAll")
             {
                 string key = context.Request.QueryString["Keyword"];
-                sql = "select No,Name from Port_StationType";
+                sql = "select No,Name FROM Port_StationType";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);
             }
             if (doType == "DtlImpReq1" || doType == "DtlImpReq2" || doType == "DtlImpReq3")
             {
-                sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1 ";
+                sql = "SELECT No,Name FROM Port_Emp WHERE  1=1 ";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);
             }
 
-            if (doType == "DtlImpFullData" )
+            if (doType == "DtlImpFullData")
             {
                 string key = context.Request.QueryString["Keyword"];
                 sql = "SELECT No,Name  FROM Port_Emp WHERE  FK_Duty='0" + key + "' ";
                 if (key.Equals("all"))
                 {
-                    sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1"; 
+                    sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1";
                 }
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);

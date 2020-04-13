@@ -893,7 +893,7 @@
                             paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                     }
 
-                    OpenEn(pkval, paras);
+                    OpenEn(pkval, paras,1, row);
                 }
 
             });
@@ -951,7 +951,7 @@
             return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
 
-        function OpenEn(pk, paras, flag) {
+        function OpenEn(pk, paras, flag,row) {
 
             //当前URL参数
             var currUrl = window.location.search.substring(1);
@@ -991,9 +991,13 @@
                 if (url.indexOf('?') == -1)
                     url = url + "?1=1";
                 if (url.indexOf('FrmID') != -1)
-                    url = url + "&WorkID=" + pk + "&OID=" + pk + paras;
+                    url = url + "&WorkID=" + pk + "&OID=" + pk ;
                 else
-                    url = url + "&EnsName=" + ensName + "&EnName=" + enName + "&PKVal=" + pk + paras;
+                    url = url + "&EnsName=" + ensName + "&EnName=" + enName + "&PKVal=" + pk ;
+            }
+            //url中包含@符号需要进行替换
+            if (url.indexOf("@") != -1) {
+                url = DealJsonExp(row, url);
             }
 
             var windowW = cfg.GetPara("WinCardW");

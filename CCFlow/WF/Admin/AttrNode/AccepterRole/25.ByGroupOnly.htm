@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>所有组织的</title>
+    <title></title>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -55,7 +55,7 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: DeliveryWay.GroupOnly
+                deliverWay: DeliveryWay.ByGroupOnly
             },
             methods: {
                 OpenNew: function () {
@@ -81,7 +81,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryWay = DeliveryWay.ByGroupOnly;
             node.Update();
         }
     </script>

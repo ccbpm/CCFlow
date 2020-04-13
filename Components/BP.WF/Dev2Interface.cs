@@ -689,22 +689,22 @@ namespace BP.WF
         /// <returns>返回该人员的所有抄送列表,结构同表WF_CCList.</returns>
         public static DataTable DB_CCList(string domain = null)
         {
+            //@yuanlina 增加一个Sta列.
             Paras ps = new Paras();
             if (domain == null)
             {
-                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID ";
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta,A.Sta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID ";
                 ps.Add("CCTo", WebUser.No);
             }
             else
             {
-                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID AND B.Domain=" + SystemConfig.AppCenterDBVarStr + "Domain ";
+                ps.SQL = "SELECT a.MyPK,A.Title,A.FK_Flow,A.FlowName,A.WorkID,A.Doc,A.Rec,A.RDT,A.FID,B.FK_Node,B.NodeName,B.WFSta,A.Sta FROM WF_CCList A, WF_GenerWorkFlow B WHERE A.CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo AND B.WorkID=A.WorkID AND B.Domain=" + SystemConfig.AppCenterDBVarStr + "Domain ";
                 ps.Add("CCTo", WebUser.No);
                 ps.Add("Domain", domain);
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -718,6 +718,23 @@ namespace BP.WF
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["STA"].ColumnName = "Sta"; //@yuanlina
+            }
+            if ( SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["mypk"].ColumnName = "MyPK";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["doc"].ColumnName = "DOC";
+                dt.Columns["rec"].ColumnName = "REC";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["sta"].ColumnName = "Sta"; //@yuanlina
             }
             return dt;
         }
@@ -5102,6 +5119,12 @@ namespace BP.WF
                     num = DBAccess.RunSQLReturnValInt(ps);
                     break;
                 case DeliveryWay.ByGroup:
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B, Port_Emp C WHERE B.FK_Emp=C.No AND A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND C.OrgNo=" + dbstr + "OrgNo";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("FK_Emp", userNo);
+                    ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
                 case DeliveryWay.ByGroupOnly:
                     ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B WHERE A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
                     ps.Add("FK_Node", nd.NodeID);

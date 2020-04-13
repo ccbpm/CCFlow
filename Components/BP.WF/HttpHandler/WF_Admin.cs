@@ -136,15 +136,7 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
-                    case DeliveryWay.ByGroup: //不解析。
-                    case DeliveryWay.ByGroupOnly: //仅按群组计算. @lizhen.
-
-                        sql = "SELECT A.No,A.Name  FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
-                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID;
-
-                        //                            WHERE A.No=B.  LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join GPM_GroupEmp on (fk_emp=Port_Emp.No)   join WF_NodeGroup on (WF_NodeGroup.fk_Group=GPM_GroupEmp.FK_Group) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
-                        // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
-                        break;
+                  
                     case DeliveryWay.ByDept:
                         sql = "SELECT No,Name FROM Port_Emp where FK_Dept in (select FK_Dept from WF_NodeDept where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("");

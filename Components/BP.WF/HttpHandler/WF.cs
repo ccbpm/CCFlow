@@ -2084,8 +2084,8 @@ namespace BP.WF.HttpHandler
             //BP.En.QueryObject qo = new BP.En.QueryObject(ss);
 
             System.Data.DataTable dt = null;
-            if (sta == "-1")
-                dt = BP.WF.Dev2Interface.DB_CCList();
+            if (sta.Equals("-1") )
+                dt= BP.WF.Dev2Interface.DB_CCList();
 
             if (sta == "0")
                 dt = BP.WF.Dev2Interface.DB_CCList_UnRead(BP.Web.WebUser.No);

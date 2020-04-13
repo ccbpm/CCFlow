@@ -1181,6 +1181,23 @@ namespace BP.WF
             }
             #endregion
 
+            #region 仅按群组智能计算 @lizhen
+            if (toNode.HisDeliveryWay == DeliveryWay.ByGroup)
+            {
+                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGrop B,Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
+                ps = new Paras();
+                ps.Add("FK_Node", toNode.NodeID);
+                ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
+
+                ps.SQL = sql;
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按群组智能计算，没有找到人员:SQL=" + ps.SQLNoPara);
+            }
+            #endregion
+
 
             #region 仅按岗位计算
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationOnly)

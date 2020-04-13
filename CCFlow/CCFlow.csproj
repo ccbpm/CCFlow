@@ -888,6 +888,7 @@
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
     <Content Include="WF\Admin\AttrFlow\Ver.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\0.ByStation.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\24.ByGroup.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\1.ByDept.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\10.ByStationAndEmpDept.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\100.ByCCFlowBPM.htm" />

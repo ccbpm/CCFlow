@@ -39,7 +39,7 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
     html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
     if (webUser.CCBPMRunModel == 1)
-        html += "<option value=" + SelectorModel.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+        html += "<option value=" + SelectorModel.Group + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
     html += "<option value=null  disabled='disabled'>+其他</option>";
     html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
     html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
@@ -179,7 +179,7 @@ function changeOption() {
         case SelectorModel.DeptAndStation:
             roleName = "9.AccepterOfDeptStationOfCurrentOper.htm";
             break;
-        case SelectorModel.ByGroup:
+        case SelectorModel.Group:
             roleName = "10.ByGroup.htm";
             break;
         default:

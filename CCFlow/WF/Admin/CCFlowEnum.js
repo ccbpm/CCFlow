@@ -108,7 +108,7 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.Url = 7,
         SelectorModel.AccepterOfDeptStationEmp = 8,
         SelectorModel.AccepterOfDeptStationOfCurrentOper = 9,
-        SelectorModel.ByGroup = 10
+        SelectorModel.Group = 10
 }
 //发送阻塞规则.
 if (typeof BlockModel == "undefined") {

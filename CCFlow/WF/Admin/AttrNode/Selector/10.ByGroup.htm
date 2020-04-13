@@ -55,7 +55,7 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: DeliveryWay.ByGroup
+                deliverWay: SelectorModel.Group
             },
             methods: {
                 OpenNew: function () {
@@ -80,9 +80,10 @@
         function Save() {
 
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = Baseinfo.deliverWay;
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.SelectorModel = Baseinfo.deliverWay;
             node.Update();
+            alert("保存成功.");
         }
     </script>
 </body>

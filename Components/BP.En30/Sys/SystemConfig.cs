@@ -39,6 +39,24 @@ using BP.Web;
 namespace BP.Sys
 {
     /// <summary>
+    /// 运行模式
+    /// </summary>
+    public enum CCBPMRunModel
+    {
+        /// <summary>
+        /// 单机版
+        /// </summary>
+        Single,
+        /// <summary>
+        /// 集团模式
+        /// </summary>
+        GroupInc,
+        /// <summary>
+        /// 多租户模式
+        /// </summary>
+        SAAS
+    }
+    /// <summary>
     /// 组织结构类型
     /// </summary>
     public enum OSModel
@@ -229,13 +247,23 @@ namespace BP.Sys
             #endregion
         }
         /// <summary>
-        /// 运行模式0=单机版，1=集团模式, 2=SAAS模式
+        /// 运行模式
         /// </summary>
-        public static int CCBPMRunModel
+        public static CCBPMRunModel CCBPMRunModel
         {
             get
             {
-                return SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+                int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+                if (val == 0)
+                    return CCBPMRunModel.Single;
+
+                if (val == 1)
+                    return CCBPMRunModel.GroupInc;
+
+                if (val == 2)
+                    return CCBPMRunModel.SAAS;
+
+                return CCBPMRunModel.Single;
             }
         }
 

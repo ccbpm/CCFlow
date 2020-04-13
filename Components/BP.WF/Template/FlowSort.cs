@@ -126,7 +126,11 @@ namespace BP.WF.Template
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
             DBAccess.RunSQL(sql);
 
-            sql = "UPDATE WF_Emp SET StartFlows='' ";
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "UPDATE WF_Emp SET StartFlows='' ";
+            else
+                sql = "UPDATE WF_Emp SET StartFlows='' ";
+
             DBAccess.RunSQL(sql);
 
             return base.beforeUpdateInsertAction();

@@ -5,24 +5,7 @@ using System.Text;
 
 namespace BP.WF
 {
-    /// <summary>
-    /// 运行模式
-    /// </summary>
-    public enum CCBPMRunModel
-    {
-        /// <summary>
-        /// 单机版
-        /// </summary>
-        Single,
-        /// <summary>
-        /// 集团模式
-        /// </summary>
-        GroupInc,
-        /// <summary>
-        /// 多租户模式
-        /// </summary>
-        SAAS
-    }
+  
     /// <summary>
     /// 工作提醒规则
     /// </summary>

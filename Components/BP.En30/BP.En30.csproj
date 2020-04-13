@@ -200,6 +200,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\KeyVal.cs" />
+    <Compile Include="GPM\GroupEmp.cs" />
     <Compile Include="NetPlatformImpl\CacheHelper.cs" />
     <Compile Include="NetPlatformImpl\DA.cs" />
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />

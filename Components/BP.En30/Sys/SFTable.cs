@@ -973,7 +973,7 @@ namespace BP.Sys
 
             #region  如果是 系统字典表.
             if (this.SrcType == Sys.SrcType.SysDict &&
-                (SystemConfig.CCBPMRunModel == 0 || SystemConfig.CCBPMRunModel == 1))
+                (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc))
             {
                 //创建dict.
                 Dict dict = new Dict();

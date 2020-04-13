@@ -23,6 +23,16 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        /// <summary>
+        /// CCBPMRunModel
+        /// </summary>
+        public static CCBPMRunModel CCBPMRunModel
+        {
+            get
+            {
+                return SystemConfig.CCBPMRunModel;
+            }
+        }
 
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
@@ -3435,26 +3445,7 @@ namespace BP.WF
                 }
             }
         }
-        /// <summary>
-        /// 运行模式
-        /// </summary>
-        public static CCBPMRunModel CCBPMRunModel
-        {
-            get
-            {
-                int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
-                if (val == 0)
-                    return CCBPMRunModel.Single;
-
-                if (val == 1)
-                    return CCBPMRunModel.GroupInc;
-
-                if (val == 2)
-                    return CCBPMRunModel.SAAS;
-
-                return CCBPMRunModel.Single;
-            }
-        }
+       
 
         /// <summary>
         /// 短信时间发送到

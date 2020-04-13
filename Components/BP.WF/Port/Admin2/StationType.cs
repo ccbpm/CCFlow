@@ -88,7 +88,7 @@ namespace BP.WF.Port.Admin2
 
         protected override bool beforeInsert()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.GroupInc)
+            if (Glo.CCBPMRunModel != BP.Sys.CCBPMRunModel.GroupInc)
                 throw new Exception("err@非GroupInc模式，不能插入. ");
 
             this.OrgNo = BP.Web.WebUser.OrgNo;

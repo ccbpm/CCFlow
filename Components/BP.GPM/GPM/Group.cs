@@ -67,12 +67,12 @@ namespace BP.GPM
                 map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
 
 
-                map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
+                map.AttrsOfOneVSM.Add(new BP.GPM.GroupEmps(), new Emps(),
                     GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new GroupEmps(), new BP.Port.Emps(),
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.GPM.GroupEmps(), new BP.Port.Emps(),
                    GroupEmpAttr.FK_Group,
                    GroupEmpAttr.FK_Emp, "人员(树)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 

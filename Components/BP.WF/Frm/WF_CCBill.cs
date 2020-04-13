@@ -270,7 +270,6 @@ namespace BP.Frm
 
             //执行保存前事件
             md.DoEvent(FrmEventList.SaveBefore, rpt, null);
-           
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Over);
@@ -291,7 +290,7 @@ namespace BP.Frm
             qo.DoQuery();
             return BP.Tools.Json.ToJson(rpts.ToDataTableField());
         }
-      
+
 
         public string MyBill_SaveAsDraft()
         {

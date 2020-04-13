@@ -699,8 +699,10 @@ namespace BP.Web
 
                     val = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Org WHERE No='" + WebUser.OrgNo + "'");
                     SetSessionByKey("OrgName", val);
-                    return val;
+                   
                 }
+                if (val == null)
+                    val = "";
                 return val;
             }
             set

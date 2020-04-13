@@ -2205,6 +2205,10 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsNumStr(string value)
         {
+            if (value==null || "".Equals(value))
+            {
+                return false;
+            }
             return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
         }
         ///// <summary>

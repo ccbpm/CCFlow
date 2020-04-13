@@ -69,16 +69,30 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 #endregion  基础属性
 
+                #region 对应关系群组。
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeGroups(), new BP.GPM.Groups(),
+                    BP.WF.Template.NodeGroupAttr.FK_Node,
+                    BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定群组");
+
+                //列表模式.
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeGroups(), new BP.GPM.Groups(),
+                  BP.WF.Template.NodeGroupAttr.FK_Node,
+                  BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定群组AddGroupListModel");
+                #endregion 
+
                 #region 对应关系
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
+                //列表模式.
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
 
+                 
 
                 //节点绑定部门. 节点绑定部门.
                 string defDeptVal = "@WebUser.FK_Dept";

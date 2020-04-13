@@ -2,9 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-using BP.GPM;
 
-namespace BP.En
+namespace BP.GPM
 {
     /// <summary>
     /// 权限组

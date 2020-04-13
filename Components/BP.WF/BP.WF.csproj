@@ -329,6 +329,7 @@
     <Compile Include="Template\NodeSimple.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Template\NodeGroup.cs" />
     <Compile Include="Template\Part\FlowRefEmp.cs" />
     <Compile Include="Template\PowerModel.cs" />
     <Compile Include="Template\SQLTemplate.cs" />

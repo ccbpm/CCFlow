@@ -140,10 +140,13 @@
             }
 
             //插入到html 到编辑器.
-            if (dataType!="Textarea") {
+            if (dataType != "Textarea") {
                 dataType = GetFieldType(FieldType, dataType);
+                InsertHtmlToEditor(dataType, KeyOfEn, name);
+            } else if (dataType == "Textarea") {
+                InsertHtmlToEditor(dataType, KeyOfEn, name,null,null, FieldType);
             }
-            InsertHtmlToEditor(dataType,KeyOfEn,name);
+           
            
         };
         //类型转换

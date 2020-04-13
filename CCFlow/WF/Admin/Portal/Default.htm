@@ -33,16 +33,17 @@
             position: absolute;
             z-index: 100;
             right: 10px;
-            top:10px;
+            top: 10px;
         }
-        #rightUL span{
-            width:120px;
-            right:10px;
-           
-            font-size:16px;
-            color: black;
-            background-color: white;
-        }
+
+            #rightUL span {
+                width: 120px;
+                right: 10px;
+                font-size: 16px;
+                color: black;
+                background-color: white;
+            }
+
         .nav > li {
             float: left;
             list-style: none;
@@ -51,38 +52,43 @@
         #rightUL a {
             display: block;
             text-decoration: none;
-            padding-bottom:2px;
+            padding-bottom: 2px;
             width: 100px;
             height: 30px;
-            font-size:14px;
+            font-size: 14px;
             text-align: center;
             line-height: 30px;
             color: black;
-            border:1px solid black;
-            background-color:#F1F1F1;
+            border: 1px solid black;
+            background-color: #F1F1F1;
             border-radius: 10px;
         }
-        #rightUL a:hover{
-            background-color:white;
-        }
+
+            #rightUL a:hover {
+                background-color: white;
+            }
+
         .drop-down-content {
             padding: 0;
             display: none;
             /*position: absolute;*/
         }
+
         .nav .drop-down:hover .drop-down-content {
             display: block;
         }
-        .tabs-header:not(:nth-child(1)){
-            width:90% !important;
-            border:none !important;
+
+        .tabs-header:not(:nth-child(1)) {
+            width: 90% !important;
+            border: none !important;
         }
-        .headTiele label{
-           color:red;
+
+        .headTiele label {
+            color: red;
         }
     </style>
     <script>
-         //页面启动函数.
+        //页面启动函数.
         $(function () {
             $("#ShowMsg").hide();
             var webUser = new WebUser();
@@ -90,15 +96,12 @@
                 window.location.href = "Login.htm";
                 return;
             }
-           
+
             $("#UserName").append(webUser.Name);
             if (webUser.CCBPMRunModel == 1) {
+                var en = new Entity("BP.WF.Port.Admin2.Org", GetQueryString("OrgNo"));
+                $("title").text("驰骋工作流程引擎设计器—" + "组织编号：" + GetQueryString("OrgNo") + "      组织名称：" + en.Name);
                 
-                $("#OrgNo").append(GetQueryString("OrgNo"));
-                
-                var en = new Entity("BP.WF.Port.Admin2.Org",GetQueryString("OrgNo"));
- 
-                $("#OrgName").append(en.Name);
             }
             else {
                 $("#OrgNo").hide();
@@ -106,8 +109,10 @@
                 $("#Login2App").show();
                 $("#org").hide();
             }
+
             return;
         });
+
     </script>
 </head>
 <body class="easyui-layout" data-options="fit: true">
@@ -117,7 +122,7 @@
         <img alt="" src="Img/loading_small.gif" align='middle' style="width: 32px; height: 32px;" />
         请稍后...
     </div>
-    
+
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
         z-index: 21006;">
     </div>
@@ -127,10 +132,7 @@
         </div>
     </div>
     <div data-options="region:'center',border:true" collapsible="true">
-        <div id="headTiele" style="position:absolute;z-index:10;left:30%">
-            <label style="font-weight:bolder;font-size:14px;" id="OrgNo">组织编号：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <label style="font-weight:bolder;font-size:14px;" id="OrgName">组织名称：</label>
-        </div>
+
         <div id="tabs" class="easyui-tabs cs-header" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
 
             <ul id="rightUL" class="nav">

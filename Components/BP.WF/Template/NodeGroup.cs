@@ -100,7 +100,7 @@ namespace BP.WF.Template
 
                 // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
                 map.AddDDLEntitiesPK(NodeGroupAttr.FK_Group, null, "群组",
-                   new BP.GPM.Stations(), true);
+                   new BP.GPM.Groups(), true);
 
                 this._enMap = map;
                 return this._enMap;

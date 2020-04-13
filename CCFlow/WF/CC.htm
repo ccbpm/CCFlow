@@ -19,7 +19,7 @@
                             #
                         </th>
                         <th>
-                            工作流程
+                            流程
                         </th>
                         <th>
                             节点
@@ -38,6 +38,9 @@
                         </th>
                         <th>
                             日期
+                        </th>
+                        <th>
+                            操作
                         </th>
                     </tr>
                 </thead>
@@ -78,40 +81,128 @@
             data = JSON.parse(data);
             var row = "";
             for (var i = 0; i < data.length; i++) {
+
+                var dt = data[i];
+
                 var batchUrl = "";
                 var url = "";
 
-                batchUrl = './WFRpt.htm?FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + data[i].FK_Node + '&WorkID=' + data[i].WorkID + '&FID=' + data[i].FID +"&CCSta=1";
-                url = '../WF/WorkOpt/CCCheckNote.htm?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FID=0&FK_Node=' + data[i].FK_Node;
+                batchUrl = './WFRpt.htm?FK_Flow=' + dt.FK_Flow + '&FK_Node=' + dt.FK_Node + '&WorkID=' + dt.WorkID + '&FID=' + dt.FID + "&CCSta=1";
+                url = '../WF/WorkOpt/CCCheckNote.htm?WorkID=' + dt.WorkID + '&FK_Flow=' + dt.FK_Flow + '&FID=0&FK_Node=' + dt.FK_Node;
 
                 row += "<tr>";
                 row += "<td>" + i + "</td>";
-                row += "<td>" + data[i].FlowName + "</td>";
-                row += "<td>" + data[i].NodeName + "</td>";
+                row += "<td>" + dt.FlowName + "</td>";
+                row += "<td>" + dt.NodeName + "</td>";
 
-                var sta = ""; 
-                switch (data[i].WFSta) {
+                var sta = "";
+                switch (dt.WFSta) {
                     case 0:
-                        sta="运行中"
+                        sta = "<font color=green>运行中</font>";
                         break;
                     case 1:
-                        sta="已完成"
+                        sta = "已完成"
                         break;
                     default:
                         sta = "其他";
                         break;
                 }
+
                 row += "<td>" + sta + "</td>";
-                row += "<td>" + data[i].Rec + "</td>";
-                row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a></td>";
-                row += "<td>" + data[i].Doc + "</td>";
-                row += "<td>" + data[i].RDT + "</td>";
+                row += "<td>" + dt.Rec + "</td>";
+                row += "<td><a    href=\"javascript:OpenFrm('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.Sta + "')\" >" + dt.Title + "</a></td>";
+                row += "<td>" + dt.Doc + "</td>";
+                row += "<td>" + dt.RDT + "</td>";
+
+                row += "<td>";
+                row += "<a href=\"javascript:OpenTrack('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.CCSta + "')\" >轨迹</a>";
+                row += "</td>";
 
                 row += "</tr>";
             }
             $("#Rows").html(row);
             return;
         });
+
+         /* 打开表单. */
+        function OpenFrm(flowNo, nodeID, workid, fid,sta) {
+
+            var currNodeId = nodeID;
+
+            //但前节点所处的位置
+            var nowNode = new Entity("BP.WF.Node", nodeID);
+
+            //如果是树形表单，则显示当前人所处节点的数据
+            if (nowNode.FormType == 5) {
+                //获取人员所处的流程节点
+
+                var currNode = new Entity("BP.WF.Node", currNodeId);
+                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    }
+                } else {
+                    //判断当前节点的运行模式
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    } else if (currNode.RunModel == RunModel.SubThread) {
+                        nodeID = currNodeId;
+                    }
+                }
+
+
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //SDK表单或者是嵌入式表单
+            if (data.indexOf('urlForm@') == 0) {
+                data = data.replace('urlForm@', '');
+                if (data.indexOf("http") == -1)
+                    data = basePath + data;
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+            //自由/傻瓜/树形表单
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+
+            alert(data);
+        }
+
+        //打开轨迹
+        function OpenTrack(flowNo,nodeID, workID, fid, ccSta) {
+
+            var batchUrl = './WFRpt.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID + '&WorkID=' + workID + '&FID=' + fid + "&CCSta=1";
+
+            WinOpenFull(batchUrl);
+        }
     </script>
 </body>
 </html>

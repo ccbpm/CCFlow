@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>驰骋工作流</title>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="./Scripts/config.js"></script>
+    <script type="text/javascript" src="./Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var flowNo = GetQueryString("FK_Flow");
+            var nodeID = GetQueryString("FK_Node");
+            var workID = GetQueryString("WorkID");
+            var fid = GetQueryString("FID");
+
+            var url = OpenFrm(workID, nodeID, flowNo, fid, nodeID);
+            window.location.href = url;
+
+        });
+
+        /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo, fid, currNodeId) {
+            //但前节点所处的位置
+            var nowNode = new Entity("BP.WF.Node", nodeID);
+
+            //如果是树形表单，则显示当前人所处节点的数据
+            if (nowNode.FormType == 5) {
+                //获取人员所处的流程节点
+
+                var currNode = new Entity("BP.WF.Node", currNodeId);
+                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    }
+                } else {
+                    //判断当前节点的运行模式
+                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
+                        workID = fid;
+                        fid = 0;
+                        nodeID = currNodeId;
+                    } else if (currNode.RunModel == RunModel.SubThread) {
+                        nodeID = currNodeId;
+                    }
+                }
+
+
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //SDK表单或者是嵌入式表单
+            if (data.indexOf('urlForm@') == 0) {
+                data = data.replace('urlForm@', '');
+                if (data.indexOf("http") == -1)
+                    data = basePath + data;
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+            //自由/傻瓜/树形表单
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                return data;
+                //window.open(data);
+                //return;
+            }
+
+            alert(data);
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+
+
+        <br />
+        <center> <img src='./Img/loading.gif' alt="" />正在加载，请稍后。。。 </center>
+    </form>
+
+</body>
+</html>

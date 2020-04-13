@@ -74,23 +74,22 @@
                 isSimpleSelector: false,
                 isEnableDeptRange: false,
                 isEnableStaRange: false,
-                nodeExt:null
-
+                nodeExt: null
             },
             methods: {
-                 OpenDialog2019: function () {
+                OpenDialog2019: function () {
                     var url = "../Selector/Default.htm";
                     var nodeID = GetQueryString("FK_Node");
                     url += '?NodeID=' + nodeID;
-                    OpenEasyUiDialogExt(url, '选择器', 950, 600, true);
+                    OpenEasyUiDialogExt(url, '选择器', 950, 450, true);
                 },
                 IsChange: function () {
-                     if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {
+                    if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {
                         if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) {
                             this.isSimpleSelector = true;
                             alert("该节点会签模式为组长模式，只能单项选择");
                         }
-                     }
+                    }
                 },
             },
             created() {
@@ -99,22 +98,22 @@
                 if (node.IsAutoLoadEmps == 1)
                     this.isAutoLoadEmps = true;
                 if (node.IsSimpleSelector == 1)
-                     this.isSimpleSelector = true;
+                    this.isSimpleSelector = true;
                 if (node.IsEnableDeptRange == 1)
-                     this.isEnableDeptRange = true;
+                    this.isEnableDeptRange = true;
                 if (node.IsEnableStaRange == 1)
-                     this.isEnableStaRange = true;
+                    this.isEnableStaRange = true;
                 this.nodeExt = new Entity("BP.WF.Template.NodeExt", this.nodeId);
                 if (this.nodeExt.HuiQianRole == 4 && this.nodeExt.HuiQianLeaderRole == 0) //组长模式
-                     this.isSimpleSelector = false;
-                }
+                    this.isSimpleSelector = false;
+            }
         });
         function Save() {
             var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
             node.DeliveryWay = Baseinfo.deliverWay;
-           
+
             node.Update();
-             var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
+            var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
             node.CopyForm();  //按照规则把数据放入到entity.
             node.Update();
         }

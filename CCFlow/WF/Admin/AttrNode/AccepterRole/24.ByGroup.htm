@@ -20,7 +20,7 @@
         <div id="bar"> </div>
 
         <div id="AdminModel">
-            <fieldset  >
+            <fieldset>
                 <legend>设置</legend>
                 <ul>
                     <li><a href="#" @click="OpenNew()"> 设置/更改群组</a></li>
@@ -55,36 +55,35 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay:DeliveryWay.ByGroup
+                deliverWay: DeliveryWay.ByGroup
             },
             methods: {
                 OpenNew: function () {
-                    
+
                     var nodeID = GetQueryString("FK_Node");
-                   var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeGroups&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Group&EnsOfM=BP.GPM.Groups&DefaultGroupAttrKey=";
+                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeGroups&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Group&EnsOfM=BP.GPM.Groups&DefaultGroupAttrKey=";
                     url += '&No=' + nodeID + '&PKVal=' + nodeID;
 
-                    OpenEasyUiDialogExtCloseFunc(url, '绑定群组', 500, 350,function () {
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定群组', 500, 350, function () {
                         Baseinfo.groups = getGroups();
                     });
                 }
             },
             created() {
                 InitBar(this.deliverWay);
-               this.groups = getGroups();
+                this.groups = getGroups();
 
             }
         });
 
         //保存
         function Save() {
-           
+
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
     </script>
-</body >
-</html >
- 
+</body>
+</html>

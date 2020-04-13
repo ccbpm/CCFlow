@@ -215,7 +215,6 @@ function getStas() {
         return obj.FK_Node != undefined
     });
     return ens;
-
 }
 /*
  * 获取节点绑定的部门
@@ -233,6 +232,7 @@ function getDepts() {
  * 获取节点绑定的群组@lz
  */
 function getGroups() {
+
     var ens = new Entities("BP.WF.Template.NodeGroups");
     ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
     ens = $.grep(ens, function (obj, i) {

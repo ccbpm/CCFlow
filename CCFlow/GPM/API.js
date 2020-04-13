@@ -13,7 +13,7 @@
  * @param {系统编号} appNo 
  * 
  * 返回：两个结果集合的JSON,可以通过下列方式获取到他.
-    var dirs = data["Dirs"]; //获得目录.
+    var dirs = data["Dirs"];   //获得目录.
     var menus = data["Menus"]; //获得菜单.
  
  说明：

@@ -339,7 +339,7 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.Title = "转化为评论组件";
-                rm.ClassMethodName = this.ToString() + ".DoSetCheck()";
+                rm.ClassMethodName = this.ToString() + ".DoSetFlowBBS()";
                 rm.Warning = "您确定要设置为评论组件吗？";
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
@@ -535,7 +535,7 @@ namespace BP.Sys.FrmUI
                 this.UIIsEnable = false;
                 this.UIVisible = false;
                 this.Update();
-                return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
+                return "设置成功,当前文本框已经是评论组件了,请关闭掉当前的窗口.";
             }
 
             return "表单中只能存在一个评论组件，表单" + this.FK_MapData + "已经存在评论组件不能再增加";

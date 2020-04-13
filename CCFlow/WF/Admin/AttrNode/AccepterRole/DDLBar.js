@@ -67,6 +67,7 @@ function InitBar(optionKey) {
 
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位智能计算</option>";
         html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的部门计算</option>";
+        html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的群组计算</option>";
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
         html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
@@ -229,6 +230,19 @@ function getDepts() {
 
 }
 /*
+ * 获取节点绑定的群组@lz
+ */
+function getGroups() {
+    var ens = new Entities("BP.WF.Template.NodeGroups");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    
+    return ens;
+
+}
+/*
  * 获取节点绑定部门的负责人@lz
  */
 function getDeptLeader() {
@@ -353,6 +367,9 @@ function changeOption() {
             break;
         case DeliveryWay.ByDeptLeader:
             roleName = "23.ByDeptLeader.htm";
+            break;
+        case DeliveryWay.ByGroup:
+            roleName = "24.ByGroup.htm";
             break;
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";

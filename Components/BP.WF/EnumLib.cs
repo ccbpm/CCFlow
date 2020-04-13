@@ -965,7 +965,7 @@ namespace BP.WF
         /// <summary>
         /// 仅按岗位计算
         /// </summary>
-        ByStationOnly11 = 14,
+        ByStationOnly = 14,
         /// <summary>
         /// FEE计算.
         /// </summary>

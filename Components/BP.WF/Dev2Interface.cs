@@ -5103,7 +5103,7 @@ namespace BP.WF
                     break;
                 case DeliveryWay.ByGroup:
                 case DeliveryWay.ByGroupOnly:
-                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B WHERE A.FK_Group= B.FK_Station AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B WHERE A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
                     ps.Add("FK_Node", nd.NodeID);
                     ps.Add("FK_Emp", userNo);
                     num = DBAccess.RunSQLReturnValInt(ps);

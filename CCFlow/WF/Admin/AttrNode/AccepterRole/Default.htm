@@ -20,6 +20,7 @@
                 node.DeliveryWay = DeliveryWay.BySelected_1;
             }
 
+
             var url = '';
             switch (parseInt(node.DeliveryWay)) {
                 
@@ -114,6 +115,8 @@
                     url = "100.ByCCFlowBPM.htm";
                     break;
                 default:
+                    //alert('错误：没有解析到的' + node.DeliveryWay +" "+parseInt(node.DeliveryWay) );
+                    //return;
                     url = "0.ByStation.htm";
                     break;
             }

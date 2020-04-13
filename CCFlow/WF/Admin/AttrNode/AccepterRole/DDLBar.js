@@ -68,7 +68,6 @@ function InitBar(optionKey) {
         if (webUser.CCBPMRunModel == 1) {
             html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算(仅限于本组织人员)</option>";
             html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
-
         }
 
 

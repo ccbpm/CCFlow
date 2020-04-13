@@ -56,19 +56,27 @@ function InitBar(optionKey) {
 
     html += "<option value=null  disabled='disabled'>+按组织结构绑定</option>";
 
+    var webUser = new WebUser();
+
     if (isSatrtNode == true) {
 
-        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位智能计算发起人</option>";
-        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的部门计算发起人</option>";
-        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的人员计算发起人</option>";
+        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算发起人</option>";
+        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算发起人</option>";
+        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算发起人</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算发起人</option>";
+
+        if (webUser.CCBPMRunModel == 1)
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算发起人</option>";
+
 
     } else {
 
-        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位智能计算</option>";
-        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的部门计算</option>";
-        html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的群组计算</option>";
-        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按节点绑定的人员计算</option>";
+        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算</option>";
+        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
+        if (webUser.CCBPMRunModel == 1)
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+
+        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
         html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
         html += "<option value=" + DeliveryWay.BySpecNodeEmpStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定节点的人员岗位计算</option>";
@@ -154,8 +162,7 @@ function SaveRole() {
     setTimeout(function () { $("#Btn_Save").val("保存"); }, 1000);
 }
 //清除缓存，本组织的.
-function AccepterRole_ClearStartFlowsCash()
-{
+function AccepterRole_ClearStartFlowsCash() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
     var data = handler.DoMethodReturnString("AccepterRole_ClearStartFlowsCash");
 }
@@ -238,7 +245,7 @@ function getGroups() {
     ens = $.grep(ens, function (obj, i) {
         return obj.FK_Node != undefined
     });
-    
+
     return ens;
 
 }

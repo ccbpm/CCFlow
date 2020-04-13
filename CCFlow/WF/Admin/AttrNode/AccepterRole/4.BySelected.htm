@@ -81,7 +81,7 @@
                     var url = "../Selector/Default.htm";
                     var nodeID = GetQueryString("FK_Node");
                     url += '?NodeID=' + nodeID;
-                    OpenEasyUiDialogExt(url, '选择器', 950, 450, true);
+                    WinOpenFull(url, '选择器', 650, 450, true);
                 },
                 IsChange: function () {
                     if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {

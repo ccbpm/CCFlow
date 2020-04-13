@@ -17,7 +17,7 @@ function InitBar(key) {
 
     optionKey = key;
 
-
+    var webUser = new WebUser();
     var nodeID = GetQueryString("FK_Node");
     var str = nodeID.substr(nodeID.length - 2);
     var isSatrtNode = false;
@@ -38,7 +38,8 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL模板计算</option>";
     html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
     html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
-
+    if (webUser.CCBPMRunModel == 1)
+        html += "<option value=" + SelectorModel.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
     html += "<option value=null  disabled='disabled'>+其他</option>";
     html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
     html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
@@ -83,7 +84,20 @@ function getDepts() {
     return ens;
 
 }
+/*
+ * 获取节点绑定的群组@lz
+ */
+function getGroups() {
 
+    var ens = new Entities("BP.WF.Template.NodeGroups");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+
+    return ens;
+
+}
 function OldVer() {
 
     var nodeID = GetQueryString("FK_Node");
@@ -164,6 +178,9 @@ function changeOption() {
             break;
         case SelectorModel.DeptAndStation:
             roleName = "9.AccepterOfDeptStationOfCurrentOper.htm";
+            break;
+        case SelectorModel.ByGroup:
+            roleName = "10.ByGroup.htm";
             break;
         default:
 

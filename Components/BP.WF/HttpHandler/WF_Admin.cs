@@ -136,28 +136,37 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
+                    case DeliveryWay.ByGroup: //不解析。
+                    case DeliveryWay.ByGroupOnly: //仅按群组计算. @lizhen.
+
+                        sql = "SELECT A.No,A.Name  FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
+                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID;
+
+                        //                            WHERE A.No=B.  LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join GPM_GroupEmp on (fk_emp=Port_Emp.No)   join WF_NodeGroup on (WF_NodeGroup.fk_Group=GPM_GroupEmp.FK_Group) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
+                        break;
                     case DeliveryWay.ByDept:
                         sql = "SELECT No,Name FROM Port_Emp where FK_Dept in (select FK_Dept from WF_NodeDept where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("");
                         break;
-                  
+
                     case DeliveryWay.ByBindEmp:
                         sql = "select No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
                         //added by liuxc,2015.6.30.
-                       
-                            sql = "SELECT pdes.FK_Emp AS No"
-                                  + " FROM   Port_DeptEmpStation pdes"
-                                  + "        INNER JOIN WF_NodeDept wnd"
-                                  + "             ON  wnd.FK_Dept = pdes.FK_Dept"
-                                  + "             AND wnd.FK_Node = " + nodeid
-                                  + "        INNER JOIN WF_NodeStation wns"
-                                  + "             ON  wns.FK_Station = pdes.FK_Station"
-                                  + "             AND wnd.FK_Node =" + nodeid
-                                  + " ORDER BY"
-                                  + "        pdes.FK_Emp";
+
+                        sql = "SELECT pdes.FK_Emp AS No"
+                              + " FROM   Port_DeptEmpStation pdes"
+                              + "        INNER JOIN WF_NodeDept wnd"
+                              + "             ON  wnd.FK_Dept = pdes.FK_Dept"
+                              + "             AND wnd.FK_Node = " + nodeid
+                              + "        INNER JOIN WF_NodeStation wns"
+                              + "             ON  wns.FK_Station = pdes.FK_Station"
+                              + "             AND wnd.FK_Node =" + nodeid
+                              + " ORDER BY"
+                              + "        pdes.FK_Emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
                         sql = "SELECT No as FK_Emp FROM Port_Emp ";
@@ -247,7 +256,7 @@ namespace BP.WF.HttpHandler
             return "url@" + url;
         }
         #endregion 测试页面.
-       
+
 
         #region 安装.
         /// <summary>
@@ -262,8 +271,8 @@ namespace BP.WF.HttpHandler
                     return "err@数据库连接配置错误,请参考手册查看数据库配置连接.";
 
 
-             //   DBAccess.IsCaseSensitive
- 
+                //   DBAccess.IsCaseSensitive
+
                 //判断是否可以安装,不能安装就抛出异常.
                 BP.WF.Glo.IsCanInstall();
 
@@ -282,7 +291,7 @@ namespace BP.WF.HttpHandler
             catch (Exception ex)
             {
 
-                return "err@" + ex.Message ;
+                return "err@" + ex.Message;
             }
         }
         public string DBInstall_Submit()

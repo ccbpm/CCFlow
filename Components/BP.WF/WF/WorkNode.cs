@@ -6236,8 +6236,27 @@ namespace BP.WF
                         para2[1] = node.NodeID.ToString();
                         para2[2] = node.Name;
                         para2[3] = ps.SQLNoPara;
-
                         throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按岗位计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
+                    }
+                }
+                #endregion
+
+                #region 仅按群组计算 @lizhen
+                if (node.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+                {
+                    sql = "SELECT A.FK_Emp No FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    ps = new Paras();
+                    ps.Add("FK_Node", node.NodeID);
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                    {
+                        string[] para2 = new string[4];
+                        para2[0] = node.HisDeliveryWay.ToString();
+                        para2[1] = node.NodeID.ToString();
+                        para2[2] = node.Name;
+                        para2[3] = ps.SQLNoPara;
+                        throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按群组计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
                     }
                 }
                 #endregion

@@ -193,6 +193,22 @@ namespace BP.WF.Template
             }
             #endregion 按节点绑定的人员处理.
 
+
+            #region 按照 群组计算 . @lizhen 翻译过去.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroup)
+            {
+                ps = new Paras();
+                ps.Add("No", BP.Web.WebUser.FK_Dept);
+                ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + dbStr + "No";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + WebUser.FK_Dept + "," + BP.Web.WebUser.FK_DeptName + ")没有维护负责人 . ");
+                return dt;
+            }
+            #endregion .群组计算
+
+
+
             #region 按照部门负责人计算. @gaoxin 翻译过去.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptLeader)
             {
@@ -686,6 +702,25 @@ namespace BP.WF.Template
             }
             #endregion 按照岗位计算，项目类.
 
+            #region 仅按 群组 计算 @lizhen
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+            {
+                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                ps = new Paras();
+                ps.Add("FK_Node", town.HisNode.NodeID);
+                ps.SQL = sql;
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                {
+                    if (this.town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    else
+                        return dt;  //可能处理跳转,在没有处理人的情况下.
+                }
+            }
+            #endregion
 
             #region 仅按岗位计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly)

@@ -5101,6 +5101,13 @@ namespace BP.WF
                     ps.Add("FK_Emp", userNo);
                     num = DBAccess.RunSQLReturnValInt(ps);
                     break;
+                case DeliveryWay.ByGroup:
+                case DeliveryWay.ByGroupOnly:
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B WHERE A.FK_Group= B.FK_Station AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                    ps.Add("FK_Node", nd.NodeID);
+                    ps.Add("FK_Emp", userNo);
+                    num = DBAccess.RunSQLReturnValInt(ps);
+                    break;
                 case DeliveryWay.ByDept:
 
                     ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";

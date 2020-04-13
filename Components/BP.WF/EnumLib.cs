@@ -965,7 +965,7 @@ namespace BP.WF
         /// <summary>
         /// 仅按岗位计算
         /// </summary>
-        ByStationOnly = 14,
+        ByStationOnly11 = 14,
         /// <summary>
         /// FEE计算.
         /// </summary>
@@ -998,6 +998,14 @@ namespace BP.WF
         /// 按照部门领导计算
         /// </summary>
         ByDeptLeader = 23,
+        /// <summary>
+        /// 按照群组智能计算
+        /// </summary>
+        ByGroup = 24,
+        /// <summary>
+        /// 仅仅按照群组计算
+        /// </summary>
+        ByGroupOnly = 25,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

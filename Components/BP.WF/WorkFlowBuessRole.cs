@@ -1166,6 +1166,22 @@ namespace BP.WF
             }
             #endregion 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
 
+            #region 仅按群组计算 @lizhen
+            if (toNode.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+            {
+                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGrop B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                ps = new Paras();
+                ps.Add("FK_Node", toNode.NodeID);
+                ps.SQL = sql;
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按群组计算，没有找到人员:SQL=" + ps.SQLNoPara);
+            }
+            #endregion
+
+
             #region 仅按岗位计算
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {

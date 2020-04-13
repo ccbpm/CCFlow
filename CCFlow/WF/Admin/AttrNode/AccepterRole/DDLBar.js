@@ -60,21 +60,26 @@ function InitBar(optionKey) {
 
     if (isSatrtNode == true) {
 
-        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算发起人</option>";
-        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算发起人</option>";
-        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算发起人</option>";
-        html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算发起人</option>";
+        html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算</option>";
+        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
+        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
+        html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
 
-        if (webUser.CCBPMRunModel == 1)
-            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算发起人</option>";
+        if (webUser.CCBPMRunModel == 1) {
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算(仅限于本组织人员)</option>";
+            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+
+        }
 
 
     } else {
 
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算</option>";
         html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
-        if (webUser.CCBPMRunModel == 1)
-            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+        if (webUser.CCBPMRunModel == 1) {
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算(仅限于本组织人员)</option>";
+            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+        }
 
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
@@ -377,6 +382,9 @@ function changeOption() {
             break;
         case DeliveryWay.ByGroup:
             roleName = "24.ByGroup.htm";
+            break;
+        case DeliveryWay.ByGroupOnly:
+            roleName = "25.ByGroupOnly.htm";
             break;
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";

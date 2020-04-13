@@ -54,6 +54,8 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.ByDeptLeader = 23,
         //按照群组计算
         DeliveryWay.ByGroup = 24,
+        //仅按群组计算.
+        DeliveryWay.ByGroupOnly = 25,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同
@@ -108,7 +110,9 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.Url = 7,
         SelectorModel.AccepterOfDeptStationEmp = 8,
         SelectorModel.AccepterOfDeptStationOfCurrentOper = 9,
-        SelectorModel.Group = 10
+        SelectorModel.Group = 10,
+        SelectorModel.GroupOnly = 11
+
 }
 //发送阻塞规则.
 if (typeof BlockModel == "undefined") {

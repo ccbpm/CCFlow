@@ -17,41 +17,14 @@
             var workID = GetQueryString("WorkID");
             var fid = GetQueryString("FID");
 
-            var url = OpenFrm(workID, nodeID, flowNo, fid, nodeID);
+            var url = OpenFrm(workID, nodeID, flowNo, fid);
             window.location.href = url;
 
         });
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo, fid, currNodeId) {
-            //但前节点所处的位置
-            var nowNode = new Entity("BP.WF.Node", nodeID);
-
-            //如果是树形表单，则显示当前人所处节点的数据
-            if (nowNode.FormType == 5) {
-                //获取人员所处的流程节点
-
-                var currNode = new Entity("BP.WF.Node", currNodeId);
-                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    }
-                } else {
-                    //判断当前节点的运行模式
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    } else if (currNode.RunModel == RunModel.SubThread) {
-                        nodeID = currNodeId;
-                    }
-                }
-
-
-            }
-
+        function OpenFrm(workid, nodeID, flowNo, fid) {
+          
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddUrlData();
             handler.AddPara("FromWorkOpt", "1");
@@ -85,8 +58,7 @@
                     data = data + "&FromWorkOpt=1";
 
                 return data;
-                //window.open(data);
-                //return;
+               
             }
 
             alert(data);

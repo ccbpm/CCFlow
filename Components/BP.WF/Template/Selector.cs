@@ -338,6 +338,9 @@ namespace BP.WF.Template
                 case SelectorModel.Dept:
                     ds = ByDept(nodeid, en);
                     break;
+                case SelectorModel.Group:
+                    ds = ByGroup(nodeid, en);
+                    break;
                 case SelectorModel.Emp:
                     ds = ByEmp(nodeid);
                     break;
@@ -636,6 +639,47 @@ namespace BP.WF.Template
 
 
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
+            return ds;
+        }
+
+        /// <summary>
+        /// 按群组计算
+        /// </summary>
+        /// <param name="nodeID"></param>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        private DataSet ByGroup(int nodeID, Entity en)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
+            string sql = null;
+            DataTable dt = null;
+            DataTable dtEmp = null;
+
+            Node nd = new Node(nodeID);
+
+            //部门.
+            sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeGroup b, GPM_GroupEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Group=c.FK_Group AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ORDER BY A.No,A.Idx";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
+                    sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeGroup b, GPM_GroupEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
+                else
+                    sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeGroup b, GPM_GroupEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + " ";
+            }
+            else
+            {
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeGroup b, GPM_GroupEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
+            }
+
+            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
             return ds;

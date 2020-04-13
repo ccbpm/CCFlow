@@ -189,7 +189,11 @@ namespace BP.WF
         /// <summary>
         /// 按岗位智能计算(操作员所在部门)
         /// </summary>
-        AccepterOfDeptStationOfCurrentOper
+        AccepterOfDeptStationOfCurrentOper,
+        /// <summary>
+        /// 按照组计算.
+        /// </summary>
+        Group=10
     }
     /// <summary>
     /// 流程删除规则

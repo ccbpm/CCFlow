@@ -1731,7 +1731,7 @@ function GenerWorkNode() {
             if (frmNode.FrmSln == 1) {
                 /*只读的方案.*/
                 //alert("把表单设置为只读.");
-                SetFrmReadonly();
+               // SetFrmReadonly();
                 //alert('ssssssssssss');
             }
 

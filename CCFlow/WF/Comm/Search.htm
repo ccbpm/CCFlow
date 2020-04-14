@@ -682,6 +682,10 @@
 
             var keyOfEn = "";
 
+            var focusField = "";
+            if (cfg.GetPara("IsEnableFocusField") == "1")
+                focusField = cfg.GetPara("FocusField");
+
             var columns = new Array();;
             columns.push({
                 title: '序',
@@ -760,6 +764,22 @@
                     fixed: false,
                     sortable: true,
                     formatter: function (value, row, index) {
+                        if (this.field == focusField) {
+                            var pkval = row[enPK];
+                            var paras = "&" + enPK + "=" + pkval;
+                            for (var i = 0; i < attrs.length; i++) {
+                                var attr = attrs[i];
+                                if (attr.UIContralType == 1)
+                                    paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
+                            }
+                            var rowstr = JSON.stringify(row);
+                            rowstr = encodeURIComponent(rowstr);
+                            return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\",1,\"" + rowstr + "\")'>" + value + "</a>";
+                        }
+
+                       
+                       
+
                          var fieldColor = [];
                          if (colorSet.indexOf("@" + this.field + ":") != -1) {
                             fieldColor = getFieldColor(colorSet, this.field);
@@ -848,8 +868,9 @@
                             if (attr.UIContralType == 1)
                                 paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                         }
-
-                        return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\")'>详情</a>";
+                        var rowstr = JSON.stringify(row);
+                        rowstr = encodeURIComponent(rowstr);
+                        return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\",1,\"" + rowstr+"\")'>详情</a>";
                     }
                 });
             }
@@ -893,7 +914,7 @@
                             paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                     }
 
-                    OpenEn(pkval, paras,1, row);
+                    OpenEn(pkval, paras, 1, encodeURIComponent(JSON.stringify(row)));
                 }
 
             });
@@ -953,6 +974,8 @@
 
         function OpenEn(pk, paras, flag,row) {
 
+            if (row != null && row != undefined && row != "")
+                row = JSON.parse(decodeURIComponent(row));
             //当前URL参数
             var currUrl = window.location.search.substring(1);
             //去除URL中的参数 EnsName、 PKVal
@@ -1075,7 +1098,7 @@
             return fieldColor;
         }
         function New() {
-            OpenEn("", "", 0);
+            OpenEn("", "", 0,null);
         }
 
         function Exp() {

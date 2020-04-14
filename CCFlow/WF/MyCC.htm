@@ -21,6 +21,8 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
             handler.AddUrlData();
+            handler.AddPara("CCSta", 1);
+            handler.AddPara("IsReadonly", 1);
             var data = handler.DoMethodReturnString("MyCC_Init");
 
             if (data.indexOf('err@') == 0) {

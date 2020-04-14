@@ -42,7 +42,11 @@
             //转json.
             data = JSON.parse(data);
 
-            GenerBindDDL("DDL_Frms", data.Frms, "No", "Name", "all");
+            var frms = data.Frms;
+
+         //   alert(frms.length);
+
+            GenerBindDDL("DDL_Frms", frms, "No", "Name", "all");
 
             var wf_Conds = data["WF_Conds"];
 

@@ -218,15 +218,16 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
             if (json[i][filterKey1] != filterVal1)
                 continue;
         }
-        if (json[i][noCol].toString().indexOf("Port") != -1 || json[i][noCol].toString().indexOf("Pub") != -1 || json[i][noCol].toString().indexOf("V") != -1 || json[i][noCol].toString().indexOf("Frm") != -1) {
 
-        }
-        else {
-            if (json[i][noCol] == undefined)
-                $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
-            else
-                $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
-        }
+        // var no = json[i][noCol].toString();
+        //   var no = json[i][nameCol].toString();
+
+
+        if (json[i][noCol] == undefined)
+            $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
+        else
+            $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
+
     }
 
     //设置选中的值.
@@ -1625,7 +1626,7 @@ var Entities = (function () {
                 length = args.length;
             }
             for (var i = 1; i < length; i += 3) { //args[i+1]是操作符
-                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2].replace(/%/g,'[%]');
+                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2].replace(/%/g, '[%]');
             }
             if (typeof orderBy !== "undefined") {
                 params += "@OrderBy||" + orderBy;
@@ -1750,8 +1751,8 @@ var Entities = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName  + "&t=" + new Date().getTime(),
-                data: { "Paras": self.Paras},
+                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                data: { "Paras": self.Paras },
                 dataType: 'html',
                 success: function (data) {
 
@@ -2285,8 +2286,8 @@ var HttpHandler = (function () {
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
                     ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
-                   
-                   
+
+
                 }
             });
 

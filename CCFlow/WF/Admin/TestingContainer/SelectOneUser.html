@@ -22,15 +22,12 @@
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+
+            var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
 
             window.parent.refreshLeft();
             //   var webUser = new WebUser();
             //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
-
-            var ens = new Entities("BP.WF.GenerWorkerLists");
-            ens.Retrieve("WorkID", workID, 'RDT,CDT'); //第3个属性是排序的.
-
 
             var html = "<table style='width:900px;'>";
             html += "<caption>工作人员列表</caption>";
@@ -78,7 +75,7 @@
 
                 if (en.IsPass == 0) {
                     html += "<td><b><font color=green>待办</font></b></td>";
-                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "')\">切换用户执行工作</a></td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
                 } else {
                     html += "<td>已处理</td>";
                     html += "<td> - </td>";
@@ -119,14 +116,15 @@
 
         });
 
-        function ChangUser(empNo) {
+        function ChangUser(empNo, nodeID, workid, fid) {
 
             //当这个人登录。
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Emp", empNo);
-            handler.AddPara("WorkID", workID);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
 
-          //  handler.AddPara("Adminer", adminer);
+            //  handler.AddPara("Adminer", adminer);
             handler.AddPara("SID", SID);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
@@ -134,7 +132,7 @@
                 alert(data);
                 return;
             }
-            window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workID, '_self');
+            window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
             window.parent.refreshLeft();
         }
 

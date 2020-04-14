@@ -35,8 +35,8 @@
                     //                }
 
                     return arr.push({
-                        _src: node.src,
-                        src: node.src
+                        _src: decodeURIComponent(node.src),
+                        src: decodeURIComponent(node.src)
                     });
                 });
 
@@ -133,6 +133,7 @@
                         $(".edui-image-upload2", $w).before($item).show();
                     }
 
+                   
                     $img.on("load", function () {
                         Base.scale(this, 120);
                         Base.close($(this));

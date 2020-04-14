@@ -42,7 +42,7 @@ namespace BP.WF
             Int64 workid = currWorkNode.HisWork.OID;
 
             //查询出来所有的节点.
-            Nodes nds = new Nodes(this.HisCurrWorkNode.HisFlow.No);
+            Nodes nds =currWorkNode.HisFlow.HisNodes;
 
             // 开始节点需要特殊处理》
             /* 如果启用了要计算未来的处理人 */
@@ -72,7 +72,11 @@ namespace BP.WF
                 //如果按照岗位计算（默认的第一个规则.）
                 if (item.HisDeliveryWay == DeliveryWay.ByStation)
                 {
-                    string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+                    // string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+
+                    string sql = "SELECT a.No, a.Name FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C "; // WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+                    sql += " WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+item.NodeID;
+
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count ==0)
                         continue;
@@ -157,7 +161,7 @@ namespace BP.WF
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
-                        throw new Exception("err@节点绑定的仅按照 群组 计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                        throw new Exception("err@节点绑定的仅按照 用户组 计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string no = dr[0].ToString();
@@ -192,7 +196,7 @@ namespace BP.WF
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
-                        throw new Exception("err@节点绑定的仅按照 群组 智能计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                        throw new Exception("err@节点绑定的仅按照 用户组 智能计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string no = dr[0].ToString();
@@ -353,7 +357,8 @@ namespace BP.WF
             Nodes toNDs = currND.HisToNodes;
             foreach (Node item in toNDs)
             {
-                if (item.HisDeliveryWay == DeliveryWay.ByStation || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
+                if (item.HisDeliveryWay == DeliveryWay.ByStation
+                    || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
                 {
                     /*如果按照岗位访问*/
                     #region 最后判断 - 按照岗位来执行。

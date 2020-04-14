@@ -16,6 +16,9 @@ using System.Collections;
 using NPOI.SS.Formula.Functions;
 using LitJson;
 using System.Net;
+using BP.WF.WeiXin;
+using System.Security.Cryptography;
+using BP.Tools;
 
 namespace BP.WF.HttpHandler
 {
@@ -494,7 +497,65 @@ namespace BP.WF.HttpHandler
 
             return result;
         }
+        /// <summary>
+        /// 调用企业号获取地理位置
+        /// </summary>
+        /// <returns></returns>
+        public string GetWXConfigSetting()
+        {
+            //必须是当前页面，如果在CCMobile/Home.htm调用，则传入Home.htm
+            string htmlPage = this.GetRequestVal("htmlPage");
+            Hashtable ht = new Hashtable();
 
+            //生成签名的时间戳
+            string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
+            //生成签名的随机串
+            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            //企业号jsapi_ticket
+            string jsapi_ticket = "";
+            string url1 = BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/"+ htmlPage;
+            //获取 AccessToken
+            string accessToken = getAccessToken();
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+
+            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string str = reader.ReadToEnd();
+
+            //权限签名算法
+            Ticket ticket = new Ticket();
+            ticket = FormatToJson.ParseFromJson<Ticket>(str);
+
+            if (ticket.errcode == "0")
+                jsapi_ticket = ticket.ticket;
+            else
+                return "err:@获取jsapi_ticket失败";
+
+            ht.Add("timestamp", timestamp);
+            ht.Add("nonceStr", nonceStr);
+            //企业微信的corpID
+            ht.Add("AppID", BP.Sys.SystemConfig.WX_CorpID);
+
+            //生成签名算法
+            string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            string Signature = Sha1Signature(str1);
+            ht.Add("signature", Signature);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        public static string Sha1Signature(string str)
+        {
+            var buffer = Encoding.UTF8.GetBytes(str);
+            var data = SHA1.Create().ComputeHash(buffer);
+
+            StringBuilder sub = new StringBuilder();
+            foreach (var t in data)
+            {
+                sub.Append(t.ToString("X2"));
+            }
+
+            return sub.ToString();
+        }
 
         public string GetIDCardInfo()
         {

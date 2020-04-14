@@ -52,6 +52,7 @@ function InitBar(key) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
 //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
  //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
@@ -62,7 +63,10 @@ function InitBar(key) {
 
 
 }
-
+function Back() {
+    url = "../AccepterRole/Default.htm?FK_Node=" + GetQueryString("FK_Node");
+    window.location.href = url;
+}
 
 /*
  * 获取节点绑定的岗位

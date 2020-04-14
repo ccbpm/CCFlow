@@ -14,7 +14,7 @@
         $(function () {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node",nodeID);
-          
+            var flowNo = GetQueryString("FK_Flow");
             var str =nodeID.substr(nodeID.length - 2);
             if (str == "01" && node.DeliveryWay==DeliveryWay.BySelected) {
                 node.DeliveryWay = DeliveryWay.BySelected_1;
@@ -120,8 +120,7 @@
                     url = "0.ByStation.htm";
                     break;
             }
-
-            document.location.href = url + "?FK_Node=" + node.NodeID;
+            document.location.href = url + "?FK_Node=" + node.NodeID+"&FK_Flow="+flowNo;
         });
 
         function Bind_1_ByStation() {

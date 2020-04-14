@@ -118,7 +118,7 @@
             $('#selectGrid').bootstrapTable("load", json);
         }
 
-        function findChildren(jsonArray, parentNo) {
+        function findChildren(jsonArray, parentNo, lazyLoad) {
             var appendToTree = function (treeToAppend, o) {
                 $.each(treeToAppend, function (i, child) {
                     if (o.id == child.ParentNo)
@@ -173,7 +173,7 @@
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
                         if (o.nodes.length == 0) {
-                            o.nodes = undefined;
+                           // o.nodes = undefined;
                         } else {
                             _(o.nodes);
                         }
@@ -185,8 +185,10 @@
         }
         function loadTree(treeUrl, treeClickUrl, rootNo, global) {
 
+           
             var json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
 
+           
             var jsonTree = findChildren(json, rootNo);
 
             $('#tree').treeview({
@@ -205,6 +207,18 @@
                     myurl = replaceAll(myurl, "~", "'");
                     loadSelectGrid(myurl, global.selectedRows, global.dbType);
 
+                },
+                onNodeExpanded: function (event, data) {
+                    if (global.TreeUrl.indexOf("@Key") != -1) {
+                        var url = global.TreeUrl.replace("@Key", data.id);
+                        var json = DBAccess.RunDBSrc(url, global.dbType);
+                        var jsonTree = findChildren(json, data.id, global.lazyLoad);
+                        $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+
+                        $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+                       
+                       
+                    }
                 }
             });
         }
@@ -249,6 +263,7 @@
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
             global.dbType = mapExt.DBType;
+            
 
             var searchUrl = mapExt.Tag1;    //查询
             var treeUrl = mapExt.Tag2;      //初始化树
@@ -271,7 +286,8 @@
                     treeClickUrl = treeClickUrl.replace("@" + attrKeyOfEn, val);
                 }
             }
-
+            global.TreeUrl = mapExt.Tag2;
+            treeUrl = treeUrl.replace("@Key", rootNo);
             if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
                 return;

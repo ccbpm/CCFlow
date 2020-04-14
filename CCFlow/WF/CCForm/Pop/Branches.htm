@@ -101,7 +101,7 @@
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
                         if (o.nodes.length == 0) {
-                            o.nodes = undefined;
+                            //o.nodes = undefined;
                         } else {
                             _(o.nodes);
                         }
@@ -136,6 +136,18 @@
                     } else {
                         //展开
                         tree.treeview('expandNode', node.nodeId);
+                    }
+                },
+                onNodeExpanded: function (event, data) {
+                    if (global.TreeUrl.indexOf("@Key") != -1) {
+                        var url = global.TreeUrl.replace("@Key", data.id);
+                        var json = DBAccess.RunDBSrc(url, global.dbType);
+                        var jsonTree = findChildren(json, data.id, global.lazyLoad);
+                        $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+
+                        $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+
+
                     }
                 }
             });
@@ -265,6 +277,7 @@
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
+            global.TreeUrl = mapExt.Tag1;
 
             var treeUrl = mapExt.Tag2;
             var treeTag1 = mapExt.Tag1;
@@ -286,6 +299,8 @@
             if (rootNo == "")
                 rootNo = "0";
 
+            global.TreeUrl = mapExt.Tag1;
+            treeUrl = treeUrl.replace("@Key", rootNo);
 
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');

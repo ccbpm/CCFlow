@@ -10,6 +10,13 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Admin.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
 
     <base target="_self" />
     <script type="text/javascript">
@@ -24,28 +31,45 @@
             var toNodeID = GetQueryString("ToNodeID");
             var param = location.href.split("?")[1];
 
-            var depts = new Entities("BP.Port.Depts");
-            depts.RetrieveAll();
+            // var depts = new Entities("BP.Port.Depts");
+            //depts.RetrieveAll();
 
             var mypk = fk_Node + "_" + toNodeID + "_Dir_Depts";
             var cond = new Entity("BP.WF.Template.Cond");
             cond.SetPKVal(mypk);
             cond.RetrieveFromDBSources();
 
-            $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
-            for (var i = 0, len = depts.length; i < len; i++) {
-                var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
-                if (i % 3 == 0) {
-                    $("#t1").append("<tr></tr>");
-                }
-                $("#t1 tr:last").append(td);
-            }
+            /* $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
+             for (var i = 0, len = depts.length; i < len; i++) {
+                 var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
+                 if (i % 3 == 0) {
+                     $("#t1").append("<tr></tr>");
+                 }
+                 $("#t1 tr:last").append(td);
+             }*/
 
             var initDepts = cond.OperatorValue.split("@");
-            for (i = 0, len = initDepts.length; i < len; i++) {
-                if (initDepts[i] == "") continue;
-                document.getElementById("dept_CB_" + initDepts[i]).checked = true;
-            }
+            /* for (i = 0, len = initDepts.length; i < len; i++) {
+                 if (initDepts[i] == "") continue;
+                 document.getElementById("dept_CB_" + initDepts[i]).checked = true;
+             }*/
+
+            //解析部门信息
+            //global
+            var global = window;
+            global.selectedNodes = [];
+            $.each(initDepts, function (i, o) {
+                if (initDepts[i] == "")
+                    return;
+                global.selectedNodes.push({
+                    "No": initDepts[i],
+                    "Name": ""
+                });
+            });
+
+            loadTree("0");
+
+
             //TODO 条件参数
             var atpara = cond.AtPara;
             if (atpara != "") {
@@ -66,22 +90,147 @@
             //end
         });
 
+
+
+        function loadTree(rootNo) {
+
+
+            var ens = new Entities("BP.WF.Port.Depts");
+            ens.RetrieveAll();
+            var jsonTree = createJsonToTree(ens, rootNo);
+
+            //查询出来数据.
+            $('#tree').treeview({
+                data: jsonTree,         // 数据源
+                showCheckbox: true,   //是否显示复选框    
+                highlightSelected: false,    //是否高亮选中
+                animate: true,
+                onNodeChecked: function (event, node) {
+                    var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则选中所有子节点
+                        $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+                        
+                    }
+                   
+
+                },
+                onNodeUnchecked: function (event, node) {
+
+                    var selectNodes = getChildNodeIdArr(node, false); //获取所有子节点
+                    if (selectNodes.length > 0) { //子节点不为空，则取消选中所有子节点
+                        $('#tree').treeview('uncheckNode', [selectNodes, { silent: true }]);
+                     
+                    }
+
+                },
+                onNodeSelected: function (event, node) {
+
+                    var tree = $('#tree');
+                    if (node.state.expanded) {
+                        //处于展开状态则折叠
+                        tree.treeview('collapseNode', node.nodeId);
+                    } else {
+                        //展开
+                        tree.treeview('expandNode', node.nodeId);
+                    }
+                }
+            });
+        }
+
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(jsonArray, parentNo) {
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = window.selectedNodes;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.No;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    treeJson.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+        function creatTreeChildern(jsonArray, parentNo) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+                    var selectedNodes = window.selectedNodes;
+                    var sel = $.grep(selectedNodes, function (obj) {
+                        return data.No == obj.No;
+                    });
+
+                    if (sel.length > 0) {
+                        checked = true;
+                    }
+                    childList.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+
+            return childList;
+        }
+
+        function getChildNodeIdArr(node, checked) {
+            var ts = [];
+            if (node.nodes) {
+                for (x in node.nodes) {
+                    ts.push(node.nodes[x].nodeId);
+                    if (node.nodes[x].nodes) {
+                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                        for (j in getNodeDieDai) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
+                }
+            }
+            return ts;
+        }
+
+
         //执行保存..CondByDept_Save
         function Btn_Save_Click() {
 
             //var param = location.href.split("?")[1];
-
-            //获取所有选中的checkbox
             var depts = ",";
-            $("input[type='checkbox']").each(function () {
+            //获取复选框选中的节点
+            var nodes = $('#tree').treeview('getChecked');
 
-                if (this.checked && this.name.indexOf("dept_CB_") == 0) {
-                    depts += this.name.replace("dept_CB_", "") + ",";
-                }
+            $.each(nodes, function (i, node) {
+                depts += node.id + ",";
             });
 
-            //var frmData = $("#cc").serialize();
-            //alert(frmData);
+
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
@@ -200,6 +349,8 @@
                         方向条件-按部门
                     </caption>
                 </table>
+                <div id="tree">
+                </div>
             </div>
             <br />
             <div>
@@ -216,14 +367,13 @@
                 <span class="lbls">
                     <span id="span0">参数：</span> <span id="span1" style="display: none">
                         节点编号：
-                    </span> <span id="span2" style="display: none">表单字段：</span> <span id="span3"
-                                                                                      style="display: none">操作员编号：</span>
+                    </span> <span id="span2" style="display: none">表单字段：</span> <span id="span3" style="display: none">操作员编号：</span>
                 </span>
                 <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled"
                        style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
                 <br />
                
-                <!--<input type="button" onclick="Back()" value="返回" id="Button2" />-->
+
             </div>
         </div>
     </form>

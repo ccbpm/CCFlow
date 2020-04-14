@@ -32,6 +32,7 @@
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("FK_Flow", flowNo);
             handler.AddPara("FID", fid);
+            handler.AddPara("CCSta", "1");
             var data = handler.DoMethodReturnString("Runing_OpenFrm");
 
             if (data.indexOf('err@') == 0) {

@@ -163,6 +163,7 @@
             handler.AddPara("WorkID", workid);
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("CCSta", "1");
             handler.AddPara("FID", fid);
             var data = handler.DoMethodReturnString("Runing_OpenFrm");
 

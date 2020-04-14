@@ -162,7 +162,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 console.log(data);
             }
             $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
-            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn);
+            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData[0], frmData.WF_Node[0]);
         }
 
     }
@@ -1303,18 +1303,18 @@ function findChildren(jsonArray, parentNo) {
 }
 
 
-function ShowFlowBBS(data, keyOfEn) {
+function ShowFlowBBS(data, keyOfEn,Sys_MapData,WF_Node) {
     var isHaveMySelf = false;
     var _Html = "";
     var str = "";
     var strT = "";
    
     for (var i = 0; i < data.length; i++) {
-        if (data[i].EmpNo == webUser.No)
+        if (data[i].Rec == webUser.No)
             isHaveMySelf = true;
-        if (str.indexOf('@' + data[i].FK_Dept + '@') == -1)
-            str += '@' + data[i].FK_Dept + '@';
-            strT += '@' + data[i].FK_DeptName + '@';
+        if (str.indexOf('@' + data[i].DeptNo + '@') == -1)
+            str += '@' + data[i].DeptNo + '@';
+            strT += '@' + data[i].DeptName + '@';
     }
     _Html += "<div>";
     var strs = str.split("@"); //生成数组.
@@ -1327,12 +1327,12 @@ function ShowFlowBBS(data, keyOfEn) {
         _Html += "<label style='font-size:13px;font-weight:bold'>" + strTs[idx] + "</label>";
         for (var i = 0; i < data.length; i++) {
             var bbs = data[i];
-            if (bbs.FK_Dept != dept)
+            if (bbs.DeptNo != dept)
                 continue;
             _Html += "<div class='row' style='margin-left:0px;margin-right:0px'>";
             _Html += "<div col-xs-12 style='margin-top:5px'><font color=green>" + bbs.Msg+"</font>";
             _Html += "</div>";
-            _Html += "<div col-xs-8 style='text-align:right'>" +bbs.EmpName + "&nbsp;&nbsp;" + bbs.RDT;
+            _Html += "<div col-xs-8 style='text-align:right'>" +bbs.RecName + "&nbsp;&nbsp;" + bbs.RDT;
             _Html += "</div>";
             _Html += "</div>";
         }
@@ -1345,7 +1345,7 @@ function ShowFlowBBS(data, keyOfEn) {
         _Html += "<div>";
         _Html +="<textarea rows='5' id='TB_Msg' name='TB_Msg' cols='60'></textarea>";
         _Html += "<br/>";
-        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论' onclick='BBSSubmit();' />";
+        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论' onclick='BBSSubmit(\""+Sys_MapData.No+"\",\""+Sys_MapData.Name+"\",\""+WF_Node.Name+"\");' />";
         _Html += "</div>";
          
     }
@@ -1353,7 +1353,7 @@ function ShowFlowBBS(data, keyOfEn) {
     $("#FlowBBS").html(_Html);
 }
 
-function BBSSubmit() {
+function BBSSubmit(FrmID,FrmName,NodeName) {
 
     if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
         alert("请填写评论内容!");
@@ -1373,6 +1373,9 @@ function BBSSubmit() {
     //获取所有的评论内容
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddUrlData();
+    handler.AddPara("FrmID", FrmID);
+    handler.AddPara("FrmName", FrmName);
+    handler.AddPara("NodeName", NodeName);
     var data = handler.DoMethodReturnString("FlowBBSList");
     if (data.indexOf('err@') == 0) {
         alert(data);

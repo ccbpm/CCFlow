@@ -8,7 +8,7 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 节点群组属性	  
+    /// 节点用户组属性	  
     /// </summary>
     public class NodeGroupAttr
     {
@@ -17,13 +17,13 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 群组
+        /// 用户组
         /// </summary>
         public const string FK_Group = "FK_Group";
     }
     /// <summary>
-    /// 节点群组
-    /// 节点的群组有两部分组成.	 
+    /// 节点用户组
+    /// 节点的用户组有两部分组成.	 
     /// 记录了从一个节点到其他的多个节点.
     /// 也记录了到这个节点的其他的节点.
     /// </summary>
@@ -64,7 +64,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 群组
+        /// 用户组
         /// </summary>
         public string FK_Group
         {
@@ -81,7 +81,7 @@ namespace BP.WF.Template
 
         #region 构造方法
         /// <summary>
-        /// 节点群组
+        /// 节点用户组
         /// </summary>
         public NodeGroup() { }
         /// <summary>
@@ -99,7 +99,7 @@ namespace BP.WF.Template
                 map.AddTBIntPK(NodeGroupAttr.FK_Node, 0, "节点", false, false);
 
                 // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
-                map.AddDDLEntitiesPK(NodeGroupAttr.FK_Group, null, "群组",
+                map.AddDDLEntitiesPK(NodeGroupAttr.FK_Group, null, "用户组",
                    new BP.GPM.Groups(), true);
 
                 this._enMap = map;
@@ -121,16 +121,16 @@ namespace BP.WF.Template
 
     }
     /// <summary>
-    /// 节点群组s
+    /// 节点用户组s
     /// </summary>
     public class NodeGroups : EntitiesMM
     {
         /// <summary>
-        /// 节点群组s
+        /// 节点用户组s
         /// </summary>
         public NodeGroups() { }
         /// <summary>
-        /// 节点群组s
+        /// 节点用户组s
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         public NodeGroups(int nodeID)
@@ -140,7 +140,7 @@ namespace BP.WF.Template
             qo.DoQuery();
         }
         /// <summary>
-        /// 节点群组
+        /// 节点用户组
         /// </summary>
         /// <param name="StationNo">StationNo </param>
         public NodeGroups(string StationNo)

@@ -6,14 +6,14 @@ using BP.En;
 namespace BP.WF.Port.Admin2
 {
     /// <summary>
-    /// 群组
+    /// 用户组
     /// </summary>
     public class GroupAttr : EntityTreeAttr
     {
         public const string ByEmpAttr = "ByEmpAttr";
     }
     /// <summary>
-    /// 群组
+    /// 用户组
     /// </summary>
     public class Group : EntityNoName
     {
@@ -31,13 +31,13 @@ namespace BP.WF.Port.Admin2
 
         #region 构造方法
         /// <summary>
-        /// 群组
+        /// 用户组
         /// </summary>
         public Group()
         {
         }
         /// <summary>
-        /// 群组
+        /// 用户组
         /// </summary>
         /// <param name="mypk"></param>
         public Group(string no)
@@ -57,7 +57,7 @@ namespace BP.WF.Port.Admin2
 
                 Map map = new Map("GPM_Group");
                 map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "群组";
+                map.EnDesc = "用户组";
                 map.EnType = EnType.Sys;
                 map.IsAutoGenerNo = true;
 
@@ -100,13 +100,13 @@ namespace BP.WF.Port.Admin2
         #endregion
     }
     /// <summary>
-    /// 群组s
+    /// 用户组s
     /// </summary>
     public class Groups : EntitiesNoName
     {
         #region 构造
         /// <summary>
-        /// 群组s
+        /// 用户组s
         /// </summary>
         public Groups()
         {

@@ -1008,11 +1008,11 @@ namespace BP.WF
         /// </summary>
         ByDeptLeader = 23,
         /// <summary>
-        /// 按照群组智能计算
+        /// 按照用户组智能计算
         /// </summary>
         ByGroup = 24,
         /// <summary>
-        /// 仅仅按照群组计算
+        /// 仅仅按照用户组计算
         /// </summary>
         ByGroupOnly = 25,
         /// <summary>

@@ -313,9 +313,9 @@ namespace BP.GPM
                     BP.GPM.DeptEmpAttr.FK_Emp,
                     BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
-                //群组
+                //用户组
                 map.AttrsOfOneVSM.Add(new GroupEmps(), new Groups(), GroupEmpAttr.FK_Emp, GroupEmpAttr.FK_Group,
-                    GroupAttr.Name, GroupAttr.No, "群组", Dot2DotModel.Default);
+                    GroupAttr.Name, GroupAttr.No, "用户组", Dot2DotModel.Default);
 
                 rm = new RefMethod();
                 rm.Title = "修改密码";

@@ -648,7 +648,7 @@ namespace BP.WF.Template
         }
 
         /// <summary>
-        /// 按群组计算
+        /// 按用户组计算
         /// </summary>
         /// <param name="nodeID"></param>
         /// <param name="en"></param>

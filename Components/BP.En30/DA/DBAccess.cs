@@ -3025,7 +3025,8 @@ namespace BP.DA
         {
             object obj = DBAccess.RunSQLReturnVal(sql);
             if (obj == null || obj == DBNull.Value)
-                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql + " @关于查询出来的详细信息已经记录日志文件，请处理。");
+                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql );
+
             string s = obj.ToString();
             if (s.Contains("."))
                 s = s.Substring(0, s.IndexOf("."));

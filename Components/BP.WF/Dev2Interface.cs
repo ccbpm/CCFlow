@@ -9793,9 +9793,7 @@ namespace BP.WF
                     ps.Add("FK_Node", item.NodeID);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
-                    {
                         continue;
-                    }
 
                     fromNodeID = item.NodeID;
                     break;

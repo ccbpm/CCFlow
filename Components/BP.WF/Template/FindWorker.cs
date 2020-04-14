@@ -687,7 +687,7 @@ namespace BP.WF.Template
             }
             #endregion 按照岗位计算，项目类.
 
-            #region 仅按 群组 计算 @lizhen
+            #region 仅按 用户组 计算 @lizhen
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroupOnly)
             {
                 sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
@@ -700,14 +700,14 @@ namespace BP.WF.Template
                 else
                 {
                     if (this.town.HisNode.HisWhenNoWorker == false)
-                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按群组计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按用户组计算，没有找到人员:SQL=" + ps.SQLNoPara);
                     else
                         return dt;  //可能处理跳转,在没有处理人的情况下.
                 }
             }
             #endregion
 
-            #region 按群组智能 计算 @lizhen
+            #region 按用户组智能 计算 @lizhen
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroup)
             {
                 sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
@@ -722,7 +722,7 @@ namespace BP.WF.Template
                 else
                 {
                     if (this.town.HisNode.HisWhenNoWorker == false)
-                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按群组计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                        throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按用户组计算，没有找到人员:SQL=" + ps.SQLNoPara);
                     else
                         return dt;  //可能处理跳转,在没有处理人的情况下.
                 }

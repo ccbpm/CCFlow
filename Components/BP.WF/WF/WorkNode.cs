@@ -6241,7 +6241,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 仅按群组计算 @lizhen
+                #region 仅按用户组计算 @lizhen
                 if (node.HisDeliveryWay == DeliveryWay.ByGroupOnly)
                 {
                     sql = "SELECT A.FK_Emp No FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
@@ -6256,12 +6256,12 @@ namespace BP.WF
                         para2[1] = node.NodeID.ToString();
                         para2[2] = node.Name;
                         para2[3] = ps.SQLNoPara;
-                        throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按群组计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
+                        throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按用户组计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
                     }
                 }
                 #endregion
 
-                #region 按群组智能计算 @lizhen
+                #region 按用户组智能计算 @lizhen
                 if (node.HisDeliveryWay == DeliveryWay.ByGroup)
                 {
                     sql = "SELECT A.FK_Emp No FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo ORDER BY A.FK_Emp";
@@ -6278,7 +6278,7 @@ namespace BP.WF
                         para2[1] = node.NodeID.ToString();
                         para2[2] = node.Name;
                         para2[3] = ps.SQLNoPara;
-                        throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按群组计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
+                        throw new Exception(BP.WF.Glo.multilingual("@节点访问规则{0}错误:节点({1},{2}), 仅按用户组计算，没有找到人员:SQL={3}.", "WorkNode", "error_in_access_rules_setting", para2));
                     }
                 }
                 #endregion
@@ -6529,12 +6529,30 @@ namespace BP.WF
             this.JumpToNode = jumpToNode;
             this.JumpToEmp = jumpToEmp;
 
-            #region 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
+            #region 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人. @sly
             if (this.HisNode.IsSendBackNode==true)
             {
-                this.JumpToEmp = this.HisGenerWorkFlow.Sender;
-                int nodeID = DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Emp='" + this.HisGenerWorkFlow.Sender + "' ORDER BY RDT,FK_Node");
-                this.JumpToNode = new Node(nodeID);
+                WorkNode wn= this.GetPreviousWorkNode();
+                this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
+                //this.JumpToNode = wn.HisNode;
+
+                DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
+                if (mydt.Rows.Count == 0)
+                    throw new Exception("系统错误，没有找到上一个节点.");
+
+                this.JumpToEmp = mydt.Rows[0][1].ToString();
+                var priNodeID = int.Parse(mydt.Rows[0][0].ToString());
+                this.JumpToNode = new Node(priNodeID);
+
+
+                // DataTable dt=
+                //如果是空，或者包含(zhangsan,张三) .
+                //if (DataType.IsNullOrEmpty(this.JumpToEmp) || this.JumpToEmp.Contains("("))
+                //{
+                //  this.JumpToEmp =DBAccess.RunSQLReturnValInt("SELECT DISTINCT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
+                //}
+                // @sly.
+                //var priNodeID= DBAccess.RunSQLReturnValInt("SELECT DISTINCT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!="+this.HisNode.NodeID+" ORDER BY RDT DESC ");
             }
             #endregion 为广西计算中心增加自动返回的节点.
 

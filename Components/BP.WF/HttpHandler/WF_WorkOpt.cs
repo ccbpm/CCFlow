@@ -762,7 +762,7 @@ namespace BP.WF.HttpHandler
                 int toNodeID = this.GetRequestValInt("ToNode");
                 string emps = this.GetRequestVal("AddEmps");
 
-                //增加到里面去.s
+                //增加到里面去.
                 BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
                 //查询出来,已经选择的人员.

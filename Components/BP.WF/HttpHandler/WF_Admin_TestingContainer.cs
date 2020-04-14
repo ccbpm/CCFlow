@@ -244,9 +244,9 @@ namespace BP.WF.HttpHandler
                         break;
                     case DeliveryWay.ByGroup: //按照组织智能计算。
                         sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
-                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID +" AND A.OrgNo='"+BP.Web.WebUser.OrgNo+"'";
+                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                         break;
-                    case DeliveryWay.ByGroupOnly: //仅按群组计算. @lizhen.
+                    case DeliveryWay.ByGroupOnly: //仅按用户组计算. @lizhen.
 
                         sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
                         sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID;
@@ -285,23 +285,9 @@ namespace BP.WF.HttpHandler
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             throw new Exception("err@非集团版本，不能设置启用此模式.");
-
-                        sql = "SELECT B.No, B.Name, d.Name as FK_DeptText FROM Port_DeptEmp A, Port_Emp B,";
-                        sql += " WF_FlowOrg C,port_dept D WHERE A.FK_Emp = B.No AND A.OrgNo = C.OrgNo AND A.FK_Dept = D.No AND C.FlowNo = '" + this.FK_Flow + "'";
-
-                        // sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  ";
-                        // sql += "WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + this.FK_Flow + "'";
-                        //if (dt.Rows.Count > 300 && 1 == 2)
-                        //{
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
-                        //        sql = "SELECT Top 200 c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'";
-
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
-                        //        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "' AND ROWNUM <300 ";
-
-                        //    if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
-                        //        sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, WF_FlowOrg C  WHERE A.FK_Dept=B.No AND B.OrgNo=C.OrgNo AND C.FlowNo='" + nd.FK_Flow + "'    limit 0,200   ";
-                        //}
+                        //@sly 
+                        sql = " SELECT A.No,A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
+                        sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '"+this.FK_Flow+"' AND A.FK_Dept = c.No ";
 
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         return BP.Tools.Json.ToJson(dt);

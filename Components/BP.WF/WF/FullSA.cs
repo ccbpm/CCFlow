@@ -117,8 +117,7 @@ namespace BP.WF
                         if (item.HisFlow.HisFlowAppType == FlowAppType.Normal)
                         {
                             ps = new Paras();
-                           
-                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                            ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
                              
 
                             ps.Add("FK_Node", item.NodeID);
@@ -449,7 +448,6 @@ namespace BP.WF
 
             //给最后的时间点复制.
             this.LastTimeDot = sa.PlanSDT;
-
         }
         /// <summary>
         /// 当前节点应该完成的日期.

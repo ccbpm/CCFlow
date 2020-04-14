@@ -69,16 +69,16 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 #endregion  基础属性
 
-                #region 对应关系群组。
+                #region 对应关系用户组。
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeGroups(), new BP.GPM.Groups(),
                     BP.WF.Template.NodeGroupAttr.FK_Node,
-                    BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定群组");
+                    BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定用户组");
 
                 //列表模式.
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeGroups(), new BP.GPM.Groups(),
                   BP.WF.Template.NodeGroupAttr.FK_Node,
-                  BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定群组AddGroupListModel");
+                  BP.WF.Template.NodeGroupAttr.FK_Group, "节点绑定用户组AddGroupListModel");
                 #endregion 
 
                 #region 对应关系

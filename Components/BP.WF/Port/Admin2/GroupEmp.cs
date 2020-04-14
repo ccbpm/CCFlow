@@ -81,7 +81,7 @@ namespace BP.WF.Port.Admin2
                 map.EnDesc = "权限组人员";
                 map.EnType = EnType.App;
 
-                map.AddTBStringPK(GroupEmpAttr.FK_Group, null, "群组", true, false, 0, 50, 20);
+                map.AddTBStringPK(GroupEmpAttr.FK_Group, null, "用户组", true, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(GroupEmpAttr.FK_Emp, null, "人员", new Emps(), true);
 
                 this._enMap = map;

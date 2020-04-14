@@ -32,8 +32,8 @@ namespace BP.Frm
         /// <param name="flowName">流程名称</param>
         /// <param name="nodeID">节点ID</param>
         /// <param name="nodeName">节点名称</param>
-        public static void Track_WriteBBS(string frmID, string frmName,int workID, string msg, 
-            int fid=0,string flowNo="", string flowName="", int nodeID=0, string nodeName="")
+        public static void Track_WriteBBS(string frmID, string frmName,Int64 workID, string msg,
+            Int64 fid =0,string flowNo="", string flowName="", int nodeID=0, string nodeName="")
         {
             Track tk = new Track();
             tk.WorkID = workID;
@@ -53,7 +53,7 @@ namespace BP.Frm
 
             //流程信息.
             tk.NodeID = nodeID;
-            tk.DeptName = nodeName;
+            tk.NodeName = nodeName;
             tk.FlowNo = flowNo;
             tk.FlowName = flowName;
             tk.FID = fid;

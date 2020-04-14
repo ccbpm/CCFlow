@@ -188,7 +188,7 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
                 RefMethod rm = new RefMethod();
-                //@袁丽娜
+
                 rm.Title = "启用规则";
                 rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;

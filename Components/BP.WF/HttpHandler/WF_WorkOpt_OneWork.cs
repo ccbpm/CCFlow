@@ -1112,8 +1112,8 @@ namespace BP.WF.HttpHandler
         public string FlowBBSList()
         {
             Paras ps = new Paras();
-            string sql = "SELECT E.No As EmpNo,E.Name AS EmpName,E.FK_Dept,D.Name As FK_DeptName ,T.Msg,T.RDT FROM ND" + int.Parse(this.FK_Flow) + "Track T,Port_Emp E,Port_Dept D WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
-            sql += " AND T.EmpFrom = E.No AND E.FK_Dept = D.No";
+            string sql = "SELECT Rec,RecName ,DeptNo,DeptName ,Msg,RDT FROM Frm_Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+          
             if (this.FID != 0)
             {
                 sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID)";
@@ -1128,15 +1128,15 @@ namespace BP.WF.HttpHandler
            
 
             ps.SQL = sql;
-            ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
+            ps.Add("ActionType", (int)BP.Frm.FrmActionType.BBS);
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                dt.Columns["EMPNO"].ColumnName = "EmpNo";
-                dt.Columns["EMPNAME"].ColumnName = "EmpName";
-                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
-                dt.Columns["FK_DEPTNAME"].ColumnName = "FK_DeptName";
+                dt.Columns["REC"].ColumnName = "Rec";
+                dt.Columns["RECNAME"].ColumnName = "RecName";
+                dt.Columns["DEPTNO"].ColumnName = "DeptNo";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
                 dt.Columns["MSG"].ColumnName = "Msg";
                 dt.Columns["RDT"].ColumnName = "RDT";
                
@@ -1144,10 +1144,10 @@ namespace BP.WF.HttpHandler
 
             if ( SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                dt.Columns["empno"].ColumnName = "EmpNo";
-                dt.Columns["empname"].ColumnName = "EmpName";
-                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
-                dt.Columns["fk_deptname"].ColumnName = "FK_DeptName";
+                dt.Columns["rec"].ColumnName = "Rec";
+                dt.Columns["recname"].ColumnName = "RecName";
+                dt.Columns["deptno"].ColumnName = "DeptNo";
+                dt.Columns["deptname"].ColumnName = "DeptName";
                 dt.Columns["msg"].ColumnName = "Msg";
                 dt.Columns["rdt"].ColumnName = "RDT";
 
@@ -1175,11 +1175,9 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Save()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
-            string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
-            ps.Add("MyPK", mypk);
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            BP.Frm.Dev2Interface.Track_WriteBBS(this.FrmID, GetRequestVal("FrmName"), this.WorkID, msg,
+           this.FID, this.FK_Flow, GetRequestVal("FlowName"), this.FK_Node, GetRequestVal("NodeName"));
+            return "评论信息保存成功";
         }
 
         /// <summary>

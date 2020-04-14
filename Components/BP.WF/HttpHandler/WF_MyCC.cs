@@ -15,10 +15,18 @@ using BP.WF.Template;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 流程处理类
+    /// 抄送处理类
     /// </summary>
-    public class WF_MyFlow : DirectoryPageBase
+    public class WF_MyCC : DirectoryPageBase
     {
+        /// <summary>
+        /// 抄送处理类
+        /// </summary>
+        public WF_MyCC()
+        {
+
+        }
+
         #region  运行变量
         /// <summary>
         /// 从节点.
@@ -273,175 +281,15 @@ namespace BP.WF.HttpHandler
         /// 初始化(处理分发)
         /// </summary>
         /// <returns></returns>
-        public string MyFlow_Init()
+        public string MyCC_Init()
         {
-            string isCC = this.GetRequestVal("IsCC");
             //手动启动子流程的标志 0父子流程 1 同级子流程
             string isStartSameLevelFlow = this.GetRequestVal("IsStartSameLevelFlow");
-            if (isCC != null && isCC == "1")
-                return "url@MyCC.htm?1=2" + this.RequestParasOfAll;
 
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            bool IsExistGWF = false;
-
-            if (this.WorkID != 0)
-            {
-                //判断是否有执行该工作的权限.
-                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
-                if (isCanDo == false)
-                {
-                    GenerWorkFlow mygwf = new GenerWorkFlow(this.WorkID);
-                    return "err@您[" + WebUser.No + "," + WebUser.Name + "]不能执行当前工作, 当前工作已经运转到[" + mygwf.NodeName + "],处理人[" + mygwf.TodoEmps + "]。";
-                }
-
-                gwf = new GenerWorkFlow();
-                gwf.WorkID = this.WorkID;
-                if (gwf.RetrieveFromDBSources() == 0)
-                    return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
-                IsExistGWF = true;
-
-                String frms = this.GetRequestVal("Frms");
-                if (DataType.IsNullOrEmpty(frms) == false)
-                {
-                    gwf.Paras_Frms=frms;
-                    gwf.Update();
-                }
-            }
-
-            //判断当前节点是否是打开即阅读
-            if (IsExistGWF == true)
-            {
-                //获取当前节点信息
-                Node nd = new Node(gwf.FK_Node);
-                if (nd != null && nd.IsOpenOver == true)
-                {
-                    //如果是结束节点执行流程结束功能
-                    if (nd.IsStartNode == false)
-                    {
-                        //如果启用审核组件
-                        if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
-                        {
-                            //判断一下审核意见是否有默认值
-                            NodeWorkCheck workCheck = new NodeWorkCheck("ND" + nd.NodeID);
-                            string msg = "同意";
-                            if (workCheck.FWCIsFullInfo == true)
-                                msg = workCheck.FWCDefInfo;
-                            BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, nd.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel);
-                        }
-
-                        BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);
-                        Node toNode = new Node(gwf.FK_Node);
-                        if (nd.HisFormType != NodeFormType.SheetTree && nd.HisFormType != NodeFormType.SheetAutoTree)
-                            //跳转到查看页面
-                            return "url@" + "./CCForm/Frm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&FK_MapData=" + toNode.NodeFrmID + "&IsReadonly=1";
-                        else
-                            //跳转到查看页面
-                            return "url@./MyFlowTreeReadonly.htm?WorkID=" + gwf.WorkID + "&FID=" + gwf.FID + "&OID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + gwf.WorkID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
-                    }
-                }
-            }
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
             //当前工作.
             Work currWK = this.currND.HisWork;
-
-            #region 判断前置导航.
-            if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
-            {
-                try
-                {
-                    if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No, this.PFlowNo, this.PNodeID, this.PWorkID) == false)
-                    {
-                        /*是否可以发起流程？ @李国文. */
-                        return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return "err@" + ex.Message;
-                }
-            }
-
-            //第一次加载.
-            if (this.WorkID == 0 && this.currND.IsStartNode && this.GetRequestVal("IsCheckGuide") == null)
-            {
-
-                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
-                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null, null, isStartSameLevelFlow);
-
-                string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
-                if (DataType.IsNullOrEmpty(hostRun) == false)
-                    hostRun += "/WF/";
-
-                this.WorkID = workid;
-
-                switch (this.currFlow.StartGuideWay)
-                {
-                    case StartGuideWay.None:
-                        break;
-                    case StartGuideWay.SubFlowGuide:
-                    case StartGuideWay.SubFlowGuideEntity:
-                        return "url@" + hostRun + "StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
-                    case StartGuideWay.ByHistoryUrl: // 历史数据.
-                        if (this.currFlow.IsLoadPriData == true)
-                        {
-                            return "err@流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。";
-                        }
-                        return "url@" + hostRun + "StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
-                    case StartGuideWay.BySystemUrlOneEntity:
-                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&WorkID=" + workid + "" + this.RequestParasOfAll;
-                    case StartGuideWay.BySQLOne:
-                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySQLOne&WorkID=" + workid + "" + this.RequestParasOfAll;
-                    case StartGuideWay.BySQLMulti:
-                        return "url@" + hostRun + "StartGuideEntities.htm?StartGuideWay=BySQLMulti&WorkID=" + workid + "" + this.RequestParasOfAll;
-                    case StartGuideWay.BySelfUrl: //按照定义的url.
-                        return "url@" + this.currFlow.StartGuidePara1 + this.RequestParasOfAll + "&WorkID=" + workid;
-                    case StartGuideWay.ByFrms: //选择表单.
-                        return "url@" + hostRun + "./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
-                    case StartGuideWay.ByParentFlowModel: //选择父流程 @yuanlina.
-                        return "url@" + hostRun + "./WorkOpt/StartGuideParentFlowModel.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
-                    default:
-                        break;
-                }
-            }
-            #endregion 判断前置导航
-
-            #region 前置导航数据拷贝到第一节点
-            if (this.WorkID != 0 && this.GetRequestVal("IsCheckGuide") != null)
-            {
-                string key = this.GetRequestVal("KeyNo");
-                DataTable dt = BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, key);
-
-                /*如果父流程编号，就要设置父子关系。*/
-                if (dt != null && dt.Rows.Count > 0 && dt.Columns.Contains("PFlowNo") == true)
-                {
-                    string pFlowNo = dt.Rows[0]["PFlowNo"].ToString();
-                    int pNodeID = int.Parse(dt.Rows[0]["PNodeID"].ToString());
-                    Int64 pWorkID = Int64.Parse(dt.Rows[0]["PWorkID"].ToString());
-                    string pEmp = ""; // dt.Rows[0]["PEmp"].ToString();
-                    if (DataType.IsNullOrEmpty(pEmp))
-                        pEmp = WebUser.No;
-
-                    //设置父子关系.
-                    BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, pWorkID);
-                }
-            }
-            #endregion
-
-            #region 启动同级子流程的信息存储
-            if (isStartSameLevelFlow != null && isStartSameLevelFlow.Equals("1") == true && this.WorkID != 0)
-            {
-                gwf.WorkID = this.WorkID;
-                gwf.RetrieveFromDBSources();
-                string slFlowNo = GetRequestVal("SLFlowNo");
-                Int32 slNode = GetRequestValInt("SLNodeID");
-                Int64 slWorkID = GetRequestValInt("SLWorkID");
-                gwf.SetPara("SLFlowNo", slFlowNo);
-                gwf.SetPara("SLNodeID", slNode);
-                gwf.SetPara("SLWorkID", slWorkID);
-                gwf.SetPara("SLEmp", BP.Web.WebUser.No);
-                gwf.Update();
-            }
-            #endregion 启动同级子流程的信息存储
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
@@ -487,16 +335,16 @@ namespace BP.WF.HttpHandler
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
                 else
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
 
                 string[] strs = this.RequestParas.Split('&');
@@ -547,7 +395,6 @@ namespace BP.WF.HttpHandler
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
 
-
                 //如果是开始节点.
                 if (currND.IsStartNode == true)
                 {
@@ -575,7 +422,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK);
+                url = this.MyCC_Init_DealUrl(currND, currWK);
 
                 //sdk表单就让其跳转.
                 return "url@" + url;
@@ -617,11 +464,11 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                //string url = "MyFlowFoolTruck.htm";
-                string url = "MyFlowGener.htm";
+                //string url = "MyCCFoolTruck.htm";
+                string url = "MyCCGener.htm";
 
                 //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                url = this.MyCC_Init_DealUrl(currND, currWK, url);
                 return "url@" + url;
             }
 
@@ -634,11 +481,11 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                //string url = "MyFlowFoolTruck.htm";
-                string url = "MyFlowWebOffice.htm";
+                //string url = "MyCCFoolTruck.htm";
+                string url = "MyCCWebOffice.htm";
 
                 //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                url = this.MyCC_Init_DealUrl(currND, currWK, url);
                 return "url@" + url;
             }
 
@@ -651,14 +498,14 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyFlowGener.htm";
+                string url = "MyCCGener.htm";
                 if (this.IsMobile)
-                    url = "MyFlowGener.htm";
+                    url = "MyCCGener.htm";
 
                 //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                url = this.MyCC_Init_DealUrl(currND, currWK, url);
 
-                url = url.Replace("DoType=MyFlow_Init&", "");
+                url = url.Replace("DoType=MyCC_Init&", "");
                 url = url.Replace("&DoWhat=StartClassic", "");
                 return "url@" + url;
             }
@@ -672,27 +519,27 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyFlowSelfForm.htm";
+                string url = "MyCCSelfForm.htm";
 
                 //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                url = this.MyCC_Init_DealUrl(currND, currWK, url);
 
-                url = url.Replace("DoType=MyFlow_Init&", "");
+                url = url.Replace("DoType=MyCC_Init&", "");
                 url = url.Replace("&DoWhat=StartClassic", "");
                 return "url@" + url;
             }
             #endregion 内置表单类型的判断.
 
-            string myurl = "MyFlowGener.htm";
+            string myurl = "MyCCGener.htm";
 
             //处理连接.
-            myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);
-            myurl = myurl.Replace("DoType=MyFlow_Init&", "");
+            myurl = this.MyCC_Init_DealUrl(currND, currWK, myurl);
+            myurl = myurl.Replace("DoType=MyCC_Init&", "");
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
 
             return "url@" + myurl;
         }
-        private string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
+        private string MyCC_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
         {
             if (url == null)
                 url = currND.FormUrl;
@@ -750,18 +597,12 @@ namespace BP.WF.HttpHandler
             return url;
         }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public WF_MyFlow()
-        {
-
-        }
+      
         /// <summary>
         /// 结束流程.
         /// </summary>
         /// <returns></returns>
-        public string MyFlow_StopFlow()
+        public string MyCC_StopFlow()
         {
             try
             {
@@ -779,7 +620,7 @@ namespace BP.WF.HttpHandler
         /// 删除流程
         /// </summary>
         /// <returns></returns>
-        public string MyFlow_DeleteFlowByReal()
+        public string MyCC_DeleteFlowByReal()
         {
             try
             {
@@ -839,55 +680,6 @@ namespace BP.WF.HttpHandler
                         if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                             isAskForOrHuiQian = true;
                     }
-
-
-                    //    //协作模式
-                    //    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
-                    //{
-                    //    if(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
-                    //    {
-                    //        if(gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                    //            isAskForOrHuiQian = true;
-                    //    }
-                    //    else
-                    //    {
-                    //        if(gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                    //            isAskForOrHuiQian = true;
-                    //    }
-                        
-                    //}
-                    //else
-                    //{
-                    //    #warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
-                    //    GenerWorkerLists gwls = new GenerWorkerLists();
-                    //    string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
-
-                    //    if (DBAccess.RunSQLReturnValInt(sql) == 1)
-                    //    {
-                    //        //修改流程会签状态
-                    //        gwf.HuiQianTaskSta = HuiQianTaskSta.None;
-                    //        isAskForOrHuiQian = false;
-                    //    }
-                    //    else
-                    //    {
-                    //        if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
-                    //        {
-                    //            if (btnLab.HuiQianLeaderRole == 0)
-                    //            {
-                    //                if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                    //                    isAskForOrHuiQian = true;
-                    //            }
-                    //            else
-                    //            {
-                    //                //不是主持人
-                    //                if ((gwf.TodoEmps.Contains(WebUser.No + ",") == false && DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true) && gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
-                    //                    isAskForOrHuiQian = true;
-                    //            }
-                    //        }
-
-                    //    }
-                    //}
-                   
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
@@ -896,120 +688,10 @@ namespace BP.WF.HttpHandler
             string toolbar = "";
             try
             {
-                #region 是否是会签？.
-                if (isAskForOrHuiQian == true && SystemConfig.CustomerNo == "LIMS")
-                    return "";
 
-                if (isAskForOrHuiQian == true)
-                {
-                    toolbar += "<input name='Send' type=button value='确定/完成' data-type='isAskFor' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";
-                    // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
-                    if (btnLab.PrintZipEnable == true)
-                    {
-                        string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                        toolbar += "<input type=button name='PackUp'  value='" + btnLab.PrintZipLab + "' enable=true/>";
-                    }
-
-                    if (btnLab.TrackEnable)
-                        toolbar += "<input type=button name='Track'  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
-
-                    return toolbar;
-                }
-                #endregion 是否是会签.
-
-                #region 是否是抄送.
-                if (this.IsCC)
-                {
-                    toolbar += "<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
-                    // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
-                    if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
-                    {
-                        /*如果不等于启用, */
-                        toolbar += "<input type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
-                    }
-                    return toolbar;
-                }
-                #endregion 是否是抄送.
-
-                #region 如果当前节点启用了协作会签.
-                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
-                {
-                    if (this.IsMobile == true)
-                        toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();SendIt(true); \" />";
-                    else
-                        toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(true); \" />";
-                }
-                #endregion 如果当前节点启用了协作会签
+                toolbar += "<input name='ReadAndClose' type=button value='已阅关闭' enable=true onclick=\"ReadAndClose();\" />";
 
                 #region 加载流程控制器 - 按钮
-                if (this.currND.HisFormType == NodeFormType.SelfForm)
-                {
-                    /*如果是嵌入式表单.*/
-                    if (currND.IsEndNode)
-                    {
-                        /*如果当前节点是结束节点.*/
-                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
-                        {
-                            /*如果启用了发送按钮.*/
-                            toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;\" />";
-                        }
-                    }
-                    else
-                    {
-                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
-                        {
-                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; this.disabled=true;\" />";
-                        }
-                    }
-
-                    /*处理保存按钮.*/
-                    if (btnLab.SaveEnable)
-                    {
-                        toolbar += "<input name='Save' type=button value='" + btnLab.SaveLab + "' enable=true onclick=\"SaveSelfFrom();\" />";
-                    }
-                }
-
-                if (this.currND.HisFormType != NodeFormType.SelfForm)
-                {
-                    /*启用了其他的表单.*/
-                    if (currND.IsEndNode)
-                    {
-                        /*如果当前节点是结束节点.*/
-                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
-                        {
-                            /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                            if (this.IsMobile)
-                                toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();SendIt(); \" />";
-                            else
-                                toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";
-
-                        }
-                    }
-                    else
-                    {
-                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
-                        {
-                            /*如果启用了发送按钮.
-                             * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
-                             */
-                            if (this.IsMobile)
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt();\" />";
-                            else
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send();\" />";
-                        }
-                    }
-
-                    /* 处理保存按钮.*/
-                    if (btnLab.SaveEnable)
-                    {
-                        if (this.IsMobile)
-                            toolbar += "<input name='Save' type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false; SaveIt();\" />";
-                        else
-                            toolbar += "<input name='Save' type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;Save();\" />";
-                    }
-                }
-
                 if (btnLab.WorkCheckEnable)
                 {
                     /*审核*/
@@ -1050,50 +732,6 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
                 }
 
-                if (btnLab.ReturnEnable)
-                {
-                    /*退回*/
-                    string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input name='Return' type=button  value='" + btnLab.ReturnLab + "' enable=true onclick=\"ReturnWork('" + urlr + "','" + btnLab.ReturnField + "'); \" />";
-                }
-
-                //  if (btnLab.HungEnable && this.currND.IsStartNode == false)
-                if (btnLab.HungEnable)
-                {
-                    /*挂起*/
-                    string urlr = "./WorkOpt/HungUp.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.HungLab + "' enable=true onclick=\"WinOpen('" + urlr + "'); \" />";
-                }
-
-                if (btnLab.ShiftEnable)
-                {
-                    /*移交*/
-                    string url12 = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
-                    toolbar += "<input name='Shift' type=button  value='" + btnLab.ShiftLab + "' enable=true onclick=\"To('" + url12 + "'); \" />";
-                }
-
-                if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
-                {
-                    if (this.IsMobile)
-                    {
-                        String urlrDel = "./WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey;
-                        toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
-                    }
-                    else
-                        // 抄送 
-                        toolbar += "<input name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + "./WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" />";
-                }
-
-                if (btnLab.DeleteEnable != 0)
-                {
-                    string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input name='Delete' type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
-                }
-
-                if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
-                {
-                    toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"javascript:DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');\" />";
-                }
 
                 // @李国文.
                 if (btnLab.PrintDocEnable == true)
@@ -1116,28 +754,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='Batch' value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
                 }
 
-                if (btnLab.AskforEnable)
-                {
-                    /*加签 */
-                    string urlr3 = appPath + "WF/WorkOpt/Askfor.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
-                }
-
-                if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
-                {
-                    /*会签 */
-                    string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
-                }
-
-                //原始会签主持人可以增加组长
-                if (btnLab.AddLeaderEnable == true && (btnLab.HuiQianRole== HuiQianRole.Teamup || btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader))
-                {
-                    /*增加组长 */
-                    toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";
-                }
-
-
+                
                 if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
                 {
                     /*公文正文 */
@@ -1145,39 +762,10 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='WebOffice'  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" />";
                 }
 
-                // 需要翻译.
-                if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
-                {
-                    /* 启用了数据重置功能 */
-                    toolbar += "<input type=button  value='数据重置' enable=true  id='reset' name='reset' onclick=\"resetData(); \" />";
-                }
-
-                //if (btnLab.SubFlowEnable == true )
-                //{
-                //    /* 子流程 */
-                //    string urlr3 = appPath + "WF/WorkOpt/SubFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                //    toolbar += "<input type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
-                //}
-
-                if (btnLab.CHRole != 0)
-                {
-                    /* 节点时限设置 */
-                    string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
-                }
-
                 if (btnLab.NoteEnable != 0)
                 {
                     /* 备注设置 */
                     toolbar += "<input type=button name='Note'  value='" + btnLab.NoteLab + "' enable=true  />";
-                }
-
-
-                if (btnLab.PRIEnable == true)
-                {
-                    /* 优先级设置 */
-                    string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='PR'  value='" + btnLab.PRILab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
                 }
 
                 /* 关注 */
@@ -1189,14 +777,6 @@ namespace BP.WF.HttpHandler
                         toolbar += "<input type=button name='Focus' value='" + btnLab.FocusLab + "' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" />";
                 }
 
-                /* 分配工作 */
-                if (btnLab.AllotEnable == true)
-                {
-                    /*分配工作*/
-                    string urlAllot = "./WorkOpt/AllotTask.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
-                    toolbar += "<input name='Allot' type=button  value='" + btnLab.AllotLab + "' enable=true onclick=\"To('" + urlAllot + "'); \" />";
-                }
-
                 /* 确认 */
                 if (btnLab.ConfirmEnable == true)
                 {
@@ -1205,8 +785,6 @@ namespace BP.WF.HttpHandler
                     else
                         toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
                 }
-
-                // 需要翻译.
 
                 /* 打包下载zip */
                 if (btnLab.PrintZipEnable == true)
@@ -1228,16 +806,6 @@ namespace BP.WF.HttpHandler
                     string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
                     toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
                 }
-
-                if (this.currND.IsStartNode == true)
-                {
-                    if (this.currFlow.IsDBTemplate == true)
-                    {
-                        string packUrl = "./WorkOpt/DBTemplate.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                        toolbar += "<input type=button name='DBTemplate'  value='模版' enable=true/>";
-                    }
-                }
-
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true)
                 {
@@ -1394,7 +962,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = "会签发送";
                     dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt(true);";
                     dt.Rows.Add(dr);
-                  
+
                 }
                 #endregion 如果当前节点启用了协作会签
 
@@ -1412,7 +980,7 @@ namespace BP.WF.HttpHandler
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
                             dr["Oper"] = btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;";
-                            dt.Rows.Add(dr); 
+                            dt.Rows.Add(dr);
                         }
                     }
                     else
@@ -1476,7 +1044,7 @@ namespace BP.WF.HttpHandler
                         dr = dt.NewRow();
                         dr["No"] = "Save";
                         dr["Name"] = btnLab.SaveLab;
-                        dr["Oper"] ="if (SysCheckFrm() == false) return false; Save(); ";
+                        dr["Oper"] = "if (SysCheckFrm() == false) return false; Save(); ";
                         dt.Rows.Add(dr);
                     }
                 }
@@ -1498,7 +1066,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.ThreadLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
@@ -1563,7 +1131,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.HungLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 if (btnLab.ShiftEnable)
@@ -1574,7 +1142,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.ShiftLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
@@ -1595,7 +1163,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.DeleteLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
@@ -1617,7 +1185,7 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
 
-                   
+
                 }
 
                 if (btnLab.TrackEnable)
@@ -1648,7 +1216,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.BatchLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.AskforEnable)
@@ -1659,7 +1227,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.AskforLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
@@ -1670,7 +1238,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.HuiQianLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 //原始会签主持人可以增加组长
@@ -1693,7 +1261,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.WebOfficeLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 // 需要翻译.
@@ -1707,7 +1275,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
 
-              
+
 
                 if (btnLab.CHRole != 0)
                 {
@@ -1717,7 +1285,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.CHLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.NoteEnable != 0)
@@ -1774,9 +1342,9 @@ namespace BP.WF.HttpHandler
                         dr["Name"] = "取消确认";
                     else
                         dr["Name"] = btnLab.ConfirmLab;
-                     
-                       dr["Oper"] = "";
-                        dt.Rows.Add(dr);
+
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 // 需要翻译.
@@ -2053,7 +1621,7 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.DeleteEnable != 0)
                 {
-                    string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    string urlrDel = appPath + "WF/MyCCInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<a data-role='button' name='Delete' type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" ></a>";
                 }
 
@@ -2108,7 +1676,7 @@ namespace BP.WF.HttpHandler
                 if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
                 {
                     /* 启用了数据重置功能 */
-                    string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
+                    string urlr3 = appPath + "WF/MyCC.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
                     toolbar += "<a data-role='button' type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" ></a>";
                 }
 
@@ -2239,7 +1807,7 @@ namespace BP.WF.HttpHandler
                 {
 
                     string val = HttpContextHelper.RequestParams(key);
-                            
+
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
@@ -2310,7 +1878,7 @@ namespace BP.WF.HttpHandler
                 if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID,this.PWorkID);
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID, this.PWorkID);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;
 
@@ -2503,7 +2071,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node,
-                    this.WorkID, this.GetMainTableHT(), null,this.FID,this.PWorkID);
+                    this.WorkID, this.GetMainTableHT(), null, this.FID, this.PWorkID);
 
                 if (this.PWorkID != 0)
                 {
@@ -2519,7 +2087,7 @@ namespace BP.WF.HttpHandler
                 return "err@保存失败:" + ex.Message;
             }
         }
-        public string MyFlowSelfForm_Init()
+        public string MyCCSelfForm_Init()
         {
             return this.GenerWorkNode();
         }
@@ -2954,7 +2522,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             //扩展工具，显示位置为表单树类型. 
-            #warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
+#warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
             //NodeToolbars extToolBars = new NodeToolbars();
             //extToolBars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
 

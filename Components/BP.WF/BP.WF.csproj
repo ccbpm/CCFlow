@@ -242,6 +242,7 @@
     <Compile Include="HttpHandler\WF_Admin_RptDfine.cs" />
     <Compile Include="HttpHandler\WF_CommEntity.cs" />
     <Compile Include="HttpHandler\WF_Comm_Sys.cs" />
+    <Compile Include="HttpHandler\WF_MyCC.cs" />
     <Compile Include="HttpHandler\WF_RptDfine.cs" />
     <Compile Include="HttpHandler\WF_RptSearch.cs" />
     <Compile Include="HttpHandler\DataUser_AppCoder.cs" />

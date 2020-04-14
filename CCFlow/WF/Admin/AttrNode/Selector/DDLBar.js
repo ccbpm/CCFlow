@@ -40,8 +40,8 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
 
     if (webUser.CCBPMRunModel == 1) {
-        html += "<option value=" + SelectorModel.Group + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组(本组织)计算</option>";
-        html += "<option value=" + SelectorModel.GroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+        html += "<option value=" + SelectorModel.Group + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织)计算</option>";
+        html += "<option value=" + SelectorModel.GroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算</option>";
     }
 
     html += "<option value=null  disabled='disabled'>+其他</option>";
@@ -93,7 +93,7 @@ function getDepts() {
 
 }
 /*
- * 获取节点绑定的群组@lz
+ * 获取节点绑定的用户组@lz
  */
 function getGroups() {
 

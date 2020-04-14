@@ -198,7 +198,7 @@
         <fieldset>
             <legend id="Help">帮助</legend>
             <ul>
-                <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式.</li>
+                <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式. 比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
                 <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
                 <li> 比如2: SELECT No,Name,Tel FROM Port_Emp WHERE No='@MyFieldName' </li>
                 <li> 返回的数据是一行多列，如果列名与主表的字段名匹配就自动赋值. </li>

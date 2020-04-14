@@ -66,8 +66,8 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
 
         if (webUser.CCBPMRunModel == 1) {
-            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算(仅限于本组织人员)</option>";
-            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算(仅限于本组织人员)</option>";
+            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算</option>";
         }
 
 
@@ -76,8 +76,8 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算</option>";
         html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
         if (webUser.CCBPMRunModel == 1) {
-            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算(仅限于本组织人员)</option>";
-            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的群组计算</option>";
+            html += "<option value=" + DeliveryWay.ByGroup + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算(仅限于本组织人员)</option>";
+            html += "<option value=" + DeliveryWay.ByGroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算</option>";
         }
 
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
@@ -240,7 +240,7 @@ function getDepts() {
 
 }
 /*
- * 获取节点绑定的群组@lz
+ * 获取节点绑定的用户组@lz
  */
 function getGroups() {
 
@@ -273,7 +273,11 @@ function getDeptLeader() {
 function getOrgs() {
 
     var ens = new Entities("BP.WF.Template.FlowOrgs");
+
+    // ens.Retrieve("FlowNo", flowNo);
     ens.Retrieve("FlowNo", GetQueryString("FK_Flow"));
+
+    // alert(ens.length);
     return ens;
 
     ens = $.grep(ens, function (obj, i) {

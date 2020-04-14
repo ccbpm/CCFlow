@@ -100,7 +100,7 @@
             $("#UserName").append(webUser.Name);
             if (webUser.CCBPMRunModel == 1) {
                 var en = new Entity("BP.WF.Port.Admin2.Org", GetQueryString("OrgNo"));
-                $("title").text("驰骋工作流程引擎设计器—" + "组织编号：" + GetQueryString("OrgNo") + "      组织名称：" + en.Name);
+                $("title").text("驰骋BPM设计器—" + "组织编号:" + GetQueryString("OrgNo") + "-名称:" + en.Name);
                 
             }
             else {

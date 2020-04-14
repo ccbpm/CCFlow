@@ -23,15 +23,15 @@
             <fieldset>
                 <legend>设置</legend>
                 <ul>
-                    <li><a href="#" @click="OpenNew()"> 设置/更改群组</a></li>
+                    <li><a href="#" @click="OpenNew()"> 设置/更改用户组</a></li>
                     <!-- <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>-->
-                    <li>该群组下所有的人员都可以处理该节点的工作。</li>
+                    <li>该用户组下所有的人员都可以处理该节点的工作。</li>
                 </ul>
             </fieldset>
         </div>
 
         <fieldset>
-            <legend>已经选择的群组</legend>
+            <legend>已经选择的用户组</legend>
             <div id="group">
                 <ul>
                     <li v-show="groups.length===0">未设置</li>
@@ -46,7 +46,7 @@
         <fieldset>
             <legend id="help">帮助</legend>
             <ul>
-                <li>节点绑定群组就是该节点下绑定群组(本组织内)里面的所有人员都可以接受该工作.</li>
+                <li>节点绑定用户组就是该节点下绑定用户组(本组织内)里面的所有人员都可以接受该工作.</li>
             </ul>
         </fieldset>
     </div>
@@ -64,7 +64,7 @@
                     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeGroups&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Group&EnsOfM=BP.GPM.Groups&DefaultGroupAttrKey=";
                     url += '&No=' + nodeID + '&PKVal=' + nodeID;
 
-                    OpenEasyUiDialogExtCloseFunc(url, '绑定群组', 500, 350, function () {
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定用户组', 500, 350, function () {
                         Baseinfo.groups = getGroups();
                     });
                 }
@@ -81,7 +81,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
-            node.SelectorModel = Baseinfo.deliverWay;
+            node.SelectorModel = SelectorModel.Group;
             node.Update();
             alert("保存成功.");
         }

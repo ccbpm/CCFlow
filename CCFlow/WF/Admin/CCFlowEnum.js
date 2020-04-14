@@ -52,9 +52,9 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelectedOrgs = 22,
         //按照部门领导计算
         DeliveryWay.ByDeptLeader = 23,
-        //按照群组计算
+        //按照用户组计算
         DeliveryWay.ByGroup = 24,
-        //仅按群组计算.
+        //仅按用户组计算.
         DeliveryWay.ByGroupOnly = 25,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,

@@ -20,7 +20,7 @@
             var url = '';
             switch (parseInt(node.SelectorModel)) {
 
-                 case SelectorModel.Station:
+                case SelectorModel.Station:
                     url = "0.Station.htm";
                     break;
 
@@ -51,10 +51,16 @@
                 case SelectorModel.DeptAndStation:
                     url = "9.AccepterOfDeptStationOfCurrentOper.htm";
                     break;
+                case SelectorModel.Group:
+                    url = "10.Group.htm";
+                    break;
+                case SelectorModel.GroupOnly:
+                    url = "11.GroupOnly.htm";
+                    break;
                 default:
                     url = "5.GenerUserSelecter.htm";
                     break;
-                
+
             }
 
             document.location.href = url + "?FK_Node=" + node.NodeID;

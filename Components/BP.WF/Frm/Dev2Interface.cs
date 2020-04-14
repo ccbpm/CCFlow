@@ -19,6 +19,49 @@ namespace BP.Frm
     /// </summary>
     public class Dev2Interface
     {
+        #region 写入轨迹.
+        /// <summary>
+        /// 写入BBS
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="frmName">表单名称</param>
+        /// <param name="workID">工作ID</param>
+        /// <param name="msg">消息</param>
+        /// <param name="fid">流程ID</param>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="flowName">流程名称</param>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="nodeName">节点名称</param>
+        public static void Track_WriteBBS(string frmID, string frmName,int workID, string msg, 
+            int fid=0,string flowNo="", string flowName="", int nodeID=0, string nodeName="")
+        {
+            Track tk = new Track();
+            tk.WorkID = workID;
+            tk.FrmID = frmID;
+            tk.FrmName = frmName;
+            tk.FrmActionType = FrmActionType.BBS;
+            tk.ActionTypeText = "评论"; 
+
+            tk.Rec = WebUser.No;
+            tk.RecName = WebUser.Name;
+            tk.DeptNo = WebUser.FK_Dept;
+            tk.DeptName = WebUser.FK_DeptName;
+
+            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_"+(int)FrmActionType.BBS;
+            tk.Msg = msg;
+            tk.RDT = DataType.CurrentDataTime;
+
+            //流程信息.
+            tk.NodeID = nodeID;
+            tk.DeptName = nodeName;
+            tk.FlowNo = flowNo;
+            tk.FlowName = flowName;
+            tk.FID = fid;
+
+            tk.Save();
+        }
+        #endregion 写入轨迹.
+
         /// <summary>
         /// 创建工作ID
         /// </summary>

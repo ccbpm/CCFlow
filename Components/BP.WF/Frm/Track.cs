@@ -17,22 +17,11 @@ namespace BP.Frm
         /// 记录日期
         /// </summary>
         public const string RDT = "RDT";
-        /// <summary>
-        /// 完成日期
-        /// </summary>
-        public const string CDT = "CDT";
-        /// <summary>
-        /// FID
-        /// </summary>
-        public const string FID = "FID";
+     
         /// <summary>
         /// WorkID
         /// </summary>
         public const string WorkID = "WorkID";
-        /// <summary>
-        /// CWorkID
-        /// </summary>
-        public const string CWorkID = "CWorkID";
         /// <summary>
         /// 活动类型
         /// </summary>
@@ -42,61 +31,21 @@ namespace BP.Frm
         /// </summary>
         public const string ActionTypeText = "ActionTypeText";
         /// <summary>
-        /// 时间跨度
+        /// 记录人
         /// </summary>
-        public const string WorkTimeSpan = "WorkTimeSpan";
+        public const string Rec = "Rec";
         /// <summary>
-        /// 节点数据
+        /// 记录人名称
         /// </summary>
-        public const string NodeData = "NodeData";
+        public const string RecName = "RecName";
         /// <summary>
-        /// 轨迹字段
+        /// 部门No
         /// </summary>
-        public const string TrackFields = "TrackFields";
+        public const string DeptNo = "DeptNo";
         /// <summary>
-        /// 备注
+        /// 部门名称
         /// </summary>
-        public const string Note = "Note";
-        /// <summary>
-        /// 从节点
-        /// </summary>
-        public const string NDFrom = "NDFrom";
-        /// <summary>
-        /// 到节点
-        /// </summary>
-        public const string NDTo = "NDTo";
-        /// <summary>
-        /// 从人员
-        /// </summary>
-        public const string EmpFrom = "EmpFrom";
-        /// <summary>
-        /// 到人员
-        /// </summary>
-        public const string EmpTo = "EmpTo";
-        /// <summary>
-        /// 审核
-        /// </summary>
-        public const string Msg = "Msg";
-        /// <summary>
-        /// EmpFromT
-        /// </summary>
-        public const string EmpFromT = "EmpFromT";
-        /// <summary>
-        /// NDFromT
-        /// </summary>
-        public const string NDFromT = "NDFromT";
-        /// <summary>
-        /// NDToT
-        /// </summary>
-        public const string NDToT = "NDToT";
-        /// <summary>
-        /// EmpToT
-        /// </summary>
-        public const string EmpToT = "EmpToT";
-        /// <summary>
-        /// 实际执行人员
-        /// </summary>
-        public const string Exer = "Exer";
+        public const string DeptName = "DeptName";
         /// <summary>
         /// 参数信息
         /// </summary>
@@ -105,77 +54,49 @@ namespace BP.Frm
         /// 表单数据
         /// </summary>
         public const string FrmDB = "FrmDB";
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public const string Msg = "Msg";
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public const string FrmID = "FrmID";
+        /// <summary>
+        /// 表单名称
+        /// </summary>
+        public const string FrmName = "FrmName";
+
+        #region 流程相关信息.
+        /// <summary>
+        /// FID
+        /// </summary>
+        public const string FID = "FID";
+        /// <summary>
+        /// 流程ID
+        /// </summary>
+        public const string FlowNo = "FlowNo";
+        /// <summary>
+        /// 流程名称
+        /// </summary>
+        public const string FlowName = "FlowName";
+        /// <summary>
+        /// 节点ID
+        /// </summary>
+        public const string NodeID = "NodeID";
+        /// <summary>
+        /// 节点名字
+        /// </summary>
+        public const string NodeName = "NodeName";
+        #endregion 流程相关信息.
+
     }
     /// <summary>
     /// 轨迹
     /// </summary>
     public class Track : BP.En.EntityMyPK
     {
-        #region 基本属性.
-        /// <summary>
-        /// 表单数据
-        /// </summary>
-        public string FrmDB = null;
-        public string FK_Flow = null;
-        #endregion 基本属性.
-
         #region 字段属性.
-        /// <summary>
-        /// 节点从
-        /// </summary>
-        public int NDFrom
-        {
-            get
-            {
-                return this.GetValIntByKey(TrackAttr.NDFrom);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.NDFrom, value);
-            }
-        }
-        /// <summary>
-        /// 节点到
-        /// </summary>
-        public int NDTo
-        {
-            get
-            {
-                return this.GetValIntByKey(TrackAttr.NDTo);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.NDTo, value);
-            }
-        }
-        /// <summary>
-        /// 从人员
-        /// </summary>
-        public string EmpFrom
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.EmpFrom);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.EmpFrom, value);
-            }
-        }
-        /// <summary>
-        /// 到人员
-        /// </summary>
-        public string EmpTo
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.EmpTo);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.EmpTo, value);
-            }
-        }
         /// <summary>
         /// 参数数据.
         /// </summary>
@@ -188,6 +109,34 @@ namespace BP.Frm
             set
             {
                 this.SetValByKey(TrackAttr.Tag, value);
+            }
+        }
+        /// <summary>
+        /// 表单ID
+        /// </summary>
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.FrmID);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.FrmID, value);
+            }
+        }
+        /// <summary>
+        /// 表单名称
+        /// </summary>
+        public string FrmName
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.FrmName);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.FrmName, value);
             }
         }
         /// <summary>
@@ -233,27 +182,13 @@ namespace BP.Frm
             }
         }
         /// <summary>
-        /// CWorkID
-        /// </summary>
-        public Int64 CWorkID
-        {
-            get
-            {
-                return this.GetValInt64ByKey(TrackAttr.CWorkID);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.CWorkID, value);
-            }
-        }
-        /// <summary>
         /// 活动类型
         /// </summary>
-        public ActionType HisActionType
+        public BP.Frm.FrmActionType FrmActionType
         {
             get
             {
-                return (ActionType)this.GetValIntByKey(TrackAttr.ActionType);
+                return (BP.Frm.FrmActionType)this.GetValIntByKey(TrackAttr.ActionType);
             }
             set
             {
@@ -265,66 +200,18 @@ namespace BP.Frm
         /// </summary>
         /// <param name="at"></param>
         /// <returns></returns>
-        public static string GetActionTypeT(ActionType at)
+        public static string GetActionTypeT(BP.Frm.FrmActionType at)
         {
             switch (at)
             {
-                case ActionType.Forward:
-                    return "发送";
-                case ActionType.Return:
-                    return "退回";
-                case ActionType.ReturnAndBackWay:
-                    return "退回并原路返回";
-                case ActionType.Shift:
-                    return "移交";
-                case ActionType.UnShift:
-                    return "撤消移交";
-                case ActionType.Start:
-                    return "发起";
-                case ActionType.UnSend:
-                    return "撤消发送";
-                case ActionType.ForwardFL:
-                    return " -前进(分流点)";
-                case ActionType.ForwardHL:
-                    return " -向合流点发送";
-                case ActionType.FlowOver:
-                    return "流程结束";
-                case ActionType.CallChildenFlow:
-                    return "子流程调用";
-                case ActionType.StartChildenFlow:
-                    return "子流程发起";
-                case ActionType.SubThreadForward:
-                    return "线程前进";
-                case ActionType.RebackOverFlow:
-                    return "恢复已完成的流程";
-                case ActionType.FlowOverByCoercion:
-                    return "强制结束流程";
-                case ActionType.HungUp:
-                    return "挂起";
-                case ActionType.UnHungUp:
-                    return "取消挂起";
-                case ActionType.Press:
-                    return "催办";
-                case ActionType.CC:
-                    return "抄送";
-                case ActionType.WorkCheck:
-                    return "审核";
-                case ActionType.ForwardAskfor:
-                    return "加签发送";
-                case ActionType.AskforHelp:
-                    return "加签";
-                case ActionType.Skip:
-                    return "跳转";
-                case ActionType.HuiQian:
-                    return "主持人执行会签";
-                case ActionType.DeleteFlowByFlag:
-                    return "逻辑删除";
-                case ActionType.Order:
-                    return "队列发送";
-                case ActionType.FlowBBS:
+                case BP.Frm.FrmActionType.Save:
+                    return "保存";
+                case BP.Frm.FrmActionType.Create:
+                    return "提交";
+                case BP.Frm.FrmActionType.BBS:
                     return "评论";
-                case ActionType.TeampUp:
-                    return "协作";
+                case BP.Frm.FrmActionType.View:
+                    return "打开";
                 default:
                     return "信息" + at.ToString();
             }
@@ -344,35 +231,35 @@ namespace BP.Frm
             }
         }
         /// <summary>
-        /// 节点数据
+        /// 记录人
         /// </summary>
-        public string NodeData
+        public string Rec
         {
             get
             {
-                return this.GetValStringByKey(TrackAttr.NodeData);
+                return this.GetValStringByKey(TrackAttr.Rec);
             }
             set
             {
-                this.SetValByKey(TrackAttr.NodeData, value);
+                this.SetValByKey(TrackAttr.Rec, value);
             }
         }
         /// <summary>
-        /// 实际执行人
+        /// 记录人名字
         /// </summary>
-        public string Exer
+        public string RecName
         {
             get
             {
-                return this.GetValStringByKey(TrackAttr.Exer);
+                return this.GetValStringByKey(TrackAttr.RecName);
             }
             set
             {
-                this.SetValByKey(TrackAttr.Exer, value);
+                this.SetValByKey(TrackAttr.RecName, value);
             }
         }
         /// <summary>
-        /// 审核意见
+        /// 消息
         /// </summary>
         public string Msg
         {
@@ -395,66 +282,88 @@ namespace BP.Frm
                 return this.GetValHtmlStringByKey(TrackAttr.Msg);
             }
         }
-        /// <summary>
-        /// 人员到
-        /// </summary>
-        public string EmpToT
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.EmpToT);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.EmpToT, value);
-            }
-        }
-        /// <summary>
-        /// 人员从
-        /// </summary>
-        public string EmpFromT
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.EmpFromT);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.EmpFromT, value);
-            }
-        }
-        /// <summary>
-        /// 节点从
-        /// </summary>
-        public string NDFromT
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.NDFromT);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.NDFromT, value);
-            }
-        }
-        /// <summary>
-        /// 节点到
-        /// </summary>
-        public string NDToT
-        {
-            get
-            {
-                return this.GetValStringByKey(TrackAttr.NDToT);
-            }
-            set
-            {
-                this.SetValByKey(TrackAttr.NDToT, value);
-            }
-        }
         #endregion attrs
 
+        #region 流程属性.
+        /// <summary>
+        /// 流程编号
+        /// </summary>
+        public string FlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.FlowNo);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.FlowNo, value);
+            }
+        }
+        /// <summary>
+        /// 流程名称
+        /// </summary>
+        public string FlowName
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.FlowName);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.FlowName, value);
+            }
+        }
+        public int NodeID
+        {
+            get
+            {
+                return this.GetValIntByKey(TrackAttr.NodeID);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.NodeID, value);
+            }
+        }
+        /// <summary>
+        /// 节点名称
+        /// </summary>
+        public string NodeName
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.NodeName);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.NodeName, value);
+            }
+        }
+        public string DeptNo
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.DeptNo);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.DeptNo, value);
+            }
+        }
+        public string DeptName
+        {
+            get
+            {
+                return this.GetValStringByKey(TrackAttr.DeptName);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.DeptName, value);
+            }
+        }
+        #endregion 流程属性.
+
+
         #region 构造.
-        public string RptName = null;
         public override Map EnMap
         {
             get
@@ -462,35 +371,40 @@ namespace BP.Frm
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Frm_Track", "轨迹表");
+                Map map = new Map("Frm_Track", "表单轨迹表");
 
-                #region 字段
-                map.AddMyPK();  //增加一个自动增长的列.
+                #region 基本字段.
+                map.AddMyPK();  //组合主键.
+
+                map.AddTBString(TrackAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
+                map.AddTBString(TrackAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
 
                 map.AddTBInt(TrackAttr.ActionType, 0, "类型", true, false);
                 map.AddTBString(TrackAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
-                map.AddTBInt(TrackAttr.FID, 0, "流程ID", true, false);
-                map.AddTBInt(TrackAttr.WorkID, 0, "工作ID", true, false);
 
-                map.AddTBInt(TrackAttr.NDFrom, 0, "从节点", true, false);
-                map.AddTBString(TrackAttr.NDFromT, null, "从节点(名称)", true, false, 0, 300, 100);
+                map.AddTBInt(TrackAttr.WorkID, 0, "工作ID/OID", true, false);
+                map.AddTBString(TrackAttr.Msg, null, "消息", true, false, 0, 300, 3000);
 
-                map.AddTBInt(TrackAttr.NDTo, 0, "到节点", true, false);
-                map.AddTBString(TrackAttr.NDToT, null, "到节点(名称)", true, false, 0, 999, 900);
+                map.AddTBString(TrackAttr.Rec, null, "记录人", true, false, 0, 200, 100);
+                map.AddTBString(TrackAttr.RecName, null, "名称", true, false, 0, 200, 100);
+                map.AddTBDateTime(TrackAttr.RDT, null, "记录日期时间", true, false);
 
-                map.AddTBString(TrackAttr.EmpFrom, null, "从人员", true, false, 0, 20, 100);
-                map.AddTBString(TrackAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 30, 100);
+                map.AddTBString(TrackAttr.DeptNo, null, "部门编号", true, false, 0, 200, 100);
+                map.AddTBString(TrackAttr.DeptName, null, "名称", true, false, 0, 200, 100);
+                #endregion 基本字段
 
-                map.AddTBString(TrackAttr.EmpTo, null, "到人员", true, false, 0, 2000, 100);
-                map.AddTBString(TrackAttr.EmpToT, null, "到人员(名称)", true, false, 0, 2000, 100);
+                #region 流程信息.
+                //流程信息.
+                map.AddTBInt(TrackAttr.FID, 0, "FID", true, false);
 
-                map.AddTBString(TrackAttr.RDT, null, "日期", true, false, 0, 20, 100);
-                map.AddTBFloat(TrackAttr.WorkTimeSpan, 0, "时间跨度(天)", true, false);
-                map.AddTBStringDoc(TrackAttr.Msg, null, "消息", true, false);
-                map.AddTBStringDoc(TrackAttr.NodeData, null, "节点数据(日志信息)", true, false);
-                map.AddTBString(TrackAttr.Tag, null, "参数", true, false, 0, 300, 3000);
-                map.AddTBString(TrackAttr.Exer, null, "执行人", true, false, 0, 200, 100);
-                #endregion 字段
+                map.AddTBString(TrackAttr.FlowNo, null, "流程ID", true, false, 0, 20, 20);
+                map.AddTBString(TrackAttr.FlowName, null, "流程名称", true, false, 0, 200, 200);
+
+                map.AddTBInt(TrackAttr.NodeID, 0, "节点ID", true, false);
+                map.AddTBString(TrackAttr.NodeName, null, "节点名称", true, false, 0, 200, 200);
+                #endregion 流程信息.
+
+                map.AddTBAtParas(3999); //参数.
 
                 this._enMap = map;
                 return this._enMap;
@@ -501,30 +415,6 @@ namespace BP.Frm
         /// </summary>
         public Track()
         {
-        }
-        /// <summary>
-        /// 增加授权人
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeInsert()
-        {
-            if (BP.Web.WebUser.No == "Guest")
-            {
-                this.Exer = BP.Web.GuestUser.No + "," + BP.Web.GuestUser.Name;
-            }
-            else
-            {
-                if (BP.Web.WebUser.IsAuthorize)
-                    this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.Auth, BP.Web.WebUser.AuthName);
-                else
-                    this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
-            }
-
-            DateTime d;
-            if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
-                this.RDT = BP.DA.DataType.CurrentDataTimess;
-
-            return base.beforeInsert();
         }
         #endregion 构造.
     }

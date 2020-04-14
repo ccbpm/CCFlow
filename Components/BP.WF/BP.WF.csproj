@@ -165,6 +165,7 @@
     <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
     <Compile Include="Frm\CtrlModelDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
+    <Compile Include="Frm\EnumLab.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />
     <Compile Include="Frm\GenerBill.cs" />

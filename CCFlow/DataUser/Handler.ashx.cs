@@ -21,18 +21,29 @@ namespace CCFlow.SDKFlowDemo
             string sql = "";
             string doType = context.Request.QueryString["DoType"];
 
+
             #region 开窗返回值的demo.
             //获得部门列表, 开窗返回值json. 这里一定要确定获取的顶级部门的ParentNo=0.
             if (doType == "ReqDepts")
             {
+                string rootNo = context.Request.QueryString["Key"];
+
                 if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
-                    sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'  ";
+                        sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'  ";
 
                 if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
+                {
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
+                    if (BP.DA.DataType.IsNullOrEmpty(rootNo) == false)
+                        sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='"+ rootNo + "' ";
+                }
 
                 if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
+                {
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
+                    if (BP.DA.DataType.IsNullOrEmpty(rootNo) == false)
+                        sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='" + rootNo + "' ";
+                }
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 

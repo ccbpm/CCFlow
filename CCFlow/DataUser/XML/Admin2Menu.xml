@@ -17,7 +17,7 @@
   <Item No="102" GroupNo="OrgAdmin" Name="部门台帐"  Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Admin2.Depts"  />
   <Item No="101" GroupNo="OrgAdmin" Name="独立组织"   Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Admin2.Orgs"  />
   <Item No="104" GroupNo="OrgAdmin" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
-  <Item No="104" GroupNo="OrgAdmin" Name="权限组"   Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Admin2.Groups"  />
+  <Item No="104" GroupNo="OrgAdmin" Name="用户组"   Url="../../Comm/Ens.htm?EnsName=BP.WF.Port.Admin2.Groups"  />
 
   <!-- 集团版本的admin2 (二级管理员) 组织结构菜单. -->
   <Group No="OrgAdmin2" Name="组织结构(2级管理员)" For="admin2" />

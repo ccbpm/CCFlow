@@ -8212,7 +8212,7 @@ namespace BP.WF
         /// <summary>
         /// 执行读取
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="mypk">主键</param>
         public static void Node_CC_SetRead(string mypk)
         {
             if (DataType.IsNullOrEmpty(mypk))

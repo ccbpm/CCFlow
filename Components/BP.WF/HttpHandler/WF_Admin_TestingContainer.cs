@@ -98,6 +98,25 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
+        /// SelectOneUser_Init @sly 
+        /// </summary>
+        /// <returns></returns>
+        public string SelectOneUser_Init()
+        {
+            Default_LetAdminerLogin();
+
+            BP.WF.GenerWorkerLists ens = new GenerWorkerLists();
+            QueryObject qo = new QueryObject(ens);
+            qo.AddWhere("WorkID", this.WorkID);
+            qo.addOr();
+            qo.AddWhere("FID", this.WorkID);
+            qo.addOrderBy(" RDT,CDT ");
+            qo.DoQuery();
+
+            return ens.ToJson();
+        }
+
+        /// <summary>
         /// 让adminer登录.
         /// </summary>
         /// <returns></returns>

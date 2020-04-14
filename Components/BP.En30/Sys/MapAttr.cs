@@ -1851,8 +1851,6 @@ namespace BP.Sys
             if (this.UIContralType== En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
 
-
-
             BP.DA.DBAccess.RunSQLs(sqls);
             return base.beforeDelete();
         }

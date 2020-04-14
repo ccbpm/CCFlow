@@ -64,10 +64,10 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(y)==false) 
                     iY = (int)double.Parse(y);
 
-                int nodeId = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY,icon);
+                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY,icon);
 
-                BP.WF.Node node = new BP.WF.Node(nodeId);
-                node.Update();
+            //    BP.WF.Node node = new BP.WF.Node(nodeId);
+             //   node.DirectUpdate();
 
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);

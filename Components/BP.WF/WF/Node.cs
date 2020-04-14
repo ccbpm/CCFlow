@@ -667,7 +667,7 @@ namespace BP.WF
                     //清空WF_Emp中的StartFlows 的内容
                     try
                     {
-                        DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                        DBAccess.RunSQL("UPDATE WF_Emp Set StartFlows ='' ");
                     }
                     catch (Exception e)
                     {
@@ -714,12 +714,12 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
             #endregion
 
-
             Flow fl = new Flow(this.FK_Flow);
 
             Node.CheckFlow(fl);
             this.FlowName = fl.Name;
 
+            //更新表单名称.
             DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='ND" + this.NodeID + "' AND name=''");
             switch (this.HisRunModel)
             {
@@ -754,6 +754,7 @@ namespace BP.WF
                     throw new Exception("eeeee");
                     break;
             }
+
             //创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
             bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK,
@@ -3555,7 +3556,6 @@ namespace BP.WF
                 attr.Y = (float)54.4;
                 attr.Insert();
 
-
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
@@ -3572,20 +3572,7 @@ namespace BP.WF
                 attr.MaxLen = 7;
                 attr.Insert();
 
-                attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = "MyNum";
-                attr.Name = "个数"; // "个数";
-                attr.DefVal = "1";
-                attr.MyDataType = BP.DA.DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.Insert();
+               
             }
         }
     }

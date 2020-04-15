@@ -747,7 +747,22 @@ namespace BP.WF.HttpHandler
                 if (dt.Rows.Count != 0)
                     sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
             }
+            //判断人员是否已经删除
+            if (sas.Count!=0)
+            {
+                for (int k = sas.Count-1; k >=0; k--)
+                {
+                    SelectAccper sa = sas[k] as SelectAccper;
+                    Emp emp = new Emp();
+                    int j = emp.Retrieve(EmpAttr.No, sa.FK_Emp);
+                    if (j == 0 || emp.FK_Dept == "")
+                    {
+                        sas.RemoveEn(sa);
+                        sa.Delete();
+                    }
 
+                }
+            }
             return sas.ToJson();
         }
         /// <summary>

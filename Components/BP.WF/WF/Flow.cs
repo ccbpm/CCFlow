@@ -6059,7 +6059,7 @@ namespace BP.WF
                             ne.Insert();
                         }
                         break;
-                    case "Sys_GroupField": //  @sly 这里需要对比一下翻译.
+                    case "Sys_GroupField": //这里需要对比一下翻译.
                         foreach (DataRow dr in dt.Rows)
                         {
                             Sys.GroupField gf = new Sys.GroupField();

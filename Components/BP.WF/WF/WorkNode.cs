@@ -2537,7 +2537,8 @@ namespace BP.WF
 
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
-                this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='./WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                //@sly Img 的路径问题.
+                this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
             //if (WebUser.IsWap == false)
@@ -6538,13 +6539,7 @@ namespace BP.WF
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
                     GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass, 0);
                 if (gwls.Count == 1)
-                    isLastOne=true;
-
-                foreach (GenerWorkerList item in gwls)
-                {
-                    if ( item.FK_Emp.Equals(WebUser.No) == false)
-                        isLastOne = true;
-                }
+                    isLastOne=true; //如果只有一个，本人就是lastOne.
 
                 //WorkNode wn= this.GetPreviousWorkNode();
                 // this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
@@ -6552,7 +6547,7 @@ namespace BP.WF
 
                 if (isLastOne == true)
                 {
-                    DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT ");
+                    DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                     if (mydt.Rows.Count == 0)
                         throw new Exception("系统错误，没有找到上一个节点.");
                     this.JumpToEmp = mydt.Rows[0][1].ToString();

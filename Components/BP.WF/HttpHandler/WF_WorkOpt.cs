@@ -3287,9 +3287,19 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
+                    //  string err= "err@流程配置逻辑错误，当前节点是协作模式，当前节点的方向条件不允许[发送按钮旁下拉框选择(默认模式)].";
+                    //  err += "，如果需要手工选择，请使用[节点属性]-[设置方向条件]-[按照用户执行发送后手工选择计算]模式计算.";
+                    //  return err;
+
                     /* 不是主持人就执行发送，返回发送结果. */
-                    SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
-                    return "info@" + objs.ToMsgOfHtml();
+
+                    //判断是否有不发送标记？ @sly
+                    string isSend = this.GetRequestVal("IsSend");
+                    if (isSend.Equals("0") == false)
+                    {
+                        SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+                        return "info@" + objs.ToMsgOfHtml();
+                    }
                 }
             }
 

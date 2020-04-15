@@ -8,9 +8,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
@@ -160,6 +158,7 @@
         //选择接受人
 
         function SelectEmps(toNodeID) {
+
             $('#modalHeader').text("选择接受人");
             modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + toNodeID + "&IsSend=0" + "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
@@ -248,7 +247,7 @@
             }
             msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-            $("#msgModalContent").html(msg.replace("@null","").replace(/@/g, '<br/>'));
+            $("#msgModalContent").html(msg.replace("@null", "").replace(/@/g, '<br/>'));
             var trackA = $('#msgModalContent a:contains("工作轨迹")');
             var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
             trackA.remove();
@@ -269,8 +268,8 @@
     <base target="_self" />
 </head>
 <body>
-    
-  
+
+
     <div style="text-align: center; position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
 
         <h3> 请选择到达的节点 </h3>

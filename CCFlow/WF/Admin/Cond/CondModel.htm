@@ -76,18 +76,20 @@
                 <li>用户发送的时候，在发送按钮旁边有一个下拉框，该下拉框是ccbpm为您计算出来的可以发送到的节点。 </li>
                 <li>是有操作者来决定要发送到那个节点上去. </li>
                 <li>如果您选择的节点的接收人规则是由上一步发送人员来选择的，系统就会弹出接受人按钮. </li>
+                <li> <img calss="HelpImg" src="CondModel1.png"  onclick="WinOpen('CondModel1.png')"  style="width:100%;" /> </li>
             </ul>
-            <img calss="HelpImg" src="CondModel1.png" style="width:95%;" />
         </fieldset>
 
         <fieldset>
             <legend>
                 <input type="radio" ID="RB_CondModel_1" name="CondModel" value="1"
-                       onClick="rb_onchange(1)" /><label for="RB_CondModel_1">按照用户选择计算 </label>
+                       onClick="rb_onchange(1)" /><label for="RB_CondModel_1">发送后手工选择到达节点与接受人.</label>
             </legend>
             <ul>
                 <li>该模式多用于分合流节点. </li>
                 <li>在异表单的合流节点上配置该模式，合流节点的操作员发送后，就转到该页面上，选择到达的节点。 </li>
+                <li> <img calss="HelpImg" src="CondModel2.png" onclick="WinOpen('CondModel2.png')" /> </li>
+                <li>也可以用于协作模式下的节点,到达的节点是需要最后一个人审核,由最后一个人选择到达的节点与接受人.</li>
             </ul>
 
         </fieldset>

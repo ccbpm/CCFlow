@@ -513,10 +513,12 @@ namespace BP.WF.HttpHandler
             string nonceStr = BP.DA.DBAccess.GenerGUID();
             //企业号jsapi_ticket
             string jsapi_ticket = "";
-            string url1 = BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/"+ htmlPage;
+            string url1 =  htmlPage;
             //获取 AccessToken
-            string accessToken = getAccessToken();
+            string accessToken = new BP.WF.WeiXin.WeiXin().GenerAccessToken();
+            
             string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+
 
             HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
@@ -529,7 +531,7 @@ namespace BP.WF.HttpHandler
             if (ticket.errcode == "0")
                 jsapi_ticket = ticket.ticket;
             else
-                return "err:@获取jsapi_ticket失败";
+                return "err:@获取jsapi_ticket失败+accessToken="+ accessToken;
 
             ht.Add("timestamp", timestamp);
             ht.Add("nonceStr", nonceStr);
@@ -545,16 +547,8 @@ namespace BP.WF.HttpHandler
         }
         public static string Sha1Signature(string str)
         {
-            var buffer = Encoding.UTF8.GetBytes(str);
-            var data = SHA1.Create().ComputeHash(buffer);
-
-            StringBuilder sub = new StringBuilder();
-            foreach (var t in data)
-            {
-                sub.Append(t.ToString("X2"));
-            }
-
-            return sub.ToString();
+            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
+            return s.ToLower();
         }
 
         public string GetIDCardInfo()

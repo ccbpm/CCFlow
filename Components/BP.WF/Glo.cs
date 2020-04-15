@@ -2564,7 +2564,7 @@ namespace BP.WF
                 s1.Name = "日常办公类";
                 s1.Update();
 
-                //加载一个模版,不然用户不知道如何新建流程. @sly.
+                //加载一个模版,不然用户不知道如何新建流程.
                 Flow.DoLoadFlowTemplate(s1.No, SystemConfig.PathOfData + "\\Install\\QingJiaFlowDemoInit.xml",
                     ImpFlowTempleteModel.AsTempleteFlowNo);
                 Flow fl = new Flow("001");

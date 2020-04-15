@@ -22,6 +22,7 @@
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
+            handler.DoMethodReturnString("Default_LetAdminerLogin");
 
             var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
 

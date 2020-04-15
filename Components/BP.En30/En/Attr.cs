@@ -122,6 +122,10 @@ namespace BP.En
 		/// 评论组件
 		/// </summary>
 		FlowBBS = 15,
+		/// <summary>
+		/// 系统定位
+		/// </summary>
+		Fiexed=16,
         /// <summary>
         /// 流程进度图
         /// </summary>

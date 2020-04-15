@@ -11,7 +11,7 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 实体属性
     /// </summary>
-    public class MapAttrCard : EntityMyPK
+    public class MapAttrFixed : EntityMyPK
     {
         #region 文本字段参数属性.
        
@@ -93,13 +93,13 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrCard()
+        public MapAttrFixed()
         {
         }
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrCard(string myPK)
+        public MapAttrFixed(string myPK)
         {
             this.MyPK = myPK;
             this.Retrieve();
@@ -115,7 +115,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "证件字段");
+                Map map = new Map("Sys_MapAttr", "系统定位字段");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -134,28 +134,10 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
+                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
 
-               
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
 
-                /**map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
-                map.SetHelperAlert(MapAttrAttr.UIVisible, "对于不可见的字段可以在隐藏功能的栏目里找到这些字段进行编辑或者删除.");
-
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-                map.SetHelperAlert(MapAttrAttr.UIIsEnable, "不可编辑,让该字段设置为只读.");
-
-                map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
-                map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
-                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
-
-                map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
-                map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
-
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
-                map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
-                //CCS样式
-                */
                 map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
@@ -226,13 +208,18 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
-            
+            //删除经度纬度的字段
+            MapAttr mapAttr = new MapAttr(this.FK_MapData + "_JD");
+            mapAttr.Delete();
+
+            mapAttr = new MapAttr(this.FK_MapData + "_WD");
+            mapAttr.Delete();
 
             //删除相对应的rpt表中的字段
             if (this.FK_MapData.Contains("ND") == true)
             {
                 string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn+"')";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn +"' OR KeyOfEn='JD' OR KeyOfEn='WD')";
                 DBAccess.RunSQL(sql);
             }
 
@@ -249,6 +236,45 @@ namespace BP.Sys.FrmUI
             mapAttr.MyPK = this.MyPK;
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
+
+
+            //判断表单中是否存在经度、维度字段
+            mapAttr = new MapAttr();
+            mapAttr.MyPK = this.FK_MapData + "_" + "JD";
+            if (mapAttr.RetrieveFromDBSources() == 0)
+            {
+                mapAttr.FK_MapData = this.FK_MapData;
+                mapAttr.KeyOfEn = "JD";
+                mapAttr.Name = "经度";
+                mapAttr.GroupID = 1;
+                mapAttr.UIContralType = UIContralType.TB;
+                mapAttr.MyDataType = 1;
+                mapAttr.LGType = 0;
+                mapAttr.UIVisible = false;
+                mapAttr.UIIsEnable = false;
+                mapAttr.UIIsInput = true;
+                mapAttr.UIWidth = 150;
+                mapAttr.UIHeight = 23;
+                mapAttr.Insert(); //插入字段.
+            }
+
+            mapAttr.MyPK = this.FK_MapData + "_" + "WD";
+            if (mapAttr.RetrieveFromDBSources() == 0)
+            {
+                mapAttr.FK_MapData = this.FK_MapData;
+                mapAttr.KeyOfEn = "WD";
+                mapAttr.Name = "纬度";
+                mapAttr.GroupID = 1;
+                mapAttr.UIContralType = UIContralType.TB;
+                mapAttr.MyDataType = 1;
+                mapAttr.LGType = 0;
+                mapAttr.UIVisible = false;
+                mapAttr.UIIsEnable = false;
+                mapAttr.UIIsInput = true;
+                mapAttr.UIWidth = 150;
+                mapAttr.UIHeight = 23;
+                mapAttr.Insert(); //插入字段.
+            }
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
@@ -286,78 +312,18 @@ namespace BP.Sys.FrmUI
         }
        
 
-        #region 重载.
-        protected override bool beforeUpdateInsertAction()
-        {
-            MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
-            attr.RetrieveFromDBSources();
-
-            #region 自动扩展字段长度. 需要翻译.
-            if (attr.MaxLen < this.MaxLen )
-            {
-                attr.MaxLen = this.MaxLen;
-
-                string sql = "";
-                MapData md = new MapData();
-                md.No = this.FK_MapData;
-                if (md.RetrieveFromDBSources() == 1)
-                {
-                    if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
-                    {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle
-                            || SystemConfig.AppCenterDBType == DBType.DM )
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
-
-                        DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
-                    }
-                }
-            }
-            #endregion 自动扩展字段长度.
-
-
-            //默认值.
-            string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
-            {
-                string defVal = this.GetValStrByKey("DefVal");
-                if (defval.Contains("@") == true)
-                    this.SetValByKey("DefVal", "");
-            }
-            else
-            {
-                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
-            }
-
-            //执行保存.
-            attr.Save();
-
-            if (this.GetValStrByKey("GroupID") == "无")
-                this.SetValByKey("GroupID", "0");
-
-            return base.beforeUpdateInsertAction();
-        }
-        #endregion
+       
     }
     /// <summary>
     /// 实体属性s
     /// </summary>
-    public class MapAttrCards : EntitiesMyPK
+    public class MapAttrFixeds : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 实体属性s
         /// </summary>
-        public MapAttrCards()
+        public MapAttrFixeds()
         {
         }
         /// <summary>
@@ -367,7 +333,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new MapAttrCard();
+                return new MapAttrFixed();
             }
         }
         #endregion
@@ -377,20 +343,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrCard> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrFixed> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrCard>)this;
+            return (System.Collections.Generic.IList<MapAttrFixed>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrCard> Tolist()
+        public System.Collections.Generic.List<MapAttrFixed> Tolist()
         {
-            System.Collections.Generic.List<MapAttrCard> list = new System.Collections.Generic.List<MapAttrCard>();
+            System.Collections.Generic.List<MapAttrFixed> list = new System.Collections.Generic.List<MapAttrFixed>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrCard)this[i]);
+                list.Add((MapAttrFixed)this[i]);
             }
             return list;
         }

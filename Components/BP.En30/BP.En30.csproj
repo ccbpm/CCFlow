@@ -252,10 +252,13 @@
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrFlowBBS.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\Dict.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrString.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />
     <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
@@ -292,7 +295,6 @@
     <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
     <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrString.cs" />
     <Compile Include="Sys\FrmUI\MapAttrNum.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
     <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />

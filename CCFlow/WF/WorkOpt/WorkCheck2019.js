@@ -134,7 +134,7 @@ function InitPage() {
                 html += "<option value='不同意'>不同意</option>";
             }
             
-            html += "</select><font color=Gray>内容不要超过2000字</font>";
+            html += "</select>";
             html += "</div>";
 
             //加入立场判断

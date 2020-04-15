@@ -10,12 +10,17 @@ namespace BP.WF.Port.Admin2
     /// </summary>
     public class StationTypeAttr : EntityNoNameAttr
     {
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     ///  岗位类型
     /// </summary>
     public class StationType : EntityNoName
     {
+        #region 属性.
         /// <summary>
         /// 组织编号
         /// </summary>
@@ -23,25 +28,14 @@ namespace BP.WF.Port.Admin2
         {
             get
             {
-                return this.GetValStrByKey(StationAttr.OrgNo);
+                return this.GetValStrByKey(StationTypeAttr.OrgNo);
             }
             set
             {
-                this.SetValByKey(StationAttr.OrgNo, value);
+                this.SetValByKey(StationTypeAttr.OrgNo, value);
             }
         }
-
-        //public override UAC HisUAC
-        //{
-
-        //    get
-        //    {
-        //        return null;
-
-        //    }
-
-        //}
-
+        #endregion 字段.
 
         #region 构造方法
         /// <summary>
@@ -57,6 +51,7 @@ namespace BP.WF.Port.Admin2
         public StationType(string _No) : base(_No) { }
         #endregion
 
+        #region 内部方法.
         /// <summary>
         /// 岗位类型Map
         /// </summary>
@@ -85,7 +80,10 @@ namespace BP.WF.Port.Admin2
                 return this._enMap;
             }
         }
-
+        /// <summary>
+        /// beforeInsert
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeInsert()
         {
             if (Glo.CCBPMRunModel != BP.Sys.CCBPMRunModel.GroupInc)
@@ -94,12 +92,15 @@ namespace BP.WF.Port.Admin2
             this.OrgNo = BP.Web.WebUser.OrgNo;
             return base.beforeInsert();
         }
+        #endregion 内部方法.
+
     }
     /// <summary>
-    /// 岗位类型
+    /// 岗位类型s
     /// </summary>
     public class StationTypes : EntitiesNoName
     {
+        #region 构造方法.
         /// <summary>
         /// 岗位类型s
         /// </summary>
@@ -122,7 +123,7 @@ namespace BP.WF.Port.Admin2
         {
             return this.Retrieve(StationAttr.OrgNo, BP.Web.WebUser.OrgNo, StationAttr.Idx);
         }
-
+        #endregion 构造方法.
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

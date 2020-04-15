@@ -23,9 +23,6 @@ namespace BP.WF.Template
     }
     /// <summary>
     /// 节点工作岗位
-    /// 节点的工作岗位有两部分组成.	 
-    /// 记录了从一个节点到其他的多个节点.
-    /// 也记录了到这个节点的其他的节点.
     /// </summary>
     public class NodeStation : EntityMM
     {
@@ -118,13 +115,13 @@ namespace BP.WF.Template
             return base.beforeInsert();
         }
         #endregion
-
     }
     /// <summary>
-    /// 节点工作岗位
+    /// 节点工作岗位s
     /// </summary>
     public class NodeStations : EntitiesMM
     {
+        #region 构造函数.
         /// <summary>
         /// 节点工作岗位
         /// </summary>
@@ -159,6 +156,7 @@ namespace BP.WF.Template
                 return new NodeStation();
             }
         }
+        #endregion 构造函数.
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

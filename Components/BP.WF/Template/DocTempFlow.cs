@@ -74,7 +74,7 @@ namespace BP.WF.Template
         /// 单据模板
         /// </summary>
         public DocTempFlow() { }
-        public DocTempFlow(string no) : base(no.Replace("\n", "").Trim())
+        public DocTempFlow(string no) : base(no)
         {
         }
         public DocTempFlow(int WorkID, string TempNo)

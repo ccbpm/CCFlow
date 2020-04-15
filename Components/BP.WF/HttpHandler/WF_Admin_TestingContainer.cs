@@ -103,7 +103,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SelectOneUser_Init()
         {
-            Default_LetAdminerLogin();
+            //Default_LetAdminerLogin();
 
             BP.WF.GenerWorkerLists ens = new GenerWorkerLists();
             QueryObject qo = new QueryObject(ens);

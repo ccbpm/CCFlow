@@ -489,6 +489,13 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             return "<img  src='./Img/JobSchedule.png'  style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";
         }
 
+        if (mapAttr.UIContralType == 16) {
+            var eleHtml = "<div style='text-align:left;padding-left:0px' >";
+            eleHtml += "<input type='button' name='select' value='系统定位' />";
+            eleHtml += "</div>";
+            return eleHtml;
+        }
+
         if (mapAttr.UIHeight <= 40)
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'><input class='form-control' style='width:95%;' value='" + mapAttr.DefVal + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
 
@@ -496,6 +503,8 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             var uiHeight = mapAttr.UIHeight;
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
         }
+        
+
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
 

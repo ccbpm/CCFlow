@@ -462,6 +462,35 @@
                             }
                             alert("创建成功");
                         }
+
+                        //系统定位（需要创建唯一)
+                        function MapAttrFixed() {
+                            var mapAttr = new Entity("BP.Sys.FrmUI.MapAttrFixed");
+                            mapAttr.SetPKVal(GetQueryString("FK_MapData") + "_Fixed");
+                            if (mapAttr.RetrieveFromDBSources() == 0) {
+                                mapAttr.FK_MapData = GetQueryString("FK_MapData");
+                                mapAttr.KeyOfEn = "Fixed";
+                                mapAttr.Name = "系统定位";
+                                mapAttr.GroupID = 1;
+                                mapAttr.UIContralType = 16; //系统定位
+                                mapAttr.MyDataType = 1;
+                                mapAttr.ColSpan = 1;
+                                mapAttr.TextColSpan = 1;
+                                mapAttr.LGType = 0; //文本
+                                mapAttr.UIIsEnable = 0; //不可编辑
+                                mapAttr.UIIsInput = 0;
+                                mapAttr.UIWidth = 150;
+                                mapAttr.UIHeight = 23;
+                                mapAttr.Insert(); //插入字段.
+                                alert("创建成功");
+                            } else {
+                                alert("表单" + GetQueryString("FK_MapData") + "已经存在系统定位按钮，不能重复创建");
+                                return;
+                            }
+                            ens.Retrieve("FK_MapData", GetQueryString("FK_MapData"), "Text", "系统定位");
+                            
+                        }
+
                         //附件.
                         function ExtAth() {
 
@@ -818,6 +847,7 @@
                         <li><a href="javascript:ExtLink();"><b>超链接</b></a> &nbsp;&nbsp;用于解析把字段做为超链接展现.</li>
                         <li><a href="javascript:ExtHandWriting();"><b>写字板</b></a> &nbsp;&nbsp;手写签名版，画图等.</li>
                         <li><a href="javascript:ExtMap();"><b>地图</b></a> &nbsp;&nbsp;用于地图应用.</li>
+                        <li><a href="javascript:MapAttrFixed();"><b>系统定位</b></a> &nbsp;&nbsp;用于定位当前系统所在的位置.</li>
                         <li><a href="javascript:ExtScore();"><b>评分控件</b></a> &nbsp;&nbsp;用于各事项评分，如淘宝星级评分.</li>
                         <li><a href="javascript:ExtBigNoteHtmlText();"><b>大块Html说明文字引入</b></a> &nbsp;&nbsp;大块文本文件引入,用于文字说明..</li>
                     </ul>

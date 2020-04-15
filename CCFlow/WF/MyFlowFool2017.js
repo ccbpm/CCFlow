@@ -339,7 +339,7 @@ function InitThreeColMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
     for (var i = 0; i < Sys_MapAttr.length; i++) {
         var attr = Sys_MapAttr[i];
 
-        if (attr.GroupID != groupID || attr.UIVisible == 0)
+        if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.UIContralType == 16)
             continue;
 
 
@@ -493,7 +493,7 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
 
         var attr = Sys_MapAttr[i];
 
-        if (attr.GroupID != groupID || attr.UIVisible == 0)
+        if (attr.GroupID != groupID || attr.UIVisible == 0 || attr.UIContralType == 16)
             continue;
 
         //赋值

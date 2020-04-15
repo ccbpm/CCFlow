@@ -200,7 +200,7 @@
             padding-left: 20px;
         }
 
-        .cs-table input, .cs-table select, .cs-table textarea {
+        .cs-table input[type=text], .cs-table select, .cs-table textarea {
             margin: 0 !important;
             width: 100% !important;
             background-color: #fff;
@@ -1096,6 +1096,11 @@
                 if (uiContralType == 13) {
                     title = '证件字段属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCard&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 16) {
+                    title = '系统定位属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 8) {

@@ -98,7 +98,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
-        /// SelectOneUser_Init @sly 
+        /// SelectOneUser_Init
         /// </summary>
         /// <returns></returns>
         public string SelectOneUser_Init()
@@ -304,7 +304,7 @@ namespace BP.WF.HttpHandler
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             throw new Exception("err@非集团版本，不能设置启用此模式.");
-                        //@sly 
+                        
                         sql = " SELECT A.No,A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
                         sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '"+this.FK_Flow+"' AND A.FK_Dept = c.No ";
 

@@ -13,54 +13,42 @@
 
 
 var optionKey = 0;
-function InitBar(key) {
-
-    optionKey = key;
+function InitBar(optionKey) {
 
     var webUser = new WebUser();
-    var nodeID = GetQueryString("FK_Node");
-    var str = nodeID.substr(nodeID.length - 2);
-    var isSatrtNode = false;
-    if (str == "01")
-        isSatrtNode = true;
 
-    // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='padding:5px' >接受人可以选择的范围限定: ";
-
+    var html = "<div style='padding:5px' >表单组件: ";
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+按组织结构限定范围</option>";
+    html += "<option value=null  disabled='disabled'>+通用组件</option>";
 
-    html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
-    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
-    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
-    html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL计算</option>";
-    html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL模板计算</option>";
-    html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
+    html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;装饰类图片</option>";
+    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;图片附件 </option>";
+    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;身份证 </option>";
+    html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;多附件</option>";
+    html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;超链接 </option>";
+    html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
 
-    if (webUser.CCBPMRunModel == 1) {
-        html += "<option value=" + SelectorModel.Group + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织)计算</option>";
-        html += "<option value=" + SelectorModel.GroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算</option>";
-    }
+    html += "<option value=null  disabled='disabled'>+流程组件</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
 
-    html += "<option value=null  disabled='disabled'>+其他</option>";
-    html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
-    html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
-    html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算(操作员所在部门)（开发中）</option>";
-
+    html += "<option value=null  disabled='disabled'>+移动端控件</option>";
+    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;系统定位</option>";
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
-//    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
- //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    //html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
+    //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+    //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
 
-    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
-
+    //  $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 
 }
 function Back() {
@@ -68,53 +56,6 @@ function Back() {
     window.location.href = url;
 }
 
-/*
- * 获取节点绑定的岗位
- */
-function getStas() {
-    var ens = new Entities("BP.WF.Template.NodeStations");
-    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-    ens = $.grep(ens, function (obj, i) {
-        return obj.FK_Node != undefined
-    });
-    return ens;
-
-}
-/*
- * 获取节点绑定的部门
- */
-function getDepts() {
-    var ens = new Entities("BP.WF.Template.NodeDepts");
-    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-    ens = $.grep(ens, function (obj, i) {
-        return obj.FK_Node != undefined
-    });
-    return ens;
-
-}
-/*
- * 获取节点绑定的用户组@lz
- */
-function getGroups() {
-
-    var ens = new Entities("BP.WF.Template.NodeGroups");
-    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-    ens = $.grep(ens, function (obj, i) {
-        return obj.FK_Node != undefined
-    });
-
-    return ens;
-
-}
-
-function OldVer() {
-
-    var nodeID = GetQueryString("FK_Node");
-    var flowNo = GetQueryString("FK_Flow");
-
-    var url = '../NodeAccepterRole.aspx?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
-    window.location.href = url;
-}
 function Help() {
 
     var url = "";
@@ -133,21 +74,7 @@ function Help() {
     window.open(url);
 }
 
-//通用的设置岗位的方法。for admin.
-
-function OpenDot2DotStations() {
-
-    var nodeID = GetQueryString("FK_Node");
-
-    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
-    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
-    url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-
-    OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
-}
-
-function GenerUrlByOptionKey(optionKey)
-{
+function GenerUrlByOptionKey(optionKey) {
     var roleName = "";
     switch (parseInt(optionKey)) {
         case SelectorModel.Station:
@@ -196,6 +123,7 @@ function GenerUrlByOptionKey(optionKey)
 
 //下拉框变化的事件.
 function changeOption() {
+
     var nodeID = GetQueryString("FK_Node");
     var obj = document.getElementById("changBar");
     var sele = obj.options;

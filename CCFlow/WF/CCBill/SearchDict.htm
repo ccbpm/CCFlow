@@ -393,10 +393,13 @@
             var _html = "";
             if (heji != null && heji != undefined) {
                 $.each(heji, function (i, item) {
+                    var val = item.Value;
+                    if (val == null || val == "" || val == undefined)
+                        val = 0;
                     if (item.Type == "Sum")
-                        _html += item.Field + "总合计：" + item.Value + " ";
+                        _html += item.Field + "总合计：" + val + " ";
                     if (item.Type == "Avg")
-                        _html += item.Field + "总平均：" + item.Value + " ";
+                        _html += item.Field + "总平均：" + val + " ";
                 });
             }
 

@@ -422,10 +422,13 @@
             var _html = "";
             if (heji != null && heji != undefined) {
                 $.each(heji, function (i, item) {
+                    var val = item.Value;
+                    if (val == null || val == "" || val == undefined)
+                        val = 0;
                     if (item.Type == "Sum")
-                        _html += item.Field + "总合计：" + item.Value + " ";
+                        _html += item.Field + "总合计：" + val + " ";
                     if (item.Type == "Avg")
-                        _html += item.Field + "总平均：" + item.Value + " ";
+                        _html += item.Field + "总平均：" + val + " ";
                 });
             }
 
@@ -613,7 +616,7 @@
 
                     if (IsDelete == true)
                         _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
-                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
+                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\'' + frmID + '\','+row["BillState"]+')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
                     _Html += '<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
                     return _Html;
                 }
@@ -662,7 +665,7 @@
                             paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                     }
 
-                    OpenIt(pkval, frmID);
+                    OpenIt(pkval, frmID,row["BillState"]);
                 }
 
             });
@@ -850,12 +853,14 @@
             return icon;
         }
 
-        function OpenIt(workid, frmID) {
-
+        function OpenIt(workid, frmID, billstate) {
+            var IsReadonly = "0";
+            if (billstate != null && billstate != undefined && billstate ==100)
+                IsReadonly="1"
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
             var rowOpenModel = parseInt(frmBill.RowOpenModel);
             var url = "";
-            url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
+            url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID + "&IsReadonly=" + IsReadonly;
             if (rowOpenModel == 0)
                 window.open(url);
             if (rowOpenModel == 1)
@@ -928,7 +933,9 @@
                 alert(data);
                 return;
             }
-            window.location.href = window.location.href;
+            SearchData();
+            pageIdx = 1;
+            Paginator(pages, pageIdx);
 
         }
 

@@ -148,7 +148,7 @@
             if (generBill.BillState == 2 && power.IsInsert == 1)
                 toolBar += "<input type=button value='新建' onclick='NewIt();' />";
 
-            if (power.IsSave == 1) {
+            if (power.IsSave == 1 && generBill.BillState !=100) {
                 var btnSave = generBill.BtnSaveLable;
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
@@ -162,7 +162,7 @@
             //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
             //}
 
-            if (power.IsSubmit == 1) {
+            if (power.IsSubmit == 1 && generBill.BillState != 100) {
                 var btnSubmit = generBill.BtnSubmitLable;
                 if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
                     btnSubmit = "提交";

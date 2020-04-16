@@ -370,174 +370,203 @@
         }
 
         //获取表单数据
-        function getFormData(isCotainTextArea, isCotainUrlParam) {
+function getFormData(isCotainTextArea, isCotainUrlParam) {
 
-            var formss = $('#divCCForm').serialize();
+    var formss = $('#divCCForm').serialize();
 
-            var formArr = formss.split('&');
-            var formArrResult = [];
-
-            $.each(formArr, function (i, ele) {
-                if (ele.split('=')[0].indexOf('CB_') == 0) {
-                    if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                        ele = ele.split('=')[0] + '=1';
-                    } else {
-                        ele = ele.split('=')[0] + '=0';
-                    }
-
-                    formArrResult.push(ele);
-                }
-                if (ele.split('=')[0].indexOf('DDL_') == 0) {
-
-                    var ctrlID = ele.split('=')[0];
-
-                    var item = $("#" + ctrlID).children('option:checked').text();
-
-                    var mystr = '';
-                    mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
-                    formArrResult.push(mystr);
-                    formArrResult.push(ele);
-                }
-                if (ele.split('=')[0].indexOf('RB_') == 0) {
-                    formArrResult.push(ele);
-                }
-
-            });
-
-
-            $.each(formArr, function (i, ele) {
-                if (ele.split('=')[0].indexOf('TB_') == 0) {
-                    var index = isExistArray(formArrResult, ele.split('=')[0]);
-                    if (index == -1)
-                        formArrResult.push(ele);
-                }
-            });
-
-
-
-            //获取表单中禁用的表单元素的值
-            var disabledEles = $('#divCCForm :disabled');
-            $.each(disabledEles, function (i, disabledEle) {
-
-                var name = $(disabledEle).attr('id');
-
-                switch (disabledEle.tagName.toUpperCase()) {
-
-                    case "INPUT":
-                        switch (disabledEle.type.toUpperCase()) {
-                            case "CHECKBOX": //复选框
-                                formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
-                                break;
-                            case "TEXT": //文本框
-                            case "HIDDEN":
-                                formArrResult.push(name + '=' + $(disabledEle).val());
-                                break;
-                            case "RADIO": //单选钮
-                                name = $(disabledEle).attr('name');
-                                var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
-                                if ($.inArray(eleResult, formArrResult) == -1) {
-                                    formArrResult.push(eleResult);
-                                }
-                                break;
-                        }
-                        break;
-                    //下拉框
-                    case "SELECT":
-                        formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                        var tbID = name.replace("DDL_", "TB_") + 'T';
-                        if ($("#" + tbID).length == 1) {
-                            var index = isExistArray(formArrResult, tbID);
-                            if (index == -1)
-                                formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
-                        }
-                        break;
-
-                    //文本区域
-                    case "TEXTAREA":
-                        formArrResult.push(name + '=' + $(disabledEle).val());
-                        break;
-                }
-            });
-
-            //获取树形结构的表单值
-            var combotrees = $(".easyui-combotree");
-            $.each(combotrees, function (i, combotree) {
-                var name = $(combotree).attr('id');
-                var tree = $('#' + name).combotree('tree');
-                //获取当前选中的节点
-                var data = tree.tree('getSelected');
-                if (data != null) {
-                    formArrResult.push(name + '=' + data.id);
-                    formArrResult.push(name + 'T=' + data.text);
-                }
-            });
-
-            if (!isCotainTextArea) {
-                formArrResult = $.grep(formArrResult, function (value) {
-                    return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
-                });
-            }
-
-            formss = formArrResult.join('&');
-            var dataArr = [];
-            //加上URL中的参数
-            if (pageData != undefined && isCotainUrlParam) {
-                var pageDataArr = [];
-                for (var data in pageData) {
-                    pageDataArr.push(data + '=' + pageData[data]);
-                }
-                dataArr.push(pageDataArr.join('&'));
-            }
-            if (formss != '')
-                dataArr.push(formss);
-            var formData = dataArr.join('&');
-
-            //为了复选框  合并一下值  复选框的值以  ，号分割
-            //用& 符号截取数据
-            var formDataArr = formData.split('&');
-
-            var formDataResultObj = {};
-            $.each(formDataArr, function (i, formDataObj) {
-                //计算出等号的INDEX
-                var indexOfEqual = formDataObj.indexOf('=');
-                var objectKey = formDataObj.substr(0, indexOfEqual);
-                var objectValue = formDataObj.substr(indexOfEqual + 1);
-                if (formDataResultObj[objectKey] == undefined) {
-                    formDataResultObj[objectKey] = objectValue;
+    var formArr = formss.split('&');
+    var formArrResult = [];
+    var haseExistStr = ",";
+    var mcheckboxs = "";
+    $.each(formArr, function (i, ele) {
+        if (ele.split('=')[0].indexOf('CB_') == 0) {
+            //如果ID获取不到值，Name获取到值为复选框多选
+            var targetId = ele.split('=')[0];
+            if ($('#' + targetId).length == 1) {
+                if ($('#' + targetId + ':checked').length == 1) {
+                    ele = targetId + '=1';
                 } else {
-                    formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+                    ele = targetId + '=0';
                 }
-            });
+                formArrResult.push(ele);
+            } else {
 
-            var formdataResultStr = '';
-            for (var ele in formDataResultObj) {
-                formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+                if (mcheckboxs.indexOf(targetId + ",") == -1) {
+                    mcheckboxs += targetId + ",";
+                    var str = "";
+                    $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                        if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                            str += $(this).val();
+                        } else {
+                            str += $(this).val() + ",";
+                        }
+                    });
+
+                    formArrResult.push(targetId + '=' + str);
+                }
+
+
             }
 
-            // 处理没有选择的文本框.
-            var ids = GenerCheckNames();
+        }
+        if (ele.split('=')[0].indexOf('DDL_') == 0) {
 
-            if (ids) {
-                var scores = ids.split(",");
-                var arrLength = scores.length;
-                var sum = 0;
-                var average = null;
-                for (var i = 0; i < arrLength; i++) {
-                    var field = scores[i];
-                    var index = formdataResultStr.indexOf(field);
-                    if (index == -1) {
-                        if ($("input[name='" + field + "'").length == 1)
-                            formdataResultStr += '&' + field + '=0';
-                        else
-                            formdataResultStr += '&' + field + '= ';
+            var ctrlID = ele.split('=')[0];
+
+            var item = $("#" + ctrlID).children('option:checked').text();
+
+            var mystr = '';
+            mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
+            formArrResult.push(mystr);
+            formArrResult.push(ele);
+            haseExistStr += ctrlID.replace("DDL_", "TB_") + "T" + ",";
+        }
+        if (ele.split('=')[0].indexOf('RB_') == 0) {
+            formArrResult.push(ele);
+        }
+
+    });
+
+
+    $.each(formArr, function (i, ele) {
+        var ctrID = ele.split('=')[0];
+        if (ctrID.indexOf('TB_') == 0) {
+            if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
+                formArrResult.push(ele);
+                haseExistStr += ctrID + ",";
+            }
+
+
+        }
+    });
+
+
+
+    //获取表单中禁用的表单元素的值
+    var disabledEles = $('#divCCForm :disabled');
+    $.each(disabledEles, function (i, disabledEle) {
+
+        var name = $(disabledEle).attr('id');
+
+        switch (disabledEle.tagName.toUpperCase()) {
+
+            case "INPUT":
+                switch (disabledEle.type.toUpperCase()) {
+                    case "CHECKBOX": //复选框
+                        formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
+                        break;
+                    case "TEXT": //文本框
+                    case "HIDDEN":
+                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                        break;
+                    case "RADIO": //单选钮
+                        name = $(disabledEle).attr('name');
+                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                        if ($.inArray(eleResult, formArrResult) == -1) {
+                            formArrResult.push(eleResult);
+                        }
+                        break;
+                }
+                break;
+            //下拉框            
+            case "SELECT":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if ($("#" + tbID).length == 1) {
+                    if (haseExistStr.indexOf("," + tbID + ",") == -1) {
+                        formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                        haseExistStr += tbID + ",";
                     }
                 }
-            }
+                break;
 
-            formdataResultStr = formdataResultStr.replace('&&', '&');
-
-            return formdataResultStr;
+            //文本区域                    
+            case "TEXTAREA":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                break;
         }
+    });
+
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree');
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+        if (data != null) {
+            formArrResult.push(name + '=' + data.id);
+            formArrResult.push(name.replace("DDL_","TB_") + 'T=' + data.text);
+        }
+    });
+
+    if (!isCotainTextArea) {
+        formArrResult = $.grep(formArrResult, function (value) {
+            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
+        });
+    }
+
+    formss = formArrResult.join('&');
+    var dataArr = [];
+    //加上URL中的参数
+    if (pageData != undefined && isCotainUrlParam) {
+        var pageDataArr = [];
+        for (var data in pageData) {
+            pageDataArr.push(data + '=' + pageData[data]);
+        }
+        dataArr.push(pageDataArr.join('&'));
+    }
+    if (formss != '')
+        dataArr.push(formss);
+    var formData = dataArr.join('&');
+
+    //为了复选框  合并一下值  复选框的值以  ，号分割
+    //用& 符号截取数据
+    var formDataArr = formData.split('&');
+
+    var formDataResultObj = {};
+    $.each(formDataArr, function (i, formDataObj) {
+        //计算出等号的INDEX
+        var indexOfEqual = formDataObj.indexOf('=');
+        var objectKey = formDataObj.substr(0, indexOfEqual);
+        var objectValue = formDataObj.substr(indexOfEqual + 1);
+        if (formDataResultObj[objectKey] == undefined) {
+            formDataResultObj[objectKey] = objectValue;
+        } else {
+            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+        }
+    });
+
+    var formdataResultStr = '';
+    for (var ele in formDataResultObj) {
+        formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+    }
+
+    // 处理没有选择的文本框.
+    //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
+    var ids = GenerCheckNames();
+
+    if (ids) {
+        var scores = ids.split(",");
+        var arrLength = scores.length;
+        var sum = 0;
+        var average = null;
+        for (var i = 0; i < arrLength; i++) {
+            var field = scores[i];
+            var index = formdataResultStr.indexOf(field);
+            if (index == -1) {
+                if ($("input[name='" + field + "'").length == 1)
+                    formdataResultStr += '&' + field + '=0';
+                else
+                    formdataResultStr += '&' + field + '= ';
+            }
+        }
+    }
+
+    formdataResultStr = formdataResultStr.replace('&&', '&');
+
+    return formdataResultStr;
+}
         function isExistArray(arrys, no) {
             for (var i = 0; i < arrys.length; i++) {
                 if (arrys[i].split('=')[0] == no)

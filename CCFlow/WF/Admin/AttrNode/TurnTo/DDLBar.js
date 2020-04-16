@@ -46,8 +46,6 @@ function InitBar(optionKey) {
     html += "<option value=" + TurntoWay.TurntoMessage + ">提示指定信息 </option>";
     html += "<option value=" + TurntoWay.TurntoUrl + ">转向指定的URL</option>";
     html += "<option value=" + TurntoWay.TurntoClose + ">发送完成立即关闭 </option>";
-    
-
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";

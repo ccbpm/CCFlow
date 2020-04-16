@@ -106,6 +106,7 @@ function getGroups() {
     return ens;
 
 }
+
 function OldVer() {
 
     var nodeID = GetQueryString("FK_Node");
@@ -145,7 +146,8 @@ function OpenDot2DotStations() {
     OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
 }
 
-function GenerUrlByOptionKey(optionKey) {
+function GenerUrlByOptionKey(optionKey)
+{
     var roleName = "";
     switch (parseInt(optionKey)) {
         case SelectorModel.Station:
@@ -192,7 +194,7 @@ function GenerUrlByOptionKey(optionKey) {
     return roleName;
 }
 
-
+//下拉框变化的事件.
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
     var obj = document.getElementById("changBar");
@@ -203,8 +205,11 @@ function changeOption() {
         optionKey = sele[index].value
     }
 
-    var roleName = GenerUrlByOptionKey(optionKey); 
-    window.location.href = roleName + "?FK_Node=" + nodeID;
+    //根据key获取url.
+    var url = GenerUrlByOptionKey(optionKey);
+
+    //转到这个url.
+    window.location.href = url + "?FK_Node=" + nodeID;
 }
 function SaveAndClose() {
     Save();

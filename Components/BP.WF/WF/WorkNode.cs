@@ -8,6 +8,7 @@ using BP.Web;
 using BP.Sys;
 using BP.WF.Template;
 using BP.WF.Data;
+using System.Linq;
 
 namespace BP.WF
 {
@@ -2019,9 +2020,38 @@ namespace BP.WF
                     continue;
                     //throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                 }
+              
+                var conds = dcs.Tolist().GroupBy(x => x.HisDataFrom);
+                //说明有不同的方向条件规则
+                if (conds.Count() == dcs.Count)
+                {
+                    // 如果通过了.
+                    if (dcs.IsPass) 
+                        myNodes.AddEntity(nd);
+                }
+                else
+                {
+                    bool isPass = false;
+                    var lists = conds.ToList();
+                    for(int i = 0; i < lists.Count(); i++)
+                    {
+                        if (isPass == true)
+                            break;
+                        Conds cds = new Conds();
+                        var nextList = lists[i].ToList();
+                        for (int k = 0; k< nextList.Count; k++)
+                        {
+                            cds.AddEntity(nextList[k]);
+                        }
+                        isPass = cds.IsPass;    
+                    }
+                    if(isPass == true)
+                        myNodes.AddEntity(nd);
+                }
+                
+                
 
-                if (dcs.IsPass) // 如果通过了.
-                    myNodes.AddEntity(nd);
+                
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
 

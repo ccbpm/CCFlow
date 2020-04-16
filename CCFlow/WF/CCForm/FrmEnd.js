@@ -649,15 +649,24 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || GetQueryString("IsReadonly") == "1")
                     continue;
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
+               
                 //获取大文本的长度
                 var left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
                 var width = tbFastInput.width() + left;
                 width = tbFastInput.parent().css('left') == "auto" ? width - 70 : width - 180;
 
-                var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;'></span><br/>");
+                var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;' id='span_" + mapExt.AttrOfOper+"'></span><br/>");
                 tbFastInput.after(content);
                 content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
-
+                tbFastInput.on("mouseover", function () {
+                    $("#span_" + mapExt.AttrOfOper).show();
+                    tbFastInput.focus();
+                });
+                tbFastInput.on("blur", function () {
+                    $("#span_" + mapExt.AttrOfOper).hide();
+                    
+                });
+                $("#span_" + mapExt.AttrOfOper).hide();
                 break;
 
             case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
@@ -1340,12 +1349,41 @@ function ShowFlowBBS(data, keyOfEn,Sys_MapData,WF_Node) {
     }
     _Html += "</div>";
     //只读状态并且当前登陆人的的抄送列表还未发生评论
-    if (pageData.IsReadonly == "1" && isHaveMySelf == false && GetQueryString("CCSta")=="1") {
+    if (pageData.IsReadonly == "1" && isHaveMySelf == false && GetQueryString("CCSta") == "1") {
+        var en = new Entity("BP.Sys.GloVar");
+        en.SetPKVal("ND" + pageData.FK_Node + "_Comment");
+        var DuanYu = "";
+        if (en.RetrieveFromDBSources() == 0) {
+            DuanYu = en.Val;
+        }
+        if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
+
+            var NewDuanYu = DuanYu.split("@");
+        } else {
+            var NewDuanYu = "";
+        }
+       
+        _Html += "</select>";
         _Html += "<div style='line-height: 1px;border-top: 2px solid #ddd;margin-top: 4px;margin-bottom: 4px;margin-left: -6px;margin-right: -6px;'></div>";
         _Html += "<div>";
         _Html +="<textarea rows='5' id='TB_Msg' name='TB_Msg' cols='60'></textarea>";
         _Html += "<br/>";
-        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论' onclick='BBSSubmit(\""+Sys_MapData.No+"\",\""+Sys_MapData.Name+"\",\""+WF_Node.Name+"\");' />";
+        //加入常用短语.
+        _Html += "<select id='DuanYu' onchange='SetDocVal()'>";
+        _Html += "<option value=''>常用短语</option>";
+        if (NewDuanYu.length > 0) {
+            for (var i = 0; i < NewDuanYu.length; i++) {
+                if (NewDuanYu[i] == "") {
+                    continue;
+                }
+                _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
+            }
+        } else {
+            _Html += "<option value='已阅'>已阅</option>";
+        }
+        _Html += "</select>";
+        _Html += "<a onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"Comment\");'> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
+        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论'style='float:right' onclick='BBSSubmit(\""+Sys_MapData.No+"\",\""+Sys_MapData.Name+"\",\""+WF_Node.Name+"\");' />";
         _Html += "</div>";
          
     }

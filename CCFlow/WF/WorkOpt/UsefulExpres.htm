@@ -30,7 +30,8 @@
         }
     </style>
     <script type="text/javascript">
-        var nodeID = GetQueryString("FK_Node");
+        var nodeID = "ND"+GetQueryString("FK_Node");
+        var groupKey = GetQueryString("GroupKey");
     
         $(function () {
             $('#myModal').modal('hide');
@@ -38,11 +39,21 @@
         });
 
         function GetSearchData() {
-            var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
-            //获得数据
-            var data = workCheck.FWCNewDuanYu;
+            var en = new Entity("BP.Sys.GloVar");
+            en.SetPKVal(nodeID + "_" + groupKey);
+            if (en.RetrieveFromDBSources() == 0) {
+                en.No = nodeID + "_" + groupKey;
+                en.Name = "";
+                en.Val = "";
+                en.GroupKey = groupKey;
+                en.Insert();
+            }
+            
             var dataInfo = {}
             var mainData = [];
+            //获得数据
+            var data = en.Val;
+           
             if (data != null && data != "") {
                 var strs = data.split("@");
                 $.each(strs, function (i, item) {
@@ -104,14 +115,14 @@
                     $('#TextArea').focus();
                     return;
                 }
-                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
-                if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
+                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
+                if (en.Val.indexOf("@" + text + "@") != -1) {
                     alert("常用短语中已存在，不能重复添加");
                     return;
                 }
-                workCheck.FWCNewDuanYu += "@" + text + "@";
-                workCheck.SetValByKey(nodeID);
-                workCheck.Update();
+                en.Val += "@" + text + "@";
+                en.SetValByKey(nodeID + "_" + groupKey);
+                en.Update();
                 $('#myModal').modal('hide');
                 LoadGridData();
                     
@@ -131,14 +142,14 @@
                     return;
                 }
 
-                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
-                if (workCheck.FWCNewDuanYu.indexOf("@" + text + "@") != -1) {
+                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
+                if (en.Val.indexOf("@" + text + "@") != -1) {
                     alert("常用短语中已存在，不能重复添加");
                     return;
                 }
-                workCheck.FWCNewDuanYu = workCheck.FWCNewDuanYu.replace("@" + againText + "@", "@" + text + "@");
-                workCheck.SetValByKey(nodeID);
-                workCheck.Update();
+                en.Val = en.Val .replace("@" + againText + "@", "@" + text + "@");
+                en.SetValByKey(nodeID + "_" + groupKey);
+                en.Update();
                 $('#myModal').modal('hide');
                 LoadGridData();
             }
@@ -178,14 +189,14 @@
                 if (confirm('确定要删除这' + rows.length + '条数据吗？') == false)
                     return;
 
-                var workCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
-                var duanyuan = workCheck.FWCNewDuanYu;
+                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
+                var val =en.Val;
                 $.each(rows, function (i, item) {
-                    duanyuan = duanyuan.replace("@" + item.CURVALUE+"@", "");
+                    val = val.replace("@" + item.CURVALUE+"@", "");
                 });
-                workCheck.FWCNewDuanYu = duanyuan;
-                workCheck.SetPKVal(nodeID);
-                workCheck.Update();
+                en.Val = val;
+                en.SetPKVal(nodeID + "_" + groupKey);
+                en.Update();
                 LoadGridData();
             }
             else {

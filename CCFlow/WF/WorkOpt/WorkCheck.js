@@ -157,7 +157,12 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
 
         //1.获取自定义常用短语
-        var DuanYu = frmWorkCheck.FWCNewDuanYu;
+        var en = new Entity("BP.Sys.GloVar");
+        en.SetPKVal("ND"+pageData.FK_Node + "_WorkCheck");
+        var DuanYu = "";
+        if (en.RetrieveFromDBSources() == 0) {
+            DuanYu = en.Val;
+        }
         if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
 
             var NewDuanYu = DuanYu.split("@");
@@ -185,7 +190,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         }
         _Html += "</select>";
         //_Html += "<input name='' type='button' value='编辑短语' onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'>";
-        _Html += "<a  onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
+        _Html += "<a  onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"WorkCheck\");'> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
 
         _Html += "</div>";
         _Html += "</td>";
@@ -379,9 +384,14 @@ function SetDocVal() {
 
     if (val == "")
         return;
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#WorkCheck_Doc").val(val);
+    }
 
-    document.getElementById("WorkCheck_Doc").value = val;
-
+    if ($("#TB_Msg").length == 1) {
+        $("#TB_Msg").val(val);
+    }
+  
 }
 function setIframeHeight() {
     $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
@@ -714,14 +724,14 @@ function WorkCheck_CheckPass() {
 }
 
 
-function AddDuanYu(nodeID) {
-    var url = basePath + "/WF/WorkOpt/UsefulExpres.htm?FK_Node=" + nodeID;
+function AddDuanYu(nodeID, GroupKey) {
+    var url = basePath + "/WF/WorkOpt/UsefulExpres.htm?FK_Node=" + nodeID + "&GroupKey=" + GroupKey;
     var W = document.body.clientWidth / 2;
     var H = 400; // document.body.clientHeight-40;
     OpenBootStrapModal(url, "UsefulExpresIFrame", "常用短语", W, H, null, false, null, null, function () {
         //修改下来框常用短语
-        var workCheck = new Entity("BP.WF.Template.FrmWorkCheck", nodeID);
-        var str = workCheck.FWCNewDuanYu;
+        var en = new Entity("BP.Sys.GloVar", "ND" + nodeID + "_" + GroupKey);
+        var str = en.Val;
         var duanYu;
         if (str == null || str == undefined || DuanYu == "")
             return;
@@ -740,7 +750,14 @@ function AddDuanYu(nodeID) {
 }
 
 function ChangeWorkCheck(str) {
-    $("#WorkCheck_Doc").val(str);
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#WorkCheck_Doc").val(str);
+    }
+
+    if ($("#TB_Msg").length == 1) {
+        $("#TB_Msg").val(str);
+    }
+    
     $('#bootStrapdlg').modal('hide');
 }
 

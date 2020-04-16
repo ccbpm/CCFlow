@@ -7473,7 +7473,10 @@ namespace BP.WF
 
                 #region 执行 自动 启动子流程.
                 CallAutoSubFlow(this.HisNode, 0); //启动本节点上的.
-                CallAutoSubFlow(this.town.HisNode, 1);
+                if (this.town!=null)
+                {
+                    CallAutoSubFlow(this.town.HisNode, 1);
+                }
                 #endregion 执行启动子流程.
 
                 #region 处理流程数据与业务表的数据同步.

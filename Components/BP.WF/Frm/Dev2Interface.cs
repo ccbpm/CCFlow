@@ -375,7 +375,7 @@ namespace BP.Frm
 
             GenerBill gb = new GenerBill();
             gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
-            gb.BillState = BillState.None; //初始化状态.
+            gb.BillState = BillState.Editing; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
             gb.FrmName = fb.Name; //单据名称.

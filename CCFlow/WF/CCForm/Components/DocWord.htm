@@ -39,7 +39,7 @@
             var data = data[0]; //把这个数据绑定到控件上.
 
             //1. 查询出来代字.
-            var words = new Entities("BP.DOC.Words");
+            var words = new Entities("BP.Port.Depts");
             words.RetrieveAll();
             GenerDDLEntityngUrl("DDL_Word", words, "No", "Name", data.DocWorkKey);//绑定到文本框.
 

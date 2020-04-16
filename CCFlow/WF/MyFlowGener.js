@@ -1767,9 +1767,20 @@ function GenerWorkNode() {
     })
 
     ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-    var enName = flowData.Sys_MapData[0].No;
-    var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
-    $.getScript(filespec);
+    try {
+        ////加载JS文件
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+
+    }
+    //var enName = flowData.Sys_MapData[0].No;
+    //var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
+    //$.getScript(filespec);
 
     try {
         ////加载JS文件

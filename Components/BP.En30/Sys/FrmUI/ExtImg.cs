@@ -80,8 +80,6 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);          
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
-
                 map.AddMyPK();
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "对应字段", true, true, 0, 200, 20);

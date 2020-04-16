@@ -236,6 +236,8 @@
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_FrmEvent.cs" />
     <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
+    <Compile Include="HttpHandler\WF_CCForm_Components.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_SFTable.cs" />
     <Compile Include="HttpHandler\WF_Admin_Port.cs" />

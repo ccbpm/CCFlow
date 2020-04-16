@@ -9,13 +9,11 @@ using System.Web;
 namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 系统定位组件
+    /// 公文字号组件
     /// </summary>
-    public class MapAttrFixed : EntityMyPK
+    public class MapAttrDocWord : EntityMyPK
     {
         #region 文本字段参数属性.
-       
-  
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -44,7 +42,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.MaxLen, value);
             }
         }
-        
+
         /// <summary>
         /// 字段
         /// </summary>
@@ -93,13 +91,13 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrFixed()
+        public MapAttrDocWord()
         {
         }
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrFixed(string myPK)
+        public MapAttrDocWord(string myPK)
         {
             this.MyPK = myPK;
             this.Retrieve();
@@ -115,7 +113,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "系统定位组件");
+                Map map = new Map("Sys_MapAttr", "公文字号组件");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -156,9 +154,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-                
+
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
 
@@ -168,7 +166,7 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-      
+
         /// <summary>
         /// 删除
         /// </summary>
@@ -185,7 +183,7 @@ namespace BP.Sys.FrmUI
             if (this.FK_MapData.Contains("ND") == true)
             {
                 string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn +"' OR KeyOfEn='JD' OR KeyOfEn='WD')";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "' OR KeyOfEn='JD' OR KeyOfEn='WD')";
                 DBAccess.RunSQL(sql);
             }
 
@@ -249,15 +247,15 @@ namespace BP.Sys.FrmUI
         #endregion
     }
     /// <summary>
-    /// 系统定位组件s
+    /// 公文字号组件s
     /// </summary>
-    public class MapAttrFixeds : EntitiesMyPK
+    public class MapAttrDocWords : EntitiesMyPK
     {
         #region 构造
         /// <summary>
-        /// 系统定位组件s
+        /// 公文字号组件s
         /// </summary>
-        public MapAttrFixeds()
+        public MapAttrDocWords()
         {
         }
         /// <summary>
@@ -267,7 +265,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new MapAttrFixed();
+                return new MapAttrDocWord();
             }
         }
         #endregion
@@ -277,20 +275,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrFixed> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrDocWord> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrFixed>)this;
+            return (System.Collections.Generic.IList<MapAttrDocWord>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrFixed> Tolist()
+        public System.Collections.Generic.List<MapAttrDocWord> Tolist()
         {
-            System.Collections.Generic.List<MapAttrFixed> list = new System.Collections.Generic.List<MapAttrFixed>();
+            System.Collections.Generic.List<MapAttrDocWord> list = new System.Collections.Generic.List<MapAttrDocWord>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrFixed)this[i]);
+                list.Add((MapAttrDocWord)this[i]);
             }
             return list;
         }

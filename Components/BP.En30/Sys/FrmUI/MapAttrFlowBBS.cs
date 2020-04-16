@@ -9,13 +9,11 @@ using System.Web;
 namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 实体属性
+    /// 评论(抄送)组件
     /// </summary>
     public class MapAttrFlowBBS : EntityMyPK
     {
         #region 文本字段参数属性.
-       
-  
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -103,7 +101,6 @@ namespace BP.Sys.FrmUI
         {
             this.MyPK = myPK;
             this.Retrieve();
-
         }
         /// <summary>
         /// EnMap
@@ -115,7 +112,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "评论字段");
+                Map map = new Map("Sys_MapAttr", "评论(抄送)组件");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -181,70 +178,9 @@ namespace BP.Sys.FrmUI
 
                 #endregion 傻瓜表单
 
-                RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "字段重命名";
-                rm.ClassMethodName = this.ToString() + ".DoRenameField()";
-                rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "转化为文本框组件";
-                rm.ClassMethodName = this.ToString() + ".DoSetTextBox()";
-                rm.Warning = "您确定要转化为文本框组件吗？";
-                map.AddRefMethod(rm);
-
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-        /// <summary>
-        /// 评论组件转文本字段
-        /// </summary>
-        /// <returns>执行结果</returns>
-        public string DoSetTextBox()
-        {
-            MapAttrString en = new MapAttrString(this.MyPK);
-            en.UIContralType = UIContralType.TB;
-            en.UIIsEnable = true;
-            en.UIVisible = true;
-            en.Update();
-
-            return "设置成功,当前评论组件已经是文本框了,请关闭掉当前的窗口.";
-        }
-
-        /// <summary>
-        /// 字段分组查询语句
-        /// </summary>
-        public static string SQLOfGroupAttr
-        {
-            get
-            {
-                return "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ";
-            }
-        }
-     
-        /// <summary>
-        /// 删除
-        /// </summary>
-        protected override void afterDelete()
-        {
-            
-
-            //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
-            {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn+"')";
-                DBAccess.RunSQL(sql);
-            }
-
-            //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
-            base.afterDelete();
         }
 
 
@@ -260,36 +196,7 @@ namespace BP.Sys.FrmUI
 
             base.afterInsertUpdateAction();
         }
-
         #endregion
-
-        public string DoRenameField(string newField)
-        {
-            string sql = "";
-            if (this.FK_MapData.IndexOf("ND") == 0)
-            {
-                string strs = this.FK_MapData.Replace("ND", "");
-                strs = strs.Substring(0, strs.Length - 2);
-
-                string rptTable = "ND" + strs + "Rpt";
-                MapDatas mds = new MapDatas();
-                mds.Retrieve(MapDataAttr.PTable, rptTable);
-
-                foreach (MapData item in mds)
-                {
-                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No  + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
-                    DBAccess.RunSQL(sql);
-                }
-            }
-            else
-            {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
-                DBAccess.RunSQL(sql);
-            }
-
-            return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
-        }
-       
 
         #region 重载.
         protected override bool beforeUpdateInsertAction()
@@ -298,56 +205,9 @@ namespace BP.Sys.FrmUI
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();
 
-            #region 自动扩展字段长度. 需要翻译.
-            if (attr.MaxLen < this.MaxLen )
-            {
-                attr.MaxLen = this.MaxLen;
-
-                string sql = "";
-                MapData md = new MapData();
-                md.No = this.FK_MapData;
-                if (md.RetrieveFromDBSources() == 1)
-                {
-                    if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
-                    {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle
-                            || SystemConfig.AppCenterDBType == DBType.DM )
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
-
-                        DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
-                    }
-                }
-            }
-            #endregion 自动扩展字段长度.
-
             //强制设置为评论组件.
             this.UIContralType =  UIContralType.FlowBBS;
-
-            //默认值.
-            string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
-            {
-                string defVal = this.GetValStrByKey("DefVal");
-                if (defval.Contains("@") == true)
-                    this.SetValByKey("DefVal", "");
-            }
-            else
-            {
-                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
-            }
-
-            //执行保存.
-            attr.Save();
-
+             
             if (this.GetValStrByKey("GroupID") == "无")
                 this.SetValByKey("GroupID", "0");
 
@@ -356,13 +216,13 @@ namespace BP.Sys.FrmUI
         #endregion
     }
     /// <summary>
-    /// 实体属性s
+    /// 评论(抄送)组件s
     /// </summary>
     public class MapAttrFlowBBSs : EntitiesMyPK
     {
         #region 构造
         /// <summary>
-        /// 实体属性s
+        /// 评论(抄送)组件s
         /// </summary>
         public MapAttrFlowBBSs()
         {

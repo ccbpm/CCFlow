@@ -337,12 +337,12 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "转化为评论组件";
-                rm.ClassMethodName = this.ToString() + ".DoSetFlowBBS()";
-                rm.Warning = "您确定要设置为评论组件吗？";
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "转化为评论组件";
+                //rm.ClassMethodName = this.ToString() + ".DoSetFlowBBS()";
+                //rm.Warning = "您确定要设置为评论组件吗？";
+               // rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
                 #endregion 执行的方法.
 

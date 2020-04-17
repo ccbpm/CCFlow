@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.En;
 
@@ -87,6 +88,12 @@ namespace BP.WF.Port
             qo.addOr();
             qo.AddWhere("OrgNo", "");
             return qo.DoQuery();
+        }
+        public string GetStationTypes(string OrgNo)
+        {
+            string sql = "select No, Name FROM port_StationType where No in (select Fk_StationType from Port_Station WHERE OrgNo ='" + OrgNo + "') group by No,Name";
+            DataTable ds = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(ds);
         }
 
 

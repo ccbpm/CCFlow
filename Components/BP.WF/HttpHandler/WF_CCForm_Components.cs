@@ -132,7 +132,30 @@ namespace BP.WF.HttpHandler
             string str = (int.Parse(lsh) + 1).ToString("0000");//将返回的数字加+1并格式化为0000;
             return str;
         }
-        #endregion 公文文号.
+  .
+        /// <summary>
+        /// 重新生成字号
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_Save()
+        {
+            //创建实体.
+            GEEntity en = new GEEntity(this.FrmID, this.OID);
+
+            //查询字段.
+            string ptable = en.EnMap.PhysicsTable; //获得存储表.
+
+            string word = this.GetRequestVal("DDL_Word"); //字号
+            string ny = this.GetRequestVal("DDL_Year"); //年份. 
+            string lsh = this.GetRequestVal("TB_LSH"); //年份. 
+
+            //生成一个新的流水号.
+            string sql = "update FROM " + ptable + " set DocWordKey='" + word + "' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"' WHERE OID=" + this.OID;
+            DBAccess.RunSQL(sql);           
+           
+            return "保存成功";
+        }
+         #endregion 公文文号.
 
     }
 }

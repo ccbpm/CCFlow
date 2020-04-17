@@ -204,6 +204,7 @@
     <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Group.cs" />
     <Compile Include="GPM\GroupEmp.cs" />
+    <Compile Include="GPM\GroupType.cs" />
     <Compile Include="NetPlatformImpl\CacheHelper.cs" />
     <Compile Include="NetPlatformImpl\DA.cs" />
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />

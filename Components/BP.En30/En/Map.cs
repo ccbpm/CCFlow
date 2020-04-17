@@ -446,12 +446,11 @@ namespace BP.En
             if (key == null)
                 throw new Exception("@[" + this.EnDesc + "] 获取属性key 值不能为空.");
 
-
             if (this.ToString().Contains("."))
-                throw new Exception("@[" + this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
+                throw new Exception("@[" +this.ToString() +","+ this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
             else
             {
-                throw new Exception("@[" + this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
+                throw new Exception("@[" + this.ToString() +","+ this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
             }
         }
         /// <summary>
@@ -472,9 +471,9 @@ namespace BP.En
                 throw new Exception("@[" + this.EnDesc + "] 获取属性key 值不能为空.");
 
             if (this.ToString().Contains("."))
-                throw new Exception("@[" + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
+                throw new Exception("@[" +this.ToString()+"," + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
             else
-                throw new Exception("@[" + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
+                throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
         }
         /// <summary>
         /// 通过一个key 得到它的属性值。
@@ -491,9 +490,9 @@ namespace BP.En
                 }
             }
             if (desc == null)
-                throw new Exception("@[" + this.EnDesc + "] 获取属性 desc  值不能为空.");
+                throw new Exception("@[" + this.ToString() +","+ this.EnDesc + "] 获取属性 desc  值不能为空.");
 
-            throw new Exception("@[" + this.EnDesc + "] 没有找到 desc=[" + desc + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
+            throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "] 没有找到 desc=[" + desc + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
         }
         #endregion
 

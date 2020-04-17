@@ -58,6 +58,11 @@
             $("#Btn_Save").val("保存成功.");
         }
 
+        function OpenAPI()
+        {
+            var url = "../../AttrFlow/APICode.htm?FK_Flow=067&s=0.07910842745423852";
+            OpenEasyUiDialogExt(url, 'ccbpm的API', 1000, 600, false);
+        }
         
     </script>
 </head>
@@ -82,6 +87,7 @@
                         <ul>
                             <li>比如您输入:/XXX/Abc.htm 系统就会自动把系统变量带入</li>
                             <li>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&SID=xcwwxccsdsdsd</li>
+                            <li><a href="javascript:OpenAPI()">查看发送，退回API接口.</a></li>
                         </ul>
                     </div>
                 </td>
@@ -99,8 +105,9 @@
             <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.htm </li>
             <li>例如:/SDKFlowDemo/QingJia/S1_TianxieShenqingDan.jsp , /SDKFlowDemo/QingJia/S1_TianxieShenqingDan.htm</li>
             <li>ccbpm团队为您提供了一个demo流程 \\流程树\\SDK流程\\ 该目录下有很多SDK模式的流程供您参考。</li>
-            <li>运行效果图</li>
-            <li><img class="HelpImg" src="SDKFrm.png" /></li>
+            <li>运行效果图 - <a href="javascript:OpenAPI()">查看发送，退回API接口.</a> </li>
+            <li><img style=" border:1px;" class="HelpImg" src="SDKFrm.png" /></li>
+
         </ul>
     </fieldset>
 

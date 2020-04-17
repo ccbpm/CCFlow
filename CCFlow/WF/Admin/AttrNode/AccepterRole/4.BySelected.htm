@@ -80,9 +80,9 @@
                 OpenDialog2019: function () {
                     var url = "../Selector/Default.htm";
                     var nodeID = GetQueryString("FK_Node");
-                    url += '?NodeID=' + nodeID;
+                    url += '?NodeID=' + nodeID+ "&FK_Flow=" + GetQueryString("FK_Flow");
                     
-                    window.location.href = url;
+                    WinOpenFull(url, '选择器', 650, 450, true);
                 },
                 IsChange: function () {
                     if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {

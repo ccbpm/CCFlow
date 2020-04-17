@@ -4934,7 +4934,8 @@ namespace BP.WF
                     SubFlows subFlows = new SubFlows();
                     int count = subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, flow.No);
                     if (count == 0)
-                        throw new Exception("父子流程关系配置信息丢失，请联系管理员");
+                        //throw new Exception("父子流程关系配置信息丢失，请联系管理员");
+                        return "";
                     SubFlow subFlow = subFlows[0] as SubFlow;
                     GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
                     if (flow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)

@@ -52,10 +52,15 @@ namespace BP.WF.HttpHandler
 
                 //如果没有此列就检查增加此列.
                 if (DBAccess.IsExitsTableCol(ptable, "DocWordKey") == false)
-                    repairSQL += "@ALTER TABLE " + ptable + " ADD col DocWordKey varchar(100) ";
+                    repairSQL += "@ALTER TABLE " + ptable + " ADD DocWordKey varchar(100) ";
                 if (DBAccess.IsExitsTableCol(ptable, "DocWordName") == false)
-                    repairSQL += "@ALTER TABLE " + ptable + " ADD col DocWordName varchar(100) ";
-
+                    repairSQL += "@ALTER TABLE " + ptable + " ADD  DocWordName varchar(100) ";
+                if (DBAccess.IsExitsTableCol(ptable, "DocWordYear") == false)
+                    repairSQL += "@ALTER TABLE " + ptable + " ADD DocWordYear nvarchar(100) ";
+                if (DBAccess.IsExitsTableCol(ptable, "DocWordLSH") == false)
+                    repairSQL += "@ALTER TABLE " + ptable + " ADD DocWordLSH nvarchar(100) ";
+                if (DBAccess.IsExitsTableCol(ptable, "DocWord") == false)
+                    repairSQL += "@ALTER TABLE " + ptable + " ADD DocWord nvarchar(100) ";
 
                 if (DataType.IsNullOrEmpty(repairSQL) == false)
                     DBAccess.RunSQLs(repairSQL);

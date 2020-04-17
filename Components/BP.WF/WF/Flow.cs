@@ -4534,6 +4534,46 @@ namespace BP.WF
                 }
             }
         }
+
+        public bool IsFrmEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsFrmEnable);
+            }
+        }
+
+        public bool IsTruckEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsTruckEnable);
+            }
+        }
+
+        public bool IsTimeBaseEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsTimeBaseEnable);
+            }
+        }
+
+        public bool IsTableEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsTableEnable);
+            }
+        }
+
+        public bool IsOPEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsOPEnable);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -4609,6 +4649,12 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.NumOfDtl, 0, "NumOfDtl", false, false);
                 map.AddTBInt(FlowAttr.FlowAppType, 0, "流程类型", false, false);
                 map.AddTBInt(FlowAttr.ChartType, 1, "节点图形类型", false, false);
+
+                map.AddTBInt(FlowAttr.IsFrmEnable, 1, "是否显示表单", true, true);
+                map.AddTBInt(FlowAttr.IsTruckEnable, 1, "是否显示轨迹图", true, true);
+                map.AddTBInt(FlowAttr.IsTimeBaseEnable, 1, "是否显示时间轴", true, true);
+                map.AddTBInt(FlowAttr.IsTableEnable, 1, "是否显示时间表", true, true);
+                map.AddTBInt(FlowAttr.IsOPEnable, 1, "是否显示操作", true, true);
 
                 // map.AddBoolean(FlowAttr.IsOK, true, "是否启用", true, true);
                 map.AddTBInt(FlowAttr.IsCanStart, 1, "可以独立启动否？", true, true);

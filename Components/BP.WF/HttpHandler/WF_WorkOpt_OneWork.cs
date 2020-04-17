@@ -563,9 +563,35 @@ namespace BP.WF.HttpHandler
             }
 
             Node nd = new Node(nodeID);
-
+            Flow flow = new Flow(nd.FK_Flow);
             foreach (OneWorkXml item in xmls)
             {
+                bool IsShow = true;
+                switch (item.No)
+                {
+                    case "Frm":
+                        if (flow.IsFrmEnable == false)
+                            IsShow = false;
+                        break;
+                    case "Truck":
+                        if (flow.IsTruckEnable == false)
+                            IsShow = false;
+                        break;
+                    case "TimeBase":
+                        if (flow.IsTimeBaseEnable == false)
+                            IsShow = false;
+                        break;
+                    case "Table":
+                        if (flow.IsTableEnable == false)
+                            IsShow = false;
+                        break;
+                    case "OP":
+                        if (flow.IsOPEnable == false)
+                            IsShow = false;
+                        break;
+                }
+                if (IsShow == false)
+                    continue;
                 string url = "";
                 url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1&CCSta="+ this.GetRequestValInt("CCSta"), item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
                 if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
@@ -1111,51 +1137,33 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBSList()
         {
-            Paras ps = new Paras();
-            string sql = "SELECT Rec,RecName,DeptNo,DeptName,Msg,RDT FROM Frm_Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
-          
+            BP.Frm.Track track = new BP.Frm.Track();
+            BP.En.QueryObject qo = new En.QueryObject(track);
+            qo.AddWhere(TrackAttr.ActionType, (int)BP.Frm.FrmActionType.BBS);
+            qo.addAnd();
+            qo.addLeftBracket();
+
             if (this.FID != 0)
             {
-                sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FID)";
-                ps.Add("FID", this.FID);
+                qo.AddWhere(TrackAttr.WorkID, this.FID);
+                qo.addOr();
+                qo.AddWhere(TrackAttr.FID, this.FID);
             }
             else
             {
-                sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID)";
-                ps.Add("WorkID", this.WorkID);
+                qo.AddWhere(TrackAttr.WorkID, this.WorkID);
+
+                if (this.WorkID != 0)
+                {
+                    qo.addOr();
+                    qo.AddWhere(TrackAttr.FID, this.WorkID);
+                }
             }
-            
-           
-
-            ps.SQL = sql;
-            ps.Add("ActionType", (int)BP.Frm.FrmActionType.BBS);
-
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["REC"].ColumnName = "Rec";
-                dt.Columns["RECNAME"].ColumnName = "RecName";
-                dt.Columns["DEPTNO"].ColumnName = "DeptNo";
-                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
-                dt.Columns["MSG"].ColumnName = "Msg";
-                dt.Columns["RDT"].ColumnName = "RDT";
-               
-            }
-
-            if ( SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            {
-                dt.Columns["rec"].ColumnName = "Rec";
-                dt.Columns["recname"].ColumnName = "RecName";
-                dt.Columns["deptno"].ColumnName = "DeptNo";
-                dt.Columns["deptname"].ColumnName = "DeptName";
-                dt.Columns["msg"].ColumnName = "Msg";
-                dt.Columns["rdt"].ColumnName = "RDT";
-
-            }
-
-
+            qo.addRightBracket();
+            qo.addOrderBy(TrackAttr.RDT);
+            qo.DoQuery();
             //转化成json
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.ToJson(track.ToDataTableField());
         }
 
         /// 查看某一用户的评论.

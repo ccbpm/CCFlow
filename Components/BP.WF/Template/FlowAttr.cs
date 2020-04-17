@@ -207,6 +207,15 @@ namespace BP.WF.Template
         /// 运行的SQL
         /// </summary>
         public const string RunSQL = "RunSQL";
+
+        /// <summary>
+        /// 流程轨迹中显示的Tab标签页的控制
+        /// </summary>
+        public const string IsFrmEnable = "IsFrmEnable";
+        public const string IsTruckEnable = "IsTruckEnable";
+        public const string IsTimeBaseEnable = "IsTimeBaseEnable";
+        public const string IsTableEnable = "IsTableEnable";
+        public const string IsOPEnable = "IsOPEnable";
         #endregion 基本属性
 
         #region 发起限制规则.

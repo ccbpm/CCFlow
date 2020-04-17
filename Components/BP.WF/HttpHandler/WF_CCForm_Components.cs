@@ -129,7 +129,7 @@ namespace BP.WF.HttpHandler
            string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
                 lsh = "001";
-            return lsh;
+            return lsh+1;
         }
         #endregion 公文文号.
 

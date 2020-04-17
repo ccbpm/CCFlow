@@ -18,7 +18,7 @@
 	<script type="text/javascript">
 
 	    //页面启动函数.
-        var stationTypes;
+        var data;
 	    $(function () {
 	        $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
@@ -32,13 +32,11 @@
 	        var stas = new Entities("BP.GPM.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
-	        //查询出来数据.	       
-	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station WHERE OrgNo ='" + orgNo + "') group by No,Name";
+            var stationTypes = new Entities("BP.WF.Port.StationTypes");
+	        data = stationTypes.DoMethodReturnString("GetStationTypes", orgNo);
+            data = JSON.parse(data);
 	       
-	        //获得要增加的流程集合.
-	        stationTypes = DBAccess.RunSQLReturnTable(sql);
-	       
-	        BindGroupModel(stationTypes, stas);
+	        BindGroupModel(data, stas);
 
 	    });
 
@@ -143,8 +141,8 @@
         var returnVal=[]
         function SelectStas() {
             //获取选择的岗位
-            for (var i = 0; i < stationTypes.length; i++) {
-                $.each($('input:checkbox[name='+stationTypes[i].No+']:checked'),function(i,obj){
+            for (var i = 0; i < data.length; i++) {
+                $.each($('input:checkbox[name='+data[i].No+']:checked'),function(i,obj){
                     returnVal.push({ "No": obj.value, "Name": $(obj).next().text() });
              });
             }

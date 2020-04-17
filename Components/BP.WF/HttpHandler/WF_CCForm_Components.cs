@@ -122,14 +122,15 @@ namespace BP.WF.HttpHandler
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
 
             string word = this.GetRequestVal("DDL_Word"); //字号
-            string ny = this.GetRequestVal("DDL_NY"); //年月. 
+            string ny = this.GetRequestVal("DDL_Year"); //年月. 
 
             //生成一个新的流水号.
            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
            string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
-                lsh = "001";
-            return lsh+1;
+                lsh = "0001";
+            string str = (int.Parse(lsh) + 1).ToString("0000");//将返回的数字加+1并格式化为0000;
+            return str;
         }
         #endregion 公文文号.
 

@@ -82,13 +82,14 @@ namespace BP.GPM
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, false, 1, 50, 200);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
-                map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
-                
-                //map.AddTBStringDoc(StationAttr.DutyReq, null, "职责要求", true, false, true);
-                //map.AddTBStringDoc(StationAttr.Makings, null, "素质要求", true, false, true);
-
+                map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new BP.GPM.StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
+
+                //@sly
+                if (BP.Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                    map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
+
                 this._enMap = map;
                 return this._enMap;
             }

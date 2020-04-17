@@ -20,10 +20,10 @@ namespace BP.GPM
         public const string OrgNo = "OrgNo";
 
     }
-	/// <summary>
+    /// <summary>
     ///  岗位类型
-	/// </summary>
-	public class StationType :EntityNoName
+    /// </summary>
+    public class StationType : EntityNoName
     {
         #region 属性
         public string FK_StationType
@@ -72,33 +72,37 @@ namespace BP.GPM
         /// </summary>
         /// <param name="_No"></param>
         public StationType(string _No) : base(_No) { }
-		#endregion 
+        #endregion
 
-		/// <summary>
-		/// 岗位类型Map
-		/// </summary>
+        /// <summary>
+        /// 岗位类型Map
+        /// </summary>
         public override Map EnMap
         {
             get
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Port_StationType","岗位类型");
+                Map map = new Map("Port_StationType", "岗位类型");
                 map.Java_SetCodeStruct("2");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
 
-                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 2, 2, 2);
+                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 5, 5);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
                 map.AddTBString(StationTypeAttr.OrgNo, null, "组织机构编号", true, false, 0, 50, 20);
+
+                //@sly
+                if (BP.Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                    map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-	}
+    }
     /// <summary>
     /// 岗位类型
     /// </summary>
@@ -120,11 +124,10 @@ namespace BP.GPM
         }
         public override int RetrieveAll()
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0 
-                || BP.Web.WebUser.No=="admin" )
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
                 return base.RetrieveAll();
 
-            //按照orgNo查询.
+            //按照orgNo查询. @sly
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
 
@@ -151,5 +154,5 @@ namespace BP.GPM
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

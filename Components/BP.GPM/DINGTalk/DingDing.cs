@@ -7,12 +7,12 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Collections;
 using BP.Tools;
-using BP.GPM;
 using BP.Sys;
 using BP.En;
 using BP.GPM.DTalk.DINGTalk;
 using BP.GPM.DTalk.DDSDK;
 using BP.DA;
+using BP.GPM;
 
 namespace BP.GPM.DTalk
 {

@@ -4,8 +4,9 @@ using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.En;
-using BP.WF.Port;
+using BP.Port;
 using BP.Web;
+using BP.GPM;
 
 namespace BP.WF.Template
 {
@@ -299,23 +300,23 @@ namespace BP.WF.Template
 
                 #region 对应关系
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", StationAttr.FK_StationType, "Name", "No");
+                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", BP.GPM.StationAttr.FK_StationType, "Name", "No");
 
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", StationAttr.FK_StationType, "Name", "No");
+                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", BP.GPM.StationAttr.FK_StationType, "Name", "No");
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
                    BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "绑定部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "绑定部门", BP.GPM.EmpAttr.Name, BP.GPM.EmpAttr.No, "@WebUser.FK_Dept");
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
-                   BP.WF.Template.NodeEmpAttr.FK_Emp, "绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "绑定接受人", BP.GPM.EmpAttr.FK_Dept, BP.GPM.EmpAttr.Name, BP.GPM.EmpAttr.No, "@WebUser.FK_Dept");
                 #endregion
 
 

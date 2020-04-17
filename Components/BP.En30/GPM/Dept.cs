@@ -149,7 +149,7 @@ namespace BP.GPM
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptEmps(), new BP.Port.Emps(),
                    DeptEmpAttr.FK_Dept,
-                   DeptEmpAttr.FK_Emp, "对应人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   DeptEmpAttr.FK_Emp, "对应人员", BP.Port.EmpAttr.FK_Dept, BP.Port.EmpAttr.Name, BP.Port.EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //平铺模式.
@@ -261,9 +261,9 @@ namespace BP.GPM
             this.GenerChildNameOfPath(this.No);
 
             //更新人员路径信息.
-            BP.GPM.Emps emps = new Emps();
-            emps.Retrieve(EmpAttr.FK_Dept, this.No);
-            foreach (BP.GPM.Emp emp in emps)
+            BP.Port.Emps emps = new BP.Port.Emps();
+            emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+            foreach (BP.Port.Emp emp in emps)
                 emp.Update();
         }
 
@@ -283,9 +283,9 @@ namespace BP.GPM
 
 
                     //更新人员路径信息.
-                    BP.GPM.Emps emps = new Emps();
-                    emps.Retrieve(EmpAttr.FK_Dept, this.No);
-                    foreach (BP.GPM.Emp emp in emps)
+                    BP.Port.Emps emps = new BP.Port.Emps();
+                    emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+                    foreach (BP.Port.Emp emp in emps)
                         emp.Update();
                 }
             }

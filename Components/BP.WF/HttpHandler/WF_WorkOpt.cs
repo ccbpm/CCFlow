@@ -3330,8 +3330,11 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.CustomerNo == "TianYe") //天业集团，去掉00000001董事长
             {
-
             }
+
+            //@sly 增加判断.
+            if (ds.Tables["Emps"].Rows.Count == 0)
+                return "err@配置接受人范围为空,请联系管理员.";
 
             #region 计算上一次选择的结果, 并把结果返回过去.
             string sql = "";

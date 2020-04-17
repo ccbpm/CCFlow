@@ -574,7 +574,7 @@ namespace BP.WF.Template
                             if (DataType.IsNullOrEmpty(empNo))
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值为空.");
                             //指定它
-                            Emp emp = new Emp();
+                            BP.Port.Emp emp = new BP.Port.Emp();
                             emp.No = empNo;
                             if (emp.RetrieveFromDBSources() == 0)
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值(" + empNo + ")是非法的人员编号...");

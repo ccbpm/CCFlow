@@ -78,8 +78,15 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                uac.OpenForSysAdmin();
+
+                //@sly 权限控制.
+                if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                    uac.OpenForSysAdmin();
+                else
+                    uac.OpenAll();
+
                 uac.IsInsert = false;
+
                 return uac;
             }
         }
@@ -113,7 +120,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 map.AddMyPK();
-               
+
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
 
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 0, 4, 20);
@@ -122,8 +129,8 @@ namespace BP.WF.Template
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
 
-                map.AddBoolean(FrmNodeAttr.IsCloseEtcFrm, false, "打开时是否关闭其它的页面？", true, true,true);
-                map.SetHelperAlert(FrmNodeAttr.IsCloseEtcFrm,"默认为不关闭,当该表单以tab标签也打开时,是否关闭其它的tab页?");
+                map.AddBoolean(FrmNodeAttr.IsCloseEtcFrm, false, "打开时是否关闭其它的页面？", true, true, true);
+                map.SetHelperAlert(FrmNodeAttr.IsCloseEtcFrm, "默认为不关闭,当该表单以tab标签也打开时,是否关闭其它的tab页?");
 
                 map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
                 map.SetHelperAlert(FrmNodeAttr.WhoIsPK, "用来控制谁是表单事例的主键的方案，对于父子流程如果子流程需要在看到父流程的表单，就需要设置ParentID是主键。");
@@ -256,7 +263,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeWorkCheck()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.WorkCheckFrm&PKVal=" + this.FK_Node+ "&CheckField=" + this.CheckField+"&FK_Frm="+this.FK_Frm+ "&t=" + DataType.CurrentDataTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.WorkCheckFrm&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDataTime;
         }
 
         /// <summary>

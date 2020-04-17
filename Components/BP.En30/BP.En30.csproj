@@ -200,9 +200,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\KeyVal.cs" />
+    <Compile Include="GPM\DeptStation.cs" />
+    <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Group.cs" />
     <Compile Include="GPM\GroupEmp.cs" />
-    <Compile Include="GPM\GroupStation.cs" />
     <Compile Include="NetPlatformImpl\CacheHelper.cs" />
     <Compile Include="NetPlatformImpl\DA.cs" />
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
@@ -402,8 +403,6 @@
     <Compile Include="GPM\Dept.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
     <Compile Include="GPM\DeptEmpStation.cs" />
-    <Compile Include="GPM\DeptStation.cs" />
-    <Compile Include="GPM\Emp.cs" />
     <Compile Include="GPM\Station.cs" />
     <Compile Include="GPM\StationType.cs" />
     <Compile Include="Web\GuestUser.cs">

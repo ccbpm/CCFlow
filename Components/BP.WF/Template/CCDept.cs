@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.En;
 using BP.WF.Port;
+using BP.GPM;
 
 namespace BP.WF.Template
 {
@@ -78,7 +79,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_CCDept", "抄送部门");				 
 
 				map.AddDDLEntitiesPK(CCDeptAttr.FK_Node,0,DataType.AppInt,"节点",new Nodes(),NodeAttr.NodeID,NodeAttr.Name,true);
-				map.AddDDLEntitiesPK( CCDeptAttr.FK_Dept,null,"部门",new Depts(),true);
+				map.AddDDLEntitiesPK( CCDeptAttr.FK_Dept,null,"部门",new BP.Port.Depts(),true);
 				this._enMap=map;
 				return this._enMap;
 			}
@@ -90,21 +91,7 @@ namespace BP.WF.Template
 	/// </summary>
     public class CCDepts : EntitiesMM
     {
-        /// <summary>
-        /// 他的工作部门
-        /// </summary>
-        public Stations HisStations
-        {
-            get
-            {
-                Stations ens = new Stations();
-                foreach (CCDept ns in this)
-                {
-                    ens.AddEntity(new Station(ns.FK_Dept));
-                }
-                return ens;
-            }
-        }
+      
         /// <summary>
         /// 他的工作节点
         /// </summary>
@@ -191,24 +178,6 @@ namespace BP.WF.Template
             foreach (CCDept en in this)
             {
                 ens.AddEntity(new Node(en.FK_Node));
-            }
-            return ens;
-        }
-        /// <summary>
-        /// 转向此节点的集合的Nodes
-        /// </summary>
-        /// <param name="nodeID">此节点的ID</param>
-        /// <returns>转向此节点的集合的Nodes (FromNodes)</returns> 
-        public Stations GetHisStations(int nodeID)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(CCDeptAttr.FK_Node, nodeID);
-            qo.DoQuery();
-
-            Stations ens = new Stations();
-            foreach (CCDept en in this)
-            {
-                ens.AddEntity(new Station(en.FK_Dept));
             }
             return ens;
         }

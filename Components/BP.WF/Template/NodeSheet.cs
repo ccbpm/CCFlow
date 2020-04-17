@@ -82,17 +82,16 @@ namespace BP.WF.Template
                 #endregion 
 
                 #region 对应关系
-                //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                //平铺模式. @sly
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
                 //列表模式.
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
 
-                 
 
                 //节点绑定部门. 节点绑定部门.
                 string defDeptVal = "@WebUser.FK_Dept";
@@ -114,8 +113,8 @@ namespace BP.WF.Template
                    "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
                    EmpAttr.No, defDeptVal);
 
-            
-                 
+
+
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

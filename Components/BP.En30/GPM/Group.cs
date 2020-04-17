@@ -10,7 +10,7 @@ namespace BP.GPM
     /// </summary>
     public class GroupAttr : EntityTreeAttr
     {
-        public const string ByEmpAttr = "ByEmpAttr";
+        public const string FK_GroupType = "FK_GroupType";
     }
     /// <summary>
     /// 权限组
@@ -51,9 +51,11 @@ namespace BP.GPM
 
                 map.AddTBStringPK(GroupAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddTBString(GroupAttr.Name, null, "名称", true, false, 0, 300, 20);
-             //   map.AddTBString(GroupAttr.ParentNo, null, "父亲节编号", true, true, 0, 100, 20);
+
+                //   map.AddTBString(GroupAttr.ParentNo, null, "父亲节编号", true, true, 0, 100, 20);
                 map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
 
+                map.AddSearchAttr(GroupAttr.FK_GroupType);
 
                 map.AttrsOfOneVSM.Add(new BP.GPM.GroupEmps(), new Emps(),
                     GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
@@ -67,13 +69,13 @@ namespace BP.GPM
                 //map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
                 // GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
-                map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
-                    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
+                //map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
+                //    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
                     
 
-                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
-                  GroupStationAttr.FK_Group,
-                  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
+                //map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
+                //  GroupStationAttr.FK_Group,
+                //  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
 
                 this._enMap = map;
                 return this._enMap;

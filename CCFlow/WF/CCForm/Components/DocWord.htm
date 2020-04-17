@@ -86,8 +86,15 @@
 
         ///保存的时候.
         function Save() {
-            var a = $("#DDL_Word");
-            console.log(a);
+           var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
+            handler.AddFormData();
+            handler.AddUrlData(); //增加参数数据            
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("OID", oid);            
+            var data = handler.DoMethodReturnString("DocWord_Save");
+           
+            alert("保存成功");
+          
 
 
 
@@ -111,7 +118,7 @@
                     </select>
                 </td>
                 <td>流水号</td>
-                <td> <input type="text"  id="TB_LSH"  />  </td>
+                <td> <input type="text"  id="TB_LSH" name="TB_LSH"  />  </td>
                 <td> 选择空闲编号 </td>
             </tr>
         </table>

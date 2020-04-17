@@ -5,18 +5,18 @@
     <title>字号管理</title>
     <meta charset="UTF-8" />
     <base target="_self" />
-    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         var frmID = "ND101";
-        var oid = 100;
+        var oid = 148;
 
         $(function () {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm_Components");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddUrlData();
             handler.AddPara("FrmID", frmID);
             handler.AddPara("OID", oid);
@@ -26,10 +26,10 @@
                 alert(data); //如果是异常，就提提示.
                 return;
             }
-
+             
             //获得第一行数据.  DocWordKey字的外键,DocWordName字的名称,DocWordYear年度,DocWordLSH流水号,DocWord字号
             //比如:DocWordKey=001, DocWordName=鲁法字,DocWordYear=2019,DocWordLSH=001,DocWord=鲁法字2019-001
-
+            console.log(JSON.parse(data));
             //绑定数据.
             BindIt(data);
         });
@@ -41,10 +41,10 @@
             //1. 查询出来代字.
             var words = new Entities("BP.Port.Depts");
             words.RetrieveAll();
-            GenerDDLEntityngUrl("DDL_Word", words, "No", "Name", data.DocWorkKey);//绑定到文本框.
+          GenerBindDDL("DDL_Word", words, "No", "Name", data.DocWorkKey);//绑定到文本框.
 
             //2. 返回年度. 绑定年度. 年度仅仅是，当前与上一年两个选项.
-            GenerDDLEntityngUrl("DDL_Year", words, "No", "Name", data.DocWordYear);//绑定到文本框.
+          GenerBindDDL("DDL_Year", words, "No", "Name", data.DocWordYear);//绑定到文本框.
 
             //3. 绑定序列号编号.
             $("#TB_LSH").val( data.DocWordLSH ); 
@@ -53,11 +53,10 @@
 
         ///下拉框变化后.
         function DocWord_ReGenerDocWord() {
-
+            
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm_Components");
             handler.AddUrlData(); //增加参数数据
-            handler.AddFromData(); //增加表单数据.
-
+            handler.AddFormData(); //增加表单数据.
             handler.AddPara("FrmID", frmID);
             handler.AddPara("OID", oid);
             var data = handler.DoMethodReturnString("DocWord_ReGenerDocWord");
@@ -80,6 +79,12 @@
 
         ///保存的时候.
         function Save() {
+            var a = $("#DDL_Word");
+            console.log(a);
+
+
+
+
         }
 
     </script>
@@ -90,6 +95,7 @@
         <tr>
             <td> 字 </td>
             <td> <select id="DDL_Word" onchange="DocWord_ReGenerDocWord()"></select> </td>
+            <td> 年度 </td>
             <td>
                 <select id="DDL_Year" onchange="DocWord_ReGenerDocWord()">
                     <option value="2020">2020 </option>

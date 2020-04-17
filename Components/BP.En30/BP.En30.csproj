@@ -212,6 +212,7 @@
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Port\StationType.cs" />
     <Compile Include="Pub\ND.cs" />
     <Compile Include="Pub\NY.cs" />
     <Compile Include="Pub\Rpt2Base.cs" />
@@ -403,8 +404,6 @@
     <Compile Include="GPM\Dept.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
     <Compile Include="GPM\DeptEmpStation.cs" />
-    <Compile Include="GPM\Station.cs" />
-    <Compile Include="GPM\StationType.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -83,12 +83,12 @@ namespace BP.WF.Template
 
                 #region 对应关系
                 //平铺模式. @sly
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
                 //列表模式.
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
 

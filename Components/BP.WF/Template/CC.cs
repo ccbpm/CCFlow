@@ -434,11 +434,11 @@ namespace BP.WF.Template
                 // 相关功能。
 
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组模式)", StationAttr.FK_StationType);
 
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组列表模式)", StationAttr.FK_StationType);
 
@@ -457,7 +457,7 @@ namespace BP.WF.Template
                 #endregion 对应关系
 
                 //// 相关功能。
-                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.GPM.Stations(),
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                 //    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
                 //    DeptAttr.Name, DeptAttr.No, "抄送岗位");
 

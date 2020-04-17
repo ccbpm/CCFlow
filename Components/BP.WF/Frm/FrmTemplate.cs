@@ -9,6 +9,7 @@ using BP.WF.Data;
 using BP.WF.Template;
 using BP.Sys;
 using System.Collections.Generic;
+using BP.Port;
 
 namespace BP.Frm
 {
@@ -213,11 +214,11 @@ namespace BP.Frm
 
                 #region 可以创建的权限.
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new StationCreates(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new StationCreates(), new Stations(),
                     StationCreateAttr.FrmID,
                     StationCreateAttr.FK_Station, "可以创建的岗位", StationAttr.FK_StationType);
 
-                map.AttrsOfOneVSM.AddGroupListModel(new StationCreates(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new StationCreates(), new BP.Port.Stations(),
                   StationCreateAttr.FrmID,
                   StationCreateAttr.FK_Station, "可以创建的岗位AddGroupListModel", StationAttr.FK_StationType);
 

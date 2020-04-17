@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.WF.Template;
+using BP.Port;
 
 namespace BP.WF.HttpHandler
 {
@@ -629,7 +629,7 @@ namespace BP.WF.HttpHandler
             {
                 if (DBAccess.IsView("Port_StationType", SystemConfig.AppCenterDBType) == false)
                 {
-                    BP.GPM.StationType st = new GPM.StationType();
+                    StationType st = new StationType();
                     st.CheckPhysicsTable();
 
                     DBAccess.RunSQL("UPDATE Port_StationType SET Idx = 1");

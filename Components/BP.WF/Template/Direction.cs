@@ -162,7 +162,7 @@ namespace BP.WF.Template
                 map.AddTBInt(DirectionAttr.Idx, 0, "顺序", true, true);
 
                 //相关功能。
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),
                     NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
                     StationAttr.Name, StationAttr.No, "方向条件与岗位");
 

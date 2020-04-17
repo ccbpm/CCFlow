@@ -792,12 +792,12 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //岗位类型.
-            BP.GPM.StationTypes tps = new BP.GPM.StationTypes();
+            StationTypes tps = new StationTypes();
             tps.RetrieveAll();
             ds.Tables.Add(tps.ToDataTableField("StationTypes"));
 
             //岗位.
-            BP.GPM.Stations sts = new BP.GPM.Stations();
+            Stations sts = new Stations();
             sts.RetrieveAll();
             ds.Tables.Add(sts.ToDataTableField("Stations"));
 
@@ -1046,12 +1046,12 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //岗位类型.
-            BP.GPM.StationTypes tps = new BP.GPM.StationTypes();
+            BP.Port.StationTypes tps = new StationTypes();
             tps.RetrieveAll();
             ds.Tables.Add(tps.ToDataTableField("StationTypes"));
 
             //岗位.
-            BP.GPM.Stations sts = new BP.GPM.Stations();
+            BP.Port.Stations sts = new BP.Port.Stations();
             sts.RetrieveAll();
             ds.Tables.Add(sts.ToDataTableField("Stations"));
 

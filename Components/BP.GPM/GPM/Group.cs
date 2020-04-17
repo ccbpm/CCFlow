@@ -79,13 +79,13 @@ namespace BP.GPM
                 //map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
                 // GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
-                map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
+                map.AttrsOfOneVSM.Add(new GroupStations(), new BP.Port.Stations(),
                     GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
                     
 
-                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.Port.Stations(),
                   GroupStationAttr.FK_Group,
-                  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
+                  GroupStationAttr.FK_Station, "岗位(平铺)", BP.Port.StationAttr.FK_StationType);
 
 
                 //节点绑定部门. 节点绑定部门.

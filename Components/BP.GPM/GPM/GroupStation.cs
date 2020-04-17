@@ -82,7 +82,7 @@ namespace BP.GPM
                 map.EnType = EnType.Sys;
 
                 map.AddTBStringPK(GroupStationAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
-                map.AddDDLEntitiesPK(GroupStationAttr.FK_Station, null, "岗位", new Stations(), true);
+                map.AddDDLEntitiesPK(GroupStationAttr.FK_Station, null, "岗位", new BP.Port.Stations(), true);
 
                 this._enMap = map;
                 return this._enMap;

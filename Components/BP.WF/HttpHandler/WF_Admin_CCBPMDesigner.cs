@@ -349,7 +349,7 @@ namespace BP.WF.HttpHandler
 
             BP.GPM.Depts depts = new BP.GPM.Depts();
             depts.Retrieve(BP.GPM.DeptAttr.ParentNo, rootid);
-            BP.GPM.Stations sts = new BP.GPM.Stations();
+            BP.Port.Stations sts = new BP.Port.Stations();
             sts.RetrieveAll();
             BP.GPM.DeptStations dss = new BP.GPM.DeptStations();
             dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, rootid);
@@ -357,7 +357,7 @@ namespace BP.WF.HttpHandler
             des.Retrieve(BP.GPM.DeptEmpAttr.FK_Dept, rootid);
             BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
             dess.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Dept, rootid);
-            BP.GPM.Station stt = null;
+            Station stt = null;
             BP.GPM.Emp emp = null;
             List<string> inemps = new List<string>();
 
@@ -370,7 +370,7 @@ namespace BP.WF.HttpHandler
             //增加部门岗位
             foreach (BP.GPM.DeptStation ds in dss)
             {
-                stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
+                stt = sts.GetEntityByKey(ds.FK_Station) as Station;
 
                 if (stt == null) continue;
 
@@ -1183,7 +1183,7 @@ namespace BP.WF.HttpHandler
 
             BP.GPM.Depts depts = new BP.GPM.Depts();
             depts.RetrieveAll();
-            BP.GPM.Stations sts = new BP.GPM.Stations();
+            BP.Port.Stations sts = new BP.Port.Stations();
             sts.RetrieveAll();
             BP.GPM.Emps emps = new BP.GPM.Emps();
             emps.RetrieveAll(BP.WF.Port.EmpAttr.Name);
@@ -1191,7 +1191,7 @@ namespace BP.WF.HttpHandler
             dss.RetrieveAll();
             BP.GPM.DeptEmpStations dess = new BP.GPM.DeptEmpStations();
             dess.RetrieveAll();
-            BP.GPM.Station stt = null;
+            BP.Port.Station stt = null;
             BP.GPM.Emp empt = null;
 
             foreach (BP.GPM.Dept dept in depts)
@@ -1203,7 +1203,7 @@ namespace BP.WF.HttpHandler
                 dss.Retrieve(BP.GPM.DeptStationAttr.FK_Dept, dept.No);
                 foreach (BP.GPM.DeptStation ds in dss)
                 {
-                    stt = sts.GetEntityByKey(ds.FK_Station) as BP.GPM.Station;
+                    stt = sts.GetEntityByKey(ds.FK_Station) as Station;
 
                     if (stt == null) continue;
 

@@ -496,7 +496,7 @@ namespace BP.GPM
             menu.Name = "岗位";
             menu.FK_App = this.No;
             menu.MenuType = MenuType.Menu;
-            menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Stations";
+            menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.Port.Stations";
             menu.ParentNo = dir2.No;
             menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();

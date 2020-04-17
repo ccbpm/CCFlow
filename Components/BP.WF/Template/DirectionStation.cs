@@ -101,7 +101,7 @@ namespace BP.WF.Template
                
  // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
                     map.AddDDLEntitiesPK(DirectionStationAttr.FK_Station, null, "工作岗位",
-                       new BP.GPM.Stations(), true);
+                       new BP.Port.Stations(), true);
                  
                 this._enMap = map;
                 return this._enMap;

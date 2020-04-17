@@ -283,11 +283,8 @@
     <Compile Include="NetPlatformImpl\WF_DynamicWebService.cs" />
     <Compile Include="NetPlatformImpl\WF_File.cs" />
     <Compile Include="OverrideFile.cs" />
-    <Compile Include="Port\Admin2\Group.cs" />
-    <Compile Include="Port\Admin2\GroupEmp.cs" />
     <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Port\Dept.cs" />
-    <Compile Include="Port\Admin2\StationType.cs" />
     <Compile Include="Port\Admin2\Org.cs" />
     <Compile Include="Rpt\MapRpt.cs">
       <SubType>Code</SubType>
@@ -506,7 +503,6 @@
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\Admin2\Station.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="SMS.cs" />
     <Compile Include="EnumLib.cs" />

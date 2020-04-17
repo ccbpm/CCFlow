@@ -300,13 +300,13 @@ namespace BP.WF.Template
 
                 #region 对应关系
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", BP.GPM.StationAttr.FK_StationType, "Name", "No");
+                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", BP.Port.StationAttr.FK_StationType, "Name", "No");
 
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", BP.GPM.StationAttr.FK_StationType, "Name", "No");
+                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", BP.Port.StationAttr.FK_StationType, "Name", "No");
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),

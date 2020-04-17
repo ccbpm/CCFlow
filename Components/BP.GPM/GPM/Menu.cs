@@ -395,12 +395,12 @@ namespace BP.GPM
 
 
                 //可以访问的权限组.
-                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.Port.Stations(),
                     StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "绑定到岗位-列表模式");
 
                 //可以访问的权限组.
-                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.GPM.Stations(),
-                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", StationAttr.FK_StationType, "Name", EmpAttr.No);
+                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.Port.Stations(),
+                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", BP.Port.StationAttr.FK_StationType, "Name", EmpAttr.No);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),

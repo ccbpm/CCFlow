@@ -2209,10 +2209,10 @@ namespace BP.WF
             BP.GPM.Dept mydept = new BP.GPM.Dept();
             mydept.CheckPhysicsTable();
 
-            BP.GPM.Station mySta = new BP.GPM.Station();
+            Station mySta = new Station();
             mySta.CheckPhysicsTable();
 
-            BP.GPM.StationType myStaType = new BP.GPM.StationType();
+            StationType myStaType = new StationType();
             myStaType.CheckPhysicsTable();
 
             BP.GPM.DeptEmp myde = new GPM.DeptEmp();

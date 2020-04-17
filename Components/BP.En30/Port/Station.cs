@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
-using BP.Sys;
 
 namespace BP.Port
 {
@@ -16,17 +14,44 @@ namespace BP.Port
         /// 岗位类型
         /// </summary>
         public const string FK_StationType = "FK_StationType";
-        /// <summary>
         /// 隶属组织
         /// </summary>
-        public const string OrgNo11 = "OrgNo";
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 岗位
     /// </summary>
     public class Station : EntityNoName
     {
-        #region 实现基本的方法
+        #region 属性
+        public string FK_StationType
+        {
+            get
+            {
+                return this.GetValStrByKey(StationAttr.FK_StationType);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.FK_StationType, value);
+            }
+        }
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(StationAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.OrgNo, value);
+            }
+        }
+        #endregion
+
+        #region 实现基本的方方法
         public override UAC HisUAC
         {
             get
@@ -34,13 +59,6 @@ namespace BP.Port
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
                 return uac;
-            }
-        }
-        public new string Name
-        {
-            get
-            {
-                return this.GetValStrByKey("Name");
             }
         }
         #endregion
@@ -55,15 +73,8 @@ namespace BP.Port
         /// <summary>
         /// 岗位
         /// </summary>
-        /// <param name="no">岗位编号</param>
-        public Station(string no)
-        {
-            this.No = no.Trim();
-            if (this.No.Length == 0)
-                throw new Exception("@要查询的岗位编号为空。");
-
-            this.Retrieve();
-        }
+        /// <param name="_No"></param>
+        public Station(string _No) : base(_No) { }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -74,52 +85,28 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Station", "岗位");
+                Map map = new Map("Port_Station","岗位");
+
                 map.Java_SetEnType(EnType.Admin);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfEntity( Depositary.None);
 
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 4, 4, 4);
-                map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 100);
+                // map.Java_SetCodeStruct("4");
+                // map.IsAutoGenerNo = true;
 
-                //map.AddTBString(StationAttr.OrgNo, null, "隶属组织编号", true, false, 0, 100, 100);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, false, 1, 50, 200);
+                map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
+                map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
+                map.AddSearchAttr(StationAttr.FK_StationType);
 
-
-                ////如果是一人一部门多岗位,就启动这个映射.
-                //if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-                //{
-                //    //岗位人员.
-                //    map.AttrsOfOneVSM.Add(new EmpStations(), new Emps(), EmpStationAttr.FK_Station, EmpStationAttr.FK_Emp,
-                //      DeptAttr.Name, DeptAttr.No, "人员");
-                //}
+                //@sly
+                if (BP.Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                    map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 this._enMap = map;
                 return this._enMap;
             }
-        }
-        #endregion
-
-
-        #region 重写查询. 2015.09.31 为适应ws的查询.
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <returns></returns>
-        public override int Retrieve()
-        {
-
-            return base.Retrieve();
-
-        }
-        /// <summary>
-        /// 查询.
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveFromDBSources()
-        {
-
-            return base.RetrieveFromDBSources();
-
         }
         #endregion
     }
@@ -143,26 +130,14 @@ namespace BP.Port
             }
         }
 
-        #region 重写查询,add by stone 2015.09.30 为了适应能够从webservice数据源查询数据.
-        /// <summary>
-        /// 重写查询全部适应从WS取数据需要
-        /// </summary>
-        /// <returns></returns>
         public override int RetrieveAll()
         {
-            return base.RetrieveAll();
-        }
-        /// <summary>
-        /// 重写重数据源查询全部适应从WS取数据需要
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveAllFromDBSource()
-        {
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+                return base.RetrieveAll();
 
-            return base.RetrieveAllFromDBSource();
-
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
-        #endregion 重写查询.
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

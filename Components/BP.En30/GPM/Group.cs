@@ -2,6 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Port;
+
 
 namespace BP.GPM
 {
@@ -73,7 +75,7 @@ namespace BP.GPM
                 //    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
                     
 
-                //map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
+                //map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.Port.Stations(),
                 //  GroupStationAttr.FK_Group,
                 //  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
 

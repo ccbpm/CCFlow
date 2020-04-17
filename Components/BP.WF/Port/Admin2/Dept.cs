@@ -3,6 +3,8 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Web;
+using BP.Port;
+using BP.GPM;
 
 namespace BP.WF.Port.Admin2
 {
@@ -158,13 +160,13 @@ namespace BP.WF.Port.Admin2
             if (DBAccess.IsView("Port_StationType") == false)
             {
                 #region 高层岗位.
-                BP.WF.Port.Admin2.StationType st = new StationType();
+                StationType st = new StationType();
                 st.No = DBAccess.GenerGUID();
                 st.Name = "高层岗";
                 st.OrgNo = this.No;
                 st.DirectInsert();
 
-                BP.WF.Port.Admin2.Station sta = new Station();
+                Station sta = new Station();
                 sta.No = DBAccess.GenerGUID();
                 sta.Name = "总经理";
                 sta.OrgNo = this.No;

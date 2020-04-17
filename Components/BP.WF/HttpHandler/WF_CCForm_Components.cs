@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
             string str = (int.Parse(lsh) + 1).ToString("0000");//将返回的数字加+1并格式化为0000;
             return str;
         }
-  .
+  
         /// <summary>
         /// 重新生成字号
         /// </summary>

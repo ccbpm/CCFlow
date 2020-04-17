@@ -20,16 +20,17 @@
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
         //初始化页面函数.....
-
+        var editor = "";
         //杨玉慧
         $(function () {
-            Init();
-            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            editor = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
                 matchBrackets: true,
                 continueComments: "Enter",
                 extraKeys: { "Ctrl-Q": "toggleComment" }
             });
+            Init();
+
         });
 
         function Init() {

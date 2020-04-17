@@ -64,7 +64,7 @@ function InitBar(key) {
 
 }
 function Back() {
-    url = "../AccepterRole/Default.htm?FK_Node=" + GetQueryString("FK_Node");
+    url = "../AccepterRole/Default.htm?FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow");
     window.location.href = url;
 }
 
@@ -204,7 +204,7 @@ function changeOption() {
     }
 
     var roleName = GenerUrlByOptionKey(optionKey); 
-    window.location.href = roleName + "?FK_Node=" + nodeID;
+    window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
 }
 function SaveAndClose() {
     Save();

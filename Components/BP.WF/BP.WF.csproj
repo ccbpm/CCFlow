@@ -503,7 +503,6 @@
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="SMS.cs" />
     <Compile Include="EnumLib.cs" />
     <Compile Include="Template\FlowAttr.cs" />

@@ -8263,7 +8263,7 @@ namespace BP.WF
         /// <param name="pFlowNo">父流程编号(可以为null)</param>
         /// <param name="pWorkID">父流程WorkID(可以为0)</param>
         /// <returns></returns>
-        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc, string pFlowNo, Int64 pWorkID)
+        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc, string pFlowNo=null, Int64 pWorkID=0)
         {
             Flow fl = new Flow(fk_flow);
             Node nd = new Node(fk_node);

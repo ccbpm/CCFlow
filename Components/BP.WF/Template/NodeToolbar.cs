@@ -40,9 +40,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string Title = "Title";
         /// <summary>
-        /// url
+        /// url @sly
         /// </summary>
-        public const string Url = "Url";
+        public const string UrlExt = "UrlExt";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -104,7 +104,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStringByKey(NodeToolbarAttr.Url);
+                string s= this.GetValStringByKey(NodeToolbarAttr.UrlExt);
 
                 if (this.ExcType !=1 && s.Contains("?") == false && this.Target.ToLower() != "javascript")
                     s = s+"?1=2";
@@ -112,7 +112,7 @@ namespace BP.WF.Template
             }
             set
             {
-                SetValByKey(NodeToolbarAttr.Url, value);
+                SetValByKey(NodeToolbarAttr.UrlExt, value);
             }
         }
         public string Target
@@ -189,7 +189,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeToolbarAttr.ExcType, 0, "执行类型", true, true, "ToobarExcType",
                     "@0=超链接@1=函数");
 
-                map.AddTBString(NodeToolbarAttr.Url, null, "连接/函数", true, false, 0, 500, 300, true);
+                map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
                 // 显示位置.

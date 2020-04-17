@@ -1112,7 +1112,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBSList()
         {
             Paras ps = new Paras();
-            string sql = "SELECT Rec,RecName ,DeptNo,DeptName ,Msg,RDT FROM Frm_Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
+            string sql = "SELECT Rec,RecName,DeptNo,DeptName,Msg,RDT FROM Frm_Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
           
             if (this.FID != 0)
             {
@@ -1124,7 +1124,7 @@ namespace BP.WF.HttpHandler
                 sql += " AND (WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID OR FID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID)";
                 ps.Add("WorkID", this.WorkID);
             }
-             
+            
            
 
             ps.SQL = sql;

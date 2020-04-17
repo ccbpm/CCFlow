@@ -162,7 +162,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 console.log(data);
             }
             $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
-            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData[0], frmData.WF_Node[0]);
+            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData.No, frmData.Sys_MapData.Name, frmData.WF_Node[0].NodeName);
         }
 
     }
@@ -1312,7 +1312,7 @@ function findChildren(jsonArray, parentNo) {
 }
 
 
-function ShowFlowBBS(data, keyOfEn,Sys_MapData,WF_Node) {
+function ShowFlowBBS(data, keyOfEn,FrmNo,FrmName,NodeName) {
     var isHaveMySelf = false;
     var _Html = "";
     var str = "";
@@ -1383,7 +1383,7 @@ function ShowFlowBBS(data, keyOfEn,Sys_MapData,WF_Node) {
         }
         _Html += "</select>";
         _Html += "<a onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"Comment\");'> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
-        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论'style='float:right' onclick='BBSSubmit(\""+Sys_MapData.No+"\",\""+Sys_MapData.Name+"\",\""+WF_Node.Name+"\");' />";
+        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论'style='float:right' onclick='BBSSubmit(\""+FrmNo+"\",\""+FrmName+"\",\""+NodeName+"\");' />";
         _Html += "</div>";
          
     }
@@ -1419,6 +1419,6 @@ function BBSSubmit(FrmID,FrmName,NodeName) {
         alert(data);
         console.log(data);
     }
-    ShowFlowBBS(JSON.parse(data));
+    ShowFlowBBS(JSON.parse(data), null, FrmID,FrmName,NodeName);
    
 }

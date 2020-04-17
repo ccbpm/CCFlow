@@ -89,7 +89,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=�
 
 -- 2018.07.24 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@DesignerNo=设计者,流程开发设计者信息');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@IsFrmEnable=轨迹@DesignerNo=设计者,流程开发设计者信息');
 
 
 --新版本的流程属性,节点属性;

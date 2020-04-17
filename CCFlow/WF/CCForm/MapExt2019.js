@@ -194,6 +194,7 @@ function openDiv(e, tbID) {
 
         orgObject.style.top = t + 'px';
         orgObject.style.left = l + 'px';
+        orgObject.style.width = $("#" + tbID).width()+"px";
         orgObject.style.display = "block";
         txtObject.focus();
     }

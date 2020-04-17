@@ -15,7 +15,13 @@
         var oid = 148;
 
         $(function () {
-
+            var myDate = new Date();
+            var currentyear = myDate.getFullYear();
+            var lastyear = currentyear - 1;           
+            $("#DDL_Year").append("<option value='" + currentyear + "'>" + currentyear + "</option>");
+            $("#DDL_Year").append("<option value='" + lastyear + "'>" + lastyear + "</option>");
+           
+         
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddUrlData();
             handler.AddPara("FrmID", frmID);
@@ -44,7 +50,7 @@
           GenerBindDDL("DDL_Word", words, "No", "Name", data.DocWorkKey);//绑定到文本框.
 
             //2. 返回年度. 绑定年度. 年度仅仅是，当前与上一年两个选项.
-          GenerBindDDL("DDL_Year", words, "No", "Name", data.DocWordYear);//绑定到文本框.
+        //  GenerBindDDL("DDL_Year", words, "No", "Name", data.DocWordYear);//绑定到文本框.
 
             //3. 绑定序列号编号.
             $("#TB_LSH").val( data.DocWordLSH ); 
@@ -54,14 +60,16 @@
         ///下拉框变化后.
         function DocWord_ReGenerDocWord() {
             
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm_Components");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
+            handler.AddPara("DDL_Word", "1");
+            handler.AddPara("DDL_Year", "2020");
             handler.AddUrlData(); //增加参数数据
-            handler.AddFormData(); //增加表单数据.
+            
             handler.AddPara("FrmID", frmID);
             handler.AddPara("OID", oid);
             var data = handler.DoMethodReturnString("DocWord_ReGenerDocWord");
-
-            $("#TB_LSH").val( data ); 
+            console.log(data);
+            $("#TB_LSH").val(data); 
 
             ////让其重新绑定.
             //BindIt(data);
@@ -90,24 +98,26 @@
     </script>
 </head>
 <body>
-
-    <table style="width:100%;">
-        <tr>
-            <td> 字 </td>
-            <td> <select id="DDL_Word" onchange="DocWord_ReGenerDocWord()"></select> </td>
-            <td> 年度 </td>
-            <td>
-                <select id="DDL_Year" onchange="DocWord_ReGenerDocWord()">
-                    <option value="2020">2020 </option>
-                    <option value="2019">2019 </option>
-                </select>
-            </td>
-            <td> <input type="text" value="001" />  </td>
-            <td> 选择空闲编号 </td>
-        </tr>
-    </table>
-    <input type="button" value="保存并关闭" onclick="Save();" />
-    <input type="button" value="关闭" onclick=" window.close();" />
-
+    <form id="cc">
+        <table style="width:100%;">
+            <tr>
+                <td> 字 </td>
+                <td> <select id="DDL_Word" name="" onchange="DocWord_ReGenerDocWord()"></select> </td>
+                <td> 年度 </td>
+                <td>
+                    <select id="DDL_Year" name="DDL_Year" onchange="DocWord_ReGenerDocWord()">
+                      
+                       
+                       
+                    </select>
+                </td>
+                <td>流水号</td>
+                <td> <input type="text"  id="TB_LSH"  />  </td>
+                <td> 选择空闲编号 </td>
+            </tr>
+        </table>
+        <input type="button" value="保存并关闭" onclick="Save();" />
+        <input type="button" value="关闭" onclick=" window.close();" />
+    </form>
 </body>
 </html>

@@ -93,7 +93,11 @@
             handler.AddPara("OID", oid);            
             var data = handler.DoMethodReturnString("DocWord_Save");
            
-            alert("保存成功");
+             if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
           
 
 

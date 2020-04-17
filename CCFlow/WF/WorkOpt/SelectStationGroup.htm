@@ -29,7 +29,7 @@
 	            orgNo = 0;
 
 	        //获得该组织的岗位.
-	        var stas = new Entities("BP.GPM.Stations");
+	        var stas = new Entities("BP.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
             var stationTypes = new Entities("BP.WF.Port.StationTypes");

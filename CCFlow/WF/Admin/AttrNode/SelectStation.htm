@@ -65,7 +65,7 @@
 
             //左边的树.
             var dbTrees = [];
-            var StationTypes = new Entities("BP.GPM.StationTypes");
+            var StationTypes = new Entities("BP.Port.StationTypes");
             StationTypes.RetrieveAll();
             $.each(StationTypes, function (i, o) {
                 dbTrees.push({ "No": o.No, "Name": o.Name, "ParentNo": "0" });
@@ -214,7 +214,7 @@
 
         //按照节点加载数据.
         function loadSelectGridByNodeID(nodeID) {
-            var stations = new Entities("BP.GPM.Stations", "FK_StationType", nodeID);
+            var stations = new Entities("BP.Port.Stations", "FK_StationType", nodeID);
             loadSelectGrid(jQuery.makeArray(stations));
         }
 

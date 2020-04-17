@@ -130,7 +130,7 @@
             for (var i = 0; i < CheckStations.length; i++) {
                 if (CheckStations[i] != "") {
 
-                    var en = new Entity("BP.GPM.Station", CheckStations[i]);
+                    var en = new Entity("BP.Port.Station", CheckStations[i]);
                     html += "&nbsp;&nbsp;&nbsp;" + en.Name;
                     count++;
                     emps += CheckStations[i] + ",";

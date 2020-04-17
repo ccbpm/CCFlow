@@ -77,11 +77,11 @@
         });
 
         function WinOldStationOpen() {
-            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.GPM.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
             OpenEasyUiDialogExt(url, '抄送岗位', 800, 500, true);
         }
         function WinNewStationOpen() {
-            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&Dot2DotEnName=BP.WF.Template.CCStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.GPM.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&Dot2DotEnName=BP.WF.Template.CCStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
 
             OpenEasyUiDialogExt(url, '抄送岗位', 800, 500, true);
         }

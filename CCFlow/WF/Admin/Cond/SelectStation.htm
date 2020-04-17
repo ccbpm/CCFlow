@@ -47,14 +47,14 @@
 
             /*调用通用的.*/
             if (orgNo == null || orgNo == "" || orgNo == 0) {
-                StationTypes = new Entities("BP.GPM.StationTypes");
+                StationTypes = new Entities("BP.Port.StationTypes");
                 StationTypes.RetrieveAll();
-                Stations = new Entities("BP.GPM.Stations");
+                Stations = new Entities("BP.Port.Stations");
                 Stations.RetrieveAll();
 
                 /*调用集团模式的.*/
             } else {
-                Stations = new Entities("BP.GPM.Stations");
+                Stations = new Entities("BP.Port.Stations");
                 Stations.Retrieve("OrgNo", orgNo);
                 //查询出来数据.
                 var sql = "select No,Name FROM port_StationType WHERE No in (SELECT Fk_StationType from Port_Station WHERE OrgNo ='" + orgNo + "')";

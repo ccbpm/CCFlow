@@ -62,11 +62,9 @@
 
         function OpenStation() {
             var nodeID = GetQueryString("FK_Node");
-            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.GPM.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
             OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
         }
-
-
 
         function OpenNew() {
             var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
@@ -89,67 +87,67 @@
         }
     </script>
 </head>
-<body >
+<body>
 
-<div id="bar"> </div>
+    <div id="bar"> </div>
 
-<table  style="width:100%;">
+    <table style="width:100%;">
 
-<tr>
-    <td style="width:50%;" valign=top>
-        <fieldset>
-            <legend>设置岗位</legend>
+        <tr>
+            <td style="width:50%;" valign=top>
+                <fieldset>
+                    <legend>设置岗位</legend>
 
-            <ul>
-                <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
-                <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
-            </ul>
-        </fieldset>
+                    <ul>
+                        <li> <a href="javascript:OpenStation()"> 设置与更改岗位(树结构)</a>  </li>
+                        <li> <a href="javascript:OpenDot2DotStations()"> 设置与更改岗位（分组结构）</a>  </li>
+                    </ul>
+                </fieldset>
 
-    </td>
+            </td>
 
-    <td style="width:50%;" valign=top>
+            <td style="width:50%;" valign=top>
 
-        <fieldset>
-            <legend>设置部门</legend>
+                <fieldset>
+                    <legend>设置部门</legend>
 
-            <ul>
-                <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
-            </ul>
-        </fieldset>
-    </td>
-</tr>
-
-
+                    <ul>
+                        <li> <a href="javascript:OpenNew()">设置/更改部门</a> </li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
 
 
-<tr>
-<td valign=top> 
+
+
+        <tr>
+            <td valign=top>
+                <fieldset>
+                    <legend>已经设置的岗位 </legend>
+                    <div id="stas"> </div>
+                </fieldset>
+            </td>
+
+            <td valign=top>
+
+                <fieldset>
+                    <legend>已经设置的部门 </legend>
+                    <div id="dept"> </div>
+                </fieldset>
+
+            </td>
+
+        </tr>
+    </table>
+
+
     <fieldset>
-        <legend>已经设置的岗位 </legend>
-        <div id="stas"> </div>
+        <legend id="help">说明</legend>
+        <ul>
+            <li>ccbpm会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受选择范围。</li>
+        </ul>
     </fieldset>
-</td>
-
-<td valign=top>
-
-    <fieldset>
-        <legend>已经设置的部门 </legend>
-        <div id="dept"> </div>
-    </fieldset>
-
-</td>
-
-</tr>
-</table>
-
-
-<fieldset>
-    <legend id="help" >说明</legend>
-    <ul>
-        <li>ccbpm会取既具备此岗位集合的又具备此部门集合的人员，做为本节点的接受选择范围。</li>
-    </ul>
-</fieldset>
 
 
 </body>

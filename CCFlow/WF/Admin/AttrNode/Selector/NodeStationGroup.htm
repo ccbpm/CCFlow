@@ -32,7 +32,7 @@
 	        ens.Retrieve("FK_Node", nodeID);
 
 	        //获得该组织的岗位.
-	        var stas = new Entities("BP.WF.Port.Stations");
+	        var stas = new Entities("BP.GPM.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
             if (stas.length == 0) {
@@ -181,7 +181,7 @@
 	        var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
 	        DBAccess.RunSQL(sql);
 	        //获得该组织的岗位.
-	        var stas = new Entities("BP.WF.Port.Stations");
+	        var stas = new Entities("BP.GPM.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
 	        //遍历checkbox控件，然后执行插入.

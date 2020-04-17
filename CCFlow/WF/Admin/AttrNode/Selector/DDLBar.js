@@ -139,7 +139,7 @@ function OpenDot2DotStations() {
     var nodeID = GetQueryString("FK_Node");
 
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
-    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
+    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.GPM.Stations";
     url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);

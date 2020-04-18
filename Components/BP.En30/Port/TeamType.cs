@@ -58,7 +58,7 @@ namespace BP.Port
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_TeamType", "用户组类型");
+                Map map = new Map("Port_TeamType", "用户组类型");
                 map.Java_SetCodeStruct("2");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);

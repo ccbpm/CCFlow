@@ -45,7 +45,7 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_Team");
+                Map map = new Map("Port_Team");
                 map.DepositaryOfEntity = Depositary.None;
                 map.EnDesc = "用户组";
                 map.EnType = EnType.Sys;

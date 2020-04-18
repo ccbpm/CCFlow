@@ -76,7 +76,7 @@ namespace BP.Port
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_TeamEmp");
+                Map map = new Map("Port_TeamEmp");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
                 map.EnDesc = "用户组人员";

@@ -5119,15 +5119,15 @@ namespace BP.WF
                     ps.Add("FK_Emp", userNo);
                     num = DBAccess.RunSQLReturnValInt(ps);
                     break;
-                case DeliveryWay.ByGroup:
-                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B, Port_Emp C WHERE B.FK_Emp=C.No AND A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND C.OrgNo=" + dbstr + "OrgNo";
+                case DeliveryWay.ByTeamOrgOnly:
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeTeam A, Port_TeamEmp B, Port_Emp C WHERE B.FK_Emp=C.No AND A.FK_Team= B.FK_Team AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND C.OrgNo=" + dbstr + "OrgNo";
                     ps.Add("FK_Node", nd.NodeID);
                     ps.Add("FK_Emp", userNo);
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
                     num = DBAccess.RunSQLReturnValInt(ps);
                     break;
-                case DeliveryWay.ByGroupOnly:
-                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeGroup A, GPM_GroupEmp B WHERE A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
+                case DeliveryWay.ByTeamOnly:
+                    ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeTeam A, Port_TeamEmp B WHERE A.FK_Group= B.FK_Group AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp";
                     ps.Add("FK_Node", nd.NodeID);
                     ps.Add("FK_Emp", userNo);
                     num = DBAccess.RunSQLReturnValInt(ps);
@@ -8102,7 +8102,7 @@ namespace BP.WF
                     //解决分组下的岗位人员.
                     sql = "SELECT a.No,a.Name, A.FK_Dept FROM Port_Emp A, " + Glo.EmpStation + " B, GPM_GroupStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Group='" + group + "'";
                     sql += " UNION ";
-                    sql += "SELECT A.No, A.Name, A.FK_Dept FROM Port_Emp A, GPM_GroupEmp B  WHERE A.No=B.FK_Emp AND B.FK_Group='" + group + "'";
+                    sql += "SELECT A.No, A.Name, A.FK_Dept FROM Port_Emp A, Port_TeamEmp B  WHERE A.No=B.FK_Emp AND B.FK_Group='" + group + "'";
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)

@@ -6273,9 +6273,9 @@ namespace BP.WF
                 #endregion
 
                 #region 仅按用户组计算 @lizhen
-                if (node.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+                if (node.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
-                    sql = "SELECT A.FK_Emp No FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    sql = "SELECT A.FK_Emp No FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                     ps = new Paras();
                     ps.Add("FK_Node", node.NodeID);
                     ps.SQL = sql;
@@ -6293,9 +6293,9 @@ namespace BP.WF
                 #endregion
 
                 #region 按用户组智能计算 @lizhen
-                if (node.HisDeliveryWay == DeliveryWay.ByGroup)
+                if (node.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
-                    sql = "SELECT A.FK_Emp No FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo ORDER BY A.FK_Emp";
+                    sql = "SELECT A.FK_Emp No FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo ORDER BY A.FK_Emp";
                     ps = new Paras();
                     ps.Add("FK_Node", node.NodeID);
                     ps.Add("OrgNo", WebUser.OrgNo);

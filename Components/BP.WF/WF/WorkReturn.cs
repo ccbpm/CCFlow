@@ -73,7 +73,6 @@ namespace BP.WF
         {
             this.HisNode = new Node(currNodeID);
 
-
             //如果退回的节点为0,就求出可以退回的唯一节点. 
             if (returnToNodeID == 0)
             {

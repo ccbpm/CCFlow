@@ -688,9 +688,9 @@ namespace BP.WF.Template
             #endregion 按照岗位计算，项目类.
 
             #region 仅按 用户组 计算 @lizhen
-            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
-                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGroup B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.SQL = sql;
@@ -708,9 +708,9 @@ namespace BP.WF.Template
             #endregion
 
             #region 按用户组智能 计算 @lizhen
-            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByGroup)
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
-                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
@@ -928,9 +928,9 @@ namespace BP.WF.Template
 
             /* 如果执行节点 与 接受节点岗位集合一致 */
             string currGroupStaNDs = this.currWn.HisNode.GroupStaNDs;
-            string toNodeGroupStaNDs = town.HisNode.GroupStaNDs;
+            string toNodeTeamStaNDs = town.HisNode.GroupStaNDs;
 
-            if (DataType.IsNullOrEmpty(currGroupStaNDs) == false && currGroupStaNDs.Equals(toNodeGroupStaNDs) == true)
+            if (DataType.IsNullOrEmpty(currGroupStaNDs) == false && currGroupStaNDs.Equals(toNodeTeamStaNDs) == true)
             {
                 /* 说明，就把当前人员做为下一个节点处理人。*/
                 DataRow dr = dt.NewRow();
@@ -940,8 +940,8 @@ namespace BP.WF.Template
             }
 
             /* 如果执行节点 与 接受节点岗位集合不一致 */
-            if ((DataType.IsNullOrEmpty(toNodeGroupStaNDs) == true && DataType.IsNullOrEmpty(currGroupStaNDs) == true)
-                || currGroupStaNDs.Equals(toNodeGroupStaNDs) == false)
+            if ((DataType.IsNullOrEmpty(toNodeTeamStaNDs) == true && DataType.IsNullOrEmpty(currGroupStaNDs) == true)
+                || currGroupStaNDs.Equals(toNodeTeamStaNDs) == false)
             {
                 /* 没有查询到的情况下, 先按照本部门计算。*/
                 if (flowAppType == FlowAppType.Normal)

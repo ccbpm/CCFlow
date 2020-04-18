@@ -148,11 +148,23 @@ namespace BP.WF.Port.Admin2
                 //rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "修改管理员";
-                rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
-                rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
-                map.AddRefMethod(rm);
+                //只有admin管理员,才能增加二级管理员.
+                if (BP.Web.WebUser.No!=null && BP.Web.WebUser.No.Equals("admin") == true)
+                {
+                    //节点绑定人员. 使用树杆与叶子的模式绑定.
+                    map.AttrsOfOneVSM.AddBranchesAndLeaf(new OrgAdminers(),
+                        new BP.Port.Emps(),
+                       OrgAdminerAttr.OrgNo,
+                       OrgAdminerAttr.FK_Emp,
+                       "管理员", EmpAttr.FK_Dept, EmpAttr.Name,
+                       EmpAttr.No, BP.Web.WebUser.OrgNo);
+                }
+
+                //rm = new RefMethod();
+                //rm.Title = "修改管理员";
+                //rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
+                //rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
+                //map.AddRefMethod(rm);
 
 
                 //rm = new RefMethod();
@@ -188,7 +200,6 @@ namespace BP.WF.Port.Admin2
         public string DoCheck()
         {
             string err = "";
-
 
             #region 组织结构信息检查.
             //检查orgNo的部门是否存在？

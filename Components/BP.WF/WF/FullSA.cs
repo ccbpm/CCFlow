@@ -152,9 +152,9 @@ namespace BP.WF
                 }
 
                 #region 仅按组织计算  @lizhen
-                if (item.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
-                    string sql = "SELECT DISTINCT c.No,c.Name FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;
@@ -185,9 +185,9 @@ namespace BP.WF
                 #endregion
 
                 #region 仅按组织智能计算  @lizhen
-                if (item.HisDeliveryWay == DeliveryWay.ByGroup)
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
-                    string sql = "SELECT DISTINCT c.No,c.Name FROM GPM_GroupEmp A, WF_NodeGroup B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);

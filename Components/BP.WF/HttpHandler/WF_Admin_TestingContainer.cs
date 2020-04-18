@@ -261,14 +261,14 @@ namespace BP.WF.HttpHandler
 
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
-                    case DeliveryWay.ByGroup: //按照组织智能计算。
-                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
-                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                    case DeliveryWay.ByTeamOrgOnly: //按照组织智能计算。
+                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
+                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                         break;
-                    case DeliveryWay.ByGroupOnly: //仅按用户组计算. @lizhen.
+                    case DeliveryWay.ByTeamOnly: //仅按用户组计算. @lizhen.
 
-                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeGroup B, GPM_GroupEmp C ";
-                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nd.NodeID;
+                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
+                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID;
                         break;
                     case DeliveryWay.ByDept:
                         sql = "SELECT No,Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;

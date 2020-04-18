@@ -1008,13 +1008,17 @@ namespace BP.WF
         /// </summary>
         ByDeptLeader = 23,
         /// <summary>
-        /// 按照用户组智能计算
+        /// 按照用户组计算(本组织范围内)
         /// </summary>
-        ByGroup = 24,
+        ByTeamOrgOnly = 24,
         /// <summary>
-        /// 仅仅按照用户组计算
+        /// 按照用户组计算(全集团)
         /// </summary>
-        ByGroupOnly = 25,
+        ByTeamOnly = 25,
+        /// <summary>
+        /// 按照用户组计算(本部门范围内)
+        /// </summary>
+        ByTeamDeptOnly = 26,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

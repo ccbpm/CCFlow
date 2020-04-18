@@ -1167,9 +1167,9 @@ namespace BP.WF
             #endregion 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
 
             #region 仅按用户组计算 @lizhen
-            if (toNode.HisDeliveryWay == DeliveryWay.ByGroupOnly)
+            if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
-                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGrop B WHERE A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.SQL = sql;
@@ -1182,9 +1182,9 @@ namespace BP.WF
             #endregion
 
             #region 仅按用户组智能计算 @lizhen
-            if (toNode.HisDeliveryWay == DeliveryWay.ByGroup)
+            if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
             {
-                sql = "SELECT A.FK_Emp FROM GPM_GroupEmp A, WF_NodeGrop B,Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Group=B.FK_Group AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
+                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.Add("OrgNo", BP.Web.WebUser.OrgNo);

@@ -246,6 +246,8 @@ function getGroups() {
 
     var ens = new Entities("BP.WF.Template.NodeTeams");
     ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    alert(ens.length);
+
     ens = $.grep(ens, function (obj, i) {
         return obj.FK_Node != undefined
     });

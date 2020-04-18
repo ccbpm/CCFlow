@@ -1491,6 +1491,21 @@ namespace BP.Sys
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
+
+        public FrmEvents(int nodeID,string fk_flow)
+        {
+            QueryObject qo = new QueryObject(this);
+
+            qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
+            qo.addOr();
+            qo.addLeftBracket();
+            qo.AddWhere(FrmEventAttr.FK_Flow, fk_flow);
+            qo.addAnd();
+            qo.AddWhere(FrmEventAttr.FK_Node, 0);
+            qo.addRightBracket();
+            qo.DoQuery();
+        }
+
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

@@ -483,7 +483,8 @@ namespace BP.WF
                 FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
                 if (obj == null)
                 {
-                    obj = new FrmEvents(this.NodeID);
+                    obj = new FrmEvents(this.NodeID,this.FK_Flow);
+
                     this.SetRefObject("FrmEvents", obj);
                 }
                 return obj;

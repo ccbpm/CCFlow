@@ -53,9 +53,9 @@ if (typeof DeliveryWay == "undefined") {
         //按照部门领导计算
         DeliveryWay.ByDeptLeader = 23,
         //按照用户组计算
-        DeliveryWay.ByGroup = 24,
+        DeliveryWay.ByTeam = 24,
         //仅按用户组计算.
-        DeliveryWay.ByGroupOnly = 25,
+        DeliveryWay.ByTeamOnly = 25,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同

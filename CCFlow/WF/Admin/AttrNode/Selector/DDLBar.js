@@ -97,7 +97,7 @@ function getDepts() {
  */
 function getGroups() {
 
-    var ens = new Entities("BP.WF.Template.NodeGroups");
+    var ens = new Entities("BP.WF.Template.NodeTeams");
     ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
     ens = $.grep(ens, function (obj, i) {
         return obj.FK_Node != undefined

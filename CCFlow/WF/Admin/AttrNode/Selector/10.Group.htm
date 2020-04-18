@@ -61,7 +61,7 @@
                 OpenNew: function () {
 
                     var nodeID = GetQueryString("FK_Node");
-                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeGroups&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Group&EnsOfM=BP.GPM.Groups&DefaultGroupAttrKey=";
+                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeTeams&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Team&EnsOfM=BP.GPM.Teams&DefaultGroupAttrKey=";
                     url += '&No=' + nodeID + '&PKVal=' + nodeID;
 
                     OpenEasyUiDialogExtCloseFunc(url, '绑定用户组', 500, 350, function () {

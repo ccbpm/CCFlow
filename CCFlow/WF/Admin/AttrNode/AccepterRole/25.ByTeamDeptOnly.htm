@@ -55,7 +55,7 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: SelectorModel.GroupOnly
+                deliverWay: DeliveryWay.ByTeamDeptOnly
             },
             methods: {
                 OpenNew: function () {
@@ -70,7 +70,7 @@
                 }
             },
             created() {
-                InitBar(this.deliverWay);
+                InitBar(DeliveryWay.ByTeamDeptOnly);
                 this.groups = getGroups();
 
             }
@@ -80,10 +80,9 @@
         function Save() {
 
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Template.Selector", nodeID);
-            node.SelectorModel = SelectorModel.GroupOnly;
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.ByTeamDeptOnly;
             node.Update();
-            alert("保存成功.");
         }
     </script>
 </body>

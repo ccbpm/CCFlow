@@ -36,7 +36,7 @@
                 <ul>
                     <li v-show="groups.length===0">未设置</li>
                     <template v-for="group in groups">
-                        <li v-if="group.FK_Team!=undefined">{{group.FK_TeamText}}</li>
+                        <li v-if="group.FK_Group!=undefined">{{group.FK_GroupText}}</li>
                     </template>
                 </ul>
 
@@ -55,7 +55,7 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: DeliveryWay.ByTeam
+                deliverWay: DeliveryWay.ByTeamOrgOnly
             },
             methods: {
                 OpenNew: function () {
@@ -70,7 +70,7 @@
                 }
             },
             created() {
-                InitBar(DeliveryWay.ByTeam);
+                InitBar(DeliveryWay.ByTeamOrgOnly);
                 this.groups = getGroups();
 
             }
@@ -81,7 +81,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByTeam;
+            node.DeliveryWay = DeliveryWay.ByTeamOrgOnly;
             node.Update();
         }
     </script>

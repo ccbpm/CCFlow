@@ -50,12 +50,15 @@ if (typeof DeliveryWay == "undefined") {
         //所有人员都可以发起
         DeliveryWay.BySelected_1 = 41,
         DeliveryWay.BySelectedOrgs = 22,
-        //按照部门领导计算
+        //按照用户组计算(本组织范围内)
         DeliveryWay.ByDeptLeader = 23,
-        //按照用户组计算
-        DeliveryWay.ByTeam = 24,
+        //按照用户组计算(全集团)
+        DeliveryWay.ByTeamOrgOnly = 24,
         //仅按用户组计算.
         DeliveryWay.ByTeamOnly = 25,
+        // 按照用户组计算(本部门范围内)
+        DeliveryWay.ByTeamDeptOnly = 26,
+
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同

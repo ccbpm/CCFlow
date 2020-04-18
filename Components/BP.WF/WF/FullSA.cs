@@ -184,7 +184,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 仅按组织智能计算  @lizhen
+                #region 本组织计算  @lizhen
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
                     string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
@@ -195,7 +195,42 @@ namespace BP.WF
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
-                        throw new Exception("err@节点绑定的仅按照 用户组 智能计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                        throw new Exception("err@节点绑定的仅按照 用户组 ByTeamOrgOnly，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+                        sa.Insert();
+                    }
+                }
+                #endregion
+
+                #region 本组织计算  @lizhen
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
+                {
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("err@节点绑定的仅按照 用户组 ByTeamDeptOnly，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string no = dr[0].ToString();

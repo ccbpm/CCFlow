@@ -5120,6 +5120,7 @@ namespace BP.WF
                     num = DBAccess.RunSQLReturnValInt(ps);
                     break;
                 case DeliveryWay.ByTeamOrgOnly:
+                case DeliveryWay.ByTeamDeptOnly:
                     ps.SQL = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeTeam A, Port_TeamEmp B, Port_Emp C WHERE B.FK_Emp=C.No AND A.FK_Team= B.FK_Team AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND C.OrgNo=" + dbstr + "OrgNo";
                     ps.Add("FK_Node", nd.NodeID);
                     ps.Add("FK_Emp", userNo);

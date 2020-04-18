@@ -1169,7 +1169,7 @@ namespace BP.WF
             #region 仅按用户组计算 @lizhen
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
-                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.SQL = sql;
@@ -1181,13 +1181,30 @@ namespace BP.WF
             }
             #endregion
 
-            #region 仅按用户组智能计算 @lizhen
+            #region 本集团组织 @lizhen
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
             {
-                sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
+
+                ps.SQL = sql;
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count > 0)
+                    return dt;
+                else
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按用户组智能计算，没有找到人员:SQL=" + ps.SQLNoPara);
+            }
+            #endregion
+
+            #region 本部门 @lizhen
+            if (toNode.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
+            {
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept  ORDER BY A.FK_Emp";
+                ps = new Paras();
+                ps.Add("FK_Node", toNode.NodeID);
+                ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
 
                 ps.SQL = sql;
                 dt = DBAccess.RunSQLReturnTable(ps);

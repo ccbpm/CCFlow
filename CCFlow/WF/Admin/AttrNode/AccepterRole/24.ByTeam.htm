@@ -55,13 +55,13 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: DeliveryWay.ByGroup
+                deliverWay: DeliveryWay.ByTeam
             },
             methods: {
                 OpenNew: function () {
 
                     var nodeID = GetQueryString("FK_Node");
-                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeTeams&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Team&EnsOfM=BP.GPM.Teams&DefaultGroupAttrKey=";
+                    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.FlowSheet&Dot2DotEnsName=BP.WF.Template.NodeTeams&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Team&EnsOfM=BP.Port.Teams&DefaultGroupAttrKey=";
                     url += '&No=' + nodeID + '&PKVal=' + nodeID;
 
                     OpenEasyUiDialogExtCloseFunc(url, '绑定用户组', 500, 350, function () {
@@ -70,7 +70,7 @@
                 }
             },
             created() {
-                InitBar(DeliveryWay.ByGroup);
+                InitBar(DeliveryWay.ByTeam);
                 this.groups = getGroups();
 
             }
@@ -81,7 +81,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByGroup;
+            node.DeliveryWay = DeliveryWay.ByTeam;
             node.Update();
         }
     </script>

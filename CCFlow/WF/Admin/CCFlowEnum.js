@@ -49,16 +49,6 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelected = 4,
         //所有人员都可以发起
         DeliveryWay.BySelected_1 = 41,
-        DeliveryWay.BySelectedOrgs = 22,
-        //按照用户组计算(本组织范围内)
-        DeliveryWay.ByDeptLeader = 23,
-        //按照用户组计算(全集团)
-        DeliveryWay.ByTeamOrgOnly = 24,
-        //仅按用户组计算.
-        DeliveryWay.ByTeamOnly = 25,
-        // 按照用户组计算(本部门范围内)
-        DeliveryWay.ByTeamDeptOnly = 26,
-
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
         // 与上一节点的人员相同
@@ -93,7 +83,15 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.ByStationForPrj = 20,
         //由上一节点发送人通过“人员选择器”选择接受人
         DeliveryWay.BySelectedForPrj = 21,
-
+        DeliveryWay.BySelectedOrgs = 22,
+        //按照用户组计算(本组织范围内)
+        DeliveryWay.ByDeptLeader = 23,
+        //按照用户组计算(全集团)
+        DeliveryWay.ByTeamOrgOnly = 24,
+        //仅按用户组计算.
+        DeliveryWay.ByTeamOnly = 25,
+        // 按照用户组计算(本部门范围内)
+        DeliveryWay.ByTeamDeptOnly = 26,
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
 
@@ -113,8 +111,10 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.Url = 7,
         SelectorModel.AccepterOfDeptStationEmp = 8,
         SelectorModel.AccepterOfDeptStationOfCurrentOper = 9,
-        SelectorModel.Group = 10,
-        SelectorModel.GroupOnly = 11
+        SelectorModel.TeamOrgOnly = 10,
+        SelectorModel.TeamOnly = 11,
+        SelectorModel.TeamDeptOnly = 12
+
 
 }
 //发送阻塞规则.

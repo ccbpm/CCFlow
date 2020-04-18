@@ -36,17 +36,17 @@
                 <ul>
                     <li v-show="groups.length===0">未设置</li>
                     <template v-for="group in groups">
-                        <li v-if="group.FK_Group!=undefined">{{group.FK_GroupText}}</li>
+                        <li v-if="group.FK_Team!=undefined">{{group.FK_TeamText}}</li>
                     </template>
                 </ul>
-
+              
             </div>
         </fieldset>
 
         <fieldset>
             <legend id="help">帮助</legend>
             <ul>
-                <li>节点绑定用户组就是该节点下绑定用户组里面的所有人员都可以接受该工作.</li>
+                <li>节点绑定用户组就是该节点下绑定用户组(本组织内)里面的所有人员都可以接受该工作.</li>
             </ul>
         </fieldset>
     </div>
@@ -55,7 +55,7 @@
             el: '#App',
             data: {
                 groups: [],
-                deliverWay: SelectorModel.GroupOnly
+                deliverWay: SelectorModel.TeamOrgOnly
             },
             methods: {
                 OpenNew: function () {
@@ -81,7 +81,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
-            node.SelectorModel = SelectorModel.GroupOnly;
+            node.SelectorModel = SelectorModel.TeamOrgOnly;
             node.Update();
             alert("保存成功.");
         }

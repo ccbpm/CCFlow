@@ -40,8 +40,9 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
 
     if (webUser.CCBPMRunModel == 1) {
-        html += "<option value=" + SelectorModel.Group + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织)计算</option>";
-        html += "<option value=" + SelectorModel.GroupOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组计算</option>";
+        html += "<option value=" + SelectorModel.TeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
+        html += "<option value=" + SelectorModel.TeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
+        html += "<option value=" + SelectorModel.TeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
     }
 
     html += "<option value=null  disabled='disabled'>+其他</option>";
@@ -178,11 +179,14 @@ function GenerUrlByOptionKey(optionKey) {
         case SelectorModel.DeptAndStation:
             roleName = "9.AccepterOfDeptStationOfCurrentOper.htm";
             break;
-        case SelectorModel.Group:
-            roleName = "10.Group.htm";
+        case SelectorModel.TeamOnly:
+            roleName = "10.TeamOnly.htm";
             break;
-        case SelectorModel.GroupOnly:
-            roleName = "11.GroupOnly.htm";
+        case SelectorModel.TeamOrgOnly:
+            roleName = "11.TeamOrgOnly.htm";
+            break;
+        case SelectorModel.TeamDeptOnly:
+            roleName = "12.TeamDeptOnly.htm";
             break;
         default:
 

@@ -7206,10 +7206,10 @@ namespace BP.WF
                         this.HisNode, this.rptGe, null, this.HisMsgObjs);
                     this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
-                    ////调用发送成功事件.
-                    //string  flowOver = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                    //this.HisNode, this.rptGe, null, this.HisMsgObjs);
-                    //this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                    //调用流程结束后事件.
+                    string flowOver = this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter,
+                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    this.HisMsgObjs.AddMsg("info21", flowOver, flowOver, SendReturnMsgType.Info);
 
                     //执行考核
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);

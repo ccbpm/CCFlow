@@ -36,7 +36,7 @@
                 <ul>
                     <li v-show="groups.length===0">未设置</li>
                     <template v-for="group in groups">
-                        <li v-if="group.FK_Group!=undefined">{{group.FK_GroupText}}</li>
+                        <li v-if="group.FK_Team!=undefined">{{group.FK_TeamText}}</li>
                     </template>
                 </ul>
 

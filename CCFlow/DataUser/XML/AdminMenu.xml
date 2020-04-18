@@ -12,8 +12,8 @@
 
   <!-- 所有的人都可以维护组织结构. -->
   <Group No="Org" Name="组织结构" />
-  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
-  <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
+  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
+  <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Depts"  />
   <Item1 No="502" GroupNo="Org" Name="部门树" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Depts"  />
 
@@ -21,13 +21,13 @@
   <Item11 No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Emps"  />
   <Item11 No="502" GroupNo="Org" Name="部门人员树" For="admin" Url="../../Comm/TreeEns.htm?TreeEnsName=BP.GPM.Depts&amp;EnsName=BP.GPM.Emps&amp;RefPK=FK_Dept"  />
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../../GPM/Organization.htm"  />
-  <Item No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
+  <Item No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
 
   <Group No="GPM" Name="菜单权限管理GPM" />
   <Item No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
   <Item No="902" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
   <Item No="903" GroupNo="GPM" Name="权限组" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
-  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
+  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.StationExts"  />
   <Item No="905" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
   <!--<Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />-->
   <Item No="907" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />

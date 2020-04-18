@@ -9,28 +9,28 @@
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单.
   -->
-
+  
   <!-- 集团版本的admin组织结构菜单. -->
   <Group No="OrgAdmin" Name="组织结构" For="admin" />
-  <Item No="101" GroupNo="OrgAdmin" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
-  <Item No="101" GroupNo="OrgAdmin" Name="岗位维护"  Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
+  <Item No="101" GroupNo="OrgAdmin" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.DOC.StationTypes"  />
+  <Item No="101" GroupNo="OrgAdmin" Name="岗位维护"  Url="../../Comm/Search.htm?EnsName=BP.DOC.Stations"  />
   <Item No="102" GroupNo="OrgAdmin" Name="部门台帐"  Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Admin2.Depts"  />
   <Item No="101" GroupNo="OrgAdmin" Name="独立组织"   Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Admin2.Orgs"  />
   <Item No="104" GroupNo="OrgAdmin" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
-  <Item No="104" GroupNo="OrgAdmin" Name="用户组"   Url="../../Comm/Ens.htm?EnsName=BP.WF.Port.Admin2.Groups"  />
+  <Item No="105" GroupNo="OrgAdmin" Name="用户组类型"   Url="../../Comm/Ens.htm?EnsName=BP.Port.TeamTypes"  />
+  <Item No="106" GroupNo="OrgAdmin" Name="用户组"   Url="../../Comm/Search.htm?EnsName=BP.Port.Teams"  />
 
   <!-- 集团版本的admin2 (二级管理员) 组织结构菜单. -->
   <Group No="OrgAdmin2" Name="组织结构(2级管理员)" For="admin2" />
   <Item No="201" GroupNo="OrgAdmin2" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
-  <Item No="202" GroupNo="OrgAdmin2" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.GPM.StationTypes"  />
-  <Item No="203" GroupNo="OrgAdmin2" Name="岗位维护"   Url="../../Comm/Search.htm?EnsName=BP.GPM.Stations"  />
-  <Item No="205" GroupNo="OrgAdmin2" Name="权限组"   Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
+  <Item No="202" GroupNo="OrgAdmin2" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
+  <Item No="203" GroupNo="OrgAdmin2" Name="岗位维护"   Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
 
   <Group No="GPM" Name="菜单权限管理"  For="admin"  />
   <Item No="901" GroupNo="GPM" Name="系统类别"  Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
   <Item No="902" GroupNo="GPM" Name="系统台帐"   Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
   <Item No="903" GroupNo="GPM" Name="权限组"   Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
-  <Item No="904" GroupNo="GPM" Name="岗位菜单"   Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
+  <Item No="904" GroupNo="GPM" Name="岗位菜单"   Url="../../Comm/Search.htm?EnsName=BP.Port.StationExts"  />
   <Item No="905" GroupNo="GPM" Name="人员菜单"   Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
   <Item No="907" GroupNo="GPM" Name="菜单树"   Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
 
@@ -43,6 +43,15 @@
   <Item No="601" GroupNo="System" Name="系统枚举"  Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
   <Item No="602" GroupNo="System" Name="字典表"   Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddSFTable"  />
   <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+
+  <Group No="DOC" Name="公文管理" For="admin" />
+  <Item No="8001" GroupNo="DOC" Name="公文类型"   Url="../../Comm/Ens.htm?EnsName=BP.DOC.DocTypes"  />
+  <Item No="8002" GroupNo="DOC" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Templates"  />
+  <Item No="8003" GroupNo="DOC" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Words"  />
+
+  <Group No="DOC2" Name="公文管理（二级管理员）" For="admin2" />
+  <Item No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Templates"  />
+  <Item No="7003" GroupNo="DOC2" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Words"  />
 
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />

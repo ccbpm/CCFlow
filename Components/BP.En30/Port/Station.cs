@@ -129,7 +129,23 @@ namespace BP.Port
                 return new Station();
             }
         }
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <param name="orderBy">排序</param>
+        /// <returns></returns>
+        public override int RetrieveAll(string orderBy)
+        {
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+                return base.RetrieveAll(orderBy);
 
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
+        }
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
         public override int RetrieveAll()
         {
             if (BP.Sys.SystemConfig.CCBPMRunModel == 0)

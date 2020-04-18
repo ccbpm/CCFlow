@@ -1104,11 +1104,10 @@ namespace BP.WF.HttpHandler
             Entities trees = attr.HisFKEns;
             //判断改类是否存在Idx
             Entity tree = trees.GetNewEntity;
-            //@sly 去掉。
-            //if(DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable,"Idx") == true
-            //    && tree.EnMap.Attrs.Contains("Idx") == true)
-            //    trees.RetrieveAll("Idx");
-            //else
+            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+                && tree.EnMap.Attrs.Contains("Idx") == true)
+                trees.RetrieveAll("Idx");
+            else
                 trees.RetrieveAll();
 
             DataTable dt = trees.ToDataTableField("DBTrees");

@@ -314,8 +314,8 @@ namespace BP.GPM
                     BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 //用户组
-                map.AttrsOfOneVSM.Add(new GroupEmps(), new Groups(), GroupEmpAttr.FK_Emp, GroupEmpAttr.FK_Group,
-                    GroupAttr.Name, GroupAttr.No, "用户组", Dot2DotModel.Default);
+                map.AttrsOfOneVSM.Add(new TeamEmps(), new Teams(), TeamEmpAttr.FK_Emp, TeamEmpAttr.FK_Team,
+                    TeamAttr.Name, TeamAttr.No, "用户组", Dot2DotModel.Default);
 
                 rm = new RefMethod();
                 rm.Title = "修改密码";

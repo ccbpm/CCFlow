@@ -87,6 +87,9 @@ namespace BP.GPM
                   GroupStationAttr.FK_Group,
                   GroupStationAttr.FK_Station, "岗位(平铺)", BP.Port.StationAttr.FK_StationType);
 
+                map.AttrsOfOneVSM.AddBranches(new GroupDepts(), new Depts(),
+                   GroupEmpAttr.FK_Group, GroupDeptAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
+
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new GroupMenus(), new BP.GPM.Menus(),

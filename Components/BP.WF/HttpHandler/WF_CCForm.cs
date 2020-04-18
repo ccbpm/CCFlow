@@ -2261,7 +2261,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(FrmEleDBs);
             qo.AddWhere(FrmEleDBAttr.FK_MapData, this.FK_MapDtl);
             qo.addAnd();
-            qo.AddWhere(FrmEleDBAttr.RefPKVal, dtl.OID);
+            qo.AddWhere(FrmEleDBAttr.RefPKVal, Convert.ToString(dtl.OID));
             qo.DoQuery();
             if (FrmEleDBs != null && FrmEleDBs.Count > 0)
             {

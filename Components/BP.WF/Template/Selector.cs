@@ -339,10 +339,13 @@ namespace BP.WF.Template
                 case SelectorModel.Dept:
                     ds = ByDept(nodeid, en);
                     break;
-                case SelectorModel.Group:
+                case SelectorModel.TeamOrgOnly:
                     ds = ByGroup(nodeid, en);
                     break;
-                case SelectorModel.GroupOnly:
+                case SelectorModel.TeamOnly:
+                    ds = ByGroup(nodeid, en);
+                    break;
+                case SelectorModel.TeamDeptOnly:
                     ds = ByGroup(nodeid, en);
                     break;
                 case SelectorModel.Emp:

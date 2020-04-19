@@ -1066,7 +1066,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            return "../../Admin/AttrNode/TurnToDeal.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 抄送人规则

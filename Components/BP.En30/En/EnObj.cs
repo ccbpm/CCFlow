@@ -900,25 +900,24 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStringByKey(string attrKey)
         {
-            switch (attrKey)
+            if (1 == 2 && attrKey.Equals("Doc") == true)
             {
-                case "Doc":
-                    string s = this.Row.GetValByKey(attrKey).ToString();
-                    if (s == "")
-                        s = this.GetValDocText();
-                    return s;
-                default:
-                    try
-                    {
-                        if (this.Row == null)
-                            throw new Exception("@没有初始化Row.");
-                        return this.Row.GetValByKey(attrKey).ToString();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类增加这个属性，EnsName=" + this.ToString());
-                    }
-                    break;
+                //string s = this.Row.GetValByKey(attrKey).ToString();
+                //if (s == "")
+                //    s = this.GetValDocText();
+                //return s;
+            }
+
+            if (this.Row == null)
+                throw new Exception("@没有初始化Row.");
+
+            try
+            {
+                return this.Row.GetValByKey(attrKey).ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类增加这个属性，EnsName=" + this.ToString());
             }
         }
         public string GetValStringByKey(string attrKey, string defVal)

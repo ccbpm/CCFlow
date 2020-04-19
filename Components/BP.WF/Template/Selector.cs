@@ -290,7 +290,7 @@ namespace BP.WF.Template
                 //     map.AddDDLSysEnum(SelectorAttr.IsMinuesAutoLoadEmps, 5, "接收人选择方式", true, true, SelectorAttr.SelectorModel,
                 //   "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url");
 
-                map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true,false,0,300,100,3);
+                map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, 0, 300, 100, 3);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, 0, 300, 100, 3);
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP3, null, "默认选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, 0, 300, 100, 3);
@@ -340,13 +340,13 @@ namespace BP.WF.Template
                     ds = ByDept(nodeid, en);
                     break;
                 case SelectorModel.TeamOrgOnly:
-                    ds = ByGroup(nodeid, en);
+                    ds = ByTeam(nodeid, en, this.SelectorModel);
                     break;
                 case SelectorModel.TeamOnly:
-                    ds = ByGroup(nodeid, en);
+                    ds = ByTeam(nodeid, en, this.SelectorModel);
                     break;
                 case SelectorModel.TeamDeptOnly:
-                    ds = ByGroup(nodeid, en);
+                    ds = ByTeam(nodeid, en, this.SelectorModel);
                     break;
                 case SelectorModel.Emp:
                     ds = ByEmp(nodeid);
@@ -657,7 +657,7 @@ namespace BP.WF.Template
         /// <param name="nodeID"></param>
         /// <param name="en"></param>
         /// <returns></returns>
-        private DataSet ByGroup(int nodeID, Entity en)
+        private DataSet ByTeam(int nodeID, Entity en, SelectorModel sm)
         {
             // 定义数据容器.
             DataSet ds = new DataSet();
@@ -667,23 +667,36 @@ namespace BP.WF.Template
 
             Node nd = new Node(nodeID);
 
-            //部门.
-            sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Group=c.FK_Group AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " AND D.OrgNo=" + WebUser.OrgNo + " ORDER BY A.No,A.Idx";
+            if (sm == SelectorModel.TeamDeptOnly)
+                sql = "SELECT  No,Name FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'";
+            if (sm == SelectorModel.TeamOnly)
+                sql = "SELECT DISTINCT a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Team=c.FK_Team AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + "   ORDER BY A.No,A.Idx";
+            if (sm == SelectorModel.TeamOrgOnly)
+                sql = "SELECT DISTINCT a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Team=c.FK_Team AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " AND D.OrgNo=" + WebUser.OrgNo + " ORDER BY A.No,A.Idx";
+
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
-                    sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nodeID + " AND A.OrgNo='"+WebUser.OrgNo+"') ORDER BY FK_Dept,Idx,No";
-                else
-                    sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE A.No=C.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nodeID + "  AND A.OrgNo='" + WebUser.OrgNo + "' ";
+                if (sm == SelectorModel.TeamDeptOnly)
+                    sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.FK_Dept + "') ORDER BY FK_Dept,Idx,No";
+                if (sm == SelectorModel.TeamOrgOnly)
+                    sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.OrgNo='" + WebUser.OrgNo + "') ORDER BY FK_Dept,Idx,No";
+                if (sm == SelectorModel.TeamOnly)
+                    sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " ) ORDER BY FK_Dept,Idx,No";
             }
             else
             {
-                sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND B.FK_Node=" + nodeID + " AND A.OrgNo='" + WebUser.OrgNo + "'  ORDER BY A.Idx";
+                if (sm == SelectorModel.TeamDeptOnly)
+                    sql = "SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.FK_Dept + "'  ORDER BY A.Idx";
+                if (sm == SelectorModel.TeamOrgOnly)
+                    sql = "SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.OrgNo='" + WebUser.OrgNo + "'  ORDER BY A.Idx";
+                if (sm == SelectorModel.TeamOnly)
+                    sql = "SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + "  ORDER BY A.Idx";
             }
 
             dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -780,7 +793,7 @@ namespace BP.WF.Template
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
                 else
-                    sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID+"  ORDER BY A.Idx";
+                    sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
             }
             else
             {

@@ -367,7 +367,7 @@ namespace BP.DA
                 _PraseParentTree2TreeNo(dtTree, newDt, dtTree.Rows[0]["No"].ToString());
             return newDt;
         }
-       
+
 
         /// <summary>
         /// 转换成MB
@@ -405,7 +405,7 @@ namespace BP.DA
 
             string filePath = fileName.Substring(0, fileName.LastIndexOf('\\'));
             string fName = fileName.Substring(fileName.LastIndexOf('\\'));
-            
+
             fName = PraseStringToUrlFileNameExt(fName, "%", "%25");
             fName = PraseStringToUrlFileNameExt(fName, "+", "%2B");
             fName = PraseStringToUrlFileNameExt(fName, " ", "%20");
@@ -606,6 +606,10 @@ namespace BP.DA
             responseStream.Close();
             return path;
         }
+        public static string ReadURLContext(string url, int timeOut)
+        {
+            return ReadURLContext(url, timeOut, Encoding.UTF8);
+        }
         /// <summary>
         /// 读取URL内容
         /// </summary>
@@ -615,6 +619,7 @@ namespace BP.DA
         /// <returns>返回读取内容</returns>
         public static string ReadURLContext(string url, int timeOut, Encoding encode)
         {
+
             HttpWebRequest webRequest = null;
             try
             {
@@ -798,7 +803,7 @@ namespace BP.DA
 
         public static string Html2Text(string htmlstr)
         {
-            return System.Text.RegularExpressions.Regex.Replace(htmlstr, "<[^>]*>", ""); 
+            return System.Text.RegularExpressions.Regex.Replace(htmlstr, "<[^>]*>", "");
         }
         public static string ByteToString(byte[] bye)
         {
@@ -922,12 +927,12 @@ namespace BP.DA
         }
 
 
-        public static int SpanDays(string fromday,string today,bool isContHoliday)
+        public static int SpanDays(string fromday, string today, bool isContHoliday)
         {
             DateTime fromDate = DateTime.Parse(fromday);
             DateTime toDate = DateTime.Parse(today);
             int day = 0;
-            if(isContHoliday == false)
+            if (isContHoliday == false)
             {
                 /* 设置节假日. */
                 while (fromDate.CompareTo(toDate) < 0)
@@ -948,11 +953,11 @@ namespace BP.DA
             {
                 SpanDays(fromday, today);
             }
-            
+
             return day;
         }
 
-        public static int SpanHours(string fromday,string today)
+        public static int SpanHours(string fromday, string today)
         {
             var span = DateTime.Parse(today) - DateTime.Parse(fromday);
             var days = span.Days;
@@ -2205,7 +2210,7 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsNumStr(string value)
         {
-            if (value==null || "".Equals(value))
+            if (value == null || "".Equals(value))
             {
                 return false;
             }

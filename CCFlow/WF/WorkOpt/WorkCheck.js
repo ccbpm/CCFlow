@@ -82,7 +82,8 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
     var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
     var isShowCheck = false;
     if (checkField == keyOfEn && pageData.IsReadonly != "1") {
-        $("#TB_" + keyOfEn).val(pageData.FK_Node);
+        if ($("#TB_" + keyOfEn).val().indexOf("," + pageData.FK_Node)==-1)
+            $("#TB_" + keyOfEn).val($("#TB_" + keyOfEn).val()+","+pageData.FK_Node);
         isShowCheck = true;
     }
 
@@ -96,7 +97,7 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
 
     for (var i = 0; i < tracks.length; i++) {
         var track = tracks[i];
-        if (track.NodeID != $("#TB_" + keyOfEn).val())
+        if ( $("#TB_" + keyOfEn).val().indexOf(","+track.NodeID)==-1)
             continue;
         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck);
     }

@@ -191,14 +191,17 @@ namespace BP.WF
         /// </summary>
         AccepterOfDeptStationOfCurrentOper,
         /// <summary>
-        /// 按照组智能计算.
+        /// 按本组织用户计算.
         /// </summary>
-        Group=10,
+        TeamOrgOnly = 10,
         /// <summary>
-        /// 按照组计算
+        /// 按全组织用户计算
         /// </summary>
-        GroupOnly = 11
-
+        TeamOnly = 11,
+        /// <summary>
+        /// 按本组织部门用户计算
+        /// </summary>
+        TeamDeptOnly = 12
     }
     /// <summary>
     /// 流程删除规则

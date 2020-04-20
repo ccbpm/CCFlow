@@ -101,7 +101,7 @@
             if (webUser.CCBPMRunModel == 1) {
                 var en = new Entity("BP.WF.Port.Admin2.Org", GetQueryString("OrgNo"));
                 $("title").text("驰骋BPM设计器—" + "组织编号:" + GetQueryString("OrgNo") + "-名称:" + en.Name);
-                
+
             }
             else {
                 $("#OrgNo").hide();
@@ -283,7 +283,7 @@
         <!--<div onclick="newSrc()" data-options="iconCls:'icon-add'">新建数据源</div>-->
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
-        <div onclick="newFrm(0)">
+        <!--<div onclick="newFrm(0)">
             <img src="../../Scripts/easyUI145/themes/icons/excel.gif">新建独立表单
         </div>
         <div onclick="newFrm(1)">
@@ -291,6 +291,9 @@
         </div>
         <div onclick="newFrm(2)">
             <img src="../../Scripts/easyUI145/themes/icons/edit_add.png">新建实体表单
+        </div>-->
+        <div onclick="openFrm('../FoolFormDesigner/NewFrmGuide.htm')">
+            <img src="../../Scripts/easyUI145/themes/icons/sheet.png">新建表单
         </div>
         <div class="menu-sep">
         </div>

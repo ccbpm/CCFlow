@@ -42,12 +42,12 @@
 
         //展现数据.
         function BindIt(data) {
-            var data = data[0]; //把这个数据绑定到控件上.
+           
 
             //1. 查询出来代字.
             var words = new Entities("BP.Port.Depts");
-            words.RetrieveAll();
-          GenerBindDDL("DDL_Word", words, "No", "Name", data.DocWorkKey);//绑定到文本框.
+            words.RetrieveAll();        
+            GenerBindDDL("DDL_WordKey", words, "No", "Name", data.DocWordKey);//绑定到文本框.
 
             //2. 返回年度. 绑定年度. 年度仅仅是，当前与上一年两个选项. 此处已经使用Date()年份
         //  GenerBindDDL("DDL_Year", words, "No", "Name", data.DocWordYear);//绑定到文本框.
@@ -86,11 +86,14 @@
 
         ///保存的时候.
         function Save() {
+           
            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddFormData();
+            var text = $("#DDL_WordKey option:selected").text();//获取字号select的text           
             handler.AddUrlData(); //增加参数数据            
             handler.AddPara("FrmID", frmID);
             handler.AddPara("OID", oid);            
+            handler.AddPara("DocWordName",text);            
             var data = handler.DoMethodReturnString("DocWord_Save");
            
              if (data.indexOf('err@') == 0) {
@@ -112,7 +115,7 @@
         <table style="width:100%;">
             <tr>
                 <td> 字 </td>
-                <td> <select id="DDL_Word" name="DDL_Word" onchange="DocWord_ReGenerDocWord()"></select> </td>
+                <td> <select id="DDL_WordKey" name="DDL_WordKey" onchange="DocWord_ReGenerDocWord()"></select> </td>
                 <td> 年度 </td>
                 <td>
                     <select id="DDL_Year" name="DDL_Year" onchange="DocWord_ReGenerDocWord()">                      

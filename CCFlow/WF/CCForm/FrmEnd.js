@@ -165,7 +165,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData[0].No, frmData.Sys_MapData[0].Name, frmData.WF_Node[0].NodeName);
             continue;
         }
-        if (mapAttr.UIContralType == 17) {//公文字号
+        if (mapAttr.UIContralType == 17) { //公文字号
             if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;

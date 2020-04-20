@@ -170,7 +170,7 @@ function ondbclickCallBackFun(figure) {
 
 //打开元素的属性窗口
 function showFigurePropertyWin(figure) {
-
+    alert('请在右边查看该元素的属性,如果被遮挡您需要全屏打开该设计器进行设计.');
     var v = figure.CCForm_Shape;
     var shap = figure.CCForm_Shape;
 

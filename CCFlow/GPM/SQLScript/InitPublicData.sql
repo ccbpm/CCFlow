@@ -124,13 +124,13 @@ INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('900', '系统管理', '2002', 99, 3, 'CCOA','', 0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('961', '流程设计器', '900',  1, 4, 'CCOA', '/WF/Admin/CCBPMDesigner/Default.htm',  0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('962', '组织结构', '900',  2, 4, 'CCOA', '/GPM/Organization.htm',  0,'');
-INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('964', '岗位类型', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.StationTypes',0,'');
-INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('966', '岗位', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.Stations',0,'');
+INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('964', '岗位类型', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.Port.StationTypes',0,'');
+INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('966', '岗位', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.Port.Stations',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('967', '人员台帐', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.Emps',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('968', '系统类别', '900', 3, 4, 'CCOA', '/WF/Comm/Ens.htm?EnsName=BP.GPM.AppSorts',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('969', '系统台帐', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.Apps',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('970', '权限组', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.Groups',0,'');
-INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('971', '岗位菜单', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.StationExts',0,'');
+INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('971', '岗位菜单', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.Port.StationExts',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('972', '人员菜单', '900', 3, 4, 'CCOA', '/WF/Comm/Search.htm?EnsName=BP.GPM.GPMEmps',0,'');
 INSERT INTO GPM_Menu (No, Name, ParentNo, Idx, MenuType, FK_App, UrlExt, OpenWay,Icon) VALUES ('973', '菜单树', '900', 3, 4, 'CCOA', '/WF/Comm/Tree.htm?EnsName=BP.GPM.Menus',0,'');
 

@@ -285,49 +285,49 @@ CREATE PROCEDURE [CustomGroupCreateOrUpdate]
 AS
 BEGIN
 
-	declare @createMax int --标识用户群组创建充许的最大值数
-	declare @createCount int --标识用户已经创建群组的数目
-    declare @returnGroupID int--标识创建成功的群组号，不成功为0；
+	declare @createMax int --标识用户用户组创建充许的最大值数
+	declare @createCount int --标识用户已经创建用户组的数目
+    declare @returnGroupID int--标识创建成功的用户组号，不成功为0；
         
 
     set @createMax=1 --假设当前用户创建的最大值数
-    set @createCount=0 --假设当前用户已经创建的群组数
+    set @createCount=0 --假设当前用户已经创建的用户组数
     set @returnGroupID=0--假设创建没有成功
     
 	SET NOCOUNT ON;
 
-   if @GroupID=0 --表示用户是创建新群组
+   if @GroupID=0 --表示用户是创建新用户组
    begin
-    --获取用户已经创建群组的数目
+    --获取用户已经创建用户组的数目
     select @createCount=count(*) from CustomGroup where UserID=@userID
-    --获取用户群组创建充许的最大值
+    --获取用户用户组创建充许的最大值
     --select @createMax=CreateGroupMax from SystemUsers where UserID=@userID
     --select @createMax=CreateGroupMax from Users where UserID=@userID
     select @createMax=CreateGroupMax from IMUser where UserID=@userID
 
     
-    if @createCount<@createMax --如果还未达到最大值，则创建群组，并返回创建组号
+    if @createCount<@createMax --如果还未达到最大值，则创建用户组，并返回创建组号
       begin
-	    insert into CustomGroup(GroupName,Notice,users,UserID) values( @GroupName,@Notice,@Users,@userID)--将创建群组的信息存入表中
-        set @returnGroupID=@@IDENTITY    --返回已创建或更新的群组号码
+	    insert into CustomGroup(GroupName,Notice,users,UserID) values( @GroupName,@Notice,@Users,@userID)--将创建用户组的信息存入表中
+        set @returnGroupID=@@IDENTITY    --返回已创建或更新的用户组号码
       end
    end
 
-   if @GroupID<>0 --表示用户是更新其创建群组的信息
+   if @GroupID<>0 --表示用户是更新其创建用户组的信息
     begin
-      select @createCount=count(*) from CustomGroup where GroupID=@GroupID and UserID=@userID --判断要更新的群组是否当前用户创建的
-      if @createCount=0 --如果不是当前用户创建的群组，则无权更新信息
+      select @createCount=count(*) from CustomGroup where GroupID=@GroupID and UserID=@userID --判断要更新的用户组是否当前用户创建的
+      if @createCount=0 --如果不是当前用户创建的用户组，则无权更新信息
         begin
            set @returnGroupID=0
         end
-      if @createCount=1 --如果是当前用户创建的群组，则更新信息
+      if @createCount=1 --如果是当前用户创建的用户组，则更新信息
         begin
 	       update CustomGroup set GroupName=@GroupName,Notice=@Notice,Users=@Users where GroupID=@GroupID
-           set @returnGroupID=@GroupID --设置返回群组的ID
+           set @returnGroupID=@GroupID --设置返回用户组的ID
         end
     end
 
-    return    @returnGroupID    --返回已创建或更新的群组号码
+    return    @returnGroupID    --返回已创建或更新的用户组号码
      
     SET   NOCOUNT   OFF   
 END

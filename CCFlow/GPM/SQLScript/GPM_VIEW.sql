@@ -3,7 +3,7 @@
 --GO-- 
 CREATE VIEW V_GPM_EmpGroup
 AS
-SELECT FK_Group,FK_Emp FROM GPM_GroupEmp
+SELECT FK_Group,FK_Emp FROM Port_TeamEmp
 UNION
 SELECT a.FK_Group,B.FK_Emp FROM GPM_GroupStation a, Port_DeptEmpStation b 
 WHERE a.FK_Station=b.FK_Station

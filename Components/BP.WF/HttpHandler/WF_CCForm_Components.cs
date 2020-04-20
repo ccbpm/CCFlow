@@ -121,7 +121,7 @@ namespace BP.WF.HttpHandler
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
 
-            string word = this.GetRequestVal("DDL_Word"); //字号
+            string word = this.GetRequestVal("DDL_WordKey"); //字号
             string ny = this.GetRequestVal("DDL_Year"); //年月. 
 
             //生成一个新的流水号.
@@ -134,7 +134,7 @@ namespace BP.WF.HttpHandler
         }
   
         /// <summary>
-        /// 重新生成字号
+        /// 保存重新生成的字号
         /// </summary>
         /// <returns></returns>
         public string DocWord_Save()
@@ -145,12 +145,12 @@ namespace BP.WF.HttpHandler
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
 
-            string word = this.GetRequestVal("DDL_Word"); //字号
+            string word = this.GetRequestVal("DDL_WordKey"); //字号
             string ny = this.GetRequestVal("DDL_Year"); //年份. 
-            string lsh = this.GetRequestVal("TB_LSH"); //年份. 
+            string lsh = this.GetRequestVal("TB_LSH"); //流水号. 
 
             //生成一个新的流水号.
-            string sql = "update FROM " + ptable + " set DocWordKey='" + word + "' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"' WHERE OID=" + this.OID;
+            string sql = "update " + ptable + " set DocWordKey='" + word + "' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);           
            
             return "保存成功";

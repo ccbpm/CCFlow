@@ -152,9 +152,9 @@ namespace BP.WF.HttpHandler
             string lsh = this.GetRequestVal("TB_LSH"); //流水号. 
 
             //检查一下这个流水号是否存在？
-            string sql = "SELECT DocWordLSH  FROM " + ptable + " WHERE DocWordKey='" + wordkey + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
-            string val = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (DataType.IsNullOrEmpty(val) == false)
+            string sql = "SELECT DocWordLSH  FROM " + ptable + " WHERE DocWordLSH="+ lsh+" AND DocWordKey='" + wordkey + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql); 
+            if (dt.Rows.Count !=0 )
                 return "err@该文号["+lsh+"]已经存在.";
 
             string docword = wordname + ny + "-" + lsh;

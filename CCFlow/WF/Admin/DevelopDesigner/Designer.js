@@ -1355,7 +1355,7 @@ UE.plugins['component'] = function () {
         execCommand: function (methode, dataType) {
             if (dataType == "Components") {
                 var dialog = new UE.ui.Dialog({
-                    iframeUrl: './DialogCtr/Components.htm?FK_MapData=' + pageParam.fk_mapdata ,
+                    iframeUrl: './DialogCtr/Components.htm?FK_MapData=' + pageParam.fk_mapdata+"&FrmType=8" ,
                     name: thePlugins,
                     editor: this,
                     title: '组件',

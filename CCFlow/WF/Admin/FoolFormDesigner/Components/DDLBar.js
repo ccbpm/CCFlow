@@ -45,7 +45,8 @@ function InitBar(optionKey, frmType) {
 
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    if (frmType!=8)
+        html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
   
     html += "</div>";
 

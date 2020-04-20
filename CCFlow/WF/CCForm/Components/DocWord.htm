@@ -11,8 +11,8 @@
     <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        var frmID = "ND101";
-        var oid = 148;
+        var frmID = GetQueryString("FrmID");
+        var oid = GetQueryString("OID");
 
         $(function () {
             var myDate = new Date();
@@ -100,12 +100,14 @@
                 alert(data);
                 return;
             }
-            alert(data);
-          
+            alert("保存成功");
+            window.parent.ChangeDocWordVal(data);
+           
 
+        }
 
-
-
+        function Close() {
+            window.parent.CloseBootstrapDialog();
         }
 
     </script>
@@ -127,7 +129,7 @@
             </tr>
         </table>
         <input type="button" value="保存并关闭" onclick="Save();" />
-        <input type="button" value="关闭" onclick=" window.close();" />
+        <input type="button" value="关闭" onclick="Close();" />
     </form>
 </body>
 </html>

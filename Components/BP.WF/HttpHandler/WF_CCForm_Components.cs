@@ -145,12 +145,14 @@ namespace BP.WF.HttpHandler
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
 
-            string word = this.GetRequestVal("DDL_WordKey"); //字号
+            string wordkey = this.GetRequestVal("DDL_WordKey"); //字号
+            string wordname = this.GetRequestVal("DocWordName"); //DocWordName 
             string ny = this.GetRequestVal("DDL_Year"); //年份. 
             string lsh = this.GetRequestVal("TB_LSH"); //流水号. 
+            string docword=wordname+ny+"-"+lsh;
 
             //生成一个新的流水号.
-            string sql = "update " + ptable + " set DocWordKey='" + word + "' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"' WHERE OID=" + this.OID;
+            string sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='"+wordname+"' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"',DocWord='"+docword+"' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);           
            
             return "保存成功";

@@ -84,7 +84,7 @@
                 var name = document.getElementById("TB_Name").value;
                 ParsePinYin(name, false, "TB_KeyOfEn");
             });
-       
+
             var fname = GetQueryString("fname");
             var name = GetQueryString("name");
             $("#TB_KeyOfEn").val(fname);
@@ -93,7 +93,7 @@
 
         var oNode = null, thePlugins = 'text';
         dialog.oncancel = function () {
-            if( UE.plugins[thePlugins].editdom ) {
+            if (UE.plugins[thePlugins].editdom) {
                 delete UE.plugins[thePlugins].editdom;
             }
         };
@@ -108,7 +108,7 @@
                 $.messager.alert('错误', '字段名称不能为空。', 'error');
                 return false;
             }
-            if (KeyOfEn == null ||KeyOfEn.length == 0) {
+            if (KeyOfEn == null || KeyOfEn.length == 0) {
                 $.messager.alert('错误', '英文字段不能为空。', 'error');
                 return false;
             }
@@ -117,15 +117,15 @@
                 var ens = new Entities("BP.Sys.MapAttrs");
                 ens.Retrieve("FK_MapData", fk_mapData, "UIContralType", 15);
                 if (ens.length > 0) {
-                    $.messager.alert('错误', '表单中只能存在一个评论组件，表单'+fk_mapData+'已经存在评论组件不能再增加', 'error');
+                    $.messager.alert('错误', '表单中只能存在一个评论组件，表单' + fk_mapData + '已经存在评论组件不能再增加', 'error');
                     return false;
                 }
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_MapData", fk_mapData);
-            handler.AddPara("KeyOfEn",KeyOfEn);
-            handler.AddPara("name",name);
+            handler.AddPara("KeyOfEn", KeyOfEn);
+            handler.AddPara("name", name);
             handler.AddPara("FType", FieldType == 14 || FieldType == 15 ? 1 : FieldType);
             handler.AddPara("IsSupperText", dataType == "Textarea" ? 1 : 0)
             if (dataType == "SignCheck" || FieldType == 14)
@@ -135,7 +135,7 @@
 
             var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
             if (data.indexOf("err@") != -1) {
-                 $.messager.alert('错误', data.replace('err@',''), 'error');
+                $.messager.alert('错误', data.replace('err@', ''), 'error');
                 return false;
             }
 
@@ -144,10 +144,10 @@
                 dataType = GetFieldType(FieldType, dataType);
                 InsertHtmlToEditor(dataType, KeyOfEn, name);
             } else if (dataType == "Textarea") {
-                InsertHtmlToEditor(dataType, KeyOfEn, name,null,null, FieldType);
+                InsertHtmlToEditor(dataType, KeyOfEn, name, null, null, FieldType);
             }
-           
-           
+
+
         };
         //类型转换
         function GetFieldType(FieldType, dataType) {
@@ -178,7 +178,7 @@
             }
 
         }
-      
+
         //在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {
 
@@ -191,7 +191,7 @@
             window.location.href = url;
         }
 
-</script>
+    </script>
 </head>
 <body>
     <form id="from1" action="">
@@ -207,7 +207,7 @@
                     </div>
                 </th>
             </tr>
-          
+
             <tr>
                 <td>
                     <input id="TB_Name" class="easyui-textbox" style="width: 200px" />
@@ -221,7 +221,7 @@
                     <input id="RB_DateTime" type="radio" name="Field_Type" value="7" /><label for="RB_DateTime">日期时间类型(发生时间、出发时间)</label><br />
                     <input id="RB_Boolen" type="radio" name="Field_Type" value="4" /><label for="RB_Boolen">Boolen型(是否同意、是否结算)</label><br />
                     <input id="RB_SignCheck" type="radio" name="Field_Type" value="14" /><label for="RB_SignCheck">签批组件</label><br />
-                    <input id="RB_FlowBBS" type="radio" name="Field_Type" value="15" /><label for="RB_SignCheck">评论组件</label><br />
+                    <label><input id="RB_FlowBBS" type="radio" name="Field_Type" value="15" />评论(抄送意见)组件</label><br />
                 </td>
             </tr>
             <tr>

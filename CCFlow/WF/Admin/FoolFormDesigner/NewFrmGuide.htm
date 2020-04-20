@@ -3,40 +3,47 @@
 <head>
     <meta charset="utf-8" />
     <title>新建表单向导</title>
-    <script src="../Portal/Default.js"></script>
-    
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script src="../Admin.js"></script>
 </head>
 <body>
 
     <fieldset>
-        <legend> 新建表单向导 </legend>
-        <ul>
-            <li>根据自己的需要，请正确的选择表单类型</li>
-            <li>每种表单类型的表单应用场景不一样.</li>
-        </ul>
-
         <legend> <label><input type="radio" id="ss" name="ss" value="0 " /> 驰骋BPM独立表单 </label>   </legend>
         <ul>
             <li> 仅为流程绑定表单所用,没有其他的增删改查的填写功能. </li>
             <li> 以下两种类型的表单也可以绑定到节点上. </li>
         </ul>
-
-
+    </fieldset>
+    <fieldset>
         <legend> <label><input type="radio" id="ss" name="ss" value="1 " /> 实体表单 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有编号，名称固定的属性，比如：学生、固定资产. </li>
         </ul>
-
+    </fieldset>
+    <fieldset>
         <legend> <label><input type="radio" id="ss" name="ss" value="2 " /> 单据 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有流水号，单据号的性质的字段，比如：学生缴费记录、固定资产维护记录. </li>
         </ul>
-
-        <input onclick="newFrm()" type="button" value="创建表单" />
-
     </fieldset>
+    <fieldset>
+        <legend id="help"></legend>
+        <ul>
+            <li>根据自己的需要，请正确的选择表单类型</li>
+            <li>每种表单类型的表单应用场景不一样.</li>
+        </ul>
+    </fieldset>
+    <input style="margin-left:30px;" onclick="newFrm()" type="button" value="创建表单" />
     <script>
 
         //新建表单
@@ -44,7 +51,7 @@
             var obj = document.getElementsByName("ss")
             for (var i = 0; i < obj.length; i++) { //遍历Radio
                 if (obj[i].checked) {
-                   frmType =obj[i].value;
+                    frmType = obj[i].value;
                 }
             }
 

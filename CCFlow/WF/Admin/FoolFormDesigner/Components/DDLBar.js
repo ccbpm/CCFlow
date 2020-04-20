@@ -131,9 +131,6 @@ function changeOption() {
             roleName = "4.Map.htm";
             break;
     }
-
-     alert(roleName);
-
     window.location.href = roleName;
 }
 

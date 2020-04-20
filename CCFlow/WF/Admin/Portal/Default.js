@@ -960,7 +960,35 @@ function moveDownCCFormSort() {
     $(currFormSort.target).parent().insertAfter(next);
 }
 function openFrm(url) {
-    addTab("NewFrm", "选择表单", url);
+    var node = $('#formTree').tree('getSelected');
+    if (!node) {
+        return;
+    }
+    if (node.attributes) {
+        if (node.attributes.TType == "SRC") {
+            url += "&Src=" + node.id;
+        } else if (node.attributes.TType == "FORMTYPE") {
+            //在表单类别上单击，则传递表单类别
+            var pnode = $('#formTree').tree('getParent', node.target);
+            //if (pnode != null) {
+            url += "?FK_FrmSort=" + node.id;
+
+            while (pnode && pnode.attributes) {
+                if (pnode.attributes.TType == "SRC") {
+                    url += "?Src=" + pnode.id;
+                    break;
+                }
+                pnode = $('#formTree').tree('getParent', pnode.target);
+            }
+            //}
+        }
+    }
+    //如果右侧有打开该表单，则关闭
+    var currTab = $('#tabs').tabs('getTab', "新建表单");
+    if (currTab) {
+        $('#tabs').tabs('close', "新建表单");
+    }
+    addTab("NewFrm", "新建表单", url);
 }
 //新建表单
 function newFrm(frmType) {

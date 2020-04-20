@@ -2728,7 +2728,7 @@ $(function () {
         && url.indexOf('registeradminer.htm') == -1
         && url.indexOf('registerorg.htm') == -1
         && url.indexOf('reqpassword.htm') == -1
-        && url.indexOf('reguser.htm') == -1
+        && url.indexOf('reguser.htm') == -1       
         && url.indexOf('port.htm') == -1) {
 
         if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {

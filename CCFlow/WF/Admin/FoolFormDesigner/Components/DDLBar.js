@@ -22,22 +22,24 @@ function InitBar(optionKey) {
 
     html += "<option value=null  disabled='disabled'>+通用组件</option>";
 
-    html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;装饰类图片</option>";
-    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;图片附件 </option>";
-    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;身份证 </option>";
-    html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;多附件</option>";
-    html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;超链接 </option>";
-    html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
+    html += "<option value=" + FrmComponents.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;装饰类图片</option>";
+    html += "<option value=" + FrmComponents.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;图片附件 </option>";
+    html += "<option value=" + FrmComponents.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;身份证 </option>";
+    html += "<option value=" + FrmComponents.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;多附件</option>";
+    html += "<option value=" + FrmComponents.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;超链接 </option>";
+    html += "<option value=" + FrmComponents.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
 
     html += "<option value=null  disabled='disabled'>+流程组件</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
 
     html += "<option value=null  disabled='disabled'>+移动端控件</option>";
-    html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;系统定位</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;系统定位</option>";
+    html += "<option value=" + FrmComponents.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;系统定位</option>";
+
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";

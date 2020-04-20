@@ -69,7 +69,7 @@ namespace BP.WF.HttpHandler
             }
 
             //处理大小写.
-            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns[0].ColumnName = "DocWordKey";
                 dt.Columns[1].ColumnName = "DocWordName";
@@ -93,8 +93,8 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(lsh) == true)
             {
                 //生成一个新的流水号.
-                sql = "SELECT MAX(DocWordLSH) AS No FROM "+ ptable + " WHERE DocWordKey='"+key+ "' AND DocWordYear='"+year+"' AND OID!="+this.OID;
-                lsh = DBAccess.RunSQLReturnStringIsNull(sql,"");
+                sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + key + "' AND DocWordYear='" + year + "' AND OID!=" + this.OID;
+                lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 if (DataType.IsNullOrEmpty(lsh) == true)
                     lsh = "001";
 
@@ -103,7 +103,7 @@ namespace BP.WF.HttpHandler
             }
 
             //初始化数据.
-            sql = "UPDATE "+ptable+ " SET DocWordLSH='" + lsh + "', DocWordYear='"+year+"' WHERE OID="+this.OID;
+            sql = "UPDATE " + ptable + " SET DocWordLSH='" + lsh + "', DocWordYear='" + year + "' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);
 
             //转成Json，返回出去.
@@ -125,14 +125,15 @@ namespace BP.WF.HttpHandler
             string ny = this.GetRequestVal("DDL_Year"); //年月. 
 
             //生成一个新的流水号.
-           string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
-           string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
+            string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
-                lsh = "0001";
-            string str = (int.Parse(lsh) + 1).ToString("0000");//将返回的数字加+1并格式化为0000;
+                lsh = "0";
+
+            string str = (int.Parse(lsh) + 1).ToString("000");//将返回的数字加+1并格式化为0000;
             return str;
         }
-  
+
         /// <summary>
         /// 保存重新生成的字号
         /// </summary>
@@ -149,15 +150,71 @@ namespace BP.WF.HttpHandler
             string wordname = this.GetRequestVal("DocWordName"); //DocWordName 
             string ny = this.GetRequestVal("DDL_Year"); //年份. 
             string lsh = this.GetRequestVal("TB_LSH"); //流水号. 
-            string docword=wordname+ny+"-"+lsh;
+
+            //检查一下这个流水号是否存在？
+            string sql = "SELECT DocWordLSH  FROM " + ptable + " WHERE DocWordKey='" + wordkey + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
+            string val = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            if (DataType.IsNullOrEmpty(val) == false)
+                return "err@该文号["+lsh+"]已经存在.";
+
+            string docword = wordname + ny + "-" + lsh;
 
             //生成一个新的流水号.
-            string sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='"+wordname+"' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"',DocWord='"+docword+"' WHERE OID=" + this.OID;
-            DBAccess.RunSQL(sql);           
-           
+            sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='" + wordname + "' ,DocWordYear='" + ny + "',DocWordLSH='" + lsh + "',DocWord='" + docword + "' WHERE OID=" + this.OID;
+            DBAccess.RunSQL(sql);
+
             return docword;
         }
-         #endregion 公文文号.
+        /// <summary>
+        /// 选择一个空闲的编号
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_GenerBlankNum()
+        {
+            //创建实体.
+            GEEntity en = new GEEntity(this.FrmID, this.OID);
+
+            //查询字段.
+            string ptable = en.EnMap.PhysicsTable; //获得存储表.
+
+            string wordkey = this.GetRequestVal("DDL_WordKey"); //字号
+            string wordname = this.GetRequestVal("DocWordName"); //DocWordName 
+            string ny = this.GetRequestVal("DDL_Year"); //年份. 
+            string lsh = this.GetRequestVal("TB_LSH"); //流水号. 
+
+            //生成一个新的流水号.
+            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + wordkey + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
+            lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            if (DataType.IsNullOrEmpty(lsh) == true)
+                return "0";
+
+            //查询出来所有的流水号.
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            string num = "";
+            int maxNum = int.Parse(lsh); 
+            for (int i = 0; i < maxNum; i++)
+            {
+                bool isHave = false;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int lshNum = int.Parse(dr[0].ToString());
+                    if (lshNum == i)
+                    {
+                        isHave = true;
+                        break;
+                    }
+                    if (isHave == true)
+                        continue;
+
+                    num += i.ToString() + ",";
+                }
+            }
+
+            return num;
+        }
+        #endregion 公文文号.
 
     }
 }

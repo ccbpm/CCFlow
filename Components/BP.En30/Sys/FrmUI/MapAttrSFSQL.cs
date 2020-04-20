@@ -107,7 +107,7 @@ namespace BP.Sys.FrmUI
                 //默认值.
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
+                //map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
 
                 //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);

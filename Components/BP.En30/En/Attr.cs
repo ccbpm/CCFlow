@@ -127,6 +127,10 @@ namespace BP.En
 		/// </summary>
 		Fiexed=16,
         /// <summary>
+        /// 公文字号
+        /// </summary>
+        DocWord=17,
+        /// <summary>
         /// 流程进度图
         /// </summary>
         JobSchedule=50,

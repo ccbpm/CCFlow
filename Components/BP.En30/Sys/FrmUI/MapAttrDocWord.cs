@@ -129,7 +129,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
                 map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");
 
-
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
@@ -150,12 +149,11 @@ namespace BP.Sys.FrmUI
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
                 map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
-                //文本跨行
+                //文本跨行.
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
-
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
@@ -167,23 +165,24 @@ namespace BP.Sys.FrmUI
             }
         }
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            //设置公文字号.
+            this.UIContralType = UIContralType.DocWord;
+
+            return base.beforeUpdateInsertAction();
+        }
+
         /// <summary>
         /// 删除
         /// </summary>
         protected override void afterDelete()
         {
-            //删除经度纬度的字段
-            MapAttr mapAttr = new MapAttr(this.FK_MapData + "_JD");
-            mapAttr.Delete();
-
-            mapAttr = new MapAttr(this.FK_MapData + "_WD");
-            mapAttr.Delete();
-
             //删除相对应的rpt表中的字段
             if (this.FK_MapData.Contains("ND") == true)
             {
                 string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "' OR KeyOfEn='JD' OR KeyOfEn='WD')";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
@@ -201,44 +200,7 @@ namespace BP.Sys.FrmUI
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
-            //判断表单中是否存在经度、维度字段
-            mapAttr = new MapAttr();
-            mapAttr.MyPK = this.FK_MapData + "_" + "JD";
-            if (mapAttr.RetrieveFromDBSources() == 0)
-            {
-                mapAttr.FK_MapData = this.FK_MapData;
-                mapAttr.KeyOfEn = "JD";
-                mapAttr.Name = "经度";
-                mapAttr.GroupID = 1;
-                mapAttr.UIContralType = UIContralType.TB;
-                mapAttr.MyDataType = 1;
-                mapAttr.LGType = 0;
-                mapAttr.UIVisible = false;
-                mapAttr.UIIsEnable = false;
-                mapAttr.UIIsInput = true;
-                mapAttr.UIWidth = 150;
-                mapAttr.UIHeight = 23;
-                mapAttr.Insert(); //插入字段.
-            }
-
-            mapAttr.MyPK = this.FK_MapData + "_" + "WD";
-            if (mapAttr.RetrieveFromDBSources() == 0)
-            {
-                mapAttr.FK_MapData = this.FK_MapData;
-                mapAttr.KeyOfEn = "WD";
-                mapAttr.Name = "纬度";
-                mapAttr.GroupID = 1;
-                mapAttr.UIContralType = UIContralType.TB;
-                mapAttr.MyDataType = 1;
-                mapAttr.LGType = 0;
-                mapAttr.UIVisible = false;
-                mapAttr.UIIsEnable = false;
-                mapAttr.UIIsInput = true;
-                mapAttr.UIWidth = 150;
-                mapAttr.UIHeight = 23;
-                mapAttr.Insert(); //插入字段.
-            }
-
+           
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 

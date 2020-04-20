@@ -119,8 +119,11 @@ namespace BP.WF.Template
 
             return base.beforeInsert();
         }
-
-        protected override bool beforeUpdateInsertAction()
+        /// <summary>
+        /// @sly 这里有变化.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeUpdate()
         {
             //更新流程引擎控制表.
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
@@ -132,9 +135,9 @@ namespace BP.WF.Template
                 sql = "UPDATE WF_Emp SET StartFlows='' ";
 
             DBAccess.RunSQL(sql);
-
-            return base.beforeUpdateInsertAction();
+            return base.beforeUpdate();
         }
+       
     }
     /// <summary>
     /// 流程类别

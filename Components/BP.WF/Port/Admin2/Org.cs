@@ -27,6 +27,10 @@ namespace BP.WF.Port.Admin2
         /// 父级组织名称
         /// </summary>
         public const string ParentName = "ParentName";
+        /// <summary>
+        /// 序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
     /// <summary>
     /// 独立组织
@@ -139,8 +143,11 @@ namespace BP.WF.Port.Admin2
                 map.AddTBString(OrgAttr.ParentNo, null, "父级组织编号", true, false, 0, 60, 200, true);
                 map.AddTBString(OrgAttr.ParentName, null, "父级组织名称", true, false, 0, 60, 200, true);
 
-                map.AddTBString(OrgAttr.Adminer, null, "管理员登录帐号", true, true, 0, 60, 200, true);
+                map.AddTBString(OrgAttr.Adminer, null, "主要管理员(创始人)", true, true, 0, 60, 200, true);
                 map.AddTBString(OrgAttr.AdminerName, null, "管理员名称", true, true, 0, 60, 200, true);
+
+                //@sly.
+                map.AddTBInt(OrgAttr.Idx, 0, "排序", true, false);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "检查正确性";
@@ -165,7 +172,6 @@ namespace BP.WF.Port.Admin2
                 //rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
                 //rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
                 //map.AddRefMethod(rm);
-
 
                 //rm = new RefMethod();
                 //rm.Title = "设置二级管理员";
@@ -193,6 +199,16 @@ namespace BP.WF.Port.Admin2
             this.Adminer = emp.No;
             this.AdminerName = emp.Name;
             this.Update();
+
+            //检查超级管理员是否存在？
+            OrgAdminer oa = new OrgAdminer();
+            int i =oa.Retrieve(OrgAdminerAttr.FK_Emp, emp.No, OrgAdminerAttr.OrgNo, this.No);
+            if (i==0)
+            {
+                oa.FK_Emp = this.Adminer;
+                oa.OrgNo = this.No;
+                oa.Insert();
+            }
 
             return "修改成功,请关闭当前记录重新打开.";
         }

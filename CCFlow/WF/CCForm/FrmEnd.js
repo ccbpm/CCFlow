@@ -169,10 +169,9 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
-                //$("#TB_DocWord").attr("disabled", "disabled");
+                $("#TB_DocWord").attr("readonly","readonly");
                 $("#TB_DocWord").on("dblclick", function () {
-                    window.parent.OpenBootStrapModal(url, "DocWordIFrame", "公文字号", 500, 500, "icon-edit", true, function () {
-                    });
+                    window.parent.OpenBootStrapModal(url, "DocWordIFrame", "公文字号", 700, 400, "icon-edit", false);
                 })
             }
         }
@@ -1434,4 +1433,14 @@ function BBSSubmit(FrmID,FrmName,NodeName) {
     }
     ShowFlowBBS(JSON.parse(data), null, FrmID,FrmName,NodeName);
    
+}
+
+
+function ChangeDocWordVal(docWord) {
+   
+    if ($("#TB_DocWord").length == 1) {
+        $("#TB_DocWord").val(docWord);
+    }
+
+    $('#bootStrapdlg').modal('hide');
 }

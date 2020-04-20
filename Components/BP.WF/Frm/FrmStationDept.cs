@@ -106,7 +106,7 @@ namespace BP.Frm
 
                 map.AddTBStringPK(FrmStationDeptAttr.FK_Frm, null, "单据编号", false, false, 1, 190, 20);
 
-                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Station, null, "工作岗位", new BP.GPM.Stations(), true);
+                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Station, null, "工作岗位", new BP.Port.Stations(), true);
 
                 map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Dept, null, "部门", new BP.GPM.Depts(), true);
 

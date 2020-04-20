@@ -1353,6 +1353,33 @@ UE.plugins['component'] = function () {
     var me = this, thePlugins = 'component';
     me.commands[thePlugins] = {
         execCommand: function (methode, dataType) {
+            if (dataType == "Components") {
+                var dialog = new UE.ui.Dialog({
+                    iframeUrl: './DialogCtr/Components.htm?FK_MapData=' + pageParam.fk_mapdata ,
+                    name: thePlugins,
+                    editor: this,
+                    title: '组件',
+                    cssRules: "width:600px;height:310px;",
+                    buttons: [
+                        {
+                            className: 'edui-okbutton',
+                            label: '确定',
+                            onclick: function () {
+                                dialog.close(true);
+
+                            }
+                        },
+                        {
+                            className: 'edui-cancelbutton',
+                            label: '取消',
+                            onclick: function () {
+                                dialog.close(false);
+                            }
+                        }]
+                });
+                dialog.render();
+                dialog.open();
+            }
             if (dataType == "Dtl") { //从表
 
             }

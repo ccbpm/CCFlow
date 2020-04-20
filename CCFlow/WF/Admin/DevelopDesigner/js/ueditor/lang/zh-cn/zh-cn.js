@@ -195,7 +195,7 @@ UE.I18N['zh-cn'] = {
         "enumSelect": "插入下拉框枚举",
         "enumCheckBox": "插入复选框枚举",
         "select": "插入外键",
-        "Components": "插入组件",
+        "component": "插入组件",
         "impFrmFields":"插入回收字段"
     },
     'copymsg': "浏览器不支持,请使用 'Ctrl + c'",

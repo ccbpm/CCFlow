@@ -14,16 +14,6 @@ var workid = GetQueryString("WorkID");
 var fid = GetQueryString("FID");
 
 var isCanSend = true; //是否可以发送？
-
-//是否是手机端.
-var isMobile = GetQueryString("IsMobile");
-
-//是否只读？
-var isReadonly = GetQueryString("isReadonly");
-if (isReadonly != "1")
-    isReadonly = "0";
-
-var enName = GetQueryString("EnName");
 var isChange = false;
 
 $(function () {
@@ -67,7 +57,7 @@ function InitPage() {
             return true;
         }
 
-        var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
+        var fwcs = new Entities("BP.WF.Template.NodeWorkChecks");
         fwcs.Retrieve("NodeID", this.NodeID);
 
         if (fwcs[0].FWCSta == 2)

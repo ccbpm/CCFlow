@@ -64,7 +64,7 @@
                 var mapAttr = mapAttrs[i];
 
                 if (mapAttr.IsRefAttr == 1)
-                    continue; //@yuanlina 如果是外键的扩展字段也要排除. Dict_BanJi 显示， Dict_BanJiT就不要显示了.
+                    continue; // 如果是外键的扩展字段也要排除. Dict_BanJi 显示， Dict_BanJiT就不要显示了.
 
                 if (cutAttrs.indexOf(mapAttr.KeyOfEn + ",") != -1)
                     continue; //排除不让其显示的字段.

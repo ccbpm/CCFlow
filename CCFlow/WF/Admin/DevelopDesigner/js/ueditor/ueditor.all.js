@@ -21879,6 +21879,8 @@ UE.plugins['contextmenu'] = function () {
                 { label: lang['enumCheckBox'], cmdName: 'enum', value:  'CheckBox' },
                 { label: lang['select'], cmdName: 'select' },
                 '-',
+                { label: lang['component'], cmdName: 'component', value: 'Components' },
+                '-',
                 { label: lang['impFrmFields'], cmdName: 'impfrmfields' },
                 '-',
                 {

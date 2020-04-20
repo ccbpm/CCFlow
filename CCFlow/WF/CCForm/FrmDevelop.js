@@ -9,26 +9,16 @@ function GenerDevelopFrm(wn,fk_mapData) {
     frmData = wn;
     $('head').append('<style type="text/css"> .form-control{display: inline; }</style >');
 
-    //加载开发者表单的内容
-    //var filename = basePath + "/DataUser/CCForm/HtmlTemplateFile/" + fk_mapData + ".htm";
-    //var htmlobj = $.ajax({ url: filename, async: false });
     var htmlContent = "";
-    //if (htmlobj.status == 404) {
-        //数据库中查找
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-        handler.AddPara("FK_MapData", fk_mapData);
-        htmlContent = handler.DoMethodReturnString("Designer_Init");
-    //} else {
-    //    htmlContent = htmlobj.responseText;
-    //    if (htmlContent == null && htmlContent == "" && htmlContent == undefined) {
-    //        htmlContent = "";
-    //    }
-   // }
+    //数据库中查找
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+    handler.AddPara("FK_MapData", fk_mapData);
+    htmlContent = handler.DoMethodReturnString("Designer_Init");
+    
     if (htmlContent == "") {
         alert("开发者设计的表单内容丢失，请联系管理员");
         return;
     }
-
     if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 ||currentURL.indexOf("MyDict.htm") != -1)
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../../");
     else

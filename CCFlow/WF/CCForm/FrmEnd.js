@@ -162,8 +162,21 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 console.log(data);
             }
             $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
-            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData.No, frmData.Sys_MapData.Name, frmData.WF_Node[0].NodeName);
+            ShowFlowBBS(JSON.parse(data), mapAttr.KeyOfEn, frmData.Sys_MapData[0].No, frmData.Sys_MapData[0].Name, frmData.WF_Node[0].NodeName);
+            continue;
         }
+        if (mapAttr.UIContralType == 17) {//公文字号
+            if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
+                var localHref = GetLocalWFPreHref();
+                var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
+                //$("#TB_DocWord").attr("disabled", "disabled");
+                $("#TB_DocWord").on("dblclick", function () {
+                    window.parent.OpenBootStrapModal(url, "DocWordIFrame", "公文字号", 500, 500, "icon-edit", true, function () {
+                    });
+                })
+            }
+        }
+        
 
     }
 

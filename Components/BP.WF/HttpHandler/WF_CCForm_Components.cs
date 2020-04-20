@@ -155,7 +155,7 @@ namespace BP.WF.HttpHandler
             string sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='"+wordname+"' ,DocWordYear='" + ny + "',DocWordLSH='"+lsh+"',DocWord='"+docword+"' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);           
            
-            return "保存成功";
+            return docword;
         }
          #endregion 公文文号.
 

@@ -18,7 +18,7 @@ function InitBar(optionKey, frmType) {
     var webUser = new WebUser();
 
     var html = "<div style='padding:5px' >表单组件: ";
-    html += "<select id='changBar' >";
+    html += "<select id='changBar' onchange='changeOption()' >";
 
     html += "<option value=null  disabled='disabled'>+通用组件</option>";
 
@@ -31,8 +31,8 @@ function InitBar(optionKey, frmType) {
     html += "<option value=" + FrmComponents.Score + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
     html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件</option>";
     html += "<option value=" + FrmComponents.Dtl + ">&nbsp;&nbsp;&nbsp;&nbsp;从表</option>";
-    if(frmType == 0)//傻瓜表单
-    html += "<option value=" + FrmComponents.BigText + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
+    if (frmType == 0)//傻瓜表单
+        html += "<option value=" + FrmComponents.BigText + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
 
     html += "<option value=null  disabled='disabled'>+流程组件</option>";
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
@@ -45,12 +45,95 @@ function InitBar(optionKey, frmType) {
 
     html += "</select >";
 
-    if (frmType!=8)
+    if (frmType != 8)
         html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-  
+
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
 
+    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 
 }
+function changeOption() {
+    
+    //var nodeID = GetQueryString("FK_Node");
+    //var en = new Entity("BP.WF.Template.NodeSimple", nodeID);
+    //flowNo = en.FK_Flow;
+    var obj = document.getElementById("changBar");
+    var sele = obj.options;
+    var index = obj.selectedIndex;
+    var optionKey = 0;
+    if (index > 1) {
+        optionKey = sele[index].value
+    }
+    var roleName = "";
+    
+    switch (parseInt(optionKey)) {
+        case FrmComponents.Map:
+            roleName = "4.Map.htm";
+            break;
+        case FrmComponents.MicHot:
+            roleName = "5.MicHot.htm";
+            break;
+        case FrmComponents.AthShow:
+            roleName = "6.AthShow.htm";
+            break;
+        case FrmComponents.MobilePhoto:
+            roleName = "7.MobilePhoto.htm";
+            break;
+        case FrmComponents.HandWriting:
+            roleName = "8.HandWriting.htm";
+            break;
+        case FrmComponents.HyperLink:
+            roleName = "9.HyperLink.htm";
+            break;
+        case FrmComponents.Lab:
+            roleName = "10.Lab.htm";
+            break;
+        case FrmComponents.FrmImg:
+            roleName = "11.FrmImg.htm";
+            break;
+        case FrmComponents.FrmImgAth:
+            roleName = "12.FrmImgAth.htm";
+            break;
+        case FrmComponents.IDCard:
+            roleName = "13.IDCard.htm";
+            break;
+        case FrmComponents.SignCheck:
+            roleName = "14.SignCheck.htm";
+            break;
+        case FrmComponents.FlowBBS:
+            roleName = "15.FlowBBS.htm";
+            break;
+        case FrmComponents.Fiexed:
+            roleName = "16.Fiexed.htm";
+            break;
+        case FrmComponents.DocWord:
+            roleName = "17.DocWord.htm";
+            break;
+        case FrmComponents.JobSchedule:
+            roleName = "50.JobSchedule.htm";
+            break;
+        case FrmComponents.BigText:
+            roleName = "60.BigText.htm";
+            break;
+        case FrmComponents.Ath:
+            roleName = "70.Ath.htm";
+            break;
+        case FrmComponents.Dtl:
+            roleName = "80.Dtl.htm";
+            break;
+        case FrmComponents.Score:
+            roleName = "101.Score.htm";
+            break;
+        default:
+            roleName = "4.Map.htm";
+            break;
+    }
+
+     alert(roleName);
+
+    window.location.href = roleName;
+}
+

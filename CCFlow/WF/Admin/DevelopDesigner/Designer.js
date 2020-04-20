@@ -395,9 +395,9 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         mypk = mypk.replace('_2', "");
         mypk = mypk.replace('_3', "");
 
-        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapData + "_" + mypk;
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + fk_mapdata + "_" + mypk;
 
-        CCForm_ShowDialog(url, '单选按钮属性', null, null, shap, fk_mapData + "_" + mypk, anchorEl);
+        CCForm_ShowDialog(url, '单选按钮属性', null, null, shap, fk_mapdata + "_" + mypk, anchorEl);
         return;
     }
 
@@ -427,6 +427,12 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     if (shap == 'Map') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
         CCForm_ShowDialog(url, '地图', null, null, shap, mypk, anchorEl);
+        return;
+    }
+
+    if (shap == 'DocWord') {
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&MyPK=' + fk_mapdata+"_" + mypk;
+        CCForm_ShowDialog(url, '公文字号', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -1371,6 +1377,10 @@ UE.plugins['component'] = function () {
                 ExtImgAth();
             }
 
+            if (dataType == "DocWord") {//公文字号
+                ExtDocWord();
+            }
+
             if (dataType == "HandWriting") {//手写签字版
                 ExtHandWriting();
             }
@@ -1451,6 +1461,12 @@ UE.plugins['component'] = function () {
                     var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
                     mapAttr.Delete();
                 }
+
+                if (dataType == "DocWord") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata+"_"+mypk);
+                    mapAttr.Delete();
+                }
+
                 if (dataType == "HandWriting") {
                     var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
                     mapAttr.Delete();
@@ -1479,7 +1495,7 @@ UE.plugins['component'] = function () {
         var el = evt.target || evt.srcElement;
         var leipiPlugins = el.getAttribute('leipiplugins');
         var dataType = el.getAttribute("data-type");
-        if (/img|span/ig.test(el.tagName.toLowerCase()) && leipiPlugins == thePlugins) {
+        if (/img|span|input/ig.test(el.tagName.toLowerCase()) && leipiPlugins == thePlugins) {
             var _html;
             if (dataType == "Dtl")
                 _html = popup.formatHtml(
@@ -1502,6 +1518,11 @@ UE.plugins['component'] = function () {
             if (dataType == "Score")
                 _html = popup.formatHtml(
                     '<nobr>评分控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+
+            if (dataType == "DocWord")
+                _html = popup.formatHtml(
+                    '<nobr>公文字号: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(
                     '<nobr>手写签名版控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
@@ -1840,6 +1861,36 @@ function ExtImgAth() {
     });
 }
 
+//公文字号
+function ExtDocWord() {
+    var en = new Entity("BP.Sys.MapAttr");
+    en.SetPKVal(pageParam.fk_mapdata + "_DocWord");
+    if (en.RetrieveFromDBSources() == 1) {
+        alert("该表单DocWord字段已经存在，公文字号默认的字段DocWord,请确认该字段是否为公文字段");
+        return;
+    }
+    
+
+    var mypk = pageParam.fk_mapdata + "_DocWord";
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 17; //公文字号.
+    mapAttr.MyPK = mypk;
+    mapAttr.FK_MapData = pageParam.fk_mapdata;
+    mapAttr.KeyOfEn = "DocWord";
+    mapAttr.Name = "公文字号";
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 1; // 
+    mapAttr.UIWidth = 150;
+    mapAttr.UIHeight = 170;
+    mapAttr.Insert(); //插入字段.
+    mapAttr.Retrieve();
+    var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&MyPK=" + mapAttr.MyPK;
+    OpenEasyUiDialog(url, "eudlgframe", '公文字号', 800, 500, "icon-edit", true, null, null, null, function () {
+        var _Html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%'/>";
+        leipiEditor.execCommand('insertHtml', _Html);
+    });
+}
 
 //图片
 function ExtImg() {

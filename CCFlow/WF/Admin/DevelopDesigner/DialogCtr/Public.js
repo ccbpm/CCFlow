@@ -130,6 +130,9 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
     if (dataType == "FlowBBS")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%'/>";
 
+    if (dataType == "DocWord")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%'/>";
+
 
     editor.execCommand('insertHtml', _Html);
 }
@@ -197,6 +200,10 @@ function GetDataType(mapAttr) {
 
         if (mapAttr.UIContralType == 15)//评论组件
             return "FlowBBS";
+        if (mapAttr.UIContralType == 16)//评论组件
+            return "Fixed";
+        if (mapAttr.UIContralType == 17)//公文字号
+            return "DocWord";
     }
 
 }

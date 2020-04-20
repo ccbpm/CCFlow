@@ -175,8 +175,14 @@
                     return "地图";
                 if (mapAttr.UIContralType == 101)//评分
                     return "评分";
-                if (mapAttr.UIContralType == 14)//评分
+                if (mapAttr.UIContralType == 14)//签批组件
                     return "签批组件";
+                if (mapAttr.UIContralType == 15)//评论组件
+                    return "评论组件";
+                if (mapAttr.UIContralType == 16)//系统定位
+                    return "系统定位";
+                if (mapAttr.UIContralType == 17)//公文字号
+                    return "公文字号";
             }
             return "其他类型";
         }
@@ -243,8 +249,21 @@
                 }
 
                 if (uiContralType == 14) {
-                    title = '字段S签批组件属性';
-                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                    title = '签批组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 15) {
+                    title = '评论组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFlowBBS&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 16) {
+                    title = '系统定位组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 17) {
+                    title = '公文字号属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
             }

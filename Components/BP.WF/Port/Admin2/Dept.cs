@@ -153,6 +153,12 @@ namespace BP.WF.Port.Admin2
             org.AdminerName = emp.Name;
             org.Insert();
 
+            //增加到管理员. @sly
+            OrgAdminer oa = new OrgAdminer();
+            oa.FK_Emp = emp.No;
+            oa.OrgNo = this.No;
+            oa.Insert();
+
             //如果不是视图.
             if (DBAccess.IsView("Port_StationType") == false)
             {

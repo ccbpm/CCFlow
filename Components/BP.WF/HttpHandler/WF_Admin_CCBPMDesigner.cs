@@ -592,29 +592,40 @@ namespace BP.WF.HttpHandler
             }
 
             //获得当前管理员管理的组织数量.
-            Orgs orgs = new Orgs();
-            orgs.Retrieve(OrgAttr.Adminer, emp.No);
-            if (orgs.Count == 0)
+            OrgAdminers adminers = null;
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                //当前登录人员没有组织.
-                if (emp.No.Equals("admin") == true)
+                //WebUser.OrgNo = orgs[0].GetValStrByKey("No");
+            }
+            else
+            {
+                //查询他管理多少组织.
+                adminers = new OrgAdminers();
+                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
+                if (adminers.Count == 0)
                 {
-                    BP.WF.Dev2Interface.Port_Login(emp.No);
-                    BP.WF.Port.Admin2.Dept dept = new Port.Admin2.Dept(emp.FK_Dept);
-                    dept.SetOrg("admin");
-                    orgs.Retrieve(OrgAttr.Adminer, emp.No);
+                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();
+                    int i = orgs.Retrieve("Adminer", WebUser.No);
+                    if (i == 0)
+                        return "err@非管理员或二级管理员用户，不能登录后台.";
+
+                    foreach (BP.WF.Port.Admin2.Org org in orgs)
+                    {
+                        OrgAdminer oa = new OrgAdminer();
+                        oa.FK_Emp = WebUser.No;
+                        oa.OrgNo = org.No;
+                        oa.Save();
+                    }
+                    adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
                 }
-                else
-                {
-                    return "err@非管理员或二级管理员用户，不能登录后台.";
-                }
+
+                //     if (adminers.Count==0)
+                //       WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
             }
 
             //设置他的组织，信息.
             WebUser.No = emp.No; //登录帐号.
-            WebUser.OrgNo = orgs[0].GetValStrByKey("No");
             WebUser.SID = DBAccess.GenerGUID(); //设置SID.
-            WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
 
             //执行更新到用户表信息.
             WebUser.UpdateSIDAndOrgNoSQL();
@@ -623,10 +634,12 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Port_Login(emp.No);
 
             //判断是否是多个组织的情况.
-            if (orgs.Count > 1)
-                return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single || adminers.Count == 1)
+                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
 
-            return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+            return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+
+            // return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
         }
         /// <summary>
         ///初始化当前登录人的下的所有组织
@@ -635,7 +648,8 @@ namespace BP.WF.HttpHandler
         public string SelectOneOrg_Init()
         {
             Orgs orgs = new Orgs();
-            orgs.Retrieve("Adminer", WebUser.No);
+            //            orgs.Retrieve("Adminer", WebUser.No);
+            orgs.RetrieveInSQL("SELECT OrgNo FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.No + "'");
             return orgs.ToJson();
         }
         /// <summary>
@@ -1091,7 +1105,7 @@ namespace BP.WF.HttpHandler
             {
                 dtForm.Rows.Add(row.ItemArray);
             }
-  
+
             String str = BP.Tools.Json.ToJson(dtForm);
             return str;
         }

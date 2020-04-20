@@ -28,20 +28,6 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
         }
-        /// <summary>
-        /// 最大长度
-        /// </summary>
-        public int MaxLen
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.MaxLen);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MaxLen, value);
-            }
-        }
 
         /// <summary>
         /// 字段
@@ -125,15 +111,13 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
-                map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
-                map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
-                map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");
-
+                map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", false, false);
+                map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", false, false);
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
 
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
+                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
+                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
 
                 map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
@@ -151,6 +135,7 @@ namespace BP.Sys.FrmUI
 
                 //文本跨行.
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
+                map.SetHelperAlert(MapAttrAttr.RowSpan, "对于傻瓜表单有效: 占的单元格row的数量.");
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
@@ -200,7 +185,7 @@ namespace BP.Sys.FrmUI
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
-           
+
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 

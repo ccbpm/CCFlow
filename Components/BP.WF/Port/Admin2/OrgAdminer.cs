@@ -83,7 +83,7 @@ namespace BP.WF.Port.Admin2
                 map.EnType = EnType.App;
 
                 map.AddTBStringPK(OrgAdminerAttr.OrgNo, null, "组织", true, false, 0, 50, 20);
-                map.AddDDLEntitiesPK(OrgAdminerAttr.FK_Emp, null, "人员", new Emps(), true);
+                map.AddDDLEntitiesPK(OrgAdminerAttr.FK_Emp, null, "管理员", new Emps(), true);
 
                 this._enMap = map;
                 return this._enMap;

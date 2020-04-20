@@ -960,7 +960,7 @@ function moveDownCCFormSort() {
     $(currFormSort.target).parent().insertAfter(next);
 }
 function openFrm(url) {
-    WinOpenFull(url);
+    addTab("NewFrm", "选择表单", url);
 }
 //新建表单
 function newFrm(frmType) {

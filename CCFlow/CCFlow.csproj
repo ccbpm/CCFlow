@@ -888,7 +888,7 @@
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
     <Content Include="WF\Admin\AttrFlow\Ver.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\0.ByStation.htm" />
-    <Content Include="WF\Admin\AttrNode\AccepterRole\24.ByGroup.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\24.ByTeamOrgOnly.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\1.ByDept.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\10.ByStationAndEmpDept.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\100.ByCCFlowBPM.htm" />
@@ -905,6 +905,8 @@
     <Content Include="WF\Admin\AttrNode\AccepterRole\20.ByStationForPrj.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\21.BySelectedForPrj.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\23.ByDeptLeader.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\26.ByTeamDeptOnly.htm" />
+    <Content Include="WF\Admin\AttrNode\AccepterRole\25.ByTeamOnly.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\3.ByBindEmp.htm" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected-1.png" />
     <Content Include="WF\Admin\AttrNode\AccepterRole\4.BySelected.htm" />
@@ -1739,6 +1741,12 @@
     <Content Include="WF\Admin\FoolFormDesigner\AttachmentSortSetting.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Bill\API.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\17.DocWord.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\4.Map.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\5.MicHot.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\DDLBar.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\Default.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Components\FrmComponentsEnum.js" />
     <Content Include="WF\Admin\FoolFormDesigner\CreateSFGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\DefVal.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
@@ -1898,6 +1906,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\pullToRefresh.css" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\pullToRefresh.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MobileFrmView\js\pullToRefresh.mini.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\NewFrmGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\NodeFrmComponents.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\0.None.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pop\1.BranchesAndLeaf.htm" />

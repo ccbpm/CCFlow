@@ -321,13 +321,17 @@ namespace BP.Sys
         /// <returns></returns>
         public static string DealToFieldOrTableNames(string fd)
         {
+            string ptable = fd;
             string keys = "~!@#$%^&*()+{}|:<>?`=[];,./～！＠＃￥％……＆×（）——＋｛｝｜：“《》？｀－＝［］；＇，．／";
             char[] cc = keys.ToCharArray();
             foreach (char c in cc)
                 fd = fd.Replace(c.ToString(), "");
+            if (fd.Length <= 0)
+                throw new Exception("存储表PTable为"+ptable+",不合法");
             string s = fd.Substring(0, 1);
             try
             {
+                
                 int a = int.Parse(s);
                 fd = "F" + fd;
             }

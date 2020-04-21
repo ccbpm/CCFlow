@@ -1,7 +1,19 @@
 /*
 1. 该JS文件被嵌入到了MyFlowGener.htm 的工作处理器中. 
 2. 开发者可以重写该文件处理通用的应用,比如通用的函数.
+
 */
+
+//外发公文.
+function WaiFa() {
+
+    var workid = GetQueryString('WorkID');
+    var flowNo = GetQueryString('FK_Flow');
+
+    var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
+    WinOpen(url);
+    //window.open(url);
+}
 
 function DZ() {
 

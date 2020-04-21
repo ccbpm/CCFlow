@@ -171,7 +171,7 @@ namespace BP.WF.HttpHandler
                     string sqls = sBuilder.ToString();
                     DBAccess.RunSQLs(sqls);
 
-                    //更新节点HisToNDs，不然就需要检查一遍. @sly
+                    //更新节点HisToNDs，不然就需要检查一遍.
                     BP.WF.Nodes nds = new Nodes(this.FK_Flow);
                     foreach (Node item in nds)
                     {

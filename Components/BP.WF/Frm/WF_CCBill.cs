@@ -1394,10 +1394,11 @@ namespace BP.Frm
             qo.AddWhere("BillState", "!=", 0);
 
             //默认查询本部门的单据
-            if (WebUser.No.Equals("admin") == false)
+            if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
+                || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
             {
                 qo.addAnd();
-                qo.AddWhere("FK_Dept", "=", WebUser.FK_Dept);
+                qo.AddWhere("Starter", "=", WebUser.No);
             }
 
             #endregion 查询语句

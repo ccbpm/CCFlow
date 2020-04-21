@@ -196,7 +196,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
-                // 显示位置.
+                // 显示位置. @sly
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
 

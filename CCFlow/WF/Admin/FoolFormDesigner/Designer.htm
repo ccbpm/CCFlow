@@ -1097,10 +1097,23 @@
                     title = '证件字段属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCard&PKVal=' + mypk + '&s=' + Math.random();
                 }
+                if (uiContralType == 14) {
+                    title = '签批组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 15) {
+                    title = '评论组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFlowBBS&PKVal=' + mypk + '&s=' + Math.random();
+                }
 
                 if (uiContralType == 16) {
                     title = '系统定位属性';
-                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 17) {
+                    title = '公文字号属性';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 8) {
@@ -1595,7 +1608,14 @@
         function Sln() {
             var url = 'Sln.htm?IsBTitle=1&PKVal=0&Ath=AthM&FK_MapData=' + pageData.fk_mapdata + '&FK_FrmAttachment=' + pageData.fk_mapdata + '_AthM';
             WinOpen(url);
-            //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
+        }
+
+        function AddComponent() {
+            var url = './Components/Default.htm?FK_MapData=' + pageData.fk_mapdata+"&FrmType=0";
+            OpenEasyUiDialog(url, "eudlgframe", '新建组件', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+
         }
 
 
@@ -1625,9 +1645,10 @@
                 <a style="display:none" href="javascript:AddF();" class="NewChild easyui-linkbutton btn-light-yellow">
                     新建字段
                 </a>
-                <!--<a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
-                    隐藏字段
-                </a>-->
+                <a style="display:none" href="javascript:AddComponent();" class="NewChild easyui-linkbutton btn-light-yellow">
+                    新建组件
+                </a>
+             
                 <a href="javascript:GroupFieldNew();" class="NewChild easyui-linkbutton btn-light-green">
                     新建字段分组
                 </a>

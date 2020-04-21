@@ -21,6 +21,7 @@ if (typeof FrmComponents == "undefined") {
         FrmComponents.BigText = 60,//大文本
         FrmComponents.Ath = 70,//独立附件
         FrmComponents.Dtl = 80,//从表
+        FrmComponents.Frame = 90,//框架
         FrmComponents.Score = 101//评分控件
 }
  

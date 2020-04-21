@@ -39,7 +39,11 @@ namespace BP.Frm
         /// <summary>
         /// 根据岗位设定的部门的集合
         /// </summary>
-        ByStationDept = 3
+        ByStationDept = 3,
+        /// <summary>
+        /// 查询所有用户创建的数据信息
+        /// </summary>
+        SearchAll = 4
 
     }
     public enum SearchDataRoleByDeptStation

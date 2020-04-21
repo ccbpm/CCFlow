@@ -906,14 +906,17 @@ namespace BP.Frm
                 qo.addAnd();
 
             qo.AddWhere("BillState", "!=", 0);
-
-            //默认查询本部门的单据
-            if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
-                || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
+            if ((SearchDataRole)md.GetParaInt("SearchDataRole") != SearchDataRole.SearchAll)
             {
-                qo.addAnd();
-                qo.AddWhere("Starter", "=", WebUser.No);
+                //默认查询本部门的单据
+                if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
+                    || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
+                {
+                    qo.addAnd();
+                    qo.AddWhere("Starter", "=", WebUser.No);
+                }
             }
+           
 
 
             //获得行数.
@@ -1393,12 +1396,16 @@ namespace BP.Frm
 
             qo.AddWhere("BillState", "!=", 0);
 
-            //默认查询本部门的单据
-            if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
-                || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
+            if ((SearchDataRole)md.GetParaInt("SearchDataRole") != SearchDataRole.SearchAll)
             {
-                qo.addAnd();
-                qo.AddWhere("Starter", "=", WebUser.No);
+                //默认查询本部门的单据
+                if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
+                || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
+                {
+                    qo.addAnd();
+                    qo.AddWhere("Starter", "=", WebUser.No);
+                }
+
             }
 
             #endregion 查询语句

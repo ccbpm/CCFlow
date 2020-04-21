@@ -1643,6 +1643,7 @@ namespace BP.WF.HttpHandler
                     attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
                     attr.IsSupperText = this.GetValBoolenFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
 
+
                     //高度.
                     attr.UIHeightInt = this.GetValIntFromFrmByKey("DDL_Rows") * 23;
 

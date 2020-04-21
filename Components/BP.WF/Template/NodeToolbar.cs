@@ -40,7 +40,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string Title = "Title";
         /// <summary>
-        /// url @sly
+        /// url
         /// </summary>
         public const string UrlExt = "UrlExt";
         /// <summary>

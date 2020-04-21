@@ -139,7 +139,6 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            //@sly.
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
             return base.beforeInsert();

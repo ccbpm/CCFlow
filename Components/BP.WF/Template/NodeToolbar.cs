@@ -19,7 +19,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 工具栏
         /// </summary>
-        Toolbar
+        Toolbar,
+        /// <summary>
+        /// 抄送
+        /// </summary>
+        CC
     }
     /// <summary>
     /// 工具栏属性
@@ -194,7 +198,7 @@ namespace BP.WF.Template
 
                 // 显示位置.
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
-                    "@0=树形表单@1=工具栏");
+                    "@0=树形表单@1=工具栏@2=抄送工具栏");
 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);

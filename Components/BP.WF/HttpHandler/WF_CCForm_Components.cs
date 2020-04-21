@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(lsh) == true)
                 lsh = "0";
 
-            string str = (int.Parse(lsh) + 1).ToString("000");//将返回的数字加+1并格式化为0000;
+            string str = (int.Parse(lsh) + 1).ToString("000");//将返回的数字加+1并格式化为000三位数;
             return str;
         }
 

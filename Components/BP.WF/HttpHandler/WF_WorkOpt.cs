@@ -3332,7 +3332,7 @@ namespace BP.WF.HttpHandler
             {
             }
 
-            //@sly 增加判断.
+            //增加判断.
             if (ds.Tables["Emps"].Rows.Count == 0)
                 return "err@配置接受人范围为空,请联系管理员.";
 

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程抄送列表</title>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../WF/Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var data = null;
+        $(function () {
+
+            var handler = new HttpHandler("BP.DOC.App_Page");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Port_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+
+                $("#msg").html(data);
+                return;
+            }
+
+            window.location.href = "../Portal20/Home.htm?3=23";
+
+            //            $("#Rows").html(row);
+            return;
+        });
+
+    </script>
+</head>
+<body class="gray-bg">
+    <form id="frm">
+
+        <div id="msg"></div>
+    </form>
+</body>
+</html>

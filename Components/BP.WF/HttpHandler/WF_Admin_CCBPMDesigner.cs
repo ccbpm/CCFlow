@@ -967,6 +967,14 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
+            //如果为0。 @sly
+            if (dt.Rows.Count==0)
+            {
+                BP.WF.Port.Admin2.Org org = new Port.Admin2.Org(WebUser.OrgNo);
+                org.DoCheck();
+                return "err@系统出现错误，请刷新一次，如果仍然出现错误，请反馈给管理员.";
+            }
+
 
             DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
             DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];

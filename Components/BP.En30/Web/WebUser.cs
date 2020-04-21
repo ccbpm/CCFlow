@@ -598,7 +598,7 @@ namespace BP.Web
                 //SAAS版本. 集团版 @hongyan 需要翻译.
                 if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
-                    string sql = "SELECT No FROM Port_Org WHERE Adminer='" + WebUser.No + "' AND No='" + WebUser.OrgNo + "'";
+                    string sql = "SELECT FK_Emp FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
                     if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
                         return false;
                     return true;

@@ -167,11 +167,11 @@ namespace BP.WF.Port.Admin2
                        EmpAttr.No, BP.Web.WebUser.OrgNo);
                 }
 
-                //rm = new RefMethod();
-                //rm.Title = "修改管理员";
-                //rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
-                //rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
-                //map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "修改主管理员";
+                rm.ClassMethodName = this.ToString() + ".ChangeAdminer";
+                rm.HisAttrs.AddTBString("adminer", null, "新主管理员编号", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "设置二级管理员";
@@ -191,10 +191,13 @@ namespace BP.WF.Port.Admin2
             if (WebUser.No.Equals("admin") == false)
                 return "err@非admin管理员，您无法执行该操作.";
 
+
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = adminer;
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@管理员编号错误.";
+
+            string old = this.Adminer;
 
             this.Adminer = emp.No;
             this.AdminerName = emp.Name;
@@ -202,13 +205,15 @@ namespace BP.WF.Port.Admin2
 
             //检查超级管理员是否存在？
             OrgAdminer oa = new OrgAdminer();
-            int i =oa.Retrieve(OrgAdminerAttr.FK_Emp, emp.No, OrgAdminerAttr.OrgNo, this.No);
-            if (i==0)
-            {
-                oa.FK_Emp = this.Adminer;
-                oa.OrgNo = this.No;
-                oa.Insert();
-            }
+            oa.FK_Emp = old;
+            oa.OrgNo = this.No;
+            oa.Delete(OrgAdminerAttr.FK_Emp, old, OrgAdminerAttr.OrgNo, this.No);
+
+            //插入到管理员.
+            oa.FK_Emp = emp.No;
+            oa.Save();
+
+            //检查超级管理员是否存在？
 
             return "修改成功,请关闭当前记录重新打开.";
         }

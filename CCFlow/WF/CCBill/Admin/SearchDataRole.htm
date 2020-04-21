@@ -108,25 +108,26 @@
         <tr>
             <th>
                 <label>
-                    <input type="radio" value="0"   id="RBPara_SearchDataRole_0" name="RBPara_SearchDataRole" />
-                    只可以查询自己创建的数据</label>
+                    <input type="radio" value="0" id="RBPara_SearchDataRole_0" name="RBPara_SearchDataRole" />
+                    只可以查询自己创建的数据
+                </label>
             </th>
         </tr>
         <tr>
-            <td >
+            <td>
                 <ul>
                     <li>只能查看自己创建的数据。</li>
                 </ul>
             </td>
         </tr>
         <!-- end规则1 -->
-
         <!-- 规则2 -->
         <tr>
             <th>
                 <label>
                     <input type="radio" value="1" checked="true" id="RBPara_SearchDataRole_1" name="RBPara_SearchDataRole" />
-                    可以查询本部门创建的数据</label>
+                    可以查询本部门创建的数据
+                </label>
             </th>
         </tr>
         <tr>
@@ -137,14 +138,13 @@
             </td>
         </tr>
         <!-- end规则2 -->
-
-    
-       <!-- 规则3 -->
+        <!-- 规则3 -->
         <tr>
             <th>
                 <label>
                     <input type="radio" value="2" id="RBPara_SearchDataRole_2" name="RBPara_SearchDataRole" />
-                    可以查询本部门与本部门一下的数据</label>
+                    可以查询本部门与本部门一下的数据
+                </label>
             </th>
         </tr>
         <tr>
@@ -155,13 +155,13 @@
             </td>
         </tr>
         <!-- end规则3 -->
-
         <!-- 规则4 -->
         <tr>
             <th>
                 <label>
                     <input type="radio" value="3" id="RBPara_SearchDataRole_3" name="RBPara_SearchDataRole" />
-                    按照岗位设置可以查询的部门集合计算</label>
+                    按照岗位设置可以查询的部门集合计算
+                </label>
             </th>
         </tr>
         <tr>
@@ -185,6 +185,23 @@
             </td>
         </tr>
         <!-- end规则4 -->
+        <!-- 规则5 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="radio" value="4" id="RBPara_SearchDataRole_4" name="RBPara_SearchDataRole" />
+                    可以所有人创建的数据
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li>具有查询权限的用户可以查看所有人创建的数据信息.</li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则3 -->
     </table>
 
                 <input type="button" id="Btn_Save" value="保存" onclick="Save()" />

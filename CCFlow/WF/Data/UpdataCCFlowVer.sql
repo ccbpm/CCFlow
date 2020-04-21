@@ -8,6 +8,8 @@ UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS N
 
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
 
+DELETE FROM Sys_Enum WHERE EnumKey ='ShowWhere';
+
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';

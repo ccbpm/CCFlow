@@ -40,13 +40,17 @@
             $("#Rows").html(row);
             return;
         });
-        //checkbox全部选中的方法
+        //checkbox全部选中disbaled等于fasle的方法
           function CheckAll(checked)
             {
-                var checks = $(":checkbox");
-                for (var i = 0; i < checks.length; i++)
-                {
-                    checks[i].checked = checked;
+              var checks = $(":checkbox");            
+             
+             for (var i = 0; i < checks.length; i++)
+              {
+              if (checks[i].disabled == false) {
+                     checks[i].checked = checked;
+              }
+               
 
                 }
               

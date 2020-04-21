@@ -113,14 +113,13 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            //@hongyan   翻译过去.
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             return base.beforeInsert();
         }
         /// <summary>
-        /// @sly 这里有变化.
+        /// 
         /// </summary>
         /// <returns></returns>
         protected override bool beforeUpdate()

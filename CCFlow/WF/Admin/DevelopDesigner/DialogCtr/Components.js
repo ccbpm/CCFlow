@@ -9,7 +9,6 @@
     dialog.onok = function () {
        
         var _html = Save();
-        debugger
         if (_html == "")
             return;
          editor.execCommand('insertHtml', _html);     

@@ -9,10 +9,21 @@ function WaiFa() {
 
     var workid = GetQueryString('WorkID');
     var flowNo = GetQueryString('FK_Flow');
-
     var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
     WinOpen(url);
     //window.open(url);
+}
+
+//转内发公文.
+function NeiFa()
+{
+    var workid = GetQueryString('WorkID');
+    var flowNo = GetQueryString('FK_Flow');
+    var mypk = GetQueryString('MyPK');
+    var pkVal = GetQueryString('PKVal');
+
+    var url = "../App/NeiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&MyPK=" + pkVal;
+    WinOpen(url);
 }
 
 function DZ() {

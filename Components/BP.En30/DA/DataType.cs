@@ -1437,6 +1437,11 @@ namespace BP.DA
 
             return dataStr;
         }
+
+        public static string CurrentDateByFormart(string dataFormat)
+        {
+            return DateTime.Now.ToString(dataFormat);
+        }
         /// <summary>
         /// 当前的日期
         /// </summary>

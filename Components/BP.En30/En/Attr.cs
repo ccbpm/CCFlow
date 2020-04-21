@@ -125,7 +125,7 @@ namespace BP.En
 		/// <summary>
 		/// 系统定位
 		/// </summary>
-		Fiexed=16,
+		Fixed=16,
         /// <summary>
         /// 公文字号
         /// </summary>
@@ -235,9 +235,7 @@ namespace BP.En
                 attr.UIRefKeyText = this.UIRefKeyText;
                 attr.UIVisible = this.UIVisible;
 
-                //if (this.IsPK)
-                //    attr.MyDataType =  = FieldType.PK;
-                //    attr.MyFieldType = FieldType.PK;
+                
 
                 switch (this.MyFieldType)
                 {
@@ -940,7 +938,21 @@ namespace BP.En
 				this._UIBindKey=value;
 			}
 		}
-        private string _UIBindKeyOfEn = null;
+
+		private int _IsSupperText = 0;
+		public int IsSupperText
+		{
+			get
+			{
+				return this._IsSupperText;
+			}
+			set
+			{
+				this._IsSupperText = value;
+			}
+		}
+
+		private string _UIBindKeyOfEn = null;
 		public bool UIIsDoc
 		{
 			get

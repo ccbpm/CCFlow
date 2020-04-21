@@ -262,11 +262,32 @@ namespace BP.En
                 }
                 else if (v.Equals("@RDT"))
                 {
-                    if (attr.MyDataType == DataType.AppDate)
-                        this.SetValByKey(attr.Key, DataType.CurrentData);
-
-                    if (attr.MyDataType == DataType.AppDateTime)
-                        this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                    string dataFormat = "yyyy-MM-dd";
+                    switch (attr.IsSupperText)
+                    {
+                        case 0: break;
+                        case 1:
+                            dataFormat = "yyyy-MM-dd HH:mm";
+                            break;
+                        case 2:
+                            dataFormat = "yyyy-MM-dd HH:mm:ss";
+                            break;
+                        case 3:
+                            dataFormat = "yyyy-MM";
+                            break;
+                        case 4:
+                            dataFormat = "HH:mm";
+                            break;
+                        case 5:
+                            dataFormat = "HH:mm:ss";
+                            break;
+                        case 6:
+                            dataFormat = "MM-dd";
+                            break;
+                        default:
+                            throw new Exception("没有找到指定的时间类型");
+                    }
+                    this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                     continue;
                 }
 
@@ -401,22 +422,42 @@ namespace BP.En
                         }
                         continue;
                     case "@RDT":
+                        string dataFormat = "yyyy-MM-dd";
+                        switch (attr.IsSupperText)
+                        {
+                            case 0: break;
+                            case 1:
+                                dataFormat = "yyyy-MM-dd HH:mm";
+                                break;
+                            case 2:
+                                dataFormat = "yyyy-MM-dd HH:mm:ss";
+                                break;
+                            case 3:
+                                dataFormat = "yyyy-MM";
+                                break;
+                            case 4:
+                                dataFormat = "HH:mm";
+                                break;
+                            case 5:
+                                dataFormat = "HH:mm:ss";
+                                break;
+                            case 6:
+                                dataFormat = "MM-dd";
+                                break;
+                            default:
+                                throw new Exception("没有找到指定的时间类型");
+                        }
+                        
                         if (attr.UIIsReadonly == true)
                         {
-                            if (attr.MyDataType == DataType.AppDate || myval == v)
-                                this.SetValByKey(attr.Key, DataType.CurrentData);
-
-                            if (attr.MyDataType == DataType.AppDateTime || myval == v)
-                                this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                           /// if (myval == v)
+                                this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
                             {
-                                if (attr.MyDataType == DataType.AppDate)
-                                    this.SetValByKey(attr.Key, DataType.CurrentData);
-                                else
-                                    this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                             }
                         }
                         continue;

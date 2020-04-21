@@ -9,7 +9,10 @@ function WaiFa() {
 
     var workid = GetQueryString('WorkID');
     var flowNo = GetQueryString('FK_Flow');
-    var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo;
+    var nodeid = GetQueryString('NodeID');
+
+
+    var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&NodeID=" + nodeid;
     WinOpen(url);
     //window.open(url);
 }

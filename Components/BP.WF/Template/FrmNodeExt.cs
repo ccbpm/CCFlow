@@ -79,7 +79,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
 
-                //@sly 权限控制.
+                //权限控制.
                 if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                     uac.OpenForSysAdmin();
                 else

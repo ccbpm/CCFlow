@@ -1641,7 +1641,7 @@ namespace BP.WF.HttpHandler
                 if (attr.MyDataType == BP.DA.DataType.AppString && lgType == FieldTypeS.Normal)
                 {
                     attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
-                    attr.IsSupperText = this.GetValBoolenFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
+                    attr.IsSupperText = this.GetValIntFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
 
 
                     //高度.

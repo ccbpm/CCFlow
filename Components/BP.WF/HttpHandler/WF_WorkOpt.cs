@@ -3293,7 +3293,7 @@ namespace BP.WF.HttpHandler
 
                     /* 不是主持人就执行发送，返回发送结果. */
 
-                    //判断是否有不发送标记？ @sly
+                    //判断是否有不发送标记？
                     string isSend = this.GetRequestVal("IsSend");
                     if (isSend.Equals("0") == false)
                     {

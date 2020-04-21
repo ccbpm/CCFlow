@@ -486,27 +486,27 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoAddRight3()
         {
-            if (this.Url.Contains("Search.htm") == false && this.Url.Contains("Search.htm") == false)
+            if (this.UrlExt.Contains("Search.htm") == false && this.UrlExt.Contains("Search.htm") == false)
                 return "该功能非Search组件，所以您不能增加功能权限.";
 
             Menu en = this.DoCreateSubNode() as Menu;
             en.Name = "增加权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Insert";
             en.Update();
 
             en = this.DoCreateSubNode() as Menu;
             en.Name = "修改权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Update";
             en.Update();
 
             en = this.DoCreateSubNode() as Menu;
             en.Name = "删除权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Delete";
             en.Update();
 

@@ -22,11 +22,7 @@
             var handler = new HttpHandler("BP.DOC.App_Page");
             handler.AddUrlData();
             orgs = handler.DoMethodReturnJSON("WaiFa_Init");
-
-            //var orgs = data["orgs"];
-            //var info = data["info"];
-            //var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
-            //orgs.RetrieveAll();
+          
 
             var row = "";
             for (var i = 0; i < orgs.length; i++) {
@@ -44,6 +40,17 @@
             $("#Rows").html(row);
             return;
         });
+        //checkbox全部选中的方法
+          function CheckAll(checked)
+            {
+                var checks = $(":checkbox");
+                for (var i = 0; i < checks.length; i++)
+                {
+                    checks[i].checked = checked;
+
+                }
+              
+        };
 
         //执行外发.
         function Send() {
@@ -72,7 +79,7 @@
                                 #
                             </th>
                             <th>
-                                <label>  <input type=checkbox value=1 />(全选) 要外发的单位.</label>
+                                <label>  <input type=checkbox onclick="CheckAll(this.checked);" value=1 />(全选) 要外发的单位.</label>
 
                                 <input type="button" value="执行外发" onclick="Send();" />
                             </th>

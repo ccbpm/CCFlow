@@ -282,15 +282,15 @@ namespace BP.Sys
         /// <summary>
         /// 是否是超大文本？
         /// </summary>
-        public bool IsSupperText
+        public int IsSupperText
         {
             get
             {
-                return this.GetParaBoolen(MapAttrAttr.IsSupperText, false);
+                return this.GetValIntByKey(MapAttrAttr.IsSupperText, 0);
             }
             set
             {
-                this.SetPara(MapAttrAttr.IsSupperText, value);
+                this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
         /// <summary>
@@ -522,6 +522,8 @@ namespace BP.Sys
                 attr.MyFieldType = FieldType.Normal; //普通类型的字段.
                 if (this.IsPK)
                     attr.MyFieldType = FieldType.PK;
+
+                attr.IsSupperText = this.IsSupperText;
 
                 switch (this.LGType)
                 {
@@ -1489,8 +1491,8 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.UIIsInput, 0, "是否必填字段", true, true);
                 map.AddTBInt(MapAttrAttr.IsSecret, 0, "是否保密", true, true);
                 map.AddTBInt(MapAttrAttr.IsRichText, 0, "富文本", true, true);
-                map.AddTBInt(MapAttrAttr.IsSupperText, 0, "富文本", true, true);
-                map.AddTBInt(MapAttrAttr.FontSize, 0, "富文本", true, true);
+                map.AddTBInt(MapAttrAttr.IsSupperText, 0, "是否是大文本", true, true);
+                map.AddTBInt(MapAttrAttr.FontSize, 0, "字体大小", true, true);
 
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
                 map.AddTBInt(MapAttrAttr.IsSigan, 0, "签字？", true, false);

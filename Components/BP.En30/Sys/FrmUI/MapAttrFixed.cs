@@ -168,7 +168,24 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-      
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.MyPK;
+            attr.RetrieveFromDBSources();
+
+            //强制设置为评论组件.
+            this.UIContralType = UIContralType.Fixed;
+
+            if (this.GetValStrByKey("GroupID") == "无")
+                this.SetValByKey("GroupID", "0");
+
+            return base.beforeUpdateInsertAction();
+        }
+
+
+
         /// <summary>
         /// 删除
         /// </summary>

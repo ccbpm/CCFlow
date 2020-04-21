@@ -642,9 +642,9 @@ namespace BP.Sys.FrmUI
             //  attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
 
             attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
-            attr.IsSupperText = this.GetValBooleanByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
+            attr.IsSupperText = this.GetValIntByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
 
-            if (attr.IsRichText || attr.IsSupperText)
+            if (attr.IsRichText || attr.IsSupperText==1)
             {
                 attr.MaxLen = 4000;
                 this.SetValByKey(MapAttrAttr.MaxLen, 4000);

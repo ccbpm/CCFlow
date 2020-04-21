@@ -30,7 +30,14 @@
                 return;
             }
 
-            window.location.href = "../Portal20/Home.htm?3=23";
+            var login = GetQuertString("Type");
+
+            if (login == null || login == undefined) {
+                window.location.href = "../Portal20/Home.htm?3=23";
+                return;
+            }
+
+            window.location.href = "../WF/Admin/Portal/Default.htm?3=23";
 
             //            $("#Rows").html(row);
             return;

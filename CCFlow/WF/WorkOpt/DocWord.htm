@@ -16,7 +16,7 @@
             var data = handler.DoMethodReturnString("DocWord_Init");
 
             if (data.indexOf('err@') == 0) {
-                $("#info").html("<br>" + data);
+                $("#Msg").html("<br>" + data);
                 return;
             }
 
@@ -31,7 +31,7 @@
                 return;
             }
 
-         
+
         });
 
         //直接下载.
@@ -89,15 +89,14 @@
             html += "<li><a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank ><img src='./Img/FileType/doc.gif' />下载vsto插件<a/></li>";
             html += "</ul>";
         }
-
     </script>
 </head>
 <body>
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+        <div id="Msg"></div>
 
         <fieldset>
             <legend>公文操作</legend>
-
             <ul>
                 <li><a href='javascript:OpenByReGenerFile()'><img src='../Img/redo.png' />重新生成模版<a />:对于已经生成的文件，删除掉重新按照新模版生成文件。</a></li>
                 <li><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载到本机,编辑后上传.<a />:下载到本机上然后编辑上传该公文.</a></li>

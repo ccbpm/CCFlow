@@ -114,6 +114,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddFormData();
             var text = $("#DDL_WordKey option:selected").text();//获取字号select的text
+        
             handler.AddUrlData(); //增加参数数据
             handler.AddPara("DocWordName", text);
             var data = handler.DoMethodReturnString("DocWord_GenerBlankNum");
@@ -189,11 +190,11 @@
 
             <tr>
                 <td colspan="6">
-                    <input type="button" value="自动生成编号" onclick="AutoNum();" />
-                    <input type="button" value="自定义编号" onclick="NewNum();" />
-                    <input type="button" value="选择空闲编号" onclick="SelecBlankNum();" />
+                    <!--<input type="button" value="自动生成编号" onclick="AutoNum();" />
+                    <input type="button" value="自定义编号" onclick="NewNum();" />-->
+                    <!--<input type="button" value="选择空闲编号" onclick="SelecBlankNum();" />-->
                     <input type="button" value="保存并关闭" onclick="Save();" />
-                    <input type="button" value="关闭" onclick="Close();" />
+                    <!--<input type="button" value="关闭" onclick="Close();" />-->
                 </td>
             </tr>
 

@@ -554,7 +554,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     $("#TB_" + mapAttr.KeyOfEn).val(val);
                     break;
                 }
-                MultipleChoiceSmall(mapExt, mapAttr); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                MultipleChoiceSmall(mapExt, mapAttr, frmData); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "MultipleChoiceSearch":
                 if (mapAttr.UIIsEnable == 0)

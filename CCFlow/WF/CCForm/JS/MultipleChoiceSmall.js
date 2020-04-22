@@ -1,5 +1,5 @@
 ﻿//小范围的多选,不需要搜索.
-function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
+function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
     if (tbID == null || tbID == undefined) {
         tbID = "TB_" + mapExt.AttrOfOper;
     }
@@ -36,11 +36,17 @@ function MultipleChoiceSmall(mapExt, mapAttr, tbID, rowIndex, OID) {
             //data = enums;
             break;
         case 3:
-            data = frmData[mapExt.Tag3];
-            if (data == undefined) {
+            if (frmData != null && frmData != undefined) {
+
+                data = frmData[mapExt.Tag3];
+                if (data == undefined) {
+                    var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
+                    data = en.DoMethodReturnJSON("GenerDataOfJson");
+                    frmData[mapExt.Tag3] = data;
+                } 
+            } else {
                 var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
                 data = en.DoMethodReturnJSON("GenerDataOfJson");
-                frmData[mapExt.Tag3] = data;
             }
             break;
         case 4:

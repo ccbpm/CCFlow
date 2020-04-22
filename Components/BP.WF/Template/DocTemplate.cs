@@ -14,15 +14,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 路径
         /// </summary>
-        public const string TempFilePath = "TempFilePath";
+        public const string FilePath = "FilePath";
         /// <summary>
         /// NodeID
         /// </summary>
         public const string NodeID = "NodeID";
-        /// <summary>
-        /// 要填充的字段
-        /// </summary>
-        public const string FillTempFields = "FillTempFields";
     }
     /// <summary>
     /// 
@@ -59,15 +55,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 路径
         /// </summary>
-        public string TempFilePath
+        public string FilePath
         {
             get
             {
-                return this.GetValStrByKey(DocTemplateAttr.TempFilePath);
+                return this.GetValStrByKey(DocTemplateAttr.FilePath);
             }
             set
             {
-                this.SetValByKey(DocTemplateAttr.TempFilePath, value);
+                this.SetValByKey(DocTemplateAttr.FilePath, value);
             }
         }
         /// <summary>
@@ -124,9 +120,8 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(DocTemplateAttr.No, null, "No", true, true, 6, 6, 20);
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
-                map.AddTBString(DocTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
+                map.AddTBString(DocTemplateAttr.FilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(DocTemplateAttr.NodeID, 0, "NodeID", true, false);
-                map.AddTBString(DocTemplateAttr.FillTempFields, null, "填充字段", true, false, 0, 2000, 200);
 
                 this._enMap = map;
                 return this._enMap;

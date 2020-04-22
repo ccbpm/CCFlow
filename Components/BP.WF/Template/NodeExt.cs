@@ -1192,7 +1192,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DocTemp()
         {
-            return "../../Admin/AttrNode/DocTemp.htm?PKVal=" + this.NodeID;
+            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID;
         } 
         /// <summary>
         /// 抄送规则
@@ -1200,7 +1200,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID+"&FK_Node="+this.NodeID;
         }
         /// <summary>
         /// 个性化接受人窗口

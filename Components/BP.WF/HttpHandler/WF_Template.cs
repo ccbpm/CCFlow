@@ -26,9 +26,9 @@ namespace BP.WF.HttpHandler
         }
 
         #region  界面 .
-        public string AccepterRole_ClearStartFlowsCash()
+        public string AccepterRole_Init()
         {
-            return null;
+            return "方法未完成";
         }
         #endregion 界面方法.
 

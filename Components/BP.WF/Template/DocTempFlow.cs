@@ -93,10 +93,10 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("WF_DocTempFlow", "公文模板与业务记录");
-
                 map.Java_SetCodeStruct("6");
-
+                
                 map.AddMyPK();
                 map.AddTBInt(DocTempFlowAttr.WorkID, 0, "业务号", true, true);
                 map.AddTBString(DocTempFlowAttr.TempNo, null, "模板编号", true, false, 0, 20, 200);
@@ -130,7 +130,6 @@ namespace BP.WF.Template
         {
         }
         #endregion
-
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

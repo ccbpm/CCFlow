@@ -180,8 +180,36 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        /// <summary>
+        /// 生成文件模版
+        /// </summary>
+        /// <returns></returns>
+        public string MyFlow_GenerDocTempalte()
+        {
+            //求出要生成的模版.
+            string fileTemplate = "";
+            DocTemplates ens = new DocTemplates();
+            ens.Retrieve(DocTemplateAttr.NodeID, this.FK_Node);
+            if (ens.Count > 1)
+                return "url@./WorkOpt/SelectDocTemp.htm";
+
+            if (ens.Count==0)
+                fileTemplate = SystemConfig.PathOfData + "\\DocFlowTemplete\\Default.docx";
+
+            if (ens.Count == 1)
+            {
+                DocTemplate en = ens[0] as DocTemplate;
+                fileTemplate = en.FilePath;
+            }
+
+            //为他初始化模版.
+            string file = "sdsds/sdssds/sssdsd";
+            return "url@";
+        }
+
         public string Focus()
         {
+            
             BP.WF.Dev2Interface.Flow_Focus(this.WorkID);
             return "设置成功.";
         }
@@ -303,7 +331,7 @@ namespace BP.WF.HttpHandler
                 String frms = this.GetRequestVal("Frms");
                 if (DataType.IsNullOrEmpty(frms) == false)
                 {
-                    gwf.Paras_Frms=frms;
+                    gwf.Paras_Frms = frms;
                     gwf.Update();
                 }
             }
@@ -854,7 +882,7 @@ namespace BP.WF.HttpHandler
                     //        if(gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                     //            isAskForOrHuiQian = true;
                     //    }
-                        
+
                     //}
                     //else
                     //{
@@ -887,7 +915,7 @@ namespace BP.WF.HttpHandler
 
                     //    }
                     //}
-                   
+
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
@@ -1131,7 +1159,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //原始会签主持人可以增加组长
-                if (btnLab.AddLeaderEnable == true && (btnLab.HuiQianRole== HuiQianRole.Teamup || btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader))
+                if (btnLab.AddLeaderEnable == true && (btnLab.HuiQianRole == HuiQianRole.Teamup || btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader))
                 {
                     /*增加组长 */
                     toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";
@@ -1394,7 +1422,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = "会签发送";
                     dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt(true);";
                     dt.Rows.Add(dr);
-                  
+
                 }
                 #endregion 如果当前节点启用了协作会签
 
@@ -1412,7 +1440,7 @@ namespace BP.WF.HttpHandler
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
                             dr["Oper"] = btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;";
-                            dt.Rows.Add(dr); 
+                            dt.Rows.Add(dr);
                         }
                     }
                     else
@@ -1476,7 +1504,7 @@ namespace BP.WF.HttpHandler
                         dr = dt.NewRow();
                         dr["No"] = "Save";
                         dr["Name"] = btnLab.SaveLab;
-                        dr["Oper"] ="if (SysCheckFrm() == false) return false; Save(); ";
+                        dr["Oper"] = "if (SysCheckFrm() == false) return false; Save(); ";
                         dt.Rows.Add(dr);
                     }
                 }
@@ -1498,7 +1526,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.ThreadLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
@@ -1563,7 +1591,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.HungLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 if (btnLab.ShiftEnable)
@@ -1574,7 +1602,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.ShiftLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
@@ -1595,7 +1623,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.DeleteLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
@@ -1617,7 +1645,7 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
 
-                   
+
                 }
 
                 if (btnLab.TrackEnable)
@@ -1648,7 +1676,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.BatchLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.AskforEnable)
@@ -1659,7 +1687,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.AskforLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
@@ -1670,7 +1698,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.HuiQianLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 //原始会签主持人可以增加组长
@@ -1693,7 +1721,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.WebOfficeLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                  
+
                 }
 
                 // 需要翻译.
@@ -1707,7 +1735,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
 
-              
+
 
                 if (btnLab.CHRole != 0)
                 {
@@ -1717,7 +1745,7 @@ namespace BP.WF.HttpHandler
                     dr["Name"] = btnLab.CHLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
-                   
+
                 }
 
                 if (btnLab.NoteEnable != 0)
@@ -1774,9 +1802,9 @@ namespace BP.WF.HttpHandler
                         dr["Name"] = "取消确认";
                     else
                         dr["Name"] = btnLab.ConfirmLab;
-                     
-                       dr["Oper"] = "";
-                        dt.Rows.Add(dr);
+
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 // 需要翻译.
@@ -2239,7 +2267,7 @@ namespace BP.WF.HttpHandler
                 {
 
                     string val = HttpContextHelper.RequestParams(key);
-                            
+
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
@@ -2310,7 +2338,7 @@ namespace BP.WF.HttpHandler
                 if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID,this.PWorkID);
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID, this.PWorkID);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;
 
@@ -2503,7 +2531,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node,
-                    this.WorkID, this.GetMainTableHT(), null,this.FID,this.PWorkID);
+                    this.WorkID, this.GetMainTableHT(), null, this.FID, this.PWorkID);
 
                 if (this.PWorkID != 0)
                 {
@@ -2954,7 +2982,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             //扩展工具，显示位置为表单树类型. 
-            #warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
+#warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
             //NodeToolbars extToolBars = new NodeToolbars();
             //extToolBars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
 

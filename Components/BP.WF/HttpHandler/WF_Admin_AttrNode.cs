@@ -74,93 +74,7 @@ namespace BP.WF.HttpHandler
 
 
         #region    公文维护
-        /// <summary>
-        /// 打开公文之前对字段的检验（必填等）
-        /// </summary>
-        /// <returns></returns>
-        public string CheckDocTempFields()
-        {
-            MethodReturnMessage<string> msg = new MethodReturnMessage<string>
-            {
-                Success = false
-            };
-
-            try
-            {
-                int workId = int.Parse(this.GetRequestVal("workId"));
-                string flowNo = this.GetRequestVal("fk_flow");
-
-                DocTempFlow dtf = new DocTempFlow();
-                int count = dtf.Retrieve(DocTempFlowAttr.WorkID, workId);
-
-                if (count == 0)
-                {
-                    msg.Success = true;
-                    msg.Message = "当前业务:" + workId + "没有绑定模板";
-                }
-                else
-                {
-                    DocTemplate dt = new DocTemplate();
-                    count = dt.Retrieve(DocTemplateAttr.No, dtf.TempNo);
-
-                    if (count == 0)
-                    {
-                        msg.Message = "业务:" + workId + "绑定的模板：" + dt.Name + "不存在.";
-                    }
-                    else
-                    {
-                        string fieldsStr = dt.FillTempFields;
-
-                        if (string.IsNullOrWhiteSpace(dt.FillTempFields))
-                        {
-                            msg.Success = true;
-                            msg.Message = "业务:" + workId + "绑定的模板：" + dt.Name + "没有设置需要验证的表单字段.";
-                        }
-                        else
-                        {
-                            DataTable dTable = DBAccess.RunSQLReturnTable("select " + dt.FillTempFields + " from ND" + int.Parse(flowNo) + "Rpt where oid=" + workId);
-                            if (dTable.Rows.Count == 0)
-                            {
-                                msg.Message = "业务:" + workId + "数据丢失";
-                            }
-                            else
-                            {
-                                bool isPass = true;
-                                for (int i = 0; i < dTable.Columns.Count; i++)
-                                {
-                                    string colName = dTable.Columns[i].ColumnName;
-                                    string colVal = dTable.Rows[0][colName].ToString();
-
-                                    if (string.IsNullOrWhiteSpace(colVal))
-                                    {
-                                        isPass = false;
-                                        msg.Message = "字段：" + colName + "不可以为空";
-                                        break;
-                                    }
-                                }
-
-                                if (isPass)
-                                {
-                                    msg.Success = true;
-                                    msg.Data = dt.FillTempFields;
-                                    msg.Message = "字段“" + dt.FillTempFields + "”验证通过";
-                                }
-
-                            }
-                        }
-
-
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                msg.Message = ex.Message;
-            }
-
-            return LitJson.JsonMapper.ToJson(msg);
-        }
+       
         public string IsExitNodeTempData()
         {
             int workId = int.Parse(this.GetRequestVal("workId"));
@@ -237,7 +151,44 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        public string ImportDocTemp()
+        /// <summary>
+        /// 选择一个模版
+        /// </summary>
+        /// <returns></returns>
+        public string SelectDocTemp_Save()
+        {
+            string docTempNo = this.GetRequestVal("no");
+
+            DocTemplate docTemplate = new DocTemplate(docTempNo);
+
+            if (File.Exists(docTemplate.TempFilePath) == false)
+                return "err@选择的模版文件不存在.";
+
+            //获得模版的流.
+            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.TempFilePath);
+
+            //保存到数据库里.
+            Flow fl = new Flow(this.FK_Flow);
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID,
+                "WordFile");
+
+            ////模板与业务的绑定.
+            //DocTempFlow dtf = new DocTempFlow();
+            //dtf.CheckPhysicsTable();
+
+            //if (dtf.IsExit(DocTempFlowAttr.WorkID, workId))
+            //{
+            //    dtf.Delete();
+            //}
+            //dtf.WorkID = workId;
+            //dtf.TempNo = docTempNo;
+            //dtf.MyPK = workId + "_" + docTempNo;
+            //dtf.Insert();
+
+            return "模板导入成功.";
+        }
+
+        public string ImportDocTemp_bak()
         {
             int nodeId = int.Parse(this.GetRequestVal("nodeId"));
             Node node = new Node(nodeId);
@@ -288,11 +239,7 @@ namespace BP.WF.HttpHandler
                 return "err@选择的模版记录不存在.";
             }
         }
-
-        public string GetDocTemp()
-        {
-            return DocTemp_Init();
-        }
+ 
 
         public string FlowDocInit()
         {
@@ -375,16 +322,11 @@ namespace BP.WF.HttpHandler
 
             return LitJson.JsonMapper.ToJson(msg);
         }
-        public string DocTemp_Init()
-        {
-            int nodeId = int.Parse(this.GetRequestVal("pkval"));
-
-            DocTemplates dts = new DocTemplates();
-            dts.Retrieve(DocTemplateAttr.NodeID, nodeId);
-
-
-            return dts.ToJson();
-        }
+       
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
         public string DocTemp_Del()
         {
             int no = int.Parse(this.GetRequestVal("no"));
@@ -400,11 +342,10 @@ namespace BP.WF.HttpHandler
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请上传模版.";
 
-            int nodeId = int.Parse(this.GetRequestVal("pkval"));
             //上传附件
             var file = HttpContextHelper.RequestFiles(0);
             var fileName = file.FileName;
-            string path = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\DocTemp\\" + nodeId;
+            string path = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\DocTemp\\" + this.FK_Node;
             string fileFullPath = path + "\\" + fileName;
 
             if (!System.IO.Directory.Exists(path))
@@ -413,7 +354,7 @@ namespace BP.WF.HttpHandler
             HttpContextHelper.UploadFile(file, fileFullPath);
 
             DocTemplate dt = new DocTemplate();
-            dt.NodeID = nodeId;
+            dt.NodeID = FK_Node;
             dt.No = DA.DBAccess.GenerOID().ToString();
             dt.Name = fileName;
             dt.TempFilePath = fileFullPath; //路径

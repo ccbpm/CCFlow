@@ -35,11 +35,11 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-                $('#docTempList').append('<li ><span><a href=\'javascript:Import(\"' + en.No + '\")\'>' + en.Name + '</a></span></li>');
+                html += "<li ><span><a href=\"javascript:Import('" + en.No + "')\" >" + en.Name + "</a></span></li>";
             }
             html += "</ul>";
 
-            $("#list").html(html);
+            $("#info").html(html);
 
         }
         function Import(id) {
@@ -51,6 +51,10 @@
             handler.AddUrlData();
             handler.AddPara("No", id);
             var data = handler.DoMethodReturnString("DocWordSelectDocTemp_Imp");
+            if (data.indexOf('err@') == 0) {
+                $("#info").html("<br>" + data);
+                return;
+            }
 
             var nodeId = GetQueryString("FK_Node");
             var workId = GetQueryString("WorkID");
@@ -64,8 +68,13 @@
 </head>
 <body>
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
-        <div id="info">
-        </div>
+        <fieldset>
+            <legend>请选择文件模版 </legend>
+            <div id="info">
+            </div>
+
+        </fieldset>
+
     </form>
 </body>
 </html>

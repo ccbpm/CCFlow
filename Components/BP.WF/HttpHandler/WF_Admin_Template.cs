@@ -43,21 +43,45 @@ namespace BP.WF.HttpHandler
                 dirName = "/";
 
             FtpSupport.FtpConnection conn = this.GenerFTPConn;
-            //string strs  =conn.FindFiles();
+
             DataSet ds = new DataSet();
 
-            DataTable dt = new DataTable();
-            dt.TableName = "Dir";
-            dt.Columns.Add("Path", typeof(string));
-            dt.Columns.Add("Name", typeof(string));
-            ds.Tables.Add(dt);
+            Win32FindData[] fls = conn.FindFiles();
+            DataTable dtDir = new DataTable();
+            dtDir.TableName = "Dir";
+            dtDir.Columns.Add("FileName", typeof(string));
+            dtDir.Columns.Add("CreationTime", typeof(string));
+            ds.Tables.Add(dtDir);
 
 
-            DataTable dt2 = new DataTable();
-            dt2.TableName = "File";
-            dt2.Columns.Add("Path", typeof(string));
-            dt2.Columns.Add("Name", typeof(string));
-            ds.Tables.Add(dt2);
+            //把文件加里面.
+            DataTable dtFile = new DataTable();
+            dtFile.TableName = "File";
+            dtFile.Columns.Add("FileName", typeof(string));
+            dtFile.Columns.Add("CreationTime", typeof(string));
+            foreach (Win32FindData fl in fls)
+            {
+                switch(fl.FileAttributes)
+                {
+                    case System.IO.FileAttributes.Directory:
+                        DataRow drDir = dtDir.NewRow(); ;
+                        drDir[0] = fl.FileName;
+                        drDir[1] = fl.CreationTime;
+                        dtDir.Rows.Add(drDir);
+                        break;
+                    case System.IO.FileAttributes.System:
+                    case System.IO.FileAttributes.Hidden:
+                        continue;
+                    default:
+                        break;
+                }
+
+                DataRow dr = dtFile.NewRow();
+                dr[0]= fl.FileName;
+                dr[1] = fl.CreationTime;
+                dtFile.Rows.Add(dr);
+            }
+            ds.Tables.Add(dtFile);
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -73,11 +97,11 @@ namespace BP.WF.HttpHandler
             string sortNo = GetRequestVal("SortNo");
 
             FtpConnection conn = this.GenerFTPConn;
+            string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + BP.Web.WebUser.No + ".xml";
 
             foreach (string str in strs)
             {
                 //定义临时文件名.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + BP.Web.WebUser.No + ".xml";
 
                 //下载到临时的目录下.
                 conn.GetFile(str, tempfile, true, System.IO.FileAttributes.Normal);

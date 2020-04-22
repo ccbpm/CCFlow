@@ -3177,7 +3177,7 @@ namespace BP.WF
         {
             get
             {
-                return SystemConfig.GetValByKey("TemplateFTPHost", "42.121.236.171:25");
+                return SystemConfig.GetValByKey("TemplateFTPHost", "42.121.236.171");
             }
         }
         public static string TemplateFTPUser

@@ -10,7 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using FtpSupport.FtpConnection;
+using FtpSupport;
 
 namespace BP.WF.HttpHandler
 {

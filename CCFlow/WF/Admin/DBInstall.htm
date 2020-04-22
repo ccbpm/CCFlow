@@ -28,21 +28,9 @@
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
             var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
-
             if (data.indexOf('err@') == 0) {
-
                 var html = "安装准备失败:";
-
                 html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >修改数据库配置信息.</a>";
-
-                //                html += "<ul style='text-align:left'>";
-                //                html += "<li>准备一个空白的数据库.</li>";
-                //                html += "<li>配置数据库连接.</li>";
-                //                html += "<li>.net版本请打开 web.config 的 AppCenterDSN 节点, 配置数据库类型与连接字符串. </li>";
-                //                html += "<li>java版本请打开 \\jflow-web\\src\\main\\resources\\jflow.properties 文件, AppCenterDSN 配置项,修改相应的配置信息. </li>";
-                //                html += "<li>python版本在开发中. </li>";
-                //                html += "</ul>";
-
                 $("#Msg").html(html + "<font color=red><br>" + data + "</font> .");
                 return;
             }

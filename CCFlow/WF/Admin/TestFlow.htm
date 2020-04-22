@@ -47,8 +47,12 @@
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-
+            handler.AddUrlData(); //增加url.传递过来的参数.
+            handler.AddFormData(); //增加表单的form数据。
+            handler.AddJson(myjson); //增加json数据参数。
+            handler.AddPara("MyParaKey","ParaVal"); //增加自定义参数.。
             var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
+
             var urlHost = "";
             if (plant == "jeesite") {
 

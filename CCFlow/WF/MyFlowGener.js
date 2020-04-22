@@ -855,7 +855,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         var data = tree.tree('getSelected');
         if (data != null) {
             formArrResult.push(name + '=' + data.id);
-            formArrResult.push(name.replace("DDL_","TB_") + 'T=' + data.text);
+            formArrResult.push(name.replace("DDL_", "TB_") + 'T=' + data.text);
         }
     });
 
@@ -951,7 +951,7 @@ function GenerCheckIDs() {
 //发送
 function Send(isHuiQian) {
     SetPageSize(80, 80);
-    
+
     //保存前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
@@ -964,7 +964,7 @@ function Send(isHuiQian) {
         if (isCanSend == false)
             return false;
     }
-   
+
     //附件检查
     var msg = checkAths();
     if (msg != "") {
@@ -1077,10 +1077,10 @@ function Send(isHuiQian) {
 }
 
 function execSend(toNodeID) {
-    
+
     //先设置按钮等不可用.
     setToobarDisiable();
-    
+
     //判断是否启用审核组件
     var iframe = document.getElementById("FWC");
     if (iframe)
@@ -1164,7 +1164,7 @@ function execSend(toNodeID) {
 
         var url = data;
         url = url.replace('url@', '');
-        
+
         window.location.href = url;
         return;
     }
@@ -1607,7 +1607,7 @@ function GenerWorkNode() {
     var node = flowData.WF_Node[0];
     var gfs = flowData.Sys_MapAttr;
 
-  
+
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
 
@@ -1758,7 +1758,7 @@ function GenerWorkNode() {
             autoTextarea(item);
         });
     }
-    
+
 
     //为 DISABLED 的 TEXTAREA 加TITLE 
     var disabledTextAreas = $('#divCCForm textarea:disabled');
@@ -2161,11 +2161,42 @@ function InitToolBar() {
 
 }
 
-/* ss */
+/* 打开公文表单 */
 function OpenOffice(isEdit) {
+
     var nodeId = GetQueryString("FK_Node");
     var workId = GetQueryString("WorkID");
     var fk_flow = GetQueryString("FK_Flow");
+
+    //如果只有1个，或者0个，就自动生成文件打开它.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("MyFlow_GenerDocTempalte");
+
+
+    if (data.indexOf('err@') == 0) {
+        $("#Msg").html("<br>" + data);
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+
+        data = data.replace('url@', ''); //如果返回url，就直接转向.
+        data = data.replace('?DoType=HttpHandler', '?');
+        data = data.replace('&DoType=HttpHandler', '');
+        data = data.replace('&DoMethod=MyCC_Init', '');
+        data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyCC', '');
+        data = data.replace('?&', '?');
+
+        //如果返回url，就直接转向.
+        window.location.href = data;
+        return;
+    }
+
+
+
+
+    var handler = new htttphan
 
     //检测与模板上的对应的字段是否都有数据
     var doMethod = "CheckDocTempFields";

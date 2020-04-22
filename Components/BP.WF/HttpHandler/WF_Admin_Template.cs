@@ -94,13 +94,13 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             FtpConnection conn = this.GenerFTPConn;
-            string tempfile = BP.Sys.SystemConfig.PathOfTemp + @"\" + BP.Web.WebUser.No + ".xml";
+            
             foreach (string str in strs)
             {
-                //定义临时文件名.
-
-                //下载到临时的目录下.
-                conn.GetFile(str, tempfile, true, System.IO.FileAttributes.Normal);
+                //生成路径.
+                string tempfile = BP.Sys.SystemConfig.PathOfTemp + @"\" + str;
+                //下载目录下.
+                conn.GetFile(str, tempfile, true, System.IO.FileAttributes.ReadOnly);
 
                 //执行导入.
                 Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);

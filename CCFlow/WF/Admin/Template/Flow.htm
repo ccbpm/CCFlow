@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>模版</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <style type="text/css">
+        th, td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        var sortNo;
+        $(function () {
+
+            var frmID = GetQueryString("SortNo");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Flow_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#msg").html(data);
+                return;
+            }
+
+            var data = json.prase(data);
+
+            var dirs = data["Dirs"];
+            var files = data["Fiels"];
+
+            //首先循环目录.
+
+        });
+
+        function Imp() {
+            //生成要选择的文件.
+            var fls = "";
+            fls = "/xxx/sss.xml;/xxx/sss.xml;";
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
+            handlerAddPara("Files", fls);
+            var data = handler.DoMethodReturnString("Flow_Imp");
+            if (data.indexOf('err@') == 0) {
+                $("#msg").html(data);
+                return;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="msg"> </div>
+    <table id="Table1" style="width: 100%; padding: 2px;">
+        <caption>
+            节点-表单-字段权限
+        </caption>
+
+    </table>
+    <button onclick='Imp();' type='button'>
+        导入模版
+    </button>
+</body>
+</html>

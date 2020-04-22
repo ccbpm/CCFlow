@@ -22,7 +22,7 @@
             //$("#cc").html("<img src='/Admin/Portal/Img/loading_small.gif' /><font color=blue>ccbpm 正在登录请您稍后.</font>");
             var webUser = new WebUser();
 
-            var html = "您好：" + webUser.Name + ", 请选择您要进入的的企业登录." + datas.length;
+            var html = "您好：" + webUser.No + " - " + webUser.Name + ",共有:<font color=red>" + datas.length + " </font>个. <a href='Login.htm'>切换管理员</a>";
             $("#title").html(html);
 
             var html = "<ul style='align:left'>";
@@ -56,9 +56,11 @@
 <body class="login-bg">
 
     <form id="cc">
+        <br />
 
         <center>
-            <fieldset style="width:60%;">
+            <h3>请选择要登录的组织</h3>
+            <fieldset style="width:50%; text-align:left">
                 <legend id="title">
                 </legend>
                 <div id="list"></div>

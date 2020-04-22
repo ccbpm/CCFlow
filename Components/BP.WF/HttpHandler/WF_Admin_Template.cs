@@ -91,13 +91,10 @@ namespace BP.WF.HttpHandler
         public string Flow_Imp()
         {
             string fls = this.GetRequestVal("Files");
-            System.Windows.Forms.MessageBox.Show(fls);
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
-            System.Windows.Forms.MessageBox.Show(sortNo);
             FtpConnection conn = this.GenerFTPConn;
             string tempfile = BP.Sys.SystemConfig.PathOfTemp + @"\" + BP.Web.WebUser.No + ".xml";
-            System.Windows.Forms.MessageBox.Show(tempfile);
             foreach (string str in strs)
             {
                 //定义临时文件名.

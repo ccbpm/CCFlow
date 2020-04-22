@@ -3,12 +3,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>模版</title>
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
     <base target="_self" />
     <style type="text/css">
         th, td {
@@ -29,21 +34,33 @@
                 return;
             }
 
-            var data = json.prase(data);
-
-            var dirs = data["Dirs"];
-            var files = data["Fiels"];
-
-            //首先循环目录.
-
+            var html = "";
+            var data = JSON.parse(data);
+            // var dirs = data["Dir"];
+            var files = data["File"];
+            html += " <caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</caption>";
+            html += "<tr><th>类型</th><th>模板名称</th><th>文件大小</th></tr>";
+            for (var i = 0; i < Object.keys(files).length; i++) {
+                if (files[i].FileName.indexOf(".xml") > 0)
+                    html += "<tr><td>XML模板</td><td><input id=" + files[i].FileName + " type='checkbox';  />" + files[i].FileName + "</td><td>" + files[i].FileSize + "</td></tr>";
+            }
+            $("#Table1").html(html);
         });
 
         function Imp() {
-            //生成要选择的文件.
             var fls = "";
-            fls = "/xxx/sss.xml;/xxx/sss.xml;";
+            var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中
+            inputArray.each(//使用数组的循环函数 循环这个input数组
+                function () {
+                    var input = $(this); //循环中的每一个input元素
+                    if (input.is(':checked')) {
+                        if (input.attr("id").indexOf(".xml") > 0)//过滤文件，只选xml的
+                            fls += input.attr("id") + ";"; //查看循环中的每一个input的id
+                    }
+                });
+            //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
-            handlerAddPara("Files", fls);
+            handler.AddPara("Files", fls);
             var data = handler.DoMethodReturnString("Flow_Imp");
             if (data.indexOf('err@') == 0) {
                 $("#msg").html(data);
@@ -54,14 +71,15 @@
 </head>
 <body>
     <div id="msg"> </div>
-    <table id="Table1" style="width: 100%; padding: 2px;">
+    <div style="right:30px; position:absolute; z-index:100; top:-4px">
+        <input type="button" value="导入模版" onclick='Imp();' />
+    </div>
+    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:center">
         <caption>
-            节点-表单-字段权限
+            流程模板
         </caption>
 
     </table>
-    <button onclick='Imp();' type='button'>
-        导入模版
-    </button>
+   
 </body>
 </html>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>公文处理</title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript">
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyFlow_GenerDocTempalte");
+
+            if (data.indexOf('err@') == 0) {
+                $("#info").html("<br>" + data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                data += "?1=2";
+                data += "&FK_Node=" + GetQueryString("FK_Node");
+                data += "&WorkID=" + GetQueryString("WorkID");
+
+                //如果返回url，就直接转向.
+                window.location.href = data + "?FK_Flow=" + GetQueryString("FK_Flow");
+                return;
+            }
+
+            var html = "<ul>";
+            html += "<li><a href='OpenByReGenerFile()'><img src='./Img/FileType/doc.gif' />重新生成模版<a/></li>";
+            html += "<li><a href='OpenByHttp()'><img src='./Img/FileType/doc.gif' />下载<a/></li>";
+            html += "<li><a href='OpenByVSTO()'><img src='./Img/FileType/doc.gif' />在线打开<a/></li>";
+            html += "<li><a href='../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank ><img src='./Img/FileType/doc.gif' />下载vsto插件<a/></li>";
+            html += "</ul>";
+            $("#info").html(html);
+        });
+
+        //直接下载.
+        function OpenByHttp() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyFlow_DocFileOpenByHttp");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<br>" + data);
+                return;
+            }
+
+            data = data.replace('url@', '');
+            window.open(data);
+        }
+
+        function OpenByVSTO() {
+
+            var url = "httpccflow://xxxxx";
+            window.open(url);
+        }
+
+        //重新生成模版.
+        function OpenByReGenerFile() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyFlow_GenerDocTempalte");
+
+            var html = "<ul>";
+            html += "<li><font color=green>模版生成成功.</font></li>";
+            html += "<li><a href='OpenByHttp()'><img src='./Img/FileType/doc.gif' />下载<a/></li>";
+            html += "<li><a href='OpenByVSTO()'><img src='./Img/FileType/doc.gif' />在线VSTO打开<a/></li>";
+            html += "<li><a href='../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank ><img src='./Img/FileType/doc.gif' />下载vsto插件<a/></li>";
+            html += "</ul>";
+
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+
+        <div id="info"></div>
+    </form>
+</body>
+</html>

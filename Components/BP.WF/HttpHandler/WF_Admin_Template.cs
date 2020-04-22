@@ -50,7 +50,7 @@ namespace BP.WF.HttpHandler
             DataTable dtDir = new DataTable();
             dtDir.TableName = "Dir";
             dtDir.Columns.Add("FileName", typeof(string));
-            dtDir.Columns.Add("CreationTime", typeof(string));
+            dtDir.Columns.Add("FileSize", typeof(string));
             ds.Tables.Add(dtDir);
 
 
@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
             DataTable dtFile = new DataTable();
             dtFile.TableName = "File";
             dtFile.Columns.Add("FileName", typeof(string));
-            dtFile.Columns.Add("CreationTime", typeof(string));
+            dtFile.Columns.Add("FileSize", typeof(string));
             foreach (Win32FindData fl in fls)
             {
                 switch(fl.FileAttributes)
@@ -66,9 +66,9 @@ namespace BP.WF.HttpHandler
                     case System.IO.FileAttributes.Directory:
                         DataRow drDir = dtDir.NewRow(); ;
                         drDir[0] = fl.FileName;
-                        drDir[1] = fl.CreationTime;
+                        drDir[1] = fl.FileSize;
                         dtDir.Rows.Add(drDir);
-                        break;
+                        continue;
                     case System.IO.FileAttributes.System:
                     case System.IO.FileAttributes.Hidden:
                         continue;
@@ -78,11 +78,10 @@ namespace BP.WF.HttpHandler
 
                 DataRow dr = dtFile.NewRow();
                 dr[0]= fl.FileName;
-                dr[1] = fl.CreationTime;
+                dr[1] = fl.FileSize;
                 dtFile.Rows.Add(dr);
             }
             ds.Tables.Add(dtFile);
-
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
@@ -92,13 +91,13 @@ namespace BP.WF.HttpHandler
         public string Flow_Imp()
         {
             string fls = this.GetRequestVal("Files");
+            System.Windows.Forms.MessageBox.Show(fls);
             string[] strs = fls.Split(';');
-
             string sortNo = GetRequestVal("SortNo");
-
+            System.Windows.Forms.MessageBox.Show(sortNo);
             FtpConnection conn = this.GenerFTPConn;
-            string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + BP.Web.WebUser.No + ".xml";
-
+            string tempfile = BP.Sys.SystemConfig.PathOfTemp + @"\" + BP.Web.WebUser.No + ".xml";
+            System.Windows.Forms.MessageBox.Show(tempfile);
             foreach (string str in strs)
             {
                 //定义临时文件名.

@@ -9,6 +9,7 @@
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="/WF/Scripts/config.js" type="text/javascript"></script>
     <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script type="text/javascript">
 
         var frmID = GetQueryString("FrmID");
@@ -24,8 +25,6 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddUrlData();
-            handler.AddPara("FrmID", frmID);
-            handler.AddPara("OID", oid);
             var data = handler.DoMethodReturnString("DocWord_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -50,7 +49,7 @@
         function BindIt(data) {
 
             //1. 查询出来代字.
-            var ensName = "BP.DOC.Words";
+            var ensName = "BP.DOC.WD.Words";
             var words = new Entities(ensName);
             words.RetrieveAll();
             if (words.length == 0) {
@@ -125,8 +124,7 @@
             }
 
             //选择一个空闲的编号.
-            if (data == "0" ||data=="")
-            {
+            if (data == "0" || data == "") {
                 alert('无空白的编号');
                 return;
             }
@@ -137,14 +135,13 @@
             for (var i = 0; i < data.length; i++) {
 
                 html += "<li><a href=\"javascript:SelectIt('" + i + "');\" >" + i + "</a></li>";
-            } 
+            }
             html += "</ul>";
 
             $("#list").html(html);
         }
 
-        function SelectIt(num)
-        {
+        function SelectIt(num) {
             $("#TB_LSH").val(num);
             Save();
         }

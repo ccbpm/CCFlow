@@ -1178,7 +1178,51 @@ namespace BP.Sys
         {
             HttpContextHelper.ResponseWrite("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
         }
+        public static Hashtable GetMainTableHT()
+        {
+            Hashtable htMain = new Hashtable();
+            foreach (string key in HttpContextHelper.RequestParamKeys)
+            {
+                if (key == null || key == "")
+                    continue;
+                string mykey = key.Replace("TB_", "");
+                mykey = key.Replace("DDL_", "");
+                mykey = key.Replace("CB_", "");
+                mykey = key.Replace("RB_", "");
 
+
+                if (key.Contains("TB_"))
+                {
+
+                    string val = HttpContextHelper.RequestParams(key);
+                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
+                    {
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+                    }
+                    continue;
+                }
+
+                if (key.Contains("DDL_"))
+                {
+                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+
+                if (key.Contains("CB_"))
+                {
+                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+
+                if (key.Contains("RB_"))
+                {
+                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+            }
+            return htMain;
+        }
         public static BP.En.Entity CopyFromRequest(BP.En.Entity en)
         {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.

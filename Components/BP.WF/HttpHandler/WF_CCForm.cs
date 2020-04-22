@@ -1824,7 +1824,18 @@ namespace BP.WF.HttpHandler
                 int i = en.RetrieveFromDBSources();
                 en.ResetDefaultVal();
 
-                en = BP.Sys.PubClass.CopyFromRequest(en) as GEEntity;
+                try
+                {
+                    Hashtable ht = BP.Sys.PubClass.GetMainTableHT();
+                    foreach (string item in ht.Keys)
+                    {
+                        en.SetValByKey(item, ht[item]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return "err@方法：MyBill_SaveIt错误，在执行  GetMainTableHT 期间" + ex.Message;
+                }
 
                 en.OID = pk;
 

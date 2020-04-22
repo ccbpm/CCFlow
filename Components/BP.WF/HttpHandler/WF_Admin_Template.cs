@@ -101,7 +101,7 @@ namespace BP.WF.HttpHandler
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + str;
                 //下载目录下.
 
-                conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal,FtpTransferType.Ascii);
+                conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
                 //执行导入.
                 Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
             }

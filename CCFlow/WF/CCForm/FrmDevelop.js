@@ -81,6 +81,34 @@ function GenerDevelopFrm(wn,fk_mapData) {
             continue;
         }
       
+        if (mapAttr.MyDataType == "1" && mapAttr.IsSigan == "1") {
+            //隐藏该字段值
+            $("#TB_" + mapAttr.KeyOfEn).hide();
+            var html = "";
+            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            var localHref = GetLocalWFPreHref();
+            if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != 0) {
+                //是否签过
+                var sealData = new Entities("BP.Tools.WFSealDatas");
+                sealData.Retrieve("OID", pageData.WorkID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+                if (sealData.length > 0) {
+                    html = "<img src='" + localHref + "/DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='" + localHref+"/DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                    isSigantureChecked = true;
+                }
+                else {
+                    html = "<img src='" + localHref + "/DataUser/Siganture/siganture.jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/UnName.jpg'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                }
+               
+
+            } else {
+              
+
+                html = "<img src='" + localHref + "/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='" + localHref+"/DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+            }
+            
+            $("#TB_" + mapAttr.KeyOfEn).after(html);
+            
+        }
 
         //为复选框高级设置绑定事件
         if (mapAttr.MyDataType == 4 && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
@@ -605,7 +633,7 @@ function figure_Develop_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = UserICon + oliId + UserIConExt;    //新图片地址
+        var src = UserICon + val + UserIConExt;    //新图片地址
        
         document.getElementById("Img" + SigantureID).src = src;
     }

@@ -1307,7 +1307,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
         impParent.removeChild(obj);
     }
     else {
-        var src = UserICon + oliId + UserIConExt;    //新图片地址
+        var src = UserICon + val + UserIConExt;    //新图片地址
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;

@@ -170,7 +170,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
                 $("#TB_DocWord").attr("readonly","readonly");
-                $("#TB_DocWord").on("mouseover", function () {
+                $("#TB_DocWord").on("dblclick", function () {
                     window.parent.OpenBootStrapModal(url, "DocWordIFrame", "公文字号", 600, 200, "icon-edit", false);
                 })
             }

@@ -3172,6 +3172,31 @@ namespace BP.WF
         }
         #endregion 执行安装.
 
+        #region 流程模版的ftp服务器配置.
+        public static string TemplateFTPHost
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("TemplateFTPHost", "jflow.cn");
+            }
+        }
+        public static string TemplateFTPUser
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("TemplateFTPUser", "ccbpm");
+            }
+        }
+        public static string TemplateFTPPassword
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("TemplateFTPPassword", "ccbpmlover");
+            }
+        }
+        #endregion 流程模版的ftp服务器配置.
+
+
         #region 全局的方法处理
         /// <summary>
         /// 流程数据表系统字段,中间用,分开.

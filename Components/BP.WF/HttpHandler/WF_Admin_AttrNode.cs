@@ -73,82 +73,16 @@ namespace BP.WF.HttpHandler
         #endregion 事件基类.
 
 
-        #region    公文维护
-       
+        #region   公文维护
         public string IsExitNodeTempData()
         {
             int workId = int.Parse(this.GetRequestVal("workId"));
             string flowNo = this.GetRequestVal("fk_flow");
             byte[] bytes = BP.DA.DBAccess.GetByteFromDB("ND" + int.Parse(flowNo) + "Rpt", "OID", workId.ToString(), "WordFile");
-
             if (bytes == null)
-            {
                 return "err@公文数据不存在.";
-            }
-            else
-            {
-                return "成功获取数据.";
-            }
-        }
-        public string GetSelectedFields()
-        {
 
-            string no = this.GetRequestVal("pkVal");
-
-            DocTemplate docTemplate = new DocTemplate();
-            if (docTemplate.Retrieve(DocTemplateAttr.No, no) > 0)
-            {
-                return docTemplate.FillTempFields;
-            }
-            else
-            {
-                return "err@选择的模版记录不存在.";
-            }
-        }
-        public string SetDocTempFields()
-        {
-            string no = this.GetRequestVal("pkVal");
-            string jsonStr = this.GetRequestVal("jsonStr");
-
-            DocTemplate docTemplate = new DocTemplate();
-            if (docTemplate.Retrieve(DocTemplateAttr.No, no) > 0)
-            {
-                docTemplate.FillTempFields = jsonStr;
-                docTemplate.Update();
-
-                return "操作成功.";
-            }
-            else
-            {
-                return "err@选择的模版记录不存在.";
-            }
-        }
-        public string CreateBlankDocTemp()
-        {
-            try
-            {
-                string docTemp = BP.Sys.SystemConfig.PathOfDataUser + "\\Temp\\" + DBAccess.GenerGUID() + ".docx";
-                byte[] bytes = null;
-
-                if (!System.IO.File.Exists(docTemp))
-                {
-                    File.Create(docTemp).Close();
-                }
-
-                bytes = BP.DA.DataType.ConvertFileToByte(docTemp);
-
-                int workId = int.Parse(this.GetRequestVal("workId"));
-                string flowNo = this.GetRequestVal("fk_flow");
-
-                BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
-
-                File.Delete(docTemp);
-                return "空白公文创建成功.";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
+            return "成功获取数据.";
         }
 
         /// <summary>
@@ -161,11 +95,11 @@ namespace BP.WF.HttpHandler
 
             DocTemplate docTemplate = new DocTemplate(docTempNo);
 
-            if (File.Exists(docTemplate.TempFilePath) == false)
+            if (File.Exists(docTemplate.FilePath) == false)
                 return "err@选择的模版文件不存在.";
 
             //获得模版的流.
-            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.TempFilePath);
+            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
 
             //保存到数据库里.
             Flow fl = new Flow(this.FK_Flow);
@@ -187,59 +121,6 @@ namespace BP.WF.HttpHandler
 
             return "模板导入成功.";
         }
-
-        public string ImportDocTemp_bak()
-        {
-            int nodeId = int.Parse(this.GetRequestVal("nodeId"));
-            Node node = new Node(nodeId);
-
-            if (!node.IsStartNode)
-            {
-                return "err@不是开始节点不可以执行模板导入.";
-            }
-
-
-            string docTempNo = this.GetRequestVal("no");
-            int workId = int.Parse(this.GetRequestVal("workId"));
-            string flowNo = this.GetRequestVal("fk_flow");
-
-            DocTemplate docTemplate = new DocTemplate();
-            if (docTemplate.Retrieve(DocTemplateAttr.No, docTempNo) > 0)
-            {
-                if (File.Exists(docTemplate.TempFilePath))
-                {
-                    var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.TempFilePath);
-                    BP.DA.DBAccess.SaveBytesToDB(bytes, "ND" + int.Parse(flowNo) + "Rpt", "OID", workId, "WordFile");
-
-                    //模板与业务的绑定
-
-                    DocTempFlow dtf = new DocTempFlow();
-                    dtf.CheckPhysicsTable();
-
-                    if (dtf.IsExit(DocTempFlowAttr.WorkID, workId))
-                    {
-                        dtf.Delete();
-                    }
-
-
-                    dtf.WorkID = workId;
-                    dtf.TempNo = docTempNo;
-                    dtf.MyPK = workId + "_" + docTempNo;
-                    dtf.Insert();
-
-                    return "模板导入成功.";
-                }
-                else
-                {
-                    return "err@选择的模版文件不存在.";
-                }
-            }
-            else
-            {
-                return "err@选择的模版记录不存在.";
-            }
-        }
- 
 
         public string FlowDocInit()
         {
@@ -322,7 +203,7 @@ namespace BP.WF.HttpHandler
 
             return LitJson.JsonMapper.ToJson(msg);
         }
-       
+
         /// <summary>
         /// 删除
         /// </summary>
@@ -331,7 +212,7 @@ namespace BP.WF.HttpHandler
         {
             int no = int.Parse(this.GetRequestVal("no"));
 
-          BP.WF.Template.DocTemplate dt = new DocTemplate();
+            BP.WF.Template.DocTemplate dt = new DocTemplate();
             dt.Retrieve(DocTemplateAttr.No, no);
             dt.Delete();
 
@@ -357,7 +238,7 @@ namespace BP.WF.HttpHandler
             dt.NodeID = FK_Node;
             dt.No = DA.DBAccess.GenerOID().ToString();
             dt.Name = fileName;
-            dt.TempFilePath = fileFullPath; //路径
+            dt.FilePath = fileFullPath; //路径
 
             dt.CheckPhysicsTable();
             dt.Save();

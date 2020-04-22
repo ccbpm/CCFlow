@@ -67,20 +67,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 要填充的字段
-        /// </summary>
-        public new string FillTempFields
-        {
-            get
-            {
-                return this.GetValStrByKey(DocTemplateAttr.FillTempFields);
-            }
-            set
-            {
-                this.SetValByKey(DocTemplateAttr.FillTempFields, value);
-            }
-        }
-        /// <summary>
         /// 节点ID
         /// </summary>
         public int NodeID
@@ -94,7 +80,6 @@ namespace BP.WF.Template
                 this.SetValByKey(DocTemplateAttr.NodeID, value);
             }
         }
-     
         #endregion
 
         #region 构造函数

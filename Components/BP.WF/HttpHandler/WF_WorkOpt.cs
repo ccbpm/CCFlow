@@ -657,6 +657,28 @@ namespace BP.WF.HttpHandler
             return fns.ToJson();
         }
 
+        #region 公文处理.
+        /// <summary>
+        /// 选择一个模版
+        /// </summary>
+        /// <returns></returns>
+        public string DocWordSelectDocTemp_Imp()
+        {
+            Node node = new Node(this.FK_Node);
+            if (node.IsStartNode == false)
+                return "err@不是开始节点不可以执行模板导入.";
+
+            DocTemplate docTemplate = new DocTemplate(this.No);
+            if (File.Exists(docTemplate.FilePath) == false)
+                return "err@选择的模版文件不存在,请联系管理员.";
+
+            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
+            Flow fl = new Flow(this.FK_Flow);
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "WordFile");
+            return "模板导入成功.";
+        }
+        #endregion
+
         #region 通用人员选择器.
         /// <summary>
         /// 通用人员选择器Init

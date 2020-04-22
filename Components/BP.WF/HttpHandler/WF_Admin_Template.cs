@@ -98,10 +98,10 @@ namespace BP.WF.HttpHandler
             foreach (string str in strs)
             {
                 //生成路径.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + @"\" + str;
+                string tempfile = BP.Sys.SystemConfig.PathOfTemp + str;
                 //下载目录下.
-                conn.GetFile(str, tempfile, true, System.IO.FileAttributes.ReadOnly);
 
+                conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal,FtpTransferType.Ascii);
                 //执行导入.
                 Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
             }

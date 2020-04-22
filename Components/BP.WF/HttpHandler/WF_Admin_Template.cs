@@ -72,7 +72,7 @@ namespace BP.WF.HttpHandler
 
             string sortNo = GetRequestVal("SortNo");
 
-            FtpConnection conn = this.GenerFTPConn();
+            FtpConnection conn = this.GenerFTPConn;
 
             foreach (string str in strs)
             {

@@ -58,6 +58,10 @@
                             fls += input.attr("id") + ";"; //查看循环中的每一个input的id
                     }
                 });
+            if (fls == "") {
+                alert("未选择模板");
+                return
+            }
             //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddPara("Files", fls);

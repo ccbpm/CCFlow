@@ -24,13 +24,18 @@
             var data = handler.DoMethodReturnString("Port_Init");
 
             if (data.indexOf('err@') == 0) {
-                alert(data);
-
-                $("#msg").html(data);
+                // alert(data);
+                //$("#msg").html(data);
                 return;
             }
 
             var login = GetQuertString("Type");
+
+            var isSkip = GetQuertString("IsSkip");
+            if (isSkip != null)
+                return;
+
+
 
             if (login == null || login == undefined) {
                 window.location.href = "../Portal20/Home.htm?3=23";
@@ -38,7 +43,6 @@
             }
 
             window.location.href = "../WF/Admin/Portal/Default.htm?3=23";
-
             //            $("#Rows").html(row);
             return;
         });
@@ -47,7 +51,7 @@
 </head>
 <body class="gray-bg">
     <form id="frm">
-
+        <h3>正在打开请稍后...</h3>
         <div id="msg"></div>
     </form>
 </body>

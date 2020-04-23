@@ -50,8 +50,15 @@ namespace BP.WF.HttpHandler
             conn.SetCurrentDirectory(dirName);
 
             DataSet ds = new DataSet();
-
-            Win32FindData[] fls = conn.FindFiles();
+            Win32FindData[] fls;
+            try
+            {
+                fls = conn.FindFiles();
+            }
+            catch
+            {
+                return "该目录无文件";
+            }
 
             DataTable dtDir = new DataTable();
             dtDir.TableName = "Dir";

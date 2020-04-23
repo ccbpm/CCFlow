@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using FtpSupport;
+using System.Collections;
 
 namespace BP.WF.HttpHandler
 {
@@ -107,22 +108,33 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flow_Imp()
         {
+            string Msg="";
             string fls = this.GetRequestVal("Files");
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
-            FtpConnection conn = this.GenerFTPConn;
 
+            FtpConnection conn = this.GenerFTPConn;
             foreach (string str in strs)
             {
+                if (str == "")
+                    continue;
                 //生成路径.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + str;
+                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
                 //下载目录下.
-
+                
                 conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
                 //执行导入.
-                Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                flow.DoCheck(); //要执行一次检查
+                Hashtable ht = new Hashtable();
+                ht.Add("FK_Flow", flow.No);
+                ht.Add("FlowName", flow.Name);
+                ht.Add("FK_FlowSort", flow.FK_FlowSort);
+                ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+                Msg+= BP.Tools.Json.ToJson(ht)+ "\n";
             }
-            return "导入成功，请刷新，或者退出重新登录.";
+            
+            return Msg;
         }
         #endregion 界面方法.
 

@@ -207,7 +207,7 @@ function EventListener_TabCloseed() {
     }
     var tabs = $('#tabs').tabs('tabs');
     if (tabs.length == 0) {
-        addTab("welcome", "首页", "Welcome.htm", "");
+        addTab("welcome", "首页", "../../../DataUser/AppCoder/FlowDesignerWelcome.htm", "");
     }
 }
 

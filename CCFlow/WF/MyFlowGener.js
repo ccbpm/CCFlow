@@ -2194,6 +2194,14 @@ function SetPageSize(w, h) {
 }
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {
+    var node = flowData.WF_Node[0];
+    if (node.FormType == 12 || (node.FormType == 11 && flowData.FrmNode[0] != null && flowData.FrmNode[0].FrmType == 8)) {
+        if (modalType == "PackUp_pdf" || modalType == "PackUp_html" || modalType == "PackUp_zip") {
+            PrintPDF();
+            return;
+        }
+    }
+  
 
     //初始化退回窗口的SRC.
     var html = '<div style=" height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
@@ -2233,6 +2241,7 @@ function initModal(modalType, toNode) {
 
     var modalIframeSrc = '';
     if (modalType != undefined) {
+       
         switch (modalType) {
             case "returnBack":
                 $('#modalHeader').text("提示信息");
@@ -2321,7 +2330,7 @@ function initModal(modalType, toNode) {
             case "PackUp_pdf":
                 $('#modalHeader').text("打包下载/打印");
                 var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
-                // alert(url);
+               
                 modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
@@ -2355,6 +2364,44 @@ function initModal(modalType, toNode) {
         }
     }
     $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
+}
+
+
+function PrintPDF() {
+    var W = document.body.clientWidth;
+    var H = document.body.clientHeight - 40;
+    $("#Btn_PrintPdf").val("PDF打印中...");
+    $("#Btn_PrintPdf").attr("disabled", true);
+    var _html = document.getElementById("divCurrentForm").innerHTML;
+    _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+    handler.AddPara("html", _html);
+    handler.AddPara("FrmID", flowData.Sys_MapData[0].No);
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+
+    var data = handler.DoMethodReturnString("Packup_Init");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+    } else {
+        $("#Btn_PrintPdf").val("PDF打印成功");
+        $("#Btn_PrintPdf").attr("disabled", false);
+        $("#Btn_PrintPdf").val("打印pdf");
+        var urls = JSON.parse(data);
+        for (var i = 0; i < urls.length; i++) {
+            if (urls[i].No == "pdf") {
+                window.open(urls[i].Name);
+                break;
+            }
+
+        }
+    }
+
+    //var url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=pdf";
+    // OpenBootStrapModal(url, "eudlgframe", "打印PDF",600, 500, "icon-property", null, null, null, null, null, "black");
+
 }
 
 // 检查审核组件,是否加盖了电子签章？

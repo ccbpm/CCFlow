@@ -21,6 +21,7 @@
             }
 
             if (data.indexOf('url@') == 0) {
+
                 data = data.replace('url@', '');
                 data += "?FK_Flow=" + GetQueryString("FK_Flow");
                 data += "&FK_Node=" + GetQueryString("FK_Node");
@@ -31,7 +32,6 @@
                 return;
             }
 
-
         });
 
         //直接下载.
@@ -40,7 +40,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("DocWord_OpenByHttp");
-            //alert(data);
 
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);
@@ -73,6 +72,15 @@
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
             var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
             window.open(url);
+        }
+
+        //上传.
+        function Upload() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddFormData(); //增加表单数据.
+            var data = handler.DoMethodReturnString("DocWord_Upload");
+            alert(data);
         }
 
         //重新生成模版.
@@ -109,7 +117,8 @@
 
         <fieldset>
             <legend>上传公文</legend>
-            <input type="file" value="上传文件" />
+            <input type="file" value="上传文件"  />
+            <input type="button" value="上传" onclick="Upload()" />
         </fieldset>
     </form>
 </body>

@@ -2050,6 +2050,14 @@ function InitToolBar() {
         $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
     }
 
+
+    if ($('[name=DocWord]').length > 0) {
+
+        $('[name=DocWord]').attr('onclick', '');
+        $('[name=DocWord]').unbind('click');
+        $('[name=DocWord]').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
+    }
+
     if ($('[name=Btn_WorkCheck]').length > 0) {
 
         $('[name=Btn_WorkCheck]').attr('onclick', '');
@@ -2162,41 +2170,11 @@ function InitToolBar() {
 
 /* 打开公文表单 */
 function OpenOffice(isEdit) {
-
     var url = "./WorkOpt/DocWord.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
     WinOpen(url);
     return;
 }
-
-//创建空白模板数据
-function CreateBlankDocTemp(nodeId, workId, fk_flow, vstourl) {
-    var doMethod = "CreateBlankDocTemp";
-    var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
-
-    $.ajax({
-        url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&nodeId=" + nodeId +
-            "&workId=" + workId + "&fk_flow=" + fk_flow,
-        async: false,
-        success: function (result, status, xhr) {
-            if (result.indexOf('err@') == 0) {
-                alert(result);
-                return false;
-            } else {
-                return true;
-            }
-        }
-    });
-
-    OpVsto(vstourl);
-}
-
-function OpVsto(vstourl) {
-    $('body').append('<a id="opvsto" hidden  href="">vsto操作</a>');
-    $('#opvsto').attr('href', vstourl);
-    $('#opvsto')[0].click();
-
-    $('#opvsto').remove();
-}
+ 
 function setModalMax() {
     //设置bootstrap最大化窗口
     //获取width
@@ -2291,6 +2269,11 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("工作移交");
                 SetPageSize(80, 80);
                 modalIframeSrc = "./WorkOpt/Forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "DocWord":
+                $('#modalHeader').text("公文");
+                SetPageSize(40, 80);
+                modalIframeSrc = "./WorkOpt/DocWord.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
                 $('#modalHeader').text("加签");

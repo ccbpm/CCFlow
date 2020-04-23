@@ -100,11 +100,14 @@
             //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddPara("Files", fls);
+            handler.AddPara("SortNo", GetQueryString("SortNo"));
             var data = handler.DoMethodReturnString("Flow_Imp");
             if (data.indexOf('err@') == 0) {
                 $("#msg").html(data);
                 return;
             }
+            var json = eval('(' + data + ')');
+            alert(json.Msg);
         }
     </script>
 </head>

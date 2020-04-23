@@ -682,6 +682,17 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 重置公文文件.
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_ResetFile()
+        {
+            Flow fl = new Flow(this.FK_Flow);
+            string sql = "UPDATE "+fl.PTable+ " SET DocWordFile=NULL WHERE OID=" + this.WorkID;
+            DBAccess.RunSQL(sql);
+            return "ok";
+        }
+        /// <summary>
         /// 生成文件模版
         /// </summary>
         /// <returns></returns>
@@ -716,7 +727,6 @@ namespace BP.WF.HttpHandler
 #warning 替换变量. todo.
 
             BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "DocWordFile");
-
             return "info@已经生成成功.";
         }
         /// <summary>

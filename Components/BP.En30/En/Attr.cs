@@ -137,7 +137,11 @@ namespace BP.En
         /// <summary>
         /// 大块文本Html(说明性文字)
         /// </summary>
-        BigText = 60
+        BigText = 60,
+		/// <summary>
+		/// 评分
+		/// </summary>
+		Score = 101
 
     }
     /// <summary>

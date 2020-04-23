@@ -22,6 +22,7 @@
     </style>
     <script type="text/javascript">
         var sortNo;
+        var retrunUrl;
         $(function () {
 
             var frmID = GetQueryString("SortNo");
@@ -47,11 +48,6 @@
             html += "<th>模板名称</th>";
             html += "<th>文件大小</th>";
             html += "</tr>";
-
-            html += "<tr>";
-            html += "<td colspan=2>返回上一级</td>";
-            html += "</tr>";
-
             for (var i = 0; i < dirs.length; i++) {
                 var dir = dirs[i];
 
@@ -65,25 +61,30 @@
                 var fl = files[i];
 
                 html += "<tr>";
-                html += "<td><a href=''><img src='../../Img/Flow.png' style='width:15px;' />" + fl.FileName + "</a></td>";
+                html += "<td><input id=" + fl.FileName + " type='checkbox';  /><img src='../../Img/dot.png' style='width:15px;' />" + fl.FileName + "</td>";
                 html += "<td>  " + fl.RDT + " </td>";
                 html += "</tr>";
             }
 
-            $("#info").html(html);
+            $("#Table1").html(html);
 
         });
 
         //他的上一级目录.
         function ToParent(path) {
             path = path.replace('//', '/');
-
+            retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
+            alert(retrunUrl);
             var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
             alert(url);
 
             window.location.href = url;
         }
-
+        //返回上一级
+        function RetrunToParent() {
+            alert(retrunUrl);
+            //window.location.href = retrunUrl;
+        }
         function Imp() {
             var fls = "";
             var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中
@@ -113,13 +114,12 @@
 <body>
 
     <div style="right:30px; position:absolute; z-index:100; top:-4px">
-        <input type="button" value="导入模版" onclick='Imp();' />
+        <a href="#" onclick="RetrunToParent()">返回上一级</a><input type="button" value="导入模版" onclick='Imp();' />
     </div>
 
 
-    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:center">
-        <div id="info">
-        </div>
+    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
+        
     </table>
     <div id="msg"> </div>
 </body>

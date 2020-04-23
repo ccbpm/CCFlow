@@ -730,6 +730,28 @@ namespace BP.WF.HttpHandler
             return "info@已经生成成功.";
         }
         /// <summary>
+        /// 上传
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_Upload()
+        {
+            if (HttpContextHelper.RequestFilesCount == 0)
+                return "err@请上传模版.";
+
+            //上传附件
+            var file = HttpContextHelper.RequestFiles(0);
+            var fileName = file.FileName;
+            string path = SystemConfig.PathOfTemp +   DBAccess.GenerGUID()+".docx";
+             
+            HttpContextHelper.UploadFile(file, path);
+
+            Flow fl = new Flow(this.FK_Flow);
+            DBAccess.SaveFileToDB(path, fl.PTable, "OID", this.WorkID.ToString(), "DocFile");
+
+            return "上传成功.";
+        }
+
+        /// <summary>
         /// 选择一个模版
         /// </summary>
         /// <returns></returns>

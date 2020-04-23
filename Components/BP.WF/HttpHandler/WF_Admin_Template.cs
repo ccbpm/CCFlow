@@ -116,7 +116,7 @@ namespace BP.WF.HttpHandler
             FtpConnection conn = this.GenerFTPConn;
             foreach (string str in strs)
             {
-                if (str == "")
+                if (str == ""||str.IndexOf(".xml")==-1)
                     continue;
                 //生成路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;

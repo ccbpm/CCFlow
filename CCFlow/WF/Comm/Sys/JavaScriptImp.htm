@@ -59,30 +59,15 @@
             }
 
             //获取发送请求时的参数
-            var queryString = document.location.search.substr(1);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
+            handler.AddFileData();
+            var data = handler.DoMethodReturnString("javaScriptImp_Done");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
 
-            //URL 路径
-            var doMethod = "javaScriptImp_Done";
-            var httpHandlerName = "BP.WF.HttpHandler.WF_Comm_Sys";
-            var URL = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName;
-            //           	var URL = Handler + "?DoType=javaScriptImp_Done";
-
-            if (queryString != null && queryString.length > 0)
-                URL += URL + "&" + queryString;
-
-            //提交数据
-            $("#cc").form("submit", {
-                type: 'POST',
-                dataType: 'html',
-                url: URL,
-                onSubmit: function (param) {
-                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
-                },
-                success: function (data) {
-                    alert(data);
-                    init_Page();
-                }
-            });
+            init_Page();
         }
     </script>
 </head>

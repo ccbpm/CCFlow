@@ -659,6 +659,67 @@ namespace BP.WF.HttpHandler
 
         #region 公文处理.
         /// <summary>
+        /// 直接下载
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_OpenByHttp()
+        {
+            //生成文件.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            Flow fl = new Flow(this.FK_Flow);
+            try
+            {
+                string file = SystemConfig.PathOfTemp + "" + gwf.Title + ".docx";
+                DBAccess.GetFileFromDB(file, fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
+                return "../../DataUser/Temp/" + gwf.Title + ".docx";
+            }
+            catch (Exception ex)
+            {
+                //如果文件生成失败，就用保险的文件名.
+                string file = SystemConfig.PathOfTemp + "" + gwf.WorkID + ".docx";
+                DBAccess.GetFileFromDB(file, fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
+                return "../../DataUser/Temp/" + gwf.WorkID + ".docx";
+            }
+        }
+        /// <summary>
+        /// 生成文件模版
+        /// </summary>
+        /// <returns></returns>
+        public string DocWord_Init()
+        {
+            //首先判断是否生成公文文件？ todo. 
+            Flow fl = new Flow(this.FK_Flow);
+            byte[] val = DBAccess.GetByteFromDB(fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
+            if (val != null)
+                return "info@请下载文件"; //如果已经有这个模版了.
+
+            //求出要生成的模版.
+            DocTemplates ens = new DocTemplates();
+            ens.Retrieve(DocTemplateAttr.NodeID, this.FK_Node);
+            if (ens.Count > 1)
+                return "url@DocWordSelectDocTemp.htm";
+
+            string fileTemplate = "";
+            if (ens.Count == 0)
+                fileTemplate = SystemConfig.PathOfData + "\\DocFlowTemplete\\Default.docx";
+
+            if (ens.Count == 1)
+            {
+                DocTemplate en = ens[0] as DocTemplate;
+                fileTemplate = en.FilePath;
+            }
+
+            //转化为字节.
+            byte[] bytes = null;
+            bytes = BP.DA.DataType.ConvertFileToByte(fileTemplate);
+
+#warning 替换变量. todo.
+
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "DocWordFile");
+
+            return "info@已经生成成功.";
+        }
+        /// <summary>
         /// 选择一个模版
         /// </summary>
         /// <returns></returns>
@@ -674,7 +735,7 @@ namespace BP.WF.HttpHandler
 
             var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
             Flow fl = new Flow(this.FK_Flow);
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "WordFile");
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "DocWordFile");
             return "模板导入成功.";
         }
         #endregion
@@ -770,9 +831,9 @@ namespace BP.WF.HttpHandler
                     sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
             }
             //判断人员是否已经删除
-            if (sas.Count!=0)
+            if (sas.Count != 0)
             {
-                for (int k = sas.Count-1; k >=0; k--)
+                for (int k = sas.Count - 1; k >= 0; k--)
                 {
                     SelectAccper sa = sas[k] as SelectAccper;
                     Emp emp = new Emp();

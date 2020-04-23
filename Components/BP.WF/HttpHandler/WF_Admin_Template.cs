@@ -36,6 +36,10 @@ namespace BP.WF.HttpHandler
                 return conn;
             }
         }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
         public string Flow_Init()
         {
             string dirName = this.GetRequestVal("DirName");
@@ -43,30 +47,34 @@ namespace BP.WF.HttpHandler
                 dirName = "/";
 
             FtpSupport.FtpConnection conn = this.GenerFTPConn;
+            conn.SetCurrentDirectory(dirName);
 
             DataSet ds = new DataSet();
 
             Win32FindData[] fls = conn.FindFiles();
+
             DataTable dtDir = new DataTable();
             dtDir.TableName = "Dir";
             dtDir.Columns.Add("FileName", typeof(string));
-            dtDir.Columns.Add("FileSize", typeof(string));
+            dtDir.Columns.Add("RDT", typeof(string));
+            dtDir.Columns.Add("Path", typeof(string));
             ds.Tables.Add(dtDir);
-
 
             //把文件加里面.
             DataTable dtFile = new DataTable();
             dtFile.TableName = "File";
             dtFile.Columns.Add("FileName", typeof(string));
-            dtFile.Columns.Add("FileSize", typeof(string));
+            dtFile.Columns.Add("RDT", typeof(string));
+            dtFile.Columns.Add("Path", typeof(string));
             foreach (Win32FindData fl in fls)
             {
-                switch(fl.FileAttributes)
+                switch (fl.FileAttributes)
                 {
                     case System.IO.FileAttributes.Directory:
                         DataRow drDir = dtDir.NewRow(); ;
                         drDir[0] = fl.FileName;
-                        drDir[1] = fl.FileSize;
+                        drDir[1] = fl.CreationTime.ToString("yyyy-MM-dd HH:mm");
+                        drDir[2] = conn.GetCurrentDirectory() + "/" + fl.FileName;
                         dtDir.Rows.Add(drDir);
                         continue;
                     case System.IO.FileAttributes.System:
@@ -77,8 +85,9 @@ namespace BP.WF.HttpHandler
                 }
 
                 DataRow dr = dtFile.NewRow();
-                dr[0]= fl.FileName;
-                dr[1] = fl.FileSize;
+                dr[0] = fl.FileName;
+                dr[1] = fl.CreationTime.ToString("yyyy-MM-dd HH:mm");
+                dr[2] = conn.GetCurrentDirectory() + "/" + fl.FileName;
                 dtFile.Rows.Add(dr);
             }
             ds.Tables.Add(dtFile);
@@ -94,7 +103,7 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             FtpConnection conn = this.GenerFTPConn;
-            
+
             foreach (string str in strs)
             {
                 //生成路径.

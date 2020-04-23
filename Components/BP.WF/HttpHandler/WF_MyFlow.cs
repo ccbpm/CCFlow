@@ -180,52 +180,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 公文处理.
-        /// <summary>
-        /// 直接下载
-        /// </summary>
-        /// <returns></returns>
-        public string MyFlow_DocFileOpenByHttp()
-        {
-            return "";
-        }
-        /// <summary>
-        /// 生成文件模版
-        /// </summary>
-        /// <returns></returns>
-        public string MyFlow_GenerDocTempalte()
-        {
-            //首先判断是否生成公文文件？ todo.
-
-
-            //求出要生成的模版.
-            DocTemplates ens = new DocTemplates();
-            ens.Retrieve(DocTemplateAttr.NodeID, this.FK_Node);
-            if (ens.Count > 1)
-                return "url@DocWordSelectDocTemp.htm";
-
-            string fileTemplate = "";
-            if (ens.Count == 0)
-                fileTemplate = SystemConfig.PathOfData + "\\DocFlowTemplete\\Default.docx";
-
-            if (ens.Count == 1)
-            {
-                DocTemplate en = ens[0] as DocTemplate;
-                fileTemplate = en.FilePath;
-            }
-
-            //转化为字节.
-            byte[] bytes = null;
-            bytes = BP.DA.DataType.ConvertFileToByte(fileTemplate);
-
-           #warning 替换变量. todo.
-
-            Flow fl = new Flow(this.FK_Flow);
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "WordFile");
-
-            return "info@已经生成成功.";
-        }
-        #endregion 公文处理.
+       
 
         public string Focus()
         {

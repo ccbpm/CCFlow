@@ -2392,7 +2392,7 @@ function PrintPDF() {
         var urls = JSON.parse(data);
         for (var i = 0; i < urls.length; i++) {
             if (urls[i].No == "pdf") {
-                window.open(urls[i].Name);
+                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
                 break;
             }
 

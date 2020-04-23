@@ -114,6 +114,7 @@
             if (generBill.RetrieveFromDBSources() == 0)
                 return;
 
+            
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
@@ -458,7 +459,9 @@
                 return;
             }
 
-            window.location.href = window.location.href;
+            var url = window.location.href;
+            url = url.replace("IsReadonly=0", "IsReadonly=1");
+            window.location.href = url;
         }
 
         //获取表单数据

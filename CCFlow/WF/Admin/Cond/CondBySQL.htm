@@ -70,7 +70,7 @@
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
-            alert(docs);
+
             document.getElementById("TB_SQL").value = docs;
             editor.setValue(document.getElementById("TB_SQL").value);
             document.getElementById("TB_Note").value = data.Note;
@@ -97,7 +97,7 @@
                 alert('请输入备注说明.');
                 return;
             }
-            alert(sqlVal);
+ 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);

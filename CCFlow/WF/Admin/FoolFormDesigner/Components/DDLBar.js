@@ -624,7 +624,7 @@ function ExtBigNoteHtmlText() {
     //增加大文本
     if (window.confirm('您确认要创建吗？') == false)
         return "";
-    window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + fk_mapData;
+    window.location.href = "../EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + fk_mapData;
 }
 
 //手写签名版.

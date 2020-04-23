@@ -76,18 +76,20 @@
         }
 
         //重新生成模版.
-        function OpenByReGenerFile() {
+        function ResetFile() {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            if (confirm('您确认要重新生成吗？如果打开编辑了数据，就会被冲掉。') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyFlow_GenerDocTempalte");
+            var data = handler.DoMethodReturnString("DocWord_ResetFile");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-            var html = "<ul>";
-            html += "<li><font color=green>模版生成成功.</font></li>";
-            html += "<li><a href='OpenByHttp()'><img src='./Img/FileType/doc.gif' />下载<a/></li>";
-            html += "<li><a href='OpenByVSTO()'><img src='./Img/FileType/doc.gif' />在线VSTO打开<a/></li>";
-            html += "<li><a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank ><img src='./Img/FileType/doc.gif' />下载vsto插件<a/></li>";
-            html += "</ul>";
+            window.location.href = window.location.href;
         }
     </script>
 </head>
@@ -98,10 +100,10 @@
         <fieldset>
             <legend>公文操作</legend>
             <ul>
-                <li><a href='javascript:OpenByReGenerFile()'><img src='../Img/redo.png' />重新生成模版<a />:对于已经生成的文件，删除掉重新按照新模版生成文件。</a></li>
+                <li><a href='javascript:ResetFile()'><img src='../Img/redo.png' />重新生成模版<a />:对于已经生成的文件，删除掉重新按照新模版生成文件。</a></li>
                 <li><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载到本机,编辑后上传.<a />:下载到本机上然后编辑上传该公文.</a></li>
-                <li><a href='javascript:OpenByVSTO()'><img src='../Img/Components.png' />启动本机Word在线打开,直接编辑公文<a />,需要vsto插件支持.</a></li>
-                <li><a href='../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载vsto插件<a /></a></li>
+                <li><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />启动本机Word在线打开,直接编辑公文<a />,需要vsto插件支持.</a></li>
+                <li><a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载vsto插件</a></li>
             </ul>
         </fieldset>
 

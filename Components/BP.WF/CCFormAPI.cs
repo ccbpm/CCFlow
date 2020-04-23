@@ -846,7 +846,7 @@ namespace BP.WF
                 switch (dtl.DtlOpenType)
                 {
                     case DtlOpenType.ForEmp:  // 按人员来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
                         qo.addAnd();
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;

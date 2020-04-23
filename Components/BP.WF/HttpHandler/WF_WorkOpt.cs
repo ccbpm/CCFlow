@@ -579,7 +579,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"));
+                return BP.WF.MakeForm2Html.MakeCCFormToPDF(nd, this.WorkID, this.FK_Flow, null, false, this.GetRequestVal("BasePath"), this.GetRequestVal("html"));
 
             }
             catch (Exception ex)
@@ -706,7 +706,7 @@ namespace BP.WF.HttpHandler
 
             //求出要生成的模版.
             DocTemplates ens = new DocTemplates();
-            ens.Retrieve(DocTemplateAttr.NodeID, this.FK_Node);
+            ens.Retrieve(DocTemplateAttr.FK_Node, this.FK_Node);
             if (ens.Count > 1)
                 return "url@DocWordSelectDocTemp.htm";
 

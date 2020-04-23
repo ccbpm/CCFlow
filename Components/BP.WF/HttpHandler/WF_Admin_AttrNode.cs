@@ -165,7 +165,7 @@ namespace BP.WF.HttpHandler
                 else//开始节点
                 {
                     DocTemplates dts = new DocTemplates();
-                    int count = dts.Retrieve(DocTemplateAttr.NodeID, nodeId);
+                    int count = dts.Retrieve(DocTemplateAttr.FK_Node, nodeId);
 
                     if (bytes == null)
                     {
@@ -235,7 +235,7 @@ namespace BP.WF.HttpHandler
             HttpContextHelper.UploadFile(file, fileFullPath);
 
             DocTemplate dt = new DocTemplate();
-            dt.NodeID = FK_Node;
+            dt.FK_Node = FK_Node;
             dt.No = DA.DBAccess.GenerOID().ToString();
             dt.Name = fileName;
             dt.FilePath = fileFullPath; //路径

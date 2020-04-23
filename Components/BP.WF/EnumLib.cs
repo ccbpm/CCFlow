@@ -1355,6 +1355,10 @@ namespace BP.WF
         /// </summary>
         RefOneFrmTree = 11,
         /// <summary>
+        /// 开发者表单
+        /// </summary>
+        Develop = 12,
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         DisableIt = 100,

@@ -1398,7 +1398,7 @@ namespace BP.WF
         /// <summary>
         /// 树形表单转成PDF.
         /// </summary>
-        public static string MakeCCFormToPDF(Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
+        public static string MakeCCFormToPDF(Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath,string htmlString=null)
         {
             //根据节点信息获取表单方案
             MapData md = new MapData("ND" + node.NodeID);
@@ -1431,7 +1431,8 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
 
             if ((int)node.HisFormType == (int)NodeFormType.FoolForm || (int)node.HisFormType == (int)NodeFormType.FreeForm
-                || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree || (int)node.HisFormType == (int)NodeFormType.FoolTruck)
+                || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree || (int)node.HisFormType == (int)NodeFormType.FoolTruck
+                || node.HisFormType == NodeFormType.Develop)
             {
                 resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
                 if (resultMsg.IndexOf("err@") != -1)
@@ -1439,7 +1440,7 @@ namespace BP.WF
 
                 string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid + "\\index.htm";
 
-                resultMsg = MakeHtmlDocument(frmID, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath);
+                resultMsg = MakeHtmlDocument(frmID, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath, htmlString);
 
                 if (resultMsg.IndexOf("err@") != -1)
                     return resultMsg;

@@ -18,7 +18,7 @@ namespace BP.WF.Template
         /// <summary>
         /// NodeID
         /// </summary>
-        public const string NodeID = "NodeID";
+        public const string FK_Node = "FK_Node";
     }
     /// <summary>
     /// 
@@ -69,15 +69,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int NodeID
+        public int FK_Node
         {
             get
             {
-                return this.GetValIntByKey(DocTemplateAttr.NodeID);
+                return this.GetValIntByKey(DocTemplateAttr.FK_Node);
             }
             set
             {
-                this.SetValByKey(DocTemplateAttr.NodeID, value);
+                this.SetValByKey(DocTemplateAttr.FK_Node, value);
             }
         }
         #endregion
@@ -106,7 +106,7 @@ namespace BP.WF.Template
                 map.AddTBStringPK(DocTemplateAttr.No, null, "No", true, true, 6, 6, 20);
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
                 map.AddTBString(DocTemplateAttr.FilePath, null, "模板路径", true, false, 0, 200, 20);
-                map.AddTBInt(DocTemplateAttr.NodeID, 0, "NodeID", true, false);
+                map.AddTBInt(DocTemplateAttr.FK_Node, 0, "FK_Node", true, false);
 
                 this._enMap = map;
                 return this._enMap;

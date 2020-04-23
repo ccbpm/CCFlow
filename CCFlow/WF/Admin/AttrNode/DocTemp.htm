@@ -33,7 +33,7 @@
             }
 
             var ens = new Entities("BP.WF.Template.DocTemplates");
-            ens.Retrieve("NodeID", nodeId);
+            ens.Retrieve("FK_Node", nodeId);
 
             var html = "";
             html += "<table style='width:98%;' >";
@@ -104,8 +104,6 @@
 
         function Edit(id) {
             alert('尚未完成.');
-            //var newWindow = window.open("SelectTempFields.htm?pkval=" + id + "&FK_MapData=ND" + GetQueryString("pkval"), "选择填充字段", 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=false,toolbar=false,location=false,center=yes,center: yes;');
-            //newWindow.focus();
         }
         function Del(id) {
             if (confirm("确认删除吗？") == false)
@@ -122,8 +120,8 @@
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
         <div id="docTempList" style="padding:5px;"></div>
         请选择模版文件:
-        <input style="background-color:white" type="file" id="File_Upload" name="File_Upload" />
-        <input type="button" id="Btn_Imp" value="执行导入" onclick="Imp_Done();" />
+        <input style="background-color:white" type="file" id="File_Upload" name="File_Upload"  onchange="Imp_Done()"/>
+        <!--<input type="button" id="Btn_Imp" value="执行导入" onclick="Imp_Done();" />-->
     </form>
 </body>
 </html>

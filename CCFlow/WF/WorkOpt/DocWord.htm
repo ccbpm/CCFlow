@@ -79,6 +79,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             handler.AddFormData(); //增加表单数据.
+            handler.AddFileData();//增加附件数据
             var data = handler.DoMethodReturnString("DocWord_Upload");
             alert(data);
         }
@@ -117,8 +118,8 @@
 
         <fieldset>
             <legend>上传公文</legend>
-            <input type="file" value="上传文件"  />
-            <input type="button" value="上传" onclick="Upload()" />
+            <input type="file" value="上传文件" onchange="Upload()" />
+            <!--<input type="button" value="上传" onclick="Upload()" />-->
         </fieldset>
     </form>
 </body>

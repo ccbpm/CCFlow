@@ -2152,13 +2152,13 @@ var DBAccess = (function () {
 
 var HttpHandler = (function () {
 
-    var parameters = {};
+    var parameters = new FormData();
 
     var formData;
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
-        parameters = {};
+        parameters = new FormData();
         formData = undefined;
     }
 
@@ -2228,26 +2228,39 @@ var HttpHandler = (function () {
                 });
             }
         },
-
+        AddFileData: function () {
+            var files = $("input[type=file]");
+            for (var i = 0; i < files.length; i++) {
+                var fileObj = files[i].files[0]; // js 获取文件对象
+                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                    alert("请选择上传的文件.");
+                    return;
+                }
+                //parameters["file"] = fileObj;
+                parameters.append("file", fileObj)
+            }
+           
+        },
         AddPara: function (key, value) {
-            parameters[key] = value;
+            parameters.append(key,value);
         },
 
         AddJson: function (json) {
 
             for (var key in json) {
-                parameters[key] = json[key];
+                //parameters[key] = json[key];
+                parameters.append(key, json[key]);
             }
         },
 
         Clear: function () {
-            parameters = {};
+            parameters = new FormData();
             formData = undefined;
         },
 
         getParams: function () {
             var params = [];
-            $.each(parameters, function (key, value) {
+           /* $.each(parameters, function (key, value) {
 
                 if (value.indexOf('<script') != -1)
                     value = '';
@@ -2255,8 +2268,12 @@ var HttpHandler = (function () {
                 params.push(key + "=" + value);
 
             });
-
-
+        */
+            parameters.forEach((value, key) => {
+                if (value.indexOf('<script') != -1)
+                    value = '';
+                params.push(key + "=" + value);
+            } );
 
 
             return params.join("&");
@@ -2279,6 +2296,9 @@ var HttpHandler = (function () {
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                 data: parameters,
                 dataType: 'html',
+                contentType: false,
+
+                processData: false,
                 success: function (data) {
                     jsonString = data;
                 },

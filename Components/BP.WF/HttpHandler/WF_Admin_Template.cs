@@ -57,6 +57,7 @@ namespace BP.WF.HttpHandler
             }
             catch
             {
+                System.Windows.Forms.MessageBox.Show("该目录无文件");
                 return "该目录无文件";
             }
 

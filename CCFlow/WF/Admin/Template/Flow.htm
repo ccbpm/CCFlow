@@ -74,10 +74,7 @@
         function ToParent(path) {
             path = path.replace('//', '/');
             retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
-            alert(retrunUrl);
             var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
-            alert(url);
-
             window.location.href = url;
         }
         //返回上一级

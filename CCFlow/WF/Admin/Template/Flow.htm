@@ -79,7 +79,7 @@
         }
         //返回上一级
         function RetrunToParent() {
-           
+
             window.history.back();
         }
         function Imp() {
@@ -106,8 +106,7 @@
                 $("#msg").html(data);
                 return;
             }
-            var json = eval('(' + data + ')');
-            alert(json.Msg);
+            alert("导入成功！")
         }
     </script>
 </head>
@@ -119,7 +118,6 @@
 
 
     <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
-        
     </table>
     <div id="msg"> </div>
 </body>

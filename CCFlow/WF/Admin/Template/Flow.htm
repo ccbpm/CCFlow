@@ -30,22 +30,54 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Flow_Init");
             if (data.indexOf('err@') == 0) {
+
                 $("#msg").html(data);
                 return;
             }
 
             var html = "";
             var data = JSON.parse(data);
-            // var dirs = data["Dir"];
+            var dirs = data["Dir"];
             var files = data["File"];
+
+
             html += " <caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</caption>";
-            html += "<tr><th>类型</th><th>模板名称</th><th>文件大小</th></tr>";
-            for (var i = 0; i < Object.keys(files).length; i++) {
-                if (files[i].FileName.indexOf(".xml") > 0)
-                    html += "<tr><td>XML模板</td><td><input id=" + files[i].FileName + " type='checkbox';  />" + files[i].FileName + "</td><td>" + files[i].FileSize + "</td></tr>";
+            html += "<tr>";
+            html += "<th>模板名称</th>";
+            html += "<th>文件大小</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < dirs.length; i++) {
+                var dir = dirs[i];
+
+                html += "<tr>";
+                html += "<td><a href=\"javascript:ToParent('" + dir.Path + "')\" ><img src='../../Img/Tree/Dir.gif' />" + dir.FileName + "</a></td>";
+                html += "<td>  " + dir.RDT + " </td>";
+                html += "</tr>";
             }
-            $("#Table1").html(html);
+
+            for (var i = 0; i < files.length; i++) {
+                var fl = files[i];
+
+                html += "<tr>";
+                html += "<td><a href=''><img src='../../Img/Flow.png' style='width:15px;' />" + fl.FileName + "</a></td>";
+                html += "<td>  " + fl.RDT + " </td>";
+                html += "</tr>";
+            }
+
+            $("#info").html(html);
+
         });
+
+        //他的上一级目录.
+        function ToParent(path) {
+            path = path.replace('//', '/');
+
+            var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
+            alert(url);
+
+            window.location.href = url;
+        }
 
         function Imp() {
             var fls = "";
@@ -74,15 +106,15 @@
     </script>
 </head>
 <body>
-    
+
     <div style="right:30px; position:absolute; z-index:100; top:-4px">
         <input type="button" value="导入模版" onclick='Imp();' />
     </div>
-    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:center">
-        <caption>
-            流程模板
-        </caption>
 
+
+    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:center">
+        <div id="info">
+        </div>
     </table>
     <div id="msg"> </div>
 </body>

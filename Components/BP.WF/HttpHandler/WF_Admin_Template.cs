@@ -57,8 +57,8 @@ namespace BP.WF.HttpHandler
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("该目录无文件");
-                return "该目录无文件";
+                //System.Windows.Forms.MessageBox.Show("该目录无文件");
+                return "err@该目录无文件";
             }
 
             DataTable dtDir = new DataTable();

@@ -3868,8 +3868,6 @@ namespace BP.WF
             {
                 //如果有数据，就不要填充了.
 
-
-
                 string[] sqls = item.Tag1.Split('*');
                 foreach (string mysql in sqls)
                 {
@@ -3896,7 +3894,6 @@ namespace BP.WF
                         int result = mdtlSln.RetrieveFromDBSources();
                         if (result != 0)
                         {
-                            //dtl.No = mdtlSln.No;
                             dtl.DtlOpenType = mdtlSln.DtlOpenType;
                         }
                     }
@@ -3908,19 +3905,19 @@ namespace BP.WF
                     try
                     {
                         gedtls = new GEDtls(dtl.No);
-                        //if (dtl.DtlOpenType == DtlOpenType.ForFID)
-                        //{
-                        //    if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
-                        //        continue;
-                        //}
-                        //else
-                        //{
-                        //    if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
-                        //        continue;
-                        //}
+                        if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                                continue;
+                        }
+                        else
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                                continue;
+                        }
 
 
-                        gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                        //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
                     }
                     catch (Exception ex)
                     {

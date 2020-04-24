@@ -277,7 +277,6 @@
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
-            global.TreeUrl = mapExt.Tag1;
 
             var treeUrl = mapExt.Tag2;
             var treeTag1 = mapExt.Tag1;
@@ -299,7 +298,7 @@
             if (rootNo == "")
                 rootNo = "0";
 
-            global.TreeUrl = mapExt.Tag1;
+            global.TreeUrl = treeUrl;
             treeUrl = treeUrl.replace("@Key", rootNo);
 
             if (treeUrl == "") {

@@ -32,6 +32,23 @@
                 return;
             }
 
+            //判断是否是开始节点?
+            var nodeID = GetQueryString("FK_Node");
+            var id = nodeID.substr(nodeID.length - 2);
+
+            //如果是开始节点.
+            if (id == '01')
+                $("#resetLI").show(); //显示出来..
+            else
+                $("#resetLI").hide(); //隐藏掉.
+
+            // 判断是否是是不可以编辑的状态.
+            if (data.indexOf("OfficeBtnEnable=2") >= 1) {
+                $("#fsUpload").hide();
+            }
+
+            $("#help").hide(); //隐藏掉.
+
         });
 
         //直接下载.
@@ -71,11 +88,18 @@
 
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
             var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
-            window.open(url);
+
+            window.location.href = url;
+            //window.open(url);
+        }
+
+        function Help() {
+            $("#help").show(); //隐藏掉.
         }
 
         //上传.
         function Upload() {
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             handler.AddFormData(); //增加表单数据.
@@ -107,20 +131,38 @@
         <div id="Msg"></div>
 
         <fieldset>
-            <legend>公文操作</legend>
+            <legend>操作</legend>
             <ul>
-                <li><a href='javascript:ResetFile()'><img src='../Img/redo.png' />重新生成模版<a />:对于已经生成的文件，删除掉重新按照新模版生成文件。</a></li>
-                <li><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载到本机,编辑后上传.<a />:下载到本机上然后编辑上传该公文.</a></li>
-                <li><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />启动本机Word在线打开,直接编辑公文<a />,需要vsto插件支持.</a></li>
-                <li><a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载vsto插件</a></li>
+                <li style="padding:5px;" name="resetLI" id="resetLI"><a href='javascript:ResetFile()'><img src='../Img/redo.png' />重新生成模版</a></li>
+                <li style="padding:5px;" ><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载本机查看或编辑.</a></li>
+                <li style="padding:5px;"><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />在线编辑</a> | <a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载vsto插件</a></li>
+                <li style="padding:5px;"><a href='javascript:Help()'><img src='../Img/Btn/help.gif' />帮助.</a></li>
             </ul>
         </fieldset>
 
-        <fieldset>
+        <fieldset id="fsUpload">
             <legend>上传公文</legend>
-            <input type="file" value="上传文件" onchange="Upload()" />
+            <ul>
+                <li>请上传公文模版</li>
+                <li>
+                    <input style=" background:bottom" type="file" value="上传文件" onchange="Upload()" />
+                </li>
+            </ul>
             <!--<input type="button" value="上传" onclick="Upload()" />-->
         </fieldset>
+        <fieldset id="help">
+            <legend>下载插件-帮助</legend>
+            <ul>
+                <li>vsto该插件运行在Word2010以上版本.</li>
+
+                <li> 重新生成模版:重置word模版功能. </li>
+                <li> 下载到本机:就是办当前的公文（文件）下载到本机打开，如果当前节点有可以编辑的功能，就可以直接上传.</li>
+                <li> 在线编辑:需要下载vsto插件，安装到本机上然后就可以直接打开,直接保存到服务器上.</li>
+
+            </ul>
+        </fieldset>
+
+
     </form>
 </body>
 </html>

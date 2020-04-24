@@ -3,7 +3,7 @@
   <!-- 管理员菜单:
   1, 用于显示在流程设计器功能菜单栏.
   2, For="admin" 标识只有admin用户可以使用. 
-     比如： For="00000120"  只有这个管理员才可以使用. 
+     比如： For="00000120"  只有这个管理员才可以使用.
      For="SecondAdmin" 说明只对二级管理员有效.
   3, 如果 For="" 标识所有的管理员都可以使用.
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
@@ -27,7 +27,7 @@
   <Item No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
   <Item No="902" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
   <Item No="903" GroupNo="GPM" Name="权限组" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
-  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.StationExts"  />
+  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <Item No="905" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
   <!--<Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />-->
   <Item No="907" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />

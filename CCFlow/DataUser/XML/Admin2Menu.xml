@@ -19,12 +19,14 @@
   <Item No="104" GroupNo="OrgAdmin" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
   <Item No="105" GroupNo="OrgAdmin" Name="用户组类型"   Url="../../Comm/Ens.htm?EnsName=BP.Port.TeamTypes"  />
   <Item No="106" GroupNo="OrgAdmin" Name="用户组"   Url="../../Comm/Search.htm?EnsName=BP.Port.Teams"  />
+  <Item No="109" GroupNo="OrgAdmin" Name="组织-公文类型-流程"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.OrgDocTypeFlows"  />
 
   <!-- 集团版本的admin2 (二级管理员) 组织结构菜单. -->
   <Group No="OrgAdmin2" Name="组织结构(2级管理员)" For="admin2" />
   <Item No="201" GroupNo="OrgAdmin2" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
   <Item No="202" GroupNo="OrgAdmin2" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
   <Item No="203" GroupNo="OrgAdmin2" Name="岗位维护"   Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
+  <Item No="204" GroupNo="OrgAdmin2" Name="组织-公文类型-流程"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.OrgDocTypeFlows"  />
 
   <Group No="GPM" Name="菜单权限管理"  For="admin"  />
   <Item No="901" GroupNo="GPM" Name="系统类别"  Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
@@ -45,13 +47,13 @@
   <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
 
   <Group No="DOC" Name="公文管理" For="admin" />
-  <Item No="8001" GroupNo="DOC" Name="公文类型"   Url="../../Comm/Ens.htm?EnsName=BP.DOC.DocTypes"  />
-  <Item No="8002" GroupNo="DOC" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Templates"  />
-  <Item No="8003" GroupNo="DOC" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Words"  />
+  <Item No="8001" GroupNo="DOC" Name="公文类型"   Url="../../Comm/Ens.htm?EnsName=BP.DOC.WD.DocTypes"  />
+  <Item No="8002" GroupNo="DOC" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />
+  <Item No="8003" GroupNo="DOC" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Words"  />
 
   <Group No="DOC2" Name="公文管理（二级管理员）" For="admin2" />
-  <Item No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Templates"  />
-  <Item No="7003" GroupNo="DOC2" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.Words"  />
+  <Item No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />
+  <Item No="7003" GroupNo="DOC2" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Words"  />
 
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />

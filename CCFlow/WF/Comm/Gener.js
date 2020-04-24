@@ -2242,14 +2242,15 @@ var HttpHandler = (function () {
            
         },
         AddPara: function (key, value) {
-            parameters.append(key,value);
+            if (parameters.has(key) ==false )
+                parameters.append(key,value);
         },
 
         AddJson: function (json) {
 
             for (var key in json) {
-                //parameters[key] = json[key];
-                parameters.append(key, json[key]);
+                if (parameters.has(key) == false)
+                    parameters.append(key, json[key]);
             }
         },
 

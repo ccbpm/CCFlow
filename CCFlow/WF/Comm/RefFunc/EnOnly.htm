@@ -82,10 +82,7 @@
             var enName = GetQueryString("EnName");
             var type = GetQueryString("type");
             httpHandler.AddUrlData();
-            if (pkVal != null) {
-                httpHandler.AddPara("PKVal", pkVal);
-            }
-
+          
             var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
             if (data.indexOf('err@') == 0) {
                 $("#CCFormTabs").html(data);

@@ -53,12 +53,12 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
 
     var target = $("#" + targetId);
     
-    //var width = target.outerWidth();
+    var width = target.outerWidth();
     //var height = target.outerHeight();
     target.hide();
     var container = $("<div></div>");
     target.after(container);
-    //container.width(width);
+    container.width(width);
     //container.height(height);
     if (index == null || index == undefined) {
         container.attr("id", mapExt.AttrOfOper + "_mtags");
@@ -165,12 +165,12 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
 
     var target = $("#" + targetId);
   
-    //var width = target.outerWidth();
+    var width = target.outerWidth();
     //var height = target.outerHeight();
     target.hide();
     var container = $("<div></div>");
     target.after(container);
-    //container.width(width);
+    container.width(width);
     //container.css("height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
     var mtags;

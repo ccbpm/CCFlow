@@ -31,8 +31,8 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Flow_Init");
             if (data.indexOf('err@') == 0) {
-
-                $("#msg").html(data);
+                alert(data);
+                window.history.back();
                 return;
             }
 
@@ -90,11 +90,12 @@
                 alert('已经是跟目录了.');
                 return;
             }
+            //alert(dirName);
+            
+            //var url = "Flow.htm?DirName=" + dirName; //.subStr(0, dirName.length);
+            //window.location.href = url;
 
-            // dirName= "/aaa/bbb/ccc";
-            var url = "Flow.htm?DirName=" + dirName; //.subStr(0, dirName.length);
-            window.location.href = url;
-            //window.history.back();
+            window.history.back();//这个没问题，不管怎么点返回的都是上一级
         }
         function Imp() {
 

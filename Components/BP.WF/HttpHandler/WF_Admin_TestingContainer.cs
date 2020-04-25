@@ -301,8 +301,7 @@ namespace BP.WF.HttpHandler
                         else
                             sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C.No ";
 
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                        return BP.Tools.Json.ToJson(dt);
+                        break;
                     case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
@@ -311,8 +310,6 @@ namespace BP.WF.HttpHandler
                         sql = " SELECT A.No,A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
                         sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '"+this.FK_Flow+"' AND A.FK_Dept = c.No ";
 
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                        return BP.Tools.Json.ToJson(dt);
                         break;
                     case DeliveryWay.BySQL:
                         if (DataType.IsNullOrEmpty(nd.DeliveryParas))

@@ -684,6 +684,25 @@ namespace BP.WF.Template
             nd.RetrieveFromDBSources();
             Cash2019.UpdateRow(nd.ToString(),this.NodeID.ToString(),nd.Row);
 
+            GroupField gf = new GroupField();
+            if (this.SFSta == FrmSubFlowSta.Disable)
+            {
+                gf.Delete(GroupFieldAttr.CtrlID, "SubFlow" + this.No);
+            }
+            else
+            {
+                if (gf.IsExit(GroupFieldAttr.CtrlID, "SubFlow" + this.No) == false)
+                {
+                    gf = new GroupField();
+                    gf.FrmID = "ND" + this.NodeID;
+                    gf.CtrlID = "SubFlow" + this.No;
+                    gf.CtrlType = GroupCtrlType.SubFlow;
+                    gf.Lab = "父子流程组件";
+                    gf.Idx = 0;
+                    gf.Insert(); //插入.
+                }
+            }
+
             base.afterUpdate();
         }
         #endregion 重写方法.

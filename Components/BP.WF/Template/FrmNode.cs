@@ -396,11 +396,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示
         /// </summary>
-        public string IsEnable
+        public bool IsEnable
         {
             get
             {
-                return this.GetValStringByKey(FrmNodeAttr.IsEnable);
+                return this.GetValBooleanByKey(FrmNodeAttr.IsEnable);
             }
             set
             {

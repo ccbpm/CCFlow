@@ -158,10 +158,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow2020_StartIt()
         {
-
             string sid = this.GetRequestVal("SID");
             if (WebUser.IsAdmin == false)
                 return "err@非管理员无法测试,关闭后重新登录。";
+
+            FlowExt fl = new FlowExt(this.FK_Flow);
+            fl.Tester = this.GetRequestVal("UserNo");
+            fl.Update();
 
             //用户编号.
             string userNo = this.GetRequestVal("UserNo");
@@ -249,7 +252,6 @@ namespace BP.WF.HttpHandler
             try
             {
                 #region 从设置里获取-测试人员.
-
                 switch (nd.HisDeliveryWay)
                 {
                     case DeliveryWay.ByStation:

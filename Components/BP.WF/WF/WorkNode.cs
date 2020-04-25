@@ -6597,7 +6597,7 @@ namespace BP.WF
                 // this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
                 //this.JumpToNode = wn.HisNode;
 
-                if (isLastOne == true)
+                if (isLastOne == true || this.HisNode.TodolistModel== TodolistModel.QiangBan)
                 {
                     DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                     if (mydt.Rows.Count == 0)

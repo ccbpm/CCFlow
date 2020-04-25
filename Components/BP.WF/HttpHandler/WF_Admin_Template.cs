@@ -108,33 +108,53 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flow_Imp()
         {
-            string Msg="";
+            //组织变量.
             string fls = this.GetRequestVal("Files");
-            string[] strs = fls.Split(';');
-            string sortNo = GetRequestVal("SortNo");
+            string[] strs = fls.Split(';'); //获得选择的文件.
+            string dirName = this.GetRequestVal("DirName"); //所在的路径.
+            string sortNo = GetRequestVal("SortNo"); //流程目录树的编号.
 
+            //构造信息存储.
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Info", typeof(string));
+
+            //执行导入.
             FtpConnection conn = this.GenerFTPConn;
+            conn.SetCurrentDirectory(dirName); //设置当前路径.
+
             foreach (string str in strs)
             {
-                if (str == ""||str.IndexOf(".xml")==-1)
+                if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //生成路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
                 //下载目录下.
-                
-                conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
-                //执行导入.
-                BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                flow.DoCheck(); //要执行一次检查
-                Hashtable ht = new Hashtable();
-                ht.Add("FK_Flow", flow.No);
-                ht.Add("FlowName", flow.Name);
-                ht.Add("FK_FlowSort", flow.FK_FlowSort);
-                ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-                Msg+= BP.Tools.Json.ToJson(ht)+ "\n";
+                try
+                {
+                    conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
+                    //执行导入.
+                    BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                    flow.DoCheck(); //要执行一次检查
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = flow.No;
+                    dr["Name"] = flow.Name;
+                    dr["Info"] = str + ",导入成功." ;
+                    dt.Rows.Add(dr);
+                }
+                catch (Exception ex)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = "000";
+                    dr["Name"] = tempfile;
+                    dr["Info"] = "导入失败:" + str;
+                    dt.Rows.Add(dr);
+                }
             }
-            
-            return Msg;
+
+            //返回执行结果.
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion 界面方法.
 

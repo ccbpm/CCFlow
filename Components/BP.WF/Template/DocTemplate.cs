@@ -19,13 +19,30 @@ namespace BP.WF.Template
         /// NodeID
         /// </summary>
         public const string FK_Node = "FK_Node";
+        /// <summary>
+        /// 流程编号
+        /// </summary>
+        public const string FK_Flow = "FK_Flow";
     }
     /// <summary>
-    /// 
+    /// 公文模板
     /// </summary>
     public class DocTemplate : EntityNoName
     {
         #region  属性
+        /// <summary>
+        /// 文件
+        /// </summary>
+        public byte[]  FileBytes
+        {
+            get
+            {
+                //转化为字节.
+                byte[] bytes = null;
+                bytes = BP.DA.DataType.ConvertFileToByte(this.FilePath);
+                return bytes;
+            }
+        }
         /// <summary>
         /// UI界面上的访问控制
         /// </summary>
@@ -45,7 +62,7 @@ namespace BP.WF.Template
         {
             get
             {
-               return  this.GetValStrByKey(DocTemplateAttr.No);
+                return this.GetValStrByKey(DocTemplateAttr.No);
             }
             set
             {
@@ -80,14 +97,32 @@ namespace BP.WF.Template
                 this.SetValByKey(DocTemplateAttr.FK_Node, value);
             }
         }
+        /// <summary>
+        /// 流程编号
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStrByKey(DocTemplateAttr.FK_Flow);
+            }
+            set
+            {
+                this.SetValByKey(DocTemplateAttr.FK_Flow, value);
+            }
+        }
         #endregion
 
         #region 构造函数
         /// <summary>
-        /// 单据模板
+        /// 公文模板
 		/// </summary>
 		public DocTemplate() { }
-        public DocTemplate(string no) : base(no.Replace("\n", "").Trim())
+        /// <summary>
+        /// 公文模板
+        /// </summary>
+        /// <param name="no"></param>
+        public DocTemplate(string no) : base(no)
         {
         }
         /// <summary>
@@ -99,15 +134,15 @@ namespace BP.WF.Template
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("WF_DocTemplate", "公文模板");
+                //map.Java_SetCodeStruct("6");
 
-                map.Java_SetCodeStruct("6");
-
-                map.AddTBStringPK(DocTemplateAttr.No, null, "No", true, true, 6, 6, 20);
+                map.AddTBStringPK(DocTemplateAttr.No, null, "No", true, true, 1, 50, 20);
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
                 map.AddTBString(DocTemplateAttr.FilePath, null, "模板路径", true, false, 0, 200, 20);
-                map.AddTBInt(DocTemplateAttr.FK_Node, 0, "FK_Node", true, false);
-
+                map.AddTBInt(DocTemplateAttr.FK_Node, 0, "节点ID", true, false);
+                map.AddTBString(DocTemplateAttr.FK_Flow, null, "流程编号", true, false, 0, 200, 20);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -115,7 +150,7 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 
+    /// 公文模板s
     /// </summary>
     public class DocTemplates : EntitiesNoName
     {
@@ -131,7 +166,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 单据模板
+        /// 公文模板
         /// </summary>
         public DocTemplates()
         {

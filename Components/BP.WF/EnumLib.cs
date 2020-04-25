@@ -64,7 +64,9 @@ namespace BP.WF
         /// </summary>
         TeamupGroupLeader = 4
     }
-
+    /// <summary>
+    /// 组长会签规则
+    /// </summary>
     public enum HuiQianLeaderRole
     {
         /// <summary>
@@ -81,7 +83,6 @@ namespace BP.WF
         EveryOneMain = 2
 
     }
-
     /// <summary>
     /// 方向条件控制规则
     /// </summary>

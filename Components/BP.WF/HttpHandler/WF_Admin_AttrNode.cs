@@ -218,31 +218,39 @@ namespace BP.WF.HttpHandler
 
             return "操作成功";
         }
+        /// <summary>
+        /// 模版文件上传
+        /// </summary>
+        /// <returns></returns>
         public string DocTemp_Upload()
         {
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请上传模版.";
 
-            //上传附件
+            Node nd = new Node(this.FK_Node);
+
+            //上传附件.
             var file = HttpContextHelper.RequestFiles(0);
             var fileName = file.FileName;
-            string path = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\DocTemp\\" + this.FK_Node;
+            string path = SystemConfig.PathOfDataUser + "DocTemplate\\" + nd.FK_Flow;
             string fileFullPath = path + "\\" + fileName;
 
-            if (!System.IO.Directory.Exists(path))
+            //上传文件.
+            if (System.IO.Directory.Exists(path)==false)
                 System.IO.Directory.CreateDirectory(path);
-
             HttpContextHelper.UploadFile(file, fileFullPath);
 
+            //插入模版.
             DocTemplate dt = new DocTemplate();
             dt.FK_Node = FK_Node;
-            dt.No = DA.DBAccess.GenerOID().ToString();
+            dt.No = DA.DBAccess.GenerGUID();
             dt.Name = fileName;
             dt.FilePath = fileFullPath; //路径
+            dt.FK_Node = this.FK_Node;
+            dt.Insert();
 
-            dt.CheckPhysicsTable();
-            dt.Save();
-
+            //保存文件.
+            DBAccess.SaveFileToDB(fileFullPath, dt.EnMap.PhysicsTable, "No", dt.No, "File");
             return dt.ToJson();
         }
         #endregion

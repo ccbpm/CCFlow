@@ -623,15 +623,18 @@ namespace BP.WF.HttpHandler
                 //       WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
             }
 
-            //设置他的组织，信息.
+            //设置他的组织，信息. @sly
             WebUser.No = emp.No; //登录帐号.
-            WebUser.SID = DBAccess.GenerGUID(); //设置SID.
+            WebUser.FK_Dept = emp.FK_Dept;
+            WebUser.FK_DeptName = emp.FK_DeptText;
 
-            //执行更新到用户表信息.
-            WebUser.UpdateSIDAndOrgNoSQL();
+            WebUser.SID = DBAccess.GenerGUID(); //设置SID.
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
+
+            //执行更新到用户表信息.
+           // WebUser.UpdateSIDAndOrgNoSQL();
 
             //判断是否是多个组织的情况.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single || adminers.Count == 1)

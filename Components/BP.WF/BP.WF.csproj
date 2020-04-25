@@ -163,6 +163,7 @@
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="DTS\Tool_RepairTodoList.cs" />
     <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
+    <Compile Include="FixFieldNames.cs" />
     <Compile Include="Frm\CtrlModelDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
     <Compile Include="Frm\EnumLab.cs" />

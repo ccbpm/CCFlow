@@ -694,7 +694,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
                 }
                 /* 公文标签 */
-                if (btnLab.OfficeBtnEnable == true)
+                if (btnLab.OfficeBtnEnable ==true)
                 {
                     toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
                 }

@@ -690,7 +690,7 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(this.FK_Flow);
             string sql = "UPDATE "+fl.PTable+ " SET DocWordFile=NULL WHERE OID=" + this.WorkID;
             DBAccess.RunSQL(sql);
-            return "ok";
+            return "重新生成模版成功.";
         }
         /// <summary>
         /// 生成文件模版
@@ -698,36 +698,34 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DocWord_Init()
         {
+            BtnLab lab = new BtnLab(this.FK_Node);
+            if (lab.OfficeBtnEnableInt == 0)
+                return "err@当前节点没有启用公文.";
+
             //首先判断是否生成公文文件？ todo. 
             Flow fl = new Flow(this.FK_Flow);
-            byte[] val = DBAccess.GetByteFromDB(fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
+            byte[] val = DBAccess.GetByteFromDB(fl.PTable, "OID", this.WorkID.ToString(), FixFieldNames.DocWordFile);
             if (val != null)
-                return "info@请下载文件"; //如果已经有这个模版了.
+                return "info@OfficeBtnEnable="+lab.OfficeBtnEnableInt.ToString()+";请下载文件"; //如果已经有这个模版了.
 
+            var en =new  DocTemplate();
             //求出要生成的模版.
             DocTemplates ens = new DocTemplates();
             ens.Retrieve(DocTemplateAttr.FK_Node, this.FK_Node);
             if (ens.Count > 1)
                 return "url@DocWordSelectDocTemp.htm";
 
-            string fileTemplate = "";
+            //如果没有模版就给他一个默认的模版.
             if (ens.Count == 0)
-                fileTemplate = SystemConfig.PathOfData + "\\DocFlowTemplete\\Default.docx";
+                en.FilePath = SystemConfig.PathOfDataUser + "\\DocTemplete\\Default.docx";
 
             if (ens.Count == 1)
-            {
-                DocTemplate en = ens[0] as DocTemplate;
-                fileTemplate = en.FilePath;
-            }
+                en = ens[0] as DocTemplate;
 
-            //转化为字节.
-            byte[] bytes = null;
-            bytes = BP.DA.DataType.ConvertFileToByte(fileTemplate);
+            #warning 替换变量. todo.
 
-#warning 替换变量. todo.
-
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "DocWordFile");
-            return "info@已经生成成功.";
+            BP.DA.DBAccess.SaveBytesToDB(en.FileBytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
+            return "info@OfficeBtnEnable=" + lab.OfficeBtnEnableInt.ToString() + ";请下载文件"; //如果已经有这个模版了.
         }
         /// <summary>
         /// 上传
@@ -746,7 +744,7 @@ namespace BP.WF.HttpHandler
             HttpContextHelper.UploadFile(file, path);
 
             Flow fl = new Flow(this.FK_Flow);
-            DBAccess.SaveFileToDB(path, fl.PTable, "OID", this.WorkID.ToString(), "DocFile");
+            DBAccess.SaveFileToDB(path, fl.PTable, "OID", this.WorkID.ToString(), FixFieldNames.DocWordFile);
 
             return "上传成功.";
         }
@@ -767,7 +765,7 @@ namespace BP.WF.HttpHandler
 
             var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
             Flow fl = new Flow(this.FK_Flow);
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, "DocWordFile");
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
             return "模板导入成功.";
         }
         #endregion

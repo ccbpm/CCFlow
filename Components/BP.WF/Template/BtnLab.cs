@@ -1105,8 +1105,13 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.OfficeBtnEnable);
             }
         }
-
-
+        public int OfficeBtnEnableInt
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.OfficeBtnEnable);
+            }
+        }
         /// <summary>
         /// 备注标签
         /// </summary>

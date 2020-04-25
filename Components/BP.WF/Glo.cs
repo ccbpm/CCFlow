@@ -5937,8 +5937,9 @@ namespace BP.WF
             }
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                 ctrlWayId = pworkid.ToString();
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                ctrlWayId = fid.ToString();
+                if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
@@ -5984,7 +5985,7 @@ namespace BP.WF
                 {
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
                     qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
                 }
 
                 if (isContantSelf == false)

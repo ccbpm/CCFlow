@@ -85,13 +85,8 @@
                 var emp = data[i];
 
                 newRow = "<tr ><td class=Idx>" + i + "</td>";
-
                 newRow += "<td>" + emp.No + "</td>";
-
-                if (emp.No == "admin")
-                    newRow += "<td><font color=red><b>" + emp.Name + "</b>-推荐使用</font></td>";
-                else
-                    newRow += "<td>" + emp.Name + "</td>";
+                newRow += "<td>" + emp.Name + "</td>";
 
                 var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\"  ><img src='./../../Img/ie.gif' border=0 />发起流程</a>";
                 if (emp.No == "admin")
@@ -143,12 +138,17 @@
 </head>
 <body onkeypress="Esc()">
 
-
     <center>
+
+        <h4>流程发起测试,能够发起该流程的人员列表(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>)  </h4>
+
+        <input type="button" value="参数测试" onclick="ToParaTest();" />
+        <input type="button" value="清楚上次的选择" onclick="ClearTester();" />
+
         <table class="table table-striped" id="Table1" cellpadding="0" cellspacing="0" border="0" style="width: 90%; padding:10px; margin:10px;">
-            <caption>流程发起测试,能够发起该流程的人员列表.(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>) - <a href="javascript:ToParaTest();">参数测试</a></caption>
+
             <tr>
-                <th> 序 </th>
+                <th style="width:50px;"> 序 </th>
                 <th> 可登录用户编号</th>
                 <th> 名称</th>
                 <th> 经典模式</th>

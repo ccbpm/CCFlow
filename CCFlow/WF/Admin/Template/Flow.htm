@@ -17,7 +17,7 @@
     <base target="_self" />
     <style type="text/css">
         th, td {
-            text-align: center;
+            text-align: left;
         }
     </style>
     <script type="text/javascript">
@@ -41,16 +41,18 @@
             var dirs = data["Dir"];
             var files = data["File"];
 
-            html += " <caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</caption>";
-
             html += "<tr>";
+            html += "<th>#</th>";
             html += "<th>模板名称</th>";
             html += "<th>创建日期</th>";
             html += "</tr>";
+
+            var idx = 0;
             for (var i = 0; i < dirs.length; i++) {
                 var dir = dirs[i];
-
+                idx++;
                 html += "<tr>";
+                html += "<td class=Idx>  " + idx + " </td>";
                 html += "<td><a href=\"javascript:ToParent('" + dir.Path + "')\" ><img src='../../Img/Tree/Dir.gif' />" + dir.FileName + "</a></td>";
                 html += "<td>  " + dir.RDT + " </td>";
                 html += "</tr>";
@@ -59,8 +61,10 @@
             for (var i = 0; i < files.length; i++) {
                 var fl = files[i];
 
+                idx++;
                 html += "<tr>";
-                html += "<td><input id=" + fl.FileName + " type='checkbox';  /><img src='../../Img/dot.png' style='width:15px;' />" + fl.FileName + "</td>";
+                html += "<td class=Idx>  " + idx + " </td>";
+                html += "<td><label><input id=" + fl.FileName + " type='checkbox';  /><img src='../../Img/dot.png' style='width:15px;' />" + fl.FileName + "</label></td>";
                 html += "<td>  " + fl.RDT + " </td>";
                 html += "</tr>";
             }
@@ -71,6 +75,7 @@
 
         //他的上一级目录.
         function ToParent(path) {
+
             path = path.replace('//', '/');
             retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
             var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
@@ -79,9 +84,20 @@
         //返回上一级
         function RetrunToParent() {
 
-            window.history.back();
+            var dirName = GetQueryString("DirName");
+            if (dirName == '' || dirName==null )
+            {
+                alert('已经是跟目录了.');
+                return;
+            }
+
+            // dirName= "/aaa/bbb/ccc";
+            var url = "Flow.htm?DirName=" + dirName; //.subStr(0, dirName.length);
+            window.location.href = url;
+            //window.history.back();
         }
         function Imp() {
+
             var fls = "";
             var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中
             inputArray.each(//使用数组的循环函数 循环这个input数组
@@ -92,14 +108,19 @@
                             fls += input.attr("id") + ";"; //查看循环中的每一个input的id
                     }
                 });
+
             if (fls == "") {
                 alert("未选择模板");
                 return
             }
+
+            // alert(fls);
+
             //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddPara("Files", fls);
             handler.AddPara("SortNo", GetQueryString("SortNo"));
+            handler.AddPara("DirName", GetQueryString("DirName"));
             var data = handler.DoMethodReturnString("Flow_Imp");
             if (data.indexOf('err@') == 0) {
                 $("#msg").html(data);
@@ -111,13 +132,16 @@
 </head>
 <body>
 
-    <div style="right:30px; position:absolute; z-index:100; top:-4px">
-        <a href="#" onclick="RetrunToParent()">返回上一级</a><input type="button" value="导入模版" onclick='Imp();' />
+    <div style="float:left;">&nbsp; &nbsp;&nbsp;&nbsp;<img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</div>
+    <div style=" float:right">
+        <a href="#" onclick="RetrunToParent()">返回上一级</a>&nbsp; &nbsp;&nbsp;&nbsp;
     </div>
 
 
     <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
     </table>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="导入模版" onclick='Imp();' />
+
     <div id="msg"> </div>
 </body>
 </html>

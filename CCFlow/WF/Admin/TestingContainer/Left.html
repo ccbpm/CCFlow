@@ -51,11 +51,11 @@
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + sid;
 
             var html = "<ul>";
-            html += "<li><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
-            html += "<li><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
-            html += "<li><a href='../../WFRpt.htm?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
-            html += "<li><a href='javascript:Restart();' >重新启动 </a></li>";
-            html += "<li><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
+            html += "<li style='padding:5px;'><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
+            html += "<li style='padding:5px;'><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
+            html += "<li style='padding:5px;'><a href='../../WFRpt.htm?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
+            html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
+            html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
             html += "</ul>";
 
             $("#Info").html(html);
@@ -81,7 +81,6 @@
             // 进入流程页面
             var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&SID=" + sid + "&UserNo=" + userNo;
             window.parent.location.href = url;
-
         }
 
         // 选择接收人.
@@ -100,7 +99,6 @@
 
             if (window.confirm('您确定要退出到管理员[]吗？') == false)
                 return;
-
 
             window.parent.LetAdminerLogin();
             window.parent.window.close();
@@ -121,6 +119,7 @@
 </head>
 <body>
     <div id="userInfo"></div>
+
     <table style="width:100%;" >
         <caption>操作功能</caption>
         <tr>

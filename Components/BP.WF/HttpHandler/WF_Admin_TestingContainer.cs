@@ -356,6 +356,20 @@ namespace BP.WF.HttpHandler
                     dtMyEmps.Rows.Add(drNew);
                 }
 
+                if(SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dtMyEmps.Columns["NO"].ColumnName = "No";
+                    dtMyEmps.Columns["NAME"].ColumnName = "Name";
+                    dtMyEmps.Columns["FK_DEPTTEXT"].ColumnName = "FK_DeptText";
+                }
+
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    dtMyEmps.Columns["no"].ColumnName = "No";
+                    dtMyEmps.Columns["name"].ColumnName = "Name";
+                    dtMyEmps.Columns["fk_depttext"].ColumnName = "FK_DeptText";
+                }
+
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);
                 #endregion 从设置里获取-测试人员.

@@ -186,10 +186,8 @@ namespace BP.WF.HttpHandler
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //生成路径.
-                System.Windows.Forms.MessageBox.Show(str);
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
                 //下载目录下.
-                System.Windows.Forms.MessageBox.Show(tempfile);
                 conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
                 //执行导入.
                 BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);

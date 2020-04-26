@@ -38,6 +38,8 @@ function GenerDevelopFrm(wn,fk_mapData) {
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
+        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15 || mapAttr.UIContralType == 17)
+            $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
 
         //如果是时间控件
         if (mapAttr.MyDataType == 6 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {

@@ -29,7 +29,7 @@
 
             var nodeId = GetQueryString("FK_Node");
             var ens = new Entities("BP.WF.Template.DocTemplates");
-            ens.Retrieve("NodeID", nodeId);
+            ens.Retrieve("FK_Node", nodeId);
 
             var html = "<ul>";
             for (var i = 0; i < ens.length; i++) {

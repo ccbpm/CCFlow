@@ -86,6 +86,13 @@
                 }
             });
         }
+        function ImpFlowPublic()
+        {
+            var fk_flowSort = GetQueryString("FK_FlowSort");
+
+            var url = "../Template/Flow.htm?SortNo="+fk_flowSort;
+
+        }
     </script>
 </head>
 <body>
@@ -131,21 +138,39 @@
                 <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
             </div>
         </fieldset>
+
         <fieldset>
-            <legend>从云服务器导入(暂停开放) </legend>
+            <legend>从云服务器导入 </legend>
             <ul>
-                <li>
+                <!--<li>
                     <a href="#">
                         <img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入
                     </a>
-                </li>
+                </li>-->
                 <li>
-                    <a href="#">
+                    <a href="javascript:ImpFlowPublic();">
                         <img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入
                     </a>
                 </li>
             </ul>
         </fieldset>
+
+
+        <!--<fieldset>
+        <legend>从云服务器导入(暂停开放) </legend>
+        <ul>
+            <li>
+                <a href="#">
+                    <img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入
+                </a>
+            </li>
+        </ul>
+    </fieldset>-->
         <fieldset>
             <legend>
                 <img src="../../Img/Btn/Help.gif" />关于流程模版

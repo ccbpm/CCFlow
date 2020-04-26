@@ -46,15 +46,15 @@
 
                 break;
             case 14://签批组件
-                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>" + mapData.Name; 
+                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>" + mapData.Name; 
                 break;
             case 15://评论组件
-                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>评论组件" ;
+                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>评论组件" ;
                 break;
             case 16://系统定位
                 break;
             case 17:// 公文字号
-                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%'/>";
+                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
                 break;
             case 18:
                 break;

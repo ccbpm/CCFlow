@@ -1915,7 +1915,7 @@ function ExtDocWord() {
     mapAttr.Retrieve();
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&MyPK=" + mapAttr.MyPK;
     OpenEasyUiDialog(url, "eudlgframe", '公文字号', 800, 500, "icon-edit", true, null, null, null, function () {
-        var _Html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%'/>";
+        var _Html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%'  placeholder='公文字号'/>";
         leipiEditor.execCommand('insertHtml', _Html);
     });
 }

@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
         {
             string dirName = this.GetRequestVal("DirName");
             if (DataType.IsNullOrEmpty(dirName) == true)
-                dirName = "/";
+                dirName = "/Flow/";
 
             FtpSupport.FtpConnection conn = this.GenerFTPConn;
             conn.SetCurrentDirectory(dirName);

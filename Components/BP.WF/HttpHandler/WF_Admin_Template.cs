@@ -178,19 +178,22 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             string dirName = GetRequestVal("DirName");
-
+            
             FtpConnection conn = this.GenerFTPConn;
-            conn.SetCurrentDirectory(dirName);
+            
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //生成路径.
+                
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
                 //下载目录下.
+                conn.SetCurrentDirectory(dirName);
                 conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
                 //执行导入.
-                BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                BP.WF.Flow flow = new BP.WF.Flow();
+                flow =  BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
                 flow.DoCheck(); //要执行一次检查
                 Hashtable ht = new Hashtable();
                 ht.Add("FK_Flow", flow.No);

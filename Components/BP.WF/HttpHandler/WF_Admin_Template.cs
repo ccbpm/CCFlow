@@ -108,7 +108,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flow_Imp()
         {
-            string Msg = "";
+            string Msg="";
             string fls = this.GetRequestVal("Files");
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
@@ -131,6 +131,10 @@ namespace BP.WF.HttpHandler
                 ht.Add("FlowName", flow.Name);
                 ht.Add("FK_FlowSort", flow.FK_FlowSort);
                 ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+                //if(strs.Length==2)
+                //{
+                //    return BP.Tools.Json.ToJson(ht);
+                //}
                 Msg += ht["Msg"].ToString() + "\n";
             }
 

@@ -595,10 +595,11 @@ namespace BP.WF.HttpHandler
         public string Focus_Init()
         {
             string flowNo = this.GetRequestVal("FK_Flow");
+            string domain = this.GetRequestVal("Domain");
 
             int idx = 0;
             //获得关注的数据.
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_Focus(flowNo, BP.Web.WebUser.No);
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_Focus(flowNo, BP.Web.WebUser.No,domain);
             SysEnums stas = new SysEnums("WFSta");
             string[] tempArr;
             foreach (System.Data.DataRow dr in dt.Rows)

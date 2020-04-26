@@ -1050,22 +1050,22 @@ namespace BP.WF
 
         #region 我关注的流程
         /// <summary>
-        /// 获得我关注的流程列表
+        /// 获得我关注的流程列表 @sly
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="userNo">操作员编号</param>
+        /// <param name="domain">域</param>
         /// <returns>返回当前关注的流程列表.</returns>
-        public static DataTable DB_Focus(string flowNo = null, string userNo = null)
+        public static DataTable DB_Focus(string flowNo = null, string userNo = null,string domain=null)
         {
             if (flowNo == "")
-            {
                 flowNo = null;
-            }
 
             if (userNo == null)
-            {
                 userNo = BP.Web.WebUser.No;
-            }
+
+            if (domain == null)
+                domain = ""; 
 
             //执行sql.
             Paras ps = new Paras();
@@ -1075,6 +1075,13 @@ namespace BP.WF
                 ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE AtPara LIKE  '%F_" + userNo + "=1%' AND FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow";
                 ps.Add("FK_Flow", flowNo);
             }
+
+            if (domain != null)
+            {
+                ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE AtPara LIKE  '%F_" + userNo + "=1%' AND FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND  Domain=" + SystemConfig.AppCenterDBVarStr + "Domain";
+                ps.Add("Domain", domain);
+            }
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

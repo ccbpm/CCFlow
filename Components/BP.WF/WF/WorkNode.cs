@@ -6577,7 +6577,6 @@ namespace BP.WF
                 return this.HisMsgObjs;
             }
 
-
             //设置跳转节点，如果有可以为null.
             this.JumpToNode = jumpToNode;
             this.JumpToEmp = jumpToEmp;
@@ -6606,6 +6605,10 @@ namespace BP.WF
                     var priNodeID = int.Parse(mydt.Rows[0][0].ToString());
                     this.JumpToNode = new Node(priNodeID);
                 }
+
+                //清除选择，防止在自动发送到该节点上来. @sly
+                this.HisGenerWorkFlow.Paras_ToNodes="";
+                this.HisGenerWorkFlow.DirectUpdate();
 
                 // DataTable dt=
                 //如果是空，或者包含(zhangsan,张三) .

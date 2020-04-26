@@ -937,7 +937,7 @@
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1)
                 window.parent.$('#EnLayout').layout('remove', 'west');
-            window.location.href = url; //刷新.
+            parent.window.location.href = url.replace("EnOnly","En"); //刷新.
 
 
         }
@@ -1006,7 +1006,7 @@
                 //新增保存后显示En
                 if (window.parent && window.parent.$('#EnLayout').length == 1)
                     url = url.replace("EnOnly", "En");
-                window.location.href = url; //刷新.
+                parent.window.location.href = url; //刷新.
                 return;
             }
 

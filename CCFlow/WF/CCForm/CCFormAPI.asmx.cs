@@ -890,22 +890,36 @@ namespace CCFlow.WF.CCForm
             }
         }
 
-        #region       公文主文件
-
+        #region  公文主文件
         [WebMethod]
-        public DataSet WordDoc_GetTempDocMainData(string userNo, string sid, string frmID, string pkValue, string atParas, string tempNo)
+        public DataSet WordDoc_GetTempDocMainData(string userNo, string sid, int nodeID, 
+            string pkValue, string atParas, string tempNo)
         {
             //让他登录.
             BP.WF.Dev2Interface.Port_Login(userNo);
 
+            //工作ID.
+            Int64 workid = Int64.Parse(pkValue);
+
+            //
+            BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workid);
+
+            string frmID = "";
+            //查询出来绑定的表单.
+            FrmNodes fns = new FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Node, gwf.FK_Node);
+            foreach (FrmNode fn in fns)
+            {
+                if (fn.IsEnable == false)
+                    continue;
+                frmID = fn.FK_Frm;
+            }
+
+            if (DataType.IsNullOrEmpty(frmID) == true)
+                frmID = "ND" + nodeID;
+
             //解析这个表单.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, pkValue, atParas);
-
-            string sql = "SELECT * from wf_DocTemplate WHERE No='" + tempNo + "' ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "TempFields";
-            ds.Tables.Add(dt);
-
             return ds;
         }
         [WebMethod]
@@ -914,21 +928,22 @@ namespace CCFlow.WF.CCForm
             MethodReturnMessage<byte[]> msg = null;
             try
             {
-                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+                BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+
 
                 string str = "WordFile";
-                if (BP.DA.DBAccess.IsExitsTableCol(tableName, str) == false)
+                if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
                 {
                     /*如果没有此列，就自动创建此列.*/
-                    string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+                    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
 
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+                        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
 
                     BP.DA.DBAccess.RunSQL(sql);
                 }
 
-                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(fl.PTable, "OID", workId.ToString(), "WordFile");
 
                 if (bytes == null)
                 {
@@ -938,12 +953,14 @@ namespace CCFlow.WF.CCForm
                     string strContext; //文档内容  
                     doc = docApp.Documents.Add(ref miss, ref miss, ref miss, ref miss);
                     docApp.Selection.ParagraphFormat.LineSpacing = 15;
+
                     //页眉    
                     //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
                     //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryHeader;
                     //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页眉内容]");
                     //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
                     //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
                     //页尾    
                     //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
                     //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryFooter;

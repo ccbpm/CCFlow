@@ -121,6 +121,7 @@
                 alert(data);
                 return;
             }
+            alert(data);
 
             window.location.href = window.location.href;
         }
@@ -133,9 +134,9 @@
         <fieldset>
             <legend>操作</legend>
             <ul>
+                <li style="padding:5px;"><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载本机查看或编辑.</a></li>
+                <li style="padding:5px;"><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />在线编辑</a>(需要CCWord插件) | <a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载插件</a></li>
                 <li style="padding:5px;" name="resetLI" id="resetLI"><a href='javascript:ResetFile()'><img src='../Img/redo.png' />重新生成模版</a></li>
-                <li style="padding:5px;" ><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载本机查看或编辑.</a></li>
-                <li style="padding:5px;"><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />在线编辑</a> | <a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载vsto插件</a></li>
                 <li style="padding:5px;"><a href='javascript:Help()'><img src='../Img/Btn/help.gif' />帮助.</a></li>
             </ul>
         </fieldset>

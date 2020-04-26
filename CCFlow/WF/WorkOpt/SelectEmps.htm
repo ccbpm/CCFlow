@@ -110,7 +110,7 @@
                     var deptNode = {
                         "text": dept.Name,
                         "id": dept.No,
-                        "state": { disabled: true },
+                        //"state": { disabled: true },
                         "children": true,
                         "data": dept
                     };
@@ -122,7 +122,7 @@
                                 var childDeptNode = {
                                     "text": childDept.Name,
                                     "id": childDept.No,
-                                    "state": {disabled:true},
+                                    //"state": {disabled:true},
                                     "children": true,
                                     "data": childDept
                                 };
@@ -208,7 +208,7 @@
                 "plugins": plugins,
                 "checkbox": {
                     "keep_selected_style": false,//是否默认选中
-                    "three_state": false,//父子级别级联选择
+                    "three_state": true,//父子级别级联选择
                     "tie_selection": true
                 },
             }).on('changed.jstree', function (node, cb) {

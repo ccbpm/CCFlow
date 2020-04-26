@@ -1,22 +1,11 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>菜单</title>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript">
+﻿
         //页面启动函数.
         //var adminer = GetQueryString("Adminer"); //管理员.
         var sid = GetQueryString("SID"); //管理员SID.
         var workID = GetQueryString("WorkID"); 
         var userNo = GetQueryString("UserNo"); 
         var flowNo = GetQueryString("FK_Flow");
-        $(function () {
+       function InitPageUserInfo() {
 
             var webUser = new WebUser();
 
@@ -49,18 +38,28 @@
             $("#userInfo").html(html);
 
             var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + sid;
-
-            var html = "<ul>";
-            html += "<li style='padding:5px;'><a href='SelectOneUser.html?1=2" + urlEnd + "' target=right >切换用户</a></li>";
-            html += "<li style='padding:5px;'><a href='DBInfo.html?1=2" + urlEnd + "' target=right >数据库信息</a></li>";
-            html += "<li style='padding:5px;'><a href='../../WFRpt.htm?1=2" + urlEnd + "' target=right >轨迹图</a></li>";
-            html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
-            html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
-            html += "</ul>";
+           var html = "<ul class='nav' id='side-menu'>";
+           html +="<li>"
+           html = "<ul style='border:solid 1px #C2D5E3;'>";
+           html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2" + urlEnd + "' class='J_menuItem' >切换用户</a></li>";
+           html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2" + urlEnd + "' class='J_menuItem' >数据库信息</a></li>";
+           html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2" + urlEnd + "' class='J_menuItem' >轨迹图</a></li>";
+           html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
+           html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
+           html += "</ul>";
+           html += "</li>";
+           html += "</ul>";
 
             $("#Info").html(html);
 
-        });
+       }
+       function chageFramPage(obj) {
+           var url = $(obj).attr('data-info');
+           $("#J_iframe").attr('src', url);
+           return false
+       }
+
+
 
         //重新启动.
         function Restart() {
@@ -91,42 +90,27 @@
             var workid = handler.DoMethodReturnString("Default_Init");
 
             var url = "SelectOneUser.html?1=2" + urlEnd;
-            WinOpenFull(url, "right");
-            //window.location.href = url;
+            $("#J_iframe").attr('src', url);
+          
         }
         //如果关闭的时候，就让admin登录.
-        function LetAdminerLogin() {
+    function LetAdminerLogin() {
 
-            if (window.confirm('您确定要退出到管理员[]吗？') == false)
-                return;
-
-            window.parent.LetAdminerLogin();
-            window.parent.window.close();
-
-            ////访问后台，获得一个工作ID.
-            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            //handler.AddUrlData();
-            //var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-
-            //if (data.indexOf('err@') == 0) {
-            //    alert(data);
-            //    return;
-            //}
-
+        if (window.confirm('您确定要退出到管理员[]吗？') == false)
             return;
-        }
-    </script>
-</head>
-<body>
-    <div id="userInfo"></div>
 
-    <table style="width:100%;" >
-        <caption>操作功能</caption>
-        <tr>
-            <td>
-                <div id="Info"></div>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>
+        window.parent.LetAdminerLogin();
+        window.parent.window.close();
+
+        ////访问后台，获得一个工作ID.
+        //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+        //handler.AddUrlData();
+        //var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+
+        //if (data.indexOf('err@') == 0) {
+        //    alert(data);
+        //    return;
+        //}
+
+        return;
+    }

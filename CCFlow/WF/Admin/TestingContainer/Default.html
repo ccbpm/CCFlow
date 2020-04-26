@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <title>测试容器</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -15,14 +16,16 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <script src="Left.js"></script>
+  
+
+
 
     <script language="javascript" type="text/javascript">
 
         //关闭页面登录admin
         $(window).on('beforeunload', function () {
-            //console.log("关闭窗口123");
             LetAdminerLogin();
-            //  return "您已经安全退出了。";
 
         });
 
@@ -64,18 +67,15 @@
 
         //负责人：@qfl
         $(function () {
-            document.getElementById("left").src = "Left.html?1=2" + urlEnd;
-            document.getElementById("right").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
+            InitPageUserInfo();
+            document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
         });
         // 发送成功后刷新页面进入切换用户页面
         function refreshRight() {
-
-            document.getElementById("right").src = "SelectOneUser.html?1=2" + urlEnd;
+            $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + urlEnd);
+            
         }
-        // 切换用户后刷新左侧
-        function refreshLeft() {
-            document.getElementById("left").src = "Left.html?1=2" + urlEnd;
-        }
+  
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
             // var adminer = GetQueryString("Adminer"); //管理员.
@@ -89,13 +89,68 @@
 
         }
     </script>
+    <style type="text/css">
+        .navbar-default {
+            background-color: white !important;
+        }
 
+        .rightContent {
+            box-sizing: border-box;
+            float: left;
+            box-sizing: border-box;
+            padding-left: 200px;
+            overflow-y: overlay;
+            overflow-x: hidden;
+            clear: both;
+            color: #717592;
+            min-width: 100%;
+            min-height: 500px;
+        }
+    </style>
 </head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
 
-<frameset cols="10%,90%">
-    <frame name="left" id="left" src="Left.html" />
-    <frame name="right" id="right" src="Welcome.html" />
-</frameset>
+            <div class="sidebar-collapse">
+                <div id="userInfo"></div>
+                <div style="margin-top:15px;text-align:center">操作功能</div>
+                <div class="sidebar-collapse" id="Info">
+                </div>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1" style="overflow:hidden">
+
+            <div class="row J_mainContent" id="content-main">
+                <iframe id="J_iframe" width="100%" height="100%" frameborder="0" seamless></iframe>
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+
+
+    <!--<body>
+        <div id="wrap">
+            <div class="leftMenu" id="leftMenu">
+                <div id="userInfo"></div>
+                <table style="width:100%;">
+                    <caption>操作功能</caption>
+                    <tr>
+                        <td>
+                            <div id="Info"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="rightContent">
+                <iframe id="J_iframe" width="100%" height="100%" frameborder="0" seamless></iframe>
+            </div>
+        </div>
+    </body>-->
+
 
 
 </html>

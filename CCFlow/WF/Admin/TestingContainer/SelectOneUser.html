@@ -26,7 +26,7 @@
 
             var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
 
-            window.parent.refreshLeft();
+            window.parent.InitPageUserInfo();
             //   var webUser = new WebUser();
             //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
 
@@ -134,16 +134,10 @@
                 return;
             }
             window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
-            window.parent.refreshLeft();
+            window.parent.InitPageUserInfo();
         }
 
-        // 选择接收人.
-        function SelectOneUser() {
-            alert(54);
-            var url = "SelectOneUser.html";
-            WinOpen(url, "right");
-            //window.location.href = url;
-        }
+       
         function OpenRpt() {
             var url = "../../WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
             WinOpen(url);
@@ -158,15 +152,6 @@
 
         <div id="gwls"></div>
 
-        <!--<fieldset>
-            <legend> 其他操作</legend>-->
-        <!--<ul>
-            <li> <a href="javascript:OpenRpt()">  轨迹图/表单/时间轴 </a> </li>
-            <li> <a href="javascript:OpenRpt()">  安全退出 </a> </li>
-            <li> <a href="javascript:OpenRpt()">  流程表控制信息 </a> </li>
-            <li> <a href="javascript:OpenRpt()">  重新启动 </a> </li>
-        </ul>-->
-        <!--</fieldset>-->
     </center>
 
 

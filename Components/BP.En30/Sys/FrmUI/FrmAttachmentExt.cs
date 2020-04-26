@@ -402,11 +402,11 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsHeLiuHuiZong);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsHeLiuHuiZong);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsHeLiuHuiZong, value);
+                this.SetValByKey(FrmAttachmentAttr.IsHeLiuHuiZong, value);
             }
         }
         /// <summary>
@@ -416,11 +416,11 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsToHeLiuHZ);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsToHeLiuHZ);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsToHeLiuHZ, value);
+                this.SetValByKey(FrmAttachmentAttr.IsToHeLiuHZ, value);
             }
         }
         /// <summary>
@@ -1014,6 +1014,8 @@ namespace BP.Sys.FrmUI
             this.IsWoEnableOver = false;
             this.IsWoEnableSeal = false;
             this.IsWoEnableTemplete = false;
+            this.IsToHeLiuHZ = true;
+            this.IsHeLiuHuiZong = true;
 
             if (this.FK_Node == 0)
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
@@ -1045,6 +1047,8 @@ namespace BP.Sys.FrmUI
             FrmAttachment ath = new FrmAttachment();
             ath.MyPK = this.MyPK;
             ath.RetrieveFromDBSources();
+            ath.IsToHeLiuHZ = this.IsToHeLiuHZ;
+            ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
             ath.Update();
           
 

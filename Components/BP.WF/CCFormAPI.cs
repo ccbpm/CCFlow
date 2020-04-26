@@ -787,7 +787,7 @@ namespace BP.WF
                 #endregion 处理下拉框数据范围.
 
                 #region 外键字段
-                if ( UIIsEnable.Equals("0") && myds.Tables.Contains(uiBindKey)==false) 
+                if ( UIIsEnable.Equals("1") && myds.Tables.Contains(uiBindKey)==false) 
                 {
                     SFTable sfTable = new SFTable(uiBindKey);
 

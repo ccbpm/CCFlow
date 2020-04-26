@@ -134,20 +134,21 @@
                 $("#msg").html(data);
                 return;
             }
-            alert(data);
-            //var json = eval('(' + data + ')');
-            //if (json.EndJSON=="0") {
-            //    $.messager.alert("提示", json.Msg, "icon-info", function () {
-            //        //打开新建的流程
-            //        if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
-            //            window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
-            //        }
-            //    });
-            //}
-            //else {
-            //    alert(data);
-            //}
-            
+            //若选择的多个模板
+            if (data.indexOf("EndJSON") ==-1) {
+                alert(data);
+                return;
+            }
+            //若选择的一个模板，则打开此模板
+            var json = eval('(' + data + ')');
+            $.messager.alert("提示", json.Msg, "icon-info", function () {
+                //打开新建的流程
+                if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+                    window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+                }
+            });
+
+
         }
     </script>
 </head>

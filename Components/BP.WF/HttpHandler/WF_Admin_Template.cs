@@ -131,10 +131,12 @@ namespace BP.WF.HttpHandler
                 ht.Add("FlowName", flow.Name);
                 ht.Add("FK_FlowSort", flow.FK_FlowSort);
                 ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-                //if(strs.Length==2)
-                //{
-                //    return BP.Tools.Json.ToJson(ht);
-                //}
+                //选择的是一个模板则返回Hashtable表格式
+                if (strs.Length == 2)
+                {
+                    return BP.Tools.Json.ToJson(ht);
+                }
+                //多个模板返回Msg字符串形式
                 Msg += ht["Msg"].ToString() + "\n";
             }
 

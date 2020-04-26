@@ -250,7 +250,7 @@ namespace BP.WF.HttpHandler
             dt.Insert();
 
             //保存文件.
-            DBAccess.SaveFileToDB(fileFullPath, dt.EnMap.PhysicsTable, "No", dt.No, "File");
+            DBAccess.SaveFileToDB(fileFullPath, dt.EnMap.PhysicsTable, "No", dt.No, "FileTemplate");
             return dt.ToJson();
         }
         #endregion

@@ -165,7 +165,7 @@
         html += '<div class="col-xs-10 main-container">';
         html += '<label>' + opts.label + '</label>';
         html += '<div class="ccflow-input-span-container">';
-        html += '<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '">';
+        html += '<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '" id="MultipleChoiceSearch">';
         html += '</div>';
         html += '<div class="ccflow-block">';
         html += '<ul class="ccflow-ul">';
@@ -193,6 +193,12 @@
             setTimeout(function () {
                 animateUp(container, block);
             }, 200);
+        });
+
+        //点击任意地方隐藏下拉
+        $(document).click(function (event) {
+            if (document.activeElement.id != "MultipleChoiceSearch")
+                animateUp(container, block);
         });
 
         function addDictionary(datas, callback) {

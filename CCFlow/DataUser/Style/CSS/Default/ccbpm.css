@@ -1,4 +1,4 @@
-/*  Table ·ç¸ñ   */  
+/*  Table ï¿½ï¿½ï¿½   */  
 body
 {
     color: #333333;
@@ -9,7 +9,7 @@ body
     direction: ltr;
 }
 
-/* °´Å¥·ç¸ñ */
+/* ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ */
 input[type="button"], input[type="submit"], input[type="file"]
 {
     border: 0; /*background: #4D77A7;*/
@@ -39,7 +39,7 @@ input:hover[type="button"]
 }
 
 
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
  input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
@@ -53,7 +53,7 @@ input:hover[type="button"]
      color: #666; 
      cursor: no-drop;
 }
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
 textarea[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
@@ -74,7 +74,7 @@ input[type=checkbox]:disabled
         width:20px;
 }
 
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
 select[disabled], input[type=text]:disabled
 {
    /**border: 1px solid #DDD;
@@ -91,7 +91,7 @@ select[disabled], input[type=text]:disabled
       -moz-appearance:none;   
       -webkit-appearance:none;   
 }
-/*  table ÀàÐÍ·ç¸ñ */
+/*  table ï¿½ï¿½ï¿½Í·ï¿½ï¿½ */
 table
 {
     border: 1px outset #C0C0C0;
@@ -100,9 +100,9 @@ table
     border-collapse: collapse;
 }
 
-/*  Ê±Ñ§ÒµÌí¼Ó ¿ªÊ¼Î»ÖÃ */
+/*  Ê±Ñ§Òµï¿½ï¿½ï¿½ ï¿½ï¿½Ê¼Î»ï¿½ï¿½ */
 
-/*À©Õ¹Ó¦ÓÃÃ÷Ï¸±íÓë¶à¸½¼þ.*/
+/*ï¿½ï¿½Õ¹Ó¦ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½à¸½ï¿½ï¿½.*/
 .TitleExt
 {
     background-color: #f4f4f4;
@@ -122,7 +122,7 @@ th
     border-color: #C2D5E3;
     border-style: solid;
     line-height: 25px;
-    color: 0a0a0a;
+    color: #0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
     background-color: #e0ecff;
@@ -147,7 +147,7 @@ th
     outline: none;
 }
  
- /*  idx ±í¸ñ×ó²àµÄÐòºÅÁÐ .*/
+ /*  idx ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ .*/
 .Idx
 {
     font-size: 12px;
@@ -251,7 +251,7 @@ caption
 }
 
 
-/** ÆäËü  */
+/** ï¿½ï¿½ï¿½ï¿½  */
 .ToolBar
 {
     background-color: #d8edff;
@@ -292,7 +292,7 @@ caption
 }
  
 
-/* ÔÚÊäÈëÐÅÏ¢×Ö¶ÎÃû³Æ£¬µ¥Ôª¸ñÊ½µÄ·ç¸ñ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ôªï¿½ï¿½Ê½ï¿½Ä·ï¿½ï¿½ */
 .FContext
 {
     padding-left: 4px;
@@ -494,7 +494,7 @@ display:none;
 }
 
 .modal-header {
-    background: #f2f2f2;
+    background: #1d7dd4;
     color: white;
     height:50px;
 }
@@ -508,7 +508,7 @@ display:none;
 }
 
 .btn {
-    background: ##f2f2f2 !important;
+    background: #f2f2f2 !important;
     border-radius: 20px !important;
     color:#0000007a !important;
 }
@@ -522,7 +522,7 @@ display:none;
 
 }
 
-        /*ÌáÊ¾¿òµÄCSS ÉèÖÃ*/
+        /*ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½CSS ï¿½ï¿½ï¿½ï¿½*/
 .popover-title {
     background: #213b5d !important;
     color: white;
@@ -553,7 +553,7 @@ display:none;
 
 #header {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "Î¢ï¿½ï¿½ï¿½Åºï¿½";
     background:rgb(157, 159, 175);
     color: #fff;
     text-align: left;
@@ -623,7 +623,7 @@ display:none;
 cursor:pointer;
 }
 
-/*radioºó±ß¸ú×ÅµÄ±êÇ©*/
+/*radioï¿½ï¿½ß¸ï¿½ï¿½ÅµÄ±ï¿½Ç©*/
 .labRb {
 cursor:pointer;
 }
@@ -634,14 +634,14 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
-    color:#0000007a;
+    color:white;
 }
 
 .input-group-addon {
     cursor: pointer;
 }
 
-/*POP´°ÖÐµÄµÄÊ÷*/
+/*POPï¿½ï¿½ï¿½ÐµÄµï¿½ï¿½ï¿½*/
 .tree-demo {
 text-align:left;
 }
@@ -699,7 +699,7 @@ border:none;
 
 .returnTackHeader {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "Î¢ï¿½ï¿½ï¿½Åºï¿½";
     background: rgb(157, 159, 175) !important;
     color: #fff;
     text-align: left;
@@ -756,7 +756,7 @@ body table tr td label{
   white-space: normal;
 }
 
-/*·ÖÒ³±í¸ñ*/
+/*ï¿½ï¿½Ò³ï¿½ï¿½ï¿½*/
 .tabPdiv {
 overflow:auto;
 }
@@ -770,7 +770,7 @@ select {
 }
 
 
-/*ÈÃ±í¸ñÏÔÊ¾ ...*/
+/*ï¿½Ã±ï¿½ï¿½ï¿½ï¿½Ê¾ ...*/
 body table tr td {
   text-overflow: ellipsis;
   /* for IE */
@@ -791,7 +791,7 @@ body table tr td {
 
 
 
-/*ÑîÓñ»Û  --ÁÙÊ±Ôö¼Ó  ´¦Àíµ¯´°·µ»ØÖµµÃ±íµ¥²¼¾ÖÂÒµôµÄÎÊÌâ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½  --ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 .FContext div[id*=_mtags],.FContext div[id*=_mtags] .main-container {
     width: 100% !important;

@@ -689,6 +689,12 @@ namespace BP.WF
 
                     }
                 }
+
+               if (this.HisDeliveryWay != oldN.HisDeliveryWay)
+               {
+                    //清空WF_Emp中的StartFlow 
+                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+               }
             }
 
             //给icon设置默认值.
@@ -787,9 +793,26 @@ namespace BP.WF
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
+
+            
             return base.beforeUpdate();
         }
         #endregion
+
+        protected override void afterInsertUpdateAction()
+        {
+            Flow fl = new Flow();
+            fl.No = this.FK_Flow;
+            fl.RetrieveFromDBSources();
+            MapData mapData = new MapData("ND" + this.NodeID);
+            if (this.HisRunModel == RunModel.SubThread)
+                mapData.PTable = mapData.No;
+            else
+                mapData.PTable = fl.PTable;
+            mapData.Update();
+
+            base.afterInsertUpdateAction();
+        }
 
         #region 基本属性
         /// <summary>

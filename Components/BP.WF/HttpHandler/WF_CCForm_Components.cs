@@ -187,27 +187,30 @@ namespace BP.WF.HttpHandler
             lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
                 return "0";
-
+            string sqlmax = "SELECT MAX(DocWordLSH) AS No FROM " + ptable;
+            string  maxlsh = DBAccess.RunSQLReturnStringIsNull(sqlmax, "");
             //查询出来所有的流水号.
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable("select *  from Frm_ZhouPengDeKaiFaZheBiaoShan ORDER BY DocWordLSH");
 
             string num = "";
-            int maxNum = int.Parse(lsh); 
-            for (int i = 0; i < maxNum; i++)
+            
+            for (int i = 1; i < int.Parse(maxlsh); i++)
             {
                 bool isHave = false;
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    int lshNum = int.Parse(dr[0].ToString());
+                    
+                    int lshNum = int.Parse(dr[9].ToString());
                     if (lshNum == i)
                     {
                         isHave = true;
                         break;
                     }
-                    if (isHave == true)
+                    if (isHave == true || lshNum <= i || num.Contains(i.ToString()) == true || lshNum == null)
                         continue;
 
+                  
                     num += i.ToString() + ",";
                 }
             }

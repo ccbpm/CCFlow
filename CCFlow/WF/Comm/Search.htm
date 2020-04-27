@@ -476,6 +476,8 @@
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
+                if (GetQueryString(attr.Field) != null && GetQueryString(attr.Field) != undefined)
+                    selectVal = GetQueryString(attr.Field);
 
                 if (selectVal == undefined || selectVal == "")
                     selectVal = "all";

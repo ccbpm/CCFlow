@@ -688,7 +688,7 @@ namespace BP.WF.HttpHandler
                         if (dt.Rows.Count > 1)
                         {
                             dt.Rows.RemoveAt(1);
-                            dt.Rows.RemoveAt(1);
+                            dt.Rows.RemoveAt(0);
                         }
                         else
                         {
@@ -867,7 +867,7 @@ namespace BP.WF.HttpHandler
                             if (dt.Rows.Count > 1)
                             {
                                 dt.Rows.RemoveAt(1);
-                                dt.Rows.RemoveAt(1);
+                                dt.Rows.RemoveAt(0);
                             }
                             else
                             {

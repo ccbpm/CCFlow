@@ -1064,8 +1064,8 @@ namespace BP.WF
             if (userNo == null)
                 userNo = BP.Web.WebUser.No;
 
-            if (domain == null)
-                domain = ""; 
+            //if (domain == null)
+            //    domain = ""; 
 
             //执行sql.
             Paras ps = new Paras();
@@ -1075,10 +1075,10 @@ namespace BP.WF
                 ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE AtPara LIKE  '%F_" + userNo + "=1%' AND FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow";
                 ps.Add("FK_Flow", flowNo);
             }
-
-            if (domain != null)
+            if (DataType.IsNullOrEmpty(domain)==false && DataType.IsNullOrEmpty(flowNo) == false)
             {
                 ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE AtPara LIKE  '%F_" + userNo + "=1%' AND FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow AND  Domain=" + SystemConfig.AppCenterDBVarStr + "Domain";
+                ps.Add("FK_Flow", flowNo);
                 ps.Add("Domain", domain);
             }
 

@@ -856,6 +856,7 @@ namespace BP.WF
                         qo.addOr();
                         qo.AddWhere(GEDtlAttr.FID, pkval);
                         qo.addRightBracket();
+                       
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
                         if (fid == 0)
@@ -883,6 +884,7 @@ namespace BP.WF
             }
 
             //增加排序.
+            qo.addOrderBy(GEDtlAttr.OID);
             //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
 
             //从表

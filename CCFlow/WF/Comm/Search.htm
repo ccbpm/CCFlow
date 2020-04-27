@@ -262,6 +262,9 @@
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
 
+                if (GetQueryString(attr.Field) != null && GetQueryString(attr.Field) != undefined)
+                    selectVal = GetQueryString(attr.Field);
+
                 if (selectVal == undefined || selectVal == "")
                     selectVal = "all";
 
@@ -529,7 +532,7 @@
 
             //保存查询条件.
             var ensName = GetQueryString("EnsName");
-            var ur = new Entity("BP.Sys.UserRegedit");
+            ur = new Entity("BP.Sys.UserRegedit");
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
@@ -661,7 +664,18 @@
 
         //生成查询页面..
         function BindTable() {
-
+            //获得外键的查询条件,存储里面去.
+            var str = "";
+            $("select[name^='DDL_']").each(function () {
+                var id = $(this).attr("id");
+                id = id.replace("DDL_", "");
+                str += "@" + id + "=" + $(this).val();
+            });
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.SetPKVal(ur.MyPK);
+            ur.Vals = str;
+            ur.Update();
             //获取页面的高度
             var H = document.body.clientHeight;
             var tableH = H - $("#toolbar").outerHeight() - $("#page-nav").outerHeight() - 70;

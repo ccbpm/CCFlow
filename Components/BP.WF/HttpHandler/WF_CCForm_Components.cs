@@ -125,7 +125,7 @@ namespace BP.WF.HttpHandler
             string ny = this.GetRequestVal("DDL_Year"); //年月. 
 
             //生成一个新的流水号.
-            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny + "' AND OID!=" + this.OID;
+            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
             string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
                 lsh = "0";
@@ -135,7 +135,7 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 保存重新生成的字号
+        /// 保存重新生成的字号和保存字号
         /// </summary>
         /// <returns></returns>
         public string DocWord_Save()
@@ -210,7 +210,7 @@ namespace BP.WF.HttpHandler
                     if (isHave == true || lshNum <= i || num.Contains(i.ToString()) == true || lshNum == null)
                         continue;
 
-                    //请严格按照000格式不够位数补0不然会影响其他地方
+                    //请严格按照000格式不够位数补0不然会影响其他地方 不允许使用000编号
                       num += i.ToString("000") + ",";
                 }
             }

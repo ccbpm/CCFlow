@@ -151,12 +151,15 @@ namespace BP.Sys
         /// <summary>
         /// 端口号
         /// </summary>
-        public static string FTPPort
+        public static int FTPPort
         {
             get
             {
                 string str = SystemConfig.AppSettings["FTPPort"];
-                return BP.Sys.Glo.String_JieMi(str);
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = "21"; 
+                str= BP.Sys.Glo.String_JieMi(str);
+                return int.Parse(str);
             }
         }
         /// <summary>

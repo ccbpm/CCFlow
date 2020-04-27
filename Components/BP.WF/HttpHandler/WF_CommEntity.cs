@@ -722,7 +722,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 /*保存到fpt服务器上.*/
-                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                 if (ftpconn == null)

@@ -922,7 +922,7 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPPort, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)

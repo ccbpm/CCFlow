@@ -33,7 +33,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 文件
         /// </summary>
-        public byte[]  FileBytes
+        public byte[] FileBytes
         {
             get
             {

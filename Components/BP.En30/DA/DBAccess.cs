@@ -112,10 +112,10 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
 
                         if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
 
                         BP.DA.DBAccess.RunSQL(sql);
 
@@ -451,20 +451,24 @@ namespace BP.DA
                     }
                     return byteFile;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    if (!BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField))
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
-                        /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " varbinary ";
+                        /*如果没有此列，就自动创建此列.  @sly */
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " Image ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        return null;
+                        // return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
                     }
-                    return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+
+                    throw ex;
                     //throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
                 finally
                 {
-                    dr.Close();
+                    if (dr != null)
+                        dr.Close();
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -533,7 +537,6 @@ namespace BP.DA
                 cm.Connection = cn;
                 cm.CommandText = strSQL;
                 cm.CommandType = CommandType.Text;
-
 
                 // 执行它.
                 try

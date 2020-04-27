@@ -10321,7 +10321,7 @@ namespace BP.WF
                 if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                 {
                     /*保存到fpt服务器上.*/
-                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
                         SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                     string ny = DateTime.Now.ToString("yyyy_MM");

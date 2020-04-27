@@ -114,9 +114,6 @@
     <Reference Include="FreeSql, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FreeSql.1.0.0\lib\net45\FreeSql.dll</HintPath>
     </Reference>
-    <Reference Include="FtpSupport">
-      <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
-    </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
@@ -349,6 +346,16 @@
     <Compile Include="Tools\Entitis2Json.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\FTP\FtpConnection.cs" />
+    <Compile Include="Tools\FTP\FtpException.cs" />
+    <Compile Include="Tools\FTP\FtpStream.cs" />
+    <Compile Include="Tools\FTP\FtpTransferType.cs" />
+    <Compile Include="Tools\FTP\GenericRights.cs" />
+    <Compile Include="Tools\FTP\InternetOpenType.cs" />
+    <Compile Include="Tools\FTP\InternetPort.cs" />
+    <Compile Include="Tools\FTP\InternetService.cs" />
+    <Compile Include="Tools\FTP\NativeMethods.cs" />
+    <Compile Include="Tools\FTP\Win32FindData.cs" />
     <Compile Include="Tools\JiaMi\ConfigInformation.cs" />
     <Compile Include="Tools\JiaMi\decode.cs" />
     <Compile Include="Tools\JiaMi\DecryptAndEncryptionHelper.cs" />

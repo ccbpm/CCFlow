@@ -3180,6 +3180,13 @@ namespace BP.WF
                 return SystemConfig.GetValByKey("TemplateFTPHost", "42.121.236.171");
             }
         }
+        public static int TemplateFTPPort
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyInt("TemplateFTPPort", 21);
+            }
+        }
         public static string TemplateFTPUser
         {
             get

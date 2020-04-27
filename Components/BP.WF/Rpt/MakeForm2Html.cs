@@ -531,7 +531,7 @@ namespace BP.WF
 
                 //#region 输出数据.
                 GEDtls gedtls = new GEDtls(dtl.No);
-                gedtls.Retrieve(GEDtlAttr.RefPK, workid);
+                gedtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
                 foreach (GEDtl gedtl in gedtls)
                 {
                     sb.Append("<tr>");

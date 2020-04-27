@@ -1315,16 +1315,16 @@ function cleanAll(KeyOfEn, frmType) {
             else
                 SetCtrlShow(mapAttrs[i]);
             SetCtrlEnable(mapAttrs[i]);
-            //CleanCtrlVal(mapAttrs[i]);
+            CleanCtrlVal(mapAttrs[i]);
         }
     }
 
-    if (frmAttrData != undefined && frmAttrData.length != 0) {
+   /* if (frmAttrData != undefined && frmAttrData.length != 0) {
         $.each(frmAttrData, function (i, obj) {
             SetCtrlVal(obj.KeyOfEn, obj.Val);
         });
 
-    }
+    }*/
    
 
 }

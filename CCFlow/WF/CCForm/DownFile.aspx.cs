@@ -12,6 +12,7 @@ using BP.Tools;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF;
+using BP;
 using BP.En;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
@@ -341,7 +342,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
@@ -394,7 +395,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();

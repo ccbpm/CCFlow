@@ -10,11 +10,15 @@
     <script type="text/javascript">
 
         var workid = GetQueryString("WorkID");
+        var PRIEnable = GetQueryString("PRIEnable");
         var fid = GetQueryString("FID");
         var webUser = new WebUser();
         var gwf;
         var pri;
         $(function () {
+            if (PRIEnable==1) {
+               $("#Btns").hide(); 
+            }
             gwf = new Entity("BP.WF.GenerWorkFlow", workid);
             pri = gwf.PRI;
             $("[name='PRI'][value='" + pri + "']").prop("checked", "checked");
@@ -25,34 +29,31 @@
             gwf.PRI = PRI;
             gwf.Update();
             alert("保存成功");
-            window.close();
+             window.parent.CloseBootstrapDialog();
         }
 
         function Cancel() {
-            //gwf.PRI = pri;
-            //gwf.Update();
-            //alert("取消成功");
-            window.close();
+           if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
+                window.parent.CloseBootstrapDialog("取消");
+            }
         }
     </script>
 
 </head>
 <body>
 
-    <ul>
-        <li>
-            <label> <input type="radio" id="PRI_2" value="2" name="PRI" /><img style="width:20px; height:20px;" src="../Img/PRI/2.png" />高</label>
-        </li>
-        <li>
-            <label> <input type="radio" id="PRI_1" value="1" name="PRI" /><img src="../Img/PRI/1.png" />中</label>
-        </li>
-        <li>
-            <label> <input type="radio" id="PRI_0" value="0" name="PRI" /><img src="../Img/PRI/0.png" />低</label>
-        </li>
-    </ul>
+    <div style="padding:10px 10px;text-align:center">
+        <label> <input type="radio" id="PRI_2" value="2" name="PRI" /><img title="高" src="../Img/PRI/2.png" />--高</label>
 
-    <input type="button" id="SaveBtn" value="保存" onclick="Save()" />
-    <input type="button" id="CancelBtn" value="取消" onclick="Cancel()" />
+        <label> <input type="radio" id="PRI_1" value="1" name="PRI" /><img title="中" src="../Img/PRI/1.png" />--中</label>
+
+        <label> <input type="radio" id="PRI_0" value="0" name="PRI" /><img title="低" src="../Img/PRI/0.png" />--低</label>
+    </div>
+    <div id="Btns" style="text-align:right;margin-bottom:10px;margin-right:10px;">
+        <input type="button" id="SaveBtn" value="保存" onclick="Save()" />
+        <input type="button" id="CancelBtn" value="取消" onclick="Cancel()" />
+
+    </div>
 
 </body>
 </html>

@@ -583,11 +583,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 重要性 是否可用
         /// </summary>
-        public bool PRIEnable
+        public int PRIEnable
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.PRIEnable);
+                return this.GetValIntByKey(BtnAttr.PRIEnable);
             }
         }
         /// <summary>

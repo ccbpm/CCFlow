@@ -2356,7 +2356,9 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Note.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
             case "PR":
                 $('#modalHeader').text("重要性设置");
-                modalIframeSrc = "./WorkOpt/PRI.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                //按百分比自适应
+                SetPageSize(50, 60);
+                modalIframeSrc = "./WorkOpt/PRI.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&PRIEnable=" + node.PRIEnable + "&Info=&s=" + Math.random();
 
             default:
                 break;

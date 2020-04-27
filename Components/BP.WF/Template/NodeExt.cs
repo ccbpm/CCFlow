@@ -628,7 +628,8 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 重要性.
                 map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.PRIEnable, 0, "重要性规则", true, true, BtnAttr.PRIEnable, @"0=不启用@1=只读@2=编辑");
+                //map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);

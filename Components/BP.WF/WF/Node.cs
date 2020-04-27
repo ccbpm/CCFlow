@@ -2830,6 +2830,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
                 //打印PDF的处理
                 map.AddTBInt(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true);
+                map.AddTBInt(BtnAttr.PRIEnable, 0, "重要性规则", true, true);
                 map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 //与未来处理人有关系.

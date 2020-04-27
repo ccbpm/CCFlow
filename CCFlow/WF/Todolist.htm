@@ -119,7 +119,8 @@
             tablet += "<th>" + window.lang.sdrq + "</th>";
             tablet += "<th>" + window.lang.qixian + "</th>";
             tablet += "<th>" + window.lang.zhuangtai + "</th>";
-            tablet += "<th>" + window.lang.leixing + "<th>";
+            tablet += "<th>" + window.lang.leixing + "</th>";
+            tablet += "<th>优先级</th>";
 
             $("#tablet").html(tablet);
 
@@ -294,6 +295,7 @@
                     }
 
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
+                    listbox += "<td>" + GetPRI(work.PRI) + "</td>";
 
                     //备注
                     //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
@@ -377,6 +379,18 @@
             //                date3 = date1.getTime() - date2.getTime();
 
             return date3;
+        }
+        function GetPRI(PRI) {
+           switch (parseInt(PRI)) {
+                case 0:
+                    return "<img title='低' src='Img/PRI/0.png' />";
+                case 1:
+                    return "<img title='中' src='Img/PRI/1.png' />";
+                    break;
+                case 2: 
+                    return "<img title='高' src='Img/PRI/2.png' />";
+                    break;
+            }
         }
         function GroupBarClick(groupName) {
 

@@ -1176,7 +1176,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                if (btnLab.PRIEnable == true)
+                if (btnLab.PRIEnable != 0)
                 {
                     /* 优先级设置 */
                     string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -1735,7 +1735,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                if (btnLab.PRIEnable == true)
+                if (btnLab.PRIEnable != 0)
                 {
                     /* 优先级设置 */
                     dr = dt.NewRow();
@@ -2132,7 +2132,7 @@ namespace BP.WF.HttpHandler
 
 
 
-                if (btnLab.PRIEnable == true)
+                if (btnLab.PRIEnable != 0)
                 {
                     /* 优先级设置 */
                     string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

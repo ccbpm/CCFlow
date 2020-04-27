@@ -1,4 +1,4 @@
-﻿namespace FtpSupport
+﻿namespace BP
 {
     using System;
     using System.ComponentModel;

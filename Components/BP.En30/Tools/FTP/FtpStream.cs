@@ -1,4 +1,4 @@
-﻿namespace FtpSupport
+﻿namespace BP
 {
     using System;
     using System.IO;
@@ -19,7 +19,7 @@
         {
             if (this.hFile != IntPtr.Zero)
             {
-                FtpSupport.NativeMethods.InternetCloseHandle(this.hFile);
+                BP.NativeMethods.InternetCloseHandle(this.hFile);
                 this.hFile = IntPtr.Zero;
             }
             base.Close();
@@ -43,7 +43,7 @@
             }
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
-            bool rc = FtpSupport.NativeMethods.InternetReadFile(this.hFile, ptr, count, out int num);
+            bool rc = NativeMethods.InternetReadFile(this.hFile, ptr, count, out int num);
             handle.Free();
             FtpException.THROWONFALSE(rc);
             return num;
@@ -67,7 +67,7 @@
             }
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
-            bool rc = FtpSupport.NativeMethods.InternetWriteFile(this.hFile, ptr, count, out _);
+            bool rc = NativeMethods.InternetWriteFile(this.hFile, ptr, count, out _);
             handle.Free();
             FtpException.THROWONFALSE(rc);
         }

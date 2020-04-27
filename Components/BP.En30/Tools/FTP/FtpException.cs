@@ -1,4 +1,4 @@
-﻿namespace FtpSupport
+﻿namespace BP
 {
     using System;
     using System.ComponentModel;
@@ -19,7 +19,7 @@
             string message = null;
             if (num == 0x2ee3)
             {
-                FtpSupport.NativeMethods.InternetGetLastResponseInfo(out message);
+                NativeMethods.InternetGetLastResponseInfo(out message);
             }
             else if ((num >= 0x2ee0) && (num <= 0x2f8e))
             {

@@ -10,7 +10,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using FtpSupport;
 using System.Collections;
 
 namespace BP.WF.HttpHandler
@@ -28,12 +27,12 @@ namespace BP.WF.HttpHandler
         }
 
         #region  界面 .
-        public FtpSupport.FtpConnection GenerFTPConn
+        public FtpConnection GenerFTPConn
         {
             get
             {
 
-                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(Glo.TemplateFTPHost, Glo.TemplateFTPPort, Glo.TemplateFTPUser, Glo.TemplateFTPPassword);
+                FtpConnection conn = new FtpConnection(Glo.TemplateFTPHost, Glo.TemplateFTPPort, Glo.TemplateFTPUser, Glo.TemplateFTPPassword);
                 return conn;
             }
         }
@@ -47,7 +46,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(dirName) == true)
                 dirName = "/Flow/";
 
-            FtpSupport.FtpConnection conn = this.GenerFTPConn;
+            FtpConnection conn = this.GenerFTPConn;
             conn.SetCurrentDirectory(dirName);
 
             DataSet ds = new DataSet();
@@ -112,7 +111,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(dirName) == true)
                 dirName = "/Form/";
 
-            FtpSupport.FtpConnection conn = this.GenerFTPConn;
+            FtpConnection conn = this.GenerFTPConn;
             conn.SetCurrentDirectory(dirName);
 
             DataSet ds = new DataSet();

@@ -6,16 +6,17 @@
         var userNo = GetQueryString("UserNo"); 
         var flowNo = GetQueryString("FK_Flow");
        function InitPageUserInfo() {
+           webUserJsonString = null;
 
-            var webUser = new WebUser();
-
+           var webUser = new WebUser();
+          
 
             var html = "<table style='width:100%;'>";
             html += "<caption>当前用户</caption>";
 
             html += "<tr>";
-            html += "<td colspan=2>";
-            html += "<img style='width:95%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
+            html += "<td colspan=2 style='text-align:center'>";
+            html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
             html += "</td>";
             html += "</tr>";
 

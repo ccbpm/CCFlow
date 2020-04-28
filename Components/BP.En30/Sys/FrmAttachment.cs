@@ -1400,7 +1400,7 @@ namespace BP.Sys
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
             
             //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
-            if (this.FK_Node != 0)
+            if (this.FK_Node != 0 && this.HisCtrlWay == AthCtrlWay.PK)
                 this.HisCtrlWay = AthCtrlWay.WorkID;
 
             return base.beforeInsert();

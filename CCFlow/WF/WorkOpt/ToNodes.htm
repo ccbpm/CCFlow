@@ -108,7 +108,7 @@
                 }
 
             }
-            var tr = $("<tr><td>" + html + "</td></tr>");
+            var tr = $("<tr><td style='padding:10px;'>" + html + "</td></tr>");
             $("#TableNode").append(tr);
 
 
@@ -270,12 +270,17 @@
 <body>
 
 
-    <div style="text-align: center; position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
+    <div style="text-align: center;  position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
 
-        <h3> 请选择到达的节点 </h3>
-        <div id="TableNode" style="width:100%;"></div>
-        <input type=button id="Btn_Send" onclick="Send();" value="发送" />
-        <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />
+        <fieldset>
+            <legend> 请选择到达的节点</legend>
+            <div id="TableNode" style="width:100%;"></div>
+
+            <br />
+            <input type=button id="Btn_Send" onclick="Send();" value="发送" />
+            <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />
+        </fieldset>
+
     </div>
 
 

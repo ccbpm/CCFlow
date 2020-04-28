@@ -2155,11 +2155,13 @@ var HttpHandler = (function () {
     var parameters = new FormData();
 
     var formData;
+    var params="&";
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
         parameters = new FormData();
         formData = undefined;
+        params = "&";
     }
 
     function validate(s) {
@@ -2242,15 +2244,17 @@ var HttpHandler = (function () {
            
         },
         AddPara: function (key, value) {
-            if (parameters.has(key) ==false )
-                parameters.append(key,value);
+            if (params.indexOf("&" + key + "=")==-1) {
+                parameters.append(key, value);
+                params +=  key + "=" + value+"&";
+            }
+                
         },
 
         AddJson: function (json) {
 
             for (var key in json) {
-                if (parameters.has(key) == false)
-                    parameters.append(key, json[key]);
+                this.AddPara(key, json[key]);
             }
         },
 
@@ -2260,24 +2264,34 @@ var HttpHandler = (function () {
         },
 
         getParams: function () {
-            var params = [];
-           /* $.each(parameters, function (key, value) {
+        //    var params = [];
+        //   /* $.each(parameters, function (key, value) {
 
-                if (value.indexOf('<script') != -1)
-                    value = '';
+        //        if (value.indexOf('<script') != -1)
+        //            value = '';
 
-                params.push(key + "=" + value);
+        //        params.push(key + "=" + value);
 
-            });
-        */
-            parameters.forEach((value, key) => {
-                if (value.indexOf('<script') != -1)
-                    value = '';
-                params.push(key + "=" + value);
-            } );
+        //    });
+        //*/
 
+        //    for (let [name, value] of formData) {
+        //        alert(`${name} = ${value}`); // key1=value1，然后是 key2=value2
+        //        if (value.indexOf('<script') != -1)
+        //            value = '';
+        //        params.push(name + "=" + value);
+        //    }
 
-            return params.join("&");
+        //    //for (var key of parameters.keys()) {
+        //    //    var val = formData.get(key);
+        //    //    if (val.indexOf('<script') != -1)
+        //    //        val = '';
+        //    //    params.push(key + "=" + val);
+                
+        //    //}
+           
+
+            return params;
         },
 
         DoMethodReturnString: function (methodName) {

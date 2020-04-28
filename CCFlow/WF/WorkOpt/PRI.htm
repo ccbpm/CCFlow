@@ -16,12 +16,16 @@
         var gwf;
         var pri;
         $(function () {
-            if (PRIEnable==1) {
-               $("#Btns").hide(); 
-            }
             gwf = new Entity("BP.WF.GenerWorkFlow", workid);
             pri = gwf.PRI;
             $("[name='PRI'][value='" + pri + "']").prop("checked", "checked");
+            if (PRIEnable==1) {
+                $("#Btns").hide(); 
+                $("input[name=PRI]").each(function () {
+                        $(this).attr("disabled", true);
+                });
+            }
+           
         });
 
         function Save() {

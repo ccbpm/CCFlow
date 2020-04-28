@@ -147,7 +147,7 @@ namespace BP.Sys
                 map.AddDDLSysEnum(DictAttr.DictType, 0, "数据类型", true, false, DictAttr.DictType,
                     "@0=编号名称@1=树结构");
 
-                map.AddTBString(DictAttr.OrgNo, null, "OrgNo", true, false, 0, 200, 20);
+                map.AddTBString(DictAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
                 map.AddTBInt(DictAttr.Idx, 0, "顺序号", false, false);
 
                 RefMethod rm = new RefMethod();

@@ -8225,9 +8225,7 @@ namespace BP.WF
         public static void Node_CC_SetRead(string mypk)
         {
             if (DataType.IsNullOrEmpty(mypk))
-            {
                 return;
-            }
 
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta  WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
@@ -8277,7 +8275,9 @@ namespace BP.WF
             Node nd = new Node(fk_node);
 
             CCList list = new CCList();
-            list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+            //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+            list.MyPK =   workID + "_" + fk_node + "_" + toEmpNo;
+
             list.FK_Flow = fk_flow;
             list.FlowName = fl.Name;
             list.FK_Node = fk_node;
@@ -8314,11 +8314,12 @@ namespace BP.WF
             }
             catch
             {
-                list.CheckPhysicsTable();
+                // list.CheckPhysicsTable();
                 list.Update();
             }
 
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
             //记录日志.
             Glo.AddToTrack(ActionType.CC, fk_flow, workID, 0, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmpNo, toEmpName, msgTitle, null);

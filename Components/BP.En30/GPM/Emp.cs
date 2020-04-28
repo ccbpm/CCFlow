@@ -288,7 +288,7 @@ namespace BP.GPM
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
                     "@0=不签名@1=图片签名@2=电子签名");
 
-                map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 500, 132, true);
+                map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50, true);
 
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);

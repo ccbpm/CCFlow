@@ -279,18 +279,14 @@ namespace BP.WF.HttpHandler
 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            // 打开抄送给我的数据，都把它设置读取状态.
             CCLists ccs = new CCLists();
             ccs.Retrieve(CCListAttr.WorkID, this.WorkID, CCListAttr.CCTo, WebUser.No);
             foreach (CCList item in ccs)
             {
                 if (item.HisSta == CCSta.UnRead)
-                {
                     BP.WF.Dev2Interface.Node_CC_SetRead(item.MyPK);
-                    //item.HisSta = CCSta.Read;
-                    //item.DirectUpdate();
-                }
             }
-
 
             //当前工作.
             Work currWK = this.currND.HisWork;

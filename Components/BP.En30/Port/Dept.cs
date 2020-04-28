@@ -106,7 +106,7 @@ namespace BP.Port
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
-                map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 100, 30);
+                map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 30);
 
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
 

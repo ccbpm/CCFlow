@@ -354,6 +354,14 @@ namespace BP.DA
             //执行保存.
             SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }
+        /// <summary>
+        /// 获得从数据库的字段获取数据，存储到一个执行的文件里.
+        /// </summary>
+        /// <param name="fileFullName">指定的存储文件全路径</param>
+        /// <param name="tableName"></param>
+        /// <param name="tablePK"></param>
+        /// <param name="pkVal"></param>
+        /// <param name="fileSaveField"></param>
         public static void GetFileFromDB(string fileFullName, string tableName, string tablePK, string pkVal, string fileSaveField)
         {
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);

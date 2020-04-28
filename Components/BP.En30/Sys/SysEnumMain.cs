@@ -170,7 +170,7 @@ namespace BP.Sys
                 //枚举值.
                 map.AddTBString(SysEnumMainAttr.EnumKey, null, "EnumKey", true, false, 0, 40, 8);
                 //组织编号.
-                map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 100, 8);
+                map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
 
                 this._enMap = map;
                 return this._enMap;

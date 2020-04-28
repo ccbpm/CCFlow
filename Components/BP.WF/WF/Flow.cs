@@ -715,7 +715,7 @@ namespace BP.WF
                     ps.Add(GenerWorkFlowAttr.FK_Flow, this.No);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-                    //如果没有启用草稿，并且存在草稿就取第一条 by dgq 5.28
+                    //如果没有启用草稿，并且存在草稿就取第一条
                     if (dt.Rows.Count > 0)
                     {
                         wk.OID = Int64.Parse(dt.Rows[0][0].ToString());
@@ -723,9 +723,8 @@ namespace BP.WF
                         int nodeID = int.Parse(dt.Rows[0][1].ToString());
                         if (nodeID != this.StartNodeID)
                         {
-                            string error = "@这里出现了blank的状态下流程运行到其它的节点上去了的情况，当前停留节点:" + nodeID;
+                            string error = "err@这里出现了blank的状态下流程运行到其它的节点上去了的情况，当前停留节点:" + nodeID;
                             Log.DefaultLogWriteLineError(error);
-                            //     throw new Exception(error);
                         }
                     }
                 }
@@ -758,7 +757,7 @@ namespace BP.WF
                     catch (Exception ex)
                     {
                         wk.CheckPhysicsTable();
-                        //    wk.DirectInsert();
+                        //wk.DirectInsert();
                     }
 
                     //设置参数.
@@ -4738,7 +4737,7 @@ namespace BP.WF
                 //设计类型 .
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
-                map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 30, 10);
+                map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10);
 
                 //参数.
                 map.AddTBAtParas(1000);

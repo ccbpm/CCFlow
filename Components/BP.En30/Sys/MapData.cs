@@ -1714,7 +1714,7 @@ namespace BP.Sys
                 map.AddTBAtParas(4000);
                 #endregion
 
-                map.AddTBString(MapDataAttr.OrgNo, null, "OrgNo", true, false, 0, 30, 20);
+                map.AddTBString(MapDataAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
 
 
                 this._enMap = map;

@@ -125,7 +125,7 @@ namespace BP.WF.Template
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
                 map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
-                map.AddTBString(SysFormTreeAttr.OrgNo, null, "OrgNo", false, false, 0, 100, 30);
+                map.AddTBString(SysFormTreeAttr.OrgNo, null, "OrgNo", false, false, 0, 50, 30);
 
                 this._enMap = map;
                 return this._enMap;

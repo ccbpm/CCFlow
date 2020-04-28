@@ -1327,7 +1327,7 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.PrjNo, null, "PrjNo", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.PrjName, null, "PrjNo", true, false, 0, 100, 10);
                 //隶属组织.
-                map.AddTBString(GenerWorkFlowAttr.OrgNo, null, "OrgNo", true, false, 0, 30, 10);
+                map.AddTBString(GenerWorkFlowAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 10);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "工作轨迹";  // "工作报告";

@@ -529,11 +529,6 @@ namespace BP.En
 
                     if (Htable_En.ContainsKey(key) == false)
                         Htable_En.Add(key, en);
-                    else
-                    {
-                        continue;
-                        //Htable_En[key] = en;
-                    }
                 }
             }
 

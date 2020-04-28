@@ -173,6 +173,12 @@ namespace BP.WF.Port.Admin2
                 rm.HisAttrs.AddTBString("adminer", null, "新主管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "取消独立组织";
+                rm.ClassMethodName = this.ToString() + ".DeleteOrg";
+                rm.Warning = "您确定要取消独立组织吗？系统将要删除该组织以及该组织的管理员，但是不删除部门数据.";
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "设置二级管理员";
                 //rm.Warning = "设置为子公司后，系统就会在流程树上分配一个目录节点.";
@@ -185,6 +191,48 @@ namespace BP.WF.Port.Admin2
             }
         }
         #endregion
+
+        public string DeleteOrg()
+        {
+            if (WebUser.No.Equals("admin") == false)
+                return "err@只有admin帐号才可以执行。";
+
+            //流程类别.
+            BP.WF.Template.FlowSorts fss = new Template.FlowSorts();
+            fss.Retrieve(OrgAdminerAttr.OrgNo, this.No);
+            foreach (BP.WF.Template.FlowSort en in fss)
+            {
+                Flows fls = new Flows();
+                fls.Retrieve(BP.WF.Template.FlowAttr.FK_FlowSort, en.No);
+
+                if (fls.Count != 0)
+                    return "err@在流程目录："+en.Name+"有["+fls.Count+"]个流程没有删除。";
+            }
+
+            //表单类别.
+            BP.Sys.FrmTrees ftTrees = new BP.Sys.FrmTrees();
+            ftTrees.Retrieve(BP.Sys.FrmTreeAttr.OrgNo, this.No);
+            foreach (BP.WF.Template.FlowSort en in fss)
+            {
+                BP.Sys.MapDatas mds = new BP.Sys.MapDatas();
+                mds.Retrieve(BP.Sys.MapDataAttr.FK_FormTree, en.No);
+
+                if (mds.Count != 0)
+                    return "err@在表单目录：" + en.Name + "有[" + mds.Count + "]个表单没有删除。";
+            }
+
+            OrgAdminers oas = new OrgAdminers();
+            oas.Delete(OrgAdminerAttr.OrgNo, this.No);
+
+            BP.WF.Template.FlowSorts fs = new Template.FlowSorts();
+            fs.Delete(OrgAdminerAttr.OrgNo, this.No);
+
+            fss.Delete(OrgAdminerAttr.OrgNo, this.No); //删除流程目录.
+            ftTrees.Delete(BP.Sys.FrmTreeAttr.OrgNo, this.No); //删除表单目录。
+
+            this.Delete();
+            return "info@成功注销组织,请关闭窗口刷新页面.";
+        }
 
         public string ChangeAdminer(string adminer)
         {

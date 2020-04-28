@@ -1507,6 +1507,7 @@ namespace BP.WF.Template
 
             BtnLab btnLab = new BtnLab(this.NodeID);
             btnLab.RetrieveFromDBSources();
+
             //清除所有的缓存.
             BP.DA.CashEntity.DCash.Clear();
 

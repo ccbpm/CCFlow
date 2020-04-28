@@ -3136,7 +3136,6 @@ namespace BP.WF.HttpHandler
                         default:
                             break;
                     }
-
                 }
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
@@ -3156,8 +3155,6 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
-
-
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);
 

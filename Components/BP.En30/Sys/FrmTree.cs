@@ -96,7 +96,7 @@ namespace BP.Sys
                 map.AddTBStringPK(FrmTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
-                map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 100, 30);
+                map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 50, 30);
                 map.AddTBInt(FrmTreeAttr.Idx, 0, "Idx", false, false);
 
                 this._enMap = map;

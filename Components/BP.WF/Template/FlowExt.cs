@@ -17,6 +17,20 @@ namespace BP.WF.Template
     {
         #region 属性.
         /// <summary>
+        /// 存储表
+        /// </summary>
+        public string PTable
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.PTable);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.PTable, value);
+            }
+        }
+        /// <summary>
         /// 流程类别
         /// </summary>
         public string FK_FlowSort
@@ -496,7 +510,7 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, true, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, true, 0, 50, 10, false);
                 map.AddTBDateTime(FlowAttr.DesignTime, null, "创建时间", true, true);
-               // map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
+                // map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 
                 #region 基本功能.
@@ -869,9 +883,9 @@ namespace BP.WF.Template
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
-             
 
-                
+
+
 
                 //rm = new RefMethod();
                 //rm.Title = "实例增长分析";
@@ -1026,9 +1040,9 @@ namespace BP.WF.Template
         public string DoDataManger_DataCharts()
         {
             return "../../Admin/AttrFlow/DataCharts.htm?FK_Flow=" + this.No;
-           // return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+            // return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
-        
+
 
         public string DoDataManger_Search()
         {
@@ -1477,7 +1491,7 @@ namespace BP.WF.Template
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (emps.Contains("@" + dr[0].ToString() + "@") || emps.Contains("@" + dr[0].ToString() + ","+dr[1].ToString()+"@"))
+                    if (emps.Contains("@" + dr[0].ToString() + "@") || emps.Contains("@" + dr[0].ToString() + "," + dr[1].ToString() + "@"))
                         continue;
                     emps += dr[0].ToString() + "," + dr[1].ToString() + "@";
                 }
@@ -1915,10 +1929,10 @@ namespace BP.WF.Template
                 }
 
                 //检查流程数据存储表是否正确
-                if (!DataType.IsNullOrEmpty(fl.PTable))
+                if (DataType.IsNullOrEmpty(fl.PTable) == false)
                 {
                     /*检查流程数据存储表填写的是否正确.*/
-                    sql = "select count(*) as Num from  " + fl.PTable + " where 1=2";
+                    sql = "select count(*) as Num from  " + fl.PTable + " WHERE 1=2";
                     try
                     {
                         DBAccess.RunSQLReturnValInt(sql, 0);
@@ -1937,15 +1951,32 @@ namespace BP.WF.Template
         }
         protected override void afterInsertUpdateAction()
         {
-            //同步流程数据表.
+            #region 更新PTale 后的业务处理  @sly.
+            // 同步流程数据表.
             string ndxxRpt = "ND" + int.Parse(this.No) + "Rpt";
             Flow fl = new Flow(this.No);
-            if (fl.PTable != "ND" + int.Parse(this.No) + "Rpt")
+            MapData md = new MapData(ndxxRpt);
+            if (md.PTable.Equals(fl.PTable) == false)
             {
-                BP.Sys.MapData md = new Sys.MapData(ndxxRpt);
-                if (md.PTable != fl.PTable)
-                    md.Update();
+                md.PTable = fl.PTable;
+                md.Update();
+
+                Nodes nds = new Nodes();
+                nds.Retrieve(NodeAttr.FK_Flow, this.No);
+                foreach (Node nd in nds)
+                {
+                    string sql = "";
+                    if (nd.HisRunModel == RunModel.SubThread)
+                        sql = "UPDATE Sys_MapData SET PTable=No WHERE No='ND" + nd.NodeID + "'";
+                    else
+                        sql = "UPDATE Sys_MapData SET PTable='" + fl.PTable + "' WHERE No='ND" + nd.NodeID + "'";
+
+                    DBAccess.RunSQL(sql);
+                }
+                fl.CheckRpt(); // 检查业务表.
             }
+            #endregion 更新PTale 后的业务处理  @sly.
+
 
             #region 为systype设置，当前所在节点的第2级别目录。
             FlowSort fs = new FlowSort(fl.FK_FlowSort);

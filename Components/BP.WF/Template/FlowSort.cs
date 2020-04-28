@@ -128,6 +128,9 @@ namespace BP.WF.Template
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
             DBAccess.RunSQL(sql);
 
+            // sql = "UPDATE WF_Flow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
+            //DBAccess.RunSQL(sql);
+
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 sql = "UPDATE WF_Emp SET StartFlows='' ";
             else
@@ -136,7 +139,7 @@ namespace BP.WF.Template
             DBAccess.RunSQL(sql);
             return base.beforeUpdate();
         }
-       
+
     }
     /// <summary>
     /// 流程类别

@@ -6593,22 +6593,31 @@ namespace BP.WF
                     isLastOne=true; //如果只有一个，本人就是lastOne.
 
                 //WorkNode wn= this.GetPreviousWorkNode();
-                // this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
+                //this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
                 //this.JumpToNode = wn.HisNode;
 
                 if (isLastOne == true || this.HisNode.TodolistModel== TodolistModel.QiangBan)
                 {
-                    DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
+                    string ptable = "ND" + int.Parse(this.HisFlow.No) + "Track";
+
+                   var mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + this.WorkID + " AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
+                    DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+
                     if (mydt.Rows.Count == 0)
                         throw new Exception("系统错误，没有找到上一个节点.");
                     this.JumpToEmp = mydt.Rows[0][1].ToString();
                     var priNodeID = int.Parse(mydt.Rows[0][0].ToString());
                     this.JumpToNode = new Node(priNodeID);
-                }
 
-                //清除选择，防止在自动发送到该节点上来. @sly
-                this.HisGenerWorkFlow.Paras_ToNodes="";
-                this.HisGenerWorkFlow.DirectUpdate();
+                    //清除选择，防止在自动发送到该节点上来. @sly
+                    this.HisGenerWorkFlow.Paras_ToNodes = "";
+                    this.HisGenerWorkFlow.DirectUpdate();
+
+                    //清除上次发送的选择,不然下次还会自动发送到当前的节点上来.
+                    mysql = "DELETE FROM WF_SelectAccper WHERE FK_Node="+this.JumpToNode.NodeID+" AND WorkID="+this.WorkID;
+                    DBAccess.RunSQL(mysql);
+                }
 
                 // DataTable dt=
                 //如果是空，或者包含(zhangsan,张三) .

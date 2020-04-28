@@ -92,7 +92,7 @@ namespace BP.WF.Port.Admin2
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 60, 200);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
-                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 100, 40);
+                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 40);
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
 

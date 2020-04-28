@@ -26,7 +26,7 @@
             GC.SuppressFinalize(this);
         }
 
-        ~FtpStream()
+        FtpStream()
         {
             this.Close();
         }

@@ -159,9 +159,9 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_StartIt()
         {
             string sid = this.GetRequestVal("SID");
-            if (WebUser.IsAdmin == false)
+           /* if (WebUser.IsAdmin == false)
                 return "err@非管理员无法测试,关闭后重新登录。";
-
+*/
             FlowExt fl = new FlowExt(this.FK_Flow);
             fl.Tester = this.GetRequestVal("UserNo");
             fl.Update();
@@ -205,12 +205,12 @@ namespace BP.WF.HttpHandler
             DataTable dt = null;
             string sql = "";
             BP.WF.Node nd = new BP.WF.Node(nodeid);
-            if (nd.IsGuestNode)
+           /* if (nd.IsGuestNode)
             {
-                /*如果是 guest 节点，就让其跳转到 guest登录界面，让其发起流程。*/
+                *//*如果是 guest 节点，就让其跳转到 guest登录界面，让其发起流程。*//*
                 //这个地址需要配置.
                 return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
-            }
+            }*/
             #endregion 测试人员.
 
             #region 从配置里获取-测试人员.

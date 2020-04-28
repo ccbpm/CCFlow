@@ -252,6 +252,11 @@
 
         //绑定添加连接操作。画线-input text值  拒绝重复连接
         jsPlumb.bind("jsPlumbConnection", function (info) {
+            if (info.sourceId == info.targetId) {
+                jsPlumb.detach(info);
+                return;
+            }
+
             setConnections(info.connection)
         });
         //绑定删除connection事件

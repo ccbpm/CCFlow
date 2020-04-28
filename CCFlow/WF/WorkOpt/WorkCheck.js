@@ -151,7 +151,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         else
             msg = msg.replace(/<BR>/g, '\t\n');
 
-        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";'>";
         _Html += msg;
         _Html += "</textarea>";
 
@@ -393,9 +393,6 @@ function SetDocVal() {
         $("#TB_Msg").val(val);
     }
   
-}
-function setIframeHeight() {
-    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
 }
 
 function SaveWorkCheck() {

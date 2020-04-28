@@ -1,22 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Data;
-using System.Drawing;
 using System.Web;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
-using System.Web.UI;
 using BP.Web;
 using BP.Sys;
 using BP.Tools;
-using BP.DA;
-using BP.WF.Template;
 using BP.WF;
 using BP;
 using BP.En;
-using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Security.Cryptography;
 
 namespace CCFlow.WF.CCForm
 {
@@ -294,22 +285,7 @@ namespace CCFlow.WF.CCForm
                 return;
 
             }
-            //else if (this.DoType == "DownMaterials")
-            //{
-            //    MaterialsCtrol mc = new MaterialsCtrol();
-            //    mc.MyPK = this.Request.QueryString["mypk"];
-            //    mc.Retrieve();
 
-            //    Helper.FtpDownFiles(mc.FileFullName, mc.FileExts, mc.FileName);
-            //}
-            //else if (this.DoType == "DownJobFiles")
-            //{
-            //    JobMgt jm = new JobMgt();
-            //    jm.No = this.Request.QueryString["mypk"];
-            //    jm.Retrieve();
-
-            //    Helper.FtpDownFiles(jm.FilePath, jm.FileExts, jm.Name);
-            //}
         }
 
         //实体文件下载

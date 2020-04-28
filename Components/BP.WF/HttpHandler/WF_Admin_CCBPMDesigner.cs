@@ -662,7 +662,12 @@ namespace BP.WF.HttpHandler
         public string SelectOneOrg_Selected()
         {
             WebUser.OrgNo = this.OrgNo;
-            WebUser.FK_Dept = this.OrgNo;
+
+            //找到管理员所在的部门.
+            string sql = "SELECT a.No Port_Dept A,Port_DeptEmp B WHERE A.No=B.FK_Dept AND A.Emp='"+WebUser.No+"'  AND A.OrgNo='"+this.OrgNo+"'";
+            string deptNo = DBAccess.RunSQLReturnStringIsNull(sql, this.OrgNo);
+
+            WebUser.FK_Dept = deptNo;
 
             //执行更新到用户表信息.
             WebUser.UpdateSIDAndOrgNoSQL();

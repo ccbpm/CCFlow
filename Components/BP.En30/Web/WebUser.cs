@@ -647,7 +647,7 @@ namespace BP.Web
         {
             if (DBAccess.IsView("Port_Emp") == false)
             {
-                string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.OrgNo + "' WHERE No='" + WebUser.No + "'";
+                string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.FK_Dept + "' WHERE No='" + WebUser.No + "'";
                 BP.DA.DBAccess.RunSQL(sql);
             }
             else

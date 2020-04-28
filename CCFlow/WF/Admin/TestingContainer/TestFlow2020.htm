@@ -62,6 +62,7 @@
                 }
 
                 if (data.indexOf('管理员') > 0) {
+                    window.close();
                     window.location.href = './../CCBPMDesigner/Login.htm';
                     return;
                 }
@@ -72,6 +73,10 @@
 
 
             if (data.indexOf('url@') == 0) {
+                if (data.indexOf('Login.htm') > 0) {
+                    window.close();
+                    return;
+                }
                 var url = data.replace('url@', '');
                 window.location.href = url;
                 return;

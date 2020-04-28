@@ -671,7 +671,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
-            cond.Insert();
+            cond.Save();
 
             return "保存成功..";
         }
@@ -754,7 +754,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
-            cond.Insert();
+            cond.Save();
 
             return "保存成功..";
         }
@@ -1012,7 +1012,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
-            cond.Insert();
+            cond.Save();
 
             return "保存成功..";
         }

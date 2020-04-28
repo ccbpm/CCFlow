@@ -116,7 +116,7 @@ CREATE VIEW V_WF_Delay
 AS
 SELECT  CONCAT(WorkID,'_',FK_Emp,'_',FK_Node) AS MyPK, PRI, WorkID, IsRead, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, 
                       FlowName, PWorkID, PFlowNo, FK_Node, NodeName, WorkerDept, Title, RDT, ADT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, GuestNo, GuestName, BillNo, FlowNote, 
-                      TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, MyNum
+                      TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, Domain
 FROM   WF_EmpWorks
 WHERE SDT>NOW() ;
   

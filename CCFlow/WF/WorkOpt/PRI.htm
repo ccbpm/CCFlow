@@ -29,12 +29,12 @@
             gwf.PRI = PRI;
             gwf.Update();
             alert("保存成功");
-             window.parent.CloseBootstrapDialog();
+            window.parent.returnWorkWindowClose("");
         }
 
         function Cancel() {
-           if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
-                window.parent.CloseBootstrapDialog("取消");
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+               window.parent.returnWorkWindowClose("取消");
             }
         }
     </script>

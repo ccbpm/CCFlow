@@ -424,7 +424,7 @@ namespace BP.WF.Template
                 map.AddBoolean(CCAttr.CCIsDepts, false, "是否启用？-按照部门抄送", true, true, false);
                 map.AddBoolean(CCAttr.CCIsEmps, false, "是否启用？-按照人员抄送", true, true, false);
                 map.AddBoolean(CCAttr.CCIsSQLs, false, "是否启用？-按照SQL抄送", true, true, true);
-                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 200, 10, true);
+                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 500, 10, true);
 
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 100, 10, true);
                 map.AddTBStringDoc(CCAttr.CCDoc, null, "抄送内容(标题与内容支持变量)", true, false, true);

@@ -23,6 +23,10 @@ namespace BP.WF.Template
         /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
+        /// <summary>
+        /// NodeID
+        /// </summary>
+        public const string FillTempFields = "FillTempFields";
     }
     /// <summary>
     /// 公文模板

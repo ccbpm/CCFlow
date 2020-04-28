@@ -183,6 +183,17 @@
         }
 
         function Save() {
+            var fk_event = GetQueryString("FK_Event");
+            if (fk_event == "NodeWarning" || fk_event == "NodeOverDue") {
+                var val = $('input:radio[name="RB_NoticeType"]:checked').val();
+                if (val == null) {
+                    if (fk_event == "NodeWarning")
+                        alert("请选择预警提醒方式");
+                    if (fk_event == "NodeOverDue")
+                        alert("请选择逾期提醒方式");
+                    return;
+                }
+            }
             //获取短消息发送设置
             var pushModels = document.getElementsByName('CB_SMSPushModel');
             var pushModel = '';

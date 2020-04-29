@@ -562,7 +562,15 @@ namespace BP.WF.HttpHandler
                 nodeID = gwf.FK_Node;
             }
 
-            Node nd = new Node(nodeID);
+            //@sly 有时候nodeID被删除了.
+            Node nd = new Node();
+            nd.NodeID = nodeID;
+            if (nd.RetrieveFromDBSources() == 0)
+            {
+                nd.NodeID = int.Parse(this.FK_Flow + "01");
+                nd.Retrieve();
+            }
+
             Flow flow = new Flow(nd.FK_Flow);
             foreach (OneWorkXml item in xmls)
             {

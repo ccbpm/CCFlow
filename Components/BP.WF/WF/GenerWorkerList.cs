@@ -149,6 +149,11 @@ namespace BP.WF
         /// 是否会签？
         /// </summary>
         public const string IsHuiQian = "IsHuiQian";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
+
     }
     /// <summary>
     /// 工作者列表

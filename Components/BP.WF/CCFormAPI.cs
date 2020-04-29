@@ -778,8 +778,25 @@ namespace BP.WF
 
                     dt.TableName = uiBindKey;
 
-                    dt.Columns[0].ColumnName = "No";
-                    dt.Columns[1].ColumnName = "Name";
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        if (dt.Columns.Contains("NO") == true)
+                            dt.Columns["NO"].ColumnName = "No";
+                        if (dt.Columns.Contains("NAME") == true)
+                            dt.Columns["NAME"].ColumnName = "Name";
+                        if (dt.Columns.Contains("PARENTNO") == true)
+                            dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                    }
+
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        if (dt.Columns.Contains("no") == true)
+                            dt.Columns["no"].ColumnName = "No";
+                        if (dt.Columns.Contains("name") == true)
+                            dt.Columns["name"].ColumnName = "Name";
+                        if (dt.Columns.Contains("parentno") == true)
+                            dt.Columns["parentno"].ColumnName = "ParentNo";
+                    }
 
                     myds.Tables.Add(dt);
                     continue;
@@ -787,20 +804,6 @@ namespace BP.WF
                 #endregion 处理下拉框数据范围.
 
                 #region 外键字段
-                if ( UIIsEnable.Equals("1") && myds.Tables.Contains(uiBindKey)==false) 
-                {
-                    SFTable sfTable = new SFTable(uiBindKey);
-
-                    DataTable dt = sfTable.GenerHisDataTable(en.Row);
-                    
-                    dt.TableName = uiBindKey;
-
-                    dt.Columns[0].ColumnName = "No";
-                    dt.Columns[1].ColumnName = "Name";
-
-                    myds.Tables.Add(dt);
-                    continue;
-                }
 
                 // 判断是否存在.
                 if (myds.Tables.Contains(uiBindKey) == true)

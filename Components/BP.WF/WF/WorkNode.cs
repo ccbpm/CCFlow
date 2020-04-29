@@ -714,6 +714,7 @@ namespace BP.WF
 
                 string myemps = "";
                 Emp emp = new Emp();
+                int idx = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     string fk_emp = dr[0].ToString();
@@ -730,6 +731,10 @@ namespace BP.WF
                     }
 
                     GenerWorkerList wl = new GenerWorkerList();
+                    #region 增加存储的优先级，防止数据库根据FK_Emp的人员编码自动排序，导致查询的结果和接收人的先后顺序不一致
+                    idx++;
+                    wl.Idx = idx;
+                    #endregion
 
                     #region 根据记忆是否设置该操作员可用与否。
                     if (rm != null)
@@ -6574,6 +6579,8 @@ namespace BP.WF
                     }
                 }
 
+                CC(this.HisNode);
+
                 return this.HisMsgObjs;
             }
 
@@ -7248,12 +7255,9 @@ namespace BP.WF
                     //执行考核
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
-                    //执行抄送.
-                    if (this.HisNode.IsEndNode == false)
-                    {
-                        CC(this.HisNode);
+                    //执行抄送. 2020-04-28 修改只要启动抄送规则就执行抄送 @sly
+                     CC(this.HisNode);
 
-                    }
 
                     //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
                     string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(this.HisGenerWorkFlow, this.HisFlow);

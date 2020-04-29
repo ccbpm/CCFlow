@@ -245,6 +245,21 @@ namespace BP.WF
                 SetValByKey(GenerWorkerListAttr.PRI, value);
             }
         }
+
+        /// <summary>
+        /// Idx
+        /// </summary>
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(GenerWorkerListAttr.Idx);
+            }
+            set
+            {
+                SetValByKey(GenerWorkerListAttr.Idx, value);
+            }
+        }
         /// <summary>
         /// WorkID
         /// </summary>
@@ -659,6 +674,8 @@ namespace BP.WF
 
                 //优先级，2012-06-15 为青岛用户增加。
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
+
+                map.AddTBInt(GenerWorkerListAttr.Idx, 1, "顺序号", true, true);
 
                 //催办次数. 为亿阳信通加.
                 map.AddTBInt(GenerWorkerListAttr.PressTimes, 0, "催办次数", true, false);

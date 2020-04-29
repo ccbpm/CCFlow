@@ -114,7 +114,7 @@ namespace BP.WF.HttpHandler
             if (gwf.WFState != WFState.Complete)
             {
                 GenerWorkerLists gwls = new GenerWorkerLists();
-                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.Idx);
 
                 //warning 补偿式的更新.  做特殊的判断，当会签过了以后仍然能够看isPass=90的错误数据.
                 foreach (GenerWorkerList item in gwls)
@@ -951,8 +951,10 @@ namespace BP.WF.HttpHandler
                         qo.AddWhere(GenerWorkerListAttr.FID, id);
                         qo.addOr();
                         qo.AddWhere(GenerWorkerListAttr.WorkID, id);
+                        qo.addOrderBy(GenerWorkerListAttr.Idx);
                         qo.DoQuery();
-
+                        
+                       
                         DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
                         ds.Tables.Add(dtGwls);
                     }

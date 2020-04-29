@@ -353,7 +353,7 @@
                     checkedNodes = $('#tree').treeview("getSelected");
                 }
                 $.each(checkedNodes, function (i, node) {
-                    if (preNo == "" && preNo != node.id) {
+                    if (preNo == "" || preNo != node.id) {
                         preNo = node.id;
                         var item = {};
                         item.No = node.id;

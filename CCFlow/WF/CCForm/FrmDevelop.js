@@ -32,7 +32,11 @@ function GenerDevelopFrm(wn,fk_mapData) {
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
-
+        if (mapAttr.UIVisible == 0 && $("#TB_" + mapAttr.KeyOfEn).length != 0) {
+            $("#TB_" + mapAttr.KeyOfEn).hide();
+            continue;
+        }
+            
         //设置字段的样式属性
         $('#TB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);

@@ -291,7 +291,10 @@
                     if (node != null) {
                         node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
                         node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
-
+                        var trackType = 0;
+                        if (node.currTrack != undefined)
+                            trackType = node.currTrack.track.ActionType;
+                        
                         var tablehtml = "";
 
                         //增加到达时间,应完成时间.
@@ -347,9 +350,15 @@
                                         tablehtml += "<td> ------</td>";
                                     else
                                         tablehtml += "<td> " + GetOverSpanTime(rdt, sdt) + "</td>";
-                                } else {
+                                } else if (gwl.IsPass == 1) {
                                     tablehtml += "<td>实际完成</td>";
                                     tablehtml += "<td> " + cdt + "</td>";
+                                } else {
+                                    //队列模式
+                                    if (trackType == 27 && gwl.IsPass > 1) {
+                                        tablehtml += "<td>是否有待办</td>";
+                                        tablehtml += "<td> 无</td>";
+                                    }
                                 }
                                 tablehtml += "</tr>";
 

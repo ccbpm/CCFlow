@@ -1116,8 +1116,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //从工作人员列表里找到被退回人的接受人.
-            GenerWorkerList gwl = new GenerWorkerList();
-            gwl.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
+            GenerWorkerList gwl = gwls[0] as GenerWorkerList;
 
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();

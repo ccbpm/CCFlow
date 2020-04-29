@@ -918,7 +918,7 @@ namespace BP.WF.Template
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
                         openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                        string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
+                        string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node+"_"+ empNo;
 
                         //发送消息
                         BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
@@ -960,7 +960,7 @@ namespace BP.WF.Template
                     smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
                     openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                    string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node;
+                    string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
 
                     //发送消息
                     BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);

@@ -272,13 +272,13 @@
             if (rootNo == null || rootNo == undefined) {
                 rootNo = "0"
             }
-            
+
             //设置变量.
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
 
-            var treeUrl = mapExt.Tag2;
+            var treeUrl = mapExt.Tag2.replace(/~/g, "'");
             var treeTag1 = mapExt.Tag1;
             if (atParas.indexOf('@') == 0) {
                 var paras = atParas.split('@');
@@ -343,6 +343,7 @@
         ///获取已经勾选节点
         function GetCheckNodes() {
             var nodeIds = [];
+            var preNo = "";
             var gridPanel = $("#viewGrid_Panel");
             if (gridPanel.is(':hidden')) { //如果列表是隐藏的则获取树控件值
                 var checkedNodes = [];
@@ -352,11 +353,14 @@
                     checkedNodes = $('#tree').treeview("getSelected");
                 }
                 $.each(checkedNodes, function (i, node) {
-                    var item = {};
-                    item.No = node.id;
-                    item.Name = node.text;
-                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
-                    nodeIds.push(item);
+                    if (preNo == "" && preNo != node.id) {
+                        preNo = node.id;
+                        var item = {};
+                        item.No = node.id;
+                        item.Name = node.text;
+                        SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
+                        nodeIds.push(item);
+                    }
                 });
             } else {
                 var selectedRows = $("#viewGrid").bootstrapTable("getSelections");
@@ -370,7 +374,7 @@
             }
             return nodeIds;
         }
-         //设置值.
+        //设置值.
         function SaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
             var frmEleDB = new Entity("BP.Sys.FrmEleDB");
             frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;

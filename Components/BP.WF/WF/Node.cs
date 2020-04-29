@@ -804,12 +804,17 @@ namespace BP.WF
             Flow fl = new Flow();
             fl.No = this.FK_Flow;
             fl.RetrieveFromDBSources();
-            /*MapData mapData = new MapData("ND" + this.NodeID);
-            if (this.HisRunModel == RunModel.SubThread)
-                mapData.PTable = mapData.No;
-            else
-                mapData.PTable = fl.PTable;
-            mapData.Update();*/
+            MapData mapData = new MapData();
+            mapData.No = "ND" + this.NodeID;
+            if (mapData.RetrieveFromDBSources() != 0)
+            {
+                if (this.HisRunModel == RunModel.SubThread)
+                    mapData.PTable = mapData.No;
+                else
+                    mapData.PTable = fl.PTable;
+                mapData.Update();
+            }
+            
 
             base.afterInsertUpdateAction();
         }

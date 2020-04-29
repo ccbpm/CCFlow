@@ -4791,7 +4791,7 @@ namespace BP.WF.HttpHandler
 
             ds = GroupSearchSet(ens, en, map, ur, ds, aas);
             if (ds == null)
-                return "info@<img src='../Img/Warning.gif' /><b><font color=red> 您没有选择分析的数据</font></b>";
+                return "err@您没有选择分析的数据";
 
             string filePath = ExportGroupExcel(ds, en.EnDesc, ur.Vals);
 

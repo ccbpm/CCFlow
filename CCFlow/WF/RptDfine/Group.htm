@@ -859,6 +859,13 @@
         function Exp() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddUrlData();  //增加参数.
+            handler.AddFormData();
+            var groupList = "";
+            $('input[name="groupContent"]').each(function () {
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
+            });
+            handler.AddPara("GroupList", groupList);
             //查询集合
             var data = handler.DoMethodReturnString("FlowGroup_Exp");
             var url = "";

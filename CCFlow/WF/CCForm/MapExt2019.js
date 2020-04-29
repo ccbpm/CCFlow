@@ -1048,6 +1048,8 @@ function GenerDB(dbSrc, selectVal, dbType) {
 
     //处理sql，url参数.
     dbSrc = dbSrc.replace(/~/g, "'");
+    if (dbType == 0)
+        selectVal = selectVal.replace(/'/g, '');
 
     dbSrc = dbSrc.replace(/@Key/g, selectVal);
 

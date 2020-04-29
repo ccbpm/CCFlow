@@ -324,6 +324,7 @@
                     $('#tree_Panel').show();
                     return;
                 }
+                keyWord = replaceAll(keyWord, "'", "");
                 var gridUrl = replaceAll(treeTag1, "@Key", keyWord);
                 // tree
                 loadViewGrid(gridUrl);

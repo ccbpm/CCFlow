@@ -163,7 +163,7 @@
             }
 
             //获得退回原因.
-            var val = escape($('#TB_Doc').val());
+            var val = escape($('#TB_Doc').val().trim());
             if (val == null || val == "" || val == undefined) {
                 alert("请输入退回原因.");
                 return;

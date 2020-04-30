@@ -82,7 +82,7 @@ namespace BP.WF.Template
                 #endregion 
 
                 #region 对应关系
-                //平铺模式. @sly
+                //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);

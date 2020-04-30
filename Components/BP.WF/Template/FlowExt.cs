@@ -1951,7 +1951,7 @@ namespace BP.WF.Template
         }
         protected override void afterInsertUpdateAction()
         {
-            #region 更新PTale 后的业务处理  @sly.
+            #region 更新PTale 后的业务处理 
             // 同步流程数据表.
             string ndxxRpt = "ND" + int.Parse(this.No) + "Rpt";
             Flow fl = new Flow(this.No);
@@ -1975,7 +1975,7 @@ namespace BP.WF.Template
                 }
                 fl.CheckRpt(); // 检查业务表.
             }
-            #endregion 更新PTale 后的业务处理  @sly.
+            #endregion 更新PTale 后的业务处理 
 
 
             #region 为systype设置，当前所在节点的第2级别目录。

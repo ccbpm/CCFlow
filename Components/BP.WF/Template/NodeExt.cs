@@ -729,7 +729,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "上传公文模板";
                 rm.ClassMethodName = this.ToString() + ".DocTemp";
-                rm.Icon = "../../WF/Img/FileType/doc.gif"; //@sly
+                rm.Icon = "../../WF/Img/FileType/doc.gif"; 
                 //设置相关字段.
                 rm.RefAttrKey = BtnAttr.OfficeBtnEnable;
                 rm.RefAttrLinkLabel = "公文模板维护";

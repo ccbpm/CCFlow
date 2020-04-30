@@ -332,6 +332,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 所在的域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.Domain);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.Domain, value);
+            }
+        }
+        /// <summary>
         /// 备注
         /// </summary>
         public string FlowNote

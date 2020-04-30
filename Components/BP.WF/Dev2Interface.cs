@@ -8274,6 +8274,8 @@ namespace BP.WF
             Flow fl = new Flow(fk_flow);
             Node nd = new Node(fk_node);
 
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
             CCList list = new CCList();
             //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
             list.MyPK =   workID + "_" + fk_node + "_" + toEmpNo;
@@ -8300,6 +8302,17 @@ namespace BP.WF
             //增加抄送人部门.
             Emp emp = new Emp(toEmpNo);
             list.CCToDept = emp.FK_Dept;
+            list.CCToDeptName = emp.FK_DeptText;
+
+            //
+            if (BP.WF.Glo.CCBPMRunModel!= CCBPMRunModel.Single)
+            {
+                BP.GPM.Emp gpmEmp = new GPM.Emp(toEmpNo);
+                list.CCToOrgNo = gpmEmp.OrgNo;
+
+                BP.WF.Port.Admin2.Org org = new Port.Admin2.Org(gpmEmp.OrgNo);
+                list.CCToOrgName = org.Name; 
+            }
 
             list.RDT = DataType.CurrentDataTime;
             list.Rec = WebUser.No;
@@ -8307,6 +8320,12 @@ namespace BP.WF
             list.FID = 0;
             list.PFlowNo = pFlowNo;
             list.PWorkID = pWorkID;
+
+            //@sly 增加两个属性 2020.04.30
+            list.Domain = gwf.Domain;
+            list.OrgNo = gwf.OrgNo; //设置组织编号.
+
+             
 
             try
             {
@@ -8318,7 +8337,6 @@ namespace BP.WF
                 list.Update();
             }
 
-            GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
             //记录日志.
             Glo.AddToTrack(ActionType.CC, fk_flow, workID, 0, nd.NodeID, nd.Name,

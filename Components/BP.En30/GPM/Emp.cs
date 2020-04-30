@@ -124,6 +124,20 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.FK_Dept, value);
             }
         }
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.OrgNo, value);
+            }
+        }
         public string FK_DeptText
         {
             get

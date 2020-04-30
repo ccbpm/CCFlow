@@ -153,7 +153,6 @@ namespace BP.WF
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
-
     }
     /// <summary>
     /// 工作者列表

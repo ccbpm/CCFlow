@@ -58,6 +58,15 @@ namespace BP.WF.Template
         /// </summary>
         public const string CCToDeptName = "CCToDeptName";
         /// <summary>
+        /// 抄送到组织编号
+        /// </summary>
+        public const string CCToOrgNo = "CCToOrgNo";
+        /// <summary>
+        /// 超
+        /// </summary>
+        public const string CCToOrgName = "CCToOrgName";
+
+        /// <summary>
         /// 审核时间
         /// </summary>
         public const string CDT = "CDT";
@@ -89,8 +98,15 @@ namespace BP.WF.Template
         /// domain
         /// </summary>
         public const string Domain = "Domain";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
+    /// <summary>
+    /// 抄送状态
+    /// </summary>
     public enum CCSta
     {
         /// <summary>
@@ -192,6 +208,28 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(CCListAttr.CCToDept, value);
+            }
+        }
+        public string CCToOrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.CCToOrgNo);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.CCToOrgNo, value);
+            }
+        }
+        public string CCToOrgName
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.CCToOrgName);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.CCToOrgName, value);
             }
         }
         /// <summary>
@@ -442,6 +480,20 @@ namespace BP.WF.Template
             get { return this.GetValBooleanByKey(CCListAttr.InEmpWorks); }
             set { this.SetValByKey(CCListAttr.InEmpWorks, value); }
 	    }
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.OrgNo, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -462,10 +514,7 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_CCList", "抄送列表");
 
-
-
                 map.AddMyPK();
-
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
                 map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
 
@@ -489,6 +538,10 @@ namespace BP.WF.Template
                 map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
 
+                //@sly.
+                map.AddTBString(CCListAttr.CCToOrgNo, null, "抄送到组织", true, false, 0, 50, 10, true);
+                map.AddTBString(CCListAttr.CCToOrgName, null, "抄送给组织名称", true, false, 0, 600, 10, true);
+
                 map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
 
                 map.AddTBString(CCListAttr.PFlowNo, null, "父流程编号", true, true, 0, 100, 10, true);
@@ -496,8 +549,10 @@ namespace BP.WF.Template
                 //added by liuxc,2015.7.6，标识是否在待办列表里显示
                 map.AddBoolean(CCListAttr.InEmpWorks, false, "是否加入待办列表", true, true);
 
-                //addmy zhoupeng 
+                //add by zhoupeng  @sly.
                 map.AddTBString(CCListAttr.Domain, null, "Domain", true, true, 0, 50, 10, true);
+                map.AddTBString(CCListAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10, true);
+
 
                 this._enMap = map;
                 return this._enMap;

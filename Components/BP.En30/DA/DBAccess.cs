@@ -463,7 +463,7 @@ namespace BP.DA
                 {
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
-                        /*如果没有此列，就自动创建此列.  @sly */
+                        /*如果没有此列，就自动创建此列. */
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " Image ";
                         BP.DA.DBAccess.RunSQL(sql);
                         return null;

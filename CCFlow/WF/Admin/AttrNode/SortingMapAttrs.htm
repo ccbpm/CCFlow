@@ -70,7 +70,7 @@
             var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.GroupField&PKVal=' + OID + '&inlayer=1';
             var W = document.body.clientWidth - 240;
             var H = document.body.clientHeight - 20;
-            OpenBootStrapModal(url, "EditFrame", "编辑分组：" + field, W, H, "icon-edit");
+            OpenBootStrapModal(url, "EditFrame", "编辑分组", W, H, "icon-edit");
 
         }
         //.net保存并关闭层所用函数
@@ -82,23 +82,21 @@
             var url = "../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
             var W = document.body.clientWidth - 240;
             var H = document.body.clientHeight - 20;
-            OpenBootStrapModal(url, "EditFrame", "编辑明细表：" + field, W, H, "icon-edit");
+            OpenBootStrapModal(url, "EditFrame", "编辑明细表", W, H, "icon-edit");
         }
         //编辑多附件
         function EditAthMent(fk_mapdata, athMentKey) {
             var url = '../FoolFormDesigner/Attachment.aspx?FK_MapData=' + fk_mapdata + '&Ath=' + athMentKey;
             var W = document.body.clientWidth - 240;
             var H = document.body.clientHeight - 20;
-            OpenBootStrapModal(url, "EditFrame", "编辑多附件：" + field, W, H, "icon-edit");
+            OpenBootStrapModal(url, "EditFrame", "编辑多附件", W, H, "icon-edit");
 
         }
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
 
             var url = "../FoolFormDesigner/MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + FK_MapData;
-            var W = document.body.clientWidth - 240;
-            var H = document.body.clientHeight - 20;
-            OpenBootStrapModal(url, "EditFrame", "预览手机端表单：" + field, W, H, "icon-edit");
+            OpenBootStrapModal(url, "EditFrame", "预览手机端表单", 300, 430, "icon-edit");
 
         }
         //复制顺序到节点

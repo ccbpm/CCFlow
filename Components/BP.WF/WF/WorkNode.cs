@@ -2572,7 +2572,7 @@ namespace BP.WF
 
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
-                //@sly Img 的路径问题.
+                //Img 的路径问题.
                 this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
@@ -6588,7 +6588,7 @@ namespace BP.WF
             this.JumpToNode = jumpToNode;
             this.JumpToEmp = jumpToEmp;
 
-            #region 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人. @sly
+            #region 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
             if (this.HisNode.IsSendBackNode == true)
             {
                 //判断是否是最后一个人？
@@ -6617,7 +6617,7 @@ namespace BP.WF
                     var priNodeID = int.Parse(mydt.Rows[0][0].ToString());
                     this.JumpToNode = new Node(priNodeID);
 
-                    //清除选择，防止在自动发送到该节点上来. @sly
+                    //清除选择，防止在自动发送到该节点上来.
                     this.HisGenerWorkFlow.Paras_ToNodes = "";
                     this.HisGenerWorkFlow.DirectUpdate();
 
@@ -6632,7 +6632,7 @@ namespace BP.WF
                 //{
                 //  this.JumpToEmp =DBAccess.RunSQLReturnValInt("SELECT DISTINCT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 //}
-                // @sly.
+                // 
                 //var priNodeID= DBAccess.RunSQLReturnValInt("SELECT DISTINCT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!="+this.HisNode.NodeID+" ORDER BY RDT DESC ");
             }
             #endregion 为广西计算中心增加自动返回的节点.

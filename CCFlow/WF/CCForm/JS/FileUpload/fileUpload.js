@@ -357,7 +357,13 @@ var uploadTools = {
 
         for(var i=0;i<fileList.length;i++){
             if(fileList[i]!=null){
-                formData.append("file",fileList[i]);
+                formData.append("file", fileList[i]);
+                numOfAths++;
+                //判断附件上传最大数量
+                if (topNumOfUpload < numOfAths) {
+                    alert("您最多上传[" + topNumOfUpload + "]个附件");
+                    return;
+                }
             }
         }
         if(opt.otherData!=null&&opt.otherData!=""){

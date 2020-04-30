@@ -144,8 +144,14 @@
 
         //检查上传的附件数量是否符合要求
         function CheckAthNum() {
+            
             if (numOfUpload > numOfAths) {
                 return "上传附件数量不能小于"+numOfUpload;
+            }
+
+            //判断附件上传最大数量
+            if (topNumOfUpload < numOfAths) {
+                return "您最多上传[" + topNumOfUpload + "]个附件";
             }
 
              if (athSortNum.length != 0 && athDesc.UploadFileNumCheck==2) {

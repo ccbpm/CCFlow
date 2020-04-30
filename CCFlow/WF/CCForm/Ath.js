@@ -54,7 +54,7 @@ function Del(fk_ath, pkVal, delPKVal) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddPara("DelPKVal", delPKVal);
     var data = handler.DoMethodReturnString("AttachmentUpload_Del");
-
+    numOfAths--;
     window.location.href = window.location.href;
 }
 

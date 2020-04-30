@@ -4987,7 +4987,6 @@ namespace BP.WF
             #endregion 处理流程表数据
 
             #region 处理OID 插入重复的问题 Sys_GroupField, Sys_MapAttr.
-            //@sly这个 region的代码发生了变化，忘记了变化那里了，你看看吧.
             DataTable mydtGF = ds.Tables["Sys_GroupField"];
             DataTable myDTAttr = ds.Tables["Sys_MapAttr"];
             DataTable myDTAth = ds.Tables["Sys_FrmAttachment"];

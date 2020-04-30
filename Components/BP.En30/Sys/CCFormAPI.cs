@@ -388,12 +388,14 @@ namespace BP.Sys
             //检查是否可以创建字段? 
             MapData md = new MapData(frmID);
             md.CheckPTableSaveModel(field);
-
+            
             MapAttr ma = new MapAttr();
             ma.FK_MapData = frmID;
             ma.KeyOfEn = field;
             ma.Name = fieldDesc;
             ma.MyDataType = mydataType;
+            if (mydataType==7)
+                 ma.Format = 1;  
             ma.X = x;
             ma.Y = y;
 

@@ -108,7 +108,7 @@ namespace BP.Port
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
                 map.AddTBString(StationTypeAttr.OrgNo, null, "组织机构编号", true, false, 0, 50, 20);
 
-                //@sly
+                
                 if (BP.Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
                     map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
@@ -158,7 +158,7 @@ namespace BP.Port
             if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
                 return base.RetrieveAll();
 
-            //按照orgNo查询. @sly
+            //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
 

@@ -1006,21 +1006,41 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
         /// <returns>返回草稿数据集合,列信息. OID=工作ID,Title=标题,RDT=记录日期,FK_Flow=流程编号,FID=流程ID, FK_Node=节点ID</returns>
-        public static DataTable DB_GenerDraftDataTable(string flowNo = null)
+        public static DataTable DB_GenerDraftDataTable(string flowNo = null, string domain = null)
         {
             /*获取数据.*/
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             BP.DA.Paras ps = new BP.DA.Paras();
-            if (flowNo == null)
+            if (DataType.IsNullOrEmpty(domain) == true)
             {
-                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
-                ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                if (flowNo == null)
+                {
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
+                    ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                }
+                else
+                {
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
+                    ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
+                    ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                }
+
             }
             else
             {
-                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
-                ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
-                ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                if (flowNo == null)
+                {
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND Domain=" + dbStr + "Domain ORDER BY RDT";
+                    ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                    ps.Add(GenerWorkFlowAttr.Domain, domain);
+                }
+                else
+                {
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow AND Domain=" + dbStr + "Domain ORDER BY RDT";
+                    ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
+                    ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
+                    ps.Add(GenerWorkFlowAttr.Domain, domain);
+                }
             }
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);

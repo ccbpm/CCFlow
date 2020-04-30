@@ -466,9 +466,9 @@ function newFlow() {
             }
         }
 
-        var html = $("#ShowMsg").html();
-        $("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
-        $("#ShowMsg").css({ "width": "320px" });
+        //var html = $("#ShowMsg").html();
+        //$("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
+        //$("#ShowMsg").css({ "width": "320px" });
         $(".mymask").show();
 
         newFlowInfo.FlowSort = flowSort;
@@ -478,8 +478,8 @@ function newFlow() {
         var data = handler.DoMethodReturnString("Defualt_NewFlow");
 
         $(".mymask").hide();
-        $("#ShowMsg").html(html);
-        $("#ShowMsg").css({ "width": "32px" });
+        //$("#ShowMsg").html(html);
+        //$("#ShowMsg").css({ "width": "32px" });
         if (data.indexOf('err@') == 0) {
             alert(data);
             return;
@@ -1261,14 +1261,14 @@ function CopyFrm() {
         alert("表单的名称已经存在，不能重复使用防止不能区分表单");
         return;
     }
-   
+    $(".mymask").show();
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
     handler.AddPara("FromFrmID", node.id);
     handler.AddPara("ToFrmID", frmID)
     handler.AddPara("ToFrmName", frmName)
     var data = handler.DoMethodReturnString("DoCopyFrm", frmID, frmName);
-
+    $(".mymask").hide();
     if (data.indexOf('err@') != -1) {
         alert(data);
         return;

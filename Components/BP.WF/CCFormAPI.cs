@@ -971,12 +971,17 @@ namespace BP.WF
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
 
+
                 //处理它的默认值.
                 if (attr.DefValReal.Contains("@") == false)
                     continue;
 
                 foreach (DataRow dr in dtDtl.Rows)
-                    dr[attr.KeyOfEn] = attr.DefVal;
+                {
+                    if(dr[attr.KeyOfEn] == null || DataType.IsNullOrEmpty(dr[attr.KeyOfEn].ToString())==true)
+                        dr[attr.KeyOfEn] = attr.DefVal;
+                }
+                    
             }
 
             dtDtl.TableName = "DBDtl"; //修改明细表的名称.

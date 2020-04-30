@@ -38,11 +38,6 @@
         //初始化页面函数.....
         $(function () {
 
-            var err = GetQueryString("Err");
-            if (err != null)
-                alert(err);
-             
-
             if (! +[1,]) {
                 //  alert("这是ie浏览器，您只能使用sliverlight版本浏览器。");
                 // window.location.href = '../XAP/Designer.htm';
@@ -113,7 +108,7 @@
                     return;
                 }
             }
-            debugger;
+
             handler.AddPara("TB_No", userNo);
             handler.AddPara("TB_PW", pass);
 

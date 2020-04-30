@@ -65,6 +65,9 @@
        {
            height:34px;
        }
+        .fixed-table-body{
+            overflow-y:hidden;
+        }
     </style>
     <script type="text/javascript" language="javascript">
         //扩展设置信息
@@ -291,7 +294,7 @@
         }
     </script>
 </head>
-<body>
+<body style="">
     <form id="cc">
     <table style="border: 0px; width: 99%;table-layout: fixed;">
         <tr>
@@ -306,7 +309,7 @@
         </tr>
         <tr>
             <td style="border: 1px #FF8000 solid;">
-                <div id="tableContent" style="overflow:auto;">
+                <div id="tableContent" style="overflow:hidden;">
                     <div>
                         <table class="table" id='jsonDataTable'></table>
                     </div>

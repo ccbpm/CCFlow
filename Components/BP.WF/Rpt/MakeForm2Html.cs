@@ -121,7 +121,7 @@ namespace BP.WF
             FrmLinks links = mapData.FrmLinks;
             foreach (FrmLink link in links)
             {
-                string url = link.URL;
+                string url = link.URLExt;
                 if (url.Contains("@"))
                 {
                     foreach (MapAttr attr in mapAttrs)

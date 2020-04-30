@@ -1465,7 +1465,7 @@ namespace BP.Sys
 
                 map.AddTBString(MapAttrAttr.Name, null, "描述", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 400, 20);
-                map.AddTBInt(MapAttrAttr.DefValType, 0, "默认值类型", true, false);
+                map.AddTBInt(MapAttrAttr.DefValType, 1, "默认值类型", true, false);
 
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
                 map.AddTBInt(MapAttrAttr.MyDataType, 1, "数据类型", true, false);

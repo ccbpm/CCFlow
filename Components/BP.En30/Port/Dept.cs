@@ -18,6 +18,7 @@ namespace BP.Port
         public const string ParentNo = "ParentNo";
         public const string Idx = "Idx";
         public const string OrgNo = "OrgNo";
+        public const string Leader = "Leader";
     }
     /// <summary>
     /// 部门
@@ -107,6 +108,7 @@ namespace BP.Port
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
                 map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 30);
+                map.AddTBString(DeptAttr.Leader, null, "部门领导", true, true, 0, 50, 30);
 
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
 

@@ -939,6 +939,49 @@ namespace BP.WF.HttpHandler
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
                 string strs = objs.ToMsgOfHtml();
                 strs = strs.Replace("@", "<br>@");
+                #region 处理发送后转向.
+                //当前节点.
+                Node currNode = new Node(this.FK_Node);
+                /*处理转向问题.*/
+                switch (currNode.HisTurnToDeal)
+                {
+                    case TurnToDeal.SpecUrl:
+                        string myurl = currNode.TurnToDealDoc.Clone().ToString();
+                        if (myurl.Contains("?") == false)
+                            myurl += "?1=1";
+                        Attrs myattrs = currNode.HisWork.EnMap.Attrs;
+                        Work hisWK = currNode.HisWork;
+                        foreach (Attr attr in myattrs)
+                        {
+                            if (myurl.Contains("@") == false)
+                                break;
+                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
+                        }
+                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                        if (myurl.Contains("@"))
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", currNode.Name + "在" + currNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currNode.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
+                        }
+
+                        if (myurl.Contains("PWorkID") == false)
+                            myurl += "&PWorkID=" + this.WorkID;
+
+                        myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        return "TurnUrl@" + myurl;
+                    case TurnToDeal.TurnToByCond:
+                       
+                        return strs;
+                    default:
+                        strs = strs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        strs = strs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        strs = strs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                        return strs;
+                }
+                #endregion
                 return strs;
             }
             catch (Exception ex)

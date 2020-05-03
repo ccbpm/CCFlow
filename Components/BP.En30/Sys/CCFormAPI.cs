@@ -395,7 +395,7 @@ namespace BP.Sys
             ma.Name = fieldDesc;
             ma.MyDataType = mydataType;
             if (mydataType==7)
-                 ma.Format = 1;  
+                 ma.IsSupperText = 1;  
             ma.X = x;
             ma.Y = y;
 

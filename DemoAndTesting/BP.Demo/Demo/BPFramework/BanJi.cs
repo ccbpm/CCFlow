@@ -16,12 +16,17 @@ namespace BP.Demo.BPFramework
         /// </summary>
         public const string BZR = "BZR";
         public const string Tel = "Tel";
+        /// <summary>
+        /// 位置
+        /// </summary>
+        public const string WZ = "WZ";
 
-	}
-	/// <summary>
+
+    }
+    /// <summary>
     /// 班级
-	/// </summary>
-	public class BanJi :BP.En.EntityNoName
+    /// </summary>
+    public class BanJi :BP.En.EntityNoName
 	{	
 		#region 基本属性
         /// <summary>
@@ -96,10 +101,12 @@ namespace BP.Demo.BPFramework
 				map.AddTBString(BanJiAttr.Name,null,"名称",true,false,0,50,200);
                 map.AddTBString(BanJiAttr.BZR, null, "班主任", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.Tel, null, "班主任电话", true, false, 0, 50, 200);
+                map.AddTBString(BanJiAttr.WZ, null, "位置", true, false, 0, 50, 200);
 
-				#endregion
 
-				this._enMap=map;
+                #endregion
+
+                this._enMap=map;
 				return this._enMap;
 			}
 		}

@@ -75,8 +75,6 @@ namespace BP.Demo.FlowEvent
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
             string nodeName = this.HisNode.Name; // 当前节点名称.
 
-           
-
             switch (nodeID)
             {
                 case 101:  //当是第1个节点的时候....

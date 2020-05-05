@@ -221,7 +221,6 @@ namespace BP.Demo.BPFramework
         }
         #endregion
 
-
         /// <summary>
         /// 重写基类的方法.
         /// </summary>

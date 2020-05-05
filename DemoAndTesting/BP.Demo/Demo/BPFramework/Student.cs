@@ -293,8 +293,8 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
                 map.AddTBInt(StudentAttr.Age, 18, "年龄", true, false);
 
-                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
-                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
+                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 100);
+                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 100);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
 
                 //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
@@ -305,7 +305,7 @@ namespace BP.Demo.BPFramework
                 map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
 
                 //外键字段.
-                //map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
+                map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
                // map.AddTBString(StudentAttr.FK_BanJi, null, "班级", true, false, 0, 200, 100, true);
 
                 //增加checkbox属性.
@@ -337,19 +337,20 @@ namespace BP.Demo.BPFramework
                 //②如果Age1无值，Age2有值，则查询小于等于Age2的结果集
                 //③如果Age1有值，Age2有值，则查询大于等于Age1小于等于Age2的结果集
               
+                //数值范围查询
                 map.SearchFieldsOfNum = "@年龄=Age";
+
+                //日期查询.
                 map.DTSearchKey = "RegDate";
                 map.DTSearchLable = "注册日期";
                 map.DTSearchWay = Sys.DTSearchWay.ByDate; 
 
 
-
                 //设置Search.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
-                map.AddSearchAttr(StudentAttr.XB);
+                map.AddSearchAttr(StudentAttr.XB,4000);
                 map.AddSearchAttr(StudentAttr.ZZMM);
 
                 // map.AddSearchAttr(StudentAttr.FK_BanJi);
-
                 //隐藏条件的查询
                 // map.AddHidden(StudentAttr.ZZMM, " = ", "1");
 
@@ -384,7 +385,7 @@ namespace BP.Demo.BPFramework
 
                 //不带有参数的方法.
                 rm = new RefMethod();
-                rm.Title = "发起xx流程";
+                rm.Title = "发起劝退流程";
                 rm.ClassMethodName = this.ToString() + ".DoStartFlow";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsCanBatch = false; //是否可以批处理？
@@ -471,7 +472,7 @@ namespace BP.Demo.BPFramework
         }
         public string DoStartFlow()
         {
-            return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept=" + this.No + "&StuName=" + this.Name;
+            return "/WF/MyFlow.htm?FK_Flow=045&XH=" + this.No + "&XM=" + this.Name;
         }
         /// <summary>
         /// 带有参数的方法:缴纳班费
@@ -480,8 +481,6 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
-
-
             return "学号:" + this.No + ",姓名:" + this.Name + ",缴纳了:" + jine + "元,说明:" + note;
         }
         /// <summary>
@@ -491,11 +490,8 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
-        //    DBAccess.RunSQL("DELETE RR");
-
-      //   DataTable DT=    DBAccess.RunSQLReturnTable("elect * from ");
-
-
+            //    DBAccess.RunSQL("DELETE RR");
+            //   DataTable DT=    DBAccess.RunSQLReturnTable("elect * from ");
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>

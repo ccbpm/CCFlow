@@ -68,7 +68,7 @@ namespace BP.Demo
                 lk.FK_MapData = "ND" + nd.NodeID;
                 lk.Text = "办事指南";
                 lk.Target = "_blank";
-                lk.URL = "/App/GovService/FlowHelp.aspx?FK_Flow=" + nd.FK_Flow;
+                lk.URLExt = "/App/GovService/FlowHelp.htm?FK_Flow=" + nd.FK_Flow;
                 lk.Insert();
             }
             return "执行成功...";

@@ -895,8 +895,6 @@ namespace BP.WF.Data
 
             foreach (Flow fl in fls)
             {
-
-
                 string sql = "SELECT OID FROM " + fl.PTable + " WHERE BillNo IS NULL AND OID="+this.WorkID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 

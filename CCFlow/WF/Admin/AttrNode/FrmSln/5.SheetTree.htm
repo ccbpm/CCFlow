@@ -54,8 +54,8 @@
         function BindFrms() {
             var url = "../../Sln/BindFrmsDtl.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow + "&DoType=SelectedFrm";
             //获取屏幕的长宽
-            var W = document.body.clientWidth - 80;
-            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 80;
+            var W = document.body.clientWidth - 280;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 250;
             OpenEasyUiDialogExt(url, '绑定表单树', W, H, false, true);
         }
 
@@ -65,8 +65,8 @@
 
         //设置表单字段控件权限
         function BindAttrs() {
-            var W = document.body.clientWidth - 160;
-            var H = document.body.clientHeight - 400;
+            var W = document.body.clientWidth - 200;
+            var H = document.body.clientHeight - 800;
             var url = "../../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
             OpenEasyUiDialogExt(url, '绑定列表', W, H, false, true);
         }
@@ -90,7 +90,7 @@
 
         function SetNodeNote() {
             var W = document.body.clientWidth - 400;
-            var H = document.body.clientHeight - 120;
+            var H = document.body.clientHeight - 820;
             var url = "NodeNote.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
             OpenEasyUiDialogExt(url, '设置摘要字段', W, H, false, true);
         }

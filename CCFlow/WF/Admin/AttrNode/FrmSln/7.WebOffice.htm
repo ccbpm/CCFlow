@@ -52,12 +52,12 @@
         //设置表单字段控件权限
         function BindAttrs() {
             var url = "../../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
-            OpenEasyUiDialogExt(url, '绑定列表', 800, 500, false);
+            OpenEasyUiDialogExt(url, '绑定列表', 800, 450, false);
         }
 
         function BindAttrsBtn() {
             var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.BtnLabExtWebOffice&PKVal=" + nodeID + "&FK_Flow=" + fk_flow;
-            OpenEasyUiDialogExt(url, '公共属性控件', 800, 600, false);
+            OpenEasyUiDialogExt(url, '公共属性控件', 800, 450, false);
         }
 
         function Save() {

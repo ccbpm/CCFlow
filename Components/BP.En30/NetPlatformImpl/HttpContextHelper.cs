@@ -282,6 +282,10 @@ namespace BP.Web
         /// <returns></returns>
         public static T SessionGet<T>(string key)
         {
+            //lims出现
+            if (Session == null)
+                return default(T);
+            
             return (T)Session[key];
         }
 

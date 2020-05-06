@@ -962,7 +962,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20200407;
+        public static int Ver = 20200411;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -3177,28 +3177,28 @@ namespace BP.WF
         {
             get
             {
-                return SystemConfig.GetValByKey("TemplateFTPHost", "42.121.236.171");
+                return SystemConfig.GetValByKey("TemplateFTPHost", "116.239.32.14");
             }
         }
         public static int TemplateFTPPort
         {
             get
             {
-                return SystemConfig.GetValByKeyInt("TemplateFTPPort", 21);
+                return SystemConfig.GetValByKeyInt("TemplateFTPPort", 9997);
             }
         }
         public static string TemplateFTPUser
         {
             get
             {
-                return SystemConfig.GetValByKey("TemplateFTPUser", "ccbpm");
+                return SystemConfig.GetValByKey("TemplateFTPUser", "oa");
             }
         }
         public static string TemplateFTPPassword
         {
             get
             {
-                return SystemConfig.GetValByKey("TemplateFTPPassword", "ccbpmlover");
+                return SystemConfig.GetValByKey("TemplateFTPPassword", "Jszx1234");
             }
         }
         #endregion 流程模版的ftp服务器配置.
@@ -4799,7 +4799,7 @@ namespace BP.WF
                 if (string.IsNullOrEmpty(value) == true)
                     return;
                 Paras p = new Paras();
-                p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "ver WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 p.Add("v", value);
                 p.AddFK_Emp();
 

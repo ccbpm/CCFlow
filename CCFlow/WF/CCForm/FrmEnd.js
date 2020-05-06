@@ -1173,8 +1173,11 @@ function SetCtrlVal(key, value) {
         ctrl.val(value);
         if (parseInt(value) <= 0)
             ctrl.attr('checked', false);
-        else
+        else {
             ctrl.attr('checked', true);
+            document.getElementById("CB_" + key).checked = true;
+        }
+           
         return;
     }
     if (ctrl.length > 1) {

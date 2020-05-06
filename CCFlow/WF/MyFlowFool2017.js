@@ -1408,7 +1408,7 @@ function SetCtrlEnable(key) {
     ctrl = $("#CB_" + key);
     if (ctrl.length > 0) {
         ctrl.removeAttr("disabled");
-        ctrl.addClass("form-control");
+        //ctrl.addClass("form-control");
     }
 
     ctr = document.getElementsByName('RB_' + key);

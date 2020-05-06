@@ -2247,7 +2247,17 @@ function Save() {
                         dataType = 4;
                     if (dataType == "SignCheck") {
                         dataType = 1;
-                        mapAttr.UIContralType = 14;
+                        mapAttr.UIContralType = 14; //签批组件
+                    }
+
+                    if (dataType == "FlowBBS") {
+                        dataType = 1;
+                        mapAttr.UIContralType = 15; //评论组件
+                    }
+
+                    if (dataType == "DocWord") {
+                        dataType = 1;
+                        mapAttr.UIContralType = 17;//公文字号
                     }
 
                     mapAttr.MyDataType = dataType;

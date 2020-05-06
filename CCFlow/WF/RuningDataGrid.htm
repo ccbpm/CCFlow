@@ -30,15 +30,16 @@
     <link href=" ../Portal20/static/fonts/font-awesome.css" rel="stylesheet" />
     <link href=" ../Portal20/static/select2/4.0/select2.css" rel="stylesheet" />
     <style type="text/css">
-        *{
-            list-style:none;
+        * {
+            list-style: none;
         }
+
         .wrapper-dropdown-2 {
             /* Size and position */
             position: relative; /* Enable absolute positionning for children and pseudo elements */
             width: 80px;
             margin: 0 auto;
-            margin-left:0px;
+            margin-left: 0px;
             padding: 10px 15px;
             /* Styles */
             background: #fff;
@@ -63,6 +64,7 @@
             .wrapper-dropdown-2 .dropdown {
                 /* Size & position */
                 position: absolute;
+                z-index: 100;
                 top: 100%;
                 left: -5px;
                 right: 0px;
@@ -80,7 +82,7 @@
             }
 
                 .wrapper-dropdown-2 .dropdown li a {
-                    list-style:none;
+                    list-style: none;
                     display: block;
                     text-decoration: none;
                     color: #333;
@@ -111,7 +113,7 @@
 
                 .wrapper-dropdown-2 .dropdown li:hover a {
                     color: grey;
-                    list-style:none;
+                    list-style: none;
                 }
 
             /* Active state */
@@ -121,7 +123,7 @@
             .wrapper-dropdown-2.active .dropdown {
                 opacity: 1;
                 pointer-events: auto;
-                list-style:none;
+                list-style: none;
             }
 
         .pagination {
@@ -585,7 +587,7 @@
                     listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
                     listbox += "<td>";
                     listbox += " <div class='wrapper-demo'>"
-                    listbox += "<div id='dd' class='wrapper-dropdown-2' tabindex='1'>操作";
+                    listbox += "<div id='dd"+i+"' class='wrapper-dropdown-2' tabindex='" + i + "'>操作";
                     listbox += "<ul class='dropdown' style='list-style:none;'>";
                     //listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
                     listbox += "<li style='list-style:none;'><a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a></li>";
@@ -626,8 +628,11 @@
         }
 
         $(function () {
-
-            var dd = new DropDown($('#dd'));
+            $(".wrapper-dropdown-2").on("mouseover", function (e) {
+                var v_id = $(e.target).attr("id");
+                var dd = new DropDown($("#"+v_id+""));
+            });
+            
 
             $(document).click(function () {
                 // all dropdowns

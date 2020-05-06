@@ -404,6 +404,8 @@ function SaveWorkCheck() {
 
     if (pageData.IsReadonly == true)
         return;
+    if (pageData.WorkID == null || pageData.WorkID == undefined || pageData.WorkID == 0)
+        return;
 
     var param = {
         FK_Flow: pageData.FK_Flow,

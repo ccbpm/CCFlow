@@ -283,6 +283,13 @@
                 return;
             }
 
+            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
+                var url = data;
+                url = url.replace('TurnUrl@', '');
+                parent.window.location.href = url;
+                return;
+            }
+
             //发送成功处理.
             $(".Msg").css("color", "");
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");

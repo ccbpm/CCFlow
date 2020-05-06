@@ -63,14 +63,7 @@
             data = JSON.parse(data);
 
             var docs = data.OperatorValue;
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-            docs = docs.replace("~", "'");
-
+            docs = docs.replace(/~/g, "'");
             document.getElementById("TB_SQL").value = docs;
             document.getElementById("TB_Note").value = data.Note;
             editor.setValue(document.getElementById("TB_SQL").value);

@@ -2,6 +2,10 @@
 //阅读并关闭.
 function ReadAndClose()
 {
+    //抄送关闭前事件
+    if (typeof beforeCCClose != 'undefined' && beforeCCClose instanceof Function)
+        if (beforeCCClose() == false)
+            return false;
     window.close();
 }
 

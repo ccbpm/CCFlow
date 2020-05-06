@@ -130,4 +130,8 @@ DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_0','由连接线条件控制','CondModel',0,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_1','按照用户选择计算','CondModel',1,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_2','发送按钮旁下拉框选择','CondModel',2,'CH');
+
+
+--2020.04.30 超链接数据保存
+UPDATE Sys_FrmLink SET URLExt= URL Where URLExt IS NULL OR URLExt='';
  

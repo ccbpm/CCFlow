@@ -64,3 +64,10 @@ function beforeReturn() {
 function beforeDelete() {
     return true;
 }
+
+
+//抄送阅读页面增加关闭前事件
+function beforeCCClose() {
+    return true;
+}
+

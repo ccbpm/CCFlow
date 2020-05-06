@@ -639,7 +639,7 @@ function figure_Template_RB(frmRb) {
 //初始化超链接
 function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
-    var url = frmLin.URL;
+    var url = frmLin.URLExt;
     $.each(flowData.Sys_MapAttr, function (i, obj) {
         if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换

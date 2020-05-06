@@ -1476,6 +1476,7 @@ namespace BP.WF
             wl.FK_NodeText = nd.Name;
             // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
+            wl.FK_DeptT = emp.FK_DeptText;
 
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);

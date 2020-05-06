@@ -317,8 +317,10 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                    WF.Port.Emp myEmp = new Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
+                    wlN.FK_Dept = myEmp.FK_Dept;
+                    wlN.FK_DeptT = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -805,8 +807,10 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                    WF.Port.Emp myEmp = new Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
+                    wlN.FK_Dept = myEmp.FK_Dept;
+                    wlN.FK_DeptT = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }

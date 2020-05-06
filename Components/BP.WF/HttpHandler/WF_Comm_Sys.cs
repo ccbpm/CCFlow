@@ -803,7 +803,7 @@ namespace BP.WF.HttpHandler
             //存在文件则删除
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
-
+            
             //files[0].SaveAs(savePath);
             HttpContextHelper.UploadFile(files[0], savePath);
             return "脚本" + fileName + "导入成功";

@@ -1177,9 +1177,9 @@ namespace BP.WF.HttpHandler
             //节点与表单的权限控制.
             FrmNode fn = null;
 
-            //是否启用装载填充？ @袁丽娜,
+            //是否启用装载填充？
             bool isLoadData = true;
-            //定义节点变量. @袁丽娜 
+            //定义节点变量. 
             Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {

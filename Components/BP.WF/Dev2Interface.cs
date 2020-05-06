@@ -6286,6 +6286,8 @@ namespace BP.WF
                 gwl.IsPassInt = 0;
                 gwl.IsRead = false;
                 gwl.WhoExeIt = 0;
+                gwl.FK_Dept = item.FK_Dept;
+                gwl.FK_DeptT = item.FK_DeptText;
                 try
                 {
                     gwl.Insert();

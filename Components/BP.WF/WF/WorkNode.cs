@@ -768,6 +768,7 @@ namespace BP.WF
 
                     wl.FK_EmpText = emp.Name;
                     wl.FK_Dept = emp.FK_Dept;
+                    wl.FK_DeptT = emp.FK_DeptText;
                     wl.Sender = WebUser.No + "," + WebUser.Name;
                     //wl.WarningHour = town.HisNode.WarningHour;
                     if (town.HisNode.HisCHWay == CHWay.None)
@@ -2411,7 +2412,7 @@ namespace BP.WF
 
             // 初试化他们的工作人员．
             current_gwls = this.Func_GenerWorkerLists(town);
-            if (town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && town.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && current_gwls.Count > 1)
+            if (town.HisNode.HuiQianRole == HuiQianRole.TeamupGroupLeader &&  town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && town.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && current_gwls.Count > 1)
             {
                 throw new Exception(BP.WF.Glo.multilingual("@接收人出错! 详情:{0}.", "WorkNode", "error_sendToemps_data", "@节点" + town.HisNode.NodeID + "是组长会签模式，接受人只能选择一人"));
 
@@ -2762,6 +2763,8 @@ namespace BP.WF
                     wl.IsRead = true;
                     wl.FK_Node = this.HisNode.NodeID;
                     wl.FK_NodeText = this.HisNode.Name;
+                    wl.FK_Dept = WebUser.FK_Dept;
+                    wl.FK_DeptT = WebUser.FK_DeptName;
                     if (wl.IsExits == false)
                         wl.Insert();
                 }
@@ -3394,7 +3397,8 @@ namespace BP.WF
                     flGwl.FK_EmpText = WebUser.Name;
                     flGwl.FK_Node = this.HisNode.NodeID;
                     flGwl.Sender = WebUser.No + "," + WebUser.Name;
-                    // flGwl.GroupMark = "";
+                    flGwl.FK_Dept = WebUser.FK_Dept;
+                    flGwl.FK_DeptT = WebUser.FK_DeptName;
                     flGwl.IsPassInt = -2; // -2; //标志该节点是干流程人员处理的节点.
                     //  wl.FID = 0; //如果是干流，
                     flGwl.Insert();
@@ -8654,6 +8658,7 @@ namespace BP.WF
             wl.FK_EmpText = this.ExecerName;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.FK_Dept = this.ExecerDeptNo;
+            wl.FK_DeptT = this.ExecerDeptName;
             // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = "无";
             wl.DTOfWarning = DataType.CurrentDataTimess;

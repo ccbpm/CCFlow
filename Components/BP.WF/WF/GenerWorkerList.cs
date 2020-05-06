@@ -371,6 +371,7 @@ namespace BP.WF
         {
             get
             {
+
                 return this.GetValStrByKey(GenerWorkerListAttr.FK_Dept);
             }
             set

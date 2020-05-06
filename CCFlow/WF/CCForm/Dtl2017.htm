@@ -1119,7 +1119,7 @@
                     }
                 });
                 expVal = max;
-                max = formatNumber(max, 2, ',');
+                max = formatNumber(max, 0, ',');
                 template.val(max);
             } else if (exp == "Min") {	// 最小
                 var min = null;
@@ -1136,7 +1136,7 @@
                     }
                 });
                 expVal = min;
-                min = formatNumber(min, 2, ',');
+                min = formatNumber(min, 0, ',');
                 template.val(min);
             }
 

@@ -628,12 +628,15 @@
         }
 
         $(function () {
-            $(".wrapper-dropdown-2").on("mouseover", function (e) {
+            $(".wrapper-dropdown-2").on("mousedown", function (e) {
                 var v_id = $(e.target).attr("id");
                 var dd = new DropDown($("#"+v_id+""));
             });
             
-
+            $(".wrapper-dropdown-2").click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-2').removeClass('active');
+            });
             $(document).click(function () {
                 // all dropdowns
                 $('.wrapper-dropdown-2').removeClass('active');

@@ -77,10 +77,10 @@
 
                     var tree = $('#tree');
                     if (node.state.open) {
-                        //处于展开状态则折叠  
+                        //处于展开状态则折叠
                         tree.tree('collapseNode', node.nodeId);
                     } else {
-                        //展开  
+                        //展开
                         tree.tree('expandNode', node.nodeId);
                     }
                 }
@@ -90,6 +90,27 @@
         //树形结构转换
         var treeJson = [];
         function createJsonToTree(jsonArray, parentNo) {
+            if (parentNo != "0") {
+                //增加当前用户所在的部门
+                var en = new Entity("BP.WF.Port.Dept", parentNo);
+                var checked = false;
+                var selectedNodes = window.selectedNodes;
+                var sel = $.grep(selectedNodes, function (obj) {
+                    return en.No == obj.No;
+                });
+
+                if (sel.length > 0) {
+                    checked = true;
+                }
+                treeJson.push({
+                    "id": en.No,
+                    "text": en.Name,
+                    "children": creatTreeChildern(jsonArray, en.No),
+                    "checked": checked,
+                    "state": 'closed'
+                });
+            }
+
             for (var i = 0; i < jsonArray.length; i++) {
                 var data = jsonArray[i];
                 if (data.ParentNo == parentNo) {

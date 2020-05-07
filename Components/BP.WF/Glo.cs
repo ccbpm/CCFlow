@@ -4913,7 +4913,7 @@ namespace BP.WF
                 if (string.IsNullOrEmpty(value) == true)
                     return;
                 Paras p = new Paras();
-                p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "ver WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 p.Add("v", value);
                 p.AddFK_Emp();
 

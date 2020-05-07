@@ -1713,7 +1713,7 @@ namespace BP.WF
 
             //取出抄送人列表
             string ccers = rptGE.GetValStrByKey("SysCCEmps");
-            if (DataType.IsNullOrEmpty(ccers) == false)
+            if (DataType.IsNullOrEmpty(ccers) == true)
                 return "";
 
             string[] cclist = ccers.Split('|');

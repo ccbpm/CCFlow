@@ -957,12 +957,118 @@ namespace BP.WF
 
             #endregion 为了适应云服务的要求.
         }
+        /// <summary>
+        /// 检查GPM菜单.
+        /// </summary>
+        public static void CheckGPM()
+        {
+            ArrayList al = null;
+            string info = "BP.En.Entity";
+            al = BP.En.ClassFactory.GetObjects(info);
+
+            #region 1, 修复表
+            foreach (Object obj in al)
+            {
+                Entity en = null;
+                en = obj as Entity;
+                if (en == null)
+                    continue;
+
+                if (en.ToString() == null)
+                    continue;
+
+                if (en.ToString().Contains("BP.Port."))
+                    continue;
+
+                if (en.ToString().Contains("BP.GPM.") == false)
+                    continue;
+
+                //if (en.ToString().Contains("BP.GPM."))
+                //    continue;
+                //if (en.ToString().Contains("BP.Demo."))
+                //    continue;
+
+                string table = null;
+                try
+                {
+                    table = en.EnMap.PhysicsTable;
+                    if (table == null)
+                        continue;
+                    if (en.EnMap.PhysicsTable.ToLower().Contains("demo_") == true)
+                        continue;
+                }
+                catch
+                {
+                    continue;
+                }
+
+                switch (table)
+                {
+                    case "WF_EmpWorks":
+                    case "WF_GenerEmpWorkDtls":
+                    case "WF_GenerEmpWorks":
+                        continue;
+                    case "Sys_Enum":
+                        en.CheckPhysicsTable();
+                        break;
+                    default:
+                        en.CheckPhysicsTable();
+                        break;
+                }
+
+                en.PKVal = "123";
+                try
+                {
+                    en.RetrieveFromDBSources();
+                }
+                catch (Exception ex)
+                {
+                    Log.DebugWriteWarning(ex.Message);
+                    en.CheckPhysicsTable();
+                }
+            }
+            #endregion 修复
+
+            //删除视图.
+            if (DBAccess.IsExitsObject("V_GPM_EmpGroup") == true)
+                DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
+
+            if (DBAccess.IsExitsObject("V_GPM_EmpGroupMenu") == true)
+                DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroupMenu");
+
+            if (DBAccess.IsExitsObject("V_GPM_EmpMenu") == true)
+                DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu");
+
+            if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu") == true)
+                DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
+
+            #region 6, 创建视图。
+            string sqlscript = "";
+            //MSSQL_GPM_VIEW 语法有所区别
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
+
+            //MySQL 语法有所区别
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
+
+            //Oracle 语法有所区别
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
+
+            if (DataType.IsNullOrEmpty(sqlscript) == true)
+                throw new Exception("err@没有判断的数据库类型:"+ BP.Sys.SystemConfig.AppCenterDBType.ToString());
+
+            BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
+            #endregion 创建视图
+
+        }
 
         #region 执行安装/升级.
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20200411;
+        public static int Ver = 20200412;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -971,6 +1077,9 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+
+            //检查BPM.
+            CheckGPM();
 
             /*
              * 升级版本记录:
@@ -998,6 +1107,11 @@ namespace BP.WF
 
 
             #region 升级优化集团版的应用. 2020.04.03
+
+            //检查frmTrack.
+            BP.Frm.Track tk = new Frm.Track();
+            tk.CheckPhysicsTable();
+
             BP.GPM.DeptEmpStation des = new BP.GPM.DeptEmpStation();
             des.CheckPhysicsTable();
 

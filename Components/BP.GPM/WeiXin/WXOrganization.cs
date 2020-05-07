@@ -1,13 +1,11 @@
 ﻿using BP.En;
+using BP.GPM.DTalk;
+using BP.GPM.WeiXin;
 using BP.Tools;
-using BP.WF.WeiXin;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BP.WF.DTS
 {

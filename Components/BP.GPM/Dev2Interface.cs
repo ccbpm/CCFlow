@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Data;
-using System.Text;
 using BP.DA;
 using BP.En;
 using BP.Web;
 using BP.Sys;
-using BP.Port;
-using BP.WF;
 using BP.GPM.WeiXin;
-using BP.WF.Data;
 using BP.GPM.DTalk.DINGTalk;
 using BP.GPM.DTalk;
 using System.Collections;
+using BP.WF;
+using BP.WF.Data;
 
 namespace BP.GPM
 {

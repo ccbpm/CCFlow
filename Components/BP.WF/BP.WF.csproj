@@ -107,6 +107,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentFTP, Version=32.4.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentFTP.32.4.0\lib\net45\FluentFTP.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>

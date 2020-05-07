@@ -315,6 +315,10 @@ namespace BP.Sys
        /// 附件类型 0 普通附件 1 图片附件
        /// </summary>
         public const string FileType = "FileType";
+        /// <summary>
+        /// 移动端图片附件上传的方式
+        /// </summary>
+        public const string PicUploadType = "PicUploadType";
 
         /// <summary>
         /// 附件删除方式
@@ -1312,6 +1316,8 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否可见", false, false);
                 //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
                 map.AddTBInt(FrmAttachmentAttr.FileType, 0, "附件类型", false,false);
+                map.AddTBInt(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true);
+                map.AddTBInt(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true);
 
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);

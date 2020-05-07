@@ -931,17 +931,17 @@ namespace CCFlow.WF.CCForm
                 BP.WF.Flow fl = new BP.WF.Flow(flowNo);
 
 
-                string str = "WordFile";
-                if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
-                {
-                    /*如果没有此列，就自动创建此列.*/
-                    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+                //string str = "WordFile";
+                //if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
+                //{
+                //    /*如果没有此列，就自动创建此列.*/
+                //    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
 
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+                //    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
 
-                    BP.DA.DBAccess.RunSQL(sql);
-                }
+                //    BP.DA.DBAccess.RunSQL(sql);
+                //}
 
                 byte[] bytes = BP.DA.DBAccess.GetByteFromDB(fl.PTable, "OID", workId.ToString(), "WordFile");
 

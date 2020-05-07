@@ -5747,25 +5747,34 @@ namespace BP.WF
             ch.UseMinutes = ts.Minutes;//用时，分钟
             //int hour = ts.Hours;
             //ch.UseDays += ts.Hours / 8; //使用的天数.
+            if(DataType.IsNullOrEmpty(ch.SDT)==false && ch.SDT.Equals("无") == false)
+            {
+                // OverDays . 求出 逾期天 数.
+                DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
 
-            // OverDays . 求出 逾期天 数.
-            DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
-
-            TimeSpan myts = dtTo - sdtOfDT;
-            ch.OverDays = myts.Days; //逾期的天数.
-            ch.OverMinutes = myts.Minutes;//逾期的分钟数
-            if (sdtOfDT >= dtTo)
+                TimeSpan myts = dtTo - sdtOfDT;
+                ch.OverDays = myts.Days; //逾期的天数.
+                ch.OverMinutes = myts.Minutes;//逾期的分钟数
+                if (sdtOfDT >= dtTo)
+                {
+                    /* 正常完成 */
+                    ch.CHSta = CHSta.AnQi; //按期完成.
+                    ch.Points = 0;
+                }
+                else
+                {
+                    /*逾期完成.*/
+                    ch.CHSta = CHSta.YuQi; //逾期完成.
+                    ch.Points = float.Parse((ch.OverDays * nd.TCent).ToString("0.00"));
+                }
+            }
+            else
             {
                 /* 正常完成 */
                 ch.CHSta = CHSta.AnQi; //按期完成.
                 ch.Points = 0;
             }
-            else
-            {
-                /*逾期完成.*/
-                ch.CHSta = CHSta.YuQi; //逾期完成.
-                ch.Points = float.Parse((ch.OverDays * nd.TCent).ToString("0.00"));
-            }
+           
             #endregion 求计算属性.
 
             //执行保存.

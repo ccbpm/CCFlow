@@ -32,8 +32,11 @@ function GenerDevelopFrm(wn,fk_mapData) {
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
-        if (mapAttr.UIVisible == 0 && $("#TB_" + mapAttr.KeyOfEn).length != 0) {
+        if (mapAttr.UIVisible == 0 ) {
             $("#TB_" + mapAttr.KeyOfEn).hide();
+            $("#DDL_" + mapAttr.KeyOfEn).hide();
+            $("input[name=CB_" + mapAttr.KeyOfEn+"]").hide();
+            $("input[name=RB_" + mapAttr.KeyOfEn+"]").hide();
             continue;
         }
             

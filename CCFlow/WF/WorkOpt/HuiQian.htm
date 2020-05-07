@@ -156,9 +156,7 @@
 
                     if (GetPara(myGwl.AtPara, "HuiQianZhuChiRen") == gwl.FK_Emp)
                         continue;
-
-                } 
-                
+                }
             
                 var row = "";
                 row += "<tr>";
@@ -197,13 +195,13 @@
 
                 //当前是组长模式处理，并且是主持人
                 if (gwl.IsPass == 90 ) {
-                    row += "<td>主持人（自己）/未审批</td>";
+                    row += "<td><font color=green>主持人（自己）/未审批</font></td>";
                     row += "<td></td>";
                 }
 
                 //当前自己
                 if (gwl.IsPass == 99) {
-                    row += "<td>主持人（您自己）/未审批</td>";
+                    row += "<td>主持人/未审批</td>";
                     row += "<td></td>";
                 }
 

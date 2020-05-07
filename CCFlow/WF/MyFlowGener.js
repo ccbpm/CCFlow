@@ -2169,7 +2169,9 @@ function InitToolBar() {
 
 /* 打开公文表单 */
 function OpenOffice(isEdit) {
-    var url = "./WorkOpt/DocWord.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+    var url = "../DataUser/OverrideFiles/DocWord.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+    //var url = "./WorkOpt/DocWord.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+
     WinOpen(url);
     return;
 }
@@ -2281,7 +2283,8 @@ function initModal(modalType, toNode) {
             case "DocWord":
                 $('#modalHeader').text("公文");
                 SetPageSize(40, 80);
-                modalIframeSrc = "./WorkOpt/DocWord.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+               // modalIframeSrc = "./WorkOpt/DocWord.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                modalIframeSrc = "../DataUser/OverrideFiles/DocWord.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
                 break;
             case "askfor":
                 $('#modalHeader').text("加签");

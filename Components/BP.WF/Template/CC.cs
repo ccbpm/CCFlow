@@ -213,6 +213,35 @@ namespace BP.WF.Template
                     dt.Rows.Add(dr);
                 }
             }
+            /**按照表单字段抄送*/
+            if(this.CCIsAttr == true)
+            {
+                if (DataType.IsNullOrEmpty(this.CCFormAttr) == true)
+                    throw new Exception("抄送规则自动抄送选择按照表单字段抄送没有设置抄送人员字段");
+
+                string ccers = rpt.GetValStrByKey(this.CCFormAttr);
+                if (DataType.IsNullOrEmpty(ccers) == false)
+                {
+                    string[] emps = ccers.Split(',');
+                    foreach(string empNo in emps)
+                    {
+                        if (DataType.IsNullOrEmpty(empNo) == true)
+                            continue;
+                        Emp emp = new Emp();
+                        emp.No = empNo;
+                        if (emp.RetrieveFromDBSources() == 1)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["No"] = empNo;
+                            dr["Name"] = emp.Name;
+                            dt.Rows.Add(dr);
+                        }
+                        
+                    }
+                }
+                   
+
+            }
             //将dt中的重复数据过滤掉  
             DataView myDataView = new DataView(dt);
             //此处可加任意数据项组合  
@@ -377,7 +406,35 @@ namespace BP.WF.Template
                 this.SetValByKey(CCAttr.CCIsSQLs, value);
             }
         }
-        
+
+        /// <summary>
+        /// 是否按照表单字段抄送
+        /// </summary>
+        public bool CCIsAttr
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CCAttr.CCIsAttr);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCIsAttr, value);
+            }
+        }
+
+        public string CCFormAttr
+        {
+            get
+            {
+                return this.GetValStringByKey(CCAttr.CCFormAttr);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCFormAttr, value);
+            }
+        }
+
+
         #endregion
 
         #region 构造函数

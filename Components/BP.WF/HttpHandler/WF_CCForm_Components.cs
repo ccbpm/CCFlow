@@ -106,6 +106,13 @@ namespace BP.WF.HttpHandler
             sql = "UPDATE " + ptable + " SET DocWordLSH='" + lsh + "', DocWordYear='" + year + "' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);
 
+            //做个性化处理,为计算中心.
+            if (DBAccess.IsExitsObject("Gov_SendFileCopy") ==true)
+            {
+                string sql1 = "UPDATE gov_sendfilecopy set orgno=" + WebUser.OrgNo + ",orgname='" + WebUser.OrgName + "' where oid=" + this.WorkID;
+                DBAccess.RunSQL(sql1);
+            }
+
             //转成Json，返回出去.
             return BP.Tools.Json.ToJson(dt);
         }

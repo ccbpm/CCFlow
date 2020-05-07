@@ -25,7 +25,14 @@
  5. ccbpm提供了两套风格，您可以参考 /Portal/GPMMenus.js ， /Portal20/GPMMenus.js
  */
 function GPM_GenerMenumsDB() {
+
     var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+    // alert(appNo);
+    if (appNo == null) {
+        alert('没有配置appNo,或者没有引入config.js 。');
+        return;
+    }
+
     handler.AddPara("AppNo", appNo);
     var data = handler.DoMethodReturnJSON("GPM_DB_Menus"); //获得菜单.
     return data;
@@ -85,6 +92,6 @@ function GPM_AutoHidShowPageElement(appNo) {
             continue;
         ctl.show(); //让其显示出来.
     }
-    
+
 }
 

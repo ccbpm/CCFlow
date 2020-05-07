@@ -987,7 +987,6 @@ namespace CCFlow.WF.CCForm
                     bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
 
                     WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
-
                     File.Delete(fullFilePath);
                 }
 
@@ -1007,7 +1006,6 @@ namespace CCFlow.WF.CCForm
                     Data = null
                 };
             }
-
 
             return LitJson.JsonMapper.ToJson(msg);
         }

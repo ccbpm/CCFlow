@@ -70,6 +70,26 @@ function beforeDelete() {
 function beforeCCClose() {
     return true;
 }
+//抄送阅读页面增加关闭前事件
+function beforeCCClose() {
+    $("#TB_Msg").val("已阅");
+    alert($("#TB_Msg").val());
+    if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
+        alert("请填写评论内容!");
+        return;
+    }
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+    handler.AddUrlData();
+    handler.AddFormData();
+    var data = handler.DoMethodReturnString("FlowBBS_Save");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+
+    return true;
+}
 //广西计算中心打开公文的方式
 function openhtml() {
     var strUrl = "office.html";

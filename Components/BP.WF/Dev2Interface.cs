@@ -1070,7 +1070,7 @@ namespace BP.WF
 
         #region 我关注的流程
         /// <summary>
-        /// 获得我关注的流程列表 @sly
+        /// 获得我关注的流程列表
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="userNo">操作员编号</param>
@@ -8343,7 +8343,7 @@ namespace BP.WF
             list.PFlowNo = pFlowNo;
             list.PWorkID = pWorkID;
 
-            //@sly 增加两个属性 2020.04.30
+            
             list.Domain = gwf.Domain;
             list.OrgNo = gwf.OrgNo; //设置组织编号.
 

@@ -664,22 +664,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DocWord_OpenByHttp()
         {
+            string DocName = this.GetRequestVal("DocName");//获取上传的公文模板名称lz
             //生成文件.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Flow fl = new Flow(this.FK_Flow);
-            try
-            {
-                string file = SystemConfig.PathOfTemp + "" + gwf.Title + ".docx";
-                DBAccess.GetFileFromDB(file, fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
-                return "../../DataUser/Temp/" + gwf.Title + ".docx";
-            }
-            catch (Exception ex)
-            {
-                //如果文件生成失败，就用保险的文件名.
-                string file = SystemConfig.PathOfTemp + "" + gwf.WorkID + ".docx";
-                DBAccess.GetFileFromDB(file, fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
-                return "../../DataUser/Temp/" + gwf.WorkID + ".docx";
-            }
+
+            string file = SystemConfig.PathOfTemp + "/" + DocName;
+            DBAccess.GetFileFromDB(file, fl.PTable, "OID", this.WorkID.ToString(), "DocWordFile");
+            return "../../DataUser/Temp/" + DocName;
+
         }
         /// <summary>
         /// 重置公文文件.
@@ -688,7 +681,7 @@ namespace BP.WF.HttpHandler
         public string DocWord_ResetFile()
         {
             Flow fl = new Flow(this.FK_Flow);
-            string sql = "UPDATE "+fl.PTable+ " SET DocWordFile=NULL WHERE OID=" + this.WorkID;
+            string sql = "UPDATE " + fl.PTable + " SET DocWordFile=NULL WHERE OID=" + this.WorkID;
             DBAccess.RunSQL(sql);
             return "重新生成模版成功.";
         }
@@ -706,9 +699,9 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(this.FK_Flow);
             byte[] val = DBAccess.GetByteFromDB(fl.PTable, "OID", this.WorkID.ToString(), FixFieldNames.DocWordFile);
             if (val != null)
-                return "info@OfficeBtnEnable="+lab.OfficeBtnEnableInt.ToString()+";请下载文件"; //如果已经有这个模版了.
+                return "info@OfficeBtnEnable=" + lab.OfficeBtnEnableInt.ToString() + ";请下载文件"; //如果已经有这个模版了.
 
-            var en =new  DocTemplate();
+            var en = new DocTemplate();
             //求出要生成的模版.
             DocTemplates ens = new DocTemplates();
             ens.Retrieve(DocTemplateAttr.FK_Node, this.FK_Node);
@@ -722,7 +715,7 @@ namespace BP.WF.HttpHandler
             if (ens.Count == 1)
                 en = ens[0] as DocTemplate;
 
-            #warning 替换变量. todo.
+#warning 替换变量. todo.
 
             BP.DA.DBAccess.SaveBytesToDB(en.FileBytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
             return "info@OfficeBtnEnable=" + lab.OfficeBtnEnableInt.ToString() + ";请下载文件"; //如果已经有这个模版了.
@@ -739,8 +732,8 @@ namespace BP.WF.HttpHandler
             //上传附件
             var file = HttpContextHelper.RequestFiles(0);
             var fileName = file.FileName;
-            string path = SystemConfig.PathOfTemp +   DBAccess.GenerGUID()+".docx";
-             
+            string path = SystemConfig.PathOfTemp + DBAccess.GenerGUID() + ".docx";
+
             HttpContextHelper.UploadFile(file, path);
 
             Flow fl = new Flow(this.FK_Flow);
@@ -973,7 +966,7 @@ namespace BP.WF.HttpHandler
                         myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
                         return "TurnUrl@" + myurl;
                     case TurnToDeal.TurnToByCond:
-                       
+
                         return strs;
                     default:
                         strs = strs.Replace("@WebUser.No", BP.Web.WebUser.No);

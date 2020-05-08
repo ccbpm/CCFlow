@@ -2213,7 +2213,7 @@ function initModal(modalType, toNode) {
         + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
         + '</div>'
-        + '<div class="modal-body" style="margin:0px;padding:0px;height:560px">'
+        + '<div class="modal-body" style="margin:0px;padding:0px;height:560px;">'
         + '<iframe style="width:100%;border:0px;height:100%;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
         + '</div>'
         + '</div><!-- /.modal-content -->'

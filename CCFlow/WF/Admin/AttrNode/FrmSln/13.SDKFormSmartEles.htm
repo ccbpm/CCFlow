@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>智能SDK模式</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet"
+          type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var nodeID = 0;
+        $(function () {
+            InitBar(FormSlnType.SDKForm);
+            //获取节点属性
+            nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            if (node.FormType == FormSlnType.SDKForm) {
+                document.getElementById("TB_FormURL").value = node.FormUrl;
+            }
+
+        });
+        //节点表单组件属性.
+        function ShowFWCAttr() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + nodeID;
+            OpenEasyUiDialogExt(url, '节点表单组件', 1000, 450, false);
+        }
+        function Save() {
+            $("#Btn_Save").val("正在保存...");
+            //更新节点表单类型.
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.FormType = FormSlnType.SDKForm;
+            node.FormUrl = document.getElementById("TB_FormURL").value;
+
+            if (node.FormUrl == "") {
+                alert('必须输入url');
+                return;
+            }
+            node.Update();
+
+            //更新表单类型.
+            //var frmID = "ND" + nodeID;
+            //var mapData = new Entity("BP.Sys.MapData", frmID);
+            //mapData.FrmType = FormSlnType.SDKForm;
+            //mapData.Update();
+
+            $("#Btn_Save").val("保存成功.");
+        }
+
+        function OpenAPI() {
+            var url = "../../AttrFlow/APICode.htm?FK_Flow=067&s=0.07910842745423852";
+            OpenEasyUiDialogExt(url, 'ccbpm的API', 1000, 450, false);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>绑定url设置 - <a href="javascript:ShowHidden('DivHelp1')">填写示例</a> - <a href="javascript:ShowFWCAttr()">组件属性</a> </legend>
+        <br />
+        <table style="width:100%; border-color:antiquewhite">
+            <tr>
+                <td>请输入URL: </td>
+                <td style="width:70%;">
+                    <input type="text" placeholder="请输入SDK表单的URL" value="" id="TB_FormURL" name="TB_FormURL"
+                           style="width:90%;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="DivHelp1" class="help" style="color: blue; display: none">
+                        <ul>
+                            <li>比如您输入:/XXX/Abc.htm 系统就会自动把系统变量带入</li>
+                            <li>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&SID=xcwwxccsdsdsd</li>
+                            <li><a href="javascript:OpenAPI()">查看发送，退回API接口.</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <br />
+
+    </fieldset>
+
+    <fieldset>
+        <legend id="help">开发说明</legend>
+        <ul>
+            <li>SDK表单就是ccbpm把界面的展现完全交给了开发人员处理,开发人员只要设计一个表单,增加一个发送按钮,调用ccbpm的发送API就可以完成</li>
+            <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.htm </li>
+            <li>例如:/SDKFlowDemo/QingJia/S1_TianxieShenqingDan.jsp , /SDKFlowDemo/QingJia/S1_TianxieShenqingDan.htm</li>
+            <li>ccbpm团队为您提供了一个demo流程 \\流程树\\SDK流程\\ 该目录下有很多SDK模式的流程供您参考。</li>
+            <li>运行效果图 - <a href="javascript:OpenAPI()">查看发送，退回API接口.</a> </li>
+            <li><img style=" border:1px;" class="HelpImg" src="SDKFrm.png" /></li>
+
+        </ul>
+    </fieldset>
+
+</body>
+</html>

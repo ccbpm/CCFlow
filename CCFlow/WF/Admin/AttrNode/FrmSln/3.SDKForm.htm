@@ -57,7 +57,47 @@
 
             $("#Btn_Save").val("保存成功.");
         }
+        ///设置该流程的所有节点都是用该方案。
+        function SetAllNodeFrmUseThisSln() {
 
+            if (confirm('您确定要设置吗？') == false)
+                return;
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            var flowNo = node.FK_Flow;
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo);
+
+            for (var i = 0; i < nds.length; i++) {
+
+                var jsNode = nds[i];
+
+                var node = new Entity("BP.WF.Node", jsNode);
+
+                node.FormType = FormSlnType.FoolTruck;
+                node.NodeFrmID = "ND" + node.NodeID;
+                node.Update();
+
+
+                //更新表单类型.
+                var frmID = "ND" + node.NodeID;
+                var mapData = new Entity("BP.Sys.MapData", frmID);
+                mapData.FrmType = 0; //FormSlnType.FoolTruck;
+                mapData.Update();
+            }
+
+            //设置显示的主表单,在完成的流程轨迹里可以看到该表单.
+            SetNDxxRpt_FrmType(flowNo, 0);
+
+            //执行流程检查.
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.DoMethodReturnString("DoCheck");
+
+            alert('设置成功.');
+            window.location.href = window.location.href;
+        }
         function OpenAPI() {
             var url = "../../AttrFlow/APICode.htm?FK_Flow=067&s=0.07910842745423852";
             OpenEasyUiDialogExt(url, 'ccbpm的API', 1000, 450, false);
@@ -70,7 +110,7 @@
     </div>
 
     <fieldset>
-        <legend>绑定url设置 - <a href="javascript:ShowHidden('DivHelp1')">填写示例</a> - <a href="javascript:ShowFWCAttr()">组件属性</a> </legend>
+        <legend>绑定url设置 - <a href="javascript:ShowHidden('DivHelp1')">填写示例</a> - <a href="javascript:ShowFWCAttr()">组件属性</a> - <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></legend>
         <br />
         <table style="width:100%; border-color:antiquewhite">
             <tr>

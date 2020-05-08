@@ -163,12 +163,13 @@ function changeOption() {
         case FormSlnType.Developer:
             url = "12.Developer.htm";
             break;
-        case FormSlnType.DisableIt:
-            url = "100.DisableIt.htm";
-            break;
         case FormSlnType.SDKFormSmart:
             url = "13.SDKFormSmart.htm";
             break;
+        case FormSlnType.DisableIt:
+            url = "100.DisableIt.htm";
+            break;
+        
         default:
             url = "0.FoolForm.htm";
             break;

@@ -70,4 +70,32 @@ function beforeDelete() {
 function beforeCCClose() {
     return true;
 }
+//广西计算中心打开公文的方式
+function openhtml() {
+    var strUrl = "office.html";
+    var dataSendToChild = $("#param").val();
+    var ntkoed = ntkoBrowser.ExtensionInstalled();
+    if (ntkoed) {
+        ntkoBrowser.openWindow(strUrl, "", "", "", "", "", dataSendToChild);
+    } else {
+        //没有安装跨浏览器控件的话提示下载安装
+        var iTop = ntkoBrowser.NtkoiTop(); //获得窗口的垂直位置;
+        var iLeft = ntkoBrowser.NtkoiLeft(); //获得窗口的水平位置;
+        window.open("downloadExe.html", "", "height=200px,width=500px,top=" + iTop + "px,left=" + iLeft +
+            "px,titlebar=no,toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no");
+    }
+}
 
+//在父页面定义的跨浏览器插件应用程序关闭事件响应方法，且方法名不能自定义，必须是ntkoCloseEvent
+function ntkoCloseEvent() {
+    console.log("跨浏览器插件应用程序窗口已关闭!");
+}
+
+//在父页面定义的用于接收子页面回传值的方法，方法名可以自定义，
+//定义后的方法名需要在子页面中通过window.external.SetReturnValueToParentPage进行注册
+function OnData(callData) {
+    var data = decodeURI(callData);
+    $("#callback").val(data);
+}
+
+//广西计算中心打开公文的方式

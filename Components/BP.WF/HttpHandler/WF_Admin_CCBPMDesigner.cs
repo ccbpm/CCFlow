@@ -623,7 +623,7 @@ namespace BP.WF.HttpHandler
                 //       WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
             }
 
-            //设置他的组织，信息. @sly
+            //设置他的组织，信息.
             WebUser.No = emp.No; //登录帐号.
             WebUser.FK_Dept = emp.FK_Dept;
             WebUser.FK_DeptName = emp.FK_DeptText;
@@ -975,7 +975,7 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
-            //如果为0。 @sly
+            //如果为0。
             if (dt.Rows.Count==0)
             {
                 BP.WF.Port.Admin2.Org org = new Port.Admin2.Org(WebUser.OrgNo);

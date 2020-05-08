@@ -3,7 +3,13 @@
 2. 开发者可以重写该文件处理通用的应用,比如通用的函数.
 
 */
-
+为广西计算中心
+$(function () {
+    jQuery.getScript("").done(function () {
+        alert("我加载完了")
+    }
+    );
+});
 //外发公文.
 function WaiFa() {
 

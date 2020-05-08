@@ -1078,9 +1078,7 @@ namespace BP.WF
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
 
-            //检查BPM.
-            CheckGPM();
-
+           
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -1105,6 +1103,8 @@ namespace BP.WF
             if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
                 return null; //不需要升级.
 
+            //检查BPM.
+            CheckGPM();
 
             #region 升级优化集团版的应用. 2020.04.03
 
@@ -1160,8 +1160,6 @@ namespace BP.WF
             //修复数据表.
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
-
-
         
 
             //if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)

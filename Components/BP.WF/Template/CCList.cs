@@ -516,21 +516,18 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
+                map.AddTBStringDoc();
                 map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
-
                 map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 10, true);
-                map.AddTBString(CCListAttr.FlowName, null, "流程名称", true, true, 0, 200, 10, true);
+                map.AddTBString(CCListAttr.FlowName, null, "名称", true, true, 0, 200, 10, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);
                 map.AddTBString(CCListAttr.NodeName, null, "节点名称", true, true, 0, 500, 10, true);
 
                 map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(CCListAttr.FID, 0, "FID", true, true);
-                
-                map.AddTBStringDoc();
 
                 map.AddTBString(CCListAttr.Rec, null, "抄送人员", true, true, 0, 50, 10, true);
                 map.AddTBDateTime(CCListAttr.RDT, null, "记录日期", true, false);
-
 
                 map.AddTBString(CCListAttr.CCTo, null, "抄送给", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToName, null, "抄送给(人员名称)", true, false, 0, 50, 10, true);
@@ -552,7 +549,6 @@ namespace BP.WF.Template
                 //add by zhoupeng  @sly.
                 map.AddTBString(CCListAttr.Domain, null, "Domain", true, true, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10, true);
-
 
                 this._enMap = map;
                 return this._enMap;

@@ -326,6 +326,10 @@ if (typeof FormSlnType == "undefined") {
         /// </summary>
         FormSlnType.Developer = 12,
         /// <summary>
+        /// 只能SDK表单
+        /// </summary>
+        FormSlnType.SDKFormSmart = 13,
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         FormSlnType.DisableIt = 100

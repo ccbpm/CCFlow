@@ -3,10 +3,11 @@
 2. 开发者可以重写该文件处理通用的应用,比如通用的函数.
 
 */
-为广西计算中心
+//为广西计算中心增加初始化引用js文件
 $(function () {
-    jQuery.getScript("").done(function () {
-        alert("我加载完了")
+  
+    jQuery.getScript("/WF/ntko_demo/officecontrol/ntkobackground.min.js").done(function () {
+       
     }
     );
 });

@@ -1777,7 +1777,7 @@ function GenerWorkNode() {
     catch (err) {
 
     }
-    //var enName = flowData.Sys_MapData[0].No;
+    var enName = flowData.Sys_MapData[0].No;
     //var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
     //$.getScript(filespec);
 

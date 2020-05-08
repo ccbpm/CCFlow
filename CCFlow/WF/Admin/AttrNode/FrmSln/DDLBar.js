@@ -26,6 +26,7 @@ function InitBar(optionKey) {
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";
     html += "<option value=" + FormSlnType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
     html += "<option value=" + FormSlnType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
+    html += "<option value=" + FormSlnType.SDKFormSmart+ " >&nbsp;&nbsp;智能SDK表单(我自定义的表单)</option>";
 
 
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
@@ -164,6 +165,9 @@ function changeOption() {
             break;
         case FormSlnType.DisableIt:
             url = "100.DisableIt.htm";
+            break;
+        case FormSlnType.SDKFormSmart:
+            url = "13.SDKFormSmart.htm";
             break;
         default:
             url = "0.FoolForm.htm";

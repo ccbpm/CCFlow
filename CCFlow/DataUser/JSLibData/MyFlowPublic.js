@@ -70,7 +70,7 @@ function beforeDelete() {
 function beforeCCClose() {
     return true;
 }
-//抄送阅读页面增加关闭前事件
+//广西抄送阅读页面增加关闭前事件
 function beforeCCClose() {
     $("#TB_Msg").val("已阅");
     alert($("#TB_Msg").val());
@@ -90,6 +90,7 @@ function beforeCCClose() {
 
     return true;
 }
+//广西抄送阅读页面增加关闭前事件结束
 //广西计算中心打开公文的方式
 function openhtml() {
     var strUrl = "office.html";

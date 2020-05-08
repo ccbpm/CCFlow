@@ -4761,7 +4761,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.FrmAttachment athDesc = this.GenerAthDesc();
 
             //查询出来数据实体.
-            BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
+            BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
             #endregion 处理权限控制.
 
             if (dbs.Count == 0)

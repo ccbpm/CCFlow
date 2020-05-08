@@ -146,7 +146,6 @@ namespace BP.WF.Port.Admin2
                 map.AddTBString(OrgAttr.Adminer, null, "主要管理员(创始人)", true, true, 0, 60, 200, true);
                 map.AddTBString(OrgAttr.AdminerName, null, "管理员名称", true, true, 0, 60, 200, true);
 
-                //@sly.
                 map.AddTBInt(OrgAttr.Idx, 0, "排序", true, false);
 
                 RefMethod rm = new RefMethod();

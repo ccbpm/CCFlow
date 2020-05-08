@@ -153,7 +153,7 @@ namespace BP.WF.Port.Admin2
             org.AdminerName = emp.Name;
             org.Insert();
 
-            //增加到管理员. @sly
+            //增加到管理员.
             OrgAdminer oa = new OrgAdminer();
             oa.FK_Emp = emp.No;
             oa.OrgNo = this.No;

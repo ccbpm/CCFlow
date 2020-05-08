@@ -33,7 +33,7 @@ namespace CCFlow.WF.CCForm
         /// <param name="filePath"></param>
         /// <returns></returns>
         [WebMethod]
-        public String VSTO_OnlineFile_Init(string userNo, string sid, string filePath)
+        public String VSTO_Gener_OnlineFile_Init(string userNo, string sid, string filePath, string actionFlag)
         {
             if (DataType.IsNullOrEmpty(filePath) == false)
                 return "err@路径不能为空.";
@@ -48,7 +48,7 @@ namespace CCFlow.WF.CCForm
         }
 
         [WebMethod]
-        public String VSTO_OnlineFile_Save(string userNo, string sid, string filePath, Byte byts)
+        public String VSTO_Gener_OnlineFile_Save(string userNo, string sid, string filePath, Byte byts, string paras)
         {
             if (DataType.IsNullOrEmpty(filePath) == false)
                 return "err@路径不能为空.";
@@ -59,6 +59,13 @@ namespace CCFlow.WF.CCForm
             string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
 
             //BP.DA.DataType.wir
+
+            #region 根据标记处理特别业务.
+            if (paras.Contains("ActionType=DocTemplate")==true)
+            {
+
+            }
+            #endregion
 
             //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
             return "1.1.0.4";

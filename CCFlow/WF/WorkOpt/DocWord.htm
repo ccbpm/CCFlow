@@ -14,7 +14,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("DocWord_Init");
-
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);
                 return;
@@ -53,11 +52,18 @@
 
         //直接下载.
         function OpenByHttp() {
-
+            var DocName = "公文模板";
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
+            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
+            var ens = new Entities("BP.WF.Template.DocTemplates");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+            if (GetQueryString("DocName") == null)
+                DocName = ens[0].Name;
+            else
+                DocName = GetQueryString("DocName");
+            handler.AddPara("DocName", DocName);
             var data = handler.DoMethodReturnString("DocWord_OpenByHttp");
-
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);
                 return;
@@ -85,11 +91,10 @@
                 paras += "IsReadonly=1,";
 
             var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
-
+            
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
             var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
 
-            //alert(url);
 
             window.location.href = url;
             //window.open(url);

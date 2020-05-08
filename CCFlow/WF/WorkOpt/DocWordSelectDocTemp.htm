@@ -35,14 +35,14 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-                html += "<li ><span><a href=\"javascript:Import('" + en.No + "')\" >" + en.Name + "</a></span></li>";
+                html += "<li ><span><a href=\"javascript:Import('" + en.No + "','" + en.Name + "')\" >" + en.Name + "</a></span></li>";
             }
             html += "</ul>";
 
             $("#info").html(html);
 
         }
-        function Import(id) {
+        function Import(id,name) {
 
             if (confirm("确认开始导入模板吗？") == false)
                 return;
@@ -60,7 +60,7 @@
             var workId = GetQueryString("WorkID");
             var fk_flow = GetQueryString("FK_Flow");
 
-            var url = "DocWord.htm?FK_Flow=" + fk_flow + "&WorkID=" + workId + "&FK_Node=" + nodeId;
+            var url = "DocWord.htm?FK_Flow=" + fk_flow + "&WorkID=" + workId + "&FK_Node=" + nodeId+"&DocName="+name;
             window.location.href = url;
 
         }

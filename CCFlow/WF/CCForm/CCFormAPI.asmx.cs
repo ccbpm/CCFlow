@@ -24,6 +24,47 @@ namespace CCFlow.WF.CCForm
     // [System.Web.Script.Services.ScriptService]
     public class CCFormAPI : System.Web.Services.WebService
     {
+        #region VSTO 2020接口.
+        /// <summary>
+        /// 获得返回的文件流
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <param name="sid"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public String VSTO_OnlineFile_Init(string userNo, string sid, string filePath)
+        {
+            if (DataType.IsNullOrEmpty(filePath) == false)
+                return "err@路径不能为空.";
+
+            if (filePath.IndexOf("/DataUser/") == -1)
+                return "err@非法的访问.";
+
+            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+
+            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+            return "1.1.0.4";
+        }
+
+        [WebMethod]
+        public String VSTO_OnlineFile_Save(string userNo, string sid, string filePath, Byte byts)
+        {
+            if (DataType.IsNullOrEmpty(filePath) == false)
+                return "err@路径不能为空.";
+
+            if (filePath.IndexOf("/DataUser/") == -1)
+                return "err@非法的访问.";
+
+            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+
+            //BP.DA.DataType.wir
+
+            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+            return "1.1.0.4";
+        }
+        #endregion  VSTO 2020接口.
+
         #region 与单据相关的接口代码.
         /// <summary>
         /// 获得单据模版信息

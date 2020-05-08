@@ -52,16 +52,10 @@
 
         //直接下载.
         function OpenByHttp() {
-            var DocName = "公文模板";
+            var DocName = GetDocName();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
-            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
-            var ens = new Entities("BP.WF.Template.DocTemplates");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-            if (GetQueryString("DocName") == null)
-                DocName = ens[0].Name;
-            else
-                DocName = GetQueryString("DocName");
+            
             handler.AddPara("DocName", DocName);
             var data = handler.DoMethodReturnString("DocWord_OpenByHttp");
             if (data.indexOf('err@') == 0) {
@@ -70,9 +64,19 @@
             }
             window.open(data);
         }
-
+        function GetDocName() {
+            var DocName = "公文模板";
+            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
+            var ens = new Entities("BP.WF.Template.DocTemplates");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+            if (GetQueryString("DocName") == null)
+                DocName = ens[0].Name;
+            else
+                DocName = GetQueryString("DocName");
+            return DocName;
+        }
         function OpenByVSTO() {
-
+            var DocName = GetDocName();
             //插件参数
             var paras = "WorkID=" + GetQueryString("WorkID") + ",";
             paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
@@ -92,9 +96,9 @@
 
             var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
             
-            var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
+            var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
             var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
-
+            alert(url);
 
             window.location.href = url;
             //window.open(url);
@@ -128,7 +132,6 @@
                 alert(data);
                 return;
             }
-            alert(data);
 
             window.location.href = window.location.href;
         }

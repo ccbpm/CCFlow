@@ -80,7 +80,7 @@ function beforeCCClose() {
 //广西抄送阅读页面增加关闭前事件
 function beforeCCClose() {
     $("#TB_Msg").val("已阅");
-    alert($("#TB_Msg").val());
+   
     if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
         alert("请填写评论内容!");
         return;

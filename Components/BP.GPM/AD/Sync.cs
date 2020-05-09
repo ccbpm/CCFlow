@@ -409,7 +409,7 @@ namespace BP.GPM.AD
                 {
 
                     //判断是 group 还是 user.
-                    BP.Port.Station station = new Station();
+                    BP.Port.Station station = new BP.Port.Station();
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                     station.No = entry.Guid.ToString();
                     station.Name = name;// this.GetValFromDirectoryEntryByKey(entry, "cn"); 

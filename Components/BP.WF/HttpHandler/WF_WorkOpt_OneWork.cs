@@ -562,7 +562,7 @@ namespace BP.WF.HttpHandler
                 nodeID = gwf.FK_Node;
             }
 
-            //@sly 有时候nodeID被删除了.
+            //有时候nodeID被删除了.
             Node nd = new Node();
             nd.NodeID = nodeID;
             if (nd.RetrieveFromDBSources() == 0)

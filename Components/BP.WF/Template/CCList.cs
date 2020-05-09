@@ -147,8 +147,9 @@ namespace BP.WF.Template
             }
             set
             {
+                //@sly 这里去掉了业务逻辑.
                 if (value == CCSta.Read)
-                    this.CDT = DataType.CurrentDataTime;
+                    this.ReadDT = DataType.CurrentDataTime;
                 this.SetValByKey(CCListAttr.Sta, (int)value);
             }
         }
@@ -465,6 +466,23 @@ namespace BP.WF.Template
                 this.SetValByKey(CCListAttr.Rec, value);
             }
         }
+        /// <summary>
+        /// 读取日期
+        /// </summary>
+        public string ReadDT
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.ReadDT);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.ReadDT, value);
+            }
+        }
+        /// <summary>
+        /// 写入日期
+        /// </summary>
         public string RDT
         {
             get

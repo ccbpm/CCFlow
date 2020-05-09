@@ -8257,9 +8257,9 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL(ps);
         }
         /// <summary>
-        /// 设置已回复
+        /// 设置已回复,由FlowBBS组件调用.
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="workid">工作ID</param>
         public static void Node_CC_SetCheckOver(Int64 workid)
         {
             Paras ps = new Paras();

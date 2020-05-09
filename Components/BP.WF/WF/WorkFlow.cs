@@ -2072,6 +2072,9 @@ namespace BP.WF
             WorkNode wn = new WorkNode(wk1, nd);
             wn.AddToTrack(ActionType.UnShift, WebUser.No, WebUser.Name, nd.NodeID, nd.Name, "撤消移交");
 
+            //删除撤销信息.
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+
             if (wls.Count == 1)
             {
                 GenerWorkerList wl = (GenerWorkerList)wls[0];
@@ -2112,8 +2115,7 @@ namespace BP.WF
             wkNew.IsPass = false;
             wkNew.Insert();
 
-            //删除撤销信息.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + wk.FK_Node);
+          
 
             return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
         }

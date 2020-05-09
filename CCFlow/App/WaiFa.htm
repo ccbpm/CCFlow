@@ -65,10 +65,6 @@
             var handler = new HttpHandler("BP.DOC.App_Page");
             handler.AddUrlData();
             handler.AddFormData();
-          
-       
-           
-           
            
             var data = handler.DoMethodReturnString("WaiFa_Send");
             if (data.indexOf('err@') == 0) {

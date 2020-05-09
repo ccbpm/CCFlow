@@ -13,6 +13,8 @@
         var data = null;
         $(function () {
 
+
+            //需要传递参数： Token
             var handler = new HttpHandler("BP.DOC.App_Page");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Port_Init");

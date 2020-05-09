@@ -7259,7 +7259,7 @@ namespace BP.WF
                     //执行考核
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
-                    //执行抄送. 2020-04-28 修改只要启动抄送规则就执行抄送 @sly
+                    //执行抄送. 2020-04-28 修改只要启动抄送规则就执行抄送 
                      CC(this.HisNode);
 
 

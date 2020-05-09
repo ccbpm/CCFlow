@@ -1193,7 +1193,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Save()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
-            string fk_mapData = this.FK_MapData;
+            string fk_mapData = this.GetRequestVal("FK_MapData");
             Node nd = new Node(this.FK_Node);
             if (DataType.IsNullOrEmpty(fk_mapData) == true)
             {
@@ -1201,7 +1201,7 @@ namespace BP.WF.HttpHandler
             }
             MapData mapData = new MapData(fk_mapData);
             BP.WF.Dev2Interface.Track_WriteBBS(fk_mapData, mapData.Name, this.WorkID, msg,
-           this.FID, this.FK_Flow, nd.GetValStringByKey("FK_FlowText"), this.FK_Node, nd.Name);
+           this.FID, this.FK_Flow, null, this.FK_Node, nd.Name);
             return "评论信息保存成功";
         }
 

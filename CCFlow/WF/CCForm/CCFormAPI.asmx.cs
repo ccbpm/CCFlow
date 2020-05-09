@@ -33,8 +33,9 @@ namespace CCFlow.WF.CCForm
         /// <param name="filePath"></param>
         /// <returns></returns>
         [WebMethod]
-        public String VSTO_Gener_OnlineFile_Init(string userNo, string sid, string filePath, string actionFlag)
+        public String VSTO_Gener_OnlineFile_Init(string flowNo,string workId, string userNo, string sid, string filePath, string actionFlag)
         {
+            
             if (DataType.IsNullOrEmpty(filePath) == false)
                 return "err@路径不能为空.";
 
@@ -42,9 +43,89 @@ namespace CCFlow.WF.CCForm
                 return "err@非法的访问.";
 
             string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+            MethodReturnMessage<byte[]> msg = null;
+            try
+            {
+                BP.WF.Flow fl = new BP.WF.Flow(flowNo);
 
-            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-            return "1.1.0.4";
+
+                //string str = "WordFile";
+                //if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
+                //{
+                //    /*如果没有此列，就自动创建此列.*/
+                //    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    BP.DA.DBAccess.RunSQL(sql);
+                //}
+
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(fl.PTable, "OID", workId.ToString(), "WordFile");
+
+                if (bytes == null)
+                {
+                    Microsoft.Office.Interop.Word.Application docApp = new Microsoft.Office.Interop.Word.Application();
+                    Microsoft.Office.Interop.Word.Document doc;
+                    object miss = System.Reflection.Missing.Value;
+                    string strContext; //文档内容  
+                    doc = docApp.Documents.Add(ref miss, ref miss, ref miss, ref miss);
+                    docApp.Selection.ParagraphFormat.LineSpacing = 15;
+
+                    //页眉    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryHeader;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页眉内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    //页尾    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryFooter;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页尾内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    strContext = "欢迎使用ccflow word";
+                    doc.Paragraphs.Last.Range.Text = strContext;
+
+                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+
+                    if (!System.IO.Directory.Exists(rootPath))
+                        System.IO.Directory.CreateDirectory(rootPath);
+
+                    string fileName = userNo + "_" + flowNo + "_" + workId + ".docx";
+                    string fullFilePath = rootPath + fileName;
+
+                    //保存文件    
+                    doc.SaveAs(fullFilePath, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+                    doc.Close(ref miss, ref miss, ref miss);
+                    docApp.Quit(ref miss, ref miss, ref miss);
+
+                    bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
+
+                    //WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
+                    File.Delete(fullFilePath);
+                }
+
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = bytes
+                };
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
         }
 
         [WebMethod]

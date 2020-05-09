@@ -8250,10 +8250,24 @@ namespace BP.WF
                 return;
 
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
+            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,ReadDT=" + SystemConfig.AppCenterDBVarStr + "ReadDT  WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add(CCListAttr.Sta, (int)CCSta.Read);
-            ps.Add(CCListAttr.CDT,  DataType.CurrentDataTime); //设置读取日期.
+            ps.Add(CCListAttr.ReadDT,  DataType.CurrentDataTime); //设置读取日期.
             ps.Add(CCListAttr.MyPK, mypk);
+            BP.DA.DBAccess.RunSQL(ps);
+        }
+        /// <summary>
+        /// 设置已回复
+        /// </summary>
+        /// <param name="mypk"></param>
+        public static void Node_CC_SetReplay(Int64 workid)
+        {
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo ";
+            ps.Add(CCListAttr.Sta, (int)CCSta.CheckOver);
+            ps.Add(CCListAttr.CDT, DataType.CurrentDataTime); //设置完成日期.
+            ps.Add(CCListAttr.WorkID, workid);
+            ps.Add(CCListAttr.CCTo, WebUser.No);
             BP.DA.DBAccess.RunSQL(ps);
         }
         /// <summary>
@@ -8265,8 +8279,9 @@ namespace BP.WF
         public static void Node_CC_SetRead(int nodeID, Int64 workid, string empNo)
         {
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo";
+            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,ReadDT=" + SystemConfig.AppCenterDBVarStr + "ReadDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo";
             ps.Add(CCListAttr.Sta, (int)CCSta.Read);
+            ps.Add(CCListAttr.ReadDT, DataType.CurrentDataTime); //设置读取日期.
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.FK_Node, nodeID);
             ps.Add(CCListAttr.CCTo, empNo);
@@ -8276,7 +8291,6 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.WorkID, workid);
             ps.Add(GenerWorkerListAttr.FK_Node, nodeID);
             ps.Add(GenerWorkerListAttr.FK_Emp, empNo);
-
             DBAccess.RunSQL(ps);
         }
         /// <summary>

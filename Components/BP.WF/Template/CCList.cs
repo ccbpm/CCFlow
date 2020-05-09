@@ -67,9 +67,13 @@ namespace BP.WF.Template
         public const string CCToOrgName = "CCToOrgName";
 
         /// <summary>
-        /// 审核时间
+        /// 审核时间（回复时间）
         /// </summary>
         public const string CDT = "CDT";
+        /// <summary>
+        /// 阅读时间
+        /// </summary>
+        public const string ReadDT = "ReadDT";
         /// <summary>
         /// 抄送人员
         /// </summary>
@@ -539,6 +543,8 @@ namespace BP.WF.Template
                 map.AddTBString(CCListAttr.CCToOrgName, null, "抄送给组织名称", true, false, 0, 600, 10, true);
 
                 map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
+                map.AddTBDateTime(CCListAttr.ReadDT, null, "阅读时间", true, false);
+
 
                 map.AddTBString(CCListAttr.PFlowNo, null, "父流程编号", true, true, 0, 100, 10, true);
                 map.AddTBInt(CCListAttr.PWorkID, 0, "父流程WorkID", true, true);

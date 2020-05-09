@@ -62,7 +62,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string CCToOrgNo = "CCToOrgNo";
         /// <summary>
-        /// 超
+        /// 抄送给组织名称
         /// </summary>
         public const string CCToOrgName = "CCToOrgName";
 
@@ -535,7 +535,6 @@ namespace BP.WF.Template
                 map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
 
-                //@sly.
                 map.AddTBString(CCListAttr.CCToOrgNo, null, "抄送到组织", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToOrgName, null, "抄送给组织名称", true, false, 0, 600, 10, true);
 

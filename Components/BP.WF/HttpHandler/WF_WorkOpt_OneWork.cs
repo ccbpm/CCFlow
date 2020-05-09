@@ -1193,8 +1193,15 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Save()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
-            BP.Frm.Dev2Interface.Track_WriteBBS(this.FrmID, GetRequestVal("FrmName"), this.WorkID, msg,
-           this.FID, this.FK_Flow, GetRequestVal("FlowName"), this.FK_Node, GetRequestVal("NodeName"));
+            string fk_mapData = this.FK_MapData;
+            Node nd = new Node(this.FK_Node);
+            if (DataType.IsNullOrEmpty(fk_mapData) == true)
+            {
+                fk_mapData = nd.NodeFrmID;
+            }
+            MapData mapData = new MapData(fk_mapData);
+            BP.WF.Dev2Interface.Track_WriteBBS(fk_mapData, mapData.Name, this.WorkID, msg,
+           this.FID, this.FK_Flow, nd.GetValStringByKey("FK_FlowText"), this.FK_Node, nd.Name);
             return "评论信息保存成功";
         }
 

@@ -77,7 +77,6 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                //@sly.
                 Map map = new Map("GPM_GroupEmp");
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;

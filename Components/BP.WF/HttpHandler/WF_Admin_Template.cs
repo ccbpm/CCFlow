@@ -179,36 +179,42 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             string dirName = GetRequestVal("DirName");
-
+            
             FtpClient conn = this.GenerFTPConn;
-            string remotePath = conn.GetWorkingDirectory() + dirName;
+            string remotePath = conn.GetWorkingDirectory()+ dirName;
+            
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
-                
                 //下载目录下.
-                conn.DownloadFile(tempfile, remotePath+str, FtpLocalExists.Overwrite);
+                FtpStatus fs= conn.DownloadFile(tempfile, "/Flow"+remotePath + "/" + str, FtpLocalExists.Overwrite);
                 
-                //conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
-                //执行导入.
-                BP.WF.Flow flow = new BP.WF.Flow();
-                flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                flow.DoCheck(); //要执行一次检查
-                Hashtable ht = new Hashtable();
-                ht.Add("FK_Flow", flow.No);
-                ht.Add("FlowName", flow.Name);
-                ht.Add("FK_FlowSort", flow.FK_FlowSort);
-                ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-                //选择的是一个模板则返回Hashtable表格式
-                if (strs.Length == 2)
+                if (fs.ToString() == "Success")
                 {
-                    return BP.Tools.Json.ToJson(ht);
+                    //执行导入.
+                    BP.WF.Flow flow = new BP.WF.Flow();
+                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                    flow.DoCheck(); //要执行一次检查
+                    Hashtable ht = new Hashtable();
+                    ht.Add("FK_Flow", flow.No);
+                    ht.Add("FlowName", flow.Name);
+                    ht.Add("FK_FlowSort", flow.FK_FlowSort);
+                    ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+                    //选择的是一个模板则返回Hashtable表格式
+                    if (strs.Length == 2)
+                    {
+                        return BP.Tools.Json.ToJson(ht);
+                    }
+                    //多个模板返回Msg字符串形式
+                    Msg += ht["Msg"].ToString() + "\n";
                 }
-                //多个模板返回Msg字符串形式
-                Msg += ht["Msg"].ToString() + "\n";
+                else
+                {
+                    return "模板未下载成功";
+                }
             }
 
             return Msg;

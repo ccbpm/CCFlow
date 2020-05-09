@@ -8260,7 +8260,7 @@ namespace BP.WF
         /// 设置已回复
         /// </summary>
         /// <param name="mypk"></param>
-        public static void Node_CC_SetReplay(Int64 workid)
+        public static void Node_CC_SetCheckOver(Int64 workid)
         {
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo ";

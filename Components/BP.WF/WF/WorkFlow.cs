@@ -2075,6 +2075,10 @@ namespace BP.WF
             //删除撤销信息.
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
 
+            //更新流程主表字段信息
+            gwf.WFState = WFState.Runing;
+            gwf.Update();
+
             if (wls.Count == 1)
             {
                 GenerWorkerList wl = (GenerWorkerList)wls[0];

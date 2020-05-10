@@ -276,7 +276,7 @@ function Ele_FrmCheck(wf_node) {
         else
             pageData.FWCVer = 1;
     }
-    return "<div id='WorkCheck'>" + WorkCheck_InitPage() +"</div>";
+    return "<div id='WorkCheck'></div>";
 }
 
 //解析表单是三列的情况
@@ -1902,8 +1902,6 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
     }, null, "black", true);
 
 }
-
-var webUser = new WebUser();
 function Down2018(fk_ath, pkVal, delPKVal, FK_Flow, FK_Node, FK_MapData, Ath) {
     if (plant == "CCFlow")
         window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;

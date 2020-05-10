@@ -157,6 +157,8 @@
 
             }
 
+            window.open("./MyCC.htm?WorkID="+workid+"&FK_Node="+nodeID+"&FK_Flow="+flowNo+"&FID="+fid+"&CCSta=1");
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddUrlData();
             handler.AddPara("FromWorkOpt", "1");

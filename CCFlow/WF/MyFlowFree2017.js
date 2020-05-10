@@ -946,7 +946,6 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var w = wf_node.FWC_W;
     if (sta == 0)
         return $('');
-    //引入WorkCheck.js
     if (wf_node.FWCSta != 0) {
         if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
             pageData.FWCVer = 0;
@@ -954,7 +953,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
             pageData.FWCVer = 1;
     }
 
-    eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>");
+    eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
     return eleHtml;
 }

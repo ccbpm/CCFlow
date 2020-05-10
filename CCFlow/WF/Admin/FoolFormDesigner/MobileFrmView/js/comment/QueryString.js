@@ -6,28 +6,8 @@ function getQueryString() {
     }
     return result;
 }
-//根据QueryString参数名称获取值 
-function getQueryStringByName(name) {
-    var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
-    if (result == null || result.length < 1) {
-        return "";
-    }
-    return result[1];
-}
-//根据QueryString参数索引获取值 
-function getQueryStringByIndex(index) {
-    if (index == null) {
-        return "";
-    }
-    var queryStringList = getQueryString();
-    if (index >= queryStringList.length) {
-        return "";
-    }
-    var result = queryStringList[index];
-    var startIndex = result.indexOf("=") + 1;
-    result = result.substring(startIndex);
-    return result;
-}
+
+
 //Other
 function GetQueryString(name) {
 
@@ -39,30 +19,64 @@ function GetQueryString(name) {
 
 }
 
+//通过URL获取QueryString的数组
+function getQueryStringFromUrl(url) {
+    if (url.indexOf('?') >= 0) {
+        url = url.substring(url.indexOf('?'));
+        var result = url.match(new RegExp("[\?\&][^\?\&]+=[^\?\&]+", "g"));
+        if (result != undefined) {
+            for (var i = 0; i < result.length; i++) {
+                result[i] = result[i].substring(1);
+            }
+            return result;
+        }
+        else {
+            return [];
+        }
+    }
+    else {
+        return [];
+    }
+}
+//根据QueryString参数名称获取值 
+function getQueryStringByNameFromUrl(url, name) {
+    if (url.indexOf('?') >= 0) {
+        url = url.substring(url.indexOf('?'));
+        var result = url.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+        if (result == null || result.length < 1) {
+            return "";
+        }
+        return result[1];
+    }
+    else {
+        return "";
+    }
+}
+
 //获取参数
 var RequestArgs = function () {
-    this.WorkID = getQueryStringByName("WorkID");
-    this.FK_Flow = getQueryStringByName("FK_Flow");
-    this.FK_Node = getQueryStringByName("FK_Node");
+    this.WorkID = GetQueryString("WorkID");
+    this.FK_Flow = GetQueryString("FK_Flow");
+    this.FK_Node = GetQueryString("FK_Node");
     if (this.FK_Node) {
         while (this.FK_Node.substring(0, 1) == '0') this.FK_Node = this.FK_Node.substring(1);
         this.FK_Node = this.FK_Node.replace('#', '');
     }
-    this.NodeID = getQueryStringByName("NodeID");
-    this.FK_MapData = getQueryStringByName("FK_MapData");
-    this.UserNo = getQueryStringByName("UserNo");
-    this.FID = getQueryStringByName("FID");
-    this.SID = getQueryStringByName("SID");
-    this.CWorkID = getQueryStringByName("CWorkID");
-    this.PWorkID = getQueryStringByName("PWorkID");
-    this.PFlowNo = getQueryStringByName("PFlowNo");
+    this.NodeID = GetQueryString("NodeID");
+    this.FK_MapData = GetQueryString("FK_MapData");
+    this.UserNo = GetQueryString("UserNo");
+    this.FID = GetQueryString("FID");
+    this.SID = GetQueryString("SID");
+    this.CWorkID = GetQueryString("CWorkID");
+    this.PWorkID = GetQueryString("PWorkID");
+    this.PFlowNo = GetQueryString("PFlowNo");
 
-    this.DoFunc = getQueryStringByName("DoFunc");
-    this.CFlowNo = getQueryStringByName("CFlowNo");
-    this.WorkIDs = getQueryStringByName("WorkIDs");
-    this.IsReadonly = getQueryStringByName("IsReadonly");
-    this.IsEdit = getQueryStringByName("IsEdit");
-    this.IsLoadData = getQueryStringByName("IsLoadData");
+    this.DoFunc = GetQueryString("DoFunc");
+    this.CFlowNo = GetQueryString("CFlowNo");
+    this.WorkIDs = GetQueryString("WorkIDs");
+    this.IsReadonly = GetQueryString("IsReadonly");
+    this.IsEdit = GetQueryString("IsEdit");
+    this.IsLoadData = GetQueryString("IsLoadData");
 }
 //传参
 var urlExtFrm = function () {

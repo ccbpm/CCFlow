@@ -2681,6 +2681,7 @@ function GetPara(atPara, key) {
 }
 
 
+
 function SFTaleHandler(url) {
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
     var curPath = window.document.location.href;

@@ -4,24 +4,19 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
-    <!-- 目前不可以去掉. -->
-    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
 
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../ccbpm.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js"></script>
-
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
     <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
 
     <!-- 重要的表单3文件. -->
-    <script type="text/javascript" src="FrmGener.js"></script>
     <script type="text/javascript" src="FrmFool.js"></script>
     <script type="text/javascript" src="FrmFree.js"></script>
     <script type="text/javascript" src="FrmDevelop.js"></script>
@@ -40,8 +35,6 @@
     <script src="./JS/mselector.js" type="text/javascript"></script>
     <script src="./JS/mtags.js" type="text/javascript"></script>
     <script type="text/javascript" src="MapExt2019.js"></script>
-    <script src="../WorkOpt/WorkCheck.js"></script>
-
 
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
@@ -185,7 +178,10 @@
     </style>
     <!--JS 加载-->
     <script type="text/javascript">
+        $.getScript("../ccbpm.js?Version=" + Math.random(), function () {
+            loadScript("./FrmGener.js?Version=" + Math.random());
 
+        });
         function setContentHeight() {
             var bodyHeight = $("body").height();
             var bottomHeight = $("#bottomToolBar").height(); // save button
@@ -206,7 +202,7 @@
             });
         });
 
-        /**/</script>
+    </script>
 </head>
 <body onclick="hiddenDiv()">
 

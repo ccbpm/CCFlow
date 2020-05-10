@@ -289,14 +289,8 @@ function Do(warning, url) {
 //以下是软通写的
 //初始化网页URL参数
 function initPageParam() {
-    //新建独有
-    pageData.UserNo = GetQueryString("UserNo");
-    pageData.DoWhat = GetQueryString("DoWhat");
-    pageData.IsMobile = GetQueryString("IsMobile");
-
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
-    //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
     pageData.WorkID = GetQueryString("WorkID") == null ? GetQueryString("OID") : GetQueryString("WorkID");
     pageData.IsRead = GetQueryString("IsRead");
@@ -309,24 +303,8 @@ function initPageParam() {
     pageData.IsReadonly=1
 }
 
-//将获取过来的URL参数转成URL中的参数形式  &
-function pageParamToUrl() {
-    var paramUrlStr = '';
-    for (var param in pageData) {
-        paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
-    }
-    return paramUrlStr;
-} 
-//设置附件为只读
-function setAttachDisabled() {
-    //附件设置
-    var attachs = $('iframe[src*="AttachmentUpload.htm"]');
-    $.each(attachs, function (i, attach) {
-        if (attach.src.indexOf('IsReadOnly') == -1) {
-            $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
-        }
-    })
-}
+
+
  
 //设置表单元素不可用
 function setFormEleDisabled() {
@@ -352,12 +330,7 @@ function getData(data, url, dataParam) {
 var pageData = {};
 var globalVarList = {};
 
-//刷新子流程
-function refSubSubFlowIframe() {
-    var iframe = $('iframe[src*="SubFlow.aspx"]');
-    //iframe[0].contentWindow.location.reload();
-    iframe[0].contentWindow.location.href = iframe[0].src;
-}
+
 
 window.onresize = function () {
     if (pageData.Col == 8) {
@@ -686,14 +659,6 @@ var FormUtils = {
 	    }
 };
 
-//AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
-function GepParaByName(name, atPara) {
-    var params = atPara.split('@');
-    var result = $.grep(params, function (value) {
-        return value != '' && value.split('=').length == 2 && value.split('=')[0] == value;
-    })
-    return result;
-}
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(frmData, mapAttr, defVal) {

@@ -7,7 +7,7 @@ var isCanSend = true; //是否可以发送？
 var isChange = false;
 
 //审核组件页面初始化
-function WorkCheck_InitPage() {
+$(function () {
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
@@ -34,8 +34,7 @@ function WorkCheck_InitPage() {
     });
     _Html += "</table>";
 
-    return _Html;
-    $("#WorkCheck").append(_Html);
+    $("#WorkCheck").html(_Html);
 
     // $(window.parent.document).find("#FWC").css('height', $("#tbTracks").height() + 5);
 
@@ -54,9 +53,9 @@ function WorkCheck_InitPage() {
         else
             AddUploafFileHtm("uploaddiv", frmWorkCheck.FWCShowModel);
     }
+    return _Html;
 
-
-}
+});
 
 function WorkCheck_Init() {
     var data;
@@ -124,8 +123,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     _Html += "<tr>";
     if (showNodeName == 1) {
         //显示审核节点的信息/有可能是会签节点
-        var tdWidth = pageData.IsMobile == null || pageData.IsMobile == "0" ? "120px" : "20%;";
-        _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+        _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>";
         var nodeName = track.NodeName;
         nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
         _Html += nodeName;

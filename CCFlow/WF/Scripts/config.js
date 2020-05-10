@@ -9,11 +9,16 @@ var MyFlow = "MyFlow.ashx"; //工作处理器.
 var webUser = null; //定义通用变量用户信息
 
 function basePath() {
+    
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
     var curPath = window.document.location.href;
     //获取主机地址之后的目录，如： jflow-web/index.jsp  
     var pathName = window.document.location.pathname;
     if (pathName == "/") { //说明不存在项目名
+        if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+            if (ccbpmPath != curPath)
+                return ccbpmPath;
+        }
         return curPath;
     }
     var pos = curPath.indexOf(pathName);
@@ -21,6 +26,11 @@ function basePath() {
     var localhostPath = curPath.substring(0, pos);
     //获取带"/"的项目名，如：/jflow-web
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+        if (ccbpmPath != localhostPath)
+            return ccbpmPath;
+    }
 
     return localhostPath;
 

@@ -227,7 +227,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
             pageData.FWCVer = 1;
     }
 
-    var eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage() +"</div>");
+    var eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
     return eleHtml;
 }
@@ -260,16 +260,12 @@ function PreaseFlowCtrls(flowCtrls, ctrlID) {
         });
 
         return jsonObj;
-
-        //alert(jsonObj + " -> " + JSON.stringify(jsonObj));
-
     }
 }
 
 //子线程
 function figure_Template_FigureThreadDtl(wf_node, mapData) {
 
-    //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
     var sta = wf_node.FrmThreadSta;
     if (sta == 0 || sta == '0' || sta == undefined)
         return $('');

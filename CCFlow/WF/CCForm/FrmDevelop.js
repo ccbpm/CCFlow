@@ -618,7 +618,7 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
             pageData.FWCVer = 1;
     }
 
-    var eleHtml = $("<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>");
+    var eleHtml = $("<div id='WorkCheck'></div>");
 
     $(element).after(eleHtml);
     $(element).remove(); //移除SubFlow节点

@@ -1021,12 +1021,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
         //进度条
         if (mapAttr.UIContralType == "50") {
-
-            var url = './WorkOpt/OneWork/JobSchedule.js';
-            $.getScript(url, function () {
-
-
-            });
             return "<div id='JobSchedule' >JobSchedule</div>";
         }
 
@@ -1638,7 +1632,6 @@ function Ele_ImgAth(frmImageAth) {
 //审核组件
 function Ele_FrmCheck(wf_node) {
 
-    //引入WorkCheck.js
     if (wf_node.FWCSta != 0) {
         if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
             pageData.FWCVer = 0;
@@ -1647,7 +1640,7 @@ function Ele_FrmCheck(wf_node) {
       
     }
 
-    return "<div id='WorkCheck'>" + WorkCheck_InitPage()+"</div>";
+    return "<div id='WorkCheck'></div>";
 
 }
 
@@ -1939,7 +1932,6 @@ function Ath_Init(mypk, FK_MapData) {
     return data;
 }
 
-var webUser = new WebUser();
 function Down2018(fk_ath, pkVal, delPKVal, FK_Flow, FK_Node, FK_MapData, Ath) {
     if (plant == "CCFlow")
         window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;

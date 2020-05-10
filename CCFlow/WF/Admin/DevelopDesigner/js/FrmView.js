@@ -580,11 +580,6 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
 var pageData = {};
 //初始化网页URL参数
 function initPageParam() {
-    //新建独有
-    pageData.UserNo = GetQueryString("UserNo");
-    pageData.DoWhat = GetQueryString("DoWhat");
-    pageData.IsMobile = GetQueryString("IsMobile");
-
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
@@ -596,8 +591,6 @@ function initPageParam() {
         oid = 0;
     pageData.OID = oid;
 
-    pageData.IsRead = GetQueryString("IsRead");
-    pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
     var isReadonly = GetQueryString("IsReadonly");
     if (isReadonly == null || isReadonly == undefined || isReadonly == "" || isReadonly == "0")

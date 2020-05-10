@@ -1820,14 +1820,7 @@
     </script>
 
     <script type="text/javascript">
-        //将获取过来的URL参数转成URL中的参数形式  &
-        function pageParamToUrl() {
-            var paramUrlStr = '';
-            for (var param in pageData) {
-                paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
-            }
-            return paramUrlStr;
-        }
+
 
         function ShowPopValOnParentForm(ctrl, fk_mapExt, refEnPK, width, height, title) {
             isChange = false;
@@ -2334,14 +2327,7 @@
             $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
 
         }
-        //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
-        function GepParaByName(name, atPara) {
-            var params = atPara.split('@');
-            var result = $.grep(params, function (value) {
-                return value != '' && value.split('=').length == 2 && value.split('=')[0] == value;
-            })
-            return result;
-        }
+
 
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(workNodeData, mapAttr, defVal) {

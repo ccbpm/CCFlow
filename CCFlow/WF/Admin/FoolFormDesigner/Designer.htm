@@ -4,26 +4,20 @@
     <title>ccform傻瓜表单设计器</title>
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script src="../../Comm/JScript.js"></script>
-    <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
-    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"
-            defer="defer"></script>
-    <script language="JavaScript" type="text/javascript" src="../../CCForm/FrmEnd.js"
-            defer="defer"></script>
-    <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt2019.js"
-            defer="defer"></script>
-    <script src="Designer.js" type="text/javascript" defer="defer"></script>
-    <script src="../../WorkOpt/WorkCheck.js"></script>
+    <script src="../../Scripts/jquery-1.11.0.min.js"  type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../ccbpm.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="./MapDef.js" type="text/javascript"></script>
+    <script src="../../Style/Verify.js" type="text/javascript"></script>
+    <script src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script src="../../CCForm/FrmEnd.js" defer="defer" type="text/javascript"></script>
+    <script src="../../CCForm/MapExt2019.js" defer="defer" type="text/javascript"></script>
     <base target="_self" />
     <style type="text/css">
         body {
@@ -206,13 +200,13 @@
             background-color: #fff;
         }
 
-            .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
-                position: static;
-                padding-left: 0;
-                width: 16px !important;
-                height: 16px;
-                vertical-align: -4px;
-            }
+        .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
+            position: static;
+            padding-left: 0;
+            width: 16px !important;
+            height: 16px;
+            vertical-align: -4px;
+        }
 
         .checkbox, .radio {
             margin-left: 0 !important;
@@ -260,7 +254,6 @@
 
         function WinOpen(url, name) {
             window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
-            //window.open(url, 'xx');
         }
         function TROver(ctrl) {
             ctrl.style.backgroundColor = 'LightSteelBlue';
@@ -282,141 +275,13 @@
     </script>
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
-
-        var webUser = new WebUser();
-        //页面启动函数.
-        $(function () {
-
-            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
-            if (GetQueryString("FK_Node") == "0")
-                $("#FrmNodeComponent").hide();
-            //初始化groupID.
-            var fk_mapData = GetQueryString("FK_MapData");
-            var isF = GetQueryString("IsFirst"); //是否第一次加载?
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            hander.Clear();
-            hander.AddPara("IsFirst", isF);
-            hander.AddPara("FK_MapData", fk_mapData);
-            hander.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-            hander.AddPara("FK_Node", GetQueryString("FK_Node"));
-            var data = hander.DoMethodReturnString("Designer_Init");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                window.location.href = data;
-                return;
-            }
-
-            //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
-            data = JSON.parse(data);
-
-
-            //拼接 TABLE
-            //按分组拼接
-            var groupFields = data.Sys_GroupField;
-            var tbody = $('<tbody></tbody>');
-
-            var frmName = data.Sys_MapData[0].Name;
-
-            var tableCol = data.Sys_MapData[0].TableCol;
-            if (tableCol == 0)
-                tableCol = 4;
-            else if (tableCol == 1)
-                tableCol = 6;
-            else if (tableCol == 2)
-                tableCol = 3;
-            else
-                tableCol = 4;
-
-            var html = "";
-
-            html += "<tr>";
-            html += "<td colspan=" + tableCol + " ><div style='float:left;margin-top:1px' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;margin-top:8px' >" + frmName + "</h2></td>";
-            html += "</tr>";
-
-            for (var k = 0; k < groupFields.length; k++) {
-
-                var groupObj = groupFields[k];
-                //附件类的控件.
-                if (groupObj.CtrlType == 'Ath') {
-                    //获取附件的主键
-                    var MyPK = groupObj.CtrlID;
-                    if (MyPK == "")
-                        continue;
-                    //创建附件描述信息.
-                    var ath = new Entity("BP.Sys.FrmAttachment");
-                    ath.MyPK = groupObj.CtrlID;
-                    if (ath.RetrieveFromDBSources() == 0)
-                        continue;
-                    if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
-                        continue;
-                }
-                //生成工具栏.
-                html += GenerGroupTR(groupObj, tableCol, data);
-
-                //生成内容.
-                html += GenerGroupContext(groupObj, data, tableCol);
-
-                //过滤attrs
-                var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
-                if (tableCol == 4 || tableCol == 6)
-                    html += InitMapAttr(mapAttrs, tableCol);
-
-                if (tableCol == 3)
-                    html += InitThreeColMapAttr(mapAttrs, tableCol);
-                continue;
-            }
-
-            // alert(html);
-            tbody.append($(html));
-            $(".NewChild").hide();
-            //contentTable
-            $('#contentTable').children().remove();
-            $('#contentTable').append(tbody);
-
-            var mapAttrs = data.Sys_MapAttr;
-            //解析设置表单字段联动显示与隐藏.
-            for (var i = 0; i < mapAttrs.length; i++) {
-
-                var mapAttr = mapAttrs[i];
-                if (mapAttr.UIVisible == 0)
-                    continue;
-
-                if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
-                    if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                        if (mapAttr.UIContralType == 1) {
-                            /*启用了显示与隐藏.*/
-                            var ddl = $("#DDL_" + mapAttr.KeyOfEn);
-                            //初始化页面的值
-                            var nowKey = ddl.val();
-
-
-                            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-
-                        }
-                        if (mapAttr.UIContralType == 3) {
-                            /*启用了显示与隐藏.*/
-                            var rb = $("#RB_" + mapAttr.KeyOfEn);
-                            var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
-
-                        }
-                    }
-                }
-            }
-
-            $("#Msg").html("");
-            ResizeWindow();
-            //            AfterBindEn_DealMapExt(data);
+        $.getScript("../../ccbpm.js?Version=" + Math.random(), function () {
+            loadScript("./Designer.js?Version=" + Math.random());
 
         });
+
+
+
 
 
 
@@ -678,26 +543,10 @@
 
                     break;
                 case "FWC":
-
-                    var nodeID = pageData.fk_mapdata.replace('ND', '');
-                    var wf_node = data.WF_Node[0];
-                    var fk_flow = GetQueryString("FK_Flow");
-                    ////var src = "../../WorkOpt/WorkCheck.htm?WorkID=0&FK_Flow=" + fk_flow + "&FK_Node=" + nodeID + "&FK_MapData=" + pageData.fk_mapdata;
-
-                    //var h = wf_node.FWC_H;
-                    //var w = wf_node.FWC_W;
-
-                    //if (h == 0)
-                    //    h = 400;
-
-                    //var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;' leftMargin='0' topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " style='width:100%;' id='FWC' >" + WorkCheck_InitPage() + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " style='width:100%;' id='WorkCheck' ></td></tr>";
                 case "Dtl":
 
                     var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
-
-                    // alert(dtl[0].H);
-                    // alert(dtl.H);
 
                     if (dtl.length == 1) {
                         var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageData.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
@@ -845,11 +694,6 @@
 
     </script>
     <script language="javascript" type="text/javascript">
-
-        var pageData = {};
-        pageData.fk_mapdata = GetQueryString("FK_MapData");
-        pageData.FK_Flow = GetQueryString("FK_Flow");
-        pageData.FK_Node = GetQueryString("FK_Node");
 
         function ReLoad(data) {
             window.location.href = window.location.href;
@@ -1028,7 +872,6 @@
         }
         function GroupField(mypk, OID) {
 
-            // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
             var url = "../../Comm/En.htm?EnName=BP.Sys.GroupField&PKVal=" + OID;
 
             OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {
@@ -1312,11 +1155,8 @@
         //子流程.
         function EditSubFlow(mypk) {
 
-            //alert(mypk);
-            //  if (mypk == null || mypk == "undefined")
             mypk = GetQueryString("FK_Node");
 
-            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
 
             OpenEasyUiDialog(url, "eudlgframe", '组件', 900, 500, "icon-property", true, null, null, null, function () {
@@ -1342,8 +1182,6 @@
 
             if (mypk == null || mypk == "undefined")
                 mypk = GetQueryString("FK_Node");
-
-            // var url = '../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PK=' + mypk
             var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk + '&tab=流转自定义';
 
             OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
@@ -1397,12 +1235,6 @@
         }
 
         function MobileFrm() {
-
-            var nodeID = GetQueryString("FK_Node");
-            var flowNo = GetQueryString("FK_Flow");
-
-
-            //var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=' + mypk;
             var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
 
             OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
@@ -1611,7 +1443,7 @@
         }
 
         function AddComponent() {
-            var url = './Components/Default.htm?FK_MapData=' + pageData.fk_mapdata+"&FrmType=0";
+            var url = './Components/Default.htm?FK_MapData=' + pageData.fk_mapdata + "&FrmType=0";
             OpenEasyUiDialog(url, "eudlgframe", '新建组件', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });

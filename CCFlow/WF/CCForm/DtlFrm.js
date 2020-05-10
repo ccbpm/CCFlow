@@ -432,23 +432,14 @@ function Save(isSaveAndNew) {
 //以下是软通写的
 //初始化网页URL参数
 function initPageParam() {
-    //新建独有
-    pageData.UserNo = GetQueryString("UserNo");
-    pageData.DoWhat = GetQueryString("DoWhat");
-    pageData.IsMobile = GetQueryString("IsMobile");
-
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
-    //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
 
     var oid = GetQueryString("WorkID");
     if (oid == null)
         oid = GetQueryString("OID");
     pageData.OID = oid;
-
-    pageData.IsRead = GetQueryString("IsRead");
-    pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
     pageData.IsReadonly = GetQueryString("IsReadonly"); //如果是IsReadonly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
@@ -458,25 +449,8 @@ function initPageParam() {
 
     //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID);
 }
-//将获取过来的URL参数转成URL中的参数形式  &
-function pageParamToUrl() {
-    var paramUrlStr = '';
-    for (var param in pageData) {
-        paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
-    }
-    return paramUrlStr;
-}
 
-//设置附件为只读
-function setAttachDisabled() {
-    //附件设置
-    var attachs = $('iframe[src*="AttachmentUpload.aspx"]');
-    $.each(attachs, function (i, attach) {
-        if (attach.src.indexOf('IsReadonly') == -1) {
-            $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");
-        }
-    })
-}
+
 
 
 //设置表单元素不可用
@@ -492,12 +466,7 @@ function setFormEleDisabled() {
 var pageData = {};
 var globalVarList = {};
 
-//刷新子流程
-function refSubSubFlowIframe() {
-    var iframe = $('iframe[src*="SubFlow.aspx"]');
-    //iframe[0].contentWindow.location.reload();
-    iframe[0].contentWindow.location.href = iframe[0].src;
-}
+
 //回填扩展字段的值
 function SetAth(data) {
     var atParamObj = $('#iframeAthForm').data();
@@ -538,14 +507,6 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 }
 
 
-//AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
-function GepParaByName(name, atPara) {
-    var params = atPara.split('@');
-    var result = $.grep(params, function (value) {
-        return value != '' && value.split('=').length == 2 && value.split('=')[0] == value;
-    })
-    return result;
-}
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(frmData, mapAttr, defVal) {
@@ -1204,16 +1165,6 @@ function Change(id) {
         if (bExists) {
             self.parent.ChangTabFormTitle();
         }
-    }
-}
-
-//然浏览器最大化.
-function ResizeWindow() {
-    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
-        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
-        window.moveTo(0, 0);           //把window放在左上角     
-        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
     }
 }
 

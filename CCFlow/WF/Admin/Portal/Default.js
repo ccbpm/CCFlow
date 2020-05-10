@@ -537,7 +537,7 @@ function newFlowSort(isSub) {
     var propName = (isSub ? '子级' : '同级') + '流程类别';
     var val = window.prompt(propName, '');
     if (val == null || val.length == 0) {
-        alert('必须输入名称.');
+        alert('未输入流程类别名称或者取消创建流程类别');
         return false;
     }
 

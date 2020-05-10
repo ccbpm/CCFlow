@@ -1,4 +1,144 @@
-﻿//解析表单是三列的情况
+﻿var webUser;
+var pageData = {};
+//页面启动函数.
+$(function () {
+    webUser = new WebUser();
+    pageData.fk_mapdata = GetQueryString("FK_MapData");
+    pageData.FK_Flow = GetQueryString("FK_Flow");
+    pageData.FK_Node = GetQueryString("FK_Node");
+
+    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+    if (GetQueryString("FK_Node") == "0")
+        $("#FrmNodeComponent").hide();
+    //初始化groupID.
+    var fk_mapData = GetQueryString("FK_MapData");
+    var isF = GetQueryString("IsFirst"); //是否第一次加载?
+
+    var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+    hander.Clear();
+    hander.AddPara("IsFirst", isF);
+    hander.AddPara("FK_MapData", fk_mapData);
+    hander.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+    hander.AddPara("FK_Node", GetQueryString("FK_Node"));
+    var data = hander.DoMethodReturnString("Designer_Init");
+
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+        data = data.replace('url@', '');
+        window.location.href = data;
+        return;
+    }
+
+    //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
+    data = JSON.parse(data);
+
+
+    //拼接 TABLE
+    //按分组拼接
+    var groupFields = data.Sys_GroupField;
+    var tbody = $('<tbody></tbody>');
+
+    var frmName = data.Sys_MapData[0].Name;
+
+    var tableCol = data.Sys_MapData[0].TableCol;
+    if (tableCol == 0)
+        tableCol = 4;
+    else if (tableCol == 1)
+        tableCol = 6;
+    else if (tableCol == 2)
+        tableCol = 3;
+    else
+        tableCol = 4;
+
+    var html = "";
+
+    html += "<tr>";
+    html += "<td colspan=" + tableCol + " ><div style='float:left;margin-top:1px' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;margin-top:8px' >" + frmName + "</h2></td>";
+    html += "</tr>";
+
+    for (var k = 0; k < groupFields.length; k++) {
+
+        var groupObj = groupFields[k];
+        //附件类的控件.
+        if (groupObj.CtrlType == 'Ath') {
+            //获取附件的主键
+            var MyPK = groupObj.CtrlID;
+            if (MyPK == "")
+                continue;
+            //创建附件描述信息.
+            var ath = new Entity("BP.Sys.FrmAttachment");
+            ath.MyPK = groupObj.CtrlID;
+            if (ath.RetrieveFromDBSources() == 0)
+                continue;
+            if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
+                continue;
+        }
+        //生成工具栏.
+        html += GenerGroupTR(groupObj, tableCol, data);
+
+        //生成内容.
+        html += GenerGroupContext(groupObj, data, tableCol);
+
+        //过滤attrs
+        var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+        if (tableCol == 4 || tableCol == 6)
+            html += InitMapAttr(mapAttrs, tableCol);
+
+        if (tableCol == 3)
+            html += InitThreeColMapAttr(mapAttrs, tableCol);
+        continue;
+    }
+
+    // alert(html);
+    tbody.append($(html));
+    $(".NewChild").hide();
+    //contentTable
+    $('#contentTable').children().remove();
+    $('#contentTable').append(tbody);
+
+    var mapAttrs = data.Sys_MapAttr;
+    //解析设置表单字段联动显示与隐藏.
+    for (var i = 0; i < mapAttrs.length; i++) {
+
+        var mapAttr = mapAttrs[i];
+        if (mapAttr.UIVisible == 0)
+            continue;
+
+        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
+            if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                if (mapAttr.UIContralType == 1) {
+                    /*启用了显示与隐藏.*/
+                    var ddl = $("#DDL_" + mapAttr.KeyOfEn);
+                    //初始化页面的值
+                    var nowKey = ddl.val();
+
+
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+                if (mapAttr.UIContralType == 3) {
+                    /*启用了显示与隐藏.*/
+                    var rb = $("#RB_" + mapAttr.KeyOfEn);
+                    var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                    setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
+
+                }
+            }
+        }
+    }
+
+    $("#Msg").html("");
+    ResizeWindow();
+
+});
+
+
+//解析表单是三列的情况
 function InitThreeColMapAttr(Sys_MapAttr, tableCol) {
     var html = "";
     var isDropTR = true;

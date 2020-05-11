@@ -189,6 +189,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+                
                 //下载目录下.
                 FtpStatus fs= conn.DownloadFile(tempfile, "/Flow"+remotePath + "/" + str, FtpLocalExists.Overwrite);
                 

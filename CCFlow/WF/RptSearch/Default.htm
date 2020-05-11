@@ -95,7 +95,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
             handler.AddUrlData();
-            handler.DoMethodReturnString("Default_Init");
+            var data = handler.DoMethodReturnString("Default_Init");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);

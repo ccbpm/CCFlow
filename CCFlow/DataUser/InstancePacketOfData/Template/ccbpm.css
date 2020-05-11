@@ -324,6 +324,13 @@ caption
 {
 }
 
+
+#divCurrentForm {
+    float: none;
+    width: auto;
+}
+  
+
 /* 内部标签风格 */
 fieldset
 {
@@ -911,14 +918,14 @@ border:none;
 }
 
 
-#divTrack, #divCurrentForm {
+#divTrack {
     margin:0px;
     float:right;
     position:relative;
 }
-    #divTrack iframe {
-    width:100%;
-    }
+#divTrack iframe {
+width:100%;
+}
 
 .trackDiv {
     background: #E3E7F4;

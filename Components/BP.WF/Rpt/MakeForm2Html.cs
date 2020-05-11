@@ -1395,6 +1395,165 @@ namespace BP.WF
             sb.Append("</table>");
             return sb;
         }
+
+
+        private static  string GetDtlHtmlByID(MapDtl dtl,Int64 workid)
+        {
+            StringBuilder sb = new System.Text.StringBuilder();
+            MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
+
+            sb.Append("<table style='wdith:100%' >");
+            sb.Append("<tr>");
+            foreach (MapAttr item in attrsOfDtls)
+            {
+                if (item.KeyOfEn == "OID")
+                    continue;
+                if (item.UIVisible == false)
+                    continue;
+
+                sb.Append("<th class='DtlTh'>" + item.Name + "</th>");
+            }
+            sb.Append("</tr>");
+            //#endregion 输出标题.
+
+
+            //#region 输出数据.
+            GEDtls gedtls = new GEDtls(dtl.No);
+            gedtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
+            foreach (GEDtl gedtl in gedtls)
+            {
+                sb.Append("<tr>");
+
+                foreach (MapAttr item in attrsOfDtls)
+                {
+                    if (item.KeyOfEn.Equals("OID") || item.UIVisible == false)
+                        continue;
+
+                    if (item.UIContralType == UIContralType.DDL)
+                    {
+                        sb.Append("<td class='DtlTd'>" + gedtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                        continue;
+                    }
+
+                    if (item.IsNum)
+                    {
+                        sb.Append("<td class='DtlTd' style='text-align:right' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                        continue;
+                    }
+
+                    sb.Append("<td class='DtlTd'>" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                }
+                sb.Append("</tr>");
+            }
+            //#endregion 输出数据.
+
+
+            sb.Append("</table>");
+
+         
+            sb.Append("</span>");
+            return sb.ToString();
+        }
+
+        private static string GetAthHtmlByID(FrmAttachment ath, Int64 workid, string path)
+        {
+            StringBuilder sb = new System.Text.StringBuilder();
+
+            if (ath.UploadType == AttachmentUploadType.Multi)
+            {
+
+
+                //判断是否有这个目录.
+                if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
+                    System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+
+                //文件加密
+                bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                FrmAttachmentDBs athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, workid.ToString(), ath.MyPK);
+                sb.Append("<table id = 'ShowTable' class='table' style='width:100%'>");
+                sb.Append("<thead><tr style = 'border:0px;'>");
+                sb.Append("<th style='width:50px; border: 1px solid #ddd;padding:8px;background-color:white' nowrap='true'>序</th>");
+                sb.Append("<th style = 'min -width:200px; border: 1px solid #ddd;padding:8px;background-color:white' nowrap='true'>文件名</th>");
+                sb.Append("<th style = 'width:50px; border: 1px solid #ddd;padding:8px;background-color:white' nowrap='true'>大小KB</th>");
+                sb.Append("<th style = 'width:120px; border: 1px solid #ddd;padding:8px;background-color:white' nowrap='true'>上传时间</th>");
+                sb.Append("<th style = 'width:80px; border: 1px solid #ddd;padding:8px;background-color:white' nowrap='true'>上传人</th>");
+                sb.Append("</thead>");
+                sb.Append("<tbody>");
+                int idx = 0;
+                foreach (FrmAttachmentDB item in athDBs)
+                {
+                    idx++;
+                    sb.Append("<tr>");
+                    sb.Append("<td class='Idx'>" + idx + "</td>");
+                    //获取文件是否加密
+                    bool isEncrypt = item.GetParaBoolen("IsEncrypt");
+                    if (ath.AthSaveWay == AthSaveWay.FTPServer)
+                    {
+                        try
+                        {
+                            string toFile = path + "\\pdf\\" + item.FileName;
+                            if (System.IO.File.Exists(toFile) == false)
+                            {
+                                //获取文件是否加密
+                                string file = item.GenerTempFile(ath.AthSaveWay);
+                                string fileTempDecryPath = file;
+                                if (fileEncrypt == true && isEncrypt == true)
+                                {
+                                    fileTempDecryPath = file + ".tmp";
+                                    BP.Tools.EncHelper.DecryptDES(file, fileTempDecryPath);
+
+                                }
+
+                                System.IO.File.Copy(fileTempDecryPath, toFile, true);
+                            }
+
+                            sb.Append("<td  title='" + item.FileName + "'><a href = '' >" + item.FileName + "</a></td>");
+                        }
+                        catch (Exception ex)
+                        {
+                            sb.Append("<td>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</td>");
+                        }
+                    }
+
+                    if (ath.AthSaveWay == AthSaveWay.IISServer)
+                    {
+                        try
+                        {
+                            string toFile = path + "\\pdf\\" + item.FileName;
+                            if (System.IO.File.Exists(toFile) == false)
+                            {
+                                //把文件copy到,
+                                string fileTempDecryPath = item.FileFullName;
+                                if (fileEncrypt == true && isEncrypt == true)
+                                {
+                                    fileTempDecryPath = item.FileFullName + ".tmp";
+                                    BP.Tools.EncHelper.DecryptDES(item.FileFullName, fileTempDecryPath);
+
+                                }
+
+                                //把文件copy到,
+                                System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
+                            }
+                            sb.Append("<td><a href='" + item.FileName + "'>" + item.FileName + "</a></td>");
+                        }
+                        catch (Exception ex)
+                        {
+                            sb.Append("<td>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</td>");
+                        }
+                    }
+                    sb.Append("<td>" + item.FileSize + "KB</td>");
+                    sb.Append("<td>" + item.RDT+ "KB</td>");
+                    sb.Append("<td>" + item.Rec + "KB</td>");
+                    sb.Append("</tr>");
+
+
+                }
+                sb.Append("</tbody>");
+
+                sb.Append("</table>");
+            }
+            return sb.ToString();
+        }
         /// <summary>
         /// 树形表单转成PDF.
         /// </summary>
@@ -1454,7 +1613,6 @@ namespace BP.WF
                 if (System.IO.Directory.Exists(pdfPath) == false)
                     System.IO.Directory.CreateDirectory(pdfPath);
 
-                fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
                 string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
                 string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
                 try
@@ -1999,6 +2157,28 @@ namespace BP.WF
                 }else if(mapData.HisFrmType == FrmType.Develop)
                 {
                     string ddocs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
+
+                    //获取附件
+
+                    //获取从表
+                    MapDtls dtls = new MapDtls(frmID);
+                    foreach (MapDtl dtl in dtls)
+                    {
+                        if (dtl.IsView == false)
+                            continue;
+                        string html = GetDtlHtmlByID(dtl, workid);
+                        htmlString = htmlString.Replace("@Dtl_Fd" + dtl.No, html);
+                    }
+                    FrmAttachments aths = new FrmAttachments(frmID);
+                    foreach (FrmAttachment ath in aths)
+                    {
+                        if (ath.IsVisable == false)
+                            continue;
+                        string html = GetAthHtmlByID(ath, workid,path);
+                        htmlString = htmlString.Replace("@Ath_Fd" + ath.MyPK, html);
+                    }
+
+
                     ddocs = ddocs.Replace("@Docs", htmlString);
 
                     ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");

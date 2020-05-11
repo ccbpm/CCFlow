@@ -40,8 +40,15 @@ $(window).load(function () {
     }
     
     if ($("#ToolBar").length == 1) {
-        if($('#ccbpmJS').length == 1)
-            loadScript(ccbpmPath + "/WF/ToolBar.js", function () { },"JS_CC");
+        if ($('#ccbpmJS').length == 1) {
+            var url = $('#ccbpmJS')[0].src;
+            var type = getQueryStringByNameFromUrl(url, "type");
+            if(type == "CC")
+                loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_CC");
+            if (type == "MyView")
+                loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_MyView");
+        }
+           
         else
             loadScript(ccbpmPath + "/WF/ToolBar.js");
 

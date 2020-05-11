@@ -1570,42 +1570,7 @@ function OpenOffice(isEdit) {
     return;
 }
 
-/**打印开发者表单 */
-function PrintPDF() {
-    var W = document.body.clientWidth;
-    var H = document.body.clientHeight - 40;
-    $("#Btn_PrintPdf").val("PDF打印中...");
-    $("#Btn_PrintPdf").attr("disabled", true);
-    var _html = document.getElementById("divCurrentForm").innerHTML;
-    _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
-    _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
-    _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-    handler.AddPara("html", _html);
-    handler.AddPara("FrmID", flowData.Sys_MapData[0].No);
-    handler.AddPara("WorkID", GetQueryString("WorkID"));
-
-    var data = handler.DoMethodReturnString("Packup_Init");
-    if (data.indexOf("err@") != -1) {
-        alert(data);
-    } else {
-        $("#Btn_PrintPdf").val("PDF打印成功");
-        $("#Btn_PrintPdf").attr("disabled", false);
-        $("#Btn_PrintPdf").val("打印pdf");
-        var urls = JSON.parse(data);
-        for (var i = 0; i < urls.length; i++) {
-            if (urls[i].No == "pdf") {
-                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
-                break;
-            }
-
-        }
-    }
-
-  
-
-}
 
 // 检查审核组件,是否加盖了电子签章？
 function CheckFWC() {

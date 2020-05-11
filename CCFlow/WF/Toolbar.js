@@ -1,19 +1,38 @@
 ﻿
 $(function () {
-    var data;
+    var barHtml;
+
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
         data = handler.DoMethodReturnString("InitToolBar"); 
-    } else {
+        $('#ToolBar').html(barHtml);
+    } if ($("#JS_MyView").length == 1) {
+
+        var _html = "";
+        _html += '<input name="Close" type="button" value="关闭" enable="true" onclick="Close()"/>';
+        _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
+        _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
+        _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
+        var gwf = new Entity("BP.WF.GenerWorkFlow", pageData.WorkID);
+        if (gwf.WFSta != 1) {//流程未结束
+            _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
+            _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
+        }
+        _html += '<input name="DocWord" type="button" value="公文" enable="true" />';
+        $('#ToolBar').html(_html);
+
+    }else {
+        
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
         handler.AddUrlData();
         data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
+        $('#ToolBar').html(barHtml);
     }
     
-    var barHtml = data;
+ 
 
-    $('#ToolBar').html(barHtml);
+   
 
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').attr('onclick', '');
@@ -147,6 +166,14 @@ $(function () {
         $('[name=Note]').attr('onclick', '');
         $('[name=Note]').unbind('click');
         $('[name=Note').bind('click', function () { initModal("Note"); $('#returnWorkModal').modal().show(); });
+    }
+
+    //公文
+    if ($('[name=DocWord]').length > 0) {
+
+        $('[name=DocWord]').attr('onclick', '');
+        $('[name=DocWord]').unbind('click');
+        $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
    
     var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
@@ -826,5 +853,42 @@ function DoDelSubFlow(fk_flow, workid) {
     var data = handler.DoMethodReturnString("DelSubFlow"); //删除子流程..
     alert(data);
     window.location.href = window.location.href;
+
+}
+
+/**打印开发者表单 */
+function PrintPDF() {
+    var W = document.body.clientWidth;
+    var H = document.body.clientHeight - 40;
+    $("#Btn_PrintPdf").val("PDF打印中...");
+    $("#Btn_PrintPdf").attr("disabled", true);
+    var _html = document.getElementById("divCurrentForm").innerHTML;
+    _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
+    _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+    handler.AddPara("html", _html);
+    handler.AddPara("FrmID", flowData.Sys_MapData[0].No);
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+
+    var data = handler.DoMethodReturnString("Packup_Init");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+    } else {
+        $("#Btn_PrintPdf").val("PDF打印成功");
+        $("#Btn_PrintPdf").attr("disabled", false);
+        $("#Btn_PrintPdf").val("打印pdf");
+        var urls = JSON.parse(data);
+        for (var i = 0; i < urls.length; i++) {
+            if (urls[i].No == "pdf") {
+                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
+                break;
+            }
+
+        }
+    }
+
+
 
 }

@@ -26,6 +26,7 @@
         var FK_Flow;
         var FK_Node;
         var FID;
+        var toNodeID = 0;//当前选中的节点
         //初始化数据
         $(function () {
             WorkID = GetQueryString("WorkID");
@@ -81,7 +82,7 @@
                             }
                         }
                     }
-                    addSpan = "<span style='color:black;'>(" + addSpan + ")</span>";
+                    addSpan = "<span style='color:black;' id='SP_"+node.NodeID+"'>(" + addSpan + ")</span>";
                 }
 
                 //异表单选择可以同时发送给多个节点
@@ -151,16 +152,17 @@
         }
 
         function returnWorkWindowClose(data) {
-            location.href = location.href;
+            document.getElementById("SP_" + toNodeID).innerHTML = "(" + data + ")";
+            $('#returnWorkModal').modal('hide');
         }
 
 
         //选择接受人
 
-        function SelectEmps(toNodeID) {
-
+        function SelectEmps(nodeID) {
+            toNodeID = nodeID;
             $('#modalHeader').text("选择接受人");
-            modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + toNodeID + "&IsSend=0" + "&s=" + Math.random();
+            modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + nodeID + "&IsSend=0" + "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show();
 

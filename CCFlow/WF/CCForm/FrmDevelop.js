@@ -289,7 +289,7 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     src = src + "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
 
     var W = element.width();
-    var eleHtml = $("<div id='Fd" + frmDtl.No + "' style='width:" + W + "px; height:auto;' ></div>");
+    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='width:" + W + "px; height:auto;' ></div>");
 
     var eleIframe = $("<iframe class= 'Fdtl' name='Dtl'  ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:" + W + "px;"
         + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
@@ -312,10 +312,9 @@ function figure_Develop_Ath(element, ath) {
     src += "&FID=" + fid;
     src += "&PWorkID=" + pWorkID;
     var W = element.width();
-    var eleHtml = $("<div id='Fd" + ath.MyPK + "' style='width:" + W + "px; height:auto;' ></div>");
+    var eleHtml = $("<div id='Fd" + ath.MyPK + "' name='Ath' style=' height:auto;' ></div>");
 
-    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Attach_" + ath.MyPK + "' src = '" + src + "' frameborder=0  style='width:" + W + "px;"
-        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Attach_" + ath.MyPK + "' src = '" + src + "' frameborder=0  style='height: auto; text-align: left; ' leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     eleHtml.append(eleIframe);
     $(element).after(eleHtml);
     $(element).remove(); //移除Imge节点

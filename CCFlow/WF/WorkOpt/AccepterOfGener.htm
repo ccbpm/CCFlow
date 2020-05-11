@@ -59,6 +59,7 @@
     <script type="text/javascript">
         var param = {};
         var isSigleSelect = false;
+        var selectEmp = "";
         $(function () {
 
             var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
@@ -146,6 +147,7 @@
                 isSigleSelect = true;
             }
 
+            selectEmp = "";
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
                 var row = "";
@@ -165,6 +167,7 @@
                 row += "</tr>";
 
                 $("#Table1 tbody").append(row);
+                selectEmp += sa.EmpName + ",";
             }
         }
 
@@ -377,7 +380,10 @@
         //关闭model.
         function CloseModel() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("");
+                //获取接收人
+                if(selectEmp!="")
+                selectEmp = selectEmp.substring(0, selectEmp.length - 1);
+                window.parent.returnWorkWindowClose(selectEmp);
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();

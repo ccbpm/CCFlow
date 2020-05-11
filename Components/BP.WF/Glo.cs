@@ -1030,11 +1030,12 @@ namespace BP.WF
             #endregion 修复
 
             //删除视图.
-            if (DBAccess.IsExitsObject("V_GPM_EmpGroup") == true)
-                DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
-
             if (DBAccess.IsExitsObject("V_GPM_EmpGroupMenu") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroupMenu");
+
+            
+            if (DBAccess.IsExitsObject("V_GPM_EmpGroup") == true)
+                DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
 
             if (DBAccess.IsExitsObject("V_GPM_EmpMenu") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpMenu");

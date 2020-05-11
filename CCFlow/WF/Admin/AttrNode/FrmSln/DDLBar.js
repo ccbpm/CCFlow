@@ -169,7 +169,6 @@ function changeOption() {
         case FormSlnType.DisableIt:
             url = "100.DisableIt.htm";
             break;
-        
         default:
             url = "0.FoolForm.htm";
             break;

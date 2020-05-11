@@ -1865,6 +1865,12 @@ namespace BP.WF
                     ccMsg1 = "@没有选择抄送人。";
                 if (cclist.Count > 0)
                 {
+                    ps.SQL = "UPDATE WF_CCList SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT  WHERE  WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ";
+                    ps.Add(CCListAttr.RDT, DataType.CurrentDataTime); //设置完成日期.
+                    ps.Add(CCListAttr.WorkID, this.WorkID);
+                    ps.Add(CCListAttr.FK_Node, node.NodeID);
+                    BP.DA.DBAccess.RunSQL(ps);
+
                     ccMsg1 = "@消息自动抄送给";
                     PushMsgs pms = new PushMsgs();
                     pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
@@ -1891,7 +1897,6 @@ namespace BP.WF
                     foreach (CCList cc in cclist)
                     {
                         ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
-
                         if (pushMsg != null)
                         {
 
@@ -5466,6 +5471,37 @@ namespace BP.WF
                     if (str == userNo)
                         return false;
                 }
+                string todoEmps = "";
+                //把当前的待办设置已办
+                foreach (GenerWorkerList gwl in gwls)
+                {
+                    if ((gwl.IsPassInt == 0 || gwl.IsPassInt == 90)&&(gwl.FK_Emp != WebUser.No))
+                    {
+                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(gwl.FK_Emp, gwl.FK_EmpText) + " ";
+                    }
+
+                    if (gwl.FK_Emp != WebUser.No)
+                    continue;
+
+                    //设置当前已经完成.
+                    gwl.IsPassInt = 1;
+                    gwl.Update();
+
+                    //调用发送成功事件.
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                    this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                    //执行时效考核.
+                    if (this.rptGe == null)
+                        Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
+                    else
+                        Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
+
+                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "多人处理规则：协作组长模式");
+                }
+                this.addMsg(SendReturnMsgFlag.CondInfo, BP.WF.Glo.multilingual("@当前工作未处理的人还有: {0},所以不能发送到下一步.", "WorkNode", "you_have_finished_1", todoEmps), null, SendReturnMsgType.Info);
+                return true;
             }
 
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.HuiQianLeader)

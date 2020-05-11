@@ -8251,7 +8251,7 @@ namespace BP.WF
 
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,ReadDT=" + SystemConfig.AppCenterDBVarStr + "ReadDT  WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
-            ps.Add(CCListAttr.Sta, (int)CCSta.Read);
+            ps.Add(CCListAttr.Sta, (int)CCSta.UnRead);
             ps.Add(CCListAttr.ReadDT,  DataType.CurrentDataTime); //设置读取日期.
             ps.Add(CCListAttr.MyPK, mypk);
             BP.DA.DBAccess.RunSQL(ps);
@@ -8280,7 +8280,7 @@ namespace BP.WF
         {
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,ReadDT=" + SystemConfig.AppCenterDBVarStr + "ReadDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo";
-            ps.Add(CCListAttr.Sta, (int)CCSta.Read);
+            ps.Add(CCListAttr.Sta, (int)CCSta.UnRead);
             ps.Add(CCListAttr.ReadDT, DataType.CurrentDataTime); //设置读取日期.
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.FK_Node, nodeID);

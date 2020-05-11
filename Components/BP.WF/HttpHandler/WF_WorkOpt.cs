@@ -1471,7 +1471,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
 
             //是否启用会签待办列表, 如果启用了，主持人会签后就转到了HuiQianList.htm里面了.
-            if (BP.WF.Glo.IsEnableHuiQianList == true)
+            if (BP.WF.Glo.IsEnableHuiQianList == true )
             {
                 //设置当前操作人员的状态.
                 sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
@@ -3280,35 +3280,35 @@ namespace BP.WF.HttpHandler
         /// 获得节点表单数据.
         /// </summary>
         /// <returns></returns>
-        public string ViewWorkNodeFrm()
-        {
-            Node nd = new Node(this.FK_Node);
-            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+        //public string ViewWorkNodeFrm()
+        //{
+        //    Node nd = new Node(this.FK_Node);
+        //    nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
-            Hashtable ht = new Hashtable();
-            ht.Add("FormType", nd.FormType.ToString());
-            ht.Add("Url", nd.FormUrl + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node);
+        //    Hashtable ht = new Hashtable();
+        //    ht.Add("FormType", nd.FormType.ToString());
+        //    ht.Add("Url", nd.FormUrl + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node);
 
-            if (nd.FormType == NodeFormType.SDKForm)
-                return BP.Tools.Json.ToJsonEntityModel(ht);
+        //    if (nd.FormType == NodeFormType.SDKForm)
+        //        return BP.Tools.Json.ToJsonEntityModel(ht);
 
-            if (nd.FormType == NodeFormType.SelfForm)
-                return BP.Tools.Json.ToJsonEntityModel(ht);
+        //    if (nd.FormType == NodeFormType.SelfForm)
+        //        return BP.Tools.Json.ToJsonEntityModel(ht);
 
-            //表单模版.
-            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID);
-            string json = BP.WF.Dev2Interface.CCFrom_GetFrmDBJson(this.FK_Flow, this.MyPK);
-            DataTable mainTable = BP.Tools.Json.ToDataTableOneRow(json);
-            mainTable.TableName = "MainTable";
-            myds.Tables.Add(mainTable);
+        //    //表单模版.
+        //    DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID);
+        //    string json = BP.WF.Dev2Interface.CCFrom_GetFrmDBJson(this.FK_Flow, this.MyPK);
+        //    DataTable mainTable = BP.Tools.Json.ToDataTableOneRow(json);
+        //    mainTable.TableName = "MainTable";
+        //    myds.Tables.Add(mainTable);
 
-            //MapExts exts = new MapExts(nd.HisWork.ToString());
-            //DataTable dtMapExt = exts.ToDataTableDescField();
-            //dtMapExt.TableName = "Sys_MapExt";
-            //myds.Tables.Add(dtMapExt);
+        //    //MapExts exts = new MapExts(nd.HisWork.ToString());
+        //    //DataTable dtMapExt = exts.ToDataTableDescField();
+        //    //dtMapExt.TableName = "Sys_MapExt";
+        //    //myds.Tables.Add(dtMapExt);
 
-            return BP.Tools.Json.ToJson(myds);
-        }
+        //    return BP.Tools.Json.ToJson(myds);
+        //}
 
         /// <summary>
         /// 回复加签信息.

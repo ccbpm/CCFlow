@@ -1056,6 +1056,8 @@ namespace BP.WF
             //Oracle 语法有所区别
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
                 throw new Exception("err@没有判断的数据库类型:"+ BP.Sys.SystemConfig.AppCenterDBType.ToString());

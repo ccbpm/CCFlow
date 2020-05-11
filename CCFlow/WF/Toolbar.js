@@ -5,7 +5,7 @@ $(function () {
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar"); 
+        barHtml = handler.DoMethodReturnString("InitToolBar"); 
         $('#ToolBar').html(barHtml);
     } if ($("#JS_MyView").length == 1) {
 
@@ -26,7 +26,7 @@ $(function () {
         
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
         handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
+        barHtml = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
         $('#ToolBar').html(barHtml);
     }
     
@@ -882,6 +882,11 @@ function PrintPDF() {
         var urls = JSON.parse(data);
         for (var i = 0; i < urls.length; i++) {
             if (urls[i].No == "pdf") {
+                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
+                break;
+            }
+
+            if (urls[i].No == "zip") {
                 window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
                 break;
             }

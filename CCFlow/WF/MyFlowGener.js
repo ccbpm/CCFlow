@@ -150,7 +150,7 @@ function SetBottomTooBar() {
 }
 
 window.onload = function () {
-    SetBottomTooBar();
+    setToobarUnVisible();
     ResizeWindow();
 };
 

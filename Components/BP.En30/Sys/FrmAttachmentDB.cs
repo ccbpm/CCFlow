@@ -233,8 +233,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
                 //获取最后"_"的位置
-                int idx = value.LastIndexOf('_');
-                string val = value.Substring(idx+1);
+                string val = value.Replace(this.FK_MapData+"_","");
                 this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val);
             }
         }

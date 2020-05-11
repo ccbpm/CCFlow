@@ -232,7 +232,7 @@ function initModal(modalType, toNode) {
         var node = flowData.WF_Node[0];
         if (node.FormType == 12 || (node.FormType == 11 && flowData.FrmNode[0] != null && flowData.FrmNode[0].FrmType == 8)) {
             if (modalType == "PackUp_pdf" || modalType == "PackUp_html" || modalType == "PackUp_zip") {
-                PrintPDF();
+                PrintPDF(modalType.replace("PackUp_",""));
                 return;
             }
         }
@@ -857,7 +857,7 @@ function DoDelSubFlow(fk_flow, workid) {
 }
 
 /**打印开发者表单 */
-function PrintPDF() {
+function PrintPDF(packUpType) {
     var W = document.body.clientWidth;
     var H = document.body.clientHeight - 40;
     $("#Btn_PrintPdf").val("PDF打印中...");
@@ -891,12 +891,12 @@ function PrintPDF() {
         $("#Btn_PrintPdf").val("打印pdf");
         var urls = JSON.parse(data);
         for (var i = 0; i < urls.length; i++) {
-            if (urls[i].No == "pdf") {
+            if (urls[i].No == packUpType) {
                 window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
                 break;
             }
 
-            if (urls[i].No == "zip") {
+            if (urls[i].No == packUpType) {
                 window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
                 break;
             }

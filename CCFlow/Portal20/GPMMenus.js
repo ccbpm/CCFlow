@@ -17,6 +17,8 @@ function InitLeftMenuComm() {
     var dirs = data["Dirs"]; //获得目录.
     var menus = data["Menus"]; //获得菜单.
 
+
+
     var firstIcon = "icon-folder";
     var secondIcon = "icon-book-open";
     $.each(dirs, function (i, dir) {

@@ -14,7 +14,7 @@ $(function () {
         _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
         _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
         _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
-        var gwf = new Entity("BP.WF.GenerWorkFlow", pageData.WorkID);
+        var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
         if (gwf.WFSta != 1) {//流程未结束
             _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
             _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
@@ -866,6 +866,16 @@ function PrintPDF() {
     _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
     _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
     _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
+    //把附件、从表替换
+    var dtls = $("[name=Dtl]");
+    $.each(dtls, function (i, dtl) {
+        _html = _html.replace(dtl.innerHTML, "@Dtl_" + dtl.id);
+    });
+    var aths = $("[name=Ath]");
+    $.each(aths, function (i, ath) {
+        _html = _html.replace(ath.innerHTML, "@Ath_" + ath.id);
+    });
+    
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddPara("html", _html);

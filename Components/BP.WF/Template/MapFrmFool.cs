@@ -108,8 +108,8 @@ namespace BP.WF.Template
                 }
 
 
-                uac.IsUpdate = true ;
-               // uac.Readonly();
+                uac.IsUpdate = true ;//zsy 临时修改 可以删除
+               // uac.Readonly();//这是原来的
                 return uac;
             }
         }

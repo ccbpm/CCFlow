@@ -35,6 +35,7 @@ namespace BP.WF.HttpHandler
         {
             //创建实体.
             GEEntity en = new GEEntity(this.FrmID, this.OID);
+            
 
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
@@ -109,7 +110,8 @@ namespace BP.WF.HttpHandler
             //做个性化处理,为计算中心.
             if (DBAccess.IsExitsObject("Gov_SendFileCopy") ==true)
             {
-                string sql1 = "UPDATE gov_sendfilecopy set orgno=" + WebUser.OrgNo + ",orgname='" + WebUser.OrgName + "' where oid=" + this.WorkID;
+              
+                string sql1 = "UPDATE gov_sendfilecopy set OrgNo='" + WebUser.OrgNo + "',OrgName='" + WebUser.OrgName + "' where oid=" + this.OID;
                 DBAccess.RunSQL(sql1);
             }
 
@@ -152,6 +154,7 @@ namespace BP.WF.HttpHandler
 
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.
+            
 
             string wordkey = this.GetRequestVal("DDL_WordKey"); //字号
             string wordname = this.GetRequestVal("DocWordName"); //DocWordName 

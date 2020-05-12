@@ -106,7 +106,10 @@ namespace BP.WF.Template
                     uac.IsUpdate = true;
                     return uac;
                 }
-                uac.Readonly();
+
+
+                uac.IsUpdate = true ;
+               // uac.Readonly();
                 return uac;
             }
         }

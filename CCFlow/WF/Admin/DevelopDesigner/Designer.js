@@ -1409,6 +1409,10 @@ UE.plugins['component'] = function () {
                 ExtDocWord();
             }
 
+            if (dataType == "Btn") {//按钮
+                ExtBtn();
+            }
+
             if (dataType == "HandWriting") {//手写签字版
                 ExtHandWriting();
             }
@@ -1495,6 +1499,15 @@ UE.plugins['component'] = function () {
                     mapAttr.Delete();
                 }
 
+                if (dataType == "Btn") {
+                    var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + mypk);
+                    mapAttr.Delete();
+
+                    //删除相关联的按钮
+                    var frmBtn = new Entity("BP.Sys.FrmUI.FrmBtn", pageParam.fk_mapdata + "_" + mypk);
+                    frmBtn.Delete();
+                }
+
                 if (dataType == "HandWriting") {
                     var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
                     mapAttr.Delete();
@@ -1550,6 +1563,9 @@ UE.plugins['component'] = function () {
             if (dataType == "DocWord")
                 _html = popup.formatHtml(
                     '<nobr>公文字号: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+            if (dataType == "Btn")
+                _html = popup.formatHtml(
+                    '<nobr>按钮: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
 
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(

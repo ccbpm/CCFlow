@@ -17,6 +17,7 @@ if (typeof FrmComponents == "undefined") {
         FrmComponents.FlowBBS = 15,//评论组件
         FrmComponents.Fiexed = 16,//系统定位
         FrmComponents.DocWord = 17,// 公文字号
+        FrmComponents.Btn = 18,// 按钮
         FrmComponents.JobSchedule = 50,//流程进度图
         FrmComponents.BigText = 60,//大文本
         FrmComponents.Ath = 70,//独立附件

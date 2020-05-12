@@ -624,6 +624,11 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             eleHtml += "</span></div>";
             return eleHtml;
         }
+        //按钮
+        if (mapAttr.UIContralType == 18) {
+            "<input type='button'  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.Name + "' style='width:98%' onclick=''/>";
+            return;
+        }
         //工作进度图
         if (mapAttr.UIContralType == 50) {
             return "<img  src='./Img/JobSchedule.png'  style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";

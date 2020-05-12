@@ -48,6 +48,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
     html += "<option value=" + FrmComponents.FlowBBS + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
     html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
+    html += "<option value=" + FrmComponents.Btn + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮</option>";
     html += "<option value=" + FrmComponents.JobSchedule + ">&nbsp;&nbsp;&nbsp;&nbsp;流程进度图</option>";
 
     html += "<option value=null  disabled='disabled'>+移动端控件</option>";
@@ -125,6 +126,9 @@ function changeOption() {
         case FrmComponents.DocWord:
             roleName = "17.DocWord.htm";
             break;
+        case FrmComponents.Btn:
+            roleName = "18.Btn.htm";
+            break;
         case FrmComponents.JobSchedule:
             roleName = "50.JobSchedule.htm";
             break;
@@ -184,7 +188,8 @@ function changeOption() {
             return MapAttrFixed();
         case 17:// 公文字号
             return ExtDocWord();
-        case 18:
+        case 18://按钮
+            return ExtBtn();
             break;
         case 50://流程进度图
             return ExtJobSchedule();
@@ -673,6 +678,59 @@ function ExtHandWriting() {
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 8)
+    }
+}
+
+//按钮
+function ExtBtn() {
+
+    var name = window.prompt('请输入按钮名称:\t\n比如:保存、发送');
+    if (name == null || name == undefined)
+        return "";
+
+    var frmID = fk_mapData;
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+    if (mapAttrs.length >= 1) {
+        alert('名称：[' + name + "]已经存在.");
+        ExtAth();
+        return "";
+    }
+
+    //获得ID.
+    var id = StrToPinYin(name);
+
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.MyPK = mypk;
+    if (mapAttr.IsExits == true) {
+        alert('名称：[' + name + "]已经存在.");
+        return "";
+    }
+    mapAttr.FK_MapData = frmID;
+    mapAttr.KeyOfEn = id;
+    mapAttr.Name = name;
+    mapAttr.GroupID = groupID;
+    mapAttr.UIContralType =18; //按钮
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 0; //
+    mapAttr.TextColSpan = 1; //
+    mapAttr.IsEnableInAPP = 0;
+    mapAttr.Insert(); //插入字段.
+
+    mapAttr.Retrieve();
+
+    var en = new Entity("BP.Sys.FrmUI.FrmBtn");
+    en.MyPK = mapAttr.MyPK;
+    en.FK_MapData = frmID;
+    en.Text = name;
+    en.GroupID = mapAttr.GroupID; //设置分组列.
+    en.Insert(); //插入到数据库.
+    if (frmType != 8)
+        window.location.href = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + en.MyPK;
+    if (frmType == 8) {
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 18)
     }
 }
 

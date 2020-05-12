@@ -724,6 +724,7 @@ function ExtBtn() {
     var en = new Entity("BP.Sys.FrmUI.FrmBtn");
     en.MyPK = mapAttr.MyPK;
     en.FK_MapData = frmID;
+    en.BtnID = id;
     en.Text = name;
     en.GroupID = mapAttr.GroupID; //设置分组列.
     en.Insert(); //插入到数据库.

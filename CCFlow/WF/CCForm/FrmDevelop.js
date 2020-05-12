@@ -246,6 +246,15 @@ function GenerDevelopFrm(wn,fk_mapData) {
         figure_Develop_IFrame(element, iframe);
 
     }
+
+    //按钮
+    var frmBtns = frmData.Sys_FrmBtn;
+    for (var i = 0; i < frmBtns.length; i++) {
+        var frmBtn = frmBtns[i];
+       
+        figure_Develop_Btn(frmBtn);
+
+    }
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
         if (nodeComponents != null) {
@@ -432,6 +441,45 @@ function figure_Develop_Image(element, frmImage) {
 
     } else if (frmImage.ImgAppType == 1) {//暂不解析
         //电子签章  写后台
+    }
+}
+
+function figure_Develop_Btn(frmBtn) {
+    var element;
+    if ($("#TB_" + frmBtn.BtnID).length == 0)
+        return;
+    element = $("#TB_" + frmBtn.BtnID);
+
+    var doc = frmBtn.EventContext;
+    doc = doc.replace("~", "'");
+    var eventType = frmBtn.EventType;
+    if (eventType == 0) {//禁用
+        element.attr('disabled', 'disabled').css('background', 'gray');
+    } else if (eventType == 1) {//运行URL
+        $.each(frmData.Sys_MapAttr, function (i, obj) {
+            if (doc.indexOf('@' + obj.KeyOfEn) > 0) {
+                doc = doc.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
+            }
+        });
+        var OID = GetQueryString("OID");
+        if (OID == undefined || OID == "");
+        OID = GetQueryString("OID");
+        var FK_Node = GetQueryString("FK_Node");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var webUser = new WebUser();
+        var userNo = webUser.No;
+        var SID = webUser.SID;
+        if (SID == undefined)
+            SID = "";
+        if (doc.indexOf("?") == -1)
+            doc = doc + "?1=1";
+        doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        element.attr('onclick', "window.open('" + doc + "')");
+
+    } else {//运行JS
+        if (doc.indexOf("(") == -1)
+            doc = doc + "()";
+        element.attr('onclick', doc);
     }
 }
 

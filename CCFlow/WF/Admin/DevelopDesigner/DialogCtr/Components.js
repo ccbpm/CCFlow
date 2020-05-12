@@ -57,7 +57,7 @@
                 _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
                 break;
             case 18:
-                _html = "<input type='button'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='Btn' data-name='" + mapData.Name +"' data-type='Btn'   leipiplugins='component' style='width:98%' placeholder=''/>";
+                _html = "<input type='button'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='Btn' value='" + mapData.Name +"'   leipiplugins='component' class='Btn'/>";
                 break;
             case 50://流程进度图
                 _html = "<img src='../FoolFormDesigner/Img/JobSchedule.png' style='border:0px;height:" + mapData.UIHeight + "px;width:100%;' id='Img" + mapData.KeyOfEn + "' leipiplugins='component' data-key='" + mapData.MyPK + "' data-type='JobSchedule'/>";

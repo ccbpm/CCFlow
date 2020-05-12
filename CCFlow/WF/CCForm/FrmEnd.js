@@ -24,6 +24,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
+        if (mapAttr.UIContralType == 18)
+            continue;
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002"||val=="10002.0000"))
             val = "";

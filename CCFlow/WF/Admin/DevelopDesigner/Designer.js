@@ -337,9 +337,9 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         return;
     }
 
-    if (shap == 'Button') {
-        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + mypk;
-        CCForm_ShowDialog(url, '按钮' + fmypk + '属性', null, null, shap, mypk, anchorEl);
+    if (shap == 'Btn') {
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + fk_mapdata+"_"+mypk;
+        CCForm_ShowDialog(url, '按钮' + mypk + '属性', null, null, shap, fk_mapdata + "_" + mypk, anchorEl);
         return;
     }
 
@@ -475,6 +475,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
             case "Map":
             case "Score":
             case "HandWriting":
+            case "Btn":
                 var en = new Entity("BP.Sys.MapAttr");
                 en.SetPKVal(MyPK);
                 if (en.RetrieveFromDBSources() == 0) {
@@ -2270,11 +2271,17 @@ function Save() {
                         dataType = 1;
                         mapAttr.UIContralType = 15; //评论组件
                     }
+                   
 
                     if (dataType == "DocWord") {
                         dataType = 1;
                         mapAttr.UIContralType = 17;//公文字号
                     }
+                    if (dataType == "Btn") {
+                        dataType = 1;
+                        mapAttr.UIContralType = 18; //按钮
+                    }
+
 
                     mapAttr.MyDataType = dataType;
                     if (dataType == 4) {

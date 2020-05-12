@@ -1203,8 +1203,7 @@ function GenerWorkNode() {
 
     ShowTextBoxNoticeInfo();
 
-    //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
-    InitToNodeDDL(flowData);
+  
 
     if (node.FormType == 11) {
         //获得配置信息.

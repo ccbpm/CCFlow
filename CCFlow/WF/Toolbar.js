@@ -33,6 +33,10 @@ $(function () {
 
     }
 
+
+    //按钮旁的下来框
+    if ("undefined" != typeof flowData && flowData != null && flowData != undefined) 
+        InitToNodeDDL(flowData);
    
 
     if ($('[name=Return]').length > 0) {

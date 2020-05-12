@@ -82,8 +82,9 @@
                             }
                         }
                     }
-                    addSpan = "<span style='color:black;' id='SP_"+node.NodeID+"'>(" + addSpan + ")</span>";
+                   
                 }
+                addSpan = "<span style='color:black;' id='SP_" + node.NodeID + "'>(" + addSpan + ")</span>";
 
                 //异表单选择可以同时发送给多个节点
                 if (isSubYBD == true) {
@@ -152,7 +153,9 @@
         }
 
         function returnWorkWindowClose(data) {
-            document.getElementById("SP_" + toNodeID).innerHTML = "(" + data + ")";
+            if(data!="取消")
+                document.getElementById("SP_" + toNodeID).innerHTML = "(" + data + ")";
+
             $('#returnWorkModal').modal('hide');
         }
 

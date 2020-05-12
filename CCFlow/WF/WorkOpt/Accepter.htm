@@ -287,15 +287,17 @@
             //生成选择的人员.
             var checked = $('input:checked');
             var selectedEmps = [];
-            var selectedEmpLab = "";
+            var selectedEmpLab = [];
             for (var i = 0; i < checked.length; i++) {
                 if (checked[i].id == "selectAll") {
                     continue;
                 }
                 selectedEmps.push(checked[i].id);
+                selectedEmpLab.push(checked[i].value);
             }
 
             selectedEmps = selectedEmps.join(',');
+            selectedEmpLab = selectedEmpLab.join(',');
             if (selectedEmps == '' || selectedEmps == null) {
                 alert('请选择人员.');
                 return;
@@ -304,7 +306,7 @@
             handler.AddUrlData();  //WorkID,FK_Flow,FK_Node,ToNode 参数.
             handler.AddPara("SelectEmps", selectedEmps); //多个人员用逗号分开： 比如 zhangsan,lisi
             var data = handler.DoMethodReturnString("Accepter_Save"); //执行保存
-            Close(false);  //关闭窗口.
+            Close(false, selectedEmpLab);  //关闭窗口.
         }
 
         //复选框全选反选
@@ -411,16 +413,17 @@
         }
 
         //取消【选择接收人并发送】
-        function Close(flag) {
-
+        function Close(flag, selectEmps) {
+            if (selectEmps == null || selectEmps == undefined)
+                selectEmps ="取消"
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("取消");
+                window.parent.returnWorkWindowClose(selectEmps);
                 if (flag == true)
                     window.parent.close();
                 else
                     window.close();
             } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                window.opener.returnWorkWindowClose("取消");
+                window.opener.returnWorkWindowClose(selectEmps);
                 if (flag == true)
                     window.opener.close();
                 else

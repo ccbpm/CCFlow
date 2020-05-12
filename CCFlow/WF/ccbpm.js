@@ -13,9 +13,13 @@ $(function () {
         isEqualsDomain = true;
 
     //引入关联的js
+    //Skip.addJs(ccbpmPath + "/WF/Scripts/config.js");
+    //Skip.addJs(ccbpmPath + "/WF/Comm/Gener.js");
+    //Skip.addJs(ccbpmPath + "/WF/Scripts/QueryString.js");
     loadScript(ccbpmPath + "/WF/Scripts/config.js", function () {
         loadScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
-                loadScript(ccbpmPath + "/WF/Scripts/QueryString.js");
+            loadScript(ccbpmPath + "/WF/Scripts/QueryString.js", function () {
+            });
         });
     });
 

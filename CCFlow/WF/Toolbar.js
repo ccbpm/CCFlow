@@ -414,6 +414,46 @@ function setToobarEnable() {
     $('#ToolBar input').removeAttr('disabled');
 }
 
+//初始化发送节点下拉框
+function InitToNodeDDL(flowData) {
+
+    if (flowData.ToNodes == undefined)
+        return;
+
+    if (flowData.ToNodes.length == 0)
+        return;
+
+    //如果没有发送按钮，就让其刷新,说明加载不同步.
+    var btn = $('[name=Send]');
+    if (btn == null || btn == undefined) {
+        window.location.href = window.location.href;
+        return;
+    }
+
+    //如果是会签且不是主持人时，则发送给主持人，不需要选择下一个节点和接收人
+    if (btn.length != 0) {
+        var dataType = $(btn[0]).attr("data-type");
+        if (dataType != null && dataType != undefined && dataType == "isAskFor")
+            return;
+    }
+    var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
+    $.each(flowData.ToNodes, function (i, toNode) {
+        var opt = "";
+        if (toNode.IsSelected == "1") {
+            var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
+            opt.data(toNode);
+        } else {
+            var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
+            opt.data(toNode);
+        }
+
+        toNodeDDL.append(opt);
+
+    });
+
+    $('[name=Send]').after(toNodeDDL);
+}
+
 /**
  * 流程发送的方法,这个是通用的方法
  * @param {isHuiQian} isHuiQian 是否是会签模式
@@ -426,6 +466,12 @@ function Send(isHuiQian,formType) {
     //SDK表单
     if (formType == 3) {
         if (SDKSend() == false)
+            return;
+    }
+
+    //嵌入式表单
+    if (formType == 2) {
+        if (SendSelfFrom() == false)
             return;
     }
     //表单方案：傻瓜表单、自由表单、开发者表单、累加表单、绑定表单库的表单（单表单)
@@ -479,9 +525,9 @@ function execSend(toNodeID, formType) {
     setToobarDisiable();
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    if (formType != 3) {
+    if (formType != 3 && formType!=2) {
         //组织数据.
-        var dataStrs = getFormData(true, true) + "&ToNode=" + toNodeID;
+        var dataStrs = getFormData(true, true);
         $.each(dataStrs.split("&"), function (i, o) {
             //计算出等号的INDEX
             var indexOfEqual = o.indexOf('=');
@@ -494,6 +540,7 @@ function execSend(toNodeID, formType) {
             }
         });
     }
+    handler.AddPara("ToNode", toNodeID);
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
 
@@ -766,6 +813,24 @@ function FromTreeSend() {
     if (isSend == false) {
         alert(msg);
         return;
+    }
+    return true;
+}
+/**
+ * 嵌入式表单
+ */
+function SendSelfFrom() {
+    var val = SaveSelfFrom();
+    if (val == false) {
+        return false;
+    }
+
+    if (val != true) {
+        //就说明是传来的参数，这些参数需要存储到WF_GenerWorkFlow里面去，用于方向条件的判断。
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddPara("WorkID", GetQueryString("WorkID"));
+        handler.AddPara("Paras", val);
+        handler.DoMethodReturnString("SaveParas");
     }
     return true;
 }

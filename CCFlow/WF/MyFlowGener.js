@@ -774,45 +774,7 @@ function GenerCheckIDs() {
     return checkBoxIDs;
 }
 
-//初始化发送节点下拉框
-function InitToNodeDDL(flowData) {
 
-    if (flowData.ToNodes == undefined)
-        return;
-
-    if (flowData.ToNodes.length == 0)
-        return;
-
-    //如果没有发送按钮，就让其刷新,说明加载不同步.
-    var btn = $('[name=Send]');
-    if (btn == null || btn == undefined) {
-        window.location.href = window.location.href;
-        return;
-    }
-
-    //如果是会签且不是主持人时，则发送给主持人，不需要选择下一个节点和接收人
-    if (btn.length != 0) {
-        var dataType = $(btn[0]).attr("data-type");
-        if (dataType != null && dataType != undefined && dataType == "isAskFor")
-            return;
-    }
-    var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-    $.each(flowData.ToNodes, function (i, toNode) {
-        var opt = "";
-        if (toNode.IsSelected == "1") {
-            var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
-            opt.data(toNode);
-        } else {
-            var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
-            opt.data(toNode);
-        }
-
-        toNodeDDL.append(opt);
-
-    });
-
-    $('[name=Send]').after(toNodeDDL);
-}
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function ShowNoticeInfo() {

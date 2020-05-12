@@ -91,6 +91,20 @@ namespace BP.En
             }
             return this;
         }
+
+        public UAC OpenForAdmin()
+        {
+            if (BP.Web.WebUser.No != null
+               && BP.Web.WebUser.IsAdmin == true)
+            {
+                this.OpenAll();
+            }
+            else
+            {
+                this.Readonly();
+            }
+            return this;
+        }
         #endregion
 
         #region 控制属性

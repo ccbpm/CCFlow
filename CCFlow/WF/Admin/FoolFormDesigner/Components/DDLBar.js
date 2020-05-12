@@ -36,6 +36,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FrmComponents.IDCard + " >&nbsp;&nbsp;&nbsp;&nbsp;身份证 </option>";
     html += "<option value=" + FrmComponents.AthShow + " >&nbsp;&nbsp;&nbsp;&nbsp;字段附件</option>";
     html += "<option value=" + FrmComponents.HyperLink + " >&nbsp;&nbsp;&nbsp;&nbsp;超链接 </option>";
+    html += "<option value=" + FrmComponents.Btn + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮</option>";
     html += "<option value=" + FrmComponents.HandWriting + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
     html += "<option value=" + FrmComponents.Score + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
     html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件</option>";
@@ -48,7 +49,6 @@ function InitBar(optionKey) {
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
     html += "<option value=" + FrmComponents.FlowBBS + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
     html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
-    html += "<option value=" + FrmComponents.Btn + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮</option>";
     html += "<option value=" + FrmComponents.JobSchedule + ">&nbsp;&nbsp;&nbsp;&nbsp;流程进度图</option>";
 
     html += "<option value=null  disabled='disabled'>+移动端控件</option>";
@@ -728,7 +728,7 @@ function ExtBtn() {
     en.GroupID = mapAttr.GroupID; //设置分组列.
     en.Insert(); //插入到数据库.
     if (frmType != 8)
-        window.location.href = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + en.MyPK;
+        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + en.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 18)
     }

@@ -488,6 +488,10 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
         //解析Lab 1、文本类型、DDL类型、RB类型、扩张（图片、附件、超链接）
         lab = GetLab(frmData, attr);
 
+        var labClass = "LabelFDesc";
+        if (attr.UIContralType == 18)
+            labClass = "FDesc";
+
         //单元格为0的情况
         if (colSpan == 0) {
             //占一行
@@ -500,7 +504,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                 isDropTR = true;
                 rowSpan = 1;
                 html += "<tr>";
-                html += "<td  colSpan=" + textColSpan + " rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
+                html += "<td  colSpan=" + textColSpan + " rowSpan=" + rowSpan + "class='" + labClass +"' style='text-align:left'>" + lab + "</br>";
                 html += "</tr>";
                 continue;
             }
@@ -513,7 +517,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     UseColSpan += colSpan + textColSpan + ruColSpan;
                     lRowSpan = rowSpan;
                     luColSpan += colSpan + textColSpan;
-                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                    html += "<td class='" + labClass +"' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
                     if (rowSpan != 1) {
                         IsShowLeft = false;
                     }
@@ -554,7 +558,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     UseColSpan += colSpan + textColSpan;
                     rRowSpan = rowSpan;
                     ruColSpan += colSpan + textColSpan;
-                    html += "<td class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
+                    html += "<td class='" + labClass +"' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colSpan=" + textColSpan + ">" + lab + "</td>";
                     if (UseColSpan == tableCol) {
                         isDropTR = true;
                         if (rowSpan != 1) {
@@ -604,7 +608,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             isDropTR = true;
             rowSpan = 1;
             html += "<tr>";
-            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='LabelFDesc' style='text-align:left'>" + lab + "</br>";
+            html += "<td  ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='" + labClass +"' style='text-align:left'>" + lab + "</br>";
             html += "</tr>";
             html += "<tr>";
             html += "<td  id='Td_" + attr.KeyOfEn + "' ColSpan='" + colSpan + "' rowSpan=" + rowSpan + " class='FDesc' style='text-align:left'>";
@@ -624,7 +628,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
             rowSpan = 1;
             isDropTR = true;
             html += "<tr >";
-            html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
+            html += "<td  id='Td_" + attr.KeyOfEn + "' class='" + labClass +"' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
             html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
             html += InitMapAttrOfCtrl(attr);
             html += "</td>";
@@ -645,7 +649,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     colSpan = colSpan + textColSpan;
                     colWidth = (parseInt(colSpan) * 23 + 10 * parseInt(textColSpan)) + "%";
                 } else {
-                    html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
+                    html += "<td  id='Td_" + attr.KeyOfEn + "' class='" + labClass +"' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 }
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrl(attr);
@@ -695,7 +699,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
                     colSpan = colSpan + textColSpan;
                     width = 35 * parseInt(colSpan) + "%";
                 } else {
-                    html += "<td  id='Td_" + attr.KeyOfEn + "' class='LabelFDesc' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
+                    html += "<td  id='Td_" + attr.KeyOfEn + "' class='" + labClass +"' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 }
                 html += "<td  class='FDesc' id='Td_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrl(attr);
@@ -2097,6 +2101,58 @@ function GetLab(frmData, attr) {
         }
 
 
+    }
+
+    //按钮
+    if (contralType == 18) {
+        //获取按钮控件的信息
+        var frmBtns = $.grep(frmData.Sys_FrmBtn, function (item, i) {
+            return item.MyPK == attr.MyPK;
+        });
+        if (frmBtns.length == 0) {
+            alert("主键为" + attr.MyPK + "名称为" + attr.Name + "的按钮信息丢失，请联系管理员");
+            return "";
+        }
+
+        var frmBtn = frmBtns[0];
+        var eleHtml = $('<div></div>');
+        var btnId = frmBtn.BtnID;
+        if (btnId == null || btnId == "")
+            btnId = frmBtn.MyPK;
+
+        var doc = frmBtn.EventContext;
+        doc = doc.replace("~", "'");
+        var eventType = frmBtn.EventType;
+        var onclick = "";
+        if (eventType == 0) {//禁用
+            onclick = "disabled='disabled' style='background:gray;'";
+        } else if (eventType == 1) {//运行URL
+            $.each(frmData.Sys_MapAttr, function (i, obj) {
+                if (doc.indexOf('@' + obj.KeyOfEn) > 0) {
+                    doc = doc.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
+                }
+            });
+            var OID = GetQueryString("OID");
+            if (OID == undefined || OID == "");
+            OID = GetQueryString("OID");
+            var FK_Node = GetQueryString("FK_Node");
+            var FK_Flow = GetQueryString("FK_Flow");
+            var webUser = new WebUser();
+            var userNo = webUser.No;
+            var SID = webUser.SID;
+            if (SID == undefined)
+                SID = "";
+            if (doc.indexOf("?") == -1)
+                doc = doc + "?1=1";
+            doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+            onclick = "onclick='window.open(\"" + doc + ")'";
+
+        } else {//运行JS
+            if (doc.indexOf("(") == -1)
+                doc = doc + "()";
+            onclick = "onclick='" + doc + "'";
+        }
+        return "<input id='" + btnId + "' type='button' value='" + frmBtn.Text + "'  class='btn' " + onclick + ">";
     }
     return lab;
 }

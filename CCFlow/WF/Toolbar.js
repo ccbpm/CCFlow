@@ -5,32 +5,33 @@ $(function () {
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
-        barHtml = handler.DoMethodReturnString("InitToolBar"); 
+        barHtml = handler.DoMethodReturnString("InitToolBar");
         $('#ToolBar').html(barHtml);
-    } if ($("#JS_MyView").length == 1) {
+    } else {
+        if ($("#JS_MyView").length == 1) {
 
-        var _html = "";
-        _html += '<input name="Close" type="button" value="关闭" enable="true" onclick="Close()"/>';
-        _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
-        _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
-        _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
-        var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
-        if (gwf.WFSta != 1) {//流程未结束
-            _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
-            _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
+            var _html = "";
+            _html += '<input name="Close" type="button" value="关闭" enable="true" onclick="Close()"/>';
+            _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
+            _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
+            _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
+            var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+            if (gwf.WFSta != 1) {//流程未结束
+                _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
+                _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
+            }
+            _html += '<input name="DocWord" type="button" value="公文" enable="true" />';
+            $('#ToolBar').html(_html);
+
+        } else {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            barHtml = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
+            $('#ToolBar').html(barHtml);
         }
-        _html += '<input name="DocWord" type="button" value="公文" enable="true" />';
-        $('#ToolBar').html(_html);
 
-    }else {
-        
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-        handler.AddUrlData();
-        barHtml = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
-        $('#ToolBar').html(barHtml);
     }
-    
- 
 
    
 

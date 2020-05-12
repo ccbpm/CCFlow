@@ -325,24 +325,29 @@ namespace BP.WF.Port.Admin2
 
                 //创建下一级目录.
                 BP.WF.Template.FlowSort en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
-                en.Name = "公文类";
+               
+                en.Name = "发文流程";
                 en.OrgNo = this.No;
-                en.Domain = "GongWen";
+                en.Domain = "FaWen";
                 en.DirectUpdate();
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
-                en.Name = "办公类";
+                en.Name = "收文流程";
                 en.OrgNo = this.No;
+                en.Domain = "ShouWen";
                 en.DirectUpdate();
 
-                en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
-                en.Name = "财务类";
-                en.OrgNo = this.No;
-                en.DirectUpdate();
+               
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
-                en.Name = "人力资源类";
+                en.Name = "业务流程";
                 en.OrgNo = this.No;
+                en.Domain = "Work";
+                en.DirectUpdate();
+                en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
+                en.Name = "会议流程";
+                en.OrgNo = this.No;
+                en.Domain = "Meet";
                 en.DirectUpdate();
             }
             #endregion 检查流程树.

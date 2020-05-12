@@ -285,10 +285,7 @@ namespace BP.WF.Template
                 }
 
                 Flow fl = new Flow(this.FK_Flow);
-                if (BP.Web.WebUser.No == "admin")
-                    uac.IsUpdate = true;
-                else
-                    uac.IsUpdate = true; //权宜之计.
+                uac.OpenForAdmin();
                 return uac;
             }
         }

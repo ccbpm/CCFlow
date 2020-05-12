@@ -3492,41 +3492,60 @@ namespace BP.WF.HttpHandler
             dt.TableName = "Selected";
             if (select.IsAutoLoadEmps == true)
             {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT  top 1 Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
-                else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
-                else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1 ";
-
-                DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-                string emps = "";
-                if (mydt.Rows.Count != 0)
+                //获取当前节点的SelectAccper的值 @sly
+                SelectAccpers selectAccpers = new SelectAccpers();
+                selectAccpers.Retrieve(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, toNodeID);
+                if (selectAccpers.Count != 0)
                 {
-                    emps = mydt.Rows[0]["Tag"].ToString();
-                    if (emps == "" || emps == null)
+                    foreach(SelectAccper sa in selectAccpers)
                     {
-                        emps = mydt.Rows[0]["EmpTo"].ToString();
-                        emps = emps + "," + emps;
+                        DataRow dr = dt.NewRow();
+                        dr[0] = sa.FK_Emp;
+                        dt.Rows.Add(dr);
+                    }
+                }
+                   
+                else
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "SELECT  top 1 Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
+                    else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                    else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
+                    else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1 ";
+
+                    DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+                    string emps = "";
+                    if (mydt.Rows.Count != 0)
+                    {
+                        emps = mydt.Rows[0]["Tag"].ToString();
+                        if (emps == "" || emps == null)
+                        {
+                            emps = mydt.Rows[0]["EmpTo"].ToString();
+                            emps = emps + "," + emps;
+                        }
+                    }
+
+                    string[] strs = emps.Split(';');
+                    foreach (string str in strs)
+                    {
+                        if (DataType.IsNullOrEmpty(str) == true)
+                            continue;
+
+                        string[] emp = str.Split(',');
+                        if (emp.Length != 2)
+                            continue;
+
+                        DataRow dr = dt.NewRow();
+                        dr[0] = emp[0];
+                        dt.Rows.Add(dr);
                     }
                 }
 
-                string[] strs = emps.Split(';');
-                foreach (string str in strs)
-                {
-                    if (DataType.IsNullOrEmpty(str) == true)
-                        continue;
-
-                    string[] emp = str.Split(',');
-                    if (emp.Length != 2)
-                        continue;
-
-                    DataRow dr = dt.NewRow();
-                    dr[0] = emp[0];
-                    dt.Rows.Add(dr);
-                }
+               
+                
             }
 
             //增加一个table.

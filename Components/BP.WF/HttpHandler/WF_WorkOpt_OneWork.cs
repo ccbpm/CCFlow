@@ -1147,8 +1147,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBSList()
         {
-            BP.Frm.Track track = new BP.Frm.Track();
-            BP.En.QueryObject qo = new En.QueryObject(track);
+            BP.Frm.Tracks tracks = new BP.Frm.Tracks();
+            BP.En.QueryObject qo = new En.QueryObject(tracks);
             qo.AddWhere(TrackAttr.ActionType, (int)BP.Frm.FrmActionType.BBS);
             qo.addAnd();
             qo.addLeftBracket();
@@ -1173,7 +1173,7 @@ namespace BP.WF.HttpHandler
             qo.addOrderBy(TrackAttr.RDT);
             qo.DoQuery();
             //转化成json
-            return BP.Tools.Json.ToJson(track.ToDataTableField());
+            return BP.Tools.Json.ToJson(tracks.ToDataTableField());
         }
 
         /// 查看某一用户的评论.

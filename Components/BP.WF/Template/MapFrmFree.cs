@@ -137,13 +137,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
-                {
-                    uac.IsDelete = false;
-                    uac.IsUpdate = true;
-                    return uac;
-                }
-                uac.Readonly();
+                uac.OpenForAdmin();
                 return uac;
             }
         }

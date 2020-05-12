@@ -100,16 +100,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
-                {
-                    uac.IsDelete = false;
-                    uac.IsUpdate = true;
-                    return uac;
-                }
-
-
-                uac.IsUpdate = true ;//zsy 临时修改 可以删除
-               // uac.Readonly();//这是原来的
+                uac.OpenForAdmin();
                 return uac;
             }
         }

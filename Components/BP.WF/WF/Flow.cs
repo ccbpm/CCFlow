@@ -4983,7 +4983,16 @@ namespace BP.WF
             {
                 fl.PTable = null;
             }
+            //修改成当前登陆人所在的组织
+            fl.OrgNo = WebUser.OrgNo;  
             fl.Update();
+            //判断该流程是否是公文流程，存在BuessFields、FlowBuessType、FK_DocType=01
+            Attrs attrs = fl.EnMap.Attrs;
+            if (attrs.Contains("FlowBuessType") == true)
+            {
+                DBAccess.RunSQL("UPDATE WF_Flow Set BuessFields='"+fl.GetParaString("BuessFields")+ "', FlowBuessType="+fl.GetParaInt("FlowBuessType")+ " ,FK_DocType='"+fl.GetParaString("FK_DocType")+"'");
+            }
+
             #endregion 处理流程表数据
 
             #region 处理OID 插入重复的问题 Sys_GroupField, Sys_MapAttr.

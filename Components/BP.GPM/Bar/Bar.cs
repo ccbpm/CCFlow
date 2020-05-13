@@ -379,8 +379,8 @@ namespace BP.GPM
                 map.EnDesc = "信息块";
                 map.EnType = EnType.Sys;
 
-                map.AddTBStringPK(BarAttr.No, null, "编号", true, false, 1, 200, 200);
-                map.AddTBString(BarAttr.Name, null, "名称", true, false, 0, 3900, 20);
+                map.AddTBStringPK(BarAttr.No, null, "编号", true, false, 100, 200, 200);
+                map.AddTBString(BarAttr.Name, null, "名称", true, false, 100, 3900, 20);
 
                 map.AddTBString(BarAttr.Title, null, "标题", true, false, 0, 3900, 20);
 
@@ -401,7 +401,7 @@ namespace BP.GPM
                 //map.AddTBInt(BarAttr.Idx, 0, "显示顺序", false, true);
 
                 // map.AddTBString(BarAttr.MoreLab, "更多...", "更多标签", true, false, 0, 900, 20);
-                map.AddTBString(BarAttr.MoreUrl, null, "更多标签Url", true, false, 0, 3900, 20,true);
+                map.AddTBString(BarAttr.MoreUrl, null, "更多标签Url", true, false, 0, 3900, 300,true);
                  //map.AddTBString(BarAttr.Doc, null, "Doc", false, false, 0, 3900, 20, false);
               
                 //map.AddTBDateTime(BarAttr.DocGenerRDT, null, "Doc生成日期", false, false);

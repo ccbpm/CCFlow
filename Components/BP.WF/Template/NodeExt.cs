@@ -285,7 +285,23 @@ namespace BP.WF.Template
                 }
 
                 Flow fl = new Flow(this.FK_Flow);
-                uac.OpenForAdmin();
+
+
+                if (BP.Web.WebUser.No != null && BP.Web.WebUser.IsAdmin == true)
+
+                {
+                    uac.IsInsert = false;
+                    uac.IsUpdate = true;
+                    uac.IsDelete = true;
+                    uac.IsAdjunct = false;
+                    uac.IsView = true;
+                }
+                else
+                {
+                    uac.Readonly();
+                }
+                
+                //uac.OpenForAdmin();
                 return uac;
             }
         }

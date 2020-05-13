@@ -27,16 +27,25 @@ $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
-            barHtml = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
-            $('#ToolBar').html(barHtml);
+           var data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
+            var toolBarHtml = data.ToolBar[0].tooBarHtml;
+            $('#ToolBar').html(toolBarHtml);
+
+            InitToNodeDDL(data);
         }
 
     }
 
 
     //按钮旁的下来框
-    if ("undefined" != typeof flowData && flowData != null && flowData != undefined) 
-        InitToNodeDDL(flowData);
+   // if ("undefined" != typeof flowData && flowData != null && flowData != undefined) 
+      //  InitToNodeDDL(flowData);
    
 
     if ($('[name=Return]').length > 0) {

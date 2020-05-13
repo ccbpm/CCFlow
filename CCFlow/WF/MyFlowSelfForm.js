@@ -31,6 +31,16 @@ function SaveSelfFrom() {
         return frm.contentWindow.Save();
 
     //出现跨域问题
+    /**
+     嵌入的页面需要增加的方法
+     window.addEventListener('message', function (e) {
+           console.log(e.data);
+           var data=e.data;
+           if(data.Save){
+               Save();
+           }
+       }, false);
+     */
     return frm.contentWindow.postMessage({ Save:"Save" }, "*");
    
 }

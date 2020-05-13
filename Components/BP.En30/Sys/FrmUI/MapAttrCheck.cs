@@ -134,7 +134,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
+                //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
 
                 /**map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.SetHelperAlert(MapAttrAttr.UIVisible, "对于不可见的字段可以在隐藏功能的栏目里找到这些字段进行编辑或者删除.");

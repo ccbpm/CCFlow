@@ -192,7 +192,8 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
+                //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false); 
+                //map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件", true, false, MapAttrAttr.UIContralType);
                 //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);

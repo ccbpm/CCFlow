@@ -52,6 +52,7 @@
   <Item No="8002" GroupNo="DOC" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />
   <Item No="8003" GroupNo="DOC" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Words"  />
   <Item No="8104" GroupNo="DOC" Name="流程设置"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Flows"  />
+  <Item No="8105" GroupNo="DOC" Name="收文流水号"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.RecWords"  />
 
   <Group No="DOC2" Name="公文管理（二级管理员）" For="admin2" />
   <Item No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />

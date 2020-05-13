@@ -7,10 +7,12 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js"  type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="Designer.js" type="text/javascript"></script>
 
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../ccbpm.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Comm/JScript.js" type="text/javascript"></script>
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -20,6 +22,10 @@
     <script src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script src="../../CCForm/FrmEnd.js" defer="defer" type="text/javascript"></script>
     <script src="../../CCForm/MapExt2019.js" defer="defer" type="text/javascript"></script>
+    <script src="../../WorkOpt/WorkCheck.js"  type="text/javascript"></script>
+    <script src="../../WorkOpt/FlowBBS.js"  type="text/javascript"></script>
+    <script src="../../WorkOpt/OneWork/JobSchedule.js" type="text/javascript"></script>
+
     <base target="_self" />
     <style type="text/css">
         body {
@@ -33,16 +39,15 @@
         }
 
         .wrapper-dropdown-2 {
-            
             /* Size and position */
             position: relative; /* Enable absolute positionning for children and pseudo elements */
             width: 80px;
             margin: 0;
-            border-radius:6px;
+            border-radius: 6px;
             margin-left: 0px;
             padding: 6px 25px;
             /* Styles */
-            color:white;
+            color: white;
             cursor: pointer;
             outline: none;
         }
@@ -56,7 +61,6 @@
                 top: 50%;
                 margin-top: -3px;
                 border-width: 6px 6px 0 6px;
-                
             }
 
             .wrapper-dropdown-2 .dropdown {
@@ -64,8 +68,7 @@
                 position: absolute;
                 z-index: 100;
                 top: 100%;
-                margin-left:130px;
-                
+                margin-left: 130px;
                 /* Styles */
                 background: white;
                 -webkit-transition: all 0.3s ease-out;
@@ -80,16 +83,14 @@
             }
 
                 .wrapper-dropdown-2 .dropdown li a {
-                    position:fixed;
-                    height:29px;
-                    line-height:29px;
-                   z-index:100000;
-                    margin-top:3px;
-                    padding-top:10px;
+                    position: fixed;
+                    height: 29px;
+                    line-height: 29px;
+                    z-index: 100000;
+                    margin-top: 3px;
+                    padding-top: 10px;
                     list-style: none;
                     display: block;
-                    
-                    
                     padding: 9px;
                     -webkit-transition: all 0.3s ease-out;
                     -moz-transition: all 0.3s ease-out;
@@ -98,17 +99,16 @@
                     transition: all 0.3s ease-out;
                 }
 
-               
 
 
 
-               
+
+
             /* Active state */
 
 
 
             .wrapper-dropdown-2.active .dropdown {
-
                 opacity: 1;
                 pointer-events: auto;
                 list-style: none;
@@ -359,14 +359,7 @@
     </script>
     <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
-        loadScript("../../ccbpm.js?Version=" + Math.random(), function () {
-            loadScript("./Designer.js?Version=" + Math.random());
-
-        });
-
-
-
-
+      
 
 
         //记录改变字段样式 不可编辑，不可见
@@ -627,6 +620,7 @@
 
                     break;
                 case "FWC":
+
                     return "<tr><td colspan=" + tableCol + " style='width:100%;' id='WorkCheck' ></td></tr>";
                 case "Dtl":
 

@@ -168,14 +168,9 @@ namespace BP.WF
             {
                 if (this.HisNode.HisRunModel != RunModel.SubThread)
                     return 0;
-                if(this.NodeFrmID.StartsWith("ND") == true)
-                    return this.GetValInt64ByKey(WorkAttr.FID);
-                else
-                {
-                    
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.OID);
-                    return gwf.FID;
-                }
+               
+                return this.GetValInt64ByKey(WorkAttr.FID);
+               
             }
             set
             {

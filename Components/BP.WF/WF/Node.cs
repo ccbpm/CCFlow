@@ -815,6 +815,57 @@ namespace BP.WF
                 mapData.Update();
             }
             
+            //@sly
+            if (this.FormType == NodeFormType.RefOneFrmTree)
+            {
+                GEEntity en = new GEEntity(this.NodeFrmID);
+                if (this.HisRunModel == RunModel.SubThread && en.EnMap.Attrs.Contains("FID") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "FID";
+                    attr.Name = "干流程ID";
+                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+                if (en.EnMap.Attrs.Contains("Rec") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "Rec";
+                    attr.Name = "记录人";
+                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+                if (en.EnMap.Attrs.Contains("Emps") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "Emps";
+                    attr.Name = "Emps";
+                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+
+            }
 
             base.afterInsertUpdateAction();
         }

@@ -32,6 +32,88 @@
             overflow: auto !important;
         }
 
+        .wrapper-dropdown-2 {
+            
+            /* Size and position */
+            position: relative; /* Enable absolute positionning for children and pseudo elements */
+            width: 80px;
+            margin: 0;
+            border-radius:6px;
+            margin-left: 0px;
+            padding: 6px 25px;
+            /* Styles */
+            color:white;
+            cursor: pointer;
+            outline: none;
+        }
+
+            .wrapper-dropdown-2:after {
+                content: "";
+                width: 0;
+                height: 0;
+                position: absolute;
+                right: 16px;
+                top: 50%;
+                margin-top: -3px;
+                border-width: 6px 6px 0 6px;
+                
+            }
+
+            .wrapper-dropdown-2 .dropdown {
+                /* Size & position */
+                position: absolute;
+                z-index: 100;
+                top: 100%;
+                margin-left:130px;
+                
+                /* Styles */
+                background: white;
+                -webkit-transition: all 0.3s ease-out;
+                -moz-transition: all 0.3s ease-out;
+                -ms-transition: all 0.3s ease-out;
+                -o-transition: all 0.3s ease-out;
+                transition: all 0.3s ease-out;
+                list-style: none;
+                /* Hiding */
+                opacity: 0;
+                pointer-events: none;
+            }
+
+                .wrapper-dropdown-2 .dropdown li a {
+                    position:fixed;
+                    height:29px;
+                    line-height:29px;
+                   z-index:100000;
+                    margin-top:3px;
+                    padding-top:10px;
+                    list-style: none;
+                    display: block;
+                    
+                    
+                    padding: 9px;
+                    -webkit-transition: all 0.3s ease-out;
+                    -moz-transition: all 0.3s ease-out;
+                    -ms-transition: all 0.3s ease-out;
+                    -o-transition: all 0.3s ease-out;
+                    transition: all 0.3s ease-out;
+                }
+
+               
+
+
+
+               
+            /* Active state */
+
+
+
+            .wrapper-dropdown-2.active .dropdown {
+
+                opacity: 1;
+                pointer-events: auto;
+                list-style: none;
+            }
+
         textarea, input[type=text] {
             width: 100%;
         }
@@ -1458,7 +1540,37 @@
 
         }
 
+        function DropDown(el) {
+            this.dd = el;
+            this.initEvents();
+        }
+        DropDown.prototype = {
+            initEvents: function () {
+                var obj = this;
 
+                obj.dd.on('click', function (event) {
+                    $(this).toggleClass('active');
+                    event.stopPropagation();
+                });
+            }
+        }
+
+        $(function () {
+            $(".wrapper-dropdown-2").on("mousedown", function (e) {
+                var v_id = $(e.target).attr("id");
+                var dd = new DropDown($("#" + v_id + ""));
+            });
+
+            $(".wrapper-dropdown-2").click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-2').removeClass('active');
+            });
+            $(document).click(function () {
+                // all dropdowns
+                $('.wrapper-dropdown-2').removeClass('active');
+            });
+
+        });
 
     </script>
 </head>
@@ -1479,29 +1591,48 @@
                     导入/导出
                 </a>
 
-                <a href="javascript:ShowNew()" class="easyui-linkbutton btn-light-yellow">
+                <span id='dd' class='btn-light-yellow wrapper-dropdown-2'>
                     新建...
-                </a>
-                <a style="display:none" href="javascript:AddF();" class="NewChild easyui-linkbutton btn-light-yellow">
-                    新建字段
-                </a>
-                <a style="display:none" href="javascript:AddComponent();" class="NewChild easyui-linkbutton btn-light-yellow">
-                    新建组件
-                </a>
-             
-                <a href="javascript:GroupFieldNew();" class="NewChild easyui-linkbutton btn-light-green">
-                    新建字段分组
-                </a>
-                <a href="javascript:GroupFieldFWCNew();" class="NewChild easyui-linkbutton btn-light-red">
-                    新建审核分组
-                </a>
-                <a href="javascript:NewMapDtl();" class="NewChild easyui-linkbutton btn-light-blue">
-                    新建从表
-                </a> <a href="javascript:NewAth();" class="NewChild easyui-linkbutton btn-light-green">
-                    新建附件
-                </a><a href="javascript:NewFrame();" class="NewChild easyui-linkbutton btn-light-yellow">
-                    新建框架
-                </a>
+                    <ul class='dropdown' style='list-style:none;'>
+
+                        <li style='list-style:none;'>
+                            <a style="top:35px" href="javascript:AddF();" class=" easyui-linkbutton btn-light-yellow">
+                                新建字段
+                            </a>
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:65px" href="javascript:AddComponent();" class=" easyui-linkbutton btn-light-yellow">
+                                新建组件
+                            </a>
+
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:155px" href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-blue">
+                                新建从表
+                            </a>
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:185px" href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
+                                新建附件
+                            </a>
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:215px" href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
+                                新建框架
+                            </a>
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:95px" href="javascript:GroupFieldNew();" class=" easyui-linkbutton btn-light-green">
+                                新建字段分组
+                            </a>
+                        </li>
+                        <li style='list-style:none;'>
+                            <a style="top:125px" href="javascript:GroupFieldFWCNew();" class=" easyui-linkbutton btn-light-red">
+                                新建审核分组
+                            </a>
+                        </li>
+                    </ul>
+                </span>
                 <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
                     批量修改字段
                 </a>

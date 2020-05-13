@@ -37,18 +37,29 @@
     <form id="cc">
         <fieldset>
             <legend>
-               <label for="RB_BlockModel_4">按照表达式阻塞</label>
+                <label for="RB_BlockModel_4">按照表达式阻塞</label>
             </legend>
-            <br /><a href="javascript:ShowHidden('exp')">请输入表达式: </a>
-            <div id="exp" style="color: Gray; display: none">
+            <br />
+            <input type="text" id="TB_Exp" name="TB_Exp" runat="server" style="width: 95%" />
+        </fieldset>
+
+
+        <fieldset id="help" >
+            <legend id="help" >
+                 帮助:
+            </legend>
+
+            <br />
+            <div id="exp" style="color: Gray;">
                 <ul>
                     <li>配置一个表达式, 比如: @MyFieldName = 1 该表达式成立的时候，系统就不能向下发送。 </li>
                     <li>表达式：@+字段名+空格+运算符+空格+值；字段名就是节点表单的所有字段，空格为英文状态下空格，运算符包含=、!=、>、>=、<、<=、LIKE </li>
                     <li>注意: 仅仅支持一个表达式 . 比如: @JinE > 10000 </li>
                 </ul>
             </div>
-            <input type="text" id="TB_Exp" name="TB_Exp" runat="server" style="width: 95%" />
+
         </fieldset>
+
     </form>
 </body>
 </html >

@@ -39,7 +39,6 @@
             var nodeID = GetQueryString("FK_Node");
 
             var node = new Entity("BP.WF.Node", nodeID);
-
             //node.SetPKVal(nodeID);
             //s node.Retrieve();
             // console.log(node);
@@ -130,7 +129,24 @@
             OpenEasyUiDialogExt(url, '节点表单组件', 800, 450, false);
         }
 
-/**/</script>
+        function OneKeySetting() {
+            var msg = "";
+            msg += "您确定要设置审核组件模式吗？ ";
+            msg += "\t\n 1,第2个节点以后的节点表单都指向第2个节点表单. ";
+            msg += "\t\n 2,结束节点都设置为只读模式.";
+
+            if (window.confirm(msg) == false)
+                return;
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            var flow = new Entity("BP.WF.Template.FlowExt", node.FK_Flow);
+            var str = flow.DoMethodReturnString("DoSetFWCModel");
+            alert(str);
+
+        }
+        /**/</script>
 </head>
 <body>
     <div class="cs-content-box">
@@ -157,7 +173,17 @@
             </legend>
             <br />
             选择节点: <select id="DDL_Frm" name="DDL_Frm" disabled="disabled"> </select>
-            <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
+
+            <legend>高级设置</legend>
+            <ul>
+                <li>
+                    <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
+                </li>
+                <li>
+                    <a href="javascript:OneKeySetting()">一键设置审核组件模式</a>
+                </li>
+            </ul>
+
             <legend id="help">说明</legend>
             <ul>
                 <li>当前节点可以引用其他节点的表单.</li>

@@ -706,11 +706,12 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         if (mapAttr.UIContralType == 1) { //下拉框
 
             var ses = null;
-            if (webUser.CCBPMRunModel == 0) {
+            if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
                 ses = new Entities("BP.Sys.SysEnums");
                 ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
             }
             else {
+
                 ses = new Entities("BP.Cloud.Sys.SysEnums");
                 ses.Retrieve("RefPK", mapAttr.UIBindKey, "IntKey");
             }

@@ -33,8 +33,6 @@ $(function () {
         IsReadonly: GetQueryString("IsReadonly")
     }
 
-    
-
 });
 
 $(window).load(function () {
@@ -47,14 +45,13 @@ $(window).load(function () {
         if ($('#ccbpmJS').length == 1) {
             var url = $('#ccbpmJS')[0].src;
             var type = getQueryStringByNameFromUrl(url, "type");
-            if(type == "CC")
+            if (type == "CC")
                 loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_CC");
             if (type == "MyView")
                 loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_MyView");
-        }
-           
-        else
+        } else {
             loadScript(ccbpmPath + "/WF/ToolBar.js");
+        }
 
     }
         
@@ -62,7 +59,6 @@ $(window).load(function () {
        loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
     if ($("#FlowBBS").length == 1)
         loadScript(ccbpmPath + "/WF/WorkOpt/FlowBBS.js");
-
     if ($("#JobSchedule").length == 1)
         loadScript(ccbpmPath + "/WF/WorkOpt/JobSchedule.js");
 

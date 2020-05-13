@@ -2360,10 +2360,10 @@ function Save() {
             continue;
         if (tag.getAttribute("data-type") != "Radio")
             continue;
+
         //获取枚举值
-        //获取枚举值
-        var enums = new Entities("BP.Sys.SysEnums");
-        enums.Retrieve("EnumKey", uiBindKey);
+        var enums = GetSysEnums(uiBindKey);
+
         if (enums.length == 0)
             continue;
         var keyOfEn = tag.getAttribute("data-key");
@@ -2390,6 +2390,21 @@ function Save() {
     //  alert("保存成功!");
     $("#Btn_Save").val("保存");
 }
+
+
+function GetSysEnums(enumKey) {
+
+    if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
+        var ses = new Entities("BP.Sys.SysEnums");
+        ses.Retrieve("EnumKey", enumKey, "IntKey");
+        return ses;
+    }
+
+    var ses = new Entities("BP.Cloud.Sys.SysEnums");
+    ses.Retrieve("RefPK", enumKey, "IntKey");
+    return ses;
+}
+
 //预览
 function PreviewForm() {
     debugger

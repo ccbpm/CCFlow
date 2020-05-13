@@ -603,9 +603,9 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             return eleHtml;
         }
         //身份证
-        if (mapAttr.UIContralType == 13 && mapAttr.KeyOfEn=="IDCardAddress") {
+        if (mapAttr.UIContralType == 13 && mapAttr.KeyOfEn == "IDCardAddress") {
             var eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
-            eleHtml += "<input type = text style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_"+mapAttr.KeyOfEn+"'/>";
+            eleHtml += "<input type = text style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
             eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo()'/>上传身份证</label>";
             eleHtml += "</div>";
             return eleHtml;
@@ -648,7 +648,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             var uiHeight = mapAttr.UIHeight;
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
         }
-        
+
 
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
@@ -705,16 +705,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
         if (mapAttr.UIContralType == 1) { //下拉框
 
-            var ses = null;
-            if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
-                ses = new Entities("BP.Sys.SysEnums");
-                ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
-            }
-            else {
-
-                ses = new Entities("BP.Cloud.Sys.SysEnums");
-                ses.Retrieve("RefPK", mapAttr.UIBindKey, "IntKey");
-            }
+            var ses = GetSysEnums(mapAttr.UIBindKey);
 
             var operations = "";
             $.each(ses, function (i, obj) {
@@ -726,9 +717,8 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         } else if (mapAttr.UIContralType == 3) { //单选按钮
 
             var rbHtmls = "";
-            var ses = new Entities("BP.Sys.SysEnums");
-            ses.Retrieve("EnumKey", mapAttr.UIBindKey, "IntKey");
-
+            var ses = GetSysEnums(mapAttr.UIBindKey);
+             
             //显示方式,默认为横向展示.
             var RBShowModel = 0;
             if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
@@ -751,7 +741,19 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
         }
     }
+}
 
+function GetSysEnums(enumKey) {
+
+    if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
+        var ses = new Entities("BP.Sys.SysEnums");
+        ses.Retrieve("EnumKey", enumKey, "IntKey");
+        return ses;
+    }
+
+    var ses = new Entities("BP.Cloud.Sys.SysEnums");
+    ses.Retrieve("RefPK", enumKey, "IntKey");
+    return ses;
 }
 
 function GenerLabel(attr) {

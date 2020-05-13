@@ -112,14 +112,7 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.现在的日期是:" + val);
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.现在的日期是:"+val);
-                        break;
+                    
                     case WorkAttr.Emps:
                         if (val.Contains(WebUser.No) == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -129,10 +122,6 @@ namespace BP.UnitTesting.SendCase
                             throw new Exception("应当 = 0,现在是:" + val);
                         break;
                     case WorkAttr.MD5:
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
                         break;
                     case WorkAttr.Rec:
                         if (val != WebUser.No)
@@ -338,14 +327,6 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains(WebUser.No) == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -359,10 +340,7 @@ namespace BP.UnitTesting.SendCase
                         //if (val !="0")
                         //    throw new Exception("应当 = 0,现在是:"+val);
                         break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                  
                     case WorkAttr.Rec:
                         if (val != WebUser.No)
                             throw new Exception("应当 Rec= " + WebUser.No + ",现在是:" + val);
@@ -386,14 +364,6 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains("zhoupeng") == false)
                             throw new Exception("第二步骤的处理人员,应当zhoupeng ,现在是:" + val);
@@ -407,10 +377,7 @@ namespace BP.UnitTesting.SendCase
                         //if (val !="0")
                         //    throw new Exception("应当 = 0,现在是:"+val);
                         break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                  
                     case WorkAttr.Rec:
                         if (val != "zhoupeng")
                             throw new Exception("应当 Rec=zhoupeng,现在是:" + val);
@@ -600,14 +567,7 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
+                    
                     case WorkAttr.Emps:
                         if (val.Contains("zhanghaicheng") == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -616,10 +576,7 @@ namespace BP.UnitTesting.SendCase
                         if (val != "0")
                             throw new Exception("应当 = 0,现在是:" + val);
                         break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                    
                     case WorkAttr.Rec:
                         if (val != objs.VarAcceptersID)
                             throw new Exception("应当 Rec=zhanghaicheng,现在是:" + val);
@@ -640,14 +597,6 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains(WebUser.No) == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -656,10 +605,7 @@ namespace BP.UnitTesting.SendCase
                         if (val != "0")
                             throw new Exception("应当 = 0,现在是:" + val);
                         break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                   
                     case WorkAttr.Rec:
                         if (val != "zhoupeng")
                             throw new Exception("应当 Rec= zhoupeng,现在是:" + val);
@@ -680,14 +626,6 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains("zhanghaicheng") == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -695,10 +633,6 @@ namespace BP.UnitTesting.SendCase
                     case WorkAttr.FID:
                         if (val != "0")
                             throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
                         break;
                     case WorkAttr.Rec:
                         if (val != objs.VarAcceptersID)
@@ -841,26 +775,11 @@ namespace BP.UnitTesting.SendCase
                         if (DataType.IsNullOrEmpty(val))
                             throw new Exception("@流程走完后标题丢失了");
                         break;
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains(WebUser.No) == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
                         break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                   
                     case WorkAttr.Rec:
                         if (val != "zhanghaicheng")
                             throw new Exception("应当 Rec=zhanghaicheng,现在是:" + val);
@@ -880,14 +799,6 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
                     case WorkAttr.Emps:
                         if (val.Contains("zhoupeng") == false)
                             throw new Exception("应当包含当前人员,现在是:" + val);
@@ -900,11 +811,6 @@ namespace BP.UnitTesting.SendCase
                         if (val != "0")
                             throw new Exception("应当 = 0,现在是:" + val);
                         break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
-                   
                     default:
                         break;
                 }
@@ -920,26 +826,7 @@ namespace BP.UnitTesting.SendCase
                 string val = dt.Rows[0][dc.ColumnName].ToString();
                 switch (dc.ColumnName)
                 {
-                    case WorkAttr.CDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("CDT,日期错误.");
-                        break;
-                    case WorkAttr.RDT:
-                        if (val.Contains(DataType.CurrentData) == false)
-                            throw new Exception("RDT,日期错误.");
-                        break;
-                    case WorkAttr.Emps:
-                        if (val.Contains(WebUser.No) == false)
-                            throw new Exception("应当包含当前人员,现在是:" + val);
-                        break;
-                    case WorkAttr.FID:
-                        if (val != "0")
-                            throw new Exception("应当 = 0,现在是:" + val);
-                        break;
-                    case WorkAttr.MyNum:
-                        if (val != "1")
-                            throw new Exception("应当 = 1,现在是:" + val);
-                        break;
+                    
                     case WorkAttr.Rec:
                         if (val != "zhanghaicheng")
                             throw new Exception("应当 Rec= zhanghaicheng,现在是:" + val);

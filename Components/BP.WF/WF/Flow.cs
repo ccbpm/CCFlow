@@ -739,8 +739,9 @@ namespace BP.WF
                     wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
                     wk.SetValByKey(StartWorkAttr.Emps, emp.No);
 
-                    wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-                    wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+                  //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
+                   // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+
                     wk.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
 
                     wk.OID = DBAccess.GenerOID("WorkID"); /*这里产生WorkID ,这是唯一产生WorkID的地方.*/
@@ -1266,14 +1267,13 @@ namespace BP.WF
             if (paras.ContainsKey("JumpToNode") == true)
             {
                 wk.Rec = WebUser.No;
-                wk.SetValByKey(StartWorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-                wk.SetValByKey(StartWorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
-                wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
-                wk.FK_Dept = emp.FK_Dept;
-                wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
-                wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
+                
+                //wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
+                //wk.FK_Dept = emp.FK_Dept;
+                //wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
+                //wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
                 wk.FID = 0;
-                wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
+               // wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
 
                 int jumpNodeID = int.Parse(paras["JumpToNode"].ToString());
                 Node jumpNode = new Node(jumpNodeID);
@@ -1297,8 +1297,8 @@ namespace BP.WF
 
             #region 最后整理wk数据.
             wk.Rec = emp.No;
-            wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-            wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+          //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
+           // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
             wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
             wk.FK_Dept = emp.FK_Dept;
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
@@ -1350,170 +1350,12 @@ namespace BP.WF
             mygwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
+
+
+
             return wk;
         }
-
         #endregion 创建新工作.
-
-        #region 初始化一个工作.
-        /// <summary>
-        /// 初始化一个工作
-        /// </summary>
-        /// <param name="workid"></param>
-        /// <param name="fk_node"></param>
-        /// <returns></returns>
-        public Work GenerWork(Int64 workid, Node nd, bool isPostBack)
-        {
-            Work wk = nd.HisWork;
-            wk.OID = workid;
-            if (wk.RetrieveFromDBSources() == 0)
-            {
-                /*
-                 * 2012-10-15 偶然发现一次工作丢失情况, WF_GenerWorkerlist WF_GenerWorkFlow 都有这笔数据，没有查明丢失原因。 stone.
-                 * 用如下代码自动修复，但是会遇到数据copy不完全的问题。
-                 * */
-#warning 2011-10-15 偶然发现一次工作丢失情况.
-
-                string fk_mapData = "ND" + int.Parse(this.No) + "Rpt";
-                GERpt rpt = new GERpt(fk_mapData);
-                rpt.OID = int.Parse(workid.ToString());
-                if (rpt.RetrieveFromDBSources() >= 1)
-                {
-                    /*  查询到报表数据.  */
-                    wk.Copy(rpt);
-                    wk.Rec = WebUser.No;
-                    wk.InsertAsOID(workid);
-                }
-                else
-                {
-                    /*  没有查询到报表数据.  */
-
-#warning 这里不应该出现的异常信息.
-
-                    string msg = "@不应该出现的异常.";
-                    msg += "@在为节点NodeID=" + nd.NodeID + " workid:" + workid + " 获取数据时.";
-                    msg += "@获取它的Rpt表数据时，不应该查询不到。";
-                    msg += "@GERpt 信息: table:" + rpt.EnMap.PhysicsTable + "   OID=" + rpt.OID;
-
-                    string sql = "SELECT count(*) FROM " + rpt.EnMap.PhysicsTable + " WHERE OID=" + workid;
-                    int num = DBAccess.RunSQLReturnValInt(sql);
-
-                    msg += " @SQL:" + sql;
-                    msg += " ReturnNum:" + num;
-                    if (num == 0)
-                    {
-                        msg += "已经用sql可以查询出来，但是不应该用类查询不出来.";
-                    }
-                    else
-                    {
-                        /*如果可以用sql 查询出来.*/
-                        num = rpt.RetrieveFromDBSources();
-                        msg += "@从rpt.RetrieveFromDBSources = " + num;
-                    }
-
-                    Log.DefaultLogWriteLineError(msg);
-
-                    MapData md = new MapData("ND" + int.Parse(nd.FK_Flow) + "01");
-                    sql = "SELECT * FROM " + md.PTable + " WHERE OID=" + workid;
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count == 1)
-                    {
-                        rpt.Copy(dt.Rows[0]);
-                        try
-                        {
-                            rpt.FlowStarter = dt.Rows[0][StartWorkAttr.Rec].ToString();
-                            rpt.FlowStartRDT = dt.Rows[0][StartWorkAttr.RDT].ToString();
-                            rpt.FK_Dept = dt.Rows[0][StartWorkAttr.FK_Dept].ToString();
-                        }
-                        catch
-                        {
-                        }
-
-                        rpt.OID = int.Parse(workid.ToString());
-                        try
-                        {
-                            rpt.InsertAsOID(rpt.OID);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.DefaultLogWriteLineError("@不应该出插入不进去 rpt:" + rpt.EnMap.PhysicsTable + " workid=" + workid);
-                            rpt.RetrieveFromDBSources();
-                        }
-                    }
-                    else
-                    {
-                        Log.DefaultLogWriteLineError("@没有找到开始节点的数据, NodeID:" + nd.NodeID + " workid:" + workid);
-                        throw new Exception("@没有找到开始节点的数据, NodeID:" + nd.NodeID + " workid:" + workid + " SQL:" + sql);
-                    }
-
-#warning 不应该出现的工作丢失.
-                    Log.DefaultLogWriteLineError("@工作[" + nd.NodeID + " : " + wk.EnDesc + "], 报表数据WorkID=" + workid + " 丢失, 没有从NDxxxRpt里找到记录,请联系管理员。");
-
-                    wk.Copy(rpt);
-                    wk.Rec = WebUser.No;
-                    wk.ResetDefaultVal();
-                    wk.Insert();
-                }
-            }
-
-            #region 判断是否有删除草稿的需求.
-            if (SystemConfig.IsBSsystem == true && isPostBack == false && nd.IsStartNode && HttpContextHelper.RequestParams("IsDeleteDraft") == "1")
-            {
-
-                /*需要删除草稿.*/
-                /*是否要删除Draft */
-                string title = wk.GetValStringByKey("Title");
-                wk.ResetDefaultValAllAttr();
-                wk.OID = workid;
-                wk.SetValByKey(GenerWorkFlowAttr.Title, title);
-                wk.DirectUpdate();
-
-                MapDtls dtls = wk.HisMapDtls;
-                foreach (MapDtl dtl in dtls)
-                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + wk.OID);
-
-                //删除附件数据。
-                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + wk.NodeID + "' AND RefPKVal='" + wk.OID + "'");
-
-            }
-            #endregion
-
-
-            // 设置当前的人员把记录人。
-            wk.Rec = WebUser.No;
-            wk.RecText = WebUser.Name;
-            wk.Rec = WebUser.No;
-            wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-            wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
-            wk.SetValByKey(GERptAttr.WFState, WFState.Runing);
-            wk.SetValByKey("FK_Dept", WebUser.FK_Dept);
-            wk.SetValByKey("FK_DeptName", WebUser.FK_DeptName);
-            wk.SetValByKey("FK_DeptText", WebUser.FK_DeptName);
-            wk.FID = 0;
-            wk.SetValByKey("RecText", WebUser.Name);
-
-            //处理单据编号.
-            if (nd.IsStartNode)
-            {
-                try
-                {
-                    string billNo = wk.GetValStringByKey(NDXRptBaseAttr.BillNo);
-                    if (DataType.IsNullOrEmpty(billNo) && nd.HisFlow.BillNoFormat.Length > 2)
-                    {
-                        /*让他自动生成编号*/
-                        wk.SetValByKey(NDXRptBaseAttr.BillNo,
-                            BP.WF.WorkFlowBuessRole.GenerBillNo(nd.HisFlow.BillNoFormat, wk.OID, wk, nd.HisFlow.PTable));
-                    }
-                }
-                catch
-                {
-                    // 可能是没有billNo这个字段,也不需要处理它.
-                }
-            }
-
-            return wk;
-        }
-        #endregion 初始化一个工作
 
         #region 其他通用方法.
         public string DoBTableDTS()
@@ -3250,27 +3092,28 @@ namespace BP.WF
                     startWork.Update();
                 }
                 rpt.Title = startWork.GetValStrByKey("Title");
+
                 string wfState = DBAccess.RunSQLReturnStringIsNull("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + oid, "1");
                 rpt.WFState = (WFState)int.Parse(wfState);
                 rpt.FlowStarter = startWork.Rec;
-                rpt.FlowStartRDT = startWork.RDT;
+                rpt.FlowStartRDT = DBAccess.RunSQLReturnStringIsNull("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + oid, "1");
                 rpt.FID = startWork.GetValIntByKey("FID");
                 rpt.FlowEmps = flowEmps;
                 rpt.FlowEnder = endWK.Rec;
-                rpt.FlowEnderRDT = endWK.RDT;
+                //rpt.FlowEnderRDT = endWK.RDT;
                 rpt.FlowEndNode = endWK.NodeID;
 
                 //修复标题字段。
                 WorkNode wn = new WorkNode(startWork, this.HisStartNode);
                 rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, startWork);
-                try
-                {
-                    TimeSpan ts = endWK.RDT_DateTime - startWork.RDT_DateTime;
-                    rpt.FlowDaySpan = ts.Days;
-                }
-                catch
-                {
-                }
+                //try
+                //{
+                //    TimeSpan ts = endWK.RDT_DateTime - startWork.RDT_DateTime;
+                //    rpt.FlowDaySpan =  ts.Days;
+                //}
+                //catch
+                //{
+                //}
                 rpt.InsertAsOID(rpt.OID);
             } // 结束循环。
             return err;

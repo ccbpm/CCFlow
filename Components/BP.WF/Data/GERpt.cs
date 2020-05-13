@@ -120,6 +120,18 @@ namespace BP.WF.Data
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+        /// <summary>
+        /// RDT
+        /// </summary>
+        public const string RDT = "RDT";
+        /// <summary>
+        /// CDT
+        /// </summary>
+        public const string CDT = "CDT";
+        /// <summary>
+        /// 记录人
+        /// </summary>
+        public const string Rec = "Rec";
     }
     /// <summary>
     /// 报表
@@ -478,9 +490,7 @@ namespace BP.WF.Data
         {
             foreach (Attr attr in this.EnMap.Attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                      || attr.Key == WorkAttr.RDT
-                      || attr.Key == WorkAttr.Rec
+                if ( attr.Key == WorkAttr.Rec
                       || attr.Key == WorkAttr.FID
                       || attr.Key == WorkAttr.OID
                       || attr.Key == WorkAttr.Emps
@@ -530,9 +540,7 @@ namespace BP.WF.Data
             Attrs attrs = fromEn.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                    || attr.Key == WorkAttr.RDT
-                    || attr.Key == WorkAttr.Rec
+                if (attr.Key == WorkAttr.Rec
                     || attr.Key == WorkAttr.FID
                     || attr.Key == WorkAttr.OID
                     || attr.Key == WorkAttr.Emps

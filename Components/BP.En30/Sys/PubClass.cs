@@ -1434,9 +1434,6 @@ namespace BP.Sys
                     continue;
                 }
             }
-            if (map.IsHaveAutoFull == false)
-                return en;
-            en.AutoFull();
             return en;
         }
      

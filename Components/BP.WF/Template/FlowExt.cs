@@ -1791,17 +1791,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Exp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-        /// <summary>
-        /// 执行重新装载数据
-        /// </summary>
-        /// <returns></returns>
-        public string DoReloadRptData()
-        {
-            Flow fl = new Flow();
-            fl.No = this.No;
-            fl.RetrieveFromDBSources();
-            return fl.DoReloadRptData();
-        }
+        
         /// <summary>
         /// 删除数据.
         /// </summary>

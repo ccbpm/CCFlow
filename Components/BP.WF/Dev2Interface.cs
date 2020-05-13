@@ -2773,7 +2773,9 @@ namespace BP.WF
                     dr["Name"] = ndFrom.Name;
 
                     dr["Rec"] = wk.Rec;
-                    dr["RecName"] = wk.RecText;
+
+                    Emp emp = new Emp(wk.Rec);
+                    dr["RecName"] = emp.Name;
 
                     if (ndFrom.IsBackTracking)
                     {
@@ -6661,7 +6663,6 @@ namespace BP.WF
                     switch (str)
                     {
                         case StartWorkAttr.OID:
-                        case StartWorkAttr.CDT:
                         case StartWorkAttr.MD5:
                         case StartWorkAttr.Emps:
                         case StartWorkAttr.FID:
@@ -7050,7 +7051,6 @@ namespace BP.WF
                     switch (str)
                     {
                         case StartWorkAttr.OID:
-                        case StartWorkAttr.CDT:
                         case StartWorkAttr.MD5:
                         case StartWorkAttr.Emps:
                         case StartWorkAttr.FID:
@@ -7254,7 +7254,6 @@ namespace BP.WF
                     switch (str)
                     {
                         case StartWorkAttr.OID:
-                        case StartWorkAttr.CDT:
                         case StartWorkAttr.MD5:
                         case StartWorkAttr.Emps:
                         case StartWorkAttr.FID:
@@ -8619,14 +8618,12 @@ namespace BP.WF
                     switch (str)
                     {
                         case StartWorkAttr.OID:
-                        case StartWorkAttr.CDT:
                         case StartWorkAttr.MD5:
                         case StartWorkAttr.Emps:
                         case StartWorkAttr.FID:
                         case StartWorkAttr.FK_Dept:
                         case StartWorkAttr.PRI:
                         case StartWorkAttr.Rec:
-                        case StartWorkAttr.RDT:
                         case StartWorkAttr.Title:
                             continue;
                         default:
@@ -8658,7 +8655,7 @@ namespace BP.WF
                 #endregion 赋值.
 
                 wk.Rec = WebUser.No;
-                wk.RecText = WebUser.Name;
+               // wk.RecText = WebUser.Name;
                 wk.SetValByKey(StartWorkAttr.FK_Dept, WebUser.FK_Dept);
                 wk.BeforeSave();
                 wk.Save();

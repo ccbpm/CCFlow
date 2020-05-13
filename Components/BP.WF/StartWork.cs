@@ -31,12 +31,16 @@ namespace BP.WF
         public const string PFlowNo = "PFlowNo";
         public const string PWorkID = "PWorkID";
         public const string PNodeID = "PNodeID";
+        /// <summary>
+        /// 参与人
+        /// </summary>
+        public const string Emps = "Emps";
         #endregion 父子流程属性
     }
-	/// <summary>	 
-	/// 开始工作基类,所有开始工作都要从这里继承
-	/// </summary>
-	abstract public class StartWork : Work 
+    /// <summary>	 
+    /// 开始工作基类,所有开始工作都要从这里继承
+    /// </summary>
+    abstract public class StartWork : Work 
 	{
         #region 与_SQLCash 操作有关
         private SQLCash _SQLCash = null;

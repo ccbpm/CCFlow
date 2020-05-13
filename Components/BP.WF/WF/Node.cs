@@ -3237,6 +3237,11 @@ namespace BP.WF
                 attr.Insert();
             }
 
+            if (this.HisRunModel != RunModel.SubThread)
+                return "修复成功.";
+
+
+
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
@@ -3253,12 +3258,12 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.RDT;
+                attr.KeyOfEn = GERptAttr.RDT;
                 attr.Name = "接受时间";  //"接受时间";
                 attr.MyDataType = BP.DA.DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
@@ -3269,12 +3274,12 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.CDT;
+                attr.KeyOfEn = GERptAttr.CDT;
                 if (this.IsStartNode)
                     attr.Name = "发起时间"; //"发起时间";
                 else
@@ -3394,44 +3399,6 @@ namespace BP.WF
                     attr.Y = (float)68.4;
                     attr.Insert();
                 }
-
-                if (attrs.Contains(MapAttrAttr.KeyOfEn, "FK_NY", MapAttrAttr.FK_MapData, md.No) == false)
-                {
-                    attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = md.No;
-                    attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = "FK_NY";
-                    attr.Name = "年月"; //"年月";
-                    attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.LGType = FieldTypeS.Normal;
-                    //attr.UIBindKey = "BP.Pub.NYs";
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.MinLen = 0;
-                    attr.MaxLen = 7;
-                    attr.Insert();
-                }
-
-                if (attrs.Contains(MapAttrAttr.KeyOfEn, "MyNum", MapAttrAttr.FK_MapData, md.No) == false)
-                {
-                    attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = md.No;
-                    attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = "MyNum";
-                    attr.Name = "个数"; // "个数";
-                    attr.DefVal = "1";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.Insert();
-                }
             }
             #endregion 增加节点必要的字段.
 
@@ -3502,7 +3469,7 @@ namespace BP.WF
             attr = new BP.Sys.MapAttr();
             attr.FK_MapData = md.No;
             attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.RDT;
+            attr.KeyOfEn = GERptAttr.RDT;
             attr.Name = "接受时间";  //"接受时间";
             attr.MyDataType = BP.DA.DataType.AppDateTime;
             attr.UIContralType = UIContralType.TB;
@@ -3515,7 +3482,7 @@ namespace BP.WF
             attr = new BP.Sys.MapAttr();
             attr.FK_MapData = md.No;
             attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.CDT;
+            attr.KeyOfEn = GERptAttr.CDT;
             if (this.IsStartNode)
                 attr.Name = "发起时间"; //"发起时间";
             else

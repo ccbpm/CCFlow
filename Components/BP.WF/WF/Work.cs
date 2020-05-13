@@ -83,15 +83,7 @@ namespace BP.WF
         /// <summary>
         /// 工作ID
         /// </summary>
-        public const string OID = "OID";
-        /// <summary>
-        /// 完成任务时间
-        /// </summary>
-        public const string CDT = "CDT";
-        /// <summary>
-        /// 记录时间
-        /// </summary>
-        public const string RDT = "RDT";
+        public const string OID = "OID";      
         /// <summary>
         /// 记录人
         /// </summary>
@@ -109,13 +101,22 @@ namespace BP.WF
         /// </summary>
         public const string FID = "FID";
         /// <summary>
-        /// MyNum
-        /// </summary>
-        public const string MyNum = "MyNum";
-        /// <summary>
         /// MD5
         /// </summary>
         public const string MD5 = "MD5";
+        #endregion
+    }
+    public class SubThreadWorkAttr: WorkAttr
+    {
+        #region 基本属性
+        /// <summary>
+        /// 记录人
+        /// </summary>
+        public const string Rec = "Rec";
+        /// <summary>
+        /// 流程ID
+        /// </summary>
+        public const string FID = "FID";
         #endregion
     }
     /// <summary>
@@ -199,20 +200,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 完成时间
-        /// </summary>
-        public string CDT
-        {
-            get
-            {
-                string str = this.GetValStringByKey(WorkAttr.CDT);
-                if (str.Length < 5)
-                    this.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTime);
-
-                return this.GetValStringByKey(WorkAttr.CDT);
-            }
-        }
-        /// <summary>
         /// 人员emps
         /// </summary>
         public string Emps
@@ -242,51 +229,6 @@ namespace BP.WF
             return i;
         }
         /// <summary>
-        /// 记录时间
-        /// </summary>
-        public string RDT
-        {
-            get
-            {
-                return this.GetValStringByKey(WorkAttr.RDT);
-            }
-        }
-        public string RDT_Date
-        {
-            get
-            {
-                try
-                {
-                    return DataType.ParseSysDate2DateTime(this.RDT).ToString(DataType.SysDataFormat);
-                }
-                catch
-                {
-                    return DataType.CurrentData;
-                }
-            }
-        }
-        public DateTime RDT_DateTime
-        {
-            get
-            {
-                try
-                {
-                    return DataType.ParseSysDate2DateTime(this.RDT_Date);
-                }
-                catch
-                {
-                    return DateTime.Now;
-                }
-            }
-        }
-        public string Record_FK_NY
-        {
-            get
-            {
-                return this.RDT.Substring(0, 7);
-            }
-        }
-        /// <summary>
         /// 记录人
         /// </summary>
         public string Rec
@@ -314,27 +256,7 @@ namespace BP.WF
                 return new Emp(this.Rec);
             }
         }
-        /// <summary>
-        /// 记录人名称
-        /// </summary>
-        public string RecText
-        {
-            get
-            {
-                try
-                {
-                    return this.HisRec.Name;
-                }
-                catch
-                {
-                    return this.Rec;
-                }
-            }
-            set
-            {
-                this.SetValByKey("RecText", value);
-            }
-        }
+   
         private Node _HisNode = null;
         /// <summary>
         /// 工作的节点.
@@ -377,26 +299,6 @@ namespace BP.WF
         #endregion
 
         #region 扩展属性
-        /// <summary>
-        /// 跨度天数
-        /// </summary>
-        public int SpanDays
-        {
-            get
-            {
-                if (this.CDT == this.RDT)
-                    return 0;
-                return DataType.SpanDays(this.RDT, this.CDT);
-            }
-        }
-        /// <summary>
-        /// 得到从工作完成到现在的日期
-        /// </summary>
-        /// <returns></returns>
-        public int GetCDTimeLimits(string todata)
-        {
-            return DataType.SpanDays(this.CDT, todata);
-        }
         /// <summary>
         /// 他的记录人
         /// </summary>
@@ -471,9 +373,7 @@ namespace BP.WF
         public override void Copy(DataRow dr)  {
             foreach (Attr attr in this.EnMap.Attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                   || attr.Key == WorkAttr.RDT
-                   || attr.Key == WorkAttr.Rec
+                if (  attr.Key == WorkAttr.Rec
                    || attr.Key == WorkAttr.FID
                    || attr.Key == WorkAttr.OID
                    || attr.Key == "No"
@@ -496,9 +396,7 @@ namespace BP.WF
             Attrs attrs = fromEn.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                    || attr.Key == WorkAttr.RDT
-                    || attr.Key == WorkAttr.Rec
+                if (  attr.Key == WorkAttr.Rec
                     || attr.Key == WorkAttr.FID
                     || attr.Key == WorkAttr.OID
                     || attr.Key == WorkAttr.Emps
@@ -508,36 +406,14 @@ namespace BP.WF
                 this.SetValByKey(attr.Key, fromEn.GetValByKey(attr.Key));
             }
         }
-        /// <summary>
-        /// 删除主表数据也要删除它的明细数据
-        /// </summary>
-        protected override void afterDelete()
-        {
-            #warning 删除了明细，有可能造成其他的影响.
-            //MapDtls dtls = this.HisNode.MapData.MapDtls;
-            //foreach (MapDtl dtl in dtls)。
-            //    DBAccess.RunSQL("DELETE FROM  " + dtl.PTable + " WHERE RefPK=" + this.OID);
-            base.afterDelete();
-        }
         #endregion
 
         #region  公共方法
-        /// <summary>
-        /// 更新之前
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeUpdate()
-        {
-            return base.beforeUpdate();
-        }
         /// <summary>
         /// 直接的保存前要做的工作
         /// </summary>
         public virtual void BeforeSave()
         {
-            //执行自动计算.
-            this.AutoFull();
-
             // 执行保存前的事件。
             this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.HisNode, this.HisNode.HisWork, "@WorkID=" + this.OID + "@FID=" + this.FID);
         }
@@ -548,10 +424,7 @@ namespace BP.WF
         {
             this.beforeUpdateInsertAction();
             if (this.DirectUpdate() == 0)
-            {
-                this.SetValByKey(WorkAttr.RDT, DateTime.Now.ToString("yyyy-MM-dd"));
                 this.DirectInsert();
-            }
         }
         public string NodeFrmID = "";
         protected int _nodeID = 0;
@@ -593,16 +466,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 查询方法
-        public int Retrieve(string fromDataTime, string toDataTime)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.Top = 90000;
-            qo.AddWhere(WorkAttr.RDT, " >=", fromDataTime);
-            qo.addAnd();
-            qo.AddWhere(WorkAttr.RDT, " <= ", toDataTime);
-            return qo.DoQuery();
-        }
-        #endregion
+        
     }
 }

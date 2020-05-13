@@ -200,7 +200,6 @@ namespace BP.Sys
         }
         protected override bool beforeUpdate()
         {
-            this.AutoFull(); /*处理自动计算。*/
             return base.beforeUpdate();
         }
         /// <summary>
@@ -256,7 +255,6 @@ namespace BP.Sys
             this.Rec = BP.Web.WebUser.No;
             this.RDT = DataType.CurrentDataTime;
 
-            this.AutoFull(); /*处理自动计算。*/
             return base.beforeInsert();
         }
         #endregion

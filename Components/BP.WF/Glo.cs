@@ -3965,8 +3965,6 @@ namespace BP.WF
                                 case WorkAttr.FID:
                                 case WorkAttr.Rec:
                                 case WorkAttr.MD5:
-                                case WorkAttr.MyNum:
-                                case WorkAttr.RDT:
                                 case "RefPK":
                                 case WorkAttr.RecText:
                                     continue;
@@ -4496,8 +4494,6 @@ namespace BP.WF
                 switch (attr.Key)
                 {
                     case WorkAttr.MD5:
-                    case WorkAttr.RDT:
-                    case WorkAttr.CDT:
                     case WorkAttr.Rec:
                     case StartWorkAttr.Title:
                     case StartWorkAttr.Emps:
@@ -4635,9 +4631,8 @@ namespace BP.WF
                 }
 
                 wk.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
-                wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
-                wk.SetValByKey(WorkAttr.MyNum, 1);
+              //  wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+               // wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 wk.Update();
 
                 Node ndStart = nd.HisFlow.HisStartNode;
@@ -4780,9 +4775,9 @@ namespace BP.WF
                     wk.SetValByKey(dc.ColumnName.Trim(), dr[dc.ColumnName].ToString().Trim());
 
                 wk.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
-                wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
-                wk.SetValByKey(WorkAttr.MyNum, 1);
+                //wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                //wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
+                //wk.SetValByKey(WorkAttr.MyNum, 1);
                 wk.Update();
 
                 Node ndStart = fl.HisStartNode;
@@ -4809,9 +4804,9 @@ namespace BP.WF
                     wkEnd.SetValByKey(dc.ColumnName.Trim(), dr[dc.ColumnName].ToString().Trim());
 
                 wkEnd.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                wkEnd.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
-                wkEnd.SetValByKey("FK_NY", DataType.CurrentYearMonth);
-                wkEnd.SetValByKey(WorkAttr.MyNum, 1);
+                //wkEnd.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                //wkEnd.SetValByKey("FK_NY", DataType.CurrentYearMonth);
+                //wkEnd.SetValByKey(WorkAttr.MyNum, 1);
                 wkEnd.Update();
 
                 try

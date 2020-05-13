@@ -23,36 +23,6 @@ namespace BP.En
         /// </summary>
         Readonly
     }
-    /// <summary>
-    /// 自动填充方式
-    /// </summary>
-    public enum AutoFullWay
-    {
-        /// <summary>
-        /// 不设置
-        /// </summary>
-        Way0,
-        /// <summary>
-        /// 方式1
-        /// </summary>
-        Way1_JS,
-        /// <summary>
-        /// sql 方式。
-        /// </summary>
-        Way2_SQL,
-        /// <summary>
-        /// 外键
-        /// </summary>
-        Way3_FK,
-        /// <summary>
-        /// 明细
-        /// </summary>
-        Way4_Dtl,
-        /// <summary>
-        /// 脚本
-        /// </summary>
-        Way5_JS
-    }
 	/// <summary>
 	///  控件类型
 	/// </summary>
@@ -504,8 +474,6 @@ namespace BP.En
 
 		#region 属性
         public string HelperUrl = null;
-        public AutoFullWay AutoFullWay = AutoFullWay.Way0;
-        public string  AutoFullDoc =null;
 		/// <summary>
 		/// 属性名称
 		/// </summary>

@@ -101,7 +101,7 @@ namespace BP.UnitTesting.SendCase
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 throw new Exception("@发起流程出错误,不应该找不到报表数据.");
-            
+
             // 检查节点表单表是否有数据?;
             sql = "SELECT * FROM ND901 WHERE OID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
@@ -114,18 +114,18 @@ namespace BP.UnitTesting.SendCase
             // 检查创建这个空白是否有数据完整?;
             sql = "SELECT * FROM WF_EmpWorks WHERE WorkID=" + workid + " AND FK_Emp='" + WebUser.No + "'";
             dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count !=0 )
+            if (dt.Rows.Count != 0)
                 throw new Exception("@找到当前人员的待办就是错误的.");
             #endregion 检查发起流程后的数据是否完整？
 
             //组织参数.
             Hashtable ht = new Hashtable();
-            ht.Add("KeFuBu",1); 
+            ht.Add("KeFuBu", 1);
             ht.Add("ShiChangBu", 1);
             ht.Add("YanFaBu", 1);
 
             //开始节点:执行发送,并获取发送对象. 主线程向子线程发送.
-            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid,ht);
+            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, ht);
 
             #region 第1步: 检查【开始节点】发送对象返回的信息是否完整？
             //从获取的发送对象里获取到下一个工作者: zhanghaicheng,qifenglin,guoxiangbin .
@@ -169,7 +169,7 @@ namespace BP.UnitTesting.SendCase
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve(GenerWorkerListAttr.FID, workid);
             if (gwfs.Count != 3)
-                throw new Exception("@应该有两个流程注册，现在是："+gwfs.Count+"个.");
+                throw new Exception("@应该有两个流程注册，现在是：" + gwfs.Count + "个.");
 
             //检查它们的注册数据是否完整.
             foreach (GenerWorkFlow item in gwfs)
@@ -261,22 +261,10 @@ namespace BP.UnitTesting.SendCase
                             if (val != item.FK_Emp)
                                 throw new Exception("@不应当不等于:" + item.FK_Emp);
                             break;
-                        case WorkAttr.MyNum:
-                            if (DataType.IsNullOrEmpty(val))
-                                throw new Exception("@不应当为空:" + dc.ColumnName);
-                            break;
-                        case WorkAttr.RDT:
-                            if (DataType.IsNullOrEmpty(val))
-                                throw new Exception("@ RDT 不应当为空:" + dc.ColumnName);
-                            break;
-                        case WorkAttr.CDT:
-                            if (DataType.IsNullOrEmpty(val))
-                                throw new Exception("@ CDT 不应当为空:" + dc.ColumnName);
-                            break;
-                        case WorkAttr.Emps:
-                            if (DataType.IsNullOrEmpty(val) || val.Contains(item.FK_Emp) == false)
-                                throw new Exception("@ Emps 不应当为空，或者不包含发起人.");
-                            break;
+                        //case WorkAttr.Emps:
+                        //    if (DataType.IsNullOrEmpty(val) || val.Contains(item.FK_Emp) == false)
+                        //        throw new Exception("@ Emps 不应当为空，或者不包含发起人.");
+                        //    break;
                         default:
                             break;
                     } //结束列的col判断。
@@ -296,8 +284,8 @@ namespace BP.UnitTesting.SendCase
                             throw new Exception("@应该是 FID =0 ");
                         break;
                     case GERptAttr.FK_Dept:
-                        if (val!=WebUser.FK_Dept)
-                            throw new Exception("@ FK_Dept 字段填充错误,应当是:"+WebUser.FK_Dept+",现在是:"+val);
+                        if (val != WebUser.FK_Dept)
+                            throw new Exception("@ FK_Dept 字段填充错误,应当是:" + WebUser.FK_Dept + ",现在是:" + val);
                         break;
                     case GERptAttr.FK_NY:
                         if (val != DataType.CurrentYearMonth)
@@ -315,22 +303,22 @@ namespace BP.UnitTesting.SendCase
                         }
                         break;
                     case GERptAttr.FlowEnder:
-                        if ( val != "zhoupeng")
-                            throw new Exception("@应该是 zhoupeng 是 FlowEnder ,现在是:"+val );
+                        if (val != "zhoupeng")
+                            throw new Exception("@应该是 zhoupeng 是 FlowEnder ,现在是:" + val);
                         break;
                     case GERptAttr.FlowEnderRDT:
                         break;
                     case GERptAttr.FlowEndNode:
-                        if ( val != "901")
-                            throw new Exception("@应该是 901 是 FlowEndNode,现在是:"+val);
+                        if (val != "901")
+                            throw new Exception("@应该是 901 是 FlowEndNode,现在是:" + val);
                         break;
                     case GERptAttr.FlowStarter:
-                        if ( val != "zhoupeng")
-                            throw new Exception("@应该是 zhoupeng 是 FlowStarter, 现在是:"+val);
+                        if (val != "zhoupeng")
+                            throw new Exception("@应该是 zhoupeng 是 FlowStarter, 现在是:" + val);
                         break;
                     case GERptAttr.PFlowNo:
                         if (val != "")
-                            throw new Exception("@ PFlowNo 应当是 '' 现在是:"+val);
+                            throw new Exception("@ PFlowNo 应当是 '' 现在是:" + val);
                         break;
                     case GERptAttr.PWorkID:
                         if (val != "0")
@@ -342,7 +330,7 @@ namespace BP.UnitTesting.SendCase
                         break;
                     case GERptAttr.WFState:
                         if (int.Parse(val) != (int)WFState.Runing)
-                            throw new Exception("@应该是 WFState.Runing 是当前的状态,现在是："+val);
+                            throw new Exception("@应该是 WFState.Runing 是当前的状态,现在是：" + val);
                         break;
                     default:
                         break;
@@ -388,7 +376,7 @@ namespace BP.UnitTesting.SendCase
             #region 第1步: 检查发送后的变量.
             if (objs.VarWorkID != threahWorkID)
                 throw new Exception("@应当是 VarWorkID=" + threahWorkID + " ，现在是:" + objs.VarWorkID);
-            
+
             if (objs.VarCurrNodeID != 902)
                 throw new Exception("@应当是 VarCurrNodeID=902 是，现在是:" + objs.VarCurrNodeID);
 
@@ -437,8 +425,8 @@ namespace BP.UnitTesting.SendCase
                     if (nd.PassRate > 50)
                     {
                         // 检查主线程数据是否正确.
-                         sql = "SELECT COUNT(*) FROM WF_EmpWorks WHERE WorkID="+workid;
-                        if (DBAccess.RunSQLReturnValInt(sql)!=0)
+                        sql = "SELECT COUNT(*) FROM WF_EmpWorks WHERE WorkID=" + workid;
+                        if (DBAccess.RunSQLReturnValInt(sql) != 0)
                             throw new Exception("@因为完成率大于 50, 所以一个通过了，主线程的工作人员不能看到.");
 
                         //if (item.IsPassInt != 3)
@@ -580,7 +568,7 @@ namespace BP.UnitTesting.SendCase
             Hashtable ht = new Hashtable();
             ht.Add("FuWuQi", 100);
             ht.Add("ShuMaXiangJi", 30);//把数据放里面去,让它保存到子线程的主表，以检查数据是否汇总到合流节点上。
-    
+
             // 执行 子线程向合流点发送.
             objs = BP.WF.Dev2Interface.Node_SendWork(fk_flow, threahWorkID, ht);
 
@@ -650,7 +638,7 @@ namespace BP.UnitTesting.SendCase
             gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.FID, workid);
             if (gwls.Count != 3)
-                throw new Exception("@不是期望的两条子线程上的工作人员列表数据, 应该是3,现在是:"+gwls.Count);
+                throw new Exception("@不是期望的两条子线程上的工作人员列表数据, 应该是3,现在是:" + gwls.Count);
             foreach (GenerWorkerList item in gwls)
             {
                 if (item.FK_Emp == "zhanghaicheng")
@@ -725,7 +713,7 @@ namespace BP.UnitTesting.SendCase
 
             //if (dt.Rows[0]["ShuMaXiangJi"].ToString() != "30")
             //    throw new Exception("没有存储到指定的位置.");
-             
+
 
             //检查报表数据是否正确？
             sql = "SELECT * FROM  ND9Rpt WHERE OID=" + workid;
@@ -950,7 +938,7 @@ namespace BP.UnitTesting.SendCase
             //检查主线程.
             sql = "SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
-            
+
 
             sql = "SELECT * FROM WF_GenerWorkerlist WHERE WorkID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
@@ -988,8 +976,8 @@ namespace BP.UnitTesting.SendCase
             if (dt.Rows[0][GERptAttr.FlowEnder].ToString() != "zhoupeng")
                 throw new Exception("@应该是 zhoupeng 是 FlowEnder .");
 
-               if ( DataType.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()) )
-                            throw new Exception("@流程走完后标题丢失了");
+            if (DataType.IsNullOrEmpty(dt.Rows[0][GERptAttr.Title].ToString()))
+                throw new Exception("@流程走完后标题丢失了");
 
             if (dt.Rows[0][GERptAttr.FlowStarter].ToString() != "zhoupeng")
                 throw new Exception("@应该是 zhoupeng 是 FlowStarter .");
@@ -1025,7 +1013,7 @@ namespace BP.UnitTesting.SendCase
                 throw new Exception("@子线程表单数据没有正确的写入Rec字段.");
             }
             #endregion 第3步: 检查 节点表单表数据.
-           
+
         }
     }
 }

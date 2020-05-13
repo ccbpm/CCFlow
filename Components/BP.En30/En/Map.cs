@@ -571,29 +571,6 @@ namespace BP.En
                 return _HisFKAttrs;
             }
         }
-        private int _isFull = -1;
-        /// <summary>
-        /// 是否有自动计算
-        /// </summary>
-        public bool IsHaveAutoFull
-        {
-            get
-            {
-                if (_isFull == -1)
-                {
-                    foreach (Attr attr in _attrs)
-                    {
-                        if (attr.AutoFullDoc != null)
-                            _isFull = 1;
-                    }
-                    if (_isFull == -1)
-                        _isFull = 0;
-                }
-                if (_isFull == 0)
-                    return false;
-                return true;
-            }
-        }
         public BPEntityAthType HisBPEntityAthType = BPEntityAthType.None;
         /// <summary>
         /// 附件存储位置
@@ -603,33 +580,6 @@ namespace BP.En
         /// 移动到显示方式
         /// </summary>
         public string TitleExt = null;
-        private int _isJs = -1;
-        public bool IsHaveJS
-        {
-            get
-            {
-                if (_isJs == -1)
-                {
-                    foreach (Attr attr in _attrs)
-                    {
-                        if (attr.AutoFullDoc == null)
-                            continue;
-                        if (attr.AutoFullWay == AutoFullWay.Way1_JS)
-                        {
-                            _isJs = 1;
-                            break;
-                        }
-                    }
-
-                    if (_isJs == -1)
-                        _isJs = 0;
-                }
-
-                if (_isJs == 0)
-                    return false;
-                return true;
-            }
-        }
         /// <summary>
         /// 是否加入相关联的名称
         /// AttrKey -  AttrKeyName 

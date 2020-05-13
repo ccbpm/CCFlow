@@ -882,7 +882,7 @@ namespace BP.WF.Data
                 wk.DirectUpdate();
                 return "不需要更新数据.";
             }
-            infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "  dt=" + wk.RDT + "被修复.";
+            infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "  被修复.";
 
             return infos;
         }
@@ -947,7 +947,7 @@ namespace BP.WF.Data
                         wk.DirectUpdate();
                         continue;
                     }
-                    infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "  dt=" + wk.RDT + "被修复.";
+                    infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "   被修复.";
                 }
             }
             return infos;

@@ -1214,8 +1214,7 @@ namespace BP.WF
                             skipWork.FID = mywork.FID;
 
                         skipWork.Rec = this.Execer;
-                        skipWork.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTimess);
-                        skipWork.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTimess);
+                       
                         skipWork.ResetDefaultVal();
 
                         // 把里面的默认值也copy报表里面去.
@@ -6551,7 +6550,7 @@ namespace BP.WF
                 this.HisWork.RetrieveFromDBSources();
                 this.HisWork.ResetDefaultVal();
                 this.HisWork.Rec = this.Execer;
-                this.HisWork.RecText = this.ExecerName;
+               // this.HisWork.RecText = this.ExecerName;
                 if (DataType.IsNullOrEmpty(sendWhen) == false)
                 {
                     sendWhen = System.Web.HttpUtility.UrlDecode(sendWhen);
@@ -10066,33 +10065,7 @@ namespace BP.WF
             }
             return this.Count;
         }
-        /// <summary>
-        /// 这个方法有问题的
-        /// </summary>
-        /// <param name="flow"></param>
-        /// <param name="oid"></param>
-        /// <returns></returns>
-        public int GenerByWorkID2014_01_06(Flow flow, Int64 oid)
-        {
-            Nodes nds = flow.HisNodes;
-            foreach (Node nd in nds)
-            {
-                Work wk = nd.GetWork(oid);
-                if (wk == null)
-                    continue;
-                string table = "ND" + int.Parse(flow.No) + "Track";
-                string actionSQL = "SELECT EmpFrom,EmpFromT,RDT FROM " + table + " WHERE WorkID=" + oid + " AND NDFrom=" + nd.NodeID + " AND ActionType=" + (int)ActionType.Forward;
-                DataTable dt = DBAccess.RunSQLReturnTable(actionSQL);
-                if (dt.Rows.Count == 0)
-                    continue;
-
-                wk.Rec = dt.Rows[0]["EmpFrom"].ToString();
-                wk.RecText = dt.Rows[0]["EmpFromT"].ToString();
-                wk.SetValByKey("RDT", dt.Rows[0]["RDT"].ToString());
-                this.Add(new WorkNode(wk, nd));
-            }
-            return this.Count;
-        }
+        
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
             /*退回 ,需要判断跳转的情况，如果是跳转的需要退回到他开始执行的节点
@@ -10127,7 +10100,7 @@ namespace BP.WF
 
 
                 wk.Rec = dr["EmpFrom"].ToString();
-                wk.RecText = dr["EmpFromT"].ToString();
+             //   wk.RecText = dr["EmpFromT"].ToString();
                 wk.SetValByKey("RDT", dr["RDT"].ToString());
                 this.Add(new WorkNode(wk, nd));
             }

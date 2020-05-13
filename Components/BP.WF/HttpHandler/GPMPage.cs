@@ -205,30 +205,38 @@ namespace BP.WF.HttpHandler
         {
             var appNo = this.GetRequestVal("AppNo");
 
-            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
-            sql1 += " FROM V_GPM_EmpMenu ";
-            sql1 += " WHERE FK_Emp = '" + WebUser.No+ "' ";
-            sql1 += " AND MenuType = '3' ";
+            Paras ps = new Paras();
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT No FROM GPM_Menu WHERE MenuType="+dbstr+ "MenuType AND FK_App="+dbstr+ "FK_App";
+            ps.Add("MenuType",2);
+            ps.Add("FK_App", appNo);
+
+            string ParentNo = DBAccess.RunSQLReturnString(ps);
+
+            var sql1 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql1 += " FROM v_gpm_empmenu ";
+            sql1 += " WHERE FK_Emp = '" + WebUser.No + "' ";
+            sql1 += " AND ParentNo = '" + ParentNo + "' ";
             sql1 += " AND FK_App = '" + appNo + "' ";
             sql1 += " UNION ";  //加入不需要权限控制的菜单.
-            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Icon,Idx";
+            sql1 += "SELECT No,Name, No as FK_Menu,MenuType,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
             sql1 += " FROM GPM_Menu ";
             sql1 += " WHERE MenuCtrlWay=1 ";
-            sql1 += " AND MenuType = '3' "; //菜单类型.
+            sql1 += " AND ParentNo = '" + ParentNo + "' ";
             sql1 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
             var dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
-            sql2 += " FROM V_GPM_EmpMenu ";
+            var sql2 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
+            sql2 += " FROM v_gpm_empmenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
-            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND ParentNo != '" + ParentNo + "'  ";
             sql2 += " AND FK_App = '" + appNo + "' ";
             sql2 += " UNION ";  //加入不需要权限控制的菜单.
-            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Icon,Idx ";
+            sql2 += "SELECT No,Name, No as FK_Menu,MenuType,ParentNo,Url,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
             sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
             sql2 += " WHERE MenuCtrlWay=1 ";
-            sql2 += " AND MenuType = '4' ";
+            sql2 += " AND ParentNo != '" + ParentNo + "' ";
             sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
 
             var menus = DBAccess.RunSQLReturnTable(sql2);

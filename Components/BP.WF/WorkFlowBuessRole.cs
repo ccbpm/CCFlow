@@ -123,12 +123,38 @@ namespace BP.WF
             if (titleRole == "@OutPara" || DataType.IsNullOrEmpty(titleRole) == true)
                 titleRole = "@WebUser.FK_DeptName-@WebUser.No,@WebUser.Name在@RDT发起.";
 
-            titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
-            titleRole = titleRole.Replace("@WebUser.Name", wk.RecText);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", wk.RecOfEmp.FK_Dept);
-            titleRole = titleRole.Replace("@RDT", wk.RDT);
+            //如果是系统字段需要查看RPT表
+            if(wk.HisNode.FormType == NodeFormType.RefOneFrmTree)
+            {
+                GERpt rpt = new GERpt("ND"+int.Parse(fl.No)+"RPT");
+                rpt.OID = wk.OID;
+                rpt.RetrieveFromDBSources();
+                string empNo = rpt.Row.GetValByKey(WorkAttr.Rec).ToString();
+                Emp emp = new Emp();
+                emp.No = empNo;
+                if (emp.RetrieveFromDBSources() != 0)
+                {
+                    titleRole = titleRole.Replace("@WebUser.No", emp.No);
+
+                    titleRole = titleRole.Replace("@WebUser.Name", emp.Name);
+                    titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                    titleRole = titleRole.Replace("@WebUser.FK_DeptName", emp.FK_DeptText);
+                    titleRole = titleRole.Replace("@WebUser.FK_Dept", emp.FK_Dept);
+                    titleRole = titleRole.Replace("@RDT", rpt.Row.GetValByKey(WorkAttr.RDT).ToString());
+                }
+                
+            }
+            else
+            {
+                
+                titleRole = titleRole.Replace("@WebUser.No", wk.Rec);
+                titleRole = titleRole.Replace("@WebUser.Name", wk.RecText);
+                titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);
+                titleRole = titleRole.Replace("@WebUser.FK_Dept", wk.RecOfEmp.FK_Dept);
+                titleRole = titleRole.Replace("@RDT", wk.RDT);
+            }
+            
 
             if (titleRole.Contains("@"))
             {

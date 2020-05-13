@@ -16,7 +16,8 @@ function InitPage() {
 
     var fk_node = GetQueryString("FK_Node");
     var node = new Entity("BP.WF.Node", fk_node);
-    InitBar(node.TurnToDeal);
+    InitBar(parseInt(node.TurnToDeal));
+   
     //调用公共类库的方法:执行批量主表赋值
     GenerFullAllCtrlsVal(node);
    
@@ -76,7 +77,6 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    
     window.location.href = url + "?FK_Node=" + nodeID;
 }
 //高级设置.

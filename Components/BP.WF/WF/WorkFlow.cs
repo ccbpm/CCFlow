@@ -1098,20 +1098,20 @@ namespace BP.WF
             Node nd = new Node(gwf.FK_Node);
             //@sly
             //DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow   WHERE WorkID=" + this.WorkID);
-            //DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID);
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID);
 
-            string sql = "SELECT count(*) FROM WF_GenerWorkFlow WHERE  FID=" + this.FID;
+            string sql = "SELECT count(*) FROM WF_GenerWorkerlist WHERE  FID=" + this.FID;
             int num = DBAccess.RunSQLReturnValInt(sql);
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
                 /*说明这是最后一个*/
                 WorkFlow wf = new WorkFlow(gwf.FK_Flow, this.FID);
                 wf.DoFlowOver(ActionType.FlowOver, "子线程结束", null, null);
-                return "@当前子线程已完成，主流程已完成。";
+                return "@当前子线程已完成，干流程已完成。";
             }
             else
             {
-                return "@当前子线程已完成，主流程还有(" + num + ")个子流程未完成。";
+                return "@当前子线程已完成，干流程还有(" + num + ")个子线程未完成。";
             }
         }
         /// <summary>
@@ -1252,7 +1252,7 @@ namespace BP.WF
             //IsMainFlow== false 这个位置是子线程
             if (this.IsMainFlow == false)
             {
-                /* 处理子流程完成*/
+                /* 处理子线程完成*/
                 stopMsg += this.DoFlowThreadOver();
             }
 

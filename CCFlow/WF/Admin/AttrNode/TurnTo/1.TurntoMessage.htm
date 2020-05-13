@@ -31,7 +31,7 @@
             node.TurnToDeal = TurntoWay.TurntoMessage;
             node.TurnToDealDoc = $("#TB_SpecMsg").val();
             node.Update();
-   
+
             alert("保存完毕");
             window.location.href = window.location.href;
         }
@@ -47,22 +47,23 @@
             <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
         </div>-->
         <fieldset>
+
             <legend>
-                <label for="RB_TurnToDeal_1">提示指定信息 </label> - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
+                <label for="RB_TurnToDeal_1">提示指定信息 </label>
             </legend>
             <br />
-            <div id="SpecMsg" style="display: none">
-                <ul style="color: Gray">
-                    <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
-                    <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
-                    <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
-                    <li>发送后系统变量如下: </li>
-                    <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
-                    <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
-                </ul>
 
-            </div>
             <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%" />
+
+            <legend id="help"></legend>
+            <ul style="color: Gray">
+                <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
+                <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
+                <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
+                <li>发送后系统变量如下: </li>
+                <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
+                <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
+            </ul>
         </fieldset>
 
     </form>

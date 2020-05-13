@@ -1094,8 +1094,14 @@ namespace BP.WF
                 return "";
 
             if (DBAccess.IsExitsTableCol("Sys_GroupField", "EnName") == true)
+            {
+                GroupField groupField = new GroupField();
+                groupField.CheckPhysicsTable();
                 DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID is null");
+            }
 
+            MapAttr attr = new MapAttr();
+            attr.CheckPhysicsTable();
 
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
@@ -1307,6 +1313,8 @@ namespace BP.WF
                 dtlNos = "('" + dtlNos + "')";
                 DBAccess.RunSQL("UPDATE SYS_MAPDTL SET FK_NODE=0 WHERE NO IN " + dtlNos);
             }
+            FrmNode nff = new FrmNode();
+            nff.CheckPhysicsTable();
 
             #region 升级审核组件
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -1549,7 +1557,7 @@ namespace BP.WF
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
 
                 if (dbtype == DBType.MSSQL)
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows text");
+                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows nvarchar(4000) null");
                 #endregion 更新wf_emp 的字段类型.
 
                 BP.Sys.FrmRB rb = new FrmRB();
@@ -1673,6 +1681,10 @@ namespace BP.WF
                 #endregion
 
                 #region 20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen
+
+                FrmRB frmRB = new FrmRB();
+                frmRB.CheckPhysicsTable();
+
                 try
                 {
                     DataTable columns = src.GetColumns("Sys_FrmRB");
@@ -1710,6 +1722,22 @@ namespace BP.WF
                 #endregion 其他.
 
                 #region 升级统一规则.
+                #region 检查必要的升级。
+                NodeWorkCheck fwc = new NodeWorkCheck();
+                fwc.CheckPhysicsTable();
+
+                Flow myfl = new Flow();
+                myfl.CheckPhysicsTable();
+
+                Node nd = new Node();
+                nd.CheckPhysicsTable();
+
+                //Sys_SFDBSrc
+                SFDBSrc sfDBSrc = new SFDBSrc();
+                sfDBSrc.CheckPhysicsTable();
+                #endregion 检查必要的升级。
+                MapExt mapExt = new MapExt();
+                mapExt.CheckPhysicsTable();
 
                 try
                 {
@@ -1813,14 +1841,10 @@ namespace BP.WF
                 FrmField ff = new FrmField();
                 ff.CheckPhysicsTable();
 
-                MapAttr attr = new MapAttr();
-                attr.CheckPhysicsTable();
+                
 
                 NodeToolbar bar = new NodeToolbar();
                 bar.CheckPhysicsTable();
-
-                FrmNode nff = new FrmNode();
-                nff.CheckPhysicsTable();
 
                 SysForm ssf = new SysForm();
                 ssf.CheckPhysicsTable();
@@ -1850,20 +1874,7 @@ namespace BP.WF
 
                 #endregion
 
-                #region 检查必要的升级。
-                NodeWorkCheck fwc = new NodeWorkCheck();
-                fwc.CheckPhysicsTable();
-
-                Flow myfl = new Flow();
-                myfl.CheckPhysicsTable();
-
-                Node nd = new Node();
-                nd.CheckPhysicsTable();
-
-                //Sys_SFDBSrc
-                SFDBSrc sfDBSrc = new SFDBSrc();
-                sfDBSrc.CheckPhysicsTable();
-                #endregion 检查必要的升级。
+                
 
                 #region 执行更新.wf_node
                 sql = "UPDATE WF_Node SET FWCType=0 WHERE FWCType IS NULL";

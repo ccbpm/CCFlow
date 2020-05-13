@@ -300,7 +300,7 @@ namespace BP.WF.Template
         }
 
         /// <summary>
-        /// 父子流程结束规则
+        /// 子流程结束规则
         /// </summary>
         public int IsAutoSendSubFlowOver
         {
@@ -348,7 +348,7 @@ namespace BP.WF.Template
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
                 map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
 
-                map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "父子流程结束规则", false, true);
+                map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", false, true);
                 map.AddTBInt(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", false, true);
 
 

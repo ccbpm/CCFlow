@@ -1276,16 +1276,23 @@ namespace BP.WF
 
                 Map map = new Map("WF_GenerWorkFlow", "流程实例");
 
-                map.AddTBIntPK(GenerWorkFlowAttr.WorkID, 0, "WorkID", true, true);
+                map.AddTBIntPK(GenerWorkFlowAttr.WorkID, 0, "WorkID", true, true); //主键.
                 map.AddTBInt(GenerWorkFlowAttr.FID, 0, "流程ID", true, true);
 
                 map.AddTBString(GenerWorkFlowAttr.FK_FlowSort, null, "流程类别", true, false, 0, 10, 10);
+
+                //等于流程类别的Domain字段值.
                 map.AddTBString(GenerWorkFlowAttr.SysType, null, "系统类别", true, false, 0, 10, 10);
+
                 map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 1000, 10);
+
+                //两个状态，在不同的情况下使用. WFState状态 可以查询到SELECT  * FROM sys_enum WHERE EnumKey='WFState'
+                // WFState 的状态  @0=空白@1=草稿@2=运行中@3=已经完成@4=挂起@5=退回.
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
+
 
                 map.AddTBString(GenerWorkFlowAttr.Starter, null, "发起人", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);
@@ -1326,7 +1333,7 @@ namespace BP.WF
 
                 //参数.
                 map.AddTBString(GenerWorkFlowAttr.AtPara, null, "参数(流程运行设置临时存储的参数)", true, false, 0, 2000, 10);
-                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 10);
+                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人(格式:@zhangshan,张三@lishi,李四)", true, false, 0, 4000, 10);
                 map.AddTBString(GenerWorkFlowAttr.GUID, null, "GUID", false, false, 0, 36, 10);
                 map.AddTBString(GenerWorkFlowAttr.FK_NY, null, "年月", false, false, 0, 7, 7);
                 map.AddTBInt(GenerWorkFlowAttr.WeekNum, 0, "周次", true, true);

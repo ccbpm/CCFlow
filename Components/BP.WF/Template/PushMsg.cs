@@ -1142,8 +1142,9 @@ namespace BP.WF.Template
         {
             //  this.MyPK = this.FK_Event + "_" + this.FK_Node + "_" + this.PushWay;
 
-            string sql = "UPDATE WF_PushMsg SET FK_Flow=(SELECT FK_Flow FROM WF_Node WHERE NodeID= WF_PushMsg.FK_Node)";
-            BP.DA.DBAccess.RunSQL(sql);
+            //@sly 去掉。
+          //  string sql = "UPDATE WF_PushMsg SET FK_Flow=(SELECT FK_Flow FROM WF_Node WHERE NodeID= WF_PushMsg.FK_Node)";
+           // BP.DA.DBAccess.RunSQL(sql);
 
             return base.beforeUpdateInsertAction();
         }

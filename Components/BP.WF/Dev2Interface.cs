@@ -8351,7 +8351,7 @@ namespace BP.WF
                 list.CCToOrgName = org.Name; 
             }
 
-            list.RDT = DataType.CurrentDataTime;
+            list.RDT = DataType.CurrentDataTime; //抄送日期.
             list.Rec = WebUser.No;
             list.WorkID = workID;
             list.FID = 0;

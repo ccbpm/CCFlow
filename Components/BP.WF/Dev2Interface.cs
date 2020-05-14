@@ -1424,7 +1424,7 @@ namespace BP.WF
                     dt.Columns["LISTTYPE"].ColumnName = "ListType";
                     dt.Columns["SENDER"].ColumnName = "Sender";
                     dt.Columns["ATPARA"].ColumnName = "AtPara";
-                    dt.Columns["MYNUM"].ColumnName = "MyNum";
+                  //  dt.Columns["MYNUM"].ColumnName = "MyNum";
                 }
 
                 if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -1465,7 +1465,7 @@ namespace BP.WF
                     dt.Columns["listtype"].ColumnName = "ListType";
                     dt.Columns["sender"].ColumnName = "Sender";
                     dt.Columns["atpara"].ColumnName = "AtPara";
-                    dt.Columns["mynum"].ColumnName = "MyNum";
+                    //dt.Columns["mynum"].ColumnName = "MyNum";
                 }
                 return dt;
             }
@@ -1577,7 +1577,7 @@ namespace BP.WF
                 dt2.Columns["LISTTYPE"].ColumnName = "ListType";
                 dt2.Columns["SENDER"].ColumnName = "Sender";
                 dt2.Columns["ATPARA"].ColumnName = "AtPara";
-                dt2.Columns["MYNUM"].ColumnName = "MyNum";
+               // dt2.Columns["MYNUM"].ColumnName = "MyNum";
             }
 
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -1618,7 +1618,7 @@ namespace BP.WF
                 dt2.Columns["listtype"].ColumnName = "ListType";
                 dt2.Columns["sender"].ColumnName = "Sender";
                 dt2.Columns["atpara"].ColumnName = "AtPara";
-                dt2.Columns["mynum"].ColumnName = "MyNum";
+              //  dt2.Columns["mynum"].ColumnName = "MyNum";
             }
             return dt2;
         }

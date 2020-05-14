@@ -40,6 +40,14 @@ function getQueryStringFromUrl(url) {
         return [];
     }
 }
+
+//修改URL参数值
+function replaceParamVal(url, paramName, replaceWith) {
+    var re = eval('/(' + paramName + '=)([^&]*)/gi');
+    var nUrl = url.replace(re, paramName + '=' + replaceWith);
+    return nUrl;
+}
+
 //根据QueryString参数名称获取值 
 function getQueryStringByNameFromUrl(url, name) {
     if (url.indexOf('?') >= 0) {

@@ -241,7 +241,7 @@ function setModalMax() {
 }
 
 //初始化退回、移交、加签窗口
-function initModal(modalType, toNode) {
+function initModal(modalType, toNode,url) {
     if ("undefined" != typeof flowData && flowData != null && flowData != undefined) {
         var node = flowData.WF_Node[0];
         if (node.FormType == 12 || (node.FormType == 11 && flowData.FrmNode[0] != null && flowData.FrmNode[0].FrmType == 8)) {
@@ -375,6 +375,9 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("选择接受人");
                 SetPageSize(60, 60);
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
+                break;
+            case "SelectNodeUrl":
+                modalIframeSrc = url;
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");
@@ -574,7 +577,8 @@ function execSend(toNodeID, formType) {
     if (data.indexOf('SelectNodeUrl@') == 0) {
         var url = data;
         url = url.replace('SelectNodeUrl@', '');
-        window.location.href = url;
+        //window.location.href = url;
+        initModal("SelectNodeUrl",null,url); $('#returnWorkModal').modal().show();
         return;
     }
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 

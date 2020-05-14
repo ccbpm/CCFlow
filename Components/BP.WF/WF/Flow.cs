@@ -6097,24 +6097,7 @@ namespace BP.WF
             if (idx == 0)
                 idx++;
 
-            while (true)
-            {
-                string strID = this.No + idx.ToString().PadLeft(2, '0');
-                nd.NodeID = int.Parse(strID);
-                if (nd.IsExits == false)
-                    break;
-                idx++;
-            }
-
-            nd.HisNodeWorkType = NodeWorkType.Work;
-            nd.Name = "New Node " + idx;
-            nd.HisNodePosType = NodePosType.Mid;
-            nd.FK_Flow = this.No;
-            nd.FlowName = this.Name;
-            nd.X = x;
-            nd.Y = y;
-            nd.ICON = icon;
-            nd.Step = idx;
+          
 
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
             nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
@@ -6135,6 +6118,28 @@ namespace BP.WF
                 }
             }
             nd.FWCVer = 1;
+
+            //设置节点ID.
+            while (true)
+            {
+                string strID = this.No + idx.ToString().PadLeft(2, '0');
+                nd.NodeID = int.Parse(strID);
+                if (nd.IsExits == false)
+                    break;
+                idx++;
+            }
+            nd.X = x;
+            nd.Y = y;
+            nd.ICON = icon;
+            nd.Step = idx;
+
+            //节点类型.
+            nd.HisNodeWorkType = NodeWorkType.Work;
+            nd.Name = "New Node " + idx;
+            nd.HisNodePosType = NodePosType.Mid;
+            nd.FK_Flow = this.No;
+            nd.FlowName = this.Name;
+
             nd.Insert();
             nd.CreateMap();
 
@@ -6288,35 +6293,40 @@ namespace BP.WF
 
                 nd = new Node();
                 nd.NodeID = int.Parse(this.No + "02");
-                nd.Name = "Node 2"; // "结束节点";
-                nd.Step = 2;
-                nd.FK_Flow = this.No;
-                nd.FlowName = this.Name;
-                nd.HisNodePosType = NodePosType.Mid;
-                nd.HisNodeWorkType = NodeWorkType.Work;
-                nd.X = 200;
-                nd.Y = 250;
-                nd.ICON = "审核";
-                nd.NodePosType = NodePosType.End;
-
-                //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-                nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
-                nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
-                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+              
 
                 //为创建节点设置默认值 
                 string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true)
                 {
-                    DataSet ds_NodeDef = new DataSet();
-                    ds_NodeDef.ReadXml(fileNewNode);
-
-                    DataTable dt = ds_NodeDef.Tables[0];
+                    DataSet myds = new DataSet();
+                    myds.ReadXml(fileNewNode);
+                    DataTable dt = myds.Tables[0];
                     foreach (DataColumn dc in dt.Columns)
                     {
                         nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
                     }
                 }
+                else
+                {
+                    nd.HisNodePosType = NodePosType.Mid;
+                    nd.HisNodeWorkType = NodeWorkType.Work;
+                    nd.X = 200;
+                    nd.Y = 250;
+                    nd.ICON = "审核";
+                    nd.NodePosType = NodePosType.End;
+
+                    //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+                    nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
+                    nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+                    nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+                }
+
+                nd.Name = "Node 2"; // "结束节点";
+                nd.Step = 2;
+                nd.FK_Flow = this.No;
+                nd.FlowName = this.Name;
+
                 nd.Insert();
                 nd.CreateMap();
                 //nd.HisWork.CheckPhysicsTable(); //去掉，检查的时候会执行.

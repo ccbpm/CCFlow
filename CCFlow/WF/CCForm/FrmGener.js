@@ -562,7 +562,7 @@ function setFormEleDisabled() {
 
 
 //FK_Flow=005&UserNo=zhwj&DoWhat=StartClassic&=&IsMobile=&FK_Node=501
-var pageData = {};
+
 var globalVarList = {};
 
 //回填扩展字段的值

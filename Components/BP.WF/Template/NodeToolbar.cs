@@ -75,7 +75,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();              
-                uac.OpenForAdmin();
+                uac.OpenForSysAdmin();
                 return uac;
             }
         }

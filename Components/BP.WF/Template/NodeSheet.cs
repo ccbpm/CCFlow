@@ -92,6 +92,15 @@ namespace BP.WF.Template
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddTeamListModel", StationAttr.FK_StationType);
 
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.Port.TeamEmps(), new BP.Port.Teams(),
+                   BP.Port.TeamEmpAttr.FK_Team,
+                   BP.Port.TeamEmpAttr.FK_Emp, "节点绑定人员", TeamAttr.FK_TeamType);
+
+                //列表模式.
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.Port.TeamEmps(), new BP.Port.Teams(),
+                   BP.Port.TeamEmpAttr.FK_Team,
+                   BP.Port.TeamEmpAttr.FK_Emp, "节点绑定人员", TeamAttr.FK_TeamType);
 
                 //节点绑定部门. 节点绑定部门.
                 string defDeptVal = "@WebUser.FK_Dept";

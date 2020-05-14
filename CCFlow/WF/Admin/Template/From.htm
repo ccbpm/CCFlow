@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>表单模版</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet"
+          type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <base target="_self" />
+    <style type="text/css">
+        th, td {
+            text-align: left;
+        }
+    </style>
+    <script type="text/javascript">
+        var sortNo;
+        var retrunUrl;
+        $(function () {
+
+            var frmID = GetQueryString("SortNo");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Form_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                window.history.back();
+                return;
+            }
+
+            var html = "";
+            var data = JSON.parse(data);
+            var dirs = data["Dir"];
+            var files = data["File"];
+
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>模板名称</th>";
+            html += "<th>创建日期</th>";
+            html += "</tr>";
+
+            var idx = 0;
+            for (var i = 0; i < dirs.length; i++) {
+                var dir = dirs[i];
+                idx++;
+                html += "<tr>";
+                html += "<td class=Idx>  " + idx + " </td>";
+                html += "<td><a href=\"javascript:ToParent('" + dir.Path + "')\" ><img src='../../Img/Tree/Dir.gif' />" + dir.FileName + "</a></td>";
+                html += "<td>  " + dir.RDT + " </td>";
+                html += "</tr>";
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                var fl = files[i];
+
+                idx++;
+                html += "<tr>";
+                html += "<td class=Idx>  " + idx + " </td>";
+                html += "<td><label><input id=" + fl.FileName + " type='checkbox';  /><img src='../../Img/dot.png' style='width:15px;' />" + fl.FileName + "</label></td>";
+                html += "<td>  " + fl.RDT + " </td>";
+                html += "</tr>";
+            }
+
+            $("#Table1").html(html);
+
+        });
+
+        //他的上一级目录.
+        function ToParent(path) {
+
+            path = path.replace('//', '/');
+            retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
+            var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
+            window.location.href = url;
+        }
+        //返回上一级
+        function RetrunToParent() {
+
+            var dirName = GetQueryString("DirName");
+            if (dirName == '' || dirName == null) {
+                alert('已经是根目录了.');
+                return;
+            }
+            //alert(dirName);
+            //var url = "Flow.htm?DirName=" + dirName; //.subStr(0, dirName.length);
+            //window.location.href = url;
+
+            window.history.back();//这个没问题，不管怎么点返回的都是上一级
+        }
+        function Imp() {
+
+            var fls = "";
+            var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中
+            inputArray.each(//使用数组的循环函数 循环这个input数组
+                function () {
+                    var input = $(this); //循环中的每一个input元素
+                    if (input.is(':checked')) {
+                        if (input.attr("id").indexOf(".xml") > 0)//过滤文件，只选xml的
+                            fls += input.attr("id") + ";"; //查看循环中的每一个input的id
+                    }
+                });
+
+            if (fls == "") {
+                alert("未选择模板");
+                return
+            }
+
+            // alert(fls);
+
+            //生成要选择的文件.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
+            handler.AddPara("Files", fls);
+            handler.AddPara("SortNo", GetQueryString("SortNo"));
+            handler.AddPara("DirName", GetQueryString("DirName"));
+            var data = handler.DoMethodReturnString("Form_Imp");
+            if (data.indexOf('err@') == 0) {
+                $("#msg").html(data);
+                return;
+            }
+            //若选择的多个模板
+            if (data.indexOf("EndJSON") ==-1) {
+                alert(data);
+                return;
+            }
+            //若选择的一个模板，则打开此模板
+            var json = eval('(' + data + ')');
+            $.messager.alert("提示", json.Msg, "icon-info", function () {
+                //打开新建的流程
+                if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+                    window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+                }
+            });
+
+
+        }
+    </script>
+</head>
+<body>
+
+    <div style="float:left;">&nbsp; &nbsp;&nbsp;&nbsp;<img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</div>
+    <div style=" float:right">
+        <a href="#" onclick="RetrunToParent()">返回上一级</a>&nbsp; &nbsp;&nbsp;&nbsp;
+    </div>
+
+
+    <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
+    </table>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="导入模版" onclick='Imp();' />
+
+    <div id="msg"> </div>
+</body>
+</html>

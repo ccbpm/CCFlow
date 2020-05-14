@@ -13,16 +13,17 @@ $(function () {
         isEqualsDomain = true;
 
     //引入关联的js
-    Skip.addJs(ccbpmPath + "/WF/Scripts/config.js");
-    Skip.addJs(ccbpmPath + "/WF/Comm/Gener.js");
-    //Skip.addJs(ccbpmPath + "/WF/Scripts/QueryString.js");
-    loadScript(ccbpmPath + "/WF/Scripts/config.js", function () {
-        loadScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
-            loadScript(ccbpmPath + "/WF/Scripts/QueryString.js", function () {
+    jQuery.getScript(ccbpmPath + "/WF/Scripts/config.js", function () {
+        jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
+            jQuery.getScript(ccbpmPath + "/WF/Scripts/QueryString.js", function () {
+
             });
         });
     });
 
+});
+
+$(window).load(function () {
     //初始化网页URL参数
     paramData = {
         FK_Flow: GetQueryString("FK_Flow"),
@@ -33,9 +34,6 @@ $(function () {
         IsReadonly: GetQueryString("IsReadonly")
     }
 
-});
-
-$(window).load(function () {
     //表单树形结构
     if ($("#tabs").length == 1) {
         return;

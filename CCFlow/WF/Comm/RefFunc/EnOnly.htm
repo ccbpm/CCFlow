@@ -586,18 +586,17 @@
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     }
-
+                    html += "</tr>";
 
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:25%;'></td>";
-                        html += "<td colspan=3>";
+                        html += "<td colspan=2>";
                         html += GenerRM(rm);
                         html += "</td>";
-                        html += "</tr>";
-                        isDropTR = true;
+                       
+                        isDropTR = false;
                     }
                     continue;
                 }

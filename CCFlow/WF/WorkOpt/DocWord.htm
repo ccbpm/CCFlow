@@ -44,8 +44,13 @@
             // 判断是否是是不可以编辑的状态.
             if (data.indexOf("OfficeBtnEnable=2") >= 1) {
                 $("#fsUpload").hide();
+                $("#Online").css("opacity", 0.2);
+                $("#Online").attr("href",""); 
             }
-
+            else {
+                $("#Online").css("opacity", 1);
+                $("#Online").attr("href","javascript:OpenByVSTO()"); 
+            }
             $("#help").hide(); //隐藏掉.
 
         });
@@ -77,6 +82,7 @@
         }
         function OpenByVSTO() {
             var DocName = GetDocName();
+        
             //插件参数
             var paras = "WorkID=" + GetQueryString("WorkID") + ",";
             paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
@@ -145,7 +151,7 @@
             <legend>操作</legend>
             <ul>
                 <li style="padding:5px;"><a href='javascript:OpenByHttp()'><img src='../Img/FileType/doc.gif' />下载本机查看或编辑.</a></li>
-                <li style="padding:5px;"><a href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />在线编辑</a>(需要CCWord插件) | <a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载插件</a></li>
+                <li style="padding:5px;"><a id="Online"  href='javascript:OpenByVSTO()'><img src='../Img/FileType/xml.gif' />在线编辑</a>(需要CCWord插件) | <a href='../../DataUser/vsto/CCFlowVSTO表单插件安装程序.zip' target=blank><img src='../Img/Btn/Save.gif' />下载插件</a></li>
                 <li style="padding:5px;" name="resetLI" id="resetLI"><a href='javascript:ResetFile()'><img src='../Img/redo.png' />重新生成模版</a></li>
                 <li style="padding:5px;"><a href='javascript:Help()'><img src='../Img/Btn/help.gif' />帮助.</a></li>
             </ul>

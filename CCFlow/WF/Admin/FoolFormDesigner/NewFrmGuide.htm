@@ -15,9 +15,10 @@
 </head>
 <body>
 
-    <div class="float:right">
+    <div style=" padding-bottom:5px;">
         <input style="margin-left:30px;" onclick="newFrm()" type="button" value="创建表单" />
-        <br />
+        <input style="margin-left:10px;" onclick="ImpFrm()" type="button" value="导入模板" />
+        
     </div>
 
     <fieldset>
@@ -41,6 +42,8 @@
             <li> 具有流水号，单据号的性质的字段，比如：学生缴费记录、固定资产维护记录. </li>
         </ul>
     </fieldset>
+
+
     <fieldset>
         <legend id="help"></legend>
         <ul>
@@ -48,7 +51,7 @@
             <li>每种表单类型的表单应用场景不一样.</li>
         </ul>
     </fieldset>
-    <input style="margin-left:10px;" onclick="ImpFrm()" type="button" value="导入模板" />
+
     <script>
 
         //新建表单
@@ -64,7 +67,7 @@
             window.location.href = url;
         }
         function ImpFrm() {
-             url = "../Template/From.htm?SortNo=" + GetQueryString("sort");
+            url = "../Template/From.htm?SortNo=" + GetQueryString("sort");
 
             window.location.href = url;
         }

@@ -131,7 +131,7 @@
             $(".Msg").hide();
 
 
-            
+
             var int = setInterval("clock()", 1000);
 
         });
@@ -268,7 +268,7 @@
             httphandler.AddUrlData(); //FK_Flow,FK_Node,WorkID,FID,ToNode 等参数.
 
             $("#Btn_Send").attr("disabled", "disabled"); //把发送按钮设置不可用.
-            $("#Btn_Send").val("正在发送请稍候...");
+            $("#Btn_Send").val("<center>正在发送请稍候...</center>");
             $("#Btn_Close").attr("disabled", "disabled"); //关闭按钮设置不可以用.
             $("#Btn_SelectEmps").attr("disabled", "disabled"); //选择人按钮不可以用.
 
@@ -286,7 +286,7 @@
                 return;
             }
 
-            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
+            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
                 var url = data;
                 url = url.replace('TurnUrl@', '');
                 parent.window.location.href = url;
@@ -362,29 +362,29 @@
         function CloseAll() {
             // 取得父页面URL，用于判断是否是来自测试流程
             var pareUrl = window.top.document.referrer;
-           // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
-            if (pareUrl.indexOf("test") !=-1 || pareUrl.indexOf("Test") !=-1) {
+            // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
+            if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
                 // 测试流程时，发送成功刷新测试容器页面右侧
                 window.parent.parent.refreshRight();
             }
-           
+
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.close();
                 if (window.parent.parent != null && window.parent.parent != undefined
-                 && pareUrl.indexOf("test") ==-1 && pareUrl.indexOf("Test") ==-1)
+                    && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
                     window.parent.parent.close();
                 window.parent.returnWorkWindowClose();
             }
 
-             window.close();
+            window.close();
         }
 
         //关闭model.
         function CloseModel() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 //获取接收人
-                if(selectEmp!="")
-                selectEmp = selectEmp.substring(0, selectEmp.length - 1);
+                if (selectEmp != "")
+                    selectEmp = selectEmp.substring(0, selectEmp.length - 1);
                 window.parent.returnWorkWindowClose(selectEmp);
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
@@ -489,8 +489,7 @@
         }
 
         //高级选择
-        function AdvSelect()
-        {
+        function AdvSelect() {
 
             http://localhost:2207/WF/WorkOpt/AccepterOfGener.htm?WorkID=190&FK_Node=501&FK_Flow=005&ToNode=502&PWorkID=0&IsSend=null
 

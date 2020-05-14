@@ -35,6 +35,10 @@
 
             var frmID = GetQueryString("SortNo");
 
+            $("#msg").html("正在加载请稍候...");
+            $("#Btn_Imp").hide();
+
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Flow_Init");
@@ -78,6 +82,10 @@
             }
 
             $("#Table1").html(html);
+
+            $("#msg").html("");
+            $("#Btn_Imp").show();
+
 
         });
 
@@ -134,7 +142,7 @@
                 return;
             }
             //若选择的多个模板
-            if (data.indexOf("EndJSON") ==-1) {
+            if (data.indexOf("EndJSON") == -1) {
                 alert(data);
                 return;
             }
@@ -161,8 +169,11 @@
 
     <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
     </table>
-    &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="导入模版" onclick='Imp();' />
 
-    <div id="msg"> </div>
+    &nbsp;&nbsp;<input type="button" id="Btn_Imp" value="导入模版" onclick='Imp();' />
+    <center>
+        <div id="msg"></div>
+    </center>
+
 </body>
 </html>

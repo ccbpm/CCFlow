@@ -2,6 +2,22 @@
 var pageData = {};
 //页面启动函数.
 $(function () {
+
+    $(".wrapper-dropdown-2").on("mousedown", function (e) {
+        var v_id = $(e.target).attr("id");
+        var dd = new DropDown($("#" + v_id + ""));
+    });
+
+    $(".wrapper-dropdown-2").click(function () {
+        // all dropdowns
+        //$('.wrapper-dropdown-2').removeClass('active');
+    });
+    $(document).click(function () {
+        // all dropdowns
+        $('.wrapper-dropdown-2').removeClass('active');
+    });
+
+
     webUser = new WebUser();
     pageData.fk_mapdata = GetQueryString("FK_MapData");
     pageData.FK_Flow = GetQueryString("FK_Flow");

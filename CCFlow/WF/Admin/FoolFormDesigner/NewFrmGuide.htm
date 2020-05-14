@@ -48,6 +48,7 @@
             <li>每种表单类型的表单应用场景不一样.</li>
         </ul>
     </fieldset>
+    <input style="margin-left:10px;" onclick="ImpFrm()" type="button" value="导入模板" />
     <script>
 
         //新建表单
@@ -60,6 +61,11 @@
             }
 
             var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetQueryString("FK_FrmSort");
+            window.location.href = url;
+        }
+        function ImpFrm() {
+             url = "../Template/From.htm?SortNo=" + GetQueryString("sort");
+
             window.location.href = url;
         }
     </script>

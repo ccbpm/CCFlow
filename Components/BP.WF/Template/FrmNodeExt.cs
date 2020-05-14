@@ -207,6 +207,13 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                //@sly
+                rm = new RefMethod();
+                rm.Title = "组件权限";
+                rm.ClassMethodName = this.ToString() + ".DoComponents()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "从表权限";
                 rm.ClassMethodName = this.ToString() + ".DoDtls()";
@@ -263,7 +270,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeWorkCheck()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.WorkCheckFrm&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDataTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDataTime;
         }
 
         /// <summary>
@@ -300,6 +307,11 @@ namespace BP.WF.Template
         public string DoFields()
         {
             return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+        }
+
+        public string DoComponents()
+        {
+            return "../../Admin/Sln/Components.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoAths()
         {

@@ -739,8 +739,8 @@ namespace BP.WF
                     wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
                     wk.SetValByKey(StartWorkAttr.Emps, emp.No);
 
-                  //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-                   // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+                    //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
+                    // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
 
                     wk.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
 
@@ -1267,13 +1267,13 @@ namespace BP.WF
             if (paras.ContainsKey("JumpToNode") == true)
             {
                 wk.Rec = WebUser.No;
-                
+
                 //wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 //wk.FK_Dept = emp.FK_Dept;
                 //wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
                 //wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
                 wk.FID = 0;
-               // wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
+                // wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
 
                 int jumpNodeID = int.Parse(paras["JumpToNode"].ToString());
                 Node jumpNode = new Node(jumpNodeID);
@@ -1297,8 +1297,8 @@ namespace BP.WF
 
             #region 最后整理wk数据.
             wk.Rec = emp.No;
-          //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-           // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+            //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
+            // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
             wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
             wk.FK_Dept = emp.FK_Dept;
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
@@ -2251,7 +2251,7 @@ namespace BP.WF
                 //清空WF_Emp中的StartFlows 的内容
                 try
                 {
-                   DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
                 }
                 catch (Exception e)
                 {
@@ -4827,13 +4827,13 @@ namespace BP.WF
                 fl.PTable = null;
             }
             //修改成当前登陆人所在的组织
-            fl.OrgNo = WebUser.OrgNo;  
+            fl.OrgNo = WebUser.OrgNo;
             fl.Update();
             //判断该流程是否是公文流程，存在BuessFields、FlowBuessType、FK_DocType=01
             Attrs attrs = fl.EnMap.Attrs;
             if (attrs.Contains("FlowBuessType") == true)
             {
-                DBAccess.RunSQL("UPDATE WF_Flow Set BuessFields='"+fl.GetParaString("BuessFields")+ "', FlowBuessType="+fl.GetParaInt("FlowBuessType")+ " ,FK_DocType='"+fl.GetParaString("FK_DocType")+"'");
+                DBAccess.RunSQL("UPDATE WF_Flow Set BuessFields='" + fl.GetParaString("BuessFields") + "', FlowBuessType=" + fl.GetParaInt("FlowBuessType") + " ,FK_DocType='" + fl.GetParaString("FK_DocType") + "'");
             }
 
             #endregion 处理流程表数据
@@ -5977,7 +5977,7 @@ namespace BP.WF
                                 }
                                 gf.SetValByKey(dc.ColumnName, val);
                             }
-                            gf.InsertAsOID( gf.OID);
+                            gf.InsertAsOID(gf.OID);
 
                             /*
                             string sql = "select * from Sys_GroupField where CtrlID = '" + gf.CtrlID + "' AND FrmID='" + gf.FrmID + "'";
@@ -6097,28 +6097,7 @@ namespace BP.WF
             if (idx == 0)
                 idx++;
 
-          
-
-            //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-            nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
-            nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
-            nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
-
-            //为创建节点设置默认值 @于庆海. 
-            string file = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
-            if (System.IO.File.Exists(file) == true)
-            {
-                DataSet ds = new DataSet();
-                ds.ReadXml(file);
-
-                DataTable dt = ds.Tables[0];
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
-                }
-            }
-            nd.FWCVer = 1;
-
+            var nodeID = 0;
             //设置节点ID.
             while (true)
             {
@@ -6128,6 +6107,38 @@ namespace BP.WF
                     break;
                 idx++;
             }
+            nodeID = nd.NodeID;
+
+
+            //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+            nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
+            nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
+            nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+            nd.FK_Flow = this.No;
+            nd.Insert();
+
+            //为创建节点设置默认值  @sly 部分方法
+            string file = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
+            DataSet ds = new DataSet();
+            if (System.IO.File.Exists(file) == true)
+            {
+                ds.ReadXml(file);
+
+                NodeExt ndExt = new NodeExt(nd.NodeID); 
+                DataTable dt = ds.Tables[0];
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                    ndExt.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                }
+
+                ndExt.FK_Flow = this.No;
+                ndExt.NodeID = nodeID;
+                ndExt.DirectUpdate();
+            }
+            nd.FWCVer = 1;
+            nd.NodeID = nodeID;
+
             nd.X = x;
             nd.Y = y;
             nd.ICON = icon;
@@ -6140,13 +6151,16 @@ namespace BP.WF
             nd.FK_Flow = this.No;
             nd.FlowName = this.Name;
 
-            nd.Insert();
+            nd.Update(); //执行更新. @sly
             nd.CreateMap();
 
             //通用的人员选择器.
             BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
             select.SelectorModel = SelectorModel.GenerUserSelecter;
             select.Update();
+
+            //设置默认值。
+
 
             //设置审核组件的高度
             DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
@@ -6292,8 +6306,7 @@ namespace BP.WF
                 select.Update();
 
                 nd = new Node();
-                nd.NodeID = int.Parse(this.No + "02");
-              
+
 
                 //为创建节点设置默认值 
                 string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
@@ -6322,10 +6335,14 @@ namespace BP.WF
                     nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
                 }
 
+                nd.NodeID = int.Parse(this.No + "02");
                 nd.Name = "Node 2"; // "结束节点";
                 nd.Step = 2;
                 nd.FK_Flow = this.No;
                 nd.FlowName = this.Name;
+
+                nd.X = 200;
+                nd.Y = 250;
 
                 nd.Insert();
                 nd.CreateMap();

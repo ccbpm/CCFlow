@@ -213,7 +213,6 @@ namespace BP.Sys
                 map.AddBoolean(GroupFieldAttr.IsZDPC, false, "是否折叠(PC)", true, true);
                 map.AddBoolean(GroupFieldAttr.IsZDMobile, false, "是否折叠(Mobile)", true, true);
 
-
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, true, 0, 128, 20, true);
                 map.AddTBAtParas(3000);

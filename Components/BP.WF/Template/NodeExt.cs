@@ -300,7 +300,7 @@ namespace BP.WF.Template
                 {
                     uac.Readonly();
                 }
-                
+
                 //uac.OpenForAdmin();
                 return uac;
             }
@@ -361,11 +361,11 @@ namespace BP.WF.Template
                 "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
 
-                
+
                 //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
-                
+
                 //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
-                  //  "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
+                //  "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 //map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
 
 
@@ -741,7 +741,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "上传公文模板";
                 rm.ClassMethodName = this.ToString() + ".DocTemp";
-                rm.Icon = "../../WF/Img/FileType/doc.gif"; 
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 //设置相关字段.
                 rm.RefAttrKey = BtnAttr.OfficeBtnEnable;
                 rm.RefAttrLinkLabel = "公文模板维护";
@@ -938,15 +938,22 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "设置为模版";
-                rm.Warning = "如果把这个节点设置为模版,以后在新建节点的时候,就会按照当前的属性初始化节点数据.";
-              //  rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
-                rm.ClassMethodName = this.ToString() + ".DoSetTemplate()";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "实验中的功能";
-                //rm.Visable = false;
-                map.AddRefMethod(rm);
+                if (Glo.CCBPMRunModel != CCBPMRunModel.SAAS)
+                {
+                    rm = new RefMethod();
+                    rm.Title = "设置为模版";
+
+                    string info = "如果把这个节点设置为模版,以后在新建节点的时候,就会按照当前的属性初始化节点数据.";
+                    info += "\t\n产生的数据文件存储在\\DataUser\\Xml\\下.";
+                    rm.Warning = info;
+
+                    //  rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                    rm.ClassMethodName = this.ToString() + ".DoSetTemplate()";
+                    rm.RefMethodType = RefMethodType.Func;
+                    rm.GroupName = "实验中的功能";
+                    //rm.Visable = false;
+                    map.AddRefMethod(rm);
+                }
 
 
                 rm = new RefMethod();
@@ -1001,7 +1008,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = NodeAttr.ReturnCHEnable;
                 map.AddRefMethod(rm);
-              
+
 
                 #endregion 实验中的功能
 
@@ -1229,14 +1236,14 @@ namespace BP.WF.Template
         public string DocTemp()
         {
             return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID;
-        } 
+        }
         /// <summary>
         /// 抄送规则
         /// </summary>
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID+"&FK_Node="+this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1387,7 +1394,7 @@ namespace BP.WF.Template
         }
         public string DtlOfReturn()
         {
-            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks"+ "&For=BP.WF.ReturnWorks&FK_Flow="+this.FK_Flow;
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks" + "&For=BP.WF.ReturnWorks&FK_Flow=" + this.FK_Flow;
             return url;
         }
         protected override bool beforeUpdate()
@@ -1411,7 +1418,7 @@ namespace BP.WF.Template
 
             //是否是发送返回节点？
             nd.IsSendBackNode = this.IsSendBackNode;
-            if (nd.IsSendBackNode==true)
+            if (nd.IsSendBackNode == true)
             {
                 //强制设置按照连接线控制.
                 nd.CondModel = CondModel.ByLineCond;

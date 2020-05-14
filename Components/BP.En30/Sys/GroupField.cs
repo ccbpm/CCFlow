@@ -26,6 +26,9 @@ namespace BP.Sys
         /// 按钮控件
         /// </summary>
         public const string Btn = "Btn";
+
+       
+
     }
     /// <summary>
     /// GroupField
@@ -52,12 +55,24 @@ namespace BP.Sys
         /// 控件ID
         /// </summary>
         public const string CtrlID = "CtrlID";
+        /// <summary>
+        /// PC端是否折叠显示？
+        /// </summary>
+        public const string IsZDPC = "IsZDPC";
+        /// <summary>
+        /// 手机端是否折叠显示？
+        /// </summary>
+        public const string IsZDMobile = "IsZDMobile";
     }
     /// <summary>
     /// GroupField
     /// </summary>
     public class GroupField : EntityOID
     {
+        #region 权限控制
+        /// <summary>
+        /// 权限控制.
+        /// </summary>
         public override UAC HisUAC
         {
             get
@@ -76,6 +91,7 @@ namespace BP.Sys
                 return uac;
             }
         }
+        #endregion 权限控制
 
         #region 属性
         public bool IsUse = false;
@@ -193,6 +209,11 @@ namespace BP.Sys
 
                 map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, true, 0, 50, 20);
                 map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, true, 0, 500, 20);
+
+                map.AddBoolean(GroupFieldAttr.IsZDPC, false, "是否折叠(PC)", true, true);
+                map.AddBoolean(GroupFieldAttr.IsZDMobile, false, "是否折叠(Mobile)", true, true);
+
+
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, true, 0, 128, 20, true);
                 map.AddTBAtParas(3000);
@@ -228,7 +249,6 @@ namespace BP.Sys
             this.InsertAsNew();
             return "执行成功.";
         }
-       
         
         /// <summary>
         /// 删除所有隶属该分组的字段.

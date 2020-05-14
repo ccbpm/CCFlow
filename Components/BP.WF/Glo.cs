@@ -23,6 +23,41 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        #region 获取[新建流程]默认值.
+        /// <summary>
+        /// 默认值配置
+        /// </summary>
+        /// <param name="field">字段</param>
+        /// <param name="defval">默认值</param>
+        /// <returns></returns>
+        public static string DefValString(string field, string defval)
+        {
+            return SystemConfig.GetValByKey(field, defval);
+        }
+        /// <summary>
+        /// 默认值配置
+        /// </summary>
+        /// <param name="field">字段</param>
+        /// <param name="defval">默认值</param>
+        /// <returns></returns>
+        public static int DefValInt(string field, int defval)
+        {
+            return SystemConfig.GetValByKeyInt(field, defval);
+        }
+        /// <summary>
+        /// 获得默认值
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="defval"></param>
+        /// <returns></returns>
+        public static bool DefValBoolen(string field, bool defval)
+        {
+            return SystemConfig.GetValByKeyBoolen(field, defval);
+        }
+        #endregion 获取[新建流程]默认值.
+
+
+        #region 高级配置.
         /// <summary>
         /// CCBPMRunModel
         /// </summary>
@@ -33,7 +68,6 @@ namespace BP.WF
                 return SystemConfig.CCBPMRunModel;
             }
         }
-
         public static string GenerGanttDataOfSubFlows(Int64 workID)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
@@ -743,7 +777,8 @@ namespace BP.WF
             return "";
 
         }
-
+        #endregion 高级配置.
+        
         #region 多语言处理.
         private static Hashtable _Multilingual_Cache = null;
         public static DataTable getMultilingual_DT(string className)

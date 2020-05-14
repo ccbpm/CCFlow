@@ -504,7 +504,6 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsBackTracking, false, "是否可以原路返回(启用退回功能才有效)", true, true, false);
                 //map.AddTBString(NodeAttr.RetunFieldsLable, "退回扩展字段", "退回扩展字段", true, false, 0, 50, 20);
 
-
                 map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10);
                 map.SetHelperUrl(NodeAttr.IsBackTracking, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //增加帮助.
 
@@ -938,6 +937,18 @@ namespace BP.WF.Template
                 //rm.Visable = false;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "设置为模版";
+                rm.Warning = "如果把这个节点设置为模版,以后在新建节点的时候,就会按照当前的属性初始化节点数据.";
+              //  rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoSetTemplate()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.GroupName = "实验中的功能";
+                //rm.Visable = false;
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.Title = "批量设置节点属性";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
@@ -1130,6 +1141,17 @@ namespace BP.WF.Template
         #endregion 表单相关.
 
         #region 实验中的功能.
+        /// <summary>
+        /// 设置模版@sly
+        /// </summary>
+        /// <returns></returns>
+        public string DoSetTemplate()
+        {
+            DataTable dt = this.ToDataTableField();
+            dt.TableName = "Node";
+            dt.WriteXml(SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml");
+            return "执行成功.";
+        }
         /// <summary>
         /// 自定义参数（通用）
         /// </summary>

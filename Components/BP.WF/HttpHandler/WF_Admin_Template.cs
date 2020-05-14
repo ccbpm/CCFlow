@@ -101,75 +101,73 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtFile);
             return BP.Tools.Json.ToJson(ds);
         }
-        ///// <summary>
-        ///// 初始化
-        ///// </summary>
-        ///// <returns></returns>
-        //public string Form_Init()
-        //{
-        //    string dirName = this.GetRequestVal("DirName");
-        //    if (DataType.IsNullOrEmpty(dirName) == true)
-        //        dirName = "/From/";
-            
-        //    FtpClient conn = this.GenerFTPConn;
-           
-        //    DataSet ds = new DataSet();
-        //    FtpListItem[] fls;
-        //    try
-        //    {
-                
-        //        fls = conn.GetListing(dirName);
-                
-        //    }
-        //    catch
-        //    {
-                
-        //        //System.Windows.Forms.MessageBox.Show("该目录无文件");
-        //        return "err@该目录无文件";
-        //    }
-            
-        //    DataTable dtDir = new DataTable();
-        //    dtDir.TableName = "Dir";
-        //    dtDir.Columns.Add("FileName", typeof(string));
-        //    dtDir.Columns.Add("RDT", typeof(string));
-        //    dtDir.Columns.Add("Path", typeof(string));
-        //    ds.Tables.Add(dtDir);
-
-        //    //把文件加里面.
-        //    DataTable dtFile = new DataTable();
-        //    dtFile.TableName = "File";
-        //    dtFile.Columns.Add("FileName", typeof(string));
-        //    dtFile.Columns.Add("RDT", typeof(string));
-        //    dtFile.Columns.Add("Path", typeof(string));
-        //    foreach (FtpListItem fl in fls)
-        //    {
-
-        //        switch (fl.Type)
-        //        {
-        //            case FtpFileSystemObjectType.Directory:
-        //                {
-        //                    DataRow drDir = dtDir.NewRow();
-        //                    drDir[0] = fl.Name;
-        //                    drDir[1] = fl.Created.ToString("yyyy-MM-dd HH:mm");
-        //                    drDir[2] = conn.GetWorkingDirectory() + "/" + fl.Name;
-        //                    dtDir.Rows.Add(drDir);
-        //                    continue;
-        //                }
-        //            default:
-        //                break;
-        //        }
-
-        //        DataRow dr = dtFile.NewRow();
-        //        dr[0] = fl.Name;
-        //        dr[1] = fl.Created.ToString("yyyy-MM-dd HH:mm");
-        //        dr[2] = conn.GetWorkingDirectory() + "/" + fl.Name;
-        //        dtFile.Rows.Add(dr);
-        //    }
-        //    ds.Tables.Add(dtFile);
-        //    return BP.Tools.Json.ToJson(ds);
-        //}
         /// <summary>
-        /// 导入文件
+        /// 初始化表单模板
+        /// </summary>
+        /// <returns></returns>
+        public string Form_Init()
+        {
+            string dirName = this.GetRequestVal("DirName");
+            if (DataType.IsNullOrEmpty(dirName) == true)
+                dirName = "/Form/";
+            if (dirName.IndexOf("/Form/") == -1)
+                dirName = "/Form/" + dirName;
+            FtpClient conn = this.GenerFTPConn;
+            DataSet ds = new DataSet();
+            FtpListItem[] fls;
+            try
+            {
+                fls = conn.GetListing(dirName);
+            }
+            catch
+            {
+
+                //System.Windows.Forms.MessageBox.Show("该目录无文件");
+                return "err@该目录无文件";
+            }
+
+            DataTable dtDir = new DataTable();
+            dtDir.TableName = "Dir";
+            dtDir.Columns.Add("FileName", typeof(string));
+            dtDir.Columns.Add("RDT", typeof(string));
+            dtDir.Columns.Add("Path", typeof(string));
+            ds.Tables.Add(dtDir);
+
+            //把文件加里面.
+            DataTable dtFile = new DataTable();
+            dtFile.TableName = "File";
+            dtFile.Columns.Add("FileName", typeof(string));
+            dtFile.Columns.Add("RDT", typeof(string));
+            dtFile.Columns.Add("Path", typeof(string));
+            foreach (FtpListItem fl in fls)
+            {
+
+                switch (fl.Type)
+                {
+                    case FtpFileSystemObjectType.Directory:
+                        {
+                            DataRow drDir = dtDir.NewRow();
+                            drDir[0] = fl.Name;
+                            drDir[1] = fl.Created.ToString("yyyy-MM-dd HH:mm");
+                            drDir[2] = conn.GetWorkingDirectory() + "/" + fl.Name;
+                            dtDir.Rows.Add(drDir);
+                            continue;
+                        }
+                    default:
+                        break;
+                }
+
+                DataRow dr = dtFile.NewRow();
+                dr[0] = fl.Name;
+                dr[1] = fl.Created.ToString("yyyy-MM-dd HH:mm");
+                dr[2] = conn.GetWorkingDirectory() + "/" + fl.Name;
+                dtFile.Rows.Add(dr);
+            }
+            ds.Tables.Add(dtFile);
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 导入流程模板
         /// </summary>
         /// <returns></returns>
         public string Flow_Imp()
@@ -179,87 +177,112 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             string dirName = GetRequestVal("DirName");
-            
+
             FtpClient conn = this.GenerFTPConn;
-            string remotePath = conn.GetWorkingDirectory()+ dirName;
-            
+            string remotePath = conn.GetWorkingDirectory() + dirName;
+
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
-                
-                //下载目录下.
-                FtpStatus fs= conn.DownloadFile(tempfile, "/Flow"+remotePath + "/" + str, FtpLocalExists.Overwrite);
-                
-                if (fs.ToString() == "Success")
+                try
                 {
-                    //执行导入.
-                    BP.WF.Flow flow = new BP.WF.Flow();
-                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                    flow.DoCheck(); //要执行一次检查
-                    Hashtable ht = new Hashtable();
-                    ht.Add("FK_Flow", flow.No);
-                    ht.Add("FlowName", flow.Name);
-                    ht.Add("FK_FlowSort", flow.FK_FlowSort);
-                    ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-                    //选择的是一个模板则返回Hashtable表格式
-                    if (strs.Length == 2)
+                    //下载目录下.
+                    FtpStatus fs = conn.DownloadFile(tempfile, "/Flow" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+
+                    if (fs.ToString() == "Success")
                     {
-                        return BP.Tools.Json.ToJson(ht);
+                        //执行导入.
+                        BP.WF.Flow flow = new BP.WF.Flow();
+                        flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                        flow.DoCheck(); //要执行一次检查
+                        Hashtable ht = new Hashtable();
+                        ht.Add("FK_Flow", flow.No);
+                        ht.Add("FlowName", flow.Name);
+                        ht.Add("FK_FlowSort", flow.FK_FlowSort);
+                        ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+                        //选择的是一个模板则返回Hashtable表格式
+                        if (strs.Length == 2)
+                        {
+                            return BP.Tools.Json.ToJson(ht);
+                        }
+                        //多个模板返回Msg字符串形式
+                        Msg += ht["Msg"].ToString() + "\n";
                     }
-                    //多个模板返回Msg字符串形式
-                    Msg += ht["Msg"].ToString() + "\n";
+                    else
+                    {
+                        return "模板未下载成功";
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    return "模板未下载成功";
+                    return "模板未下载成功-"+ex.Message;
                 }
             }
 
             return Msg;
         }
-        ///// <summary>
-        ///// 导入文件
-        ///// </summary>
-        ///// <returns></returns>
-        //public string Form_Imp()
-        //{
-        //    string Msg = "";
-        //    string fls = this.GetRequestVal("Files");
-        //    string[] strs = fls.Split(';');
-        //    string sortNo = GetRequestVal("SortNo");
+        /// <summary>
+        /// 导入表单模板
+        /// </summary>
+        /// <returns></returns>
+        public string Form_Imp()
+        {
+            string Msg = "";
+            string fls = this.GetRequestVal("Files");
+            string[] strs = fls.Split(';');
+            string sortNo = GetRequestVal("SortNo");
+            string dirName = GetRequestVal("DirName");
 
-        //    FtpClient conn = this.GenerFTPConn;
-        //    foreach (string str in strs)
-        //    {
-        //        if (str == "" || str.IndexOf(".xml") == -1)
-        //            continue;
-        //        //生成路径.
-        //        string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
-        //        //下载目录下.
+            FtpClient conn = this.GenerFTPConn;
+            string remotePath = conn.GetWorkingDirectory() + dirName;
 
-        //        conn.GetFile(str, tempfile, false, System.IO.FileAttributes.Normal);
-        //        //执行导入.
-        //        BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-        //        flow.DoCheck(); //要执行一次检查
-        //        Hashtable ht = new Hashtable();
-        //        ht.Add("FK_Flow", flow.No);
-        //        ht.Add("FlowName", flow.Name);
-        //        ht.Add("FK_FlowSort", flow.FK_FlowSort);
-        //        ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-        //        //选择的是一个模板则返回Hashtable表格式
-        //        if (strs.Length == 2)
-        //        {
-        //            return BP.Tools.Json.ToJson(ht);
-        //        }
-        //        //多个模板返回Msg字符串形式
-        //        Msg += ht["Msg"].ToString() + "\n";
-        //    }
+            foreach (string str in strs)
+            {
+                if (str == "" || str.IndexOf(".xml") == -1)
+                    continue;
+                //设置要到的路径.
+                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+                try
+                {
+                    //下载目录下
+                    FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+                    if (fs.ToString() == "Success")
+                    {
+                        //执行导入
+                        DataSet ds = new DataSet();
+                        ds.ReadXml(tempfile);
+                        try
+                        {
+                            //执行装载.
+                            MapData.ImpMapData(ds);
+                            if (this.FK_Node != 0)
+                            {
+                                Node nd = new Node(this.FK_Node);
+                                nd.RepareMap(nd.HisFlow);
+                            }
+                            Msg = "导入完毕";
+                        }
+                        catch
+                        {
+                            Msg = "导入失败";
+                        }
+                    }
+                    else
+                    {
+                        return "模板下载未成功";
+                    }
+                }
+                catch(Exception ex)
+                {
+                    return "模板下载未成功-" + ex.Message;
+                }
+            }
 
-        //    return Msg;
-        //}
+            return Msg;
+        }
         #endregion 界面方法.
 
     }

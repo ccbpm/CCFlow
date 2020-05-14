@@ -15,8 +15,13 @@
 </head>
 <body>
 
+    <div class="float:right">
+        <input style="margin-left:30px;" onclick="newFrm()" type="button" value="创建表单" />
+        <br />
+    </div>
+
     <fieldset>
-        <legend> <label><input type="radio" id="ss" name="ss" value="0" checked="checked"  /> 驰骋BPM独立表单 </label>   </legend>
+        <legend> <label><input type="radio" id="ss" name="ss" value="0" checked="checked" /> 驰骋BPM独立表单 </label>   </legend>
         <ul>
             <li> 仅为流程绑定表单所用,没有其他的增删改查的填写功能. </li>
             <li> 以下两种类型的表单也可以绑定到节点上. </li>
@@ -43,7 +48,6 @@
             <li>每种表单类型的表单应用场景不一样.</li>
         </ul>
     </fieldset>
-    <input style="margin-left:30px;" onclick="newFrm()" type="button" value="创建表单" />
     <script>
 
         //新建表单
@@ -55,7 +59,7 @@
                 }
             }
 
-            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType="+ frmType +"&FK_FrmSort="+ GetQueryString("FK_FrmSort");
+            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetQueryString("FK_FrmSort");
             window.location.href = url;
         }
     </script>

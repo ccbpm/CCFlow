@@ -33,26 +33,26 @@
             if (webUser.CCBPMRunModel == 2)
                 ensFrmTree = "BP.Cloud.FrmTrees";
 
-           /* var frmTrees = new Entities(ensFrmTree);
+            /* var frmTrees = new Entities(ensFrmTree);
 
-            frmTrees.RetrieveAll();
+             frmTrees.RetrieveAll();
 
-            if (node.FormType == FormSlnType.RefOneFrmTree) {
-                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
-            } else {
-                GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
-            }*/
-            
+             if (node.FormType == FormSlnType.RefOneFrmTree) {
+                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.RefOneFrmTreeType);
+             } else {
+                 GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
+             }*/
+
             //根据表单类别的默认值，初始加载默认的表单
-           /* var sortNo = $("#DDL_FrmTree").val();
+            /* var sortNo = $("#DDL_FrmTree").val();
 
-            if (sortNo != null && sortNo != "") {
-                //获取表单库中的所有表单
-                var frms = new Entities("BP.Sys.MapDatas");
-                frms.Retrieve("FK_FormTree", sortNo);
-                //绑定表单
-                GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
-            }*/
+             if (sortNo != null && sortNo != "") {
+                 //获取表单库中的所有表单
+                 var frms = new Entities("BP.Sys.MapDatas");
+                 frms.Retrieve("FK_FormTree", sortNo);
+                 //绑定表单
+                 GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+             }*/
             nodeFrmID = node.NodeFrmID;
 
             //表单库的表单.
@@ -62,17 +62,20 @@
                 var i = frmNode.RetrieveFromDBSources();
 
                 if (i == 1) {
-                    var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a>  - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
+                    var html = ""; // "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a>  - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
+
+                    html += "<li><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a></li>";
+                    html += "<li><a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a></li>";
+
                     $("#Div_RefOneFrmTree").html(html);
                 }
             }
 
-            
             var frm = new Entity("BP.Sys.MapData", nodeFrmID);
-            
+
             //设置已经选定的表单库表单
-            $("#MyFrm").html(node.NodeFrmID + ":"+frm.Name);
-            
+            $("#MyFrm").html(node.NodeFrmID + ":" + frm.Name);
+
         });
 
         function EditFrmNode(mypk) {
@@ -102,45 +105,45 @@
             //判断是否已经绑定了表单
             var nodeID = GetQueryString("FK_Node");
             var node = new Entities("BP.WF.Nodes");
-            node.Retrieve("NodeID",nodeID);
+            node.Retrieve("NodeID", nodeID);
             if (node[0].NodeFrmID == "") {
                 alert('请选择一个表单');
                 return;
             } else {
-                 alert("保存成功.");
+                alert("保存成功.");
             }
-           /* var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
+            /* var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
 
-            if (selectFrm == undefined || selectFrm == null) {
-                alert('请选择一个表单');
-                return;
-            }
+             if (selectFrm == undefined || selectFrm == null) {
+                 alert('请选择一个表单');
+                 return;
+             }
 
-            var FK_Node = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", FK_Node);
-            node.NodeID = FK_Node;
-            var i = node.RetrieveFromDBSources();
+             var FK_Node = GetQueryString("FK_Node");
+             var node = new Entity("BP.WF.Node", FK_Node);
+             node.NodeID = FK_Node;
+             var i = node.RetrieveFromDBSources();
 
-            //更新节点表单类型.
-            node.FormType = FormSlnType.RefOneFrmTree;
-            node.NodeFrmID = selectFrm; //选择的表单
-            node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
+             //更新节点表单类型.
+             node.FormType = FormSlnType.RefOneFrmTree;
+             node.NodeFrmID = selectFrm; //选择的表单
+             node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
 
-            var update = node.Update(); //执行更新.
+             var update = node.Update(); //执行更新.
 
-            //节点表单属性
-            var frmNode = new Entity("BP.WF.Template.FrmNode");
-            frmNode.MyPK = selectFrm + "_" + node.NodeID + "_" + node.FK_Flow;
-            var i = frmNode.RetrieveFromDBSources();
-            frmNode.FK_Node = node.NodeID;
-            frmNode.FK_Flow = node.FK_Flow;
-            frmNode.FK_Frm = selectFrm;
-            frmNode.Save(); //执行保存.
+             //节点表单属性
+             var frmNode = new Entity("BP.WF.Template.FrmNode");
+             frmNode.MyPK = selectFrm + "_" + node.NodeID + "_" + node.FK_Flow;
+             var i = frmNode.RetrieveFromDBSources();
+             frmNode.FK_Node = node.NodeID;
+             frmNode.FK_Flow = node.FK_Flow;
+             frmNode.FK_Frm = selectFrm;
+             frmNode.Save(); //执行保存.
 
-            var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a> - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
-            $("#Div_RefOneFrmTree").html(html);
-            alert("独立表单库表单 - 保存成功.");
-            return;*/
+             var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a> - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
+             $("#Div_RefOneFrmTree").html(html);
+             alert("独立表单库表单 - 保存成功.");
+             return;*/
 
             // //更新表单类型.
             // var frmID = "ND" + nodeID;
@@ -149,7 +152,7 @@
             // mapData.FK_FormTree = $("#DDL_FrmTree").val();
             // mapData.Update();
 
-           
+
         }
 
         ///设置该流程的所有节点都是用该方案。
@@ -214,7 +217,7 @@
 
         }
 
-          //节点表单组件属性.
+        //节点表单组件属性.
         function SetFrm() {
             var nodeID = GetQueryString("FK_Node");
             var url = "11.RefOneFrmTreeFrms.htm?NodeID=" + nodeID;
@@ -229,8 +232,8 @@
         <legend>选择表单</legend>
         <ul>
             <!--<li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()"> </select> </li>
-    <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
-        -->
+            <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
+                -->
             <li>已经选择的表单: <div id="MyFrm"></div> </li>
             <li><a href="javascript:SetFrm();">设置表单</a></li>
 

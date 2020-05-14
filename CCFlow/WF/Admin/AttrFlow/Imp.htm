@@ -89,22 +89,15 @@
         }
         function ImpFlowPublic() {
             var fk_flowSort = GetQueryString("FK_FlowSort");
-
             var url = "../Template/Flow.htm?SortNo=" + fk_flowSort;
+            window.location.href = url;
 
         }
     </script>
 </head>
 <body>
 
-    <div id="bar" class="cs-tr cs-bar">
-        <label style="float:left; font-size :15px;font-weight:bolder;padding-top:10px;">模板导入</label>
-        <input type="button" id="Btn_Save" style="background-color:#F7F6F9"  />
-    </div>
-    
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
-
-
         <fieldset>
             <legend>从本机导入 </legend>
             <ul>

@@ -22,7 +22,6 @@
     <script src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
     <script src="../../CCForm/FrmEnd.js" defer="defer" type="text/javascript"></script>
     <script src="../../CCForm/MapExt2019.js" defer="defer" type="text/javascript"></script>
-    <script src="../../WorkOpt/WorkCheck.js"  type="text/javascript"></script>
     <script src="../../WorkOpt/FlowBBS.js"  type="text/javascript"></script>
     <script src="../../WorkOpt/OneWork/JobSchedule.js" type="text/javascript"></script>
 
@@ -620,7 +619,7 @@
 
                     break;
                 case "FWC":
-
+                    Skip.addJs("../../WorkOpt/WorkCheck.js");
                     return "<tr><td colspan=" + tableCol + " style='width:100%;' id='WorkCheck' ></td></tr>";
                 case "Dtl":
 

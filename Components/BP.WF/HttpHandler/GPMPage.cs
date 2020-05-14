@@ -208,7 +208,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT No FROM GPM_Menu WHERE MenuType="+dbstr+ "MenuType AND FK_App="+dbstr+ "FK_App";
-            ps.Add("MenuType",2);
+            ps.Add("MenuType",3);
             ps.Add("FK_App", appNo);
 
             string ParentNo = DBAccess.RunSQLReturnString(ps);

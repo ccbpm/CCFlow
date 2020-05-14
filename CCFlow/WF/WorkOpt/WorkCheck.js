@@ -8,6 +8,8 @@ var isChange = false;
 
 //审核组件页面初始化
 $(function () {
+    if (pageData.FK_Node == 0)
+        return;
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息

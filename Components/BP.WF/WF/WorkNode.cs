@@ -240,9 +240,7 @@ namespace BP.WF
             ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FK_Node =" + dbStr + "FK_Node";
             DBAccess.RunSQL(ps);
 
-            if (this.town.HisNode.HisDeliveryWay == DeliveryWay.ByCCFlowBPM
-                || 1 == 1)
-            {
+          
                 /*如果设置了安ccbpm的BPM模式*/
                 while (true)
                 {
@@ -253,7 +251,7 @@ namespace BP.WF
 
                     return InitWorkerLists(town, dt);
                 }
-            }
+             
 
             throw new Exception("@此部分代码已经移除了.");
         }
@@ -2417,10 +2415,7 @@ namespace BP.WF
             // 初试化他们的工作人员．
             current_gwls = this.Func_GenerWorkerLists(town);
             if (town.HisNode.HuiQianRole == HuiQianRole.TeamupGroupLeader &&  town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && town.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && current_gwls.Count > 1)
-            {
                 throw new Exception(BP.WF.Glo.multilingual("@接收人出错! 详情:{0}.", "WorkNode", "error_sendToemps_data", "@节点" + town.HisNode.NodeID + "是组长会签模式，接受人只能选择一人"));
-
-            }
 
             if (town.HisNode.TodolistModel == TodolistModel.Order && current_gwls.Count > 1)
             {

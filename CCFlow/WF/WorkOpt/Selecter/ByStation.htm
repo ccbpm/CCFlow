@@ -3,34 +3,101 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <style>
+        ul li {
+            list-style: none;
+        }
+
+        a, a:hover {
+            text-decoration: none;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(function () {
+            var webUser = new WebUser();
+
+            var ens = new Entities("BP.Port.Stations");
+            ens.Retrieve("OrgNo", webUser.OrgNo);
+            var html = "";
+            html += "<ul>";
+            for (var i = 0; i < ens.length; i++) {
+                html += "<a href='#'><li><input onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='checkbox'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
+            }
+            html += "</ul>"
+            $("#stationsList").append(html);
+        });
+
+        function ShowEmp(StationNo) {
+            $("#stationsEmpList").html("");
+            var ens = new Entities("BP.GPM.DeptEmpStations");
+
+            ens.Retrieve("FK_Station", StationNo);
+            
+            if (ens.length == 0) {
+                alert("该部门下未找到人员");
+                return;
+            }
+            var html = "";
+            html += "<ul>";
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = new Entity("BP.Port.Emp", ens[i].FK_Emp);
+
+                html += "<a href='#'><li><input onclick='SelectEmp(" + (en.No) + ")' id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
+            }
+
+            html += "</ul>"
+            $("#stationsEmpList").append(html);
+        }
+        function SelectEmp(EmpNo) {
+
+            var html = "";
+            html += "<ul>";
+
+            var en = new Entity("BP.Port.Emp", EmpNo);
+
+            html += "<li>" + en.Name + "</li>";
+
+            html += "</ul>"
+            $("#selectEmpList").append(html);
+        }
+    </script>
+
 </head>
 <body>
 
-
-    <table style="border:1px; border-color:black ">
+    <a onclick=""></a>
+    <table class="table table-bordered" style="border:1px; border-color:black ">
         <tr>
-            <td>(@)按岗位 ()<a href="ByTeam.htm" >按用户组</a> </td>
+            <td>(@)按岗位 ()<a href="ByTeam.htm">按用户组</a> </td>
             <td>关键字:____ 查询 关闭 </td>
         </tr>
-
         <tr>
-            <td rowspan="2">
-                <ul>
-                    <li>xxxxx</li>
-                    <li>xxxxx</li>
-                    <li>xxxxx</li>
-                </ul>
+            <td id="stationsList" rowspan="2">
             </td>
-            <td>
-                ()全部选择
-                zhangsan, lisi,wangwu<br />
-                zhangsan, lisi,wangwu
+            <td id="stationsEmpList">
             </td>
-            <td>
-                ()已经选择
-                zhangsan, lisi,wangwu<br />
-                zhangsan, lisi,wangwu
-            </td>
+        </tr>
+        <tr>
+            <td id="selectEmpList" rowspan="2"></td>
+
         </tr>
 
     </table>

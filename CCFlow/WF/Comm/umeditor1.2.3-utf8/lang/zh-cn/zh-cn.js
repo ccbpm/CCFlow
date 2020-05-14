@@ -25,7 +25,8 @@ UM.I18N['zh-cn'] = {
     },
     'paragraph':{'p':'段落', 'h1':'标题 1', 'h2':'标题 2', 'h3':'标题 3', 'h4':'标题 4', 'h5':'标题 5', 'h6':'标题 6'},
     'fontfamily':{
-        'songti':'宋体',
+        'songti': '宋体',
+        'FangSong_GB2312': '仿宋_GB2312',
         'kaiti':'楷体',
         'heiti':'黑体',
         'lishu':'隶书',

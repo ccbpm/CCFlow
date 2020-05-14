@@ -314,15 +314,15 @@
     </script>
 </head>
 <body>
-    <label>关键字</label>
-    <!--<input style='width:180px;display:inline' type=text id='TB_Key' name='TB_Key' class='form-control' placeholder="输入部门编号或者名称" />-->
-    <input type="button" onclick="Search()" value="查询" />
-    <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
-                                                               id="toPrevDept" />
-    <input type="button" onclick="SelectEmps()" value="确定" />
+    <div style="text-align:right">
+        <input type="button" value="上一级" id="toPrevDept" />
+        <input type="button" onclick="Close()" value="取消" />
+        <input type="button" onclick="SelectEmps()" value="确定" />
+    </div>
+   
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
-    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
-                                                               value="确定" />
+    <!--<input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
+                                                               value="确定" />-->
 </body>
 </html>

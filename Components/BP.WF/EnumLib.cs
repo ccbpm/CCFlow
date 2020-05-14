@@ -1024,6 +1024,10 @@ namespace BP.WF
         /// </summary>
         ByTeamDeptOnly = 26,
         /// <summary>
+        /// 按照绑定岗位的用户组人员
+        /// </summary>
+        ByBindTeamEmp = 27,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

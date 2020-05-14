@@ -62,7 +62,7 @@ function InitBar(optionKey) {
 
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算</option>";
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
-        html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+        html += "<option value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
 
         if (webUser.CCBPMRunModel == 1) {
@@ -408,6 +408,9 @@ function changeOption() {
             break;
         case DeliveryWay.ByTeamDeptOnly:
             roleName = "26.ByTeamDeptOnly.htm";
+            break;
+        case DeliveryWay.ByBindTeamEmp:
+            roleName = "27.SelectEmpsByTeamStation.htm";
             break;
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";

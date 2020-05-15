@@ -172,57 +172,65 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flow_Imp()
         {
-            string Msg = "";
+            //构造返回数据.
+            DataTable dtInfo = new DataTable();
+            dtInfo.Columns.Add("Name");
+            dtInfo.Columns.Add("Info");
+            dtInfo.Columns.Add("Result");
+
+            //获得下载的文件名.
             string fls = this.GetRequestVal("Files");
             string[] strs = fls.Split(';');
-            string sortNo = GetRequestVal("SortNo");
-            string dirName = GetRequestVal("DirName");
+
+            string sortNo = GetRequestVal("SortNo");//流程类别.
+
+            string dirName = GetRequestVal("DirName"); //目录名称.
+            if (DataType.IsNullOrEmpty(dirName) == true)
+                dirName = "/";
 
             FtpClient conn = this.GenerFTPConn;
             string remotePath = conn.GetWorkingDirectory() + dirName;
 
+            string err = "";
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
+
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+
+                //下载目录下.
+                FtpStatus fs = conn.DownloadFile(tempfile, "/Flow" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+
+                if (fs.ToString().Equals("Success") == false)
+                    return "err@模板未下载成功" + fs.ToString();
+
                 try
                 {
-                    //下载目录下.
-                    FtpStatus fs = conn.DownloadFile(tempfile, "/Flow" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+                    //执行导入.
+                    BP.WF.Flow flow = new BP.WF.Flow();
+                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                    flow.DoCheck(); //要执行一次检查
 
-                    if (fs.ToString() == "Success")
-                    {
-                        //执行导入.
-                        BP.WF.Flow flow = new BP.WF.Flow();
-                        flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                        flow.DoCheck(); //要执行一次检查
-                        Hashtable ht = new Hashtable();
-                        ht.Add("FK_Flow", flow.No);
-                        ht.Add("FlowName", flow.Name);
-                        ht.Add("FK_FlowSort", flow.FK_FlowSort);
-                        ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
-                        //选择的是一个模板则返回Hashtable表格式
-                        if (strs.Length == 2)
-                        {
-                            return BP.Tools.Json.ToJson(ht);
-                        }
-                        //多个模板返回Msg字符串形式
-                        Msg += ht["Msg"].ToString() + "\n";
-                    }
-                    else
-                    {
-                        return "模板未下载成功";
-                    }
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = "执行成功:新流程编号:" + flow.No;
+                    dr[2] = "导入成功";
+                    dtInfo.Rows.Add(dr);
+
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    return "模板未下载成功-"+ex.Message;
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = ex.Message;
+                    dr[2] = "导入失败";
+                    dtInfo.Rows.Add(dr);
                 }
             }
 
-            return Msg;
+            return BP.Tools.Json.ToJson(dtInfo);
         }
         /// <summary>
         /// 导入表单模板
@@ -275,7 +283,7 @@ namespace BP.WF.HttpHandler
                         return "模板下载未成功";
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return "模板下载未成功-" + ex.Message;
                 }

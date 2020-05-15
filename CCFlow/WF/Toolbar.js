@@ -256,8 +256,8 @@ function initModal(modalType, toNode,url) {
 
     //初始化退回窗口的SRC.
     var html = '<div style=" height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
-        '<div class="modal-dialog">'
-        + '<div class="modal-content" style="border-radius:0px;width:900px;height:560px;text-align:left;">'
+        '<div class="modal-dialog" style="border-radius:0px;width:920px;">'
+        + '<div class="modal-content" id="viewModal" style="border-radius:0px;height:560px;">'
         + '<div class="modal-header" style="background-color:#f2f2f2">'
         + '<button id="ClosePageBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
         + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
@@ -271,7 +271,7 @@ function initModal(modalType, toNode,url) {
         + '</div>';
 
     $('body').append($(html));
-
+   
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
     });
@@ -401,6 +401,8 @@ function initModal(modalType, toNode,url) {
         }
     }
     $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
+   
+    
 }
 
 //设置弹出页面比例

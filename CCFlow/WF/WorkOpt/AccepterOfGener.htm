@@ -490,9 +490,6 @@
 
         //高级选择
         function AdvSelect() {
-
-            http://localhost:2207/WF/WorkOpt/AccepterOfGener.htm?WorkID=190&FK_Node=501&FK_Flow=005&ToNode=502&PWorkID=0&IsSend=null
-
             var url = "./Selecter/ByStation.htm?WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode");
             url += "&FK_Node=" + GetQueryString("FK_Node");
             window.open(url);
@@ -514,7 +511,7 @@
                    placeholder="查张三,您可输入: zs或zhangs或zhangsan" ;=;
                    value='' style=" width:300px; " />
             <input type="button" id="Btn_SelectEmps" value='选择人' />
-            <input type="button" id="Btn_SelectAdv" onclick="AdvSelect" value='高级选择' />
+            <input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='高级选择' />
 
             <div id="SelectEmp"></div>
 

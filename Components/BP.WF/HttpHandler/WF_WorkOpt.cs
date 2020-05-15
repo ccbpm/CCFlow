@@ -107,6 +107,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string PrintDoc_Done()
         {
+            return GetRequestVal("FK_Bill");
+            
             string billTemplateNo = this.GetRequestVal("FK_Bill");
             return PrintDoc_DoneIt(billTemplateNo);
         }

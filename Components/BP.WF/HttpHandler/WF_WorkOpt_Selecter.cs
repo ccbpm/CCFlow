@@ -26,6 +26,20 @@ namespace BP.WF.HttpHandler
 
         }
 
+        public string ByStation_ShowEmps()
+        {
+            string staNo = this.GetRequestVal("StaNo");
+            string sql = "";
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
+            else
+                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Station='" + staNo + "'";
+
+            DataTable db = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(db);
+            //return "方法未完成";
+        }
+
         #region  界面 .
         public string SelectEmpsByTeamStation_Init()
         {

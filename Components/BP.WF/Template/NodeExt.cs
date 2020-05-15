@@ -278,28 +278,14 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (this.FK_Flow == "")
-                {
-                    uac.OpenForAppAdmin();
-                    return uac;
-                }
 
-                Flow fl = new Flow(this.FK_Flow);
+                //@sly
+                if (BP.Web.WebUser.IsAdmin == false)
+                    throw new Exception("err@管理员登录用户信息丢失,当前会话[" + BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + "]");
 
-
-                if (BP.Web.WebUser.No != null && BP.Web.WebUser.IsAdmin == true)
-
-                {
-                    uac.IsInsert = false;
-                    uac.IsUpdate = true;
-                    uac.IsDelete = true;
-                    uac.IsAdjunct = false;
-                    uac.IsView = true;
-                }
-                else
-                {
-                    uac.Readonly();
-                }
+                uac.IsUpdate = true;
+                uac.IsDelete = false;
+                uac.IsInsert = false;
 
                 //uac.OpenForAdmin();
                 return uac;

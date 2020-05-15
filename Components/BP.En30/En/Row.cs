@@ -104,6 +104,11 @@ namespace BP.En
                 return false;
             return true;
         }
+        public string GetValStrByKey(string key)
+        {
+            return this[key] as string;
+        }
+
         public object GetValByKey(string key)
         {
             return this[key];

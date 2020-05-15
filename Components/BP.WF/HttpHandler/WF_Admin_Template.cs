@@ -211,11 +211,11 @@ namespace BP.WF.HttpHandler
                     //执行导入.
                     BP.WF.Flow flow = new BP.WF.Flow();
                     flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                    flow.DoCheck(); //要执行一次检查
+                    flow.DoCheck(); //要执行一次检查.
 
                     DataRow dr = dtInfo.NewRow();
                     dr[0] = str;
-                    dr[1] = "执行成功:新流程编号:" + flow.No;
+                    dr[1] = "执行成功:新流程编号:" + flow.No+" - "+flow.Name;
                     dr[2] = "导入成功";
                     dtInfo.Rows.Add(dr);
 

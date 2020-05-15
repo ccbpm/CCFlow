@@ -461,11 +461,11 @@ namespace BP.En
                             default:
                                 throw new Exception("没有找到指定的时间类型");
                         }
-                        
+
                         if (attr.UIIsReadonly == true)
                         {
-                           /// if (myval == v)
-                                this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
+                            /// if (myval == v)
+                            this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                         }
                         else
                         {
@@ -506,13 +506,28 @@ namespace BP.En
                         int count = gloVar.RetrieveFromDBSources();
                         if (count == 1)
                         {
-                            //执行SQL获取默认值
+                            //执行SQL获取默认值 @sly
                             string sql = gloVar.Val;
-                            sql = DealExp(sql, null, null);
+                            if (DataType.IsNullOrEmpty(sql) == true)
+                                continue;
 
-                            //这里有异常就要跑出来
-                            string val = DBAccess.RunSQLReturnString(sql);
-                            this.SetValByKey(attr.Key, val);
+                            sql = DealExp(sql, this.Row, null);
+                            if (sql.ToUpper().Contains("SELECT") == false)
+                            {
+                                this.SetValByKey(attr.Key, sql);
+                                continue;
+                            }
+
+                            try
+                            {
+                                //这里有异常就要跑出来
+                                string val = DBAccess.RunSQLReturnString(sql);
+                                this.SetValByKey(attr.Key, val);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("err@为类：" + this.ToString() + ",字段：" + attr.Key + ",变量表达式:" + v + ",设置信息:" + gloVar.ToJson() + ",设置默认值解析SQL:" + sql + " ，原始设置SQL:" + gloVar.Val + ",执行SQL期间出现错误.");
+                            }
                         }
                         continue;
                 }
@@ -526,7 +541,7 @@ namespace BP.En
         /// <param name="en">数据源</param>
         /// <param name="errInfo">错误</param>
         /// <returns></returns>
-        private static string DealExp(string exp, Entity en, string errInfo)
+        private static string DealExp(string exp, Row row, string errInfo)
         {
             if (exp.Contains("@") == false)
                 return exp;
@@ -553,9 +568,8 @@ namespace BP.En
             }
 
             //增加对新规则的支持. @MyField; 格式.
-            if (en != null)
+            if (row != null)
             {
-                Row row = en.Row;
                 //特殊判断.
                 if (row.ContainsKey("OID") == true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
@@ -572,15 +586,13 @@ namespace BP.En
                     return exp;
 
                 #region 解决排序问题.
-                Attrs attrs = en.EnMap.Attrs;
                 string mystrs = "";
-                foreach (Attr attr in attrs)
+                foreach (string key in row.Keys)
                 {
-                    if (attr.MyDataType == DataType.AppString)
-                        mystrs += "@" + attr.Key + ",";
-                    else
-                        mystrs += "@" + attr.Key;
+                    mystrs += "@" + key;
                 }
+
+
                 string[] strs = mystrs.Split('@');
                 DataTable dt = new DataTable();
                 dt.Columns.Add(new DataColumn("No", typeof(string)));
@@ -606,10 +618,10 @@ namespace BP.En
                     if (isStr == true)
                     {
                         key = key.Replace(",", "");
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                        exp = exp.Replace("@" + key, row.GetValStrByKey(key));
                     }
                     else
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                        exp = exp.Replace("@" + key, row.GetValStrByKey(key));
                 }
                 #endregion
 

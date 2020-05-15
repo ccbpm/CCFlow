@@ -1591,8 +1591,10 @@ namespace BP.WF
                 if (dbtype == DBType.MySQL)
                     DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
 
-                if (dbtype == DBType.MSSQL)
+                if (dbtype == DBType.MSSQL) {
+
                     DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows nvarchar(4000) null");
+                }
                 #endregion 更新wf_emp 的字段类型.
 
                 BP.Sys.FrmRB rb = new FrmRB();
@@ -2398,7 +2400,7 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text DEFAULT  NULL";
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text";
                         break;
                     case DBType.Oracle:
                         sql = "ALTER TABLE  WF_EMP add StartFlows BLOB";

@@ -1556,7 +1556,7 @@
 
     <div class="easyui-layout layout cs-easyui-layout" data-options="fit:true" style="width: 100%; height: 628px;">
         <div class="panel layout-panel layout-panel-north cs-panel-north">
-            <div data-options="region:'north'" id="toolbar" style="padding: 8px 0;
+            <div data-options="region:'north'" id="toolbar" style="padding: 0px;
         overflow-y: hidden;
 " title="表单设计器-工具栏"
                  class="panel-body panel-body-noheader layout-body cs-btn-group">
@@ -1569,48 +1569,27 @@
                     导入/导出
                 </a>
 
-                <span id='dd' class='btn-light-yellow wrapper-dropdown-2' >
-                    新建...
-                    <ul class='dropdown' style='list-style:none;'>
+                <a href="javascript:AddF();" class=" easyui-linkbutton btn-light-yellow">
+                    新建字段
+                </a>
+                <a href="javascript:AddComponent();" class=" easyui-linkbutton btn-light-yellow">
+                    新建组件
+                </a>
 
-                        <li style='list-style:none;'>
-                            <a style="top:35px" href="javascript:AddF();" class=" easyui-linkbutton btn-light-green">
-                                +字段
-                            </a>
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:65px" href="javascript:AddComponent();" class=" easyui-linkbutton btn-light-green">
-                                +组件
-                            </a>
+                <a href="javascript:GroupFieldNew();" class=" easyui-linkbutton btn-light-green">
+                    新建字段分组
+                </a>
+                <a href="javascript:GroupFieldFWCNew();" class=" easyui-linkbutton btn-light-red">
+                    新建审核分组
+                </a>
+                <a href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-blue">
+                    新建从表
+                </a> <a href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
+                    新建附件
+                </a><a href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
+                    新建框架
+                </a>
 
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:155px" href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-green">
-                                +从表
-                            </a>
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:185px" href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
-                                +附件
-                            </a>
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:215px" href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-green">
-                                +框架
-                            </a>
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:95px" href="javascript:GroupFieldNew();" class=" easyui-linkbutton btn-light-green">
-                                +字段分组
-                            </a>
-                        </li>
-                        <li style='list-style:none;'>
-                            <a style="top:125px" href="javascript:GroupFieldFWCNew();" class=" easyui-linkbutton btn-light-green">
-                                +审核分组
-                            </a>
-                        </li>
-                    </ul>
-                </span>
 
                 <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
                     批量修改字段

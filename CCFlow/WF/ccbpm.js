@@ -11,7 +11,7 @@ var paramData = {};
 $(function () {
     if (window.location.href.startsWith(ccbpmPath) == false)
         isEqualsDomain = true;
-
+    debugger
     //引入关联的js
     jQuery.getScript(ccbpmPath + "/WF/Scripts/config.js", function () {
         jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
@@ -35,9 +35,9 @@ $(window).load(function () {
     }
 
     //表单树形结构
-    if ($("#tabs").length == 1) {
-        return;
-    }
+   // if ($("#tabs").length == 1) {
+   //     return;
+   // }
     
     if ($("#ToolBar").length == 1) {
         if ($('#ccbpmJS').length == 1) {

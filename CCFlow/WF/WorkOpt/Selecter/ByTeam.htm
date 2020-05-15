@@ -34,7 +34,7 @@
             var html = "";
             html += "<ul>";
             for (var i = 0; i < ens.length; i++) {
-                html += "<a href='#'><li><input onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='checkbox'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
+                html += "<a href='#'><li><input name='team' onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='radio'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
             }
             html += "</ul>"
             $("#teamsList").append(html);

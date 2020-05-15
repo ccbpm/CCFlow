@@ -331,6 +331,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
+                uac.OpenForAdmin(); //zsy修改 2020.5.15
                 if (BP.Web.WebUser.No == "admin" || this.DesignerNo == WebUser.No)
                     uac.IsUpdate = true;
 

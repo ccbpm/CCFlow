@@ -33,30 +33,45 @@
         $(function () {
             var webUser = new WebUser();
 
-            var ens = new Entities("BP.Port.Stations");
-            ens.Retrieve("OrgNo", webUser.OrgNo);
-            var html = "";
-            html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                html += "<a href='#'><li><input name='station' onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='radio'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
-            }
-            html += "</ul>"
-            $("#stationsList").append(html);
 
-            
+            var tps = new Entities("BP.Port.StationTypes");
+            tps.RetrieveAll();
+
+            var stas = new Entities("BP.Port.Stations");
+            stas.RetrieveAll();
+
+            var html = "<ul>";
+
+            for (var idx = 0; idx < tps.length; idx++) {
+                var tp = tps[idx];
+
+                html += "<li>" + tp.Name + "<br>";
+
+                html += "<ul>";
+                for (var i = 0; i < stas.length; i++) {
+                    var sta = stas[i];
+                    if (sta.FK_StationType != tp.No)
+                        continue;
+
+                    html += "<li><a href='#' onclick='ShowEmp(" + sta.No + ")' id='" + sta.No + "' >" + sta.Name + "</a></li>";
+                }
+                html += "</ul>";
+
+                html += "</li>";
+            }
+            html += "</ul>";
+
+            $("#stationsList").append(html);
 
         });
 
+        //显示人员.
         function ShowEmp(StationNo) {
+
             $("#stationsEmpList").html("");
-            var ens = new Entities("BP.GPM.DeptEmpStations");
+            var handler = new htt();
 
-            ens.Retrieve("FK_Station", StationNo);
-
-            if (ens.length == 0) {
-                alert("该部门下未找到人员");
-                return;
-            }
+           
             var html = "";
             html += "<ul>";
             for (var i = 0; i < ens.length; i++) {

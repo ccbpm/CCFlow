@@ -116,6 +116,12 @@ $(function () {
     //contentTable
     $('#contentTable').children().remove();
     $('#contentTable').append(tbody);
+    if ($("#WorkCheck").length == 1)
+        loadScript("../../WorkOpt/WorkCheck.js");
+
+    if ($("#FlowBBS").length == 1)
+        loadScript("../../WorkOpt/FlowBBS.js");
+   
 
     var mapAttrs = data.Sys_MapAttr;
     //解析设置表单字段联动显示与隐藏.
@@ -148,6 +154,7 @@ $(function () {
         }
     }
 
+    
     $("#Msg").html("");
     ResizeWindow();
 

@@ -342,7 +342,7 @@ function ExtWorkCheck() {
     mapAttr.TextColSpan = 1; //
     mapAttr.UIWidth = 150;
     mapAttr.UIHeight = 50;
-    mapAttr.IsEnableInAPP = 0;
+    mapAttr.IsEnableInAPP = 1;
     mapAttr.Insert(); //插入字段.
     if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&MyPK=" + mapAttr.MyPK;
@@ -372,7 +372,7 @@ function ExtFlowBBS() {
     mapAttr.TextColSpan = 1;
     mapAttr.UIWidth = 150;
     mapAttr.UIHeight = 50;
-    mapAttr.IsEnableInAPP = 0;
+    mapAttr.IsEnableInAPP = 1;
     mapAttr.Insert(); //插入字段.
     if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrFlowBBS&MyPK=" + mapAttr.MyPK;

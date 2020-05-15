@@ -778,7 +778,7 @@ namespace BP.WF
 
         }
         #endregion 高级配置.
-        
+
         #region 多语言处理.
         private static Hashtable _Multilingual_Cache = null;
         public static DataTable getMultilingual_DT(string className)
@@ -1074,7 +1074,7 @@ namespace BP.WF
             if (DBAccess.IsExitsObject("V_GPM_EmpGroup") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
 
-          
+
             if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
 
@@ -1095,7 +1095,7 @@ namespace BP.WF
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
-                throw new Exception("err@没有判断的数据库类型:"+ BP.Sys.SystemConfig.AppCenterDBType.ToString());
+                throw new Exception("err@没有判断的数据库类型:" + BP.Sys.SystemConfig.AppCenterDBType.ToString());
 
             BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 创建视图
@@ -1116,7 +1116,7 @@ namespace BP.WF
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
 
-           
+
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -1204,7 +1204,7 @@ namespace BP.WF
             //修复数据表.
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
-        
+
 
             //if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
             //    DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
@@ -1360,7 +1360,7 @@ namespace BP.WF
                 sql = "UPDATE WF_FrmNode F  SET (IsEnableFWC)=(SELECT FWCSta FROM WF_Node N WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1)";
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sql = "UPDATE WF_FrmNode SET IsEnableFWC=(SELECT FWCSta FROM WF_Node N Where N.NodeID=WF_FrmNode.FK_Node AND WF_FrmNode.IsEnableFWC=1)";
-            
+
             DBAccess.RunSQL(sql);
             #endregion 升级审核组件
 
@@ -1576,25 +1576,18 @@ namespace BP.WF
                 #region 更新wf_emp. 的字段类型. 2019.06.19
                 DBType dbtype = BP.Sys.SystemConfig.AppCenterDBType;
 
+                //if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
+                //    DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
 
-                if (dbtype == DBType.Oracle)
-                {
-                    if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
-                    {
-                        DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
+                //if (dbtype == DBType.Oracle)
+                //    DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows BLOB");
 
-                    }
-                    DBAccess.RunSQL("ALTER TABLE WF_Emp Add StartFlows BLOB");
+                //if (dbtype == DBType.MySQL)
+                //    DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
 
-                }
+                //if (dbtype == DBType.MSSQL)
+                //    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows nvarchar(4000) null");
 
-                if (dbtype == DBType.MySQL)
-                    DBAccess.RunSQL("ALTER TABLE WF_Emp modify StartFlows longtext ");
-
-                if (dbtype == DBType.MSSQL) {
-
-                    DBAccess.RunSQL(" ALTER TABLE WF_Emp ALTER column  StartFlows nvarchar(4000) null");
-                }
                 #endregion 更新wf_emp 的字段类型.
 
                 BP.Sys.FrmRB rb = new FrmRB();
@@ -1878,7 +1871,7 @@ namespace BP.WF
                 FrmField ff = new FrmField();
                 ff.CheckPhysicsTable();
 
-                
+
 
                 NodeToolbar bar = new NodeToolbar();
                 bar.CheckPhysicsTable();
@@ -1911,7 +1904,7 @@ namespace BP.WF
 
                 #endregion
 
-                
+
 
                 #region 执行更新.wf_node
                 sql = "UPDATE WF_Node SET FWCType=0 WHERE FWCType IS NULL";
@@ -2400,7 +2393,7 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text";
+                        sql = "ALTER TABLE WF_Emp ADD StartFlows Text DEFAULT  NULL";
                         break;
                     case DBType.Oracle:
                         sql = "ALTER TABLE  WF_EMP add StartFlows BLOB";
@@ -3640,7 +3633,7 @@ namespace BP.WF
                 }
             }
         }
-       
+
 
         /// <summary>
         /// 短信时间发送到
@@ -4679,8 +4672,8 @@ namespace BP.WF
                 }
 
                 wk.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-              //  wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
-               // wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
+                //  wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                // wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 wk.Update();
 
                 Node ndStart = nd.HisFlow.HisStartNode;
@@ -5905,7 +5898,7 @@ namespace BP.WF
             ch.UseMinutes = ts.Minutes;//用时，分钟
             //int hour = ts.Hours;
             //ch.UseDays += ts.Hours / 8; //使用的天数.
-            if(DataType.IsNullOrEmpty(ch.SDT)==false && ch.SDT.Equals("无") == false)
+            if (DataType.IsNullOrEmpty(ch.SDT) == false && ch.SDT.Equals("无") == false)
             {
                 // OverDays . 求出 逾期天 数.
                 DateTime sdtOfDT = DataType.ParseSysDate2DateTime(ch.SDT);
@@ -5932,7 +5925,7 @@ namespace BP.WF
                 ch.CHSta = CHSta.AnQi; //按期完成.
                 ch.Points = 0;
             }
-           
+
             #endregion 求计算属性.
 
             //执行保存.
@@ -6113,7 +6106,7 @@ namespace BP.WF
                 ctrlWayId = pworkid.ToString();
             if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                 ctrlWayId = fid.ToString();
-                if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
                 /* 继承模式 */
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);

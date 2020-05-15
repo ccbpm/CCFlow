@@ -38,10 +38,13 @@
             var html = "";
             html += "<ul>";
             for (var i = 0; i < ens.length; i++) {
-                html += "<a href='#'><li><input onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='checkbox'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
+                html += "<a href='#'><li><input name='station' onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='radio'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
             }
             html += "</ul>"
             $("#stationsList").append(html);
+
+            
+
         });
 
         function ShowEmp(StationNo) {
@@ -49,7 +52,7 @@
             var ens = new Entities("BP.GPM.DeptEmpStations");
 
             ens.Retrieve("FK_Station", StationNo);
-            
+
             if (ens.length == 0) {
                 alert("该部门下未找到人员");
                 return;

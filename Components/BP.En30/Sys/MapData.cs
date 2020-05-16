@@ -2121,9 +2121,6 @@ namespace BP.Sys
             }
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
 
-
-
-
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
             {

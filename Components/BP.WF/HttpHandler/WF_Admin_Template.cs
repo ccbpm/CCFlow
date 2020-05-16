@@ -311,7 +311,7 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     //执行装载.
-                    MapData.ImpMapData(ds);
+                    MapData.ImpMapData(md.No,ds);
                     DataRow dr = dtInfo.NewRow();
                     dr[0] = str;
                     dr[1] = "执行成功:新流程编号:" + md.No + " - " + md.Name;

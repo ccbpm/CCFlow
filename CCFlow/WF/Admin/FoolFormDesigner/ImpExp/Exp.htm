@@ -37,10 +37,11 @@
             var frmID = GetQueryString("FK_MapData");
             var md = new Entity("BP.Sys.MapData", frmID);
 
+
             //创建处理类.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("DownFormTemplete"); //执行方法，返回执行结果.
+            var data = handler.DoMethodReturnString("Exp_DownFormTemplete"); //执行方法，返回执行结果.
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');

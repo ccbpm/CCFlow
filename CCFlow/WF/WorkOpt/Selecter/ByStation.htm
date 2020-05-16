@@ -45,7 +45,7 @@
             for (var idx = 0; idx < tps.length; idx++) {
                 var tp = tps[idx];
 
-                html += "<li>" + tp.Name + "<br>";
+                html += "<li>" + tp.Name;
 
                 html += "<ul>";
                 for (var i = 0; i < stas.length; i++) {
@@ -53,7 +53,7 @@
                     if (sta.FK_StationType != tp.No)
                         continue;
 
-                    html += "<li><a href='#' onclick='ShowEmp(" + sta.No + ")' id='" + sta.No + "' >" + sta.Name + "</a></li>";
+                    html += "<li><a href='#' onclick=ShowEmp('" + sta.No + "') id='" + sta.No + "' >" + sta.Name + "</a></li>";
                 }
                 html += "</ul>";
 
@@ -67,34 +67,37 @@
 
         //显示人员.
         function ShowEmp(StationNo) {
-
+            
             $("#stationsEmpList").html("");
-            var handler = new htt();
-
-           
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
+            handler.AddPara("StaNo",StationNo);
+            var data = handler.DoMethodReturnString("ByStation_ShowEmps");
+            var Emps = eval('(' + data + ')');
             var html = "";
             html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
+            for (var i = 0; i < Emps.length; i++) {
+                en = Emps[i];
+               
+                var en = new Entity("BP.Port.Emp", en.No);
 
-                var en = new Entity("BP.Port.Emp", ens[i].FK_Emp);
-
-                html += "<a href='#'><li><input onclick='SelectEmp(" + (en.No) + ")' id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
+                html += "<a href='#'><li><input onclick=SelectEmp('" + (en.No) + "') id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
             }
 
             html += "</ul>"
             $("#stationsEmpList").append(html);
         }
         function SelectEmp(EmpNo) {
-
-            var html = "";
-            html += "<ul>";
-
-            var en = new Entity("BP.Port.Emp", EmpNo);
-
-            html += "<li>" + en.Name + "</li>";
-
-            html += "</ul>"
-            $("#selectEmpList").append(html);
+           var en = new Entity("BP.Port.Emp", EmpNo);
+            if (document.getElementById(EmpNo).checked) {
+                var html = "";
+                html += "<ul>";
+                html += "<li id='" + en.Name + "'>" + en.Name + "</li>";
+                html += "</ul>"
+                $("#selectEmpList").append(html);
+            }
+            else {
+                document.getElementById(en.Name).remove();
+            }
         }
     </script>
 

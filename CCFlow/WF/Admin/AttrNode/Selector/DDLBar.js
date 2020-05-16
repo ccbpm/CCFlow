@@ -84,9 +84,11 @@ function getStas() {
 /*
  * 获取节点绑定的部门
  */
-function getDepts() {
-    var ens = new Entities("BP.WF.Template.NodeDepts");
-    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+function getDepts(orgNo) {
+    var sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
+    var ens = DBAccess.RunSQLReturnTable(sql);
+    //var ens = new Entities("BP.WF.Template.NodeDepts");
+    //ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
     ens = $.grep(ens, function (obj, i) {
         return obj.FK_Node != undefined
     });

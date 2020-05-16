@@ -109,9 +109,8 @@
                     "checked": checked,
                     "state": 'closed'
                 });
-            }
-
-            for (var i = 0; i < jsonArray.length; i++) {
+            } else {
+                 for (var i = 0; i < jsonArray.length; i++) {
                 var data = jsonArray[i];
                 if (data.ParentNo == parentNo) {
                     var checked = false;
@@ -132,6 +131,9 @@
                     });
                 }
             }
+            }
+
+           
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
@@ -182,7 +184,7 @@
             var orgNo = GetQueryString("OrgNo");
 
             //删除,该组织下已经保存的岗位.
-            var sql = "DELETE FROM WF_NodeDept WHERE FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
+            var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "')";
             DBAccess.RunSQL(sql);
 
             //获取复选框选中的节点
@@ -195,7 +197,9 @@
                 en.Insert();
 
             }
-            window.close();
+            parent.location.reload(); 
+            //self.opener.location.reload(); 
+            //window.opener.document.location.reload();
         }
 
     </script>

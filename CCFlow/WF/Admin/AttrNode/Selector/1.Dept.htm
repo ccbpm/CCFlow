@@ -93,12 +93,14 @@
             },
             created() {
                 InitBar(this.deliverWay);
-                this.depts = getDepts();
+                
 
                 //根据用户的信息，判断是否启用那个设置工具。
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+
+                this.depts = getDepts(this.webuser.OrgNo);
 
             }
         });
@@ -112,7 +114,7 @@
 
         //保存
         function Save() {
-
+            
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Template.Selector", nodeID);
             node.SelectorModel = Baseinfo.deliverWay;

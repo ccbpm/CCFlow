@@ -31,12 +31,9 @@
     <script type="text/javascript">
 
         $(function () {
-            var webUser = new WebUser();
-
-
             var tps = new Entities("BP.Port.StationTypes");
             tps.RetrieveAll();
-
+            
             var stas = new Entities("BP.Port.Stations");
             stas.RetrieveAll();
 
@@ -79,7 +76,6 @@
                 en = Emps[i];
                
                 var en = new Entity("BP.Port.Emp", en.No);
-
                 html += "<a href='#'><li><input onclick=SelectEmp('" + (en.No) + "') id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
             }
 
@@ -99,6 +95,10 @@
                 document.getElementById(en.Name).remove();
             }
         }
+        function GotoUrl() {
+            var url = "ByTeam.htm?WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode");
+            window.location.href = url;
+        }
     </script>
 
 </head>
@@ -107,7 +107,7 @@
     <a onclick=""></a>
     <table class="table table-bordered" style="border:1px; border-color:black ">
         <tr>
-            <td>(@)按岗位 ()<a href="ByTeam.htm">按用户组</a> </td>
+            <td>(@)按岗位 ()<a onclick="GotoUrl()" href="#">按用户组</a> </td>
             <td>关键字:____ 查询 关闭 </td>
         </tr>
         <tr>

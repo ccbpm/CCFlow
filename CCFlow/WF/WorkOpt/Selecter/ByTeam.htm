@@ -30,44 +30,71 @@
     <script type="text/javascript">
 
         $(function () {
-            var ens = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Team");
-            var html = "";
-            html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                html += "<a href='#'><li><input name='team' onclick='ShowEmp(" + ens[i].No + ")' id='" + ens[i].No + "' type='radio'>&nbsp&nbsp" + ens[i].Name + "</li></a>";
+            var tps = new Entities("BP.Port.TeamTypes");
+            tps.RetrieveAll();
+
+            var teams = new Entities("BP.Port.Teams");
+            teams.RetrieveAll();
+
+           var html = "<ul>";
+
+            for (var idx = 0; idx < tps.length; idx++) {
+                var tp = tps[idx];
+
+                html += "<li>" + tp.Name;
+
+                html += "<ul>";
+                for (var i = 0; i < teams.length; i++) {
+                    var team = teams[i];
+                    if (team.FK_TeamType != tp.No)
+                        continue;
+
+                    html += "<li><a href='#' onclick=ShowEmp('" + team.No + "') id='" + team.No + "' >" + team.Name + "</a></li>";
+                }
+                html += "</ul>";
+
+                html += "</li>";
             }
-            html += "</ul>"
+            html += "</ul>";
             $("#teamsList").append(html);
         });
         function ShowEmp(TeamNo) {
+           
             $("#teamsEmpList").html("");
-            var ens = new Entities("BP.Port.TeamEmps");
-            ens.Retrieve("FK_Team", TeamNo);
- 
-            if (ens.length == 0) {
-                alert("该组内未找到人员");
-                return;
-            }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
+            handler.AddPara("TeamNo",TeamNo);
+            var data = handler.DoMethodReturnString("SelectEmpsByTeamStation_Init");
+            
+            var Emps = eval('(' + data + ')');
             var html = "";
             html += "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                 var en = new Entity("BP.Port.Emp", ens[i].FK_Emp);
-                html += "<a href='#'><li><input onclick='SelectEmp(" + (en.No) + ")' id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
+            for (var i = 0; i < Emps.length; i++) {
+                en = Emps[i];
+               
+                var en = new Entity("BP.Port.Emp", en.No);
+
+                html += "<a href='#'><li><input onclick=SelectEmp('" + (en.No) + "') id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
             }
+
             html += "</ul>"
             $("#teamsEmpList").append(html);
         }
         function SelectEmp(EmpNo) {
-            
-            var html = "";
-            html += "<ul>";
-
-            var en = new Entity("BP.Port.Emp", EmpNo);
-
-            html += "<li>" + en.Name + "</li>";
-
-            html += "</ul>"
-            $("#selectEmpList").append(html);
+             var en = new Entity("BP.Port.Emp", EmpNo);
+            if (document.getElementById(EmpNo).checked) {
+                var html = "";
+                html += "<ul>";
+                html += "<li id='" + en.Name + "'>" + en.Name + "</li>";
+                html += "</ul>"
+                $("#selectEmpList").append(html);
+            }
+            else {
+                document.getElementById(en.Name).remove();
+            }
+        }
+        function GotoUrl() {
+            var url = "ByStation.htm?WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode");
+            window.location.href = url;
         }
     </script>
 
@@ -77,7 +104,7 @@
 
     <table class="table table-bordered" style="border:1px; border-color:black ">
         <tr>
-            <td><a href="ByStation.htm">()按用户组</a> (@)按用户组 </td>
+            <td><a onclick="GotoUrl()" href="#">()按用户组</a> (@)按用户组 </td>
             <td>关键字:____查询 关闭 </td>
         </tr>
 

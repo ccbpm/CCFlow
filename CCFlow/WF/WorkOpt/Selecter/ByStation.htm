@@ -33,16 +33,16 @@
         $(function () {
             var tps = new Entities("BP.Port.StationTypes");
             tps.RetrieveAll();
-            
+
             var stas = new Entities("BP.Port.Stations");
             stas.RetrieveAll();
 
-            var html = "<ul>";
+            var html = "<ul class='list-group'>";
 
             for (var idx = 0; idx < tps.length; idx++) {
                 var tp = tps[idx];
 
-                html += "<li>" + tp.Name;
+                html += "<li >" + tp.Name;
 
                 html += "<ul>";
                 for (var i = 0; i < stas.length; i++) {
@@ -50,7 +50,7 @@
                     if (sta.FK_StationType != tp.No)
                         continue;
 
-                    html += "<li><a href='#' onclick=ShowEmp('" + sta.No + "') id='" + sta.No + "' >" + sta.Name + "</a></li>";
+                    html += "<a href='#' onclick=ShowEmp('" + sta.No + "') id='" + sta.No + "' ><li class='list-group-item node-tree' data-nodeid='" + i + "' style='color:undefined;background-color:undefined;'>" + sta.Name + "</li></a>";
                 }
                 html += "</ul>";
 
@@ -64,31 +64,48 @@
 
         //显示人员.
         function ShowEmp(StationNo) {
-            
+
             $("#stationsEmpList").html("");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
-            handler.AddPara("StaNo",StationNo);
+            handler.AddPara("StaNo", StationNo);
             var data = handler.DoMethodReturnString("ByStation_ShowEmps");
             var Emps = eval('(' + data + ')');
             var html = "";
-            html += "<ul>";
+            //html += " <tr>";
+            //html += " <th class='bs-checkbox ' style='width:36px; ' data-field='_checkbox'>"
+            //html += " <div class='th-inner '><label><input name='btSelectAll' type='checkbox'><span></span></label></div><div class='fht-cell' style='width: 35px; '></div></th>";
+            //html += " <th style='' data-field='No'><div class='th-inner '>编号</div><div class='fht-cell' style='width: 551px; '></div></th>";
+            //html += " <th style='' data-field='No'><div class='th-inner '>名称</div><div class='fht-cell' style='width: 386px; '></div></th>";
+            //html += " </tr>";
+            //html += "<ul>";
             for (var i = 0; i < Emps.length; i++) {
                 en = Emps[i];
-               
+
                 var en = new Entity("BP.Port.Emp", en.No);
-                html += "<a href='#'><li><input onclick=SelectEmp('" + (en.No) + "') id='" + en.No + "' type='checkbox'>&nbsp&nbsp" + en.Name + "</li></a>";
+                //html += "<a href='#'><li>&nbsp&nbsp" + en.Name + "</li></a>";
+                html += "<tr data-index='" + i + "' data-uniqueid='" + en.No + "'>"
+                html += "<td class='bs-checkbox ' ><input onclick=SelectEmp('" + en.No + "') id='" + en.No + "' type='checkbox'></td>";
+                html += "<td>" + en.No + "</td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "</tr>"
+
             }
 
-            html += "</ul>"
-            $("#stationsEmpList").append(html);
+            // html += "</ul>"
+            $("#stationsEmpList").append(html)
         }
         function SelectEmp(EmpNo) {
-           var en = new Entity("BP.Port.Emp", EmpNo);
+           
+            var en = new Entity("BP.Port.Emp", EmpNo);
             if (document.getElementById(EmpNo).checked) {
                 var html = "";
-                html += "<ul>";
-                html += "<li id='" + en.Name + "'>" + en.Name + "</li>";
-                html += "</ul>"
+                
+                html += "<tr data-uniqueid='" + en.No + "'>"
+                html += "<td class='bs-checkbox ' >" + en.No + "</td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "<td>X</td>";
+                html += "</tr>"
+               ;
                 $("#selectEmpList").append(html);
             }
             else {
@@ -103,8 +120,68 @@
 
 </head>
 <body>
+    <div class="container-fluid">
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <h4 class="text-center" id="title">选择人员</h4>
+                    </div>
+                    <div class="col-md-9 col-sm-9">
+                        <div class="pull-center search search-margin">
+                            <input class="form-control" type="text" placeholder="" id="TB_Key">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <!--左列-->
+        <div class="row row-margin-top">
+            <div class="col-md-4 col-sm-4" style="height:500px">
+                <div id="stationsList" style="overflow-y:auto;height:100%">
+                    <ul class="list-group">
+                    </ul>
+                </div>
+            </div>
 
-    <a onclick=""></a>
+            <div class="col-md-8 col-sm-8">
+                <div class="row" style="height:300px;">
+                    <div class="col-md-12">
+                        <table style="width: 976px;" class="table table-bordered table-hover" id="stationsEmpList">
+                            <tr>
+                                <th class="bs-checkbox " style="width: 36px; " data-field="_checkbox">
+                                    <div class="th-inner "><label><input name="btSelectAll" type="checkbox"><span></span></label></div><div class="fht-cell" style="width: 35px;"></div>
+                                </th>
+                                <th style="" data-field="No"><div class="th-inner ">编号</div><div class="fht-cell" style="width: 551px;"></div></th>
+                                <th style="" data-field="Name"><div class="th-inner ">名称</div><div class="fht-cell" style="width: 386px;"></div></th>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                </div>
+                <div class="row row-margin-top">
+                    <div class="col-md-12">
+                        <table  id="selectEmpList"style="width: 976px;" class="table table-bordered table-hover">
+                            
+                                <tr>
+                                    <th style="" data-field="No">
+                                        <div class="th-inner ">编号</div><div class="fht-cell" style="width: 456px;"></div>
+                                    </th>
+                                    <th style="" data-field="Name"><div class="th-inner ">名称</div><div class="fht-cell" style="width: 293px;"></div></th>
+                                    <th style="" data-field="2"><div class="th-inner ">操作</div><div class="fht-cell" style="width: 223px;"></div></th>
+                                </tr>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<a onclick=""></a>
     <table class="table table-bordered" style="border:1px; border-color:black ">
         <tr>
             <td>(@)按岗位 ()<a onclick="GotoUrl()" href="#">按用户组</a> </td>
@@ -121,7 +198,7 @@
 
         </tr>
 
-    </table>
+    </table>-->
 
 </body>
 </html>

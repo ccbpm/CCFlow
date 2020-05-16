@@ -58,6 +58,7 @@ namespace BP.WF.HttpHandler
                 string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
                 if (Directory.Exists(filePath) == false)
                     Directory.CreateDirectory(filePath);
+
                 filePath = filePath + this.FK_MapData + ".htm";
                 //写入到html 中
                 BP.DA.DataType.WriteFile(filePath, htmlCode);

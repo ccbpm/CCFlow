@@ -174,9 +174,9 @@ namespace BP.WF.HttpHandler
         {
             //构造返回数据.
             DataTable dtInfo = new DataTable();
-            dtInfo.Columns.Add("Name");
-            dtInfo.Columns.Add("Info");
-            dtInfo.Columns.Add("Result");
+            dtInfo.Columns.Add("Name");   //文件名.
+            dtInfo.Columns.Add("Info");   //导入信息。
+            dtInfo.Columns.Add("Result"); //执行结果.
 
             //获得下载的文件名.
             string fls = this.GetRequestVal("Files");
@@ -238,58 +238,98 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Form_Imp()
         {
-            string Msg = "";
+            //构造返回数据.
+            DataTable dtInfo = new DataTable();
+            dtInfo.Columns.Add("Name");   //文件名.
+            dtInfo.Columns.Add("Info");   //导入信息.
+            dtInfo.Columns.Add("Result"); //执行结果.
+
+            //获得变量.
             string fls = this.GetRequestVal("Files");
             string[] strs = fls.Split(';');
             string sortNo = GetRequestVal("SortNo");
             string dirName = GetRequestVal("DirName");
+            if (DataType.IsNullOrEmpty(dirName) == true)
+                dirName = "/";
 
             FtpClient conn = this.GenerFTPConn;
             string remotePath = conn.GetWorkingDirectory() + dirName;
 
+            ///遍历选择的文件.
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+
+                //下载目录下
+                FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+                if (fs.ToString().Equals("Success") == false)
+                {
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = "文件下载失败.";
+                    dr[2] = "导入失败";
+                    dtInfo.Rows.Add(dr);
+                    continue;
+                }
+
+                //读取文件.
+                DataSet ds = new DataSet();
+                ds.ReadXml(tempfile);
+
+                if (ds.Tables.Contains("Sys_MapData") == false)
+                {
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = "模版不存在Sys_MapData表.";
+                    dr[2] = "导入失败";
+                    dtInfo.Rows.Add(dr);
+                    continue;
+                }
+
+                //获得模版里的编号，检查是否存在.
+                string no = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
+                MapData md = new MapData();
+                md.No = no;
+                if (md.RetrieveFromDBSources() == 1)
+                {
+                    md.No = no + "" + WebUser.OrgNo;
+                    ds.Tables["Sys_MapData"].Rows[0]["No"] = md.No;
+                    if (md.RetrieveFromDBSources() == 1)
+                    {
+                        DataRow dr = dtInfo.NewRow();
+                        dr[0] = str;
+                        dr[1] = "模版编号为:" + no + "，已经存在.";
+                        dr[2] = "导入失败";
+                        dtInfo.Rows.Add(dr);
+                        continue;
+                    }
+                }
+
                 try
                 {
-                    //下载目录下
-                    FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + str, FtpLocalExists.Overwrite);
-                    if (fs.ToString() == "Success")
-                    {
-                        //执行导入
-                        DataSet ds = new DataSet();
-                        ds.ReadXml(tempfile);
-                        try
-                        {
-                            //执行装载.
-                            MapData.ImpMapData(ds);
-                            if (this.FK_Node != 0)
-                            {
-                                Node nd = new Node(this.FK_Node);
-                                nd.RepareMap(nd.HisFlow);
-                            }
-                            Msg = "导入完毕";
-                        }
-                        catch
-                        {
-                            Msg = "导入失败";
-                        }
-                    }
-                    else
-                    {
-                        return "模板下载未成功";
-                    }
+                    //执行装载.
+                    MapData.ImpMapData(ds);
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = "执行成功:新流程编号:" + md.No + " - " + md.Name;
+                    dr[2] = "导入成功";
+                    dtInfo.Rows.Add(dr);
                 }
                 catch (Exception ex)
                 {
-                    return "模板下载未成功-" + ex.Message;
+                    DataRow dr = dtInfo.NewRow();
+                    dr[0] = str;
+                    dr[1] = ex.Message;
+                    dr[2] = "导入失败";
+                    dtInfo.Rows.Add(dr);
+                    continue;
                 }
             }
-
-            return Msg;
+            //返回执行结果.
+            return BP.Tools.Json.ToJson(dtInfo);
         }
         #endregion 界面方法.
 

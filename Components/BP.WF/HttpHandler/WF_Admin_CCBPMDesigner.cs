@@ -203,24 +203,21 @@ namespace BP.WF.HttpHandler
             string docs = DataType.ReadTextFile(fileXml);
             return docs;
         }
+        /// <summary>
+        /// 返回临时文件.
+        /// </summary>
+        /// <returns></returns>
         public string DownFormTemplete()
         {
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(this.FK_MapData);
+
             string file = BP.Sys.SystemConfig.PathOfTemp + this.FK_MapData + ".xml";
             ds.WriteXml(file);
             string docs = DataType.ReadTextFile(file);
             return docs;
 
-            //DataTable dt = new DataTable();
-            //dt.Columns.Add("FileName");
-            //dt.Columns.Add("FileType");
-            //dt.Columns.Add("FlieContent");
-            //DataRow dr = dt.NewRow();
-            //dr["FileName"] = md.Name+".xml";
-            //dr["FileType"] = "xml";
-            //dr["FlieContent"] = docs;
-            //dt.Rows.Add(dr);
-            //return BP.Tools.Json.ToJson(dt);
+            //return file;
+            //return docs;
         }
 
         #region 执行父类的重写方法.

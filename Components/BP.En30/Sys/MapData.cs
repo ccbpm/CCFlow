@@ -317,6 +317,7 @@ namespace BP.Sys
     /// </summary>
     public class MapData : EntityNoName
     {
+
         #region entity 相关属性(参数属性)
         /// <summary>
         /// 属性ens
@@ -333,7 +334,6 @@ namespace BP.Sys
             }
         }
         #endregion entity 相关操作.
-
 
         #region weboffice文档属性(参数属性)
         /// <summary>

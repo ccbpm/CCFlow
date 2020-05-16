@@ -322,7 +322,6 @@ namespace BP.DA
                     string sql = "ALTER TABLE " + tableName + " ADD " + saveToFileField + " text ";
                     BP.DA.DBAccess.RunSQL(sql);
 
-
                     //在执行一遍.
                     DBAccess.RunSQL(ps);
                     return;

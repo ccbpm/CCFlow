@@ -205,7 +205,7 @@ namespace BP.WF.Port.Admin2
                 fls.Retrieve(BP.WF.Template.FlowAttr.FK_FlowSort, en.No);
 
                 if (fls.Count != 0)
-                    return "err@在流程目录："+en.Name+"有["+fls.Count+"]个流程没有删除。";
+                    return "err@在流程目录：" + en.Name + "有[" + fls.Count + "]个流程没有删除。";
             }
 
             //表单类别.
@@ -325,7 +325,7 @@ namespace BP.WF.Port.Admin2
 
                 //创建下一级目录.
                 BP.WF.Template.FlowSort en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
-               
+
                 en.Name = "发文流程";
                 en.OrgNo = this.No;
                 en.Domain = "FaWen";
@@ -337,7 +337,7 @@ namespace BP.WF.Port.Admin2
                 en.Domain = "ShouWen";
                 en.DirectUpdate();
 
-               
+
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "业务流程";

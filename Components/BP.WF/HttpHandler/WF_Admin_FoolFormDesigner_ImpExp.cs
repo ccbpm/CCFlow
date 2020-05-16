@@ -15,13 +15,24 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_FoolFormDesigner_ImpExp : BP.WF.HttpHandler.DirectoryPageBase
     {
 
-
         /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_FoolFormDesigner_ImpExp()
         {
         }
+
+        #region 导出.
+        /// <summary>
+        /// @sly 下载
+        /// </summary>
+        /// <returns></returns>
+        public string Exp_DownFormTemplete()
+        {
+            BP.WF.HttpHandler.WF_Admin_CCBPMDesigner en = new WF_Admin_CCBPMDesigner();
+            return en.DownFormTemplete();
+        }
+        #endregion
 
         #region 导入
         /// <summary>
@@ -119,7 +130,8 @@ namespace BP.WF.HttpHandler
             //加入系统表.
             return BP.Tools.Json.ToJson(ds);
         }
-        
+        #endregion 如果是单据.
+
         /// <summary>
         /// 从本机装载表单模版
         /// </summary>
@@ -165,7 +177,6 @@ namespace BP.WF.HttpHandler
                     bill.Update();
                     bill.CheckEnityTypeAttrsFor_Bill();
                 }
-                #endregion 如果是单据.
 
                 #region 如果是实体 EnityNoName .
                 if (mymd.HisEntityType == (int)EntityType.FrmDict)
@@ -338,12 +349,13 @@ namespace BP.WF.HttpHandler
                 }
                 BP.Sys.SystemConfig.DoClearCash();
                 return "执行成功.";
+                #endregion
+
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
-
         }
 
         #region 04.从外部数据源导入
@@ -508,7 +520,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #endregion
 
     }
 }

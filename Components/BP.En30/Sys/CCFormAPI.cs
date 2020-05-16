@@ -1359,6 +1359,11 @@ namespace BP.Sys
 
             return ds;
         }
+        /// <summary>
+        /// 获得表单字段信息字段.
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
         {
 
@@ -1374,6 +1379,16 @@ namespace BP.Sys
 
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
+
+            //如果是开发者表单, 就把html信息放入到字段.
+            if (md.HisFrmType== FrmType.Develop)
+            {
+                Sys_MapData.Columns.Add("HtmlTemplateFile", typeof(string));
+                string text = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                Sys_MapData.Rows[0]["HtmlTemplateFile"] = text;
+            }
+
+
             ds.Tables.Add(Sys_MapData);
 
             //加入分组表.

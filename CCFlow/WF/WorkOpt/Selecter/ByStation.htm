@@ -29,7 +29,7 @@
         }
     </style>
     <script type="text/javascript">
-
+        //初始化人员
         $(function () {
             var tps = new Entities("BP.Port.StationTypes");
             tps.RetrieveAll();
@@ -64,8 +64,9 @@
 
         //显示人员.
         function ShowEmp(StationNo) {
-
-            $("#stationsEmpList").html("");
+            //加载时清空人员列表
+            $(".emplist").remove();
+            //后台加载当前选中部门的人员列表
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
             handler.AddPara("StaNo", StationNo);
             var data = handler.DoMethodReturnString("ByStation_ShowEmps");
@@ -77,40 +78,42 @@
             //html += " <th style='' data-field='No'><div class='th-inner '>编号</div><div class='fht-cell' style='width: 551px; '></div></th>";
             //html += " <th style='' data-field='No'><div class='th-inner '>名称</div><div class='fht-cell' style='width: 386px; '></div></th>";
             //html += " </tr>";
-            //html += "<ul>";
             for (var i = 0; i < Emps.length; i++) {
                 en = Emps[i];
 
                 var en = new Entity("BP.Port.Emp", en.No);
                 //html += "<a href='#'><li>&nbsp&nbsp" + en.Name + "</li></a>";
-                html += "<tr data-index='" + i + "' data-uniqueid='" + en.No + "'>"
-                html += "<td class='bs-checkbox ' ><input onclick=SelectEmp('" + en.No + "') id='" + en.No + "' type='checkbox'></td>";
+                html += "<tr class='emplist' data-index='" + i + "' data-uniqueid='" + en.No + "' >"
+                html += "<td class='bs-checkbox ' ><input onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "</tr>"
-
+                html += "</tr>";
             }
-
-            // html += "</ul>"
             $("#stationsEmpList").append(html)
         }
+        //选择人员
         function SelectEmp(EmpNo) {
-           
+           //根据人员编号添加
             var en = new Entity("BP.Port.Emp", EmpNo);
-            if (document.getElementById(EmpNo).checked) {
+            if (document.getElementById(en.Name).checked) {
                 var html = "";
-                
-                html += "<tr data-uniqueid='" + en.No + "'>"
+
+                html += "<tr id='" + en.No + "' data-uniqueid='" + en.No + "'>"
                 html += "<td class='bs-checkbox ' >" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "<td>X</td>";
+                html += "<td><a class='newBtn btn-danger' href='#' onclick=removeRecord('" + en.No + "','" + en.Name + "')>X</a></td>";
                 html += "</tr>"
                ;
                 $("#selectEmpList").append(html);
             }
-            else {
-                document.getElementById(en.Name).remove();
+            else { 
+                document.getElementById(en.No).remove();
             }
+        }
+        //删除按钮
+        function removeRecord(No, Name) {
+            document.getElementById(Name).checked = false;
+            document.getElementById(No).remove();
         }
         function GotoUrl() {
             var url = "ByTeam.htm?WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode");

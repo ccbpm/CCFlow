@@ -314,7 +314,7 @@ namespace BP.WF.HttpHandler
                     MapData.ImpMapData(md.No,ds);
                     DataRow dr = dtInfo.NewRow();
                     dr[0] = str;
-                    dr[1] = "执行成功:新流程编号:" + md.No + " - " + md.Name;
+                    dr[1] = "执行成功:新模板编号:" + md.No + " -名称 " + md.Name;
                     dr[2] = "导入成功";
                     dtInfo.Rows.Add(dr);
                 }

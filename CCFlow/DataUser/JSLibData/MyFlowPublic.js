@@ -6,10 +6,9 @@
 //为广西计算中心增加初始化引用js文件
 $(function () {
   
-    jQuery.getScript("/WF/ntko_demo/officecontrol/ntkobackground.min.js").done(function () {
-       
-    }
-    );
+    
+
+    
 });
 //外发公文.
 function WaiFa() {

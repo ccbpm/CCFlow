@@ -10,5 +10,6 @@ var Hide_HastenWork = true; //在途是否显示催办按钮:true 显示
 var Hide_IsTodoList = true; //待办列表中是否显示查看授权:true 显示
 var UserICon = "@basePath/DataUser/Siganture/"; //默认的用户签名地址
 var UserIConExt = ".jpg";
+var IsShowDevelopFieldLab = false; //开发者表单设计器设计插入字段时增加的文本
 
 

@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程抄送列表</title>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../WF/Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var orgs = null;
+        $(function () {
+
+            var handler = new HttpHandler("BP.DOC.App_Page");
+            handler.AddUrlData();
+            orgs = handler.DoMethodReturnJSON("WaiFa_Init");
+          
+
+            var row = "";
+            for (var i = 0; i < orgs.length; i++) {
+                var org = orgs[i];
+                row += "<tr>";
+                row += "<td>" + i + "</td>";
+                if (org.AdminerName.indexOf('err@') == 0)
+                   
+                    row += "<td><label><input onclick=\"this.value=(this.value==0)?1:0\" type=checkbox disabled=true value=0  id='CB_" + org.No + "' name='CB_" + org.No +"'/>" + org.Name + "</label></td>";
+                else
+                    row += "<td><label><input onclick=\"this.value=(this.value==0)?1:0\" type=checkbox value=0 id='CB_" + org.No + "' name='CB_" + org.No +"' />" + org.No + " - " + org.Name + "</label></td>";
+
+                row += "<td><input type=hidden value='" + org.AdminerName + "' id='TB_" + org.No + "' name='TB_" + org.No +"'/>" + org.AdminerName + "</td>";
+                row += "</tr>";
+            }
+            $("#Rows").html(row);
+            return;
+        });
+        //checkbox全部选中disbaled等于fasle的方法
+          function CheckAll(checked)
+            {
+              var checks = $(":checkbox");            
+             
+             for (var i = 0; i < checks.length; i++)
+              {
+                 if (checks[i].disabled == false) {                 
+
+                     checks[i].checked = checked;//设置为选中状态
+                     checks[i].value =1;//将value值改为1;
+              }
+               
+
+                }
+              
+        };
+
+        //执行外发.
+        function Send() {            
+           
+            var handler = new HttpHandler("BP.DOC.App_Page");
+            handler.AddUrlData();
+            handler.AddFormData();
+           
+            var data = handler.DoMethodReturnString("WaiFa_Send");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+            window.close();
+        }
+    </script>
+</head>
+<body class="gray-bg">
+    <form id="frm">
+       
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox-content">
+                <table id="Table1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                <label>  <input type=checkbox onclick="CheckAll(this.checked);"  />(全选) 要外发的单位.</label>
+
+                                <input type="button" value="执行外发" onclick="Send();" />
+                            </th>
+                            <th>
+                                收文秘书
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="Rows"></tbody>
+                </table>
+
+            </div>
+        </div>
+    </form>
+</body>
+</html>

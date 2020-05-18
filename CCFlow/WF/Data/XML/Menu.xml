@@ -4,8 +4,8 @@
   <Item No="01"  Name="组织结构" Img="/Images/Btn/Help.gif"  Url="">
     <!--<Item No="0101"  Name="部门类型" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.DeptTypes"  Img="/Images/Btn/Card.gif"  />-->
     
-    <Item No="0102"  Name="岗位类型" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.StationTypes"  Img="/Images/Btn/Card.gif"  />
-    <Item No="0103"  Name="岗位" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.Stations"  Img="/Images/Btn/Station.gif"  />
+    <Item No="0102"  Name="岗位类型" Url="/WF/Comm/Search.htm?EnsName=BP.Port.StationTypes"  Img="/Images/Btn/Card.gif"  />
+    <Item No="0103"  Name="岗位" Url="/WF/Comm/Search.htm?EnsName=BP.Port.Stations"  Img="/Images/Btn/Station.gif"  />
     <Item No="0104"  Name="职务维护" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.Dutys"  Img="/Images/Btn/User.gif"  />
     <Item No="0105"  Name="组织结构" Url="/GPM/OrganizationalStructure.aspx?EnsName=BP.Port.Depts"  Img="/GPM/Images/Menu/sitemap.png"  />
     <Item No="0106"  Name="功能执行"  Url="/WF/Comm/MethodLink.htm" Img="/Images/Btn/Do.gif"  />

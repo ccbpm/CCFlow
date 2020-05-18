@@ -1,11 +1,14 @@
 ﻿
 var isSigantureChecked = false;
+var IsLoadUEditor = false;
 function GenerFreeFrm(mapData, frmData) {
 
     //循环FrmRB
     for (var i in frmData.Sys_FrmRB) {
-        var frmLab = frmData.Sys_FrmRB[i];
-        var label = figure_Template_Rb(frmLab);
+        var frmRB = frmData.Sys_FrmRB[i];
+        if (frmRB.AtPara.indexOf("@MyDataType=4") != -1)
+            continue;
+        var label = figure_Template_Rb(frmRB);
         $('#CCForm').append(label);
     }
 
@@ -187,7 +190,7 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
 
     if (node == null || frmNode == null)
         return $('');
-    if (node.FormType == 5 && frmNode.IsEnableFWC != 1)
+    if (node.FormType == 5 && frmNode.IsEnableFWC ==0)
         return $('');
 
     var pos = PreaseFlowCtrls(mapData.FlowCtrls, "FrmCheck");
@@ -217,41 +220,14 @@ function figure_Template_FigureFrmCheck(wf_node, mapData, frmData) {
     if (w <= 10)
         w = 300;
 
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "../WorkOpt/WorkCheck.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    else
-        src = "../WorkOpt/WorkCheck2019.htm?s=2&IsReadonly=" + GetQueryString("IsReadonly");
-    var fwcOnload = "";
-    var paras = '';
-
-    var isReadonly = GetQueryString('IsReadonly');
-    if (isReadonly != "1") {
-        isReadonly = "0";
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
     }
-    if (sta == 2)//只读
-        isReadonly = "1";
 
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&WorkID=" + pageData["OID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-
-    //  paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        // src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
-
-    eleHtml = $(eleHtml);
+    var eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y + 'px').css('left', x + 'px').css('width', w + 'px').css('height', h + 'px');
     return eleHtml;
 }
@@ -284,16 +260,12 @@ function PreaseFlowCtrls(flowCtrls, ctrlID) {
         });
 
         return jsonObj;
-
-        //alert(jsonObj + " -> " + JSON.stringify(jsonObj));
-
     }
 }
 
 //子线程
 function figure_Template_FigureThreadDtl(wf_node, mapData) {
 
-    //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
     var sta = wf_node.FrmThreadSta;
     if (sta == 0 || sta == '0' || sta == undefined)
         return $('');
@@ -355,7 +327,7 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
-    if (sta == 2)//只读
+    if (sta == 2 || pageData.IsReadonly == 1)//只读
     {
         src += "&DoType=View";
     }
@@ -424,9 +396,9 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
 
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe ID='Dtl_" + frmDtl.No + "' src='" + src +
-                 "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='atuo' /></iframe>");
+    eleIframe = $("<iframe name='Dtl' ID='Dtl_" + frmDtl.No + "' src='" + src +
+        "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
+        "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='atuo' /></iframe>");
     if (pageData.IsReadonly) {
 
     } else {
@@ -525,9 +497,6 @@ function figure_Template_IFrame(fram) {
                 strs += "&" + str + "=" + paras[str];
         }
 
-
-
-
         url = url + strs + "&IsReadonly=0";
 
         //4.追加GenerWorkFlow AtPara中的参数
@@ -548,8 +517,8 @@ function figure_Template_IFrame(fram) {
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + url +
-	                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
-	                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+        "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
+        "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
     eleHtml.append(eleIframe);
 
@@ -624,7 +593,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     /***************** 外部数据源 *****************************/
     if (mapAttr.LGType != 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select style='padding:0px;' class='form-control' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        eleHtml = "<select style='padding:0px;' class='form-control " + mapAttr.CSS + "' data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         return eleHtml;
     }
 
@@ -743,7 +712,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return eleHtml;
             }
 
-            eleHtml += "<input style='display:inline' class='form-control' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            var type = " type='text' ";
+            if (mapAttr.IsSecret)
+                type = " type='password' ";
+
+            eleHtml += "<input style='display:inline' class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "'" + type+" placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }
@@ -756,10 +729,19 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             if (mapAttr.UIIsEnable == "0") {
                 //只读状态直接 div 展示富文本内容
                 //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                eleHtml = "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                eleHtml = "<div class='richText " + mapAttr.CSS + "' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                 return eleHtml;
             }
+            if (IsLoadUEditor == false) {
+                //加载UEditor需要的JS
+                $("<link href='../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css' type = 'text/css' rel = 'stylesheet' />").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/third-party/template.min.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.config.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/umeditor.min.js'></script>").appendTo("head");
+                $("<script type='text/javascript' src='../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js'></script>").appendTo("head");
+                IsLoadUEditor = true;
 
+            }
             document.BindEditorMapAttr = mapAttr; //存到全局备用
 
             //设置编辑器的默认样式
@@ -772,7 +754,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         }
 
         //多行文本模式.
-        eleHtml = "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+        eleHtml = "<textarea class='" + mapAttr.CSS + " form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
         return eleHtml;
     }
 
@@ -784,7 +766,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        eleHtml = "<input class='form-control Wdate' type='text' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
+        eleHtml = "<input class='form-control Wdate " + mapAttr.CSS + "' type='text' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
         return eleHtml;
     }
 
@@ -796,16 +778,14 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        eleHtml = "<input  class='form-control Wdate' type='text' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        eleHtml = "<input  class='form-control Wdate " + mapAttr.CSS + "' type='text' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     //checkbox 类型.
     if (mapAttr.MyDataType == 4) { // AppBoolean = 7
-
-
-        eleHtml += "<div class='checkbox' ><label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' name='CB_" + mapAttr.KeyOfEn + "'/>";
-        eleHtml += mapAttr.Name + '</label></div>';
+        eleHtml += "<label style='width:100%;' > <input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' name='CB_" + mapAttr.KeyOfEn + "'/>";
+        eleHtml += mapAttr.Name + '</label>';
         return eleHtml;
     }
 
@@ -813,7 +793,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框
-            eleHtml += "<select style='padding:0px;'  class='form-control'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            eleHtml += "<select style='padding:0px;'  class='form-control " + mapAttr.CSS + "'  data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         }
         return eleHtml;
     }
@@ -826,14 +806,21 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input class='form-control' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value));limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value));limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type+" id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
 
-        eleHtml += "<input class='form-control' style='text-align:right;' onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;' onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -847,7 +834,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         else
             bit = 2;
 
-        eleHtml += "<input class='form-control ' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); limitLength(this," + bit + ");FormatMoney(this, " + bit + ", ',');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input class='form-control " + mapAttr.CSS + "' style='text-align:right;'   onblur='valitationAfter(this, \"money\")' onkeydown='valitationBefore(this, \"money\")' onkeyup=" + '"' + "valitationAfter(this, 'money'); limitLength(this," + bit + ");FormatMoney(this, " + bit + ", ',');" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -970,7 +961,7 @@ function figure_Template_Rb(frmRb) {
     var childLabEle = $('<label class="labRb"></label>');
     childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
-    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
+    childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + "_" + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
     //    if (frmRb.UIIsEnable == false)
     //        childRbEle.attr('disabled', 'disabled');
 
@@ -987,7 +978,7 @@ function figure_Template_Rb(frmRb) {
 //初始化超链接
 function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
-    var url = frmLin.URL;
+    var url = frmLin.URLExt;
     $.each(frmData.Sys_MapAttr, function (i, obj) {
         if (url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换
@@ -1067,7 +1058,7 @@ function figure_Template_Image(frmImage) {
         }
 
         eleHtml.attr("id", frmImage.MyPK);
-        eleHtml.css('position', 'absolute').css('top', frmImage.Y + 'px').css('left', frmImage.X + 'px').css('width', frmImage.W).css('height', frmImage.H); ;
+        eleHtml.css('position', 'absolute').css('top', frmImage.Y + 'px').css('left', frmImage.X + 'px').css('width', frmImage.W).css('height', frmImage.H);;
     } else if (frmImage.ImgAppType == 3)//二维码  手机
     {
 
@@ -1175,9 +1166,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
 
     if (pageData.IsReadonly == "1")
-        src = src + "?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = src + "?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     else
-        src = src + "?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = src + "?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
 
     var fid = GetQueryString("FID");
     var pWorkID = GetQueryString("PWorkID");
@@ -1185,28 +1176,47 @@ function figure_Template_Attachment(frmAttachment) {
     src += "&FID=" + fid;
     src += "&PWorkID=" + pWorkID;
 
-    eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "' name='Attach'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', ath.Y + 'px').css('left', ath.X + 'px').css('width', ath.W).css('height', ath.H);
 
     return eleHtml;
 }
 
+// function connector_Template_Line(frmLine) {
+//     var eleHtml = '';
+//     eleHtml = '<table><tr><td></td></tr></table>';
+//     eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1 + 'px').css('left', frmLine.X1 + 'px');
+//     eleHtml.find('td').css('padding', '0px')
+//     if (navigator.userAgent.indexOf('Firefox') >= 0) {
+//         eleHtml.find('td').css('padding', '0px')
+//             .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
+//             .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
+//             .css("background", frmLine.BorderColor);
+//     } else {
+//         eleHtml.find('td').css('padding', '0px')
+//             .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
+//             .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
+//             .css("background", frmLine.BorderColor);
+//     }
+
+//     return eleHtml;
+// }
 function connector_Template_Line(frmLine) {
-    var eleHtml = '';
-    eleHtml = '<table><tr><td></td></tr></table>';
-    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1 + 'px').css('left', frmLine.X1 + 'px');
-    eleHtml.find('td').css('padding', '0px')
+    var eleHtml = '';    
+    //姜玲 20191219 解决画1个像素宽度问题   
+    eleHtml = '<div><div>';
+    eleHtml = $(eleHtml).css('position', 'absolute').css('top', frmLine.Y1).css('left', frmLine.X1);
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
-        eleHtml.find('td').css('padding', '0px')
+        eleHtml.css('padding', '0px')
         .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 1 : Math.abs(frmLine.X1 - frmLine.X2))
-    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2 : Math.abs(frmLine.Y1 - frmLine.Y2))
+    .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 2: Math.abs(frmLine.Y1 - frmLine.Y2))
         .css("background", frmLine.BorderColor);
     } else {
-        eleHtml.find('td').css('padding', '0px')
-        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0 : Math.abs(frmLine.X1 - frmLine.X2))
+        eleHtml.css('padding', '0px')
+        .css('width', Math.abs(frmLine.X1 - frmLine.X2) == 0 ? 0.5 : Math.abs(frmLine.X1 - frmLine.X2))
     .css('height', Math.abs(frmLine.Y1 - frmLine.Y2) == 0 ? 1 : Math.abs(frmLine.Y1 - frmLine.Y2))
-        .css("background", frmLine.BorderColor);
+        .css("background", frmLine.BorderColor).css("border-color",frmLine.BorderColor == 'Black'?"":frmLine.BorderColor);
     }
 
     return eleHtml;

@@ -117,6 +117,7 @@
     function executeSql(sql, valueField, textField, key) {
         var datas = [];
         if (sql && $.trim(key) != "") {
+            key = key.replace("'", "");
             var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
             var dt = DBAccess.RunSQLReturnTable(_sql);
             if ($.isArray(dt)) {
@@ -164,7 +165,7 @@
         html += '<div class="col-xs-10 main-container">';
         html += '<label>' + opts.label + '</label>';
         html += '<div class="ccflow-input-span-container">';
-        html += '<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '">';
+        html += '<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '" id="MultipleChoiceSearch">';
         html += '</div>';
         html += '<div class="ccflow-block">';
         html += '<ul class="ccflow-ul">';
@@ -192,6 +193,12 @@
             setTimeout(function () {
                 animateUp(container, block);
             }, 200);
+        });
+
+        //点击任意地方隐藏下拉
+        $(document).click(function (event) {
+            if (document.activeElement.id != "MultipleChoiceSearch")
+                animateUp(container, block);
         });
 
         function addDictionary(datas, callback) {
@@ -228,7 +235,7 @@
             var text = search.val();
             var datas = [];
             var src = opts.dbSrc;
-            
+            text = text.replace("'", "");
             //增加数据源的访问.
             src = src.replace(/@Key/g, text).replace(/~/g, "'");
             var dt = DBAccess.RunDBSrc(src);

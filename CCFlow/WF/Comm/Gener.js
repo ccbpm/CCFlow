@@ -1,4 +1,6 @@
-﻿//检查字段,从表名,附件ID,输入是否合法.
+﻿
+
+//检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
     //首位可以是字母以及下划线。 
     //首位之后可以是字母，数字以及下划线。下划线后不能接下划线
@@ -7,7 +9,6 @@ function CheckID(val) {
     var reg = /(^_([a-zA-Z0-9]_?)*$)|(^[a-zA-Z](_?[a-zA-Z0-9])*_?$)/;
 
     flag = reg.test(val);
-
     return flag;
 }
 
@@ -22,15 +23,6 @@ function rtrim(s) {
 //去左右空格;
 function trim(s) {
     return s.replace(/(^\s*)|(\s*$)/g, "");
-}
-
-//
-if (plant == "CCFlow") {
-    // CCFlow
-    dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-} else {
-    // JFlow
-    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
 }
 
 
@@ -100,15 +92,15 @@ function DearUrlParas(urlParam) {
                     var key = param[0];
                     var value = param[1];
 
-                    if (key == "DoType")
+                    if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
                         return true;
 
                     if (value == "null" || typeof value == "undefined")
                         return true;
 
                     if (value != null && typeof value != "undefined"
-                            && value != "null"
-                            && value != "undefined") {
+                        && value != "null"
+                        && value != "undefined") {
 
                         //  value = value.trim();
 
@@ -167,6 +159,25 @@ function GenerCheckIDs() {
     return checkBoxIDs;
 }
 
+function GenerCheckNames() {
+
+    var checkBoxIDs = "";
+    var arrObj = document.all;
+
+    for (var i = 0; i < arrObj.length; i++) {
+
+        if (arrObj[i].type != 'checkbox')
+            continue;
+
+        var cid = arrObj[i].name;
+        if (cid == null || cid == "" || cid == '')
+            continue;
+        if (checkBoxIDs.indexOf(arrObj[i].name) == -1)
+            checkBoxIDs += arrObj[i].name + ',';
+    }
+    return checkBoxIDs;
+}
+
 //填充下拉框.
 function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, filterVal1) {
 
@@ -207,10 +218,15 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
                 continue;
         }
 
+        // var no = json[i][noCol].toString();
+        //   var no = json[i][nameCol].toString();
+
+
         if (json[i][noCol] == undefined)
             $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
         else
             $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
+
     }
 
     //设置选中的值.
@@ -231,7 +247,8 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
 
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
 
     $.ajax({
 
@@ -265,7 +282,8 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
 /* 绑定枚举值外键表.*/
 function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
-
+    if (dynamicHandler == "")
+        return;
     $.ajax({
         type: 'post',
         async: true,
@@ -294,7 +312,8 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
 绑定外键表.
 */
 function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
     $.ajax({
         type: 'post',
         async: true,
@@ -322,7 +341,8 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 2, paras 就是向这个sql传递的参数, 比如： @FK_Mapdata=BAC@KeyOfEn=MyFild  .
 */
 function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
-
+    if (dynamicHandler == "")
+        return;
     if (colNo == null)
         colNo = "NO";
     if (colName == null)
@@ -522,7 +542,6 @@ function GenerFullAllDivVal(data) {
         var val = json[attr]; //值
 
         var div = document.getElementById(attr);
-
         if (div != null) {
             div.innerHTML = val;
             continue;
@@ -694,7 +713,8 @@ function To(url) {
 }
 
 function WinOpen(url, winName) {
-    var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+
+    var newWindow = window.open(url, winName, 'width=800,height=550,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
     newWindow.focus();
     return;
 }
@@ -839,6 +859,8 @@ var Entity = (function () {
 
         loadData: function () {
             var self = this;
+            if (dynamicHandler == "")
+                return;
             $.ajax({
                 type: 'post',
                 async: false,
@@ -882,6 +904,9 @@ var Entity = (function () {
         },
 
         Insert: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
 
@@ -889,6 +914,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -926,6 +952,9 @@ var Entity = (function () {
             return result;
         },
         DirectInsert: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
 
@@ -933,6 +962,7 @@ var Entity = (function () {
                 params = getParams1(self);
 
             var result = "";
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -971,9 +1001,13 @@ var Entity = (function () {
         },
 
         Update: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
             var result;
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1004,9 +1038,13 @@ var Entity = (function () {
         },
 
         Save: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams(self);
             var result;
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1035,12 +1073,15 @@ var Entity = (function () {
         },
 
         Delete: function (key1, val1, key2, val2) {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
 
+
             var result;
+
             $.ajax({
                 type: 'post',
                 async: false,
@@ -1070,6 +1111,9 @@ var Entity = (function () {
         },
 
         Retrieve: function () {
+            if (dynamicHandler == "")
+                return;
+
             var self = this;
             var params = getParams1(this);
             var result;
@@ -1100,8 +1144,8 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "Retrieve[" + self.enName + "]:err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(jsonString);
+                    var url = dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params;
+                    ThrowMakeErrInfo("Retrieve-" + self.enName + " pkval=" + pkavl, textStatus, url);
                 }
             });
             return result;
@@ -1183,6 +1227,8 @@ var Entity = (function () {
             return val;
         },
         RetrieveFromDBSources: function () {
+            if (dynamicHandler == "")
+                return;
             var self = this;
             // var params = getParams1(this); //查询的时候不需要把参数传入里面去.
 
@@ -1226,17 +1272,20 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    var url = dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl;
+                    ThrowMakeErrInfo("Entity_RetrieveFromDBSources-" + self.enName + " pkval=" + pkavl, textStatus, url);
 
-                    alert(JSON.stringify(XMLHttpRequest));
-                    result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(result);
+                    //alert(JSON.stringify(XMLHttpRequest));
+                    //result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    //alert(result);
                 }
             });
             return result;
         },
 
         IsExits: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             var result;
 
@@ -1264,26 +1313,29 @@ var Entity = (function () {
                         result = false;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "err@系统发生异常,IsExits, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(result);
+                    ThrowMakeErrInfo("Entity_IsExits-" + self.enName, textStatus);
                 }
             });
             return result;
         },   //一个参数直接传递,  多个参数，参数之间使用 ~隔开， 比如: zhangsna~123~1~山东济南.
         DoMethodReturnString: function (methodName, myparams) {
-
-            var params = {};
+            if (dynamicHandler == "")
+                return;
+            var params = "";
             if (myparams == null || myparams == undefined)
                 myparams = "";
 
-            arguments["paras"] = myparams;
-            /*$.each(arguments, function (i, o) {
-            if (i > 0)
-            params.push(o);
-            });*/
+            $.each(arguments, function (i, o) {
+                if (i != 0)
+                    params += o + "~";
+            });
+            if (params.lastIndexOf("~") == params.length - 1)
+                params = params.substr(0, params.length - 1);
+            arguments["paras"] = params;
 
-            var pkavl = this.GetPKVal();
-            if (pkavl == null || pkavl == "") {
+
+            var pkval = this.GetPKVal();
+            if (pkval == null || pkval == "") {
                 alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
                 return;
             }
@@ -1297,15 +1349,18 @@ var Entity = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkavl + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: arguments,
                 success: function (data) {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(string);
+                    var url = dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime();
+                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus, url);
+
+                    //    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    //  alert(string);
                 }
             });
 
@@ -1571,7 +1626,7 @@ var Entities = (function () {
                 length = args.length;
             }
             for (var i = 1; i < length; i += 3) { //args[i+1]是操作符
-                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2];
+                params += "@" + args[i] + "|" + args[i + 1] + "|" + args[i + 2].replace(/%/g, '[%]');
             }
             if (typeof orderBy !== "undefined") {
                 params += "@OrderBy||" + orderBy;
@@ -1584,7 +1639,8 @@ var Entities = (function () {
     Entities.prototype = {
         constructor: Entities,
         loadData: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
 
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
@@ -1604,6 +1660,11 @@ var Entities = (function () {
                 success: function (data) {
 
                     if (data.indexOf("err@") != -1) {
+                        data = data.replace('err@', '');
+                        data += "\t\n参数信息:";
+                        data += "\t\nDoType=Entities_Init";
+                        data += "\t\EnsName=" + self.ensName;
+                        data += "\t\Paras=" + self.Paras;
                         alert(data);
                         return;
                     }
@@ -1621,12 +1682,14 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    ThrowMakeErrInfo("Entities_Init-" + self.ensName, textStatus);
+
                 }
             });
         },
         deleteIt: function () {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             if (self.ensName == null || self.ensName == "" || self.ensName == "") {
                 alert("在初始化实体期间EnsName没有赋值");
@@ -1651,7 +1714,9 @@ var Entities = (function () {
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_Delte err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_Delte-" + self.ensName, textStatus);
+
                 }
             });
         },
@@ -1665,6 +1730,8 @@ var Entities = (function () {
             this.loadData();
         },
         RetrieveCond: function () {
+            if (dynamicHandler == "")
+                return;
             var args = [""];
             $.each(arguments, function (i, o) {
                 args.push(o);
@@ -1684,7 +1751,8 @@ var Entities = (function () {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                data: { "Paras": self.Paras },
                 dataType: 'html',
                 success: function (data) {
 
@@ -1706,7 +1774,8 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Entities_RetrieveCond err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_RetrieveCond-" + self.ensName, textStatus);
                 }
             });
 
@@ -1721,40 +1790,55 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
-            //            var params = [];
-            //            $.each(arguments, function (i, o) {
-            //                if (i > 0)
-            //                    params.push(o);
-            //            });
+            if (dynamicHandler == "")
+                return;
+            var params = "";
+            $.each(arguments, function (i, o) {
+                if (i != 0)
+                    params += o + "~";
+            });
+
+            params = params.substr(0, params.length - 1);
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                data: arguments,
                 xhrFields: {
                     withCredentials: true
                 },
                 crossDomain: true,
-                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "Entities_DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    alert(string);
+                    ThrowMakeErrInfo("Entities_DoMethodReturnString-" + methodName, textStatus);
                 }
             });
 
             return string;
 
         },
+        GetEns: function () {
+            // { data: [{}, {}, {}], length: 3, name: 'xxx' };
+            var result = [];
+            for (var key in this) {
+                console.log(typeof this[key]);
+                if (typeof this[key] === 'object') {
+                    result.push(this[key]);
+                }
+            }
+            this.data = result;
+            console.log('data', this);
+            return this;
+        },
 
         DoMethodReturnJSON: function (methodName, params) {
 
-            var jsonString = this.DoMethodReturnString(methodName, params);
+            var jsonString = this.DoMethodReturnString(methodName);
 
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
@@ -1772,6 +1856,8 @@ var Entities = (function () {
             return jsonString;
         },
         RetrieveAll: function () {
+            if (dynamicHandler == "")
+                return;
             var pathRe = "";
             if (plant == "JFlow" && (basePath == null || basePath == '')) {
                 var rowUrl = window.document.location.href;
@@ -1807,7 +1893,9 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("RetrieveAll err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+
+                    ThrowMakeErrInfo("Entities_RetrieveAll-", textStatus);
+
                 }
             });
         }
@@ -1845,6 +1933,8 @@ var DBAccess = (function () {
     }
 
     DBAccess.RunSQL = function (sql) {
+        if (dynamicHandler == "")
+            return;
         var count = 0;
         sql = sql.replace(/'/g, '~');
         $.ajax({
@@ -1864,7 +1954,7 @@ var DBAccess = (function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("RunSQL 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                ThrowMakeErrInfo("DBAccess_RunSQL-", textStatus);
             }
         });
 
@@ -1953,7 +2043,8 @@ var DBAccess = (function () {
     };
 
     DBAccess.RunSQLReturnTable = function (sql) {
-        //sql = replaceAll(sql, "~", "'");
+        if (dynamicHandler == "")
+            return;
 
         sql = sql.replace(/~/g, "'");
         sql = sql.replace(/[+]/g, "/#");
@@ -1985,14 +2076,15 @@ var DBAccess = (function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                ThrowMakeErrInfo("DBAccess_RunSQLReturnTable-", textStatus);
             }
         });
         return jsonString;
     };
 
     DBAccess.RunUrlReturnString = function (url) {
-
+        if (dynamicHandler == "")
+            return;
         if (url == null || typeof url === "undefined") {
             alert("err@url无效");
             return;
@@ -2021,8 +2113,10 @@ var DBAccess = (function () {
                 string = data;
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                string = "err系统发生异常, RunUrlReturnString status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState + " \t\nurl:" + url;
-                alert(string);
+
+                alert(url);
+                ThrowMakeErrInfo("HttpHandler-RunUrlCrossReturnString-", textStatus);
+
             }
         });
 
@@ -2059,12 +2153,16 @@ var DBAccess = (function () {
 
 var HttpHandler = (function () {
 
-    var parameters = {};
+    var parameters = new FormData();
 
     var formData;
+    var params="&";
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
+        parameters = new FormData();
+        formData = undefined;
+        params = "&";
     }
 
     function validate(s) {
@@ -2098,8 +2196,14 @@ var HttpHandler = (function () {
             $.each(queryString.split("&"), function (i, o) {
                 var param = o.split("=");
                 if (param.length == 2 && validate(param[1])) {
+
                     (function (key, value) {
+
+                        if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
+                            return;
+
                         self.AddPara(key, value);
+
                     })(param[0], param[1]);
                 }
             });
@@ -2107,6 +2211,9 @@ var HttpHandler = (function () {
         },
 
         AddFormData: function () {
+            if ($("form").length == 0)
+                throw Error('必须是Form表单才可以使用该方法');
+
             formData = $("form").serialize();
             //序列化时把空格转成+，+转义成％２Ｂ，在保存时需要把+转成空格  
             formData = formData.replace(/\+/g, " ");
@@ -2124,44 +2231,76 @@ var HttpHandler = (function () {
                 });
             }
         },
-
+        AddFileData: function () {
+            var files = $("input[type=file]");
+            for (var i = 0; i < files.length; i++) {
+                var fileObj = files[i].files[0]; // js 获取文件对象
+                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                    alert("请选择上传的文件.");
+                    return;
+                }
+                //parameters["file"] = fileObj;
+                parameters.append("file", fileObj)
+            }
+           
+        },
         AddPara: function (key, value) {
-            parameters[key] = value;
+            if (params.indexOf("&" + key + "=")==-1) {
+                parameters.append(key, value);
+                params +=  key + "=" + value+"&";
+            }
+                
         },
 
         AddJson: function (json) {
 
             for (var key in json) {
-                parameters[key] = json[key];
+                this.AddPara(key, json[key]);
             }
         },
 
         Clear: function () {
-            parameters = {};
+            parameters = new FormData();
             formData = undefined;
         },
 
         getParams: function () {
-            var params = [];
-            $.each(parameters, function (key, value) {
+        //    var params = [];
+        //   /* $.each(parameters, function (key, value) {
 
-                if (value.indexOf('<script') != -1)
-                    value = '';
+        //        if (value.indexOf('<script') != -1)
+        //            value = '';
 
-                params.push(key + "=" + value);
+        //        params.push(key + "=" + value);
 
-            });
+        //    });
+        //*/
 
+        //    for (let [name, value] of formData) {
+        //        alert(`${name} = ${value}`); // key1=value1，然后是 key2=value2
+        //        if (value.indexOf('<script') != -1)
+        //            value = '';
+        //        params.push(name + "=" + value);
+        //    }
 
+        //    //for (var key of parameters.keys()) {
+        //    //    var val = formData.get(key);
+        //    //    if (val.indexOf('<script') != -1)
+        //    //        val = '';
+        //    //    params.push(key + "=" + val);
+                
+        //    //}
+           
 
-
-            return params.join("&");
+            return params;
         },
 
         DoMethodReturnString: function (methodName) {
-
+            if (dynamicHandler == "")
+                return;
             var self = this;
             var jsonString;
+
 
             $.ajax({
                 type: 'post',
@@ -2173,16 +2312,17 @@ var HttpHandler = (function () {
                 url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                 data: parameters,
                 dataType: 'html',
+                contentType: false,
+
+                processData: false,
                 success: function (data) {
                     jsonString = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    if (XMLHttpRequest.status == 500)
-                        jsonString = "1. Handler DoMethodReturnString err@系统发生异常. \t\n2.估计是数据库连接错误或者是系统环境问题. \t\n3.技术信息:status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-                    else
-                        jsonString = " Handler DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
+                    ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
 
-                    alert(jsonString);
+
                 }
             });
 
@@ -2219,10 +2359,18 @@ var HttpHandler = (function () {
 
 })();
 
+var webUserJsonString = null;
 var WebUser = function () {
+    if (dynamicHandler == "")
+        return;
+    if (webUserJsonString != null) {
+        var self = this;
+        $.each(webUserJsonString, function (n, o) {
+            self[n] = o;
+        });
+        return;
+    }
 
-    //if (webUser != undefined)
-    //this.self
 
     if (plant == "CCFlow") {
         // CCFlow
@@ -2253,9 +2401,6 @@ var WebUser = function () {
     return;
     }*/
 
-
-    var jsonString = {};
-
     $.ajax({
         type: 'post',
         async: false,
@@ -2277,22 +2422,102 @@ var WebUser = function () {
             }
 
             try {
-                jsonString = JSON.parse(data);
+                webUserJsonString = JSON.parse(data);
+
             } catch (e) {
                 alert("json解析错误: " + data);
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-            alert("WebUser_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            var url = dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime();
+            ThrowMakeErrInfo("WebUser-WebUser_Init", textStatus, url);
         }
     });
-
     var self = this;
-    $.each(jsonString, function (n, o) {
+    $.each(webUserJsonString, function (n, o) {
         self[n] = o;
     });
 };
+
+var guestUserJsonString = null;
+var GuestUser = function () {
+    if (dynamicHandler == "")
+        return;
+    if (guestUserJsonString != null) {
+        var self = this;
+        $.each(guestUserJsonString, function (n, o) {
+            self[n] = o;
+        });
+        return;
+    }
+
+
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+
+
+    $.ajax({
+        type: 'post',
+        async: false,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
+        url: dynamicHandler + "?DoType=GuestUser_Init&t=" + new Date().getTime(),
+        dataType: 'html',
+        success: function (data) {
+
+            if (data.indexOf("err@") != -1) {
+                if (data.indexOf('登录信息丢失') != -1) {
+                    alert("登录信息丢失，请重新登录。");
+                } else {
+                    alert(data);
+                }
+                return;
+            }
+
+            try {
+                guestUserJsonString = JSON.parse(data);
+
+            } catch (e) {
+                alert("json解析错误: " + data);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            var url = dynamicHandler + "?DoType=GuestUser_Init&t=" + new Date().getTime();
+            ThrowMakeErrInfo("GuestUser_Init", textStatus, url);
+        }
+    });
+    var self = this;
+    $.each(guestUserJsonString, function (n, o) {
+        self[n] = o;
+    });
+
+};
+
+function ThrowMakeErrInfo(funcName, obj, url) {
+
+    var msg = "1. " + funcName + " err@系统发生异常.";
+    msg += "\t\n2.检查请求的URL连接是否错误：" + url;
+    msg += "\t\n3.估计是数据库连接错误或者是系统环境问题. ";
+    msg += "\t\n4.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
+    msg += "\t\n5.您要打开执行的handler查看错误吗？ ";
+    // msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
+
+    if (url != null) {
+        if (window.confirm(msg) == true) {
+            WinOpen(url);
+            return;
+        }
+        return;
+    }
+    alert(msg);
+}
 
 //替换全部.
 function replaceAll(str, oldKey, newKey) {
@@ -2346,7 +2571,7 @@ function FormatDate(now, mask) {
             case 'tt': return d.getHours() < 12 ? 'am' : 'pm';
             case 'TT': return d.getHours() < 12 ? 'AM' : 'PM';
             case 'Z': return d.toUTCString().match(/[A-Z]+$/);
-                // Return quoted strings with the surrounding quotes removed
+            // Return quoted strings with the surrounding quotes removed
             default: return $0.substr(1, $0.length - 2);
         }
     });
@@ -2354,6 +2579,9 @@ function FormatDate(now, mask) {
 
 //表达式的替换.
 function DealExp(expStr, webUser) {
+
+    if (expStr.indexOf('@') == -1)
+        return expStr;
 
     if (webUser == null || webUser == undefined)
         webUser = new WebUser();
@@ -2364,6 +2592,8 @@ function DealExp(expStr, webUser) {
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
     expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+    expStr = expStr.replace('@WebUser.OrgNo', webUser.OrgNo);
+    expStr = expStr.replace('@WebUser.OrgName', webUser.OrgName);
     if (expStr.indexOf('@') == -1)
         return expStr;
 
@@ -2421,6 +2651,8 @@ function DealJsonExp(json, expStr, webUser) {
     expStr = expStr.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
     expStr = expStr.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
     expStr = expStr.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+    expStr = expStr.replace('@WebUser.OrgNo', webUser.OrgNo);
+    expStr = expStr.replace('@WebUser.OrgName', webUser.OrgName);
 
 
     if (expStr.indexOf('@') == -1)
@@ -2447,6 +2679,7 @@ function GetPara(atPara, key) {
     return undefined;
 
 }
+
 
 
 function SFTaleHandler(url) {
@@ -2509,3 +2742,47 @@ function validate(s) {
     }
     return true;
 }
+var loadWebUser = null;
+var url = window.location.href.toLowerCase();
+if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1) {
+    loadWebUser = new WebUser();
+}
+//初始化页面
+$(function () {
+    //   debugger;
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
+    //判断登录权限.
+
+    if (url.indexOf('login.htm') == -1
+        && url.indexOf('dbinstall.htm') == -1
+        && url.indexOf('registeradminer.htm') == -1
+        && url.indexOf('registerorg.htm') == -1
+        && url.indexOf('reqpassword.htm') == -1
+        && url.indexOf('reguser.htm') == -1       
+        && url.indexOf('port.htm') == -1) {
+
+        if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {
+            dynamicHandler = "";
+            alert("登录信息丢失,请重新登录.");
+            return;
+        }
+
+        //要排除的目录.
+        if (url.indexOf("/admin/TestingContainer/") == -1)
+            return;
+
+        //如果进入了管理员目录.
+        if (url.indexOf("/admin/") != -1 && loadWebUser.IsAdmin != 1) {
+            dynamicHandler = "";
+            alert("管理员登录信息丢失,请重新登录,当前用户[" + loadWebUser.No + "]不能操作管理员目录功能.");
+            return;
+        }
+    }
+
+});

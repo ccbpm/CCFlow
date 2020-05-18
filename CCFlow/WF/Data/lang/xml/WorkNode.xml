@@ -331,9 +331,9 @@ ko-kr="Matched the workflow completion condition."
     />
   <item
 key="node_completed_success"
-zh-cn="@工作已经成功处理(一个流程的工作)。"
-zh-tw="@工作已经成功处理(一个流程的工作)。"
-zh-hk="@工作已经成功处理(一个流程的工作)。"
+zh-cn="@工作已经成功处理(一个节点流程的工作流程)。"
+zh-tw="@工作已经成功处理(一个节点流程的工作流程)。"
+zh-hk="@工作已经成功处理(一个节点流程的工作流程)。"
 en-us="@The node completed successfully(one workflow work)."
 ja-jp="@The node completed successfully(one workflow work)."
 ko-kr="@The node completed successfully(one workflow work)."

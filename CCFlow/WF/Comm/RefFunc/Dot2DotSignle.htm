@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>分组平铺</title>
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+
+    <script type="text/javascript">
+
+        var selectedEles = null;
+        var saveType = GetQueryString("SaveType");
+        if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
+            saveType = 0;
+        else
+            saveType = 1;
+
+        var mapExt = null;
+
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var enName = GetQueryString("EnName"); // 主表实体. A实体.
+            var dot2DotEnsName = GetQueryString("Dot2DotEnsName"); //存储实体.
+            var EnsOfMM = GetQueryString("EnsOfMM"); //B实体.
+            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
+            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应B实体外键.
+            var defaultGroupAttrKey = GetQueryString("DefaultGroupAttrKey");
+            var para = GetQueryString("Para");
+            var paraVal = GetQueryString("ParaVal");
+            var para1 = GetQueryString("Para1");
+            var paraVal1 = GetQueryString("ParaVal1");
+
+
+
+
+            //获得已经选择的集合.
+            if (para == null || para == undefined || para == "") {
+                selectedEles = new Entities(dot2DotEnsName);
+                selectedEles.ensName = dot2DotEnsName;
+                selectedEles.Retrieve(AttrOfOneInMM, GetPKVal());
+            } else if ((para1 == null || para1 == undefined || para1 == "") && saveType == 1) {
+
+                var ens = new new Entities(dot2DotEnsName);
+                ens.enName = enName;
+                ens.Retrieve(AttrOfOneInMM, GetPKVal(), para, paraVal);
+                if (ens.length == 0)
+                    selectedEles = "";
+                else
+                    selectedEles = ens[0][AttrOfMInMM];
+            } else if (para != null && para != undefined && para != "" && (para1 != null && para1 != undefined && para1 != "") && saveType == 1) {
+                var ens = new Entities(dot2DotEnsName);
+                ens.enName = enName;
+                ens.Retrieve(AttrOfOneInMM, GetPKVal(), para, paraVal, para1, paraVal1);
+                if (ens.length == 0)
+                    selectedEles = "";
+                else
+                    selectedEles = ens[0][AttrOfMInMM];
+
+            }
+
+
+            if (defaultGroupAttrKey == "" || defaultGroupAttrKey == "null") {
+                BindListModel();
+            } else {
+                BindGroupModel();
+            }
+        });
+        //去重复的人员
+        function unique(arr) {
+            var result = [], isRepeated;
+            for (var i = 0, len = arr.length; i < len; i++) {
+                isRepeated = false;
+                for (var j = 0, len1 = result.length; j < len1; j++) {
+                    if (arr[i].No == result[j].No) {
+                        isRepeated = true;
+                        break;
+                    }
+                }
+                if (!isRepeated) {
+                    result.push(arr[i]);
+                }
+            }
+            return result;
+        }
+        function BindListModel() {
+
+            var enName = GetQueryString("EnName"); // 主表实体. A实体.
+            var EnsOfMM = GetQueryString("EnsOfMM"); //存储实体.
+            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
+            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应主表的外键.
+            //获得列表实体, 查询全部.
+            var ensOfM = GetQueryString("EnsOfM"); // 主表实体. A实体.
+            var entities = new Entities(ensOfM);
+            entities.RetrieveAll();
+            entities = unique(entities);//去重复的数据
+
+            var html = "<table style='width:100%;' >";
+            html += "<tr>";
+            html += "<th colspan=3>";
+
+            html += "<div style='float:right'>";
+            html += "<input type=checkbox value='全选' onclick='CheckAll(this.checked, \"CB\");' id='SelectAll' /><label for='SelectAll' >全选</label>";
+            html += "</div>";
+
+            html += "<div style='float:left'>";
+            html += "<input type=button value='保存' onclick='Save()' />";
+            html += "</div>";
+
+            html += "</th>";
+            html += "</tr>";
+
+            //获得已经选择的集合.
+            //    loadEntities(mapExt);
+
+            var myNum = -1;
+            for (var idx = 0; idx < entities.length; idx++) {
+
+                en = entities[idx];
+
+                var isHave = false;
+                if (saveType == 1) {
+                    if (selectedEles.indexOf("," + en.No + ",") != -1)
+                        isHave = true;
+                }
+                if (saveType == 0) {
+                    for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                        var ele = selectedEles[iEle];
+                        if (ele == null || ele == undefined)
+                            continue;
+
+                        if (ele[AttrOfMInMM] == en.No) {
+                            isHave = true;
+                            break;
+                        }
+                    }
+                }
+
+
+                var lab = en.Name;
+                if (isHave)
+                    lab = "<font color=green>" + en.Name + "</font>";
+
+                myNum++;
+                if (myNum == 0)
+                    html += "<TR>";
+                if (isHave == true)
+                    html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                else
+                    html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+
+                if (myNum == 2) {
+                    html += "</tr>";
+                    myNum = -1;
+                }
+
+            }
+
+            if (idx == 1) {
+                html += "<td colspan=2></td>";
+                html += "</tr>";
+            }
+
+            if (idx == 2) {
+                html += "<td></td>";
+                html += "</tr>";
+            }
+
+            html += "</table>";
+
+            $("#Msg").html("");
+            $("#Msg").html(html);
+        }
+
+        function BindGroupModel() {
+
+            var enName = GetQueryString("EnName"); // 主表实体. A实体.
+            var EnsOfMM = GetQueryString("EnsOfMM"); //存储实体.
+            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
+            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应主表的外键.
+
+
+            //获得列表实体, 查询全部.
+            var ensOfM = GetQueryString("EnsOfM"); // 主表实体. A实体.
+            var entities = new Entities(ensOfM);
+            entities.RetrieveAll();
+
+            //处理
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hand.AddUrlData();
+
+            var groups = hand.DoMethodReturnJSON("Dot2Dot_GenerGroupEntitis");
+
+            var html = "<table style='width:100%;' >";
+
+            html += "<tr>";
+            html += "<th colspan=3>";
+
+            html += "<div style='float:right'>";
+            html += "<input type=checkbox value='全选' onclick='CheckAll(this.checked, '');' id='SelectAll' /><label for='SelectAll' >全选</label>";
+            html += "</div>";
+
+            html += "<div style='float:left'>";
+            html += "<input type=button value='保存' onclick='Save();' id='save' />";
+            html += "</div>";
+
+            html += "</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < groups.length; i++) {
+
+                var group = groups[i];
+
+                html += "<tr>";
+                html += "<th colspan=3>";
+
+                html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "' name='Group_" + group.No + "' /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
+
+                html += "</th>";
+                html += "</tr>";
+
+
+                var myNum = -1;
+                for (var idx = 0; idx < entities.length; idx++) {
+
+                    en = entities[idx];
+
+                    var myidx = 0;
+                    var oOfEn;
+                    for (var obj in en) {
+                        if (myidx == 2) {
+                            oOfEn = obj;
+                            break;
+                        }
+                        myidx++;
+                    }
+
+                    myidx = 0;
+                    var oOfGroup;
+                    for (var obj in en) {
+                        if (myidx == 0) {
+                            oOfGroup = obj;
+                            break;
+                        }
+                        myidx++;
+                    }
+
+                    if (en[oOfEn] != group[oOfGroup])
+                        continue;
+
+                    var isHave = false;
+                    if (saveType == 1) {
+                        if (selectedEles != null && selectedEles.indexOf("," + en.No + ",") != -1)
+                            isHave = true;
+                    }
+                    if (saveType == 0) {
+                        for (var iEle = 0; iEle < selectedEles.length; iEle++) {
+
+                            var ele = selectedEles[iEle];
+                            if (ele == null || ele == undefined)
+                                continue;
+
+                            if (ele[AttrOfMInMM] == en.No) {
+                                isHave = true;
+                                break;
+                            }
+                        }
+                    }
+
+
+                    var lab = en.Name;
+                    if (isHave)
+                        lab = "<font color=green>" + en.Name + "</font>";
+
+                    myNum++;
+                    if (myNum == 0)
+                        html += "<TR>";
+
+                    if (isHave == true)
+                        html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    else
+                        html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+
+
+                    if (myNum == 2) {
+                        html += "</tr>";
+                        myNum = -1;
+                    }
+                }
+
+                if (idx == 1) {
+                    html += "<td colspan=2></td>";
+                    html += "</tr>";
+                }
+
+                if (idx == 2) {
+                    html += "<td></td>";
+                    html += "</tr>";
+                }
+            }
+
+            html += "</table>";
+
+            $("#Msg").html("");
+            $("#Msg").html(html);
+        }
+
+        //选择与取消选择.
+        function CheckAll(checked, no) {
+
+            //获取name=box的复选框 遍历输出复选框
+            var checkeds = document.getElementsByName("CB_" + no);
+            for (var i = 0; i < checkeds.length; i++) {
+                checkeds[i].checked = checked;
+            }
+
+        }
+
+        //保存.
+        function Save() {
+
+            //获得存储的值.
+            var cbs = $("input[type='checkbox']:checked");
+            var strs = ",";
+            cbs.each(function () {
+                if (this.id.indexOf('CB_') == -1)
+                    return true;
+                strs += this.defaultValue + ",";
+            });
+
+            //处理
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hand.AddUrlData();
+            hand.AddPara("ElesAAA", strs);
+
+            var data = hand.DoMethodReturnString("Dot2Dot_Save");
+            //alert(data);
+            window.location.href = window.location.href;
+            return;
+        }
+
+        // 新增
+        function selectedElements(entities, selectedArray) {
+            var array = [];
+            $.each(selectedArray, function (i, e) {
+                if (typeof e === "undefined") {
+                    return true;
+                }
+                var exists = false;
+                $.each(entities, function (n, o) {
+                    if (o.Tag1 == e) {
+                        exists = true;
+                        return false;
+                    }
+                });
+                if (!exists) {
+                    array.push(e);
+                }
+            });
+            return array;
+        }
+        // 删除
+        function canceledElements(entities, selectedArray) {
+            if (!$.isArray(selectedArray)) {
+                return;
+            }
+            var array = [];
+            $.each(entities, function (i, o) {
+                var value = o.Tag1;
+                var t = selectedArray.filter(function (e) {
+                    return e == value;
+                });
+                if (t.length == 0) {
+                    array.push(value);
+                }
+            });
+            return array;
+        }
+
+/**/</script>
+</head>
+<body>
+ 
+ <table id="Table1" >
+  
+ </table>
+
+ <input type=button id="Btn_Save" onclick="Save();" style="display: none;" value="Save"/>
+ <div id="Msg"> </div>
+ <script type="text/javascript">
+     $(function () {
+         //给全选的复选框添加事件
+         $("#SelectAll").click(function () {
+             // this 全选的复选框
+             var userids = this.checked;
+             //获取name=box的复选框 遍历输出复选框
+             $("input[class='dot2_checkbox']").each(function () {
+                 this.checked = userids;
+             });
+         });
+     });
+     
+ </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>输入提示后查询</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
+          media="all" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
+
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=7db4dab570f2d221062d9a628daaa373&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geolocation"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style>
+
+        #container {
+            width: 760px;
+            height: 400px;
+        }
+
+        input {
+            width: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div class="info">
+        <!--<h4 id='status'></h4><hr>
+        <p id='result'></p><hr>
+        <p id='address'></p><hr>
+        <p>由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。</p>-->
+    </div>
+    
+    <div id="myPageTop">
+        <table>
+            <tr>
+                <td>
+                    <label>请输入关键字：</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="tipinput" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr />
+    <div style="margin-top:400px">
+        <div class="col-xs-6 col-sm-3">
+
+            <label style="text-align: right; ">地址名称:</label>
+            <input type="text" class="form-control" style="width:200px" id="addName" /><br /><br />
+            <label style="text-align: right;">详细地址:</label>
+            <input type="text" class="form-control" style="width:200px" id="addDetails" />
+            <input type="hidden" class="form-control" style="width:200px" id="addLat" />
+            <input type="hidden" class="form-control" style="width:200px" id="addLng" />
+
+        </div>
+        <div class="col-xs-6 col-sm-3 " style="text-align:right;vertical-align:bottom;padding-top:33px">
+
+            <button type="button" class="btn btn-primary btn-sm active" id="commit" >提交</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-primary btn-sm active" id="close">关闭</button>
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+
+        var AtPara = GetQueryString("Paras");//获取地址名称@详细地址@纬度@经度
+        var KeyOfEn = GetQueryString("KeyOfEn");
+        var FK_Node = GetQueryString("FK_Node");
+        var WorkID = GetQueryString("WorkID");
+        var UIIsEnable = GetQueryString("UIIsEnable");//是否可编辑
+        if (UIIsEnable!=1) {
+
+            $("#commit").prop("disabled", true); // 当不可编辑时，提交按钮禁用
+        }
+        var addLat;//纬度坐标
+        var addLng;//经度坐标
+        //给各控件赋值
+        if (AtPara != "" && AtPara != 'undefined' && AtPara != null) {
+            var paras = AtPara.split("@");
+            addLat =  paras[2];
+            addLng = paras[3];
+            $("#addName").val(paras[0]);
+            $("#addDetails").val(paras[1]);
+            $("#addLat").val(paras[2]);
+            $("#addLng").val(paras[3]);
+        }
+        //地图加载
+        var map = new AMap.Map("container", {
+            resizeEnable: true,//是否监控地图容器尺寸变化
+            zoom: 18, //初始地图级别
+        });
+        //当有保存的数据时，定位到保存的中心点
+        if (addLat != undefined && addLng != undefined) {
+
+            map.setCenter([addLng, addLat]);
+            //添加mark
+            var marker = new AMap.Marker();
+            map.add(marker);
+            marker.setPosition([addLng,addLat]);//设置标记的位置
+        }
+         
+        //输入提示
+        var autoOptions = {
+            input: "tipinput"
+        };
+        var auto = new AMap.Autocomplete(autoOptions);
+        var placeSearch = new AMap.PlaceSearch({
+            map: map,
+            showCover: true
+        });  //构造地点查询类
+        AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+        function select(e) {
+            placeSearch.setCity(e.poi.adcode);
+            placeSearch.search(e.poi.name);  //关键字查询查询
+        };
+        //监听搜索后的mark点击事件，点击填充地址名称等控件
+        AMap.event.addListener(placeSearch,"markerClick",eventHandler);
+        function eventHandler(e) {
+            var poiid = e.id;
+            var data = e.data;
+            placeSearch.getDetails(poiid, function(status, result) {
+                // 查询成功时，result即为对应的POI详情
+                 var name = result.poiList.pois[0].name;
+                 var address = result.poiList.pois[0].address;
+                 var addLat = result.poiList.pois[0].location.lat;
+                 var addLng = result.poiList.pois[0].location.lng;
+                 $("#addName").val(name);
+                 $("#addDetails").val(address);
+                 $("#addLat").val(addLat);
+                 $("#addLng").val(addLng);
+            })
+        }
+        //提交
+         $("#commit").click(function () {
+             var addName = $("#addName").val();//地址名称
+             var addDetails = $("#addDetails").val();//详细地址
+             var addLat =  $("#addLat").val();//纬度
+             var addLng = $("#addLng").val();//经度
+             var str = addName + "@" + addDetails + "@" + addLat + "@" + addLng;
+             if (addName != "") {
+                  parent.document.getElementById("TB_AtPara").value = str;//地址名称@详细地址@纬度@经度
+                  parent.document.getElementById("TB_" + KeyOfEn).value = addName;  //给表单地图控件赋值
+                 if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
+                    window.parent.CloseBootstrapDialog();
+                }
+             } else {
+                 alert("地址名称不能为空!");
+             }
+            
+	     });
+        //关闭
+        $("#close").click(function () {
+            if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
+                window.parent.CloseBootstrapDialog();
+            }
+	    });
+        
+    </script>
+</body>
+</html>

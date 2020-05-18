@@ -1,10 +1,14 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
-update sys_groupfield set frmID=enName where frmid is  null;
+
+-- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.
+update WF_Direction set mypk=replace(mypk, '_0','') ;
 
 UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
 
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
+
+DELETE FROM Sys_Enum WHERE EnumKey ='ShowWhere';
 
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
@@ -51,15 +55,18 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日�
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@CurrWorker','当前工作可处理人员','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@OrgNo','登录人员组织','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@OrgName','登录人员组织名称','DefVal');
+
+
  
--- 升级数据源 2016.0
+-- 升级数据源 2016.
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
 UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
 --更新日期长度.
-UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6
-UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7
+UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6;
+UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7;
 
 
 -- 2016.11.18 升级维护附件属性.;
@@ -69,9 +76,9 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.FrmAttachmentExt',
 @DeleteWay=权限控制,控制附件的下载与上传权限.@IsRowLock=WebOffice属性,设置与公文有关系的属性配置.
 @IsToHeLiuHZ=流程相关,控制节点附件的分合流.');
 
--- 2016.07.20 升级明细表维护分组;
+-- 2020.02.25 升级明细表维护分组.;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDtlExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDtlExt','@No=基础信息,基础信息权限信息.@IsExp=数据导入导出,数据导入导出.@MTR=多表头,实现多表头.@IsEnableLink=超链接,显示在从表的右边.@IsCopyNDData=流程相关,与流程相关的配置非流程可以忽略.');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDtlExt','@No=基础信息,基础信息权限信息.@IsExp=数据导入导出,数据导入导出.@IsEnableLink=超链接,显示在从表的右边.@IsCopyNDData=流程相关,与流程相关的配置非流程可以忽略.');
 
 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeComponent';
@@ -84,7 +91,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=�
 
 -- 2018.07.24 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@DesignerNo=设计者,流程开发设计者信息');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@IsFrmEnable=轨迹@DesignerNo=设计者,流程开发设计者信息');
 
 
 --新版本的流程属性,节点属性;
@@ -123,4 +130,8 @@ DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_0','由连接线条件控制','CondModel',0,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_1','按照用户选择计算','CondModel',1,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_2','发送按钮旁下拉框选择','CondModel',2,'CH');
+
+
+--2020.04.30 超链接数据保存
+UPDATE Sys_FrmLink SET URLExt= URL Where URLExt IS NULL OR URLExt='';
  

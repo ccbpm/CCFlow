@@ -1,6 +1,7 @@
-/****** 对象:  View WF_EmpWorks    脚本日期: 03/12/2011 21:42:50 ******/;
+﻿/****** 对象:  View WF_EmpWorks    脚本日期: 03/12/2011 21:42:50 ******/;
 
 /*  WF_EmpWorks  */;
+ 
 
 CREATE VIEW  WF_EmpWorks
 (
@@ -40,7 +41,7 @@ TaskSta,
 ListType,
 Sender,
 AtPara,
-MyNum
+Domain
 )
 AS
 
@@ -62,7 +63,7 @@ A.TaskSta,
 0 as ListType,
 A.Sender,
 A.AtPara,
-1 as MyNum
+A.Domain
 FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
  AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState!=0 AND WhoExeIt!=1
@@ -85,37 +86,9 @@ A.TodoEmpsNum,
 1 as ListType,
 B.Rec as Sender,
 '@IsCC=1'+A.AtPara as AtPara,
-1 as MyNum
+A.Domain 
   FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0;
-  
-  
-
-/****** 对象:  View V_FlowStarter 脚本日期:  2015-04-10 ******/;
-/*  V_FlowStarter 
--- 按绑定岗位.
--- 按绑定部门的人员.
--- 按绑定人员的人员.
-  */;
-CREATE VIEW V_FlowStarter (FK_Flow,FlowName,FK_Emp)
-AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14)
-UNION 
-SELECT A.FK_Flow, a.FlowName, C.No as FK_Emp FROM WF_Node a, WF_NodeDept b, Port_Emp c 
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
-AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 
-UNION 
-SELECT A.FK_Flow, a.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
-AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
-UNION 
-SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
- WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 
- UNION   
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C, Port_Emp D,  Port_DeptEmpStation E
- WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) AND  A.NodeID=B.FK_Node AND A.NodeID=C.FK_Node AND B.FK_Dept=D.FK_Dept
-  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
+   
 
 /****** 对象:  View V_FlowStarterBPM 脚本日期:  2015-04-10 ******/;
 /*  V_FlowStarterBPM 
@@ -124,31 +97,37 @@ SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeSta
 -- 按绑定人员的人员.
   */;
 
-CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp)
+CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)
 AS
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
+SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c 
  WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
 AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14)
-  UNION 
-SELECT A.FK_Flow, a.FlowName, C.FK_Emp FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c 
+  UNION  
+SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c 
  WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )
 AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1
-  UNION 
-SELECT A.FK_Flow, a.FlowName, B.FK_Emp FROM WF_Node A, WF_NodeEmp B 
+  UNION  
+SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 ) 
 AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3
   UNION 
-SELECT A.FK_Flow, a.FlowName, B.No AS FK_Emp FROM WF_Node A, Port_Emp B 
+SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B 
  WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4
   UNION  
-SELECT A.FK_Flow, a.FlowName, E.FK_Emp FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
+SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
  WHERE a.NodePosType=0 
  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) 
  AND  A.NodeID=B.FK_Node 
  AND A.NodeID=C.FK_Node 
  AND B.FK_Dept=E.FK_Dept 
- AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ;
- 
+ AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9
+ UNION
+ SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C
+ WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo
+ AND  A.DeliveryWay=22;
+
+  
+  
 
 /****** 考核:  View V_TOTALCH    脚本日期:  2015-09-10 ******/;
 /*  V_TOTALCH */;
@@ -205,6 +184,6 @@ CREATE VIEW V_WF_Delay
 AS
 SELECT     CONVERT(varchar, WorkID) + '_' + CONVERT(varchar, FK_Emp) + '_' + CONVERT(varchar, FK_Node) AS MyPK, PRI, WorkID, IsRead, Starter, StarterName, WFState, FK_Dept, DeptName, FK_Flow, 
                       FlowName, PWorkID, PFlowNo, FK_Node, NodeName, WorkerDept, Title, RDT, ADT, SDT, FK_Emp, FID, FK_FlowSort, SysType, SDTOfNode, PressTimes, GuestNo, GuestName, BillNo, FlowNote, 
-                      TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, MyNum
+                      TodoEmps, TodoEmpsNum, TodoSta, TaskSta, ListType, Sender, AtPara, Domain
 FROM         dbo.WF_EmpWorks where CONVERT(datetime,SDT, 20) > GETDATE() AND SDT<>'无';
  

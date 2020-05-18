@@ -4,35 +4,38 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
 
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
-    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <!--<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />-->
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
     <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
     <!-- 位置必须放在 jquery 之后. -->
-    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Gener.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Gener.js" type="text/javascript"></script>
+    <script src="../JScript.js" type="text/javascript"></script>
 
     <!--UEditor-->
     <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
           rel="stylesheet" />
-    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
-    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+    <script src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js" type="text/javascript"></script>
+    <script charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js" type="text/javascript"></script>
+    <script charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js" type="text/javascript"></script>
+    <script src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js" type="text/javascript"></script>
     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../CCForm/FrmEnd.js" type="text/javascript"></script>
@@ -70,6 +73,7 @@
         var webUser = new WebUser();
         $(function () {
             pkVal = GetPKVal();
+
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1 && pkVal == null)
                 window.parent.$('#EnLayout').layout('remove', 'west');
@@ -97,18 +101,62 @@
 
             document.title = mapData.Name;
 
+
+            //获取没有解析的外部数据源
+            var uiBindKeys = frmData["UIBindKey"];
+            if (uiBindKeys != null && uiBindKeys.length != 0) {
+                //获取外部数据源 handler/JavaScript
+                var operdata;
+                for (var i = 0; i < uiBindKeys.length; i++) {
+                    var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+                    var srcType = sfTable.SrcType;
+                    if (srcType != null && srcType != "") {
+                        //Handler 获取外部数据源
+                        if (srcType == 5) {
+                            var selectStatement = sfTable.SelectStatement;
+                            if (plant == 'CCFlow')
+                                selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            else
+                                selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
+                            operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                        }
+                        //JavaScript获取外部数据源
+                        if (srcType == 6) {
+                            operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                        }
+                        frmData[uiBindKeys[i].No] = operdata;
+                    }
+                }
+
+            }
+
             InitToolbar(); //初始工具栏.
 
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
+            //修改页面样式
+            if ($("ul.tabs").length != 0) {
+                var li = $("<li style='float:right !important;z-index:999; top:-6px' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
+                li.append($("#Btns").children());
+                $("ul.tabs").append(li);
+                //$(".tabs-panels").css("padding-bottom", "30px");
+                $("#Btns").parent().remove();
+                $("#Btns").remove();
+
+            } else {
+                $("#CCFormTabs").parent().parent().parent().css("cssText", "top:20px!important");
+            }
 
 
         })
 
         ///设置.
         function Setting() {
-            var url = "Setting.htm?EnName=" + GetQueryString("EnName");
-            WinOpen(url, "xxs");
+            var url = GetLocalWFPreHref() + "/WF/Comm/RefFunc/Setting.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
+            //WinOpen(url, "xxs");
+            window.parent.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
 
@@ -149,18 +197,24 @@
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
             var mapAtrrs = frmData.Sys_MapAttr;
-
+            //用户设置
+            var mypk = new WebUser().No + "_Fields_HS_" + GetQueryString("EnName");
+            var userRegedit = new Entity("BP.Sys.UserRegedit");
+            userRegedit.SetPKVal(mypk);
+            var count = userRegedit.RetrieveFromDBSources();
 
             var tabIndex = GetQueryString("tabIndex");
-
 
             var tableWidth = 800; //  w - 40;
             var html = "";
             if (Sys_GroupFields.length > 1)
-                html = "<div id='tabDiv' class='easyui-tabs' >";
+                html = "<div id='tabDiv' class='easyui-tabs' data-options='fit:true' >";
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
+                    continue;
+
                 var lab = gf.Lab;
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
@@ -173,7 +227,7 @@
                     html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
                 }
 
-                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
+                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID, userRegedit);
                 html += "</div>";
             }
             if (Sys_GroupFields.length > 1)
@@ -217,6 +271,8 @@
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(mapAttr);
+                if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002")
+                    defValue = "";
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
@@ -231,13 +287,17 @@
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
 
-                   
+
                     var uiBindKey = mapAttr.UIBindKey;
 
-                    if (uiBindKey.indexOf("Dept") != -1) {
+                    if (uiBindKey.toLowerCase().indexOf("select") == -1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
+
                         var webUser = new WebUser();
+
+
                         var ens = new Entities(uiBindKey);
                         ens.RetrieveAll();
+
                         var pushData;
                         if (webUser.No == "admin")
                             pushData = findChildren(ens, "0");
@@ -248,8 +308,13 @@
                             $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue).target;
+                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
+                        if (target != null) {
+                            target = target.target;
                             $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                        }
+
+
 
                         //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {
@@ -363,15 +428,16 @@
         }
 
         //解析表单字段 MapAttr.
-        function InitMapAttr(Sys_MapAttr, mainData, groupID) {
+        function InitMapAttr(Sys_MapAttr, mainData, groupID, userRegedit) {
 
             var html = "<table border='0' style='width:99%;' >";
             var isDropTR = true;
             var isExitMyNum = false;
             var fileDesc = "";
             for (var i = 0; i < Sys_MapAttr.length; i++) {
-
                 var attr = Sys_MapAttr[i];
+                if (userRegedit != null && userRegedit != undefined && userRegedit.Vals.indexOf("," + attr.KeyOfEn) != -1)
+                    continue;
                 if (attr.KeyOfEn == "MyFileNum") {
                     isExitMyNum = true;
                     continue;
@@ -400,10 +466,20 @@
                 }
                 else {
 
-                    if (helpUrl.indexOf('javascr') == 0)
-                        name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
-                    else
-                        name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
+                    if (attr.MyDataType == 4) {
+
+                        if (helpUrl.indexOf('javascr') == 0)
+                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
+                        else
+                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
+
+                    } else {
+
+                        if (helpUrl.indexOf('javascr') == 0)
+                            name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
+                        else
+                            name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
+                    }
                 }
 
                 var lab = "";
@@ -424,10 +500,18 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40) || attr.UIHeight > 40) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:20%;'>" + lab + "</td>";
-                    html += "<td colspan=3>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
+                    if (attr.UIContralType == 2) {
+                        html += "<td class='FContext' colspan='4' >";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    } else {
+                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FContext'  colspan=3>";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</td>";
+                    }
+
+
                     html += "</tr>";
 
                     if (rm != null) {
@@ -502,18 +586,17 @@
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     }
-
+                    html += "</tr>";
 
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:25%;'></td>";
-                        html += "<td colspan=3>";
+                        html += "<td colspan=2>";
                         html += GenerRM(rm);
                         html += "</td>";
-                        html += "</tr>";
-                        isDropTR = true;
+
+                        isDropTR = false;
                     }
                     continue;
                 }
@@ -563,16 +646,24 @@
                 icon = "../" + rm.Icon;
             }
             var html = "";
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight - 20;
+            if (W > rm.W)
+                W = rm.W;
+            if (H > rm.H)
+                H = rm.H;
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
                 html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel)
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel) {
+                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+            }
+
 
             if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
@@ -615,7 +706,7 @@
             var eleHtml = '';
 
             //外部数据源类型.
-            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+            if (mapAttr.LGType == "0" && (mapAttr.MyDataType == "1" || mapAttr.MyDataType == "2") && mapAttr.UIContralType == "1") {
 
                 //枚举类型.
                 if (mapAttr.UIIsEnable == 1)
@@ -667,8 +758,8 @@
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         html += '<div class="input-group">';
                         html += "<span class='input-group-addon' style='border-radius:0;border-color:#d2d6de;background-color:#fff'><i id='menuIconIcon' class='icon-settings'></i></span>";
-                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
-                        html += "<span class='input-group-btn' style='padding-left:3px'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='fa fa-search'></i></a></span>";
+                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;margin:0px 0px' type='text'  " + enableAttr + " />";
+                        html += "<span class='input-group-btn' style='padding-left:3px;border:1px solid #d2d6de;'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='fa fa-search'></i></a></span>";
                         html += "</div>";
                         return html;
                     }
@@ -717,10 +808,21 @@
                 if (checkedStr != "true" && checkedStr != '1') {
                     checkedStr = ' checked="checked" ';
                 }
+                var name = "";
+                var helpUrl = GetPara(mapAttr.AtPara, "HelpUrl");
+                if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
+                    name = mapAttr.Name;
+                } else {
+                    if (helpUrl.indexOf('javascr') == 0)
+                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right;height:15px'  /></a>";
+                    else
+                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right;height:15px' /></a>";
+
+                }
 
                 checkedStr = "";
 
-                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;margin-bottom: 0px;' >" + mapAttr.Name + "</label>";
+                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
             }
 
             //枚举类型.
@@ -740,7 +842,6 @@
                 if (mapAttr.UIIsEnable != 1)
                     enableAttr = "disabled='disabled'";
 
-                // alert(mapAttr.KeyOfEn);
                 return "<input  class='form-control' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
@@ -786,80 +887,28 @@
 
         //初始化下拉列表框的OPERATION
         function InitDDLOperation(flowData, mapAttr, defVal) {
-
-            var operations = '';
-
-            var data = frmData[mapAttr.KeyOfEn];
+            var operations = "";
+            var data = flowData[mapAttr.KeyOfEn];
             if (data == undefined)
-                data = frmData[mapAttr.UIBindKey];
+                data = flowData[mapAttr.UIBindKey];
+            if (data == undefined) {
+                //枚举类型的.
+                if (mapAttr.LGType == 1) {
+                    var enums = flowData.Sys_Enum;
+                    enums = $.grep(enums, function (value) {
+                        return value.EnumKey == mapAttr.UIBindKey;
+                    });
 
-            //外键类型.
-            if (mapAttr.LGType == 2) {
 
-                var data = frmData[mapAttr.KeyOfEn];
-                if (data == undefined)
-                    data = frmData[mapAttr.UIBindKey];
-
-                if (data == undefined) {
-                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-                    return;
+                    $.each(enums, function (i, obj) {
+                        operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    });
                 }
-                var key = "No";
-                var keyText = "Name";
-                if (mapAttr.UIRefKey != "")
-                    key = mapAttr.UIRefKey;
-                if (mapAttr.UIRefKeyText != "")
-                    keyText = mapAttr.UIRefKeyText;
-                $.each(data, function (i, obj) {
-
-                    operations += "<option " + (obj[key] == defVal ? " selected='selected' " : "") + " value='" + obj[key] + "'>" + obj[keyText] + "</option>";
-                });
-            }
-
-            if (mapAttr.LGType == 0 && data != undefined) {
-                $.each(data, function (i, obj) {
-                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                });
                 return operations;
             }
-
-
-            //枚举类型.
-            if (mapAttr.LGType == 1) {
-
-                var enums = frmData.Sys_Enum;
-                enums = $.grep(enums, function (value) {
-                    return value.EnumKey == mapAttr.UIBindKey;
-                });
-
-                $.each(enums, function (i, obj) {
-                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-                });
-            }
-
-
-            //外部数据源类型 MyFlowGener.js.InitDDLOperation
-            if (mapAttr.LGType == 0) {
-                var fn;
-                try {
-                    if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
-                    }
-                } catch (e) {
-                }
-                if (typeof fn == "function") {
-                    $.each(fn.call(), function (i, obj) {
-                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-                    });
-                } else if (typeof CommonHandler == "function") {
-                    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
-                        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
-                    })
-                } else {
-                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-                    //alert('没有获得约定的数据源.');
-                }
-            }
+            $.each(data, function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
             return operations;
         }
 
@@ -887,14 +936,16 @@
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1)
                 window.parent.$('#EnLayout').layout('remove', 'west');
-            window.location.href = url; //刷新.
+            parent.window.location.href = url.replace("EnOnly", "En"); //刷新.
 
 
         }
 
         function Save() {
 
+            $("#Btn_Save").val('正在保存');
             this.Update();
+            $("#Btn_Save").val('保存');
         }
 
         //更新.
@@ -956,7 +1007,7 @@
                 //新增保存后显示En
                 if (window.parent && window.parent.$('#EnLayout').length == 1)
                     url = url.replace("EnOnly", "En");
-                window.location.href = url; //刷新.
+                parent.window.location.href = url; //刷新.
                 return;
             }
 
@@ -1088,7 +1139,8 @@
 
         function CloseIt() {
             parent.$("#eudlg").dialog('close');
-            parent.parent.$("#eudlg").dialog('close');
+            if (parent.parent != undefined && parent.parent.$("#eudlg").length == 1)
+                parent.parent.$("#eudlg").dialog('close');
         }
 
         $(function () {
@@ -1136,8 +1188,12 @@
 
         }
 
-/**/</script>
+        /**/</script>
     <style type="text/css">
+        /*body.easyui-layout {
+            top: 20px;
+            left: 40px;
+        }*/
         .panel-body {
             padding: 0px;
         }
@@ -1150,38 +1206,228 @@
             border: 0px;
         }
 
+        .cs-btn-group {
+            width: auto !important;
+            min-height: 34px;
+            text-align: right;
+            background-color: transparent;
+        }
+
+            .cs-btn-group .l-btn-icon {
+                display: none;
+            }
+
+            .cs-btn-group .l-btn-text {
+                margin: 0;
+            }
+
+        .layout-panel {
+            position: absolute;
+            right: 0;
+            top: 0 !important;
+            box-shadow: none;
+        }
+
+        .layout-panel-north {
+            width: auto !important;
+            left: auto !important;
+            background-color: transparent;
+        }
+
         .btn {
-            background: white !important;
-            color: #337ab7 !important;
+            padding: 0 10px;
+            color: #fff !important;
+            border-radius: 0px !important;
+            border: 0;
+            height: 24px;
+            line-height: 24px;
+            box-sizing: border-box;
+        }
+
+            .btn:hover {
+                padding: 0 10px;
+                border: 0;
+            }
+
+        .btn-light-green {
+            background-color: #50b6ac !important;
+        }
+
+            .btn-light-green:hover {
+                background-color: #50b6ac;
+            }
+
+        .btn-light-blue {
+            background-color: #62cae3 !important;
+        }
+
+            .btn-light-blue:hover {
+                background-color: #62cae3;
+            }
+
+        .btn-light-yellow {
+            background-color: #f3ba20 !important;
+        }
+
+            .btn-light-yellow:hover {
+                background-color: #f3ba20;
+            }
+
+        .btn-light-red {
+            background-color: #f74f52 !important;
+        }
+
+            .btn-light-red:hover {
+                background-color: #f74f52;
+            }
+
+        .btn-white {
+            border: 1px solid #031f5d;
+            background-color: #fff !important;
+            color: #031f5d !important;
+        }
+
+            .btn-white:hover {
+                border: 1px solid #031f5d;
+            }
+
+        .tabs-wrap .tabs, .tabs-panels, .tabs li a.tabs-inner, .tabs-panels table, td.FDesc, td.FContext, td {
+            border: 0;
+        }
+
+        .tabs-wrap table {
+            width: 100% !important;
+        }
+
+        .tabs-wrap .tabs {
+            padding-left: 0;
+            width: auto;
+            border-bottom: 1px solid #0a2561;
+        }
+
+        .tabs li a.tabs-inner {
+            padding: 0 16px;
+            background: none;
+            border-radius: 5px 5px 0 0;
+        }
+
+            .tabs li a.tabs-inner:hover {
+                background: none;
+                font-weight: bold;
+            }
+
+        .tabs li.tabs-selected a.tabs-inner {
+            border: 1px solid #0a2561;
+            border-bottom-color: #fff;
+            background: #fff;
+        }
+
+        td {
+            box-sizing: border-box;
+        }
+
+            td a {
+                color: #15398b;
+                font-size: 12px;
+            }
+
+                td a img {
+                    vertical-align: -2px;
+                }
+
+            td.FContext {
+                width: 30%;
+            }
+
+                td.FContext:nth-child(2) {
+                    padding-right: 30px;
+                }
+
+                td.FContext > *:only-child {
+                    width: 100% !important;
+                    font-size: 13px;
+                    color: #282828;
+                    box-sizing: border-box;
+                }
+
+                td.FContext[colspan] {
+                    padding-right: 0;
+                }
+
+        select[disabled], input[type=text]:disabled, .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+            background-color: #fff;
+            border: 1px solid #ccc !important;
+            text-align: left !important;
+            height: 32px;
+            box-sizing: border-box;
+        }
+
+            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+                background-color: #f7f6f9;
+            }
+
+        td input[type="text"], td input[type="number"], td input[type="date"], td input[type="tel"] {
+            height: 32px;
+        }
+
+        td input[type="checkbox"] {
+            margin-right: 5px;
+            width: 16px;
+            height: 16px;
+        }
+
+        td label {
+            font-size: 13px;
+        }
+
+        /*td.FDesc {
+           padding-right: 10px;
+            text-align: right;
+            box-sizing: border-box;
+        }*/
+        /*td.FDesc:first-child {
+            width: 81px!important;
+        }
+        td:nth-child(3)[class="FDesc"] {
+            width: 130px!important;
+        }*/
+        .cs-form-import > .layout-panel-center {
+            padding: 16px 0 0 16px;
+        }
+
+        .cs-form-import > .layout-panel-north {
+            top: 6px !important;
+            padding-right: 21px;
+            border-radius: 0;
         }
     </style>
 </head>
-<body class="easyui-layout">
-    <div class="easyui-layout" data-options="region:'center'" border="false">
-        <div class="easyui-layout" data-options="fit:true">
-            <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false"
-                 style="height: 30px; padding: 2px; background-color: #d3d3d34a">
-                <a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'"
-                   onclick="New()">新建</a> <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton"
-                                             data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
-                <a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
-                   onclick="Delete()">删除</a>
+<body class="easyui-layout cs-form-import" data-options="fit:true">
+    <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
+        <!--<a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
+        onclick="New()" style="margin-right:5px;">新建</a>-->
+        <input type="button" id="Btn_New" value="新建" onclick="New()" />
+        <!--<a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
+        data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>-->
 
-                                   <a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reset'"
-                   onclick="Setting()">设置</a>
+        <input type="button" id="Btn_Save" value="保存" onclick="Update()" />
 
-
-
-            </div>
-            <div data-options="region:'center',noheader:true,border:false" style="margin: 0px">
-                <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin: 0px;
+        <!--<a id="Btn_Delete" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-red" data-options="plain:true,iconCls:'icon-delete'"
+        onclick="Delete()" style="margin-right:5px;">删除</a>-->
+        <input type="button" id="Btn_Delete" value="删除" onclick="Delete()" />
+        <!--<a id="Btn_Setting" href="javaScript:void(0)" class="easyui-linkbutton btn btn-white" data-options="plain:true,iconCls:'icon-reset'"
+           onclick="Setting()" style="margin-right:5px;">设置</a>-->
+        <input type="button" id="Btn_Setting" value="设置" onclick="Setting()" />
+    </div>
+    <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto">
+        <div class="easyui-layout" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
                     padding: 0px; overflow: auto">
-                    <br />
-                    <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                    <br />
-                </div>
-            </div>
+            <br />
+            <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+            <br />
         </div>
     </div>
+    <!--</div>-->
+    <!--</div>-->
 </body>
 </html>

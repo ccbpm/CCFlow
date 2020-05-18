@@ -10,6 +10,7 @@ using BP.Sys;
 using BP.Web;
 using BP.DA;
 using BP.En;
+using System.Drawing;
 
 namespace CCFlow.WF.CCForm
 {
@@ -23,6 +24,135 @@ namespace CCFlow.WF.CCForm
     // [System.Web.Script.Services.ScriptService]
     public class CCFormAPI : System.Web.Services.WebService
     {
+        #region VSTO 2020接口.
+        /// <summary>
+        /// 获得返回的文件流
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <param name="sid"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public String VSTO_Gener_OnlineFile_Init(string flowNo,string workId, string userNo, string sid, string filePath, string actionFlag)
+        {
+            
+            if (DataType.IsNullOrEmpty(filePath) == false)
+                return "err@路径不能为空.";
+
+            if (filePath.IndexOf("/DataUser/") == -1)
+                return "err@非法的访问.";
+
+            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+            MethodReturnMessage<byte[]> msg = null;
+            try
+            {
+                BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+
+
+                //string str = "WordFile";
+                //if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
+                //{
+                //    /*如果没有此列，就自动创建此列.*/
+                //    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    BP.DA.DBAccess.RunSQL(sql);
+                //}
+
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(fl.PTable, "OID", workId.ToString(), "WordFile");
+
+                if (bytes == null)
+                {
+                    Microsoft.Office.Interop.Word.Application docApp = new Microsoft.Office.Interop.Word.Application();
+                    Microsoft.Office.Interop.Word.Document doc;
+                    object miss = System.Reflection.Missing.Value;
+                    string strContext; //文档内容  
+                    doc = docApp.Documents.Add(ref miss, ref miss, ref miss, ref miss);
+                    docApp.Selection.ParagraphFormat.LineSpacing = 15;
+
+                    //页眉    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryHeader;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页眉内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    //页尾    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryFooter;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页尾内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    strContext = "欢迎使用ccflow word";
+                    doc.Paragraphs.Last.Range.Text = strContext;
+
+                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+
+                    if (!System.IO.Directory.Exists(rootPath))
+                        System.IO.Directory.CreateDirectory(rootPath);
+
+                    string fileName = userNo + "_" + flowNo + "_" + workId + ".docx";
+                    string fullFilePath = rootPath + fileName;
+
+                    //保存文件    
+                    doc.SaveAs(fullFilePath, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+                    doc.Close(ref miss, ref miss, ref miss);
+                    docApp.Quit(ref miss, ref miss, ref miss);
+
+                    bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
+
+                    //WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
+                    File.Delete(fullFilePath);
+                }
+
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = bytes
+                };
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
+        [WebMethod]
+        public String VSTO_Gener_OnlineFile_Save(string userNo, string sid, string filePath, Byte byts, string paras)
+        {
+            if (DataType.IsNullOrEmpty(filePath) == false)
+                return "err@路径不能为空.";
+
+            if (filePath.IndexOf("/DataUser/") == -1)
+                return "err@非法的访问.";
+
+            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+
+            //BP.DA.DataType.wir
+
+            #region 根据标记处理特别业务.
+            if (paras.Contains("ActionType=DocTemplate")==true)
+            {
+
+            }
+            #endregion
+
+            //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+            return "1.1.0.4";
+        }
+        #endregion  VSTO 2020接口.
+
         #region 与单据相关的接口代码.
         /// <summary>
         /// 获得单据模版信息
@@ -95,13 +225,13 @@ namespace CCFlow.WF.CCForm
                 foreach (GEDtl dtl in dtlEns)
                 {
                     DataTable dtDtl = dtl.ToDataTableField(item.No);
-                    
+
                     #region 处理bool类型.
                     foreach (Attr dtlitem in dtl.EnMap.Attrs)
                     {
                         if (dtlitem.MyDataType == DataType.AppBoolean)
                         {
-                            if(Dtl.Columns.Contains(dtlitem.Key + "Text"))
+                            if (Dtl.Columns.Contains(dtlitem.Key + "Text"))
                             {
                                 continue;
                             }
@@ -127,6 +257,93 @@ namespace CCFlow.WF.CCForm
             bytes = template.GenerTemplateFile();
             return;
         }
+
+        [WebMethod]
+        public string SaveBillDesingerTemplate_2019(string billNo, string frmID, byte[] bytes)
+        {
+            try
+            {
+                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string fileName = billNo + "_" + frmID + ".docx";
+                if (!Directory.Exists(filePath))
+                    Directory.CreateDirectory(filePath);
+
+                string fileFullPath = filePath + fileName;
+
+                if (File.Exists(fileFullPath))
+                    File.Delete(fileFullPath);
+
+                FileStream fs = new FileStream(fileFullPath, System.IO.FileMode.CreateNew);
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Close();
+
+                return "模版上传成功";
+            }
+            catch (Exception ex)
+            {
+
+                return "err@:" + ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// 获取模版
+        /// </summary>
+        /// <param name="billNo"></param>
+        /// <param name="frmID"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string GetBillDesingerTemplate_2019(string billNo, string frmID)
+        {
+            MethodReturnMessage<byte[]> msg = null;
+
+            try
+            {
+                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string fileName = billNo + "_" + frmID + ".docx";
+                if (!Directory.Exists(filePath))
+                    Directory.CreateDirectory(filePath);
+
+                string fileFullPath = filePath + fileName;
+
+                if (File.Exists(fileFullPath))
+                {
+                    FileStream fs = new FileStream(fileFullPath, FileMode.Open);
+                    var buffer = new byte[fs.Length];
+                    fs.Position = 0;
+                    fs.Read(buffer, 0, buffer.Length);
+                    fs.Close();
+
+                    msg = new MethodReturnMessage<byte[]>
+                    {
+                        Success = true,
+                        Message = "读取文件成功",
+                        Data = buffer
+                    };
+                }
+                else
+                {
+                    msg = new MethodReturnMessage<byte[]>
+                    {
+                        Success = false,
+                        Message = "模版不存在",
+                        Data = null
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
         #endregion
 
         #region 与公文相关的接口.
@@ -343,11 +560,15 @@ namespace CCFlow.WF.CCForm
             if (dsDtlsChange != null)
             {
                 //截去『BP.XXX.』以便下方的“new MapDtls(frmID)”能正常取值
+                string tempFrmID = frmID;
                 if (frmID.Contains("BP."))
                     frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
 
                 //明细集合.
                 MapDtls dtls = new MapDtls(frmID);
+
+                if (dtls.Count == 0)
+                    dtls = new MapDtls(tempFrmID);
 
                 //保存从表
                 foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
@@ -426,7 +647,8 @@ namespace CCFlow.WF.CCForm
                             foreach (DataRow dr in dt.Rows)
                             {
                                 GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                                daDtl.OID = int.Parse(dr["OID"].ToString());
+                                string oid = dr["OID"].ToString();
+                                daDtl.OID = int.Parse(string.IsNullOrWhiteSpace(oid) ? "0" : oid);
                                 if (daDtl.OID > 100)
                                     daDtl.RetrieveFromDBSources();
 
@@ -602,8 +824,9 @@ namespace CCFlow.WF.CCForm
         /// <param name="pkValue">主键</param>
         /// <param name="byt">文件流.</param>
         [WebMethod]
-        public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string fileName)
+        public void SaveFrmAth(string userNo, string sid, string frmID, int nodeID, Int64 workID, byte[] byt, string guid)
         {
+            BP.WF.Dev2Interface.Port_Login(userNo);
             MapData md = new MapData(frmID);
             FrmAttachments aths = new FrmAttachments(frmID);
             if (aths.Count == 0)
@@ -614,13 +837,34 @@ namespace CCFlow.WF.CCForm
             FrmAttachment ath = aths[0] as FrmAttachment;
 
             //把文件写入.
-            string myfileName = BP.Sys.SystemConfig.PathOfTemp + fileName;
-            if (System.IO.File.Exists(myfileName) == true)
-                System.IO.File.Delete(myfileName);
-            BP.DA.DataType.WriteFile(myfileName, byt);
+            string rootPath = Context.Server.MapPath("~/" + ath.SaveTo);
+            string fileName = guid + "." + System.Drawing.Imaging.ImageFormat.Jpeg.ToString();
+            string filePath = rootPath + fileName;
+            if (System.IO.File.Exists(filePath) == true)
+                System.IO.File.Delete(filePath);
+            BP.DA.DataType.WriteFile(filePath, byt);
 
-            //增加附件.
-            BP.WF.Dev2Interface.CCForm_AddAth(nodeID, workID, ath.NoOfObj, frmID, BP.Sys.SystemConfig.PathOfTemp, fileName);
+            FileInfo info = new FileInfo(filePath);
+            FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+            dbUpload.MyPK = guid;
+            dbUpload.NodeID = nodeID;
+            dbUpload.Sort = null;
+            dbUpload.FK_FrmAttachment = ath.MyPK;
+            dbUpload.FK_MapData = ath.FK_MapData;
+            dbUpload.FileExts = info.Extension;
+            dbUpload.FileFullName = filePath;
+            dbUpload.FileName = fileName;
+            dbUpload.FileSize = (float)info.Length;
+            dbUpload.RDT = DataType.CurrentDataTimess;
+            dbUpload.Rec = userNo;
+            dbUpload.RecName = BP.Web.WebUser.Name;
+            dbUpload.FK_Dept = WebUser.FK_Dept;
+            dbUpload.FK_DeptName = WebUser.FK_DeptName;
+            dbUpload.RefPKVal = workID.ToString();
+
+            dbUpload.UploadGUID = guid;
+            dbUpload.DirectSave();
+
         }
         /// <summary>
         /// 级联接口
@@ -703,5 +947,249 @@ namespace CCFlow.WF.CCForm
             //return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
             return "1.0.0.0";
         }
+        [WebMethod]
+        public void RecordMsg(Int64 workID, string msg)
+        {
+            //VSTOMsg vMsg = new VSTOMsg();
+            //vMsg.WorkID = workID;
+            //vMsg.ErrorMsg = msg;
+            //vMsg.RDT = DateTime.Now.ToString(BP.DA.DataType.SysDataTimeFormat);
+            //vMsg.IsDelete = false;
+            //vMsg.DirectSave();
+        }
+        public class ReportImage
+        {
+            public string ext;
+            public string fileName;
+            public byte[] bytesData;
+            public string mypk;
+        }
+
+        [WebMethod]
+        public string GetReportImagesData(long workID, string createReportType)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(createReportType))
+                    return null;
+
+                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                BP.DA.Paras ps = new BP.DA.Paras();
+
+
+                switch (createReportType)
+                {
+                    case "1":
+                        ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE  RefPKVal=" + dbStr + "RefPKVal";
+                        ps.Add(BP.Sys.FrmAttachmentDBAttr.RefPKVal, workID);
+                        break;
+                    case "2":
+                        ps.SQL = "SELECT FileFullName,FileExts,MyPK,FileName  FROM Sys_FrmAttachmentDB  WHERE " +
+                                 "RefPKVal in(SELECT WorkID FROM WF_GenerWorkFlow WHERE PWORKID=" + dbStr + "PWORKID)";
+                        ps.Add("PWORKID", workID);
+                        break;
+                    default:
+                        break;
+                }
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
+                List<ReportImage> reImgsList = new List<ReportImage>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    FileStream fs = new FileStream(dr["FileFullName"].ToString(), FileMode.Open);
+                    long size = fs.Length;
+                    byte[] bytes = new byte[size];
+                    fs.Read(bytes, 0, bytes.Length);
+                    fs.Close();
+
+                    reImgsList.Add(new ReportImage
+                    {
+                        ext = dr["FileExts"].ToString(), //frmDB.FileExts,
+                        fileName = dr["FileName"].ToString(), //frmDB.FileName,
+                        bytesData = bytes,
+                        mypk = dr["MyPK"].ToString() //frmDB.MyPK
+                    });
+                }
+
+                return LitJson.JsonMapper.ToJson(reImgsList);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #region  公文主文件
+        [WebMethod]
+        public DataSet WordDoc_GetTempDocMainData(string userNo, string sid, int nodeID, 
+            string pkValue, string atParas, string tempNo)
+        {
+            //让他登录.
+            BP.WF.Dev2Interface.Port_Login(userNo);
+
+            //工作ID.
+            Int64 workid = Int64.Parse(pkValue);
+
+            //
+            BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workid);
+
+            string frmID = "";
+            //查询出来绑定的表单.
+            FrmNodes fns = new FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Node, gwf.FK_Node);
+            foreach (FrmNode fn in fns)
+            {
+                if (fn.IsEnable == false)
+                    continue;
+                frmID = fn.FK_Frm;
+            }
+
+            if (DataType.IsNullOrEmpty(frmID) == true)
+                frmID = "ND" + nodeID;
+
+            //解析这个表单.
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, pkValue, atParas);
+            return ds;
+        }
+        [WebMethod]
+        public string WordDoc_GetWordFile(string flowNo, int nodeId, string userNo, long workId)
+        {
+            MethodReturnMessage<byte[]> msg = null;
+            try
+            {
+                BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+
+
+                //string str = "WordFile";
+                //if (BP.DA.DBAccess.IsExitsTableCol(fl.PTable, str) == false)
+                //{
+                //    /*如果没有此列，就自动创建此列.*/
+                //    string sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //        sql = "ALTER TABLE " + fl.PTable + " ADD  " + str + " image ";
+
+                //    BP.DA.DBAccess.RunSQL(sql);
+                //}
+
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(fl.PTable, "OID", workId.ToString(), "WordFile");
+
+                if (bytes == null)
+                {
+                    Microsoft.Office.Interop.Word.Application docApp = new Microsoft.Office.Interop.Word.Application();
+                    Microsoft.Office.Interop.Word.Document doc;
+                    object miss = System.Reflection.Missing.Value;
+                    string strContext; //文档内容  
+                    doc = docApp.Documents.Add(ref miss, ref miss, ref miss, ref miss);
+                    docApp.Selection.ParagraphFormat.LineSpacing = 15;
+
+                    //页眉    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryHeader;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页眉内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    //页尾    
+                    //docApp.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekPrimaryFooter;
+                    //docApp.ActiveWindow.ActivePane.Selection.InsertAfter("[页尾内容]");
+                    //docApp.Selection.Paragraphs.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    //docApp.ActiveWindow.View.SeekView = WdSeekView.wdSeekMainDocument;
+
+                    strContext = "欢迎使用ccflow word";
+                    doc.Paragraphs.Last.Range.Text = strContext;
+
+                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+
+                    if (!System.IO.Directory.Exists(rootPath))
+                        System.IO.Directory.CreateDirectory(rootPath);
+
+                    string fileName = userNo + "_" + flowNo + "_" + workId + ".docx";
+                    string fullFilePath = rootPath + fileName;
+
+                    //保存文件    
+                    doc.SaveAs(fullFilePath, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+                    doc.Close(ref miss, ref miss, ref miss);
+                    docApp.Quit(ref miss, ref miss, ref miss);
+
+                    bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
+
+                    WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
+                    File.Delete(fullFilePath);
+                }
+
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = bytes
+                };
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = null
+                };
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
+        [WebMethod]
+        public string WordDoc_SaveWordFile(string flowNo, int nodeId, string userNo, long workId, byte[] bytes)
+        {
+            MethodReturnMessage<string> msg = null;
+            try
+            {
+                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+
+                BP.DA.DBAccess.SaveBytesToDB(bytes, tableName, "OID", workId, "WordFile");
+
+                msg = new MethodReturnMessage<string>
+                {
+                    Success = true,
+                    Message = "读取文件成功",
+                    Data = ""
+                };
+
+            }
+            catch (Exception ex)
+            {
+                msg = new MethodReturnMessage<string>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = ""
+                };
+
+            };
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// 返回信息格式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class MethodReturnMessage<T>
+    {
+        /// <summary>
+        /// 是否运行成功
+        /// </summary>
+        public bool Success { get; set; }
+        /// <summary>
+        /// 信息    
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 返回的数据
+        /// </summary>
+        public T Data { get; set; }
     }
 }

@@ -220,3 +220,18 @@ function DoDown() {
     }
 }
 
+function OpenNode(type) {
+    if (type == 0) {
+        //展开所有的节点
+        $("#enTree").tree("expandAll");
+    }
+    if (type == 1) {
+        //展开选择的节点
+        var node = $('#enTree').tree('getSelected');
+        if (node) {
+            $("#enTree").tree('expand', node.target);
+        }
+       
+    }
+}
+

@@ -11,7 +11,7 @@
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
-    <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
@@ -224,9 +224,9 @@
         var firstLoad = true;
         //此文件没用，可删除
         function dtTable() {
-            var fk_MapExt = getQueryStringByName("FK_MapExt");
+            var fk_MapExt = GetQueryString("FK_MapExt");
             var searchData = $('#searchForm').serialize();
-            var formData = getQueryString('FormData');
+            var formData = GetQueryString('FormData');
             var formData2 = {};
             for (var i = 0; i < formData.length; i++) {
                 formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);

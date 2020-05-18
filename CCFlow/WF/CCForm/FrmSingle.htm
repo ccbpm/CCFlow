@@ -12,11 +12,11 @@
     <script src="../Scripts/config.js"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
-        var mapdata = getQueryStringByName("FK_MapData");
-        var oid = getQueryStringByName("OID");
-        var isEdit = getQueryStringByName("IsEdit");
-        var isPrint = getQueryStringByName("IsPrint");
-        var isLoadData = getQueryStringByName("IsLoadData");
+        var mapdata = GetQueryString("FK_MapData");
+        var oid = GetQueryString("OID");
+        var isEdit = GetQueryString("IsEdit");
+        var isPrint = GetQueryString("IsPrint");
+        var isLoadData = GetQueryString("IsLoadData");
         var mdinfo;
 
         $(function () {

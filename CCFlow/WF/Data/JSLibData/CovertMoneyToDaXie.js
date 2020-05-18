@@ -59,6 +59,7 @@ function getArgsFromHref(sArgName) {
 }
 
 function clearNoNum(obj) {
+    obj = obj.toString();
     obj = obj.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
     obj = obj.replace(/^\./g, "");  //验证第一个字符是数字而不是.
     obj = obj.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的.

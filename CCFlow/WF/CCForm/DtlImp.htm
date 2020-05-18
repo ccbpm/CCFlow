@@ -370,9 +370,9 @@
             data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
 
             $("#jsonDataTable").html("");
-            if (data && data.length > 0) {
+            //if (data && data.length > 0) {
                 InitTableByData(data);
-            }
+            //}
         }
 
         //数据返回Table
@@ -427,6 +427,10 @@
             thread.append(threadTr);
             $("#jsonDataTable").append(thread);
 
+            if (dataTable && dataTable.length == 0) {
+                $("#jsonDataTable").append('<tbody><tr><td colspan=' + parseInt(heads.length+1)+'>没有查询到数据</td></tr></tbody>');
+                return;
+            }
             //生成表格体
             var tbody = $('<tbody></tbody>');
             $.each(dataTable, function (i, dataObj) {
@@ -458,78 +462,7 @@
             $("#jsonDataTable").append(tbody);
         }
 
-        //ajax获取后台数据
-        function initTable() {
-            var tbody = "";
-            $.ajax({
-                type: 'POST',
-                dataType: "json",
-                async: false,
-                xhrFields: {
-                    withCredentials: true
-                },
-                crossDomain: true,
-                url: "table.jsp", //请求的action路径页面
-                data: { "flag": true },
-                error: function () {//请求失败处理函数 
-                    alert('请求失败');
-                },
-                success: function (data) { //请求成功后处理函数。 
-                    tbody = "<tr class='success'><th>设备标识号</td><th  align='center'>设备类别</td><th  align='center'>参数编码</td><th  align='center'>失效模式编码</td><th  align='center'>数据来源</td></tr>";
-                    $.each(data.list, function (i, n) {
-                        var trs = "";
-                        trs += "<tr><td align='center'>" + n.sbbsh + "</td><td align='center'>" + n.sblb + "</td><td align='center'>" + n.csbm + "</td><td align='center'>" + n.sxcode + "</td><td align='center'>" + n.sjly + "</td></tr>";
-                        tbody += trs;
-                    });
-                    $("#testTable").html(tbody);
-                    var pageCount = data.pageCount; //取到pageCount的值
-                    var currentPage = data.CurrentPage; //得到currentPage
-
-                    var options = {
-                        bootstrapMajorVersion: 3, //版本
-                        currentPage: currentPage, //当前页数
-                        totalPages: pageCount, //总页数
-                        numberOfPages: 5,
-                        itemTexts: function (type, page, current) {
-                            switch (type) {
-                                case "first":
-                                    return "首页";
-                                case "prev":
-                                    return "上一页";
-                                case "next":
-                                    return "下一页";
-                                case "last":
-                                    return "末页";
-                                case "page":
-                                    return page;
-                            }
-                        }, //点击事件，用于通过Ajax来刷新整个list列表
-                        onPageClicked: function (event, originalEvent, type, page) {
-                            $.ajax({
-                                url: "table.jsp",
-                                type: "Post",
-                                dataType: "json",
-                                xhrFields: {
-                                    withCredentials: true
-                                },
-                                crossDomain: true,
-                                data: "page=" + page,
-                                success: function (data) {
-                                    tbody1 = "<tr class='success'><th>设备标识号</td><th  align='center'>设备类别</td><th  align='center'>参数编码</td><th  align='center'>失效模式编码</td><th  align='center'>数据来源</td></tr>";
-                                    $.each(data.list, function (i, n) {
-                                        var trs = "";
-                                        trs += "<tr><td align='center'>" + n.sbbsh + "</td><td align='center'>" + n.sblb + "</td><td align='center'>" + n.csbm + "</td><td align='center'>" + n.sxcode + "</td><td align='center'>" + n.sjly + "</td></tr>";
-                                        tbody1 += trs;
-                                    });
-                                    $("#testTable").html(tbody1);
-                                }
-                            });
-                        }
-                    };
-                    $('#example').bootstrapPaginator(options);
-                }
-            });
-        }
+       
 
         //重置标签
         function ResetHtml() {
@@ -632,9 +565,6 @@
         <tr id="groupTr">
             <td style="height: 60px; text-align: left;">
                 <div id="groupDiv" class="menuGroup">
-                    <a href="javascript:void(0);">全部</a> 
-                    <a class="menuGroupSelected" href="javascript:void(0);">携程商旅</a> 
-                    <a href="javascript:void(0);">滴滴出行</a>
                 </div>
             </td>
         </tr>

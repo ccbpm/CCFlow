@@ -1,5 +1,13 @@
 ﻿//小范围的多选,不需要搜索.
-function MultipleChoiceSmall(mapExt, mapAttr) {
+function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
+    if (tbID == null || tbID == undefined) {
+        tbID = "TB_" + mapExt.AttrOfOper;
+    }
+    var cbxID = mapExt.AttrOfOper + "_combobox";
+    if (rowIndex != null && rowIndex != undefined)
+        cbxID = mapExt.AttrOfOper + "_combobox_" + rowIndex;
+    var tbTextID = tbID + "T";
+
     var webUser = new WebUser();
     var data = [];
     var valueField = "No";
@@ -15,18 +23,31 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             });
             break;
         case 2:
-            valueField = "IntKey"
-            textField = "Lab";
             var enums = new Entities("BP.Sys.SysEnums");
             enums.Retrieve("EnumKey", mapExt.Tag2);
-            $.each(enums, function (i, o) {
-                data.push({ No: o.EnumKey, Name: o.Lab, IntKey: o.IntKey })
-            });
+            if (mapExt.Tag == "1" || mapExt.Tag == "2")
+                $.each(enums, function (i, o) {
+                    data.push({ No: o.EnumKey, Name: o.Lab, IntKey: o.IntKey })
+                });
+            else
+                $.each(enums, function (i, o) {
+                    data.push({ No: o.IntKey, Name: o.Lab })
+                });
             //data = enums;
             break;
         case 3:
-            var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
-            data = en.DoMethodReturnJSON("GenerDataOfJson");
+            if (frmData != null && frmData != undefined) {
+
+                data = frmData[mapExt.Tag3];
+                if (data == undefined) {
+                    var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
+                    data = en.DoMethodReturnJSON("GenerDataOfJson");
+                    frmData[mapExt.Tag3] = data;
+                } 
+            } else {
+                var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
+                data = en.DoMethodReturnJSON("GenerDataOfJson");
+            }
             break;
         case 4:
             var tag4SQL = mapExt.Tag4;
@@ -34,7 +55,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
             tag4SQL = tag4SQL.replace('@WebUser.Name', webUser.Name);
             tag4SQL = tag4SQL.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
             tag4SQL = tag4SQL.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-            
+
             if (tag4SQL.indexOf('@') == 0) {
                 alert('约定的变量错误:' + tag4SQL + ", 没有替换下来.");
                 return;
@@ -47,19 +68,19 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
         //如果是checkbox 多选.
         if (mapExt.Tag == "1" || mapExt.Tag == "2") {
-            return MakeCheckBoxsModel(mapExt, data, mapAttr);
+            return MakeCheckBoxsModel(mapExt, data, mapAttr, tbID);
         }
 
-        var tb = $("#TB_" + AttrOfOper);
-        //tb.attr("visible", true); //把他隐藏起来.
-        tb.css("visibility", "hidden");
+        var tb = $("#" + tbID);
+        var w = tb.outerWidth();
+        var h = tb.outerHeight();
+        tb.hide();
 
         var cbx = $('<input type="text" />');
-        cbx.attr("id", AttrOfOper + "_combobox");
+        cbx.attr("id", cbxID);
         cbx.attr("name", AttrOfOper + "_combobox");
         tb.before(cbx);
-        var w = tb.outerWidth() - 120;
-        var h = tb.outerHeight() + 5;
+
         cbx.attr("class", "easyui-combobox");
         cbx.css("width", w);
         cbx.css("height", h);
@@ -71,22 +92,16 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
             "multiple": true,
             "onSelect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
+                $("#" + tbID).val(cbx.combobox("getValues"));
+                $("#" + tbTextID).val(cbx.combobox("getText"));
                 //保存选择的值.
-                SaveVal(FK_MapData, AttrOfOper, p.No, p.Name);
-
-                //                (function sel(n, KeyOfEn, FK_MapData) {
-                //                    //保存选择的值.
-                //                    SaveVal(FK_MapData, KeyOfEn, n);
-
-                //                })(p[valueField], AttrOfOper, FK_MapData);
             },
             "onUnselect": function (p) {
-                $("#TB_" + AttrOfOper).val(cbx.combobox("getValues"));
+                $("#" + tbID).val(cbx.combobox("getValues"));
                 (function unsel(n, KeyOfEn) {
 
                     //删除选择的值.
-                    Delete(KeyOfEn, n);
+                    Delete(KeyOfEn, n, OID);
 
                 })(p[valueField], AttrOfOper);
             }
@@ -94,7 +109,7 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 
         cbx.combobox("loadData", data);
-        $(".textbox-text").css("width", "100%");
+        $(".textbox-text").css("width", w);
 
         if (mapAttr != null && mapAttr.UIIsEnable != 1) {
             cbx.combobox('disable');
@@ -113,10 +128,9 @@ function MultipleChoiceSmall(mapExt, mapAttr) {
 
 
 //checkbox 模式.
-function MakeCheckBoxsModel(mapExt, data, mapAttr) {
-    var textboxId = "TB_" + mapExt.AttrOfOper
-    var textbox = $("#" + textboxId);
-    textbox.css("visibility", "hidden");
+function MakeCheckBoxsModel(mapExt, data, mapAttr, tbID) {
+    var textbox = $("#" + tbID);
+    textbox.hide();
     var tbVal = textbox.val();
     if (tbVal == null) tbVal = "";
     for (var i = 0; i < data.length; i++) {
@@ -141,7 +155,7 @@ function MakeCheckBoxsModel(mapExt, data, mapAttr) {
             enableAttr = "disabled='disabled'";
         }
 
-        var cb = $("<input " + enableAttr + " type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + textboxId + "\",\"" + name + "\")'  />");
+        var cb = $("<input " + enableAttr + " type='checkbox' id='" + id + "' name='" + name + "' value='" + keyValue + "'onclick='changeValue(\"" + tbID + "\",\"" + name + "\")'  />");
 
 
         if (tbVal.indexOf(keyValue + ',') != -1)
@@ -156,9 +170,9 @@ function MakeCheckBoxsModel(mapExt, data, mapAttr) {
         textbox.before(cb);
 
         if (mapExt.Tag == "1")
-            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label>");
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "&nbsp;&nbsp;</label>");
         else
-            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "</label><br>");
+            var lab = $("<label class='labRb align_cbl' for='" + id + "'>&nbsp;" + en.Name + "&nbsp;&nbsp;</label><br>");
 
         textbox.before(lab);
     }
@@ -179,18 +193,23 @@ function changeValue(changeIdV, getNameV) {
 }
 
 //删除数据.
-function Delete(keyOfEn, val) {
-
-    var oid = (pageData.WorkID || pageData.OID || "");
+function Delete(keyOfEn, val, oid) {
+    if (oid == null || oid == undefined)
+        oid = (pageData.WorkID || pageData.OID || "");
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
     frmEleDB.Delete();
 }
 
 //设置值.
-function SaveVal(fk_mapdata, keyOfEn, val, name) {
+function SaveVal(fk_mapdata, keyOfEn, val, name, oid) {
 
-    var oid = (pageData.WorkID || pageData.OID || "");
+    if (oid == null || oid == undefined) {
+        if (GetQueryString("WorkID") == null || GetQueryString("WorkID") == undefined)
+            oid = GetQueryString("OID");
+        else
+            oid = GetQueryString("WorkID");
+    }
 
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 
@@ -263,5 +282,78 @@ function DeptEmpModelAdv0(mapExt) {
             }
             return true;
         });
+    });
+}
+
+
+function MultipleInputSearch(mapExt, defaultVal,tbID) {
+    if (tbID == null || tbID == undefined) {
+        tbID = "TB_" + mapExt.AttrOfOper;
+    }
+   var tb= $("#" + tbID);
+    var width = tb.width();
+    var height = tb.height();
+    tb.hide();
+    //获取当前元素是否在P标签内
+    var parent;
+    var container;
+    if(tb.parent().length == 1 && tb.parent()[0].tagName.toUpperCase()=="P"){
+        parent = tb.parent()[0];
+        var ptext = $(parent).text();
+        if(ptext.indexOf(tb.attr("data-name"))!=-1){
+            var _html = $(parent).html();
+            $(parent).html(_html.replace(ptext,""));
+            tb= $("#" + tbID);
+            tb.before($("<div style='float:left'>"+ptext+"</div>"));
+
+            container = $("<div style='float:left'></div>");
+            tb.before(container);
+            tb.before($("<div style='clear:both'></div>"));
+
+        }else{
+            container = $("<div></div>");
+            tb.before(container);
+        }
+
+
+    }else{
+        container = $("<div></div>");
+        tb.before(container);
+    }
+
+
+
+
+    container.attr("id", mapExt.AttrOfOper + "_comboTree");
+   
+    container.addClass("select-tree-wrap");
+
+    var dbSrc = mapExt.Doc; //搜索数据源
+    //处理sql，url参数.
+    dbSrc = dbSrc.replace(/~/g, "'");
+    dbSrc = DealExp(dbSrc);
+  
+    var listSrc = mapExt.Tag1;//列表数据源
+    listSrc = listSrc.replace(/~/g, "'");
+    listSrc = DealExp(listSrc);
+
+    var isShowSignature = mapExt.Tag == "1" ? true : false;
+    var valArray = [];
+    if (defaultVal != null && defaultVal != undefined) {
+        defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
+        defaultVal = defaultVal.substr(0, defaultVal.length - 1);
+        valArray = defaultVal.split(",");
+    }
+    
+    $('#' + mapExt.AttrOfOper + "_comboTree").comboTree({
+        source: dbSrc,
+        listSource:listSrc,
+        isMultiple: true,
+        isFirstClassSelectable: false, //第一级是否可选
+        cascadeSelect: true,
+        selectedlength: 30,//最多可选
+        keyOfEn: mapExt.AttrOfOper,
+        selected: valArray,
+        isShowSignature: isShowSignature
     });
 }

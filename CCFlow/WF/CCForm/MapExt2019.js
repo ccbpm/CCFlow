@@ -65,7 +65,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
             $("#divinfo").empty();
             //获得对象.
            
-            var dataObj = GenerDB(mapExt.Doc, selectVal, mapExt.DBType);
+            var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType);
             if ($.isEmptyObject(dataObj)) {
                 $("#divinfo").hide();
                 return;
@@ -149,7 +149,12 @@ function showDataGrid(sender, tbid, dataObj,mapExt) {
             cardView: false,
             detailView: false,
             uniqueId: "No",
-            columns: searchTableColumns
+            columns: searchTableColumns,
+            rowStyle: function () {
+                var style = {};
+                style = 'active';
+                return { classes: style };
+            }
         };
         options.onClickRow = function (row, element) {
             $("#divinfo").empty();
@@ -189,6 +194,7 @@ function openDiv(e, tbID) {
 
         orgObject.style.top = t + 'px';
         orgObject.style.left = l + 'px';
+        orgObject.style.width = $("#" + tbID).width()+"px";
         orgObject.style.display = "block";
         txtObject.focus();
     }
@@ -320,12 +326,10 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
                 } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
-                    //$(ctrl).val(returnValObj.Name);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 } else {
                     //
                     for (var property in returnValObj) {
-                        //$('[id$=_' + property + ']').val(returnValObj[property]);
 
                         SetEleValByName(property, returnValObj[property]);
                     }
@@ -334,8 +338,6 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                 frames["iframePopModalForm"].window.GetGroupReturnVal();
-                //alert(returnValObj.Value + "|" + ctrl.id);
-                //$(ctrl).val(returnValObj.Value);
                 setValForPopval(ctrl.id, dtlWin, returnValObj.Value);
             } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                 returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
@@ -346,21 +348,17 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
                     //$(ctrl).val(returnValObj.Name);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 } else {
-                    // ??????????
                     for (var property in returnValObj) {
-                        //$('[id$=_' + property + ']').val(returnValObj[property]);
                         SetEleValByName(property, returnValObj[property]);
                     }
 
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
-                //frames["iframePopModalForm"].window.GetTreeReturnVal();
                 if (frames["iframePopModalForm"].window.GetReturnVal != undefined &&
                     typeof (frames["iframePopModalForm"].window.GetReturnVal) == "function") {
                     frames["iframePopModalForm"].window.GetReturnVal()
                 }
-                //$(ctrl).val(returnValObj.Value);
                 setValForPopval(ctrl.id, dtlWin, returnValObj.Value);
             }
         } else {
@@ -763,6 +761,9 @@ function FullIt(selectVal, refPK, elementId) {
     if (oid == null)
         oid = GetQueryString('WorkID');
 
+    if (oid == null)
+        oid = GetQueryString("RefPKVal");
+
     if (oid == null) {
         oid = 0;
         return;
@@ -807,7 +808,7 @@ function FullIt(selectVal, refPK, elementId) {
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
     var dbSrc = mapExt.Doc;
     if (dbSrc == null || dbSrc == "") {
-        alert("没有配置填充主表的信息");
+       // alert("没有配置填充主表的信息");
         return;
     }
     var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType);
@@ -840,6 +841,8 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 
     //遍历属性，给属性赋值.
     var valID;
+    var tbs;
+    var selects;
     for (var key in data) {
 
         var val = data[key];
@@ -888,7 +891,23 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 
         //获取表单中所有的字段
         if (valID.length == 0) {
-            var tbs = $('input');
+            if (tbs == undefined || tbs=="") {
+                if (endId != "") {
+                    //获取所在的行
+                    tbs = $("#" + ctrlIdBefore).parent().parent().find("input")
+                }
+                else
+                   tbs = $('input');
+            }
+            if (selects == undefined || selects == "") {
+                if (endId != "") {
+                    //获取所在的行
+                    selects = $("#" + ctrlIdBefore).parent().parent().find("select")
+                }
+                else
+                    selects = $('select');
+            }
+            
             $.each(tbs, function (i, tb) {
                 var name = $(tb).attr("id");
                 if (name == null || name == undefined)
@@ -907,8 +926,6 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
                     return false;
                 }
             });
-
-            var selects = $('select');
             $.each(selects, function (i, select) {
                 var name = $(select).attr("id");
                 if (name.toUpperCase().indexOf(key) >= 0) {
@@ -923,10 +940,11 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 /**填充下拉框信息**/
 function FullCtrlDDL(selectVal, ctrlID , mapExt) {
 
-    if (mapExt.Tag == "" || mapExt.Tag == null) 
+    var doc = mapExt.Tag;
+    if (doc == "" || doc == null)
         return;
    
-    var dbSrcs = mapExt.Tag.split('$'); //获得集合.
+    var dbSrcs = doc.split('$'); //获得集合.
     for (var i = 0; i < dbSrcs.length; i++) {
 
         var dbSrc = dbSrcs[i];
@@ -1030,8 +1048,10 @@ function GenerDB(dbSrc, selectVal, dbType) {
 
     //处理sql，url参数.
     dbSrc = dbSrc.replace(/~/g, "'");
+    if (dbType == 0)
+        selectVal = selectVal.replace(/'/g, '');
 
-    dbSrc = dbSrc.replace('@Key', selectVal);
+    dbSrc = dbSrc.replace(/@Key/g, selectVal);
 
     dbSrc = DealExp(dbSrc);
     dbSrc = DealSQL(dbSrc, selectVal, kvs);
@@ -1042,6 +1062,9 @@ function GenerDB(dbSrc, selectVal, dbType) {
 }
 
 function DealSQL(dbSrc, key, kvs) {
+
+    if (dbSrc.indexOf('@') == -1)
+        return dbSrc;
 
     dbSrc = dbSrc.replace(/~/g, "'");
 

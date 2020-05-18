@@ -1,18 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Web;
-using BP.Sys;
-using System.IO;
-using BP.Web;
-using System.Data;
-using System.Drawing;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
-using System.Web.UI;
-using BP.DA;
-using BP.WF.Template;
-using BP.WF;
+
 
 
 namespace CCFlow.WF.CCForm

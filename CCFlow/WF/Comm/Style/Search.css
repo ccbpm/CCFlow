@@ -1,0 +1,161 @@
+﻿body {
+    margin: 0px;
+}
+
+.panel-header, .panel-body {
+    border-width: 1px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+table > td {
+    width: 100%;
+}
+
+.pagination {
+    margin: 8px 0;
+    display: block;
+    font-size: 13px;
+}
+
+.pagination .controls {
+    float: left;
+    border: 0;
+    padding: 7px 0 0 15px;
+    color: #777;
+}
+
+.cs-search-html {
+    background-color: #f7f6f9;
+    padding: 0 12px 10px;
+    color: #282828;
+    font-size: 13px;
+}
+
+.cs-table .ibox-content {
+    background-color: transparent;
+}
+
+.cs-shadow-box {
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.cs-table .panel-default {
+    padding: 3px 30px 3px 10px;
+    margin-bottom: 10px;
+}
+
+.cs-table .panel-default .btn {
+    padding: 4px 15px;
+    background-color: #fff;
+    color: #031f5d;
+    border-color: currentColor;
+    vertical-align: 2px;
+}
+
+.cs-table label {
+    margin: 0 10px 0 20px !important;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.cs-table input[type=text], .cs-table select {
+    min-width: 160px;
+    height: 27px;
+    border-radius: 3px;
+}
+
+.cs-table select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.cs-table tbody td, .JColResizer > tbody > tr > td, .JColResizer > tbody > tr > th {
+    padding: 4px 0 4px 6px !important;
+}
+
+.cs-table tbody td {
+    border-bottom: 1px solid #ddd !important;
+}
+
+.fixed-table-container thead th .th-inner {
+    padding: 4px 0 6px 4px !important;
+}
+
+.table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    background-color: #f5f5f5;
+    font-size: 13px;
+}
+
+.bootstrap-table .table, .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 0;
+    border-right: 1px solid #ddd;
+    font-size: 13px;
+}
+
+.cs-pagination {
+    text-align: right;
+}
+
+    .cs-pagination ul {
+        display: inline-block;
+    }
+
+    .cs-pagination .controls {
+        padding: 0 4px;
+        vertical-align: 4px;
+    }
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    color: #15398b;
+}
+
+.fixed-table-border {
+    display: none;
+}
+
+.fixed-table-body {
+    height: auto;
+    overflow-y: hidden;
+}
+
+.fixed-table-container {
+    height: auto !important;
+    padding-bottom: 0 !important;
+}
+.Wdate {
+    border: 1px solid #e5e6e7;
+    height: 28px;
+}
+
+.fixed-table-container thead th .th-inner {
+    padding: 8px;
+    line-height: 24px;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /**background-color: #eaf2ff;**/
+    width: 100%;
+}
+
+.fixed-table-header {
+    background-color: #f2f2f2;
+}
+
+td {
+    word-break: keep-all; /* 不换行 */
+    white-space: nowrap; /* 不换行 */
+    text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+    -o-text-overflow: ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+}

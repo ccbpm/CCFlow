@@ -1,0 +1,583 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        .row-margin-top {
+            margin-top: 20px;
+        }
+
+        .search-margin {
+            margin-top: 15px;
+        }
+
+        .newBtn {
+            display: inline-block;
+            padding: 1px 4px;
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var selectedRows = null;
+        var hander;
+        var global = window;
+        var deptNo = "";
+        global.selectedNodes = [];
+        global.selectedRows = [];
+
+        var saveType = GetQueryString("SaveType");
+        if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
+            saveType = 0;
+        else
+            saveType = 1;
+
+        var webUser = new WebUser();
+
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var enName = GetQueryString("EnName"); // 主表实体. A实体.
+            var dot2DotEnsName = GetQueryString("Dot2DotEnsName"); //存储实体.
+            var EnsOfMM = GetQueryString("EnsOfMM"); //B实体.
+            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
+            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应B实体外键.
+            var defaultGroupAttrKey = GetQueryString("DefaultGroupAttrKey");
+
+            //获得数据.
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hander.AddUrlData();
+            var data = hander.DoMethodReturnJSON("BranchesAndLeaf_Init");
+
+            var dbTrees = data["DBTrees"]; //左边的树.
+
+            //选择的数据.
+            if (saveType == 1) {
+                if (data["DBMMs"].length == 0)
+                    selectedRows = ","
+                else
+                    selectedRows = data["DBMMs"][0].No;
+            }
+            else
+                selectedRows = data["DBMMs"];
+
+
+            // AtPara
+            var title = "请选择"; // mapExt.GetPara("Title");
+            $("#title").text(title); //设置标题.
+
+            var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
+            $("#TB_Key").attr("placeholder", tip); //设置查询提示.
+
+
+            var searchTableColumns = [{
+                field: "_checkbox",
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.checked) {
+                        return {
+                            "checked": true
+                        };
+                    }
+                }
+            }];
+
+            //显示列的中文名称.
+            var tag = "No=编号,Name=名称";
+            $.each(tag.split(","), function (i, o) {
+                var exp = o.split("=");
+                var field;
+                var title;
+                if (exp.length == 1) {
+                    field = title = exp[0];
+                } else if (exp.length == 2) {
+                    field = exp[0];
+                    title = exp[1];
+                }
+                if (!isLegalName(field)) {
+                    return true;
+                }
+                searchTableColumns.push({
+                    field: field,
+                    title: title
+                });
+            });
+
+
+            // search
+            $("#TB_Key").on("keyup", function () {
+                loadSelectGridByKey($(this).val());
+            });
+
+            // tree
+            loadTree(dbTrees, "0");
+
+            // grid1
+            $('#selectGrid').bootstrapTable({
+                striped: true,
+                cache: false,
+                sortOrder: "asc",
+                strictSearch: true,
+                minimumCountColumns: 2,
+                clickToSelect: true,
+                sortable: false,
+                cardView: false,
+                detailView: false,
+                height: $(document).height() / 3,
+                uniqueId: "No",
+                columns: searchTableColumns,
+                "onCheck": function (row, element) {
+                    addSelectedData(selectedRows, [row]);
+                    loadViewGrid(selectedRows);
+                },
+                "onUncheck": function (row, element) {
+                    removeSelectedData(selectedRows, [row]);
+                    loadViewGrid(selectedRows);
+                },
+                "onCheckAll": function (rows) {
+                    addSelectedData(selectedRows, rows);
+                    loadViewGrid(selectedRows);
+                },
+                "onUncheckAll": function (rows) {
+                    removeSelectedData(selectedRows, rows);
+                    loadViewGrid(selectedRows);
+                }
+            });
+
+            // grid2
+            $('#viewGrid').bootstrapTable({
+                striped: true,
+                cache: false,
+                sortOrder: "asc",
+                strictSearch: true,
+                minimumCountColumns: 2,
+                clickToSelect: true,
+                sortable: false,
+                cardView: false,
+                detailView: false,
+                height: $(document).height() / 3,
+                uniqueId: "No",
+                columns: [{
+                    field: 'No',
+                    title: '编号'
+                }, {
+                    field: 'Name',
+                    title: '名称'
+                }, {
+                    title: '操作', formatter: function (value, row, index) {
+                        return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
+                    }
+                }]
+            });
+
+
+            loadViewGrid(selectedRows);
+        });
+
+        function loadViewGrid(json) {
+            if (saveType == 1) {
+                //把字符串转json
+                var strs = json.split(",");
+                json = [];
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+                    json.push({ "No": strs[i] });
+                }
+            }
+            if ($.isArray(json)) {
+                $('#viewGrid').bootstrapTable("load", json);
+            }
+        }
+        function addSelectedData(globalSelectedRows, nowSelectedRows) {
+            if (saveType == 1) {
+                if (!$.isArray(nowSelectedRows))
+                    return;
+                $.each(nowSelectedRows, function (i, o) {
+                    if (globalSelectedRows.indexOf("," + o.No + ",") == -1) {
+                        if (globalSelectedRows == "" || globalSelectedRows == undefined)
+                            globalSelectedRows += "," + o.No + ",";
+                        else
+                            globalSelectedRows += o.No + ",";
+                        
+                    }
+                });
+                SaveVal(globalSelectedRows);
+                selectedRows =globalSelectedRows;
+                return;
+            }
+            if (!$.isArray(globalSelectedRows) || !$.isArray(nowSelectedRows)) {
+                return;
+            }
+            $.each(nowSelectedRows, function (i, o) {
+                var sel = $.grep(globalSelectedRows, function (obj) {
+                    return obj.No == o.No;
+                });
+                if (sel.length == 0) {
+
+                    SaveVal(o.No);
+                    globalSelectedRows.push(o);
+                }
+            });
+        }
+        function removeSelectedData(globalSelectedRows, nowSelectedRows) {
+            if (saveType == 1) {
+                if (!$.isArray(nowSelectedRows))
+                    return;
+                $.each(nowSelectedRows, function (i, o) {
+                    if (globalSelectedRows.indexOf("," + o.No + ",") != -1) {
+                        globalSelectedRows = globalSelectedRows.replace("," + o.No + ",", ",");
+                       
+                    }
+                });
+                 SaveVal(globalSelectedRows);
+                selectedRows = globalSelectedRows;
+
+                return;
+            }
+            if (!$.isArray(globalSelectedRows) || !$.isArray(nowSelectedRows)) {
+                return;
+            }
+            $.each(nowSelectedRows, function (i, o) {
+                for (var index = 0; index < globalSelectedRows.length; index++) {
+                    if (o.No == globalSelectedRows[index].No) {
+                        Delete(o.No);
+                        globalSelectedRows.splice(index, 1);
+                        break;
+                    }
+                }
+            });
+        }
+
+        //按照关键字加载数据.
+        function loadSelectGridByKey(key) {
+
+            if (key == "")
+                return;
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hander.AddUrlData();
+
+            hander.AddPara("Key", key);
+            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
+
+            //document.title =  "key="+key+" json:" +json.length;
+            //alert( JSON.stringify( json));
+
+            loadSelectGrid(json);
+        }
+
+        //按照节点加载数据.
+        function loadSelectGridByNodeID(nodeID) {
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hander.AddUrlData();
+            hander.AddPara("Key", nodeID);
+            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
+
+
+            //alert(json);
+            loadSelectGrid(json);
+        }
+
+        function loadSelectGrid(json) {
+
+           
+            if (!$.isArray(json)) {
+                return;
+            }
+
+            // 绑定内容列表.
+            $('#selectGrid').bootstrapTable("hideAllColumns");
+            $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+            $('#selectGrid').bootstrapTable("showColumn", "No");
+            $('#selectGrid').bootstrapTable("showColumn", "Name");
+
+            if (saveType == 1) {
+                $.each(json, function (i, o) {
+                    if (selectedRows.indexOf("," + o.No + ",") != -1)
+                        o.checked = true;
+                });
+            } else {
+                
+                if ($.isArray(selectedRows)) {
+                    $.each(json, function (i, o) {
+                        var sel = $.grep(selectedRows, function (obj) {
+                            return o.No == obj.No;
+                        });
+
+                        if (sel.length > 0) {
+                            o.checked = true;
+                        }
+                    });
+                }
+            }
+
+
+            $('#selectGrid').bootstrapTable("load", json);
+        }
+
+        var nodeId = "";
+        var rootNo = "0";
+        function loadTree(dbTrees, rootNo, global) {
+            var jsonTree = createJsonToTree(dbTrees, rootNo);
+            $('#tree').treeview({
+                data: jsonTree,         // 数据源
+                showCheckbox: false,   //是否显示复选框
+                highlightSelected: true,    //是否高亮选中
+                //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
+                nodeIcon: 'glyphicon',
+                emptyIcon: '',    //没有子节点的节点图标
+                multiSelect: false,    //多选
+                onNodeChecked: function (event, data) {
+                    //alert(data.id);
+                },
+                onNodeSelected: function (event, data) {
+                    nodeId = data.nodeId;
+                    deptNo = data.id;
+                    runModel = 0; //查询模式.
+                    loadSelectGridByNodeID(data.id); //, selectedRows);
+                    deptNo = $('#tree').treeview('getNode', data.nodeId).id;
+                    var tree = $('#tree');
+                    if (data.state.expanded) {
+                        //处于展开状态则折叠
+                        tree.treeview('collapseNode', data.nodeId);
+                    } else {
+                        //展开
+                        tree.treeview('expandNode', data.nodeId);
+                    }
+
+                }
+            });
+        }
+
+
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(jsonArray, parentNo) {
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (rootNo != "0") {
+                    if (data.No == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return data.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
+                        treeJson.push({
+                            "id": data.No,
+                            "text": data.Name,
+                            "nodes": creatTreeChildern(jsonArray, data.No),
+                            "state": { checked: checked, disabled: false }
+                        });
+                    }
+                } else {
+                    if (data.ParentNo == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return data.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
+                        treeJson.push({
+                            "id": data.No,
+                            "text": data.Name,
+                            "nodes": creatTreeChildern(jsonArray, data.No),
+                            "state": { checked: checked, disabled: false }
+                        });
+                    }
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+
+        function creatTreeChildern(jsonArray, parentNo) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var data = jsonArray[i];
+                if (data.ParentNo == parentNo) {
+                    var checked = false;
+
+                    childList.push({
+                        "id": data.No,
+                        "text": data.Name,
+                        "nodes": creatTreeChildern(jsonArray, data.No),
+                        "state": { checked: checked, disabled: false }
+                    });
+                }
+            }
+
+            return childList;
+        }
+
+
+        function getChildNodeIdArr(node, checked) {
+            var ts = [];
+            if (node.nodes) {
+                for (x in node.nodes) {
+                    ts.push(node.nodes[x].nodeId);
+                    if (node.nodes[x].nodes) {
+                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                        for (j in getNodeDieDai) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
+                }
+            } else {
+                ts.push(node.nodeId);
+            }
+            return ts;
+        }
+
+
+        function isLegalName(name) {
+            if (!name) {
+                return false;
+            }
+            return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+        }
+
+        function removeRecord(No) {
+
+            if (window.confirm('您确认要删除吗？') == false)
+                return;
+
+
+            $("#selectGrid").bootstrapTable("uncheckBy", {
+                field: "No",
+                values: [No]
+            });
+            //
+            Delete(No);
+            $('#viewGrid').bootstrapTable("remove", {
+                field: "No",
+                values: [No]
+            });
+        }
+
+        //删除数据.
+        function Delete(no) {
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hander.AddUrlData();
+            hander.AddPara("Key", no);
+            var msg = hander.DoMethodReturnString("BranchesAndLeaf_Delete");
+            if (msg.indexOf('err@') == 0)
+                alert(msg);
+        }
+        //设置值.
+        function SaveVal(val) {
+
+            var dot2DotEnName = GetQueryString("Dot2DotEnName");
+            var attrOfOneInMM = GetQueryString("AttrOfOneInMM");
+            var attrOfMInMM = GetQueryString("AttrOfMInMM");
+            var mm = new Entity(dot2DotEnName);
+            var para = GetQueryString("Para");
+            var paraVal = GetQueryString("ParaVal");
+            var para1 = GetQueryString("Para1");
+            var paraVal1 = GetQueryString("ParaVal1");
+
+            mm[attrOfMInMM] = val;
+
+            if (para != null && para != undefined && para != "") {
+                mm[para] = paraVal;
+                mm[attrOfOneInMM] = GetPKVal().replace("_" + paraVal, "");
+            } else
+                mm[attrOfOneInMM] = GetPKVal();
+
+            if (para1 != null && para1 != undefined && para1 != "")
+                mm[para1] = paraVal1;
+
+            mm.Save();
+        }
+    </script>
+    <head>
+        <body>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">
+                                <h4 class="text-center" id="title"></h4>
+                            </div>
+                            <div class="col-md-9 col-sm-9">
+                                <div class="pull-center search search-margin">
+                                    <input class="form-control" type="text" placeholder="" id="TB_Key">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-margin-top">
+                    <div class="col-md-4 col-sm-4">
+                        <div id="tree"></div>
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="selectGrid"></table>
+                            </div>
+                        </div>
+                        <div class="row row-margin-top">
+                            <div class="col-md-12">
+                                <table id="viewGrid"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+</html>

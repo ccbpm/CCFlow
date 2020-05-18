@@ -3,29 +3,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>统计分析</title>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+          type="text/css" />
+    <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
+          media="all" />
+
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!--引入图表-->
     <script src="FusionCharts/fusioncharts.js" type="text/javascript"></script>
-   
+
     <!--引入公共的JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="Gener.js" type="text/javascript"></script>
+    <script src="JScript.js" type="text/javascript"></script>
     <style type="text/css">
-        input[type=text], input[type=password], select
-        {
+        input[type=text], input[type=password], select {
             border: thin solid #cccccc;
             margin: 2px 1px;
             height: 24px;
             background-color: rgba(255, 255, 255, 0.77);
+        }
+
+        .form-control {
+            width: 200px;
+            margin-right: 15px;
+            display: inline;
         }
     </style>
 
@@ -99,7 +113,7 @@
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
 
-            for (var i = searchAttrs.length-1; i >= 0; i--) {
+            for (var i = searchAttrs.length - 1; i >= 0; i--) {
 
                 var attr = searchAttrs[i];
                 var str = "";
@@ -110,7 +124,7 @@
 
             var html = "";
             if (mapBase.IsShowSearchKey == "1")
-                html += "<label for='TB_Key'>关键字:</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<label for='TB_Key'>关键字:</label><input  style='width:100px; margin-right:15px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />";
 
             if (mapBase.DTSearchWay != "0") {
 
@@ -157,7 +171,7 @@
 
             var ens = frmData[mapAttr.Field];
             if (ens == null) {
-                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
             }
             for (var i = 0; i < ens.length; i++) {
 
@@ -229,7 +243,7 @@
                 html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
                 html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<select style='width:80%' class='form-control' name='DDL_Aly_" + analyAtts[i].Field + "' ID='DDL_Aly_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
                 $("#AnalyGroup").append(html);
@@ -252,16 +266,16 @@
             ur.MyPK = webUser.No + ensName + "_Group";
             var selectedGroupKey = "";
             $('input[name="groupContent"]:checked').each(function () {
-                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             var stateNumKey = "";
 
             $('input[name="groupAnaly"]:checked').each(function () {
                 var key = $(this).val();
                 //获取下拉框的值
-                var defVal = $("#DDL_" + key).val();
+                var defVal = $("#DDL_Aly_" + key).val();
 
-                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中  
+                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中
             });
 
             ur.Vals = "SelectedGroupKey=" + selectedGroupKey + "@StateNumKey" + stateNumKey + '@';
@@ -279,7 +293,7 @@
             Group_Search();
         }
         function Group_Search() {
-             //销毁图例
+            //销毁图例
             if (FusionCharts("column_chart") != undefined)
                 FusionCharts("column_chart").dispose();
             if (FusionCharts("pie_chart") != undefined)
@@ -299,7 +313,7 @@
             handler.AddFormData();
             var groupList = "";
             $('input[name="groupContent"]').each(function () {
-                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             handler.AddPara("GroupList", groupList);
 
@@ -334,7 +348,7 @@
         }
 
         function GenerTable(divId, groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum) {
-            var html = "<table id='mainTable'  class='Table' cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' > ";
+            var html = "<table id='mainTable'  class='table table-bordered table-hover' style='text-align:center;'> ";
             //生成表头
 
             /**含有合计的时候**/
@@ -349,7 +363,7 @@
                 // 增加数据列
                 for (var i = 0; i < AttrsOfNum.length; i++) {
                     if (ur.Vals.indexOf.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1)
-                    /*  如果本数据列 包含累计 */
+                        /*  如果本数据列 包含累计 */
                         html += "<td  colspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
                     else
                         html += "<td  rowspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
@@ -497,7 +511,7 @@
                     }
                 }
                 url = baseUrl + url;
-                html += "<td nowrap ><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='easyui-linkbutton'>详细</a></td>";
+                html += "<td nowrap ><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn-sm easyui-linkbutton'>详细</a></td>";
                 html += "</tr>";
             }
 
@@ -554,14 +568,14 @@
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
                             html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
                             html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
                         }
@@ -569,7 +583,7 @@
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") < 1)
@@ -595,14 +609,14 @@
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
+                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
                             html += "<td class='TDNum' nowrap >" + d + "</td>";
 
                         } else {
                             d = 0;
                             $.each(groupSearch, function (k, o) {
-                                if(o[AttrsOfNum[i].KeyOfEn]!=null && o[AttrsOfNum[i].KeyOfEn]!=undefined)
+                                if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
                                     d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
@@ -699,25 +713,25 @@
                 "categories": categories,
                 "dataset": dataSet
             };
-            
-             FusionCharts.ready(function(){
+
+            FusionCharts.ready(function () {
                 var myChart = new FusionCharts({
                     type: "mscolumn2d",
                     id: "column_chart",
-                   renderAt: "chart-container",
-                   width: w,
-                   height: h,
-                   dataFormat: "json",
-                   dataSource:dataSource
+                    renderAt: "chart-container",
+                    width: w,
+                    height: h,
+                    dataFormat: "json",
+                    dataSource: dataSource
                 }).render("column_chart_div");
             });
-           
+
 
         }
         //饼图
         function GeneratePieChart(groupSearch, KeyOfEn, AttrsOfNum, w, h, projectName) {
             var firstKey = AttrsOfNum[0];
-         
+
             var categories = "[{\"category\": [";
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
@@ -729,7 +743,7 @@
             for (var j = 0; j < groupSearch.length; j++) {
                 dataSet += "{\"label\":\"" + groupSearch[j][KeyOfEn + "T"] + "\",\"value\":\"" + +groupSearch[j][firstKey.KeyOfEn] + "\" },";
             }
-            
+
             dataSet = dataSet.substr(0, dataSet.length - 1);
             dataSet += "]}]";
             dataSet = JSON.parse(dataSet);
@@ -738,18 +752,18 @@
                     //"exportEnabled": '0',
                     //"exportAtClient": '1',
                     //"exportHandler": 'fcExporter1',
-                   // "exportFormats": 'PNG=生成PNG图片|JPG=生成JPG图片|PDF=生成PDF文件',
+                    // "exportFormats": 'PNG=生成PNG图片|JPG=生成JPG图片|PDF=生成PDF文件',
                     "caption": document.title + "-" + firstKey.Name,
-                    "showValues":"1",
+                    "showValues": "1",
                     "numberSuffix": "%",
                     "theme": "hulk-light",
-                    "enableMultiSlicing":"1",
-                    "outCnvBaseFontColor":'FFFFFF',
-                     "hoverCapBgColor": '2E4A89',
-                     //"basefontcolor": 'ccdee',
-                     "basefontsize": '14',
-                    "bgColor": '2E4A89, 90B1DE', "palette": '2', "animation": '1' ,
-                    "formatNumberScale":'0', "pieSliceDepth":'30', "startingAngle":'125'
+                    "enableMultiSlicing": "1",
+                    "outCnvBaseFontColor": 'FFFFFF',
+                    "hoverCapBgColor": '2E4A89',
+                    //"basefontcolor": 'ccdee',
+                    "basefontsize": '14',
+                    "bgColor": '2E4A89, 90B1DE', "palette": '2', "animation": '1',
+                    "formatNumberScale": '0', "pieSliceDepth": '30', "startingAngle": '125'
                 },
                 "dataset": dataSet
             };
@@ -768,7 +782,7 @@
         }
         //折线图
         function GenerateLineChart(groupSearch, KeyOfEn, AttrsOfNum, w, h, projectName) {
-            
+
 
             var categories = "[{\"category\": [";
             for (var i = 0; i < groupSearch.length; i++) {
@@ -861,15 +875,22 @@
         function Exp() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddUrlData();  //增加参数.
+            handler.AddFormData();
+            var groupList = "";
+            $('input[name="groupContent"]').each(function () {
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
+            });
+            handler.AddPara("GroupList", groupList);
             //查询集合
             var data = handler.DoMethodReturnString("Group_Exp");
-            var url = "";
-            if (data.indexOf('err@') == 0) {
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
                 alert(data);
+                return;
             }
-           
-            data = basePath+ data;
-         
+
+            data = GetLocalWFPreHref() + data;
+
             window.open(data);
             return;
 
@@ -885,45 +906,46 @@
 </head>
 <body class="easyui-layout">
    <form  id="cc">
-        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="padding: 5px">
+        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="border:none">
             <div class="easyui-layout"  data-options="fit:true">
-                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
-                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                      <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
+                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 40px; background-color: #F5F5F6; line-height: 30px">
+                     <a href="#" style="margin-bottom:5px; margin-left:10px;" class="btn btn-default btn-sm" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                      <a href="#" style="margin-bottom:5px;margin-left:10px;" class="btn btn-default btn-sm" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
-                    <div class="easyui-panel" title="显示内容" style="padding: 5px; margin-bottom: 5px">
+                <div data-options="region:'west',title:'分组条件',split:false" style="padding: 5px; width: 250px;">
+                    <div class="fixed-table-header" title="显示内容">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
                     <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px">
-                        <table id="AnalyGroup"  cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' ></table>
+                        <table id="AnalyGroup"  style='border-style:none;width:100%'></table>
                     </div>
                     <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-style: none; width: 100%">
+                        <table class="table" style=" width: 90%">
                             <tr>
-                                <td style=" tex ">
-                                    高度：<input name="TB_H" type="text" value="460" id="TB_H"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                <td>
+                                    高度：<input name="TB_H" type="text" value="460" id="TB_H" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                                 <td style="text-align: right">
-                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict"  onclick="javascript:doPostBack()" />
+                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack()" />
                                         <label for="CB_IsShowPict">显示图表</label>
                                     </span>
                                     <span style="float: right">
-                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a></span>
+                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a>
+                                    </span>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
-                <div id="Content" data-options="region:'center'" style="padding: 5px;"></div>
+                <div id="Content" data-options="region:'center'" style="padding: 5px; "></div>
            </div>
         </div>
     </form>

@@ -8,8 +8,7 @@ var isChange = false;
 
 //审核组件页面初始化
 $(function () {
-    if (pageData.FK_Node == 0)
-        return;
+   
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
@@ -62,7 +61,7 @@ $(function () {
 function WorkCheck_Init() {
     var data;
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-    handler.AddJson(pageData);
+    handler.AddUrlData()
     if (pageData.FWCVer == 0)
         data = handler.DoMethodReturnString("WorkCheck_Init");
     else
@@ -401,6 +400,7 @@ function SaveWorkCheck() {
         return;
 
     var doc = $("#WorkCheck_Doc").val();
+    doc = doc.replace(/'/g, '');
 
     if (pageData.IsReadonly == true)
         return;

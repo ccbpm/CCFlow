@@ -145,7 +145,7 @@
             handler.AddPara("EnumKey", UIBindKey);
             if (dataType == "Radio")
                 handler.AddPara("UIContralType", 3);
-            else if(dataType =="Select")
+            else if (dataType == "Select")
                 handler.AddPara("UIContralType", 1);
             else if (dataType == "CheckBox")
                 handler.AddPara("UIContralType", 2);
@@ -166,7 +166,7 @@
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
-                            _Html += "<label><input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;</label>";
+                            _Html += "<label><input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1] + "&nbsp;&nbsp;</label>";
                     }
                     _Html += "</span>";
 
@@ -192,46 +192,40 @@
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
-                            _Html += "<label><input type='checkbox' value= '" + keyVal[0] + "' id='CB_" + KeyOfEn + "_" + keyVal[0] + "' name='CB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;</label>";
+                            _Html += "<label><input type='checkbox' value= '" + keyVal[0] + "' id='CB_" + KeyOfEn + "_" + keyVal[0] + "' name='CB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1] + "&nbsp;&nbsp;</label>";
                     }
                     _Html += "</span>";
                 }
             }
             editor.execCommand('insertHtml', _Html);
-
-
         };
 
-
-</script>
+    </script>
 </head>
 <body>
-        
 
-        <div id="table"></div>
-                
-        <table style="width:100%;">
+    <table style="width:100%;">
         <tr>
-        <td>中文名 </td>
+            <td>中文名 </td>
+            <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
+            <td>字段英文名 </td>
+            <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
+            <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
+            <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
 
-        <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
-
-
-        <td>字段英文名 </td>
-        <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
-
-        <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
-
-        <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建枚举" /> </td>
+            <td>关键字 </td>
+            <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width:60px" /> </td>
+            <td><input type="button" id="Btn_New" class="easyui-button" onclick="Search()" value="查询" /> </td>
         </tr>
-        </table>
-           
-                             
-        <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
-        <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+    </table>
 
-                          
-                           
-             
+
+    <div style="position:relative">
+        <div id="table"></div>
+    </div>
+
+    <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+    <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+
 </body>
 </html>

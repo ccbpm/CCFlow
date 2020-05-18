@@ -10,6 +10,9 @@
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <!--引入图表-->
@@ -37,7 +40,11 @@
 
         //初始化页面
         $(function () {
-           // $("#Msg").show();
+
+            if (groupType == null)
+                groupType = GetQueryString("SearchType");
+
+            // $("#Msg").show();
             //$("#Msg").css("line-height", $("body").height() / 1.5 + "px");
 
             switch (groupType) {
@@ -54,26 +61,28 @@
                     $("#mainDiv").panel({ title: '高级查询' });
                     break;
             }
-            
+
             //初始化页面
             InitPage();
-           
+
             //显示数据
-           // doPostBack();
-           // $("#Msg").html("");
+            // doPostBack();
+            // $("#Msg").html("");
 
         });
 
         //初始化数据.
         function InitPage() {
 
+
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddPara("GroupType", groupType);
-            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
 
             //获得查询信息，包含了查询数据表.
             var data = handler.DoMethodReturnString("FlowGroup_Init");
+
 
             if (data.indexOf("err@") != -1) {
                 $.messager.alert("错误", data, "icon-error");
@@ -89,7 +98,7 @@
             //分析项目
             GroupAnalysis(data);
             //分析结果显示
-            doPostBack();
+            doPostBack(null,true);
         }
 
         function InitToolBar(data) {
@@ -133,7 +142,7 @@
                 }
             }
 
-            
+
 
             //当前用户页面信息.
             var searchUr = new Entity("BP.Sys.UserRegedit");
@@ -159,10 +168,10 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            
+
             var ens = frmData[mapAttr.Field];
             if (ens == null) {
-                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
             }
             for (var i = 0; i < ens.length; i++) {
 
@@ -197,7 +206,7 @@
                 }
                 html += "<tr>";
                 html += "<td>";
-                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
+                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
                 html += "</td>";
                 html += "</tr>";
                 $("#CheckBoxList").append(html);
@@ -217,31 +226,38 @@
                 }
                 html += "<tr>";
                 html += "<td>";
-                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
+                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
                 html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,true)'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
                 $("#AnalyGroup").append(html);
             }
         }
 
-        function doPostBack() {
-            var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount > 1) 
-                $("#CB_IsShowPict").attr("disabled", "disabled");
-            else
-                $("#CB_IsShowPict").attr("disabled", false);
-
+        function doPostBack(scorp, ispost) {
             //给注册表信息重新赋值
             var myPK = webUser.No + rptNo + "_GroupAttrs";
-            ur = new Entity("BP.Sys.UserRegedit",myPK);
-            if (ur && ur.IsPic == 1)
+            ur = new Entity("BP.Sys.UserRegedit", myPK);
+            if (ur && ur.IsPic == 1 && ispost == true) {
                 document.getElementById("CB_IsShowPict").checked = "checked";
+            }
+
+            var groupCount = $('input[name="groupContent"]:checked').length;
+            if (groupCount > 1) {
+                if (ispost == true) {
+                    ur.IsPic = 0;
+                    document.getElementById("CB_IsShowPict").checked = "";
+                }
+                $("#CB_IsShowPict").attr("disabled", "disabled");
+            }
+            else {
+                $("#CB_IsShowPict").attr("disabled", false);
+            }
             var selectedGroupKey = "";
             $('input[name="groupContent"]:checked').each(function () {
-                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             var stateNumKey = "";
 
@@ -250,16 +266,18 @@
                 //获取下拉框的值
                 var defVal = $("#DDL_" + key).val();
 
-                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中  
+                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中
             });
 
             ur.Vals = "SelectedGroupKey=" + selectedGroupKey + "@StateNumKey" + stateNumKey + '@';
 
-            if ($("#CB_IsShowPict").is(":checked") == true)
-                ur.IsPic = 1;
-            else
-                ur.IsPic = 0;
-
+            if (ispost == false) {
+                if ($("#CB_IsShowPict").is(":checked") == true) {
+                    ur.IsPic = 1;
+                } else {
+                    ur.IsPic = 0;
+                }
+            }
             ur.SetPKVal(ur.MyPK);
             ur.FK_Emp = webUser.No;
             ur.CfgKy = ensName;
@@ -275,7 +293,7 @@
             handler.AddFormData();
             var groupList = "";
             $('input[name="groupContent"]').each(function () {
-                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             handler.AddPara("GroupList", groupList);
 
@@ -296,9 +314,9 @@
             var AttrsOfGroup = data["AttrsOfGroup"];
             var ActiveAttr = data["ActiveAttr"];
             var noShowSum = "";
-
+            
             //生成表格
-            if (ur.IsPic == 0) {
+            if ($("#CB_IsShowPict").is(":checked") == false) {
                 GenerTable("Content", groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum);
                 //生成图表
             } else {
@@ -308,7 +326,12 @@
         }
 
         function GenerTable(divId, groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum) {
-            var html = "<table id='mainTable'  class='Table' cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' > ";
+
+            var flowNo = GetQueryString("FK_Flow");
+            var groupType = GetQueryString("GroupType");
+
+
+            var html = "<table id='mainTable'  class='table table-bordered table-hover' style='text-align:center;'> ";
             //生成表头
 
             /**含有合计的时候**/
@@ -323,7 +346,7 @@
                 // 增加数据列
                 for (var i = 0; i < AttrsOfNum.length; i++) {
                     if (ur.Vals.indexOf.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1)
-                    /*  如果本数据列 包含累计 */
+                        /*  如果本数据列 包含累计 */
                         html += "<td  colspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
                     else
                         html += "<td  rowspan=2 class='GroupTitle' >" + AttrsOfNum[i].Name + "</td>";
@@ -350,16 +373,16 @@
                     if (OrderBy == AttrsOfGroup[i].KeyOfEn) {
                         switch (OrderWay) {
                             case "Down":
-                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Up' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Up' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 break;
                             case "Up":
                             default:
-                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
                     else {
-                        html += "<td class='GroupTitle' nowrap><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "</a></td>";
+                        html += "<td class='GroupTitle' nowrap><a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "</a></td>";
                     }
                 }
 
@@ -377,25 +400,24 @@
                         switch (OrderWay) {
                             case "Down":
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
                                 break;
                             case "Up":
                             default:
                                 if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
+                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
                                 break;
                         }
                     }
                     else {
                         if (NumKey == AttrsOfNum[i].KeyOfEn)
-                            html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
+                            html += "<td class='GroupTitle' nowrap>" + lab + "<a href='Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
                         else
-                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
-
+                            html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?FK_Flow=" + flowNo + "&GroupType=" + groupType + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?GroupType=" + groupType + "&FK_Flow=" + flowNo + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
                     }
                 }
                 html += "<td class='GroupTitle' nowrap></td>";
@@ -455,22 +477,22 @@
                     if (AttrsOfNum[j].MyDataType == 8) {
                         if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
                             //需要转换为金额类型，小数位数不到两位的补全,功能待定
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
                         } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
                         }
                     } else {
                         if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
                         } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
+                            html += "<td class=' ' nowrap >" + obj + "</td>";
                         }
                     }
                 }
                 url = baseUrl + url;
-                html += "<td nowrap ><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='easyui-linkbutton'>详细</a></td>";
+                html += "<td style=''><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn-sm easyui-linkbutton'>详细</a></td>";
                 html += "</tr>";
             }
 
@@ -512,7 +534,7 @@
                         handler.AddPara("Exp", exp);
                         var data = handler.DoMethodReturnString("ParseExpToDecimal");
                         //待定
-                        html += "<td class='TDNum' nowrap >" + data.toFixed(4) + "</td>";
+                        html += "<td class=' ' nowrap >" + data.toFixed(4) + "</td>";
                     }
 
                     if (isHave == false)
@@ -528,13 +550,13 @@
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                            html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                            html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
                         }
                         else {
                             d = 0;
@@ -543,12 +565,12 @@
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") < 1)
-                                html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
+                                html += "<td class=' ' nowrap >" + d.toFixed(4) + "</td>";
                             else {
                                 if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap >0</td>";
+                                    html += "<td class=' ' nowrap >0</td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
+                                    html += "<td class=' ' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;
@@ -559,13 +581,13 @@
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
                             });
 
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
+                            html += "<td class=' ' nowrap >" + d + "</td>";
 
                             d = 0;
                             $.each(groupSearch, function (k, o) {
                                 d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
                             });
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
+                            html += "<td class=' ' nowrap >" + d + "</td>";
 
                         } else {
                             d = 0;
@@ -574,12 +596,12 @@
                             });
 
                             if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") == -1)
-                                html += "<td class='TDNum' nowrap >" + d + "</td>";
+                                html += "<td class=' ' nowrap >" + d + "</td>";
                             else {
                                 if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap >0</td>";
+                                    html += "<td class=' ' nowrap >0</td>";
                                 else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
+                                    html += "<td class=' ' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
                             }
                         }
                         break;
@@ -589,7 +611,8 @@
             html += "<td class='TDNum' nowrap ></td>";
             html += "</tr>";
             html += "</table>";
-            $("#" + divId).html("").append(html);
+            $("#" + divId).html("");
+            $("#" + divId).html(html);
         }
 
 
@@ -634,7 +657,9 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[";
@@ -645,7 +670,9 @@
                 for (var j = 0; j < groupSearch.length; j++) {
                     dataSet += "{\"value\":\"" + +groupSearch[j][AttrsOfNum[i].KeyOfEn] + "\"},";
                 }
-                dataSet = dataSet.substr(0, dataSet.length - 1);
+                if (groupSearch.length > 0) {
+                    dataSet = dataSet.substr(0, dataSet.length - 1);
+                }
                 dataSet += "]},";
             }
             dataSet = dataSet.substr(0, dataSet.length - 1);
@@ -688,15 +715,18 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[{\"data\":[";
             for (var j = 0; j < groupSearch.length; j++) {
                 dataSet += "{\"label\":\"" + groupSearch[j][KeyOfEn + "T"] + "\",\"value\":\"" + +groupSearch[j][firstKey.KeyOfEn] + "\" },";
             }
-
-            dataSet = dataSet.substr(0, dataSet.length - 1);
+            if (groupSearch.length > 0) {
+                dataSet = dataSet.substr(0, dataSet.length - 1);
+            }
             dataSet += "]}]";
             dataSet = JSON.parse(dataSet);
             var dataSource = {
@@ -739,7 +769,9 @@
             for (var i = 0; i < groupSearch.length; i++) {
                 categories += "{ \"label\":\"" + groupSearch[i][KeyOfEn + "T"] + "\"},";
             }
-            categories = categories.substr(0, categories.length - 1);
+            if (groupSearch.length > 0) {
+                categories = categories.substr(0, categories.length - 1);
+            }
             categories += "]}]";
             categories = JSON.parse(categories);
             var dataSet = "[";
@@ -750,7 +782,9 @@
                 for (var j = 0; j < groupSearch.length; j++) {
                     dataSet += "{\"value\":\"" + +groupSearch[j][AttrsOfNum[i].KeyOfEn] + "\"},";
                 }
-                dataSet = dataSet.substr(0, dataSet.length - 1);
+                if (groupSearch.length) {
+                    dataSet = dataSet.substr(0, dataSet.length - 1);
+                }
                 dataSet += "]},";
             }
             dataSet = dataSet.substr(0, dataSet.length - 1);
@@ -789,7 +823,7 @@
             //保存查询条件.
             var ensName = GetQueryString("EnsName");
             var ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No  + rptNo + "_SearchAttrs";
+            ur.MyPK = webUser.No + rptNo + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
             if ($("#TB_Key") != null && $("#TB_Key").val() != "")
@@ -808,11 +842,11 @@
             var str = "";
             $("select[name^='CXDDL_']").each(function () {
                 var id = $(this).attr("id");
-                if($(this).val()!="all")
-                 str += "@" + id + "=" + $(this).val();
+                if ($(this).val() != "all")
+                    str += "@" + id + "=" + $(this).val();
             });
 
-            ur.CfgKey = rptNo+"_SearchAttrs";
+            ur.CfgKey = rptNo + "_SearchAttrs";
             ur.Vals = str;
             ur.FK_MapData = ensName;
             //ur.SetPara("RecCount", count);
@@ -825,6 +859,13 @@
         function Exp() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddUrlData();  //增加参数.
+            handler.AddFormData();
+            var groupList = "";
+            $('input[name="groupContent"]').each(function () {
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
+            });
+            handler.AddPara("GroupList", groupList);
             //查询集合
             var data = handler.DoMethodReturnString("FlowGroup_Exp");
             var url = "";
@@ -847,49 +888,50 @@
     </script>
 </head>
 <body class="easyui-layout">
-   <form  id="cc">
+    <form id="cc" class="form-inline" role="form">
         <div id="mainDiv" data-options="region:'center',title:'学生',noheader:false" style="padding: 5px">
-            <div class="easyui-layout"  data-options="fit:true">
+            <div class="easyui-layout" data-options="fit:true">
                 <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
-                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                      <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
-                    <div class="easyui-panel" title="显示内容" style="padding: 5px; margin-bottom: 5px">
+                <div data-options="region:'west',title:'分组条件',split:true" style="width: 280px;">
+                    <div class="easyui-panel" title="显示内容" style=" Contentpadding: 5px; margin-bottom: 5px">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
                     <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px">
-                        <table id="AnalyGroup"  cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' ></table>
+                        <table id="AnalyGroup" cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%'></table>
                     </div>
                     <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-style: none; width: 100%">
+                        <table class="table" style=" width: 90%">
                             <tr>
                                 <td>
-                                    高度：<input name="TB_H" type="text" value="460" id="TB_H"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                    高度：<input name="TB_H" type="text" value="460" id="TB_H" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                                 <td style="text-align: right">
-                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W"  class="aspNetDisabled" style="width: 60px; height: auto;
+                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W" class="aspNetDisabled" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict"  onclick="javascript:doPostBack()" />
+                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack(this,false)" />
                                         <label for="CB_IsShowPict">显示图表</label>
                                     </span>
                                     <span style="float: right">
-                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a></span>
+                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a>
+                                    </span>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div id="Content" data-options="region:'center'" style="padding: 5px;"></div>
-           </div>
+            </div>
         </div>
-        
+
     </form>
 </body>
 </html>

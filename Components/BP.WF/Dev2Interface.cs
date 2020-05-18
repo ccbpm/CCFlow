@@ -4181,7 +4181,7 @@ namespace BP.WF
             ps.Add(TrackAttr.Tag, tag);
             ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
 
-            ps.Add(TrackAttr.FrmDB,"@DeptNo"+WebUser.FK_Dept + "@DeptName="+WebUser.FK_DeptName);
+            ps.Add(TrackAttr.FrmDB,"@DeptNo="+WebUser.FK_Dept + "@DeptName="+WebUser.FK_DeptName);
 
             int num = DBAccess.RunSQL(ps);
 

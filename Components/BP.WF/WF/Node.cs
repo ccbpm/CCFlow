@@ -848,21 +848,7 @@ namespace BP.WF
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
                 }
-                if (en.EnMap.Attrs.Contains("Emps") == false)
-                {
-                    MapAttr attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = this.NodeFrmID;
-                    attr.KeyOfEn = "Emps";
-                    attr.Name = "Emps";
-                    attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.DefVal = "0";
-                    attr.HisEditType = BP.En.EditType.Readonly;
-                    attr.Insert();
-                }
+                
 
             }
 
@@ -2819,6 +2805,7 @@ namespace BP.WF
                 map.AddTBInt(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
                 map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
+                map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
                 #endregion 审核组件.
 
                 #region 考核属性.

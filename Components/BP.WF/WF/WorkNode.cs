@@ -1716,12 +1716,20 @@ namespace BP.WF
                         //记录最开始相同处理人的节点ID，用来上面查找SQL判断
                         if (beforeSkipNodeID == 0)
                             beforeSkipNodeID = prvNodeID;
-
+                        //@sly
                         Work wk = nd.HisWork;
-                        wk.Copy(this.rptGe);
-                        wk.Rec = WebUser.No;
-                        wk.OID = this.WorkID;
-                        wk.ResetDefaultVal();
+                        wk.Copy(mywork);
+                        //存储在相同的表中，不需要拷贝
+                        if (wk.NodeFrmID != nd.NodeFrmID)
+                        {
+                            if (wk.EnMap.PhysicsTable != this.rptGe.EnMap.PhysicsTable)
+                                wk.Copy(this.rptGe);
+                            wk.Rec = WebUser.No;
+
+                            wk.OID = this.WorkID;
+                            wk.ResetDefaultVal();
+                        }
+                       
 
                         //执行表单填充，如果有，修改新昌方面同时修改本版本，added by liuxc,2015-10-16
                         MapExt item = nd.MapData.MapExts.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull) as MapExt;
@@ -2464,7 +2472,7 @@ namespace BP.WF
                     foreach (GenerWorkerList item in current_gwls)
                         emps += item.FK_Emp + ",";
                 }
-                toWK.Emps = emps;
+                //toWK.Emps = emps;
 
                 try
                 {
@@ -2750,7 +2758,7 @@ namespace BP.WF
 
                     //更新工作信息.
                     wk.Rec = wl.FK_Emp;
-                    wk.Emps = "@" + wl.FK_Emp;
+                    //wk.Emps = "@" + wl.FK_Emp;
                     //wk.RDT = DataType.CurrentDataTimess;
                     wk.DirectUpdate();
 
@@ -3050,14 +3058,13 @@ namespace BP.WF
                         mywk.FID = this.HisWork.OID;
 
                     mywk.Rec = wl.FK_Emp;
-                    mywk.Emps = wl.FK_Emp;
+                    //mywk.Emps = wl.FK_Emp;
                     mywk.BeforeSave();
 
                     //判断是不是MD5流程？
                     if (this.HisFlow.IsMD5)
                         mywk.SetValByKey("MD5", Glo.GenerMD5(mywk));
                 }
-
 
                 #region 处理烟台（安检模式的流程）需求, 需要合流节点有一个明细表，根据明细表启动子线程任务,并要求把明细表的一行数据copy到下一个子线程的主表上去。
                 if (isHaveFLDtl == true)
@@ -3551,7 +3558,7 @@ namespace BP.WF
                     mainWK.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
 
                 mainWK.Rec = WebUser.No;
-                mainWK.Emps = emps;
+                //mainWK.Emps = emps;
                 mainWK.OID = this.HisWork.FID;
                 mainWK.Save();
             }
@@ -7785,7 +7792,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    //  FullSA fsa = new FullSA(this.town);
+                    //FullSA fsa = new FullSA(this.town);
                 }
 
                 #endregion 计算未来处理人.
@@ -9423,7 +9430,7 @@ namespace BP.WF
             //复制当前节点表单数据.
             heLiuWK.FID = 0;
             heLiuWK.Rec = FK_Emp;
-            heLiuWK.Emps = emps;
+            //heLiuWK.Emps = emps;
             heLiuWK.OID = this.HisWork.FID;
             heLiuWK.DirectUpdate(); //在更新一次.
 

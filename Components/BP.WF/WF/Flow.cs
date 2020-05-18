@@ -1747,7 +1747,6 @@ namespace BP.WF
         /// <returns></returns>
         public string DoCheck()
         {
-
             BP.DA.Cash.ClearCash();
 
             Nodes nds = new Nodes(this.No);

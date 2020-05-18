@@ -286,7 +286,7 @@ namespace BP.En
                         continue;
                     }
 
-                    if (attr.IsNum == true && DataType.IsNumStr(obj.ToString() ) == false)
+                    if (attr.IsNum == true && DataType.IsNumStr(obj.ToString()) == false)
                         dr[attr.Key] = 0;
                     else
                         dr[attr.Key] = obj;
@@ -298,8 +298,8 @@ namespace BP.En
                 /*如果包含这个字段*/
                 AtPara ap = this.atPara;
                 foreach (string key in ap.HisHT.Keys)
-                    if(DataType.IsNullOrEmpty(dr[key].ToString())==true)
-                    dr[key] = ap.HisHT[key];
+                    if (DataType.IsNullOrEmpty(dr[key].ToString()) == true)
+                        dr[key] = ap.HisHT[key];
             }
 
             dt.Rows.Add(dr);
@@ -365,7 +365,7 @@ namespace BP.En
         /// </summary>
         /// <param name="sql">要运行的 select sql</param>
         /// <returns>执行的查询结果</returns>
-        public DataTable RunSQLReturnTable(string sql,Paras paras=null)
+        public DataTable RunSQLReturnTable(string sql, Paras paras = null)
         {
             switch (this.EnMap.EnDBUrl.DBUrlType)
             {
@@ -401,7 +401,7 @@ namespace BP.En
             switch (this.EnMap.EnDBUrl.DBUrlType)
             {
                 case DBUrlType.AppCenterDSN:
-                    return DBAccess.RunSQLReturnValInt(paras,0);
+                    return DBAccess.RunSQLReturnValInt(paras, 0);
                 case DBUrlType.DBAccessOfMSSQL1:
                     return DBAccessOfMSSQL1.RunSQLReturnInt(paras);
                 //case DBUrlType.DBAccessOfMSSQL2:
@@ -638,8 +638,8 @@ namespace BP.En
                 string sql = null;
                 if (attr == null)
                     attr = this.EnMap.GetAttrByKey(attrKey);
-            //    if (attr.UIIsReadonly == false)
-              //      throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
+                //    if (attr.UIIsReadonly == false)
+                //      throw new Exception("@需要自动生成编号的列(" + attr.Key + ")必须为只读。");
 
                 string field = this.EnMap.GetFieldByKey(attrKey);
                 switch (this.EnMap.EnDBUrl.DBType)
@@ -1022,7 +1022,24 @@ namespace BP.En
         /// </summary>
         public int DirectUpdate()
         {
-            return EntityDBAccess.Update(this, null);
+            try
+            {
+                return EntityDBAccess.Update(this, null);
+
+            } catch (Exception ex)
+            {
+                if (ex.Message.Contains("列名") || ex.Message.Contains("将截断字符串") || ex.Message.Contains("缺少") || ex.Message.Contains("的值太大"))
+                {
+                    /*说明字符串长度有问题.*/
+                    this.CheckPhysicsTable();
+
+                    //执行字段扩充检查.
+                    bool isCheck = CheckPhysicsTableAutoExtFieldLength(ex);
+                    if (isCheck == true)
+                        return this.DirectUpdate();
+                }
+                throw ex;
+            }
         }
         /// <summary>
         /// 直接的Insert
@@ -1046,21 +1063,17 @@ namespace BP.En
             }
             catch (Exception ex)
             {
+
+                this.CheckPhysicsTable();
+
+                //执行字段扩充检查.
+                bool isCheck = CheckPhysicsTableAutoExtFieldLength(ex);
+                if (isCheck == true)
+                    return this.Insert();
+
                 this.roll();
-                if (SystemConfig.IsDebug)
-                {
-                    try
-                    {
-                        this.CheckPhysicsTable();
-                    }
-                    catch (Exception ex1)
-                    {
-                        throw new Exception(ex.Message + " == " + ex1.Message);
-                    }
-                }
                 throw ex;
             }
-
             //this.RunSQL(this.SQLCash.Insert, SqlBuilder.GenerParas(this, null));
         }
         /// <summary>
@@ -1219,14 +1232,14 @@ namespace BP.En
                     || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
-                    if ( this.EnMap.EnDBUrl.DBUrlType  == DBUrlType.AppCenterDSN
+                    if (this.EnMap.EnDBUrl.DBUrlType == DBUrlType.AppCenterDSN
                         && DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.
                 }
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
             }
 
-            string msg = ""; 
+            string msg = "";
             switch (this.PK)
             {
                 case "OID":
@@ -1846,6 +1859,13 @@ namespace BP.En
             catch (Exception ex)
             {
                 this.CheckPhysicsTable();
+
+                //执行字段扩充检查.
+                bool isCheck = CheckPhysicsTableAutoExtFieldLength(ex);
+                if (isCheck == true)
+                    return this.Insert();
+
+
                 throw ex;
             }
 
@@ -1854,7 +1874,7 @@ namespace BP.En
                 Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
 
             this.afterInsert();
-            this.afterInsertUpdateAction(); 
+            this.afterInsertUpdateAction();
 
             return i;
         }
@@ -2271,28 +2291,34 @@ namespace BP.En
             }
             catch (System.Exception ex)
             {
+
                 if (ex.Message.Contains("列名") || ex.Message.Contains("将截断字符串") || ex.Message.Contains("缺少") || ex.Message.Contains("的值太大"))
                 {
                     /*说明字符串长度有问题.*/
                     this.CheckPhysicsTable();
 
-                    /*比较参数那个字段长度有问题*/
-                    string errs = "";
-                    foreach (Attr attr in this.EnMap.Attrs)
-                    {
-                        if (attr.MyDataType != BP.DA.DataType.AppString)
-                            continue;
+                    //执行字段扩充检查.
+                    bool isCheck = CheckPhysicsTableAutoExtFieldLength(ex);
+                    if (isCheck == true)
+                        return this.Update();
 
-                        if (attr.MaxLength < this.GetValStrByKey(attr.Key).Length)
-                        {
-                            errs += "@映射里面的" + attr.Key + "," + attr.Desc + ", 相对于输入的数据:{" + this.GetValStrByKey(attr.Key) + "}, 太长。";
-                        }
-                    }
+                    ///*比较参数那个字段长度有问题*/
+                    //string errs = "";
+                    //foreach (Attr attr in this.EnMap.Attrs)
+                    //{
+                    //    if (attr.MyDataType != BP.DA.DataType.AppString)
+                    //        continue;
 
-                    if (errs != "")
-                        throw new Exception("@执行更新[" + this.ToString() + "]出现错误@错误字段:" + errs + " <br>清你在提交一次。" + ex.Message);
-                    else
-                        throw ex;
+                    //    if (attr.MaxLength < this.GetValStrByKey(attr.Key).Length)
+                    //    {
+                    //        errs += "@映射里面的" + attr.Key + "," + attr.Desc + ", 相对于输入的数据:{" + this.GetValStrByKey(attr.Key) + "}, 太长。";
+                    //    }
+                    //}
+
+                    //if (errs != "")
+                    //    throw new Exception("@执行更新[" + this.ToString() + "]出现错误@错误字段:" + errs + " <br>清你在提交一次。" + ex.Message);
+                    //else
+                    //    throw ex;
                 }
 
                 Log.DefaultLogWriteLine(LogType.Error, ex.Message);
@@ -2429,9 +2455,9 @@ namespace BP.En
         #region 对文件的处理.
         public void SaveBigTxtToDB(string saveToField, string bigTxt)
         {
-            
-             DBAccess.SaveBigTextToDB(bigTxt, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
-            
+
+            DBAccess.SaveBigTextToDB(bigTxt, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+
         }
         /// <summary>
         /// 保存文件到数据库
@@ -2702,11 +2728,9 @@ namespace BP.En
             string sqlFields = "";
             string sqlYueShu = "";
 
-            sqlFields = "SELECT column_name as FName,data_type as FType,CHARACTER_MAXIMUM_LENGTH as FLen from information_schema.columns where table_name='" + this.EnMap.PhysicsTable + "'";
-            sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + this.EnMap.PhysicsTable + "') ";
 
-            DataTable dtAttr = DBAccess.RunSQLReturnTable(sqlFields);
-            DataTable dtYueShu = DBAccess.RunSQLReturnTable(sqlYueShu);
+            DataTable dtAttr = DBAccess.RunSQLReturnTable(DBAccess.SQLOfTableFieldDesc(table));
+            DataTable dtYueShu = DBAccess.RunSQLReturnTable(DBAccess.SQLOfTableFieldYueShu(table));
 
             #region 修复表字段。
             Attrs attrs = this._enMap.Attrs;
@@ -3289,12 +3313,106 @@ namespace BP.En
             #endregion
         }
         /// <summary>
+        /// 自动扩展长度
+        /// </summary>
+        public bool CheckPhysicsTableAutoExtFieldLength(Exception ex)
+        {
+            this._enMap = this.EnMap;
+
+            //  string msg = "";
+            if (this._enMap.EnType == EnType.View
+                || this._enMap.EnType == EnType.XML
+                || this._enMap.EnType == EnType.ThirdPartApp
+                || this._enMap.EnType == EnType.Ext)
+                return false;
+
+
+            string sql = "";
+
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    return CheckPhysicsTableAutoExtFieldLength_SQL();
+                case DBType.Oracle:
+                case DBType.DM:
+                    break;
+                case DBType.MySQL:
+                   // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                    //return CheckPhysicsTableAutoExtFieldLength_MySQL(sql);
+                    break;
+                case DBType.Informix:
+                    break;
+                case DBType.PostgreSQL:
+                    break;
+                default:
+                    throw new Exception("@没有涉及到的数据库类型");
+            }
+
+            return false;
+        }
+
+        private bool CheckPhysicsTableAutoExtFieldLength_SQL()
+        {
+            string sqlFields = "SELECT column_name as FName,data_type as FType,CHARACTER_MAXIMUM_LENGTH as FLen from information_schema.columns where table_name='" + this.EnMap.PhysicsTable + "'";
+            //sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + this.EnMap.PhysicsTable + "') ";
+            //原始的
+            DataTable dtAttr = DBAccess.RunSQLReturnTable(sqlFields);
+
+            //是否有? 没有check就返回.
+            bool isCheckIt = false;
+
+            //遍历属性.
+            Attrs attrs = this._enMap.Attrs;
+            foreach (Attr attr in attrs)
+            {
+                if (attr.MyDataType != DataType.AppString)
+                    continue;
+
+                int dbLen = 0;
+                foreach (DataRow dr in dtAttr.Rows)
+                {
+                    if (dr["FName"].ToString().Equals(attr.Key) == true)
+                    {
+                        dbLen = int.Parse(dr["FLen"].ToString());
+                        break;
+                    }
+                }
+
+                //如果是负数，就是maxvarchar 的类型.
+                if (dbLen <= 0)
+                    continue;
+
+                //获得长度.
+                string val = this.GetValStrByKey(attr.Key);
+                if (val.Length <= dbLen)
+                    continue;
+
+                //字段长度.
+                string sql = "";
+                if (val.Length >= 4000)
+                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + attr.Key + " nvarchar(MAX)";
+                else
+                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER column " + attr.Key + " VARCHAR(" + val.Length + ")";
+
+                try
+                {
+                    DBAccess.RunSQL(sql);
+                    isCheckIt = true;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("err@类["+this.ToString()+"],表["+this.EnMap.PhysicsTable+"],自动扩展字段:(" + attr.Key + ")的长度，修复SQL("+sql+")字段长度("+val.Length+")字段值：(" + val + ")");
+                }
+            }
+            //返回是否检测到。
+            return isCheckIt;
+        }
+        /// <summary>
         /// 检查物理表
         /// </summary>
         public void CheckPhysicsTable()
         {
             this._enMap = this.EnMap;
-
             //  string msg = "";
             if (this._enMap.EnType == EnType.View
                 || this._enMap.EnType == EnType.XML
@@ -3310,7 +3428,6 @@ namespace BP.En
             }
             if (this._enMap.IsView)
                 return;
-
 
             DBType dbtype = this._enMap.EnDBUrl.DBType;
 
@@ -3685,7 +3802,7 @@ namespace BP.En
                 if (attr.IsPK)
                     continue;
 
-                if (fields.Contains(","+attr.Key.ToUpper() + ",") == true)
+                if (fields.Contains("," + attr.Key.ToUpper() + ",") == true)
                     continue;
 
                 //if (fields.Contains(attr.Key.ToUpper() + ",") == true)
@@ -5551,7 +5668,7 @@ namespace BP.En
             }
             return dt;
         }
-        public DataTable ToDataTableDescField(string tableName="dt")
+        public DataTable ToDataTableDescField(string tableName = "dt")
         {
             DataTable dt = this.ToEmptyTableDescField();
             dt.TableName = tableName;

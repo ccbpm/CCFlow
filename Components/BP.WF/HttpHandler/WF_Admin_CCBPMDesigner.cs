@@ -119,72 +119,157 @@ namespace BP.WF.HttpHandler
         public WF_Admin_CCBPMDesigner()
         {
         }
+
+        /// <summary>
+        /// 保存节点名字. @sly
+        /// </summary>
+        /// <returns>返回保存方法</returns>
+        public string Designer_SaveNodeName()
+        {
+            string sql = "UPDATE WF_Node SET Name='" + this.Name + "' WHERE NodeID=" + this.FK_Node;
+            DBAccess.RunSQL(sql);
+
+            //表单ID.
+            string frmID = "ND" + this.FK_Node;
+            sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' || Name IS Null) ";
+            DBAccess.RunSQL(sql);
+
+            //Node nd = new Node();
+            //nd.NodeID = this.FK_Node;
+            //nd.RetrieveFromDBSources();
+
+            //MapData md = new MapData();
+            //md.No = frmID;
+            //md.RetrieveFromDBSources();
+
+            //BP.WF.Template.NodeExt nodeExt = new BP.WF.Template.NodeExt(this.FK_Node);
+            //nodeExt.Name = this.Name;
+            //nodeExt.Update();
+
+            //BP.WF.Node node = new BP.WF.Node(this.FK_Node);
+            //node.Name = this.Name;
+            //node.Update();
+
+            //MapData mapData = new MapData("ND"+this.FK_Node);
+            //if ( DataType.IsNullOrEmpty(mapData.Name)==true)
+            //{
+            //    mapData.Name = this.Name;
+            //    mapData.Update();
+            //}
+
+            //修改分组名称.
+            var groups = new BP.Sys.GroupFields();
+            groups.Retrieve("FrmID", "ND" + this.FK_Node);
+            if (groups.Count == 1)
+            {
+                var group = groups[0] as BP.Sys.GroupField;
+                group.Lab = this.Name;
+                group.Update();
+            }
+
+            //清除指定的名字.
+            // BP.DA.Cash2019.ClearCashSpecEnName("BP.WF.Template.NodeExt");
+            // BP.DA.Cash2019.ClearCashSpecEnName("BP.WF.Node");
+            // BP.DA.Cash2019.ClearCashSpecEnName("BP.Sys.GroupField");
+
+            //清楚缓存.
+            BP.DA.Cash.ClearCash();
+
+            return "更新成功.";
+        }
+
         /// <summary>
         /// 执行流程设计图的保存.
         /// </summary>
         /// <returns></returns>
         public string Designer_Save()
         {
+            //@sly. 
+            if (BP.Web.WebUser.IsAdmin == false)
+                return "err@当前您不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
+
             string sql = "";
             try
             {
+
+                StringBuilder sBuilder = new StringBuilder();
+
+                //保存方向.
+                sBuilder = new StringBuilder();
+                string[] dirs = this.GetRequestVal("Dirs").Split('@');
+                foreach (string item in dirs)
                 {
-                    StringBuilder sBuilder = new StringBuilder();
-
-                    //保存节点位置. @101,2,30@102,3,1
-                    string[] nodes = this.GetRequestVal("Nodes").Split('@');
-                    foreach (string item in nodes)
-                    {
-                        if (item == "" || item == null)
-                            continue;
-                        string[] strs = item.Split(',');
-                        sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE NodeID=" + strs[0] + ";");
-                    }
-
-                    DBAccess.RunSQLs(sBuilder.ToString());
-
-                    //保存方向.
-                    sBuilder = new StringBuilder();
-                    string[] dirs = this.GetRequestVal("Dirs").Split('@');
-                    foreach (string item in dirs)
-                    {
-                        if (item == "" || item == null)
-                            continue;
-                        string[] strs = item.Split(',');
-                        sBuilder.Append("DELETE FROM WF_Direction where MyPK='" + strs[0] + "';");
-                        sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
-                    }
-
-                    DBAccess.RunSQLs(sBuilder.ToString());
-
-                    //保存label位置.
-                    sBuilder = new StringBuilder();
-                    string[] labs = this.GetRequestVal("Labs").Split('@');
-                    foreach (string item in labs)
-                    {
-                        if (item == "" || item == null)
-                            continue;
-                        string[] strs = item.Split(',');
-                        sBuilder.Append("UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0] + "';");
-                    }
-
-                    string sqls = sBuilder.ToString();
-                    DBAccess.RunSQLs(sqls);
-
-                    //更新节点HisToNDs，不然就需要检查一遍.
-                    BP.WF.Nodes nds = new Nodes(this.FK_Flow);
-                    foreach (Node item in nds)
-                    {
-                        string strs = "";
-                        Directions mydirs = new Directions(item.NodeID);
-                        foreach (Direction dir in mydirs)
-                            strs += "@" + dir.ToNode;
-                        item.HisToNDs = strs;
-                        item.Update();
-                    }
-
-                    return "保存成功.";
+                    if (item == "" || item == null)
+                        continue;
+                    string[] strs = item.Split(',');
+                    sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
+                    sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
                 }
+                DBAccess.RunSQLs(sBuilder.ToString());
+
+                //保存label位置.
+                sBuilder = new StringBuilder();
+                string[] labs = this.GetRequestVal("Labs").Split('@');
+                foreach (string item in labs)
+                {
+                    if (item == "" || item == null)
+                        continue;
+                    string[] strs = item.Split(',');
+
+                    sBuilder.Append("UPDATE WF_LabNote SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0] + "';");
+                }
+
+                string sqls = sBuilder.ToString();
+                DBAccess.RunSQLs(sqls);
+
+                //更新节点 HisToNDs，不然就需要检查一遍.
+                BP.WF.Nodes nds = new Nodes();
+                nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
+
+                //获得方向集合处理toNodes
+                Directions mydirs = new Directions(this.FK_Flow);
+
+                string mystrs = "";
+                foreach (Node item in nds)
+                {
+                    string strs = "";
+                    foreach (Direction dir in mydirs)
+                    {
+                        if (dir.Node != item.NodeID)
+                            continue;
+
+                        strs += "@" + dir.ToNode;
+                    }
+
+                    DBAccess.RunSQL("UPDATE WF_Node SET HisToNDs='" + strs + "' WHERE NodeID=" + item.NodeID);
+                }
+
+                //获得字符串格式. $101;@102@103
+                //   string[] mystr = mystrs.Split('$');
+
+                //保存节点位置. @101,2,30@102,3,1
+                string[] nodes = this.GetRequestVal("Nodes").Split('@');
+                foreach (string item in nodes)
+                {
+                    if (item == "" || item == null)
+                        continue;
+
+                    string[] strs = item.Split(',');
+                    string nodeID = strs[0]; //获得nodeID.
+
+                    //@sly 
+                    sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "' WHERE NodeID=" + strs[0] + ";");
+                }
+
+                DBAccess.RunSQLs(sBuilder.ToString());
+
+                //清楚缓存.
+                BP.DA.Cash.ClearCash();
+                // Node nd = new Node(102);
+                // throw new Exception(nd.Name);
+
+                return "保存成功.";
+
             }
             catch (Exception ex)
             {
@@ -532,7 +617,7 @@ namespace BP.WF.HttpHandler
 
             }
             catch (Exception ex)
-            {   
+            {
                 string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们)";
                 msg += "@系统信息:" + ex.Message;
                 return msg;
@@ -631,7 +716,7 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Port_Login(emp.No);
 
             //执行更新到用户表信息.
-           // WebUser.UpdateSIDAndOrgNoSQL();
+            // WebUser.UpdateSIDAndOrgNoSQL();
 
             //判断是否是多个组织的情况.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single || adminers.Count == 1)
@@ -661,7 +746,7 @@ namespace BP.WF.HttpHandler
             WebUser.OrgNo = this.OrgNo;
 
             //找到管理员所在的部门.
-            string sql = "SELECT a.No FROM Port_Dept A,Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='"+WebUser.No+"'  AND A.OrgNo='"+this.OrgNo+"'";
+            string sql = "SELECT a.No FROM Port_Dept A,Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + WebUser.No + "'  AND A.OrgNo='" + this.OrgNo + "'";
             string deptNo = DBAccess.RunSQLReturnStringIsNull(sql, this.OrgNo);
 
             WebUser.FK_Dept = deptNo;
@@ -784,6 +869,7 @@ namespace BP.WF.HttpHandler
 
             return "err@修改节点失败，请确认该节点是否存在？";
         }
+
         /// <summary>
         /// 修改节点运行模式
         /// </summary>
@@ -973,7 +1059,7 @@ namespace BP.WF.HttpHandler
             }
 
             //如果为0。
-            if (dt.Rows.Count==0)
+            if (dt.Rows.Count == 0)
             {
                 BP.WF.Port.Admin2.Org org = new Port.Admin2.Org(WebUser.OrgNo);
                 org.DoCheck();

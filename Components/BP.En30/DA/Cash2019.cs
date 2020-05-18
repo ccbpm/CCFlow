@@ -9,6 +9,26 @@ namespace BP.DA
 {
     public class Cash2019
     {
+        /// <summary>
+        /// 清除所有的实体缓存.
+        /// </summary>
+        public static void ClearCash()
+        {
+            _hts = null;
+        }
+        /// <summary>
+        /// 清除指定的缓存数据.
+        /// </summary>
+        /// <param name="enName">实体名称</param>
+        public static void ClearCashSpecEnName(string enName)
+        {
+            Hashtable ht = hts[enName] as Hashtable;
+            if (ht != null)
+            {
+                hts.Remove(enName);
+            }
+        }
+
         #region 缓存ht
         private static Hashtable _hts;
         public static Hashtable hts

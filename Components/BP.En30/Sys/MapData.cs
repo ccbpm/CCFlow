@@ -1966,7 +1966,7 @@ namespace BP.Sys
             MapData md = new MapData();
             md.No = fk_mapData;
             if (md.IsExits)
-                throw new Exception("@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
+                throw new Exception("err@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
             //导入.
             return ImpMapData(fk_mapData, ds);
@@ -2048,11 +2048,11 @@ namespace BP.Sys
         /// <summary>
         /// 导入表单
         /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="specFrmID">指定的表单ID</param>
         /// <param name="ds">表单数据</param>
         /// <param name="isSetReadonly">是否设置只读？</param>
         /// <returns></returns>
-        public static MapData ImpMapData(string fk_mapdata, DataSet ds)
+        public static MapData ImpMapData(string specFrmID, DataSet ds)
         {
 
             #region 检查导入的数据是否完整.
@@ -2092,7 +2092,7 @@ namespace BP.Sys
 
             //检查是否存在OID字段.
             MapData mdOld = new MapData();
-            mdOld.No = fk_mapdata;
+            mdOld.No = specFrmID;
             mdOld.RetrieveFromDBSources();
 
             //现在表单的类型
@@ -2139,7 +2139,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
 
                             }
                             dtl.Insert();
@@ -2155,7 +2155,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //如果物理表为空，则使用编号为物理数据表
@@ -2213,7 +2213,6 @@ namespace BP.Sys
                                     BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
                                 }
                             }
-
                         }
                         break;
                     case "Sys_FrmBtn":
@@ -2229,7 +2228,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
@@ -2250,7 +2249,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             //en.MyPK = "LE_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
@@ -2268,7 +2267,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             en.MyPK = DBAccess.GenerGUID();
                             en.Insert();
@@ -2287,7 +2286,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             //en.MyPK = "LK_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
@@ -2307,7 +2306,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
 
@@ -2325,7 +2324,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             if (DataType.IsNullOrEmpty(en.KeyOfEn) == true)
                                 en.MyPK = DBAccess.GenerGUID();
@@ -2344,7 +2343,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             if (DataType.IsNullOrEmpty(en.CtrlID))
@@ -2364,9 +2363,8 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-
 
                             try
                             {
@@ -2388,9 +2386,9 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-                            en.MyPK = fk_mapdata + "_" + en.GetValByKey("NoOfObj");
+                            en.MyPK = specFrmID + "_" + en.GetValByKey("NoOfObj");
 
 
                             try
@@ -2414,7 +2412,7 @@ namespace BP.Sys
                                     continue;
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             en.DirectInsert();
                         }
@@ -2431,7 +2429,7 @@ namespace BP.Sys
                                     continue;
                                 if (DataType.IsNullOrEmpty(val.ToString()) == true)
                                     continue;
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //执行保存，并统一生成PK的规则.
@@ -2449,7 +2447,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
@@ -2466,7 +2464,7 @@ namespace BP.Sys
                                     //若文件存在，则复制                                  
                                     if (System.IO.File.Exists(file) == true)
                                     {
-                                        string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + fk_mapdata + ".htm";
+                                        string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + specFrmID + ".htm";
                                         if (System.IO.File.Exists(newFile) == true)
                                             System.IO.File.Delete(newFile);
                                         System.IO.File.Copy(file, newFile);
@@ -2491,17 +2489,17 @@ namespace BP.Sys
                                     continue;
                                 try
                                 {
-                                    en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                    en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                                 }
                                 catch
                                 {
-                                    throw new Exception("val:" + val.ToString() + "oldMapID:" + oldMapID + "fk_mapdata:" + fk_mapdata);
+                                    throw new Exception("val:" + val.ToString() + "oldMapID:" + oldMapID + "fk_mapdata:" + specFrmID);
                                 }
                             }
                             int beforeID = en.OID;
                             en.OID = 0;
                             en.DirectInsert();
-                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID='" + beforeID + "'";
+                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + specFrmID + "' AND GroupID='" + beforeID + "'";
                         }
                         break;
                     case "Sys_Enum":
@@ -2544,7 +2542,7 @@ namespace BP.Sys
                                 + ",FWC_H=" + dt.Rows[0]["FWC_H"]
                                 + ",FWC_W=" + dt.Rows[0]["FWC_W"]
                                 + ",FWCType=" + dt.Rows[0]["FWCType"]
-                                + " WHERE NodeID=" + fk_mapdata.Replace("ND", "");
+                                + " WHERE NodeID=" + specFrmID.Replace("ND", "");
                         }
                         break;
                     default:
@@ -2556,7 +2554,7 @@ namespace BP.Sys
             //执行最后结束的sql.
             DBAccess.RunSQLs(endDoSQL);
 
-            MapData mdNew = new MapData(fk_mapdata);
+            MapData mdNew = new MapData(specFrmID);
             mdNew.RepairMap();
 
             if (mdNew.No.IndexOf("ND") == 0)

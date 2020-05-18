@@ -40,6 +40,62 @@ namespace BP.DA
     public class DBAccess
     {
         /// <summary>
+        /// 获得数据表字段描述的SQL
+        /// </summary>
+        public static string SQLOfTableFieldDesc(string table)
+        {
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                return "SELECT column_name as FName,data_type as FType,CHARACTER_MAXIMUM_LENGTH as FLen from information_schema.columns where table_name='" + table + "'";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+
+            }
+            throw new Exception("@没有涉及到的数据库类型");
+        }
+        /// <summary>
+        /// 获得约束
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string SQLOfTableFieldYueShu(string table)
+        {
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                return  "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+
+            }
+            throw new Exception("@没有涉及到的数据库类型");
+
+        }
+
+
+        /// <summary>
         /// 是否大小写敏感
         /// </summary>
         public static bool IsCaseSensitive

@@ -14,7 +14,6 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_FoolFormDesigner_ImpExp : BP.WF.HttpHandler.DirectoryPageBase
     {
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -261,6 +260,7 @@ namespace BP.WF.HttpHandler
                 }
             }
         }
+        
         /// <summary>
         /// 从流程上copy表单
         /// @徐彪来调用.

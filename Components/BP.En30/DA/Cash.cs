@@ -36,6 +36,9 @@ namespace BP.DA
 
             if (_Bill_Cash != null)
                 _Bill_Cash.Clear();
+
+            //清除 @sly
+            Cash2019.ClearCash();
         }
         static Cash()
         {

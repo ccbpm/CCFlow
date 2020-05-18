@@ -718,7 +718,7 @@ namespace BP.WF
 
             #region 更新流程判断条件的标记。
             DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + this.FK_Flow + "'");
-            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
+            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1  WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
             #endregion
 
             Flow fl = new Flow(this.FK_Flow);
@@ -793,7 +793,6 @@ namespace BP.WF
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
-
             
             return base.beforeUpdate();
         }

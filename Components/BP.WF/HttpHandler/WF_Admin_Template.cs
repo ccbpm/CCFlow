@@ -25,6 +25,35 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_Template()
         {
+
+        }
+        /// <summary>
+        /// 导入本机模版
+        /// </summary>
+        /// <returns></returns>
+        public string ImpFrmLocal_Done()
+        {
+            try
+            {
+                ///表单类型.
+                string frmSort = this.GetRequestVal("FrmSort");
+
+                //创建临时文件.
+                string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
+
+                //获得数据类型.
+                DataSet ds = new DataSet();
+                ds.ReadXml(temp);
+
+                //执行装载.
+                MapData.ImpMapData(ds);
+
+                return "导入成功.";
+            }catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
 
         #region  界面 .
@@ -183,7 +212,6 @@ namespace BP.WF.HttpHandler
             string[] strs = fls.Split(';');
 
             string sortNo = GetRequestVal("SortNo");//流程类别.
-
             string dirName = GetRequestVal("DirName"); //目录名称.
             if (DataType.IsNullOrEmpty(dirName) == true)
                 dirName = "/";
@@ -197,40 +225,55 @@ namespace BP.WF.HttpHandler
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
 
+                #region 下载文件.
                 //设置要到的路径.
                 string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
-
-                //下载目录下.
-                FtpStatus fs = conn.DownloadFile(tempfile, "/Flow" + remotePath + "/" + str, FtpLocalExists.Overwrite);
-
-                if (fs.ToString().Equals("Success") == false)
-                    return "err@模板未下载成功" + fs.ToString();
-
+                FtpStatus fs;
                 try
                 {
-                    //执行导入.
-                    BP.WF.Flow flow = new BP.WF.Flow();
-                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
-                    flow.DoCheck(); //要执行一次检查.
-
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "执行成功:新流程编号:" + flow.No+" - "+flow.Name;
-                    dr[2] = "导入成功";
-                    dtInfo.Rows.Add(dr);
-
+                    //下载目录下.
+                    fs = conn.DownloadFile(tempfile, "/Flow" + remotePath + "/" + str, FtpLocalExists.Overwrite);
                 }
                 catch (Exception ex)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = ex.Message;
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+                    dtInfo = this.ImpAddInfo(dtInfo, str,  ex.Message, "失败.");
+                    continue;
                 }
+
+                if (fs.ToString().Equals("Success") == false)
+                {
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "模板未下载成", "失败.");
+                    continue;
+                }
+                #endregion 下载文件.
+
+                #region 执行导入.
+                BP.WF.Flow flow = new BP.WF.Flow();
+                try
+                {
+                    //执行导入.
+                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                    flow.DoCheck(); //要执行一次检查.
+
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "执行成功:新流程编号:" + flow.No + " - " + flow.Name, "成功.");
+                }
+                catch (Exception ex)
+                {
+                    dtInfo = this.ImpAddInfo(dtInfo, str, ex.Message, "导入失败.");
+                }
+                #endregion 执行导入.
             }
 
             return BP.Tools.Json.ToJson(dtInfo);
+        }
+        public DataTable ImpAddInfo(DataTable dtInfo, string fileName, string info, string result)
+        {
+            DataRow dr = dtInfo.NewRow();
+            dr[0] = fileName;
+            dr[1] = info;
+            dr[2] = result;
+            dtInfo.Rows.Add(dr);
+            return dtInfo;
         }
         /// <summary>
         /// 导入表单模板

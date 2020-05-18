@@ -1,17 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>挂起的工作</title>
+    <title>加签待办</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
  	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
 </head>
-
 <body  class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 	<div class="ibox-content">
@@ -27,16 +25,16 @@
 		</div>
 	</div>		
 </div>
-
-<script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+   <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="./Scripts/config.js" type="text/javascript"></script>
-    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>  
+    <script src="./Comm/Gener.js" type="text/javascript"></script>   
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-   <script type="text/javascript">
- function GroupBarClick(groupName) {
+    <script src="AppClassic/comm.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function GroupBarClick(groupName) {
 
 				var alt = document.getElementById('Img' + groupName).alert;
 				var sta = 'block';
@@ -68,31 +66,29 @@
 					}
 				}
 			}
-        
-       function WinOpenIt(url) {
+        function WinOpenIt(url) {
+            //窗口最大化e
+            var scrWidth = screen.availWidth;
+            var scrHeight = screen.availHeight;
+            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
+            self.moveTo(0, 0);
+            self.resizeTo(scrWidth, scrHeight);
+            self.focus();
+            var loop = setInterval(function () {
+                if (self.closed) {
+                    clearInterval(loop);
+                    InitPage();
+                    InitHomeCount();
+                }
+            }, 1);   
            
-           layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: '挂起', 
-				  area:['96%','90%'],
-				  content: url
-				});
-       }
-    </script>
-    
-    <script language="javascript" type="text/javascript" >
-
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
         }
+
 
         //页面启动函数.
         $(function () {
- 			InitPage();
+        	InitPage();
+
         });
 
         //初始化数据.
@@ -103,8 +99,9 @@
             var timeKey = Math.random();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddJson();
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("HungUpList_Init");
+            var data = handler.DoMethodReturnString("HuiQianAdderList_Init");
 
 
 
@@ -112,6 +109,7 @@
                 alert(data);
                 return;
             }
+
             data = eval('(' + data + ')');
 
             //设置表头.
@@ -121,10 +119,9 @@
 
 
             var nodeIDt = GetQueryString("FK_Node");
-
             var tablet = "";
 
-            tablet += "<th>#</th>";
+            tablet += "<th>序号</th>";
             // title += "<th style='width:20px;'>优先级</th>";
             tablet += "<th>标题</th>";
 
@@ -144,12 +141,9 @@
             }
 
 
-            tablet += "<th>发起日期</th>";
-            tablet += "<th>到达</th>";
-            tablet += "<th>期限</th>";
-            tablet += "<th>状态</th>";
-            tablet += "<th>类型</th>";
-            tablet += "<th>备注</th>";
+            tablet += "<th>参与人</th>";
+            // title += "<th>备注</th>";
+
 
 
             $("#tablet").html(tablet);
@@ -158,26 +152,25 @@
 
             //生成分组的字符串.
             var str = "";
-            var listbox = '';
             for (var i = 0; i < data.length; i++) {
 
                 if (groupBy == "ByNode") {
-                    if (str.indexOf(data[i].NodeName) == -1)
+                    if (str.indexOf('@' + data[i].NodeName) == -1)
                         str += "@" + data[i].NodeName;
                 }
 
                 if (groupBy == "ByFlow") {
-                    if (str.indexOf(data[i].FlowName) == -1)
+                    if (str.indexOf('@' + data[i].FlowName) == -1)
                         str += "@" + data[i].FlowName;
                 }
 
                 if (groupBy == "ByStarter") {
-                    if (str.indexOf(data[i].StarterName) == -1)
+                    if (str.indexOf('@' + data[i].StarterName) == -1)
                         str += "@" + data[i].StarterName;
                 }
             }
             var strs = str.split("@"); //生成数组.
-
+            var listbox = '';
             var num = 0;
             var is1 = false;
 
@@ -189,7 +182,8 @@
                 if (groupName == "" || groupName == null)
                     continue;
 
-                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+
+                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=5 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
 
                 //增加处理.
                 for (var i = 0; i < data.length; i++) {
@@ -212,49 +206,46 @@
                         continue;
                     }
 
-
+                    var newRow = "";
                     var title = work.Title;
-                    var isRead = work.IsRead;
                     var flowNo = work.FK_Flow;
                     var flowName = work.FlowName;
                     var nodeName = work.NodeName;
                     var starterName = work.StarterName;
-                    var pri = work.PRI;
                     var nodeID = work.FK_Node;
-                    var fid = work.FID;
                     var workID = work.WorkID;
-                    var pWorkID = work.PWorkID;
-                    var paras = work.AtPara;
+                    var paras = ""; // work.AtPara;
+                    var todoEmps = work.TodoEmps;
 
                     if (paras != '') {
                         paras = paras.replace("'", "\\'");
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
+                        while (true) {
+                            paras = paras.replace('@', '&');
+
+                            if (paras.indexOf('@') < 0) {
+                                break;
+                            }
+                        }
                         paras = "1" + paras;
                     }
 
                     num++;
 
                     if (is1 == true) {
-                        listbox += "<tr  id='" + groupName + num + "' >";
+                        newRow += "<tr  id='" + groupName + num + "' >";
                         is1 = false;
                     }
                     else {
-                        listbox += "<tr id='" + groupName + num + "' >";
+                        newRow += "<tr  id='" + groupName + num + "' >";
                         is1 = true;
                     }
 
-                    listbox += "<td style='width:20px'>" + num + "</td>"; //序号.
-                    //listbox += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+                    listbox += "<td>" + num + "</td>"; //序号.
+                    //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
 
                     var url = "";
-                    if (isRead == 0)
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
-                    else
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+
+                    url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" >" + title + "</a>";
 
                     listbox += "<td>" + url + "</td>"; //标题
 
@@ -270,52 +261,14 @@
                         listbox += "<td>" + nodeName + "</td>"; //节点名称
                     }
 
-
-                    listbox += "<td>" + work.RDT + "</td>"; //发起时间
-                    listbox += "<td>" + work.ADT + "</td>"; //接受时间
-                    listbox += "<td>" + work.SDT + "</td>"; //应完成时间
-                    //判断流程是否逾期
-                    if (cdt > work.SDT && work.WFState == 2)
-                        listbox += "<td><font color=red>逾期</font></td>";
-                    else
-                        listbox += "<td><font color=green>正常</font></td>";
-
-                    listbox += "<td>" + GetState(work.WFState) + "</td>";
-
-                    //备注
-                    listbox += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+                    listbox += "<td>" + todoEmps + "</td>"; //参与人
                     listbox += "</tr>";
 
                 }
             }
-            $('#Table1').html(listbox);
-            $("#Table2").html("<div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
-        }
-        function GetState(wfState) {
 
-            switch (wfState) {
-                case 1:
-                    return "草稿";
-                case 2:
-                    return "待办";
-                    break;
-                case 3: //已完成.
-                    break;
-                case 4:
-                    return "挂起";
-                case 5:
-                    return "<font color=red>退回</font>";
-                case 6:
-                    return "转发";
-                case 7:
-                    return "删除";
-                case 8:
-                    return "加签";
-                case 11:
-                    return "加签回复";
-                default:
-                    return "其他";
-            }
+            $('#Table1').html(listbox);
+            $("#Table2").html("合计:" + data.length + "条");
         }
         //获取当前时间
         function getNowFormatDate() {
@@ -336,57 +289,54 @@
 
             return cdt;
         }
-
-       
     </script>
-<script type="text/javascript">
-    var NS4 = (document.layers);
-    var IE4 = (document.all);
-    var win = window;
-    var n = 0;
-    function findInPage(str) {
+    <script type="text/javascript">
+        var NS4 = (document.layers);
+        var IE4 = (document.all);
+        var win = window;
+        var n = 0;
+        function findInPage(str) {
 
-        alert(document.getElementById('string1'));
-        str = document.getElementById('string1').value;
-        //    alert(str);
-        var txt, i, found;
-        if (str == "")
-            return false;
-        if (NS4) {
-            if (!win.find(str))
-                while (win.find(str, false, true))
-                    n++;
-            else
-                n++;
-            if (n == 0)
-                alert("对不起！没有你要找的内容。");
-        }
-        if (IE4) {
-            txt = win.document.body.createTextRange();
-            for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) {
-                txt.moveStart("character", 1);
-                txt.moveEnd("textedit");
-            }
-            if (found) {
-                txt.moveStart("character", -1);
-                txt.findText(str);
-                txt.select();
-                txt.scrollIntoView();
-                n++;
-            }
-            else {
-                if (n > 0) {
-                    n = 0;
-                    findInPage(str);
-                }
+           // alert(document.getElementById('string1'));
+            str = document.getElementById('string1').value;
+            //    alert(str);
+            var txt, i, found;
+            if (str == "")
+                return false;
+            if (NS4) {
+                if (!win.find(str))
+                    while (win.find(str, false, true))
+                        n++;
                 else
+                    n++;
+                if (n == 0)
                     alert("对不起！没有你要找的内容。");
             }
+            if (IE4) {
+                txt = win.document.body.createTextRange();
+                for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) {
+                    txt.moveStart("character", 1);
+                    txt.moveEnd("textedit");
+                }
+                if (found) {
+                    txt.moveStart("character", -1);
+                    txt.findText(str);
+                    txt.select();
+                    txt.scrollIntoView();
+                    n++;
+                }
+                else {
+                    if (n > 0) {
+                        n = 0;
+                        findInPage(str);
+                    }
+                    else
+                        alert("对不起！没有你要找的内容。");
+                }
+            }
+            return false;
         }
-        return false;
-    }
 
-</script>
-
+    </script>
 </body>
 </html>

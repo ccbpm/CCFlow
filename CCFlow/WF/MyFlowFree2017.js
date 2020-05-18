@@ -6,6 +6,7 @@ function GenerFreeFrm(wn) {
     flowData = wn;
 
     $('#CCForm').html('');
+
     //循环FrmRB
     for (var i in flowData.Sys_FrmRB) {
         var frmLab = flowData.Sys_FrmRB[i];
@@ -232,13 +233,13 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
             }
         }
-        eleHtml = "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  >" + InitDDLOperation(flowData, mapAttr) + "</select>";
+        eleHtml = "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control " + mapAttr.CSS + "'  >" + InitDDLOperation(flowData, mapAttr) + "</select>";
         return eleHtml;
     }
 
     /***************** 外部数据源 *****************************/
     if (mapAttr.LGType == 0 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select  style='padding:0px;'  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+        eleHtml = "<select  style='padding:0px;'  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control " + mapAttr.CSS + "' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         return eleHtml;
     }
 
@@ -356,7 +357,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 return eleHtml;
             }
 
-            eleHtml += "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            var type = " type='text' ";
+            if (mapAttr.IsSecret)
+                type = " type='password' ";
+
+            eleHtml += "<input class='form-control " + mapAttr.CSS + "' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'"+type+" placeholder='" + (mapAttr.Tip || '') + "' />";
 
             return eleHtml;
         }
@@ -395,30 +400,54 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     //日期类型.
     if (mapAttr.MyDataType == 6) { //AppDate
         var enableAttr = '';
-        if (mapAttr.UIIsEnable == 1) {
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+        var frmDate = mapAttr.IsSupperText;//获取日期格式
+        var dateFmt = '';
+        if (frmDate == 0) {
+            dateFmt = "yyyy-MM-dd";
+        } else if (frmDate == 3) {
+            dateFmt = "yyyy-MM";
+        } else if (frmDate == 6) {
+            dateFmt = "MM-dd";
         }
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+        } else {
+            enableAttr = "disabled='disabled'";
+        }
+            
 
-        eleHtml = "<input  type='text' class='form-control Wdate' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        eleHtml = "<input  type='text' class='form-control Wdate " + mapAttr.CSS + "' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     //日期时间类型.
     if (mapAttr.MyDataType == 7) { // AppDateTime = 7
         var enableAttr = '';
-        if (mapAttr.UIIsEnable == 1) {
-            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+        var frmDate = mapAttr.IsSupperText; //获取日期格式
+        var dateFmt = '';
+        if (frmDate == 1) {
+            dateFmt = "yyyy-MM-dd HH:mm";
+        } else if (frmDate == 2) {
+            dateFmt = "yyyy-MM-dd HH:mm:ss";
+        } else if (frmDate == 4) {
+            dateFmt = "HH:mm";
+        } else if (frmDate == 5) {
+            dateFmt = "HH:mm:ss";
         }
-        eleHtml = "<input type='text' class='form-control Wdate'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'" + dateFmt + "'})" + '";';
+        } else {
+            enableAttr = "disabled='disabled'";
+        }
+            
+        eleHtml = "<input type='text' class='form-control Wdate " + mapAttr.CSS + "'  " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     //checkbox 类型.
     if (mapAttr.MyDataType == 4) { // AppBoolean = 7
-
-      
-        eleHtml += "<div class='checkbox' ><label><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' />";
-        eleHtml += mapAttr.Name + '</label></div>';
+        eleHtml += "<label><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' />";
+        eleHtml += mapAttr.Name + '</label>';
         return eleHtml;
     }
 
@@ -426,7 +455,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
         if (mapAttr.UIContralType == 1) { //DDL
             //多选下拉框.
-            eleHtml += "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+            eleHtml += "<select  style='padding:0px;' id='DDL_" + mapAttr.KeyOfEn + "' class='form-control " + mapAttr.CSS + "'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         }
         return eleHtml;
     }
@@ -439,13 +468,22 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'float');if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
     // int 类型.
     if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 +type+ "  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -460,7 +498,11 @@ function figure_MapAttr_TemplateEle(mapAttr) {
         else
             bit = 2;
 
-        eleHtml += "<input style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        var type = " type='text' ";
+        if (mapAttr.IsSecret)
+            type = " type='password' ";
+
+        eleHtml += "<input style='text-align:right;' class='form-control " + mapAttr.CSS + "' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type+"  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
         return eleHtml;
     }
 
@@ -597,7 +639,7 @@ function figure_Template_RB(frmRb) {
 //初始化超链接
 function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
-    var url = frmLin.URL;
+    var url = frmLin.URLExt;
     $.each(flowData.Sys_MapAttr, function (i, obj) {
         if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换
@@ -619,7 +661,7 @@ function figure_Template_HyperLink(frmLin) {
         SID = "";
     if (url.indexOf("?") == -1)
         url = url + "?1=1";
-    if (url.indexOf("SearchBS.htm") != -1)
+    if (url.indexOf("Search.htm") != -1)
         url = url + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
     else
         url = url + "&OID=" + OID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
@@ -757,9 +799,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
     var src = "";
     if (pageData.IsReadonly)
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
     else
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
+        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
@@ -824,7 +866,7 @@ function figure_Template_Dtl(frmDtl) {
     }
 
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe class='Fdtl' ID='Dtl_" + frmDtl.No + "' src='" + src +
+    eleIframe = $("<iframe class='Fdtl' name='Dtl' ID='Dtl_" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     if (pageData.IsReadonly) {
@@ -904,33 +946,14 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var w = wf_node.FWC_W;
     if (sta == 0)
         return $('');
-
-    var src = "";
-    if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
-        src = "./WorkOpt/WorkCheck.htm?s=2";
-    else
-        src = "./WorkOpt/WorkCheck2019.htm?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
+    if (wf_node.FWCSta != 0) {
+        if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
+            pageData.FWCVer = 0;
+        else
+            pageData.FWCVer = 1;
     }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
 
-    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
-
-    eleHtml = $(eleHtml);
+    eleHtml = $("<div id='WorkCheck'></div>");
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
     return eleHtml;
 }
@@ -993,7 +1016,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
+    if (sta == 2 || pageData.IsReadonly == 1)//只读
     {
         src += "&DoType=View";
     }

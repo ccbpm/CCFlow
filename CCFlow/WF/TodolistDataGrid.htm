@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -261,7 +261,7 @@
             var nodeIDt = GetQueryString("FK_Node");
 
             var tablet = "";
-            tablet += "<th style='width:40px;'>序</th>";
+            tablet += "<th style='width:40px;'>#</th>";
             // title += "<th >优先级</th>";
             tablet += "<th>标题</th>";
 
@@ -467,9 +467,7 @@
         }
         function GetState(wfState) {
 
-            //alert(wfState);
-
-            switch (wfState) {
+            switch (parseInt(wfState)) {
                 case 1:
                     return "草稿";
                 case 2:
@@ -506,9 +504,17 @@
             if (strDate >= 0 && strDate <= 9) {
                 strDate = "0" + strDate;
             }
+           var hour = date.getHours();
+            if (hour >= 1 && hour <= 9) {
+                hour = "0" + hour;
+            }
+             var minute = date.getMinutes();
+            if (minute >= 1 && minute <= 9) {
+                minute = "0" + minute;
+            }
             //当前时间=年份-月份-日 小时：分钟
             var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes();
+            + " " + hour + seperator2 + minute;
 
             return cdt;
         }

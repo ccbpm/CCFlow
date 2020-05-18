@@ -1,15 +1,14 @@
 ﻿<html>
 <head>
     <meta charset="UTF-8">
-    <title>正在加载请稍候...</title>
-    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+    <title>正在打开请稍后...</title>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="./Scripts/config.js"></script>
     <script type="text/javascript" src="./Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -18,11 +17,11 @@
             var name, value;
             var str = location.href; //取得整个地址栏
             var num = str.indexOf("?")
-            str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+            str = str.substr(num + 1); //取得所有参数  stringvar.substr(start [, length ]
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyFlow_Init");
+            var data = handler.DoMethodReturnString("MyView_Init");
 
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);
@@ -34,8 +33,8 @@
                 data = data.replace('url@', ''); //如果返回url，就直接转向.
                 data = data.replace('?DoType=HttpHandler', '?');
                 data = data.replace('&DoType=HttpHandler', '');
-                data = data.replace('&DoMethod=MyFlow_Init', '');
-                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('&DoMethod=MyView_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyCC', '');
                 data = data.replace('?&', '?');
 
                 //如果返回url，就直接转向.
@@ -49,13 +48,13 @@
         });
     </script>
 </head>
-<body >
+<body>
 
-<form id="cc">
+    <form id="cc">
 
- <div id="Msg" style="" > 正在加载，请稍后。。。</div>
+        <div id="Msg" style=""> 正在加载，请稍后。。。</div>
 
-</form>
+    </form>
 
 </body>
 </html>

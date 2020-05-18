@@ -24,13 +24,12 @@
             ens.Retrieve("FK_Emp", empNo, "FK_Dept", deptNo);
 
             //所有的岗位类别.
-            var stationTypes = new Entities("BP.GPM.StationTypes");
+            var stationTypes = new Entities("BP.Port.StationTypes");
             stationTypes.RetrieveAll();
 
             //所有的岗位s
-            var stations = new Entities("BP.GPM.Stations");
+            var stations = new Entities("BP.Port.Stations");
             stations.RetrieveAll();
-
 
             var html = "<table border=0 style='width:100%;'>";
             html += "<caption >姓名:" + emp.Name + ", <a href='javascript:Back()'>返回</a></caption>";

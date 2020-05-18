@@ -1,10 +1,20 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
-<head >
+<head>
     <title>驰骋权限管理系统</title>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link href="../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
-    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="/WF/Comm/JS/validation.js"></script>
+    <script src="/WF/Style//skin/layui/layui.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="/WF/Comm//Gener.js"></script>
+    
 </head>
 <body class="login-bg">
 <div class="login-box">
@@ -12,7 +22,7 @@
            <div class="login-form">
              <form id="Form1" >
                 <div class="form-group">
-                    <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"  class="form-control" />
+                    <input value="" type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"  class="form-control" />
                 </div>
                 <div class="form-group">
                     <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required"  class="form-control"  />
@@ -20,27 +30,26 @@
                 <input type="button" class="btn btn-primary btn-block" value="操作员登录" lay-submit lay-filter="formDemo" />
 
             </form>
-            <div class="row login-nav">
-            	<div class="col-xs-6">默认密码：123</div>
-            	<div class="col-xs-6 ">
-                <a href="../WF/Admin/CCBPMDesigner/Login.htm"  class="pull-right">流程设计器</a>
-                <a href="../WF/AppClassic/Login.htm"  class="pull-right">流程前台登录</a>
-                <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
-                </div>
-            </div>
+             <div class="row login-nav">
+                 
+                 <div class="col-xs-6">默认密码：123</div>
+                
+
+                 <div class="col-xs-6 ">
+                     <a href="../WF/Admin/CCBPMDesigner/Login.htm" class="pull-right">流程设计器</a>
+                     <a href="RegUser.html" class="  pull-right">注册新用户</a>
+                     <a href="../WF/AppClassic/Login.htm" class="pull-right">流程前台登录</a>
+                     <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
+                 </div>
+             </div>
               
         </div>
    </div>
   
-   <script src="../WF/Style/skin/layui/layui.js" type="text/javascript"></script>
    
-    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
-    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >        
-    //页面启动函数.
-
+        //页面启动函数.
+       
         layui.use(['form', 'layer'], function () {
 
             //从后台获取当前登录会话的信息.

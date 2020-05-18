@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <!--是否启用调试-->
+    <add key="IsDegug" value="0" />
+    <!--是否显示参数信息-->
+    <add key="IsShowMsg" value="0" />
+    <add key="CCFormServiceUrl--" value="http://localhost:8061/WF/CCForm/CCFormAPI.asmx" />
+    <!--正式-->
+    <add key="CCFormServiceUrl" value="http://182.92.173.41:8061/WF/CCForm/CCFormAPI.asmx" />
+    <add key="ClientSettingsProvider.ServiceUri" value="" />
+  </appSettings>
+</configuration>

@@ -1,19 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Diagnostics.Eventing;
-using System.Diagnostics.PerformanceData;
-using System.Diagnostics.SymbolStore;
-
 using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
-using System.DirectoryServices.ActiveDirectory;
-using BP;
-
 using System.Runtime.InteropServices;   //必要引用
 using System.Security.Principal;    //必要引用
 

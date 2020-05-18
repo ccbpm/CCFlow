@@ -323,12 +323,10 @@ namespace BP.GPM.AD
             if (en.Properties.Contains(key) == false)
                 return isNullAsVal;
 
-
             PropertyValueCollection valueCollection = en.Properties[key];
 
             if (valueCollection.Value == null)
                 return isNullAsVal;
-
 
             return valueCollection.Value.ToString();
         }
@@ -411,7 +409,7 @@ namespace BP.GPM.AD
                 {
 
                     //判断是 group 还是 user.
-                    BP.GPM.Station station = new Station();
+                    BP.Port.Station station = new BP.Port.Station();
                     // emp.No = name;// this.GetValFromDirectoryEntryByKey(entry, "samaccountname");
                     station.No = entry.Guid.ToString();
                     station.Name = name;// this.GetValFromDirectoryEntryByKey(entry, "cn"); 

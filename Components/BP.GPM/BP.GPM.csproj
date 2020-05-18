@@ -49,6 +49,9 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\RefDLL\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
@@ -61,6 +64,7 @@
     <Compile Include="Bar\BarBase.cs" />
     <Compile Include="Bar\BarOfStart.cs" />
     <Compile Include="Bar\BarOfTodolist.cs" />
+    <Compile Include="CommonDbOperator.cs" />
     <Compile Include="Crypto.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -69,7 +73,35 @@
     <Compile Include="AD\Emp.cs" />
     <Compile Include="AD\Glo.cs" />
     <Compile Include="AD\Sync.cs" />
+    <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
+    <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
+    <Compile Include="DINGTalk\DDSDK\CacheItem.cs" />
+    <Compile Include="DINGTalk\DDSDK\ConstVars.cs" />
+    <Compile Include="DINGTalk\DDSDK\ErrCodeEnum.cs" />
+    <Compile Include="DINGTalk\DDSDK\ICacheProvider.cs" />
+    <Compile Include="DINGTalk\DDSDK\JSTicket.cs" />
+    <Compile Include="DINGTalk\DDSDK\Keys.cs" />
+    <Compile Include="DINGTalk\DDSDK\RequestHelper.cs" />
+    <Compile Include="DINGTalk\DDSDK\ResultPackage.cs" />
+    <Compile Include="DINGTalk\DDSDK\SignPackage.cs" />
+    <Compile Include="DINGTalk\DDSDK\SignPackageHelper.cs" />
+    <Compile Include="DINGTalk\DDSDK\SimpleCacheProvider.cs" />
+    <Compile Include="DINGTalk\DDSDK\TimeStamp.cs" />
+    <Compile Include="DINGTalk\DDSDK\TokenResult.cs" />
+    <Compile Include="DINGTalk\DDSDK\Urls.cs" />
+    <Compile Include="DINGTalk\DingDing.cs" />
+    <Compile Include="DINGTalk\DingFlowMessage.cs" />
+    <Compile Include="DINGTalk\DingModel.cs" />
+    <Compile Include="DINGTalk\DingTalk_Message.cs" />
+    <Compile Include="DINGTalk\DTS\OrgInit_Ding.cs" />
+    <Compile Include="DINGTalk\DTS\OrgInit_DingIcreMent.cs" />
+    <Compile Include="DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
+    <Compile Include="DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="Glo.cs" />
+    <Compile Include="GPM\EnumClass.cs" />
+    <Compile Include="GPM\GroupDept.cs" />
+    <Compile Include="GPM\GroupType.cs" />
+    <Compile Include="GPM\Station.cs" />
     <Compile Include="GPM\StationExt.cs" />
     <Compile Include="GPM\AppSort.cs" />
     <Compile Include="GPM\GPMEmp.cs" />
@@ -79,43 +111,21 @@
     <Compile Include="GPM\GroupMenu.cs" />
     <Compile Include="GPM\StationMenu.cs" />
     <Compile Include="GPM\PerSetting.cs" />
+    <Compile Include="GPM\StationType.cs" />
     <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\AccessToken.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Analyze.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\CacheItem.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ConstVars.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ErrCodeEnum.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ICacheProvider.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\JSTicket.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Keys.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\RequestHelper.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\ResultPackage.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackage.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SignPackageHelper.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\TimeStamp.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\TokenResult.cs" />
-    <Compile Include="Plugins\DINGTalk\DDSDK\Urls.cs" />
-    <Compile Include="Plugins\DINGTalk\DingDing.cs" />
-    <Compile Include="Plugins\DINGTalk\DingFlowMessage.cs" />
-    <Compile Include="Plugins\DINGTalk\DingModel.cs" />
-    <Compile Include="Plugins\DINGTalk\DingTalk_Message.cs" />
-    <Compile Include="Plugins\DINGTalk\WeinXinModel.cs" />
-    <Compile Include="Plugins\DINGTalk\WeiXin.cs" />
-    <Compile Include="Plugins\DINGTalk\WeiXinMessage.cs" />
-    <Compile Include="Plugins\DINGTalk\WXBizMsgCrypt.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_Ding.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_DingIcreMent.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_DingUserIcon.cs" />
-    <Compile Include="Plugins\DTS\OrgInit_WeiXinUserIcon.cs" />
-    <Compile Include="Plugins\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="UserData\EmpMenu.cs" />
     <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />
-    <Compile Include="UserData\Group.cs" />
     <Compile Include="UserData\VGPMEmpMenu.cs" />
+    <Compile Include="UserVar.cs" />
+    <Compile Include="WeiXin\OrgInit_WeiXinUserIcon.cs" />
+    <Compile Include="WeiXin\WeinXinModel.cs" />
+    <Compile Include="WeiXin\WeiXin.cs" />
+    <Compile Include="WeiXin\WeiXinMessage.cs" />
+    <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
+    <Compile Include="WeiXin\WXOrganization.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">

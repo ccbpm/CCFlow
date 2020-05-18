@@ -28,6 +28,7 @@ namespace BP.GPM
             }
         }
         #endregion
+
         #region 构造方法
         /// <summary>
         /// 权限组
@@ -66,25 +67,28 @@ namespace BP.GPM
                 map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
 
 
-                map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
+                map.AttrsOfOneVSM.Add(new BP.GPM.GroupEmps(), new Emps(),
                     GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new GroupEmps(), new BP.Port.Emps(),
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.GPM.GroupEmps(), new BP.Port.Emps(),
                    GroupEmpAttr.FK_Group,
                    GroupEmpAttr.FK_Emp, "人员(树)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 //map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
                 // GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
-                map.AttrsOfOneVSM.Add(new GroupStations(), new Stations(),
+                map.AttrsOfOneVSM.Add(new GroupStations(), new BP.Port.Stations(),
                     GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
                     
 
-                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.Port.Stations(),
                   GroupStationAttr.FK_Group,
-                  GroupStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
+                  GroupStationAttr.FK_Station, "岗位(平铺)", BP.Port.StationAttr.FK_StationType);
+
+                map.AttrsOfOneVSM.AddBranches(new GroupDepts(), new Depts(),
+                   GroupEmpAttr.FK_Group, GroupDeptAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
 
 
                 //节点绑定部门. 节点绑定部门.

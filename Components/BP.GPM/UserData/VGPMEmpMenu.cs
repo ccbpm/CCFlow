@@ -195,7 +195,7 @@ namespace BP.GPM
 
                 map.AddTBString(MenuAttr.Name, null, "菜单功能-名称", true, false, 0, 3900, 20);
                 map.AddTBString(MenuAttr.ParentNo, null, "ParentNo", true, false, 1, 30, 20);
-                map.AddTBString(AppAttr.Url, null, "连接", true, false, 0, 3900, 20, true);
+                map.AddTBString(AppAttr.UrlExt, null, "连接", true, false, 0, 3900, 20, true);
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
                     "@3=目录@4=功能@5=功能控制点");
                 map.AddTBString(MenuAttr.FK_App, null, "系统", true, false, 0, 30, 20);

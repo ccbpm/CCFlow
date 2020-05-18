@@ -6,67 +6,6 @@ using BP.En;
 
 namespace BP.GPM
 {
-
-    /// <summary>
-    /// 控制方式
-    /// </summary>
-    public enum CtrlWay
-    {
-        /// <summary>
-        /// 游客
-        /// </summary>
-        Guest,
-        /// <summary>
-        /// 任何人
-        /// </summary>
-        AnyOne,
-        /// <summary>
-        /// 按岗位
-        /// </summary>
-        ByStation,
-        /// <summary>
-        /// 按部门
-        /// </summary>
-        ByDept,
-        /// <summary>
-        /// 按人员
-        /// </summary>
-        ByEmp,
-        /// <summary>
-        /// 按sql
-        /// </summary>
-        BySQL
-    }
-    /// <summary>
-    /// 菜单类型
-    /// </summary>
-    public enum MenuType
-    {
-        /// <summary>
-        /// 系统根目录
-        /// </summary>
-        Root,
-        /// <summary>
-        /// 系统类别
-        /// </summary>
-        AppSort,
-        /// <summary>
-        /// 系统
-        /// </summary>
-        App,
-        /// <summary>
-        /// 目录
-        /// </summary>
-        Dir,
-        /// <summary>
-        /// 菜单
-        /// </summary>
-        Menu,
-        /// <summary>
-        /// 功能控制点
-        /// </summary>
-        Function
-    }
     /// <summary>
     /// 菜单
     /// </summary>
@@ -88,6 +27,14 @@ namespace BP.GPM
         /// 连接
         /// </summary>
         public const string Url = "Url";
+        /// <summary>
+        /// 连接（pc）
+        /// </summary>
+        public const string UrlExt = "UrlExt";
+        /// <summary>
+        /// 连接（移动端）
+        /// </summary>
+        public const string MobileUrlExt = "MobileUrlExt";
         /// <summary>
         /// 控制内容
         /// </summary>
@@ -182,6 +129,18 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.MenuType, (int)value);
             }
         }
+        public MenuCtrlWay MenuCtrlWay
+        {
+            get
+            {
+                return (MenuCtrlWay)this.GetValIntByKey(MenuAttr.MenuCtrlWay);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.MenuCtrlWay, (int)value);
+            }
+        }
+        
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -287,6 +246,28 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.Url, value);
             }
         }
+        public string UrlExt
+        {
+            get
+            {
+                return this.GetValStringByKey(MenuAttr.UrlExt);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.UrlExt, value);
+            }
+        }
+        public string MobileUrlExt
+        {
+            get
+            {
+                return this.GetValStringByKey(MenuAttr.MobileUrlExt);
+            }
+            set
+            {
+                this.SetValByKey(MenuAttr.MobileUrlExt, value);
+            }
+        }
         public bool IsCheck = false;
         /// <summary>
         /// 标记
@@ -320,10 +301,7 @@ namespace BP.GPM
             this.No = no;
             this.Retrieve();
         }
-        protected override bool beforeInsert()
-        {
-            return base.beforeInsert();
-        }
+
         protected override bool beforeDelete()
         {
             if (this.Flag.Contains("FlowSort") || this.Flag.Contains("Flow"))
@@ -365,35 +343,39 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
                 #endregion 与树有关的必备属性.
+
                 // 类的字段属性. 
                 map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, MenuAttr.MenuType,
                     "@0=系统根目录@1=系统类别@2=系统@3=目录@4=功能/界面@5=功能控制点");
 
+                //map.AddDDLSysEnum(MenuAttr.MenuType, 0, "菜单类型", true, true, "MenuTypeExt",
+                // "@3=目录@4=功能/界面@5=功能控制点");
+
+
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLEntities(MenuAttr.FK_App, null, "系统", new Apps(), false);
-                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay, "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
+                    "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
-                map.AddTBString(MenuAttr.Url, null, "连接", true, false, 0, 3900, 200, true);
+                //map.AddTBString(MenuAttr.Url, null, "连接", false, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.UrlExt, null, "PC端连接", true, false, 0, 3900, 200, true);
+                map.AddTBString(MenuAttr.MobileUrlExt, null, "移动端连接", true, false, 0, 3900, 200, true);
+
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
                 map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
                     "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, false);
-                map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
-                map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
-                map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
-
-                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
-
+                //map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
+                //map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
+                //map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
                 //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
-
-                map.AddMyFile("图标");  //附件.
+                //  map.AddMyFile("图标");  //附件.
 
                 map.AddSearchAttr(MenuAttr.FK_App);
                 map.AddSearchAttr(MenuAttr.MenuType);
                 map.AddSearchAttr(MenuAttr.OpenWay);
-
 
                 //map.AddDDLSysEnum(AppAttr.CtrlWay, 1, "控制方式", true, true, AppAttr.CtrlWay,
                 //    "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
@@ -413,12 +395,12 @@ namespace BP.GPM
 
 
                 //可以访问的权限组.
-                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.GPM.Stations(),
+                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.Port.Stations(),
                     StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "绑定到岗位-列表模式");
 
                 //可以访问的权限组.
-                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.GPM.Stations(),
-                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", StationAttr.FK_StationType, "Name", EmpAttr.No);
+                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.Port.Stations(),
+                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", BP.Port.StationAttr.FK_StationType, "Name", EmpAttr.No);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),
@@ -447,7 +429,7 @@ namespace BP.GPM
                 rm.HisAttrs.AddTBString("Name", null, "单据名称", true, false, 0, 100, 400);
                 rm.HisAttrs.AddTBString("PTable", null, "存储表(为空则为编号相同)", true, false, 0, 100, 100);
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "单据模式", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
-                rm.HisAttrs.AddDDLSQL("Sys_FormTree", null, "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
+                rm.HisAttrs.AddDDLSQL("Sys_FormTree", "", "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
 
                 rm.ClassMethodName = this.ToString() + ".DoAddCCBill";
                 map.AddRefMethod(rm);
@@ -489,7 +471,7 @@ namespace BP.GPM
                 fb.Update();
 
                 //执行绑定.
-                fb.DoBindMenu(this.No,name);
+                fb.DoBindMenu(this.No, name);
 
                 return "<a href='../Comm/En.htm?EnName=BP.Frm.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
             }
@@ -504,27 +486,27 @@ namespace BP.GPM
         /// <returns></returns>
         public string DoAddRight3()
         {
-            if (this.Url.Contains("Search.htm") == false && this.Url.Contains("SearchBS.htm") == false)
+            if (this.UrlExt.Contains("Search.htm") == false && this.UrlExt.Contains("Search.htm") == false)
                 return "该功能非Search组件，所以您不能增加功能权限.";
 
             Menu en = this.DoCreateSubNode() as Menu;
             en.Name = "增加权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Insert";
             en.Update();
 
             en = this.DoCreateSubNode() as Menu;
             en.Name = "修改权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Update";
             en.Update();
 
             en = this.DoCreateSubNode() as Menu;
             en.Name = "删除权限";
             en.MenuType = GPM.MenuType.Function; //功能权限.
-            en.Url = this.Url;
+            en.Url = this.UrlExt;
             en.Tag1 = "Delete";
             en.Update();
 
@@ -550,7 +532,71 @@ namespace BP.GPM
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
+            //判断选择的类型是否正确.
+            if (this.HisMenuType == MenuType.Root && this.ParentNo.Equals("0") == false)
+            {
+                Menu en = new Menu(this.ParentNo);
+                if (en.HisMenuType == MenuType.Dir)
+                    this.HisMenuType = MenuType.Menu;
+
+
+                if (en.HisMenuType == MenuType.App)
+                    this.HisMenuType = MenuType.Dir;
+
+                if (en.HisMenuType == MenuType.AppSort)
+                    this.HisMenuType = MenuType.App;
+            }
+
+            //如果是菜单类别.
+            //if (this.HisMenuType == MenuType.AppSort)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
+
+            //    if (en.HisMenuType != MenuType.Root)
+            //        throw new Exception("err@当前菜单类型是系统类别，但是父节点不是root，选择不正确.");
+            //}
+
+            //if (this.HisMenuType == MenuType.App)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
+            //    if (en.HisMenuType != MenuType.AppSort)
+            //        throw new Exception("err@当前菜单类型是系统，但是父节点不是系统类别，选择不正确.");
+            //}
+
+            //if (this.HisMenuType == MenuType.Dir)
+            //{
+            //    Menu en = new Menu(this.ParentNo);
+            //    if (en.HisMenuType != MenuType.App)
+            //        throw new Exception("err@当前菜单类型是目录，但是父节点不是系统，选择不正确.");
+
+            //}
+
+            //if (this.HisMenuType == MenuType.Menu)
+            //{
+            //    if (DataType.IsNullOrEmpty(this.UrlExt) == true)
+            //        throw new Exception("err@请设置页面链接.");
+            //}
+
+            //if (this.HisMenuType == MenuType.Function)
+            //{
+            //    if (DataType.IsNullOrEmpty(this.Flag) == true)
+            //        throw new Exception("err@请设置功能点标记.");
+            //}
+
+
             this.WebPath = this.WebPath.Replace("//", "/");
+
+            //设置他的系统编号.
+            if (DataType.IsNullOrEmpty(this.ParentNo) == false
+                && (this.MenuType == MenuType.Menu
+                || this.MenuType == MenuType.Dir
+                || this.MenuType == MenuType.Function))
+            {
+                Menu en = new Menu(this.ParentNo);
+                this.FK_App = en.FK_App;
+            }
+
+            this.Url = this.UrlExt;
             return base.beforeUpdateInsertAction();
         }
         /// <summary>

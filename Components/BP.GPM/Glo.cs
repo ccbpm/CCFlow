@@ -12,6 +12,23 @@ namespace BP.GPM
     public class Glo
     {
         /// <summary>
+        /// 是否允许用户注册.
+        /// </summary>
+        public static bool IsEnableRegUser
+        {
+            get
+            {
+                string str= BP.Sys.SystemConfig.AppSettings["IsEnableRegUser"];
+                if (DataType.IsNullOrEmpty(str)==true)
+                    return false;
+
+                if (str.Equals("1") == true)
+                    return true;
+
+                return false;
+            }
+        }
+        /// <summary>
         /// 运行模式
         /// </summary>
         public static OSModel OSModel

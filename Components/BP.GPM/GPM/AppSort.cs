@@ -49,6 +49,7 @@ namespace BP.GPM
             }
         }
         #endregion
+
         #region 构造方法
         /// <summary>
         /// 系统类别
@@ -78,10 +79,9 @@ namespace BP.GPM
                 map.DepositaryOfEntity = Depositary.None;
                 map.EnDesc = "系统类别";
                 map.EnType = EnType.App;
-                map.IsAutoGenerNo = true;
+                map.IsAutoGenerNo = false;
 
-
-                map.AddTBStringPK(AppSortAttr.No, null, "编号", true, true, 2, 2, 20);
+                map.AddTBStringPK(AppSortAttr.No, null, "编号", true, true, 1, 200, 20);
                 map.AddTBString(AppSortAttr.Name, null, "名称", true, false, 0, 300, 20);
                 map.AddTBInt(AppSortAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBString(AppSortAttr.RefMenuNo, null, "关联的菜单编号", false, false, 0, 300, 20);
@@ -106,8 +106,20 @@ namespace BP.GPM
             return base.beforeDelete();
         }
 
+        public void CheckIt()
+        {
+            AppSort sort = new AppSort();
+            sort.CheckPhysicsTable();
+            App app = new App();
+            app.CheckPhysicsTable();
+            Menu en = new Menu();
+            en.CheckPhysicsTable();
+        }
+
         protected override bool beforeUpdate()
         {
+            CheckIt();
+
             Menu root = new Menu();
             root.No = this.RefMenuNo;
             if (root.RetrieveFromDBSources() > 0)
@@ -120,7 +132,7 @@ namespace BP.GPM
 
         protected override bool beforeInsert()
         {
-            base.beforeInsert();
+            CheckIt();
 
             // 求root.
             Menu root = new Menu();
@@ -143,6 +155,7 @@ namespace BP.GPM
             sort1.FK_App = "AppSort";
             sort1.Update();
 
+            this.No = sort1.No;
             this.RefMenuNo = sort1.No;
             return true;
         }

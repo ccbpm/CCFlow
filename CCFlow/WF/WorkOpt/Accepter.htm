@@ -57,6 +57,7 @@
             color: white !important;
             padding: 4px 17px !important;
         }
+
         #btnCancel {
             background: #50b6ac !important;
             border-radius: 3px !important;
@@ -132,7 +133,7 @@
         var doType = GetQueryString("DoType");
         $(function () {
             var IsSend = GetQueryString("IsSend");
-          //  alert(IsSend);
+            //  alert(IsSend);
 
             if (IsSend != null && IsSend != undefined && IsSend == 0) {
                 $("#btnOKAndClose").show();
@@ -185,7 +186,7 @@
 
             //获得三个数据源.
             var depts = data.Depts; //部门集合. 这个集合也可能为空，如果为空就不要分组.
-            var emps = data.Emps; //人员集合.
+            var emps = data.Emps;  //可选的人员集合.
             var selected = data.Selected; //已经选择的人员集合.
 
             if (emps == null || emps == undefined || emps.length == 0) {
@@ -278,7 +279,19 @@
             html += "</table>";
 
             $("#table").append(html);
-            return;
+
+
+            //只有一个人的时候.  @sly 这部分我修改完了，调试通过了你移动到手机端把。
+            if (emps.length == 1) {
+
+                //获得人员编号.
+                var no = emps[0].No;
+                //让其选择.
+                $("#" + no).attr("checked", "checked");
+
+                //执行发送.
+                SendNode();
+            }
 
         });
 
@@ -348,7 +361,7 @@
             handler.AddUrlData(); //FK_Flow,WorkID,FK_Node,ToNode 参数.
 
             //多个参数用逗号分开的比如： zhangsan;lisi;wangwu
-            handler.AddPara("SelectEmps", encodeURI(selectedEmps)); 
+            handler.AddPara("SelectEmps", encodeURI(selectedEmps));
             var data = handler.DoMethodReturnString("Accepter_Send"); //执行发送方法.
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -415,7 +428,7 @@
         //取消【选择接收人并发送】
         function Close(flag, selectEmps) {
             if (selectEmps == null || selectEmps == undefined)
-                selectEmps ="取消"
+                selectEmps = "取消"
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose(selectEmps);
                 if (flag == true)

@@ -742,9 +742,7 @@ namespace BP.WF.Data
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
                 
-
-                map.AddTBMyNum();
-
+                 
                 map.DTSearchKey = MyFlowAttr.RDT;
                 map.DTSearchLable = "发起日期";
                 map.DTSearchWay = DTSearchWay.ByDate;
@@ -756,7 +754,7 @@ namespace BP.WF.Data
 
              //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
-                map.AddSearchAttr(MyFlowAttr.TSpan);
+                map.AddSearchAttr(MyFlowAttr.TSpan, 4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
                 //map.IsShowSearchKey = false;
 

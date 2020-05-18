@@ -20,15 +20,6 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_Multilingual : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_Multilingual(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_Multilingual()
@@ -51,7 +42,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ht);
         }
 
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法
@@ -68,7 +58,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 

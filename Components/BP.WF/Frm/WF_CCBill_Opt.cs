@@ -23,14 +23,6 @@ namespace BP.Frm
     {
         #region 构造方法.
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_CCBill_Opt(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_CCBill_Opt()

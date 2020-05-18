@@ -446,8 +446,9 @@ namespace BP.WF
                 map.AddTBDateTime(BillAttr.RDT, "打印时间", true, true);
 
                 map.AddDDLEntities(BillAttr.FK_Dept, null, "隶属部门", new BP.Port.Depts(), false);
-                
-                map.AddDDLEntities(BillAttr.FK_NY, null, "隶属年月", new BP.Pub.NYs(), false);
+
+                map.AddTBString(BillAttr.FK_NY, null, "隶属年月", true, true, 0, 50, 5);
+
 
                 map.AddTBString(BillAttr.Emps, null, "Emps", false, false, 0, 4000, 5);
 
@@ -456,8 +457,6 @@ namespace BP.WF
                 map.AddTBIntMyNum();
 
                 map.AddSearchAttr(BillAttr.FK_Dept);
-                map.AddSearchAttr(BillAttr.FK_NY);
-
                 map.AddSearchAttr(BillAttr.FK_Emp);
 
                 RefMethod rm = new RefMethod();
@@ -484,7 +483,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoOpen()
         {
-            string path = BP.Sys.Glo.Request.MapPath(this.Url);
+            string path = SystemConfig.PathOfWebApp + (this.Url);
             return path; 
         }
         /// <summary>
@@ -493,7 +492,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoOpenPDF()
         {
-            string path = BP.Sys.Glo.Request.MapPath(this.Url);
+            string path = SystemConfig.PathOfWebApp + (this.Url);
             return path;
         }
     }

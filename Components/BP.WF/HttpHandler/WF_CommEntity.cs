@@ -19,14 +19,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_CommEntity : DirectoryPageBase
     {
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_CommEntity(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -98,6 +91,8 @@ namespace BP.WF.HttpHandler
 
                 #region 保存新加行.
                 int newRowCount = this.GetRequestValInt("NewRowCount");
+                bool isEntityOID = dtl.IsOIDEntity;  //已同步数据.
+                bool isEntityNo = dtl.IsNoEntity;
                 for (int i = 0; i < newRowCount; i++)
                 {
                     string val = "";
@@ -143,7 +138,23 @@ namespace BP.WF.HttpHandler
                     }
                     //dtl.SetValByKey(pkval, 0);
                     dtl.SetValByKey(this.GetRequestVal("RefKey"), this.GetRequestVal("RefVal"));
-                    dtl.PKVal = "0";
+
+                    //已同步数据.
+                    if (isEntityOID == true)
+                    {
+                        dtl.PKVal = "0";
+                        dtl.Insert();
+                        continue;
+                    }
+
+                    if (isEntityNo == true && dtl.EnMap.IsAutoGenerNo==true)
+                    {
+                        dtl.PKVal = dtl.GenerNewNoByKey("No");
+                        dtl.Insert();
+                        continue;
+                    }
+
+                    //直接执行保存.
                     dtl.Insert();
                 }
                 #endregion 保存新加行.
@@ -318,7 +329,7 @@ namespace BP.WF.HttpHandler
             foreach (Entity dt in dtls)
             {
                 string pkval = dt.PKVal.ToString();
-                string ext = dt.GetValByKey("MyFileExt").ToString();
+                string ext =  string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString(); 
                 if (DataType.IsNullOrEmpty(ext) == true)
                     continue;
                 myFilePath = myFilePath + "\\" + pkval + "." + ext;
@@ -575,8 +586,8 @@ namespace BP.WF.HttpHandler
 
                     if (attr.UIIsReadonly == true)
                         continue;
-
-                    if (attr.UIBindKey.Contains("SELECT") == true || attr.UIBindKey.Contains("select") == true)
+                    
+                    if (attr.UIBindKey.ToUpper().Contains("SELECT") == true)
                     {
                         /*是一个sql*/
                         string sqlBindKey = attr.UIBindKey.Clone() as string;
@@ -627,7 +638,6 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 把外键与枚举放入里面去.
 
-
                 #region 增加 上方法.
                 DataTable dtM = new DataTable("dtM");
                 dtM.Columns.Add("No");
@@ -649,6 +659,8 @@ namespace BP.WF.HttpHandler
                 RefMethods rms = map.HisRefMethods;
                 foreach (RefMethod item in rms)
                 {
+                    item.HisEn = en;
+                    //item.HisAttrs = en.EnMap.Attrs;B
                     string myurl = "";
                     if (item.RefMethodType != RefMethodType.Func)
                     {
@@ -710,7 +722,7 @@ namespace BP.WF.HttpHandler
             else
             {
                 /*保存到fpt服务器上.*/
-                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                 if (ftpconn == null)
@@ -810,7 +822,7 @@ namespace BP.WF.HttpHandler
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.ClassMethodName );
+                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.Title+" - 方法:"+item.ClassMethodName );
                         }
                     }
                     else
@@ -1090,7 +1102,13 @@ namespace BP.WF.HttpHandler
                 return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
 
             Entities trees = attr.HisFKEns;
-            trees.RetrieveAll();
+            //判断改类是否存在Idx
+            Entity tree = trees.GetNewEntity;
+            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+                && tree.EnMap.Attrs.Contains("Idx") == true)
+                trees.RetrieveAll("Idx");
+            else
+                trees.RetrieveAll();
 
             DataTable dt = trees.ToDataTableField("DBTrees");
             //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
@@ -1104,20 +1122,53 @@ namespace BP.WF.HttpHandler
             #endregion 生成树目录.
 
             #region 生成选择的数据.
+            bool saveType = this.GetRequestValBoolen("SaveType");
             Entities dot2Dots = ClassFactory.GetEns(dot2DotEnsName);
-            dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+            DataTable dtSelected = null;
+            if (saveType == true)
+            {
+                //选择的值保存在一个字段中
+                string para = this.GetRequestVal("Para");
+                string paraVal = this.GetRequestVal("ParaVal");
 
-            DataTable dtSelected = dot2Dots.ToDataTableField("DBMMs");
+                string para1 = this.GetRequestVal("Para1");
+                string paraVal1 = this.GetRequestVal("ParaVal1");
+
+                string pkval = this.PKVal;
+
+                if (DataType.IsNullOrEmpty(para) == true)
+                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+                else if (DataType.IsNullOrEmpty(para1) == true)
+                {
+                    pkval = pkval.Replace("_" + paraVal, "");
+                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal);
+                }
+                   
+                else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
+                {
+                    pkval = pkval.Replace("_" + paraVal, "");
+                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal, para1, paraVal1);
+                }
+                    
+               
+            }
+            else
+            {
+                dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+            }
+            dtSelected = dot2Dots.ToDataTableField("DBMMs");
+           
 
             string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
             string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
 
             dtSelected.Columns[attrOfMInMM].ColumnName = "No";
 
-            if (dtSelected.Columns.Contains(attrOfMInMM + "Text") == false)
+            if (dtSelected.Columns.Contains(attrOfMInMM + "Text") == false && saveType == false)
                 return "err@MM实体类字段属性需要按照外键属性编写:" + dot2DotEnsName + " - " + attrOfMInMM;
 
-            dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
+            if(saveType == false)
+                dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
 
             dtSelected.Columns.Remove(AttrOfOneInMM);
             ds.Tables.Add(dtSelected); //已经选择的数据.
@@ -1143,10 +1194,43 @@ namespace BP.WF.HttpHandler
                 string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
                 string attrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
                 string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
-
+                bool saveType = this.GetRequestValBoolen("SaveType");
                 //获得点对点的实体.
                 Entity en = ClassFactory.GetEns(dot2DotEnsName).GetNewEntity;
-                en.Delete(attrOfOneInMM, this.PKVal); //首先删除.
+                if (saveType == true)
+                {
+                    //选择的值保存在一个字段中
+                    string para = this.GetRequestVal("Para");
+                    string paraVal = this.GetRequestVal("ParaVal");
+
+                    string para1 = this.GetRequestVal("Para1");
+                    string paraVal1 = this.GetRequestVal("ParaVal1");
+
+                    //首先删除.
+                    if (DataType.IsNullOrEmpty(para) == true)
+                        en.Delete(attrOfOneInMM, this.PKVal);
+                    else if (DataType.IsNullOrEmpty(para1) == true)
+                        en.Delete(attrOfOneInMM, this.PKVal, para, paraVal);
+                    else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
+                        en.Delete(attrOfOneInMM, this.PKVal, para, paraVal, para1, paraVal1) ;
+
+                    if (DataType.IsNullOrEmpty(eles) == true)
+                        return "没有选择值";
+                    en.SetValByKey(attrOfOneInMM, this.PKVal);
+                    en.SetValByKey(attrOfMInMM, eles);
+                    if (en.Row.ContainsKey(para))
+                        en.SetValByKey(para, paraVal);
+                    if (en.Row.ContainsKey(para1))
+                        en.SetValByKey(para1, paraVal1);
+
+                    en.Insert();
+                    return "数据保存成功.";
+
+                }
+
+
+
+                en.Delete(attrOfOneInMM, this.PKVal);
 
                 string[] strs = eles.Split(',');
                 foreach (string str in strs)
@@ -1200,18 +1284,6 @@ namespace BP.WF.HttpHandler
                 /* 如果是枚举 */
                 SysEnums ses = new SysEnums();
                 ses.Retrieve(SysEnumAttr.IntKey, attr.UIBindKey);
-
-                //ses.ToStringOfSQLModelByKey
-
-                BP.Pub.NYs nys = new Pub.NYs();
-                foreach (SysEnum item in ses)
-                {
-                    BP.Pub.NY ny =new Pub.NY();
-                    ny.No = item.IntKey.ToString();
-                    ny.Name = item.Lab;
-                    nys.AddEntity(ny);
-                }
-                return nys.ToJson();
             }
 
             return "err@设置的默认分组[" + key + "]不能是普通字段.";

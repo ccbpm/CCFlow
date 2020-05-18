@@ -23,6 +23,8 @@ namespace BP.WF.DTS
         {
             this.Title = "处理逾期的任务";
             this.Help = "需要每天执行一次,对于已经逾期的工作,按照逾期的规则处理。";
+            this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量

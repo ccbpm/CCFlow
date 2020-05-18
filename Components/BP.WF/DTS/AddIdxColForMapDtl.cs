@@ -21,6 +21,9 @@ namespace BP.WF.DTS
         {
             this.Title = "为所有的从表增加一个隐藏的Id列.";
             this.Help = "用户VSTO表单.";
+
+            this.GroupName = "系统维护";
+
         }
         /// <summary>
         /// 设置执行变量

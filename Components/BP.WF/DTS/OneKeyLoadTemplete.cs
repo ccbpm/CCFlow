@@ -28,6 +28,10 @@ namespace BP.WF.DTS
             this.Help += "@1,系统所有的流程数据、模版数据、组织解构数据、将会被删除。";
             this.Help += "@2,重新装载C:\\CCFlowTemplete 的数据。";
             this.Help += "@3,此功能一般提供给ccflow的开发者用于不同的数据库之间的移植。";
+
+            this.GroupName = "数据备份/恢复";
+
+
         }
         /// <summary>
         /// 设置执行变量
@@ -82,7 +86,7 @@ namespace BP.WF.DTS
             FlowSorts sorts = new FlowSorts();
             sorts.ClearTable();
             DataTable dt = ds.Tables["WF_FlowSort"];
-           // sorts = QueryObject.InitEntitiesByDataTable(sorts, dt, null) as FlowSorts;
+            // sorts = QueryObject.InitEntitiesByDataTable(sorts, dt, null) as FlowSorts;
             foreach (FlowSort item in sorts)
             {
                 item.DirectInsert(); //插入数据.
@@ -119,23 +123,18 @@ namespace BP.WF.DTS
             dt = ds.Tables["Port_Station"];
             stas = QueryObject.InitEntitiesByDataTable(stas, dt, null) as Stations;
             foreach (Station item in stas)
+                item.DirectInsert(); //插入数据.
+
+            //EmpDepts.
+            BP.GPM.DeptEmps eds = new BP.GPM.DeptEmps();
+            eds.ClearTable();
+            dt = ds.Tables["Port_DeptEmp"];
+            eds = QueryObject.InitEntitiesByDataTable(eds, dt, null) as BP.GPM.DeptEmps;
+            foreach (BP.GPM.DeptEmp item in eds)
             {
                 item.DirectInsert(); //插入数据.
             }
 
-
-            if (BP.Sys.SystemConfig.OSModel == OSModel.OneMore)
-            {
-                //EmpDepts.
-                BP.GPM.DeptEmps eds = new BP.GPM.DeptEmps();
-                eds.ClearTable();
-                dt = ds.Tables["Port_DeptEmp"];
-                eds = QueryObject.InitEntitiesByDataTable(eds, dt, null) as BP.GPM.DeptEmps;
-                foreach (BP.GPM.DeptEmp item in eds)
-                {
-                    item.DirectInsert(); //插入数据.
-                }
-            }
             #endregion 2 组织结构.
 
             #region 3 恢复系统数据.
@@ -228,7 +227,7 @@ namespace BP.WF.DTS
                     continue;
 
                 SysFormTree fs = new SysFormTree();
-                fs.No = item.Name.Substring(0, item.Name.IndexOf('.') );
+                fs.No = item.Name.Substring(0, item.Name.IndexOf('.'));
                 fs.Name = item.Name.Substring(item.Name.IndexOf('.'));
                 fs.ParentNo = "0";
                 fs.Insert();
@@ -251,7 +250,7 @@ namespace BP.WF.DTS
                     }
                     catch (Exception ex)
                     {
-                        msg += "@调度失败,文件:"+f+",异常信息:" + ex.Message;
+                        msg += "@调度失败,文件:" + f + ",异常信息:" + ex.Message;
                     }
                 }
             }
@@ -290,7 +289,7 @@ namespace BP.WF.DTS
                     continue;
 
                 FlowSort fs = new FlowSort();
-                fs.No = dir.Name.Substring(0, dir.Name.IndexOf('.') );
+                fs.No = dir.Name.Substring(0, dir.Name.IndexOf('.'));
                 fs.Name = dir.Name.Substring(3);
                 fs.ParentNo = fsRoot.No;
                 fs.Insert();

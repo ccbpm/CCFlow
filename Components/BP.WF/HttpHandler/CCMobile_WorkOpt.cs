@@ -114,11 +114,6 @@ namespace BP.WF.HttpHandler
             WF_WorkOpt en = new WF_WorkOpt();
             return en.AccepterOfGener_AddEmps();
         }
-        public string AccepterOfGener_Delete()
-        {
-            WF_WorkOpt en = new WF_WorkOpt();
-            return en.AccepterOfGener_Delete();
-        }
         public string AccepterOfGener_Send()
         {
             WF_WorkOpt en = new WF_WorkOpt();

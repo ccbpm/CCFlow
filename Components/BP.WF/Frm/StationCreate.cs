@@ -98,7 +98,7 @@ namespace BP.Frm
 
                 map.AddTBStringPK(StationCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
                 map.AddDDLEntitiesPK(StationCreateAttr.FK_Station, null, "可以创建岗位",
-                   new BP.GPM.Stations(), true);
+                   new BP.Port.Stations(), true);
                 this._enMap = map;
                 return this._enMap;
             }

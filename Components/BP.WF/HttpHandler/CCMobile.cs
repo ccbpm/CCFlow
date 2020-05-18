@@ -369,7 +369,7 @@ namespace BP.WF.HttpHandler
             if (tSpan == "-1")
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
             else
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%"+BP.Web.WebUser.No+",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -403,7 +403,7 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 500";
-            else if(SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
@@ -432,20 +432,20 @@ namespace BP.WF.HttpHandler
             mydt.TableName = "WF_GenerWorkFlow";
             if (mydt != null)
             {
-                 mydt.Columns.Add("TDTime");
-                 foreach (DataRow dr in mydt.Rows)
-                 {
-                     dr["TDTime"] = GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
-                 }
+                mydt.Columns.Add("TDTime");
+                foreach (DataRow dr in mydt.Rows)
+                {
+                    dr["TDTime"] = GetTraceNewTime(dr["FK_Flow"].ToString(), int.Parse(dr["WorkID"].ToString()), int.Parse(dr["FID"].ToString()));
+                }
             }
             #endregion
-            
+
 
             ds.Tables.Add(mydt);
 
             return BP.Tools.Json.ToJson(ds);
         }
-         public static string  GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)
+        public static string  GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
             string sqlOfWhere2 = "";

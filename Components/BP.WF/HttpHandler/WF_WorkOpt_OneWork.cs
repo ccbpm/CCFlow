@@ -114,7 +114,7 @@ namespace BP.WF.HttpHandler
             if (gwf.WFState != WFState.Complete)
             {
                 GenerWorkerLists gwls = new GenerWorkerLists();
-                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.Idx);
 
                 //warning 补偿式的更新.  做特殊的判断，当会签过了以后仍然能够看isPass=90的错误数据.
                 foreach (GenerWorkerList item in gwls)
@@ -129,7 +129,7 @@ namespace BP.WF.HttpHandler
             }
 
             //把节点审核配置信息.
-            FrmWorkCheck fwc = new FrmWorkCheck(gwf.FK_Node);
+            NodeWorkCheck fwc = new NodeWorkCheck(gwf.FK_Node);
             ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
             //返回结果.
@@ -236,9 +236,27 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string OP_UnSend()
         {
+            //获取用户当前所在的节点
+            String currNode = "";
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
+                    break;
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                    currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
+                    break;
+                case DBType.MSSQL:
+                    currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+                    break;
+                default:
+                    break;
+            }
+            String unSendToNode = DBAccess.RunSQLReturnString(currNode);
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, int.Parse(unSendToNode), this.FID);
             }
             catch (Exception ex)
             {
@@ -295,8 +313,8 @@ namespace BP.WF.HttpHandler
              + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
             psql = "SELECT PowerFlag From(" + psql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
-           string powers = DBAccess.RunSQLReturnStringIsNull(psql,"");
-          
+            string powers = DBAccess.RunSQLReturnStringIsNull(psql, "");
+
             #endregion PowerModel权限的解析
 
             #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
@@ -326,7 +344,8 @@ namespace BP.WF.HttpHandler
                     else
                         ht.Add("IsCanDelete", 0);
 
-                    if (powers.Contains("FlowDataDelete") == true) { 
+                    if (powers.Contains("FlowDataDelete") == true)
+                    {
                         //存在移除这个键值
                         if (ht.ContainsKey("IsCanDelete") == true)
                             ht.Remove("IsCanDelete");
@@ -349,29 +368,39 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-                    /*撤销发送*/
-                    GenerWorkerLists workerlists = new GenerWorkerLists();
-                    QueryObject info = new QueryObject(workerlists);
-                    info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsPass, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
-                    info.addAnd();
-                    info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-
-                    if (info.DoQuery() > 0)
-                        ht.Add("CanUnSend", 1);
-                    else
-                        ht.Add("CanUnSend", 0);
-
-                    if (powers.Contains("FlowDataUnSend") == true)
+                    if (SystemConfig.CustomerNo == "TianYe")
                     {
-                        //存在移除这个键值
-                        if (ht.ContainsKey("CanUnSend") == true)
-                            ht.Remove("CanUnSend");
                         ht.Add("CanUnSend", 1);
+
                     }
+                    else
+                    {
+                        /*撤销发送*/
+                        GenerWorkerLists workerlists = new GenerWorkerLists();
+                        QueryObject info = new QueryObject(workerlists);
+                        info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsPass, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+
+                        if (info.DoQuery() > 0)
+                            ht.Add("CanUnSend", 1);
+                        else
+                            ht.Add("CanUnSend", 0);
+
+                        if (powers.Contains("FlowDataUnSend") == true)
+                        {
+                            //存在移除这个键值
+                            if (ht.ContainsKey("CanUnSend") == true)
+                                ht.Remove("CanUnSend");
+                            ht.Add("CanUnSend", 1);
+                        }
+
+                    }
+
 
                     //流程结束
                     if (powers.Contains("FlowDataOver") == true)
@@ -384,6 +413,33 @@ namespace BP.WF.HttpHandler
                     {
                         ht.Add("CanFlowPress", 1);
                     }
+
+
+
+                    //是否可以调整工时
+                    sql = "SELECT CHRole \"CHRole\" From WF_GenerWorkerList G,WF_Node N Where G.FK_Node=N.NodeID AND N.CHRole!=0 AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (Int32.Parse(dr["CHRole"].ToString()) == 1 || Int32.Parse(dr["CHRole"].ToString()) == 3)
+                            {
+                                ht.Add("CanChangCHRole", 1);
+                                break;
+                            }
+                            else
+                            {
+                                ht.Add("CanChangCHRole", 2);
+                            }
+
+                        }
+
+
+
+                    }
+
+
 
                     break;
                 case WFState.Complete: // 完成.
@@ -400,6 +456,12 @@ namespace BP.WF.HttpHandler
                         if (ht.ContainsKey("CanRollBack") == true)
                             ht.Remove("CanRollBack");
                         ht.Add("CanRollBack", 1);
+                    }
+
+                    if (nd.CHRole != 0)//0禁用 1 启用 2 只读 3 启用并可以调整流程应完成时间
+                    {
+                        ht.Add("CanChangCHRole", 2);
+
                     }
 
 
@@ -500,25 +562,58 @@ namespace BP.WF.HttpHandler
                 nodeID = gwf.FK_Node;
             }
 
-            Node nd = new Node(nodeID);
+            //有时候nodeID被删除了.
+            Node nd = new Node();
+            nd.NodeID = nodeID;
+            if (nd.RetrieveFromDBSources() == 0)
+            {
+                nd.NodeID = int.Parse(this.FK_Flow + "01");
+                nd.Retrieve();
+            }
 
+            Flow flow = new Flow(nd.FK_Flow);
             foreach (OneWorkXml item in xmls)
             {
+                bool IsShow = true;
+                switch (item.No)
+                {
+                    case "Frm":
+                        if (flow.IsFrmEnable == false)
+                            IsShow = false;
+                        break;
+                    case "Truck":
+                        if (flow.IsTruckEnable == false)
+                            IsShow = false;
+                        break;
+                    case "TimeBase":
+                        if (flow.IsTimeBaseEnable == false)
+                            IsShow = false;
+                        break;
+                    case "Table":
+                        if (flow.IsTableEnable == false)
+                            IsShow = false;
+                        break;
+                    case "OP":
+                        if (flow.IsOPEnable == false)
+                            IsShow = false;
+                        break;
+                }
+                if (IsShow == false)
+                    continue;
                 string url = "";
-                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1", item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
+                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1&CCSta="+ this.GetRequestValInt("CCSta"), item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
                 if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
                 {
                     if (nd.FormUrl.Contains("?"))
-                        url = "@url=" + nd.FormUrl + "&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                        url = "@url=" + nd.FormUrl + "&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1&CCSta="+this.GetRequestValInt("CCSta");
                     else
-                        url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1";
+                        url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1&CCSta=" + this.GetRequestValInt("CCSta");
                 }
                 re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
             }
 
             return re.TrimEnd(',') + "]";
         }
-
         /// <summary>
         /// 获取流程的JSON数据，以供显示工作轨迹/流程设计
         /// </summary>
@@ -526,6 +621,158 @@ namespace BP.WF.HttpHandler
         /// <param name="workid">工作编号</param>
         /// <param name="fid">父流程编号</param>
         /// <returns></returns>
+        public string Chart_Init2020()
+        {
+            //参数.
+            string fk_flow = this.FK_Flow;
+            Int64 workid = this.WorkID;
+            Int64 fid = this.FID;
+
+            DataSet ds = new DataSet();
+            DataTable dt = null;
+            string json = string.Empty;
+            try
+            {
+                //流程信息
+                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Flow";
+                ds.Tables.Add(dt);
+
+                //节点信息 ， 
+                // NodePosType=0，开始节点， 1中间节点,2=结束节点.
+                // RunModel= select * from sys_enum where Enumkey='RunModel' 
+                // TodolistModel= select * from sys_enum where Enumkey='TodolistModel' ;
+                sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\",RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
+                    fk_flow + "' ORDER BY Step";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Node";
+                ds.Tables.Add(dt);
+
+                //标签信息
+                sql = "SELECT MyPK \"MyPK\", Name \"Name\", X \"X\", Y \"Y\" FROM WF_LabNote WHERE FK_Flow='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_LabNote";
+                ds.Tables.Add(dt);
+
+                //线段方向信息
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "WF_Direction";
+                ds.Tables.Add(dt);
+
+                //如果workid=0就仅仅返回流程图数据.
+                if (workid == 0)
+                    return BP.Tools.Json.DataSetToJson(ds);
+
+
+                //流程信息.
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                dt = gwf.ToDataTableField(); // DBAccess.RunSQLReturnTable(string.Format(sql, workid));
+                dt.TableName = "WF_GenerWorkFlow";
+                ds.Tables.Add(dt);
+
+                //把节点审核配置信息.
+                NodeWorkCheck fwc = new NodeWorkCheck(gwf.FK_Node);
+                ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
+
+
+                //获取工作轨迹信息
+                var trackTable = "ND" + int.Parse(fk_flow) + "Track";
+                sql = "SELECT FID \"FID\",NDFrom \"NDFrom\",NDFromT \"NDFromT\",NDTo  \"NDTo\", NDToT \"NDToT\", ActionType \"ActionType\",ActionTypeText \"ActionTypeText\",Msg \"Msg\",RDT \"RDT\",EmpFrom \"EmpFrom\",EmpFromT \"EmpFromT\", EmpToT \"EmpToT\",EmpTo \"EmpTo\" FROM " + trackTable +
+                      " WHERE WorkID=" +
+                      workid + (fid == 0 ? (" OR FID=" + workid) : (" OR WorkID=" + fid + " OR FID=" + fid)) + " ORDER BY RDT DESC";
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+                DataTable newdt = new DataTable();
+                newdt = dt.Clone();
+
+                #region 判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
+                if (dt.Rows.Count > 0)
+                {
+                    if (Equals(dt.Rows[0]["ActionType"], (int)ActionType.Return)
+                        || Equals(dt.Rows[0]["ActionType"], (int)ActionType.UnSend))
+                    {
+                        if (dt.Rows.Count > 1)
+                        {
+                            dt.Rows.RemoveAt(1);
+                            dt.Rows.RemoveAt(0);
+                        }
+                        else
+                        {
+                            dt.Rows.RemoveAt(0);
+                        }
+                        newdt = dt;
+                    }
+                    else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ActionType"], (int)ActionType.Return) || Equals(dt.Rows[1]["ActionType"], (int)ActionType.UnSend)))
+                    {
+                        //删除已发送的节点，
+                        if (dt.Rows.Count > 3)
+                        {
+                            dt.Rows.RemoveAt(1);
+                            dt.Rows.RemoveAt(1);
+                        }
+                        else
+                        {
+                            dt.Rows.RemoveAt(1);
+                        }
+
+                        string fk_node = "";
+                        if (dt.Rows[0]["NDFrom"].Equals(dt.Rows[0]["NDTo"]))
+                            fk_node = dt.Rows[0]["NDFrom"].ToString();
+                        if (DataType.IsNullOrEmpty(fk_node) == false)
+                        {
+                            //如果是跳转页面，则需要删除中间跳转的节点
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                if (Equals(dr["ACTIONTYPE"], (int)ActionType.Skip) && dr["NDFrom"].ToString().Equals(fk_node))
+                                    continue;
+                                DataRow newdr = newdt.NewRow();
+                                newdr.ItemArray = dr.ItemArray;
+                                newdt.Rows.Add(newdr);
+                            }
+                        }
+                        else
+                        {
+                            newdt = dt.Copy();
+                        }
+                    }
+                    else
+                        newdt = dt.Copy();
+                }
+                newdt.TableName = "Track";
+                ds.Tables.Add(newdt);
+                #endregion
+
+                #region 如果流程没有完成,就把工作人员列表返回过去.
+                if (gwf.WFState != WFState.Complete)
+                {
+                    //加入工作人员列表.
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+                    Int64 id = this.FID;
+                    if (id == 0)
+                        id = this.WorkID;
+
+                    QueryObject qo = new QueryObject(gwls);
+                    qo.AddWhere(GenerWorkerListAttr.FID, id);
+                    qo.addOr();
+                    qo.AddWhere(GenerWorkerListAttr.WorkID, id);
+                    qo.DoQuery();
+
+                    DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
+                    ds.Tables.Add(dtGwls);
+                }
+                #endregion 如果流程没有完成,就把工作人员列表返回过去.
+
+                string str= BP.Tools.Json.DataSetToJson(ds);
+                 DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
+                 return str;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         public string Chart_Init()
         {
             string fk_flow = this.FK_Flow;
@@ -567,7 +814,7 @@ namespace BP.WF.HttpHandler
                     //获取流程信息，added by liuxc,2016-10-26
                     //sql =
                     //    "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
-                    //    workid;
+                    //    workid;                     
                     sql = "SELECT wgwf.Starter as \"Starter\","
                           + "        wgwf.StarterName as \"StarterName\","
                           + "        wgwf.RDT as \"RDT\","
@@ -601,11 +848,12 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
                     //获得流程状态.
-                    WFState wfState = (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
+                    WFState wfState = (WFState)int.Parse(dt.Select("workid=" + workid + "")[0]["wfstate"].ToString());// (WFState)int.Parse(dt.Rows[0]["WFState"].ToString());
 
                     String fk_Node = dt.Rows[0]["FK_Node"].ToString();
+
                     //把节点审核配置信息.
-                    FrmWorkCheck fwc = new FrmWorkCheck(fk_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(fk_Node);
                     ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
 
 
@@ -618,14 +866,15 @@ namespace BP.WF.HttpHandler
                     dt = DBAccess.RunSQLReturnTable(sql);
                     DataTable newdt = new DataTable();
                     newdt = dt.Clone();
+
                     //判断轨迹数据中，最后一步是否是撤销或退回状态的，如果是，则删除最后2条数据
                     if (dt.Rows.Count > 0)
                     {
-                        if (Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[0]["ACTIONTYPE"], (int)ActionType.UnSend))
+                        if (Equals(dt.Rows[0]["ActionType"], (int)ActionType.Return) || Equals(dt.Rows[0]["ActionType"], (int)ActionType.UnSend))
                         {
                             if (dt.Rows.Count > 1)
                             {
-                                dt.Rows.RemoveAt(0);
+                                dt.Rows.RemoveAt(1);
                                 dt.Rows.RemoveAt(0);
                             }
                             else
@@ -635,7 +884,7 @@ namespace BP.WF.HttpHandler
 
                             newdt = dt;
                         }
-                        else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.Return) || Equals(dt.Rows[1]["ACTIONTYPE"], (int)ActionType.UnSend)))
+                        else if (dt.Rows.Count > 1 && (Equals(dt.Rows[1]["ActionType"], (int)ActionType.Return) || Equals(dt.Rows[1]["ActionType"], (int)ActionType.UnSend)))
                         {
                             //删除已发送的节点，
                             if (dt.Rows.Count > 3)
@@ -670,8 +919,6 @@ namespace BP.WF.HttpHandler
                         }
                         else
                             newdt = dt.Copy();
-
-
                     }
 
                     newdt.TableName = "Track";
@@ -692,8 +939,6 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dt);
 
 
-
-
                     //如果流程没有完成.
                     if (wfState != WFState.Complete)
                     {
@@ -706,8 +951,10 @@ namespace BP.WF.HttpHandler
                         qo.AddWhere(GenerWorkerListAttr.FID, id);
                         qo.addOr();
                         qo.AddWhere(GenerWorkerListAttr.WorkID, id);
+                        qo.addOrderBy(GenerWorkerListAttr.Idx);
                         qo.DoQuery();
-
+                        
+                       
                         DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
                         ds.Tables.Add(dtGwls);
                     }
@@ -900,13 +1147,33 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBSList()
         {
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
-            ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
-            ps.Add("WorkID", this.WorkID);
+            BP.Frm.Tracks tracks = new BP.Frm.Tracks();
+            BP.En.QueryObject qo = new En.QueryObject(tracks);
+            qo.AddWhere(TrackAttr.ActionType, (int)BP.Frm.FrmActionType.BBS);
+            qo.addAnd();
+            qo.addLeftBracket();
 
+            if (this.FID != 0)
+            {
+                qo.AddWhere(TrackAttr.WorkID, this.FID);
+                qo.addOr();
+                qo.AddWhere(TrackAttr.FID, this.FID);
+            }
+            else
+            {
+                qo.AddWhere(TrackAttr.WorkID, this.WorkID);
+
+                if (this.WorkID != 0)
+                {
+                    qo.addOr();
+                    qo.AddWhere(TrackAttr.FID, this.WorkID);
+                }
+            }
+            qo.addRightBracket();
+            qo.addOrderBy(TrackAttr.RDT);
+            qo.DoQuery();
             //转化成json
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            return BP.Tools.Json.ToJson(tracks.ToDataTableField());
         }
 
         /// 查看某一用户的评论.
@@ -926,11 +1193,16 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Save()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
-            string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE MyPK=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "MyPK";
-            ps.Add("MyPK", mypk);
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            string fk_mapData = this.GetRequestVal("FK_MapData");
+            Node nd = new Node(this.FK_Node);
+            if (DataType.IsNullOrEmpty(fk_mapData) == true)
+            {
+                fk_mapData = nd.NodeFrmID;
+            }
+            MapData mapData = new MapData(fk_mapData);
+            BP.WF.Dev2Interface.Track_WriteBBS(fk_mapData, mapData.Name, this.WorkID, msg,
+           this.FID, this.FK_Flow, null, this.FK_Node, nd.Name);
+            return "评论信息保存成功";
         }
 
         /// <summary>

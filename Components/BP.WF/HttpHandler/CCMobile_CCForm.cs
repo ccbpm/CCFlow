@@ -11,6 +11,14 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using System.Net.Http;
+using System.Collections;
+using NPOI.SS.Formula.Functions;
+using LitJson;
+using System.Net;
+using BP.WF.WeiXin;
+using System.Security.Cryptography;
+using BP.Tools;
 
 namespace BP.WF.HttpHandler
 {
@@ -59,8 +67,9 @@ namespace BP.WF.HttpHandler
             GEDtls dtls = new GEDtls(this.EnsName);
             GEDtl dtl = dtls.GetNewEntity as GEDtl;
             dtls.Retrieve("RefPK", this.GetRequestVal("RefPKVal"));
+            MapDtl mdtl = new MapDtl(this.EnsName);
             Map map = dtl.EnMap;
-            foreach (Entity item in dtls)
+            foreach (GEDtl item in dtls)
             {
                 string pkval = item.GetValStringByKey(dtl.PK);
                 foreach (Attr attr in map.Attrs)
@@ -79,21 +88,22 @@ namespace BP.WF.HttpHandler
                     }
 
 
-                    if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.TB)
                     {
+                       
                         string val = this.GetValFromFrmByKey("TB_" + attr.Key + "_" + pkval, null);
-                        item.SetValByKey(attr.Key, val);
+                        item.SetValByKey(attr.Key, HttpUtility.UrlDecode(val, Encoding.UTF8));
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.DDL)
                     {
                         string val = this.GetValFromFrmByKey("DDL_" + attr.Key + "_" + pkval);
-                        item.SetValByKey(attr.Key, val);
+                        item.SetValByKey(attr.Key, HttpUtility.UrlDecode(val, Encoding.UTF8));
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
+                    if (attr.UIContralType == UIContralType.CheckBok)
                     {
                         string val = this.GetValFromFrmByKey("CB_" + attr.Key + "_" + pkval, "-1");
                         if (val == "0")
@@ -104,6 +114,23 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 item.SetValByKey("OID",pkval);
+                //关联主赋值.
+                item.RefPK = this.RefPKVal;
+                switch (mdtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        item.RefPK = this.RefPKVal;
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        item.RefPK = this.RefPKVal;
+                        item.FID = long.Parse(this.RefPKVal);
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        item.RefPK = this.RefPKVal;
+                        item.FID = this.FID;
+                        break;
+                }
+                item.Rec = WebUser.No;
                 item.Update(); //执行更新.
             }
             return "保存成功.";
@@ -265,7 +292,7 @@ namespace BP.WF.HttpHandler
 
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                    dbUpload.NodeID = this.FK_Node.ToString();
+                    dbUpload.NodeID = this.FK_Node;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
@@ -290,6 +317,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     dbUpload.RefPKVal = PKVal;
                     dbUpload.FID = this.FID;
 
@@ -354,7 +383,7 @@ namespace BP.WF.HttpHandler
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
-                    dbUpload.NodeID = FK_Node.ToString();
+                    dbUpload.NodeID = FK_Node;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -382,6 +411,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     //if (athDesc.IsNote)
                     //    dbUpload.MyNote = this.Pub1.GetTextBoxByID("TB_Note").Text;
 
@@ -409,7 +440,7 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                     {
                         /*保存到fpt服务器上.*/
-                        FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                        FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
                             SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                         string ny = DateTime.Now.ToString("yyyy_MM");
@@ -442,6 +473,110 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 保存到数据库.
             }
+        }
+		/// <summary>
+        /// 获取百度云token
+        /// </summary>
+        /// <returns></returns>
+        public string getAccessToken()
+        {
+            string ak = Sys.SystemConfig.APIKey;
+            string sk = Sys.SystemConfig.SecretKey;
+
+            //百度云应用获取token
+            String authHost = "https://aip.baidubce.com/oauth/2.0/token";
+            HttpClient client = new HttpClient();
+            List<KeyValuePair<String, String>> paraList = new List<KeyValuePair<string, string>>();
+            paraList.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+            paraList.Add(new KeyValuePair<string, string>("client_id", ak));
+            paraList.Add(new KeyValuePair<string, string>("client_secret", sk));
+
+            HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
+            String result = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(result);
+
+            return result;
+        }
+        /// <summary>
+        /// 调用企业号获取地理位置
+        /// </summary>
+        /// <returns></returns>
+        public string GetWXConfigSetting()
+        {
+            //必须是当前页面，如果在CCMobile/Home.htm调用，则传入Home.htm
+            string htmlPage = this.GetRequestVal("htmlPage");
+            Hashtable ht = new Hashtable();
+
+            //生成签名的时间戳
+            string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
+            //生成签名的随机串
+            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            //企业号jsapi_ticket
+            string jsapi_ticket = "";
+            string url1 =  htmlPage;
+            //获取 AccessToken
+            string accessToken = new BP.WF.WeiXin.WeiXin().GenerAccessToken();
+            
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+
+
+            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string str = reader.ReadToEnd();
+
+            //权限签名算法
+            Ticket ticket = new Ticket();
+            ticket = FormatToJson.ParseFromJson<Ticket>(str);
+
+            if (ticket.errcode == "0")
+                jsapi_ticket = ticket.ticket;
+            else
+                return "err:@获取jsapi_ticket失败+accessToken="+ accessToken;
+
+            ht.Add("timestamp", timestamp);
+            ht.Add("nonceStr", nonceStr);
+            //企业微信的corpID
+            ht.Add("AppID", BP.Sys.SystemConfig.WX_CorpID);
+
+            //生成签名算法
+            string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            string Signature = Sha1Signature(str1);
+            ht.Add("signature", Signature);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        public static string Sha1Signature(string str)
+        {
+            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
+            return s.ToLower();
+        }
+
+        public string GetIDCardInfo()
+        {
+            string token = getAccessToken();
+            JsonData jd = JsonMapper.ToObject(token);
+            string host = "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard?access_token=" + jd["access_token"].ToString();
+            Encoding encoding = Encoding.Default;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
+            request.Method = "post";
+            request.KeepAlive = true;
+            // 图片的base64编码
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的身份证件。";
+            Stream stream = files[0].InputStream;//new MemoryStream();
+            byte[] bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            string base64 = Convert.ToBase64String(bytes);
+            stream.Close();
+            String str = "id_card_side=" + "front" + "&image=" + HttpUtility.UrlEncode(base64);
+            byte[] buffer = encoding.GetBytes(str);
+            request.ContentLength = buffer.Length;
+            request.GetRequestStream().Write(buffer, 0, buffer.Length);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string result = reader.ReadToEnd();
+            return result;
         }
     }
 }

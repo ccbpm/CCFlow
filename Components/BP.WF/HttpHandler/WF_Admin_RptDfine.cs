@@ -20,14 +20,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_RptDfine : DirectoryPageBase
     {
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_RptDfine(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
 
         /// <summary>
         /// 构造函数
@@ -58,15 +51,15 @@ namespace BP.WF.HttpHandler
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;
                 }
-                context.Response.Write(msg);
+                HttpContextHelper.ResponseWrite(msg);
             }
             catch (Exception ex)
             {
-                context.Response.Write("err@" + ex.Message);
+                HttpContextHelper.ResponseWrite("err@" + ex.Message);
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" +HttpContextHelper.RequestRawUrl );
         }
         #endregion 执行父类的重写方法.
 
@@ -142,6 +135,13 @@ namespace BP.WF.HttpHandler
             //保存的字段,从外面传递过来的值. 用逗号隔开的: 比如:  ,Name,Tel,Addr,
             string fields = "," + this.GetRequestVal("Fields") + ",";
 
+            //增加上必要的字段.
+            if (rptNo.Contains("My") == true && fields.Contains(",FlowEmps,") == false)
+                fields += "FlowEmps,";
+
+            if (rptNo.Contains("MyDept") == true && fields.Contains(",FK_Dept,") == false)
+                fields += "FK_Dept,";
+
             //构造一个空的集合.
             MapAttrs mrattrsOfRpt = new MapAttrs();
             mrattrsOfRpt.Delete(MapAttrAttr.FK_MapData, rptNo);
@@ -153,6 +153,7 @@ namespace BP.WF.HttpHandler
             foreach (MapAttr attr in allAttrs)
             {
                 attr.UIVisible = true;
+
                 #region 处理特殊字段.
                 if (attr.KeyOfEn == "FK_NY")
                 {
@@ -229,7 +230,12 @@ namespace BP.WF.HttpHandler
             }
 
             //选择的字段,就是报表的字段.
-            MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
+            MapAttrs mattrsOfRpt = new MapAttrs();
+            QueryObject qo = new QueryObject(mattrsOfRpt);
+            qo.AddWhere(MapAttrAttr.FK_MapData, rptNo);
+            qo.addOrderBy(MapAttrAttr.Idx);
+            qo.DoQuery();
+
             mattrsOfRpt.RemoveEn(rptNo + "_OID");
             mattrsOfRpt.RemoveEn(rptNo + "_Title");
 
@@ -325,7 +331,7 @@ namespace BP.WF.HttpHandler
 
             //查询出来枚举与外键类型的字段集合.
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo,"Idx");
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
             #region 检查是否有日期字段.
@@ -388,7 +394,7 @@ namespace BP.WF.HttpHandler
                 md.RptIsSearchKey = false;
             else
                 md.RptIsSearchKey = true;
-
+            md.SetPara("RptStringSearchKeys", this.GetRequestVal("RptStringSearchKeys"));
             //查询方式.
             int DTSearchWay = this.GetRequestValInt("DTSearchWay");
             md.RptDTSearchWay = (DTSearchWay)DTSearchWay;
@@ -396,6 +402,10 @@ namespace BP.WF.HttpHandler
             //日期字段.
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
             md.RptDTSearchKey = DTSearchKey;
+
+
+            //是否查询自己部门发起
+            md.SetPara("IsSearchNextLeavel", this.GetRequestValBoolen("IsSearchNextLeavel"));
             md.Save();
 
             Cash.Map_Cash.Remove(this.RptNo);

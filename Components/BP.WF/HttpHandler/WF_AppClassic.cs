@@ -12,6 +12,10 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
+using LitJson;
+using System.Net;
+using System.IO;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -21,20 +25,10 @@ namespace BP.WF.HttpHandler
     public class WF_AppClassic : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_AppClassic(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_AppClassic()
         {
-
         }
 
 
@@ -54,7 +48,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -62,6 +56,118 @@ namespace BP.WF.HttpHandler
 
         #endregion xxx 界面方法.
 
+        /// <summary>
+        /// 蓝信登陆
+        /// </summary>
+        /// <returns></returns>
+        public string LanXin_Login()
+        {
+            string code = GetRequestVal("code");
+
+            if (DataType.IsNullOrEmpty(WebUser.Token) == false)
+            {
+                //刷新token
+                string urlr = "http://xjtyjt.e.lanxin.cn:11180//sns/oauth2/refresh_token?refresh_token=" + WebUser.Token + "&appid=100243&grant_type=refresh_token";
+                string resultr = HttpPostConnect(urlr, "");
+                JsonData jdr = JsonMapper.ToObject(resultr);
+                resultr = jdr["errcode"].ToString();
+                if (resultr == "0")
+                {
+                    WebUser.Token = jdr["access_token"].ToString();
+                }
+                return WebUser.No;
+            }
+
+
+            //获取Token
+            string url = "http://xjtyjt.e.lanxin.cn:11180/sns/oauth2/access_token?code=" + code + "&appid=100243&grant_type=authorization_code";
+            string result = HttpPostConnect(url, "");
+            JsonData jd = JsonMapper.ToObject(result);
+            result = jd["errcode"].ToString();
+            if (result != "0")
+            {
+                return "err@" + jd["errmsg"].ToString();
+            }
+            string access_token = jd["access_token"].ToString();
+            string openId = jd["openid"].ToString();
+
+            //获取用户信息
+            url = "http://xjtyjt.e.lanxin.cn:11180/sns/userinfo?access_token=" + access_token + "&mobile=" + openId;
+            result = HttpPostConnect(url, "");
+            jd = JsonMapper.ToObject(result);
+            result = jd["errcode"].ToString();
+            if (result != "0")
+            {
+                return "err@" + jd["errmsg"].ToString();
+            }
+            string userNo = jd["openOrgMemberList"][0]["serialNumber"].ToString();
+            string tel = jd["openOrgMemberList"][0]["mobile"].ToString();
+
+            /**单点登陆*/
+            Paras ps = new Paras();
+            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No and Tel=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "Tel";
+            ps.Add("No", userNo);
+            ps.Add("Tel", tel);
+            string No = BP.DA.DBAccess.RunSQLReturnString(ps);
+            if (DataType.IsNullOrEmpty(No))
+                return "err@用户信息不正确，请联系管理员";
+
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            WebUser.Token = access_token;
+            result = jd["errcode"].ToString();
+            return userNo;
+        }
+        /// <summary>
+        /// httppost方式发送数据
+        /// </summary>
+        /// <param name="url">要提交的url</param>
+        /// <param name="postDataStr"></param>
+        /// <param name="timeOut">超时时间</param>
+        /// <param name="encode">text code.</param>
+        /// <returns>成功：返回读取内容；失败：0</returns>
+        public static string HttpPostConnect(string serverUrl, string postData)
+        {
+            var dataArray = Encoding.UTF8.GetBytes(postData);
+            //创建请求
+            var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
+            request.Method = "POST";
+            request.ContentLength = dataArray.Length;
+            //设置上传服务的数据格式  设置之后不好使
+            //request.ContentType = "application/json";
+            //请求的身份验证信息为默认
+            request.Credentials = CredentialCache.DefaultCredentials;
+            //请求超时时间
+            request.Timeout = 10000;
+            //创建输入流
+            Stream dataStream;
+            try
+            {
+                dataStream = request.GetRequestStream();
+            }
+            catch (Exception)
+            {
+                return "0";//连接服务器失败
+            }
+            //发送请求
+            dataStream.Write(dataArray, 0, dataArray.Length);
+            dataStream.Close();
+            //读取返回消息
+            string res;
+            try
+            {
+                var response = (HttpWebResponse)request.GetResponse();
+
+                var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                res = reader.ReadToEnd();
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+
+                return "0";//连接服务器失败
+            }
+            return res;
+        }
         /// <summary>
         /// 初始化Home
         /// </summary>
@@ -129,7 +235,7 @@ namespace BP.WF.HttpHandler
                 BP.Port.Emp emp = new Emp(userNo);
 
                 BP.WF.Dev2Interface.Port_Login(emp.No);
-                return "登录成功.";
+                return ".";
             }
             catch (Exception ex)
             {
@@ -172,12 +278,12 @@ namespace BP.WF.HttpHandler
                         if (i == 0)
                             return "err@用户名或者密码错误.";
                     }
-                    else if (DBAccess.IsExitsTableCol("Port_Emp", "Name") == true)
+                    else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
                     {
                         /*如果包含Name列,就检查Name是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Name=" + SystemConfig.AppCenterDBVarStr + "Name";
-                        ps.Add("Name", userNo);
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
+                        ps.Add("Tel", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
                             return "err@用户名或者密码错误.";
@@ -201,19 +307,46 @@ namespace BP.WF.HttpHandler
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
-                return "登录成功.";
+                if (DBAccess.IsView("Port_Emp") == false)
+                {
+                    string sid = BP.DA.DBAccess.GenerGUID();
+                    BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
+                    WebUser.SID = sid;
+                    emp.SID = sid;
+                }
+
+                return "登陆成功";
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
         }
+
+
         /// <summary>
         /// 执行登录
         /// </summary>
         /// <returns></returns>
         public string Login_Init()
         {
+            string doType = GetRequestVal("LoginType");
+            if (DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
+            {
+                //清空cookie
+                WebUser.Exit();
+            }
+
+
+            if (this.DoWhat != null && this.DoWhat.Equals("Login") == true)
+            {
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
+                return "url@Home.htm?UserNo=" + this.UserNo;
+                //this.Login_Submit();
+                //return;
+            }
+
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);

@@ -19,14 +19,6 @@ namespace BP.WF.HttpHandler
 
         #region 执行父类的重写方法.
         /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_CCFormDesigner(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_CCFormDesigner()
@@ -206,17 +198,20 @@ namespace BP.WF.HttpHandler
                 //自由，傻瓜，SL表单不做判断
                 case BP.Sys.FrmType.FreeFrm:
                 case BP.Sys.FrmType.FoolForm:
+                case BP.Sys.FrmType.Develop:
                     break;
                 case BP.Sys.FrmType.Url:
                 case BP.Sys.FrmType.Entity:
                     md.Url = md.PTable;
+                    md.PTable = "";
                     break;
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:
                 case BP.Sys.FrmType.ExcelFrm:
+                case BP.Sys.FrmType.VSTOForExcel:
                     break;
                 default:
-                    throw new Exception("未知表单类型.");
+                    throw new Exception("未知表单类型." + md.HisFrmType.ToString());
             }
             md.Insert();
 
@@ -246,7 +241,6 @@ namespace BP.WF.HttpHandler
             {
                 BP.Frm.FrmDict entityDict = new FrmDict(md.No);
                 entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
-
                 entityDict.BtnNewModel = 0;
 
                 //设置默认的查询条件.
@@ -274,10 +268,13 @@ namespace BP.WF.HttpHandler
                 return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
-                return "url@FormDesigner.htm?FK_MapData=" + md.No;
+                return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
+
+            if (md.HisFrmType == BP.Sys.FrmType.Develop)
+                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + md.No + "&FrmID="+md.No+"&EntityType=" + this.GetRequestVal("EntityType");
 
 
-            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
+            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
         }
         #endregion 创建表单.
 
@@ -287,6 +284,7 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
+       
 
         public string GoToFrmDesigner_Init()
         {
@@ -298,16 +296,22 @@ namespace BP.WF.HttpHandler
                 return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
+            if (md.HisFrmType == BP.Sys.FrmType.Develop)
+            {
+                /* 开发者表单 */
+                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + this.FK_MapData + "&FrmID="+this.FK_MapData+"&IsFirst=1";
+            }
+
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
                 /* 自由表单 */
-                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData + "&IsFirst=1";
+                return "url@../CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.FK_MapData + "&IsFirst=1";
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.VSTOForExcel)
             {
                 /* 自由表单 */
-                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+                return "url@../CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.FK_MapData;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.Url)
@@ -413,7 +417,8 @@ namespace BP.WF.HttpHandler
                 FrmAttachments aths = new FrmAttachments(this.FK_MapData);
                 ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
 
-                MapDtls dtls = new MapDtls(this.FK_MapData);
+                MapDtls dtls = new MapDtls();
+                dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
                 ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
                 FrmLines lines = new FrmLines(this.FK_MapData);
@@ -495,7 +500,7 @@ namespace BP.WF.HttpHandler
 
             string docs = this.GetRequestVal("diagram");
             BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, docs);
-            
+
             return "保存成功.";
         }
 
@@ -553,5 +558,66 @@ namespace BP.WF.HttpHandler
             md.Update();
             return "重置成功.";
         }
+
+        #region 复制表单
+        /// <summary>
+        /// 复制表单属性和表单内容
+        /// </summary>
+        /// <param name="frmId">新表单ID</param>
+        /// <param name="frmName">新表单内容</param>
+        public void DoCopyFrm()
+        {
+            string fromFrmID = GetRequestVal("FromFrmID");
+            string toFrmID = GetRequestVal("ToFrmID");
+            string toFrmName = GetRequestVal("ToFrmName");
+            #region 原表单信息
+            //表单信息
+            MapData fromMap = new MapData(fromFrmID);
+            //单据信息
+            FrmBill fromBill = new FrmBill();
+            fromBill.No = fromFrmID;
+            int billCount = fromBill.RetrieveFromDBSources();
+            //实体单据
+            FrmDict fromDict = new FrmDict();
+            fromDict.No = fromFrmID;
+            int DictCount = fromDict.RetrieveFromDBSources();
+            #endregion 原表单信息
+
+            #region 复制表单
+            MapData toMapData = new MapData();
+            toMapData = fromMap;
+            toMapData.No = toFrmID;
+            toMapData.Name = toFrmName;
+            toMapData.Insert();
+            if (billCount != 0)
+            {
+                FrmBill toBill = new FrmBill();
+                toBill = fromBill;
+                toBill.No = toFrmID;
+                toBill.Name = toFrmName;
+                toBill.EntityType = EntityType.FrmBill;
+                toBill.Update();
+            }
+            if (DictCount != 0)
+            {
+                FrmDict toDict = new FrmDict();
+                toDict = fromDict;
+                toDict.No = toFrmID;
+                toDict.Name = toFrmName;
+                toDict.EntityType = EntityType.FrmDict;
+                toDict.Update();
+            }
+            #endregion 复制表单
+
+            MapData.ImpMapData(toFrmID, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
+
+            //清空缓存
+            toMapData.RepairMap();
+            BP.Sys.SystemConfig.DoClearCash();
+
+
+        }
+        #endregion 复制表单
+
     }
 }

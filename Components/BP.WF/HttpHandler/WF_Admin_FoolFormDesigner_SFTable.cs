@@ -20,15 +20,6 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_FoolFormDesigner_SFTable : DirectoryPageBase
     {
         /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_FoolFormDesigner_SFTable(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_FoolFormDesigner_SFTable()

@@ -16,44 +16,21 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_Template : DirectoryPageBase
+    public class WF_Template : BP.WF.HttpHandler.DirectoryPageBase
     {
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Template(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
         /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Template()
         {
         }
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
+
+        #region  界面 .
+        public string AccepterRole_Init()
         {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
+            return "方法未完成";
         }
-        #endregion 执行父类的重写方法.
-
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
+        #endregion 界面方法.
 
     }
 }

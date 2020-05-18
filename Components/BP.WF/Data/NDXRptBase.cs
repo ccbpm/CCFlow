@@ -159,16 +159,6 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 数量
-        /// </summary>
-        public int MyNum
-        {
-            get
-            {
-                return 1;
-            }
-        }
-        /// <summary>
         /// 主流程ID
         /// </summary>
         public Int64 FID

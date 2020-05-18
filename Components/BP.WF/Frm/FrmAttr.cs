@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace BP.Frm
@@ -20,6 +19,10 @@ namespace BP.Frm
         /// </summary>
         public const string EntityType = "EntityType";
         /// <summary>
+        /// 展示模式
+        /// </summary>
+        public const string EntityShowModel = "EntityShowModel";
+        /// <summary>
         /// 单据编号生成规则
         /// </summary>
         public const string BillNoFormat = "BillNoFormat";
@@ -31,6 +34,14 @@ namespace BP.Frm
         /// 排序字段
         /// </summary>
         public const string SortColumns = "SortColumns";
+        /// <summary>
+        /// 字段颜色设置
+        /// </summary>
+        public const string ColorSet = "ColorSet";
+        /// <summary>
+        /// 字段求和求平均设置
+        /// </summary>
+        public const string FieldSet = "FieldSet";
         /// <summary>
         /// 关联单据
         /// </summary>
@@ -61,6 +72,10 @@ namespace BP.Frm
         /// 按钮save启用规则
         /// </summary>
         public const string BtnSaveEnable = "BtnSaveEnable";
+
+        public const string BtnSubmitLable = "BtnSubmitLable";
+        public const string BtnSubmitEnable = "BtnSubmitEnable";
+        
 
         /// <summary>
         /// 保存andclose

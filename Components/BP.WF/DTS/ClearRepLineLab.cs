@@ -21,6 +21,8 @@ namespace BP.WF.DTS
         {
             this.Title = "清除重复的表单中的Line Lab 数据";
             this.Help = "由于表单模板以前的Bug导致的标签与线重复数据。";
+            this.GroupName = "系统维护";
+
         }
         /// <summary>
         /// 设置执行变量

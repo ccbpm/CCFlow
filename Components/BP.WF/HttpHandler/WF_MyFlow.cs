@@ -15,7 +15,7 @@ using BP.WF.Template;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 初始化函数
+    /// 流程处理类
     /// </summary>
     public class WF_MyFlow : DirectoryPageBase
     {
@@ -180,8 +180,11 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+       
+
         public string Focus()
         {
+
             BP.WF.Dev2Interface.Flow_Focus(this.WorkID);
             return "设置成功.";
         }
@@ -279,7 +282,7 @@ namespace BP.WF.HttpHandler
             //手动启动子流程的标志 0父子流程 1 同级子流程
             string isStartSameLevelFlow = this.GetRequestVal("IsStartSameLevelFlow");
             if (isCC != null && isCC == "1")
-                return "url@WFRpt.htm?1=2" + this.RequestParasOfAll;
+                return "url@MyCC.htm?1=2" + this.RequestParasOfAll;
 
             GenerWorkFlow gwf = new GenerWorkFlow();
             bool IsExistGWF = false;
@@ -299,6 +302,13 @@ namespace BP.WF.HttpHandler
                 if (gwf.RetrieveFromDBSources() == 0)
                     return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
                 IsExistGWF = true;
+
+                String frms = this.GetRequestVal("Frms");
+                if (DataType.IsNullOrEmpty(frms) == false)
+                {
+                    gwf.Paras_Frms = frms;
+                    gwf.Update();
+                }
             }
 
             //判断当前节点是否是打开即阅读
@@ -315,7 +325,7 @@ namespace BP.WF.HttpHandler
                         if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                         {
                             //判断一下审核意见是否有默认值
-                            FrmWorkCheck workCheck = new FrmWorkCheck("ND" + nd.NodeID);
+                            NodeWorkCheck workCheck = new NodeWorkCheck("ND" + nd.NodeID);
                             string msg = "同意";
                             if (workCheck.FWCIsFullInfo == true)
                                 msg = workCheck.FWCDefInfo;
@@ -359,7 +369,7 @@ namespace BP.WF.HttpHandler
             {
 
                 Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
-                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null,null,isStartSameLevelFlow);
+                    WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null, null, isStartSameLevelFlow);
 
                 string hostRun = this.currFlow.GetValStrByKey(FlowAttr.HostRun);
                 if (DataType.IsNullOrEmpty(hostRun) == false)
@@ -421,7 +431,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 启动同级子流程的信息存储
-            if(isStartSameLevelFlow!=null && isStartSameLevelFlow .Equals("1") == true && this.WorkID != 0)
+            if (isStartSameLevelFlow != null && isStartSameLevelFlow.Equals("1") == true && this.WorkID != 0)
             {
                 gwf.WorkID = this.WorkID;
                 gwf.RetrieveFromDBSources();
@@ -434,9 +444,6 @@ namespace BP.WF.HttpHandler
                 gwf.SetPara("SLEmp", BP.Web.WebUser.No);
                 gwf.Update();
             }
-            
-           
-            
             #endregion 启动同级子流程的信息存储
 
             #region 处理表单类型.
@@ -476,8 +483,6 @@ namespace BP.WF.HttpHandler
                         return "err@" + msg;
                     }
                 }
-
-
 
                 #region 开始组合url.
                 string toUrl = "";
@@ -688,8 +693,6 @@ namespace BP.WF.HttpHandler
             myurl = myurl.Replace("DoType=MyFlow_Init&", "");
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
 
-
-
             return "url@" + myurl;
         }
         private string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
@@ -755,6 +758,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_MyFlow()
         {
+
         }
         /// <summary>
         /// 结束流程.
@@ -810,9 +814,9 @@ namespace BP.WF.HttpHandler
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             BtnLab btnLab = new BtnLab(this.FK_Node);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (this.FK_Node.ToString().EndsWith("01") == false)
             {
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Askfor)
                     isAskForOrHuiQian = true;
 
@@ -820,20 +824,73 @@ namespace BP.WF.HttpHandler
                 /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
                 if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
                 {
-                    if(btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    //初次打开会签节点时
+                    if (DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
                     {
-                        if (btnLab.HuiQianLeaderRole == 0)
-                        {
-                            if (gwf.HuiQianZhuChiRen != WebUser.No)
-                                isAskForOrHuiQian = true;
-                        }
-                        else
-                        {
-                            //不是主持人
-                            if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false)
-                                isAskForOrHuiQian = true;
-                        }
+                        if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
                     }
+
+                    //执行会签后的状态
+                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole == 0)
+                    {
+                        if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+                    else
+                    {
+                        if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+
+
+                    //    //协作模式
+                    //    if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                    //{
+                    //    if(DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
+                    //    {
+                    //        if(gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                    //            isAskForOrHuiQian = true;
+                    //    }
+                    //    else
+                    //    {
+                    //        if(gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                    //            isAskForOrHuiQian = true;
+                    //    }
+
+                    //}
+                    //else
+                    //{
+                    //    #warning 修复会签状态不正确的问题，如果是会签状态，但是WF_GenerWorkerList中只有一个待办，则说明数据不正确 yuanlina
+                    //    GenerWorkerLists gwls = new GenerWorkerLists();
+                    //    string sql = "SELECT Count(*) From WF_GenerWorkerList Where WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND (IsPass=0 OR IsPass=90)";
+
+                    //    if (DBAccess.RunSQLReturnValInt(sql) == 1)
+                    //    {
+                    //        //修改流程会签状态
+                    //        gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+                    //        isAskForOrHuiQian = false;
+                    //    }
+                    //    else
+                    //    {
+                    //        if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                    //        {
+                    //            if (btnLab.HuiQianLeaderRole == 0)
+                    //            {
+                    //                if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                    //                    isAskForOrHuiQian = true;
+                    //            }
+                    //            else
+                    //            {
+                    //                //不是主持人
+                    //                if ((gwf.TodoEmps.Contains(WebUser.No + ",") == false && DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true) && gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                    //                    isAskForOrHuiQian = true;
+                    //            }
+                    //        }
+
+                    //    }
+                    //}
+
                 }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
@@ -868,7 +925,7 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<input type=button  value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
                     // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
                     if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                     {
                         /*如果不等于启用, */
@@ -959,8 +1016,6 @@ namespace BP.WF.HttpHandler
                 if (btnLab.WorkCheckEnable)
                 {
                     /*审核*/
-                    //     string urlr1 = "./WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    //   toolbar += "<input  name='Btn_WorkCheck' type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
                     toolbar += "<input  name='workcheckBtn' type=button  value='" + btnLab.WorkCheckLab + "' enable=true />";
                 }
 
@@ -974,8 +1029,8 @@ namespace BP.WF.HttpHandler
                 if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
                 {
                     /*如果要查看父流程.*/
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
-                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&s=" + tKey;
+                    GenerWorkFlow gwf1 = new GenerWorkFlow(this.PWorkID);
+                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf1.FK_Node + "&FID=" + gwf1.FID + "&WorkID=" + gwf1.WorkID + "&FK_Flow=" + gwf1.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button  value='" + btnLab.ShowParentFormLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
                 }
 
@@ -1078,6 +1133,13 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
                 }
 
+                //原始会签主持人可以增加组长
+                if (btnLab.AddLeaderEnable == true && (btnLab.HuiQianRole == HuiQianRole.Teamup || btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader))
+                {
+                    /*增加组长 */
+                    toolbar += "<input type=button name='AddLeader'  value='" + btnLab.AddLeaderLab + "' enable=true  />";
+                }
+
 
                 if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
                 {
@@ -1090,8 +1152,7 @@ namespace BP.WF.HttpHandler
                 if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
                 {
                     /* 启用了数据重置功能 */
-                    string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
-                    toolbar += "<input type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" />";
+                    toolbar += "<input type=button  value='数据重置' enable=true  id='reset' name='reset' onclick=\"resetData(); \" />";
                 }
 
                 //if (btnLab.SubFlowEnable == true )
@@ -1115,7 +1176,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                if (btnLab.PRIEnable == true)
+                if (btnLab.PRIEnable != 0)
                 {
                     /* 优先级设置 */
                     string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -1183,10 +1244,10 @@ namespace BP.WF.HttpHandler
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true)
                 {
-                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice();'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    toolbar += "<input type=button id='Btn_DocWord' name=DocWord value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    //toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
                 }
                 #endregion
-
 
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
@@ -1214,7 +1275,712 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
-            return toolbar;
+            //@sly
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("tooBarHtml", typeof(string));   //节点ID.
+            DataRow drr = dt.NewRow();
+            drr["tooBarHtml"] = toolbar;
+            dt.Rows.Add(drr);
+            ds.Tables.Add(dt);
+            Node nd = new Node(this.FK_Node);
+            //增加转向下拉框数据.
+            if (nd.CondModel == CondModel.SendButtonSileSelect)
+            {
+                if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
+                {
+                    /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
+
+                    /*如果当前节点，是可以显示下拉框的.*/
+                    Nodes nds = nd.HisToNodes;
+
+                    DataTable dtToNDs = new DataTable();
+                    dtToNDs.TableName = "ToNodes";
+                    dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
+                    dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
+                    dtToNDs.Columns.Add("IsSelectEmps", typeof(string)); //是否弹出选择人的对话框？
+                    dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
+
+                    #region 增加到达延续子流程节点。
+                    if (nd.SubFlowYanXuNum >= 0)
+                    {
+                        SubFlowYanXus ygflows = new SubFlowYanXus(this.FK_Node);
+                        foreach (SubFlowYanXu item in ygflows)
+                        {
+                            DataRow dr = dtToNDs.NewRow();
+                            dr["No"] = item.SubFlowNo + "01";
+                            dr["Name"] = "启动:" + item.SubFlowName;
+                            dr["IsSelectEmps"] = "1";
+                            dr["IsSelected"] = "0";
+                            dtToNDs.Rows.Add(dr);
+                        }
+                    }
+                    #endregion 增加到达延续子流程节点。
+
+                    #region 到达其他节点.
+                    //上一次选择的节点.
+                    int defalutSelectedNodeID = 0;
+                    if (nds.Count > 1)
+                    {
+                        string mysql = "";
+                        // 找出来上次发送选择的节点.
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC";
+                        else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                        else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
+                        else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
+
+                        //获得上一次发送到的节点.
+                        defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
+                    }
+
+                    #region 为天业集团做一个特殊的判断.
+                    if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
+                    {
+                        /*如果是董事长节点, 如果是下一个节点默认的是备案. */
+                        foreach (Node item in nds)
+                        {
+                            if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
+                            {
+                                defalutSelectedNodeID = item.NodeID;
+                                break;
+                            }
+                        }
+                    }
+                    #endregion 为天业集团做一个特殊的判断.
+
+
+                    foreach (Node item in nds)
+                    {
+                        DataRow dr = dtToNDs.NewRow();
+                        dr["No"] = item.NodeID;
+                        dr["Name"] = item.Name;
+                        //if (item.hissel
+
+                        if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                            dr["IsSelectEmps"] = "1";
+                        else
+                            dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+
+                        //设置默认选择的节点.
+                        if (defalutSelectedNodeID == item.NodeID)
+                            dr["IsSelected"] = "1";
+                        else
+                            dr["IsSelected"] = "0";
+
+                        dtToNDs.Rows.Add(dr);
+                    }
+                    #endregion 到达其他节点。
+
+
+                    //增加一个下拉框, 对方判断是否有这个数据.
+                    ds.Tables.Add(dtToNDs);
+                }
+            }
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+
+        /// <summary>
+        /// 工具栏
+        /// </summary>
+        /// <returns></returns>
+        public string InitToolBarForVue()
+        {
+            //创建一个DataTable，返回按钮信息
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+            dt.Columns.Add("Role", typeof(int));
+            #region 处理是否是加签，或者是否是会签模式.
+            bool isAskForOrHuiQian = false;
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (this.FK_Node.ToString().EndsWith("01") == false)
+            {
+                if (gwf.WFState == WFState.Askfor)
+                    isAskForOrHuiQian = true;
+
+                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮.*/
+                /**说明：针对于组长模式的会签，协作模式的会签加签人仍可以加签*/
+                if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)
+                {
+                    //初次打开会签节点时
+                    if (DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
+                    {
+                        if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+
+                    //执行会签后的状态
+                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole == 0)
+                    {
+                        if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+                    else
+                    {
+                        if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
+                            isAskForOrHuiQian = true;
+                    }
+
+                }
+            }
+            #endregion 处理是否是加签，或者是否是会签模式，.
+            DataRow dr = dt.NewRow();
+
+            string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
+            string toolbar = "";
+            try
+            {
+                #region 是否是会签？.
+                if (isAskForOrHuiQian == true && SystemConfig.CustomerNo == "LIMS")
+                    return "";
+
+                if (isAskForOrHuiQian == true)
+                {
+                    dr["No"] = "Send";
+                    dr["Name"] = "确定/完成";
+                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAllSend()";
+                    dt.Rows.Add(dr);
+                    if (btnLab.PrintZipEnable == true)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "PackUp";
+                        dr["Name"] = btnLab.PrintZipLab;
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+
+                    if (btnLab.TrackEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Track";
+                        dr["Name"] = btnLab.TrackLab;
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+
+                    return BP.Tools.Json.ToJson(dt);
+                }
+                #endregion 是否是会签.
+
+                #region 是否是抄送.
+                if (this.IsCC)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = "流程运行轨迹";
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                    // 判断审核组件在当前的表单中是否启用，如果启用了.
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
+                    if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
+                    {
+                        dr = dt.NewRow();
+                        /*如果不等于启用, */
+                        dr["No"] = "CCWorkCheck";
+                        dr["Name"] = "填写审核意见";
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+
+                        //toolbar += "<input type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+                    }
+                    return toolbar;
+                }
+                #endregion 是否是抄送.
+
+                #region 如果当前节点启用了协作会签.
+                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "SendHuiQian";
+                    dr["Name"] = "会签发送";
+                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt(true);";
+                    dt.Rows.Add(dr);
+
+                }
+                #endregion 如果当前节点启用了协作会签
+
+                #region 加载流程控制器 - 按钮
+                if (this.currND.HisFormType == NodeFormType.SelfForm)
+                {
+                    /*如果是嵌入式表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            dr = dt.NewRow();
+                            /*如果启用了发送按钮.*/
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if (SendSelfFrom()==false) return false; this.disabled=true;";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if ( SendSelfFrom()==false) return false; this.disabled=true;";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+
+                    /*处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Save";
+                        dr["Name"] = btnLab.SaveLab;
+                        dr["Oper"] = "SaveSelfFrom();";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (this.currND.HisFormType != NodeFormType.SelfForm)
+                {
+                    /*启用了其他的表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dt.Rows.Add(dr);
+
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了发送按钮.
+                             * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
+                             */
+                            dr = dt.NewRow();
+                            dr["No"] = "Send";
+                            dr["Name"] = btnLab.SendLab;
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+
+                    /* 处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Save";
+                        dr["Name"] = btnLab.SaveLab;
+                        dr["Oper"] = "if (SysCheckFrm() == false) return false; Save(); ";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                if (btnLab.WorkCheckEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "workcheckBtn";
+                    dr["Name"] = btnLab.WorkCheckLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);/*审核*/
+                }
+
+                if (btnLab.ThreadEnable)
+                {
+                    /*如果要查看子线程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Thread";
+                    dr["Name"] = btnLab.ThreadLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
+                {
+                    /*如果要查看父流程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "ParentForm";
+                    dr["Name"] = btnLab.ShowParentFormLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.TCEnable == true)
+                {
+                    /*流转自定义..*/
+                    dr = dt.NewRow();
+                    dr["No"] = "TransferCustom";
+                    dr["Name"] = btnLab.TCLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.HelpRole != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Help";
+                    dr["Name"] = btnLab.HelpLab;
+                    dr["Oper"] = "HelpAlter()";
+                    dr["Role"] = btnLab.HelpRole;
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.JumpWayEnable && 1 == 2)
+                {
+                    /*跳转*/
+                    dr = dt.NewRow();
+                    dr["No"] = "JumpWay";
+                    dr["Name"] = btnLab.JumpWayLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.ReturnEnable)
+                {
+                    /*退回*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Return";
+                    dr["Name"] = btnLab.ReturnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                //  if (btnLab.HungEnable && this.currND.IsStartNode == false)
+                if (btnLab.HungEnable)
+                {
+                    /*挂起*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Hung";
+                    dr["Name"] = btnLab.HungLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.ShiftEnable)
+                {
+                    /*移交*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Shift";
+                    dr["Name"] = btnLab.ShiftLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
+                {
+
+                    // 抄送 
+                    dr = dt.NewRow();
+                    dr["No"] = "CC";
+                    dr["Name"] = btnLab.CCLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.DeleteEnable != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Delete";
+                    dr["Name"] = btnLab.DeleteLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "EndFlow";
+                    dr["Name"] = btnLab.EndFlowLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                // @李国文.
+                if (btnLab.PrintDocEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PrintDoc";
+                    dr["Name"] = btnLab.PrintDocLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+
+                }
+
+                if (btnLab.TrackEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = btnLab.TrackLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+
+                if (btnLab.SearchEnable)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Search";
+                    dr["Name"] = btnLab.SearchLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (btnLab.BatchEnable)
+                {
+                    /*批量处理*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Batch";
+                    dr["Name"] = btnLab.BatchLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.AskforEnable)
+                {
+                    /*加签 */
+                    dr = dt.NewRow();
+                    dr["No"] = "Askfor";
+                    dr["Name"] = btnLab.AskforLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                {
+                    /*会签 */
+                    dr = dt.NewRow();
+                    dr["No"] = "HuiQian";
+                    dr["Name"] = btnLab.HuiQianLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                //原始会签主持人可以增加组长
+                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true && gwf.TodoEmps.Contains(WebUser.No) == true) || gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                {
+                    /*增加组长 */
+                    dr = dt.NewRow();
+                    dr["No"] = "AddLeader";
+                    dr["Name"] = btnLab.AddLeaderLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+
+                if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
+                {
+                    /*公文正文 */
+                    dr = dt.NewRow();
+                    dr["No"] = "WebOffice";
+                    dr["Name"] = btnLab.WebOfficeLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                // 需要翻译.
+                if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
+                {
+                    /* 启用了数据重置功能 */
+                    dr = dt.NewRow();
+                    dr["No"] = "ReSet";
+                    dr["Name"] = "数据重置";
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+
+
+                if (btnLab.CHRole != 0)
+                {
+                    /* 节点时限设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "CH";
+                    dr["Name"] = btnLab.CHLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                }
+
+                if (btnLab.NoteEnable != 0)
+                {
+                    /* 备注设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "Note";
+                    dr["Name"] = btnLab.NoteLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+
+                if (btnLab.PRIEnable != 0)
+                {
+                    /* 优先级设置 */
+                    dr = dt.NewRow();
+                    dr["No"] = "PR";
+                    dr["Name"] = btnLab.PRILab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 关注 */
+                if (btnLab.FocusEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Focus";
+                    if (HisGenerWorkFlow.Paras_Focus == true)
+                        dr["Name"] = "取消关注";
+                    else
+                        dr["Name"] = btnLab.FocusLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 分配工作 */
+                if (btnLab.AllotEnable == true)
+                {
+                    /*分配工作*/
+                    dr = dt.NewRow();
+                    dr["No"] = "Allot";
+                    dr["Name"] = btnLab.AllotLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 确认 */
+                if (btnLab.ConfirmEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Confirm";
+                    if (HisGenerWorkFlow.Paras_Confirm == true)
+                        dr["Name"] = "取消确认";
+                    else
+                        dr["Name"] = btnLab.ConfirmLab;
+
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                // 需要翻译.
+
+                /* 打包下载zip */
+                if (btnLab.PrintZipEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载html */
+                if (btnLab.PrintHtmlEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载pdf */
+                if (btnLab.PrintPDFEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                if (this.currND.IsStartNode == true)
+                {
+                    if (this.currFlow.IsDBTemplate == true)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "DBTemplate";
+                        dr["Name"] = "模版";
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+                }
+
+                /* 公文标签 */
+                if (btnLab.OfficeBtnEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Btn_Office";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                #endregion
+
+
+                #region  加载自定义的button.
+                BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
+                foreach (NodeToolbar bar in bars)
+                {
+                    if (bar.ShowWhere != ShowWhere.Toolbar)
+                        continue;
+
+                    if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Btn_Office";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Btn_Office";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
+
+                        //string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        //toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
+                    }
+                }
+                #endregion  //加载自定义的button.
+
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex);
+                new Exception("err@" + ex.Message);
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// <summary>
@@ -1268,7 +2034,7 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<a data-role='button'    value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" ></a>";
                     // 判断审核组件在当前的表单中是否启用，如果启用了.
-                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
                     if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
                     {
                         /*如果不等于启用, */
@@ -1357,7 +2123,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<a data-role='button' type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" ></a>";
                 }
 
-               
+
 
                 if (btnLab.JumpWayEnable)
                 {
@@ -1471,7 +2237,7 @@ namespace BP.WF.HttpHandler
 
 
 
-                if (btnLab.PRIEnable == true)
+                if (btnLab.PRIEnable != 0)
                 {
                     /* 优先级设置 */
                     string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -1582,10 +2348,19 @@ namespace BP.WF.HttpHandler
                 {
 
                     string val = HttpContextHelper.RequestParams(key);
+
                     if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
                     {
                         val = HttpUtility.UrlDecode(val, Encoding.UTF8);
                         htMain.Add(key.Replace("TB_", ""), val);
+
+                    }
+                    else
+                    {
+                        htMain.Remove(key.Replace("TB_", ""));
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+
                     }
                     continue;
                 }
@@ -1644,7 +2419,7 @@ namespace BP.WF.HttpHandler
                 if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID, this.PWorkID);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;
 
@@ -1837,7 +2612,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Node_SaveWork(this.FK_Flow, this.FK_Node,
-                    this.WorkID, this.GetMainTableHT(), null);
+                    this.WorkID, this.GetMainTableHT(), null, this.FID, this.PWorkID);
 
                 if (this.PWorkID != 0)
                 {
@@ -1869,59 +2644,68 @@ namespace BP.WF.HttpHandler
                 wk.RetrieveFromDBSources();
             }
 
-            //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
-            if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+            //获取表单树的数据
+            BP.WF.WorkNode workNode = new WorkNode(this.WorkID, this.FK_Node);
+            Work treeWork = workNode.CopySheetTree();
+            if (treeWork != null)
             {
-                FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
-                foreach (FrmNode item in nds)
-                {
-                    if (item.FrmEnableRole == FrmEnableRole.Disable)
-                        continue;
-                    if (item.FK_Frm.Equals("ND"+this.FK_Node) == true)
-                        continue;
-                    GEEntity en = null;
-                    try
-                    {
-                        en = new GEEntity(item.FK_Frm);
-                        en.PKVal = this.WorkID;
-                        if (en.RetrieveFromDBSources() == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        continue;
-                    }
-
-                    Attrs frmAttrs = en.EnMap.Attrs;
-                    Attrs wkAttrs = wk.EnMap.Attrs;
-                    foreach (Attr wkattr in wkAttrs)
-                    {
-                        if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
-                            || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
-                            || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
-                            || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
-                            || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
-                        {
-                            continue;
-                        }
-
-                        foreach (Attr attr in frmAttrs)
-                        {
-                            if (wkattr.Key.Equals(attr.Key))
-                            {
-                                wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
-                                break;
-                            }
-
-                        }
-
-                    }
-
-                }
+                wk.Copy(treeWork);
                 wk.Update();
             }
+
+            //获取该节点是是否是绑定表单方案, 如果流程节点中的字段与绑定表单的字段相同时赋值 
+            //if (nd.FormType == NodeFormType.SheetTree || nd.FormType == NodeFormType.RefOneFrmTree)
+            //{
+            //    FrmNodes nds = new FrmNodes(this.FK_Flow, this.FK_Node);
+            //    foreach (FrmNode item in nds)
+            //    {
+            //        if (item.FrmEnableRole == FrmEnableRole.Disable)
+            //            continue;
+            //        if (item.FK_Frm.Equals("ND"+this.FK_Node) == true)
+            //            continue;
+            //        GEEntity en = null;
+            //        try
+            //        {
+            //            en = new GEEntity(item.FK_Frm);
+            //            en.PKVal = this.WorkID;
+            //            if (en.RetrieveFromDBSources() == 0)
+            //            {
+            //                continue;
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            continue;
+            //        }
+
+            //        Attrs frmAttrs = en.EnMap.Attrs;
+            //        Attrs wkAttrs = wk.EnMap.Attrs;
+            //        foreach (Attr wkattr in wkAttrs)
+            //        {
+            //            if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
+            //                || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
+            //                || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
+            //                || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
+            //                || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
+            //            {
+            //                continue;
+            //            }
+
+            //            foreach (Attr attr in frmAttrs)
+            //            {
+            //                if (wkattr.Key.Equals(attr.Key))
+            //                {
+            //                    wk.SetValByKey(wkattr.Key, en.GetValStrByKey(attr.Key));
+            //                    break;
+            //                }
+
+            //            }
+
+            //        }
+
+            //    }
+            //    wk.Update();
+            //}
 
             #region 为开始工作创建待办.
             if (nd.IsStartNode == true)
@@ -2006,16 +2790,16 @@ namespace BP.WF.HttpHandler
         /// 获取表单树数据
         /// </summary>
         /// <returns></returns>
-        BP.WF.Template.FlowFormTrees appFlowFormTree = new FlowFormTrees();
         public string FlowFormTree_Init()
         {
+            BP.WF.Template.FlowFormTrees appFlowFormTree = new FlowFormTrees();
+
             //add root
             BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
-            root.No = "00";
+            root.No = "1";
             root.ParentNo = "0";
             root.Name = "目录";
             root.NodeType = "root";
-            appFlowFormTree.Clear();
             appFlowFormTree.AddEntity(root);
 
             #region 添加表单及文件夹
@@ -2027,12 +2811,23 @@ namespace BP.WF.HttpHandler
             frmNodes.Retrieve(FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
 
             //文件夹
-            SysFormTrees formTrees = new SysFormTrees();
-            formTrees.RetrieveAll(SysFormTreeAttr.Name);
+            //SysFormTrees formTrees = new SysFormTrees();
+            //formTrees.RetrieveAll(SysFormTreeAttr.Name);
 
-            //所有表单集合.
+            //所有表单集合. 为了优化效率,这部分重置了一下.
             MapDatas mds = new MapDatas();
-            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+            if (frmNodes.Count <= 3)
+            {
+                foreach (FrmNode fn in frmNodes)
+                {
+                    MapData md = new MapData(fn.FK_Frm);
+                    mds.AddEntity(md);
+                }
+            }
+            else
+            {
+                mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+            }
 
 
             string frms = HttpContextHelper.RequestParams("Frms");
@@ -2055,7 +2850,9 @@ namespace BP.WF.HttpHandler
                     case FrmEnableRole.Allways:
                         break;
                     case FrmEnableRole.WhenHaveData: //判断是否有数据.
-                        MapData md = new MapData(frmNode.FK_Frm);
+                        MapData md = mds.GetEntityByKey(frmNode.FK_Frm) as MapData;
+                        if (md == null)
+                            continue;
                         Int64 pk = this.WorkID;
                         switch (frmNode.WhoIsPK)
                         {
@@ -2218,20 +3015,15 @@ namespace BP.WF.HttpHandler
                     if (md.FK_FormTree == "")
                         md.FK_FormTree = treeNo;
 
-                    foreach (SysFormTree formTree in formTrees)
+                    //给他增加目录.
+                    if (appFlowFormTree.Contains("Name", md.FK_FormTreeText) == false)
                     {
-                        if (md.FK_FormTree != formTree.No)
-                            continue;
-                        if (appFlowFormTree.Contains("No", formTree.No) == false)
-                        {
-                            BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
-                            nodeFolder.No = formTree.No;
-                            nodeFolder.ParentNo = formTree.ParentNo;
-                            nodeFolder.Name = formTree.Name;
-                            nodeFolder.NodeType = "folder";
-                            appFlowFormTree.AddEntity(nodeFolder);
-                            break;
-                        }
+                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                        nodeFolder.No = md.FK_FormTree;
+                        nodeFolder.ParentNo = "1";
+                        nodeFolder.Name = md.FK_FormTreeText;
+                        nodeFolder.NodeType = "folder";
+                        appFlowFormTree.AddEntity(nodeFolder);
                     }
 
                     //检查必填项.
@@ -2250,7 +3042,17 @@ namespace BP.WF.HttpHandler
                     BP.WF.Template.FlowFormTree nodeForm = new BP.WF.Template.FlowFormTree();
                     nodeForm.No = md.No;
                     nodeForm.ParentNo = md.FK_FormTree;
-                    nodeForm.Name = md.Name;
+
+                    //设置他的表单显示名字. 2019.09.30
+                    string frmName = md.Name;
+                    Entity fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No);
+                    if (fn != null)
+                    {
+                        string str = fn.GetValStrByKey(FrmNodeAttr.FrmNameShow);
+                        if (DataType.IsNullOrEmpty(str) == false)
+                            frmName = str;
+                    }
+                    nodeForm.Name = frmName;
                     nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
                     nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
                     nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
@@ -2258,117 +3060,45 @@ namespace BP.WF.HttpHandler
                     break;
                 }
             }
-            //找上级表单文件夹
-            AppendFolder(formTrees);
             #endregion
 
-            //扩展工具，显示位置为表单树类型.
-            NodeToolbars extToolBars = new NodeToolbars();
-            QueryObject info = new QueryObject(extToolBars);
-            info.AddWhere(NodeToolbarAttr.FK_Node, this.FK_Node);
-            info.addAnd();
-            info.AddWhere(NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
-            info.DoQuery();
+            //扩展工具，显示位置为表单树类型. 
+#warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
+            //NodeToolbars extToolBars = new NodeToolbars();
+            //extToolBars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
 
-            foreach (NodeToolbar item in extToolBars)
-            {
-                string url = "";
-                if (DataType.IsNullOrEmpty(item.Url))
-                    continue;
+            //foreach (NodeToolbar item in extToolBars)
+            //{
+            //    string url = "";
+            //    if (DataType.IsNullOrEmpty(item.Url))
+            //        continue;
 
-                url = item.Url;
+            //    url = item.Url;
 
-                BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
-                formTree.No = item.OID.ToString();
-                formTree.ParentNo = "01";
-                formTree.Name = item.Title;
-                formTree.NodeType = "tools|0";
-                if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
-                {
-                    formTree.NodeType = "tools|1";
-                }
+            //    BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
+            //    formTree.No = item.OID.ToString();
+            //    formTree.ParentNo = "1";
+            //    formTree.Name = item.Title;
+            //    formTree.NodeType = "tools|0";
+            //    if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
+            //    {
+            //        formTree.NodeType = "tools|1";
+            //    }
 
-                formTree.Url = url;
-                appFlowFormTree.AddEntity(formTree);
-            }
+            //    formTree.Url = url;
+            //    appFlowFormTree.AddEntity(formTree);
+            //}]]
+
+            //if (appFlowFormTree.Count==1 && nd.FormType== NodeFormType.Tab)
+            //{
+            //    //nd.FormType
+            //}
+
+            //增加到数据结构上去.
             TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
+
+
             return appendMenus.ToString();
-        }
-        /// <summary>
-        /// 拼接文件夹
-        /// </summary>
-        /// <param name="formTrees"></param>
-        private void AppendFolder(SysFormTrees formTrees)
-        {
-            BP.WF.Template.FlowFormTrees parentFolders = new BP.WF.Template.FlowFormTrees();
-            //二级目录
-            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
-            {
-                if (DataType.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
-                    continue;
-
-                foreach (SysFormTree item in formTrees)
-                {
-                    //排除根节点
-                    if (item.ParentNo.Equals("0") || item.No.Equals("0"))
-                        continue;
-                    if (parentFolders.Contains("No", item.No) == true)
-                        continue;
-                    //文件夹
-                    if (folder.ParentNo.Equals(item.No))
-                    {
-                        if (parentFolders.Contains("No", item.No) == true)
-                            continue;
-                        if (item.ParentNo.Equals("0") == true)
-                            continue;
-
-                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
-                        nodeFolder.No = item.No;
-                        nodeFolder.ParentNo = item.ParentNo;
-                        nodeFolder.Name = item.Name;
-                        nodeFolder.NodeType = "folder";
-                        parentFolders.AddEntity(nodeFolder);
-                    }
-                }
-            }
-            //找到父级目录添加到集合
-            foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
-            {
-                if (appFlowFormTree.Contains(folderapp) == false)
-                    appFlowFormTree.AddEntity(folderapp);
-            }
-            //求出没有父节点的文件夹
-            parentFolders.Clear();
-            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
-            {
-                if (DataType.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
-                    continue;
-
-                bool bHave = false;
-                foreach (BP.WF.Template.FlowFormTree child in appFlowFormTree)
-                {
-                    if (folder.ParentNo.Equals(child.No) == true)
-                    {
-                        bHave = true;
-                        break;
-                    }
-                }
-                //没有父节点的文件夹
-                if (bHave == false && parentFolders.Contains("No", folder.No) == false)
-                {
-                    parentFolders.AddEntity(folder);
-                }
-            }
-            //修改根节点编号
-            foreach (BP.WF.Template.FlowFormTree folder in parentFolders)
-            {
-                foreach (BP.WF.Template.FlowFormTree folderApp in appFlowFormTree)
-                {
-                    if (folderApp.No.Equals(folder.No) == false)
-                        continue;
-                    folderApp.ParentNo = "00";
-                }
-            }
         }
         /// <summary>
         /// 将实体转为树形
@@ -2399,11 +3129,12 @@ namespace BP.WF.HttpHandler
             // 增加它的子级.
             appendMenus.Append(",\"children\":");
             AddChildren(root, ens, checkIds);
+
             appendMenus.Append(appendMenuSb);
             appendMenus.Append("}]");
         }
 
-        public void AddChildren(EntityTree parentEn, Entities ens, string checkIds)
+        private void AddChildren(EntityTree parentEn, Entities ens, string checkIds)
         {
             appendMenus.Append(appendMenuSb);
             appendMenuSb.Clear();
@@ -2485,7 +3216,34 @@ namespace BP.WF.HttpHandler
             {
                 DataSet ds = new DataSet();
 
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                Int64 workID = this.WorkID;
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    //获取绑定的表单
+                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
+                    switch (frmnode.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            workID = this.FID;
+                            break;
+                        case WhoIsPK.PWorkID:
+                            workID = this.PWorkID;
+                            break;
+                        case WhoIsPK.P2WorkID:
+                            GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
+                            workID = gwff.PWorkID;
+                            break;
+                        case WhoIsPK.P3WorkID:
+                            string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
                     this.FID, BP.Web.WebUser.No);
 
                 //Node nd = new Node(this.FK_Node);
@@ -2502,8 +3260,6 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
-                   
-
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);
 

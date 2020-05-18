@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using BP.Web;
 
-namespace BP.NetPlatformImpl
+namespace BP.WF.NetPlatformImpl
 {
     public class WF_File
     {

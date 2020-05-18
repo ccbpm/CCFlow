@@ -5,10 +5,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
@@ -35,15 +31,15 @@ namespace BP.WF.HttpHandler
         /// <returns>返回值</returns>
         public string GetValFromFrmByKey(string key, string isNullAsVal = null)
         {
-            string val = context.Request.Form[key];
+            string val = HttpContextHelper.RequestParams(key);
             if (val == null && key.Contains("DDL_") == false)
-                val = context.Request.Form["DDL_" + key];
+                val = HttpContextHelper.RequestParams("DDL_" + key);
 
             if (val == null && key.Contains("TB_") == false)
-                val = context.Request.Form["TB_" + key];
+                val = HttpContextHelper.RequestParams("TB_" + key);
 
             if (val == null && key.Contains("CB_") == false)
-                val = context.Request.Form["CB_" + key];
+                val = HttpContextHelper.RequestParams("CB_" + key);
 
             if (val == null)
             {
@@ -66,8 +62,6 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                myEn.context = this.context;
-
                 Type tp = myEn.GetType();
                 MethodInfo mp = tp.GetMethod(methodName);
                 if (mp == null)
@@ -85,10 +79,17 @@ namespace BP.WF.HttpHandler
                 if (methodName.Contains(">") == true)
                     return "err@非法的脚本植入.";
 
+
                 if (ex.InnerException != null)
+                    if (ex.InnerException.Message.IndexOf("err@") == 0)
+                        return ex.InnerException.Message;
+                    else
                     return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
                 else
-                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
+                    if (ex.Message.IndexOf("err@") == 0)
+                        return ex.Message;
+                    else
+                        return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
             }
         }
         /// <summary>
@@ -112,15 +113,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetRequestVal(string key)
         {
-            string val = context.Request[key];
-            if (val == null)
-                val = context.Request.QueryString[key];
-            if (val == null)
-                val = context.Request.Form[key];
-
-            if (val == null)
-                return null;
-
+            string val = HttpContextHelper.RequestParams(key);
             return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         /// <summary>
@@ -214,20 +207,31 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-                string rawUrl = this.context.Request.RawUrl;
-                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
-                string[] paras = rawUrl.Split('&');
-                foreach (string para in paras)
+                //string rawUrl = HttpContextHelper.RequestRawUrl;
+                //rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
+                //string[] paras = rawUrl.Split('&');
+                //foreach (string para in paras)
+                //{
+                //    if (para == null
+                //        || para == ""
+                //        || para.Contains("=") == false)
+                //        continue;
+
+                //    if (para == "1=1")
+                //        continue;
+
+                //    urlExt += "&" + para;
+                //}
+
+                // 适配framework和core（注：net core的rawurl中不含form data）
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    if (para == null
-                        || para == ""
-                        || para.Contains("=") == false)
-                        continue;
-
-                    if (para == "1=1")
-                        continue;
-
-                    urlExt += "&" + para;
+                    if (key != "1") // 过滤url中1=1的情形
+                    {
+                        string value = HttpContextHelper.RequestParams(key);
+                        if (!String.IsNullOrEmpty(value))
+                            urlExt += string.Format("&{0}={1}", key, value);
+                    }
                 }
                 return urlExt;
             }
@@ -240,7 +244,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-                string rawUrl = this.context.Request.RawUrl;
+                string rawUrl = HttpContextHelper.RequestRawUrl;
                 rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
                 string[] paras = rawUrl.Split('&');
                 foreach (string para in paras)
@@ -253,13 +257,27 @@ namespace BP.WF.HttpHandler
                     if (para == "1=1")
                         continue;
 
+                    // @lizhen 同步.
+                    if (para.Contains("DoType=")
+                       || para.Contains("DoMethod=")
+                       || para.ToLower().Equals("t")
+                       || para.Contains("HttpHandlerName="))
+                        continue;
+
                     urlExt += "&" + para;
                 }
 
 
-                foreach (string key in this.context.Request.Form.Keys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    urlExt += "&" + key + "=" + this.context.Request.Form[key];
+                    // @lizhen 同步.
+                    if (key.Equals("DoType")
+                        || key.Equals("DoMethod")
+                        || key.ToLower().Equals("t")
+                        || key.Equals("HttpHandlerName"))
+                        continue;
+                    if (urlExt.Contains("&" + key + "=") == false)
+                        urlExt += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
 
                 return urlExt;
@@ -311,7 +329,7 @@ namespace BP.WF.HttpHandler
                 if (v != null && v == "1")
                     return true;
 
-                if (System.Web.HttpContext.Current.Request.RawUrl.Contains("/CCMobile/") == true)
+                if (HttpContextHelper.RequestRawUrl.Contains("/CCMobile/") == true)
                     return true;
 
                 return false;
@@ -340,7 +358,26 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-
+        public string UserNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("UserNo");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        public string DoWhat
+        {
+            get
+            {
+                string str = this.GetRequestVal("DoWhat");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -352,13 +389,13 @@ namespace BP.WF.HttpHandler
                 string doType = "";
 
                 doType = this.GetRequestVal("DoType");
-                if (doType == null)
+                if (String.IsNullOrEmpty(doType))
                     doType = this.GetRequestVal("Action");
 
-                if (doType == null)
+                if (String.IsNullOrEmpty(doType))
                     doType = this.GetRequestVal("action");
 
-                if (doType == null)
+                if (String.IsNullOrEmpty(doType))
                     doType = this.GetRequestVal("Method");
 
                 return doType;
@@ -568,6 +605,19 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                string str = this.GetRequestVal("Domain");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         /// 相关编号
         /// </summary>
         public string RefNo
@@ -580,7 +630,19 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("OrgNo");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -785,17 +847,7 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        public HttpContext context
-        {
-            get
-            {
-                return System.Web.HttpContext.Current;
-            }
-            set
-            {
-                var i = 1;
-            }
-        }
+
         /// <summary>
         /// 获得Int数据
         /// </summary>
@@ -1135,7 +1187,14 @@ namespace BP.WF.HttpHandler
                         }
                         else
                         {
-                            string text = dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key].ToString();
+                            string text = "";
+                            if (attr.IsFKorEnum || attr.IsFK)
+                                text = dr[attr.Key + "Text"].ToString();
+                            else if(attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                                text = dr[attr.Key + "T"].ToString();
+                            else
+                                text = dr[attr.Key].ToString();
+
                             if (attr.Key == "FK_NY" && DataType.IsNullOrEmpty(text)==true)
                             {
                                text = dr[attr.Key].ToString();

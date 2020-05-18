@@ -15,6 +15,7 @@ using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using LitJson;
+using BP.NetPlatformImpl;
 
 namespace BP.WF.HttpHandler
 {
@@ -34,9 +35,7 @@ namespace BP.WF.HttpHandler
 
                 //查询出来数据实体.
                 string pkVal = this.PKVal;
-                if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                    pkVal = this.FID.ToString();
-
+                
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)
@@ -95,7 +94,7 @@ namespace BP.WF.HttpHandler
 
                         dbUpload.CheckPhysicsTable();
                         dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
-                        dbUpload.NodeID = FK_Node.ToString();
+                        dbUpload.NodeID = FK_Node;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -112,7 +111,6 @@ namespace BP.WF.HttpHandler
                             ps.Add("WorkID", this.PKVal);
                             string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                             if (pWorkID == null || pWorkID == "0")
-
                                 pWorkID = this.PKVal;
                             dbUpload.RefPKVal = pWorkID;
                         }
@@ -128,6 +126,8 @@ namespace BP.WF.HttpHandler
                         dbUpload.RDT = DataType.CurrentDataTime;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
+                        dbUpload.FK_Dept = WebUser.FK_Dept;
+                        dbUpload.FK_DeptName = WebUser.FK_DeptName;
 
                         dbUpload.Insert();
 
@@ -641,22 +641,21 @@ namespace BP.WF.HttpHandler
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
                     //太爷孙关系
-                    if (fn.WhoIsPK == WhoIsPK.PPPWorkID)
+                    if (fn.WhoIsPK == WhoIsPK.P3WorkID)
                     {
-                        //根据PWorkID 获取PPPWorkID
+                        //根据PWorkID 获取P3WorkID
                         string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                        string pppworkID = DBAccess.RunSQLReturnString(sql);
-                        if (DataType.IsNullOrEmpty(pppworkID) == true || pppworkID == "0")
+                        string p3workID = DBAccess.RunSQLReturnString(sql);
+                        if (DataType.IsNullOrEmpty(p3workID) == true || p3workID == "0")
                             throw new Exception("err@不存在太爷孙流程关系，请联系管理员检查流程设计是否正确");
 
-                        Int64 PPPWorkID = Int64.Parse(pppworkID);
-                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + PPPWorkID);
-                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + PPPWorkID);
-                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + PPPWorkID);
+                        Int64 workID = Int64.Parse(p3workID);
+                        paras = paras.Replace("&OID=" + this.WorkID, "&OID=" + workID);
+                        paras = paras.Replace("&WorkID=" + this.WorkID, "&WorkID=" + workID);
+                        paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + workID);
                     }
 
-
-                    if (fn.WhoIsPK == WhoIsPK.PPWorkID)
+                    if (fn.WhoIsPK == WhoIsPK.P2WorkID)
                     {
                         //根据PWorkID 获取PPWorkID
                         GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
@@ -686,7 +685,7 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
                     }
 
-                    if (md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
+                    if ((this.GetRequestVal("ShowFrmType") != null && this.GetRequestVal("ShowFrmType").Equals("FrmFool") == true) || md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
                     {
                         if (IsMobile == true)
                             return "url@../FrmView.htm?1=2" + paras;
@@ -1178,14 +1177,16 @@ namespace BP.WF.HttpHandler
             //节点与表单的权限控制.
             FrmNode fn = null;
 
-            //是否启用装载填充？ @袁丽娜,
+            //是否启用装载填充？
             bool isLoadData = true;
-            //定义节点变量. @袁丽娜 
+            //定义节点变量. 
             Node nd = null;
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 nd = new Node(this.FK_Node);
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+                //if (nd.HisFormType== NodeFormType.FoolTruck)
+
                 fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
                 isLoadData = fn.IsEnableLoadData;
             }
@@ -1197,9 +1198,6 @@ namespace BP.WF.HttpHandler
                 string fromWhere = this.GetRequestVal("FromWorkOpt");
                 if (fromWhere != null && fromWhere.Equals("1") && this.FK_Node != 0 && this.FK_Node != 999999)
                 {
-                    nd = new Node(this.FK_Node);
-                    nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
-
                     //如果是累加表单.
                     if (nd.HisFormType == NodeFormType.FoolTruck)
                     {
@@ -1213,7 +1211,7 @@ namespace BP.WF.HttpHandler
 
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-                string atParas = "";
+
                 //主表实体.
                 GEEntity en = new GEEntity(this.EnsName);
 
@@ -1235,28 +1233,19 @@ namespace BP.WF.HttpHandler
                         en.Insert();
                 }
 
-                //把流程信息表发送过去.
-                GenerWorkFlow gwf = new GenerWorkFlow();
-                gwf.WorkID = pk;
-                gwf.RetrieveFromDBSources();
-                ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+                //如果有框架
+                if (ds.Tables["Sys_MapFrame"].Rows.Count > 0)
+                {
+                    //把流程信息表发送过去.
+                    GenerWorkFlow gwf = new GenerWorkFlow();
+                    gwf.WorkID = pk;
+                    gwf.RetrieveFromDBSources();
+                    ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+                }
 
                 #endregion 根据who is pk 获取数据.
 
                 #region 附加参数数据.
-                //把参数放入到 En 的 Row 里面。
-                if (DataType.IsNullOrEmpty(atParas) == false)
-                {
-                    AtPara ap = new AtPara(atParas);
-                    foreach (string key in ap.HisHT.Keys)
-                    {
-                        if (en.Row.ContainsKey(key) == true) //有就该变.
-                            en.Row[key] = ap.GetValStrByKey(key);
-                        else
-                            en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
-                    }
-                }
-
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
@@ -1278,52 +1267,43 @@ namespace BP.WF.HttpHandler
                 #endregion 附加参数数据.
 
                 #region 执行装载填充.与相关的事件.
-                MapExt me = null;
-                if (isLoadData == true)
+                MapExts mes = md.MapExts;
+
+                MapExt me = mes.GetEntityByKey("ExtType", MapExtXmlList.PageLoadFull) as MapExt;
+                if (isLoadData == true && me != null && GetRequestValInt("IsTest") != 1)
                 {
-                    me = new MapExt();
-                    if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
+                    //执行通用的装载方法.
+                    MapAttrs attrs = new MapAttrs(this.EnsName);
+                    MapDtls dtls = new MapDtls(this.EnsName);
+                    //判断是否自定义权限.
+                    bool IsSelf = false;
+                    //单据或者是单据实体表单
+                    if (nd == null)
                     {
-                        //执行通用的装载方法.
-                        MapAttrs attrs = new MapAttrs(this.EnsName);
-                        MapDtls dtls = new MapDtls(this.EnsName);
-
-                        if (GetRequestValInt("IsTest") != 1)
-                        {
-                            //判断是否自定义权限.
-                            bool IsSelf = false;
-                            //单据或者是单据实体表单
-                            if (nd == null)
-                            {
-                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, 0, this.WorkID) as GEEntity;
-                            }
-                            else
-                            {
-                                if ((nd.HisFormType == NodeFormType.SheetTree 
-                                    || nd.HisFormType == NodeFormType.RefOneFrmTree)
-                                    && (fn.FrmSln == FrmSln.Self))
-                                    IsSelf = true;
-                                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, nd.NodeID, this.WorkID) as GEEntity;
-                            }
-                           
-                        }
-
+                        en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, 0, this.WorkID) as GEEntity;
+                    }
+                    else
+                    {
+                        if ((nd.HisFormType == NodeFormType.SheetTree
+                            || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                            && (fn.FrmSln == FrmSln.Self))
+                            IsSelf = true;
+                        en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls, IsSelf, nd.NodeID, this.WorkID) as GEEntity;
                     }
                 }
 
-                //执行事件
-                md.DoEvent(FrmEventList.SaveBefore, en, null);
+                //执行事件, 不应该加.
+                if (1 == 2)
+                    md.DoEvent(FrmEventList.SaveBefore, en, null);
                 #endregion 执行装载填充.与相关的事件.
 
-                #region 把外键表加入DataSet.
+                #region 把外键表加入 DataSet.
                 DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
-                MapExts mes = md.MapExts;
+
                 DataTable ddlTable = new DataTable();
                 ddlTable.Columns.Add("No");
-
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
-                    
                     string lgType = dr["LGType"].ToString();
                     string uiBindKey = dr["UIBindKey"].ToString();
 
@@ -1344,7 +1324,6 @@ namespace BP.WF.HttpHandler
                     if (uiIsEnable.Equals("0") == true && lgType.Equals("0") == true)
                         continue; //如果是外部数据源，并且是不可以编辑的状态.
 
-
                     // 检查是否有下拉框自动填充。
                     string keyOfEn = dr["KeyOfEn"].ToString();
                     string fk_mapData = dr["FK_MapData"].ToString();
@@ -1357,7 +1336,27 @@ namespace BP.WF.HttpHandler
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
                         DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
-                        dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            if(dt.Columns.Contains("NO") == true)
+                                dt.Columns["NO"].ColumnName = "No";
+                            if (dt.Columns.Contains("NAME") == true)
+                                dt.Columns["NAME"].ColumnName = "Name";
+                            if (dt.Columns.Contains("PARENTNO") == true)
+                                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                        }
+
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        {
+                            if (dt.Columns.Contains("no") == true)
+                                dt.Columns["no"].ColumnName = "No";
+                            if (dt.Columns.Contains("name") == true)
+                                dt.Columns["name"].ColumnName = "Name";
+                            if (dt.Columns.Contains("parentno") == true)
+                                dt.Columns["parentno"].ColumnName = "ParentNo";
+                        }
+
+                            dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                         ds.Tables.Add(dt);
                         continue;
                     }
@@ -1383,25 +1382,24 @@ namespace BP.WF.HttpHandler
                 #endregion End把外键表加入DataSet
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-
-                if ( nd!=null && (fn.IsEnableFWC == true || nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
+                if (nd != null && fn.IsEnableFWC != FrmWorkCheckSta.Disable)
                 {
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                     if (nd.NodeFrmID != "ND" + nd.NodeID)
                     {
                         /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
-                       int  refNodeID = 0;
-                        if (nd.NodeFrmID.IndexOf("ND")==-1)
-                            refNodeID  = nd.NodeID;
+                        int refNodeID = 0;
+                        if (nd.NodeFrmID.IndexOf("ND") == -1)
+                            refNodeID = nd.NodeID;
                         else
                             refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
                         BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
 
-                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_H, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_H));
-                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_W));
-                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_X));
-                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y));
+                        fnc.SetValByKey(NodeWorkCheckAttr.FWC_H, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_H));
+                        fnc.SetValByKey(NodeWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_W));
+                        fnc.SetValByKey(NodeWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_X));
+                        fnc.SetValByKey(NodeWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_Y));
 
                         fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
                         fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));
@@ -1454,18 +1452,17 @@ namespace BP.WF.HttpHandler
                                 ds.Tables.Add(gf);
 
                                 //执行更新,就自动生成那个丢失的字段分组.
-                                refFnc.Update();
+                                refFnc.Update(); //这里生成到了NDxxx表单上去了。
 
                             }
                         }
                     }
 
 
-
-                    #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                    if ( fn.IsEnableFWC == true && nd.NodeFrmID == "ND" + nd.NodeID
-                        && nd.HisFormType != NodeFormType.RefOneFrmTree)
+                    #region 没有审核组件分组就增加上审核组件分组.
+                    if (fn.IsEnableFWC !=FrmWorkCheckSta.Disable)
                     {
+                        //如果启用了审核组件，并且 节点表单与当前一致。
                         if (md.HisFrmType == FrmType.FoolForm)
                         {
                             //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
@@ -1497,10 +1494,9 @@ namespace BP.WF.HttpHandler
                                 ds.Tables.Remove("Sys_GroupField");
                                 ds.Tables.Add(gf);
 
-
                                 //更新,为了让其表单上自动增加审核分组.
                                 BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(nd.NodeID);
-                                FrmWorkCheck fwc = new FrmWorkCheck(nd.NodeID);
+                                NodeWorkCheck fwc = new NodeWorkCheck(nd.NodeID);
                                 if (fn.FrmSln == FrmSln.Self || fn.FrmSln == FrmSln.Default)
                                     fwc.HisFrmWorkCheckSta = FrmWorkCheckSta.Enable;
                                 else
@@ -1513,10 +1509,10 @@ namespace BP.WF.HttpHandler
                     #endregion 没有审核组件分组就增加上审核组件分组.
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
                 }
-                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                if (nd != null)
                     ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
-                if (this.FK_Node != 0 && this.FK_Node != 999999)
+                if (nd != null)
                     ds.Tables.Add(fn.ToDataTableField("WF_FrmNode"));
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
@@ -1543,7 +1539,8 @@ namespace BP.WF.HttpHandler
                     {
                         //查询出来自定义的数据.
                         FrmFields ffs = new FrmFields();
-                        ffs.Retrieve(FrmFieldAttr.FK_Node, nd.NodeID, FrmFieldAttr.FK_MapData, md.No);
+                        ffs.Retrieve(FrmFieldAttr.FK_Node, nd.NodeID,
+                            FrmFieldAttr.FK_MapData, md.No);
 
                         //遍历属性集合.
                         foreach (DataRow dr in dtMapAttr.Rows)
@@ -1695,8 +1692,7 @@ namespace BP.WF.HttpHandler
 
                 #region 加入主表的数据.
                 //增加主表数据.
-                DataTable mainTable = en.ToDataTableField(md.No);
-                mainTable.TableName = "MainTable";
+                DataTable mainTable = en.ToDataTableField("MainTable");
                 ds.Tables.Add(mainTable);
                 #endregion 加入主表的数据.
 
@@ -1828,7 +1824,18 @@ namespace BP.WF.HttpHandler
                 int i = en.RetrieveFromDBSources();
                 en.ResetDefaultVal();
 
-                en = BP.Sys.PubClass.CopyFromRequest(en) as GEEntity;
+                try
+                {
+                    Hashtable ht = BP.Sys.PubClass.GetMainTableHT();
+                    foreach (string item in ht.Keys)
+                    {
+                        en.SetValByKey(item, ht[item]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return "err@方法：MyBill_SaveIt错误，在执行  GetMainTableHT 期间" + ex.Message;
+                }
 
                 en.OID = pk;
 
@@ -2045,6 +2052,7 @@ namespace BP.WF.HttpHandler
         {
             //从表.
             string fk_mapDtl = this.FK_MapDtl;
+            string RowIndex = this.GetRequestVal("RowIndex");
             MapDtl mdtl = new MapDtl(fk_mapDtl);
 
             #region 处理权限方案。
@@ -2083,6 +2091,7 @@ namespace BP.WF.HttpHandler
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
             foreach (BP.En.Attr attr in attrs)
             {
+
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
 
@@ -2134,6 +2143,36 @@ namespace BP.WF.HttpHandler
             {
                 //dtl.OID = DBAccess.GenerOID();
                 dtl.Insert();
+                //dtl生成oid后，将pop弹出的FrmEleDB表中的数据用oid替换掉
+                foreach (BP.En.Attr attr in attrs)
+                {
+                    string Refval = this.RefPKVal + "_" + RowIndex;
+                    FrmEleDBs FrmEleDBs = new FrmEleDBs();
+                    QueryObject qo = new QueryObject(FrmEleDBs);
+                    qo.AddWhere(FrmEleDBAttr.EleID, attr.Key);
+                    qo.addAnd();
+                    qo.AddWhere(FrmEleDBAttr.RefPKVal, Refval);
+                    qo.DoQuery();
+                    if (FrmEleDBs!=null&& FrmEleDBs.Count==0)
+                        continue;
+                    foreach (FrmEleDB FrmEleDB in FrmEleDBs)
+                    {
+                        FrmEleDB athDB_N = new FrmEleDB();
+                        athDB_N.MyPK = attr.Key + "_" + dtl.OID + "_"+FrmEleDB.Tag1;
+                        athDB_N.FK_MapData = FrmEleDB.FK_MapData;
+                        athDB_N.EleID = FrmEleDB.EleID;
+                        athDB_N.RefPKVal = dtl.OID.ToString();
+                        athDB_N.FID = FrmEleDB.FID;
+                        athDB_N.Tag1 = FrmEleDB.Tag1;
+                        athDB_N.Tag2 = FrmEleDB.Tag2;
+                        athDB_N.Tag3 = FrmEleDB.Tag3;
+                        athDB_N.Tag4 = FrmEleDB.Tag4;
+                        athDB_N.Tag5 = FrmEleDB.Tag5;
+                        athDB_N.DirectInsert();
+                        FrmEleDB.Delete();
+                    }
+                 
+                }
             }
             else
             {
@@ -2225,8 +2264,25 @@ namespace BP.WF.HttpHandler
                     febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
                 }
             }
+
             #endregion 从表 删除 后处理事件.
 
+            //如果有pop，删除相关存储
+            FrmEleDBs FrmEleDBs = new FrmEleDBs();
+            QueryObject qo = new QueryObject(FrmEleDBs);
+            qo.AddWhere(FrmEleDBAttr.FK_MapData, this.FK_MapDtl);
+            qo.addAnd();
+            qo.AddWhere(FrmEleDBAttr.RefPKVal, Convert.ToString(dtl.OID));
+            qo.DoQuery();
+            if (FrmEleDBs != null && FrmEleDBs.Count > 0)
+            {
+
+                foreach (FrmEleDB FrmEleDB in FrmEleDBs)
+                {
+
+                    FrmEleDB.Delete();
+                }
+            }
             //如果可以上传附件这删除相应的附件信息
             FrmAttachmentDBs dbs = new FrmAttachmentDBs();
             dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
@@ -3172,9 +3228,11 @@ namespace BP.WF.HttpHandler
             dbUpload.FileSize = (float)info.Length;
             dbUpload.Rec = WebUser.No;
             dbUpload.RecName = WebUser.Name;
+            dbUpload.FK_Dept = WebUser.FK_Dept;
+            dbUpload.FK_DeptName = WebUser.FK_DeptName;
             dbUpload.RDT = BP.DA.DataType.CurrentDataTime;
 
-            dbUpload.NodeID = fk_node.ToString();
+            dbUpload.NodeID = fk_node;
             dbUpload.Save();
 
             if (frmAth.AthSaveWay == AthSaveWay.DB)
@@ -3206,8 +3264,7 @@ namespace BP.WF.HttpHandler
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);
-            string msg = null;
-
+            string msg = "";
             //求出来实体记录，方便执行事件.
             GEEntity en = new GEEntity(athDesc.FK_MapData);
             en.PKVal = pkVal;
@@ -3238,19 +3295,66 @@ namespace BP.WF.HttpHandler
 
                     if (fn.WhoIsPK == WhoIsPK.PWorkID)
                         pkVal = this.PWorkID.ToString();
+                    if (fn.WhoIsPK == WhoIsPK.OID)
+                    {
+                        //如果是继承模式(AthUploadWay.Inherit)，上传附件使用本流程的WorkID,pkVal不做处理
+
+                        //如果是协作模式(AthUploadWay.Interwork),上传附件就是用控制呈现模式
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                        {
+                            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                                pkVal = this.FID.ToString();
+                            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                                pkVal = this.PWorkID.ToString();
+                            if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                            {
+                                //根据流程的PWorkID获取他的P2流程
+                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                                pkVal = pWorkID;
+                            }
+                            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                            {
+                                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                                //根据流程的PWorkID获取他的P2流程
+                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                                pkVal = pWorkID;
+                            }
+                        }
+                    }
                 }
 
                 //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                    athDesc = new FrmAttachment(attachPk + "_" + this.FK_Node);
-                    if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                        pkVal = this.FID.ToString();
+                    athDesc = new FrmAttachment();
+                    athDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    if (athDesc.RetrieveFromDBSources() != 0)
+                    {
+                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                            pkVal = this.FID.ToString();
 
-                    if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                        pkVal = this.PWorkID.ToString();
+                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                            pkVal = this.PWorkID.ToString();
+
+                        if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                        {
+                            //根据流程的PWorkID获取他的爷爷流程
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                            pkVal = pWorkID;
+                        }
+                        if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                        {
+                            string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                            //根据流程的PWorkID获取他的P2流程
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                            pkVal = pWorkID;
+                        }
+                    }
+                    
                 }
             }
+
+
 
 
             //获取上传文件是否需要加密
@@ -3291,8 +3395,8 @@ namespace BP.WF.HttpHandler
                     savePath = savePath.Replace("\\\\", "\\");
                     try
                     {
-                        if(savePath.Contains(SystemConfig.PathOfWebApp) == false)
-                        savePath = SystemConfig.PathOfWebApp + savePath;
+                        if (savePath.Contains(SystemConfig.PathOfWebApp) == false)
+                            savePath = SystemConfig.PathOfWebApp + savePath;
                     }
                     catch (Exception ex)
                     {
@@ -3356,7 +3460,7 @@ namespace BP.WF.HttpHandler
                     FileInfo info = new FileInfo(realSaveTo);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                    dbUpload.NodeID = this.FK_Node.ToString();
+                    dbUpload.NodeID = this.FK_Node;
                     dbUpload.Sort = sort;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
@@ -3396,6 +3500,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     dbUpload.RefPKVal = pkVal;
                     dbUpload.FID = this.FID;
 
@@ -3427,7 +3533,6 @@ namespace BP.WF.HttpHandler
                     {
 
                         string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
-                        //file.SaveAs(strtmp);//先明文保存到本地(加个后缀名.tmp)
                         HttpContextHelper.UploadFile(file, strtmp);
                         EncHelper.EncryptDES(strtmp, temp);//加密
                         File.Delete(strtmp);//删除临时文件
@@ -3435,7 +3540,6 @@ namespace BP.WF.HttpHandler
                     else
                     {
                         //文件保存的路径
-                        //file.SaveAs(temp);
                         HttpContextHelper.UploadFile(file, temp);
                     }
 
@@ -3460,29 +3564,13 @@ namespace BP.WF.HttpHandler
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                     dbUpload.Sort = sort;
-                    dbUpload.NodeID = FK_Node.ToString();
+                    dbUpload.NodeID = FK_Node;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)
                         dbUpload.SetPara("IsEncrypt", 1);
-                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                    {
-                        /*如果是继承，就让他保持本地的PK. */
-                        dbUpload.RefPKVal = pkVal.ToString();
-                    }
 
-                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    {
-                        /*如果是协同，就让他是PWorkID. */
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                        ps.Add("WorkID", pkVal);
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
-                        if (pWorkID == null || pWorkID == "0")
-                            pWorkID = pkVal;
-                        dbUpload.RefPKVal = pWorkID;
-                    }
-
+                    dbUpload.RefPKVal = pkVal.ToString();
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FileName = file.FileName;
@@ -3490,6 +3578,8 @@ namespace BP.WF.HttpHandler
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
+                    dbUpload.FK_Dept = WebUser.FK_Dept;
+                    dbUpload.FK_DeptName = WebUser.FK_DeptName;
                     if (athDesc.IsExpCol == true)
                     {
                         if (paras != null && paras.Length > 0)
@@ -4602,14 +4692,22 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
+                    //如果是绑定表单树中的表单，重新赋值绑定表单的名字
+                    if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    {
+                        fk_mapdata = nd.NodeFrmID;
+                    }
                     FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, fk_mapdata);
-                    if (fn.FrmSln == FrmSln.Default)
+                    /*if (fn.FrmSln == FrmSln.Default)
                     {
                         if (fn.WhoIsPK == WhoIsPK.FID)
                             athDesc.HisCtrlWay = AthCtrlWay.FID;
 
                         if (fn.WhoIsPK == WhoIsPK.PWorkID)
                             athDesc.HisCtrlWay = AthCtrlWay.PWorkID;
+
+                        if (fn.WhoIsPK == WhoIsPK.P2WorkID)
+                            athDesc.HisCtrlWay = AthCtrlWay.P2WorkID;
 
 
                     }
@@ -4627,7 +4725,7 @@ namespace BP.WF.HttpHandler
                         athDesc.IsDownload = true;
                         athDesc.MyPK = this.FK_FrmAttachment;
                         return athDesc;
-                    }
+                    }*/
 
                     if (fn.FrmSln == FrmSln.Self)
                     {
@@ -4663,7 +4761,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.FrmAttachment athDesc = this.GenerAthDesc();
 
             //查询出来数据实体.
-            BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
+            BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
             #endregion 处理权限控制.
 
             if (dbs.Count == 0)

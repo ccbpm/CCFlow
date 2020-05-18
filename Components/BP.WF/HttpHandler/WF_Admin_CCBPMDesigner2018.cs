@@ -21,14 +21,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner2018 : DirectoryPageBase
     {
-        /// <summary>
-        /// 初始化函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_CCBPMDesigner2018(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
            /// <summary>
         /// 构造函数
         /// </summary>
@@ -60,7 +52,6 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string FK_Flow = this.GetRequestVal("FK_Flow");
                 string x = this.GetRequestVal("X");
                 string y = this.GetRequestVal("Y");
                 string icon = this.GetRequestVal("icon");
@@ -73,14 +64,29 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(y)==false) 
                     iY = (int)double.Parse(y);
 
-                int nodeId = BP.WF.Template.TemplateGlo.NewNode(FK_Flow, iX, iY,icon);
+                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY,icon);
 
-                BP.WF.Node node = new BP.WF.Node(nodeId);
-                node.Update();
+            //    BP.WF.Node node = new BP.WF.Node(nodeId);
+             //   node.DirectUpdate();
 
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);
                 ht.Add("Name", node.Name);
+
+
+                #region  //2019.11.08 增加如果是极简版, 就设置初始化参数.
+                Flow fl = new Flow(this.FK_Flow);
+                if (fl.FlowFrmType != FlowFrmType.Ver2019Earlier)
+                {
+                    FrmNode fm = new FrmNode();
+                    fm.FK_Flow = this.FK_Flow;
+                    fm.FK_Frm = "ND" + int.Parse(this.FK_Flow + "01");
+                    fm.FK_Node = node.NodeID;
+                    fm.FrmSln = FrmSln.Readonly;
+                    fm.Insert();
+                }
+                #endregion  //2019.11.08 增加如果是极简版.
+
 
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }
@@ -120,7 +126,7 @@ namespace BP.WF.HttpHandler
         public string Node_EditNodeName()
         {
             string FK_Node = this.GetValFromFrmByKey("NodeID");
-            string NodeName = System.Web.HttpContext.Current.Server.UrlDecode(this.GetValFromFrmByKey("NodeName"));
+            string NodeName = HttpContextHelper.UrlDecode(this.GetValFromFrmByKey("NodeName"));
 
             BP.WF.Node node = new BP.WF.Node();
             node.NodeID = int.Parse(FK_Node);

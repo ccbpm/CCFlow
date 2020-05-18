@@ -739,7 +739,6 @@ namespace BP.WF.Data
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 100, true);
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
-                map.AddTBMyNum();
 
                 //隐藏字段.
                 map.AddTBInt(MyStartFlowAttr.WFState, 0, "状态", false, false);

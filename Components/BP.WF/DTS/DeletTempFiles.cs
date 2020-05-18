@@ -23,6 +23,8 @@ namespace BP.WF.DTS
             this.Title = "删除产生的临时文件";
             this.Help = "上传、下载、导入导出流程模版表单模版的临时文件删除.";
             this.Icon = "<img src='/WF/Img/Btn/Delte.gif'  border=0 />";
+            this.GroupName = "系统维护";
+
         }
         /// <summary>
         /// 设置执行变量

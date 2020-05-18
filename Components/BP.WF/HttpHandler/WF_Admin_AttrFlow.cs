@@ -1,31 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
 using BP.Web;
 using BP.Sys;
 using BP.DA;
-using BP.En;
-using BP.WF.Template;
-using System.Data;
-using System.Web.UI;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
     public class WF_Admin_AttrFlow : BP.WF.HttpHandler.DirectoryPageBase
     {
-
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_AttrFlow(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
          /// <summary>
         /// 构造函数
         /// </summary>
@@ -543,7 +527,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
                 en.Retrieve();
 
-                en = BP.Sys.PubClass.CopyFromRequestByPost(en, context.Request) as BP.WF.Template.TruckViewPower;
+                en = BP.Sys.PubClass.CopyFromRequestByPost(en) as BP.WF.Template.TruckViewPower;
                 en.Save();  //执行保存.
                 return "保存成功";
             }
@@ -562,16 +546,17 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Imp_Done()
         {
-            HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
             if (files.Count == 0)
-                return "err@请选择要上传的流程模版。";
+            return "err@请选择要上传的流程模版。";
 
             //设置文件名
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
             string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
-            files[0].SaveAs(filePath);
+            //files[0].SaveAs(filePath);
+            HttpContextHelper.UploadFile(files[0], filePath);
 
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
@@ -592,6 +577,7 @@ namespace BP.WF.HttpHandler
 
             //执行导入
             BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
+            flow.DoCheck(); //要执行一次检查.
 
             Hashtable ht = new Hashtable();
             ht.Add("FK_Flow", flow.No);
@@ -684,7 +670,7 @@ namespace BP.WF.HttpHandler
             string nodesOfEmail = "";
             foreach (BP.WF.Node mynd in nds)
             {
-                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (key.Contains("CB_Station_" + mynd.NodeID)
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
@@ -710,12 +696,12 @@ namespace BP.WF.HttpHandler
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
             //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
 
             //短信手机字段.
-            msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
+            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");
             //替换变量
-            string smsstr = HttpContext.Current.Request["TB_SMS"].ToString();
+            string smsstr = HttpContextHelper.RequestParams("TB_SMS");
             //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
             //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -728,14 +714,15 @@ namespace BP.WF.HttpHandler
 
             #region 邮件保存.
             //邮件.
-            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
-
+            //msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
+            //2019-07-25 zyt改造
+            msg.MailPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_Email").Replace("RB_Email_", ""));
             //邮件标题与内容.
-            msg.MailTitle_Real = HttpContext.Current.Request["TB_Email_Title"].ToString();
-            msg.MailDoc_Real = HttpContext.Current.Request["TB_Email_Doc"].ToString();
+            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_Email_Title");
+            msg.MailDoc_Real = HttpContextHelper.RequestParams("TB_Email_Doc");
 
             //邮件地址.
-            msg.MailAddress = HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+            msg.MailAddress = HttpContextHelper.RequestParams("DDL_Email_Fields");
 
             #endregion 邮件保存.
 
@@ -752,5 +739,137 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
+        #region 欢迎页面初始化.
+        /// <summary>
+        /// 欢迎页面初始化-获得数量.
+        /// </summary>
+        /// <returns></returns>
+        public string GraphicalAnalysis_Init()
+        {
+            Hashtable ht = new Hashtable();
+            string fk_flow = GetRequestVal("FK_Flow");
+            //所有的实例数量.
+            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '"+ fk_flow +"'")); //实例数.
+
+            //所有的待办数量.
+            ht.Add("TodolistNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=2 AND Fk_flow = '" + fk_flow + "'"));
+            
+            //所有的运行中的数量.
+            ht.Add("RunNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFSta!=1 AND WFState!=3 AND Fk_flow = '" + fk_flow + "'"));
+            
+            //退回数.
+            ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 AND Fk_flow = '" + fk_flow + "'"));
+
+            //说有逾期的数量.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "'"));
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "'";
+
+                sql += "UNION SELECT* FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "')";
+
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
+            }
+            else
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "'"));
+            }
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
+        /// 获得数量  流程饼图，部门柱状图，月份折线图.
+        /// </summary>
+        /// <returns></returns>
+        public string GraphicalAnalysis_DataSet()
+        {
+            DataSet ds = new DataSet();
+            string fk_flow = GetRequestVal("FK_Flow");
+            #region  实例分析
+            //月份分组.
+            string sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY FK_NY";
+            DataTable FlowsByNY = DBAccess.RunSQLReturnTable(sql);
+            FlowsByNY.TableName = "FlowsByNY";
+            ds.Tables.Add(FlowsByNY);
+
+            //部门分组.
+            sql = "SELECT DeptName, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
+            DataTable FlowsByDept = DBAccess.RunSQLReturnTable(sql);
+            FlowsByDept.TableName = "FlowsByDept";
+            ds.Tables.Add(FlowsByDept);
+            #endregion 实例分析。
+
+
+            #region 待办 分析
+            //待办 - 部门分组.
+            sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            DataTable TodolistByDept = DBAccess.RunSQLReturnTable(sql);
+            TodolistByDept.TableName = "TodolistByDept";
+            ds.Tables.Add(TodolistByDept);
+
+            //逾期的 - 人员分组.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp ";
+                sql += "UNION SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
+            }
+            else
+            {
+                sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
+            }
+            DataTable OverTimeByEmp = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByEmp.TableName = "OverTimeByEmp";
+            ds.Tables.Add(OverTimeByEmp);
+            //逾期的 - 部门分组.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
+                sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            }
+            else
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            }
+            DataTable OverTimeByDept = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByDept.TableName = "OverTimeByDept";
+            ds.Tables.Add(OverTimeByDept);
+            //逾期的 - 节点分组.
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName ";
+                sql += "UNION Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
+            }
+            else
+            {
+                sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
+            }
+            DataTable OverTimeByNode = DBAccess.RunSQLReturnTable(sql);
+            OverTimeByNode.TableName = "OverTimeByNode";
+            ds.Tables.Add(OverTimeByNode);
+            #endregion 逾期。
+
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 欢迎页面初始化.
     }
 }

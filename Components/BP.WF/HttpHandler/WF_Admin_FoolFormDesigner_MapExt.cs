@@ -37,14 +37,7 @@ namespace BP.WF.HttpHandler
             //找不不到标记就抛出异常.
             throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }
-        /// <summary>
-        /// 初始化函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Admin_FoolFormDesigner_MapExt(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -338,7 +331,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
-                    dtl.MTR = sql.Trim();
+                    //dtl.MTR = sql.Trim();
                 }
             }
 
@@ -721,6 +714,36 @@ namespace BP.WF.HttpHandler
 
             //加入单选按钮.
             ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 复选框选择事件
+        /// </summary>
+        /// <returns></returns>
+        public string CheckBoxs_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //放入表单字段.
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+            //属性.
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.Retrieve();
+
+            //把分组加入里面.
+            GroupFields gfs = new GroupFields(this.FK_MapData);
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
+
+            FrmRBs rbs = new FrmRBs();
+            rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
+            //加入单选按钮.
+            ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
+
+
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
@@ -1121,7 +1144,7 @@ namespace BP.WF.HttpHandler
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
-                    dtl.MTR = sql.Trim();
+                    //dtl.MTR = sql.Trim();//多表头去掉了
                 }
             }
 
@@ -1225,7 +1248,9 @@ namespace BP.WF.HttpHandler
         public string InitScript_Init()
         {
             try {
-                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                //2019-07-26 zyt改造
+                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath)) {
@@ -1246,9 +1271,11 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                //2019-07-26 zyt改造
+                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
-                String content = this.context.Request.Params["JSDoc"];
+                String content = HttpContextHelper.RequestParams("JSDoc"); // this.context.Request.Params["JSDoc"];
 
                 //在应用程序当前目录下的File1.txt文件中追加文件内容，如果文件不存在就创建，默认编码
                 File.WriteAllText(filePath, content);
@@ -1265,7 +1292,9 @@ namespace BP.WF.HttpHandler
         public string InitScript_Delete()
         {
             try {
-                String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                //2019-07-26 zyt改造
+                //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
+                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))

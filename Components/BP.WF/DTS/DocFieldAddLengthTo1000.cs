@@ -21,6 +21,8 @@ namespace BP.WF.DTS
             this.Title = "扩充Doc字段的长度";
             this.Help = "为doc类型的字段扩充长度，低于1000的字符扩充为1000.";
             this.Help += "<br>减少因为实施的原因忽略了字符长度导致的界面报错。";
+            this.GroupName = "系统维护";
+
         }
         /// <summary>
         /// 设置执行变量

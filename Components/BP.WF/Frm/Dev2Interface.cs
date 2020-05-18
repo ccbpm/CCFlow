@@ -19,6 +19,7 @@ namespace BP.Frm
     /// </summary>
     public class Dev2Interface
     {
+       
         /// <summary>
         /// 创建工作ID
         /// </summary>
@@ -26,12 +27,20 @@ namespace BP.Frm
         /// <param name="userNo">用户编号</param>
         /// <param name="htParas">参数</param>
         /// <returns>一个新的WorkID</returns>
-        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas)
+        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas,string billNo=null)
         {
             GenerBill gb = new GenerBill();
-            int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
-            if (i == 1)
-                return gb.WorkID;
+            if (DataType.IsNullOrEmpty(billNo) == true)
+            {
+                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
+                if (i == 1)
+                    return gb.WorkID;
+            }else
+            {
+                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.BillNo, billNo);
+                if (i == 1)
+                    return gb.WorkID;
+            }
 
             FrmBill fb = new FrmBill(frmID);
 
@@ -41,6 +50,9 @@ namespace BP.Frm
             gb.StarterName = BP.Web.WebUser.Name;
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
+
+            if (DataType.IsNullOrEmpty(billNo) == false)
+                gb.BillNo = billNo ; //BillNo
 
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
             gb.RDT = BP.DA.DataType.CurrentDataTime;
@@ -54,13 +66,20 @@ namespace BP.Frm
             if (fb.EntityType == EntityType.FrmBill)
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
-                gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                if (DataType.IsNullOrEmpty(billNo) == false)
+                    gb.BillNo = billNo;
+                else
+                    gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
             }
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
                 rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
-                gb.BillNo = rpt.GenerNewNoByKey("BillNo");
+                if (DataType.IsNullOrEmpty(billNo) == false)
+                    gb.BillNo = billNo;
+                else
+                    gb.BillNo = rpt.GenerNewNoByKey("BillNo");
+
                 // BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }
@@ -72,6 +91,7 @@ namespace BP.Frm
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
+            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
             rpt.SetValByKey("RDT", gb.RDT);
             rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", gb.BillNo);
@@ -100,6 +120,7 @@ namespace BP.Frm
             rpt.SetValByKey("BillState", 0);
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
+            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
             rpt.SetValByKey("RDT", DataType.CurrentData);
 
             rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
@@ -166,6 +187,62 @@ namespace BP.Frm
 
             return "保存成功...";
         }
+
+        /// <summary>
+        /// 提交
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="workID">工作ID</param>
+        /// <returns>返回保存结果</returns>
+        public static string SubmitWork(string frmID, Int64 workID)
+        {
+            FrmBill fb = new FrmBill(frmID);
+
+            GenerBill gb = new GenerBill();
+            gb.WorkID = workID;
+            int i = gb.RetrieveFromDBSources();
+            if (i == 0)
+                return "";
+            gb.BillState = BillState.Over;
+
+            //创建rpt.
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(gb.FrmID, workID);
+
+            if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
+            {
+
+                gb.Title = rpt.Title;
+                gb.Update();
+                return "提交成功...";
+            }
+
+            //单据编号.
+            if (DataType.IsNullOrEmpty(gb.BillNo) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
+            {
+                gb.BillNo = BP.Frm.Dev2Interface.GenerBillNo(fb.BillNoFormat, workID, null, fb.PTable);
+                //更新单据里面的billNo字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "BillNo") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET BillNo='" + gb.BillNo + "' WHERE OID=" + workID);
+            }
+
+            //标题.
+            if (DataType.IsNullOrEmpty(gb.Title) == true && !(fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict))
+            {
+                gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
+                //更新单据里面的 Title 字段.
+                if (DBAccess.IsExitsTableCol(fb.PTable, "Title") == true)
+                    DBAccess.RunSQL("UPDATE " + fb.PTable + " SET Title='" + gb.Title + "' WHERE OID=" + workID);
+            }
+
+            gb.Update();
+
+            //把通用的字段更新到数据库.
+            rpt.Title = gb.Title;
+            rpt.BillNo = gb.BillNo;
+            rpt.Update();
+
+            return "提交成功...";
+        }
         /// <summary>
         /// 保存
         /// </summary>
@@ -200,6 +277,22 @@ namespace BP.Frm
             return "删除成功.";
         }
 
+
+        /// <summary>
+        /// 删除实体
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public static string MyDict_Delete(string frmID, Int64 workID)
+        {
+            FrmBill fb = new FrmBill(frmID);
+            string sql = "@DELETE FROM " + fb.PTable + " WHERE OID=" + workID;
+            DBAccess.RunSQLs(sql);
+            return "删除成功.";
+        }
+
+
         /// <summary>
         /// 删除实体单据
         /// </summary>
@@ -214,6 +307,20 @@ namespace BP.Frm
             return "删除成功.";
         }
         /// <summary>
+        /// 删除树形结构的实体表单
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="billNo"></param>
+        /// <returns></returns>
+        public static string MyEntityTree_Delete(string frmID, string billNo)
+        {
+            FrmBill fb = new FrmBill(frmID);
+            string sql = "DELETE FROM " + fb.PTable + " WHERE BillNo='"+ billNo + "' OR ParentNo='"+ billNo+"'";
+            DBAccess.RunSQLs(sql);
+            return "删除成功.";
+        }
+
+        /// <summary>
         /// 复制单据数据
         /// </summary>
         /// <param name="frmID"></param>
@@ -226,7 +333,7 @@ namespace BP.Frm
 
             GenerBill gb = new GenerBill();
             gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
-            gb.BillState = BillState.None; //初始化状态.
+            gb.BillState = BillState.Editing; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
             gb.FrmName = fb.Name; //单据名称.
@@ -349,6 +456,7 @@ namespace BP.Frm
             //查询出来单据运行模式的.
             FrmBills bills = new FrmBills();
             bills.RetrieveAll();
+
             //bills.Retrieve(FrmBillAttr.EntityType, 0); //实体类型.
 
             DataTable dtStart = bills.ToDataTableField();

@@ -24,7 +24,9 @@ namespace BP.WF.DTS
         {
             this.Title = "装载流程演示模板";
             this.Help = "为了帮助各位爱好者学习与掌握ccflow, 特提供一些流程模板与表单模板以方便学习。";
-            this.Help += "@这些模板的位于" + SystemConfig.PathOfData + "\\FlowDemo\\";
+            this.Help += "@这些模板的位于" + SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\";
+            this.GroupName = "流程维护";
+
         }
         /// <summary>
         /// 设置执行变量
@@ -134,7 +136,7 @@ namespace BP.WF.DTS
                     continue;
 
                 FlowSort fs = new FlowSort();
-                fs.No = dir.Name.Substring(0, 3);
+                fs.No = dir.Name.Substring(0, 2);
                 fs.Name = dir.Name.Substring(3);
                 fs.ParentNo = fsRoot.No;
                 fs.Insert();

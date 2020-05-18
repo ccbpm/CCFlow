@@ -11,6 +11,10 @@ using BP.En;
 using BP.WF.Template;
 using BP.WF.XML;
 using System.IO;
+using BP.Tools;
+using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -69,6 +73,188 @@ namespace BP.WF.HttpHandler
         #endregion 事件基类.
 
 
+        #region   公文维护
+        public string IsExitNodeTempData()
+        {
+            int workId = int.Parse(this.GetRequestVal("workId"));
+            string flowNo = this.GetRequestVal("fk_flow");
+            byte[] bytes = BP.DA.DBAccess.GetByteFromDB("ND" + int.Parse(flowNo) + "Rpt", "OID", workId.ToString(), "WordFile");
+            if (bytes == null)
+                return "err@公文数据不存在.";
+
+            return "成功获取数据.";
+        }
+
+        /// <summary>
+        /// 选择一个模版
+        /// </summary>
+        /// <returns></returns>
+        public string SelectDocTemp_Save()
+        {
+            string docTempNo = this.GetRequestVal("no");
+
+            DocTemplate docTemplate = new DocTemplate(docTempNo);
+
+            if (File.Exists(docTemplate.FilePath) == false)
+                return "err@选择的模版文件不存在.";
+
+            //获得模版的流.
+            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
+
+            //保存到数据库里.
+            Flow fl = new Flow(this.FK_Flow);
+            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID,
+                "WordFile");
+
+            ////模板与业务的绑定.
+            //DocTempFlow dtf = new DocTempFlow();
+            //dtf.CheckPhysicsTable();
+
+            //if (dtf.IsExit(DocTempFlowAttr.WorkID, workId))
+            //{
+            //    dtf.Delete();
+            //}
+            //dtf.WorkID = workId;
+            //dtf.TempNo = docTempNo;
+            //dtf.MyPK = workId + "_" + docTempNo;
+            //dtf.Insert();
+
+            return "模板导入成功.";
+        }
+
+        public string FlowDocInit()
+        {
+            MethodReturnMessage<string> msg = new MethodReturnMessage<string>
+            {
+                Success = true
+            };
+
+            try
+            {
+                int nodeId = int.Parse(this.GetRequestVal("nodeId"));
+                int workId = int.Parse(this.GetRequestVal("workId"));
+                string flowNo = this.GetRequestVal("fk_flow");
+                string tableName = "ND" + int.Parse(flowNo) + "Rpt";
+
+                string str = "WordFile";
+                if (BP.DA.DBAccess.IsExitsTableCol(tableName, str) == false)
+                {
+                    /*如果没有此列，就自动创建此列.*/
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
+
+                    BP.DA.DBAccess.RunSQL(sql);
+                }
+
+                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
+                Node node = new Node(nodeId);
+
+                if (!node.IsStartNode)
+                {
+                    if (bytes == null)
+                    {
+                        msg.Message = "{\"IsStartNode\":0,\"IsExistFlowData\":0,\"IsExistTempData\":0}";
+                    }
+                    else
+                    {
+                        msg.Message = "{\"IsStartNode\":0,\"IsExistFlowData\":1,\"IsExistTempData\":0}";
+                    }
+                }
+                else//开始节点
+                {
+                    DocTemplates dts = new DocTemplates();
+                    int count = dts.Retrieve(DocTemplateAttr.FK_Node, nodeId);
+
+                    if (bytes == null)
+                    {
+                        if (count == 0)
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":0,\"IsExistTempData\":0}";
+                            msg.Data = null;
+                        }
+                        else
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":0,\"IsExistTempData\":" + count + "}";
+                            msg.Data = dts.ToJson();
+                        }
+                    }
+                    else
+                    {
+                        if (count == 0)
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":1,\"IsExistTempData\":0}";
+                            msg.Data = null;
+                        }
+                        else
+                        {
+                            msg.Message = "{\"IsStartNode\":1,\"IsExistFlowData\":1,\"IsExistTempData\":" + count + "}";
+                            msg.Data = dts.ToJson();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg.Success = false;
+                msg.Message = ex.Message;
+            }
+
+            return LitJson.JsonMapper.ToJson(msg);
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string DocTemp_Del()
+        {
+            int no = int.Parse(this.GetRequestVal("no"));
+
+            BP.WF.Template.DocTemplate dt = new DocTemplate();
+            dt.Retrieve(DocTemplateAttr.No, no);
+            dt.Delete();
+
+            return "操作成功";
+        }
+        /// <summary>
+        /// 模版文件上传
+        /// </summary>
+        /// <returns></returns>
+        public string DocTemp_Upload()
+        {
+            if (HttpContextHelper.RequestFilesCount == 0)
+                return "err@请上传模版.";
+
+            Node nd = new Node(this.FK_Node);
+
+            //上传附件.
+            var file = HttpContextHelper.RequestFiles(0);
+            var fileName = file.FileName;
+            string path = SystemConfig.PathOfDataUser + "DocTemplate\\" + nd.FK_Flow;
+            string fileFullPath = path + "\\" + fileName;
+
+            //上传文件.
+            if (System.IO.Directory.Exists(path)==false)
+                System.IO.Directory.CreateDirectory(path);
+            HttpContextHelper.UploadFile(file, fileFullPath);
+
+            //插入模版.
+            DocTemplate dt = new DocTemplate();
+            dt.FK_Node = FK_Node;
+            dt.No = DA.DBAccess.GenerGUID();
+            dt.Name = fileName;
+            dt.FilePath = fileFullPath; //路径
+            dt.FK_Node = this.FK_Node;
+            dt.Insert();
+
+            //保存文件.
+            DBAccess.SaveFileToDB(fileFullPath, dt.EnMap.PhysicsTable, "No", dt.No, "FileTemplate");
+            return dt.ToJson();
+        }
+        #endregion
+
         #region  单据模版维护
         /// <summary>
         /// @李国文.
@@ -86,6 +272,7 @@ namespace BP.WF.HttpHandler
             //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
             var file = HttpContextHelper.RequestFiles(0);
             string fileName = file.FileName;
+            fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
             fileName = fileName.ToLower();
 
             filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;
@@ -210,7 +397,7 @@ namespace BP.WF.HttpHandler
             msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
             //节点预警
-            if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
+            if (this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
             {
                 int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
                 msg.SetPara("NoticeType", noticeType);
@@ -666,7 +853,7 @@ namespace BP.WF.HttpHandler
                     dtNodes.TableName = "dtNodes";
                     ds.Tables.Add(dtNodes);
                 }
-               
+
                 #endregion
 
                 ds.Tables.Add(mapdatas.ToDataTableField("mapdatas"));
@@ -681,7 +868,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(athMents.ToDataTableField("athMents"));
                 ds.Tables.Add(btns.ToDataTableField("btns"));
                 ds.Tables.Add(isDtl);
-               
+
                 //ds.Tables.Add(nodes.ToDataTableField("nodes"));
             }
         }
@@ -764,7 +951,7 @@ namespace BP.WF.HttpHandler
                 foreach (MapAttr attr in attrs)
                 {
                     att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
-                    if (atts.Contains(","+attr.KeyOfEn+","))
+                    if (atts.Contains("," + attr.KeyOfEn + ","))
                     {
                         att.IsEnableInAPP = true;
                     }
@@ -772,13 +959,24 @@ namespace BP.WF.HttpHandler
                         att.IsEnableInAPP = false;
                     att.Update();
 
-                    if (atts.Contains("," + FK_MapData + "_" + attr.KeyOfEn + ",") == true)
-                    {
-                        FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
+                    //if (atts.Contains("," + FK_MapData + "_" + attr.KeyOfEn + ",") == true)
+                    //{
+                    //    FrmAttachment ath = new FrmAttachment(FK_MapData + "_" + attr.KeyOfEn);
+                    //    ath.SetPara("IsShowMobile", 1);
+                    //    ath.Update();
+
+                    //}
+                }
+                //获取附件
+                FrmAttachments aths = new FrmAttachments();
+                aths.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.FK_Node, 0);
+                foreach (FrmAttachment ath in aths)
+                {
+                    if (atts.Contains("," + ath.MyPK + ",") == true)
                         ath.SetPara("IsShowMobile", 1);
-                        ath.Update();
-                        
-                    }
+                    else
+                        ath.SetPara("IsShowMobile", 0);
+                    ath.Update();
                 }
                 return "保存成功！";
             }

@@ -121,9 +121,17 @@ namespace BP.WF.Data
         /// </summary>
         public const string GUID = "GUID";
         /// <summary>
-        /// 数量
+        /// RDT
         /// </summary>
-        public const string MyNum = "MyNum";
+        public const string RDT = "RDT";
+        /// <summary>
+        /// CDT
+        /// </summary>
+        public const string CDT = "CDT";
+        /// <summary>
+        /// 记录人
+        /// </summary>
+        public const string Rec = "Rec";
     }
     /// <summary>
     /// 报表
@@ -154,17 +162,6 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(GERptAttr.FlowDaySpan, value);
-            }
-        }
-        public int MyNum
-        {
-            get
-            {
-                return this.GetValIntByKey(GERptAttr.MyNum);
-            }
-            set
-            {
-                this.SetValByKey(GERptAttr.MyNum, value);
             }
         }
         /// <summary>
@@ -493,9 +490,7 @@ namespace BP.WF.Data
         {
             foreach (Attr attr in this.EnMap.Attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                      || attr.Key == WorkAttr.RDT
-                      || attr.Key == WorkAttr.Rec
+                if ( attr.Key == WorkAttr.Rec
                       || attr.Key == WorkAttr.FID
                       || attr.Key == WorkAttr.OID
                       || attr.Key == WorkAttr.Emps
@@ -527,11 +522,6 @@ namespace BP.WF.Data
                       || attr.Key.Equals("Name"))
                     continue;
 
-                if (attr.Key == GERptAttr.MyNum)
-                {
-                    this.SetValByKey(attr.Key, 1);
-                    continue;
-                }
 
                 try
                 {
@@ -550,9 +540,7 @@ namespace BP.WF.Data
             Attrs attrs = fromEn.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
-                if (attr.Key == WorkAttr.CDT
-                    || attr.Key == WorkAttr.RDT
-                    || attr.Key == WorkAttr.Rec
+                if (attr.Key == WorkAttr.Rec
                     || attr.Key == WorkAttr.FID
                     || attr.Key == WorkAttr.OID
                     || attr.Key == WorkAttr.Emps
@@ -585,11 +573,6 @@ namespace BP.WF.Data
                     continue;
 
 
-                if (attr.Key== GERptAttr.MyNum)
-                {
-                    this.SetValByKey(attr.Key, 1);
-                    continue;
-                }
                 this.SetValByKey(attr.Key, fromEn.GetValByKey(attr.Key));
             }
         }

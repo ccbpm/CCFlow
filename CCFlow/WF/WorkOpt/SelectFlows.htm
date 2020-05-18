@@ -1,0 +1,297 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>选择流程</title>
+    <!--
+    1, 退回界面。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <style type="text/css">
+        #TB_Doc
+        {
+            height: 132px;
+            width: 433px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitTreeData();
+            bindTest();
+
+        });
+
+        //确定 流程选择
+        function SelectEmps() {
+
+            GetSelectedEmpsReturnVal();
+
+            //No  是返回到别的页面的值
+            if (returnVal.No == undefined || returnVal.No == '') {
+                alert("未选择流程");
+            } else {
+                window.parent.selectFlowsWindowClose("确定");
+            }
+        }
+
+        //取消流程选择
+        function Close() {
+            if (window.parent != null && window.parent.selectFlowsWindowClose != null) {
+                window.parent.selectFlowsWindowClose("取消");
+            }
+        }
+
+        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore') == "1" ? true : false, FK_FlowSort: GetQueryString('FK_FlowSort') || '', ParentFlowSort: '' };
+        var returnVal = {};
+
+        //初始化树  
+        function InitTreeData() {
+            $('#OrgJSTree').css('display', 'block');
+
+            var url = '';
+
+            //初始化Tree
+            var plugins = [];
+            if (pageData.IsSelectMore == true) { //多选
+                plugins = [
+                    "checkbox",
+                    //"state",
+                    //"conditionalselect"
+                ];
+            }
+            //返回节点数组
+            var initNodeData = function (data, fk_flowsort2) {
+
+                data = eval('(' + data + ')');
+
+                var fk_flowsort = fk_flowsort2; //pageData.FK_FlowSort;
+                var parentNo = undefined;
+                var fkDeptObj = $.grep(data.FlowSorts, function (value) {
+                    return value.No == fk_flowsort;
+                });
+                if (fkDeptObj != undefined && fkDeptObj.length == 1) {
+                    parentNo = fkDeptObj[0].ParentNo;
+                }
+                pageData.FK_FlowSort = parentNo;
+                //本节点
+                var instance = $('#OrgJSTree').jstree(true);
+                var flowSorts = $.grep(data.FlowSorts, function (value) {
+                    return value.ParentNo == parentNo;
+                })
+
+                //if (instance.)
+                //子流程
+                var childFlowSorts = $.grep(data.FlowSorts, function (value) {
+                    return value.ParentNo == fk_flowsort;
+                })
+                //流程
+                var flows = data.Flows;
+
+                var itemArr = [];
+                $.each(flowSorts, function (i, flowSort) {
+                    var flowSortNode = {
+                        "text": flowSort.Name,
+                        "state" : {"opened" : true },
+                        "id": flowSort.No,
+                        "children": true,
+                        "data": flowSort
+                    };
+
+                    if (flowSort.No == fk_flowsort) {  //是本部门时加载子部门和流程
+                        var children = [];
+                        if (childFlowSorts.length > 0) {
+                            $.each(childFlowSorts, function (i, childFlowSort) {
+                                var childFlowSortNode = {
+                                    "text": childFlowSort.Name,
+                                    "state" : {"opened" : true },
+                                    "id": childFlowSort.No,
+                                    "children": true,
+                                    "data": childFlowSort
+                                };
+
+                                children.push(childFlowSortNode);
+                            });
+                        }
+                        if (flows.length > 0) {
+                            $.each(flows, function (i, flow) {
+                                var flowNode = {
+                                    "text": flow.Name,
+                                    "state" : {"opened" : true },//打开文件夹的
+                                    "id": flow.No,
+                                    "children": false,
+                                    "data": flow,
+                                    "icon": "jstree-file"
+                                };
+                                children.push(flowNode);
+                            });
+                        }
+                        flowSortNode.data.childrenData = children;
+                    }
+
+                    itemArr.push(flowSortNode);
+                });
+
+                if (instance == false || instance.get_node(fk_flowsort) == false) {
+                    pageData.ParentFlowSort = parentNo;
+                }
+                else {
+                    itemArr = itemArr[0].data.childrenData;
+                }
+                return itemArr;
+
+            };
+
+            $('#OrgJSTree').jstree({
+                'core': {
+
+                    'data': function (node, cb) {
+
+                        //初始化根节点
+                        if (node.id == "#") {
+
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+                            //handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                            if (pageData.FK_FlowSort != undefined)
+                                handler.AddPara("FK_FlowSort", pageData.FK_FlowSort);
+                            var data = handler.DoMethodReturnString("SelectEmps_Init");
+                            if (data.indexOf('err@') == 0) {
+                                alert(data);
+                                return;
+                            }
+
+                            var fk_flowsort2 = pageData.FK_FlowSort;
+                            cb(initNodeData(data, fk_flowsort2));
+
+
+                        }
+                        else {
+                            if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length > 0) {
+                                var fk_flowsort2 = node.id;
+                                cb(node.data.childrenData, fk_flowsort2);
+                            }
+                            else {
+                                pageData.FK_FlowSort = node.id;
+
+                                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+                                //handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                                handler.AddPara("FK_FlowSort", pageData.FK_FlowSort);
+                                var data = handler.DoMethodReturnString("SelectEmps_Init");
+
+                                if (data.indexOf('err@') == 0) {
+                                    alert(data);
+                                    return;
+                                }
+
+                                var fk_flowsort2 = node.id;
+                                cb(initNodeData(data, fk_flowsort2));
+                            }
+                        }
+                    }
+                },
+                "plugins": plugins
+
+            }).on('changed.jstree', function (node, cb) {
+                GetSelectedEmpsReturnVal();
+            })
+        }
+        //弹出树
+        function bindTest() {
+            $('#test').bind('click', function () {
+                if ($('#OrgJSTree').css('display') == "none") {
+                    $('#OrgJSTree').css('display', 'block');
+                    var instance = $('#OrgJSTree').jstree(true);
+                    if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
+                        instance.select_node($('#orgTxt').val());
+                    }
+                }
+                else {
+                    $('#OrgJSTree').css('display', 'none');
+                }
+            });
+
+            $('#toPrevDept').bind('click', function () {
+                if (pageData.ParentFlowSort == 'null' || pageData.ParentFlowSort == 'F0') {
+                    alert("已到第一级机构");
+                    return;
+                }
+
+                //判断最高级别.
+                var user = new WebUser();
+                if (user.CustomerNo == 'TianYe') {
+                    if (user.FK_Dept.indexOf('18099') == 0) {
+                        if (pageData.ParentFlowSort.indexOf('18099') != 0) {
+                            alert('已经是最高级别了.');
+                            return;
+                        }
+                    }
+                }
+
+                pageData.FK_FlowSort = pageData.ParentFlowSort;
+
+                $('#OrgJSTree').jstree(true).refresh();
+            });
+        }
+        //获取树选中的值
+        function GetSelectedEmpsReturnVal() {
+
+            var instance = $('#OrgJSTree').jstree(true);
+
+            var selectedIdArr = instance.get_selected();
+            var selectedNodes = [];
+            var nameArrs = [];
+            var noArr = [];
+            var nameArr = [];
+            $.each(selectedIdArr, function (i, selectedId) {
+                selectedNodes.push(instance.get_node(selectedId));
+            });
+
+            $.each(selectedNodes, function (i, selectedNode) {
+                if (selectedNodes[i].icon != true) {
+                    nameArrs.push(selectedNode.data);
+                }
+            });
+
+            if (nameArrs.length > 0) {
+                for (var property in nameArrs[0]) {
+                    returnVal[property] = [];
+                }
+            }
+            $.each(nameArrs, function (i, selected) {
+                for (var property in returnVal) {
+                    returnVal[property].push(selected[property]);
+                }
+            });
+            for (var property in nameArrs[0]) {
+                returnVal[property] = returnVal[property].join(",");
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
+        id="toPrevDept" />
+    <input type="button" onclick="SelectEmps()" value="确定" />
+    <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
+    </div>
+    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
+        value="确定" />
+</body>
+</html>

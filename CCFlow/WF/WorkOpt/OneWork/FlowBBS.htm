@@ -61,7 +61,6 @@
         }
         //删除.
         function Delete(mypk) {
-            var name;
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
@@ -74,7 +73,6 @@
                 alert(data);
                 return;
             }
-            // alert(data);
 
             $("#Table1  tr[id='" + mypk + "']").remove();
             Count();
@@ -108,7 +106,7 @@
 
             document.getElementById("TB_count").innerText = data;
         }
-        function Check(empName, fk_flow) {
+        function Check(empName) {
 
             $("#Table1  tr:not(:first)").html("");
 
@@ -130,7 +128,7 @@
             data = JSON.parse(data);
             //增加处理.
             for (var i = 0; i < data.length; i++) {
-                AddRow2(data[i]);
+                AddRow(data[i]);
 
             }
         }
@@ -186,52 +184,29 @@
 
         }
         function AddRow(data) {
-            var mypk = data.MyPK;
+            var mypk = data.MyPK; 
             var date = data.RDT;
             var empNo = data.EmpFrom;
             var empName = data.EmpFromT;
             var msg = data.Msg;
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            handler.AddPara("UserName", empNo);
-            var data = handler.DoMethodReturnString("FlowBBSDept");
-
-            var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
+            //获取发表人所在的部门
+            var emp = new Entity("BP.WF.Port.Emp", empNo);
+           
+            //var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "  <br/><br/>";
+            var leftInfo = "";
             //增加上icon.
-            leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
-            leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
+            leftInfo += "<th><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </th><br/><br/>";
+            leftInfo += "<th>发表人:&nbsp&nbsp" + empName + "<br>";
             leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
-            leftInfo += "所属部门:&nbsp&nbsp" + data;
+            leftInfo += "所属部门:&nbsp&nbsp" + emp.FK_DeptText;
+            leftInfo += "</th>";
             var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Check('" + empName + "','" + fk_flow + "');\">只看该用户</a> ";
-            var newRow = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
+            var newRow = "<tr id='" + mypk + "'>" + leftInfo + "<br><br><th colspan='2'>" + msg + "<br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' />" + delLink + "</th></tr>";
             $("#Table1 tr:last").after(newRow);
             Count();
         }
 
-        function AddRow2(data) {
-            var mypk = data.MyPK;
-            var date = data.RDT;
-            var empNo = data.EmpFrom;
-            var empName = data.EmpFromT;
-            var msg = data.Msg;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            handler.AddPara("UserName", empNo);
-            var data = handler.DoMethodReturnString("FlowBBSDept");
-
-            var leftInfo = "<img src='../../Img/Dot.png' border='1'  width='7px'/>&nbsp;" + empNo + "<br/><br/>";
-            //增加上icon.
-            leftInfo += "<center ><img width='100' height='100'  src='../../../DataUser/UserIcon/" + empNo + "Biger.png' onerror=\"this.src='../../../DataUser/UserIcon/DefaultBiger.png'\" /> </center><br/><br/>";
-            leftInfo += "发表人:&nbsp&nbsp" + empName + "<br>";
-            leftInfo += "发表于:&nbsp&nbsp" + date + "<br>";
-            leftInfo += "所属部门:&nbsp&nbsp" + data;
-            var delLink = "<a href=\"javascript:Delete('" + mypk + "');\" ><img src='../../Img/Btn/Delete.gif' />删除</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:Rel('" + empNo + "','" + mypk + "','" + empName + "');\"><img src='../../Img/Btn/Reply.gif' /> 回复</a>&nbsp&nbsp|&nbsp&nbsp<a href=\"javascript:InitPage();\">查看全部</a> ";
-            var Row = "<tr id='" + mypk + "'><th style='background-color: #dbe5f1' >" + leftInfo + "<br><br></th><th class=BigDoc colspan='2'>" + msg + "<br/><br/><br/><br/><br/><br/><br/><hr style='height:1px;border:none;border-top:1px dashed blue;' /> " + delLink + "</th></tr>";
-            $("#Table1 tr:last").after(Row);
-            Count();
-        }
 
         function goTop() {
             if (this.location.href.indexOf("#top") == -1) {
@@ -242,33 +217,24 @@
             }
         }
     </script>
-    <div align="center">
+    <div align="center" style="margin-top:20px">
         <a name="top"></a>
-        <table id="Table1" style="width: 100%;">
+        <table id="Table1" style="width: 98%;">
             <tr>
-                <th style="width: 200px;">
-                    资料
-                </th>
-                <th>
-                    信息内容
-                </th>
-                <th style="text-align: right;">
-                    评论总计条数:&nbsp<span style="color: red" id="TB_count" />
-                </th>
+                <th style="width: 20%;" colspan="2"> 资料</th>
+                <th>信息内容 </th>
+                <th style="text-align: right;">评论总计条数:&nbsp<span style="color: red" id="TB_count" /> </th>
             </tr>
         </table>
         <form id="cc" name="cc">
-        <fieldset style="width: 98%;">
-            <textarea rows="3" id="TB_Msg" name="TB_Msg" cols="60">
-</textarea>
-            <br />
-            <input type="button" id="Btn_Save" name="Btn_Save" value="提交评论" onclick="Submit();" />
-            <input type="button" id="Button1" name="Btn_Save" value="清空" onclick="Clear();" />
-        </fieldset>
-        </
+            <div style="width: 98%;">
+                <textarea rows="5" id="TB_Msg" name="TB_Msg" cols="60"></textarea>
+                <br />
+                <input type="button" id="Btn_Save" name="Btn_Save" value="提交评论" onclick="Submit();" />
+                <input type="button" id="Button1" name="Btn_Save" value="清空" onclick="Clear();" />
+            </div>
         </form>
-        <div id="Msg">
-        </div>
+        <div id="Msg"></div>
     </div>
     <div class="side">
         <ul>

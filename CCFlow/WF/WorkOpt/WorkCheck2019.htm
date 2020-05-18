@@ -2,6 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>审核组件</title>
+    <!-- 调用审核组件的问题.
+            0. 把这个审核组件放入到iframe 里面.
+            1. 需要传入 FK_Flow, FK_Node, WorkID, FID 四大参数.
+            2. 执行保存的方法.iframe 内部的 SaveWorkCheck();
+            /*
+            var iframe = document.getElementById("FWC");
+            if (iframe)
+                iframe.contentWindow.SaveWorkCheck();
+            */
+            -->
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
@@ -15,10 +25,10 @@
     <!-- 引入解析 -->
     <script type="text/javascript" src="WorkCheck2019.js?v=11"></script>
     <style type="text/css">
-       .btn {
+        .btn {
             border-radius: 0px !important;
-            color:White !important;
-        } 
+            color: White !important;
+        }
     </style>
 </head>
 <body style="margin: 0;">

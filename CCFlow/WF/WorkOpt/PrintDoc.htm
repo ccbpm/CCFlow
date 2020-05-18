@@ -114,7 +114,8 @@
             }
 
             html += "</ul>";
-            $("#rtf").html(html);
+            $("#rtf").html(html);
+
         }
 
         //打印.
@@ -133,26 +134,27 @@
                 alert(data);
                 return;
             }
-
             //如果是一个url.
             if (data.indexOf('url@') == 0) {
 
                 data = data.replace('url@', '');
-                data = data.replace('rtf@', '').replace('word@', '');
-
-                if (plant == 'CCFlow' && printModal == 1) {
-                    data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
-                }
-               if(plant == "JFlow"){
-                    alert('还没有翻译.');
+                if (data.indexOf('rtf@') != -1) {
+                    window.location.href = data.replace('rtf@', '');
+                } else {
+                    data = data.replace('word@', '');
+                    if (plant == 'CCFlow' && printModal == 1) {
+                        data += "?WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                    }
+                    if (plant == "JFlow") {
+                        alert('还没有翻译.');
+                        return;
+                    }
+                    WinOpen(data);
                     return;
-                }
 
-             
-                WinOpen(data);
-                return;
+                }
             }
-            alert(data);
+            
         }
 
         //取消退回

@@ -11,6 +11,10 @@
 <body>
     <script type="text/javascript">
 
+        var fk_node = GetQueryString("FK_Node");
+        var fk_flow = GetQueryString("FK_Flow");
+        var workid = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
         $(function () {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
@@ -23,19 +27,32 @@
 
             //打包下载.
             if (data.CanPackUp == 1) 
-                html += PackUp();
+                html += PackUp(data.PrintType);
 
            //是否可以删除流程.
            if (data.IsCanDelete==1) 
                html += DeleteFlow();
  
             //增加回滚.
-            if (data.Rollback == "1")
+            if (data.CanRollBack == "1")
                 html += Rollback();
 
             //增加撤销.
             if (data.CanUnSend == "1")
                 html += addUnSend();
+
+            //增加催办.
+            if (data.CanFlowPress == "1")
+                html += addHurry();
+
+            //增加流程结束.
+            if (data.CanFlowOver == "1")
+                html += addFlowOver();
+
+            //调整工天
+            if (data.CanChangCHRole != undefined)
+                html += addCHNode(data.CanChangCHRole);
+
 
             $("#ccop").append(html);
 
@@ -104,11 +121,52 @@
         function addHurry() {
 
             var html = addBlockBegin("工作催办");
-            html += "您没有此权限。";
+             html += "功能执行:<a href =\"javascript:Press('" + fk_flow + "','" + workid + "','" + fid + "')\" >工作催办</a>。";
+            html += addBlockEnd();
+            return html;
+        }
+         //催办.
+        function Press(fk_flow, workid, fid) {
+
+            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+            if (msg == null)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+            handler.AddPara("Msg", msg);
+            var data = handler.DoMethodReturnString("Runing_Press");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data);
+            return;
+        }
+
+        //流程结束
+        function addFlowOver() {
+
+            var html = addBlockBegin("流程结束");
+            html += "功能执行:<a href =\"javascript:FlowOver('" + fk_flow + "','" + workid + "','" + fid + "')\" >流程结束</a>。";
             html += addBlockEnd();
             return html;
         }
 
+        function FlowOver(fk_flow,workid,fid) {
+            if (confirm('您确定要结束流程操作吗 ?') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("WorkID", workid);
+            var data = handler.DoMethodReturnString("MyFlow_StopFlow");
+            alert(data);
+        }
         //撤销发送
         function addUnSend() {
 
@@ -144,15 +202,14 @@
         }
 
         ///增加打印.
-        function PackUp() {
+        function PackUp(printType) {
 
             var fk_node = GetQueryString("FK_Node");
             if (fk_node == null)
                 fk_node = GetQueryString("NodeID");
 
             //如果printType是undefined或者null 就执行打包下载
-            var printType;
-            if (printType == null || printType == undefined) {
+            if (printType == null || printType == undefined || printType==0) {
                 var html = addBlockBegin("打印/打包下载");
                 html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "' >执行打印</a>。";
                 html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";
@@ -216,6 +273,18 @@
 
         function addBlockEnd() {
             return "</td></tr></table>";
+        }
+
+        function addCHNode(data) {
+            var html = addBlockBegin("调整工天");
+            var IsReadOnly = 1;
+            if (data == 1)
+                IsReadOnly = 0;
+
+           html += "功能执行:<a href='../CH.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") +"&FK_Node=" + GetQueryString("FK_Node") + "&IsReadOnly="+IsReadOnly+"' >调整工天</a>。";
+           html += "<br />说明：调整工天，计算工时。";
+
+            return html;
         }
     </script>
     <div id="ccop" style="width: 100%; height: auto">

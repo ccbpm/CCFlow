@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权详细信息</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!--时间-->
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <!-- 导入配置文件. -->
+    <!--<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>-->
+    <!--<script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>-->
+    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Comm/JScript.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
+    <style type="text/css">
+        .ccflow-input-span-container {
+            box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+            border: 0px;
+        }
+
+        .ccflow-input-span-container {
+            line-height: 28px;
+        }
+
+        th {
+            border-width: 1px;
+            border-color: #C2D5E3;
+            border-style: solid;
+            line-height: 25px;
+            color: #0a0a0a;
+            white-space: nowrap;
+            padding: 5px 2px;
+            background-color: #e0ecff;
+            font-size: 14px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: bolder;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var webUser = null;
+        var emp = null;
+        var currPowerFlag = "";
+        var flows = [];
+        var treeFlowName="";
+        $(function () {
+            BindPop();
+            var mtags = $("#TB_Flows");
+            //初始化mtags 
+            mtags.mtags({
+                "fit": true,
+                "onUnselect": function (record) {
+                    //点×时同时删除数组元素
+                    for(var i = 0; i < flows.length; i++) {
+                        if(flows[i].Name == record.Name) {
+                         flows.splice(i, 1);
+                         break;
+                        }
+                       }
+                }
+            });
+            webUser = new WebUser();
+           
+            $('#Btn_Auto').bind('click', function () { BindPop(); $('#selectEmpsModal').modal().show(); });//选择授权人按钮
+
+            var sql = "select No from WF_FlowSort WHERE Name='流程树'";
+            var FK_FlowSort = DBAccess.RunSQLReturnVal(sql);
+            var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F"+FK_FlowSort+"&IsSelectMore=1&treeFlowName="+treeFlowName;
+
+            //设置流程字段的显示与隐藏
+            var select = $("#DDL_AuthorWay").val();
+            if (select == 2) {
+                $("#flowID").show();
+            } else {
+                $("#flowID").hide();
+            }
+
+            $("#DDL_AuthorWay").change(function () {
+                var value = $(this).val();
+                if (value == 2) {
+                    $("#flowID").show();
+                } else {
+                    $("#flowID").hide();
+                }
+            });
+            
+            //流程选择事件
+
+            $("#TB_Flows").bind("dblclick", function () {
+                $("#title").html("选择流程");
+                $('#iframeSelectEmpsForm').attr('src', staUrl);
+                $('#selectEmpsModal').modal().show();
+            });
+
+        });
+
+        //设置选中的人员
+        function selectEmpsWindowClose(data) {
+
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
+            var name = frames["iframeSelectEmpsForm"].window.returnVal.Name;
+            $("#TB_No").val(no);
+            $("#TB_EmpName").val(name);
+        }
+
+        function BindPop() {
+
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
+            //  url = url.replace('101', '10102');
+            url = url.replace('=101&', '=10102&');
+            $('#iframeSelectEmpsForm').attr('src', url);
+        }
+
+
+        //执行保存.
+        function Save() {
+
+            var en = new Entity("BP.WF.Auth");
+
+            en.Auther = webUser.No;
+            en.AuthType = $("#DDL_AuthorWay").val();
+            en.TakeBackDT = $("#TB_DT").val();
+
+            en.EmpNo = $("#TB_No").val();
+            en.EmpName = $("#TB_EmpName").val();
+            if (en.EmpName == "") {
+                alert("请选择要授权的人员！");
+                return;
+            }
+            //判断是否已有全部流程授权
+            var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 1 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT >= '" + en.TakeBackDT + "'";
+            var dt = DBAccess.RunSQLReturnTable(sql); 
+            if (dt.length != 0) {
+                alert("已按全部流程授权！");
+                return;
+            }
+
+            en.RDT = getNowFormatDate();
+            if (en.AuthType == 2) {
+
+                for (var j = 0; j < flows.length; j++) {
+
+                    var flowNo = flows[j].No;
+                    var flowName = flows[j].Name;
+                    en.FlowNo = flowNo;
+                    en.FlowName = flowName;
+                    en.Insert();
+                }
+            } else {
+
+                en.Insert();   
+            }
+            window.location.href = 'Author.htm';
+
+
+        }
+        var flows = [];
+        //设置选中的流程
+        function selectFlowsWindowClose(data) {
+
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            }
+            var returnVal = frames["iframeSelectEmpsForm"].window.returnVal;
+            var powerFlag = currPowerFlag;
+            var recName = returnVal.Name.split(",");
+            for (var i = 0; i < recName.length; i++) {
+                var No = recName[i].split(".")[0];
+                //var Name = recName[i].split(".")[1];
+                flows.push({
+                    "No": No,
+                    "Name": recName[i],
+                });
+            }
+            var mtags = $("#TB_Flows");
+
+            mtags.mtags("loadData", flows);
+            //InitMtags($("#TB_Flows"), powerFlag,0,1);
+
+        }
+        //初始化接收人员列表
+        function InitMtags(mtags, powerFlag, portSta, portEmp) {
+            var powerModels = new Entities("BP.WF.Template.PowerModels");
+            powerModels.Retrieve("Model", "FlowData", "FlowNo", GetQueryString("FK_Flow"));
+            var initJsonData = GetPowerModel(powerFlag, portSta, portEmp, powerModels)
+            mtags.mtags("loadData", initJsonData);
+        }
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                + " " + date.getHours() + seperator2 + date.getMinutes();
+
+            return cdt;
+        }
+
+    </script>
+</head>
+<body onkeypress="Esc()" class="gray-bg">
+    <form id="cc" name="cc">
+        <table style="width: 90%; padding-left: 40px; margin-left: 40px;">
+            <caption style="height:auto;text-indent: 0em;">
+                授权详细信息
+            </caption>
+           
+            <tr>
+                <td>
+                    授权给
+                </td>
+                <td>
+                    <input type="hidden" id="TB_No" name="TB_No" class="form-control" />
+                    <input type="text" id="TB_EmpName" name="TB_EmpName" class="form-control" readonly="readonly" />
+                </td>
+                <td>
+                    <input type="button" value="选择授权人" id="Btn_Auto"  />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    收回授权日期:
+                </td>
+                <td>
+                    <input name="TB_DT" class="Wdate" type="text"  maxlength="20"
+                           id="TB_DT" onfocus="WdatePicker({minDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'});" />
+                </td>
+                <td>
+                    在日期范围内，可以处理授权人的数据。
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    授权方式:
+                </td>
+                <td>
+                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
+                        <option selected="selected" value="0">不授权</option>
+                        <option value="1">全部流程授权</option>
+                        <option value="2">指定流程授权</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+
+            <tr id="flowID">
+                <td>
+                    流程:
+                </td>
+                <td height="45px">
+                    <div id='TB_Flows' data-power=" + model.PowerFlag + " style='width:100%' class='mtags'></div>
+                    <div id='TB_Flows' style='width:100%' class='mtags'></div>
+                    <!--<input class="form-control mtags" type="text" id="TB_Flows" name="TB_Flows" />-->
+                </td>
+                <td>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <input type="button" name="Btn_Save" value="保存" id="Btn_Save"
+                           onclick="Save();" />
+
+                    <input type="button" name="Btn_Sa2ve" value="返回" id="Btn_bACK" 
+                           onclick="javascript: window.location.href = 'Author.htm'"  />
+
+                </td>
+            </tr>
+        </table>
+        <!-- 弹出窗台.. -->
+        <div class="modal fade" id="selectEmpsModal">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 0px; width: 700px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" style="color: white; opacity: 1;" data-dismiss="modal"
+                                aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="title">
+                            选择授权人
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
+                                name="iframeSelectEmpsForm"></iframe>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        </div>
+    </form>
+</body>
+</html>

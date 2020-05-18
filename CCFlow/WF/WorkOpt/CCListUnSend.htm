@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程抄送列表</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+
+    <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .btn {
+            padding: 4px 15px;
+            background-color: #fff;
+            color: #031f5d !important;
+            border-color: currentColor;
+            vertical-align: 2px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <div class="row search-padding">
+                <div class="col-md-4 col-sm-4 pull-left">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type='checkbox' id='CB_CheckAll' class="form-control" onclick="checkAll()"/>全选
+                        </div>
+                        <a href="#" class="btn btn-primary btn-sm" style="margin-left:10px" id="unSend_btn" onclick="UnSendCC()">执行撤销</a>
+                    </div>
+                </div>
+            </div>
+            <table id="Table1" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            工作流程
+                        </th>
+                        <th>
+                            节点
+                        </th>
+                        <th>
+                            状态
+                        </th>
+                        <th>
+                            接收人
+                        </th>
+                        <th>
+                            标题
+                        </th>
+                        <th>
+                            内容
+                        </th>
+                        <th>
+                            日期
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="Rows"></tbody>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //打开默认窗口
+        function WinOpenFull(url) {
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '抄送',
+                area: ['96%', '90%'],
+                content: url
+            });
+        }
+        //页面启动函数.
+        $(function () {
+            var webUser = new WebUser();
+            var ccl = new Entities("BP.WF.Template.CCLists");
+            ccl.Retrieve("WorkID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "Rec", webUser.No);
+            var row = "";
+            for (var i = 0; i < ccl.length; i++) {
+                row += "<tr>";
+                row += "<td><input type='checkbox' id='CB_"+ccl[i].MyPK+"' name='CB_CC' value='"+ccl[i].MyPK+"'/></td>";
+                row += "<td>" + ccl[i].FlowName + "</td>";
+                row += "<td>" + ccl[i].NodeName + "</td>";
+
+                var sta = ""; 
+                switch (ccl[i].WFSta) {
+                    case 0:
+                        sta="运行中"
+                        break;
+                    case 1:
+                        sta="已完成"
+                        break;
+                    default:
+                        sta = "其他";
+                        break;
+                }
+                row += "<td>" + sta + "</td>";
+                row += "<td>" + ccl[i].CCToName + "</td>";
+                row += "<td>" + ccl[i].Title + "</td>";
+                row += "<td>" + ccl[i].Doc + "</td>";
+                row += "<td>" + ccl[i].RDT + "</td>";
+
+                row += "</tr>";
+            }
+            $("#Rows").html(row);
+            return;
+        });
+
+
+        function checkAll() {
+            var checkboxs = $("input[name=CB_CC]");
+            if (document.getElementById("CB_CheckAll").checked == true) {
+                $.each(checkboxs, function (idx, item) {
+                    item.checked = true;
+                });
+        
+            } else {
+                $.each(checkboxs, function (idx, item) {
+                    item.checked = false;
+                });
+            }
+        }
+        function UnSendCC() {
+            var checkboxs = "";
+            $("input:checkbox[name=CB_CC]:checked").each(function (i) {
+
+                //使用循环遍历迭代的方式得到所有被选中的checkbox复选框
+                console.log($(this).val());
+
+                checkboxs += $(this).val() + ",";
+
+            });
+
+            if (checkboxs == "") {
+                alert("选择需要撤销的抄送");
+                return;
+            }
+
+            if (window.confirm('您确定要撤销本次抄送吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData();
+            handler.AddPara("CCPKs", checkboxs.substr(0, checkboxs.length-1));
+            var data = handler.DoMethodReturnString("Runing_UnSendCC");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            window.location.href = window.location.href;
+
+        }
+       
+    </script>
+</body>
+</html>

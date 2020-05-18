@@ -110,6 +110,7 @@
                     var deptNode = {
                         "text": dept.Name,
                         "id": dept.No,
+                        //"state": { disabled: true },
                         "children": true,
                         "data": dept
                     };
@@ -121,6 +122,7 @@
                                 var childDeptNode = {
                                     "text": childDept.Name,
                                     "id": childDept.No,
+                                    //"state": {disabled:true},
                                     "children": true,
                                     "data": childDept
                                 };
@@ -203,7 +205,12 @@
                         }
                     }
                 },
-                "plugins": plugins
+                "plugins": plugins,
+                "checkbox": {
+                    "keep_selected_style": false,//是否默认选中
+                    "three_state": true,//父子级别级联选择
+                    "tie_selection": true
+                },
             }).on('changed.jstree', function (node, cb) {
                 GetSelectedEmpsReturnVal();
             }).bind("loaded.jstree", function (event, data) {
@@ -231,17 +238,22 @@
                     alert("已到第一级机构");
                     return;
                 }
-
-                //判断最高级别.
-                var user = new WebUser();
-                if (user.CustomerNo == 'TianYe') {
-                    if (user.FK_Dept.indexOf('18099') == 0) {
-                        if (pageData.ParentDept.indexOf('18099') != 0) {
-                            alert('已经是最高级别了.');
-                            return;
-                        }
-                    }
+                 var webUser = new WebUser();
+                // SAAS模式下，限制只可以看到OrgNo级别
+                if (webUser.CCBPMRunModel != 0 && pageData.ParentDept == 100) {
+                    alert("已到第一级机构");
+                    return;
                 }
+                //判断最高级别.
+                //var user = new WebUser();
+                //if (user.CustomerNo == 'TianYe') {
+                //    if (user.FK_Dept.indexOf('18099') == 0) {
+                //        if (pageData.ParentDept.indexOf('18099') != 0) {
+                //            alert('已经是最高级别了.');
+                //            return;
+                //        }
+                //    }
+                //}
 
                 pageData.FK_Dept = pageData.ParentDept;
 
@@ -282,15 +294,35 @@
                 returnVal[property] = returnVal[property].join(",");
             }
         }
+
+        function Search() {
+            var keyVal = $("#TB_Key").val();
+            if (keyVal == "")
+                return;
+            //根据输入的部门编号或者名称获取部门信息
+            var ens = new Entities("BP.Port.Depts");
+            ens.RetrieveCond("No,Name", "like", '%'+keyVal+'%');
+           
+            //查询到的部门节点就展开
+            var $jstree = $('#OrgJSTree').jstree(true);
+            for (var i = 0; i < ens.length; i++) {
+                $jstree.open_node($jstree.get_node(ens[i].No));
+                
+            }
+
+        }
     </script>
 </head>
 <body>
-    <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
-        id="toPrevDept" />
-    <input type="button" onclick="SelectEmps()" value="确定" />
+    <div style="text-align:right">
+        <input type="button" value="上一级" id="toPrevDept" />
+        <input type="button" onclick="Close()" value="取消" />
+        <input type="button" onclick="SelectEmps()" value="确定" />
+    </div>
+   
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
-    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
-        value="确定" />
+    <!--<input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
+                                                               value="确定" />-->
 </body>
 </html>

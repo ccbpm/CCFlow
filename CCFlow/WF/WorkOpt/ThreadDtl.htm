@@ -4,12 +4,12 @@
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
     <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
@@ -18,6 +18,7 @@
         var node = null; //公共变量.
 
         $(function () {
+
             //   alert(html);
             $("#Msg").html('正在加载，请稍候...');
 
@@ -26,9 +27,106 @@
 
             node = new Entity("BP.WF.Node", nodeID);
 
+            //子线程流程引擎注册表.
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
             gwfs.Retrieve("FID", workID);
 
+            //工作人员表.
+            var gwls = new Entities("BP.WF.GenerWorkerLists");
+            gwls.Retrieve("FID", workID);
+
+            //获得子线节点的数量,如果1个，就用单独列表的模式展现，多个就用多列表模式展现.
+            var numOfSubNods = 0;
+            var numOfSubNodsStrs = "";
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+
+                if (numOfSubNodsStrs.indexOf(gwl.FK_Node) == -1) {
+                    numOfSubNodsStrs += gwl.FK_Node + ",";
+                    numOfSubNods++;
+                }
+            }
+
+            //只有一个子线程，就是用列表模式.
+            if (numOfSubNods == 1) {
+                BindModelOne(gwfs, gwls);
+            } else {
+                //使用分组列表的模式.
+                BindModelMore(gwfs, gwls);
+            }
+        })
+
+        function BindModelOne(gwfs, gwls) {
+
+            var strs = "<table style='width:100%;'>";
+            strs += "<caption>子线程信息</caption>";
+            strs += "<tr>";
+            strs += "<th>序</th>";
+            strs += "<th>节点</th>";
+            strs += "<th>处理人</th>";
+            strs += "<th>状态</th>";
+            strs += "<th>应完成日期</th>";
+            strs += "<th>实际完成日期</th>";
+            strs += "<th>表单</th>";
+            if (node.ThreadKillRole == 1)
+                strs += "<th>终止</th>";
+            strs += "<th>操作</th>";
+            strs += "</tr>";
+
+            var idx = 0;
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+                idx++;
+                strs += "<tr>";
+                strs += "<td class=Idx >" + idx + "</td>";
+                strs += "<td>" + gwl.FK_NodeText + "</td>";
+
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+
+                var openStr = "";
+                if (gwl.IsPass == 1) {
+
+                    strs += "<td>已完成</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>" + gwl.RDT + "</td>";
+                    openStr += "<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a>";
+
+                } else {
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未读 </td>";
+                    else
+                        strs += "<td> 已读,未处理 </td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>无</td>";
+                }
+
+                strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">表单</a></td>";
+
+
+                if (node.ThreadKillRole == 1)
+                    strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a></td>";
+
+                strs += "<td>" + openStr + "</td>";
+
+                strs += "<tr>";
+            }
+
+            strs += "</table>";
+
+            $("#Msg").html(strs);
+
+        }
+
+        function BindModelMore(gwfs, gwls) {
+
+            //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
             var html = "<table style='width:100%;' >";
             html += "<caption>子线程信息</caption>";
             html += "<tr>";
@@ -51,65 +149,69 @@
                 html += "<td>" + gwf.RDT + "</td>";
                 html += "</tr>";
 
-
                 html += "<tr>";
-                html += "<td colspan=5 > " + GenerHtml(gwf) + " </td>";
+                html += "<td colspan=5 > " + GenerHtml(gwf, gwls) + " </td>";
                 html += "</tr>";
             }
 
             $("#Msg").html(html);
+        }
 
-        })
-
-        function GenerHtml(gwf) {
-
-            //该子线程下面的 generworkerlist.
-            var gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", gwf.WorkID, "IsEnable", 1);
+        function GenerHtml(gwf, gwls) {
 
             var strs = "<table style='width:100%;'>";
 
-            strs += "<tr >";
+            strs += "<tr>";
             strs += "<td>序</td>";
             strs += "<td>节点</td>";
             strs += "<td>处理人</td>";
-            strs += "<td>名称</td>";
+            // strs += "<td>名称</td>";
             strs += "<td>状态</td>";
             strs += "<td>应完成日期</td>";
             strs += "<td>实际完成日期</td>";
-            strs += "<td></td>";
+            strs += "<td>操作</td>";
             strs += "</tr>";
 
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
 
+                if (gwl.WorkID != gwf.WorkID)
+                    continue;
+
+                if (gwl.IsPass == -2)
+                    continue; //这个节点是干流程发起的人员.
+
                 strs += "<tr>";
                 strs += "<td>" + i + "</td>";
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
-                strs += "<td>" + gwl.FK_Emp + "</td>";
-                strs += "<td>" + gwl.FK_EmpText + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+                var openStr = "";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">表单</a>";
 
                 if (gwl.IsPass == 1) {
 
                     strs += "<td>已完成</td>";
                     strs += "<td>" + gwl.SDT + "</td>";
                     strs += "<td>" + gwl.RDT + "</td>";
-
-                    if (node.ThreadKillRole == 1)
-                        strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a></td>";
-                    else
-                        strs += "<td>无</td>";
+                    openStr += "-<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a>";
 
                 } else {
 
-                    strs += "<td>未完成</td>";
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未读 </td>";
+                    else
+                        strs += "<td> 已读,未处理 </td>";
                     strs += "<td>" + gwl.SDT + "</td>";
                     strs += "<td>无</td>";
-
-                    strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">打开表单</a>";
-                    strs += " - <a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a></td>";
                 }
+
+                if (node.ThreadKillRole == 1)
+                    openStr += "-<a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a>";
+
+                strs += "<td>" + openStr + "</td>";
+
                 strs += "<tr>";
             }
 
@@ -171,11 +273,11 @@
 </head>
 <body>
     <form id="cc">
-    <center>
-        <div id="Msg">
-            <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
-        </div>
-    </center>
+        <center>
+            <div id="Msg">
+                <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
+            </div>
+        </center>
     </form>
 </body>
 </html>

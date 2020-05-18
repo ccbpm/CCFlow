@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
@@ -96,6 +96,7 @@
 
 
             //遍历子流程配置。
+            var pworkID = GetQueryString("WorkID");
             for (var i = 0; i < subFlows.length; i++) {
 
                 var subFlow = subFlows[i];
@@ -103,7 +104,7 @@
                 if (sf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View") {
 
                     if (subFlow.SubFlowModel == 0 || subFlow.SubFlowModel == null) { //下级子流程.
-                        tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                        tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?IsStartSameLevelFlow=0&FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
                     }
 
                     if (subFlow.SubFlowModel == 1) { //平级子流程.
@@ -115,7 +116,9 @@
                         if (gwf.PWorkID == 0) {
                             tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>为子流程的时候才能启动(" + subFlow.SubFlowName + ")]</style>";
                         } else {
-                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                            pworkID = gwf.PWorkID;
+                            //传递启动该子流程的流程的信息 IsSameLevel = 1;SLWorkID=workId 
+                            tdHtml = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "&IsStartSameLevelFlow=1&SLWorkID=" + workID + "&SLNodeID=" + nodeID + "&SLFlowNo=" + flowNo +"')\"  >" + sf.SFCaption + "</a>]</style>";
                         }
                     }
                 }
@@ -130,14 +133,18 @@
                 //该流程的子流程信息.
                 var gwfs = new Entities("BP.WF.GenerWorkFlows");
                 if (sf.SFShowCtrl == SFShowCtrl.All)
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.SubFlowNo); //流程.          
+                    gwfs.Retrieve("PWorkID", pworkID, "FK_Flow", subFlow.SubFlowNo); //流程.          
                 else
-                    gwfs.Retrieve("PWorkID", GetQueryString("WorkID"), "FK_Flow", subFlow.SubFlowNo, "Starter", webUser.No); //流程.
+                    gwfs.Retrieve("PWorkID", pworkID, "FK_Flow", subFlow.SubFlowNo, "Starter", webUser.No); //流程.
 
                 for (var j = 0; j < gwfs.length; j++) {
 
                     var item = gwfs[j];
                     if (item.WFState == 0)
+                        continue;
+                    //平级子流程，获取平级的workID
+                    var slWorkID = GetPara(item.AtPara, "SLWorkID");
+                    if (slWorkID != null && slWorkID != undefined && slWorkID != GetQueryString("WorkID"))
                         continue;
 
                     html += "<tr>";
@@ -325,6 +332,14 @@
         function OpenIt(url) {
             var newWindow = window.open(url, 'card', 'width=700,top=50,left=50,height=500,scrollbars=yes,resizable=yes,toolbar=false,location=false');
             newWindow.focus();
+            var loop = setInterval(function(){
+　　　　        if(newWindow.closed){
+　　　　　　        clearInterval(loop);
+　　　　　　        parent.location.reload();
+
+　　　　        }
+
+　　        },1);
             return;
         }
     </script>

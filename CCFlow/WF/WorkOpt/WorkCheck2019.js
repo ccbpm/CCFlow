@@ -14,16 +14,6 @@ var workid = GetQueryString("WorkID");
 var fid = GetQueryString("FID");
 
 var isCanSend = true; //是否可以发送？
-
-//是否是手机端.
-var isMobile = GetQueryString("IsMobile");
-
-//是否只读？
-var isReadonly = GetQueryString("isReadonly");
-if (isReadonly != "1")
-    isReadonly = "0";
-
-var enName = GetQueryString("EnName");
 var isChange = false;
 
 $(function () {
@@ -67,7 +57,7 @@ function InitPage() {
             return true;
         }
 
-        var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
+        var fwcs = new Entities("BP.WF.Template.NodeWorkChecks");
         fwcs.Retrieve("NodeID", this.NodeID);
 
         if (fwcs[0].FWCSta == 2)
@@ -84,8 +74,14 @@ function InitPage() {
         html += nodeName;
         html += "</td>";
         html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
+        //获取自定义常用短语
+        var DuanYu = fwcs[0].FWCNewDuanYu;
+        if (DuanYu != null && DuanYu != undefined) {
 
-
+            var NewDuanYu = DuanYu.split("@");
+        } else {
+            var NewDuanYu = "";
+        }
         //当前节点审核意见可编辑
         if (this.IsDoc == "1" && isReadonly == false) {
 
@@ -111,14 +107,26 @@ function InitPage() {
             html += "<br>";
             html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
             html += "<option value=''>常用短语</option>";
-            html += "<option value='同意'>同意</option>";
-            html += "<option value='同意办理'>同意办理</option>";
-            html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-            html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-            html += "<option value='不同意'>不同意</option>";
-            html += "</select><font color=Gray>内容不要超过2000字</font>";
-            html += "</div>";
+            if (NewDuanYu.length > 0) {
+
+                for (var i = 0; i < NewDuanYu.length; i++) {
+                    if (NewDuanYu[i] == "") {
+                        continue;
+                    }
+                    html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
+                }
+            } else {
+
+                html += "<option value='同意'>同意</option>";
+                html += "<option value='同意办理'>同意办理</option>";
+                html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+                html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+                html += "<option value='不同意'>不同意</option>";
+            }
             
+            html += "</select>";
+            html += "</div>";
+
             //加入立场判断
             if (wcDesc.FWCView != null && wcDesc.FWCView != "" && wcDesc.FWCView != undefined) {
                 var fwcView = "";
@@ -135,7 +143,7 @@ function InitPage() {
                 }
 
                 var str = wcDesc.FWCView.split(",");
-                html +="<br>";
+                html += "<br>";
                 html += "立场:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 var idx = 0;
                 for (var i = 0; i < str.length; i++) {
@@ -146,10 +154,10 @@ function InitPage() {
                         check = "checked = checked";
                     else if (fwcView == "" && idx == 0)
                         check = "checked = checked";
-                    html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check +" onclick='SaveWorkCheck()' value='"+idx+"'/>" + str[i] +"&nbsp;&nbsp;&nbsp;";
+                    html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
                     idx++;
                 }
-               
+
             }
             html += "</td>";
             html += '</tr>';
@@ -157,10 +165,10 @@ function InitPage() {
         } else {
             var returnMsg = this.ActionType == 2 ? "退回原因：" : "";
             var val = this.Msg.split("WorkCheck@");
-            if(val.length==2)
+            if (val.length == 2)
                 this.Msg = val[1];
 
-           
+
             html += '<font color=green>' + returnMsg + this.Msg + '</font>';
             //加入立场判断
             if (this.FWCView != null && this.FWCView != "" && this.FWCView != undefined) {
@@ -323,7 +331,6 @@ function InitPage() {
         else
             AddUploafFileHtm("uploaddiv");
     }
-
 }
 
 
@@ -430,7 +437,6 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
     }
 
     return html;
-
 }
 function SetDocVal() {
 
@@ -444,10 +450,12 @@ function SetDocVal() {
 
 }
 function setIframeHeight() {
-    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height()+40);
+    $("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height() + 40);
 }
 
 function SaveWorkCheck() {
+    if ($("#WorkCheck_Doc").length == 0)//审核组件只读
+        return;
 
     var doc = $("#WorkCheck_Doc").val();
     var fwcView = $('input:radio[name="RB_FWCView"]:checked').val();
@@ -564,7 +572,7 @@ function GetUserSiganture(userNo, userName) {
         return userName;
     }
     else {
-        return "<img src='../../DataUser/Siganture/" + userNo + ".png?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.png'\" />";
+        return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.jpg'\" />";
     }
 
 }
@@ -602,7 +610,7 @@ function GetSubAths(nd) {
 function GetAthHtml(ath) {
     var html = "<div id='Ath_" + ath.MyPK + "' style='margin:5px; display:inline-block;'>";
 
-    if (ath.CanDelete=="1" || ath.CanDelete==true) {
+    if (ath.CanDelete == "1" || ath.CanDelete == true) {
         html += "<img alt='删除' align='middle' src='../Img/Btn/Delete.gif' onclick=\"DelWorkCheckAth('" + ath.MyPK + "')\" />&nbsp;&nbsp;";
     }
 
@@ -627,13 +635,13 @@ function AddUploadify(divid) {
         else {
             var currentPath = window.document.location.href;
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-            url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + nodeid + "_FrmWorkCheck&FK_Flow=" + fk_flow + "&PKVal=" + workid+"&FK_Node="+GetQueryString("FK_Node");
+            url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + nodeid + "_FrmWorkCheck&FK_Flow=" + fk_flow + "&PKVal=" + workid + "&FK_Node=" + GetQueryString("FK_Node");
         }
 
 
         $('#file_upload').uploadify({
             'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf',
-            'uploader':url,
+            'uploader': url,
             'auto': true,
             'fileTypeDesc': '请选择上传文件',
             'buttonText': '上传附件',
@@ -657,7 +665,7 @@ function AddUploadify(divid) {
 
 function AddUploafFileHtm(divid) {
     if ($("#file_upload").length == 0) {
-        var html ="<div id='s' style='float:right;margin-right:10px;margin-top:5px;' >"
+        var html = "<div id='s' style='float:right;margin-right:10px;margin-top:5px;' >"
             + "<label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' onchange='UploadChange();' ><span>文件上传</span></label>"
             + "</div>";
 
@@ -673,11 +681,11 @@ function UploadChange() {
     }
     var fileName = fileObj.name;
 
-//            
-//        if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
-//            alert("上传附件类型不正确，只能上传" + realFileExts);
-//            return;
-//        }
+    //            
+    //        if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.'))) == -1) {
+    //            alert("上传附件类型不正确，只能上传" + realFileExts);
+    //            return;
+    //        }
 
     //form表单序列话
     var parasData = $("form").serialize();
@@ -694,7 +702,7 @@ function UploadChange() {
     var name = $("input").val();
     formData.append("file", fileObj);
     formData.append("name", name);
-    var AttachPK = "ND"+ GetQueryString("FK_Node")+ "_FrmWorkCheck" ;
+    var AttachPK = "ND" + GetQueryString("FK_Node") + "_FrmWorkCheck";
     var Url = "";
     var doMethod = "MoreAttach";
     var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
@@ -754,14 +762,14 @@ function GetNewUploadedAths(files) {
         FK_Node: nodeid,
         WorkID: workid
     };
-    var Names ="|";
+    var Names = "|";
     for (var field in files) {
         Names += files[field].name + "|";
     }
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddPara("Names", Names);
-    handler.AddPara("AttachPK", "ND"+nodeid + "_FrmWorkCheck");
+    handler.AddPara("AttachPK", "ND" + nodeid + "_FrmWorkCheck");
     handler.AddPara("FK_Flow", fk_flow);
     handler.AddPara("FK_Node", nodeid);
     handler.AddPara("WorkID", workid);

@@ -13,12 +13,12 @@
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
 
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <link href="../../DataUser/Style/Table0.css" rel="Stylesheet" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
@@ -71,8 +71,10 @@
     </style>
     <script type="text/javascript">
         var param = {};
+        var webUser;
+        var huiQianType = GetQueryString("HuiQianType");
         $(function () {
-
+            webUser = new WebUser();
             Help();
 
             //初始化页面移交页面
@@ -80,11 +82,9 @@
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
                 FID: GetQueryString('FID'),
-                Message: GetQueryString('Info'),
                 FK_Flow: GetQueryString("FK_Flow")
             };
 
-            $('#Msg').val(param.Message);
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
@@ -112,12 +112,10 @@
                 dept = u.FK_Dept;
             }
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);
             $('#Btn_SelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
-            //$("section").show();
             $(".Msg").hide();
 
             //执行数据初始化工作.
@@ -129,17 +127,37 @@
                 return;
             }
 
-            var gwls = JSON.parse(data);
-            BindTable(gwls);
+            var data = JSON.parse(data);
+            BindTable(data);
 
         });
 
-        function BindTable(gwls) {
-
+        function BindTable(data) {
+           //判断当前节点是否是第二组长
+            var gwls = data.WF_GenerWorkList;
+            var myGwl = data.My_GenerWorkList[0];
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
+                var zhuChiRen = GetPara(gwl.AtPara, "HuiQianZhuChiRen");
+                var addLeader = GetPara(gwl.AtPara, "HuiQianType");
+                if (gwl.FK_Emp != webUser.No) { //相同即为主持人
+                    if (zhuChiRen != null && zhuChiRen != undefined && zhuChiRen!= webUser.No)
+                    continue;
 
+                   //获取增加组长的信息
+                    if (huiQianType != null && huiQianType != undefined && huiQianType == "AddLeader") {
+                        if (addLeader == null || addLeader != "AddLeader")
+                            continue;
+                    } else {
+                        if (addLeader != null && addLeader == "AddLeader")
+                            continue;
+                    }
+
+                    if (GetPara(myGwl.AtPara, "HuiQianZhuChiRen") == gwl.FK_Emp)
+                        continue;
+                }
+            
                 var row = "";
                 row += "<tr>";
                 // row += "<td>" + i + "</td>";
@@ -151,28 +169,57 @@
                     row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
                 }
 
-                if (gwl.IsPass == 0 ) {
-                    row += "<td>未审批</td>";
-                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                if (gwl.IsPass == 0) {
+                    if (gwl.FK_Emp == webUser.No) {
+                        row += "<td>主持人/未审批</td>";
+                        row += "<td></td>";
+                    }
+                    else {
+                        row += "<td>未审批</td>";
+                        row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                    }
+                      
                 }
 
-                //当前是主持人
+                
+
+                //当前是主持人这个是协作模式处理
                 if (gwl.IsPass == 100) {
                     row += "<td>主持人/未审批</td>";
+                    row += "<td></td>";
+                }
+                if (gwl.IsPass == 1001) {
+                    row += "<td>主持人/已审批</td>";
+                    row += "<td></td>";
+                }
+
+                //当前是组长模式处理，并且是主持人
+                if (gwl.IsPass == 90 ) {
+                    row += "<td><font color=green>主持人（自己）/未审批</font></td>";
                     row += "<td></td>";
                 }
 
                 //当前自己
                 if (gwl.IsPass == 99) {
-                    row += "<td>您自己</td>";
+                    row += "<td>主持人/未审批</td>";
+                    row += "<td></td>";
+                }
+
+                //当前自己
+                if (gwl.IsPass == 9901) {
+                    row += "<td>主持人（您自己）/已审批</td>";
                     row += "<td></td>";
                 }
 
                 if (gwl.IsPass == 1) {
-                    row += "<td>已审批</td>";
+                    if (gwl.FK_Emp == webUser.No) 
+                          row += "<td>已审批</td>";
+                    else
+                        row += "<td>已审批</td>";
                     row += "<td></td>";
                 }
 
+             
                 row += "</tr>";
 
                 //$("#Table1 tr:last").after(row);
@@ -210,6 +257,7 @@
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             hand.AddUrlData();
             hand.AddPara("AddEmps", emps);
+             hand.AddPara("HuiQianType", huiQianType);
             var data = hand.DoMethodReturnString("HuiQian_AddEmps");
 
             if (data.indexOf('err@') == 0) {
@@ -235,8 +283,26 @@
             $("#Btn_HuiQian").attr("disabled", "disabled");
             $("#Btn_HuiQian").val("执行中...");
             $("#Btn_SelectEmps").attr("disabled", "disabled");
+            var trs = $("tbody tr");
+            var flag = true;
+            if (trs.length >= 2) {
+                $.each(trs, function (i, tr) {
+                    if (tr.innerHTML.indexOf("新增") > 0) {
 
+                        flag = false;
+                        return;
+                    };
+                    
+                })
+                if (flag) {
+                    alert("表中会签人已审批，请选择新的会签人再发送！");
+                    $("#Btn_HuiQian").attr("disabled", false);
+                    $("#Btn_HuiQian").val("执行会签");
+                    $("#Btn_SelectEmps").attr("disabled", false);
+                    return;
+                }
 
+            }
             //执行数据初始化工作.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             hand.AddUrlData();
@@ -285,6 +351,41 @@
             }
 
             alert(data);
+            window.close();
+            return;
+        }
+
+        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
+        function AddLeader() {
+            $("#Btn_HuiQian").attr("disabled", "disabled");
+            $("#Btn_HuiQian").val("执行中...");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+            var trs = $("tbody tr");
+            var flag = true;
+            if (trs.length >= 2) {
+                $.each(trs, function (i, tr) {
+                    if (tr.innerHTML.indexOf("新增") > 0) {
+
+                        flag = false;
+                        return;
+                    };
+                    
+                })
+                if (flag) {
+                    alert("表中会签人已审批，请选择新的会签人再发送！");
+                    $("#Btn_HuiQian").attr("disabled", false);
+                    $("#Btn_HuiQian").val("执行会签");
+                    $("#Btn_SelectEmps").attr("disabled", false);
+                    return;
+                }
+
+            }
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            var data = hand.DoMethodReturnString("HuiQian_AddLeader");
+            alert(data);
+             window.location.href = window.location.href;
             window.close();
             return;
         }
@@ -395,15 +496,9 @@
         }
 
         $(function () {
-
-            //  $("#TB_Emps").plac
             //人员选择
             $("#TB_Emps").bind('input propertychange', function () {
-
-               
                 if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
-                    //alert("输入内容为空！");
-                    //return;
                     $("#SelectEmp").hide().html("");
                     return;
                 }
@@ -412,25 +507,30 @@
                 var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
                 hand.AddUrlData();
                 hand.AddPara("TB_Emps", $("#TB_Emps").val());
+                hand.AddPara("HuiQianType", huiQianType);
                 var data = hand.DoMethodReturnString("HuiQian_SelectEmps");
                 if (data.indexOf('err@') == 0) {
                     alert(data);
                     return;
                 }
 
-                //SelectEmp
-                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
-
                 data = JSON.parse(data);
-                //$("#SelectEmp").hide().html("");
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
-                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
                     html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                 }
                 $("#SelectEmp").show().html(html);
                 
             });
+
+            //如果是加主持人，变更按钮名称
+            var huiQianType = GetQueryString("HuiQianType");
+            if (huiQianType != null && huiQianType != undefined && huiQianType == "AddLeader") {
+                 $("#Btn_HuiQian").html("增加主持人");
+                $("#Btn_HuiQian").attr("onclick", "AddLeader()");
+            }
+               
+
         });
 
         function selectAdd(No) {
@@ -481,16 +581,18 @@
             </div>
             <br />
             <div id="next">
-                <input type="button" id="Btn_HuiQian" value="执行会签" onclick="SaveAndClose();" />
-                <img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>
+
+                <img src="../Img/Multiplayer.png" onclick="SaveAndClose();" style="width:27px;" />
+                <button id="Btn_HuiQian" class="btn-info" onclick="SaveAndClose();">执行会签</button>
+                <span style="color:red">点击此按钮执行会签</span>
                 <div id="HelpInfo" style="">
                     <ul>
                         1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
                         <br />2、点击“保存会签人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。
-                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。 
+                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。
                         <br />4、可以使用人员名称拼音，支持全拼和简拼。
-                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
-                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
                     </ul>
                 </div>
             </div>

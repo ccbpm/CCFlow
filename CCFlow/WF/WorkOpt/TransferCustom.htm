@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>驰骋工作流</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -15,13 +16,17 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
     <style type="text/css">
+        *{
+            margin:0px;
+            padding:0px;
+        }
         .ccflow-input-span-container {
             border: 0;
         }
@@ -45,13 +50,13 @@
         var currSelectNode = "";
         $(function () {
 
-            var html = "<table style='width:100%;' >";
+            var html = "<table class='table table-hover table-bordered' style='width:100%;' >";
             html += "<tr>";
             html += "<th width='5%'>步骤</th>";
             html += "<th width='*'>节点</th>";
             html += "<th width='50%'>处理人</th>";
-            html += "<th width='15%'>应完成时间</th>";
-            html += "<th width='100px'>操作</th>";
+            //html += "<th width='15%'>应完成时间</th>";
+            html += "<th width='200px'>操作</th>";
             html += "</tr>";
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
@@ -67,11 +72,10 @@
                 var gwl = gwls[i];
 
                 html += "<tr>";
-                html += "<td>" + gwl.FK_Node + " </td>";
-                html += "<td>" + gwl.FK_NodeText + " </td>";
-                html += "<td>" + gwl.FK_EmpText + " </td>";
-                html += "<td></td>";
-                html += "<td>无</td>";
+                html += "<td >" + gwl.FK_Node + " </td>";
+                html += "<td >" + gwl.FK_NodeText + " </td>";
+                html += "<td >" + gwl.FK_EmpText + " </td>";
+                html += "<td >无</td>";
                 html += "</tr>";
             }
 
@@ -90,13 +94,13 @@
                 //处理接收人的事件
                 html += "<div id='" + tc.FK_Node + "_mtags' style='width:99%'  class='mtags'></div>";
                 html += " </td>";
-                if (tc.PlanDT != null && tc.PlanDT != "") {
-                    IsShowSave = true;
-                    html += "<td><input type='text' id='"+tc.MyPK+"' name='CHTime' value='" + tc.PlanDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
-                } else {
-                    html += "<td></td>";
-                }
-                html += "<td>[<a href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>][<a href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>][<a href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a>]</td>";
+                //if (tc.PlanDT != null && tc.PlanDT != "") {
+                //    IsShowSave = true;
+                //    html += "<td><input type='text' id='"+tc.MyPK+"' name='CHTime' value='" + tc.PlanDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
+                //} else {
+                //    html += "<td></td>";
+                //}
+                html += "<td style='text-align:center; line-height:50%;  padding:3px;'><a class='btn btn-default'; href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>&nbsp&nbsp&nbsp&nbsp<a class='btn btn-default'; href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>&nbsp&nbsp&nbsp&nbsp<a class='btn btn-default'; href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a></td>";
                 html += "</tr>";
             }
 
@@ -111,9 +115,8 @@
                 html += "<td>" + tc.FK_Node + " </td>";
                 html += "<td>" + tc.NodeName + " </td>";
                 html += "<td>" + tc.WorkerName + " </td>";
-                html += "<td></td>";
 
-                html += "<td>[<a href=\"javascript:Add('" + tc.MyPK + "');\">增加</a>]</td>";
+                html += "<td>[<a class='btn btn-default' href=\"javascript:Add('" + tc.MyPK + "');\">增加</a>]</td>";
                 html += "</tr>";
             }
 
@@ -240,7 +243,12 @@
             window.location.href = window.location.href;
         }
         function Remove(myPK) {
-
+            var ens = new Entities("BP.WF.TransferCustoms");
+            ens.Retrieve("WorkID", GetQueryString("WorkID"), "IsEnable", 1);
+            if (ens.length == 1) {
+                alert("流转自定义必须选择一个游离态节点，当前只有一个游离态节点不能移除");
+                return;
+            }
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.IsEnable = 0;
             en.Update();
@@ -255,7 +263,7 @@
             $.each(tfs, function (i, obj) {
                 var id = obj.id;
                 if (obj.value == "") {
-                    alert("节点" + id.replace("_" + workId,"") + "不能为空");
+                    alert("节点" + id.replace("_" + workId, "") + "不能为空");
                     return;
                 }
                 var en = new Entity("BP.WF.TransferCustom");
@@ -264,7 +272,7 @@
                 en.MyPK = id;
                 en.PlanDT = obj.value;
                 en.Save();
-                    
+
             });
 
         }
@@ -272,32 +280,25 @@
 </head>
 <body>
     <form id="cc">
-    <center>
-        <table style="width: 90%;">
-            <caption>
-                流转设置
-            </caption>
-            <tr>
-                <td>
-                    <div id="docs" name="docs" style="width: 100%">
-                    </div>
-                </td>
-            </tr>
-            <tr id="IsShowSave" style="display:none">
-                <td colspan="4">
-                    <input type="button" value="保存" onclick="Save()" />
-                    
-                </td>
-            </tr>
+        <center>
+            <h3>流转设置</h3>
+            <table style="width: 90%;">
 
-        </table>
-    </center>
+                <tr style="margin-top:20px;">
+                    <td>
+                        <div id="docs" name="docs" style="width: 100%">
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </center>
     </form>
     <div class="modal fade" id="SelectEmpsModal">
         <div class="modal-dialog">
-            <div class="modal-content" style="border-radius: 0px; width: 700px;">
+            <div class="modal-content" style="border-radius: 0px; width:100%;">
                 <div class="modal-header">
-                    <button type="button" class="close" style="color: #0000007a; opacity: 1;" data-dismiss="modal"
+                    <button type="button" class="close" style="color: #000; opacity: 1;" data-dismiss="modal"
                         aria-hidden="true">
                         &times;</button>
                     <h4 class="modal-title">
@@ -309,10 +310,8 @@
                 </div>
             </div>
             <!-- /.modal-content -->
-            '
         </div>
         <!-- /.modal-dialog -->
-        '
     </div>
 </body>
 </html>

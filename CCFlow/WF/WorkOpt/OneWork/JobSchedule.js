@@ -1,12 +1,19 @@
-﻿
+﻿var StarStepNum = 0;
 var step = 0;
 $(function () {
 
+    var v = $("#JobSchedule");
+    if (v == null || v == undefined)
+        return;
+
     var workid = GetQueryString("WorkID");
+	var oid = GetQueryString("OID");
+    if (workid==null) {
+        workid = oid;
+    }
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
     handler.AddPara("WorkID", workid);
     var ds = handler.DoMethodReturnJSON("JobSchedule_Init");
-    // console.log(ds);
     var gwf = ds["WF_GenerWorkFlow"][0]; //工作记录.
     var nodes = ds["WF_Node"]; //节点.
     var dirs = ds["WF_Direction"]; //连接线.
@@ -14,8 +21,6 @@ $(function () {
 
     var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
     html += "<tr>";
-
-    //debugger;
 
     var step = 0;
     //循环历史记录, 生成唯一的节点连续字符串比如 101,102,103
@@ -92,7 +97,7 @@ $(function () {
             if (nextNode == 0)
                 var info = GenerIcon("DotEnd", step, doc, true, nodeName);
             else
-                var info = GenerIcon("DotEnd", step, doc, false, nodeName);
+                var info = GenerIcon("DotEnd", step + StarStepNum, doc, false, nodeName);
 
             html += "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 
@@ -122,12 +127,14 @@ function GenerMNode(tracks, nodeID, gwf) {
     var info = "<ul>";
 
     var emps = "";
+    var track;
     for (var i = 0; i < tracks.length; i++) {
 
         var tk = tracks[i];
       //  debugger
         if (tk.FK_Node != nodeID) continue;
         if (emps.indexOf(tk.EmpNo + ',') >= 0) continue; //已经出现的，就不处理了.
+        track = tk;
 
         emps += tk.EmpNo + ",";
 
@@ -139,11 +146,13 @@ function GenerMNode(tracks, nodeID, gwf) {
         }
     }
     info += "</ul>";
-
-    if (tk.FK_Node == gwf.FK_Node)
-        info = GenerIcon("DotGreen", step, info, false, tk.NodeName);
-    else
-        info = GenerIcon("DotBlue", step, info, false, tk.NodeName);
+    if(track != null && track != undefined) {
+        if (track.FK_Node == gwf.FK_Node)
+            info = GenerIcon("DotGreen", step, info, false, track.NodeName);
+        else
+            info = GenerIcon("DotBlue", step, info, false, track.NodeName);
+    }
+   
 
     return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
 
@@ -170,10 +179,10 @@ function GenerSingerNode(tracks, nodeID, gwf) {
 
         var info = "";
         if (tk.FK_Node == gwf.FK_Node)
-            info = GenerIcon("DotGreen", i + 1, doc, false, tk.NodeName);
+            info = GenerIcon("DotGreen", step, doc, false, tk.NodeName);
         else
-            info = GenerIcon("DotBlue", i + 1, doc, false, tk.NodeName);
-
+            info = GenerIcon("DotBlue", step, doc, false, tk.NodeName);
+        StarStepNum = step;
         return "<td style='text-align:center;vertical-align:top;'>" + info + "</td>";
     }
 }
@@ -197,9 +206,6 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
 
         barUrlRight = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
         barUrlLeft = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/BarGreen.png' style='width:100%;margin-right:0px;margin-left:0px;padding-left:0px;padding-right:0px;' />";
-
-        if (step == 1)
-            barUrlLeft = "";
     }
 
     if (icon == 'DotEnd') {
@@ -213,14 +219,14 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
     var html = "";
     html += "<table style='height:100px;width: 100%; table-layout: fixed;border:none;margin:0px; padding:0px;'>";
     html += "<tr>";
-    html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table ><tr><td><img src='" + url + "' style='width:18px;'/></td><td ><nobr>" + nodeName + "</nobr></td></tr></table></td>";
-    html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
+    //html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
+    html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table style='border:none;'><tr><td style='border:none;'><img src='" + url + "' style='width:18px;'/></td></tr><tr><td style='border:none;'><nobr>" + nodeName + "</nobr></td></tr><tr><td style='border:none;'>" + barUrlRight + "</td></tr><tr><td style='border:none;'>" + docs + "</td></tr></table></td>";
+    //html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
     html += "<tr>";
 
-    html += "<tr>";
-    html += "<td colspan=3 style='border:none;' >" + docs + "</td>";
-    html += "<tr>";
+    //html += "<tr>";
+    //html += "<td colspan=3 style='border:none;' >" + docs + "</td>";
+    //html += "<tr>";
     html += "</table>";
 
     return html;

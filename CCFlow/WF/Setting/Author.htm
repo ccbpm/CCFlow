@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>授权详细信息-驰骋工作流程管理系统</title>
+    <title>授权详细信息</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -28,138 +28,127 @@
 
         $(function () {
 
-            BindPop();
+            webUser = new WebUser();
 
-            var webUser = new WebUser();
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-            var emp = handler.DoMethodReturnJSON("Author_Init");
+            var ens = new Entities("BP.WF.Auths");
+            ens.Retrieve("Auther", webUser.No);
 
 
-            $("#TB_Author").val(emp.Author); //设置授权人.
-            $("#TB_DT").val(emp.AuthorDate); //授权到日期.
-            $("#DDL_AuthorWay").val(emp.AuthorWay); //授权方式.
+           var  html = "<div class='container'>";
+           html += "<div class='fixed-table-header '>";
+           html += "<table class='table table-hover table-striped ' >";
+           html += "<caption style='height:auto;text-indent: 0em;'> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
+            
+           html += "<thead ><tr> ";
+           html += "<th style='background-color:#F2F2F2;'>序</th>";
+           html += "<th style='background-color:#F2F2F2;'>授权给</th>";
+           html += "<th style='background-color:#F2F2F2;'>授权类型</th>";
+           html += "<th style='background-color:#F2F2F2;'>流程</th>";
+           html += "<th style='background-color:#F2F2F2;'>收回日期</th>";
+           html += "<th style='background-color:#F2F2F2;'>状态</th>";
+           html += "<th style='background-color:#F2F2F2;'>操作</th>";
+           html += "</tr></thead>";
 
-            $('#Btn_Auto').bind('click', function () { $('#selectEmpsModal').modal().show(); });
 
+            html += "<tbody>";
+            var takeBackDT = "";
+            var num = 1;
+            for (var i = 0; i < ens.length; i++) {
+
+                en = ens[i];
+                //指定流程时，授权时间不同，可能会有多条合并流程的记录
+                if (en.AuthType == 2) {
+                    if (takeBackDT.indexOf(en.TakeBackDT+",") != -1) {
+                            continue;
+                    }
+                    takeBackDT += en.TakeBackDT + ",";
+
+                    var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 2 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT = '" + en.TakeBackDT + "'";
+                    var dt = DBAccess.RunSQLReturnTable(sql);
+                    
+                    var flowName = "";
+                    for (var j = 0; j < dt.length; j++) {
+                    
+                        var da = dt[j];
+                        flowName += da.FlowName + ",";
+                    }
+                }
+                var AuthType = en.AuthType;
+                var AuthTypeName;
+                switch (AuthType) {
+                    case 0: AuthTypeName='不授权' ; break;
+                    case 1: AuthTypeName='全部流程授权'; break;
+                    case 2: AuthTypeName='指定流程授权';break;
+                    default: AuthTypeName = '空'; 
+                }
+                var nowDate = getNowFormatDate();
+                var state = "";
+                if (nowDate<=en.TakeBackDT) {
+                    state = "授权中";
+                } else {
+                    state = "已收回";
+                }
+                
+                html += "<tr>";
+                html += "<td>" + num + "</td>";
+                html += "<td>" + en.EmpName + "</td>";
+                html += "<td>" + AuthTypeName + "</td>";
+                if (en.AuthType == 2) {
+                    html += "<td>" + flowName + "</td>";
+                } else {
+                    html += "<td>" + en.FlowName + "</td>";
+                }
+                html += "<td>" + en.TakeBackDT + "</td>";
+                html += "<td>" + state + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.Auther + "','" + en.EmpNo + "','" + en.TakeBackDT + "')\">删除</a></td>";
+                html += "</tr>";
+                num++;
+            }
+
+            html += "</tbody>";
+            html += "</table>";
+            html += "</div>";
+            html += "</div>";
+            $("#docs").html(html);
+           
         });
 
-        //设置选中的人员
-        function selectEmpsWindowClose(data) {
-
-            $('#selectEmpsModal').modal('hide');
-            if (data == '取消') {
+        //执行删除.
+        function Del(Auther,EmpNo,TakeBackDT) {
+            if (window.confirm('您确定要删除吗？') == false)
                 return;
-            }
-
-            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
-            $("#TB_Author").val(no);
-        }
-
-
-        function BindPop() {
-
-            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-            if (dept == null || dept == '' || dept == undefined) {
-                dept = $.cookie('FK_Dept');
-            }
-            if (dept == undefined) {
-                var u = new WebUser();
-                dept = u.FK_Dept;
-            }
-            var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
-            url = url.replace('=101&', '=10102&');
-            $('#iframeSelectEmpsForm').attr('src', url);
-        }
-
-
-        //执行保存.
-        function Save() {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
-            handler.AddPara("Author", $("#TB_Author").val());
-            handler.AddPara("AuthorDate", $("#TB_DT").val());
-            handler.AddPara("AuthorWay", $("#DDL_AuthorWay").val());
-            var data = handler.DoMethodReturnString("Author_Save");
-
-            alert(data);
-
-            window.location.href = 'Default.htm';
+            var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
+            DBAccess.RunSQL(sql);
+            alert("删除成功");
+            window.location.href = window.location.href;
 
         }
-    </script>
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+            //+ " " + date.getHours() + seperator2 + date.getMinutes();
+
+            return cdt;
+        }
+
+</script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">
-    <table style="width: 90%; padding-left: 40px; margin-left: 40px;">
-        <caption>
-            授权详细信息
-        </caption>
-        <tr>
-            <td>
-                授权给
-            </td>
-            <td>
-                <input type="text" id="TB_Author" name="TB_Author" class="form-control" />
-            </td>
-            <td>
-                <input type="button" value="选择授权人" id="Btn_Auto" class="btn btn-default" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                收回授权日期:
-            </td>
-            <td>
-                <input name="TB_DT" type="text"  value="2099-01-01" maxlength="20"
-                    id="TB_DT" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'});" />
-            </td>
-            <td>
-                在日期范围内，可以处理授权人的数据。
-            </td>
-        </tr>
-        <tr>
-            <td>
-                授权方式:
-            </td>
-            <td>
-                <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
-                    <option selected="selected" value="0">不授权</option>
-                    <option value="1">全部流程授权</option>
-                    <option value="2">指定流程授权</option>
-                </select>
-            </td>
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="button" name="Btn_Save" value="保存" id="Btn_Save" class="btn btn-info"
-                    onclick="Save();" />
-                <a class="btn btn-white" href="Default.htm">返回</a>
-            </td>
-        </tr>
-    </table>
-    <!-- 弹出窗台.. -->
-    <div class="modal fade" id="selectEmpsModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius: 0px; width: 700px;">
-                <div class="modal-header">
-                    <button type="button" class="close" style="color: white; opacity: 1;" data-dismiss="modal"
-                        aria-hidden="true">
-                        &times;</button>
-                    <h4 class="modal-title">
-                        选择授权人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
-                        name="iframeSelectEmpsForm"></iframe>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+        <div id="docs"></div>
+
     </form>
 </body>
 </html>

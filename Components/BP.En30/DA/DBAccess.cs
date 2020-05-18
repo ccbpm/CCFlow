@@ -20,20 +20,16 @@ using System.Data.SqlClient;
 using System.Collections;
 using System.ComponentModel;
 using System.Collections.Specialized;
-using System.Data.OracleClient;
-using System.EnterpriseServices;
+using Oracle.ManagedDataAccess.Client;
 using System.Web;
 using System.Data.Odbc;
 using System.IO;
 using MySql.Data;
 using MySql;
 using MySql.Data.MySqlClient;
-using MySql.Data.MySqlClient.Properties;
-using IBM.Data;
-using IBM.Data.Informix;
-using IBM.Data.Utilities;
 using BP.Sys;
 using Npgsql;
+using Dm;
 
 namespace BP.DA
 {
@@ -43,16 +39,104 @@ namespace BP.DA
     /// </summary>
     public class DBAccess
     {
+        /// <summary>
+        /// 获得数据表字段描述的SQL
+        /// </summary>
+        public static string SQLOfTableFieldDesc(string table)
+        {
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                return "SELECT column_name as FName,data_type as FType,CHARACTER_MAXIMUM_LENGTH as FLen from information_schema.columns where table_name='" + table + "'";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+
+            }
+            throw new Exception("@没有涉及到的数据库类型");
+        }
+        /// <summary>
+        /// 获得约束
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static string SQLOfTableFieldYueShu(string table)
+        {
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                return  "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+
+            }
+            throw new Exception("@没有涉及到的数据库类型");
+
+        }
+
+
+        /// <summary>
+        /// 是否大小写敏感
+        /// </summary>
+        public static bool IsCaseSensitive
+        {
+            get
+            {
+                if (DBAccess.IsExitsObject("TEST") == true)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                }
+                if (DBAccess.IsExitsObject("test") == true)
+                {
+                    DBAccess.RunSQL("DROP table test ");
+                }
+
+                string mysql = "CREATE TABLE TEST(OID int NOT NULL )";
+                DBAccess.RunSQL(mysql);
+                if (DBAccess.IsExitsObject("test") == false)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                    return true;
+                }
+                if (DBAccess.IsExitsTableCol("test", "oid") == false)
+                {
+                    DBAccess.RunSQL("DROP TABLE TEST ");
+                    return true;
+                }
+                return false;
+            }
+        }
+
         #region 文件存储数据库处理.
         /// <summary>
-        /// 保存文件到数据库 @shilianyu
+        /// 保存文件到数据库 
         /// </summary>
         /// <param name="bytes">数据流</param>
         /// <param name="tableName">表名称</param>
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="saveFileField">保存到字段</param>
-        public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, string pkVal, string saveToFileField)
+        public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, object pkVal, string saveToFileField)
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
@@ -84,14 +168,23 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " image ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
+
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
+
                         BP.DA.DBAccess.RunSQL(sql);
+
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
-                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                    throw new Exception("@缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //修复for：jlow  oracle 异常： ORA-01745: 无效的主机/绑定变量名 edited by qin 16.7.1
@@ -108,11 +201,11 @@ namespace BP.DA
                 if (cn.State == 0) cn.Open();
                 cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=:FlowJsonFile WHERE " + tablePK + " =:PKVal";
 
-                OracleParameter spFile = new OracleParameter("FlowJsonFile", OracleType.Blob);
+                OracleParameter spFile = new OracleParameter("FlowJsonFile", OracleDbType.Blob);
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
-                OracleParameter spPK = new OracleParameter("PKVal", OracleType.NVarChar);
+                OracleParameter spPK = new OracleParameter("PKVal", OracleDbType.NVarchar2);
                 spPK.Value = pkVal;
                 cm.Parameters.Add(spPK);
 
@@ -132,9 +225,15 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
+
+
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //add by zhoupeng
@@ -153,8 +252,20 @@ namespace BP.DA
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
-                NpgsqlParameter spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
-                spPK.Value = pkVal;
+                NpgsqlParameter spPK = null;
+                if (tableName.Contains("ND") == true || pkVal.GetType() == typeof(int) || pkVal.GetType() == typeof(Int64))
+                {
+                    spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Integer);
+                    spPK.Value = int.Parse(pkVal.ToString());
+
+                }
+                else
+                {
+                    spPK = new NpgsqlParameter("PKVal", NpgsqlTypes.NpgsqlDbType.Varchar);
+                    spPK.Value = pkVal;
+                }
+
+                //spPK.DbType= NpgsqlTypes.NpgsqlDbType.Integer.
                 cm.Parameters.Add(spPK);
 
                 try
@@ -171,9 +282,13 @@ namespace BP.DA
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
-                    throw new Exception("@缺少此字段,系统自动修复，请重试一次,错误信息:" + ex.Message);
+                    throw new Exception("@NpgsqlDbType缺少此字段[" + tableName + "," + saveToFileField + "],有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //added by liuxc,2016-12-7，增加对mysql大数据longblob字段存储逻辑
@@ -214,25 +329,63 @@ namespace BP.DA
 
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-                return;
+                finally
+                {
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
         }
         /// <summary>
         /// 保存文件到数据库
         /// </summary>
-        /// <param name="fullFileName">完成的文件路径</param>
-        /// <param name="tableName">表名称</param>
-        /// <param name="tablePK">表主键</param>
-        /// <param name="pkVal">主键值</param>
-        /// <param name="saveFileField">保存到字段</param>
-        public static void SaveBigTextToDB(string docs, string tableName, string tablePK, string pkVal, string saveToFileField)
+        /// <param name="docs">文内容</param>
+        /// <param name="tableName">表名</param>
+        /// <param name="tablePK">主键</param>
+        /// <param name="pkVal">值</param>
+        /// <param name="saveToFileField">保存到字段</param>
+        /// <param name="isSaveByte">是否是保存byete</param>
+        public static void SaveBigTextToDB(string docs, string tableName, string tablePK,
+            object pkVal, string saveToFileField)
         {
-            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
-            //byte[] inputBytes = converter.GetBytes(docs);
-            byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
+            //对于特殊的数据库进行判断.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
+                //执行保存.
+                SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+                return;
+            }
 
-            //执行保存.
-            SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
+            //其他数据库.
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE " + tableName + " SET " + saveToFileField + "=" + SystemConfig.AppCenterDBVarStr + "MyDocs WHERE " + tablePK + "=" + SystemConfig.AppCenterDBVarStr + "PKVal";
+            ps.Add("MyDocs", docs);
+            ps.Add("PKVal", pkVal);
+
+            try
+            {
+                DBAccess.RunSQL(ps);
+            }
+            catch (Exception ex)
+            {
+                /*如果没有此列，就自动创建此列.*/
+                if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                {
+                    string sql = "ALTER TABLE " + tableName + " ADD " + saveToFileField + " text ";
+                    BP.DA.DBAccess.RunSQL(sql);
+
+                    //在执行一遍.
+                    DBAccess.RunSQL(ps);
+                    return;
+                }
+                throw ex;
+            }
+
+
         }
         /// <summary>
         /// 保存文件到数据库
@@ -256,6 +409,14 @@ namespace BP.DA
             //执行保存.
             SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }
+        /// <summary>
+        /// 获得从数据库的字段获取数据，存储到一个执行的文件里.
+        /// </summary>
+        /// <param name="fileFullName">指定的存储文件全路径</param>
+        /// <param name="tableName"></param>
+        /// <param name="tablePK"></param>
+        /// <param name="pkVal"></param>
+        /// <param name="fileSaveField"></param>
         public static void GetFileFromDB(string fileFullName, string tableName, string tablePK, string pkVal, string fileSaveField)
         {
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
@@ -267,6 +428,7 @@ namespace BP.DA
                 fs = fi.OpenWrite();
                 fs.Write(byteFile, 0, byteFile.Length);
                 fs.Close();
+                fs.Dispose();
             }
         }
         /// <summary>
@@ -276,18 +438,43 @@ namespace BP.DA
         /// <param name="tablePK">主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="fileSaveField">保存字段</param>
+        /// <param name="isByte">保存字段类型是否为Blob</param>
         /// <returns></returns>
-        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
+        public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal,
+            string fileSaveField)
         {
-            byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
-            if (byteFile == null)
-                return null;
+            //对于特殊的数据库进行判断.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                || SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+                if (byteFile == null)
+                    return null;
 
-            string strs= System.Text.Encoding.UTF8.GetString(byteFile);
-            int idx = strs.IndexOf('$');
-            if (idx != 0)
-                strs = strs.Substring(idx + 1);
-            return strs;
+                string strs = System.Text.Encoding.UTF8.GetString(byteFile);
+                int idx = strs.IndexOf('$');
+                if (idx != 0)
+                    strs = strs.Substring(idx + 1);
+                return strs;
+            }
+
+            //其他的数据库类型直接从 text字段去.
+            try
+            {
+                string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
+                return DBAccess.RunSQLReturnString(getSql);
+            }
+            catch (Exception ex)
+            {
+                if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                {
+                    string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " text ";
+                    DBAccess.RunSQL(sql);
+                }
+                string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
+                return DBAccess.RunSQLReturnString(getSql);
+            }
         }
         /// <summary>
         /// 从数据库里提取文件
@@ -316,30 +503,38 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = (byte[])dr[0];
+                    }
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
-                    if (!BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField))
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
-                        /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " image ";
+                        /*如果没有此列，就自动创建此列. */
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " Image ";
                         BP.DA.DBAccess.RunSQL(sql);
+                        return null;
+                        // return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
                     }
-                    return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+
+                    throw ex;
                     //throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = (byte[])dr[0];
+                    if (dr != null)
+                        dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-                return byteFile;
-
-
             }
 
             //增加对oracle数据库的逻辑 qin
@@ -362,6 +557,16 @@ namespace BP.DA
                 try
                 {
                     dr = cm.ExecuteReader();
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = (byte[])dr[0];
+                    }
+
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
@@ -373,17 +578,12 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = (byte[])dr[0];
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
-
-                return byteFile;
             }
 
             //added by liuxc,2016-12-7,增加对mysql数据库的逻辑
@@ -401,11 +601,22 @@ namespace BP.DA
                 cm.CommandText = strSQL;
                 cm.CommandType = CommandType.Text;
 
-
                 // 执行它.
                 try
                 {
                     dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = dr[0] as byte[];
+                        //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    }
+
+                    return byteFile;
                 }
                 catch (Exception ex)
                 {
@@ -417,18 +628,61 @@ namespace BP.DA
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
-
-                byte[] byteFile = null;
-                if (dr.Read())
+                finally
                 {
-                    if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
-                        return null;
-
-                    byteFile = dr[0] as byte[];
-                    //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
                 }
+            }
 
-                return byteFile;
+            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                NpgsqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as NpgsqlConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                NpgsqlDataReader dr = null;
+                NpgsqlCommand cm = new NpgsqlCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+                // 执行它.
+                try
+                {
+                    dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = dr[0] as byte[];
+                        //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    }
+
+                    return byteFile;
+                }
+                catch (Exception ex)
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
+                        BP.DA.DBAccess.RunSQL(sql);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+                finally
+                {
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
+                }
             }
 
             //最后仍然没有找到.
@@ -476,6 +730,7 @@ namespace BP.DA
         /// </summary>
         public static void DoTransactionCommit()
         {
+            /*
             return;
 
             if (SystemConfig.AppCenterDBType != DBType.MSSQL)
@@ -485,6 +740,7 @@ namespace BP.DA
                 return;
 
             DBAccess.RunSQL("Commit TRANSACTION");
+            */
         }
         #endregion 事务处理
 
@@ -503,7 +759,7 @@ namespace BP.DA
         /// 运行一个sql返回该table的第1列，组成一个查询的where in 字符串.
         /// </summary>
         /// <param name="sql"></param>
-        /// <returns></returns>
+        /// <returns></returns>i
         public static string GenerWhereInPKsString(string sql)
         {
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -536,26 +792,27 @@ namespace BP.DA
                 switch (BP.Sys.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
+                    case DBType.PostgreSQL:
                         BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 ");
                         break;
                     case DBType.Oracle:
                     case DBType.MySQL:
                         BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
                         break;
-                    case DBType.Informix:
-                        BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
-                        break;
+                    //case DBType.Informix:
+                    //    BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
+                    //    break;
                     default:
                         break;
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
 
-            return true;
+            //return true;
         }
 
         #region IO
@@ -900,7 +1157,7 @@ namespace BP.DA
                     string[] strs = BP.Sys.SystemConfig.AppCenterDSN.Split(';');
                     foreach (string str in strs)
                     {
-                        if (str.Contains("user ") == true)
+                        if (str.ToLower().Contains("user ") == true)
                         {
                             _connectionUserID = str.Split('=')[1];
                             break;
@@ -920,13 +1177,14 @@ namespace BP.DA
                     case DBType.MSSQL:
                         return new SqlConnection(connstr);
                     case DBType.Oracle:
+                    case DBType.DM:
                         return new OracleConnection(connstr);
                     case DBType.MySQL:
                         return new MySqlConnection(connstr);
                     case DBType.PostgreSQL:
                         return new Npgsql.NpgsqlConnection(connstr);
-                    case DBType.Informix:
-                        return new IfxConnection(connstr);
+                    //case DBType.Informix: net core 无法支持
+                    //    return new IfxConnection(connstr);
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBConn发现未知的数据库连接类型！");
@@ -943,13 +1201,14 @@ namespace BP.DA
                     case DBType.MSSQL:
                         return new SqlDataAdapter();
                     case DBType.Oracle:
+                    case DBType.DM:
                         return new OracleDataAdapter();
                     case DBType.MySQL:
                         return new MySqlDataAdapter();
                     case DBType.PostgreSQL:
                         return new NpgsqlDataAdapter();
-                    case DBType.Informix:
-                        return new IfxDataAdapter();
+                    //case DBType.Informix: net core 无法支持
+                    //    return new IfxDataAdapter();
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBAdapter发现未知的数据库连接类型！");
@@ -966,12 +1225,14 @@ namespace BP.DA
                         return new SqlCommand();
                     case DBType.Oracle:
                         return new OracleCommand();
+                    case DBType.DM:
+                        return new DmCommand();
                     case DBType.MySQL:
                         return new MySqlCommand();
                     case DBType.PostgreSQL:
                         return new NpgsqlCommand();
-                    case DBType.Informix:
-                        return new IfxCommand();
+                    //case DBType.Informix:
+                    //    return new IfxCommand();
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBCommand发现未知的数据库连接类型！");
@@ -1015,6 +1276,7 @@ namespace BP.DA
                 switch (AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.DM:
                     case DBType.MSSQL:
                     case DBType.Informix:
                     case DBType.Access:
@@ -1055,19 +1317,9 @@ namespace BP.DA
         /// <returns>返回运行结果</returns>
         public static int RunSQL(string sql, SqlConnection conn, CommandType sqlType, string dsn)
         {
-            conn.Close();
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-            //如果是锁定状态，就等待
-            //while (lock_SQL_RunSQL)
-            //    ;
-            // 开始执行.
-            //lock_SQL_RunSQL = true; //锁定
-            string step = "1";
+            SqlCommand cmd = new SqlCommand();
             try
             {
-
                 if (conn == null)
                     conn = new SqlConnection(dsn);
 
@@ -1076,42 +1328,22 @@ namespace BP.DA
                     conn.ConnectionString = dsn;
                     conn.Open();
                 }
-
-                step = "2";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd = new SqlCommand(sql, conn);
                 cmd.CommandType = sqlType;
-                step = "3";
 
-                step = "4";
-                int i = 0;
-                try
-                {
-                    i = cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    step = "5";
-                    //lock_SQL_RunSQL = false;
-                    cmd.Dispose();
-                    step = "6";
-                    throw new Exception("RunSQL step=" + step + ex.Message + " SQL=" + sql);
-                }
-                step = "7";
-                cmd.Dispose();
-                // lock_SQL_RunSQL = false;
-                return i;
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                step = "8";
-                // lock_SQL_RunSQL = false;
-                throw new Exception("RunSQL2 step=" + step + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
+                BP.DA.Log.DebugWriteInfo(ex.Message);
+                throw new Exception("RunSQL2 step=" + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
             }
             finally
             {
-                step = "9";
-                //lock_SQL_RunSQL = false;
-                conn.Close();
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         #endregion
@@ -1123,15 +1355,7 @@ namespace BP.DA
         }
         public static int RunSQL(string sql, OracleConnection conn, CommandType sqlType, string dsn)
         {
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-            //如果是锁定状态，就等待
-            // while (lock_SQL_RunSQL)
-            //  ;
-            // 开始执行.
-            // lock_SQL_RunSQL = true; //锁定
-            string step = "1";
+            OracleCommand cmd = new OracleCommand();
             try
             {
                 if (conn == null)
@@ -1143,72 +1367,24 @@ namespace BP.DA
                     conn.Open();
                 }
 
-                step = "2";
-                OracleCommand cmd = new OracleCommand(sql, conn);
+                cmd = new OracleCommand(sql, conn);
                 cmd.CommandType = sqlType;
-                step = "3";
-                int i = 0;
-                try
-                {
-                    i = cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    step = "5";
-                    // lock_SQL_RunSQL = false;
-                    cmd.Dispose();
-                    step = "6";
-                    throw new Exception("RunSQL step=" + step + ex.Message + " SQL=" + sql);
-                }
-                step = "7";
-                cmd.Dispose();
 
-
-                //lock_SQL_RunSQL = false;
-                return i;
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                step = "8";
-                // lock_SQL_RunSQL = false;
-                throw new Exception("RunSQL2 step=" + step + ex.Message);
+                BP.DA.Log.DebugWriteInfo(ex.Message);
+                throw new Exception("RunSQL2" + ex.Message);
             }
             finally
             {
-                step = "9";
-                // lock_SQL_RunSQL = false;
-                conn.Close();
-            }
+                if (cmd != null)
+                    cmd.Dispose();
 
-            /*
-            Debug.WriteLine( sql );
-            try
-            {
-                OracleCommand cmd = new OracleCommand( sql ,conn);
-                cmd.CommandType = sqlType;
-                foreach(object par in pars)
-                {
-                    cmd.Parameters.Add( "par",par);
-                }
-                if (conn.State != System.Data.ConnectionState.Open)
-                {
-                    conn.Open();
-                }
-				
-                int i= cmd.ExecuteNonQuery();				 
-                cmd.Dispose();
-                return i;				 
+                if (conn != null)
+                    conn.Dispose();
             }
-            catch(System.Exception ex)
-            {
-                throw new Exception(ex.Message + sql );
-            }
-            finally
-            {
-                conn.Close();
-
-            }
-            */
         }
         #endregion
 
@@ -1230,6 +1406,7 @@ namespace BP.DA
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.MSSQL:
                     sql = "ALTER TABLE " + table + " DROP CONSTRAINT " + pkName;
                     break;
@@ -1241,7 +1418,7 @@ namespace BP.DA
                     break;
                 default:
                     throw new Exception("err@DropTablePK不支持的数据库类型." + SystemConfig.AppCenterDBType);
-                    break;
+                    //break;
             }
             BP.DA.DBAccess.RunSQL(sql);
         }
@@ -1273,7 +1450,15 @@ namespace BP.DA
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT " + tab + "pk PRIMARY KEY(" + pk.ToUpper() + ")";
                     break;
             }
-            DBAccess.RunSQL(sql);
+
+            //这个地方不应该出现异常, 需要处理一下  @yln. 在向日库计划流程中出现.
+            try
+            {
+                DBAccess.RunSQL(sql);
+            }
+            catch (Exception ex)
+            {
+            }
         }
         public static void CreatePK(string tab, string pk1, string pk2, DBType db)
         {
@@ -1325,49 +1510,61 @@ namespace BP.DA
 
 
         #region index
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk)
+        public static void CreatIndex(string table, string fields)
         {
-            string idxName = table + "ID";
+            string idxName = table + "_" + fields;
             if (BP.DA.DBAccess.IsExitsObject(idxName) == true)
                 return;
 
-            //string sql = "";
-            //try
-            //{
-            //    sql = "DROP INDEX " + table + "ID ON " + table;
-            //    DBAccess.RunSQL(mydburl, sql);
-            //}
-            //catch
-            //{
-            //}
+            string sql = "";
+            try
+            {
+                sql = "DROP INDEX " + idxName + " ON " + table;
+                DBAccess.RunSQL(sql);
+            }
+            catch
+            {
+            }
 
-            //try
-            //{
-            //    sql = "CREATE INDEX " + table + "ID ON " + table + " (" + pk + ")";
-            //    DBAccess.RunSQL(mydburl, sql);
-            //}
-            //catch
-            //{
-            //}
+            try
+            {
+                sql = "CREATE INDEX " + idxName + " ON " + table + " (" + fields + ")";
+                DBAccess.RunSQL(sql);
+            }
+            catch
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2)
+        public static void CreatIndex(string table, string pk1, string pk2)
         {
 
-            //try
-            //{
-            //    DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
-            //}
-            //catch
-            //{
-            //}
+            try
+            {
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
+            }
+            catch
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3)
+        public static void CreatIndex(string table, string pk1, string pk2, string pk3)
         {
-            //  DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+            try
+            {
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + ")");
+            }
+            catch (Exception ex)
+            {
+            }
         }
-        public static void CreatIndex(DBUrlType mydburl, string table, string pk1, string pk2, string pk3, string pk4)
+        public static void CreatIndex(string table, string pk1, string pk2, string pk3, string pk4)
         {
-            //DBAccess.RunSQL(mydburl, "CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
+            try
+            {
+                DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + "," + pk3 + "," + pk4 + ")");
+            }
+            catch (Exception ex)
+            {
+            }
         }
         #endregion
 
@@ -1406,8 +1603,9 @@ namespace BP.DA
                 return RunSQL(sql, (SqlConnection)oconn, sqlType, dsn);
             else if (oconn is OracleConnection)
                 return RunSQL(sql, (OracleConnection)oconn, sqlType, dsn);
-            else
-                throw new Exception("获取数据库连接[GetAppCenterDBConn]失败！");
+
+            oconn.Dispose();
+            throw new Exception("获取数据库连接[GetAppCenterDBConn]失败！");
         }
         public static DataTable ReadProText(string proName)
         {
@@ -1415,6 +1613,7 @@ namespace BP.DA
             switch (BP.Sys.SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT text FROM user_source WHERE name=UPPER('" + proName + "') ORDER BY LINE ";
                     break;
                 default:
@@ -1477,18 +1676,10 @@ namespace BP.DA
         public static string DealSQL(string sql)
         {
             return sql;
-          ////  return sql;
-          //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
-          //  String presult = p.matcher(sql).replaceAll("$1");
-          //  return presult;
-        }
-        public static void RunSP(string sql, Paras ps)
-        {
-
-        }
-        public static void RunSP(string sql)
-        {
-
+            ////  return sql;
+            //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+            //  String presult = p.matcher(sql).replaceAll("$1");
+            //  return presult;
         }
         /// <summary>
         /// 运行SQLs
@@ -1504,8 +1695,8 @@ namespace BP.DA
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");
 
-            if (sql.Contains("';'")==false)
-              sql = sql.Replace(";", "~");
+            if (sql.Contains("';'") == false)
+                sql = sql.Replace(";", "~");
 
             sql = sql.Replace("UPDATE", "~UPDATE");
             sql = sql.Replace("DELETE", "~DELETE");
@@ -1552,23 +1743,6 @@ namespace BP.DA
             Paras ps = new Paras();
             ps.SQL = sql;
             return RunSQL(ps);
-
-
-            //switch (dburl)
-            //{
-            //    case DBUrlType.AppCenterDSN:
-            //        return RunSQL(ps);
-            //    //case DBUrlType.DBAccessOfMSSQL1:
-            //    //    return DBAccessOfMSSQL1.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfMSSQL2:
-            //    //    return DBAccessOfMSSQL2.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfOracle1:
-            //    //    return DBAccessOfOracle1.RunSQL(sql);
-            //    //case DBUrlType.DBAccessOfOracle2:
-            //    //    return DBAccessOfOracle2.RunSQL(sql);
-            //    default:
-            //        throw new Exception("@没有判断的类型" + dburl.ToString());
-            //}
         }
         public static int RunSQL(string sql, string paraKey, object val)
         {
@@ -1603,13 +1777,8 @@ namespace BP.DA
         /// <returns></returns>
         public static int RunSQL(string sql, Paras paras)
         {
-            if (sql == null || sql.Trim() == "")
+            if (DataType.IsNullOrEmpty(sql))
                 return 1;
-
-            while (lockRunSQL == true)
-            {
-            };
-            lockRunSQL = true;
 
             int result = 0;
             try
@@ -1628,9 +1797,12 @@ namespace BP.DA
                     case DBType.PostgreSQL:
                         result = RunSQL_201902_PSQL(sql, paras);
                         break;
-                    case DBType.Informix:
-                        result = RunSQL_201205_Informix(sql, paras);
+                    case DBType.DM: //为中国电子支持dm.
+                        result = RunSQL_20191230_DM(sql, paras);
                         break;
+                    //case DBType.Informix:
+                    //    result = RunSQL_201205_Informix(sql, paras);
+                    //    break;
                     default:
                         throw new Exception("err@RunSQL发现未知的数据库连接类型！");
                 }
@@ -1660,6 +1832,22 @@ namespace BP.DA
                 throw new Exception("执行sql错误:" + ex.Message + " Paras(" + paras.Count + ")=" + msg + "<hr>" + mysql);
             }
         }
+        private static Npgsql.NpgsqlConnection _conn = null;
+        private static bool isCloseConn = true;
+        private static Npgsql.NpgsqlConnection connOfPGSQL
+        {
+            get
+            {
+                return new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+
+                if (_conn == null)
+                {
+                    _conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+                    return _conn;
+                }
+                return _conn;
+            }
+        }
         /// <summary>
         /// 运行sql返回结果
         /// </summary>
@@ -1668,12 +1856,20 @@ namespace BP.DA
         /// <returns>执行的结果</returns>
         private static int RunSQL_201902_PSQL(string sql, Paras paras)
         {
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            if (1 == 1)
+            {
+                if (paras == null)
+                    paras = new Paras();
+                paras.SQL = sql;
+            }
+
+            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL;
             if (conn.State != System.Data.ConnectionState.Open)
             {
                 conn.ConnectionString = SystemConfig.AppCenterDSN;
                 conn.Open();
             }
+
             Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(sql, conn);
             cmd.CommandType = CommandType.Text;
 
@@ -1686,14 +1882,13 @@ namespace BP.DA
                 }
                 int i = cmd.ExecuteNonQuery();
                 cmd.Dispose();
-                conn.Close();
+
+                if (isCloseConn == true)
+                    conn.Close();
                 return i;
             }
             catch (System.Exception ex)
             {
-                cmd.Dispose();
-                conn.Close();
-
                 paras.SQL = sql;
                 string msg = "";
                 if (paras.Count == 0)
@@ -1706,8 +1901,10 @@ namespace BP.DA
             }
             finally
             {
-                cmd.Dispose();
-                conn.Close();
+                if (cmd != null)
+                    conn.Dispose();
+                if (cmd != null)
+                    conn.Dispose();
             }
         }
         /// <summary>
@@ -1716,6 +1913,52 @@ namespace BP.DA
         /// <param name="sql">sql</param>
         /// <param name="paras">参数</param>
         /// <returns>执行的结果</returns>
+        private static int RunSQL_20191230_DM(string sql, Paras paras)
+        {
+            DmConnection conn = new DmConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+
+            DmCommand cmd = new DmCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
+
+            try
+            {
+                if (paras != null)
+                {
+                    foreach (Para para in paras)
+                    {
+                        DmParameter oraP = new DmParameter(para.ParaName, para.val);
+                        cmd.Parameters.Add(oraP);
+                    }
+                }
+
+                int i = cmd.ExecuteNonQuery();
+                return i;
+            }
+            catch (System.Exception ex)
+            {
+                paras.SQL = sql;
+                string msg = "";
+                if (paras.Count == 0)
+                    msg = "SQL=" + sql + ",异常信息:" + ex.Message;
+                else
+                    msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
+
+                Log.DefaultLogWriteLineInfo(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
+            }
+        }
         private static int RunSQL_200705_SQL(string sql, Paras paras)
         {
             SqlConnection conn = new SqlConnection(SystemConfig.AppCenterDSN);
@@ -1735,15 +1978,11 @@ namespace BP.DA
                     cmd.Parameters.Add(oraP);
                 }
                 int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close();
+
                 return i;
             }
             catch (System.Exception ex)
             {
-                cmd.Dispose();
-                conn.Close();
-
                 paras.SQL = sql;
                 string msg = "";
                 if (paras.Count == 0)
@@ -1756,8 +1995,10 @@ namespace BP.DA
             }
             finally
             {
-                cmd.Dispose();
-                conn.Close();
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
         /// <summary>
@@ -1818,7 +2059,6 @@ namespace BP.DA
         /// <returns></returns>
         private static int RunSQL_200705_MySQL(string sql, Paras paras)
         {
-
             MySqlConnection connOfMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
             if (connOfMySQL.State != System.Data.ConnectionState.Open)
             {
@@ -1826,53 +2066,58 @@ namespace BP.DA
                 connOfMySQL.Open();
             }
 
-            int i = 0;
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sql, connOfMySQL);
                 cmd.CommandType = CommandType.Text;
-                foreach (Para para in paras)
-                {
-                    MySqlParameter oraP = new MySqlParameter(para.ParaName, para.val);
-                    cmd.Parameters.Add(oraP);
-                }
-                i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
 
-                connOfMySQL.Close();
-                //   connOfMySQL.Dispose();
-                return i;
+                if (paras != null)
+                {
+                    foreach (Para para in paras)
+                    {
+                        MySqlParameter oraP = new MySqlParameter(para.ParaName, para.val);
+                        cmd.Parameters.Add(oraP);
+                    }
+                }
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                connOfMySQL.Close();
-                connOfMySQL.Dispose();
-                throw new Exception(ex.Message + "@SQL:" + sql);
+                throw new Exception("err@RunSQL_200705_MySQL:" + ex.Message + "@SQL:" + sql);
+            }
+            finally
+            {
+                if (connOfMySQL != null)
+                    connOfMySQL.Dispose();
+                if (connOfMySQL != null)
+                    connOfMySQL.Close();
             }
         }
         private static int RunSQL_200705_Ora(string sql, Paras paras)
         {
-            if (sql.EndsWith(";") == false)
-                sql = sql + ";";
-            sql = "begin " + sql + " end;";
+            if (sql.EndsWith(";") == true)
+                sql = "begin " + sql + " end;";
+
             OracleConnection conn = new OracleConnection(SystemConfig.AppCenterDSN);
+
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+
+            OracleCommand cmd = new OracleCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
+            cmd.BindByName = true;
+
             try
             {
-                if (conn.State != System.Data.ConnectionState.Open)
-                {
-                    conn.ConnectionString = SystemConfig.AppCenterDSN;
-                    conn.Open();
-                }
-
-                OracleCommand cmd = new OracleCommand(sql, conn);
-                cmd.CommandType = CommandType.Text;
-
                 foreach (Para para in paras)
                 {
                     OracleParameter oraP = new OracleParameter(para.ParaName, para.DATypeOfOra);
                     oraP.Size = para.Size;
 
-                    if (para.DATypeOfOra == OracleType.Clob)
+                    if (para.DATypeOfOra == OracleDbType.Clob)
                     {
                         if (DataType.IsNullOrEmpty(para.val as string) == true)
                             oraP.Value = DBNull.Value;
@@ -1882,18 +2127,14 @@ namespace BP.DA
                     else
                         oraP.Value = para.val;
 
+                    oraP.DbType = para.DAType;
                     cmd.Parameters.Add(oraP);
                 }
-                int i = cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                conn.Close(); //把它关闭.
-                return i;
+
+                return cmd.ExecuteNonQuery();
             }
             catch (System.Exception ex)
             {
-                conn.Close(); //把它关闭.
-
-
                 if (paras != null)
                 {
                     foreach (Para item in paras)
@@ -1930,10 +2171,15 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
-       
+
+        /*
         /// <summary>
         /// 运行sql
         /// </summary>
@@ -1985,6 +2231,7 @@ namespace BP.DA
                 conn.Close();
             }
         }
+        */
         #endregion
 
         #endregion
@@ -1999,12 +2246,6 @@ namespace BP.DA
         private static bool lock_msSQL_ReturnTable = false;
         public static DataTable RunSQLReturnTable(string oraSQL, OracleConnection conn, CommandType sqlType, string dsn)
         {
-
-#if DEBUG
-            //Debug.WriteLine( oraSQL );
-#endif
-
-
             try
             {
                 if (conn == null)
@@ -2037,7 +2278,8 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
 
@@ -2049,32 +2291,27 @@ namespace BP.DA
         /// <param name="sqlType"></param>
         /// <param name="pars"></param>
         /// <returns></returns>
-        public static DataTable RunSQLReturnTable(string msSQL, SqlConnection conn, string connStr, CommandType sqlType, params object[] pars)
+        public static DataTable RunSQLReturnTable(string msSQL, SqlConnection conn, string connStr, CommandType sqlType, Paras paras)
         {
-            string msg = "step1";
-
             if (conn.State == ConnectionState.Closed)
             {
                 conn.ConnectionString = connStr;
                 conn.Open();
             }
 
-#if DEBUG
-            Debug.WriteLine(msSQL);
-#endif
-
             while (lock_msSQL_ReturnTable)
-                ;
+            { 
+            }
 
             SqlDataAdapter msAda = new SqlDataAdapter(msSQL, conn);
-            msg = "error 2";
+
             msAda.SelectCommand.CommandType = sqlType;
-            if (pars != null)
+            if (paras != null)
             {
                 //CommandType.
-                foreach (object par in pars)
+                foreach (Para para in paras)
                 {
-                    msAda.SelectCommand.Parameters.AddWithValue("par", par);
+                    msAda.SelectCommand.Parameters.AddWithValue(para.ParaName, para.val);
                 }
             }
 
@@ -2083,36 +2320,22 @@ namespace BP.DA
             lock_msSQL_ReturnTable = true; //锁定
             try
             {
-                msg = "error 3";
-                try
-                {
-                    msg = "4";
-                    msAda.Fill(mstb);
-                }
-                catch (Exception ex)
-                {
-                    msg = "5";
-                    lock_msSQL_ReturnTable = false;
-                    conn.Close();
-                    throw new Exception(ex.Message + " msg=" + msg + " Run@DBAccess");
-                }
-                msg = "10";
-                msAda.Dispose();
-                msg = "11";
-                //				if (SystemConfig.IsBSsystem==false )
-                //				{
-                //					msg="13";
-                //					sqlconn.Close();
-                //				}
-                msg = "14";
+                msAda.Fill(mstb);
+
                 lock_msSQL_ReturnTable = false;// 返回前一定要开锁
-                conn.Close();
             }
             catch (System.Exception ex)
             {
                 lock_msSQL_ReturnTable = false;
-                conn.Close();
-                throw new Exception("[RunSQLReturnTable on SqlConnection 1] step = " + msg + "<BR>" + ex.Message + " sql=" + msSQL);
+                BP.DA.Log.DebugWriteError(ex.Message);
+                throw new Exception("[RunSQLReturnTable on SqlConnection 1]" + "<BR>" + ex.Message + " sql=" + msSQL);
+            }
+            finally
+            {
+                if (msAda != null)
+                    msAda.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
             return mstb;
         }
@@ -2121,6 +2344,52 @@ namespace BP.DA
         #endregion
 
         #region OracleConnection
+        private static DataTable RunSQLReturnTable_20191231_DM(string selectSQL, Paras paras)
+        {
+            DmConnection conn = new DmConnection(SystemConfig.AppCenterDSN);
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+
+                DmDataAdapter ada = new DmDataAdapter(selectSQL, conn);
+                ada.SelectCommand.CommandType = CommandType.Text;
+
+                // 加入参数
+                if (paras != null)
+                {
+                    foreach (Para para in paras)
+                    {
+                        DmParameter myParameter = new DmParameter(para.ParaName, para.DATypeOfOra);
+                        myParameter.Size = para.Size;
+                        myParameter.Value = para.val;
+                        ada.SelectCommand.Parameters.Add(myParameter);
+                    }
+                }
+
+                DataTable oratb = new DataTable("otb");
+                ada.Fill(oratb);
+                ada.Dispose();
+
+                return oratb;
+            }
+            catch (System.Exception ex)
+            {
+                string msg = "@运行查询在(RunSQLReturnTable_20191231_DM with paras)出错 sql=" + selectSQL + " @异常信息：" + ex.Message;
+                msg += "@Para Num= " + paras.Count;
+                foreach (Para pa in paras)
+                {
+                    msg += "@" + pa.ParaName + "=" + pa.val;
+                }
+                Log.DebugWriteError(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
+            }
+        }
         private static DataTable RunSQLReturnTable_200705_Ora(string selectSQL, Paras paras)
         {
             OracleConnection conn = new OracleConnection(SystemConfig.AppCenterDSN);
@@ -2147,12 +2416,11 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (System.Exception ex)
             {
-                conn.Close();
                 string msg = "@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql=" + selectSQL + " @异常信息：" + ex.Message;
                 msg += "@Para Num= " + paras.Count;
                 foreach (Para pa in paras)
@@ -2164,7 +2432,8 @@ namespace BP.DA
             }
             finally
             {
-                conn.Close();
+                if (conn != null)
+                    conn.Close();
             }
         }
         private static DataTable RunSQLReturnTable_200705_SQL(string selectSQL)
@@ -2180,6 +2449,7 @@ namespace BP.DA
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
                 ada.Dispose();
+
                 return oratb;
             }
             catch (System.Exception ex)
@@ -2188,6 +2458,11 @@ namespace BP.DA
                 string msg = "@运行查询在(RunSQLReturnTable_200705_SQL)出错 sql=" + selectSQL + " @异常信息：" + msgErr;
                 Log.DebugWriteError(msg);
                 throw new Exception(msg);
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Close();
             }
         }
 
@@ -2215,15 +2490,20 @@ namespace BP.DA
             {
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (Exception ex)
             {
-                ada.Dispose();
-                conn.Close();
+                Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+            finally
+            {
+                if (ada != null)
+                    ada.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         /// <summary>
@@ -2234,7 +2514,7 @@ namespace BP.DA
         /// <returns>返回的数据.</returns>
         private static DataTable RunSQLReturnTable_201902_PSQL(string sql, Paras paras)
         {
-            Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
+            Npgsql.NpgsqlConnection conn = DBAccess.connOfPGSQL; // new Npgsql.NpgsqlConnection(SystemConfig.AppCenterDSN);
             if (conn.State != ConnectionState.Open)
                 conn.Open();
 
@@ -2246,7 +2526,10 @@ namespace BP.DA
             {
                 foreach (Para para in paras)
                 {
-                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, para.val);
+                    // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
+                    object valObj = para.val;
+
+                    Npgsql.NpgsqlParameter myParameter = new Npgsql.NpgsqlParameter(para.ParaName, valObj);
                     myParameter.Size = para.Size;
                     ada.SelectCommand.Parameters.Add(myParameter);
                 }
@@ -2256,15 +2539,20 @@ namespace BP.DA
             {
                 DataTable oratb = new DataTable("otb");
                 ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
+
                 return oratb;
             }
             catch (Exception ex)
             {
-                ada.Dispose();
-                conn.Close();
+                Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+            finally
+            {
+                if (ada != null)
+                    ada.Dispose();
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         private static string DealInformixSQL(string sql)
@@ -2323,72 +2611,11 @@ namespace BP.DA
                                     break;
                                 }
                             }
-
-                            //else
-                            //{
-                            //    mysql += "?" + str;
-                            //}
-
-                            //if (str.Contains(")") == true)
-                            //    mysql += "?" + str.Substring(str.IndexOf(")"));
-                            //else
-                            //    mysql += "?" + str;
                             break;
                     }
                 }
             }
             return mysql;
-        }
-        /// <summary>
-        /// RunSQLReturnTable_200705_Informix
-        /// </summary>
-        /// <param name="selectSQL">要执行的sql</param>
-        /// <returns>返回table</returns>
-        private static DataTable RunSQLReturnTable_201205_Informix(string sql, Paras paras)
-        {
-            //if (paras.Count != 0 && sql.Contains("?") == false)
-            //{
-            //    sql = DealInformixSQL(sql);
-            //}
-            sql = DealInformixSQL(sql);
-
-            IfxConnection conn = new IfxConnection(SystemConfig.AppCenterDSN);
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-
-            IfxDataAdapter ada = new IfxDataAdapter(sql, conn);
-            ada.SelectCommand.CommandType = CommandType.Text;
-
-            // 加入参数
-            foreach (Para para in paras)
-            {
-                IfxParameter myParameter = new IfxParameter(para.ParaName, para.val);
-                myParameter.Size = para.Size;
-                ada.SelectCommand.Parameters.Add(myParameter);
-            }
-
-            try
-            {
-                DataTable oratb = new DataTable("otb");
-                ada.Fill(oratb);
-                ada.Dispose();
-                conn.Close();
-                return oratb;
-            }
-            catch (Exception ex)
-            {
-                ada.Dispose();
-                conn.Close();
-                Log.DefaultLogWriteLineError(sql);
-                Log.DefaultLogWriteLineError(ex.Message);
-
-                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
-            }
-            finally
-            {
-                ada.Dispose();
-                conn.Close();
-            }
         }
         /// <summary>
         /// RunSQLReturnTable_200705_SQL
@@ -2399,21 +2626,9 @@ namespace BP.DA
         {
             return RunSQLReturnTable_200705_MySQL(selectSQL, new Paras());
         }
-        /// <summary>
-        /// RunSQLReturnTable_200705_SQL
-        /// </summary>
-        /// <param name="selectSQL">要执行的sql</param>
-        /// <returns>返回table</returns>
         private static DataTable RunSQLReturnTable_200705_MySQL(string sql, Paras paras)
         {
-            //  string mcs = "Data Source=127.0.0.1;User ID=root;Password=root;DataBase=wk;Charset=gb2312;";
-            //  MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN);
-            //  SqlDataAdapter ad = new SqlDataAdapter("select username,password from person", conn);
-            //  DataTable dt = new DataTable();
-            //  conn.Open();
-            //  ad.Fill(dt);
-            //  conn.Close();
-            //  return dt;
+
 
             using (MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN))
             {
@@ -2425,12 +2640,16 @@ namespace BP.DA
                     ada.SelectCommand.CommandType = CommandType.Text;
 
                     // 加入参数
-                    foreach (Para para in paras)
+                    if (paras != null)
                     {
-                        MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
-                        myParameter.Size = para.Size;
-                        ada.SelectCommand.Parameters.Add(myParameter);
+                        foreach (Para para in paras)
+                        {
+                            MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
+                            myParameter.Size = para.Size;
+                            ada.SelectCommand.Parameters.Add(myParameter);
+                        }
                     }
+
 
                     try
                     {
@@ -2451,10 +2670,66 @@ namespace BP.DA
         /// </summary>
         /// <param name="selectSQL">要执行的sql</param>
         /// <returns>返回table</returns>
+        private static DataTable RunSQLReturnTable_200705_MySQL_del(string sql, Paras paras)
+        {
+            //  string mcs = "Data Source=127.0.0.1;User ID=root;Password=root;DataBase=wk;Charset=gb2312;";
+            //  MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN);
+            //  SqlDataAdapter ad = new SqlDataAdapter("select username,password from person", conn);
+            //  DataTable dt = new DataTable();
+            //  conn.Open();
+            //  ad.Fill(dt);
+            //  conn.Close();
+            //  return dt;
+
+            using (MySqlConnection conn = new MySqlConnection(SystemConfig.AppCenterDSN))
+            {
+                using (MySqlDataAdapter ada = new MySqlDataAdapter(sql, conn))
+                {
+                    if (conn.State != ConnectionState.Open)
+                        conn.Open();
+
+                    ada.SelectCommand.CommandType = CommandType.Text;
+
+                    // 加入参数
+                    if (paras != null)
+                    {
+                        foreach (Para para in paras)
+                        {
+                            MySqlParameter myParameter = new MySqlParameter(para.ParaName, para.val);
+                            myParameter.Size = para.Size;
+                            ada.SelectCommand.Parameters.Add(myParameter);
+                        }
+                    }
+
+
+                    try
+                    {
+                        DataTable oratb = new DataTable("otb");
+                        ada.Fill(oratb);
+                        return oratb;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
+                    finally
+                    {
+                        ada.Dispose();
+                        conn.Close();
+                    }
+                }
+            }
+        }
+        /*
+        /// <summary>
+        /// RunSQLReturnTable_200705_SQL
+        /// </summary>
+        /// <param name="selectSQL">要执行的sql</param>
+        /// <returns>返回table</returns>
         private static DataTable RunSQLReturnTable_201205_Informix(string selectSQL)
         {
             return RunSQLReturnTable_201205_Informix(selectSQL, new Paras());
-        }
+        }*/
         #endregion
 
         #endregion
@@ -2507,6 +2782,9 @@ namespace BP.DA
                     return RunSQLReturnTable_201612_SQL(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.Oracle:
                     return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
+                case DBType.DM:
+                    return RunSQLReturnTable_201612_Ora(sql, pageSize, pageIdx, orderKey, orderType);
+
                 case DBType.MySQL:
                     return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.PostgreSQL:
@@ -2656,8 +2934,8 @@ namespace BP.DA
                     case DBType.Oracle:
                         dt = RunSQLReturnTable_200705_Ora(sql, paras);
                         break;
-                    case DBType.Informix:
-                        dt = RunSQLReturnTable_201205_Informix(sql, paras);
+                    case DBType.DM:
+                        dt = RunSQLReturnTable_20191231_DM(sql, paras);
                         break;
                     case DBType.PostgreSQL:
                         dt = RunSQLReturnTable_201902_PSQL(sql, paras);
@@ -2687,7 +2965,7 @@ namespace BP.DA
                 dc.ColumnName = dc.ColumnName.ToUpper();
             return dt;
 
-            return dt;
+            //return dt;
         }
 
 
@@ -2813,7 +3091,8 @@ namespace BP.DA
         {
             object obj = DBAccess.RunSQLReturnVal(sql);
             if (obj == null || obj == DBNull.Value)
-                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql + " @关于查询出来的详细信息已经记录日志文件，请处理。");
+                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql );
+
             string s = obj.ToString();
             if (s.Contains("."))
                 s = s.Substring(0, s.IndexOf("."));
@@ -2917,11 +3196,6 @@ namespace BP.DA
         public static object RunSQLReturnVal(string sql, SqlConnection conn, CommandType sqlType, string dsn, params object[] pars)
         {
             //return DBAccess.RunSQLReturnTable(sql,conn,dsn,sqlType,null).Rows[0][0];
-
-#if DEBUG
-            Debug.WriteLine(sql);
-#endif
-
             object val = null;
             SqlCommand cmd = null;
 
@@ -2945,15 +3219,16 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                //return DBAccess.re
-
-                cmd.Cancel();
-                conn.Close();
-                cmd.Dispose();
-                conn.Dispose();
                 throw new Exception(ex.Message + " [RunSQLReturnVal on SqlConnection] " + sql);
             }
-            //conn.Close();
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
+            }
+
             return val;
         }
         #endregion
@@ -2983,6 +3258,9 @@ namespace BP.DA
                 case DBType.Oracle:
                     dt = DBAccess.RunSQLReturnTable_200705_Ora(sql, paras);
                     break;
+                case DBType.DM:
+                    dt = DBAccess.RunSQLReturnTable_20191231_DM(sql, paras);
+                    break;
                 case DBType.MSSQL:
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, paras);
                     break;
@@ -2991,9 +3269,6 @@ namespace BP.DA
                     break;
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, paras);
-                    break;
-                case DBType.Informix:
-                    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, paras);
                     break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
@@ -3016,15 +3291,18 @@ namespace BP.DA
                 case DBType.Oracle:
                     dt = DBAccess.RunSQLReturnTable_200705_Ora(sql, new Paras());
                     break;
+                case DBType.DM:
+                    dt = DBAccess.RunSQLReturnTable_20191231_DM(sql, new Paras());
+                    break;
                 case DBType.MSSQL:
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, new Paras());
                     break;
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, new Paras());
                     break;
-                case DBType.Informix:
-                    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());
-                    break;
+                //case DBType.Informix:
+                //    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());
+                //    break;
                 case DBType.MySQL:
                     dt = DBAccess.RunSQLReturnTable_200705_MySQL(sql, new Paras());
                     break;
@@ -3079,6 +3357,7 @@ namespace BP.DA
                     ps.Add("Tab", table);
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT constraint_name, constraint_type,search_condition, r_constraint_name  from user_constraints WHERE table_name = upper(:tab) AND constraint_type = 'P'";
                     ps.Add("Tab", table);
                     break;
@@ -3123,7 +3402,7 @@ namespace BP.DA
                 return true;
         }
         /// <summary>
-        /// 是否是view @shilianyu.
+        /// 是否是view 
         /// </summary>
         /// <param name="tabelOrViewName"></param>
         /// <returns></returns>
@@ -3136,15 +3415,16 @@ namespace BP.DA
         /// </summary>
         /// <param name="tabelOrViewName"></param>
         /// <returns></returns>
-        public static bool IsView(string tabelOrViewName,DBType dbType)
+        public static bool IsView(string tabelOrViewName, DBType dbType)
         {
-            if (dbType == null)
-                dbType = SystemConfig.AppCenterDBType;
+            //if (dbType == null) dbType是Enum，永远不会为null. 张磊 2019-7-24
+            //    dbType = SystemConfig.AppCenterDBType;
 
             string sql = "";
             switch (dbType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
                     DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
                     if (oradt.Rows.Count == 0)
@@ -3161,7 +3441,7 @@ namespace BP.DA
                     if (dt1.Rows.Count == 0)
                         return false;
 
-                    if (dt1.Rows[0][0].ToString().ToUpper().Trim().Equals("V")==true )
+                    if (dt1.Rows[0][0].ToString().ToUpper().Trim().Equals("V") == true)
                         return true;
                     else
                         return false;
@@ -3197,7 +3477,7 @@ namespace BP.DA
                     else
                         return false;
                 case DBType.Access:
-                    sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
+                    sql = "select   Type   from   msysobjects  WHERE  UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
                     DataTable dtw = DBAccess.RunSQLReturnTable(sql);
                     if (dtw.Rows.Count == 0)
                         return false;
@@ -3236,56 +3516,42 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsExitsObject(DBUrl dburl, string obj)
         {
-          
-                //有的同事写的表名包含dbo.导致创建失败.
-                obj = obj.Replace("dbo.", "");
+            //有的同事写的表名包含dbo.导致创建失败.
+            obj = obj.Replace("dbo.", "");
 
-                // 增加参数.
-                Paras ps = new Paras();
-                ps.Add("obj", obj);
+            // 增加参数.
+            Paras ps = new Paras();
+            ps.Add("obj", obj);
 
-                switch (AppCenterDBType)
-                {
-                    case DBType.Oracle:
-                        if (obj.IndexOf(".") != -1)
-                            obj = obj.Split('.')[1];
-                        return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
-                    case DBType.MSSQL:
-                        return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
-                    case DBType.PostgreSQL:
-                        return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
-                    case DBType.Informix:
-                        return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
-                    case DBType.MySQL:
+            switch (AppCenterDBType)
+            {
+                case DBType.Oracle:
+                case DBType.DM:
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
+                    return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
+                case DBType.MSSQL:
+                    return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
+                case DBType.PostgreSQL:
+                    return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
+                case DBType.Informix:
+                    return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
+                case DBType.MySQL:
 
-                        /*如果不是检查的PK.*/
-                        if (obj.IndexOf(".") != -1)
-                            obj = obj.Split('.')[1];
+                    /*如果不是检查的PK.*/
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
 
-                        // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
-                        return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
+                    // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
+                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
 
-                    case DBType.Access:
-                        //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
-                        return IsExits("SELECT * FROM MSysObjects WHERE Name =  '" + obj + "'");
-                    default:
-                        throw new Exception("没有识别的数据库编号");
-                }
-             
+                case DBType.Access:
+                    //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
+                    return IsExits("SELECT * FROM MSysObjects WHERE Name =  '" + obj + "'");
+                default:
+                    throw new Exception("没有识别的数据库编号");
+            }
 
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-            //    return DBAccessOfMSSQL1.IsExitsObject(obj);
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfODBC)
-            //    return DBAccessOfODBC.IsExitsObject(obj);
-
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfOLE)
-            //    return DBAccessOfOLE.IsExitsObject(obj);
-          
-            //if (dburl.DBUrlType == DBUrlType.DBAccessOfOracle2)
-            //    return DBAccessOfOracle2.IsExitsObject(obj);
-
-            //throw new Exception("@没有判断的数据库类型:" + dburl);
         }
         /// <summary>
         /// 表中是否存在指定的列
@@ -3310,20 +3576,21 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt(sql);
                     break;
                 case DBType.PostgreSQL:
-                    string sql1 = "select count(*) from information_schema.columns where table_schema='table_schema' and table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
+                    string sql1 = "select count(*) from information_schema.columns where   table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql1);
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     if (table.IndexOf(".") != -1)
                         table = table.Split('.')[1];
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) from user_tab_columns  WHERE table_name= upper(:tab) AND column_name= upper(:col) ", ps);
                     break;
-                case DBType.Informix:
-                    i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
-                    break;
-                case DBType.Access:
-                    return false;
-                    break;
+                //case DBType.Informix:
+                //    i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
+                //    break;
+                //case DBType.Access:
+                //    return false;
+                //    break;
                 default:
                     throw new Exception("err@IsExitsTableCol没有判断的数据库类型.");
             }
@@ -3349,6 +3616,7 @@ namespace BP.DA
                     sql = "SELECT column_name as FNAME, data_type as FTYPE, CHARACTER_MAXIMUM_LENGTH as FLEN , column_name as FDESC FROM information_schema.columns where table_name='" + tableName + "'";
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                     sql = "SELECT COLUMN_NAME as FNAME,DATA_TYPE as FTYPE,DATA_LENGTH as FLEN,COLUMN_NAME as FDESC FROM all_tab_columns WHERE table_name = upper('" + tableName + "')";
                     break;
                 case DBType.MySQL:
@@ -3445,6 +3713,8 @@ namespace BP.DA
         {
             get
             {
+                return new OdbcConnection(SystemConfig.AppSettings["DBAccessOfODBC"]);
+                /* 2019-7-24 张磊 
                 if (SystemConfig.IsBSsystem_Test)
                 {
                     OdbcConnection conn = HttpContext.Current.Session["DBAccessOfODBC"] as OdbcConnection;
@@ -3465,6 +3735,7 @@ namespace BP.DA
                     }
                     return conn;
                 }
+                */
             }
         }
         #endregion 取得连接对象 ，CS、BS共用属性
@@ -3503,13 +3774,18 @@ namespace BP.DA
                     conn.Open();
                 DataTable dt = new DataTable("tb");
                 ada.Fill(dt);
-                // peng add 
+
                 ada.Dispose();
                 return dt;
             }
             catch (System.Exception ex)
             {
                 throw new Exception(ex.Message + sql);
+            }
+            finally
+            {
+                if (conn != null)
+                    conn.Dispose();
             }
         }
         #endregion
@@ -3540,10 +3816,9 @@ namespace BP.DA
         }
         public static int RunSQL(string sql, OdbcConnection conn, CommandType sqlType, params object[] pars)
         {
-            Debug.WriteLine(sql);
+            OdbcCommand cmd = new OdbcCommand(sql, conn);
             try
             {
-                OdbcCommand cmd = new OdbcCommand(sql, conn);
                 cmd.CommandType = sqlType;
                 foreach (object par in pars)
                 {
@@ -3558,6 +3833,13 @@ namespace BP.DA
             catch (System.Exception ex)
             {
                 throw new Exception(ex.Message + sql);
+            }
+            finally
+            {
+                if (cmd != null)
+                    cmd.Dispose();
+                if (conn != null)
+                    conn.Close();
             }
         }
 
@@ -3618,19 +3900,24 @@ namespace BP.DA
                     cmd.Parameters.AddWithValue("par", par);
                 }
                 tmp.Open();
+
                 val = cmd.ExecuteScalar();
             }
             catch (System.Exception ex)
             {
-                tmp.Close();
                 throw new Exception(ex.Message + sql);
             }
-            tmp.Close();
+            finally
+            {
+                if (tmp != null)
+                    tmp.Close();
+            }
+
             return val;
         }
         #endregion 执行SQL ，返回首行首列
 
     }
     #endregion
- 
+
 }

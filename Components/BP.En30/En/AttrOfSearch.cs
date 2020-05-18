@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using BP.En;
+using BP.Web;
 
 namespace BP.En
 {
@@ -195,16 +196,18 @@ namespace BP.En
                         return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", Web.WebUser.FK_DeptNameOfFull);
 
                     // 处理传递过来的参数。
-                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    //foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    //2019-07-25 zyt改造
+                    foreach (string k in HttpContextHelper.RequestParamKeys)
                     {
                         if (_DefaultVal.Contains(k))
-                            return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                            return _DefaultVal.Replace("@" + k, HttpContextHelper.RequestParams(k));
                     }
-                    foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
-                    {
-                        if (_DefaultVal.Contains(k))
-                            return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.Form[k]);
-                    }
+                    //foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                    //{
+                    //    if (_DefaultVal.Contains(k))
+                    //        return _DefaultVal.Replace("@" + k, System.Web.HttpContext.Current.Request.Form[k]);
+                    //}
 
                     //if (_DefaultVal.Contains("@WebUser.FK_Unit"))
                     //    return _DefaultVal.Replace("@WebUser.FK_Unit", Web.WebUser.FK_Unit);

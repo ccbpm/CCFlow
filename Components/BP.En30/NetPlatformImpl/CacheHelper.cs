@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Caching;
 
-namespace BerryInfo.Utility
+namespace BP.Web
 {
     public static class CacheHelper
     {

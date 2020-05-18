@@ -58,7 +58,7 @@ namespace BP.En
                 else
                 {
                     if (selecSQL.Contains(" WHERE "))
-                        sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
+                         sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
                     else
                         sql = selecSQL + " WHERE   ( " + this._sql + " ) " + _groupBy + this._orderBy;
                 }
@@ -67,7 +67,12 @@ namespace BP.En
                 sql = sql.Replace("  ", " ");
                 sql = sql.Replace("  ", " ");
 
-                sql = sql.Replace("WHERE AND", "WHERE");
+                sql = sql.Replace("AND ( AND )", "AND");
+                sql = sql.Replace("WHERE(1 = 1) AND ( AND )", "WHERE(1 = 1)");
+
+
+
+                 sql = sql.Replace("WHERE AND", "WHERE");
                 sql = sql.Replace("WHERE  AND", "WHERE");
 
                 sql = sql.Replace("WHERE ORDER", "ORDER");
@@ -254,11 +259,10 @@ namespace BP.En
         /// <param name="attr"></param>
         /// <param name="exp"></param>
         /// <param name="val"></param>
-        public void AddWhere(string attr, string exp, string val)
+        public void AddWhere(string attr, string exp, object val)
         {
             AddWhere(attr, exp, val, null);
         }
-       
         /// <summary>
         /// 增加条件
         /// </summary>
@@ -266,12 +270,14 @@ namespace BP.En
         /// <param name="exp">操作符号（根据不同的数据库）</param>
         /// <param name="val">值</param>
         /// <param name="paraName">参数名称，可以为null, 如果查询中有多个参数中有相同属性名的需要，分别给他们起一个参数名。</param>
-        public void AddWhere(string attr, string exp, string val, string paraName)
+        public void AddWhere(string attr, string exp, object val, string paraName)
         {
             if (val == null)
                 val = "";
 
-            if (val == "all")
+            string valStr = Convert.ToString(val);
+
+            if (valStr == "all")
             {
                 this.SQL = "( 1=1 )";
                 return;
@@ -279,7 +285,7 @@ namespace BP.En
 
             if (exp.ToLower().Contains("in"))
             {
-                this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                 return;
             }
 
@@ -287,34 +293,34 @@ namespace BP.En
             {
                 if (attr == "FK_Dept")
                 {
-                    val = val.Replace("'", "");
-                    val = val.Replace("%", "");
+                    valStr = valStr.Replace("'", "");
+                    valStr = valStr.Replace("%", "");
 
                     switch (this.HisDBType)
                     {
                         case DBType.Oracle:
                             this.SQL = "( " + attr2Field(attr) + " " + exp + " '%'||" + this.HisVarStr + "FK_Dept||'%' )";
-                            this.MyParas.Add("FK_Dept", val);
+                            this.MyParas.Add("FK_Dept", valStr);
                             break;
                         default:
                             //this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + this.HisVarStr + "FK_Dept%' )";
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + val + "%' )";
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + valStr + "%' )";
                             //this.MyParas.Add("FK_Dept", val);
                             break;
                     }
                 }
                 else
                 {
-                    if (val.Contains(":") || val.Contains("@"))
+                    if (valStr.Contains(":") || valStr.Contains("@"))
                     {
-                        this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                        this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                     }
                     else
                     {
-                        if (val.Contains("'") == false)
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + val + "' )";
+                        if (valStr.Contains("'") == false)
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  '" + valStr + "' )";
                         else
-                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + val + " )";
+                            this.SQL = "( " + attr2Field(attr) + " " + exp + "  " + valStr + " )";
                     }
                 }
                 return;
@@ -463,7 +469,7 @@ namespace BP.En
         /// <param name="val">值</param>
         public void AddWhere(string attr, int val)
         {
-            this.AddWhere(attr, "=", val);
+            this.AddWhere(attr, "=", val, null);
         }
         /// <summary>
         /// 增加条件
@@ -479,9 +485,8 @@ namespace BP.En
         }
         public void AddWhere(string attr, Int64 val)
         {
-            this.AddWhere(attr, int.Parse(val.ToString()));
+            this.AddWhere(attr, "=", val, null);
         }
-
         public void AddWhere(string attr, float val)
         {
             this.AddWhere(attr, "=", val);
@@ -491,41 +496,12 @@ namespace BP.En
             if (val == null)
                 throw new Exception("Attr=" + attr + ", 值是空 is null");
 
-            Type type = val.GetType();
-            if (type == typeof(string))
+            if (val.GetType() == typeof(int) || val.GetType() == typeof(long))
             {
-                this.AddWhere(attr, "=", val.ToString());
+                this.AddWhere(attr, "=", val);
                 return;
             }
-            else if (type == typeof(Int16))
-            {
-                this.AddWhere(attr, "=", (Int16)val);
-                return;
-            }
-            else if (type == typeof(Int32))
-            {
-                this.AddWhere(attr, "=", (Int32)val);
-                return;
-            }
-            else if (type == typeof(Int64))
-            {
-                this.AddWhere(attr, "=", (Int64)val);
-                return;
-            }
-            else
-            {
-                //typeof(float)  typeof(double)  没有double类型的
-                this.AddWhere(attr, "=", float.Parse(val.ToString()));
-                return;
-            }
-             
-            //if (type == typeof(int) || type == typeof(Int32) || type == typeof(Int64))
-            //{
-            //    //int i = int.Parse(val.ToString()) ;
-            //    this.AddWhere(attr, "=", (Int32)val);
-            //    return;
-            //}
-            //this.AddWhere(attr, "=", val.ToString());
+            this.AddWhere(attr, "=", Convert.ToString(val));
         }
 
         public void addLeftBracket()
@@ -562,13 +538,14 @@ namespace BP.En
         private string _orderBy = "";
         public void addOrderBy(string attr)
         {
+             
             if (this._orderBy.IndexOf("ORDER BY") != -1)
             {
-                this._orderBy = " , " + attr2Field(attr);
+                this._orderBy += " , " + attr;
             }
             else
             {
-                this._orderBy = " ORDER BY " + attr2Field(attr);
+                this._orderBy = " ORDER BY " + attr;
             }
         }
 
@@ -594,7 +571,15 @@ namespace BP.En
         /// <param name="desc"></param>
         public void addOrderByDesc(string attr)
         {
-            this._orderBy = " ORDER BY " + attr2Field(attr) + " DESC ";
+            if (this._orderBy.IndexOf("ORDER BY") != -1)
+            {
+                this._orderBy += " , " + attr2Field(attr) + " DESC ";
+            }
+            else
+            {
+                this._orderBy = " ORDER BY " + attr2Field(attr) + " DESC ";
+            }
+            
         }
         public void addOrderByDesc(string attr1, string attr2)
         {
@@ -739,7 +724,7 @@ namespace BP.En
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
 
-            return DBAccess.RunSQLReturnTable(sql1, this.MyParas);
+            return this.En.RunSQLReturnTable(sql1, this.MyParas);
         }
 
         public DataTable DoGroupReturnTableSqlServer(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
@@ -819,7 +804,7 @@ namespace BP.En
                 sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
-            return DBAccess.RunSQLReturnTable(sql1, this.MyParas);
+            return this.En.RunSQLReturnTable(sql1, this.MyParas);
         }
         /// <summary>
         /// 分组查询，返回datatable.
@@ -903,7 +888,7 @@ namespace BP.En
                 sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
             else
                 sql1 += " ORDER BY " + attrGroup.Key;
-            return DBAccess.RunSQLReturnTable(sql1);
+            return this.En.RunSQLReturnTable(sql1);
         }
         public string[] FullAttrs = null;
         /// <summary>
@@ -956,7 +941,7 @@ namespace BP.En
         }
         public string DealString(string sql)
         {
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = this.En.RunSQLReturnTable(sql);
             string strs = "";
             foreach (DataRow dr in dt.Rows)
             {
@@ -985,7 +970,12 @@ namespace BP.En
                     else
                         pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
 
-                    this.MyParasR.Add("R" + paraI, dr[0].ToString());
+                    if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
+                    this.MyParasR.Add("R" + paraI, int.Parse( dr[0].ToString()));
+                    else
+                        this.MyParasR.Add("R" + paraI, dr[0].ToString());
+
+
                     if (i >= to)
                         return pks.Substring(0, pks.Length - 1);
                 }
@@ -1001,7 +991,7 @@ namespace BP.En
         public string GenerPKsByTable(string sql, int from, int to)
         {
             //Log.DefaultLogWriteLineWarning(" ***************************** From= " + from + "  T0" + to);
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, this.MyParas);
+            DataTable dt = this.En.RunSQLReturnTable(sql, this.MyParas);
             string pks = "";
             int i = 0;
             foreach (DataRow dr in dt.Rows)
@@ -1377,7 +1367,7 @@ namespace BP.En
             }
             try
             {
-                int i = DBAccess.RunSQLReturnValInt(sql, this.MyParas);
+                int i = this.En.RunSQLReturnValInt(sql, this.MyParas);
                 if (this.Top == -1)
                     return i;
 
@@ -1389,6 +1379,47 @@ namespace BP.En
             catch (Exception ex)
             {
                 //   if (SystemConfig.IsDebug)
+                this.En.CheckPhysicsTable();
+                throw ex;
+            }
+        }
+
+
+        public DataTable GetSumOrAvg(string oper)
+        {
+            string sql = this.SQL;
+            string ptable = this.En.EnMap.PhysicsTable;
+            string pk = this.En.PKField;
+
+            switch (this.En.EnMap.EnDBUrl.DBType)
+            {
+                case DBType.Oracle:
+                    if (this._sql == "" || this._sql == null)
+                        sql = "SELECT "+oper +" FROM " + ptable;
+                    else
+                        sql = "SELECT "+oper + sql.Substring(sql.IndexOf("FROM "));
+                    break;
+                default:
+                    if (this._sql == "" || this._sql == null)
+                        sql = "SELECT  " + oper + "  FROM " + ptable;
+                    else
+                    {
+                        sql = sql.Substring(sql.IndexOf("FROM "));
+                        if (sql.IndexOf("ORDER BY") >= 0)
+                            sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
+                        sql = "SELECT " +oper +" "+ sql;
+                    }
+                    
+                    break;
+            }
+            try
+            {
+ 
+                return this.En.RunSQLReturnTable(sql, this.MyParas);
+                
+            }
+            catch (Exception ex)
+            {
                 this.En.CheckPhysicsTable();
                 throw ex;
             }
@@ -1427,7 +1458,7 @@ namespace BP.En
                     //	sql=sql.Substring(0,i);
                     break;
             }
-            return DBAccess.RunSQLReturnTable(sql, this.MyParas);
+            return this.En.RunSQLReturnTable(sql, this.MyParas);
 
         }
         /// <summary>
@@ -1438,7 +1469,7 @@ namespace BP.En
         public DataTable DoQueryToTable(int topNum)
         {
             this.Top = topNum;
-            return DBAccess.RunSQLReturnTable(this.SQL, this.MyParas);
+            return this.En.RunSQLReturnTable(this.SQL, this.MyParas);
         }
 
         private int doEntityQuery()
@@ -1464,7 +1495,7 @@ namespace BP.En
             return EntityDBAccess.Retrieve(this.Ens, this.SQL, this.MyParas, this.FullAttrs);
         }
         /// <summary>
-        /// 根据data初始化entiies.
+        /// 根据data初始化entiies.   
         /// </summary>
         /// <param name="ens">实体s</param>
         /// <param name="dt">数据表</param>

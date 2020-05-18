@@ -3,6 +3,7 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Port;
+using BP.Sys;
 
 namespace BP.GPM
 {
@@ -45,6 +46,10 @@ namespace BP.GPM
         /// 签字类型
         /// </summary>
         public const string SignType = "SignType";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -117,6 +122,20 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(EmpAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.OrgNo, value);
             }
         }
         public string FK_DeptText
@@ -263,6 +282,7 @@ namespace BP.GPM
                 map.EnDesc = "用户"; // "用户"; // 实体的描述.
                 map.Java_SetEnType(EnType.App);   //实体类型。
                 map.EnType = EnType.App;
+                map.IndexField = EmpAttr.FK_Dept;
                 #endregion
 
                 #region 字段
@@ -271,7 +291,7 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 130);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), true);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
@@ -281,6 +301,9 @@ namespace BP.GPM
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
                     "@0=不签名@1=图片签名@2=电子签名");
+
+                map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50, true);
+
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
@@ -304,13 +327,14 @@ namespace BP.GPM
                     BP.GPM.DeptEmpAttr.FK_Emp,
                     BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
-                 ////他的部门权限
-                 //map.AttrsOfOneVSM.Add(new DeptEmps(), new Depts(), DeptEmpAttr.FK_Emp, DeptEmpAttr.FK_Dept,
-                 //    DeptAttr.Name, DeptAttr.No, "部门权限", Dot2DotModel.TreeDept);
+                //用户组
+                map.AttrsOfOneVSM.Add(new TeamEmps(), new Teams(), TeamEmpAttr.FK_Emp, TeamEmpAttr.FK_Team,
+                    TeamAttr.Name, TeamAttr.No, "用户组", Dot2DotModel.Default);
 
                 rm = new RefMethod();
                 rm.Title = "修改密码";
                 rm.ClassMethodName = this.ToString() + ".DoResetpassword";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.HisAttrs.AddTBString("pass1", null, "输入密码", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("pass2", null, "再次输入", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
@@ -318,8 +342,8 @@ namespace BP.GPM
                 rm = new RefMethod();
                 rm.Title = "修改主部门";
                 rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-              //  rm.RefAttrKey = EmpAttr.FK_Dept;
+                rm.RefAttrKey = EmpAttr.FK_Dept;
+                rm.RefMethodType = RefMethodType.LinkModel;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -329,24 +353,33 @@ namespace BP.GPM
 
         public string DoEditMainDept()
         {
-            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
         
 
         public string DoEmpDepts()
         {
-            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
-            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
+            //路径
+            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
         }
-
+        protected override bool beforeInsert()
+        {
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+            return base.beforeInsert();
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
             //增加拼音，以方便查找.
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("err@名称不能为空.");
+
             string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name).ToLower();
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
@@ -383,9 +416,12 @@ namespace BP.GPM
                 depts += "@" + dept.NameOfPath;
             }
 
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
 
             return base.beforeUpdateInsertAction();
         }
+
         /// <summary>
         /// 保存后修改WF_Emp中的邮箱
         /// </summary>
@@ -394,13 +430,33 @@ namespace BP.GPM
             string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
             int count = DBAccess.RunSQLReturnValInt(sql);
             if (count == 0)
-                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('"+this.No+"','"+this.Name+"','"+this.Email+"')";
+                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('" + this.No + "','" + this.Name + "','" + this.Email + "')";
             else
                 sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
             DBAccess.RunSQL(sql);
 
-             base.afterInsertUpdateAction();
+            //修改Port_Emp中的缓存
+            BP.Port.Emp emp = new BP.Port.Emp(this.No);
+            emp.FK_Dept=this.FK_Dept;
+            emp.Pass = this.Pass;
+            emp.Update();
+
+            base.afterInsertUpdateAction();
         }
+        /// <summary>
+        /// 删除之后要做的事情
+        /// </summary>
+        protected override void afterDelete()
+        {
+            DeptEmps des = new DeptEmps();
+            des.Delete(DeptEmpAttr.FK_Emp, this.No );
+           
+            DeptEmpStations stas = new DeptEmpStations();
+            stas.Delete(DeptEmpAttr.FK_Emp, this.No);
+
+            base.afterDelete();
+        }
+
         public static string GenerPinYin(string no,string name)
         {
             //增加拼音，以方便查找.
@@ -462,7 +518,6 @@ namespace BP.GPM
         {
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
-
 
             this.Pass = pass1;
 

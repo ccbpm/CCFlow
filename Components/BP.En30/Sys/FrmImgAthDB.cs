@@ -277,6 +277,9 @@ namespace BP.Sys
                 map.EnDesc = "剪切图片附件数据存储";
                 map.Java_SetEnType(EnType.Sys);
 
+                map.IndexField = FrmImgAthDBAttr.RefPKVal; 
+
+
                 map.AddMyPK();
 
                 // 以下三个字段组成一个主键. FK_FrmImgAth+"_"+RefPKVal

@@ -90,10 +90,13 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
+                map.IndexField = FrmTreeAttr.ParentNo; 
+
+
                 map.AddTBStringPK(FrmTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
-                map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 100, 30);
+                map.AddTBString(FrmTreeAttr.OrgNo, null, "组织编号", false, false, 0, 50, 30);
                 map.AddTBInt(FrmTreeAttr.Idx, 0, "Idx", false, false);
 
                 this._enMap = map;
@@ -143,13 +146,38 @@ namespace BP.Sys
             en.Insert();
             return en;
         }
-        public void DoUp()
+        /// <summary>
+        /// 创建子目录 @lilzhen
+        /// </summary>
+        /// <param name="dirName">要创建的子目录名字</param>
+        /// <returns>返回子目录编号</returns>
+        public string CreateSubNode(string dirName)
+        {
+            FrmTree en = new FrmTree();
+            en.Copy(this);
+            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.ParentNo = this.No;
+            en.Name = dirName;
+            en.Insert();
+            return en.No;
+        }
+        /// <summary>
+        /// 上移 @lizhen
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
         {
             this.DoOrderUp(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
+            return "移动成功";
         }
-        public void DoDown()
+        /// <summary>
+        /// 下移@lizhen
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
         {
             this.DoOrderDown(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
+            return "移动成功";
         }
     }
     /// <summary>

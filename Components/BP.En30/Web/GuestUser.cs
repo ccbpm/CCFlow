@@ -11,6 +11,7 @@ using System.Configuration;
 using BP.Port;
 using BP.Pub;
 using BP.Sys;
+using System.Collections.Generic;
 
 namespace BP.Web
 {
@@ -26,7 +27,7 @@ namespace BP.Web
         /// <param name="guestName"></param>
         /// <param name="lang"></param>
         /// <param name="isRememberMe"></param>
-        public static void SignInOfGener(string guestNo, string guestName, string lang, bool isRememberMe)
+        public static void SignInOfGener(string guestNo, string guestName, string lang="CH", bool isRememberMe=true)
         {
             SignInOfGener(guestNo, guestName, "deptNo", "deptName", lang, isRememberMe);
         }
@@ -42,7 +43,8 @@ namespace BP.Web
         public static void SignInOfGener(string guestNo, string guestName, string deptNo, 
             string deptName,string lang, bool isRememberMe)
         {
-            if (System.Web.HttpContext.Current == null)
+            //2019-07-25 zyt改造
+            if (HttpContextHelper.Current == null)
                 SystemConfig.IsBSsystem = false;
             else
                 SystemConfig.IsBSsystem = true;
@@ -50,8 +52,6 @@ namespace BP.Web
             //记录客人信息.
             GuestUser.No = guestNo;
             GuestUser.Name = guestName;
-            GuestUser.DeptNo = deptNo;
-            GuestUser.DeptName = deptName;
 
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
@@ -61,52 +61,8 @@ namespace BP.Web
                 em.Name = "客人";
                 em.Insert();
             }
-            WebUser.No = em.No;
-            WebUser.Name = em.Name;
-            WebUser.FK_Dept = em.FK_Dept;
-            WebUser.FK_DeptName = em.FK_DeptText;
-            WebUser.SysLang = lang;
-            if (BP.Sys.SystemConfig.IsBSsystem)
-            {
-                // Guest  信息.
-                HttpCookie cookie = new HttpCookie("CCSGuest");
-                //cookie.Expires = DateTime.Now.AddMonths(10);
-                cookie.Expires = DateTime.Now.AddDays(2);
-                cookie.Values.Add("GuestNo", guestNo);
-                cookie.Values.Add("GuestName", HttpUtility.UrlEncode(guestName));
-                cookie.Values.Add("DeptNo", deptNo);
-                cookie.Values.Add("DeptName", HttpUtility.UrlEncode(deptName));
-                System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-
-
-                HttpCookie cookie2 = new HttpCookie("CCS");
-                cookie2.Expires = DateTime.Now.AddDays(2);
-                // Guest  信息.
-                cookie2.Values.Add("GuestNo", guestNo);
-                cookie2.Values.Add("GuestName", HttpUtility.UrlEncode(guestName));
-
-                cookie2.Values.Add("DeptNo", deptNo);
-                cookie2.Values.Add("DeptName", HttpUtility.UrlEncode(deptName));
-
-                cookie2.Values.Add("No", "Guest");
-                cookie2.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
-
-                if (isRememberMe)
-                    cookie2.Values.Add("IsRememberMe", "1");
-                else
-                    cookie2.Values.Add("IsRememberMe", "0");
-
-                cookie2.Values.Add("FK_Dept", em.FK_Dept);
-                cookie2.Values.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
-
-                cookie2.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
-                cookie2.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
-
-                cookie2.Values.Add("Lang", lang);
-                cookie2.Values.Add("Style", "0");
-                cookie2.Values.Add("Auth", ""); //授权人.
-                System.Web.HttpContext.Current.Response.AppendCookie(cookie2);
-            }
+            BP.Web.WebUser.SignInOfGener(em);
+            return;
         }
 
         #region 静态方法
@@ -120,7 +76,7 @@ namespace BP.Web
         {
             if (IsBSMode)
             {
-                string str = System.Web.HttpContext.Current.Session[key] as string;
+                string str = HttpContextHelper.SessionGetString(key);
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -136,6 +92,7 @@ namespace BP.Web
                     return (string)BP.Port.Current.Session[key];
             }
         }
+        /* 2019-7-25 张磊注释，net core中需要知道object的具体类型才行（不能被序列化的对象，无法放入session中）
         public static object GetObjByKey(string key)
         {
             if (IsBSMode)
@@ -146,7 +103,7 @@ namespace BP.Web
             {
                 return BP.Port.Current.Session[key];
             }
-        }
+        }*/
         #endregion
 
         /// <summary>
@@ -156,20 +113,23 @@ namespace BP.Web
         {
             get
             {
-                if (System.Web.HttpContext.Current == null)
+                //2019-07-25 zyt改造
+                if (HttpContextHelper.Current == null)
                     return false;
                 else
                     return true;
             }
         }
+
         public static object GetSessionByKey(string key, Object defaultObjVal)
         {
             if (IsBSMode)
             {
-                if (System.Web.HttpContext.Current.Session[key] == null)
+                object obj = HttpContextHelper.SessionGet(key);
+                if (obj == null)
                     return defaultObjVal;
                 else
-                    return System.Web.HttpContext.Current.Session[key];
+                    return obj;
             }
             else
             {
@@ -179,6 +139,7 @@ namespace BP.Web
                     return BP.Port.Current.Session[key];
             }
         }
+
         /// <summary>
         /// 设置session
         /// </summary>
@@ -189,7 +150,7 @@ namespace BP.Web
             if (val == null)
                 return;
             if (IsBSMode)
-                System.Web.HttpContext.Current.Session[key] = val;
+                HttpContextHelper.SessionSet(key, val);
             else
                 BP.Port.Current.SetSession(key, val);
         }
@@ -203,22 +164,14 @@ namespace BP.Web
                 try
                 {
                     string token = WebUser.Token;
-                    System.Web.HttpContext.Current.Response.Cookies.Clear();
-                    BP.Sys.Glo.Request.Cookies.Clear();
 
+                    HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "GuestNo", "GuestName" },
+                    "CCS");
 
-                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                    cookie.Expires = DateTime.Now.AddDays(2);
-                    cookie.Values.Add("No", string.Empty);
-                    cookie.Values.Add("Name", string.Empty);
-                    // 2013.06.07 H
-                    cookie.Values.Add("Pass", string.Empty); 
-                    cookie.Values.Add("IsRememberMe", "0");
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
                     BP.Port.Current.Session.Clear();
 
-
+                    /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用
                     // Guest  信息.
                     cookie = new HttpCookie("CCSGuest");
                     cookie.Expires = DateTime.Now.AddDays(2);
@@ -227,7 +180,7 @@ namespace BP.Web
                     cookie.Values.Add("DeptNo", string.Empty);
                     cookie.Values.Add("DeptName", string.Empty);
                     System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-
+                    */
                 }
                 catch
                 {
@@ -237,22 +190,13 @@ namespace BP.Web
             {
                 try
                 {
-                    string token = WebUser.Token;
-                    System.Web.HttpContext.Current.Response.Cookies.Clear();
-                    BP.Sys.Glo.Request.Cookies.Clear();
-                 
-                    System.Web.HttpContext.Current.Session.Clear();
+                    BP.Port.Current.Session.Clear();
+                    HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "GuestNo", "GuestName"},
+                       "CCS");
 
-                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                    cookie.Expires = DateTime.Now.AddDays(2);
-                    cookie.Values.Add("No", string.Empty);
-                    cookie.Values.Add("Name", string.Empty);
-                    // 2013.06.07 H
-                    cookie.Values.Add("Pass",string.Empty);
-                    cookie.Values.Add("IsRememberMe", "0");
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
-
+                    HttpContextHelper.SessionClear();
+                    /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用 
                     // Guest  信息.
                     cookie = new HttpCookie("CCSGuest");
                     cookie.Expires = DateTime.Now.AddDays(2);
@@ -261,38 +205,12 @@ namespace BP.Web
                     cookie.Values.Add("DeptNo", string.Empty);
                     cookie.Values.Add("DeptName", string.Empty);
                     System.Web.HttpContext.Current.Response.AppendCookie(cookie); //加入到会话。
-
+                    */
                 }
                 catch
                 {
                 }
             }
-        }
-        public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)
-        {
-            if (IsBSMode == false)
-                return BP.Port.Current.GetSessionStr(valKey, isNullAsVal);
-            string key = "CCSGuest";
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
-            if (hc == null)
-                return null;
-            try
-            {
-                string val = null;
-                if (isChinese)
-                    val = HttpUtility.UrlDecode(hc[valKey]);
-                else
-                    val = hc.Values[valKey];
-
-                if (DataType.IsNullOrEmpty(val))
-                    return isNullAsVal;
-                return val;
-            }
-            catch
-            {
-                return isNullAsVal;
-            }
-            throw new Exception("@err-001 登录信息丢失。");
         }
         /// <summary>
         /// 编号
@@ -301,31 +219,11 @@ namespace BP.Web
         {
             get
             {
-                return GetValFromCookie("GuestNo", null, false);
-                string no = null; // GetSessionByKey("No", null);
-                if (no == null || no == "")
-                {
-                    if (IsBSMode == false)
-                        return "admin";
-
-                    string key = "CCSGuest";
-                    HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
-                    if (hc == null)
-                        return null;
-
-                    if (hc.Values["GuestNo"] != null)
-                    {
-                       GuestUser.No = hc["GuestNo"];
-                       GuestUser.Name = hc["GuestName"];
-                       return hc.Values["GuestNo"];
-                    }
-                    throw new Exception("@err-002 Guest 登录信息丢失。");
-                }
-                return no;
+                return BP.Web.WebUser.GetValFromCookie("GuestNo", null, true);
             }
             set
             {
-                SetSessionByKey("GuestNo", value);
+                BP.Web.WebUser.SetSessionByKey("GuestNo", value.Trim()); //@祝梦娟.
             }
         }
         /// <summary>
@@ -335,62 +233,14 @@ namespace BP.Web
         {
             get
             {
-                string val = GetValFromCookie("GuestName", null, true);
+                string val = BP.Web.WebUser.GetValFromCookie("GuestName", null, true);
                 if (val == null)
                     throw new Exception("@err-001 GuestName 登录信息丢失。");
                 return val;
             }
             set
             {
-                SetSessionByKey("GuestName", value);
-            }
-        }
-        /// <summary>
-        /// 部门名称
-        /// </summary>
-        public static string DeptNo
-        {
-            get
-            {
-                string val = GetValFromCookie("DeptNo", null, true);
-                if (val == null)
-                    throw new Exception("@err-003 DeptNo 登录信息丢失。");
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("DeptNo", value);
-            }
-        }
-        /// <summary>
-        /// 部门名称
-        /// </summary>
-        public static string DeptName
-        {
-            get
-            {
-                string val = GetValFromCookie("DeptName", null, true);
-                if (val == null)
-                    throw new Exception("@err-002 DeptName 登录信息丢失。");
-                return val;
-            }
-            set
-            {
-                SetSessionByKey("DeptName", value);
-            }
-        }
-        /// <summary>
-        /// 风格
-        /// </summary>
-        public static string Style
-        {
-            get
-            {
-                return GetSessionByKey("Style", "0");
-            }
-            set
-            {
-                SetSessionByKey("Style", value);
+                BP.Web.WebUser.SetSessionByKey("GuestName", value);
             }
         }
     }

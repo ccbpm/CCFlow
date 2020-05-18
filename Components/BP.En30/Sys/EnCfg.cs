@@ -3,6 +3,9 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP;
+using BP.Web;
+using System.IO;
+
 namespace BP.Sys
 {
     /// <summary>
@@ -182,7 +185,7 @@ namespace BP.Sys
         /// <summary>
         /// Url
         /// </summary>
-        public const string Url = "Url";
+        public const string UrlExt = "UrlExt";
         /// <summary>
         /// 附件路径
         /// </summary>
@@ -199,6 +202,15 @@ namespace BP.Sys
         /// Search,Group,设置.
         /// </summary>
         public const string UI = "UI";
+
+        /// <summary>
+        /// 字段颜色设置
+        /// </summary>
+        public const string ColorSet = "ColorSet";
+        /// <summary>
+        /// 字段求和求平均设置
+        /// </summary>
+        public const string FieldSet = "FieldSet";
     }
     /// <summary>
     /// EnCfgs
@@ -274,7 +286,11 @@ namespace BP.Sys
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJWebPath);
                 if (str == "" || str == null)
-                    return BP.Sys.Glo.Request.ApplicationPath + "DataUser/" + this.No + "/";
+                    str = Path.Combine(HttpContextHelper.RequestApplicationPath ,
+                        "DataUser/" , this.No);
+                str = str.Replace("\\", "/");
+                if (!str.EndsWith("/"))
+                    str += "/";
                 return str;
             }
             set
@@ -311,6 +327,18 @@ namespace BP.Sys
             set
             {
                 this.SetPara("PageSizeOfSearch", value);
+            }
+        }
+
+        public string FieldSet
+        {
+            get
+            {
+                return this.GetValStringByKey(EnCfgAttr.FieldSet);
+            }
+            set
+            {
+                this.SetValByKey(EnCfgAttr.FieldSet, value);
             }
         }
         #endregion 参数属性.
@@ -352,14 +380,20 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
+
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
                 map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);
-                map.AddTBString(EnCfgAttr.Url, null, "要打开的Url", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60);
 
                 map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
                 map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
+
+                //字段颜色设置
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
+                //对字段求总和平均
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, false, 0, 500, 60);
 
 
                 map.AddTBAtParas(3000);  //参数属性.

@@ -56,6 +56,20 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.UIBindKey, value);
             }
         }
+        /// <summary>
+        /// 控件类型
+        /// </summary>
+        public UIContralType UIContralType
+        {
+            get
+            {
+                return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -93,6 +107,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
@@ -101,14 +117,36 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
-                //默认值.
-                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",
-                    "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'", true);
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    case DBType.MySQL:
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name ";
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
+                        break;
 
-                //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
+                    case DBType.PostgreSQL:
+                    default:
+                        sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
+                        break;
+                }
+                sql += " union ";
+
+                if (SystemConfig.CCBPMRunModel == 0)
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
+                else
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' ";
+
+                //默认值.
+                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);
+
+                //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
-                 "@1=下拉框@3=单选按钮");
+                 "@1=下拉框@2=复选框@3=单选按钮");
 
                 map.AddDDLSysEnum("RBShowModel", 0, "单选按钮的展现方式", true, true, "RBShowModel",
             "@0=竖向@3=横向");
@@ -127,6 +165,8 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
                 map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", false, true); //参数字段.
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -141,7 +181,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 #endregion 傻瓜表单。
@@ -188,8 +228,10 @@ namespace BP.Sys.FrmUI
             }
         }
 
+
         protected override bool beforeUpdateInsertAction()
         {
+
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();
@@ -199,6 +241,11 @@ namespace BP.Sys.FrmUI
 
             //单选按钮的展现方式.
             attr.RBShowModel = this.GetValIntByKey("RBShowModel");
+
+            if (this.UIContralType == UIContralType.DDL || this.UIContralType == UIContralType.RadioBtn)
+                attr.MyDataType = DataType.AppInt;
+            else
+                attr.MyDataType = DataType.AppString;
 
             //执行保存.
             attr.Save();
@@ -211,8 +258,63 @@ namespace BP.Sys.FrmUI
             MapAttr mapAttr = new MapAttr();
             mapAttr.MyPK = this.MyPK;
             mapAttr.RetrieveFromDBSources();
+            //@sly
+            if (this.UIContralType == UIContralType.CheckBok)
+            {
+                mapAttr.MyDataType = DataType.AppString;
+                MapData mapData = new MapData(this.FK_MapData);
+                GEEntity en = new GEEntity(this.FK_MapData);
+               
+                switch(SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    //先检查是否存在约束
+                    string sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + en.EnMap.PhysicsTable + "') ";
+                    DataTable dtYueShu = DBAccess.RunSQLReturnTable(sqlYueShu);
+                    foreach (DataRow dr in dtYueShu.Rows)
+                    {
+                        if (dr["FName"].ToString().ToLower() == this.KeyOfEn.ToLower())
+                            {
+                                DBAccess.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " drop constraint " + dr[0].ToString());
+                                break;
+                            }
+                            
+                    }
+                    this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " VARCHAR(20)");
+                        break;
+                    case DBType.Oracle:
+                        //判断数据库当前字段的类型
+                        string sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + en.EnMap.PhysicsTable.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + this.KeyOfEn.ToUpper() + "' ";
+                        string val = DBAccess.RunSQLReturnString(sql);
+                        if (val == null)
+                            Log.DefaultLogWriteLineError("@没有检测到字段eunm" + this.KeyOfEn);
+                        if (val.IndexOf("NUMBER") != -1)
+                        {
+                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable+" RENAME COLUMN "+ this.KeyOfEn+" TO " + this.KeyOfEn+"_tmp");
+
+                            /*增加一个和原字段名同名的字段name*/
+                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ADD " + this.KeyOfEn + " varchar2(20)");
+
+                            /*将原字段name_tmp数据更新到增加的字段name*/
+                            this.RunSQL("UPDATE " + en.EnMap.PhysicsTable+" SET "+ this.KeyOfEn +"= trim(" + this.KeyOfEn + "_tmp)");
+
+                            /*更新完，删除原字段name_tmp*/
+                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable+" DROP COLUMN "+ this.KeyOfEn+"_tmp");
+
+                            //this.RunSQL(sql);
+                        }
+                        break;
+                    case DBType.MySQL:
+                        this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " modify " + this.KeyOfEn + " NVARCHAR(20)");
+                        break;
+                    case DBType.PostgreSQL:
+                        this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " type character varying(20)");
+                        break;
+                }   
+            }
             mapAttr.Update();
 
+          
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
@@ -256,7 +358,7 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
         }
-        
+
         public string DoDDLFullCtrl2019()
         {
             return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);

@@ -64,7 +64,11 @@ namespace BP.DA
         /// <summary>
         /// Informix
         /// </summary>
-        Informix=6
+        Informix=6,
+        /// <summary>
+        /// 达梦
+        /// </summary>
+        DM
     }
     /// <summary>
     /// 保管位置

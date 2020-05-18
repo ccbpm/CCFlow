@@ -23,11 +23,15 @@ namespace BP.GPM
         /// 人员
         /// </summary>
         public const string FK_Emp = "FK_Emp";
-		#endregion	
-	}
-	/// <summary>
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public const string OrgNo = "OrgNo";
+        #endregion
+    }
+    /// <summary>
     /// 部门岗位人员对应 的摘要说明。
-	/// </summary>
+    /// </summary>
     public class DeptEmpStation : EntityMyPK
     {
         #region 基本属性
@@ -121,10 +125,10 @@ namespace BP.GPM
 
                 map.AddTBStringPK("MyPK", null, "主键MyPK", false, true, 1, 150, 10);
 
-
                 map.AddTBString(DeptEmpStationAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Station, null, "岗位", false, false, 1, 50, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Emp, null, "操作员", false, false, 1, 50, 1);
+                map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", false, false, 0, 50, 50);
 
                 this._enMap = map;
                 return this._enMap;
@@ -192,5 +196,13 @@ namespace BP.GPM
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        #region 删除方法
+        public string  DelteNotInEmp()
+        {
+            string sql = "DELETE FROM Port_DeptEmpStation WHERE FK_Emp NOT IN (SELECT No FROM Port_Emp)";
+            DBAccess.RunSQL(sql);
+            return "删除成功";
+        }
+        #endregion
+    }
 }

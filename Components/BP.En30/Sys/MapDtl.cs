@@ -183,7 +183,7 @@ namespace BP.Sys
         /// <summary>
         /// 多表头列
         /// </summary>
-        public const string MTR = "MTR";
+        //public const string MTR = "MTR";
         /// <summary>
         /// GUID
         /// </summary>
@@ -245,6 +245,10 @@ namespace BP.Sys
 
         #region 导入导出属性.
         /// <summary>
+        /// 是否可以导入
+        /// </summary>
+        public const string IsImp = "IsImp";
+        /// <summary>
         /// 是否可以导出
         /// </summary>
         public const string IsExp = "IsExp";
@@ -301,6 +305,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDtlAttr.RowIdx, value);
+            }
+        }
+        /// <summary>
+        /// 是否可以导入
+        /// </summary>
+        public bool IsImp
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsImp, value);
             }
         }
         /// <summary>
@@ -1182,25 +1200,25 @@ namespace BP.Sys
         /// <summary>
         /// 多表头
         /// </summary>
-        public string MTR
-        {
-            get
-            {
-                string s = this.GetValStrByKey(MapDtlAttr.MTR);
-                s = s.Replace("《", "<");
-                s = s.Replace("》", ">");
-                s = s.Replace("‘", "'");
-                return s;
-            }
-            set
-            {
-                string s = value;
-                s = s.Replace("<", "《");
-                s = s.Replace(">", "》");
-                s = s.Replace("'", "‘");
-                this.SetValByKey(MapDtlAttr.MTR, value);
-            }
-        }
+        //public string MTR
+        //{
+        //    get
+        //    {
+        //        string s = this.GetValStrByKey(MapDtlAttr.MTR);
+        //        s = s.Replace("《", "<");
+        //        s = s.Replace("》", ">");
+        //        s = s.Replace("‘", "'");
+        //        return s;
+        //    }
+        //    set
+        //    {
+        //        string s = value;
+        //        s = s.Replace("<", "《");
+        //        s = s.Replace(">", "》");
+        //        s = s.Replace("'", "‘");
+        //        this.SetValByKey(MapDtlAttr.MTR, value);
+        //    }
+        //}
         /// <summary>
         /// 别名
         /// </summary>
@@ -1352,7 +1370,7 @@ namespace BP.Sys
                 map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //MTR 多表头列.
-                map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
+                //map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
                 #region 超链接.
                 map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
@@ -1383,6 +1401,7 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "字段中文名", true, false, 0, 900, 20);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "IsImp", true, true);
                 #endregion 导入导出填充.
 
 

@@ -4,6 +4,8 @@ using System.Collections;
 using System.Text;
 using BP.Sys;
 using BP.DA;
+using BP.Web;
+using BP.En;
 
 namespace BP.Sys
 {
@@ -12,6 +14,56 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
+        /// <summary>
+        /// 更新SID Or OrgNo 的SQL
+        /// 用于集成所用
+        /// 更新被集成的用户的user表
+        /// </summary>
+        public static string UpdateSIDAndOrgNoSQL
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("UpdateSIDAndOrgNoSQL", null);
+            }
+        }
+        /// <summary>
+        /// 获得真实的数据类型
+        /// </summary>
+        /// <param name="attrs">属性集合</param>
+        /// <param name="key">key</param>
+        /// <param name="val">值</param>
+        /// <returns>返回val真实的数据类型.</returns>
+        public static object GenerRealType(Attrs attrs, string key, object val)
+        {
+            Attr attr = attrs.GetAttrByKey(key);
+            switch (attr.MyDataType)
+            {
+                case DataType.AppString:
+                case DataType.AppDateTime:
+                case DataType.AppDate:
+                    val = val.ToString();
+                    break;
+                case DataType.AppInt:
+                case DataType.AppBoolean:
+                    val = int.Parse(val.ToString());
+                    break;
+                case DataType.AppFloat:
+                    val = float.Parse(val.ToString());
+                    break;
+                case DataType.AppDouble:
+
+                    val = int.Parse(val.ToString());
+                    break;
+                case DataType.AppMoney:
+                    val = decimal.Parse(val.ToString());
+                    break;
+                default:
+                    throw new Exception();
+                    break;
+            }
+            return val;
+        }
+
         #region 业务单元.
         private static Hashtable Htable_BuessUnit = null;
         /// <summary>
@@ -272,7 +324,7 @@ namespace BP.Sys
         {
             //为了提高运行效率，把这个地方屏蔽了。
             return;
-
+            /*
             UserLog ul = new UserLog();
             ul.MyPK = DBAccess.GenerGUID();
             ul.FK_Emp = empNo;
@@ -282,12 +334,13 @@ namespace BP.Sys
             try
             {
                 if (BP.Sys.SystemConfig.IsBSsystem)
-                    ul.IP = BP.Sys.Glo.Request.UserHostAddress;
+                    ul.IP = HttpContextHelper.Request.UserHostAddress;
             }
             catch
             {
             }
             ul.Insert();
+            */
         }
         #endregion 写入用户日志.
 
@@ -364,16 +417,14 @@ namespace BP.Sys
             en.Update();
         }
 
-        /// <summary>
-        /// 获得对象.
-        /// </summary>
-        public static System.Web.HttpRequest Request
-        {
-            get
-            {
-                return System.Web.HttpContext.Current.Request;
-            }
-        }
+        //public static System.Web.HttpRequest Request
+        //{
+        //    get
+        //    {
+        //        return System.Web.HttpContext.Current.Request;
+        //    }
+        //}
+
 
         /// <summary>
         /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.

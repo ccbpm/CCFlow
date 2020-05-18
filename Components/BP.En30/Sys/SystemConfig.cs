@@ -23,32 +23,38 @@ using System.Configuration;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.OracleClient;
+//using System.Data.OracleClient;
+using Oracle.ManagedDataAccess.Client;
 using System.IO;
 using MySql;
 using MySql.Data;
 using MySql.Data.Common;
 using MySql.Data.MySqlClient;
-using IBM;
-using IBM.Data;
-using IBM.Data.Informix;
+//using IBM;
+//using IBM.Data;
+//using IBM.Data.Informix;
 using BP.DA;
+using BP.Web;
 
 namespace BP.Sys
 {
     /// <summary>
-    /// 组织解构数据来源
+    /// 运行模式
     /// </summary>
-    public enum OSDBSrc
+    public enum CCBPMRunModel
     {
         /// <summary>
-        /// 数据库.
+        /// 单机版
         /// </summary>
-        Database,
+        Single,
         /// <summary>
-        /// WebServices
+        /// 集团模式
         /// </summary>
-        WebServices
+        GroupInc,
+        /// <summary>
+        /// 多租户模式
+        /// </summary>
+        SAAS
     }
     /// <summary>
     /// 组织结构类型
@@ -138,19 +144,22 @@ namespace BP.Sys
         {
             get
             {
-                string str= SystemConfig.AppSettings["FTPUserPassword"];
+                string str = SystemConfig.AppSettings["FTPUserPassword"];
                 return BP.Sys.Glo.String_JieMi(str);
             }
         }
         /// <summary>
         /// 端口号
         /// </summary>
-        public static string FTPPort
+        public static int FTPPort
         {
             get
             {
                 string str = SystemConfig.AppSettings["FTPPort"];
-                return BP.Sys.Glo.String_JieMi(str);
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = "21"; 
+                str= BP.Sys.Glo.String_JieMi(str);
+                return int.Parse(str);
             }
         }
         /// <summary>
@@ -182,39 +191,6 @@ namespace BP.Sys
             }
         }
         #endregion
-
-        #region 组织结构的配置.
-
-        /// <summary>
-        /// OS结构
-        /// </summary>
-        public static OSModel OSModel
-        {
-            get
-            {
-                return Sys.OSModel.OneMore;
-                //return (OSModel)SystemConfig.GetValByKeyInt("OSModel", 0);
-            }
-        }
-        public static OSDBSrc OSDBSrc
-        {
-            get
-            {
-                return (OSDBSrc)SystemConfig.GetValByKeyInt("OSDBSrc", 0);
-            }
-        }
-        /// <summary>
-        /// 结束流程 窗口配置
-        /// </summary>
-        public static IsOpenEndFlow IsOpenEndFlow
-        {
-            get
-            {
-                return (IsOpenEndFlow)SystemConfig.GetValByKeyInt("IsOpenEndFlow", 0);
-            }
-        }
-        #endregion
-
         /// <summary>
         /// 运行的平台为转换java平台使用.
         /// </summary>
@@ -273,51 +249,26 @@ namespace BP.Sys
             }
             #endregion
         }
+        /// <summary>
+        /// 运行模式
+        /// </summary>
+        public static CCBPMRunModel CCBPMRunModel
+        {
+            get
+            {
+                int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+                if (val == 0)
+                    return CCBPMRunModel.Single;
 
-        #region 关于开发商的信息
-        public static string Ver
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["Ver"];
-                }
-                catch
-                {
-                    return "1.0.0";
-                }
+                if (val == 1)
+                    return CCBPMRunModel.GroupInc;
+
+                if (val == 2)
+                    return CCBPMRunModel.SAAS;
+
+                return CCBPMRunModel.Single;
             }
         }
-        public static string TouchWay
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["TouchWay"];
-                }
-                catch
-                {
-                    return SystemConfig.CustomerTel + " 地址:" + SystemConfig.CustomerAddr;
-                }
-            }
-        }
-        public static string CopyRight
-        {
-            get
-            {
-                try
-                {
-                    return AppSettings["CopyRight"];
-                }
-                catch
-                {
-                    return "版权所有@" + CustomerName;
-                }
-            }
-        }
-        #endregion
 
         #region 用户配置信息
         /// <summary>
@@ -341,7 +292,7 @@ namespace BP.Sys
         /// 封装了AppSettings
         /// </summary>		
         private static NameValueCollection _CS_AppSettings;
-        internal static NameValueCollection CS_AppSettings
+        public static NameValueCollection CS_AppSettings
         {
             get
             {
@@ -355,9 +306,6 @@ namespace BP.Sys
             }
         }
 
-        public static void InitOptons(NameValueCollection appSetting,NameValueCollection connections) { 
-        
-        }
         /// <summary>
         /// 封装了AppSettings
         /// </summary>
@@ -386,20 +334,10 @@ namespace BP.Sys
         {
             get
             {
-                if (SystemConfig.IsBSsystem && HttpContext.Current != null)
-                    return HttpContext.Current.Request.PhysicalApplicationPath;
+                if (SystemConfig.IsBSsystem && HttpContextHelper.Current != null)
+                    return HttpContextHelper.PhysicalApplicationPath;
                 else
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            }
-        }
-        /// <summary>
-        /// 文件放置的路径
-        /// </summary>
-        public static string PathOfUsersFiles
-        {
-            get
-            {
-                return "/Data/Files/";
             }
         }
         /// <summary>
@@ -418,7 +356,7 @@ namespace BP.Sys
             {
                 if (BP.Sys.SystemConfig.IsBSsystem)
                 {
-                    string path1 = HttpContext.Current.Request.PhysicalApplicationPath + "\\..\\";
+                    string path1 = HttpContextHelper.PhysicalApplicationPath + "\\..\\";
                     System.IO.DirectoryInfo info1 = new DirectoryInfo(path1);
                     return info1.FullName;
                 }
@@ -447,7 +385,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp +    "\\WF\\Data\\";
+                return PathOfWebApp + "\\WF\\Data\\";
             }
         }
         public static string PathOfDataUser
@@ -478,16 +416,10 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp  + "\\WF\\Data\\XML\\";
+                return PathOfWebApp + "\\WF\\Data\\XML\\";
             }
         }
-        public static string PathOfAppUpdate
-        {
-            get
-            {
-                return PathOfWebApp +  "\\WF\\Data\\AppUpdate\\";
-            }
-        }
+
         public static string PathOfCyclostyleFile
         {
             get
@@ -502,7 +434,7 @@ namespace BP.Sys
         {
             get
             {
-                return BP.Sys.Glo.Request.ApplicationPath.Replace("/", "");
+                return HttpContextHelper.RequestApplicationPath.Replace("/", "");
             }
         }
         /// <summary>
@@ -512,7 +444,7 @@ namespace BP.Sys
         {
             get
             {
-                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"])==false)
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["DataUserDirPath"]) == false)
                 {
                     return PathOfWebApp + SystemConfig.AppSettings["DataUserDirPath"];
                 }
@@ -540,7 +472,7 @@ namespace BP.Sys
         {
             get
             {
-                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"])==false)
+                if (DataType.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"]) == false)
                 {
                     return SystemConfig.AppSettings["HostURL"];
                 }
@@ -570,7 +502,7 @@ namespace BP.Sys
         {
             get
             {
-                string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
+                string url = "http://" + HttpContextHelper.RequestUrlAuthority;
                 return url;
             }
         }
@@ -583,7 +515,7 @@ namespace BP.Sys
             {
                 if (SystemConfig.IsBSsystem)
                 {
-                    return BP.Sys.Glo.Request.PhysicalApplicationPath;
+                    return HttpContextHelper.PhysicalApplicationPath;
                 }
                 else
                 {
@@ -662,13 +594,7 @@ namespace BP.Sys
                 return s;
             }
         }
-        public static string OrderWay
-        {
-            get
-            {
-                return AppSettings["OrderWay"];
-            }
-        }
+
         public static int PageSize
         {
             get
@@ -683,48 +609,7 @@ namespace BP.Sys
                 }
             }
         }
-        public static int MaxDDLNum
-        {
-            get
-            {
-                try
-                {
-                    return int.Parse(AppSettings["MaxDDLNum"]);
-                }
-                catch
-                {
-                    return 50;
-                }
-            }
-        }
-        public static int PageSpan
-        {
-            get
-            {
-                try
-                {
-                    return int.Parse(AppSettings["PageSpan"]);
-                }
-                catch
-                {
-                    return 20;
-                }
-            }
-        }
-        /// <summary>
-        ///  到的路径.PageOfAfterAuthorizeLogin
-        /// </summary>
-        public static string PageOfAfterAuthorizeLogin
-        {
-            get { return BP.Sys.Glo.Request.ApplicationPath + "" + AppSettings["PageOfAfterAuthorizeLogin"]; }
-        }
-        /// <summary>
-        /// 丢失session 到的路径.
-        /// </summary>
-        public static string PageOfLostSession
-        {
-            get { return BP.Sys.Glo.Request.ApplicationPath + "" + AppSettings["PageOfLostSession"]; }
-        }
+
         /// <summary>
         /// 日志路径
         /// </summary>
@@ -787,7 +672,7 @@ namespace BP.Sys
                     return false;
             }
         }
-        
+
         public static bool IsEnableNull
         {
             get
@@ -811,29 +696,6 @@ namespace BP.Sys
                     return false;
             }
         }
-        public static bool IsOpenSQLCheck
-        {
-            get
-            {
-                if (AppSettings["IsOpenSQLCheck"] == "0")
-                    return false;
-                else
-                    return true;
-            }
-        }
-        /// <summary>
-        /// 是不是多系统工作。
-        /// </summary>
-        public static bool IsMultiSys
-        {
-            get
-            {
-                if (AppSettings["IsMultiSys"] == "1")
-                    return true;
-                return false;
-            }
-        }
-       
         /// <summary>
         /// 是否启用密码加密
         /// </summary>
@@ -962,7 +824,7 @@ namespace BP.Sys
         {
             get
             {
-                return AppSettings["RunOnPlant"];
+                return AppSettings["RunOnPlant"] ?? "";
             }
         }
         public static string CustomerURL
@@ -1013,6 +875,23 @@ namespace BP.Sys
             get
             {
                 return AppSettings["CorpID"];
+            }
+        }
+        /// <summary>
+        /// 是否使用微信企业号中的通讯录帐号登录
+        /// </summary>
+        public static string OZType
+        {
+            get
+            {
+                return AppSettings["OZType"];
+            }
+        }
+        public static string OZParentNo
+        {
+            get
+            {
+                return AppSettings["OZParentNo"];
             }
         }
         /// <summary>
@@ -1129,7 +1008,38 @@ namespace BP.Sys
             }
         }
         #endregion
-
+        #region 百度云配置相关
+        /// <summary>
+        /// 百度云应用ID
+        /// </summary>
+        public static string AppID
+        {
+            get
+            {
+                return AppSettings["AppID"];
+            }
+        }
+        /// <summary>
+        /// 百度云应用AK
+        /// </summary>
+        public static string APIKey
+        {
+            get
+            {
+                return AppSettings["APIKey"];
+            }
+        }
+        /// <summary>
+        /// 百度云应用SK
+        /// </summary>
+        public static string SecretKey
+        {
+            get
+            {
+                return AppSettings["SecretKey"];
+            }
+        }
+        #endregion
         /// <summary>
         ///取得配置 NestedNamesSection 内的相应 key 的内容
         /// </summary>
@@ -1422,6 +1332,8 @@ namespace BP.Sys
                         return BP.DA.DBType.MySQL;
                     case "PostgreSQL":
                         return BP.DA.DBType.PostgreSQL;
+                    case "DM":
+                        return BP.DA.DBType.DM;
                     case "Access":
                         return BP.DA.DBType.Access;
                     case "Informix":
@@ -1439,38 +1351,48 @@ namespace BP.Sys
         {
             get
             {
-                if (_AppCenterDBDatabase == null)
+
+                switch (BP.DA.DBAccess.AppCenterDBType)
                 {
-                    switch (BP.DA.DBAccess.AppCenterDBType)
-                    {
-                        case DA.DBType.MSSQL:
-                            SqlConnection connMSSQL = new SqlConnection(SystemConfig.AppCenterDSN);
-                            if (connMSSQL.State != ConnectionState.Open)
-                                connMSSQL.Open();
-                            _AppCenterDBDatabase = connMSSQL.Database;
-                            break;
-                        case DA.DBType.Oracle:
-                            OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
-                            if (connOra.State != ConnectionState.Open)
-                                connOra.Open();
-                            _AppCenterDBDatabase = connOra.Database;
-                            break;
-                        case DA.DBType.MySQL:
-                            MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
-                            if (connMySQL.State != ConnectionState.Open)
-                                connMySQL.Open();
-                            _AppCenterDBDatabase = connMySQL.Database;
-                            break;
-                        case DA.DBType.Informix:
-                            IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
-                            if (connIFX.State != ConnectionState.Open)
-                                connIFX.Open();
-                            _AppCenterDBDatabase = connIFX.Database;
-                            break;
-                        default:
-                            throw new Exception("@没有判断的数据类型.");
-                            break;
-                    }
+                    case DA.DBType.MSSQL:
+                        SqlConnection connMSSQL = new SqlConnection(SystemConfig.AppCenterDSN);
+                        if (connMSSQL.State != ConnectionState.Open)
+                            connMSSQL.Open();
+                        _AppCenterDBDatabase = connMSSQL.Database;
+                        break;
+                    case DA.DBType.Oracle:
+
+                        string[] strs = SystemConfig.AppCenterDSN.Split(';');
+                        foreach (string str in strs)
+                        {
+
+                            if (str.ToLower().Contains("user id") == false)
+                                continue;
+
+                            string[] mystrs = str.Split('=');
+                            return mystrs[1];
+
+                        }
+
+                        //OracleConnection connOra = new OracleConnection(SystemConfig.AppCenterDSN);
+                        //if (connOra.State != ConnectionState.Open)
+                        //    connOra.Open();
+                        //_AppCenterDBDatabase = connOra.Database;
+                        break;
+                    case DA.DBType.MySQL:
+                        MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
+                        _AppCenterDBDatabase = connMySQL.Database;
+                        break;
+                    //From Zhou IBM 删除
+                    //case DA.DBType.Informix:
+                    //    IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
+                    //    if (connIFX.State != ConnectionState.Open)
+                    //        connIFX.Open();
+                    //    _AppCenterDBDatabase = connIFX.Database;
+                    //    break;
+                    default:
+                        throw new Exception("@没有判断的数据类型.");
+                        break;
                 }
 
                 // 返回database.
@@ -1488,6 +1410,7 @@ namespace BP.Sys
                 {
                     case BP.DA.DBType.Oracle:
                     case BP.DA.DBType.PostgreSQL:
+                    case BP.DA.DBType.DM:
                         return ":";
                     case BP.DA.DBType.MySQL:
                     case BP.DA.DBType.Informix:

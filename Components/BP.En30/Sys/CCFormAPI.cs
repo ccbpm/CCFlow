@@ -168,7 +168,7 @@ namespace BP.Sys
             {
                 if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
                     //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
-                    ath.SaveTo = "\\DataUser\\UploadFile\\" + fk_mapdata + "\\";
+                    ath.SaveTo = "/DataUser/UploadFile/" + fk_mapdata + "/";
                 if (fk_mapdata.Contains("ND") == true)
                     ath.HisCtrlWay = AthCtrlWay.WorkID;
             }
@@ -177,6 +177,8 @@ namespace BP.Sys
             ath.Name = name;
             ath.X = x;
             ath.Y = y;
+            //默认在移动端显示
+            ath.SetPara("IsShowMobile", 1);
             ath.Save();
         }
         /// <summary>
@@ -250,7 +252,11 @@ namespace BP.Sys
 
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
-            //   attr.LGType = FieldTypeS.FK;
+            //如果绑定的外键是树形结构的，在AtPara中增加标识
+            if (sf.CodeStruct == CodeStruct.Tree)
+                attr.SetPara("CodeStruct", 1);
+            if(DataType.IsNullOrEmpty(sf.RootVal)==false)
+                attr.SetPara("ParentNo", sf.RootVal);
             attr.X = x;
             attr.Y = y;
 
@@ -279,6 +285,9 @@ namespace BP.Sys
             {
                 MapAttr attrH = new MapAttr();
                 attrH.Copy(attr);
+                attrH.UIBindKey = "";
+                attrH.SetPara("CodeStruct", "");
+                attrH.SetPara("ParentNo", "");
                 attrH.KeyOfEn = attr.KeyOfEn + "T";
                 attrH.Name = attr.Name;
                 attrH.UIContralType = BP.En.UIContralType.TB;
@@ -379,12 +388,14 @@ namespace BP.Sys
             //检查是否可以创建字段? 
             MapData md = new MapData(frmID);
             md.CheckPTableSaveModel(field);
-
+            
             MapAttr ma = new MapAttr();
             ma.FK_MapData = frmID;
             ma.KeyOfEn = field;
             ma.Name = fieldDesc;
             ma.MyDataType = mydataType;
+            if (mydataType==7)
+                 ma.IsSupperText = 1;  
             ma.X = x;
             ma.Y = y;
 
@@ -1245,8 +1256,14 @@ namespace BP.Sys
         /// <param name="frmID"></param>
         public static void AfterFrmEditAction(string frmID)
         {
+            //清除缓存.
             BP.DA.CashFrmTemplate.Remove(frmID);
-            MapData mapdata = new MapData(frmID);
+            BP.DA.Cash.SetMap(frmID, null);
+
+            MapData mapdata = new MapData();
+            mapdata.No = frmID;
+            mapdata.RetrieveFromDBSources();
+            Cash2019.UpdateRow(mapdata.ToString(), frmID, mapdata.Row);
             mapdata.CleanObject();
             return;
         }
@@ -1278,7 +1295,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_GroupField);
 
             //加入明细表.
-            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            DataTable Sys_MapDtl = md.OrigMapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
 
             //加入枚举表.
@@ -1342,6 +1359,11 @@ namespace BP.Sys
 
             return ds;
         }
+        /// <summary>
+        /// 获得表单字段信息字段.
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
         {
 
@@ -1357,6 +1379,16 @@ namespace BP.Sys
 
             //加入主表信息.
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
+
+            //如果是开发者表单, 就把html信息放入到字段.
+            if (md.HisFrmType== FrmType.Develop)
+            {
+                Sys_MapData.Columns.Add("HtmlTemplateFile", typeof(string));
+                string text = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                Sys_MapData.Rows[0]["HtmlTemplateFile"] = text;
+            }
+
+
             ds.Tables.Add(Sys_MapData);
 
             //加入分组表.
@@ -1366,7 +1398,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_GroupField);
 
             //加入明细表.
-            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            DataTable Sys_MapDtl = md.OrigMapDtls.ToDataTableField("Sys_MapDtl");
             ds.Tables.Add(Sys_MapDtl);
 
             //加入枚举表.

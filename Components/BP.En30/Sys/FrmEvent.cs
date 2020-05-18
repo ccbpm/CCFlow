@@ -5,7 +5,6 @@ using System.Text;
 using System.Collections;
 using BP.DA;
 using BP.En;
-using BP.En;
 using BP.Port;
 using BP.Web;
 
@@ -174,6 +173,14 @@ namespace BP.Sys
         /// 当前节点移交后
         /// </summary>
         public const string ShitAfter = "ShitAfter";
+        /// <summary>
+        /// 节点催办后
+        /// </summary>
+        public const string PressAfter = "PressAfter";
+        /// <summary>
+        /// 节点抄送后
+        /// </summary>
+        public const string CCAfter = "CCAfter";
         /// <summary>
         /// 当节点加签后
         /// </summary>
@@ -814,6 +821,9 @@ namespace BP.Sys
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.IndexField = FrmEventAttr.FK_MapData; 
+
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);
@@ -873,6 +883,7 @@ namespace BP.Sys
         /// <returns>null 没有事件，其他为执行了事件。</returns>
         public string DoEventNode(string dotype, Entity en)
         {
+           // return null; // 2019-08-27 取消节点事件 zl 
             return DoEventNode(dotype, en, null);
         }
         /// <summary>
@@ -882,6 +893,11 @@ namespace BP.Sys
         /// <param name="en">数据实体</param>
         /// <param name="atPara">参数</param>
         /// <returns>null 没有事件，其他为执行了事件。</returns>
+        /// <remarks>
+        /// 不再使用节点事件 2019-08-27 zl
+        /// 原调用点有两处：（1）FrmEvent.cs 中的DoEventNode()； （2）Flow.cs中的DoFlowEventEntity()方法中，3973行 fes.DoEventNode(doType, en, atPara)。
+        /// 现在都已经取消调用
+        /// </remarks>
         public string DoEventNode(string dotype, Entity en, string atPara)
         {
             if (this.Count == 0)
@@ -935,13 +951,13 @@ namespace BP.Sys
             foreach (Attr attr in attrs)
             {
                 if (doc.Contains("@" + attr.Key) == false)
-                    break;
-                if (attr.MyDataType == DataType.AppString
-                    || attr.MyDataType == DataType.AppDateTime
-                    || attr.MyDataType == DataType.AppDate)
-                    doc = doc.Replace("@" + attr.Key, "'" + en.GetValStrByKey(attr.Key) + "'");
-                else
-                    doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                    continue ;
+                //if (attr.MyDataType == DataType.AppString
+                //    || attr.MyDataType == DataType.AppDateTime
+                //    || attr.MyDataType == DataType.AppDate)
+                //    doc = doc.Replace("@" + attr.Key, "'" + en.GetValStrByKey(attr.Key) + "'");
+                //else
+                doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
             }
 
             doc = doc.Replace("~", "'");
@@ -957,10 +973,12 @@ namespace BP.Sys
 
             if (doc.Contains("@") == true)
             {
-                if (System.Web.HttpContext.Current != null)
+                if (HttpContextHelper.Current != null)
                 {
                     /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
-                    string url = BP.Sys.Glo.Request.RawUrl;
+                    //string url = BP.Sys.Glo.Request.RawUrl;
+                    //2019-07-25 zyt改造
+                    string url = HttpContextHelper.RequestRawUrl ;
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
@@ -991,8 +1009,9 @@ namespace BP.Sys
                 if (SystemConfig.IsBSsystem)
                 {
                     /*是bs系统，并且是url参数执行类型.*/
-                    string url = BP.Sys.Glo.Request.RawUrl;
-
+                    //string url = BP.Sys.Glo.Request.RawUrl;
+                    //2019-07-25 zyt改造
+                    string url = HttpContextHelper.RequestRawUrl;
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
@@ -1021,11 +1040,13 @@ namespace BP.Sys
                     if (SystemConfig.IsBSsystem)
                     {
                         /*在cs模式下自动获取*/
-                        string host = BP.Sys.Glo.Request.Url.Host;
+                        //string host = BP.Sys.Glo.Request.Url.Host;
+                        //2019-07-25 zyt改造
+                        string host = HttpContextHelper.RequestUrlHost;
                         if (doc.Contains("@AppPath"))
-                            doc = doc.Replace("@AppPath", "http://" + host + BP.Sys.Glo.Request.ApplicationPath);
+                            doc = doc.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);
                         else
-                            doc = "http://" + BP.Sys.Glo.Request.Url.Authority + doc;
+                            doc = "http://" + HttpContextHelper.RequestUrlAuthority + doc;
                     }
 
                     if (SystemConfig.IsBSsystem == false)
@@ -1079,11 +1100,13 @@ namespace BP.Sys
                     {
                         if (SystemConfig.IsBSsystem)
                         {
-                            string host = BP.Sys.Glo.Request.Url.Host;
+                            //string host = BP.Sys.Glo.Request.Url.Host;
+                            //2019-07-25 zyt改造
+                            string host = HttpContextHelper.RequestUrlHost;
                             if (myURL.Contains("@AppPath"))
-                                myURL = myURL.Replace("@AppPath", "http://" + host + BP.Sys.Glo.Request.ApplicationPath);
+                                myURL = myURL.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);
                             else
-                                myURL = "http://" + BP.Sys.Glo.Request.Url.Authority + myURL;
+                                myURL = "http://" + HttpContextHelper.RequestUrlAuthority + myURL;
                         }
                         else
                         {
@@ -1194,9 +1217,10 @@ namespace BP.Sys
                         if (SystemConfig.IsBSsystem == true)
                         {
                             /*如果是bs系统, 就加入外部url的变量.*/
-                            foreach (string key in BP.Sys.Glo.Request.QueryString)
+                            //2019 - 07 - 25 zyt改造
+                            foreach (string key in HttpContextHelper.RequestParamKeys)
                             {
-                                string val = BP.Sys.Glo.Request.QueryString[key];
+                                string val = HttpContextHelper.RequestParams(key);
                                 try
                                 {
                                     r.Add(key, val);
@@ -1467,6 +1491,21 @@ namespace BP.Sys
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
+
+        public FrmEvents(int nodeID,string fk_flow)
+        {
+            QueryObject qo = new QueryObject(this);
+
+            qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
+            qo.addOr();
+            qo.addLeftBracket();
+            qo.AddWhere(FrmEventAttr.FK_Flow, fk_flow);
+            qo.addAnd();
+            qo.AddWhere(FrmEventAttr.FK_Node, 0);
+            qo.addRightBracket();
+            qo.DoQuery();
+        }
+
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

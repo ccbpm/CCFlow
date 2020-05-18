@@ -51,6 +51,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 map.AddMyPK();
                 map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
@@ -71,7 +73,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmBtnAttr.BtnID, null, "按钮ID", true, false, 0, 128, 20);
 
                 //显示的分组.
-                map.AddDDLSQL(FrmBtnAttr.GroupID, "0", "所在分组",
+                map.AddDDLSQL(FrmBtnAttr.GroupID,0, "所在分组",
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'", true);
              
                 this._enMap = map;
@@ -97,6 +99,12 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
+			//@sly
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            if (mapAttr.RetrieveFromDBSources() != 0)
+                mapAttr.Delete();
+
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();

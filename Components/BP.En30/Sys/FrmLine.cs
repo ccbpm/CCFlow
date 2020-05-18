@@ -175,6 +175,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmImgAthDBAttr.FK_MapData; 
+
 
                 map.AddMyPK();
                 map.AddTBString(FrmLineAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);

@@ -59,6 +59,14 @@ namespace BP.Sys
         /// </summary>
         public const string RecName = "RecName";
         /// <summary>
+        /// 所在部门
+        /// </summary>
+        public const string FK_Dept = "FK_Dept";
+        /// <summary>
+        /// 所在部门名称
+        /// </summary>
+        public const string FK_DeptName = "FK_DeptName";
+        /// <summary>
         /// 类别
         /// </summary>
         public const string Sort = "Sort";
@@ -225,8 +233,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
                 //获取最后"_"的位置
-                int idx = value.LastIndexOf('_');
-                string val = value.Substring(idx+1);
+                string val = value.Replace(this.FK_MapData+"_","");
                 this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val);
             }
         }
@@ -300,6 +307,39 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.RecName, value);
             }
         }
+
+    
+
+        /// <summary>
+        /// 所在部门
+        /// </summary>
+        public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmAttachmentDBAttr.FK_Dept);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentDBAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 所在部门名称
+        /// </summary>
+        public string FK_DeptName
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmAttachmentDBAttr.FK_DeptName);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentDBAttr.FK_DeptName, value);
+            }
+        }
+
+
         /// <summary>
         /// 附件编号
         /// </summary>
@@ -359,11 +399,11 @@ namespace BP.Sys
         /// <summary>
         /// 附件扩展名
         /// </summary>
-        public string NodeID
+        public int NodeID
         {
             get
             {
-                return this.GetValStringByKey(FrmAttachmentDBAttr.NodeID);
+                return this.GetValIntByKey(FrmAttachmentDBAttr.NodeID);
             }
             set
             {
@@ -415,6 +455,9 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+
+                map.IndexField = FrmAttachmentDBAttr.RefPKVal;
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
@@ -423,7 +466,8 @@ namespace BP.Sys
 
                 map.AddTBString(FrmAttachmentDBAttr.RefPKVal, null, "实体主键", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentDBAttr.FID, 0, "FID", true, false);
-                map.AddTBString(FrmAttachmentDBAttr.NodeID, null, "节点ID", true, false, 0, 50, 20);
+                map.AddTBInt(FrmAttachmentDBAttr.NodeID, 0, "节点ID", true, false);
+                
 
                 map.AddTBString(FrmAttachmentDBAttr.Sort, null, "类别", true, false, 0, 200, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileFullName, null, "文件路径", true, false, 0, 700, 20);
@@ -434,6 +478,8 @@ namespace BP.Sys
                 map.AddTBDateTime(FrmAttachmentDBAttr.RDT, null, "记录日期", true, false);
                 map.AddTBString(FrmAttachmentDBAttr.Rec, null, "记录人", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentDBAttr.RecName, null, "记录人名字", true, false, 0, 50, 20);
+                map.AddTBString(FrmAttachmentDBAttr.FK_Dept, null, "所在部门", true, false, 0, 50, 20);
+                map.AddTBString(FrmAttachmentDBAttr.FK_DeptName, null, "所在部门名称", true, false, 0, 50, 20);
                 map.AddTBStringDoc(FrmAttachmentDBAttr.MyNote, null, "备注", true, false);
 
                 map.AddTBInt(FrmAttachmentDBAttr.IsRowLock, 0, "是否锁定行", true, false);
@@ -491,11 +537,11 @@ namespace BP.Sys
             return base.beforeInsert();
         }
 
-        protected override bool beforeDelete()
+        protected override void afterDelete()
         {
             //判断删除excel数据提取的数据
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
-                return true;
+                return;
 
             //是一个流程先判断流程是否结束，如果结束了，就不让删除.
          //   string nodeID = this.FK_MapData.Replace("ND", "");
@@ -514,7 +560,7 @@ namespace BP.Sys
 
                 if (ath.AthSaveWay == Sys.AthSaveWay.FTPServer)
                 {
-                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
                              SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                     string fullName = this.FileFullName;
@@ -553,7 +599,7 @@ namespace BP.Sys
             }
 
 
-            return base.beforeDelete();
+             base.afterDelete();
         }
 
      

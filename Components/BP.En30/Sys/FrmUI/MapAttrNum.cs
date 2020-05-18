@@ -107,6 +107,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
@@ -117,8 +119,9 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值/小数位数", true, false, 0, 200, 20);
-
+                map.AddTBString(MapAttrAttr.DefVal, MapAttrAttr.DefaultVal, "默认值/小数位数", true, false, 0, 200, 20);
+ 
+                map.AddDDLSysEnum(MapAttrAttr.DefValType,1,"默认值选择方式",true,true,"DefValType","@0=默认值为空@1=按照设置的默认值设置",false);
                 string help = "给该字段设置默认值:\t\r";
 
                 help += "\t\r 1. 如果是整形就设置一个整形的数字作为默认值.";
@@ -131,11 +134,13 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-
+                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
                 map.SetHelperAlert("ExtIsSum", "如果是从表，就需要显示该从表的合计,在从表的底部.");
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -149,7 +154,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
               
@@ -178,11 +183,11 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "脚本验证";
-                rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "脚本验证";
+                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";
@@ -209,11 +214,22 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.DefVal, value);
             }
         }
+        public int DefValType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.DefValType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefValType, value);
+            }
+        }
         protected override bool beforeUpdateInsertAction()
         {
             //如果没默认值.
-            if (this.DefVal == "")
-                this.DefVal = "0";
+            if (this.DefVal == "" && this.DefValType==0)
+                this.DefVal =MapAttrAttr.DefaultVal;
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
@@ -221,9 +237,6 @@ namespace BP.Sys.FrmUI
 
             //是否显示合计
             attr.IsSum = this.GetValBooleanByKey("ExtIsSum");
-
-            //增加保留小数位数.
-            //attr.SetPara("DecimalDigits", this.GetValIntByKey("DecimalDigits"));
 
             attr.Update();
 
@@ -311,14 +324,7 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
         }
-        /// <summary>
-        /// 设置级联
-        /// </summary>
-        /// <returns></returns>
-        public string DoInputCheck()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
-        }
+        
         /// <summary>
         /// 扩展控件
         /// </summary>

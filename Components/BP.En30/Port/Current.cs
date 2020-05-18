@@ -25,11 +25,6 @@ namespace BP.Port
             if (val == null)
                 return isNullAsValue;
             return val as string;
-            //if (Session.ContainsKey(key))
-            //{
-            //    Session.Remove(key);
-            //}
-            //Session.Add(key, Value);
         }
 	}
  

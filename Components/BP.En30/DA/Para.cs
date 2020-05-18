@@ -10,7 +10,7 @@ namespace BP.DA
     {
         #region 属性
         public System.Data.DbType DAType = System.Data.DbType.String;
-        public System.Data.OracleClient.OracleType DATypeOfOra
+        public Oracle.ManagedDataAccess.Client.OracleDbType DATypeOfOra
         {
             get
             {
@@ -19,17 +19,17 @@ namespace BP.DA
                     case System.Data.DbType.String:
                     case System.Data.DbType.Object:
                         if (this.IsBigText)
-                            return System.Data.OracleClient.OracleType.Clob;
+                            return Oracle.ManagedDataAccess.Client.OracleDbType.Clob;
                         else
-                            return System.Data.OracleClient.OracleType.VarChar;
+                            return Oracle.ManagedDataAccess.Client.OracleDbType.Varchar2;
                     case System.Data.DbType.Int32:
                     case System.Data.DbType.Int16:
-                        return System.Data.OracleClient.OracleType.Number;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Int16;
                     case System.Data.DbType.Int64:
-                        return System.Data.OracleClient.OracleType.UInt32;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Int64;
                     case System.Data.DbType.Decimal:
                     case System.Data.DbType.Double:
-                        return System.Data.OracleClient.OracleType.Double;
+                        return Oracle.ManagedDataAccess.Client.OracleDbType.Double;
                     default:
                         throw new Exception("没有涉及到的类型。typeof(obj)=" + this.DAType.ToString());
                 }
@@ -182,7 +182,7 @@ namespace BP.DA
 		}
         public void Add( object obj)
         {
-            this.Add("p", obj);
+           this.Add("p", obj);
         }
         public void Add(string _name, object obj)
         {
@@ -200,6 +200,18 @@ namespace BP.DA
                     return;
                 }
             }
+
+            // 2019-8-8 适配pgsql数据库的新版驱动，要求数据类型一致
+            //if (String.Compare("FK_Node", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            //{
+            //    this.Add(_name, Convert.ToInt32(obj));
+            //    return;
+            //}
+            //if (String.Compare("WorkID", _name, StringComparison.OrdinalIgnoreCase) == 0)
+            //{
+            //    this.Add(_name, Convert.ToInt64(obj));
+            //    return;
+            //}
 
             if (obj.GetType() == typeof(string))
             {
@@ -263,7 +275,7 @@ namespace BP.DA
 			this.Add(en);
 		}
 
-        private void Add(string _name, Int32 _val)
+        public void Add(string _name, Int32 _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Int32;
@@ -271,7 +283,7 @@ namespace BP.DA
 			en.ParaName = _name ;
 			this.Add(en);
 		}
-        private void Add(string _name, Int64 _val)
+        public void Add(string _name, Int64 _val)
         {
             Para en = new Para();
             en.DAType = System.Data.DbType.Int64;
@@ -279,14 +291,14 @@ namespace BP.DA
             en.ParaName = _name;
             this.Add(en);
         }
-        private void Add(string _name, float _val)
+        public void Add(string _name, float _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Decimal;
             //   en.DAType = System.Data.DbType.Int64;
 			en.val = _val;
 			en.ParaName = _name ;
-			this.Add(en);			
+			this.Add(en);
 		}
         public void AddDBNull(string _name)
         {
@@ -296,7 +308,7 @@ namespace BP.DA
             en.ParaName = _name;
             this.Add(en);
         }
-        private void Add(string _name, decimal _val)
+        public void Add(string _name, decimal _val)
 		{
 			Para en = new Para();
 			en.DAType=System.Data.DbType.Decimal;
@@ -304,7 +316,7 @@ namespace BP.DA
 			en.ParaName = _name ;
 			this.Add(en);			
 		}
-        private void Add(string _name, double _val)
+        public void Add(string _name, double _val)
         {
             Para en = new Para();
             en.DAType = System.Data.DbType.Decimal;

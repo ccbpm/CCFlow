@@ -75,7 +75,16 @@ namespace BP.Sys
         /// <summary>
         /// 工作ID,对流程有效.
         /// </summary>
-        WorkID
+        WorkID,
+        /// <summary>
+        /// P2流程
+        /// </summary>
+        P2WorkID,
+        /// <summary>
+        /// P3流程
+        /// </summary>
+        P3WorkID
+
     }
     /// <summary>
     /// 附件上传类型
@@ -306,6 +315,10 @@ namespace BP.Sys
        /// 附件类型 0 普通附件 1 图片附件
        /// </summary>
         public const string FileType = "FileType";
+        /// <summary>
+        /// 移动端图片附件上传的方式
+        /// </summary>
+        public const string PicUploadType = "PicUploadType";
 
         /// <summary>
         /// 附件删除方式
@@ -1268,6 +1281,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmAttachmentAttr.FK_MapData;
+
                 map.AddMyPK();
 
 
@@ -1301,6 +1316,8 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否可见", false, false);
                 //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
                 map.AddTBInt(FrmAttachmentAttr.FileType, 0, "附件类型", false,false);
+                map.AddTBInt(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true);
+                map.AddTBInt(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true);
 
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
@@ -1389,7 +1406,7 @@ namespace BP.Sys
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
             
             //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
-            if (this.FK_Node != 0)
+            if (this.FK_Node != 0 && this.HisCtrlWay == AthCtrlWay.PK)
                 this.HisCtrlWay = AthCtrlWay.WorkID;
 
             return base.beforeInsert();
@@ -1400,7 +1417,7 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;

@@ -2,6 +2,7 @@
 using System.Data;
 using BP.DA;
 using BP.En;
+using BP.Port;
 
 namespace BP.GPM
 {
@@ -159,24 +160,6 @@ namespace BP.GPM
 		#endregion 
 
 		#region 查询方法
-		/// <summary>
-		/// 岗位对应的节点
-		/// </summary>
-		/// <param name="stationNo">岗位编号</param>
-		/// <returns>节点s</returns>
-		public Emps GetHisEmps(string stationNo)
-		{
-			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(DeptStationAttr.FK_Station, stationNo );
-			qo.addOrderBy(DeptStationAttr.FK_Station);
-			qo.DoQuery();
-
-			Emps ens = new Emps();
-			foreach(DeptStation en in this)
-				ens.AddEntity( new Emp(en.FK_Dept)) ;
-			
-			return ens;
-		}
 		/// <summary>
 		/// 工作部门岗位对应s
 		/// </summary>

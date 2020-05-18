@@ -1,95 +1,107 @@
 ﻿using System;
-using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.En;
+using BP.Port;
 
 namespace BP.Pub
 {
-	/// <summary>
-	/// 年度
-	/// </summary>
-	public class ND :SimpleNoNameFix
-	{
-		#region 实现基本的方方法
-		/// <summary>
-		/// 物理表
-		/// </summary>
-		public override string  PhysicsTable
-		{
-			get
-			{
-				return "Pub_ND";
-			}
-		}
-		/// <summary>
-		/// 描述
-		/// </summary>
-		public override string  Desc
-		{
-			get
-			{
-                return "年度";// "年度";
-			}
-		}
-		#endregion 
+    /// <summary>
+    /// 年度
+    /// </summary>
+    public class NDAttr : EntityNoNameAttr
+    {
+        #region 基本属性
+        public const string FK_SF = "FK_SF";
+        #endregion
+    }
+    /// <summary>
+    /// 年度
+    /// </summary>
+    public class ND : EntityNoName
+    {
+        #region 基本属性
+        #endregion
 
-		#region 构造方法
-		public ND()
-		{
-		}
-		public ND(string _No ):base(_No)
-		{
-		}
-		#endregion 
-	}
-	/// <summary>
-	/// NDs
-	/// </summary>
-	public class NDs :SimpleNoNameFixs
-	{
-		/// <summary>
-		/// 年度集合
-		/// </summary>
-		public NDs()
-		{
-		}
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new ND();
-			}
-		}
-        public override int RetrieveAll()
+        #region 构造函数
+        public override UAC HisUAC
         {
-            return base.RetrieveAll();
-        }
-
-        #region 为了适应自动翻译成java的需要,把实体转换成List.
-        /// <summary>
-        /// 转化成 java list,C#不能调用.
-        /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.IList<ND> ToJavaList()
-        {
-            return (System.Collections.Generic.IList<ND>)this;
-        }
-        /// <summary>
-        /// 转化成list
-        /// </summary>
-        /// <returns>List</returns>
-        public System.Collections.Generic.List<ND> Tolist()
-        {
-            System.Collections.Generic.List<ND> list = new System.Collections.Generic.List<ND>();
-            for (int i = 0; i < this.Count; i++)
+            get
             {
-                list.Add((ND)this[i]);
+                UAC uac = new UAC();
+                uac.OpenForSysAdmin();
+                return uac;
             }
-            return list;
         }
-        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+        /// <summary>
+        /// 年度
+        /// </summary>		
+        public ND() { }
+        public ND(string no) : base(no)
+        {
+        }
+
+
+        /// <summary>
+        /// Map
+        /// </summary>
+        public override Map EnMap
+        {
+            get
+            {
+                if (this._enMap != null)
+                    return this._enMap;
+                Map map = new Map("Pub_ND", "年度");
+
+                #region 基本属性 
+                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
+                map.AdjunctType = AdjunctType.AllType;
+                map.DepositaryOfMap = Depositary.Application;
+                map.DepositaryOfEntity = Depositary.None;
+                map.IsCheckNoLength = false;
+                map.EnType = EnType.App;
+                map.CodeStruct = "4";
+                #endregion
+
+                #region 字段 
+                map.AddTBStringPK(NDAttr.No, null, "编号", true, false, 0, 50, 50);
+                map.AddTBString(NDAttr.Name, null, "名称", true, false, 0, 50, 200);
+                #endregion
+
+                this._enMap = map;
+                return this._enMap;
+            }
+        }
+        public override Entities GetNewEntities
+        {
+            get { return new NDs(); }
+        }
+        #endregion
+    }
+    /// <summary>
+    /// 年度
+    /// </summary>
+    public class NDs : EntitiesNoName
+    {
+        #region 
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new ND();
+            }
+        }
+        #endregion
+
+        #region 构造方法
+        /// <summary>
+        /// 年度s
+        /// </summary>
+        public NDs() { }
+        #endregion
+    }
+
 }

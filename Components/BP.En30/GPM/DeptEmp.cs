@@ -19,6 +19,10 @@ namespace BP.GPM
         /// 人员
         /// </summary>
         public const string FK_Emp = "FK_Emp";
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
     /// <summary>
@@ -103,12 +107,14 @@ namespace BP.GPM
                     return this._enMap;
 
                 Map map = new Map("Port_DeptEmp");
-                map.EnDesc = "部门人员信息";  
+                map.EnDesc = "部门人员信息";
+                map.IndexField = DeptEmpAttr.FK_Dept;
+
                 
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddDDLEntities(DeptEmpAttr.FK_Emp, null, "操作员", new BP.Port.Emps(), false);
-
+                map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", false, false, 0, 50, 50);
 
                 this._enMap = map;
                 return this._enMap;
@@ -176,6 +182,15 @@ namespace BP.GPM
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+
+        #region 删除方法
+        public string DelteNotInEmp()
+        {
+            string sql = "DELETE FROM Port_DeptEmp WHERE FK_Emp NOT IN (SELECT No FROM Port_Emp)";
+            DBAccess.RunSQL(sql);
+            return "删除成功";
+        }
+        #endregion
 
     }
 }

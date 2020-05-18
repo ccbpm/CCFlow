@@ -801,6 +801,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmEleAttr.FK_MapData;
+
 
                 //主键.
                 map.AddMyPK();

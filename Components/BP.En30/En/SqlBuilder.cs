@@ -162,9 +162,9 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.PK || attr.MyFieldType == FieldType.PKFK || attr.MyFieldType == FieldType.PKEnum)
                 {
                     if (dbStr == "?")
-                        sql = sql + " AND " + attr.Field + "=" + dbStr;
+                        sql = sql + " AND " + en.EnMap.PhysicsTable + "." + attr.Field + "=" + dbStr;
                     else
-                        sql = sql + " AND " + attr.Field + "=" + dbStr + attr.Field;
+                        sql = sql + " AND " + en.EnMap.PhysicsTable + "." + attr.Field + "=" + dbStr + attr.Field;
                 }
             }
             return sql;
@@ -891,9 +891,13 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppFloat:
-                    case DataType.AppMoney:
-                    case DataType.AppDouble:
                         sql += attr.Field + " float  NULL COMMENT '" + attr.Desc + "',";
+                        break;
+                    case DataType.AppMoney:
+                        sql += attr.Field + " decimal(20,4)  NULL COMMENT '" + attr.Desc + "',";
+                        break;
+                    case DataType.AppDouble:
+                        sql += attr.Field + " double  NULL COMMENT '" + attr.Desc + "',";
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
@@ -906,7 +910,10 @@ namespace BP.En
                         }
                         else
                         {
-                            sql += attr.Field + " INT DEFAULT " + attr.DefaultVal + " COMMENT '" + attr.Desc + "',";
+                            if (attr.DefValType == 0 && attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal)==true)
+                                sql += attr.Field + " INT  NULL COMMENT '" + attr.Desc + "',";
+                            else
+                                sql += attr.Field + " INT DEFAULT " + attr.DefaultVal + " COMMENT '" + attr.Desc + "',";
                         }
                         break;
                     default:
@@ -914,7 +921,7 @@ namespace BP.En
                 }
             }
             sql = sql.Substring(0, sql.Length - 1);
-            sql += ")";
+            sql += ") default charset=utf8 ";
 
             return sql;
         }
@@ -1533,7 +1540,9 @@ namespace BP.En
                         }
                         else
                         {
+                         //   val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
                             val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
+
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -2423,7 +2432,7 @@ namespace BP.En
                             ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
                             break;
                         case DataType.AppInt:
-                            if (attr.Key.Equals("MyPK") ) //特殊判断解决 truck 是64位的int类型的数值问题.
+                            if (attr.Key.Equals("MyPK")) //特殊判断解决 truck 是64位的int类型的数值问题.
                             {
                                 ps.Add(attr.Key, en.GetValInt64ByKey(attr.Key));
                             }
@@ -2442,7 +2451,12 @@ namespace BP.En
                                 if (strInt == null || strInt == "" || strInt == "null")
                                     ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
                                 else
-                                    ps.Add(attr.Key, int.Parse(strInt));
+                                    if (attr.DefValType == 0
+                                        && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                        && en.GetValIntByKey(attr.Key) == Int32.Parse(MapAttrAttr.DefaultVal))
+                                        ps.Add(attr.Key, null);
+                                    else
+                                         ps.Add(attr.Key, int.Parse(strInt));
                             }
                             break;
                         //@YLN
@@ -2459,7 +2473,12 @@ namespace BP.En
                             }
                             else
                             {
-                                ps.Add(attr.Key, decimal.Parse(str));
+                                if (attr.DefValType == 0
+                                       && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                       && en.GetValIntByKey(attr.Key) == Int64.Parse(MapAttrAttr.DefaultVal))
+                                    ps.Add(attr.Key, null);
+                                else
+                                    ps.Add(attr.Key, decimal.Parse(str));
                             }
                             break;
                         case DataType.AppMoney:
@@ -2474,8 +2493,12 @@ namespace BP.En
                                 str = str.Replace("￥", "");
                                 str = str.Replace(",", "");
                             }
-
-                            ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
+                            if (attr.DefValType == 0
+                                       && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
+                                       && str.Equals(MapAttrAttr.DefaultVal))
+                                ps.Add(attr.Key, null);
+                            else
+                                ps.Add(attr.Key, double.Parse(str, System.Globalization.NumberStyles.Any));
 
                             break;
                         case DataType.AppDate: // 如果是日期类型。

@@ -93,6 +93,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
 
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
@@ -105,7 +107,7 @@ namespace BP.Sys.FrmUI
                 //默认值.
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
+                //map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
 
                 //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
@@ -129,7 +131,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
                 #endregion 傻瓜表单。
 
@@ -228,7 +230,7 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = attr.FK_MapData + "_" + this.KeyOfEn + "T";
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "T";
             attr.Delete();
 
             //删除相对应的rpt表中的字段

@@ -53,6 +53,17 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
             }
         }
+        public string FK_MapData
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.FK_MapData);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.FK_MapData, value);
+            }
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -66,7 +77,8 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_FrmImg", "装饰图片");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
+                map.Java_SetEnType(EnType.Sys);          
+                map.IndexField = MapAttrAttr.FK_MapData;
 
                 map.AddMyPK();
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 0, 200, 20);
@@ -97,7 +109,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
 
                 //跨单元格
@@ -132,8 +144,8 @@ namespace BP.Sys.FrmUI
 
                 attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
 
-                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); //名称.
-                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); //名称.
+                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); 
+                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); 
                 attr.Update();
             }
 
@@ -144,6 +156,7 @@ namespace BP.Sys.FrmUI
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.MyPK = this.MyPK;
+            attr.FK_MapData = this.FK_MapData;
             attr.Delete();
 
             base.afterDelete();

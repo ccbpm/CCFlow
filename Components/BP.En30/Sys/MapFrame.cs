@@ -18,6 +18,7 @@ namespace BP.Sys
         /// URL
         /// </summary>
         public const string URL = "URL";
+        public const string FrameURL = "FrameURL";
         public const string UrlSrcType = "UrlSrcType";
         public const string FrmID = "FrmID";
 
@@ -125,14 +126,14 @@ namespace BP.Sys
         {
             get
             {
-                string s= this.GetValStrByKey(MapFrameAttr.URL);
+                string s= this.GetValStrByKey(MapFrameAttr.FrameURL);
                 if (DataType.IsNullOrEmpty(s))
                     return "http://ccflow.org";
                 return s;
             }
             set
             {
-                this.SetValByKey(MapFrameAttr.URL, value);
+                this.SetValByKey(MapFrameAttr.FrameURL, value);
             }
         }
         public float X
@@ -237,10 +238,11 @@ namespace BP.Sys
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
                 map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
+                map.AddTBString(MapFrameAttr.FrameURL, null, "FrameURL", true, false, 0, 3000, 20, true);
 
                 map.AddTBInt(MapFrameAttr.UrlSrcType, 0, "URL来源", false, false);
 
-//@sly.
+
               //  map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                 //"@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
 

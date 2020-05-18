@@ -402,11 +402,11 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsHeLiuHuiZong);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsHeLiuHuiZong);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsHeLiuHuiZong, value);
+                this.SetValByKey(FrmAttachmentAttr.IsHeLiuHuiZong, value);
             }
         }
         /// <summary>
@@ -416,11 +416,11 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsToHeLiuHZ);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsToHeLiuHZ);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.IsToHeLiuHZ, value);
+                this.SetValByKey(FrmAttachmentAttr.IsToHeLiuHZ, value);
             }
         }
         /// <summary>
@@ -762,6 +762,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
                 map.AddMyPK();
 
                 #region 基本属性。
@@ -809,6 +811,9 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.FileType, 0, "附件类型", true, true, FrmAttachmentAttr.FileType, "@0=普通附件@1=图片文件");
 
+                map.AddDDLSysEnum(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true, FrmAttachmentAttr.PicUploadType, "@0=拍照上传或者相册上传@1=只能拍照上传");
+                map.SetHelperAlert(FrmAttachmentAttr.PicUploadType, "该功能只使用于移动端图片文件上传的方式.");
+
                 #endregion 基本属性。
 
                 #region 权限控制。
@@ -832,7 +837,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, "@0=继承模式@1=协作模式");
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, "Ath" + FrmAttachmentAttr.CtrlWay,
-                    "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的附件@4=按照WorkID计算(对流程节点表单有效)");
+                    "@0=PK-主键@1=FID-干流程ID@2=PWorkID-父流程ID@3=仅能查看自己上传的附件@4=WorkID-按照WorkID计算(对流程节点表单有效)@5=P2WorkID@6=P3WorkID");
 
 
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DataRef, 0, "数据引用", true, true, FrmAttachmentAttr.DataRef,
@@ -920,7 +925,7 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(SystemConfig.FTPServerIP,  SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)
@@ -968,7 +973,7 @@ namespace BP.Sys.FrmUI
 
             #region 处理分组.
             //更新相关的分组信息.
-            if (this.IsVisable == true)
+            if (this.IsVisable == true && this.FK_Node == 0)
             {
                 GroupField gf = new GroupField();
                 int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
@@ -1012,6 +1017,8 @@ namespace BP.Sys.FrmUI
             this.IsWoEnableOver = false;
             this.IsWoEnableSeal = false;
             this.IsWoEnableTemplete = false;
+            this.IsToHeLiuHZ = true;
+            this.IsHeLiuHuiZong = true;
 
             if (this.FK_Node == 0)
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
@@ -1026,7 +1033,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            if (gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;
@@ -1043,7 +1050,20 @@ namespace BP.Sys.FrmUI
             FrmAttachment ath = new FrmAttachment();
             ath.MyPK = this.MyPK;
             ath.RetrieveFromDBSources();
+            ath.IsToHeLiuHZ = this.IsToHeLiuHZ;
+            ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
             ath.Update();
+          
+
+            //判断是否是字段附件
+            MapAttr mapAttr = new MapAttr();
+            mapAttr.MyPK = this.MyPK;
+            if (mapAttr.RetrieveFromDBSources() != 0 && mapAttr.Name.Equals(this.Name) == false)
+            {
+                mapAttr.Name = this.Name;
+                mapAttr.Update();
+            }
+
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
@@ -1055,13 +1075,19 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
-            GroupField gf = new GroupField();
-            gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
+            GroupFields gfs= new GroupFields();
+            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK+"%");
+            gfs.Delete();
+            //gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.MyPK = this.MyPK;
-            attr.Delete();
+            if (attr.RetrieveFromDBSources() != 0)
+            {
+                attr.Delete();  
+            }
+            
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);

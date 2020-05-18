@@ -21,7 +21,7 @@ namespace BP.Sys
         /// Target
         /// </summary>
         public const string Target = "Target";
-        public const string URL = "URL";
+        public const string URLExt = "URLExt";
         /// <summary>
         /// X
         /// </summary>
@@ -100,15 +100,15 @@ namespace BP.Sys
                 this.SetValByKey(FrmLinkAttr.FontColor, value);
             }
         }
-        public string URL
+        public string URLExt
         {
             get
             {
-                return this.GetValStringByKey(FrmLinkAttr.URL).Replace("#","@");
+                return this.GetValStringByKey(FrmLinkAttr.URLExt).Replace("#","@");
             }
             set
             {
-                this.SetValByKey(FrmLinkAttr.URL, value);
+                this.SetValByKey(FrmLinkAttr.URLExt, value);
             }
         }
         /// <summary>
@@ -259,13 +259,15 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmImgAthDBAttr.FK_MapData; 
+
 
                 map.AddMyPK();
 
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmLinkAttr.Text, "New Link", "Label", true, false, 0, 500, 20);
 
-                map.AddTBString(FrmLinkAttr.URL, null, "URL", true, false, 0, 500, 20);
+                map.AddTBString(FrmLinkAttr.URLExt, null, "URLExt", true, false, 0, 500, 20);
 
                 map.AddTBString(FrmLinkAttr.Target, "_blank", "Target", true, false, 0, 20, 20);
 

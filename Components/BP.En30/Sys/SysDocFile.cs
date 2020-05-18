@@ -7,7 +7,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.OleDb;
 
-
 namespace BP.Sys
 {
     public class SysDocFileAttr

@@ -9,6 +9,26 @@ namespace BP.DA
 {
     public class Cash2019
     {
+        /// <summary>
+        /// 清除所有的实体缓存.
+        /// </summary>
+        public static void ClearCash()
+        {
+            _hts = null;
+        }
+        /// <summary>
+        /// 清除指定的缓存数据.
+        /// </summary>
+        /// <param name="enName">实体名称</param>
+        public static void ClearCashSpecEnName(string enName)
+        {
+            Hashtable ht = hts[enName] as Hashtable;
+            if (ht != null)
+            {
+                hts.Remove(enName);
+            }
+        }
+
         #region 缓存ht
         private static Hashtable _hts;
         public static Hashtable hts
@@ -39,7 +59,10 @@ namespace BP.DA
                     ht = new Hashtable();
                     hts.Add(enName, ht);
                 }
-                ht.Add(pkVal.ToString(), row);
+                if (ht.ContainsKey(pkVal) == true)
+                    ht[pkVal] = row;
+                else
+                    ht.Add(pkVal, row);
             }
         }
         public static void UpdateRow(string enName, string pkVal, Row row)
@@ -52,7 +75,7 @@ namespace BP.DA
                     ht = new Hashtable();
                     hts.Add(enName, ht);
                 }
-                ht[pkVal]=row; 
+                ht[pkVal] = row;
             }
         }
         public static void DeleteRow(string enName, string pkVal)
@@ -110,6 +133,6 @@ namespace BP.DA
             return null;
         }
         #endregion 对实体的集合操作.
- 
+
     }
 }

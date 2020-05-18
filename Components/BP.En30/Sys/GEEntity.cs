@@ -79,6 +79,7 @@ namespace BP.Sys
         public GEEntity(string fk_mapdata)
         {
             this.FK_MapData = fk_mapdata;
+            this._enMap = null;
         }
         /// <summary>
         /// 通用OID实体
@@ -89,6 +90,7 @@ namespace BP.Sys
         {
             this.FK_MapData = fk_mapdata;
             this.PKVal = pk;
+            this._enMap = null;
             this.Retrieve();
         }
         #endregion
@@ -153,7 +155,7 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.OID);
+                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.OID+"'");
 
                 //求对应的Idx的，从表配置.
                 MapDtl dtlFrom = dtlsFrom[i] as MapDtl;
@@ -218,7 +220,11 @@ namespace BP.Sys
                 BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.OID+"'");
 
                 GEDtls ensDtl = new GEDtls(dtl.No);
-                ensDtl.Retrieve(GEDtlAttr.RefPK, oidOID);
+
+             //   var typeVal = BP.Sys.Glo.GenerRealType( ensDtl.GetNewEntity.EnMap.Attrs, GEDtlAttr.RefPK, this.OID);
+
+                ensDtl.Retrieve(GEDtlAttr.RefPK, this.OID.ToString() );
+
                 foreach (GEDtl enDtl in ensDtl)
                 {
                     enDtl.RefPK = this.OID.ToString();

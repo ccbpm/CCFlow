@@ -149,8 +149,9 @@ namespace BP.Sys.FrmUI
             get
             {
                 UAC uac = new UAC();
-                uac.Readonly();
+                uac.IsInsert = false;
                 uac.IsUpdate = true;
+                uac.IsDelete = true;
                 return uac;
             }
         }
@@ -182,6 +183,8 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
@@ -197,6 +200,16 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmImgAthAttr.IsEdit, true, "是否可编辑", true, true);
                 //map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddBoolean(FrmImgAthAttr.IsRequired, false, "是否必填项", true, true);
+                //显示的分组.
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
+
+                //跨单元格
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                //跨行
+                map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
+                   "@1=跨1个行@2=跨2行@3=跨3行");
                 //map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
                 //map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, true, 0, 128, 20);
 
@@ -230,6 +243,11 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
+            //把相关的字段也要删除.
+            MapAttrString attr = new MapAttrString();
+            attr.MyPK = this.MyPK;
+            attr.FK_MapData = this.FK_MapData;
+            attr.Delete();
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
             base.afterDelete();

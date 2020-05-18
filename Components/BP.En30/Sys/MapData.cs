@@ -4,6 +4,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BP.Sys
 {
@@ -46,7 +47,7 @@ namespace BP.Sys
         Dtl
     }
     /// <summary>
-    /// 表单类型 0=傻瓜表单@1=自由表单@2=Silverlight表单(已取消)@3=嵌入式表单@4=Word表单@5=Excel表单
+    /// 表单类型 @0=傻瓜表单@1=自由表单@3=嵌入式表单@4=Word表单@5=Excel表单@6=VSTOForExcel@7=Entity
     /// </summary>
     public enum FrmType
     {
@@ -59,10 +60,6 @@ namespace BP.Sys
         /// </summary>
         FreeFrm = 1,
         /// <summary>
-        /// Silverlight表单(已取消)
-        /// </summary>
-        Silverlight = 2,
-        /// <summary>
         /// URL表单(自定义)
         /// </summary>
         Url = 3,
@@ -71,7 +68,7 @@ namespace BP.Sys
         /// </summary>
         WordFrm = 4,
         /// <summary>
-        /// Excel类型表单
+        /// Excel表单
         /// </summary>
         ExcelFrm = 5,
         /// <summary>
@@ -79,9 +76,13 @@ namespace BP.Sys
         /// </summary>
         VSTOForExcel = 6,
         /// <summary>
-        /// 实体类组件
+        /// 实体类
         /// </summary>
-        Entity
+        Entity = 7,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        Develop = 8
     }
     /// <summary>
     /// 映射基础
@@ -149,6 +150,10 @@ namespace BP.Sys
         /// </summary>
         public const string FrmType = "FrmType";
         /// <summary>
+        /// 业务类型
+        /// </summary>
+        public const string EntityType = "EntityType";
+        /// <summary>
         /// 表单展示方式
         /// </summary>
         public const string FrmShowType = "FrmShowType";
@@ -196,6 +201,10 @@ namespace BP.Sys
         /// 流程控件
         /// </summary>
         public const string FlowCtrls = "FlowCtrls";
+        /// <summary>
+        ///组织解构.
+        /// </summary>
+        public const string OrgNo = "OrgNo";
 
 
         #region 报表属性(参数的方式存储).
@@ -308,6 +317,7 @@ namespace BP.Sys
     /// </summary>
     public class MapData : EntityNoName
     {
+
         #region entity 相关属性(参数属性)
         /// <summary>
         /// 属性ens
@@ -324,7 +334,6 @@ namespace BP.Sys
             }
         }
         #endregion entity 相关操作.
-
 
         #region weboffice文档属性(参数属性)
         /// <summary>
@@ -668,6 +677,17 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.Ver, value);
             }
         }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDataAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.OrgNo, value);
+            }
+        }
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -763,7 +783,24 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 从表
+        /// 从表原始属性的获取
+        /// </summary>
+        public MapDtls OrigMapDtls
+        {
+            get
+            {
+                MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
+                if (obj == null)
+                {
+                    obj = new MapDtls();
+                    obj.Retrieve(MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node, 0);
+                    this.SetRefObject("MapDtls", obj);
+                }
+                return obj;
+            }
+        }
+        /// <summary>
+        /// 查询给MapData下的所有从表数据
         /// </summary>
         public MapDtls MapDtls
         {
@@ -1034,18 +1071,16 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
             return;
-            
-
-
         }
-
         /// <summary>
         /// 清空缓存
         /// </summary>
         public void ClearCash()
         {
             BP.DA.CashFrmTemplate.Remove(this.No);
+            BP.DA.Cash.SetMap(this.No, null);
             CleanObject();
+            BP.DA.Cash.SQL_Cash.Remove(this.No);
         }
 
         #region 基本属性.
@@ -1220,6 +1255,19 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDataAttr.FrmType, (int)value);
+            }
+        }
+
+
+        public int HisEntityType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.EntityType);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.EntityType, value);
             }
         }
         /// <summary>
@@ -1442,7 +1490,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapDataAttr.TableCol,value);
+                this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
 
@@ -1639,6 +1687,10 @@ namespace BP.Sys
 
                 map.AddTBInt(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true);
 
+                map.AddDDLSysEnum(MapDataAttr.EntityType, 0, "业务类型", true, false, MapDataAttr.EntityType,
+                  "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
+                map.SetHelperAlert(MapDataAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
+
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);
                 map.AddTBString(MapDataAttr.DBSrc, "local", "数据源", true, false, 0, 100, 20);
@@ -1661,6 +1713,9 @@ namespace BP.Sys
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 #endregion
+
+                map.AddTBString(MapDataAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -1911,7 +1966,7 @@ namespace BP.Sys
             MapData md = new MapData();
             md.No = fk_mapData;
             if (md.IsExits)
-                throw new Exception("@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
+                throw new Exception("err@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
             //导入.
             return ImpMapData(fk_mapData, ds);
@@ -1993,11 +2048,11 @@ namespace BP.Sys
         /// <summary>
         /// 导入表单
         /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
+        /// <param name="specFrmID">指定的表单ID</param>
         /// <param name="ds">表单数据</param>
         /// <param name="isSetReadonly">是否设置只读？</param>
         /// <returns></returns>
-        public static MapData ImpMapData(string fk_mapdata, DataSet ds)
+        public static MapData ImpMapData(string specFrmID, DataSet ds)
         {
 
             #region 检查导入的数据是否完整.
@@ -2037,8 +2092,15 @@ namespace BP.Sys
 
             //检查是否存在OID字段.
             MapData mdOld = new MapData();
-            mdOld.No = fk_mapdata;
+            mdOld.No = specFrmID;
             mdOld.RetrieveFromDBSources();
+
+            //现在表单的类型
+            FrmType frmType = mdOld.HisFrmType;
+
+            //业务类型
+            int entityType = mdOld.HisEntityType;
+
             mdOld.Delete();
 
             // 求出dataset的map.
@@ -2059,8 +2121,6 @@ namespace BP.Sys
             }
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
 
-
-
             #region 表单元素
             foreach (DataTable dt in ds.Tables)
             {
@@ -2079,7 +2139,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
 
                             }
                             dtl.Insert();
@@ -2095,7 +2155,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //如果物理表为空，则使用编号为物理数据表
@@ -2116,10 +2176,43 @@ namespace BP.Sys
                                 md.Name = mdOld.Name;
 
                             md.HisFrmType = mdOld.HisFrmType;
+                            if (frmType == FrmType.Develop)
+                                md.HisFrmType = FrmType.Develop;
+
+                            if (entityType != md.HisEntityType)
+                                md.HisEntityType = entityType;
+
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
-
                             md.DirectInsert();
+                            Cash2019.UpdateRow(md.ToString(), md.No.ToString(), md.Row);
+
+                            //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
+                            if (frmType == FrmType.Develop)
+                            {
+                                string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
+                                if (DataType.IsNullOrEmpty(htmlCode) == false)
+                                {
+                                    //保存到数据库，存储html文件
+                                    //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    if (Directory.Exists(filePath) == false)
+                                        Directory.CreateDirectory(filePath);
+                                    filePath = filePath + md.No + ".htm";
+                                    //写入到html 中
+                                    BP.DA.DataType.WriteFile(filePath, htmlCode);
+                                    // HtmlTemplateFile 保存到数据库中
+                                    BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                                else
+                                {
+                                    //如果htmlCode是空的需要删除当前节点的html文件
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    if (File.Exists(filePath) == true)
+                                        File.Delete(filePath);
+                                    BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                            }
                         }
                         break;
                     case "Sys_FrmBtn":
@@ -2135,7 +2228,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
@@ -2156,7 +2249,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             //en.MyPK = "LE_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
@@ -2174,10 +2267,8 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-                            //  en.FK_MapData = fk_mapdata; 删除此行解决从表lab的问题。
-                            //en.MyPK = "LB_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
                             en.Insert();
                         }
@@ -2195,7 +2286,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             //en.MyPK = "LK_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
@@ -2215,7 +2306,7 @@ namespace BP.Sys
 
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
 
@@ -2233,11 +2324,11 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-                            if(DataType.IsNullOrEmpty(en.KeyOfEn) == true)
+                            if (DataType.IsNullOrEmpty(en.KeyOfEn) == true)
                                 en.MyPK = DBAccess.GenerGUID();
-                           
+
                             en.Insert();
                         }
                         break;
@@ -2252,7 +2343,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             if (DataType.IsNullOrEmpty(en.CtrlID))
@@ -2272,9 +2363,8 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-
 
                             try
                             {
@@ -2296,9 +2386,9 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-                            en.MyPK = fk_mapdata + "_" + en.GetValByKey("NoOfObj");
+                            en.MyPK = specFrmID + "_" + en.GetValByKey("NoOfObj");
 
 
                             try
@@ -2322,7 +2412,7 @@ namespace BP.Sys
                                     continue;
 
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             en.DirectInsert();
                         }
@@ -2339,7 +2429,7 @@ namespace BP.Sys
                                     continue;
                                 if (DataType.IsNullOrEmpty(val.ToString()) == true)
                                     continue;
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             //执行保存，并统一生成PK的规则.
@@ -2357,7 +2447,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
                             en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
@@ -2366,6 +2456,21 @@ namespace BP.Sys
                             try
                             {
                                 en.DirectInsert();
+                                //判断该字段是否是大文本 例如注释、说明
+                                if (en.UIContralType == UIContralType.BigText)
+                                {
+                                    //判断原文件是否存在
+                                    string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
+                                    //若文件存在，则复制                                  
+                                    if (System.IO.File.Exists(file) == true)
+                                    {
+                                        string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + specFrmID + ".htm";
+                                        if (System.IO.File.Exists(newFile) == true)
+                                            System.IO.File.Delete(newFile);
+                                        System.IO.File.Copy(file, newFile);
+                                    }
+
+                                }
                             }
                             catch
                             {
@@ -2384,17 +2489,17 @@ namespace BP.Sys
                                     continue;
                                 try
                                 {
-                                    en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                                    en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                                 }
                                 catch
                                 {
-                                    throw new Exception("val:" + val.ToString() + "oldMapID:" + oldMapID + "fk_mapdata:" + fk_mapdata);
+                                    throw new Exception("val:" + val.ToString() + "oldMapID:" + oldMapID + "fk_mapdata:" + specFrmID);
                                 }
                             }
                             int beforeID = en.OID;
                             en.OID = 0;
                             en.DirectInsert();
-                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + fk_mapdata + "' AND GroupID='" + beforeID + "'";
+                            endDoSQL += "@UPDATE Sys_MapAttr SET GroupID=" + en.OID + " WHERE FK_MapData='" + specFrmID + "' AND GroupID='" + beforeID + "'";
                         }
                         break;
                     case "Sys_Enum":
@@ -2437,7 +2542,7 @@ namespace BP.Sys
                                 + ",FWC_H=" + dt.Rows[0]["FWC_H"]
                                 + ",FWC_W=" + dt.Rows[0]["FWC_W"]
                                 + ",FWCType=" + dt.Rows[0]["FWCType"]
-                                + " WHERE NodeID=" + fk_mapdata.Replace("ND", "");
+                                + " WHERE NodeID=" + specFrmID.Replace("ND", "");
                         }
                         break;
                     default:
@@ -2449,7 +2554,7 @@ namespace BP.Sys
             //执行最后结束的sql.
             DBAccess.RunSQLs(endDoSQL);
 
-            MapData mdNew = new MapData(fk_mapdata);
+            MapData mdNew = new MapData(specFrmID);
             mdNew.RepairMap();
 
             if (mdNew.No.IndexOf("ND") == 0)
@@ -2747,6 +2852,10 @@ namespace BP.Sys
             //更新版本号.
             this.Ver = DataType.CurrentDataTimess;
 
+            //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
+            if (SystemConfig.CCBPMRunModel != 0)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+
             #region  检查是否有ca认证设置.
             bool isHaveCA = false;
             foreach (MapAttr item in this.MapAttrs)
@@ -2777,6 +2886,9 @@ namespace BP.Sys
                 // attr.Save();
             }
             #endregion  检查是否有ca认证设置.
+
+            //清除缓存.
+            this.ClearCash();
 
             return base.beforeUpdateInsertAction();
         }
@@ -2881,24 +2993,32 @@ namespace BP.Sys
         /// <returns></returns>
         public bool ExcelGenerFile(string pkValue, ref byte[] bytes, string saveTo)
         {
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
-            if (by != null)
+            try
             {
-                bytes = by;
-                return true;
+                byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+                if (by != null)
+                {
+                    bytes = by;
+                    return true;
+                }
+                else //说明当前excel文件没有生成.
+                {
+                    string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+                    if (System.IO.File.Exists(tempExcel) == true)
+                    {
+                        bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                        return false;
+                    }
+                    else //模板文件也不存在时
+                    {
+                        throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
+                    }
+                }
             }
-            else //说明当前excel文件没有生成.
+            catch (Exception ex)
             {
-                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
-                if (System.IO.File.Exists(tempExcel) == true)
-                {
-                    bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-                    return false;
-                }
-                else //模板文件也不存在时
-                {
-                    throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
-                }
+                Log.DebugWriteError("读取excel失败：" + ex.Message);
+                return false;
             }
         }
         /// <summary>

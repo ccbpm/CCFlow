@@ -10,7 +10,7 @@ using System.Xml;
 using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
-using System.Web.Services.Description;
+using BP.Web;
 
 namespace BP.Sys
 {
@@ -46,7 +46,11 @@ namespace BP.Sys
         /// <summary>
         /// JS请求数据.
         /// </summary>
-        JQuery = 6
+        JQuery = 6,
+        /// <summary>
+        /// 系统字典表
+        /// </summary>
+        SysDict=7
     }
     /// <summary>
     /// 编码表类型
@@ -152,7 +156,7 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GenerHisDataTable()
+        public System.Data.DataTable GenerHisDataTable(Hashtable ht = null)
         {
             //创建数据源.
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
@@ -189,24 +193,25 @@ namespace BP.Sys
                             pa[1] = pa[1].Replace("@WebUser.No", BP.Web.WebUser.No);
                         if (pa[1].Contains("@WebUser.Name"))
                             pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
+						if (pa[1].Contains("@WebUser.FK_DeptName"))
+                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                         if (pa[1].Contains("@WebUser.FK_Dept"))
                             pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                        if (pa[1].Contains("@WebUser.FK_DeptName"))
-                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                        
                     }
                     catch
                     { }
 
                     if (pa[1].Contains("@WorkID"))
-                        pa[1] = pa[1].Replace("@WorkID", BP.Sys.Glo.Request["WorkID"] ?? "");
+                        pa[1] = pa[1].Replace("@WorkID", HttpContextHelper.RequestParams("WorkID") ?? "");
                     if (pa[1].Contains("@NodeID"))
-                        pa[1] = pa[1].Replace("@NodeID", BP.Sys.Glo.Request["NodeID"] ?? "");
+                        pa[1] = pa[1].Replace("@NodeID", HttpContextHelper.RequestParams("NodeID") ?? "");
                     if (pa[1].Contains("@FK_Node"))
-                        pa[1] = pa[1].Replace("@FK_Node", BP.Sys.Glo.Request["FK_Node"] ?? "");
+                        pa[1] = pa[1].Replace("@FK_Node", HttpContextHelper.RequestParams("FK_Node") ?? "");
                     if (pa[1].Contains("@FK_Flow"))
-                        pa[1] = pa[1].Replace("@FK_Flow", BP.Sys.Glo.Request["FK_Flow"] ?? "");
+                        pa[1] = pa[1].Replace("@FK_Flow", HttpContextHelper.RequestParams("FK_Flow") ?? "");
                     if (pa[1].Contains("@FID"))
-                        pa[1] = pa[1].Replace("@FID", BP.Sys.Glo.Request["FID"] ?? "");
+                        pa[1] = pa[1].Replace("@FID", HttpContextHelper.RequestParams("FID") ?? "");
 
                     args.Add(pa[1]);
                 }
@@ -290,16 +295,55 @@ namespace BP.Sys
                     runObj = string.Empty;
 
                 runObj = runObj.Replace("~", "'");
+                runObj = runObj.Replace("/#", "+"); //为什么？
+                runObj = runObj.Replace("/$", "-"); //为什么？
                 if (runObj.Contains("@WebUser.No"))
                     runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
 
                 if (runObj.Contains("@WebUser.Name"))
                     runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
+				if (runObj.Contains("@WebUser.FK_DeptName"))
+                    runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                return src.RunSQLReturnTable(runObj);
+                
+
+                if (runObj.Contains("@") == true && ht != null)
+                {
+                    foreach (string key in ht.Keys)
+                    {
+                        //值为空或者null不替换
+                        if (ht[key] == null || ht[key].Equals("") == true)
+                            continue;
+
+                        if (runObj.Contains("@" + key))
+                            runObj = runObj.Replace("@" + key, ht[key].ToString());
+
+                        //不包含@则返回SQL语句
+                        if (runObj.Contains("@") == false)
+                            break;
+                    }
+                }
+
+                if (runObj.Contains("@") && SystemConfig.IsBSsystem == true)
+                {
+                    /*如果是bs*/
+                    foreach (string key in HttpContextHelper.RequestParamKeys)
+                    {
+                        if (string.IsNullOrEmpty(key))
+                            continue;
+                        runObj = runObj.Replace("@" + key, HttpContextHelper.RequestParams(key));
+                    }
+                }
+
+                if (runObj.Contains("@") == true)
+                    throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
+
+                DataTable dt = src.RunSQLReturnTable(runObj);
+                return dt;
             }
             #endregion
 
@@ -308,6 +352,12 @@ namespace BP.Sys
             {
                 string sql = "SELECT No, Name FROM " + this.No;
                 return src.RunSQLReturnTable(sql);
+            }
+
+            if(this.SrcType == Sys.SrcType.SysDict)
+            {
+                DictDtls dictDtls = new DictDtls(this.No);
+                return dictDtls.ToDataTableField();
             }
             #endregion
 
@@ -357,7 +407,7 @@ namespace BP.Sys
                     str = "1";
                 return str.PadLeft(3, '0');
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "";
             }
@@ -370,66 +420,68 @@ namespace BP.Sys
         /// <param name="args">把webservices里需要的参数按顺序放到这个object[]里</param>
         public object InvokeWebService(string url, string methodname, object[] args)
         {
+            return null;
+            /* TODO 2019-07-25 为了合并core，注释掉
+                        //这里的namespace是需引用的webservices的命名空间，在这里是写死的，大家可以加一个参数从外面传进来。
+                        string @namespace = "BP.RefServices";
+                        try
+                        {
+                            if (url.EndsWith(".asmx"))
+                                url += "?wsdl";
+                            else if (url.EndsWith(".svc"))
+                                url += "?singleWsdl";
 
-            //这里的namespace是需引用的webservices的命名空间，在这里是写死的，大家可以加一个参数从外面传进来。
-            string @namespace = "BP.RefServices";
-            try
-            {
-                if (url.EndsWith(".asmx"))
-                    url += "?wsdl";
-                else if (url.EndsWith(".svc"))
-                    url += "?singleWsdl";
+                            //获取WSDL
+                            WebClient wc = new WebClient();
+                            Stream stream = wc.OpenRead(url);
+                            ServiceDescription sd = ServiceDescription.Read(stream);
+                            string classname = sd.Services[0].Name;
+                            ServiceDescriptionImporter sdi = new ServiceDescriptionImporter();
+                            sdi.AddServiceDescription(sd, "", "");
+                            CodeNamespace cn = new CodeNamespace(@namespace);
 
-                //获取WSDL
-                WebClient wc = new WebClient();
-                Stream stream = wc.OpenRead(url);
-                ServiceDescription sd = ServiceDescription.Read(stream);
-                string classname = sd.Services[0].Name;
-                ServiceDescriptionImporter sdi = new ServiceDescriptionImporter();
-                sdi.AddServiceDescription(sd, "", "");
-                CodeNamespace cn = new CodeNamespace(@namespace);
+                            //生成客户端代理类代码
+                            CodeCompileUnit ccu = new CodeCompileUnit();
+                            ccu.Namespaces.Add(cn);
+                            sdi.Import(cn, ccu);
+                            CSharpCodeProvider csc = new CSharpCodeProvider();
+                            ICodeCompiler icc = csc.CreateCompiler();
 
-                //生成客户端代理类代码
-                CodeCompileUnit ccu = new CodeCompileUnit();
-                ccu.Namespaces.Add(cn);
-                sdi.Import(cn, ccu);
-                CSharpCodeProvider csc = new CSharpCodeProvider();
-                ICodeCompiler icc = csc.CreateCompiler();
+                            //设定编译参数
+                            CompilerParameters cplist = new CompilerParameters();
+                            cplist.GenerateExecutable = false;
+                            cplist.GenerateInMemory = true;
+                            cplist.ReferencedAssemblies.Add("System.dll");
+                            cplist.ReferencedAssemblies.Add("System.XML.dll");
+                            cplist.ReferencedAssemblies.Add("System.Web.Services.dll");
+                            cplist.ReferencedAssemblies.Add("System.Data.dll");
 
-                //设定编译参数
-                CompilerParameters cplist = new CompilerParameters();
-                cplist.GenerateExecutable = false;
-                cplist.GenerateInMemory = true;
-                cplist.ReferencedAssemblies.Add("System.dll");
-                cplist.ReferencedAssemblies.Add("System.XML.dll");
-                cplist.ReferencedAssemblies.Add("System.Web.Services.dll");
-                cplist.ReferencedAssemblies.Add("System.Data.dll");
+                            //编译代理类
+                            CompilerResults cr = icc.CompileAssemblyFromDom(cplist, ccu);
+                            if (true == cr.Errors.HasErrors)
+                            {
+                                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                                foreach (System.CodeDom.Compiler.CompilerError ce in cr.Errors)
+                                {
+                                    sb.Append(ce.ToString());
+                                    sb.Append(System.Environment.NewLine);
+                                }
+                                throw new Exception(sb.ToString());
+                            }
 
-                //编译代理类
-                CompilerResults cr = icc.CompileAssemblyFromDom(cplist, ccu);
-                if (true == cr.Errors.HasErrors)
-                {
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    foreach (System.CodeDom.Compiler.CompilerError ce in cr.Errors)
-                    {
-                        sb.Append(ce.ToString());
-                        sb.Append(System.Environment.NewLine);
-                    }
-                    throw new Exception(sb.ToString());
-                }
+                            //生成代理实例，并调用方法
+                            System.Reflection.Assembly assembly = cr.CompiledAssembly;
+                            Type t = assembly.GetType(@namespace + "." + classname, true, true);
+                            object obj = Activator.CreateInstance(t);
+                            System.Reflection.MethodInfo mi = t.GetMethod(methodname);
 
-                //生成代理实例，并调用方法
-                System.Reflection.Assembly assembly = cr.CompiledAssembly;
-                Type t = assembly.GetType(@namespace + "." + classname, true, true);
-                object obj = Activator.CreateInstance(t);
-                System.Reflection.MethodInfo mi = t.GetMethod(methodname);
-
-                return mi.Invoke(obj, args);
-            }
-            catch
-            {
-                return null;
-            }
+                            return mi.Invoke(obj, args);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+            */
         }
         #endregion
 
@@ -802,7 +854,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=动态Json");
+                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
@@ -820,8 +872,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.ColumnValue, null, "显示的值(编号列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
-                map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", false, false, 0, 1000, 600, true);
-
+                map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
                 //查找.
@@ -877,9 +928,22 @@ namespace BP.Sys
         public string DoEdit()
         {
             if (this.IsClass)
+            {
+
                 return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+            }
             else
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+            {
+                if ( this.SrcType == Sys.SrcType.SysDict)
+                {
+                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SysDictEditData.htm?FK_SFTable=" + this.No;
+                }
+                else
+                {
+                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+
+                }
+            }
         }
         public string IsCanDelete()
         {
@@ -907,8 +971,83 @@ namespace BP.Sys
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
 
+            #region  如果是 系统字典表.
+            if (this.SrcType == Sys.SrcType.SysDict &&
+                (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc))
+            {
+                //创建dict.
+                Dict dict = new Dict();
+                dict.TableID = this.No;
+                dict.TableName = this.Name;
+                dict.OrgNo = WebUser.OrgNo;
+                dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
+                if (SystemConfig.CCBPMRunModel == 0)
+                {
+                    dict.MyPK = this.No;
+                }
+                else
+                {
+                    dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                }
+                dict.Insert();
 
-            #region 如果是本地类. @于庆海.
+                if (this.CodeStruct == CodeStruct.NoName)
+                {
+                    DictDtl dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.BH = "001";
+                    dtl.Name = "Item1";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.BH = "002";
+                    dtl.Name = "Item2";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.BH = "003";
+                    dtl.Name = "Item3";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.Insert();
+                }
+
+                if (this.CodeStruct == CodeStruct.Tree)
+                {
+                    DictDtl dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.BH = "001";
+                    dtl.Name = "Item1";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "0";
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.BH = "002";
+                    dtl.Name = "Item2";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "001";
+                    dtl.Insert();
+
+                    dtl = new DictDtl();
+                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.BH = "003";
+                    dtl.Name = "Item3";
+                    dtl.DictMyPK = dict.MyPK;
+                    dtl.ParentNo = "001";
+                    dtl.Insert();
+                }
+            }
+            #endregion  如果是 系统字典表.
+
+
+
+
+            #region 如果是本地类. 
             if (this.SrcType == Sys.SrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);

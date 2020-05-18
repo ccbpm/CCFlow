@@ -107,6 +107,7 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = MapAttrAttr.FK_MapData;
 
                 #region 基本信息.
 
@@ -118,6 +119,7 @@ namespace BP.Sys.FrmUI
 
                 //数据类型.
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 4, "数据类型", true, false);
+
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
 
@@ -140,10 +142,13 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddTBInt(MapAttrAttr.UIWidth, 0, "宽度(对自由表单有效)", true, false);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 #endregion 傻瓜表单。
 
@@ -153,6 +158,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "高级JS设置";
+                rm.ClassMethodName = this.ToString() + ".DoCheckboxs()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -199,8 +211,17 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-        #endregion
-    }
+        /// <summary>
+        /// 高级设置
+        /// </summary>
+        /// <returns></returns>
+        public  String DoCheckboxs() 
+        {
+			//@sly
+		    return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+        }
+    #endregion
+}
     /// <summary>
     /// 实体属性s
     /// </summary>

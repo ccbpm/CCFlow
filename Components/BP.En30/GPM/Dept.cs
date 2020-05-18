@@ -3,6 +3,7 @@ using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Web;
+using BP.Port;
 
 namespace BP.GPM
 {
@@ -149,7 +150,7 @@ namespace BP.GPM
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptEmps(), new BP.Port.Emps(),
                    DeptEmpAttr.FK_Dept,
-                   DeptEmpAttr.FK_Emp, "对应人员", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   DeptEmpAttr.FK_Emp, "对应人员", BP.Port.EmpAttr.FK_Dept, BP.Port.EmpAttr.Name, BP.Port.EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //平铺模式.
@@ -261,9 +262,9 @@ namespace BP.GPM
             this.GenerChildNameOfPath(this.No);
 
             //更新人员路径信息.
-            BP.GPM.Emps emps = new Emps();
-            emps.Retrieve(EmpAttr.FK_Dept, this.No);
-            foreach (BP.GPM.Emp emp in emps)
+            BP.Port.Emps emps = new BP.Port.Emps();
+            emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+            foreach (BP.Port.Emp emp in emps)
                 emp.Update();
         }
 
@@ -283,9 +284,9 @@ namespace BP.GPM
 
 
                     //更新人员路径信息.
-                    BP.GPM.Emps emps = new Emps();
-                    emps.Retrieve(EmpAttr.FK_Dept, this.No);
-                    foreach (BP.GPM.Emp emp in emps)
+                    BP.Port.Emps emps = new BP.Port.Emps();
+                    emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+                    foreach (BP.Port.Emp emp in emps)
                         emp.Update();
                 }
             }
@@ -322,9 +323,27 @@ namespace BP.GPM
         }
         public override int RetrieveAll()
         {
-            QueryObject qo = new QueryObject(this);
-            qo.addOrderBy(GPM.DeptAttr.Idx);
-            return qo.DoQuery();
+
+            if (BP.Web.WebUser.No == "admin")
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.addOrderBy(GPM.DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOr();
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOrderBy(GPM.DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, GPM.DeptAttr.Idx);
+
+          
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成IList, c#代码调用会出错误。

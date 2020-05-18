@@ -4,6 +4,7 @@ using BP.DA;
 using System.Data;
 using BP.Sys;
 using BP.En;
+using BP.Web;
 
 namespace BP.En
 {
@@ -18,7 +19,7 @@ namespace BP.En
         /// </summary>
         public void LoadRightFromCCGPM(Entity en)
         {
-            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='"+BP.Web.WebUser.No+"'  AND Url LIKE '%" + en.ToString()+ "%'  ";
+            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='" + BP.Web.WebUser.No + "'  AND Url LIKE '%" + en.ToString() + "%'  ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
@@ -59,12 +60,12 @@ namespace BP.En
         public void OpenAllForStation(string fk_station)
         {
             Paras ps = new Paras();
-            ps.Add("user", Web.WebUser.No);
+            ps.Add("FK_Emp", Web.WebUser.No);
             ps.Add("st", fk_station);
 
             bool bl;
-           
-                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+
+            bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
 
             if (bl)
                 this.OpenAll();
@@ -83,9 +84,24 @@ namespace BP.En
         }
         public UAC OpenForAppAdmin()
         {
-            if (BP.Web.WebUser.No != null && BP.Web.WebUser.No.Contains("admin") == true)
+            if (BP.Web.WebUser.No != null
+                && BP.Web.WebUser.No.Contains("admin") == true)
             {
                 this.OpenAll();
+            }
+            return this;
+        }
+
+        public UAC OpenForAdmin()
+        {
+            if (BP.Web.WebUser.No != null
+               && BP.Web.WebUser.IsAdmin == true)
+            {
+                this.OpenAll();
+            }
+            else
+            {
+                this.Readonly();
             }
             return this;
         }
@@ -223,13 +239,12 @@ namespace BP.En
 
             foreach (Attr attr in this._enMap.Attrs)
             {
-                string key=attr.Key;
+                string key = attr.Key;
 
-                string v = this.GetValStringByKey(key,null);  // this._row[key] as string;
+                string v = this.GetValStringByKey(key, null);  // this._row[key] as string;
 
                 if (v == null || v.IndexOf('@') == -1)
                     continue;
-
 
                 // 设置默认值.
                 if (v.Equals("@WebUser.No"))
@@ -261,25 +276,43 @@ namespace BP.En
                 }
                 else if (v.Equals("@RDT"))
                 {
-                    if (attr.MyDataType == DataType.AppDate)
-                        this.SetValByKey(attr.Key, DataType.CurrentData);
+                    string dataFormat = "yyyy-MM-dd";
+                    switch (attr.IsSupperText)
+                    {
+                        case 0: break;
+                        case 1:
+                            dataFormat = "yyyy-MM-dd HH:mm";
+                            break;
+                        case 2:
+                            dataFormat = "yyyy-MM-dd HH:mm:ss";
+                            break;
+                        case 3:
+                            dataFormat = "yyyy-MM";
+                            break;
+                        case 4:
+                            dataFormat = "HH:mm";
+                            break;
+                        case 5:
+                            dataFormat = "HH:mm:ss";
+                            break;
+                        case 6:
+                            dataFormat = "MM-dd";
+                            break;
+                        default:
+                            throw new Exception("没有找到指定的时间类型");
+                    }
+                    this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
+                    continue;
+                }
 
-                    if (attr.MyDataType == DataType.AppDateTime)
-                        this.SetValByKey(attr.Key, DataType.CurrentDataTime);
-                    continue;
-                }
-                else
-                {
-                    continue;
-                }
             }
         }
         /// <summary>
         /// 重新设置默信息. @yuanlina 这里有问题，需要重构到jflow上去.
         /// </summary>
-        public void ResetDefaultVal()
+        public void ResetDefaultVal(string fk_mapdata = null, string fk_flow = null, int fk_node = 0)
         {
-           
+
             ResetDefaultValRowValues();
 
             Attrs attrs = this.EnMap.Attrs;
@@ -288,8 +321,33 @@ namespace BP.En
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-               string v = attr.DefaultValOfReal as string;
-                if ( v==null || v.Contains("@")==false)
+                DataTable dt = null;
+                int i = 0;
+                if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
+                {
+                    string sql2 = "SELECT * FROM Sys_FrmSln where FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = '" + fk_node + "' AND KeyOfEn = '" + attr.Key + "'";
+                    dt = DBAccess.RunSQLReturnTable(sql2);
+                    i = dt.Rows.Count;
+                }
+
+                string v = attr.DefaultValOfReal as string;
+                if (i == 1)
+                {
+                    v = dt.Rows[0]["DefVal"].ToString();
+                    if (DataType.IsNullOrEmpty(v))
+                    {
+                        v = attr.DefaultValOfReal;
+                    }
+                    else
+                    {
+                        if (v.Contains("@") == false)
+                        {
+                            this.SetValByKey(attr.Key, v);
+                            continue;
+                        }
+                    }
+                }
+                if (v == null || v.Contains("@") == false)
                     continue;
 
                 string myval = this.GetValStrByKey(attr.Key);
@@ -299,6 +357,7 @@ namespace BP.En
                 switch (v)
                 {
                     case "@WebUser.No":
+                    case "@CurrWorker":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.No);
@@ -354,23 +413,65 @@ namespace BP.En
                                 this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                         }
                         continue;
-                    case "@RDT":
+                    case "@WebUser.OrgNo":
                         if (attr.UIIsReadonly == true)
                         {
-                            if (attr.MyDataType == DataType.AppDate || myval == v)
-                                this.SetValByKey(attr.Key, DataType.CurrentData);
+                            this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                        }
+                        continue;
+                    case "@WebUser.OrgName":
+                        if (attr.UIIsReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, Web.WebUser.OrgName);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, Web.WebUser.OrgName);
+                        }
+                        continue;
+                    case "@RDT":
+                        string dataFormat = "yyyy-MM-dd";
+                        switch (attr.IsSupperText)
+                        {
+                            case 0: break;
+                            case 1:
+                                dataFormat = "yyyy-MM-dd HH:mm";
+                                break;
+                            case 2:
+                                dataFormat = "yyyy-MM-dd HH:mm:ss";
+                                break;
+                            case 3:
+                                dataFormat = "yyyy-MM";
+                                break;
+                            case 4:
+                                dataFormat = "HH:mm";
+                                break;
+                            case 5:
+                                dataFormat = "HH:mm:ss";
+                                break;
+                            case 6:
+                                dataFormat = "MM-dd";
+                                break;
+                            default:
+                                throw new Exception("没有找到指定的时间类型");
+                        }
 
-                            if (attr.MyDataType == DataType.AppDateTime || myval == v)
-                                this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                        if (attr.UIIsReadonly == true)
+                        {
+                            /// if (myval == v)
+                            this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
                             {
-                                if (attr.MyDataType == DataType.AppDate)
-                                    this.SetValByKey(attr.Key, DataType.CurrentData);
-                                else
-                                    this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                             }
                         }
                         continue;
@@ -405,16 +506,28 @@ namespace BP.En
                         int count = gloVar.RetrieveFromDBSources();
                         if (count == 1)
                         {
-                            //执行SQL获取默认值
+                            //执行SQL获取默认值 @sly
                             string sql = gloVar.Val;
-                            sql = DealExp(sql, null, null);
-                            try{
+                            if (DataType.IsNullOrEmpty(sql) == true)
+                                continue;
+
+                            sql = DealExp(sql, this.Row, null);
+                            if (sql.ToUpper().Contains("SELECT") == false)
+                            {
+                                this.SetValByKey(attr.Key, sql);
+                                continue;
+                            }
+
+                            try
+                            {
+                                //这里有异常就要跑出来
                                 string val = DBAccess.RunSQLReturnString(sql);
                                 this.SetValByKey(attr.Key, val);
-                            }catch(Exception ex){
-                                this.SetValByKey(attr.Key, ex.Message+sql);
                             }
-                            
+                            catch (Exception ex)
+                            {
+                                throw new Exception("err@为类：" + this.ToString() + ",字段：" + attr.Key + ",变量表达式:" + v + ",设置信息:" + gloVar.ToJson() + ",设置默认值解析SQL:" + sql + " ，原始设置SQL:" + gloVar.Val + ",执行SQL期间出现错误.");
+                            }
                         }
                         continue;
                 }
@@ -428,7 +541,7 @@ namespace BP.En
         /// <param name="en">数据源</param>
         /// <param name="errInfo">错误</param>
         /// <returns></returns>
-        private static string DealExp(string exp, Entity en, string errInfo)
+        private static string DealExp(string exp, Row row, string errInfo)
         {
             if (exp.Contains("@") == false)
                 return exp;
@@ -455,9 +568,8 @@ namespace BP.En
             }
 
             //增加对新规则的支持. @MyField; 格式.
-            if (en != null)
+            if (row != null)
             {
-                Row row = en.Row;
                 //特殊判断.
                 if (row.ContainsKey("OID") == true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
@@ -474,15 +586,13 @@ namespace BP.En
                     return exp;
 
                 #region 解决排序问题.
-                Attrs attrs = en.EnMap.Attrs;
                 string mystrs = "";
-                foreach (Attr attr in attrs)
+                foreach (string key in row.Keys)
                 {
-                    if (attr.MyDataType == DataType.AppString)
-                        mystrs += "@" + attr.Key + ",";
-                    else
-                        mystrs += "@" + attr.Key;
+                    mystrs += "@" + key;
                 }
+
+
                 string[] strs = mystrs.Split('@');
                 DataTable dt = new DataTable();
                 dt.Columns.Add(new DataColumn("No", typeof(string)));
@@ -508,10 +618,10 @@ namespace BP.En
                     if (isStr == true)
                     {
                         key = key.Replace(",", "");
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                        exp = exp.Replace("@" + key, row.GetValStrByKey(key));
                     }
                     else
-                        exp = exp.Replace("@" + key, en.GetValStrByKey(key));
+                        exp = exp.Replace("@" + key, row.GetValStrByKey(key));
                 }
                 #endregion
 
@@ -526,16 +636,16 @@ namespace BP.En
                 }
             }
 
-           
+
 
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
-                foreach (string key in System.Web.HttpContext.Current.Request.QueryString.Keys)
+                foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (string.IsNullOrEmpty(key))
                         continue;
-                    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.QueryString[key]);
+                    exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
                 }
             }
 
@@ -633,7 +743,7 @@ namespace BP.En
                 Map mp = (Map)value;
                 if (SystemConfig.IsDebug)
                 {
-                    
+
                 }
 
                 if (mp == null || mp.DepositaryOfMap == Depositary.None)
@@ -706,13 +816,6 @@ namespace BP.En
                 case null:
                 case "&nbsp;":
                     val = "";
-                    break;
-                case "RDT":
-                    if (val.Length > 4)
-                    {
-                        this.SetValByKey("FK_NY", val.Substring(0, 7));
-                        this.SetValByKey("FK_ND", val.Substring(0, 4));
-                    }
                     break;
                 default:
                     break;
@@ -838,8 +941,8 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStrByKey(string key)
         {
-            if(this.Row.GetValByKey(key)!=null)
-            return this.Row.GetValByKey(key).ToString();
+            if (this.Row.GetValByKey(key) != null)
+                return this.Row.GetValByKey(key).ToString();
             return "";
         }
         public string GetValStrByKey(string key, string isNullAs)
@@ -864,25 +967,24 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStringByKey(string attrKey)
         {
-            switch (attrKey)
+            if (1 == 2 && attrKey.Equals("Doc") == true)
             {
-                case "Doc":
-                    string s = this.Row.GetValByKey(attrKey).ToString();
-                    if (s == "")
-                        s = this.GetValDocText();
-                    return s;
-                default:
-                    try
-                    {
-                        if (this.Row == null)
-                            throw new Exception("@没有初始化Row.");
-                        return this.Row.GetValByKey(attrKey).ToString();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类增加这个属性，EnsName=" + this.ToString());
-                    }
-                    break;
+                //string s = this.Row.GetValByKey(attrKey).ToString();
+                //if (s == "")
+                //    s = this.GetValDocText();
+                //return s;
+            }
+
+            if (this.Row == null)
+                throw new Exception("@没有初始化Row.");
+
+            try
+            {
+                return this.Row.GetValByKey(attrKey).ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类增加这个属性，EnsName=" + this.ToString());
             }
         }
         public string GetValStringByKey(string attrKey, string defVal)
@@ -980,7 +1082,8 @@ namespace BP.En
         {
             try
             {
-                return int.Parse(this.GetValStrByKey(key));
+                string str = this.GetValStrByKey(key);
+                return string.IsNullOrWhiteSpace(str) ? 0 : int.Parse(this.GetValStrByKey(key));
             }
             catch (Exception ex)
             {
@@ -1019,7 +1122,7 @@ namespace BP.En
                         return int.Parse(attr.DefaultVal.ToString());
                 }
 
-                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "],错误信息:"+ex.Message);
+                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "],错误信息:" + ex.Message);
             }
         }
         /// <summary>
@@ -1033,7 +1136,7 @@ namespace BP.En
             if (DataType.IsNullOrEmpty(s))
                 s = this.EnMap.GetAttrByKey(key).DefaultVal.ToString();
 
-            if (s == "0")
+            if (int.Parse(s) < 0 || int.Parse(s) == 0)
                 return false;
 
             if (s == "1")
@@ -1041,7 +1144,7 @@ namespace BP.En
 
             if (s.ToUpper().Equals("FALSE"))
                 return false;
-            if (s.ToUpper().Equals("TRUE") )
+            if (s.ToUpper().Equals("TRUE"))
                 return true;
 
             if (DataType.IsNullOrEmpty(s))
@@ -1083,7 +1186,7 @@ namespace BP.En
         public float GetValFloatByKey(string key, int blNum)
         {
             string val = this.Row.GetValByKey(key).ToString();
-            if (DataType.IsNullOrEmpty(val))                
+            if (DataType.IsNullOrEmpty(val))
                 return float.Parse(blNum.ToString("0.00"));
 
             return float.Parse(float.Parse(val).ToString("0.00"));
@@ -1097,7 +1200,8 @@ namespace BP.En
         {
             try
             {
-                return float.Parse(float.Parse(this.Row.GetValByKey(key).ToString()).ToString("0.00"));
+                string str = this.Row.GetValByKey(key).ToString();
+                return string.IsNullOrWhiteSpace(str) ? 0 : float.Parse(float.Parse(str).ToString("0.00"));
             }
             catch
             {
@@ -1140,11 +1244,23 @@ namespace BP.En
         {
             try
             {
-                return decimal.Round(decimal.Parse(this.GetValStrByKey(key)), 4);
+                string str = this.GetValStrByKey(key);
+                return string.IsNullOrWhiteSpace(str) ? 0 : decimal.Round(decimal.Parse(this.GetValStrByKey(key)), 4);
             }
             catch (Exception ex)
             {
                 throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为float类型.错误信息：" + ex.Message);
+            }
+        }
+        public decimal GetValDecimalByKeyIsNullAsVal(string key, decimal val)
+        {
+            try
+            {
+                return GetValDecimalByKey(key);
+            }
+            catch (Exception ex)
+            {
+                return val;
             }
         }
         public decimal GetValDecimalByKey(string key, string items)
@@ -1208,10 +1324,10 @@ namespace BP.En
                         continue;
 
                     //日期类型.  @杜. 这里需要翻译.
-                    if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec") )
+                    if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec"))
                         continue;
 
-                    if (attr.DefaultValOfReal!=null && attr.DefaultValOfReal.Contains("@") == true)
+                    if (attr.DefaultValOfReal != null && attr.DefaultValOfReal.Contains("@") == true)
                         continue;
 
                     //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
@@ -1388,7 +1504,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK == "ID")
+                if (this.GetType().BaseType.FullName.Equals("BP.En.EntityTree") == true)
                     return true;
                 return false;
             }

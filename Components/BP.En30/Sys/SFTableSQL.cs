@@ -10,7 +10,6 @@ using System.Xml;
 using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
-using System.Web.Services.Description;
 
 namespace BP.Sys
 {
@@ -96,7 +95,7 @@ namespace BP.Sys
             if (this.IsClass)
                 return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
             else
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No+ "&&QueryType=Sql";
         }
 
         /// <summary>
@@ -112,7 +111,10 @@ namespace BP.Sys
                     return false;
             }
         }
-
+        /// <summary>
+        /// 删除之前要做的工作
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeDelete()
         {
             MapAttrs attrs = new MapAttrs();

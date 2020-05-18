@@ -5,6 +5,7 @@ using System.Text;
 using BP.En;
 using BP.Pub;
 using BP.Sys;
+using BP.Web;
 
 namespace BP.DA
 {	 
@@ -35,6 +36,9 @@ namespace BP.DA
 
             if (_Bill_Cash != null)
                 _Bill_Cash.Clear();
+
+            //清除 @sly
+            Cash2019.ClearCash();
         }
         static Cash()
         {
@@ -232,18 +236,6 @@ namespace BP.DA
                 }
             }
 
-            if (haveError)
-            {
-                //string myfile = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + cfile;
-                //if (System.IO.File.Exists(myfile) == false)
-                //    myfile = cfile;
-
-                // throw new Exception("@没有文件:"+myfile);
-
-                //StreamWriter wr = new StreamWriter(myfile,false, Encoding.ASCII);
-                //wr.Write(Billstr);
-                //wr.Close();
-            }
 
             if (msg != "")
             {
@@ -464,7 +456,7 @@ namespace BP.DA
                     // return  System.Web.HttpContext.Current.Cache[key];
                     return BS_Cash[key]; //  System.Web.HttpContext.Current.Cache[key];
                 else
-                    return System.Web.HttpContext.Current.Session[key];
+                    return HttpContextHelper.SessionGet(key);
             }
             else
             {
@@ -559,7 +551,7 @@ namespace BP.DA
             {
                 try
                 {
-                    return System.Web.HttpContext.Current.Session[key];
+                    return HttpContextHelper.SessionGet(key);
                 }
                 catch
                 {
@@ -587,9 +579,9 @@ namespace BP.DA
             if (SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
-                    System.Web.HttpContext.Current.Cache.Remove(key);
+                    CacheHelper.Remove(key);
                 else
-                    System.Web.HttpContext.Current.Session.Remove(key);
+                    HttpContextHelper.Session.Remove(key);
             }
             else
             {
@@ -626,7 +618,7 @@ namespace BP.DA
                 }
                 else
                 {
-                    System.Web.HttpContext.Current.Session[key] = obj;
+                    HttpContextHelper.SessionSet(key, obj);
                 }
             }
             else
@@ -649,17 +641,11 @@ namespace BP.DA
             {
                 if (where == Depositary.Application)
                 {
-                    if (System.Web.HttpContext.Current.Cache[key] == null)
-                        return false;
-                    else
-                        return true;
+                    return CacheHelper.Contains(key);
                 }
                 else
                 {
-                    if (System.Web.HttpContext.Current.Session[key] == null)
-                        return false;
-                    else
-                        return true;
+                    return HttpContextHelper.SessionGet(key) != null;
                 }
             }
             else

@@ -2,6 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Web;
+
 namespace BP.Sys
 {
     /// <summary>
@@ -235,7 +237,7 @@ namespace BP.Sys
                 string src = this.GetValStringByKey(FrmImgAttr.ImgPath);
                 if (DataType.IsNullOrEmpty(src))
                 {
-                    string appPath = BP.Sys.Glo.Request.ApplicationPath;
+                    string appPath = HttpContextHelper.RequestApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
@@ -252,7 +254,7 @@ namespace BP.Sys
                 string src = this.GetValStringByKey(FrmImgAttr.ImgURL);
                 if (DataType.IsNullOrEmpty(src) || src.Contains("component/Img"))
                 {
-                    string appPath = BP.Sys.Glo.Request.ApplicationPath;
+                    string appPath = HttpContextHelper.RequestApplicationPath;
                     src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
@@ -363,6 +365,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmImgAttr.FK_MapData; 
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmImgAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
@@ -395,7 +399,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", false, true);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "显示的分组",BP.Sys.FrmUI.MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组",BP.Sys.FrmUI.MapAttrString.SQLOfGroupAttr, true);
 
                 this._enMap = map;
                 return this._enMap;

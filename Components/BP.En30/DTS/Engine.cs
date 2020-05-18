@@ -7,6 +7,7 @@ using BP.En;
 using BP.DA;
 using BP.Port;
 using BP.Sys;
+using BP.Web;
 
 namespace BP.Pub
 {
@@ -771,11 +772,7 @@ namespace BP.Pub
 
                 if (strs.Length == 2)
                 {
-
-                    string keyOfEn = strs[0].Trim();
-
-                    string val = this.HisGEEntity.GetValStringByKey(keyOfEn);
-
+                    string val = this.HisGEEntity.GetValStringByKey(strs[0].Trim());
                     switch (strs[1].Trim())
                     {
 
@@ -832,9 +829,9 @@ namespace BP.Pub
                                 return "是";
                         case "Boolen":
                             if (val == "1")
-                                return "[Y]";
+                                return "[√]";
                             else
-                                return "[X]";
+                                return "[×]";
                             break;
                         case "YesNo":
                             if (val == "1")
@@ -1356,10 +1353,9 @@ namespace BP.Pub
                 throw new Exception("生成文档失败：单据名称[" + this.CyclostyleFilePath + "] 异常信息：" + ex.Message + " @自动修复单据信息：" + msg);
             }
             if (isOpen)
-                PubClass.Print(BP.Sys.Glo.Request.ApplicationPath + "Temp/" + file);
+                PubClass.Print(HttpContextHelper.RequestApplicationPath + "Temp/" + file);
         }
         #endregion
-
 
         #region 生成单据
         #region 生成单据
@@ -1419,6 +1415,4 @@ namespace BP.Pub
         }
         #endregion
     }
-
-
 }

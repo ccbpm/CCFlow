@@ -9,6 +9,7 @@ using BP.DA;
 using System.Configuration;
 using BP.Port;
 using BP.Sys;
+using System.Collections.Generic;
 
 namespace BP.Web
 {
@@ -76,13 +77,12 @@ namespace BP.Web
                 if (sql.Contains("UPDATE Port_Emp SET FK_Dept=") == true)
                     if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                         return;
-                 BP.DA.DBAccess.RunSQL(sql);
+                BP.DA.DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
             {
                 throw new Exception("@执行更改当前操作员的主部门的时候错误,请检查SQL配置:" + ex.Message);
             }
-
         }
         /// <summary>
         /// 通用的登陆
@@ -92,9 +92,10 @@ namespace BP.Web
         /// <param name="auth">授权人</param>
         /// <param name="isRememberMe">是否记录cookies</param>
         /// <param name="IsRecSID">是否记录SID</param>
-        public static void SignInOfGener(Emp em, string lang = "CH", bool isRememberMe = false, bool IsRecSID = false, string authNo = null, string authName = null)
+        public static void SignInOfGener(Emp em, string lang = "CH", bool isRememberMe = false, bool IsRecSID = false,
+            string authNo = null, string authName = null)
         {
-            if (System.Web.HttpContext.Current == null)
+            if (HttpContextHelper.Current == null)
                 SystemConfig.IsBSsystem = false;
             else
                 SystemConfig.IsBSsystem = true;
@@ -104,6 +105,12 @@ namespace BP.Web
 
             WebUser.No = em.No;
             WebUser.Name = em.Name;
+
+            //增加他的orgNo
+            if (SystemConfig.CCBPMRunModel != 0)
+                WebUser.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
+
+
             if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
@@ -116,108 +123,70 @@ namespace BP.Web
             }
 
             #region 解决部门的问题.
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.Database)
+            if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
             {
-                if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
+                string sql = "";
+
+                sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
+
+                string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                if (DataType.IsNullOrEmpty(deptNo) == true)
                 {
-                    string sql = "";
-
-                    sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
-
-                    string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                    sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
+                    deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
                     if (DataType.IsNullOrEmpty(deptNo) == true)
-                    {
-                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
-                        deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
-                        if (DataType.IsNullOrEmpty(deptNo) == true)
-                            throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
-                    }
-                    else
-                    {
-                        //调用接口更改所在的部门.
-                        WebUser.ChangeMainDept(em.No, deptNo);
-                    }
+                        throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
                 }
-
-                BP.Port.Dept dept = new Dept();
-                dept.No = em.FK_Dept;
-                if (dept.RetrieveFromDBSources() == 0)
-                    throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{" + em.FK_Dept + "}不存在.");
+                else
+                {
+                    //调用接口更改所在的部门.
+                    WebUser.ChangeMainDept(em.No, deptNo);
+                }
             }
 
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-            {
-                var ws = DataType.GetPortalInterfaceSoapClientInstance();
-                DataTable dt = ws.GetEmpHisDepts(em.No);
-                string strs = BP.DA.DBAccess.GenerWhereInPKsString(dt);
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET Depts=" + SystemConfig.AppCenterDBVarStr + "Depts WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("Depts", strs);
-                ps.Add("No", em.No);
-                BP.DA.DBAccess.RunSQL(ps);
+            BP.Port.Dept dept = new Dept();
+            dept.No = em.FK_Dept;
+            if (dept.RetrieveFromDBSources() == 0)
+                throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门,或者部门编号{" + em.FK_Dept + "}不存在.");
 
-                dt = ws.GetEmpHisStations(em.No);
-                strs = BP.DA.DBAccess.GenerWhereInPKsString(dt);
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET Stas=" + SystemConfig.AppCenterDBVarStr + "Stas WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-                ps.Add("Stas", strs);
-                ps.Add("No", em.No);
-                BP.DA.DBAccess.RunSQL(ps);
-            }
             #endregion 解决部门的问题.
 
             WebUser.FK_Dept = em.FK_Dept;
             WebUser.FK_DeptName = em.FK_DeptText;
-            if (IsRecSID)
-            {
-                //判断是否视图，如果为视图则不进行修改 
-                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
-                {
-                    /*如果记录sid*/
-                    string sid1 = DateTime.Now.ToString("MMddHHmmss");
-                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid1 + "' WHERE No='" + WebUser.No + "'");
-                    WebUser.SID = sid1;
-                }
-            }
 
             WebUser.SysLang = lang;
             if (BP.Sys.SystemConfig.IsBSsystem)
             {
-                HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
-                if (hc != null)
-                    BP.Sys.Glo.Request.Cookies.Remove("CCS");
+                // cookie操作，为适应不同平台，统一使用HttpContextHelper
+                Dictionary<string, string> cookieValues = new Dictionary<string, string>();
 
-                HttpCookie cookie = new HttpCookie("CCS");
-                //设置Cookies有效期
-                DateTime time = DateTime.Now;
-
-                cookie.Values.Add("No", em.No);
-                cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
+                cookieValues.Add("No", em.No);
+                cookieValues.Add("Name", HttpUtility.UrlEncode(em.Name));
 
                 if (isRememberMe)
-                    cookie.Values.Add("IsRememberMe", "1");
+                    cookieValues.Add("IsRememberMe", "1");
                 else
-                    cookie.Values.Add("IsRememberMe", "0");
+                    cookieValues.Add("IsRememberMe", "0");
 
-                cookie.Values.Add("FK_Dept", em.FK_Dept);
-                cookie.Values.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
+                cookieValues.Add("FK_Dept", em.FK_Dept);
+                cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
 
-                if (System.Web.HttpContext.Current.Session != null)
+                if (HttpContextHelper.Current.Session != null)
                 {
-                    cookie.Values.Add("Token", System.Web.HttpContext.Current.Session.SessionID);
-                    cookie.Values.Add("SID", System.Web.HttpContext.Current.Session.SessionID);
+                    cookieValues.Add("Token", HttpContextHelper.SessionID);
+                    cookieValues.Add("SID", HttpContextHelper.SessionID);
                 }
 
-                cookie.Values.Add("Lang", lang);
+                cookieValues.Add("Lang", lang);
                 if (authNo == null)
                     authNo = "";
-                cookie.Values.Add("Auth", authNo); //授权人.
+                cookieValues.Add("Auth", authNo); //授权人.
 
                 if (authName == null)
                     authName = "";
-                cookie.Values.Add("AuthName", authName); //授权人名称..
+                cookieValues.Add("AuthName", authName); //授权人名称..
 
-                System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+                HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
             }
         }
 
@@ -230,9 +199,10 @@ namespace BP.Web
         /// <returns></returns>
         public static string GetSessionByKey(string key, string isNullAsVal)
         {
-            if (IsBSMode && System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Session != null)
+            //2019-07-25 zyt改造
+            if (IsBSMode && HttpContextHelper.Current != null && HttpContextHelper.Current.Session != null)
             {
-                string str = System.Web.HttpContext.Current.Session[key] as string;
+                string str = HttpContextHelper.SessionGetString(key);
                 if (DataType.IsNullOrEmpty(str))
                     str = isNullAsVal;
                 return str;
@@ -257,7 +227,7 @@ namespace BP.Web
         {
             get
             {
-                if (System.Web.HttpContext.Current == null)
+                if (HttpContextHelper.Current == null)
                     return false;
                 else
                     return true;
@@ -273,10 +243,11 @@ namespace BP.Web
             if (val == null)
                 return;
 
+            //2019-07-25 zyt改造
             if (IsBSMode == true
-                && System.Web.HttpContext.Current != null
-                && System.Web.HttpContext.Current.Session != null)
-                System.Web.HttpContext.Current.Session[key] = val;
+                && HttpContextHelper.Current != null
+                && HttpContextHelper.Current.Session != null)
+                HttpContextHelper.SessionSet(key, val);
             else
                 BP.Port.Current.SetSession(key, val);
         }
@@ -287,55 +258,22 @@ namespace BP.Web
         {
             if (IsBSMode == false)
             {
-                try
-                {
-                    string token = WebUser.Token;
-                    //此处放到后面 杨玉慧                    
-                    //System.Web.HttpContext.Current.Response.Cookies.Clear();
-                    BP.Sys.Glo.Request.Cookies.Clear();
-                    HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                    cookie.Expires = DateTime.Now.AddDays(2);
-                    cookie.Values.Add("No", string.Empty);
-                    cookie.Values.Add("Name", string.Empty);
-                    // 2013.06.07 H
-                    cookie.Values.Add("Pass", string.Empty);
-                    cookie.Values.Add("IsRememberMe", "0");
-                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                    WebUser.Token = token;
-                    //杨玉慧 加上 授权人
-                    cookie.Values.Add("Auth", string.Empty); //授权人.
-                    cookie.Values.Add("AuthName", string.Empty); //授权人.
-                    BP.Sys.Glo.Request.Cookies.Add(cookie);
-                    //System.Web.HttpContext.Current.Response.Cookies.Add(cooki                    BP.Port.Current.Session.Clear();
-                }
-                catch (Exception ex)
-                {
-                }
+                HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                    "CCS");
+
                 return;
             }
 
             try
             {
-                string token = WebUser.Token;
-                //杨玉慧加
-                BP.Port.Current.Session.Clear(); System.Web.HttpContext.Current.Response.Cookies.Clear();
-                BP.Sys.Glo.Request.Cookies.Clear();
+                BP.Port.Current.Session.Clear();
 
+                HttpContextHelper.ResponseCookieDelete(new string[] {
+                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                   "CCS");
 
-                System.Web.HttpContext.Current.Session.Clear();
-
-                HttpCookie cookie = new HttpCookie("CCS", string.Empty);
-                cookie.Expires = DateTime.Now.AddDays(2);
-                cookie.Values.Add("No", string.Empty);
-                cookie.Values.Add("Name", string.Empty);
-                // 2013.06.07 H
-                cookie.Values.Add("Pass", string.Empty);
-                cookie.Values.Add("IsRememberMe", "0");
-                cookie.Values.Add("Auth", string.Empty); //授权人.
-                //杨玉慧 加
-                cookie.Values.Add("AuthName", string.Empty); //授权人.                    
-                System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
-                WebUser.Token = token;
+                HttpContextHelper.SessionClear();
             }
             catch
             {
@@ -435,16 +373,17 @@ namespace BP.Web
             get
             {
                 return "CH";
-
+                /*
                 string no = GetSessionByKey("Lang", null);
                 if (no == null || no == "")
                 {
                     if (IsBSMode)
                     {
-                        HttpCookie hc1 = BP.Sys.Glo.Request.Cookies["CCS"];
-                        if (hc1 == null)
+                        // HttpCookie hc1 = BP.Sys.Glo.Request.Cookies["CCS"];
+                        string lang = HttpContextHelper.RequestCookieGet("Lang", "CCS");
+                        if (String.IsNullOrEmpty(lang))
                             return "CH";
-                        SetSessionByKey("Lang", hc1.Values["Lang"]);
+                        SetSessionByKey("Lang", lang);
                     }
                     else
                     {
@@ -455,7 +394,7 @@ namespace BP.Web
                 else
                 {
                     return no;
-                }
+                }*/
             }
             set
             {
@@ -477,7 +416,7 @@ namespace BP.Web
 
                     string sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                     string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
-                    if (dept == null && SystemConfig.OSModel == OSModel.OneMore)
+                    if (dept == null)
                     {
                         sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
                         dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
@@ -559,8 +498,7 @@ namespace BP.Web
         /// <returns></returns>
         public static bool CheckSID(string userNo, string sid)
         {
-            if (BP.Sys.SystemConfig.OSDBSrc == OSDBSrc.WebServices)
-                return true;
+
 
             Paras paras = new Paras();
             paras.SQL = "SELECT SID FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
@@ -586,7 +524,9 @@ namespace BP.Web
             try
             {
                 //先从session里面取.
-                string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //string v = System.Web.HttpContext.Current.Session[valKey] as string;
+                //2019-07-25 zyt改造
+                string v = HttpContextHelper.SessionGet<string>(valKey);
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
             }
@@ -594,22 +534,15 @@ namespace BP.Web
             {
             }
 
-            string key = "CCS";
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies[key];
-            if (hc == null)
-                return null;
 
             try
             {
-                string val = null;
+                string val = HttpContextHelper.RequestCookieGet(valKey, "CCS");
+
                 if (isChinese)
-                {
-                    val = HttpUtility.UrlDecode(hc[valKey]);
-                    if (val == null)
-                        val = hc.Values[valKey];
-                }
-                else
-                    val = hc.Values[valKey];
+                    val = HttpUtility.UrlDecode(val);
+
+
 
                 if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
@@ -630,19 +563,25 @@ namespace BP.Web
             if (BP.Sys.SystemConfig.IsBSsystem == false)
                 return;
 
+            /* 2019-7-25 张磊 如下代码没有作用，删除
             HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
             if (hc != null)
                 BP.Sys.Glo.Request.Cookies.Remove("CCS");
 
             HttpCookie cookie = new HttpCookie("CCS");
             cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
+            */
 
+            Dictionary<string, string> cookieValues = new Dictionary<string, string>();
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
-                cookie.Values.Add(key, HttpUtility.UrlEncode(ap.GetValStrByKey(key)));
+                cookieValues.Add(key, ap.GetValStrByKey(key));
 
-            System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+            HttpContextHelper.ResponseCookieAdd(cookieValues,
+                DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute),
+                "CCS");
         }
+
         /// <summary>
         /// 是否是操作员？
         /// </summary>
@@ -652,17 +591,19 @@ namespace BP.Web
             {
                 if (BP.Web.WebUser.No == "admin")
                     return true;
-                try
+
+                if (SystemConfig.CCBPMRunModel == 0)
+                    return false; //单机版.
+
+                //SAAS版本. 集团版 @hongyan 需要翻译.
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
-                    string sql = "SELECT No FROM WF_Emp WHERE UserType=1 AND No='" + WebUser.No + "'";
-                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 1)
-                        return true;
-                    return false;
+                    string sql = "SELECT FK_Emp FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
+                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
+                        return false;
+                    return true;
                 }
-                catch
-                {
-                    return false;
-                }
+                return false;
             }
         }
         /// <summary>
@@ -697,6 +638,76 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("Name", value);
+            }
+        }
+        /// <summary>
+        /// 更新当前管理员的组织SID信息.
+        /// </summary>
+        public static void UpdateSIDAndOrgNoSQL()
+        {
+            if (DBAccess.IsView("Port_Emp") == false)
+            {
+                string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.FK_Dept + "' WHERE No='" + WebUser.No + "'";
+                BP.DA.DBAccess.RunSQL(sql);
+            }
+            else
+            {
+                string sql = Glo.UpdateSIDAndOrgNoSQL;
+                if (DataType.IsNullOrEmpty(sql) == true)
+                    throw new Exception("err@系统管理员缺少全局配置变量 UpdateSIDAndOrgNoSQL ");
+
+                sql = sql.Replace("@FK_Dept", WebUser.FK_Dept);
+                sql = sql.Replace("@OrgNo", WebUser.OrgNo);
+                sql = sql.Replace("@SID", WebUser.SID);
+                sql = sql.Replace("@No", WebUser.No);
+                DBAccess.RunSQL(sql);
+            }
+        }
+        /// <summary>
+        /// 所在的组织
+        /// </summary>
+        public static string OrgNo
+        {
+            get
+            {
+                string val = GetValFromCookie("OrgNo", null, true);
+                if (val == null)
+                {
+                    if (WebUser.No == null)
+                        throw new Exception("@err-005 OrgNo 登录信息丢失.");
+
+                    string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
+                    SetSessionByKey("OrgNo", no);
+                    return no;
+                }
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("OrgNo", value);
+            }
+        }
+        public static string OrgName
+        {
+            get
+            {
+                string val = GetValFromCookie("OrgName", null, true);
+                if (val == null)
+                {
+                    if (WebUser.No == null)
+                        throw new Exception("@err-006 OrgName 登录信息丢失，或者在 CCBPMRunModel=0 的模式下不能读取该节点.");
+
+                    val = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Org WHERE No='" + WebUser.OrgNo + "'");
+                    SetSessionByKey("OrgName", val);
+                   
+                }
+                if (val == null)
+                    val = "";
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("OrgName", value);
             }
         }
         /// <summary>
@@ -794,14 +805,28 @@ namespace BP.Web
                     SetSessionByKey("AuthName", value);
             }
         }
+        public static string Theame
+        {
+            get
+            {
+                string val = GetValFromCookie("Theame", null, false);
+                if (val == null)
+                    val = GetSessionByKey("Theame", null);
+                return val;
+            }
+            set
+            {
+                if (value == "")
+                    SetSessionByKey("Theame", null);
+                else
+                    SetSessionByKey("Theame", value);
+            }
+        }
 
         #region 当前人员操作方法.
         public static void DeleteTempFileOfMy()
         {
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
-            if (hc == null)
-                return;
-            string usr = hc.Values["No"];
+            string usr = HttpContextHelper.RequestCookieGet("No", "CCS"); //hc.Values["No"];
             string[] strs = System.IO.Directory.GetFileSystemEntries(SystemConfig.PathOfTemp);
             foreach (string str in strs)
             {

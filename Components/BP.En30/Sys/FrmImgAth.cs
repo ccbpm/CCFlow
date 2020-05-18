@@ -209,6 +209,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
+                map.IndexField = FrmImgAttr.FK_MapData; 
+
                 map.AddMyPK();
 
                 map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
@@ -235,6 +237,9 @@ namespace BP.Sys
         protected override bool beforeUpdateInsertAction()
         {
             this.MyPK = this.FK_MapData +"_"+ this.CtrlID;
+            MapAttr attr = new MapAttr(this.MyPK);
+            attr.Name = this.Name;
+            attr.Update();
             return base.beforeUpdateInsertAction();
         }
     }

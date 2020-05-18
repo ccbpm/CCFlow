@@ -113,6 +113,9 @@
     <Reference Include="ChnCharInfo">
       <HintPath>..\..\RefDLL\ChnCharInfo.dll</HintPath>
     </Reference>
+    <Reference Include="DmProvider">
+      <HintPath>..\..\RefDLL\DmProvider.dll</HintPath>
+    </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
@@ -137,6 +140,9 @@
     <Reference Include="Npgsql">
       <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\..\..\ccflow\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -151,6 +157,7 @@
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -169,6 +176,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\AtPara.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -178,7 +187,6 @@
     <Compile Include="DA\EncodingBP.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DA\CashFrmTemplate.cs" />
-    <Compile Include="Difference\DBAccess.cs" />
     <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -191,11 +199,18 @@
     </Compile>
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\GloEntity.cs" />
-    <Compile Include="HttpContextHelper.cs" />
+    <Compile Include="NetPlatformImpl\CacheHelper.cs" />
+    <Compile Include="NetPlatformImpl\DA.cs" />
+    <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
+    <Compile Include="NetPlatformImpl\Sys.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Current.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Port\StationType.cs" />
+    <Compile Include="Port\Team.cs" />
+    <Compile Include="Port\TeamEmp.cs" />
+    <Compile Include="Port\TeamType.cs" />
     <Compile Include="Pub\Day.cs" />
     <Compile Include="References\IJsonWrapper.cs" />
     <Compile Include="References\JsonData.cs" />
@@ -218,6 +233,8 @@
     <Compile Include="Sys\Contrast.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sys\Dict.cs" />
+    <Compile Include="Sys\DictDtl.cs" />
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
@@ -228,10 +245,18 @@
     <Compile Include="Sys\FormEventBase.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
+    <Compile Include="Sys\FrmUI\ComponentsFieldList.cs" />
+    <Compile Include="Sys\FrmUI\ExtMap.cs" />
+    <Compile Include="Sys\FrmUI\ExtScore.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrFlowBBS.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />
@@ -329,6 +354,9 @@
     <Compile Include="DA\Para.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\NPinyin\Pinyin.cs" />
+    <Compile Include="Tools\NPinyin\PyCode.cs" />
+    <Compile Include="Tools\NPinyin\PyHash.cs" />
     <Compile Include="Tools\RMB.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -380,8 +408,6 @@
     <Compile Include="GPM\DeptEmpStation.cs" />
     <Compile Include="GPM\DeptStation.cs" />
     <Compile Include="GPM\Emp.cs" />
-    <Compile Include="GPM\Station.cs" />
-    <Compile Include="GPM\StationType.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
     </Compile>

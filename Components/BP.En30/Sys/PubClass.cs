@@ -6,10 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -325,13 +321,17 @@ namespace BP.Sys
         /// <returns></returns>
         public static string DealToFieldOrTableNames(string fd)
         {
+            string ptable = fd;
             string keys = "~!@#$%^&*()+{}|:<>?`=[];,./～！＠＃￥％……＆×（）——＋｛｝｜：“《》？｀－＝［］；＇，．／";
             char[] cc = keys.ToCharArray();
             foreach (char c in cc)
                 fd = fd.Replace(c.ToString(), "");
+            if (fd.Length <= 0)
+                throw new Exception("存储表PTable为"+ptable+",不合法");
             string s = fd.Substring(0, 1);
             try
             {
+                
                 int a = int.Parse(s);
                 fd = "F" + fd;
             }
@@ -509,14 +509,13 @@ namespace BP.Sys
                 {
                 }
             }
-
         }
         /// <summary>
         /// 获取datatable.
         /// </summary>
         /// <param name="uiBindKey"></param>
         /// <returns></returns>
-        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey)
+        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey,Hashtable ht=null)
         {
             DataTable dt = new DataTable();
             if (uiBindKey.Contains("."))
@@ -542,7 +541,7 @@ namespace BP.Sys
             {
                 if (sf.SrcType == SrcType.Handler || sf.SrcType == SrcType.JQuery)
                     return null;
-                dt = sf.GenerHisDataTable();
+                dt = sf.GenerHisDataTable(ht);
             }
 
             if (dt == null)
@@ -757,14 +756,13 @@ namespace BP.Sys
         }
         public static string AddComment(Entity en)
         {
+
             if (en == null)
-                return null;
-
+                return "实体错误 en=null ";
             if (en.EnMap == null)
-                return null;
-
+                return "实体错误 en.getEnMap=null ";
             if (en.EnMap.PhysicsTable == null)
-                return null;
+                return "实体错误 en.getEnMap.getPhysicsTable=null ";
 
 
             if (DBAccess.IsExitsObject(en.EnMap.PhysicsTable) == false)
@@ -791,7 +789,7 @@ namespace BP.Sys
                 return "<hr>" + en.ToString() + "体检失败:" + ex.Message;
             }
         }
-        public static void AddCommentForTable_Ora(Entity en)
+        private static void AddCommentForTable_Ora(Entity en)
         {
            
 
@@ -835,7 +833,7 @@ namespace BP.Sys
                 }
             }
         }
-        public static void AddCommentForTable_MySql(Entity en)
+        private static void AddCommentForTable_MySql(Entity en)
         {
             MySql.Data.MySqlClient.MySqlConnection conn =
                 new MySql.Data.MySqlClient.MySqlConnection(BP.Sys.SystemConfig.AppCenterDSN);
@@ -1174,20 +1172,61 @@ namespace BP.Sys
         #region
         public static void To(string url)
         {
-            System.Web.HttpContext.Current.Response.Redirect(url, true);
+            HttpContextHelper.Response.Redirect(url, true);
         }
         public static void Print(string url)
         {
-            System.Web.HttpContext.Current.Response.Write("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
+            HttpContextHelper.ResponseWrite("<script language='JavaScript'> var newWindow =window.open('" + url + "','p','width=0,top=10,left=10,height=1,scrollbars=yes,resizable=yes,toolbar=yes,location=yes,menubar=yes') ; newWindow.focus(); </script> ");
+        }
+        public static Hashtable GetMainTableHT()
+        {
+            Hashtable htMain = new Hashtable();
+            foreach (string key in HttpContextHelper.RequestParamKeys)
+            {
+                if (key == null || key == "")
+                    continue;
+                string mykey = key.Replace("TB_", "");
+                mykey = key.Replace("DDL_", "");
+                mykey = key.Replace("CB_", "");
+                mykey = key.Replace("RB_", "");
+
+
+                if (key.Contains("TB_"))
+                {
+
+                    string val = HttpContextHelper.RequestParams(key);
+                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
+                    {
+                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
+                        htMain.Add(key.Replace("TB_", ""), val);
+                    }
+                    continue;
+                }
+
+                if (key.Contains("DDL_"))
+                {
+                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+
+                if (key.Contains("CB_"))
+                {
+                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+
+                if (key.Contains("RB_"))
+                {
+                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
+                    continue;
+                }
+            }
+            return htMain;
         }
         public static BP.En.Entity CopyFromRequest(BP.En.Entity en)
         {
-            return CopyFromRequest(en, BP.Sys.Glo.Request);
-        }
-        public static BP.En.Entity CopyFromRequest(BP.En.Entity en, HttpRequest reqest)
-        {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
-            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
+            string checkBoxIDs = HttpContextHelper.RequestParams("CheckBoxIDs");
             if (checkBoxIDs != null)
             {
                 string[] strs = checkBoxIDs.Split(',');
@@ -1196,17 +1235,19 @@ namespace BP.Sys
                     if (str == null || str == "")
                         continue;
 
+                    //@hongyan
+                    string key = str.Replace("CB_", "");
+                    if (en.Row.ContainsKey(key) == false)
+                        continue; //判断是否存在?
+
                     //设置该属性为false.
-                    en.Row[str.Replace("CB_", "")] = 0;
+                    en.Row[key] = 0;
                 }
             }
 
-
-            //如果不使用clone 就会导致 “集合已修改;可能无法执行枚举操作。”的错误。
-            Hashtable ht = en.Row.Clone() as Hashtable;
-
+            Attrs attrs = en.EnMap.Attrs;
             /*说明已经找到了这个字段信息。*/
-            foreach (string key in reqest.Params.Keys)
+            foreach (string key in HttpContextHelper.RequestParamKeys)
             {
                 if (key == null || key == "")
                     continue;
@@ -1224,18 +1265,29 @@ namespace BP.Sys
                 else
                     continue;
 
-                string val = reqest.Params[key];
+                //@hongyan
+                if (en.Row.ContainsKey(attrKey) == false)
+                    continue; //判断是否存在?
 
-                //其他的属性.
-                en.Row[attrKey] = val;
+                var val = HttpContextHelper.RequestParams(key);
+                Attr attr = attrs.GetAttrByKey(attrKey);
+                if (val == null)
+                    val = attr.DefaultVal.ToString(); //如果此值为空,就让其设置默认值.
+
+                //如果是数值类型的值.
+                if (attr.IsNum && DataType.IsNumStr(val.ToString()) == false)
+                    throw new Exception( "err@["+en.ToString()+","+en.EnDesc+"]输入错误:" + attr.Key + "," + attr.Desc + ",应该是数值类型，但是输入了[" + val.ToString() + "]");
+
+                //设置他的属性.
+                en.SetValByKey(attrKey, val);
             }
             return en;
         }
 
-        public static BP.En.Entity CopyFromRequestByPost(BP.En.Entity en, HttpRequest reqest)
+        public static BP.En.Entity CopyFromRequestByPost(BP.En.Entity en)
         {
             //获取传递来的所有的checkbox ids 用于设置该属性为falsse.
-            string checkBoxIDs = reqest.QueryString["CheckBoxIDs"];
+            string checkBoxIDs = HttpContextHelper.RequestParams("CheckBoxIDs");
             if (checkBoxIDs != null)
             {
                 string[] strs = checkBoxIDs.Split(',');
@@ -1263,7 +1315,7 @@ namespace BP.Sys
             Hashtable ht = en.Row.Clone() as Hashtable;
 
             /*说明已经找到了这个字段信息。*/
-            foreach (string key in reqest.Form.Keys)
+            foreach (string key in HttpContextHelper.RequestParamKeys)
             {
                 if (key == null || key == "")
                     continue;
@@ -1296,7 +1348,7 @@ namespace BP.Sys
                     
                 }
 
-                string val = reqest.Form[key];
+                string val = HttpContextHelper.RequestParams(key); // Form[key]
                 if (key.IndexOf("CB_") == 0 || key.IndexOf("CBPara_") == 0)
                 {
                     en.Row[attrKey] = 1;
@@ -1324,8 +1376,7 @@ namespace BP.Sys
             else
                 pk = "_" + pk;
 
-            HttpRequest reqest = BP.Sys.Glo.Request;
-            foreach (string myK in reqest.Params.Keys)
+            foreach (string myK in HttpContextHelper.RequestParamKeys)
                 allKeys += myK + ";";
 
             Attrs attrs = map.Attrs;
@@ -1359,7 +1410,7 @@ namespace BP.Sys
                 if (allKeys.Contains(relKey + ";"))
                 {
                     /*说明已经找到了这个字段信息。*/
-                    foreach (string myK in BP.Sys.Glo.Request.Params.Keys)
+                    foreach (string myK in HttpContextHelper.RequestParamKeys)
                     {
                         if (myK == null || myK == "")
                             continue;
@@ -1368,7 +1419,7 @@ namespace BP.Sys
                         {
                             if (attr.UIContralType == UIContralType.CheckBok)
                             {
-                                string val = BP.Sys.Glo.Request.Params[myK];
+                                string val = HttpContextHelper.RequestParams(myK);
                                 if (val == "on" || val == "1" || val.Contains(",on"))
                                     en.SetValByKey(attr.Key, 1);
                                 else
@@ -1376,16 +1427,13 @@ namespace BP.Sys
                             }
                             else
                             {
-                                en.SetValByKey(attr.Key, BP.Sys.Glo.Request.Params[myK]);
+                                en.SetValByKey(attr.Key, HttpContextHelper.RequestParams(myK));
                             }
                         }
                     }
                     continue;
                 }
             }
-            if (map.IsHaveAutoFull == false)
-                return en;
-            en.AutoFull();
             return en;
         }
      
@@ -1398,21 +1446,10 @@ namespace BP.Sys
         {
             get
             {
-                string urlExt = "";
-                string rawUrl = System.Web.HttpContext.Current.Request.RawUrl;
-                rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
-                string[] paras = rawUrl.Split('&');
-                foreach (string para in paras)
-                {
-                    if (para == null
-                        || para == ""
-                        || para.Contains("=") == false)
-                        continue;
-                    urlExt += "&" + para;
-                }
-                return urlExt;
+                return BP.NetPlatformImpl.Sys_PubClass.RequestParas;
             }
         }
+
         /// <summary>
         /// 不用page 参数，show message
         /// </summary>
@@ -1425,7 +1462,7 @@ namespace BP.Sys
 
 
             string script = "<script language=JavaScript>alert('" + mess + "');</script>";
-            System.Web.HttpContext.Current.Response.Write(script);
+            HttpContextHelper.ResponseWrite(script);
 
 
 
@@ -1436,7 +1473,7 @@ namespace BP.Sys
         public static void ResponseWriteScript(string script)
         {
             script = "<script language=JavaScript> " + script + "</script>";
-            System.Web.HttpContext.Current.Response.Write(script);
+            HttpContextHelper.ResponseWrite(script);
         }
         #endregion
 

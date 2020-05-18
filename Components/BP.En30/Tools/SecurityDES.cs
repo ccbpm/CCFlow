@@ -7,7 +7,6 @@ using System.Data;
 using BP.Sys;
 using BP;
 using BP.En;
-using System.Data;
 using System.Data.Sql;
 using System.Data.Common;
 using System.Data.SqlClient;

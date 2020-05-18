@@ -1,0 +1,15 @@
+D:\forVS2010\Components\BP.En30\bin\BP.En30.dll.config
+D:\forVS2010\Components\BP.En30\bin\BP.En30.dll
+D:\forVS2010\Components\BP.En30\bin\ChineseConverter.dll
+D:\forVS2010\Components\BP.En30\bin\ChnCharInfo.dll
+D:\forVS2010\Components\BP.En30\bin\DmProvider.dll
+D:\forVS2010\Components\BP.En30\bin\FtpSupport.dll
+D:\forVS2010\Components\BP.En30\bin\IBM.Data.Informix.dll
+D:\forVS2010\Components\BP.En30\bin\Microsoft.Expression.Interactions.dll
+D:\forVS2010\Components\BP.En30\bin\Mono.Security.dll
+D:\forVS2010\Components\BP.En30\bin\MySql.Data.dll
+D:\forVS2010\Components\BP.En30\bin\Newtonsoft.Json.dll
+D:\forVS2010\Components\BP.En30\bin\Npgsql.dll
+D:\forVS2010\Components\BP.En30\bin\Oracle.ManagedDataAccess.dll
+D:\forVS2010\Components\BP.En30\bin\ThoughtWorks.QRCode.dll
+D:\forVS2010\Components\BP.En30\obj\Release\BP.En30.dll

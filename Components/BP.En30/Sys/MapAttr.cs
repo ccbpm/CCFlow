@@ -3,6 +3,7 @@ using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
+using System.IO;
 
 namespace BP.Sys
 {
@@ -239,6 +240,8 @@ namespace BP.Sys
         /// </summary>
         public const string TBModel = "TBModel";
 
+        public const string CSS = "CSS";
+
 
         #region 参数属性.
         /// <summary>
@@ -261,6 +264,14 @@ namespace BP.Sys
         public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
+        public const string IsSecret = "IsSecret";
+
+        /// <summary>
+        /// 默认值设置方式
+        /// </summary>
+        public const string DefValType = "DefValType";
+
+        public const string DefaultVal = "10002";
     }
     /// <summary>
     /// 实体属性
@@ -271,15 +282,15 @@ namespace BP.Sys
         /// <summary>
         /// 是否是超大文本？
         /// </summary>
-        public bool IsSupperText
+        public int IsSupperText
         {
             get
             {
-                return this.GetParaBoolen(MapAttrAttr.IsSupperText, false);
+                return this.GetValIntByKey(MapAttrAttr.IsSupperText, 0);
             }
             set
             {
-                this.SetPara(MapAttrAttr.IsSupperText, value);
+                this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
         /// <summary>
@@ -485,16 +496,14 @@ namespace BP.Sys
                 attr.Key = this.KeyOfEn;
                 attr.Desc = this.Name;
 
+
                 string s = this.DefValReal;
                 if (DataType.IsNullOrEmpty(s))
                     attr.DefaultValOfReal = null;
                 else
-                {
-                    // attr.DefaultVal
                     attr.DefaultValOfReal = this.DefValReal;
-                    //this.DefValReal;
-                }
 
+                attr.DefValType = this.DefValType;
 
                 attr.Field = this.Field;
                 attr.MaxLength = this.MaxLen;
@@ -513,6 +522,9 @@ namespace BP.Sys
                 attr.MyFieldType = FieldType.Normal; //普通类型的字段.
                 if (this.IsPK)
                     attr.MyFieldType = FieldType.PK;
+
+                attr.IsSupperText = this.IsSupperText;
+
                 switch (this.LGType)
                 {
                     case FieldTypeS.Enum:
@@ -554,6 +566,9 @@ namespace BP.Sys
                         break;
                 }
 
+                //外部数据源
+                if (this.LGType == FieldTypeS.Normal && this.MyDataType == DataType.AppString && this.UIContralType == UIContralType.DDL)
+                    attr.UIDDLShowType = BP.Web.Controls.DDLShowType.BindSQL;
                 //attr.AutoFullWay = this.HisAutoFull;
                 //attr.AutoFullDoc = this.AutoFullDoc;
                 //attr.MyFieldType = FieldType
@@ -689,6 +704,18 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
+
+        public int DefValType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.DefValType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefValType, value);
             }
         }
         /// <summary>
@@ -970,7 +997,7 @@ namespace BP.Sys
             {
                 string str= this.GetValStringByKey(MapAttrAttr.GroupID);
                 if (str == "无" || str=="")
-                    return 0;
+                    return 1;
                 return int.Parse(str);
             }
             set
@@ -1438,7 +1465,7 @@ namespace BP.Sys
 
                 map.AddTBString(MapAttrAttr.Name, null, "描述", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 400, 20);
-
+                map.AddTBInt(MapAttrAttr.DefValType, 1, "默认值类型", true, false);
 
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
                 map.AddTBInt(MapAttrAttr.MyDataType, 1, "数据类型", true, false);
@@ -1462,10 +1489,10 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsInput, 0, "是否必填字段", true, true);
-
+                map.AddTBInt(MapAttrAttr.IsSecret, 0, "是否保密", true, true);
                 map.AddTBInt(MapAttrAttr.IsRichText, 0, "富文本", true, true);
-                map.AddTBInt(MapAttrAttr.IsSupperText, 0, "富文本", true, true);
-                map.AddTBInt(MapAttrAttr.FontSize, 0, "富文本", true, true);
+                map.AddTBInt(MapAttrAttr.IsSupperText, 0, "是否是大文本", true, true);
+                map.AddTBInt(MapAttrAttr.FontSize, 0, "字体大小", true, true);
 
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
                 map.AddTBInt(MapAttrAttr.IsSigan, 0, "签字？", true, false);
@@ -1495,11 +1522,12 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true,false);
 
 
-                //显示的分组. @shilianyu. 
+                //显示的分组.
                 map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
+                map.AddTBString(MapAttrAttr.CSS, "0", "自定义样式", true, false, 1, 100, 20);
 
                 //参数属性.
                 map.AddTBAtParas(4000); //
@@ -1509,6 +1537,8 @@ namespace BP.Sys
             }
         }
         #endregion
+
+
 
         protected override void afterInsert()
         {
@@ -1536,8 +1566,53 @@ namespace BP.Sys
             //}
             base.afterInsert();
         }
+        /// <summary>
+        /// 保存大块html文本
+        /// </summary>
+        /// <returns></returns>
+        public string SaveBigNoteHtmlText(string text)
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\"+ this.FK_MapData + ".htm";
+            //若文件夹不存在，则创建
+            string folder = System.IO.Path.GetDirectoryName(file);
+            if (System.IO.Directory.Exists(folder) == false)
+                System.IO.Directory.CreateDirectory(folder);
 
-      
+            BP.DA.DataType.WriteFile(file, text);
+            return "保存成功！";
+        }
+        //删除大块文本信息
+        public string DeleteBigNoteHtmlText()
+        {
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            
+            if (System.IO.File.Exists(file) == true)
+                System.IO.File.Delete(file);
+
+            this.Delete();
+            
+
+            return "删除成功！";
+        }
+        /// <summary>
+        /// 读取大块html文本
+        /// </summary>
+        /// <returns></returns>
+        public string ReadBigNoteHtmlText()
+        {
+            string doc = "";
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string folder = System.IO.Path.GetDirectoryName(file);
+            if (System.IO.Directory.Exists(folder) != false) {
+                if (File.Exists(file))
+                {
+                    doc = BP.DA.DataType.ReadTextFile(file);
+
+                }
+            }
+                
+            return doc;
+        }
         public void DoDownTabIdx()
         {
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);
@@ -1661,7 +1736,7 @@ namespace BP.Sys
 
             //added by liuxc,2016-12-2
             //判断当前属性是否有分组，没有分组，则自动创建一个分组，并关联
-            if (this.GroupID.ToString() == "0")
+            if (this.GroupID.ToString() == "1")
             {
                 //查找分组，查找到的第一个分组，关联当前属性
                 GroupField group = new GroupField();
@@ -1777,8 +1852,6 @@ namespace BP.Sys
             //如果外部数据，或者ws数据，就删除其影子字段.
             if (this.UIContralType== En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
-
-
 
             BP.DA.DBAccess.RunSQLs(sqls);
             return base.beforeDelete();

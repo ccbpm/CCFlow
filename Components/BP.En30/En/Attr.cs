@@ -23,36 +23,6 @@ namespace BP.En
         /// </summary>
         Readonly
     }
-    /// <summary>
-    /// 自动填充方式
-    /// </summary>
-    public enum AutoFullWay
-    {
-        /// <summary>
-        /// 不设置
-        /// </summary>
-        Way0,
-        /// <summary>
-        /// 方式1
-        /// </summary>
-        Way1_JS,
-        /// <summary>
-        /// sql 方式。
-        /// </summary>
-        Way2_SQL,
-        /// <summary>
-        /// 外键
-        /// </summary>
-        Way3_FK,
-        /// <summary>
-        /// 明细
-        /// </summary>
-        Way4_Dtl,
-        /// <summary>
-        /// 脚本
-        /// </summary>
-        Way5_JS
-    }
 	/// <summary>
 	///  控件类型
 	/// </summary>
@@ -106,10 +76,42 @@ namespace BP.En
         /// 图片
         /// </summary>
         FrmImg = 11,
+		/// <summary>
+		/// 图片附件
+		/// </summary>
+		FrmImgAth = 12,
+		/// <summary>
+		/// 身份证号
+		/// </summary>
+		IDCard=13,
+		/// <summary>
+		/// 签批组件
+		/// </summary>
+		SignCheck = 14,
+		/// <summary>
+		/// 评论组件
+		/// </summary>
+		FlowBBS = 15,
+		/// <summary>
+		/// 系统定位
+		/// </summary>
+		Fixed=16,
+        /// <summary>
+        /// 公文字号
+        /// </summary>
+        DocWord=17,
         /// <summary>
         /// 流程进度图
         /// </summary>
-        JobSchedule=50
+        JobSchedule=50,
+        /// <summary>
+        /// 大块文本Html(说明性文字)
+        /// </summary>
+        BigText = 60,
+		/// <summary>
+		/// 评分
+		/// </summary>
+		Score = 101
 
     }
     /// <summary>
@@ -194,6 +196,7 @@ namespace BP.En
                 attr.UIBindKey = this.UIBindKey;
                 attr.UIIsLine = this.UIIsLine;
                 attr.UIHeight = 0;
+                attr.DefValType = this.DefValType;
 
                 if (this.MaxLength > 3000)
                     attr.UIHeight = 10;
@@ -206,9 +209,7 @@ namespace BP.En
                 attr.UIRefKeyText = this.UIRefKeyText;
                 attr.UIVisible = this.UIVisible;
 
-                //if (this.IsPK)
-                //    attr.MyDataType =  = FieldType.PK;
-                //    attr.MyFieldType = FieldType.PK;
+                
 
                 switch (this.MyFieldType)
                 {
@@ -473,8 +474,6 @@ namespace BP.En
 
 		#region 属性
         public string HelperUrl = null;
-        public AutoFullWay AutoFullWay = AutoFullWay.Way0;
-        public string  AutoFullDoc =null;
 		/// <summary>
 		/// 属性名称
 		/// </summary>
@@ -513,11 +512,26 @@ namespace BP.En
                 if (value != null)
                     this._field = value.Trim();
 			}
-		}		
-		/// <summary>
-		/// 字段默认值
-		/// </summary>
-		private object _defaultVal=null;
+		}
+
+        private int _DefValType = 0;
+        public int DefValType
+        {
+            get
+            {
+                return this._DefValType;
+            }
+            set
+            {
+                if (value != null)
+                    this._DefValType = value;
+            }
+        }
+
+        /// <summary>
+        /// 字段默认值
+        /// </summary>
+        private object _defaultVal=null;
         public string DefaultValOfReal
         {
             get
@@ -896,7 +910,21 @@ namespace BP.En
 				this._UIBindKey=value;
 			}
 		}
-        private string _UIBindKeyOfEn = null;
+
+		private int _IsSupperText = 0;
+		public int IsSupperText
+		{
+			get
+			{
+				return this._IsSupperText;
+			}
+			set
+			{
+				this._IsSupperText = value;
+			}
+		}
+
+		private string _UIBindKeyOfEn = null;
 		public bool UIIsDoc
 		{
 			get
@@ -1378,13 +1406,26 @@ namespace BP.En
 		}
 
         #region DDLSQL
-        public void AddDDLSQL(string key, string defaultVal, string desc, string sql, bool uiIsEnable = true)
+        public void AddDDLSQL(string key, object defaultVal, string desc, string sql, bool uiIsEnable = true)
         {
+            if (defaultVal == null)
+                defaultVal = "";
+
             Attr attr = new Attr();
             attr.Key = key;
             attr.Field = key;
-            attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppString;
+
+            if (typeof(int)== defaultVal.GetType() )
+            { 
+                attr.DefaultVal = defaultVal;
+                attr.MyDataType = DataType.AppInt;
+            }
+            else
+            {
+                attr.DefaultVal = defaultVal;
+                attr.MyDataType = DataType.AppString;
+            }
+
             attr.MyFieldType = FieldType.Normal;
             attr.MaxLength = 50;
 
@@ -1662,6 +1703,7 @@ namespace BP.En
                     mattr.MinLen = item.MinLength;
                     mattr.UIVisible = item.UIVisible;
                     mattr.DefValReal = item.DefaultValOfReal;
+                    mattr.DefValType = item.DefValType;
 
                     mattr.UIIsEnable = item.UIIsReadonly;
 
@@ -1717,7 +1759,7 @@ namespace BP.En
         public void Add(Attr attr)
         {
             if (attr.Field == null || attr.Field == "")
-                throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "',得字段值为空");
+                throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "', "+attr.Desc+",得字段值为空");
 
             bool k = attr.IsKeyEqualField;
             this.Add(attr, true, false);
@@ -1745,12 +1787,14 @@ namespace BP.En
 		}
 		private void AddRefAttrText(Attr attr)
 		{
+            if (attr.MyFieldType == FieldType.Enum && attr.MyDataType == DataType.AppString)
+                return;
 			if ( attr.MyFieldType==FieldType.FK 
 				||  attr.MyFieldType==FieldType.Enum 
 				||  attr.MyFieldType==FieldType.PKEnum 
 				||  attr.MyFieldType==FieldType.PKFK )
 			{
-
+                
 				Attr myattr= new Attr();
 				myattr.MyFieldType=FieldType.RefText ;
 				myattr.MyDataType=DataType.AppString ;

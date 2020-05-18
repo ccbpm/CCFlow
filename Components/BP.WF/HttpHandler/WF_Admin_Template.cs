@@ -330,7 +330,6 @@ namespace BP.WF.HttpHandler
 
                 if (ds.Tables.Contains("Sys_MapData") == false)
                 {
-
                     dtInfo = this.ImpAddInfo(dtInfo, str, "模版不存在Sys_MapData表,非法的表单.", "导入失败");
                     continue;
                 }

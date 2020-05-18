@@ -1,0 +1,8 @@
+-----------------------------------------------------------------------------------------------------
+18日15时37分41秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+18日15时37分44秒Info:System');"SQL=DROP INDEX ND147Rpt_OID ON ND147Rpt,异常信息:无法对 索引 'ND147Rpt.ND147Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+18日15时45分53秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+18日15时46分06秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+18日15时46分15秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+18日15时47分27秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+18日15时47分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString

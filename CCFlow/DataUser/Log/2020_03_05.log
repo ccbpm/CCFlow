@@ -1,0 +1,4 @@
+-----------------------------------------------------------------------------------------------------
+05日16时12分17秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Data.MyStartFlows
+05日16时12分18秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Data.MyJoinFlows
+05日16时16分35秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrNum

@@ -1,10 +1,10 @@
-﻿function SendMyFlow()
-{ 
+﻿function SendMyFlow() {
 
-alert('该纳税人，有欠税，您不能注销.');
-
-return true;
+    alert('该纳税人，有欠税，您不能注销.');
+    return true;
 }
+
+//计算两个请假天数
 function DateDiffExt() {
 
     var d1 = $("#TB_QingJiaShiJianCong").val();
@@ -13,14 +13,12 @@ function DateDiffExt() {
     d2 = d2.substring(0, 10);
 
     var days = DateDiff(d1, d2);
-
     //请假天数.
     $("#TB_QingJiaTianShu").val(days);
 
 }
 
 function DateDiff(date1, date2) {
-
 
     var regexp = /^(\d{1,4})[-|\.]{1}(\d{1,2})[-|\.]{1}(\d{1,2})$/;
     var monthDays = [0, 3, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1];

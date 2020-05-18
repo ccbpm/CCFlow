@@ -1,0 +1,17 @@
+-----------------------------------------------------------------------------------------------------
+09日15时31分22秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+09日15时31分22秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = 
+09日15时31分36秒Info:System');"SQL=DROP INDEX Port_Team_No ON Port_Team,异常信息:无法对 索引 'Port_Team.Port_Team_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日15时31分45秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmReportField
+09日15时31分57秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Data.MyDeptEmp
+09日15时33分12秒Info:System');"SQL=DROP INDEX CN_City_No ON CN_City,异常信息:无法对 索引 'CN_City.CN_City_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日15时33分19秒Info:System');"SQL=DROP INDEX CN_PQ_No ON CN_PQ,异常信息:无法对 索引 'CN_PQ.CN_PQ_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日15时33分26秒Info:System');"SQL=DROP INDEX CN_SF_No ON CN_SF,异常信息:无法对 索引 'CN_SF.CN_SF_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日15时33分35秒Warning:System');"err@字段类型不匹配,表[ND18Rpt]字段[FlowDaySpan]名称[状态]映射类型为[整型(int)],数据类型为[float]
+09日15时33分35秒Info:System');"SQL=ALTER TABLE ND18Rpt ALTER column FlowEnder VARCHAR(50),异常信息:对象'DF__ND18Rpt__FlowEnd__2E5BD364' 依赖于 列'FlowEnder'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN FlowEnder 失败。
+09日15时33分35秒Info:System');"SQL=ALTER TABLE ND18Rpt ALTER column FlowStarter VARCHAR(50),异常信息:对象'DF__ND18Rpt__FlowSta__2D67AF2B' 依赖于 列'FlowStarter'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN FlowStarter 失败。
+09日15时33分35秒Info:System');"SQL=ALTER TABLE ND18Rpt ALTER column PFlowNo VARCHAR(50),异常信息:对象'DF__ND18Rpt__PFlowNo__2C738AF2' 依赖于 列'PFlowNo'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN PFlowNo 失败。
+09日15时47分22秒Warning:System');"err@字段类型不匹配,表[ND18Rpt]字段[FlowDaySpan]名称[状态]映射类型为[整型(int)],数据类型为[float]

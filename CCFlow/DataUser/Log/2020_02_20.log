@@ -1,0 +1,25 @@
+-----------------------------------------------------------------------------------------------------
+20日15时13分45秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+20日15时13分48秒Info:System');"SQL=DROP INDEX ND148Rpt_OID ON ND148Rpt,异常信息:无法对 索引 'ND148Rpt.ND148Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+20日15时19分28秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"FK_NY":"2020-02","FID":0,"Rec":"admin","MyNum":1,"OID":1866,"FK_DeptText":"周大福集团","ShenQingRenBuMen":"周大福集团","Emps":"admin","CDT":"2020-02-20 15:18","ShenQingRiJi":"2020-02-20","Title":"周大福集团-admin,admin在2020-02-20 15:18发起.","FK_Dept":"10000","ShenQingRen":"admin","RDT":"2020-02-20 15:18","EndJSON":"0"}' WHERE MyPK='1273588996',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时19分28秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+20日15时21分00秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1866,"FID":0,"FK_Dept":"10000","Rec":"admin","CDT":"2020-02-20 15:18","RDT":"2020-02-20 15:18","Emps":"admin","EndJSON":"0"}' WHERE MyPK='1313462076',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时24分19秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 219
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1159
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2352
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3630
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7139
+20日15时24分32秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1866,"FID":0,"FK_Dept":"10000","Rec":"admin","CDT":"2020-02-20 15:18","RDT":"2020-02-20 15:18","Emps":"admin","EndJSON":"0"}' WHERE MyPK='1688260881',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时24分44秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1866,"FID":0,"FK_Dept":"10000","Rec":"admin","CDT":"2020-02-20 15:18","RDT":"2020-02-20 15:18","Emps":"admin","EndJSON":"0"}' WHERE MyPK='778249623',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时32分43秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"FK_NY":"2020-02","FID":0,"Rec":"admin","MyNum":1,"OID":1867,"FK_DeptText":"周大福集团","ShenQingRenBuMen":"周大福集团","Emps":"admin","CDT":"2020-02-20 15:31","ShenQingRiJi":"2020-02-20","Title":"周大福集团-admin,admin在2020-02-20 15:31发起.","FK_Dept":"10000","ShenQingRen":"admin","RDT":"2020-02-20 15:31","EndJSON":"0"}' WHERE MyPK='422802725',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时33分18秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1867,"FID":0,"FK_Dept":"10000","Rec":"admin","CDT":"2020-02-20 15:31","RDT":"2020-02-20 15:31","Emps":"admin","EndJSON":"0"}' WHERE MyPK='552113660',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时44分03秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 219
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1159
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2352
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3630
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7139
+20日15时44分08秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1867,"FID":0,"FK_Dept":"10000","Rec":"admin","CDT":"2020-02-20 15:31","RDT":"2020-02-20 15:31","Emps":"admin","EndJSON":"0"}' WHERE MyPK='2132361927',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时45分45秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1867,"FID":0,"FK_Dept":"10000","Rec":"zhoupeng","CDT":"2020-02-20 15:31","RDT":"2020-02-20 15:31","Emps":"admin","EndJSON":"0"}' WHERE MyPK='1803809297',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+20日15时49分54秒Info:System');"SQL=UPDATE ND62Track SET FrmDB='{"OID":1867,"FID":0,"FK_Dept":"10000","Rec":"zhoupeng","CDT":"2020-02-20 15:31","RDT":"2020-02-20 15:31","Emps":"admin","EndJSON":"0"}' WHERE MyPK='792943437',异常信息:操作数类型冲突: nvarchar 与 image 不兼容

@@ -1,0 +1,25 @@
+-----------------------------------------------------------------------------------------------------
+28日09时54分01秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日09时54分03秒Info:System');"SQL=DROP INDEX ND20Rpt_OID ON ND20Rpt,异常信息:无法对 索引 'ND20Rpt.ND20Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日09时55分16秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日09时55分18秒Info:System');"SQL=DROP INDEX ND21Rpt_OID ON ND21Rpt,异常信息:无法对 索引 'ND21Rpt.ND21Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日09时58分58秒Info:System');"SQL=DROP INDEX Frm_BiaoShanKuShenHeZuJian_OID ON Frm_BiaoShanKuShenHeZuJian,异常信息:无法对 索引 'Frm_BiaoShanKuShenHeZuJian.Frm_BiaoShanKuShenHeZuJian_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日09时59分23秒Info:System');"SQL=DROP INDEX Frm_BiaoShanShuShenHeZuJian_OID ON Frm_BiaoShanShuShenHeZuJian,异常信息:无法对 索引 'Frm_BiaoShanShuShenHeZuJian.Frm_BiaoShanShuShenHeZuJian_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日10时02分30秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时02分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时02分49秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时02分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时04分10秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时04分12秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时05分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时05分35秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时06分14秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时06分17秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+28日10时19分10秒Info:System');"SQL=UPDATE ND21Track SET FrmDB='{"FK_NY":"2020-03","FID":0,"Rec":"zhanghaicheng","MyNum":1,"OID":186,"FK_DeptText":"集团市场部","ShenQingRenBuMen":"集团市场部","Emps":"zhanghaicheng","CDT":"2020-03-28 10:18","ShenQingRiJi":"2020-03-28","Title":"集团市场部-zhanghaicheng,张海成在2020-03-28 10:18发起.","FK_Dept":"1001","ShenQingRen":"张海成","RDT":"2020-03-28 10:18","EndJSON":"0"}' WHERE MyPK='1510345861',异常信息:列名 'FrmDB' 无效。
+-----------------------------------------------------------------------------------------------------
+28日13时54分42秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日13时54分45秒Info:System');"SQL=DROP INDEX ND22Rpt_OID ON ND22Rpt,异常信息:无法对 索引 'ND22Rpt.ND22Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+28日14时21分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.GPMEmps
+28日14时21分34秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.GPMEmp
+28日14时25分42秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.GPMEmp
+28日14时27分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.GPMEmp

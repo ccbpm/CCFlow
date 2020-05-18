@@ -1,0 +1,2 @@
+-----------------------------------------------------------------------------------------------------
+25日18时20分40秒Info:System');"SQL=UPDATE ND202Track SET FrmDB='{"FK_NY":"2020-03","FID":0,"Rec":"admin","MyNum":1,"OID":1756,"FK_DeptText":"集团总部","ShenQingRenBuMen":"集团总部","Emps":"admin","CDT":"2020-03-25 18:20","ShenQingRiJi":"2020-03-25","Title":"集团总部-admin,admin在2020-03-25 18:20发起.","FK_Dept":"100","ShenQingRen":"admin","RDT":"2020-03-25 18:20","EndJSON":"0"}' WHERE MyPK='2027705537',异常信息:列名 'FrmDB' 无效。

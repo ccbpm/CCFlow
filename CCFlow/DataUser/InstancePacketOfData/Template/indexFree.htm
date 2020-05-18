@@ -4,6 +4,81 @@
     <title>@Title</title>
     <meta charset="UTF-8"/>
     <link href="ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        var addHeight = 0;
+        var upperaddHeight = 0;
+        var currTop = 0;
+        window.onload = function () {
+            //获取div的所有元素
+
+            var divs = document.getElementsByTagName("div");
+            var eleDivs = [];
+            var labDivs = [];
+            for (var i = 0; i < divs.length; i++) {
+                if (divs[i].id == "topContentDiv" || divs[i].id == "contentDiv" || divs[i].id == "divCCForm" || divs[i] == "CCForm")
+                    continue;
+                if (divs[i].getAttribute("name") == "u2")
+                    labDivs.push(divs[i]);
+                else
+                    eleDivs.push(divs[i]);
+            }
+
+            for (var i = 0; i < eleDivs.length; i++) {
+                var tag = eleDivs[i];
+                var height = tag.offsetHeight;
+                var scroHeight = tag.scrollHeight;
+                var top = tag.offsetTop;
+                if (upperaddHeight != 0 && top < currTop) {
+                    top = top + upperaddHeight;
+                    tag.style.top = top + 'px';
+                }
+
+                //说明元素中的内容有填写较多，出现滚动
+                if (scroHeight > height && scroHeight - height > 5) {
+                    getLines(top, top + scroHeight);
+                    getlabs(labDivs, top, top + scroHeight);
+
+
+                }
+            }
+        }
+
+        function getLines(startTop, endTop) {
+            var lines = document.getElementsByName("line");
+            for (var i = 0; i < lines.length; i++) {
+                var tag = lines[i];
+                var top = tag.offsetTop;
+                if (startTop < top && top < endTop) {
+                    upperaddHeight = endTop - top + 10;
+                    addHeight += upperaddHeight;
+                    top = endTop + 10;
+                    tag.style.top = top + 'px';
+                    currTop = top;
+                    break;
+                } else {
+                    currTop = 0;
+                }
+            }
+        }
+
+        function getlabs(labs, startTop, endTop) {
+            for (var i = 0; i < labs.length; i++) {
+                var tag = labs[i];
+                var top = tag.offsetTop;
+                if (startTop < top && top < endTop) {
+                    top = endTop + 10;
+                    tag.style.top = top + 'px';
+                    break;
+                }
+            }
+        }
+
+        function setYLine() {
+            var lines = document.getElementsByName("YLine");
+            for (var i = 0; i < labs.length; i++) {
+            }
+        }
+    </script>
 </head>
 <body style="height:@Height;zoom: 1.5" >
 	  <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;height:@Height;width:@Width">

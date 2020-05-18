@@ -1,0 +1,6 @@
+-----------------------------------------------------------------------------------------------------
+09日17时19分55秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+09日17时24分00秒Fatal:System');"SQL= SELECT TOP 99999 MyPK, FrmID, CtrlObj,ISNULL(IsEnableAll,0) IsEnableAll,ISNULL(IsEnableStation,0) IsEnableStation,ISNULL(IsEnableDept,0) IsEnableDept,ISNULL(IsEnableUser,0) IsEnableUser, IDOfUsers, IDOfStations, IDOfDepts FROM Frm_CtrlModel WHERE (1=1) AND ( ( Frm_CtrlModel.FrmID =@FrmID) )  Exception=对象名 'Frm_CtrlModel' 无效。
+09日17时24分00秒Info:System');"SQL=DROP INDEX Frm_CtrlModel_MyPK ON Frm_CtrlModel,异常信息:无法对 索引 'Frm_CtrlModel.Frm_CtrlModel_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日17时52分50秒Info:System');"SQL=DROP INDEX ceshi3_OID ON ceshi3,异常信息:无法对 索引 'ceshi3.ceshi3_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+09日17时53分32秒Info:System');"SQL=INSERT INTO ceshi3 (BillNo,Title,AtPara,BillState,RDT,Starter,StarterName,OID,OY ) VALUES ( 'ccbpm2020-01-09-0001','周大福集團 admin 20年01月09日17时53分','',0,'2020-01-09 17:53','admin','admin',5087,''),异常信息:列名 'OY' 无效。

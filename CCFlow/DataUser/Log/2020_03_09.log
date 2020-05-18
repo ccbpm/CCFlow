@@ -1,0 +1,35 @@
+-----------------------------------------------------------------------------------------------------
+09日11时12分01秒Fatal:System');"无法打开登录所请求的数据库 "dev"。登录失败。
+用户 'sa' 登录失败。
+09日11时12分08秒Fatal:System');"无法打开登录所请求的数据库 "dev"。登录失败。
+用户 'sa' 登录失败。
+-----------------------------------------------------------------------------------------------------
+09日11时16分05秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日11时16分38秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日11时16分42秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日11时16分45秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日11时16分57秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日11时17分12秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日13时41分29秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日13时42分14秒Fatal:System');"SQL= SELECT  TOP 1  ND195Rpt.Title,ISNULL(ND195Rpt.ShenQingRen, '@WebUser.Name') ShenQingRen,ISNULL(ND195Rpt.ShenQingRiJi,'@RDT') ShenQingRiJi,ISNULL(ND195Rpt.ShenQingRenBuMen, '@WebUser.FK_DeptName') ShenQingRenBuMen,ISNULL(ND195Rpt.RDT,'2020-03-09') RDT,ISNULL(ND195Rpt.OID,0)   OID,ISNULL(ND195Rpt.FID,0)   FID,ISNULL(ND195Rpt.CDT,'2020-03-09') CDT,ISNULL(ND195Rpt.Rec, '@WebUser.No') Rec, ND195Rpt.Emps, ND195Rpt.FK_Dept, Port_Dept_FK_Dept.Name AS FK_DeptText, ND195Rpt.FK_NY,ISNULL(ND195Rpt.MyNum,1)   MyNum, ND195Rpt.ChuLiRen, ND195Rpt.RenYuan, ND195Rpt.RenYuanT, ND195Rpt.QZB FROM ND195Rpt LEFT JOIN Port_Dept AS Port_Dept_FK_Dept ON ND195Rpt.FK_Dept=Port_Dept_FK_Dept.No WHERE (1=1)  AND ND195Rpt.OID=@OID Exception=列名 'QZB' 无效。
+09日13时42分41秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日13时43分00秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtHandWriting
+09日15时58分14秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日15时58分45秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日15时58分49秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日15时58分56秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时05分14秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时05分55秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时06分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时06分36秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时06分41秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时07分28秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时07分57秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时08分12秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时08分15秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时09分56秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+09日16时10分03秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+-----------------------------------------------------------------------------------------------------
+09日17时15分42秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+10日09时12分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.SubFlowAuto
+10日09时19分51秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.SubFlowAuto

@@ -1,0 +1,15 @@
+-----------------------------------------------------------------------------------------------------
+27日15时04分17秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时04分20秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时06分01秒Fatal:System');"列名 'POP' 无效。
+27日15时06分01秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(OID,0)   OID,ISNULL(RDT,'2020-04-27') RDT,ISNULL(FID,0)   FID, POP FROM Frm_BiaoShanKuShenHeZuJian WHERE (1=1)  AND Frm_BiaoShanKuShenHeZuJian.OID=@OID Exception=列名 'POP' 无效。
+27日15时09分39秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时09分43秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时09分53秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时10分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时10分56秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时11分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时11分05秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时11分11秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日15时11分17秒Fatal:System');"列名 'POP1' 无效。
+27日15时11分17秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(OID,0)   OID,ISNULL(RDT,'2020-04-27') RDT,ISNULL(FID,0)   FID, POP, POP1 FROM Frm_BiaoShanKuShenHeZuJian WHERE (1=1)  AND Frm_BiaoShanKuShenHeZuJian.OID=@OID Exception=列名 'POP1' 无效。

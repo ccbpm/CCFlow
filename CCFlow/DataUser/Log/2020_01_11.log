@@ -1,0 +1,14 @@
+-----------------------------------------------------------------------------------------------------
+11日10时05分02秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+11日10时05分04秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+11日10时06分08秒Fatal:System');"SQL= SELECT TOP 99999 ISNULL(OID,0) OID,ISNULL(RefPK, '0') RefPK,ISNULL(FID,0) FID,ISNULL(RDT,'2020-01-11') RDT,ISNULL(Rec, '@WebUser.No') Rec, XingMing, YouXiang, Tel,ISNULL(DHXZ,0) DHXZ, CASE DHXZ WHEN 0 THEN '地方号' WHEN 1 THEN '专线号' WHEN 2 THEN '自动号' WHEN 3 THEN '密话' WHEN NULL THEN '地方号' END "DHXZText",ISNULL(QJLX,0) QJLX, CASE QJLX WHEN 0 THEN '事假' WHEN 1 THEN '病假' WHEN 2 THEN '年假' WHEN 3 THEN '调休' WHEN 4 THEN '婚假' WHEN 5 THEN '产假' WHEN 6 THEN '陪产假' WHEN 7 THEN '路途假' WHEN 8 THEN '丧假' WHEN NULL THEN '事假' END "QJLXText" FROM Dict_YuanGongXinXiDtl1 WHERE (1=1) AND ( ( ( Dict_YuanGongXinXiDtl1.RefPK =@RefPK) OR ( Dict_YuanGongXinXiDtl1.FID =@FID) ) )  Exception=列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。
+列名 'QJLX' 无效。

@@ -1,0 +1,2 @@
+-----------------------------------------------------------------------------------------------------
+14日11时15分54秒Info:System');"SQL=UPDATE ND131Track SET FrmDB='{"FK_NY":"2020-01","FID":0,"Rec":"admin","MyNum":1,"OID":1806,"FK_DeptText":"周大福集团","ShenQingRenBuMen":"周大福集团","Emps":"admin","CDT":"2020-01-14 11:12","ShenQingRiJi":"2020-01-14","Title":"周大福集团-admin,admin在2020-01-14 11:12发起.","FK_Dept":"10000","ShenQingRen":"admin","RDT":"2020-01-14 11:12","EndJSON":"0"}' WHERE MyPK='1679199438',异常信息:列名 'FrmDB' 无效。

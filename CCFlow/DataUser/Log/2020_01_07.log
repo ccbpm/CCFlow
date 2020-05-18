@@ -1,0 +1,11 @@
+-----------------------------------------------------------------------------------------------------
+07日17时40分05秒Info:System');"SQL=DROP INDEX ND99Rpt_OID ON ND99Rpt,异常信息:无法对 索引 'ND99Rpt.ND99Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+07日17时40分27秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+07日17时46分37秒Fatal:System');"SQL= SELECT  TOP 1 ISNULL(WorkID,0)   WorkID,ISNULL(FK_Node,0)   FK_Node, NodeName, FK_Emp, FK_EmpT, StartDT, EndDT,ISNULL(GT,0)   GT, ISNULL( Scale ,0) AS  Scale, ISNULL( TotalScale ,0) AS  TotalScale, ISNULL( ChanZhi ,0) AS  ChanZhi, AtPara, MyPK FROM WF_CHNode WHERE (1=1)  AND WF_CHNode.MyPK=@MyPK Exception=对象名 'WF_CHNode' 无效。
+07日17时46分38秒Info:System');"SQL=DROP INDEX WF_CHNode_MyPK ON WF_CHNode,异常信息:无法对 索引 'WF_CHNode.WF_CHNode_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+07日17时46分38秒Info:System');"SQL=UPDATE ND99Track SET FrmDB='{"FK_NY":"2020-01","FID":0,"Rec":"admin","PrjNo":"","MyNum":1,"OID":5083,"FK_DeptText":"周大福集團","ShenQingRenBuMen":"周大福集團","Emps":"admin","CDT":"2020-01-07 17:46","ShenQingRiJi":"2020-01-07","Title":"周大福集團-admin,admin在2020-01-07 17:46发起.","FK_Dept":"3000000","noSense":"","ShenQingRen":"admin","CESSS":"","RDT":"2020-01-07 17:46","MainPK":"","EndJSON":"0"}' WHERE MyPK='197733857',异常信息:列名 'FrmDB' 无效。
+08日09时37分26秒Info:System');"SQL=DROP INDEX ND100Rpt_OID ON ND100Rpt,异常信息:无法对 索引 'ND100Rpt.ND100Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+08日09时37分45秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+08日09时38分39秒Info:System');"SQL=UPDATE ND100Track SET FrmDB='{"FK_NY":"2020-01","FID":0,"Rec":"admin","PrjNo":"","MyNum":1,"OID":5085,"FK_DeptText":"周大福集團","ShenQingRenBuMen":"周大福集團","Emps":"admin","CDT":"2020-01-08 09:38","ShenQingRiJi":"2020-01-08","Title":"周大福集團-admin,admin在2020-01-08 09:38发起.","FK_Dept":"3000000","noSense":"","ShenQingRen":"admin","CESSS":"","RDT":"2020-01-08 09:38","MainPK":"","EndJSON":"0"}' WHERE MyPK='870336567',异常信息:列名 'FrmDB' 无效。
+08日10时48分54秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+08日10时50分13秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.ExtMap

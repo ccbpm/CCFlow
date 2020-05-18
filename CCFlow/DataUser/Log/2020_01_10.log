@@ -1,0 +1,21 @@
+-----------------------------------------------------------------------------------------------------
+10日11时01分10秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日11时01分14秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日11时05分15秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+10日13时43分52秒Info:System');"SQL=DROP INDEX Frm_HeTongShenPi_OID ON Frm_HeTongShenPi,异常信息:无法对 索引 'Frm_HeTongShenPi.Frm_HeTongShenPi_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日13时46分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日13时46分46秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日13时49分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日13时54分59秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日13时55分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日13时59分46秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrSFTable
+10日13时59分48秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrSFTable
+-----------------------------------------------------------------------------------------------------
+10日17时54分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日17时54分54秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+10日17时56分10秒Fatal:System');"SQL= SELECT TOP 99999 ISNULL(OID,0) OID,ISNULL(RefPK, '0') RefPK,ISNULL(FID,0) FID,ISNULL(RDT,'2020-01-10') RDT,ISNULL(Rec, '@WebUser.No') Rec, XingMing, YouXiang, Tel,ISNULL(DHXZ,0) DHXZ, CASE DHXZ WHEN 0 THEN '地方号' WHEN 1 THEN '专线号' WHEN 2 THEN '自动号' WHEN 3 THEN '密话' WHEN NULL THEN '地方号' END "DHXZText" FROM Dict_YuanGongXinXiDtl1 WHERE (1=1) AND ( ( ( Dict_YuanGongXinXiDtl1.RefPK =@RefPK) OR ( Dict_YuanGongXinXiDtl1.FID =@FID) ) )  Exception=列名 'DHXZ' 无效。
+列名 'DHXZ' 无效。
+列名 'DHXZ' 无效。
+列名 'DHXZ' 无效。
+列名 'DHXZ' 无效。
+列名 'DHXZ' 无效。

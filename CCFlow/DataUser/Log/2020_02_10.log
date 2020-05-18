@@ -1,0 +1,12 @@
+-----------------------------------------------------------------------------------------------------
+10日11时22分38秒Info:System');"SQL=DROP INDEX ND14401_OID ON ND14401,异常信息:无法对 索引 'ND14401.ND14401_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分39秒Info:System');"SQL=DROP INDEX ND14402_OID ON ND14402,异常信息:无法对 索引 'ND14402.ND14402_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分40秒Info:System');"SQL=DROP INDEX ND14404_OID ON ND14404,异常信息:无法对 索引 'ND14404.ND14404_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分40秒Info:System');"SQL=DROP INDEX ND14404Dtl1_OID ON ND14404Dtl1,异常信息:无法对 索引 'ND14404Dtl1.ND14404Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分41秒Info:System');"SQL=DROP INDEX ND14405_OID ON ND14405,异常信息:无法对 索引 'ND14405.ND14405_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分42秒Info:System');"SQL=DROP INDEX ND14406_OID ON ND14406,异常信息:无法对 索引 'ND14406.ND14406_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分42秒Info:System');"SQL=DROP INDEX ND14406Dtl1_OID ON ND14406Dtl1,异常信息:无法对 索引 'ND14406Dtl1.ND14406Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时22分59秒Info:System');"SQL=DROP INDEX ND144Rpt_OID ON ND144Rpt,异常信息:无法对 索引 'ND144Rpt.ND144Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日11时23分01秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+10日15时31分04秒Fatal:System');"SQL= SELECT TOP 99999 Port_Emp.No, Port_Emp.Name,ISNULL(Port_Emp.Pass, '123') Pass, Port_Emp.FK_Dept, Port_Dept_FK_Dept.Name AS FK_DeptText, Port_Emp.SID FROM Port_Emp LEFT JOIN Port_Dept AS Port_Dept_FK_Dept ON Port_Emp.FK_Dept=Port_Dept_FK_Dept.No WHERE (1=1) AND ( ( Port_Emp.No LIKE %fu'h% ) OR ( Port_Emp.Name LIKE %fu'h% ) )  Exception='fu' 附近有语法错误。
+10日15时31分09秒Fatal:System');"SQL= SELECT TOP 99999 Port_Emp.No, Port_Emp.Name,ISNULL(Port_Emp.Pass, '123') Pass, Port_Emp.FK_Dept, Port_Dept_FK_Dept.Name AS FK_DeptText, Port_Emp.SID FROM Port_Emp LEFT JOIN Port_Dept AS Port_Dept_FK_Dept ON Port_Emp.FK_Dept=Port_Dept_FK_Dept.No WHERE (1=1) AND ( ( Port_Emp.No LIKE %fu'h% ) OR ( Port_Emp.Name LIKE %fu'h% ) )  Exception='fu' 附近有语法错误。

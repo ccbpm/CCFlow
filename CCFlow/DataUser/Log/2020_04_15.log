@@ -1,0 +1,70 @@
+-----------------------------------------------------------------------------------------------------
+15日08时51分17秒Fatal:System');"列名 'GroupID' 无效。
+列名 'GroupIDText' 无效。
+列名 'ColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+15日08时51分17秒Fatal:System');"SQL= SELECT  TOP 1  MyPK, FK_MapData, CtrlID, Name, ISNULL( X ,5) AS  X, ISNULL( Y ,5) AS  Y, ISNULL( H ,200) AS  H, ISNULL( W ,160) AS  W, ISNULL(IsEdit,1) IsEdit, ISNULL( IsRequired,0) IsRequired,ISNULL(GroupID,0)   GroupID,ISNULL(GroupIDText, '0') GroupIDText,ISNULL(ColSpan,0)   ColSpan,ISNULL(TextColSpan,1)   TextColSpan, CASE TextColSpan WHEN 1 THEN '跨1个单元格' WHEN 2 THEN '跨2个单元格' WHEN 3 THEN '跨3个单元格' WHEN 4 THEN '跨4个单元格' WHEN NULL THEN '跨1个单元格' END "TextColSpanText",ISNULL(RowSpan,1)   RowSpan, CASE RowSpan WHEN 1 THEN '跨1个行' WHEN 2 THEN '跨2行' WHEN 3 THEN '跨3行' WHEN NULL THEN '跨1个行' END "RowSpanText" FROM Sys_FrmImgAth WHERE (1=1)  AND Sys_FrmImgAth.MyPK=@MyPK Exception=列名 'GroupID' 无效。
+列名 'GroupIDText' 无效。
+列名 'ColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'TextColSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+列名 'RowSpan' 无效。
+15日08时51分18秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.FrmImgAth
+15日11时32分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时32分34秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.GPMEmps
+15日11时32分53秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Apps
+15日11时33分00秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Groups
+15日11时33分02秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.StationExts
+15日11时54分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分05秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分23秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分26秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分34秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分40秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分51秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时54分54秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时56分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日11时56分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+15日16时12分09秒Fatal:System');"对象名 'V_GPM_EmpMenu' 无效。
+15日16时12分09秒Fatal:System');"SQL=SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx  FROM V_GPM_EmpMenu  WHERE FK_Emp = 'admin'  AND MenuType = '3'  AND FK_App = 'CCOA'  UNION SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx FROM GPM_Menu  WHERE MenuCtrlWay=1  AND MenuType = '3'  AND FK_App = 'CCOA' ORDER BY Idx  Exception=对象名 'V_GPM_EmpMenu' 无效。
+15日16时13分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Menu
+15日16时14分11秒Fatal:System');"对象名 'V_GPM_EmpMenu' 无效。
+15日16时14分11秒Fatal:System');"SQL=SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx  FROM V_GPM_EmpMenu  WHERE FK_Emp = 'admin'  AND MenuType = '3'  AND FK_App = 'CCOA'  UNION SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx FROM GPM_Menu  WHERE MenuCtrlWay=1  AND MenuType = '3'  AND FK_App = 'CCOA' ORDER BY Idx  Exception=对象名 'V_GPM_EmpMenu' 无效。
+15日16时14分18秒Fatal:System');"对象名 'V_GPM_EmpMenu' 无效。
+15日16时14分18秒Fatal:System');"SQL=SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx  FROM V_GPM_EmpMenu  WHERE FK_Emp = 'admin'  AND MenuType = '3'  AND FK_App = 'CCOA'  UNION SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx FROM GPM_Menu  WHERE MenuCtrlWay=1  AND MenuType = '3'  AND FK_App = 'CCOA' ORDER BY Idx  Exception=对象名 'V_GPM_EmpMenu' 无效。
+15日16时18分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Menu
+15日16时18分51秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Menu
+15日16时19分06秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.Menu
+15日16时23分27秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+15日16时26分43秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+15日16时26分55秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+15日16时26分57秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+15日16时27分11秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '105','单据列表',0,'105'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+15日16时27分20秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '106','单据列表',1,'106'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+15日16时27分34秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '107','单据列表',106,'107'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+15日16时28分09秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '108','单据列表',106,'108'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+15日16时35分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts

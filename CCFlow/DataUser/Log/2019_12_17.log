@@ -1,0 +1,8 @@
+-----------------------------------------------------------------------------------------------------
+17日10时36分06秒Info:System');"SQL=UPDATE ND129Track SET FrmDB='{"FK_NY":"2019-12","FID":0,"Rec":"admin","MyNum":1,"OID":1709,"FK_DeptText":"周大福集团","Emps":"admin","CDT":"2019-12-17 10:35","Title":"周大福集团-admin,admin在2019-12-17 10:35发起.","FK_Dept":"10000","GongSiRenYuan":"","RDT":"2019-12-17 10:35","EndJSON":"0"}' WHERE MyPK='876321144',异常信息:列名 'FrmDB' 无效。
+17日14时00分53秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 219
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1159
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2355
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3633
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7125

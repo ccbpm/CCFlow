@@ -1,0 +1,13 @@
+-----------------------------------------------------------------------------------------------------
+06日09时52分56秒Info:System');"SQL=DROP INDEX Frm_FuJian85_OID ON Frm_FuJian85,异常信息:无法对 索引 'Frm_FuJian85.Frm_FuJian85_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+06日14时21分29秒Fatal:System');"SQL= SELECT  TOP 1  MyPK, FK_MapData, Name, KeyOfEn,ISNULL(ExtDefVal, '0') ExtDefVal,ISNULL(ExtDefValText, '0') ExtDefValText, DefVal,ISNULL(MinLen,0)   MinLen,ISNULL(MaxLen,50)   MaxLen, ISNULL( UIWidth ,100) AS  UIWidth, ISNULL( UIHeight ,23) AS  UIHeight, ISNULL(UIVisible,1) UIVisible, ISNULL(UIIsEnable,1) UIIsEnable, ISNULL( UIIsInput,0) UIIsInput, ISNULL( IsRichText,0) IsRichText, ISNULL( IsSupperText,0) IsSupperText, Tip,ISNULL(CSS, '0') CSS,ISNULL(CSSText, '0') CSSText,ISNULL(ColSpan,1)   ColSpan, CASE ColSpan WHEN 0 THEN '跨0个单元格' WHEN 1 THEN '跨1个单元格' WHEN 2 THEN '跨2个单元格' WHEN 3 THEN '跨3个单元格' WHEN 4 THEN '跨4个单元格' WHEN NULL THEN '跨1个单元格' END "ColSpanText",ISNULL(TextColSpan,1)   TextColSpan, CASE TextColSpan WHEN 1 THEN '跨1个单元格' WHEN 2 THEN '跨2个单元格' WHEN 3 THEN '跨3个单元格' WHEN 4 THEN '跨4个单元格' WHEN NULL THEN '跨1个单元格' END "TextColSpanText",ISNULL(RowSpan,1)   RowSpan,ISNULL(GroupID,0)   GroupID,ISNULL(GroupIDText, '0') GroupIDText,ISNULL(IsSigan,0)   IsSigan, CASE IsSigan WHEN 0 THEN '无' WHEN 1 THEN '图片签名' WHEN 2 THEN '山东CA' WHEN 3 THEN '广东CA' WHEN 4 THEN '图片盖章' WHEN NULL THEN '无' END "IsSiganText",ISNULL(Idx,0)   Idx FROM Sys_MapAttr WHERE (1=1)  AND Sys_MapAttr.MyPK=@MyPK Exception=列名 'CSSText' 无效。
+06日14时21分31秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+06日15时16分06秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时16分08秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时16分49秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时16分51秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时18分15秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时18分17秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时18分30秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时18分43秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+06日15时22分11秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum

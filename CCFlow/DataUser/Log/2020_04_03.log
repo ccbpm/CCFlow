@@ -1,0 +1,71 @@
+-----------------------------------------------------------------------------------------------------
+03日09时06分25秒Info:System');"SQL= UPDATE ND53Rpt SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE ND53Rpt.Oid=WF_GENERWORKFLOW.WORKID),异常信息:列名 'FlowStarter' 无效。
+03日09时06分28秒Info:System');"SQL= UPDATE ND111Rpt SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE ND111Rpt.Oid=WF_GENERWORKFLOW.WORKID),异常信息:列名 'FlowStarter' 无效。
+03日09时06分51秒Info:System');"SQL=UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL',异常信息:违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+语句已终止。
+03日09时06分51秒Fatal:System');"执行sql错误:SQL=UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL',异常信息:违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+语句已终止。 Paras(0)=<hr>UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL'
+-----------------------------------------------------------------------------------------------------
+03日09时07分08秒Info:System');"SQL= UPDATE ND53Rpt SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE ND53Rpt.Oid=WF_GENERWORKFLOW.WORKID),异常信息:列名 'FlowStarter' 无效。
+03日09时07分10秒Info:System');"SQL= UPDATE ND111Rpt SET FlowStarter =(SELECT Starter FROM WF_GENERWORKFLOW WHERE ND111Rpt.Oid=WF_GENERWORKFLOW.WORKID),异常信息:列名 'FlowStarter' 无效。
+03日09时07分29秒Info:System');"SQL=UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL',异常信息:违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+语句已终止。
+03日09时07分29秒Fatal:System');"执行sql错误:SQL=UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL',异常信息:违反了 PRIMARY KEY 约束 'Sys_MapExtpk'。不能在对象 'dbo.Sys_MapExt' 中插入重复键。
+语句已终止。 Paras(0)=<hr>UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='ActiveDDL'
+03日09时07分35秒Warning:System');"err@字段类型不匹配,表[Sys_FrmImg]字段[GroupID]名称[显示的分组]映射类型为[整型(int)],数据类型为[nvarchar]
+03日09时07分36秒Warning:System');"err@字段类型不匹配,表[Sys_FrmImg]字段[GroupID]名称[显示的分组]映射类型为[整型(int)],数据类型为[nvarchar]
+03日09时08分09秒Warning:System');"err@字段类型不匹配,表[Sys_FrmImg]字段[GroupID]名称[显示的分组]映射类型为[整型(int)],数据类型为[nvarchar]
+03日09时08分10秒Warning:System');"err@字段类型不匹配,表[Sys_FrmImg]字段[GroupID]名称[显示的分组]映射类型为[整型(int)],数据类型为[nvarchar]
+-----------------------------------------------------------------------------------------------------
+03日09时50分24秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+03日09时50分53秒Info:System');"SQL=DROP INDEX ND25Rpt_OID ON ND25Rpt,异常信息:无法对 索引 'ND25Rpt.ND25Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+03日10时29分01秒Fatal:System');"对象名 'WF_DocTemplate' 无效。
+03日10时29分01秒Fatal:System');"SQL= SELECT TOP 99999 No, Name, TempFilePath,ISNULL(NodeID,0) NodeID, FillTempFields FROM WF_DocTemplate WHERE (1=1) AND ( ( WF_DocTemplate.NodeID =@NodeID) )  Exception=对象名 'WF_DocTemplate' 无效。
+03日10时29分01秒Info:System');"SQL=DROP INDEX WF_DocTemplate_No ON WF_DocTemplate,异常信息:无法对 索引 'WF_DocTemplate.WF_DocTemplate_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+03日10时34分33秒Fatal:System');"对象名 'WF_DocTempFlow' 无效。
+03日10时34分33秒Fatal:System');"SQL= SELECT TOP 99999 MyPK,ISNULL(WorkID,0) WorkID, TempNo FROM WF_DocTempFlow WHERE (1=1) AND ( ( WF_DocTempFlow.WorkID =@WorkID) )  Exception=对象名 'WF_DocTempFlow' 无效。
+03日10时34分33秒Info:System');"SQL=DROP INDEX WF_DocTempFlow_MyPK ON WF_DocTempFlow,异常信息:无法对 索引 'WF_DocTempFlow.WF_DocTempFlow_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+03日11时07分27秒Info:System');"SQL=UPDATE ND25Track SET FrmDB='{"FK_NY":"2020-04","FID":0,"Rec":"zhoupeng","MyNum":1,"OID":201,"FK_DeptText":"集团总部","ShenQingRenBuMen":"集团总部","Emps":"zhoupeng","CDT":"2020-04-03 11:04","ShenQingRiJi":"2020-04-03","Title":"集团总部-zhoupeng,周朋在2020-04-03 11:04发起.","FK_Dept":"100","ShenQingRen":"周朋","RDT":"2020-04-03 11:04","EndJSON":"0"}' WHERE MyPK='519715776',异常信息:列名 'FrmDB' 无效。
+03日11时07分41秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2377
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3655
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+-----------------------------------------------------------------------------------------------------
+03日12时49分33秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.NodeSend_GenerNextStepNode_Ext1() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 1563
+   在 BP.WF.WorkNode.NodeSend_GenerNextStepNode() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 1118
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3639
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+03日12时49分45秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2377
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3655
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+03日12时51分22秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.NodeSend_GenerNextStepNode_Ext1() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 1563
+   在 BP.WF.WorkNode.NodeSend_GenerNextStepNode() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 1118
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3639
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+03日12时53分15秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2377
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3655
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+03日12时54分37秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2377
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3655
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176
+03日12时55分23秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 232
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1152
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2377
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3655
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7176

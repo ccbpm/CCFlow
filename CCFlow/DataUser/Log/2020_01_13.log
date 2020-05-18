@@ -1,0 +1,12 @@
+-----------------------------------------------------------------------------------------------------
+13日17时31分11秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile varbinary ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+-----------------------------------------------------------------------------------------------------
+13日17时59分33秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时00分18秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时03分53秒Info:System');"SQL=DROP INDEX ND7102Dtl1_OID ON ND7102Dtl1,异常信息:无法对 索引 'ND7102Dtl1.ND7102Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+13日18时03分54秒Info:System');"SQL=DROP INDEX ND7103Dtl1_OID ON ND7103Dtl1,异常信息:无法对 索引 'ND7103Dtl1.ND7103Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+13日18时04分42秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时06分14秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时09分01秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时09分25秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。
+13日18时09分53秒Info:System');"SQL=ALTER TABLE ND71Rpt ADD  WordFile image ,异常信息:找不到对象 "ND71Rpt"，因为它不存在或者您没有所需的权限。

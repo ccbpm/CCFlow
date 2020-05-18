@@ -1,0 +1,3 @@
+-----------------------------------------------------------------------------------------------------
+12日14时24分12秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+12日15时07分14秒Info:System');"SQL=INSERT INTO ND25Rpt ([Title],[ShenQingRen],[ShenQingRiJi],[ShenQingRenBuMen],[RDT],[OID],[FID],[CDT],[Rec],[Emps],[FK_Dept],[FK_NY],[MyNum],[QJLX] ) VALUES ( '','admin','2020-05-12','集团总部','2020-05-12 15:07',249,0,'2020-05-12 15:07','admin','admin','100','2020-05',1,0),异常信息:列名 'QJLX' 无效。

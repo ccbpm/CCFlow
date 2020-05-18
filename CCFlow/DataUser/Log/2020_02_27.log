@@ -1,0 +1,29 @@
+-----------------------------------------------------------------------------------------------------
+27日10时06分16秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+27日10时06分19秒Info:System');"SQL=DROP INDEX ND7Rpt_OID ON ND7Rpt,异常信息:无法对 索引 'ND7Rpt.ND7Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+27日10时09分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分06秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分10秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分13秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分37秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分40秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时09分46秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时10分47秒Info:System');"SQL=DROP INDEX ND701Dtl1_OID ON ND701Dtl1,异常信息:无法对 索引 'ND701Dtl1.ND701Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+27日10时10分48秒Info:System');"SQL=DROP INDEX ND702Dtl1_OID ON ND702Dtl1,异常信息:无法对 索引 'ND702Dtl1.ND702Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+27日10时10分50秒Info:System');"SQL=DROP INDEX ND703Dtl1_OID ON ND703Dtl1,异常信息:无法对 索引 'ND703Dtl1.ND703Dtl1_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+27日10时12分40秒Info:System');"SQL=UPDATE ND7Track SET FrmDB='{"FK_NY":"2020-02","FID":0,"Rec":"admin","MyNum":1,"OID":152,"FK_DeptText":"集团总部","ShenQingRenBuMen":"集团总部","Emps":"admin","CDT":"2020-02-27 10:12","ShenQingRiJi":"2020-02-27","Title":"集团总部-admin,admin在2020-02-27 10:12发起.","FK_Dept":"100","ShenQingRen":"admin","RDT":"2020-02-27 10:12","EndJSON":"0"}' WHERE MyPK='1033615686',异常信息:列名 'FrmDB' 无效。
+27日10时22分26秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时31分22秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时31分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+27日10时33分16秒Fatal:System');"   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 219
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\ccflow\Components\BP.WF\Template\FindWorker.cs:行号 1159
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 249
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 2352
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 3630
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp) 位置 D:\ccflow\Components\BP.WF\WF\WorkNode.cs:行号 7142
+27日10时35分24秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+-----------------------------------------------------------------------------------------------------
+27日11时16分29秒Info:System');"SQL=UPDATE ND9Track SET FrmDB='{"FK_NY":"2019-09","FID":0,"Zhang":1,"Rec":"admin","MyNum":1,"OID":350,"FK_Dept":"100","FK_DeptText":"集团总部","Emps":"admin","CDT":"2019-09-10 14:42","Title":"集团总部-admin,admin在2019-09-10 14:42发起.","XingMing":"","RDT":"2019-09-10 14:42","EndJSON":"0"}' WHERE MyPK='101707653',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+27日11时17分09秒Info:System');"SQL=UPDATE ND9Track SET FrmDB='{"FK_NY":"2019-10","FID":0,"Zhang":0,"Rec":"admin","MyNum":1,"OID":1001,"FK_Dept":"100","FK_DeptText":"集团总部","Emps":"admin","CDT":"2019-10-17 10:23","Title":"集团总部-admin,admin在2019-10-17 10:23发起.","XingMing":"","RDT":"2019-10-17 10:23","EndJSON":"0"}' WHERE MyPK='1944714912',异常信息:操作数类型冲突: nvarchar 与 image 不兼容
+27日11时18分30秒Info:System');"SQL=UPDATE ND9Track SET FrmDB='{"FK_NY":"2019-10","FID":0,"Zhang":0,"Rec":"admin","MyNum":1,"OID":1134,"FK_Dept":"100","FK_DeptText":"集团总部","Emps":"admin","CDT":"2019-10-17 10:29","Title":"集团总部-admin,admin在2019-10-17 10:29发起.","XingMing":"","RDT":"2019-10-17 10:29","EndJSON":"0"}' WHERE MyPK='897978557',异常信息:操作数类型冲突: nvarchar 与 image 不兼容

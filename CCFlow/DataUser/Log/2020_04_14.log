@@ -1,0 +1,22 @@
+-----------------------------------------------------------------------------------------------------
+14日16时53分21秒Info:System');"SQL=UPDATE Bill_CeShi1 SET BillNo='ccbpm2020-04-14-0001',Title='梧州高速公路运营有限公司 系统管理员 20年04月14日16时52分',AtPara='',BillState=2,RDT='2020-04-14+16%3A52',Starter='admin',StarterName='%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%98',OrgNo='',FK_Dept='12370912',XingMing='%E5%B7%A7%E9%AD%8F',XingBie='' WHERE Bill_CeShi1.OID=210,异常信息:将截断字符串或二进制数据。
+语句已终止。
+14日16时54分04秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+14日16时54分40秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+14日16时55分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+14日16时55分15秒Info:System');"SQL=UPDATE Bill_CeShi1 SET BillNo='ccbpm2020-04-14-0001',Title='梧州高速公路运营有限公司 系统管理员 20年04月14日16时52分',AtPara='',BillState=2,RDT='2020-04-14+16%3A52',Starter='admin',StarterName='%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%98',OrgNo='',FK_Dept='12370912',XingMing='',XingBie='' WHERE Bill_CeShi1.OID=210,异常信息:将截断字符串或二进制数据。
+语句已终止。
+14日17时04分44秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.StationExts
+14日17时04分47秒Fatal:System');"列名 'MobileUrlExt' 无效。
+14日17时04分47秒Fatal:System');"SQL= SELECT TOP 99999 GPM_Menu.No, GPM_Menu.ParentNo, GPM_Menu_ParentNo.Name AS ParentNoText, GPM_Menu.Name,ISNULL(GPM_Menu.Idx,0) Idx,ISNULL(GPM_Menu.MenuType,0) MenuType, CASE GPM_Menu.MenuType WHEN 0 THEN '系统根目录' WHEN 1 THEN '系统类别' WHEN 2 THEN '系统' WHEN 3 THEN '目录' WHEN 4 THEN '功能/界面' WHEN 5 THEN '功能控制点' WHEN NULL THEN '系统根目录' END "MenuTypeText", GPM_Menu.FK_App, GPM_App_FK_App.Name AS FK_AppText,ISNULL(GPM_Menu.OpenWay,1) OpenWay, CASE GPM_Menu.OpenWay WHEN 0 THEN '新窗口' WHEN 1 THEN '本窗口' WHEN 2 THEN '覆盖新窗口' WHEN NULL THEN '本窗口' END "OpenWayText", GPM_Menu.UrlExt, GPM_Menu.MobileUrlExt, ISNULL(GPM_Menu.IsEnable,1) IsEnable, GPM_Menu.Icon,ISNULL(GPM_Menu.MenuCtrlWay,0) MenuCtrlWay, CASE GPM_Menu.MenuCtrlWay WHEN 0 THEN '按照设置的控制' WHEN 1 THEN '任何人都可以使用' WHEN 2 THEN 'Admin用户可以使用' WHEN NULL THEN '按照设置的控制' END "MenuCtrlWayText", GPM_Menu.Flag FROM GPM_Menu LEFT JOIN GPM_Menu AS GPM_Menu_ParentNo ON GPM_Menu.ParentNo=GPM_Menu_ParentNo.No LEFT JOIN GPM_App AS GPM_App_FK_App ON GPM_Menu.FK_App=GPM_App_FK_App.No WHERE (1=1) ORDER BY Idx Exception=列名 'MobileUrlExt' 无效。
+14日17时04分52秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+14日17时04分56秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+14日17时07分02秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+14日17时08分09秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+14日17时08分20秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '100','单据表单',0,'100'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+14日17时08分24秒Info:System');"SQL=INSERT INTO GPM_AppSort ([No],[Name],[Idx],[RefMenuNo] ) VALUES ( '101','单据表单',0,'101'),异常信息:将截断字符串或二进制数据。
+语句已终止。
+14日17时08分27秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSort
+14日17时08分30秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.GPM.AppSorts
+14日17时24分18秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = Bill_CeShi1

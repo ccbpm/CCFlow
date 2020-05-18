@@ -14,7 +14,6 @@ input[type="button"], input[type="submit"],input[type="file"]
     border: 0; /*background: #4D77A7;*/
     background: #009999;
     color: #FFF;
-    font-size: 22px;
     padding: 4px 8px;
     margin: 5px 3px 5px 3px;
     border-radius: 5px;
@@ -25,20 +24,20 @@ input[disabled],input:disabled{
 border:1px solid #DDD;
 background-color:#F5F5F5;
 color:#009999;
-font-size:22px;}
+}
 /*文本框只读风格.*/
 textarea[disabled],input:disabled{
 border:1px solid #DDD;
 background-color:#F5F5F5;
 color:#009999;
-font-size:22px;}
+}
 /*文本框只读风格.*/
 select[disabled], input:disabled
 {
     border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;
-	font-size:22px;
+
 }
   
 /*  table 类型风格 */
@@ -76,9 +75,7 @@ th
     white-space: nowrap;
     padding: 0 2px;
     background-color: #e0ecff;
-
     text-align: left;
-    font-size: 22px;
     font-weight: normal;
 }
  
@@ -326,6 +323,13 @@ caption
 .BigDoc
 {
 }
+
+
+#divCurrentForm {
+    float: none;
+    width: auto;
+}
+  
 
 /* 内部标签风格 */
 fieldset
@@ -602,7 +606,7 @@ input[type=text], input[type=password], select
     margin: 1px 1px;
     width: 100%;
     height: 23px;
-	font-size: 22px;}
+}
 
 .FDesc
 {
@@ -839,7 +843,7 @@ display:none;
 }
 #CCForm label {
     font-weight: normal;
-    font-size:22px;
+    font-size:14px;
     margin-bottom:0px;
 }
 .state {
@@ -914,14 +918,14 @@ border:none;
 }
 
 
-#divTrack, #divCurrentForm {
+#divTrack {
     margin:0px;
     float:right;
     position:relative;
 }
-    #divTrack iframe {
-    width:100%;
-    }
+#divTrack iframe {
+width:100%;
+}
 
 .trackDiv {
     background: #E3E7F4;
@@ -1037,4 +1041,14 @@ body table tr td {
 
 .errorInput {
     border-color: red;
+}
+.only-print-show {
+    
+    display: inline-block;
+}
+.only-print-hidden {
+    display: none;
+}
+.drop-down-wrap{
+    display:none
 }

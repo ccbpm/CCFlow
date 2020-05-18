@@ -1,0 +1,16 @@
+-----------------------------------------------------------------------------------------------------
+13日10时17分35秒Info:System');"SQL=DROP INDEX Frm_CeShi666_OID ON Frm_CeShi666,异常信息:无法对 索引 'Frm_CeShi666.Frm_CeShi666_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+13日10时21分21秒Info:System');"SQL=DROP INDEX Frm_FuJianDaoRu_OID ON Frm_FuJianDaoRu,异常信息:无法对 索引 'Frm_FuJianDaoRu.Frm_FuJianDaoRu_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+13日10时27分00秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+13日10时27分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+13日11时26分11秒Fatal:System');"@没有[实体属性  Sys_MapAttr, 类[BP.Sys.MapAttr], 物理表[Sys_MapAttr] 实例。PK = Frm_FuJianBiaoShan_Ath1
+13日11时26分38秒Fatal:System');"@没有[实体属性  Sys_MapAttr, 类[BP.Sys.MapAttr], 物理表[Sys_MapAttr] 实例。PK = Frm_FuJianBiaoShan_Ath1
+13日11时30分42秒Fatal:System');"@没有[实体属性  Sys_MapAttr, 类[BP.Sys.MapAttr], 物理表[Sys_MapAttr] 实例。PK = Frm_FuJianDaoRu_Ath1
+13日15时09分04秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrSFSQL
+13日15时09分32秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+13日15时11分16秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+13日15时11分23秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+13日15时13分40秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+13日15时13分45秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+13日16时25分01秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrEnum
+13日16时35分05秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString

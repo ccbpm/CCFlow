@@ -1,0 +1,6 @@
+-----------------------------------------------------------------------------------------------------
+06日09时19分53秒Fatal:System');"列名 'Leader' 无效。
+06日09时19分53秒Fatal:System');"SQL= SELECT  TOP 1  No, Name, ParentNo, OrgNo, Leader,ISNULL(Idx,0)   Idx FROM Port_Dept WHERE (1=1)  AND Port_Dept.No=@No Exception=列名 'Leader' 无效。
+06日09时21分00秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.SubFlowAuto
+06日09时33分45秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+06日09时33分48秒Info:System');"SQL=DROP INDEX ND31Rpt_OID ON ND31Rpt,异常信息:无法对 索引 'ND31Rpt.ND31Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。

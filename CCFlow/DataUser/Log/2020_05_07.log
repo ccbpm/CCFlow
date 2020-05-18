@@ -1,0 +1,9 @@
+-----------------------------------------------------------------------------------------------------
+07日11时19分37秒Info:System');"SQL=INSERT INTO WF_DocTemplate ([No],[Name],[FilePath],[FK_Node],[FK_Flow] ) VALUES ( 'b2c80a90-7f11-46a6-8f9c-9c62e2e11189','新建 Microsoft Word 文档.docx','D:\ccflow\CCFlow\DataUser\DocTemplate\030\新建 Microsoft Word 文档.docx',3001,''),异常信息:将截断字符串或二进制数据。
+语句已终止。
+07日11时20分00秒Info:System');"SQL=INSERT INTO WF_DocTemplate ([No],[Name],[FilePath],[FK_Node],[FK_Flow] ) VALUES ( 'd409ed2a-68ab-408a-9f8f-17b03c57803f','公司表彰公文.docx','D:\ccflow\CCFlow\DataUser\DocTemplate\030\公司表彰公文.docx',3001,''),异常信息:将截断字符串或二进制数据。
+语句已终止。
+07日12时02分08秒Info:System');"SQL=UPDATE ND30Track SET FrmDB='{"FK_NY":"2020-05","FID":0,"Rec":"admin","MyNum":1,"OID":240,"FK_DeptText":"集团总部","ShenQingRenBuMen":"集团总部","Emps":"admin","CDT":"2020-05-07 11:51","ShenQingRiJi":"2020-05-07","Title":"集团总部-admin,admin在2020-05-07 11:51发起.","FK_Dept":"100","ShenQingRen":"admin","RDT":"2020-05-07 11:51","EndJSON":"0"}' WHERE MyPK='1743727243',异常信息:列名 'FrmDB' 无效。
+07日14时19分30秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+07日14时19分37秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrDT
+07日14时19分47秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString

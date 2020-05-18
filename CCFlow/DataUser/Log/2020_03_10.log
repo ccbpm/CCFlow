@@ -1,0 +1,4 @@
+-----------------------------------------------------------------------------------------------------
+10日15时58分55秒Info:System');"SQL=UPDATE ND147Track SET FrmDB='{"FK_NY":"2020-03","FID":0,"Rec":"admin","MyNum":1,"OID":1860,"FK_DeptText":"周大福集团","GWSFKZXBJText":"是","ShenQingRenBuMen":"周大福集团","Emps":"admin","CDT":"2020-03-10 15:56","ShenQingRiJi":"2020-03-10","Title":"周大福集团-admin,admin在2020-03-10 15:56发起.","GWSFKZXBJ":0,"FK_Dept":"10000","ShenQingRen":"admin","RDT":"2020-03-10 15:56","FJKZXBJ":"","EndJSON":"0"}' WHERE MyPK='2129669272',异常信息:列名 'FrmDB' 无效。
+-----------------------------------------------------------------------------------------------------
+10日18时21分15秒Info:System');"SQL=INSERT INTO ND154Rpt ([Title],[OID],[RDT],[FID],[CDT],[Rec],[Emps],[FK_Dept],[FK_NY],[MyNum],[ShenQingRen],[NeiRong],[ShiJian],[BM],[FJ] ) VALUES ( '',2063,'2020-03-10 18:21',0,'2020-03-10 18:21','admin','admin','10000','2020-03',1,'','','',0,''),异常信息:列名 'FJ' 无效。

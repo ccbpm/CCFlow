@@ -1,0 +1,23 @@
+-----------------------------------------------------------------------------------------------------
+08日09时07分09秒Info:System');"SQL=DROP INDEX GPM_GroupType_No ON GPM_GroupType,异常信息:无法对 索引 'GPM_GroupType.GPM_GroupType_No' 执行 删除，因为它不存在，或者您没有所需的权限。
+08日09时07分26秒Info:System');"SQL=ALTER TABLE WF_Node ALTER column CCSQL VARCHAR(500),异常信息:对象'DF__WF_Node__CCSQL__25869641' 依赖于 列'CCSQL'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN CCSQL 失败。
+08日09时07分29秒Info:System');"SQL=ALTER TABLE Sys_MapData ALTER column OrgNo VARCHAR(50),异常信息:对象'DF__Sys_MapDa__OrgNo__186C9245' 依赖于 列'OrgNo'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN OrgNo 失败。
+08日09时07分32秒Info:System');"SQL=ALTER TABLE WF_GenerWorkFlow ALTER column OrgNo VARCHAR(50),异常信息:对象'DF__WF_GenerW__OrgNo__3508D0F3' 依赖于 列'OrgNo'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN OrgNo 失败。
+08日09时07分46秒Info:System');"SQL=exec sp_rename 'WF_CCList.[Rec]','Rec','column';,异常信息:在从服务器接收结果时发生传输级错误。 (provider: Session Provider, error: 19 - 物理连接不可用)
+08日09时07分46秒Fatal:System');"系统升级错误:问题出处:执行sql错误:SQL=exec sp_rename 'WF_CCList.[Rec]','Rec','column';,异常信息:在从服务器接收结果时发生传输级错误。 (provider: Session Provider, error: 19 - 物理连接不可用) Paras(0)=<hr>exec sp_rename 'WF_CCList.[Rec]','Rec','column';<hr><br>详细信息:@   在 BP.DA.DBAccess.RunSQL(String sql, Paras paras) 位置 D:\ccflow\Components\BP.En30\DA\DBAccess.cs:行号 1777
+   在 BP.DA.DBAccess.RunSQL(Paras ps) 位置 D:\ccflow\Components\BP.En30\DA\DBAccess.cs:行号 1669
+   在 BP.DA.DBAccess.RunSQL(String sql) 位置 D:\ccflow\Components\BP.En30\DA\DBAccess.cs:行号 1682
+   在 BP.En.Entity.CheckPhysicsTable_SQL() 位置 D:\ccflow\Components\BP.En30\En\Entity.cs:行号 2972
+   在 BP.En.Entity.CheckPhysicsTable() 位置 D:\ccflow\Components\BP.En30\En\Entity.cs:行号 3324
+   在 BP.WF.Glo.UpdataCCFlowVer() 位置 D:\ccflow\Components\BP.WF\Glo.cs:行号 1770<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>
+-----------------------------------------------------------------------------------------------------
+08日09时50分25秒Fatal:System');"在从服务器接收结果时发生传输级错误。 (provider: Session Provider, error: 19 - 物理连接不可用)
+08日09时52分11秒Fatal:System');"在从服务器接收结果时发生传输级错误。 (provider: Session Provider, error: 19 - 物理连接不可用)
+08日09时52分11秒Fatal:System');"在从服务器接收结果时发生传输级错误。 (provider: Session Provider, error: 19 - 物理连接不可用)
+-----------------------------------------------------------------------------------------------------
+08日16时16分26秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+08日16时17分14秒Fatal:System');"列名 'XingMing' 无效。
+08日16时17分14秒Fatal:System');"SQL= SELECT  TOP 1  ND30Rpt.Title,ISNULL(ND30Rpt.ShenQingRen, '@WebUser.Name') ShenQingRen,ISNULL(ND30Rpt.ShenQingRiJi,'@RDT') ShenQingRiJi,ISNULL(ND30Rpt.ShenQingRenBuMen, '@WebUser.FK_DeptName') ShenQingRenBuMen,ISNULL(ND30Rpt.OID,0)   OID,ISNULL(ND30Rpt.RDT,'2020-05-08') RDT,ISNULL(ND30Rpt.FID,0)   FID,ISNULL(ND30Rpt.CDT,'2020-05-08') CDT,ISNULL(ND30Rpt.Rec, '@WebUser.No') Rec, ND30Rpt.Emps, ND30Rpt.FK_Dept, Port_Dept_FK_Dept.Name AS FK_DeptText, ND30Rpt.FK_NY,ISNULL(ND30Rpt.MyNum,1)   MyNum, ND30Rpt.XingMing FROM ND30Rpt LEFT JOIN Port_Dept AS Port_Dept_FK_Dept ON ND30Rpt.FK_Dept=Port_Dept_FK_Dept.No WHERE (1=1)  AND ND30Rpt.OID=@OID Exception=列名 'XingMing' 无效。

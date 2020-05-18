@@ -1,0 +1,42 @@
+-----------------------------------------------------------------------------------------------------
+29日14时00分19秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日14时04分06秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日14时29分28秒Fatal:System');"执行超时已过期。完成操作之前已超时或服务器未响应。 
+29日14时29分28秒Fatal:System');"SQL= SELECT  TOP 1  WF_Flow.No, WF_Flow.Name,ISNULL(WF_Flow.FK_FlowSort, '01') FK_FlowSort, WF_FlowSort_FK_FlowSort.Name AS FK_FlowSortText, WF_Flow.SysType,ISNULL(WF_Flow.FlowRunWay,0)   FlowRunWay, WF_Flow.RunObj, WF_Flow.Note, WF_Flow.RunSQL,ISNULL(WF_Flow.NumOfBill,0)   NumOfBill,ISNULL(WF_Flow.NumOfDtl,0)   NumOfDtl,ISNULL(WF_Flow.FlowAppType,0)   FlowAppType,ISNULL(WF_Flow.ChartType,1)   ChartType,ISNULL(WF_Flow.IsFrmEnable,1)   IsFrmEnable,ISNULL(WF_Flow.IsTruckEnable,1)   IsTruckEnable,ISNULL(WF_Flow.IsTimeBaseEnable,1)   IsTimeBaseEnable,ISNULL(WF_Flow.IsTableEnable,1)   IsTableEnable,ISNULL(WF_Flow.IsOPEnable,1)   IsOPEnable,ISNULL(WF_Flow.IsCanStart,1)   IsCanStart,ISNULL(WF_Flow.IsStartInMobile,1)   IsStartInMobile, ISNULL( WF_Flow.AvgDay ,0) AS  AvgDay,ISNULL(WF_Flow.IsFullSA,0)   IsFullSA,ISNULL(WF_Flow.IsMD5,0)   IsMD5,ISNULL(WF_Flow.Idx,0)   Idx,ISNULL(WF_Flow.SDTOfFlowRole,0)   SDTOfFlowRole, WF_Flow.SDTOfFlowRoleSQL, WF_Flow.Paras, WF_Flow.PTable,ISNULL(WF_Flow.FlowFrmType,0)   FlowFrmType, WF_Flow.FrmUrl,ISNULL(WF_Flow.Draft,0)   Draft,ISNULL(WF_Flow.DataStoreModel,0)   DataStoreModel, WF_Flow.TitleRole, WF_Flow.FlowMark, WF_Flow.FlowEventEntity, WF_Flow.HistoryFields,ISNULL(WF_Flow.IsGuestFlow,0)   IsGuestFlow, WF_Flow.BillNoFormat, WF_Flow.FlowNoteExp,ISNULL(WF_Flow.DRCtrlType,0)   DRCtrlType, WF_Flow.HostRun,ISNULL(WF_Flow.IsToParentNextNode,0)   IsToParentNextNode,ISNULL(WF_Flow.StartLimitRole,0)   StartLimitRole, WF_Flow.StartLimitPara, WF_Flow.StartLimitAlert,ISNULL(WF_Flow.StartLimitWhen,0)   StartLimitWhen,ISNULL(WF_Flow.StartGuideWay,0)   StartGuideWay, WF_Flow.StartGuideLink, WF_Flow.StartGuideLab, WF_Flow.StartGuidePara1, WF_Flow.StartGuidePara2, WF_Flow.StartGuidePara3,ISNULL(WF_Flow.IsResetData,0)   IsResetData,ISNULL(WF_Flow.IsLoadPriData,0)   IsLoadPriData,ISNULL(WF_Flow.IsDBTemplate,0)   IsDBTemplate,ISNULL(WF_Flow.IsBatchStart,0)   IsBatchStart, WF_Flow.BatchStartFields,ISNULL(WF_Flow.IsAutoSendSubFlowOver,0)   IsAutoSendSubFlowOver, WF_Flow.Ver,ISNULL(WF_Flow.FlowDeleteRole,0)   FlowDeleteRole, WF_Flow.OrgNo, WF_Flow.AtPara,ISNULL(WF_Flow.DTSWay,0)   DTSWay, WF_Flow.DTSDBSrc, WF_Flow.DTSBTable, WF_Flow.DTSBTablePK,ISNULL(WF_Flow.DTSTime,0)   DTSTime, WF_Flow.DTSSpecNodes,ISNULL(WF_Flow.DTSField,0)   DTSField, WF_Flow.DTSFields FROM WF_Flow LEFT JOIN WF_FlowSort AS WF_FlowSort_FK_FlowSort ON WF_Flow.FK_FlowSort=WF_FlowSort_FK_FlowSort.No WHERE (1=1)  AND WF_Flow.No=@No Exception=执行超时已过期。完成操作之前已超时或服务器未响应。 
+29日14时29分32秒Info:System');"SQL=ALTER TABLE WF_Flow ALTER column OrgNo VARCHAR(50),异常信息:对象'DF__WF_Flow__OrgNo__149C0161' 依赖于 列'OrgNo'。
+由于一个或多个对象访问此列，ALTER TABLE ALTER COLUMN OrgNo 失败。
+29日14时29分41秒Info:System');"SQL=DROP INDEX WF_Track_MyPK ON WF_Track,异常信息:无法对 索引 'WF_Track.WF_Track_MyPK' 执行 删除，因为它不存在，或者您没有所需的权限。
+29日14时29分44秒Info:System');"SQL=DROP INDEX ND30Rpt_OID ON ND30Rpt,异常信息:无法对 索引 'ND30Rpt.ND30Rpt_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+29日14时36分10秒Fatal:System');"列名 'FK_Node' 无效。
+列名 'FilePath' 无效。
+列名 'FK_Node' 无效。
+列名 'FK_Flow' 无效。
+29日14时36分10秒Fatal:System');"SQL= SELECT TOP 99999 No, Name, FilePath,ISNULL(FK_Node,0) FK_Node, FK_Flow FROM WF_DocTemplate WHERE (1=1) AND ( ( WF_DocTemplate.FK_Node =@FK_Node) )  Exception=列名 'FK_Node' 无效。
+列名 'FilePath' 无效。
+列名 'FK_Node' 无效。
+列名 'FK_Flow' 无效。
+29日14时38分52秒Info:System');"SQL=INSERT INTO WF_DocTemplate ([No],[Name],[FilePath],[FK_Node],[FK_Flow] ) VALUES ( 'fd9fda3c-8cb5-4963-9deb-6640fdcdba22','维修保养管理系统流程及角色.docx','D:\ccflow\CCFlow\DataUser\DocTemplate\030\维修保养管理系统流程及角色.docx',3001,''),异常信息:将截断字符串或二进制数据。
+语句已终止。
+29日14时39分01秒Info:System');"SQL=INSERT INTO WF_DocTemplate ([No],[Name],[FilePath],[FK_Node],[FK_Flow] ) VALUES ( '8ef307a0-39a7-41c7-bbaa-5de91e9e913f','公司表彰公文.docx','D:\ccflow\CCFlow\DataUser\DocTemplate\030\公司表彰公文.docx',3001,''),异常信息:将截断字符串或二进制数据。
+语句已终止。
+29日14时48分18秒Info:System');"SQL=INSERT INTO WF_DocTemplate ([No],[Name],[FilePath],[FK_Node],[FK_Flow] ) VALUES ( '0720f01b-695e-4c58-b5c9-a05decfbc376','新建 Microsoft Word 文档.docx','D:\ccflow\CCFlow\DataUser\DocTemplate\030\新建 Microsoft Word 文档.docx',3001,''),异常信息:将截断字符串或二进制数据。
+语句已终止。
+29日15时08分49秒Info:System');"SQL=DROP INDEX Dict_CeShi444_OID ON Dict_CeShi444,异常信息:无法对 索引 'Dict_CeShi444.Dict_CeShi444_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+29日15时09分26秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日15时10分54秒Info:System');"SQL=DROP INDEX Frm_CeShi4444_OID ON Frm_CeShi4444,异常信息:无法对 索引 'Frm_CeShi4444.Frm_CeShi4444_OID' 执行 删除，因为它不存在，或者您没有所需的权限。
+29日15时11分10秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+-----------------------------------------------------------------------------------------------------
+29日15时36分39秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+-----------------------------------------------------------------------------------------------------
+29日15时42分25秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+-----------------------------------------------------------------------------------------------------
+29日15时47分16秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日16时43分14秒Fatal:System');"@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = Frm_CeShi4444
+29日16时45分23秒Fatal:System');"Reading from the stream has failed.
+29日16时46分48秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日16时47分00秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日16时47分21秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt
+29日16时47分49秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日16时47分55秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.Sys.FrmUI.MapAttrString
+29日16时48分15秒Fatal:System');"Reading from the stream has failed.
+29日16时48分50秒Fatal:System');"@没有[实体配置  Sys_EnCfg, 类[BP.Sys.EnCfg], 物理表[Sys_EnCfg] 实例。PK = BP.WF.Template.FrmNodeExt

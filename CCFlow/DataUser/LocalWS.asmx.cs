@@ -67,7 +67,7 @@ namespace CCFlow.DataUser
         /// <returns>返回我可以发起的流程列表.</returns>
         public string DB_StarFlows(string userNo, string domain = null)
         {
-            DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo, domain);
+            DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

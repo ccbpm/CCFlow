@@ -27,10 +27,14 @@ namespace ccbpm
         /// <param name="sendToEmpNo">发送给(内部帐号，可以为空.)</param>
         /// <param name="tel">手机号码</param>
         /// <param name="msgInfo">短消息</param>
+        /// <param name="title">标题</param>
+        /// <param name="openUrl">链接</param>
         /// <returns>是否发送成功</returns>
         [WebMethod(EnableSession = true)]
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag)
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, 
+            string msgInfo, string title,string openUrl)
         {
+            
             return true;
         }
 

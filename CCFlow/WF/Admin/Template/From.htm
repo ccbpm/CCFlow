@@ -38,7 +38,6 @@
             $("#msg").html("正在加载请稍候...");
             $("#Btn_Imp").hide();
 
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Form_Init");

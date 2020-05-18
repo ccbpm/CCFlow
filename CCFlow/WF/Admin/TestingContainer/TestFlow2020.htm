@@ -54,6 +54,7 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString(doType);
 
+
             if (data.indexOf('err@') == 0) {
 
                 if (data.indexOf('访问规则') > 0) {
@@ -62,6 +63,7 @@
                 }
 
                 if (data.indexOf('管理员') > 0) {
+                    alert(data);
                     window.close();
                     window.location.href = './../CCBPMDesigner/Login.htm';
                     return;

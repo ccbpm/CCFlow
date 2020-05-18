@@ -12,13 +12,38 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <base target="_self" />
     <script src="../Admin.js"></script>
+    <script type="text/javascript">
+        //新建表单
+        function CreateFrm() {
+            var obj = document.getElementsByName("ss")
+            for (var i = 0; i < obj.length; i++) { //遍历Radio
+                if (obj[i].checked) {
+                    frmType = obj[i].value;
+                }
+            }
+
+            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetQueryString("FK_FrmSort");
+            window.location.href = url;
+        }
+        function ImpFrmFromFtp() {
+            var url = "../Template/From.htm?SortNo=" + GetQueryString("FK_FrmSort");
+            window.location.href = url;
+        }
+        function ImpFrmFromLocal() {
+            var url = "../Template/ImpFrmLocal.htm?SortNo=" + GetQueryString("FK_FrmSort");
+            window.location.href = url;
+        }
+    </script>
 </head>
 <body>
 
-    <div style=" padding-bottom:5px;">
-        <input style="margin-left:30px;" onclick="newFrm()" type="button" value="创建表单" />
-        <input style="margin-left:10px;" onclick="ImpFrm()" type="button" value="导入模板" />
-        
+    <div style=" padding:10px; padding-left:30px;">
+
+        <a href="javascript:CreateFrm()"><img src="../../Img/dot.png">创建表单</a>
+        <a href="javascript:ImpFrmFromFtp()"><img src="../../Img/dot.png">从ftp服务器导入模板</a>
+        <a href="javascript:ImpFrmFromLocal()"><img src="../../Img/dot.png">从本机导入模板</a>
+
+        <!--<input style="margin-left:10px;" onclick="ImpFrmFromLocal()" type="button" value="从本机导入模板" />-->
     </div>
 
     <fieldset>
@@ -52,25 +77,5 @@
         </ul>
     </fieldset>
 
-    <script>
-
-        //新建表单
-        function newFrm() {
-            var obj = document.getElementsByName("ss")
-            for (var i = 0; i < obj.length; i++) { //遍历Radio
-                if (obj[i].checked) {
-                    frmType = obj[i].value;
-                }
-            }
-
-            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetQueryString("FK_FrmSort");
-            window.location.href = url;
-        }
-        function ImpFrm() {
-            url = "../Template/From.htm?SortNo=" + GetQueryString("sort");
-
-            window.location.href = url;
-        }
-    </script>
 </body>
 </html>

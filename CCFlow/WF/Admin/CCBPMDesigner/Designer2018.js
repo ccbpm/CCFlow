@@ -8,7 +8,7 @@ var basepath = "";
 $(function () {
 
     ccbpmRunModel = webUser.CCBPMRunModel;
-   
+
     if (ccbpmRunModel == 2) {
         basepath = "../../WF/Admin/";
     } else {
@@ -16,7 +16,7 @@ $(function () {
     }
     //设置状态.
     SetState();
-    
+
     $("#pmfun,#nodeMenu").hover(function () {
         var mLeft = $("#jqContextMenu").css("left").replace('px', '');
         var mTop = $("#jqContextMenu").css("top").replace('px', '');
@@ -27,11 +27,11 @@ $(function () {
     }, function () {
         $("#nodeMenu").hide();
     });
-    
+
     //节点类型--普通
     $('#Node_Ordinary').on('click', function () {
         var nodeID = document.getElementById("leipi_active_id");
-        
+
         SetNodeRunModel(nodeID.value, 0);
 
     });
@@ -377,7 +377,7 @@ $(function () {
         }
         /*步骤右键*/
         , processMenus: {
-            
+
             "pmBegin": function (t) {
                 var activeId = _canvas.getActiveId(); //右键当前的ID
                 alert("设为第一步:" + activeId);
@@ -445,9 +445,9 @@ $(function () {
                 NodeFrmFree(activeId); cAlert
             },
             "pmNodeAccepterRole": function (t) {
-               
+
                 var activeId = _canvas.getActiveId(); //右键当前的ID
-                
+
                 NodeAccepterRole(activeId);
             }
         },
@@ -470,11 +470,10 @@ $(function () {
 
                 windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
 
-
-                var baocunbut = $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
-                var saveNodeName = $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
+                $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
+                $("#alertModal3 div:eq(2) button").attr("onclick", "saveLabName(\"" + activeId + "\")");
                 var xiuNodename = '<input style="width:90%" id="TB_LAB_' + activeId + '" type="text" value="' + windowtext + '">'
-                var spanaa = $("#lab" + activeId + " span").html();
+                $("#lab" + activeId + " span").html();
 
                 labAlert(xiuNodename);
             }
@@ -489,9 +488,9 @@ $(function () {
             var activeId = _canvas.getActiveId(); //右键当前的ID
             var windowtext = $("#window" + activeId).text();
             var baocunbut = $("#alertModal1 div:eq(2) button:eq(0)").attr("class", "btn btn-primary savetext" + activeId);
-            var saveNodeName = $("#alertModal1 div:eq(2) button:eq(0)").attr("onclick", "saveNodeName(\"" + activeId + "\")");
+            $("#alertModal1 div:eq(2) button:eq(0)").attr("onclick", "SaveNodeName(\"" + activeId + "\")");
             var baocunbut = $("#alertModal1 div:eq(2) button:eq(1)").attr("class", "btn btn-primary savetext" + activeId);
-            var saveNodeName = $("#alertModal1 div:eq(2) button:eq(1)").attr("onclick", "saveAndUpdateNodeName(\"" + activeId + "\")");
+             $("#alertModal1 div:eq(2) button:eq(1)").attr("onclick", "SaveAndUpdateNodeName(\"" + activeId + "\")");
             windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
@@ -504,7 +503,7 @@ $(function () {
         , fnDbClick: function () {
             //和 pmAttribute 一样
             var activeId = _canvas.getActiveId(); //右键当前的ID\
-           
+
             NodeAttr(activeId);
 
         }
@@ -566,6 +565,9 @@ function SaveFlow(_canvas) {
 
         //定义要生成的字符串.
         var nodePos = "";
+
+        //定义名称. 格式为: @101=填写请假申请单@101=
+        var nodeName = "";
         for (var nodeID in processInfo) {
 
             var nodeIDStr = JSON.stringify(nodeID);
@@ -579,8 +581,12 @@ function SaveFlow(_canvas) {
                 if (myID != nodeIDStr)
                     continue;
 
-                nodePos += "@" + node.NodeID + "," + nodeJSON.left + "," + nodeJSON.top;
-                break;
+                //alert(node);
+
+                var nodeName = $("#span_" + node.NodeID).text();
+
+                nodePos += "@" + node.NodeID + "," + nodeJSON.left + "," + nodeJSON.top + "," + nodeName;
+                //console.log(nodePos);
             }
         }
 
@@ -661,8 +667,17 @@ function SaveFlow(_canvas) {
 }
 
 //修改节点名称
-function saveNodeName(activeId) {
+function SaveNodeName(activeId) {
+
     var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+    $("#span_" + activeId).text(text);
+
+    //执行数据库保存.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddPara("NodeID", activeId);
+    handler.AddPara("Name", text);
+    var data = handler.DoMethodReturnString("Designer_SaveNodeName");
+    return;
 
     //alert(text);
 
@@ -700,7 +715,10 @@ function saveNodeName(activeId) {
 
 //修改并更新节点表单名称
 function saveAndUpdateNodeName(activeId) {
+
     var text = document.getElementById("TB_" + activeId).value; //新修改的值.
+    $("#span_" + activeId).text(text);
+    return;
 
     //alert(text);
 
@@ -919,7 +937,7 @@ function FlowRpt() {
 
     var flowId = Number(flowNo);
     flowId = String(flowId);
-   // url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+    // url = "../RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
     var url = basepath + "RptDfine/Default.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
 
     //OpenEasyUiDialogExt(url, "报表设计", 900, 500, false);
@@ -962,14 +980,14 @@ function FlowRun2020() {
     var reg = new RegExp('(^|&?)SID=([^&]*)(&|$)', 'i');
     var r = topUrl.substr(1).match(reg);
     if (r != null) {
-        SID=unescape(r[2]);
+        SID = unescape(r[2]);
     }
 
     //执行流程检查.
     var flow = new Entity("BP.WF.Flow", flowNo);
     flow.DoMethodReturnString("ClearCash");
 
-    var url = baseurl + "TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH&SID="+SID;
+    var url = baseurl + "TestingContainer/TestFlow2020.htm?FK_Flow=" + flowNo + "&Lang=CH&SID=" + SID;
 
     WinOpenFull(url);
     //window.parent.addTab(flowNo + "_YXLH", "运行流程2020" + flowNo, url);
@@ -1012,7 +1030,7 @@ function Help() {
 
 //节点属性
 function NodeAttr(nodeID) {
-    
+
     //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var baseurl = "";
     if (ccbpmRunModel == 2) {
@@ -1026,7 +1044,7 @@ function NodeAttr(nodeID) {
     var html = "";
     if (top == self) {
         if (ccbpmRunModel == 2) {
-            window.WinOpenFull(url,nodeID+"节点属性");
+            window.WinOpenFull(url, nodeID + "节点属性");
         } else {
             window.WinOpenFull(url, nodeID + "节点属性");
         }
@@ -1103,7 +1121,7 @@ function FrmPower(nodeID) {
 
     var frmID = "ND" + parseInt(flowNo + "01");
     var mypk = frmID + "_" + nodeID + "_" + flowNo;
-    
+
     var baseurl = "";
     if (ccbpmRunModel == 2) {
         baseurl = "../../WF/";
@@ -1127,7 +1145,7 @@ function NodeFrmFool(nodeID) {
 function NodeFrmFree(nodeID) {
 
     //自由表单.
-    var url = basepath +"CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = basepath + "CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
     ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
     //WinOpen(url);
@@ -1135,14 +1153,14 @@ function NodeFrmFree(nodeID) {
 
 function NodeFrmDeveloper(nodeID) {
     //开发者表单.
-    var url = basepath +"DevelopDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = basepath + "DevelopDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.parent.addTab(nodeID + "_Developer", "设计表单" + nodeID, url);
 }
 
 //接受人规则.
 function NodeAccepterRole(nodeID) {
     //接受人规则.
-    var url = basepath +"AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = basepath + "AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.parent.addTab(nodeID + "_JSGZ", "接受人规则" + nodeID, url);
     //OpenEasyUiDialogExt(url, "接受人规则", 800, 500, false);
 }

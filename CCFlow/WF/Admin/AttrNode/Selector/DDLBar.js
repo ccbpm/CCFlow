@@ -54,8 +54,8 @@ function InitBar(key) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
-//    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
- //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+    //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -85,6 +85,7 @@ function getStas() {
  * 获取节点绑定的部门
  */
 function getDepts(orgNo) {
+
     var sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
     var ens = DBAccess.RunSQLReturnTable(sql);
     //var ens = new Entities("BP.WF.Template.NodeDepts");
@@ -209,7 +210,7 @@ function changeOption() {
         optionKey = sele[index].value
     }
 
-    var roleName = GenerUrlByOptionKey(optionKey); 
+    var roleName = GenerUrlByOptionKey(optionKey);
     window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
 }
 function SaveAndClose() {

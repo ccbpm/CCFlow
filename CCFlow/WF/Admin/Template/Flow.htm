@@ -55,7 +55,7 @@
 
             html += "<tr>";
             html += "<th>#</th>";
-            html += "<th>模板名称</th>";
+            html += "<th>模板名称  -  <a href=\"javascript:RetrunToParent()\"><img src='../../Img/ArrUp.gif'>上一级</a></th>";
             html += "<th>创建日期</th>";
             html += "</tr>";
 
@@ -112,10 +112,10 @@
             window.history.back();//这个没问题，不管怎么点返回的都是上一级
         }
         function Imp() {
-     
-            $("#Btn_Imp").val("正在导入10分钟左右，请不要关闭");
+
+
+
             var fls = "";
-          
             var inputArray = $("input[type='checkbox']"); //取到所有的input 并且放到一个数组中
             inputArray.each(//使用数组的循环函数 循环这个input数组
                 function () {
@@ -133,33 +133,50 @@
 
             // alert(fls);
 
+            $("#msg").html("<img src='../../Img/loading.gif' />正在导入请稍候，10分钟左右，请不要关闭");
+
             //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddPara("Files", fls);
             handler.AddPara("SortNo", GetQueryString("SortNo"));
             handler.AddPara("DirName", GetQueryString("DirName"));
-          
-            
+
             var data = handler.DoMethodReturnString("Flow_Imp");
             if (data.indexOf('err@') == 0) {
                 $("#msg").html(data);
                 return;
             }
-            //若选择的多个模板
-            if (data.indexOf("EndJSON") == -1) {
-                alert(data);
-                return;
-            }
-            //若选择的一个模板，则打开此模板
-            var json = eval('(' + data + ')');
-            $.messager.alert("提示", json.Msg, "icon-info", function () {
-                //打开新建的流程
-                if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
-                    window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
-                }
-            });
 
-            $("#Btn_Imp").val("导入模板");
+            //    $("#Btn_Imp").hide(); //("正在导入请稍候，10分钟左右，请不要关闭");
+
+            //返回执行结果的数据.
+            var json = eval('(' + data + ')');
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>文件</th>";
+            html += "<th>结果</th>";
+            html += "<th>信息</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < json.length; i++) {
+                var en = json[i];
+                html += "<tr>";
+                html += "<th>" + en.Name + "</th>";
+                html += "<th>" + en.Result + "</th>";
+                html += "<th>" + en.Info + "</th>";
+                html += "</tr>";
+            }
+            html += "/<table>";
+            $("#msg").html(html);
+
+            //$.messager.alert("提示", json.Msg, "icon-info", function () {
+            //    //打开新建的流程
+            //    if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+            //        window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+            //    }
+            //});
+            //$("#Btn_Imp").show(); //("导入模板");
         }
     </script>
 </head>
@@ -176,6 +193,7 @@
 
     &nbsp;&nbsp;<input type="button" id="Btn_Imp" value="导入模版" onclick='Imp();' />
     <center>
+        <div id="msg"></div>
         <div id="msg"></div>
     </center>
 

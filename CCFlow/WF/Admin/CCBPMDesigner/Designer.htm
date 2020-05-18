@@ -206,12 +206,13 @@
                     <button class="btn btn-white" type="button" onclick="ShowNewFlowGif()">
                         新建
                     </button>
-                    <button class="btn btn-white" type="button" id="Btn_Save">
+                    <button class="btn btn-light-blue" type="button" id="Btn_Save">
                         保存
                     </button>
-                    <button class="btn btn-white" type="button" id="Btn_SaveToColud">
+
+                    <!--<button class="btn btn-white" type="button" id="Btn_SaveToColud">
                         保存到云
-                    </button>
+                    </button>-->
 
                     <button class="btn btn-white" type="button" id="Btn_FlowAttr" onclick="FlowProperty()">
                         流程属性
@@ -219,7 +220,7 @@
                     <!--<button class="btn btn-info" type="button" id="Btn_Rpt" onclick="FlowRpt()">
                         定义报表
                     </button>-->
-                    <button class="btn btn-white" type="button" id="Btn_Check" onclick="FlowCheck()">
+                    <button class="btn btn-light-green" type="button" id="Btn_Check" onclick="FlowCheck()">
                         检查流程
                     </button>
                     <button class="btn btn-white" type="button" id="Btn_Run" onclick="FlowRun2020()">
@@ -239,9 +240,9 @@
 
                     <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                     <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
-                    <button class="btn btn-white" type="button" id="Btn_Reload" onclick="Reload()">
+                    <!--<button class="btn btn-white" type="button" id="Btn_Reload" onclick="Reload()">
                         刷新
-                    </button>
+                    </button>-->
                     <button class="btn btn-white" type="button" id="Btn_Help" onclick="Help()">
                         帮助
                     </button>
@@ -289,12 +290,12 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary savetext" data-dismiss="modal" aria-hidden="true">
+            <button data-dismiss="modal" aria-hidden="true" onclick="SaveNodeName();" >
                 保存
             </button>
-            <button style="class=" btn=btn btn-primary=btn-primary savetext"=savetext" data-dismiss="modal" aria-hidden="true">
+            <!--<button  onclick="SaveNodeName();" btn-primary=btn-primary  data-dismiss="modal" aria-hidden="true">
                 保存&更新节点表单名称
-            </button>
+            </button>-->
         </div>
     </div>
     <!-- 连接线提示 -->

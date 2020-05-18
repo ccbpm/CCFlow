@@ -315,38 +315,29 @@ namespace BP.En
 
             ResetDefaultValRowValues();
 
+            DataTable dt = null;
+            if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
+            {
+                string sql2 = "SELECT * FROM Sys_FrmSln where FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = " + fk_node ;
+                dt = DBAccess.RunSQLReturnTable(sql2);
+            }
+
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
-                DataTable dt = null;
-                int i = 0;
-                if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
-                {
-                    string sql2 = "SELECT * FROM Sys_FrmSln where FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = '" + fk_node + "' AND KeyOfEn = '" + attr.Key + "'";
-                    dt = DBAccess.RunSQLReturnTable(sql2);
-                    i = dt.Rows.Count;
-                }
-
                 string v = attr.DefaultValOfReal as string;
-                if (i == 1)
+
+                //先判断是否设置了字段权限
+                if (dt != null)
                 {
-                    v = dt.Rows[0]["DefVal"].ToString();
-                    if (DataType.IsNullOrEmpty(v))
-                    {
-                        v = attr.DefaultValOfReal;
-                    }
-                    else
-                    {
-                        if (v.Contains("@") == false)
-                        {
-                            this.SetValByKey(attr.Key, v);
-                            continue;
-                        }
-                    }
+                    DataRow[] rows = dt.Select("MyPK='" + fk_mapdata + "_" + fk_node + "_" + attr.Key);
+                    if (rows.Length != 0 && rows[0]["DefVal"]!=null)
+                        v = rows[0]["DefVal"].ToString();
                 }
+                
                 if (v == null || v.Contains("@") == false)
                     continue;
 

@@ -110,15 +110,43 @@ td
 }
 .FDesc {
 padding: 4px;
-text-align: right;
+text-align: left;
 font-size: 12px;
 margin: 4px;
-border: lightgrey 0px solid;
-border-top: none;
+border: lightgrey 1px solid;
 width: 18%;
 }
+.LabelFDesc {
+    padding: 4px;
+    text-align: right;
+    font-size: 18px;
+    font-weight:bold;
+    background-color:#c1c1c12b;
+    margin: 4px;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 18%;
+}
 
-.tdSpan
+.LabelFDesc label
 {
-    text-align:left;padding-left: 15%;
+    font-size:14px !important;
+    font-weight:bold !important;
+    padding-right:5px;
+}
+.TitleFDesc
+{
+     padding: 4px;
+    text-align: right;
+    font-size: 18px;
+    font-weight:bold;
+    margin: 4px;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 18%;
+}
+a, a:link, a:visited
+{
+    color:#333333;
+    font-size:14px;
 }

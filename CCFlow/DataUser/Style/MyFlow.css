@@ -266,22 +266,13 @@ legend
     border: 0;
     width: auto;
 }
- .FDesc
-{
+ .FDesc {
     padding: 4px;
-    text-align: right;
+    text-align: left;
     font-size: 12px;
     margin: 4px;
-    border-top: none;
+    border: lightgrey 1px solid;
     width: 18%;
-    border-style: solid;
-    border-width: thin;
-    border-color: lightgrey;
-}
-
-.tdSpan
-{
-    text-align:left;padding-left: 15%;
 }
  .LabelFDesc {
     padding: 4px;
@@ -308,7 +299,7 @@ legend
     font-size: 18px;
     font-weight:bold;
     margin: 4px;
-    border: lightgrey 0px solid;
+    border: lightgrey 1px solid;
     border-top: none;
     width: 18%;
 }
@@ -317,4 +308,3 @@ a, a:link, a:visited
     color:#333333;
     font-size:14px;
 }
- 

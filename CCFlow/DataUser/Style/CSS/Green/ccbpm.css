@@ -8,35 +8,29 @@ body
     font-size: 14px;
     direction: ltr;
 }
-/* 图片放大鼠标样式 */
-.HelpImg:hover {
-    cursor: zoom-in;
-}
-/* 图片缩小鼠标样式 */
-#bigimg {
-    cursor: zoom-out;
-}
-/* 按钮风格  edit by zhoupeng 我们就使用白色的背景颜色了，不要变动了,不然影响全局. */
-input[type="button"], input[type="submit"], input[type="file"] {
+
+/* 按钮风格 */
+input[type="button"], input[type="submit"], input[type="file"]
+{
     border: 0; /*background: #4D77A7;*/
-    background-color: #62CAE3;
-    color: white;
+    background: #fff;
+    color: #545454;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border: 1px solid #d2cdcd;
+    border:1px solid #d2cdcd;
 }
-/*编辑器插件*/
- .CodeMirror {
-    border: 1px solid #eee;
-    height: auto;
-}
-
-.CodeMirror-scroll {
-    height: auto;
-    overflow-y: hidden;
-    overflow-x: auto;
+input:hover[type="button"]
+{
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+     border:1px solid #1d7dd4;
 }
 .form-control[disabled],
 .form-control[readonly],
@@ -45,7 +39,20 @@ input[type="button"], input[type="submit"], input[type="file"] {
 }
 
 
-
+/*文本框只读风格.*/
+ input[type=text]:disabled
+{
+    /**border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+}
 /*文本框只读风格.*/
 textarea[disabled], input[type=text]:disabled
 {
@@ -68,44 +75,25 @@ input[type=checkbox]:disabled
 }
 
 /*文本框只读风格.*/
-select[disabled], input[type=text]:disabled, input[type=password]:disabled {
-    /**border: 1px solid #DDD;
+select[disabled], input[type=text]:disabled
+{
+   /**border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;*/
-    width: 100%;
-    padding-left: 10px;
-    border: none;
-    background: none;
-    text-align: left !important;
-    color: #666;
-    cursor: no-drop;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+     appearance:none;   
+      -moz-appearance:none;   
+      -webkit-appearance:none;   
 }
-input[type="password"]::-webkit-input-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]:-moz-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]::-moz-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]:-ms-input-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-
 /*  table 类型风格 */
-table {
+table
+{
     border: 1px outset #C0C0C0;
     padding: inherit;
     margin: 0;
@@ -128,7 +116,8 @@ table {
     color: #333333;
 }
 
-th {
+th
+{
     border-width: 1px;
     border-color: #C2D5E3;
     border-style: solid;
@@ -136,11 +125,25 @@ th {
     color: 0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
-    background-color: #F5F5F5;
+    background-color: #e0ecff;
     font-size: 14px;
     text-align: left;
     font-size: 12px;
     font-weight: bolder;
+}
+.image-local {
+    width: 116px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background-color: #0073eb;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    height: 28px;
+    box-sizing: border-box;
+    outline: none;
 }
  
  /*  idx 表格左侧的序号列 .*/
@@ -245,20 +248,7 @@ caption
     width: 100%;
     font-size: 12px;
 }
-.image-local {
-    width: 116px;
-    font-size: 16px;
-    line-height: 28px;
-    text-align: center;
-    color: #fff;
-    background-color: #0073eb;
-    border: none;
-    display: inline-block;
-    vertical-align: middle;
-    height: 28px;
-    box-sizing: border-box;
-    outline: none;
-}
+
 
 /** 其它  */
 .ToolBar
@@ -517,9 +507,9 @@ display:none;
 }
 
 .btn {
-    background: #f2f2f2 !important;
+    background: ##f2f2f2 !important;
     border-radius: 20px !important;
-    color:#000 !important;
+    color:#0000007a !important;
 }
 
 .errorBorder {
@@ -643,7 +633,7 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
-    color:#000;
+    color:#0000007a;
 }
 
 .input-group-addon {
@@ -816,9 +806,6 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
-
-
-
 .only-print-show {
     display: none;
 }
@@ -838,29 +825,5 @@ body table tr td {
         display: none;
     }
 }
-
-/*滚动条*/
-::-webkit-scrollbar-thumb {
-    background-color: #b5b5b5;
-    height: 50px;
-    -webkit-border-radius: 4px
-}
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #585858;
-        height: 50px;
-        -webkit-border-radius: 4px
-    }
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px
-}
-
-::-webkit-scrollbar-track-piece {
-    background-color: #fff;
-    -webkit-border-radius: 4px
-}
-
 
  

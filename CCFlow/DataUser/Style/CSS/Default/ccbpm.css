@@ -1,4 +1,4 @@
-/*  Table ·ç¸ñ   */
+/*  Table ï¿½ï¿½ï¿½   */  
 body
 {
     color: #333333;
@@ -8,35 +8,29 @@ body
     font-size: 14px;
     direction: ltr;
 }
-/* Í¼Æ¬·Å´óÊó±êÑùÊ½ */
-.HelpImg:hover {
-    cursor: zoom-in;
-}
-/* Í¼Æ¬ËõÐ¡Êó±êÑùÊ½ */
-#bigimg {
-    cursor: zoom-out;
-}
-/* °´Å¥·ç¸ñ  edit by zhoupeng ÎÒÃÇ¾ÍÊ¹ÓÃ°×É«µÄ±³¾°ÑÕÉ«ÁË£¬²»Òª±ä¶¯ÁË,²»È»Ó°ÏìÈ«¾Ö. */
-input[type="button"], input[type="submit"], input[type="file"] {
+
+/* ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ */
+input[type="button"], input[type="submit"], input[type="file"]
+{
     border: 0; /*background: #4D77A7;*/
-    background-color: #62CAE3;
-    color: white;
+    background: #fff;
+    color: #545454;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-    border: 1px solid #d2cdcd;
+    border:1px solid #d2cdcd;
 }
-/*±à¼­Æ÷²å¼þ*/
- .CodeMirror {
-    border: 1px solid #eee;
-    height: auto;
-}
-
-.CodeMirror-scroll {
-    height: auto;
-    overflow-y: hidden;
-    overflow-x: auto;
+input:hover[type="button"]
+{
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+     border:1px solid #1d7dd4;
 }
 .form-control[disabled],
 .form-control[readonly],
@@ -45,8 +39,21 @@ input[type="button"], input[type="submit"], input[type="file"] {
 }
 
 
-
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
+ input[type=text]:disabled
+{
+    /**border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;*/
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+}
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
 textarea[disabled], input[type=text]:disabled
 {
     /**border: 1px solid #DDD;
@@ -67,54 +74,35 @@ input[type=checkbox]:disabled
         width:20px;
 }
 
-/*ÎÄ±¾¿òÖ»¶Á·ç¸ñ.*/
-select[disabled], input[type=text]:disabled, input[type=password]:disabled {
-    /**border: 1px solid #DDD;
+/*ï¿½Ä±ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½.*/
+select[disabled], input[type=text]:disabled
+{
+   /**border: 1px solid #DDD;
     background-color: #F5F5F5;
     color: #009999;*/
-    width: 100%;
-    padding-left: 10px;
-    border: none;
-    background: none;
-    text-align: left !important;
-    color: #666;
-    cursor: no-drop;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
+    width:100%;
+    padding-left:10px;
+     border: none; 
+     background: none; 
+     text-align: left; 
+     color: #666; 
+     cursor: no-drop;
+     appearance:none;   
+      -moz-appearance:none;   
+      -webkit-appearance:none;   
 }
-input[type="password"]::-webkit-input-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]:-moz-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]::-moz-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-input[type="password"]:-ms-input-placeholder {
-    letter-spacing: 0;
-    font-size: 14px;
-}
-
-
-/*  table ÀàÐÍ·ç¸ñ */
-table {
+/*  table ï¿½ï¿½ï¿½Í·ï¿½ï¿½ */
+table
+{
     border: 1px outset #C0C0C0;
     padding: inherit;
     margin: 0;
     border-collapse: collapse;
 }
 
-/*  Ê±Ñ§ÒµÌí¼Ó ¿ªÊ¼Î»ÖÃ */
+/*  Ê±Ñ§Òµï¿½ï¿½ï¿½ ï¿½ï¿½Ê¼Î»ï¿½ï¿½ */
 
-/*À©Õ¹Ó¦ÓÃÃ÷Ï¸±íÓë¶à¸½¼þ.*/
+/*ï¿½ï¿½Õ¹Ó¦ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½à¸½ï¿½ï¿½.*/
 .TitleExt
 {
     background-color: #f4f4f4;
@@ -128,22 +116,38 @@ table {
     color: #333333;
 }
 
-th {
+th
+{
     border-width: 1px;
     border-color: #C2D5E3;
     border-style: solid;
     line-height: 25px;
-    color: 0a0a0a;
+    color: #0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
-    background-color: #F5F5F5;
+    background-color: #e0ecff;
     font-size: 14px;
     text-align: left;
     font-size: 12px;
     font-weight: bolder;
 }
+
+.image-local {
+    width: 116px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background-color: #0073eb;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    height: 28px;
+    box-sizing: border-box;
+    outline: none;
+}
  
- /*  idx ±í¸ñ×ó²àµÄÐòºÅÁÐ .*/
+ /*  idx ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ .*/
 .Idx
 {
     font-size: 12px;
@@ -245,22 +249,9 @@ caption
     width: 100%;
     font-size: 12px;
 }
-.image-local {
-    width: 116px;
-    font-size: 16px;
-    line-height: 28px;
-    text-align: center;
-    color: #fff;
-    background-color: #0073eb;
-    border: none;
-    display: inline-block;
-    vertical-align: middle;
-    height: 28px;
-    box-sizing: border-box;
-    outline: none;
-}
 
-/** ÆäËü  */
+
+/** ï¿½ï¿½ï¿½ï¿½  */
 .ToolBar
 {
     background-color: #d8edff;
@@ -301,7 +292,7 @@ caption
 }
  
 
-/* ÔÚÊäÈëÐÅÏ¢×Ö¶ÎÃû³Æ£¬µ¥Ôª¸ñÊ½µÄ·ç¸ñ */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ôªï¿½ï¿½Ê½ï¿½Ä·ï¿½ï¿½ */
 .FContext
 {
     padding-left: 4px;
@@ -503,7 +494,7 @@ display:none;
 }
 
 .modal-header {
-    background: #f2f2f2;
+    background: #1d7dd4;
     color: white;
     height:50px;
 }
@@ -519,7 +510,7 @@ display:none;
 .btn {
     background: #f2f2f2 !important;
     border-radius: 20px !important;
-    color:#000 !important;
+    color:#0000007a !important;
 }
 
 .errorBorder {
@@ -531,7 +522,7 @@ display:none;
 
 }
 
-        /*ÌáÊ¾¿òµÄCSS ÉèÖÃ*/
+        /*ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½CSS ï¿½ï¿½ï¿½ï¿½*/
 .popover-title {
     background: #213b5d !important;
     color: white;
@@ -562,7 +553,7 @@ display:none;
 
 #header {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "Î¢ï¿½ï¿½ï¿½Åºï¿½";
     background:rgb(157, 159, 175);
     color: #fff;
     text-align: left;
@@ -632,7 +623,7 @@ display:none;
 cursor:pointer;
 }
 
-/*radioºó±ß¸ú×ÅµÄ±êÇ©*/
+/*radioï¿½ï¿½ß¸ï¿½ï¿½ÅµÄ±ï¿½Ç©*/
 .labRb {
 cursor:pointer;
 }
@@ -643,14 +634,14 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
-    color:#000;
+    color:white;
 }
 
 .input-group-addon {
     cursor: pointer;
 }
 
-/*POP´°ÖÐµÄµÄÊ÷*/
+/*POPï¿½ï¿½ï¿½ÐµÄµï¿½ï¿½ï¿½*/
 .tree-demo {
 text-align:left;
 }
@@ -708,7 +699,7 @@ border:none;
 
 .returnTackHeader {
     height: 50px;
-    font: bold 16px "Î¢ÈíÑÅºÚ";
+    font: bold 16px "Î¢ï¿½ï¿½ï¿½Åºï¿½";
     background: rgb(157, 159, 175) !important;
     color: #fff;
     text-align: left;
@@ -765,7 +756,7 @@ body table tr td label{
   white-space: normal;
 }
 
-/*·ÖÒ³±í¸ñ*/
+/*ï¿½ï¿½Ò³ï¿½ï¿½ï¿½*/
 .tabPdiv {
 overflow:auto;
 }
@@ -779,7 +770,7 @@ select {
 }
 
 
-/*ÈÃ±í¸ñÏÔÊ¾ ...*/
+/*ï¿½Ã±ï¿½ï¿½ï¿½ï¿½Ê¾ ...*/
 body table tr td {
   text-overflow: ellipsis;
   /* for IE */
@@ -800,7 +791,7 @@ body table tr td {
 
 
 
-/*ÑîÓñ»Û  --ÁÙÊ±Ôö¼Ó  ´¦Àíµ¯´°·µ»ØÖµµÃ±íµ¥²¼¾ÖÂÒµôµÄÎÊÌâ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½  --ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
 .FContext div[id*=_mtags],.FContext div[id*=_mtags] .main-container {
     width: 100% !important;
@@ -816,9 +807,6 @@ body table tr td {
 .ccflow-tag {
     margin-right: 10px !important;
 }
-
-
-
 .only-print-show {
     display: none;
 }
@@ -838,29 +826,5 @@ body table tr td {
         display: none;
     }
 }
-
-/*¹ö¶¯Ìõ*/
-::-webkit-scrollbar-thumb {
-    background-color: #b5b5b5;
-    height: 50px;
-    -webkit-border-radius: 4px
-}
-
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: #585858;
-        height: 50px;
-        -webkit-border-radius: 4px
-    }
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px
-}
-
-::-webkit-scrollbar-track-piece {
-    background-color: #fff;
-    -webkit-border-radius: 4px
-}
-
 
  

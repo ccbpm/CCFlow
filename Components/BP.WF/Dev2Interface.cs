@@ -4175,11 +4175,14 @@ namespace BP.WF
             }
 
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                     "RDT WHERE  Tag=" + dbStr + "Tag ";
+                     "RDT,FrmDB="+dbStr+"FrmDB WHERE  Tag=" + dbStr + "Tag ";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
             ps.Add(TrackAttr.Tag, tag);
             ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
+
+            ps.Add(TrackAttr.FrmDB,"@DeptNo"+WebUser.FK_Dept + "@DeptName="+WebUser.FK_DeptName);
+
             int num = DBAccess.RunSQL(ps);
 
             if (num > 1)

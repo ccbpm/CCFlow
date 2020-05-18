@@ -492,7 +492,8 @@
         function AdvSelect() {
             var url = "./Selecter/ByStation.htm?WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode");
             url += "&FK_Node=" + GetQueryString("FK_Node");
-            window.open(url);
+            WinOpenFull(url);
+            
 
         }
     </script>

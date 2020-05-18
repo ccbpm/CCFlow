@@ -209,18 +209,17 @@ namespace BP.Demo.BPFramework
                 map.AddDDLSysEnum(BPUserAttr.XB, 0,"性别", false, true, BPUserAttr.XB, "@0=女@1=男");
 
                 //外键字段.
-                map.AddDDLEntities(BPUserAttr.FK_NY, null, "隶属年月", new BP.Pub.NYs(),true);
+            //    map.AddDDLEntities(BPUserAttr.FK_NY, null, "隶属年月", new BP.Pub.NYs(),true);
 
                 //设置查询条件。
                 map.AddSearchAttr(BPUserAttr.XB);
-                map.AddSearchAttr(BPUserAttr.FK_NY);
+           //     map.AddSearchAttr(BPUserAttr.FK_NY);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-
 
         /// <summary>
         /// 重写基类的方法.

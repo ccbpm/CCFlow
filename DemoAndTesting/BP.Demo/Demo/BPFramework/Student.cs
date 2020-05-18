@@ -290,12 +290,12 @@ namespace BP.Demo.BPFramework
                 //map.AddTBStringDoc(StudentAttr.PWD, null, "密码", true, false);
                 map.AddTBString(StudentAttr.PWD, null, "密码", true, false, 0, 200, 50);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
+                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, false);
                 map.AddTBInt(StudentAttr.Age, 18, "年龄", true, false);
 
-                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
-                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
-                map.AddTBDate(StudentAttr.RegDate, null, "注册日期", true, true);
+                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 100);
+                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 100);
+                map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
 
                 //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
                 //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
@@ -306,6 +306,7 @@ namespace BP.Demo.BPFramework
 
                 //外键字段.
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
+               // map.AddTBString(StudentAttr.FK_BanJi, null, "班级", true, false, 0, 200, 100, true);
 
                 //增加checkbox属性.
                 map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true, true);
@@ -323,16 +324,38 @@ namespace BP.Demo.BPFramework
 
                 #endregion 字段映射 - 普通字段.
 
-                //map.AddHidden("XB", " = ", "0");
+                map.AddMyFile("简历");//上传单附件
 
-                map.AddMyFile("简历");
+                #region 设置查询条件。
 
-                //map.AddMyFileS("简历");
+                //String字段类型的模糊查询：定义方式map.SearchFields,其赋值格式是@名称=字段英文名
+                //如果不设置该字段则进行关键字查询即所有string字段的模糊查询
+               // map.SearchFields = "@名称=Name@地址=Addr@电话=Tel";
+                //数值型字段查询：定义方式map.SearchFieldsOfNum，其赋值格式是@名称=字段英文名
+                //查询方式是从Age1到Age2阶段查询：
+                //①如果Age1有值，Age2无值，则查询大于等于Age1的结果集
+                //②如果Age1无值，Age2有值，则查询小于等于Age2的结果集
+                //③如果Age1有值，Age2有值，则查询大于等于Age1小于等于Age2的结果集
+              
+                //数值范围查询
+                map.SearchFieldsOfNum = "@年龄=Age";
 
-                //设置查询条件。
-                map.AddSearchAttr(StudentAttr.XB);
-                map.AddSearchAttr(StudentAttr.FK_BanJi);
+                //日期查询.
+                map.DTSearchKey = "RegDate";
+                map.DTSearchLable = "注册日期";
+                map.DTSearchWay = Sys.DTSearchWay.ByDate; 
+
+
+                //设置Search.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
+                map.AddSearchAttr(StudentAttr.XB,4000);
                 map.AddSearchAttr(StudentAttr.ZZMM);
+
+                // map.AddSearchAttr(StudentAttr.FK_BanJi);
+                //隐藏条件的查询
+                // map.AddHidden(StudentAttr.ZZMM, " = ", "1");
+
+
+                #endregion 设置查询条件
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -362,7 +385,7 @@ namespace BP.Demo.BPFramework
 
                 //不带有参数的方法.
                 rm = new RefMethod();
-                rm.Title = "发起xx流程";
+                rm.Title = "发起劝退流程";
                 rm.ClassMethodName = this.ToString() + ".DoStartFlow";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsCanBatch = false; //是否可以批处理？
@@ -376,6 +399,13 @@ namespace BP.Demo.BPFramework
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
 
+                //不带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "单独打开页面演示";
+                rm.ClassMethodName = this.ToString() + ".DoOpenit";
+                rm.IsCanBatch = true; //是否可以批处理？
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 ////不带有参数的方法.
                 //rm = new RefMethod();
@@ -388,6 +418,11 @@ namespace BP.Demo.BPFramework
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        public string DoOpenit()
+        {
+            return "/WebForm1.aspx?No="+this.No;
+
         }
         /// <summary>
         /// 重写基类的方法.
@@ -437,7 +472,7 @@ namespace BP.Demo.BPFramework
         }
         public string DoStartFlow()
         {
-            return "/WF/MyFlow.htm?FK_Flow=001&FK_Studept=" + this.No + "&StuName=" + this.Name;
+            return "/WF/MyFlow.htm?FK_Flow=045&XH=" + this.No + "&XM=" + this.Name;
         }
         /// <summary>
         /// 带有参数的方法:缴纳班费
@@ -455,7 +490,8 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
-
+            //    DBAccess.RunSQL("DELETE RR");
+            //   DataTable DT=    DBAccess.RunSQLReturnTable("elect * from ");
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>
@@ -471,7 +507,6 @@ namespace BP.Demo.BPFramework
 
         protected override bool beforeDelete()
         {
-
             return base.beforeDelete();
         }
 

@@ -33,6 +33,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\RefDLL\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,6 +89,10 @@
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Components\BP.GPM\BP.GPM.csproj">
+      <Project>{507A6498-9001-4674-A90A-719F3818940A}</Project>
+      <Name>BP.GPM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
       <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
       <Name>BP.WF</Name>
@@ -93,9 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo\BPFramework\Readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Demo\CRM\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -65,6 +65,7 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
+
             ///  throw new Exception("err@不符合流程发送条件。");
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;

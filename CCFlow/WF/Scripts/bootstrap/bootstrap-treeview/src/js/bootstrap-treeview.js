@@ -118,6 +118,11 @@
 			unselectNode: $.proxy(this.unselectNode, this),
 			toggleNodeSelected: $.proxy(this.toggleNodeSelected, this),
 
+			//增加节点删除节点
+			addNode: $.proxy(this.addNode, this),
+			deleteNode: $.proxy(this.deleteNode, this),
+			deleteChildrenNode: $.proxy(this.deleteChildrenNode, this),
+
 			// Expand / collapse methods
 			collapseAll: $.proxy(this.collapseAll, this),
 			collapseNode: $.proxy(this.collapseNode, this),
@@ -200,6 +205,7 @@
 		this.$element.off('searchComplete');
 		this.$element.off('searchCleared');
 	};
+
 
 	Tree.prototype.subscribeEvents = function () {
 
@@ -614,6 +620,68 @@
 				return _this.buildTree(node.nodes, level);
 			}
 		});
+	};
+
+
+
+
+	Tree.prototype.addNode = function (identifiers, options) {
+		this.forEachIdentifier(identifiers, options, $.proxy(function (node, options) {
+			this.setAddNode(node, options);
+		}, this));
+
+		this.setInitialStates({ nodes: this.tree }, 0);
+		this.render();
+	};
+
+	/**
+
+	 */
+	Tree.prototype.setAddNode = function (node, options) {
+		if (node.nodes == null) node.nodes = [];
+		if (options.node) {
+			$.each(options.node, function (index, option) {
+				node.nodes.push(option);
+			})
+		}
+	};
+	/**
+
+	 * @param identifiers
+	 * @param options
+	 */
+	Tree.prototype.deleteNode = function (identifiers, options) {
+		this.forEachIdentifier(identifiers, options, $.proxy(function (node, options) {
+
+			var parentNode = this.getParent(node);
+
+			if (parentNode && parentNode.nodes != null) {
+				for (var i = parentNode.nodes.length - 1; i >= 0; i--) {
+					if (parentNode.nodes[i].nodeId == node.nodeId) {
+						parentNode.nodes.splice(i, 1);
+					}
+				}
+				this.setInitialStates({ nodes: this.tree }, 0);
+				this.render();
+
+			} else {
+				console.log('根节点不能删除');
+			}
+		}, this));
+	};
+	/**
+
+	 * @param node
+	 * @param options
+	 */
+	Tree.prototype.deleteChildrenNode = function (identifiers, options) {
+		this.forEachIdentifier(identifiers, options, $.proxy(function (node, options) {
+			if (node.nodes != null) {
+				node.nodes = null;
+				this.setInitialStates({ nodes: this.tree }, 0);
+				this.render();
+			}
+		}, this));
 	};
 
 	// Define any node level style override for

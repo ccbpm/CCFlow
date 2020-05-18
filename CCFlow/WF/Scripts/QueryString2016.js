@@ -35,7 +35,7 @@ function GetQueryString(name) {
 
     var r = window.location.search.substr(1).match(reg);
 
-    if (r != null) return unescape(r[2]); return null;
+    if (r != null) return decodeURI(r[2]); return null;
 
 }
 
@@ -96,7 +96,7 @@ function GetQueryStringFromUrl(name) {
 
         var r = url.substr(1).match(reg);
 
-        if (r != null) return unescape(r[2]); return null;
+        if (r != null) return decodeURI(r[2]); return null;
     }
     else {
         return null;

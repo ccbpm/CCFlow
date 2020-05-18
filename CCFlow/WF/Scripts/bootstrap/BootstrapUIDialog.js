@@ -45,7 +45,7 @@
     var modalContent = $("<div class='modal-content' style='border-radius:0px;text-align:left;'></div>");
     modalDialog.append(modalContent);
     //标题
-    var modalHead = $("<div class='modal-header' style='padding: 5px;'></div>");
+    var modalHead = $("<div class='modal-header' style='padding: 5px;background-color:#1d7dd4'></div>");
     if (showCloseBtn == null)
         showCloseBtn = true;
     //关闭按钮
@@ -55,7 +55,7 @@
         btnClose = $("<button type='button' id='closeModal' style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>X</button>");
    
     //标题
-    var titleHead = $("<h4 class='modal-title'></h4>");
+    var titleHead = $("<h4 class='modal-title' style='color:white;'></h4>");
 
     titleHead.text(dlgTitle);
     modalHead.append(btnClose);
@@ -65,7 +65,7 @@
     modalContent.append(modalHead);
 
     //body块
-    var modalBody = $("<div class='modal-body' style='margin:5px;padding:0px;'></div>");
+    var modalBody = $("<div class='modal-body' style='margin:5px;padding:0px;text-align:center'></div>");
     var iframeWidth = dlgWidth - 45;
 
     var iFrame = $("<iframe></iframe>");

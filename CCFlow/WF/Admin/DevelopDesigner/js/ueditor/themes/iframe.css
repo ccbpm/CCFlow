@@ -1,0 +1,778 @@
+/*可以在这里添加你自己的css*/
+/*  Table 风格   */
+body {
+    color: #333333;
+    font-family: "Open Sans", sans-serif;
+    padding: 0px !important;
+    margin: 0px !important;
+    font-size: 14px;
+    direction: ltr;
+}
+
+/* 按钮风格 */
+input[type="button"], input[type="submit"], input[type="file"] {
+    border: 0; /*background: #4D77A7;*/
+    background: #fff;
+    color: #545454;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #d2cdcd;
+}
+
+input:hover[type="button"] {
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #1d7dd4;
+}
+
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] {
+    background-color: white;
+}
+
+
+/*文本框只读风格.*/
+input[type=text]:disabled {
+    /**border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;*/
+    width: 100%;
+    padding-left: 10px;
+    border: none;
+    background: none;
+    text-align: left;
+    color: #666;
+    cursor: no-drop;
+}
+/*文本框只读风格.*/
+textarea[disabled], input[type=text]:disabled {
+    /**border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;*/
+    width: 100%;
+    padding-left: 10px;
+    border: none !important;
+    background: none;
+    text-align: left;
+    color: #666;
+    cursor: no-drop;
+}
+
+input[type=checkbox]:disabled {
+    display: inline;
+    width: 20px;
+}
+
+/*文本框只读风格.*/
+select[disabled], input[type=text]:disabled {
+    /**border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;*/
+    width: 100%;
+    padding-left: 10px;
+    border: none;
+    background: none;
+    text-align: left;
+    color: #666;
+    cursor: no-drop;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+/*  table 类型风格 */
+table {
+    border: 1px outset #C0C0C0;
+    padding: inherit;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+/*  时学业添加 开始位置 */
+
+/*扩展应用明细表与多附件.*/
+.TitleExt {
+    background-color: #f4f4f4;
+    font-size: 12px;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
+}
+
+th {
+    border-width: 1px;
+    border-color: #C2D5E3;
+    border-style: solid;
+    line-height: 25px;
+    color: 0a0a0a;
+    white-space: nowrap;
+    padding: 5px 2px;
+    background-color: #e0ecff;
+    font-size: 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bolder;
+}
+
+/*  idx 表格左侧的序号列 .*/
+.Idx {
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+    width: 20px;
+}
+
+/* ss */
+.Sum {
+    background-color: InfoBackground;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-weight: bold;
+}
+
+td {
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-width: 1px;
+    border-color: #C2D5E3;
+}
+
+
+    td a {
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+
+    td input[type="textbox"] {
+        margin: 0px;
+        border: 1px solid #D6DDE6;
+        padding: 0px;
+    }
+
+.TDNum {
+    text-align: right;
+    word-break: keep-all;
+}
+
+td input {
+    /*border:none;*/
+    word-break: keep-all;
+}
+
+.TBcalendar {
+    background-position: left center;
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+}
+
+caption {
+    height: 30px;
+    text-align: left;
+    font-size: 14px;
+    background-position: 12px 6px;
+    border-bottom: 1px #CCCCCC solid;
+    text-indent: 1.8em;
+    line-height: 30px;
+    color: #336699;
+    font-weight: bolder;
+}
+
+.TBDoc {
+    /*border-style: dotted; */
+    border-width: 1px;
+    border-color: #CCCCCC;
+    /*  overflow: visible;*/
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+}
+
+.TB {
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+    overflow: visible;
+    width: 100%;
+    font-size: 12px;
+}
+
+
+/** 其它  */
+.ToolBar {
+    background-color: #d8edff;
+}
+
+.GroupTitle {
+    padding: 4px;
+    margin: 4px;
+    background-color: #e0ecff;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #0e2d5f;
+}
+
+.GroupField {
+    padding: 4px;
+    margin: 4px;
+    background-color: #eee;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #006666;
+}
+
+.Icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+/* 在输入信息字段名称，单元格式的风格 */
+.FContext {
+    padding-left: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin-left: 4px;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 35%;
+}
+
+.TBNum {
+    border-style: none none dotted none;
+    padding: 1px;
+    margin: 1px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    clear: left;
+    width: auto;
+    border-width: 1px;
+    width: 70px;
+    word-break: keep-all;
+}
+
+
+.TBNumReadonly {
+    font-size: 12px;
+    background-color: infobackground;
+    border-right: black thin;
+    border-top: black thin;
+    border-left: black thin;
+    border-bottom: black thin;
+    text-align: right;
+    vertical-align: bottom;
+    text-align: right;
+    width: 70px;
+    word-break: keep-all;
+}
+
+.TR1 {
+    background-color: AliceBlue;
+}
+
+.TRSum {
+    font-size: 12px;
+    background-color: #FFFFFF;
+    border-bottom-style: double;
+    border-bottom-width: 2px;
+    border-bottom-color: #C0C0C0;
+    border-right-style: none;
+    border-left-style: none;
+}
+
+
+#bottomToolBar {
+    display: block;
+}
+
+
+#divCCForm {
+    position: relative !important;
+    /*background-color: white;*/
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+#CCForm {
+    min-width: 0px;
+    /*background-color: white;*/
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.Message {
+    margin: 0 auto;
+    background: white;
+    /*display: table;*/
+    display: none;
+    display: block;
+    font-weight: bold;
+    color: red;
+    text-align: left;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    z-index: 10;
+    max-height: 95%;
+    overflow: auto;
+}
+
+#topBar {
+    margin: 0 auto;
+    background: white;
+    text-align: right;
+}
+
+.topBar {
+    margin: 0 auto;
+    background: white;
+    text-align: left;
+    border-bottom: 1px solid #4D77A7;
+    border-bottom-color: #CCCCCC;
+}
+
+.flowInfo {
+    margin: 0 auto;
+    background: white;
+    display: table;
+}
+
+.childThread {
+    margin: 0 auto;
+    background: white;
+    display: table;
+}
+
+.pub2Class {
+    margin: 0 auto;
+    display: table;
+}
+
+input[type=text], input[type=password], select {
+    border-radius: 5px;
+    border: thin solid #CCCCCC;
+    margin: 1px 1px;
+    height: 28px;
+}
+
+.FDesc {
+    padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 18%;
+}
+
+#contentTable .form-control {
+    margin: 0px 3%;
+    width: 92%
+}
+
+#contentTable .checkbox {
+    margin-left: 3%;
+}
+
+select {
+    height: 29px;
+}
+
+textarea, iframe[src*="Ath.htm"] {
+    margin-top: 6px !important;
+    border-radius: 5px !important;
+    /* border: #2884fa 1px solid;
+    margin: 0px 10px;*/
+    line-height: 15px !important;
+    padding-left: 6px !important;
+    margin: 4px 0px !important;
+    width: 100%;
+    text-align: left;
+    min-height: 40px;
+}
+
+
+#topContentDiv {
+    background: #fff;
+    border-radius: 5px;
+    padding: 8px 0px 0px 0px;
+    margin: 8px 15px 15px 15px;
+    border: #EFEFEF 1px solid;
+    overflow: auto;
+}
+
+#contentDiv {
+    width: 100%;
+}
+
+.panel {
+    border: 0px !important;
+    margin: 0px;
+}
+
+.topBar {
+    display: none;
+}
+
+#bottomToolBar {
+    padding-right: 18px;
+    float: right;
+}
+
+.modal-header {
+    background: #f2f2f2;
+    color: white;
+    height: 50px;
+}
+
+
+.modal-body {
+    border-radius: 20px;
+    margin: 15px 10px;
+    text-align: right;
+}
+
+.btn {
+    background: #f2f2f2 !important;
+    border-radius: 20px !important;
+    color: #000 !important;
+}
+
+.errorBorder {
+    border: 1px solid #f48236 !important;
+}
+
+.normalBorder {
+    border: 1px solid #2884fa !important;
+}
+
+/*提示框的CSS 设置*/
+.popover-title {
+    background: #213b5d !important;
+    color: white;
+    height: 30px;
+}
+
+.popover-content {
+    background: #f4f9ff;
+}
+
+#divTopArrow > .arrow:after {
+    border-top-color: #f4f9ff
+}
+
+#divBottomArrow > .arrow:after {
+    border-bottom-color: #d4e6fe
+}
+
+#divTopArrow > .arrow {
+    background: white;
+}
+
+#divBottomArrow > .arrow {
+    background: white;
+}
+
+.panel {
+    margin: 0px !important;
+}
+
+#header {
+    height: 50px;
+    font: bold 16px "微软雅黑";
+    background: rgb(157, 159, 175);
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    line-height: 50px;
+    padding-left: 40px;
+}
+
+#showCol {
+    float: right;
+    display: none;
+}
+
+#orgTxt {
+    margin: 0px !important;
+}
+
+.group {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    color: #333;
+    font-size: 14px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    /* display:none;*/
+}
+
+#CCForm label {
+    font-weight: normal;
+    font-size: 12px;
+    margin-bottom: 0px;
+}
+
+.state {
+    padding: 0px 8px 0px 5px;
+    cursor: pointer;
+}
+
+.reloadIframe {
+    color: white;
+    cursor: pointer;
+    float: right;
+}
+
+.form_tree input[type=text] {
+    margin: 0px;
+    border-right: none;
+    border-radius: 15px 0px 0px 15px;
+}
+
+.form_tree {
+    margin: 8px 0px 8px 0px;
+}
+
+    .form_tree .input-group-addon {
+        border-radius: 0px 15px 15px 0px;
+        border: #2884fa 1px solid;
+        cursor: pointer;
+        border-left: none;
+        color: #2884fa;
+    }
+
+#showCol input[type=radio] {
+    cursor: pointer;
+}
+
+/*radio后边跟着的标签*/
+.labRb {
+    cursor: pointer;
+}
+
+input[type=radio] {
+    cursor: pointer;
+}
+
+.modal-title {
+    text-align: left;
+    font-size: 16px;
+    color: #000;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+/*POP窗中的的树*/
+.tree-demo {
+    text-align: left;
+}
+
+.divAth {
+    background: rgb(235, 235, 228);
+    min-width: 100px;
+    cursor: pointer;
+    margin: 8px 0;
+    line-height: 30px;
+}
+
+#navIframe {
+    width: 100%;
+    background: transparent;
+    border: none;
+}
+
+
+#divTrack, #divCurrentForm {
+    margin: 0px;
+    float: right;
+    position: relative;
+}
+
+    #divTrack iframe {
+        width: 100%;
+    }
+
+.trackDiv {
+    background: #E3E7F4;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+    .trackDiv i {
+        display: block;
+        width: 33px;
+        height: 22px;
+        background: url("../../WF/Scripts/bootstrap/css/img/sanjiao_03.png") no-repeat;
+        position: absolute;
+        top: 66px;
+        left: 50px;
+    }
+
+.returnTackDiv {
+    font-size: 15px;
+    text-align: left;
+    padding: 20px;
+    background: #fff;
+    border-radius: 20px;
+    margin: 35px 15px 20px 15px;
+    border: #2854FF 1px solid;
+    overflow: auto;
+    color: #f00;
+    display: none;
+}
+
+.returnTackHeader {
+    height: 50px;
+    font: bold 16px "微软雅黑";
+    background: rgb(157, 159, 175) !important;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    line-height: 50px;
+    padding-left: 40px;
+}
+
+
+
+#freeBarDiv {
+    display: none;
+    text-align: right;
+}
+
+    #freeBarDiv #BtnOk {
+        margin-right: 50px;
+    }
+
+    #freeBarDiv #BtnCancel {
+    }
+
+#orgjstree {
+    font-size: 14px;
+    display: none;
+    height: 90%;
+    overflow: auto;
+}
+
+body table {
+    /* width: 98% border:0px;
+                        margin: 0px;*/
+}
+
+    body table tr td {
+        text-overflow: ellipsis;
+        /* for IE */
+        -moz-text-overflow: ellipsis;
+        /* for Firefox,mozilla */
+    }
+
+        body table tr td:first-child {
+            text-overflow: initial;
+            /* for IE */
+            -moz-text-overflow: initial;
+            /* for Firefox,mozilla */
+            overflow: auto;
+            white-space: normal;
+        }
+
+        body table tr td label {
+            text-overflow: initial;
+            /* for IE */
+            -moz-text-overflow: initial;
+            /* for Firefox,mozilla */
+            overflow: auto;
+            white-space: normal;
+        }
+
+/*分页表格*/
+.tabPdiv {
+    overflow: auto;
+}
+
+    .tabPdiv table {
+        width: 100%;
+    }
+
+select {
+    apperance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+}
+
+
+/*让表格显示 ...*/
+body table tr td {
+    text-overflow: ellipsis;
+    /* for IE */
+    -moz-text-overflow: ellipsis;
+    /* for Firefox,mozilla */
+    /* overflow: hidden;
+  white-space: nowrap;*/
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+
+.errorInput {
+    border-color: red;
+}
+
+
+
+
+
+/*杨玉慧  --临时增加  处理弹窗返回值得表单布局乱掉的问题*/
+
+.FContext div[id*=_mtags], .FContext div[id*=_mtags] .main-container {
+    width: 100% !important;
+    clear: both;
+}
+
+
+
+    .FContext div[id*=_mtags] .main-container {
+        height: auto !important;
+    }
+
+.ccflow-tag {
+    margin-right: 10px !important;
+}
+
+ 

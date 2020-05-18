@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-<meta charset="UTF-8"> 
-<title>HTML框架</title> 
-<script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML框架</title>
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
@@ -24,18 +24,28 @@
             html += "<li><a href='FlowCheckError.htm?FK_Flow=" + flowNo + "' target=right>流程检查</a></li>";
             html += "<li><a href='Run.htm?FK_Flow=" + flowNo + "' target=right>模拟运行</a></li>";
             html += "</ul>";
-            $("#Info").html(html);
+            $("#Auto").html(html);
 
         });
-       
+
     </script>
 
-</head> 
-<body> 
+</head>
+<body>
 
-<div id="Info">
-</div>
- 
-</body> 
+    <fieldset>
+        <legend> 手工测试</legend>
+        <div id="Hand">
+        </div>
+    </fieldset>
+
+
+    <fieldset>
+        <legend> 模拟测试</legend>
+        <div id="Auto">
+        </div>
+    </fieldset>
+
+
+</body>
 </html>
- 

@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,75 +14,70 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <script  type="text/javascript">
-
-        $(function () {
-
-            InitBar(DeliveryWay.BySQLTemplate);
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body >
+<div id="App">
+    <div id="bar"> </div>
+    <fieldset>
+        <legend>请选择一个SQLTemplate.</legend>
+        <div style="margin-top:15px">
+            请选择一个SQLTemplate:
+            <select name="DDL_BySQLTemplate" id="DDL_BySQLTemplate" v-model="sqlTemplateSelect">
+                <option :value="sqlTemplate.No" v-for="sqlTemplate in sqlTemplates">{{sqlTemplate.Name}}</option>
+            </select>
+        </div>
+        <ul>
+            <li ><a href="javascript:void(0)" @click="OpenDialog();" >我要配置SQLTemplate</a></li>
+       </ul>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    var Baseinfo = new Vue({
+        el: '#App',
+        data: {
+            deliverWay: DeliveryWay.BySQLTemplate,
+            sql: '',
+            nodeId: GetQueryString("FK_Node"),
+            sqlTemplates: [],
+            sqlTemplateSelect:''
+        },
+        methods: {
+            OpenDialog: function () {
+                var url = "../../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates&SQLType=1";
+                OpenEasyUiDialogExtCloseFunc(url, 'SQL模板', 800, 500, function () {
+                    var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates");
+                    sqlTemplates.Retrieve("SQLType", 1);
+                    this.sqlTemplates = $.grep(sqlTemplates, function (obj, i) {
+                          return obj.No != undefined;
+                     })
+                });
+            }
+        },
+        created() {
+            InitBar(this.deliverWay);
+            var node = new Entity("BP.WF.Node", this.nodeId);
             var paras = node.DeliveryParas;
 
-            var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates", "SQLType", 1)
-            var str = "";
-            str += "&nbsp;<select id='RB_BySQLTemplate'>" + InitDDLOperation(sqlTemplates) + "</select>";
-
-            document.getElementById("sqlTemSelect").innerHTML = str; //设置基础信息.
-
+            var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates");
+            sqlTemplates.Retrieve("SQLType", 1);
+            this.sqlTemplates = $.grep(sqlTemplates, function (obj, i) {
+                return obj.No != undefined;
+            })
+           
             //初始话下拉列表值
             if (node.DeliveryWay == DeliveryWay.BySQLTemplate) {
                 if (paras != null && paras != "")
-                    $("#RB_BySQLTemplate").val(paras);
+                    this.sqlTemplateSelect=paras;
             }
-            
-
-        });
-
-        //初始化下拉列表框的OPERATION
-        function InitDDLOperation(sqlTemplates) {
-
-            var operations = "";
-
-            for (var i = 0; i < sqlTemplates.length; i++) {
-
-                var template = sqlTemplates[i];
-
-                if (template.No == undefined)
-                    operations += "<option value='" + template.IntKey + "'>" + template.Lab + "</option>";
-                else
-                    operations += "<option value='" + template.No + "'>" + template.Name + "</option>";
-            }
-            return operations;
         }
-
-        //装载模版.
-        function OpenDialog() {
-            var url = "../../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates&SQLType=1";
-            OpenEasyUiDialogExt(url, 'SQL模板', 800, 500, false);
-        }
-
-        function Save() {
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySQLTemplate;
-            var DeliveryParas = $("#RB_BySQLTemplate ").val();
-            node.DeliveryParas = DeliveryParas;
-            node.Update();
-        }
-    </script>
-</head>
-<body >
-
-<div id="bar"> </div>
-
-<fieldset>
-    <legend>请选择一个SQLTemplate.</legend>
-    请选择一个SQLTemplate:  <label id="sqlTemSelect"></label>
-    <ul>
-            <li ><a href="javascript:OpenDialog();" >我要配置SQLTemplate</a></li>
-
-   </ul>
-</fieldset>
+    });
+    function Save() {
+        var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+        node.DeliveryWay = Baseinfo.deliverWay;
+        node.DeliveryParas = Baseinfo.sqlTemplateSelect;
+        node.Update();
+    }
+</script>
 </body>
 </html>

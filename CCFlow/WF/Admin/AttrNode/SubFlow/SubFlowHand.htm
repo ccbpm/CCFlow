@@ -80,7 +80,7 @@
             var webUser = new WebUser();
 
             var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-            OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
+            OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
         }
         //查询集团的流程.
         function AddOrg() {
@@ -116,9 +116,16 @@
     </script>
 </head>
 <body>
+    <div style="right:30px; position:absolute; z-index:100; top:-4px">
+        <input type="button" value="增加子流程" onclick="AddGroup()" />
+
+        <input type="button" value="我需要帮助" onclick="Help()" />
+    </div>
     <table id="Table1" style="width: 100%">
         <caption>
-            手动子流程</caption>
+            <img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
+            手动子流程
+        </caption>
         <tr>
             <th>
                 序
@@ -129,13 +136,13 @@
             <th>
                 流程名称
             </th>
-              <th>
+            <th>
                 模式
             </th>
             <th>
                 编辑
             </th>
-           
+
             <th>
                 删除
             </th>
@@ -145,11 +152,15 @@
         </tr>
     </table>
     <br />
-    <input type="button" value="增加集团子流程" onclick="AddGroup()" />
-    <input type="button" value="增加本组织子流程" onclick="AddOrg()" />
-    <input type="button" value="我需要帮助" onclick="Help()" />
-    <div id="Msg">
+    <!--<input type="button" value="增加集团子流程" onclick="AddGroup()" />
+    <input type="button" value="增加本组织子流程" onclick="AddOrg()" />-->
+
+
+    <div style="position:relative;" id="Msg">
     </div>
-  
+    <fieldset>
+        <legend>运行效果</legend>
+        <img src="SubFlowHand-1.png" />
+    </fieldset>
 </body>
 </html>

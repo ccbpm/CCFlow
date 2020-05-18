@@ -29,14 +29,17 @@
 		    //表单ID.
 		    var fk_mapData = GetQueryString("FK_MapData");
 		    //明细表ID.
-		    var fk_mapDtl = GetQueryString("FK_MapDtl");
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+
+            var fk_flow = GetQueryString("FK_Flow");
 
 		    var attrs = new Entities("BP.Sys.MapAttrs");
 		    attrs.Retrieve("FK_MapData", fk_mapDtl, "Idx");
 
 		    $("#trTitle").append("<th>序</th>");
 
-		    var colNum = 0;
+            var colNum = 0;
+            var fields = "WorkID,ReturnNode,ReturnNodeName,Returner,ReturnerName,ReturnToNode,ReturnToEmp,BeiZhu,RDT,IsBackTracking,";
 		    //生成表头..
 		    for (var i = 0; i < attrs.length; i++) {
 
@@ -44,7 +47,10 @@
 		        var visable = attr.UIVisible;
 		        if (visable == 0)
 		            continue;
-
+                if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
+                    continue;
+                if (fk_flow!=null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                    continue;
 
 		        colNum++;
 
@@ -109,7 +115,11 @@
 
 		            var visable = attr.UIVisible;
 		            if (visable == 0)
-		                continue;
+                        continue;
+                    if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1 )
+                        continue;
+                    if (fk_flow!=null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                        continue;
 
 		            var mypk = attr.MyPK;
 		            var dataType = attr.MyDataType;
@@ -146,7 +156,7 @@
 		            }
 
 		            if (dataType == 4) {
-		                td = "<td ><input type=checkbox value='1' id=" + field + "_" + i + " />" + name + "</td>";
+		                td = "<td ><label for='"+ field + "_" + i + "'><input type=checkbox value='1' id=" + field + "_" + i + " name=" + field + "_" + i + " />" + name + "</label></td>";
 		            }
 
 

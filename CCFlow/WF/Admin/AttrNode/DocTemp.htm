@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>模版导入</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet"
+          type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            Init();
+        });
+
+        function Init() {
+
+            var nodeId = GetQueryString("FK_Node");
+            if (nodeId.indexOf('01') == -1) {
+                alert('必须是开始节点才能维护模版.');
+                return;
+            }
+
+            var ens = new Entities("BP.WF.Template.DocTemplates");
+            ens.Retrieve("FK_Node", nodeId);
+
+            var html = "";
+            html += "<table style='width:98%;' >";
+            html += "<tr>";
+            html += "<th>#</th>";
+            //   html += "<th>编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>删除</th>";
+            html += "<th>字段</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td><img src='../../Img/FileType/doc.gif'/>" + en.Name + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.No + "')\">删除</a></td>";
+                html += "<td><a href=\"javascript:Edit('" + en.No + "','"+en.FilePath+"')\">在线编辑</a></td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            $("#docTempList").html(html);
+
+        }
+
+        function Imp_Done() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择公文模板。");
+                return;
+            }
+
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".docx") {
+                $.messager.alert("提示", "所选文件不符合格式，请重新选择。");
+                return;
+            }
+
+            $("#pageloading").show();
+            //提交数据
+            var doMethod = "DocTemp_Upload";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_Node=" + nodeID,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    $("#pageloading").hide();
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+
+        function Edit(id,path) {
+
+              var DocName = GetDocName();
+            //插件参数
+            var paras = "WorkID=" + GetQueryString("WorkID") + ",";
+            paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
+            paras += "TempNo=" + GetQueryString("TempNo") + ",";
+            paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
+
+            var webUser = new WebUser();
+            paras += "UserNo=" + webUser.No + ",";
+            paras += "SID=" + webUser.SID + ",";
+
+            //是否可以编辑(只读)
+            var isEdit = "True";
+            if (isEdit == "True")
+                paras += "IsReadonly=0,";
+            else
+                paras += "IsReadonly=1,";
+
+            //增加标记.
+            paras += "ActionType=DocTemplate,ID=" + id;
+
+            var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+            
+            var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
+            var url = "httpCCWord://-fromccflow,Path="+path+",App=OnlineEdit," + paras + "WSUrl=" + urlWS;
+           // alert(url);
+            window.location.href = url;
+
+            //alert('尚未完成.');
+        }
+        function Del(id) {
+            if (confirm("确认删除吗？") == false)
+                return;
+            var en = new Entity("BP.WF.Template.DocTemplate", id);
+            en.PKVal = id;
+            en.Delete();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+        <div id="docTempList" style="padding:5px;"></div>
+        请选择模版文件:
+        <input style="background-color:white" type="file" id="File_Upload" name="File_Upload"  onchange="Imp_Done()"/>
+        <!--<input type="button" id="Btn_Imp" value="执行导入" onclick="Imp_Done();" />-->
+    </form>
+</body>
+</html>

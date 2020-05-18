@@ -101,12 +101,17 @@
             var downloadUrl = "../../../DataUser/TempleteOfImp/" + frmID + ".xls";
             var a = document.getElementById("downFileID");
             a.href = downloadUrl;
-            a.download = FrmID + ".xls";
+            a.download = frmID + ".xls";
             a.click();
         }
         function Back() {
             var frmID = GetQueryString("FrmID");
+            var EntityType = GetQueryString("EntityType");
             var url = "../Search.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+            if (EntityType == "1")
+                url = "../SearchBill.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+            if (EntityType == "2")
+                url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
             window.location.href = url;
         }
     </script>

@@ -49,8 +49,8 @@ CCForm_Control_Enum = {
                 { Text: '当前日期-yyyy年mm月dd日', Value: '@yyyy年mm月dd日' },
                 { Text: '当前日期-yy年mm月dd日', Value: '@yy年mm月dd日' },
                 { Text: '当前年度', Value: '@FK_ND' },
-                { Text: '当前月份', Value: '@FK_YF' },
-                { Text: '当前工作可处理人员', Value: '@CurrWorker' }
+                { Text: '当前月份', Value: '@FK_YF' }/*,
+                { Text: '当前工作可处理人员', Value: '@CurrWorker' }*/
     ],
     
     /** 

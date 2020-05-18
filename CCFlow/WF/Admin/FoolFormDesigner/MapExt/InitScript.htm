@@ -2,6 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>驰骋工作流</title>
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/addon/comment/comment.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/comment/continuecomment.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <!-- 引用通用的js文件. -->
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -12,12 +18,19 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //初始化页面函数.....
-
+        var editor = "";
         //杨玉慧
         $(function () {
+            editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                matchBrackets: true,
+                continueComments: "Enter",
+                extraKeys: { "Ctrl-Q": "toggleComment" }
+            });
             Init();
+
         });
 
         function Init() {
@@ -34,7 +47,8 @@
                 alert(data)
             }
             else {
-                $('#TB_JSDoc').val(data);
+                $('#code').val(data);
+                editor.setValue($("#code").val());
             }
             return;
         }
@@ -43,7 +57,7 @@
             var frmID = GetQueryString("FK_MapData");
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            var jsDocVal=$("#TB_JSDoc").val();
+            var jsDocVal = editor.getValue();
             handler.AddUrlData();
             handler.AddPara("JSDoc", jsDocVal);
             var data = handler.DoMethodReturnString("InitScript_Save"); //执行方法，返回执行结果.
@@ -68,19 +82,19 @@
         }
     </script>
 </head>
-<body  onload="Load()" >
+<body onload="Load()">
 
-<!--<form id="cc">
+    <!--<form id="cc">
 
-    <h2> 该功能在重构过程中，您可以直接打开datauser\JSLibData\+FrmID+'_Self.js' 修改.</h2>
+        <h2> 该功能在重构过程中，您可以直接打开datauser\JSLibData\+FrmID+'_Self.js' 修改.</h2>
 
-    <textarea id="">
+        <textarea id="">
 
-    </textarea>
+        </textarea>
 
-    <input type="button" />
+        <input type="button" />
 
-</form>-->
+    </form>-->
 
     <form id="cc">
         <fieldset>
@@ -93,7 +107,7 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="width: 100%;">
-                        <textarea rows="20" name="TB_JSDoc" id="TB_JSDoc" style="width:100%;"> </textarea>
+                        <textarea rows="20" name="code" id="code" style="width:100%;"> </textarea>
                     </td>
                 </tr>
                 <tr>

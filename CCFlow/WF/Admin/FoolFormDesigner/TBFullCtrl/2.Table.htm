@@ -2,8 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>表格模式</title>
+
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../LoadSql.js"></script>
+
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
@@ -17,21 +30,22 @@
 
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData";
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
-            
+
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
 
             //去掉 ' 号。
-            var doc = mapExt.Doc;
+            var doc = mapExt.Tag4;
             while (doc.indexOf('~') > 1) {
                 doc = doc.replace("~", "'");
             }
             var Tag3 = mapExt.Tag3;
             //按照文本计算.
-            $("#TB_Doc").val(doc);
+            $("#TB_SQL").val(doc);
+            editor.setValue($("#TB_SQL").val());
             $("#TB_Tag3").val(Tag3);
             //设置按钮是否可以用?
             if (i == 0) {
@@ -51,7 +65,7 @@
             en.Update();
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn")+"_FullData" ;
+            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
@@ -61,18 +75,17 @@
             mapExt.ExtType = "FullData";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
-
+            mapExt.Tag4=editor.getValue();
             if (mapExt.Update() == 0)
                 mapExt.Insert();
             var val = mapExt.Save();
             window.location.href = window.location.href;
         }
-       
+
 
     </script>
     <style type="text/css">
-        .style1
-        {
+        .style1 {
             height: 21px;
         }
     </style>
@@ -81,65 +94,72 @@
     <div id="bar">
     </div>
     <form id="cc">
-     <table id="table" style="width: 100%;">
-        <caption>
-            为文本框填充其它控件</caption>
-        <tr>
-            <td>
-                数据源类型
-            </td>
-            <td>
-                <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
-                    <option value="0">执行SQL</option>
-                    <option value="1">执行url返回JSON</option>
-                    <option value="2">执行CCFromRef.js返回JSON</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2"> 
-                数据源  <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <div id='sqlexp' style='color: Gray; display: none'>
-                    <ul>
-                        <li>填充SQL帮助:</li>
-                        <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-                        <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                        <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                        <li>4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
-                            WF_Emp WHERE No LIKE '@Key%' </li>
-                       
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="width: 100%;">
-                <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
-            </td>
-        </tr>
-        
-        <!-- 数据列名与中文意思对照 -->
-        <tr>
-            <th colspan="2">数据列名与中文意思对照
-                <a href="javascript:ShowHidden('tab6')">帮助</a>
-                <div id="tab6" style="color: Gray; display: none">
-                    <ul>
-                        <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
-                        <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
-                    </ul>
-                </div>
-            </th>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <input type="text" id="TB_Tag3" name="TB_Tag3" style="width: 99%;" />
-            </td>
-        </tr>
-    </table>
+        <table id="table" style="width: 100%;">
+           
+            <tr>
+                <td>
+                    数据源类型
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    数据源  <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>填充SQL帮助:</li>
+                            <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                            <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                            <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                            <li>
+                                4. 比如:SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM
+                                WF_Emp WHERE No LIKE '@Key%'
+                            </li>
+                            <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
+
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%;">
+                    <textarea rows="4" id="TB_SQL" name="TB_SQL" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+
+            <!-- 数据列名与中文意思对照 -->
+            <tr>
+                <td colspan="2">
+                    数据列名与中文意思对照
+                    <a href="javascript:ShowHidden('tab6')">帮助</a>
+                    <div id="tab6" style="color: Gray; display: none">
+                        <ul>
+                            <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.</li>
+                            <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="text" id="TB_Tag3" name="TB_Tag3" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
     </form>
+    <fieldset>
+        <legend>运行效果</legend>
+        <a href="javascript:WinOpen('2.Simple-1.png');">  <img src="2.Simple-1.png" style="width:90%;" /> </a>
+    </fieldset>
 </body>
 </html>

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>开发者表单设计器</title>
+    <!--引入jquery-->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <!--引入bootstrap-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!--引入CSS样式 begin-->
+    <link href="css/default.css" rel="stylesheet" />
+    <!--引入CSS样式 end-->
+    <!--UEditer Begin-->
+    <script src="js/ueditor/ueditor.config.js"></script>
+    <script src="js/ueditor/ueditor.all.js"></script>
+    <script src="js/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <!--UEditer End-->
+    <script src="js/designer.js"></script>
+
+    <script type="text/javascript">
+        var leipiEditor = UE.getEditor('myFormDesign', {
+            toolleipi: true,//是否显示，设计器的 toolbars
+            textarea: 'design_content',
+            //这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+            toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', '|', 'fontfamily', 'fontsize', '|', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'horizontal', 'spechars', 'wordimage', '|', 'inserttable', 'deletetable', 'mergecells', 'splittocells', '|', 'template']],
+            //focus时自动清空初始化时的内容
+            //autoClearinitialContent:true,
+            //关闭字数统计
+            wordCount: false,
+            //关闭elementPath
+            elementPathEnabled: false,
+            //默认的编辑区域高度
+            initialFrameHeight: 300
+            //更多其他参数，请参考ueditor.config.js中的配置项
+        });
+
+        var leipiFormDesign = {
+            exec: function (method) {
+                leipiEditor.execCommand(method);
+            },
+
+            fnCheckForm: function (type) {
+                if (leipiEditor.queryCommandState('source'))
+                    leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
+
+
+                if (leipiEditor.hasContents()) {
+                    leipiEditor.sync();       //同步内容
+
+                    var type_value, formid, formeditor;
+                    if (typeof type !== 'undefined') {
+                        type_value = type;
+                    }
+                    formeditor = leipiEditor.getContent();
+
+                    $("#button_save").text("submit...");
+                    //异步提交数据
+                    $.ajax({
+                        type: 'POST',
+                        url: '/demo/formdesign.html',
+                        dataType: 'json',
+                        data: { "form_id": 2375, "design_content": formeditor },
+                        success: function (data) {
+                            $("#button_save").text("确定保存");
+                            if (data.status == 1) {
+                                alert('保存成功');
+                                location.reload();
+                            } else {
+                                alert(data.info);
+                            }
+                        }
+                    });
+                } else {
+                    alert('表单内容不能为空！')
+                    $('#submitbtn').button('reset');
+                    return false;
+                }
+            },
+
+            fnReview: function () {
+                if (leipiEditor.queryCommandState('source'))
+                    leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
+
+                if (leipiEditor.hasContents()) {
+                    leipiEditor.sync();       //同步内容
+                    document.saveform.target = "mywin";
+                    window.open('', 'mywin', "menubar=0,toolbar=0,status=0,resizable=1,left=0,top=0,scrollbars=1,width=" + (screen.availWidth - 10) + ",height=" + (screen.availHeight - 50) + "\"");
+                    document.saveform.action = "/demo/temp_preview.html";
+                    document.saveform.submit(); //提交表单
+                } else {
+                    alert('表单内容不能为空！');
+                    return false;
+                }
+            }
+        };
+
+/**/</script>
+
+</head>
+<body>
+    <div class="wrapper">
+        <div class="row  ">
+            <div class="tabbable" >
+                <!--开发者表单设计器-->
+                <div class="tab-content" style="height:628px">
+                    <div class="row">
+                        <div class="well well-small">
+                            <span class="pull-right">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-small" onclick="leipiFormDesign.fnReview();">预览效果</a>
+                                <a href="javascript:void(0);" class="btn btn-success btn-small" id="button_save" onclick="leipiFormDesign.fnCheckForm('save');">确定保存</a>
+                            </span>
+
+                            <p>
+                                一栏布局：<br /><br />
+                                <button type="button" onclick="leipiFormDesign.exec('text');" class="btn btn-info">文本框</button>
+                                <button type="button" onclick="leipiFormDesign.exec('textarea');" class="btn btn-info">多行文本</button>
+                                <button type="button" onclick="leipiFormDesign.exec('select');" class="btn btn-info">下拉框</button>
+                                <button type="button" onclick="leipiFormDesign.exec('radios');" class="btn btn-info">单选框</button>
+                                <button type="button" onclick="leipiFormDesign.exec('checkboxs');" class="btn btn-info">复选框</button>
+                                <button type="button" onclick="leipiFormDesign.exec('checkboxs');" class="btn btn-info">附件</button>
+                                <button type="button" onclick="leipiFormDesign.exec('checkboxs');" class="btn btn-info">从表</button>
+
+                                <button type="button" onclick="leipiFormDesign.exec('macros');" class="btn btn-info">宏控件</button>
+                                <button type="button" onclick="leipiFormDesign.exec('progressbar');" class="btn btn-info">进度条</button>
+                                <button type="button" onclick="leipiFormDesign.exec('qrcode');" class="btn btn-info">二维码</button>
+                                <button type="button" onclick="leipiFormDesign.exec('listctrl');" class="btn btn-info">列表控件</button>
+                                <button type="button" onclick="leipiFormDesign.exec('more');" class="btn btn-primary">一起参与...</button>
+                            </p>
+                        </div>
+                    </div><!--end row-->
+                    <div class="row">
+                        <script id="myFormDesign" type="text/plain" style="margin-left:20px;margin-right:20px">
+                            <table><tbody><tr class="firstRow"><td style="word-break: break-all;" width="136" valign="top">姓名</td><td width="136" valign="top"><input name="data_1" type="text" title="name" value="" leipiplugins="text" orghide="0" orgalign="left" orgwidth="150" orgtype="text" style="text-align: left; width: 150px;" /></td><td style="word-break: break-all;" width="136" valign="top">年级</td><td width="136" valign="top"><input name="data_2" type="text" title="grade" value="" leipiplugins="text" orghide="0" orgalign="left" orgwidth="150" orgtype="text" style="text-align: left; width: 150px;" /></td><td style="word-break: break-all;" width="136" valign="top">班级</td><td width="136" valign="top"><input name="data_3" type="text" title="classname" value="" leipiplugins="text" orghide="0" orgalign="left" orgwidth="150" orgtype="text" style="text-align: left; width: 150px;" /></td></tr><tr><td style="word-break: break-all;" width="136" valign="top">性别</td><td width="136" valign="top">{|-<span leipiplugins="radios" name="data_4" title="sex"><input type="radio" name="data_4" value="男" />男&nbsp;<input type="radio" name="data_4" value="女" />女&nbsp;</span>-|}</td><td width="136" valign="top"><br /></td><td width="136" valign="top"><input name="data_5" type="text" value="{macros}" title="出错" leipiplugins="macros" orgtype="sys_datetime" orghide="0" orgwidth="150" style="width: 150px;" /></td><td width="136" valign="top"><input name="data_6" type="text" value="{macros}" title="ll" leipiplugins="macros" orgtype="sys_realname" orghide="0" orgwidth="150" style="width: 150px;" /></td><td width="136" valign="top"><br /></td></tr><tr><td width="136" valign="top"><br /></td><td width="136" valign="top"><input name="data_7" type="text" title="aaa" value="" leipiplugins="text" orghide="0" style="text-align: left; width: 150px;" orgalign="left" orgwidth="150" orgtype="text" /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td></tr><tr><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td><td width="136" valign="top"><br /></td></tr></tbody></table>
+                            <p>{|-<span leipiplugins="checkboxs" title="aaa"><input type="checkbox" name="data_8" value="aaaa" />aaaa&nbsp;</span>-|}</p>
+                        </script>
+                    </div><!--end row-->
+                </div>
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active">
+                        <a data-toggle="tab" href="#designer">设计</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#html">Html</a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="tab" href="#code">后台代码</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

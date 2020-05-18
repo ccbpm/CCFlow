@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,32 +14,48 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
 
-    <script  type="text/javascript">
+    <script type="text/javascript">
 
         $(function () {
             InitBar(DeliveryWay.ByFEE);
 
         });
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.ByFEE;
-           node.Update();
-       }
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = DeliveryWay.ByFEE;
+            node.Update();
+        }
     </script>
 </head>
-<body >
-<div id="bar"> </div>
-<fieldset>
-    <legend>说明</legend>
-    <div style="float: right">
-        请编写事件代码
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>用流程事件，通过调用设置接受的接口，来设置当前节点的接收人，实现的把接受人信息写入接收人列表里。</li>
+            </ul>
+        </fieldset>
     </div>
-    <ul>
-        <li>用流程事件，通过调用设置接受的接口，来设置当前节点的接收人，实现的把接受人信息写入接收人列表里。</li>
-    </ul>
-</fieldset>
-
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.ByFEE,
+                nodeId: GetQueryString("FK_Node")
+            },
+            created() {
+                InitBar(this.deliverWay);
+            }
+        });
+        function Save() {
+            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
 </body>
 </html>

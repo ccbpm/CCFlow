@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>切换用户</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        var flowNo = GetQueryString("FK_Flow");
+        var workID = GetQueryString("WorkID");
+        var adminer = GetQueryString("Adminer");
+        var SID = GetQueryString("SID");
+
+        //页面启动函数.
+        $(function () {
+
+            //访问后台，获得一个工作ID.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddUrlData();
+            handler.DoMethodReturnString("Default_LetAdminerLogin");
+
+            var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
+
+            window.parent.InitPageUserInfo();
+            //   var webUser = new WebUser();
+            //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
+
+            var html = "<table style='width:900px;'>";
+            html += "<caption>工作人员列表</caption>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>人员编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>节点ID</th>";
+            html += "<th>节点名称</th>";
+
+
+            html += "<th>下达时间</th>";
+            html += "<th>处理时间</th>";
+
+
+            html += "<th>是否读取？</th>";
+
+            html += "<th>状态</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+
+                if (en.IsPass == 0) {
+                    html += "<tr class=Sum>";
+                } else {
+                    html += "<tr >";
+                }
+
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.FK_Emp + "</td>";
+                html += "<td>" + en.FK_EmpText + "</td>";
+                html += "<td>" + en.FK_Node + "</td>";
+                html += "<td>" + en.FK_NodeText + "</td>";
+
+                html += "<td>" + en.RDT + "</td>";
+
+                if (en.IsPass == 0) {
+                    html += "<td> - </td>";
+                } else {
+                    html += "<td>" + en.CDT + "</td>";
+                }
+                html += "<td>" + en.IsRead + "</td>";
+
+                if (en.IsPass == 0) {
+                    html += "<td><b><font color=green>待办</font></b></td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
+                } else {
+                    html += "<td>已处理</td>";
+                    html += "<td> - </td>";
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#gwls").html(html);
+
+
+            //******************************** 绑定流程信息 **/
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+            var html = "<table style='width:900px;'>";
+            html += "<caption>流程信息</caption>";
+            html += "<tr>";
+            html += "<th>标题</th>";
+            html += "<td colspan=6>" + gwf.Title + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<th>工作ID</th>";
+            html += "<td>" + gwf.WorkID + "</td>";
+            html += "<th>状态</th>";
+            html += "<td>" + gwf.WFStateText + "</td>";
+            html += "<th>发起人</th>";
+            html += "<td>" + gwf.Starter + "," + gwf.StarterName + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<th>停留节点ID</th>";
+            html += "<td>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
+            html += "<th>当前待办人员</th>";
+            html += "<td>" + gwf.TodoEmps + "</td>";
+            html += "</tr>";
+
+            html += "</table>";
+            $("#gwf").html(html);
+
+        });
+
+        function ChangUser(empNo, nodeID, workid, fid) {
+
+            //当这个人登录。
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddPara("FK_Emp", empNo);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FID", fid);
+
+            //  handler.AddPara("Adminer", adminer);
+            handler.AddPara("SID", SID);
+
+            var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+            window.parent.InitPageUserInfo();
+        }
+
+       
+        function OpenRpt() {
+            var url = "../../WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
+            WinOpen(url);
+        }
+    </script>
+</head>
+<body>
+    <div id="userInfo"></div>
+
+    <center>
+        <div id="gwf"></div>
+
+        <div id="gwls"></div>
+
+    </center>
+
+
+
+
+</body>
+</html>

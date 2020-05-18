@@ -131,31 +131,34 @@
 </head>
 <body onkeypress="Esc();">
     <form method="post" action="" id="form1">
-    <table id="Table1" width='100%'>
-        <caption>
-            正确的调整好Tab键的顺序,可以方便用户数据录入.</caption>
-        <tr>
-            <th>
-                Idx
-            </th>
-            <th>
-                字段
-            </th>
-            <th>
-                描述
-            </th>
-            <th>
-                顺序号
-            </th>
-            <th>
-                移动
-            </th>
-            <th>
-                移动
-            </th>
-        </tr>
-    </table>
-     <center><input type="button" value=" 保 存 "  onclick="Save();" /></center>
+        <div style="right:10px; position:absolute; z-index:100; ">
+            <input type="button" value=" 保 存 " onclick="Save();" />
+        </div>
+        <table id="Table1" width='100%'>
+            <caption>
+                正确的调整好Tab键的顺序,可以方便用户数据录入.
+            </caption>
+            <tr>
+                <th>
+                    Idx
+                </th>
+                <th>
+                    字段
+                </th>
+                <th>
+                    描述
+                </th>
+                <th>
+                    顺序号
+                </th>
+                <th>
+                    移动
+                </th>
+                <th>
+                    移动
+                </th>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

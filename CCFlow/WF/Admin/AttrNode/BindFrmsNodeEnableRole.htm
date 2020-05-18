@@ -41,10 +41,10 @@
             $('#RB_FrmEnableRole_' + frmEnableRole).attr('checked', 'true');
             //选中值显示
             switch (frmEnableRole) {
-                case '4':
+                case 4:
                     $("#TB_FrmEnableExp").val(frmEnableExp);
                     break;
-                case '6':
+                case 6:
                     var stations = [];
                     if (frmEnableExp != null && frmEnableExp != undefined && frmEnableExp != "")
                         stations = frmEnableExp.split(';');
@@ -55,7 +55,7 @@
                     });
                     ShowTable(statonSelectRows, 6);
                     break;
-                case '7':
+                case 7:
                     var depts = [];
                     if (frmEnableExp != null && frmEnableExp != undefined && frmEnableExp != "")
                         depts = frmEnableExp.split(';');

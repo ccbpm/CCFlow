@@ -10,6 +10,8 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Admin.js" type="text/javascript"></script>
+
     <base target="_self" />
     <script type="text/javascript">
 
@@ -31,6 +33,11 @@
                 return;
             }
 
+            if (data.indexOf('info@') == 0) {
+                $("#Msg").html("<font >提示:<br>" + data + "</font> .");
+                return;
+            }
+
             //转json.
             var wf_Cond = JSON.parse(data);
 
@@ -49,16 +56,13 @@
                 newRow += "<td>" + cond.ToNodeID + "</td>";
                 newRow += "<td>" + cond.Note + "</td>";
                 newRow += "<td>" + cond.PRI + "</td>";
-                newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Up')\">上移</a></td>";
-                newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Down')\">下移</a></td>";
+                newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Up')\">上移</a> - <a href=\"javascript:DoIt('" + cond.MyPK + "','Down')\">下移</a></td>";
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
             }
-
         });
 
-
-        //执行删除..
+        //执行上移下移
         function DoIt(mypk, updown) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
@@ -79,49 +83,35 @@
                 return;
             }
             window.location.href = window.location.href;
-
         }
-         
+
     </script>
 </head>
-<body onkeypress="Esc();" class="easyui-layout" topmargin="0" leftmargin="0" style="font-size: smaller">
+<body onkeypress="Esc();">
     <form id="cc">
-    <div data-options="region:'center',title:'方向条件优先级'" style="overflow-y: hidden;">
         <table id="Table1" name="Table1" style="width: 99%;">
+            <caption>方向条件优先级</caption>
             <tr>
-                <th>
-                    序
-                </th>
-                <th>
-                    到节点ID
-                </th>
-                <th>
-                    名称
-                </th>
-                <th>
-                    优先级
-                </th>
-                <th>
-                    操作
-                </th>
-                <th>
-                    操作
-                </th>
+                <th>序</th>
+                <th>到节点ID</th>
+                <th>名称</th>
+                <th>优先级</th>
+                <th>操作</th>
             </tr>
         </table>
-    </div>
-    <center>
-        <div id="Msg" />
-    </center>
-    <div style="float: left; text-align: left">
-        <h5>
-            什么是方向条件的优先级？
-        </h5>
-        <ul>
-            <li>在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
-            <li>例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>
-        </ul>
-    </div>
+
+        <div id="Msg" ></div>
+
+
+        <fieldset>
+            <legend id="help">什么是方向条件的优先级？</legend>
+            <ul>
+                <li>在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
+                <li>例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>
+                <li>只有一个方向条件的小于等于1就不能设置。</li>
+            </ul>
+        </fieldset>
+
     </form>
 </body>
 </html>

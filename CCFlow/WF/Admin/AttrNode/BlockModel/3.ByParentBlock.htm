@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>发送阻塞规则</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+    <script>
+        $(function () {
+            InitBar(BlockModel.ByParentBlock);
+        });
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.BlockModel = BlockModel.ByParentBlock;
+            if (!$("#TB_SpecSubFlowNode").val());
+             node.BlockExp = $("#TB_SpecSubFlowNode").val();
+            node.Update();
+            alert("保存完毕");
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+
+    </div>
+    <form id="cc">
+        <fieldset>
+            <legend>
+                <label for="RB_BlockModel_5">是否启用为父流程时，子流程未运行到指定的节点</label>
+            </legend>
+            <br /><a href="javascript:ShowHidden('SpecSubFlow')"></a>
+            <div id="SpecSubFlow" style="color: Gray; display: none">
+                <ul>
+                    <li>当该节点向下运动时，要检查指定的子流程是否运行过指定的节点，作为条件。</li>
+                    <li>例如：在D节点上，要检查启动的子流程是否全部运行到指定的节点，如果完成就不阻塞。</li>
+                    <li>配置格式：@指定的节点1=子流程节点编号1@指定的节点n=子流程节点编号n。。</li>
+                </ul>
+            </div>
+            <input type="text" id="TB_SpecSubFlowNode" name="TB_SpecSubFlowNode" runat="server" style="width: 95%" />
+        </fieldset>
+    </form>
+</body>
+</html >

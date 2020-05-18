@@ -40,9 +40,10 @@
             ens.Retrieve("FK_MapData", GetQueryString("FK_MapData"));
 
             for (var i = 0; i < ens.length; i++) {
+                var mypk = ens[i].MyPK;
 
                 var en = new Entity("BP.Sys.FrmEvent", ens[i]);
-
+                en.MyPK = mypk;
                 var newRow = "";
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
                 newRow += "<td><a href='ActionForDtlEntity.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_MapData="+en.FK_MapData+"&FK_Node=" + en.FK_Node + "'>" + en.FK_Event + "</a></td>";
@@ -59,12 +60,12 @@
 
         function PushWayText(EventListOfNode, doType) {
 
-            var ret = { "DtlSaveBefore": ["不发送", "发送给当前节点的所有处理人", "从表保存之前", "其他节点的处理人"],
-                "DtlSaveEnd": ["不发送", "发送给下一个节点的所有接受人", "从表保存之后", "其他节点的处理人"],
-                "DtlItemSaveBefore": ["不发送", "发送给被退回的节点处理人", "从表的行保存之前", "其他节点的处理人"],
-                "DtlItemSaveAfter": ["不发送", "撤销工作后通知的节点接受人", "从表的行保存之后", "其他节点的处理人"],
-                "DtlItemDelBefore": ["不发送", "流程结束通知的所有流程的参与人", "从表的行删除之前", "其他节点的处理人"],
-                "DtlItemDelAfter": ["不发送", "流程删除后通知所有流程的参与人", "从表的行删除之后", "其他节点的处理人"]
+            var ret = { "DtlSaveBefore": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
+                "DtlSaveEnd": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
+                "DtlItemSaveBefore": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
+                "DtlItemSaveAfter": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
+                "DtlItemDelBefore": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
+                "DtlItemDelAfter": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"]
             };
 
             return ret[EventListOfNode][doType];

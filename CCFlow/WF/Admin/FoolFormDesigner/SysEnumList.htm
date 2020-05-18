@@ -130,7 +130,9 @@
         function NewEnum() {
 
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?s=' + Math.random();
-            OpenEasyUiDialog(url, "eudlgframe", "新建枚举", 600, 400, "icon-edit", true, null, null, null, function () {
+            var W = document.body.clientWidth - 120;
+            var H = document.documentElement.clientHeight - 10;
+            OpenEasyUiDialog(url, "eudlgframe", "新建枚举", W, H, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -138,8 +140,9 @@
         function Edit(enumKey,name,cfgKeys) {
 
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
-
-            OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", 600, 400, "icon-edit", true, null, null, null, function () {
+            var W = document.body.clientWidth - 120;
+            var H = document.documentElement.clientHeight - 10;
+            OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", W, H, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

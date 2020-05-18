@@ -4,6 +4,9 @@
     <!-- 于庆海  -->
     <meta charset="UTF-8" />
     <title>流程字段列表</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -168,13 +171,18 @@
                 idx4++;
             }
         }
-          
+
     </script>
+    <style>
+        th {
+            background-color: #F5F5F5;
+        }
+    </style>
 </head>
 <body onkeypress="Esc()">
-    <table id="Table1" style="width: 100%">
-        <caption>
-            流程系统字段</caption>
+    <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
+        <h4>
+            流程系统字段</h4>
         <tr>
             <th style="width: 5%">
                 序
@@ -199,9 +207,10 @@
             </th>
         </tr>
     </table>
-    <table id="Table2" style="width: 100%">
-        <caption>
-            普通字段</caption>
+    <table class="table table-bordered table-hover table-condensed" id="Table2" style="width: 100%">
+        <h4>
+            普通字段
+        </h4>
         <tr>
             <th style="width: 5%">
                 序
@@ -226,9 +235,9 @@
             </th>
         </tr>
     </table>
-    <table id="Table3" style="width: 100%">
-        <caption>
-            枚举字段</caption>
+    <table class="table table-bordered table-hover table-condensed" id="Table3" style="width: 100%">
+        <h4>
+            枚举字段</h4>
         <tr>
             <th style="width: 5%">
                 序
@@ -253,9 +262,9 @@
             </th>
         </tr>
     </table>
-    <table id="Table4" style="width: 100%">
-        <caption>
-            外键字段</caption>
+    <table class="table table-bordered table-hover table-condensed" id="Table4" style="width: 100%">
+        <h4>
+            外键字段</h4>
         <tr>
             <th style="width: 5%">
                 序
@@ -280,7 +289,7 @@
             </th>
         </tr>
     </table>
-    <table>
+    <table class="table table-bordered table-hover table-condensed">
         <tr>
             <th colspan="7">
                 <div style="float: right" id="dtsbt">

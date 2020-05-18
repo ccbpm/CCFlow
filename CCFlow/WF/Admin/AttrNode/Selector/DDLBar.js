@@ -1,9 +1,23 @@
-﻿
+﻿$(function () {
+
+    jQuery.getScript(basePath + "/WF/Admin/Admin.js")
+        .done(function () {
+            /* 耶，没有问题，这里可以干点什么 */
+            //alert('ok');
+        })
+        .fail(function () {
+            /* 靠，马上执行挽救操作 */
+            //alert('err');
+        });
+});
+
+
 var optionKey = 0;
 function InitBar(key) {
 
     optionKey = key;
 
+    var webUser = new WebUser();
     var nodeID = GetQueryString("FK_Node");
     var str = nodeID.substr(nodeID.length - 2);
     var isSatrtNode = false;
@@ -11,7 +25,7 @@ function InitBar(key) {
         isSatrtNode = true;
 
     // var html = "<div style='background-color:Silver' > 请选择访问规则: ";
-    var html = "<div style='padding:5px' >接受人范围限定: ";
+    var html = "<div style='padding:5px' >接受人可以选择的范围限定: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
@@ -25,6 +39,12 @@ function InitBar(key) {
     html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
     html += "<option value=" + SelectorModel.DeptAndStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按部门与岗位的交集</option>";
 
+    if (webUser.CCBPMRunModel == 1) {
+        html += "<option value=" + SelectorModel.TeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
+        html += "<option value=" + SelectorModel.TeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
+        html += "<option value=" + SelectorModel.TeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
+    }
+
     html += "<option value=null  disabled='disabled'>+其他</option>";
     html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
     html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
@@ -33,8 +53,9 @@ function InitBar(key) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-//    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
-    html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
+    //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
+    //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -43,7 +64,52 @@ function InitBar(key) {
 
 
 }
+function Back() {
+    url = "../AccepterRole/Default.htm?FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow");
+    window.location.href = url;
+}
 
+/*
+ * 获取节点绑定的岗位
+ */
+function getStas() {
+    var ens = new Entities("BP.WF.Template.NodeStations");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    return ens;
+
+}
+/*
+ * 获取节点绑定的部门
+ */
+function getDepts(orgNo) {
+
+    var sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
+    var ens = DBAccess.RunSQLReturnTable(sql);
+    //var ens = new Entities("BP.WF.Template.NodeDepts");
+    //ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    return ens;
+
+}
+/*
+ * 获取节点绑定的用户组@lz
+ */
+function getGroups() {
+
+    var ens = new Entities("BP.WF.Template.NodeTeams");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+
+    return ens;
+
+}
 function OldVer() {
 
     var nodeID = GetQueryString("FK_Node");
@@ -77,22 +143,13 @@ function OpenDot2DotStations() {
     var nodeID = GetQueryString("FK_Node");
 
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
-    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.WF.Port.Stations";
+    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations";
     url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExt(url, '设置岗位', 800, 500, true);
 }
 
-function changeOption() {
-    var nodeID = GetQueryString("FK_Node");
-    var obj = document.getElementById("changBar");
-    var sele = obj.options;
-    var index = obj.selectedIndex;
-    var optionKey = 0;
-    if (index > 1) {
-        optionKey = sele[index].value
-    }
-
+function GenerUrlByOptionKey(optionKey) {
     var roleName = "";
     switch (parseInt(optionKey)) {
         case SelectorModel.Station:
@@ -125,13 +182,36 @@ function changeOption() {
         case SelectorModel.DeptAndStation:
             roleName = "9.AccepterOfDeptStationOfCurrentOper.htm";
             break;
+        case SelectorModel.TeamOnly:
+            roleName = "10.TeamOnly.htm";
+            break;
+        case SelectorModel.TeamOrgOnly:
+            roleName = "11.TeamOrgOnly.htm";
+            break;
+        case SelectorModel.TeamDeptOnly:
+            roleName = "12.TeamDeptOnly.htm";
+            break;
         default:
 
             roleName = "0.Station.htm";
             break;
     }
+    return roleName;
+}
 
-    window.location.href = roleName + "?FK_Node=" + nodeID;
+
+function changeOption() {
+    var nodeID = GetQueryString("FK_Node");
+    var obj = document.getElementById("changBar");
+    var sele = obj.options;
+    var index = obj.selectedIndex;
+    var optionKey = 0;
+    if (index > 1) {
+        optionKey = sele[index].value
+    }
+
+    var roleName = GenerUrlByOptionKey(optionKey);
+    window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
 }
 function SaveAndClose() {
     Save();

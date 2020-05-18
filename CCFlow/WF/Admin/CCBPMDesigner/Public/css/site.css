@@ -42,7 +42,7 @@
   text-shadow: 0 1px 0 rgba(0,0,0,.15);
   background-color: #000;
   color: #fff;
-  ;background-repeat:repeat-x;
+  background-repeat:repeat-x;
   background-image:-webkit-linear-gradient(45deg, #020031, #563d7c);
   background-image:-moz-linear-gradient(45deg, #020031, #563d7c);
   background-image:linear-gradient(45deg, #020031, #563d7c)

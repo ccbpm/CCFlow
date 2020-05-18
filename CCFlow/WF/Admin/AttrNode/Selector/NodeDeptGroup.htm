@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>延续子流程</title>
+    <title>选择部门</title>
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -32,7 +32,7 @@
             var rootNo = "0";
 
             var webUser = new WebUser();
-            rootNo = webUser.FK_Dept;
+            rootNo = webUser.OrgNo
 
 
             //多对多实体.
@@ -77,10 +77,10 @@
 
                     var tree = $('#tree');
                     if (node.state.open) {
-                        //处于展开状态则折叠  
+                        //处于展开状态则折叠
                         tree.tree('collapseNode', node.nodeId);
                     } else {
-                        //展开  
+                        //展开
                         tree.tree('expandNode', node.nodeId);
                     }
                 }
@@ -90,7 +90,27 @@
         //树形结构转换
         var treeJson = [];
         function createJsonToTree(jsonArray, parentNo) {
-            for (var i = 0; i < jsonArray.length; i++) {
+            if (parentNo != "0") {
+                //增加当前用户所在的部门
+                var en = new Entity("BP.WF.Port.Dept", parentNo);
+                var checked = false;
+                var selectedNodes = window.selectedNodes;
+                var sel = $.grep(selectedNodes, function (obj) {
+                    return en.No == obj.No;
+                });
+
+                if (sel.length > 0) {
+                    checked = true;
+                }
+                treeJson.push({
+                    "id": en.No,
+                    "text": en.Name,
+                    "children": creatTreeChildern(jsonArray, en.No),
+                    "checked": checked,
+                    "state": 'closed'
+                });
+            } else {
+                 for (var i = 0; i < jsonArray.length; i++) {
                 var data = jsonArray[i];
                 if (data.ParentNo == parentNo) {
                     var checked = false;
@@ -111,6 +131,9 @@
                     });
                 }
             }
+            }
+
+           
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
@@ -161,7 +184,7 @@
             var orgNo = GetQueryString("OrgNo");
 
             //删除,该组织下已经保存的岗位.
-            var sql = "DELETE FROM WF_NodeDept WHERE FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
+            var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "')";
             DBAccess.RunSQL(sql);
 
             //获取复选框选中的节点
@@ -174,7 +197,9 @@
                 en.Insert();
 
             }
-            window.close();
+            parent.location.reload(); 
+            //self.opener.location.reload(); 
+            //window.opener.document.location.reload();
         }
 
     </script>

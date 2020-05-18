@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>切换用户</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        //参数.
+        var flowNo = GetQueryString("FK_Flow");
+        var workID = GetQueryString("WorkID");
+        var adminer = GetQueryString("Adminer");
+        var SID = GetQueryString("SID");
+
+        //页面启动函数.
+        $(function () {
+
+            // 初始化页面
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("Adminer", adminer);
+            handler.AddPara("SID", SID);
+            handler.AddPara("FK_Flow", flowNo);
+
+            var data = handler.DoMethodReturnString("DBInfo_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var data = ToJson(data);
+            var gwf = data["WF_GenerWorkFlow"][0]; //流程引擎控制表.
+            var gwls = data["WF_GenerWorkerList"]; //工作人员列表.
+            var track = data["Track"]; //日志表..
+            var ndrpt = data["NDRpt"][0]; //流程数据表..
+
+            // **************************************** gwf 流程引擎控制表 ************************
+
+            //。
+            var html = "<table width='980px'>";
+            html += "<caption>流程引擎控制表</caption>";
+            html += "<tr>";
+
+            // 输出列名
+            for (var m in gwf) {
+                html += "<th>" + m + "</th>";
+            }
+            html += "</tr>";
+
+            // 输出列值
+            html += "<tr>";
+            for (var m in gwf) {
+                html += "<td nowarp=true>" + gwf[m] + "</td>";
+            }
+            html += "</tr>";
+
+            $("#GenerWorkFlow").html(html);
+
+            // **************************************** gwls 输出工作人员列表 ************************
+            var html = "<table width='1300px'>";
+            html += "<caption>工作人员列表</caption>";
+            html += "<tr>";
+            // 输出列名
+            for (var m in gwls[0]) {
+                html += "<th>" + m + "</th>";
+            }
+            html += "</tr>";
+
+            // 输出列值
+            var arr = Object.keys(gwls);
+
+            for (var n = 0; n < arr.length; n++) {
+                html += "<tr>";
+                for (var m in gwls[n]) { html += "<td>" + gwls[n][m] + "</td>"; }
+                html += "</tr>";
+            }
+            $("#GenerWorkerList").html(html);
+
+
+
+            // **************************************** Track列表 ************************
+            var html = "<table  width='980px'>";
+            html += "<caption>Track列表</caption>";
+            html += "<tr>";
+
+            // 输出列名
+            for (var m in track[0])
+            {
+                html += "<th>" + m + "</th>";
+            }
+            html += "</tr>";
+
+            // 输出列值
+            var arr = Object.keys(track);
+
+            html += "<tr>";
+            for (var m in track[0]) {
+                if (m == "FrmDB")
+                {
+                    track[0][m] = "...";
+                }
+
+                html += "<td>" + track[0][m] + "</td>";
+            }
+            html += "</tr>";
+
+            $("#Track").html(html);
+
+
+            // **************************************** NDxxxRpt 流程数据表  ************************
+            var html = "<table width='980px'>";
+            html += "<caption>流程数据表</caption>";
+            html += "<tr>";
+
+            // 输出列名
+            for (var m in ndrpt) { html += "<th>" + m + "</th>"; }
+            html += "</tr>";
+
+            // 输出列值
+            var arr = Object.keys(ndrpt);
+
+            html += "<tr>";
+            for (var m in ndrpt) {
+                html += "<td>" + ndrpt[m] + "</td>";
+            }
+            html += "</tr>";
+            $("#NDxxRpt").html(html);
+
+        });
+
+
+    </script>
+</head>
+<body>
+
+    <h2>数据库信息 </h2>
+
+    <fieldset>
+        <legend>流程引擎控制表</legend>
+        <div id="GenerWorkFlow"></div>
+    </fieldset>
+
+    <fieldset>
+        <legend> 工作人员列表</legend>
+        <div id="GenerWorkerList"></div>
+    </fieldset>
+
+    <fieldset>
+        <legend> 日志表</legend>
+        <div id="Track"></div>
+    </fieldset>
+
+
+    <fieldset>
+        <legend> 流程数据表</legend>
+        <div id="NDxxRpt"></div>
+    </fieldset>
+
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>单据打印样本</title>
+    <!-- 于庆海 -->
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+            var nodeID = GetQueryString("FK_Node");
+            var frmID = GetQueryString("FrmID");
+            var ens = new Entities("BP.WF.Template.BillTemplate2019s");
+            ens.Retrieve("MyFrmID", frmID);
+
+            var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+            var urlWS = local + "/WF/CCForm/CCFormAPI.asmx";
+            //生成列表.
+            //增加处理.
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                var newRow = "";
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + en.No + "</td>";
+                newRow += "<td><a href='wordform://-fromccflow,App=BillTemplateWordDesigner,BillNo=" + en.No + ",FrmID=" + en.MyFrmID + ",WSUrl="+urlWS+"' >" + en.Name + "</a></td>";
+                newRow += "<td>" + en.TemplateFileModelText + "</td>";
+                newRow += "<td>" + en.QRModelText + "</td>";
+
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + en.No + "')\"><img src='" + basePath + "/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+        }
+
+        function Delete(no) {
+
+            if (window.confirm('您确定要删除[' + no + ']吗？') == false)
+                return;
+            var en = new Entity("BP.WF.Template.BillTemplate2019");
+            en.SetPKVal(no);
+            en.Delete();
+            window.location.href = window.location.href;
+        }
+
+
+        function New() {
+            var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.BillTemplate2019&MyFrmID=" + GetQueryString("FK_MapData");
+            WinOpen(url);
+        }
+        //选择文件名自动填充模板名称和模板文件格式
+        function show() {
+            //上传文件名自动显示到模板名称中
+            var path = document.getElementById("bill").value;
+            var pos1 = path.lastIndexOf("\\");
+            var pos2 = path.lastIndexOf(".");
+            var TB_Name = path.substring(pos1 + 1, pos2);
+            document.getElementById("TB_Name").value = TB_Name;
+            //模板文件格式显示对应格式
+            var hz = path.substr(pos2 + 1, 4).toLowerCase();
+            if (hz == "rtf") {
+                $("#DDL_TemplateFileModel").val(0);
+            } else if (hz == "doc" || hz == "docx") {
+                $("#DDL_TemplateFileModel").val(1);
+            } else if (hz == "xls" || hz == "xlsx") {
+                $("#DDL_TemplateFileModel").val(2);
+            } else {
+                alert("格式不正确！");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div style="margin: 8px;">
+        <form id="cc" enctype="multipart/form-data" method="post">
+            <table style="width: 100%;" id="Table1">
+                <caption>
+                    单据模版列表  <a href="javascript:New();">+新建</a>
+                </caption>
+                <tr>
+                    <th style="width: 3%;">
+                        序
+                    </th>
+                    <th style="width: 10%;">
+                        编号
+                    </th>
+                    <th>
+                        名称
+                    </th>
+                    <th>模版类型</th>
+                    <th>
+                        二维码生成方式
+                    </th>
+                    <th style="width: 8%;">
+                        操作
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

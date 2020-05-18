@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -13,70 +13,71 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <script  type="text/javascript">
-        //初始化页面
-        $(function () {
-            InitBar(DeliveryWay.ByBindEmp);
-            var ens = new Entities("BP.WF.Template.NodeEmps");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-
-            var html = "<ul>";
-            var idx = 0;
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_EmpText + "</li>";
-            }
-            if (ens.length == 0)
-                html += "<li>未绑定</li>";
-
-            html += "</ul>";
-            document.getElementById("emp").innerHTML = html;
-
-        });
-
-        //弹出新窗体
-        function OpenDialog() {
-
-            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeEmps&Dot2DotEnName=BP.WF.Template.NodeEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
-
-            OpenEasyUiDialogExt(url, '设置人员', 800, 500, true);
-
-        }
-        function Save() {
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByBindEmp;
-            node.Update();
-
-        }
-    </script>
+    <script src="../../../Scripts/vue.js"></script>
 </head>
 
 <body>
-    <div id="bar"> </div>
+    <div id="App">
+        <div id="bar"> </div>
 
-    <fieldset>
-        <legend>设置</legend>
-        <ul>
-            <li>
-                <a href="javascript:OpenDialog()">设置/更改处理人</a>
-            </li>
-            <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
-            <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
-            <li> 适用于当前节点人员比较稳定，一般不会变化的情况。</li>
-            <li> 如果人员变化比较频繁，就需要设置岗位，让岗位设置人员。</li>
-        </ul>
-    </fieldset>
+        <fieldset>
+            <legend>设置</legend>
+            <ul>
+                <li>
+                    <a href="javascript:void(0)" @click="OpenDialog()">设置/更改处理人</a>
+                </li>
+                <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
+                <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
+                <li> 适用于当前节点人员比较稳定，一般不会变化的情况。</li>
+                <li> 如果人员变化比较频繁，就需要设置岗位，让岗位设置人员。</li>
+            </ul>
+        </fieldset>
 
-    <fieldset>
-        <legend>绑定的人员</legend>
-        <div id="emp"> </div>
-    </fieldset>
-     
+        <fieldset>
+            <legend>绑定的人员</legend>
+            <div id="emp">
+                <ul>
+                    <li v-show="emps.length===0">未设置</li>
+                    <template v-for="emp in emps">
+                        <li v-if="emp.FK_EmpText!=undefined">{{emp.FK_EmpText}}</li>
+                    </template>
+                </ul>
 
+            </div>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                emps: [],
+                deliverWay:DeliveryWay.ByBindEmp
+            },
+            methods: {
+                OpenDialog: function () {
+
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeEmps&Dot2DotEnName=BP.WF.Template.NodeEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
+                    OpenEasyUiDialogExtCloseFunc(url, '设置人员', 800, 500, function () {
+                        Baseinfo.emps = getEmps();
+                    });
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.emps = getEmps();
+            }
+        });
+      
+        //保存
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
 </body>
 </html>

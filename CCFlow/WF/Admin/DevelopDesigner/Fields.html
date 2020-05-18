@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>字段</title>
+    <!--引入jquery-->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <!--引入bootstrap-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--引入easyui-->
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js"></script>
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+
+    <!--引入通用的JS-->
+    <script src="../../Scripts/QueryString.js"></script>
+    <script src="../../Scripts/config.js"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="js/ueditor/dialogs/internal.js"></script>
+    <script src="DialogCtr/Public.js"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
+</head>
+<body>
+
+    <center>
+        <table id="App" style="width:90%;" class="table mt-3">
+            <tr>
+                <th>序</th>
+                <th>字段</th>
+                <th>英文名</th>
+                <th>类型</th>
+                <th colspan="3">操作1</th>
+            </tr>
+
+            <tr v-for="(value,index) in delData">
+                <td>{{index+1}}</td>
+                <td>{{value.KeyOfEn}}</td>
+                <td>{{value.Name}}</td>
+                <td>{{value.contralType}}</td>
+                <td> <a href="#" @click="Edit(value.MyPK);">编辑</a></td>
+                <td> <a href="#" @click="Insert(value.MyPK);">插入</a></td>
+                <td> <a href="#" @click="Delete(value.MyPK);">删除</a></td>
+            </tr>
+        </table>
+    </center>
+
+    <script type="text/javascript">
+
+
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                //listData: [],
+                delData: []
+            },
+            created() {
+                this.delData =  InitData();
+
+                
+            },
+            methods: {
+                Edit: function (myPK) {
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    if (attr.LGType == 0 && attr.UIContralType == 1) {
+                        EditTableSQL(attr.MyPK, attr.KeyOfEn);
+                    }
+
+                    if (attr.LGType == 0) {
+                        Edit(attr.MyPK, attr.MyDataType, attr.GroupID, attr.FK_MapData, attr.UIContralType);
+                    }
+
+                    if (attr.LGType == 1) {
+                        EditEnum(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
+                    }
+                    if (attr.LGType == 2) {
+                        EditTable(attr.FK_MapData, attr.MyPK, attr.KeyOfEn);
+                    }
+                },
+                Insert: function (myPK) {
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    InsertHtmlToEditor(GetDataType(attr), attr.KeyOfEn, attr.Name, attr.UIBindKey, attr);
+                    dialog.close(true);
+                },
+                Delete: function (myPK) {
+                    if (window.confirm('您确定要删除吗?') == false)
+                        return;
+
+                     var attr = new Entity("BP.Sys.MapAttr", myPK);
+                     attr.Delete();
+                     alert('删除成功,需要手工刷新');
+                     window.location.href = window.location.href;
+                }
+            }
+        })
+
+        function InitData() {
+            var frmID = GetQueryString("FrmID");
+            var mapData = new Entity("BP.Sys.MapData", frmID);
+            var ens = new Entities("BP.Sys.MapAttrs");
+            ens.Retrieve("FK_MapData", frmID, "Idx");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+            handler.AddPara("FrmID", frmID);
+            var html = handler.DoMethodReturnString("Fields_Init");
+
+            var list = ens.GetEns();
+            var deldate = [];
+            var fields = "";
+            if (mapData.EntityType == 0)
+                fields = "OID,RDT.FID";
+            else
+             fields ="BillNo,Title,AtPara,BillState,RDT,Starter,StarterName,FK_Dept,OrgNo,OID"
+            list.data.map(function (item, index) {
+                if (fields.indexOf(item.KeyOfEn)==-1 && item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) ) {
+                    item.contralType = GetFieldType(item);
+                    deldate.push(item);
+                }
+            });
+            return deldate;
+               
+        }
+        
+        function GetFieldType(mapAttr) {
+
+            if (mapAttr.UIContralType == 0) {
+                //控件数据类型
+                if (mapAttr.MyDataType == "1") {
+                    return "文本框 String";
+                } else if (mapAttr.MyDataType == "2") {
+                    return "文本框 Int";
+                } else if (mapAttr.MyDataType == "3") {
+                    return "文本框 Float";
+                } else if (mapAttr.MyDataType == "4") {
+                    return "文本框 Boolean";
+                } else if (mapAttr.MyDataType == "5") {
+                    return "文本框 Double";
+                } else if (mapAttr.MyDataType == "6") {
+                    return "文本框 Date";
+                } else if (mapAttr.MyDataType == "7") {
+                    return "文本框 DateTime";
+                } else if (mapAttr.MyDataType == "8") {
+                    return "文本框 Money";
+                }
+            } else if (mapAttr.UIContralType == 1) {
+                //枚举下拉框
+                if (mapAttr.LGType == 1) {
+                    return "枚举下拉框";
+                } //外键下拉框
+                else if (mapAttr.LGType == 2) {
+                    return "外键下拉框";
+                }
+                //外部数据源
+                else if (mapAttr.LGType == 0) {
+                    return "外部数据源";
+                }
+            } else if (mapAttr.UIContralType == 2) {//复选框
+                if (mapAttr.MyDataType == "1")
+                    return "枚举多选框";
+                return "复选框";
+            } else if (mapAttr.UIContralType == 3) {//单选框
+                return "枚举单选按钮";
+            }
+            if (mapAttr.MyDataType == 1) {
+                if (mapAttr.UIContralType == 8)//手写签字版
+                    return "手写签字版";
+                if (mapAttr.UIContralType == 11)//图片
+                    return "图片";
+                if (mapAttr.UIContralType == 4)//地图
+                    return "地图";
+                if (mapAttr.UIContralType == 101)//评分
+                    return "评分";
+                if (mapAttr.UIContralType == 14)//签批组件
+                    return "签批组件";
+                if (mapAttr.UIContralType == 15)//评论组件
+                    return "评论组件";
+                if (mapAttr.UIContralType == 16)//系统定位
+                    return "系统定位";
+                if (mapAttr.UIContralType == 17)//公文字号
+                    return "公文字号";
+            }
+            return "其他类型";
+        }
+
+        function Edit(mypk, ftype, gf, fk_mapdata, uiContralType) {
+
+            var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + fk_mapdata + '&GroupField=' + gf;
+            var title = '';
+            if (ftype == 1) {
+
+
+                if (uiContralType == 0) {
+                    title = '字段String属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 9) {
+                    title = '字段String超连接';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 8) {
+                    title = '手写签名版';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 6) {
+                    title = '附件组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 11) {
+
+                    debugger;
+                    var imgEn = new Entity("BP.Sys.FrmUI.ExtImg");
+                    imgEn.SetPKVal(mypk);
+
+                    if (imgEn.RetrieveFromDBSources() == 0) {
+                        var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+
+                        imgEn.CopyJSON(mapAttr);
+                        imgEn.MyPK = mypk;
+                        imgEn.Insert();
+                    }
+
+                    title = '装饰类图片属性';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 8) {
+                    title = '书写签字版';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 4) {
+                    title = '地图';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 50) {
+                    title = '流程进度图';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 101) {
+                    title = '评分控件';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 14) {
+                    title = '签批组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 15) {
+                    title = '评论组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFlowBBS&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 16) {
+                    title = '系统定位组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                }
+                if (uiContralType == 17) {
+                    title = '公文字号属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+            }
+
+            if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
+                title = '字段Num属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 date 属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 6 || ftype == 7) {
+                title = '字段 datetime 属性';
+
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            if (ftype == 4) {
+                title = '字段 boolen 属性';
+                url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
+            }
+
+            OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
+                 Baseinfo.delData =  InitData();
+            });
+           
+            return;
+        }
+
+        function EditEnum(fk_mapdata, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTableSQL(mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function EditTable(fk_mapData, mypk, keyOfEn) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
+
+            OpenEasyUiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+
+
+
+    </script>
+
+
+</body>
+</html>

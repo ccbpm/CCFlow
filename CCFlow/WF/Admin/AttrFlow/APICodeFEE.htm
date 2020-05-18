@@ -3,19 +3,20 @@
 <head runat="server">
     <meta charset="UTF-8" />
     <title>自定义事件代码生成</title>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
     <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
     <script language="javascript" type="text/javascript">
         //初始化页面函数.....
         $(function () {
@@ -33,11 +34,18 @@
 
     </script>
 </head>
-<body class="easyui-layout" data-options="border:false">
+<body >
     <form id="form1" runat="server">
-    <div data-options="region:'center',border:false,title:'自定义事件代码生成'," style="padding: 5px">
-        <div id="Msg" />
-    </div>
+        <h3><img style="vertical-align:middle" src='../../Img/Event.png' />自定义事件代码生成 </h3>
+
+        <fieldset>
+            <legend>
+               &nbsp;
+            </legend>
+            <div id="Msg"></div>
+        </fieldset>
+
+
     </form>
 </body>
 </html>

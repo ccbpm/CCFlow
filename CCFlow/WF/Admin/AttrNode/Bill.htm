@@ -149,91 +149,97 @@
 <body>
     <div style="margin: 8px;">
         <form id="cc" enctype="multipart/form-data" method="post">
-        <table style="width: 100%;">
-            <caption>
-                单据模版</caption>
-            <tr>
-              <td>模版文件: </td>
-                <td> <input id="bill" type="file" name="bill" style="width: 60%;" onchange="show()"/></td>
-                <td style="width: 15%;">模版名称 </td>
-                <td>
-                    <input type="text" id="TB_Name" name="TB_Name" style="width: 80%; " />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    生成的文件类型
-                </td>
-                <td>
-                    <select id="DDL_BillFileType" name="DDL_BillFileType" style="width: 60%;" />
-                </td>
-                <td>打开方式</td>
-                <td>
-                   <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" style="width: 60%;" >
-                        <option value="0">下载到本地 </option>
-                        <option value="1">在线打开</option>
-                    </select>
-                     
-                </td>
-            </tr>
-            <tr>
-                <td>是否加载二维码</td>
-                <td>
-                    <select id="DDL_QRModel" name="DDL_QRModel" style="width: 60%;">
-                        <option value="0">不加载二维码 </option>
-                        <option value="1">加载二维码 </option>
-                    </select>
-                </td>
-
-                 <td>模版文件格式</td>
-             <td> 
-                <select id="DDL_TemplateFileModel" name="DDL_TemplateFileModel" style="width: 60%;">
-                        <option value="0">rtf格式的模版 </option>
-                        <option value="1">vsto格式word模版</option>
-                        <!--<option value="2">vsto格式Excel模版</option>-->
-                    </select>
-             </td>
-              
-            </tr>
-
-          
-
-            <tr>
-                <td>
-                </td>
-                <td colspan="3">
+            <div style="right:10px; position:absolute; z-index:100; ">
+                
                     <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-                 <!--   <input type="button" id="Btn_New" runat="server" value="新建" onclick="Btn_New_Click()" />-->
-                </td>
-            </tr>
-        </table>
-        <br />
-        <table style="width: 100%;" id="Table1">
-            <caption>
-                单据模版列表
-            </caption>
-            <tr>
-                <th style="width: 3%;">
-                    序
-                </th>
-                <th style="width: 10%;">
-                    编号
-                </th>
-                <th>
-                    名称
-                </th>
-                   <th>模版类型</th>
-                <th>
-                    二维码生成方式
-                </th>
-                <th style="width: 50%;">
-                    路径
-                </th>
-                <th style="width: 8%;">
-                    操作
-                </th>
-            </tr>
-        </table>
+ 
+            </div>
+            <table style="width: 100%;">
+                <caption>
+                    单据模版
+                </caption>
+                <tr>
+                    <td>模版文件: </td>
+                    <td> <input id="bill" type="file" name="bill" style="width: 60%; background-color:white" onchange="show()" /></td>
+                    <td style="width: 15%;">模版名称 </td>
+                    <td>
+                        <input type="text" id="TB_Name" name="TB_Name" style="width: 80%; " />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        生成的文件类型
+                    </td>
+                    <td>
+                        <select id="DDL_BillFileType" name="DDL_BillFileType" style="width: 60%;" />
+                    </td>
+                    <td>打开方式</td>
+                    <td>
+                        <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" style="width: 60%;">
+                            <option value="0">下载到本地 </option>
+                            <option value="1">在线打开</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否加载二维码</td>
+                    <td>
+                        <select id="DDL_QRModel" name="DDL_QRModel" style="width: 60%;">
+                            <option value="0">不加载二维码 </option>
+                            <option value="1">加载二维码 </option>
+                        </select>
+                    </td>
+
+                    <td>模版文件格式</td>
+                    <td>
+                        <select id="DDL_TemplateFileModel" name="DDL_TemplateFileModel" style="width: 60%;">
+                            <option value="0">rtf格式的模版 </option>
+                            <option value="1">vsto格式word模版</option>
+                            <!--<option value="2">vsto格式Excel模版</option>-->
+                        </select>
+                    </td>
+
+                </tr>
+
+
+
+                <tr>
+                    <td>
+                    </td>
+                    <td colspan="3">
+                        
+                        <!--   <input type="button" id="Btn_New" runat="server" value="新建" onclick="Btn_New_Click()" />-->
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table style="width: 100%;" id="Table1">
+                <caption>
+                    单据模版列表
+                </caption>
+                <tr>
+                    <th style="width: 3%;">
+                        序
+                    </th>
+                    <th style="width: 10%;">
+                        编号
+                    </th>
+                    <th>
+                        名称
+                    </th>
+                    <th>模版类型</th>
+                    <th>
+                        二维码生成方式
+                    </th>
+                    <th style="width: 50%;">
+                        路径
+                    </th>
+                    <th style="width: 8%;">
+                        操作
+                    </th>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

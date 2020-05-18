@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,28 +14,36 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <script  type="text/javascript">
-        $(function () {
-            InitBar(DeliveryWay.ByStarter);
-        });
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.ByStarter;
-           node.Update();
-       }
-    </script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
 </head>
-<body >
-
-<div id="bar"> </div>
-<fieldset>
-<legend id="help">说明</legend>
-    <ul>
-        <li >当前节点的处理人与开始节点一致，发起人是 zhangsan,现在节点的处理人也是zhangsan。</li>
-        <li >多用于反馈给申请人节点，通知申请人审批审核结果，此工作已经审核审批完毕。</li>
-    </ul>
-</fieldset>
-</body>
-</html>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>当前节点的处理人与开始节点一致，发起人是 zhangsan,现在节点的处理人也是zhangsan。</li>
+                <li>多用于反馈给申请人节点，通知申请人审批审核结果，此工作已经审核审批完毕。</li>
+            </ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.ByStarter
+            },
+            created() {
+                InitBar(this.deliverWay);
+            }
+        });
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
+</body >
+</html >

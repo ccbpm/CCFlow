@@ -4,11 +4,11 @@
     <title>属性</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
 
         //页面启动函数.
         $(function () {
@@ -36,35 +36,42 @@
 
 
 </head>
-<body  >
+<body>
 
-<form id="cc">
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type=button value="保存" onclick="Save()" />
+        </div>
+        <table style="width:100%;">
+            <caption>表单body属性</caption>
+            <tr>
+                <td>
 
-
-
-<table style="width:100%;">
-<caption>表单body属性</caption>
-<tr>
-<td> 
-
-<textarea id="TB_Attr" name="TB_Attr" rows="15" >
+<textarea id="TB_Attr" name="TB_Attr" style="width:98%;" rows="10">
 </textarea>
-     
-    </td>
-</tr>
 
-<tr>
-<td> 
+                </td>
+            </tr>
 
-<input type=button value="保存"  onclick="Save()" />
+            <tr>
+                <td>
 
-    </td>
-</tr>
+                   <fieldset>
+                       <label>帮助</label>
+                       <ul>
+                           <li>该配置，会被动态的加载到表单解析器里。</li>
+                           <li>您可以在这里增加样式，script 等属性</li>
+                       </ul>
+                   </fieldset>
+                    
 
-</table>
-  
+                </td>
+            </tr>
 
-</form>
+        </table>
+
+
+    </form>
 
 </body>
 </html>

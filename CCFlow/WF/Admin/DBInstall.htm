@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>驰骋工作流程引擎-系统安装</title>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -28,21 +28,9 @@
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
             var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
-
             if (data.indexOf('err@') == 0) {
-
                 var html = "安装准备失败:";
-
                 html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >修改数据库配置信息.</a>";
-
-                //                html += "<ul style='text-align:left'>";
-                //                html += "<li>准备一个空白的数据库.</li>";
-                //                html += "<li>配置数据库连接.</li>";
-                //                html += "<li>.net版本请打开 web.config 的 AppCenterDSN 节点, 配置数据库类型与连接字符串. </li>";
-                //                html += "<li>java版本请打开 \\jflow-web\\src\\main\\resources\\jflow.properties 文件, AppCenterDSN 配置项,修改相应的配置信息. </li>";
-                //                html += "<li>python版本在开发中. </li>";
-                //                html += "</ul>";
-
                 $("#Msg").html(html + "<font color=red><br>" + data + "</font> .");
                 return;
             }
@@ -82,7 +70,13 @@
                 return;
             }
 
-            if (confirm('将要安装您确认吗？') == false)
+            var info = "";
+            info += " 安装即将进行，如下几个问题，需要确认：";
+            info += "\t\n 1. 您必须遵守GPL开源协议，点击确定就表明您已经理解了GPL协议内容。";
+            info += "\t\n 2. 如果您需要商务评估，请联系我们 http://ccflow.org 。";
+            info += "\t\n 3. 您配置的连接数据库的用户必须是管理员权限，因为系统会创建删除：表、视图、索引、主键、以及数据的权限.";
+
+            if (confirm(info) == false)
                 return;
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在安装，请稍候....</font>");
@@ -106,9 +100,9 @@
                 return;
             }
 
-            document.getElementById("Btn_Submit").value = '安装完成';
+            document.getElementById("Btn_Submit").value = '祝贺你,安装完成';
 
-            $("#Msg").html("<font color=green>" + data + "</font>");
+            $("#Msg").html("<font color=green><h3>" + data + "</h3></font>");
         }
 
         //公共方法
@@ -140,122 +134,145 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-    <center>
-        <table style="text-align: center; width: 600px">
-            <tr>
-                <td>
-                    <div style='float: left'>
-                        <img src='../../DataUser/ICON/LogBiger.png' width="300px" border="0px" alt="ccbpm" />
-                    </div>
-                    <div style='float: right'>
-                        <img src='../Img/ccflowWX.jpg' width="110px" border="0px" alt="微信" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    需要帮助？
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    购买ccbpm的技术支持，请联系我们: 0531-82374939,18660153393(微信同号) . 自助服务http://ccbpm.mydoc.io
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    当前数据库安装类型, <a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target="_blank">修改数据库配置信息.</a>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <input id="RB_DBType_MSSQL" type="radio" disabled="false" name="RB_DBType" value="MSSQL" /><label
-                        for="RB_DBType_MSSQL">SQLServer2000,2005,2008 .... 系列版本</label>
-                    <br />
-                    <input id="RB_DBType_Oracle" type="radio" disabled="false" name="RB_DBType" value="Oracle" /><label
-                        for="RB_DBType_Oracle">Oracle,Oracle9i,10g ... 系列版本</label>
-                    <br />
-                    <input id="RB_DBType_MySQL" type="radio" disabled="false" name="RB_DBType" value="MySQL" /><label
-                        for="RB_DBType_MySQL">MySQL系列版本</label>
-                    <br />
-                    <input id="RB_DBType_Informix" type="radio" disabled="false" name="RB_DBType" value="Informix" /><label
-                        for="RB_DBType_Informix">Informix 系列版本(首先需要执行:D:\\ccflow\\trunk\\CCFlow\\WF\\Data\\Install\\Informix.sql)</label>
-                    <br />
-                    <input id="RB_DBType_PostgreSQL" type="radio" disabled="false" name="RB_DBType" value="PostgreSQL" /><label
-                        for="RB_DBType_PostgreSQL">PostgreSQL</label>
-                    <br />
-                </td>
-            </tr>
-            <!--
-<tr>
-<th>组织结构的运行模式,我们已经不再提供对OneOne的模式支持.</th>
-</tr>
-
-<tr>
-<td>
-<input id="RB_OSModel_1" type="radio" name="RB_OSModel" disabled="false"  value="1" checked=true  /><label for="RB_OSModel_1">OneMore一个人多部门多岗位</label>
-</td>
-</tr>-->
-            <tr>
-                <th>
-                    是否安装GPM系统?.
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <input id="RB_OSRunModel_0" type="radio" name="RB_OSRunModel" value="0" checked="true" /><b>中间件模式:</b>我想集成我自己的开发框架,集成自己的组织结构,仅仅想使用流程引擎与表单引擎.</label>
-                    <br />
-                    <label>
-                        <input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel" value="1" /><b>BPM模式:</b>我想让ccbpm为我提供组织结构管理、菜单,权限组管理.</label>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    装载演示流程模版
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <input id="RB_DemoType_0" type="radio" name="DemoType" value="0" /><label for="RB_DemoType_0">我是技术人员，我安装技术类的设计演示模版.(估计在<font
-                        color="red">8-15分钟</font>内安装完成)。</label>
-                    <br />
-                    <!--<input id="RB_DemoType_1" type="radio" name="DemoType" value="1"  /><label for="RB_DemoType_1">我是业务人员，我想了解与使用常用的业务流程(估计在<font color=red>5-13分钟</font>内安装完成)。</label>
-<br />
--->
-                    <input id="RB_DemoType_2" type="radio" name="DemoType" value="2" checked="checked" /><label
-                        for="RB_DemoType_2">否:不安装demo，仅仅安装空白的ccbpm环境(估计在<font color="red">2-3分钟</font>内安装完成)。</label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div style="text-align: left">
-                        <div id="shuoming">
+        <center>
+            <table style="text-align: center; width: 600px">
+                <tr>
+                    <td>
+                        <div style='float: left'>
+                            <img src='../../DataUser/ICON/LogBiger.png' width="300px" border="0px" alt="ccbpm" />
                         </div>
-                        <input type="button" value="接受ccbpm的GPL开源协议并执行安装" id="Btn_Submit" onclick="DoInstall()" />
-                        <a href="https://baike.baidu.com/item/GPL/2357903?fr=aladdin" target="_blank">什么是GPL开源协议?</a>
-                    </div>
-                    <div style="text-align: right; font-style-color: green">
-                        当前小版本号：<div id="Ver" />
-                        脚本下载http://140.143.236.168:7080/svn/CCBPMDOCS/InstallDataBaseScript 用户名/密码:ccbpm
+                        <div style='float: right'>
+                            <img src='../Img/ccflowWX.jpg' width="110px" border="0px" alt="微信" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        需要帮助？
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>购买ccbpm的技术支持，请联系我们: 0531-82374939,18660153393(微信同号).</li>
+                            <li>自助服务请下载文档 http://ccflow.org/docs/</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        当前数据库安装类型, <a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target="_blank">修改数据库配置信息.</a>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="RB_DBType_MSSQL" type="radio" disabled="false" name="RB_DBType" value="MSSQL" /><label for="RB_DBType_MSSQL">SQLServer2000,2005,2008 .... 系列版本</label>
                         <br />
-                    </div>
-                    <center>
-                        <div id="Msg" />
-                    </center>
-                    <!--
-<fieldset>
-<legend>如果自动安装失败请到群里下载脚本文件</legend>
+                        <input id="RB_DBType_Oracle" type="radio" disabled="false" name="RB_DBType" value="Oracle" /><label for="RB_DBType_Oracle">Oracle,Oracle9i,10g ... 系列版本</label>
+                        <br />
+                        <input id="RB_DBType_DM" type="radio" disabled="false" name="RB_DBType" value="DM" /><label for="RB_DBType_DM">Dameng 7.6+ 系列版本</label>
+                        <br />
+                        <input id="RB_DBType_MySQL" type="radio" disabled="false" name="RB_DBType" value="MySQL" /><label for="RB_DBType_MySQL">MySQL系列版本</label>
+                        <br />
+                        <input id="RB_DBType_Informix" type="radio" disabled="false" name="RB_DBType" value="Informix" /><label for="RB_DBType_Informix">Informix 系列版本(首先需要执行:D:\\ccflow\\trunk\\CCFlow\\WF\\Data\\Install\\Informix.sql)</label>
+                        <br />
+                        <input id="RB_DBType_PostgreSQL" type="radio" disabled="false" name="RB_DBType" value="PostgreSQL" /><label for="RB_DBType_PostgreSQL">PostgreSQL</label>
+                        <br />
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                <th>组织结构的运行模式,我们已经不再提供对OneOne的模式支持.</th>
+                </tr>
 
-<ul>
-<li>百度云网盘下载数据库文件: </li>
-<li><a href="https://pan.baidu.com/s/1NlH9ntNUva5t8wio80yGrg" target=_blank>下载sql脚本</a> </li>
-</ul>
-</fieldset>-->
+                <tr>
+                <td>
+                <input id="RB_OSModel_1" type="radio" name="RB_OSModel" disabled="false"  value="1" checked=true  /><label for="RB_OSModel_1">OneMore一个人多部门多岗位</label>
                 </td>
-            </tr>
-        </table>
-    </center>
+                </tr>-->
+                <tr>
+                    <th>
+                        是否安装GPM系统?.
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input id="RB_OSRunModel_0" type="radio" name="RB_OSRunModel" value="0" checked="true" /><b>中间件模式:</b>我想集成我自己的开发框架,集成自己的组织结构,仅仅想使用流程引擎与表单引擎.
+                        </label>
+                        <br />
+                        <label>
+                            <input id="RB_OSRunModel_1" type="radio" name="RB_OSRunModel" value="1" /><b>BPM模式:</b>我想让ccbpm为我提供组织结构管理、菜单,权限组管理.
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        装载演示流程模版
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <!--<input id="RB_DemoType_0" type="radio" name="DemoType" value="0"  /><label for="RB_DemoType_0">我是技术人员，我安装技术类的设计演示模版.(估计在<font
+                            color="red">8-15分钟</font>内安装完成)。</label>
+                        <br />-->
+                        <!--<input id="RB_DemoType_1" type="radio" name="DemoType" value="1"  /><label for="RB_DemoType_1">我是业务人员，我想了解与使用常用的业务流程(估计在<font color=red>5-13分钟</font>内安装完成)。</label>
+                        <br />
+                        -->
+                        <input id="RB_DemoType_2" type="radio" name="DemoType" value="2" checked="checked" /><label for="RB_DemoType_2">否:不安装demo，仅仅安装空白的ccbpm环境(估计在<font color="red">2-3分钟</font>内安装完成)。</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
+                        ccbpm的运行模式？
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            <input id="RB_CCBOMRunModel_0" checked="checked" type="radio" disabled="false" name="CCBOMRunModel" value="0" checked="true" />
+                            单机版
+                        </label>
+                        <label>
+                            <input id="RB_CCBOMRunModel_1" type="radio" disabled="false" name="CCBOMRunModel" value="1" />集团版
+                        </label>
+
+                        <label>
+                            <input id="RB_CCBOMRunModel_1" type="radio" disabled="false" name="CCBOMRunModel" value="1" />SAAS版
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div style="text-align: left">
+                            <div id="shuoming">
+                            </div>
+                            <input type="button" value="接受ccbpm的GPL开源协议并执行安装" id="Btn_Submit" onclick="DoInstall()" />
+                            <a href="https://baike.baidu.com/item/GPL/2357903?fr=aladdin" target="_blank">什么是GPL开源协议?</a>
+                        </div>
+                        <div style="text-align: right; font-style-color: green">
+                            当前小版本号：<div id="Ver" />
+                            脚本下载http://140.143.236.168:7080/svn/CCBPMDOCS/InstallDataBaseScript 用户名/密码:ccbpm
+                            <br />
+                        </div>
+                        <center>
+                            <div id="Msg" />
+                        </center>
+                        <!--
+                        <fieldset>
+                        <legend>如果自动安装失败请到群里下载脚本文件</legend>
+
+                        <ul>
+                        <li>百度云网盘下载数据库文件: </li>
+                        <li><a href="https://pan.baidu.com/s/1NlH9ntNUva5t8wio80yGrg" target=_blank>下载sql脚本</a> </li>
+                        </ul>
+                        </fieldset>-->
+                    </td>
+                </tr>
+            </table>
+        </center>
     </form>
 </body>
 </html>

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script src="../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+        var fk_MapData = GetQueryString("FK_MapData");
+        var pkVal = GetQueryString("pkval");
+        function InitPage() {
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", fk_MapData, "Idx");
+
+            var colCount = 2;//每行显示几列
+            var t = 0;
+            var html = "";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                if (attr.KeyOfEn == "Title" || attr.KeyOfEn == "OID" || attr.KeyOfEn == "RDT" || attr.KeyOfEn == "FID"
+                    || attr.KeyOfEn == "CDT" || attr.KeyOfEn == "Rec" || attr.KeyOfEn == "Emps" || attr.KeyOfEn == "FK_Dept"
+                    || attr.KeyOfEn == "FK_NY" || attr.KeyOfEn == "MyNum" || attr.KeyOfEn == "AtPara" || attr.KeyOfEn == "BillState" || attr.KeyOfEn == "Starter" || attr.KeyOfEn == "StarterName") {
+                    continue;
+                }
+
+                html += "<td><input name='tempField' type=\"checkbox\" id=\"" + attr.KeyOfEn + "\" name=\"" + attr.KeyOfEn + "\" />" + attr.Name + "[" + attr.KeyOfEn + "]" + "</td>";
+                if ((t + 1) % colCount == 0) {
+                    $("#tb").append("<tr>" + html + "</tr>");
+                    html = "";
+                }
+                t += 1;
+            }
+            GetSelectedFields();
+        }
+
+        function GetSelectedFields() {
+            $("input[name='tempField']").attr("checked", false);
+            var doMethod = "GetSelectedFields";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $.ajax({
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkVal=" + pkVal,
+                async: false,
+                success: function (result, status, xhr) {
+                    if (result != "") {
+                        var fieldsList = result.split(',');
+                        for (var i = 0; i < fieldsList.length; i++) {
+                            $("#"+fieldsList[i]).prop("checked",true);
+                        }
+                    }
+                }
+            });
+        }
+        function save() {
+            var fieldList = new Array();
+            $("input[name='tempField']").each(function () {
+                if ($(this).is(":checked")) {
+                    fieldList.push($(this).attr('id'));
+                }
+            });
+
+            var jsonStr = fieldList.length == 0 ? "" : fieldList.toString();
+            var doMethod = "SetDocTempFields";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrNode";
+            $.ajax({
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&pkVal=" + pkVal +
+                    "&jsonStr=" + jsonStr,
+                async: false,
+                success: function (result, status, xhr) {
+                    alert(result);
+                    //if (data.indexOf('err@') == 0) {
+                    //    alert(result);
+                    //    return false;
+                    //} else {
+                    //    return true;
+                    //}
+                }
+            });
+        }
+    </script>
+    <base target="_self" />
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',border:false" style="padding:5px;height:auto;text-align:center;">
+        <table id="tb" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
+        </table>
+        <div style="margin:5px 7px 9px 0px">
+            <a class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:save()">保存</a>
+        </div>
+    </div>
+</body>
+</html>

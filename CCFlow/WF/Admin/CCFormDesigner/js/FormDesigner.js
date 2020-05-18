@@ -170,7 +170,7 @@ function ondbclickCallBackFun(figure) {
 
 //打开元素的属性窗口
 function showFigurePropertyWin(figure) {
-
+    
     var v = figure.CCForm_Shape;
     var shap = figure.CCForm_Shape;
 
@@ -273,7 +273,7 @@ function showFigurePropertyWin(figure) {
 
         //alert(CCForm_FK_MapData);
 
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&PKVal=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&PKVal=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片附件');
         return;
     }
@@ -286,7 +286,7 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'FrmCheck') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }
@@ -343,6 +343,7 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'Label') {
+        alert('请在右边查看该元素的属性,如果被遮挡您需要全屏打开该设计器进行设计.');
         $('#right').css('display', 'block');
         $('#container').css('right', 'auto');
         return;
@@ -670,7 +671,9 @@ function Conver_CCForm_V1ToV2() {
     //循环FrmRB
     for (var i in flow_Data.Sys_FrmRB) {
         var frmRb = flow_Data.Sys_FrmRB[i];
-        //if (i == 0) {
+        if (frmRb.AtPara != null && frmRb.AtPara != undefined && frmRb.AtPara.indexOf("@MyDataType=4") != -1)
+            continue;
+       
         var createdFigure = figure_Template_Rb(frmRb);
         //move it into position
         //createdFigure.transform(Matrix.translationMatrix(frmRb.X - createdFigure.rotationCoords[0].x, frmRb.Y - createdFigure.rotationCoords[0].y))

@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>常用字段</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            //查询出来数据.
+            var frmID = GetQueryString("FrmID");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var mypk = frmID + '_' + keyOfEn;
+            var mapattr = new Entity("BP.Sys.MapAttr", mypk);
+
+          //  if (mapattr.IsGener)
+
+
+        });
+
+        function Save() {
+
+            
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table style="width: 99%;">
+            <caption>设置常用字段 - 尚未完成</caption>
+            <tr>
+                <td >
+                    <div id="info"></div>
+                </td>
+            </tr>
+        </table>
+
+        <fieldset>
+            <legend>帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的 SQL或者数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>
+                    实例： <font color="green">
+                        SELECT  Name as MingCheng, Tel as DianHua, Email FROM WF_EMP WHERE No='@Key'
+                    </font>
+                </li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>

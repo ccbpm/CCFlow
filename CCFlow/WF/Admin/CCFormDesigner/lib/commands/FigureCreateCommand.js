@@ -575,7 +575,7 @@ FigureCreateCommand.prototype = {
     IsExist: function (MyPK) {
         var flag = false;
         for (f in STACK.figures) {
-            if (STACK.figures[f].CCForm_MyPK == MyPK) {
+            if (STACK.figures[f].CCForm_MyPK == MyPK || STACK.figures[f].CCForm_MyPK.indexOf("RB_" + MyPK + "_")!=-1) {
                 flag = true;
                 break;
             }

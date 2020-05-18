@@ -95,13 +95,15 @@
                 return;
             }
 
+			var myNode = new Entity("BP.WF.Node", nodeID);
             var en = new Entity("BP.WF.Template.SubFlowAuto");
-            console.log(en);
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowName = name;
             en.SubFlowType = 1;
+            en.FK_Flow = myNode.FK_Flow;
+
             var myen = en.Insert();
 
             window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=' + myen.MyPK;
@@ -124,6 +126,9 @@
             </th>
             <th>
                 名称
+            </th>
+            <th>
+                操作
             </th>
         </tr>
     </table>

@@ -85,6 +85,7 @@
 
             var nodeID = GetQueryString("FK_Node");
 
+
             var ens = new Entities("BP.WF.Template.SubFlowHands");
             ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo,"SubFlowType", 0);
 
@@ -93,13 +94,16 @@
                 return;
             }
 
+            var myNode = new Entity("BP.WF.Node", nodeID);
+
             var en = new Entity("BP.WF.Template.SubFlowHand");
-            console.log(en);
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowType = 0;
             en.SubFlowName = name;
+            en.FK_Flow = myNode.FK_Flow;
+
             var myen = en.Insert();
 
             window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=' + myen.MyPK;
@@ -122,6 +126,9 @@
             </th>
             <th>
                 名称
+            </th>
+            <th>
+                操作
             </th>
         </tr>
     </table>

@@ -39,9 +39,12 @@
                 alert('请选择一个实体类.');
                 return;
             }
- 
+            var name = $("#DDL_No").find("option:selected").text();
+           
             var en = new Entity("BP.Sys.SFTable");
             en.No = no;
+            if (name.indexOf("(树结构)") != -1)
+                en.CodeStruct = 1;
             en.SrcType = 0; //本地类.
             
             var i = en.Insert();

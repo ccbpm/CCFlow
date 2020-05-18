@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <!--<link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">-->
+    <!-- 引用外部的js -->
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js类库 -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+
+    <!-- 引用通用的ccbill的js类库 -->
+    <script src="CCBill.js"></script>
+    <script src="CCBillAdmin.js"></script>
+
+    <!-- ../Admin/Admin.js 这个js可以不引用 -->
+    <script src="../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var webUser = new WebUser();
+            if (webUser.No == null) {
+                Port_Login("admin");
+                 webUser = new WebUser();
+               // window.location.href = "./Portal/Login.htm?RefUrl=" + window.location.href;
+               // return;
+            }
+
+
+            //后台的操作.
+            BindAdmin();
+
+            //前端的操作
+            BindUser();
+
+        });
+
+        function BindAdmin() {
+
+            //获得所有的表单.
+            var bills = Admin_GenerAllBills();
+
+            $("#list").html("正在加载表单列表...");
+
+            var html = "<table>";
+            html += "<caption>CCBillAdmin.js方法 - 页面初始化的时候生成全部表单列表</caption>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>表单ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>展现模式</th>";
+            html += "<th>类型</th>";
+            html += "<th>存储表</th>";
+            html += "<th colspan=4>后台操作</th>";
+            //html += "<th colspan=2>移动</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < bills.length; i++) {
+
+                var bill = bills[i];
+
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td>" + bill.No + "</td>";
+                html += "<td>" + bill.Name + "</td>";
+                html += "<td>" + GetFrmType(bill.FrmType) + "</td>";
+                html += "<td>" + GetEntityType(bill.EntityType) + "</td>";
+                html += "<td>" + bill.PTable + "</td>";
+
+                html += "<td><a href=\"javascript:DeleteFrm('" + bill.No + "')\">删除模版</a></td>";
+                html += "<td><a href=\"javascript:DFrom('" + bill.No + "')\">设计表单</a></td>";
+                html += "<td><a href=\"javascript:FrmEntity('" + bill.No + "')\">模板属性</a></td>";
+
+                //html += "<td><a href=\"javascript:Delete('" + bill.No + "')\">授权给用户</a></td>";
+                //html += "<td><a href=\"javascript:Delete('" + bill.No + "')\">授权给角色</a></td>";
+
+                //html += "<td><a href=\"javascript:DoUp('" + bill.No + "')\">上移</a></td>";
+                //html += "<td><a href=\"javascript:DoDown('" + bill.No + "')\">下移</a></td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#list").html(html);
+        }
+
+        function BindUser() {
+
+            //获得所有的表单.
+            var bills = CCFrom_GenerFrmListOfCanOption();
+
+            $("#listMyFrms").html("正在加载表单列表...");
+
+            var html = "<table>";
+            html += "<caption>CCBill.js方法 - 绑定当前操作员可以操作的表单</caption>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>表单ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>展现模式</th>";
+            html += "<th>类型</th>";
+            html += "<th>存储表</th>";
+            html += "<th colspan=4>操作</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < bills.length; i++) {
+
+                var bill = bills[i];
+
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td>" + bill.No + "</td>";
+                html += "<td>" + bill.Name + "</td>";
+                html += "<td>" + GetFrmType(bill.FrmType) + "</td>";
+                html += "<td>" + GetEntityType(bill.EntityType) + "</td>";
+                html += "<td>" + bill.PTable + "</td>";
+
+                html += "<td><a href=\"javascript:OpenSearch('" + bill.No + "'," + bill.EntityType + ")\">打开查询</a></td>";
+                html += "<td><a href=\"javascript:NewEntity('" + bill.No + "'," + bill.EntityType + ")\">新建一条记录</a></td>";
+                html += "<td><a href=\"javascript:DeleteEntity('" + bill.No + "'," + bill.EntityType + ")\">根据主键-删除一条记录</a></td>";
+                html += "<td><a href=\"javascript:OpenFrm('" + bill.No + "'," + bill.EntityType + ")\">根据单据编号-打开/创建一条记录</a></td>";
+
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#listMyFrms").html(html);
+        }
+
+        //打开根据单据编号打开或者创建一个表单.
+        function OpenFrm(frmID, frmType) {
+            var billNo = window.prompt("请输入单据编号");
+            if (billNo == null || billNo == undefined)
+                return;
+
+            var name = window.prompt("单据名称");
+            if (name == null || name == undefined)
+                name = "";
+
+            var paras = window.prompt("其他参数(默认字段名字或者值,格式为:@Name=张三@Age=12@Addr=山东济南):",
+                "@Name=张三@Age=12@Addr=山东济南");
+            if (paras == null || paras == undefined)
+                paras = "";
+
+            var data = CCFrom_NewFrmEntityAsSpecBillNo(frmID, billNo, name, paras);
+
+            if (data == null) {
+                alert('没有创建成功.');
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+            } else {
+                alert(data);
+                return;
+            }
+
+            alert('根据billNo创建一条数据,返回的url:' + data);
+            WinOpen(data);
+        }
+
+        function DeleteEntity(frmID)
+        {
+            var oid = window.prompt("要删除表单[" + frmID + "]的OID.");
+            if (oid == null || oid == undefined)
+                return;
+            var data = CCFrom_DeleteFrmEntityByOID(frmID, oid);
+            alert(data);
+        }
+
+        //查询列表数据
+        function OpenSearch(frmID, frmType) {
+            var url = CCForm_FrmSearch(frmID, frmType);
+            WinOpen(url);
+        }
+
+        function GetEntityType(frmType) {
+            if (frmType == 1)
+                return "单据";
+            if (frmType == 2)
+                return "实体";
+            return "其他" + frmType;
+        }
+        function GetFrmType(frmType) {
+            if (frmType == 0)
+                return "傻瓜表单";
+            if (frmType == 1)
+                return "自由表单";
+            if (frmType == 8)
+                return "开发者表单";
+
+            return "url模式";
+        }
+
+        ///设计表单.
+        function DFrom(frmID) {
+
+            var url = Admin_Form_GenerDesignerUrl(frmID);
+            var root = $("#tbWebRoot").val();
+            var myurl = root + url;
+
+            alert("接口返回的url:" + url + "\t\n组合后的url:" + myurl);
+
+            WinOpen(myurl);
+        }
+
+        //新建单据. frmType  0=傻瓜表单 1=自由表单, 3=URL
+        function NewFrmBill(frmType) {
+
+            var frmID = window.prompt("请输入表单ID,必须是英文字母或者下划线数字组合,不能重复,比如MyBill.");
+            if (frmID == null || frmID == undefined)
+                return;
+
+            var frmName = window.prompt("请输入表单名称", frmID);
+            if (frmName == null || frmName == undefined)
+                return;
+
+            var ptable = window.prompt("请输入存储的表名称,必须是英文字母或者下划线数字组合.", frmID);
+            if (ptable == null || ptable == undefined)
+                return;
+
+            var data = Admin_Form_CreateBill(100, frmID, frmName, frmType, ptable);
+            alert(data);
+
+            window.location.href = window.location.href;
+        }
+        //新建单据. frmType  0=傻瓜表单,1=自由表单, 3=URL
+        function NewFrmDict(frmType) {
+
+            var frmID = window.prompt("请输入表单ID,不能重复");
+            if (frmID == null || frmID == undefined)
+                return;
+
+            var frmName = window.prompt("请输入表单名称", frmID);
+            if (frmName == null || frmName == undefined)
+                return;
+
+            var ptable = window.prompt("请输入存储的表名称", frmID);
+            if (ptable == null || ptable == undefined)
+                return;
+
+            var data = Admin_Form_CreateDict(100, frmID, frmName, frmType, ptable);
+            alert(data);
+            window.location.href = window.location.href;
+        }
+
+
+        function DeleteFrm(frmID) {
+            if (window.confirm("确定要删除吗?") == false)
+                return;
+
+            Admin_From_Drop(frmID);
+            window.location.href = window.location.href;
+        }
+
+        function DoUp(frmID) {
+
+            Admin_From_Up(frmID);
+            window.location.href = window.location.href;
+        }
+
+        function DoDown(frmID) {
+
+            Admin_From_Down(frmID);
+            window.location.href = window.location.href;
+        }
+
+        //打开模版属性.
+        function FrmEntity(frmID) {
+
+            var url = Admin_FromTemplateAttr(frmID);
+            WinOpen(url);
+        }
+
+        /**/</script>
+</head>
+<body>
+
+    <fieldset>
+        <legend id="help" >设置根目录</legend>
+        根目录参数:<input type="text" value="" id="tbWebRoot" /> 
+        <br>说明:在集成ccform的时候，有的开发环境并不是  /WF/或者 /jflow-web/是根目录.
+    </fieldset>
+
+    <fieldset>
+        <legend id="help">后台操作: CCBillAdmin.js</legend>
+
+        <div id="list"></div>
+        <br />
+        <button onclick="NewFrmBill(0);"> 新建单据(傻瓜表单)</button>
+        <button onclick="NewFrmBill(1);"> 新建单据(自由表单)</button>
+        <button onclick="NewFrmBill(3);"> 新建单据(Url表单)</button>
+        <button onclick="NewFrmBill(8);"> 新建单据(开发者表单)</button>
+        -
+        <button onclick="NewFrmDict(0);"> 新建实体(傻瓜表单)</button>
+        <button onclick="NewFrmDict(1);"> 新建实体(自由表单)</button>
+        <button onclick="NewFrmDict(3);"> 新建实体(Url表单)</button>
+        <button onclick="NewFrmDict(8);"> 新建单据(开发者表单)</button>
+        <br />
+        <br />
+
+        <legend id="help">CCBillAdmin.js 帮助</legend>
+        <ul>
+            <li>后台是就表单设计人员所要操作的API.</li>
+            <li>开发者可以利用ccform提供的js 的API函数，完成如下操作.</li>
+            <li>获得所有表单列表:function <font color="blue">Admin_GenerAllBills()</font></li>
+            <li>删除模版:function <font color="blue">Admin_From_Drop()</font></li>
+            <li>创建实体:function <font color="blue">Admin_Form_CreateDict()</font></li>
+            <li>创建单据:function <font color="blue">Admin_Form_CreateBill()</font></li>
+            <li>设计表单:function <font color="blue">Admin_Form_GenerDesignerUrl()</font></li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+        <legend id="help">前台操作: CCBill.js</legend>
+        <div id="listMyFrms"></div>
+
+        <legend id="help">操作demo:</legend>
+        CCFrom_GenerFrmListOfCanOption
+        <ul>
+            <li>前台是就使用者登陆后查看的菜单所要操作的API.</li>
+            <li>开发者可以利用ccform提供的js 的API函数，完成如下操作.</li>
+            <li>获得所有菜单列表:function <font color="blue">CCFrom_GenerFrmListOfCanOption()</font></li>
+            <li>查询指定菜单列表数据:function <font color="blue"></font></li>
+            <li>新增数据:function <font color="blue"></font></li>
+            <li>删除数据:function <font color="blue"></font></li>
+            <li>保存数据:function <font color="blue"></font></li>
+            <li>提交数据:function <font color="blue"</font></li>
+        </ul>
+    </fieldset>
+
+
+
+</body>
+</html>

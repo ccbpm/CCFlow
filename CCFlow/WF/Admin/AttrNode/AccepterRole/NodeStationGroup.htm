@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-	<title>延续子流程</title>
+	<title>本组织岗位</title>
 	 <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -24,16 +24,22 @@
 	        //求出来已经设置的延续子流程.
 	        var nodeID = GetQueryString("FK_Node");
 	        var orgNo = GetQueryString("OrgNo");
-	        if (orgNo == null || orgNo == undefined)
-	            orgNo = "";
+            var webUser = new WebUser();
+            if (orgNo == null || orgNo == undefined || orgNo == "undefined")
+                orgNo = webUser.FK_Dept;
 
 	        //已经选择的岗位.
 	        var ens = new Entities("BP.WF.Template.NodeStations");
 	        ens.Retrieve("FK_Node", nodeID);
 
 	        //获得该组织的岗位.
-	        var stas = new Entities("BP.WF.Port.Stations");
-	        stas.Retrieve("OrgNo", orgNo);
+	        var stas = new Entities("BP.Port.Stations");
+			stas.Retrieve("OrgNo", orgNo);
+
+            if (stas.length == 0) {
+                $("#Msg").html("<span style='color:red;margin:10px'>组织编号为" + orgNo + "下面没有设置岗位</span>");
+                return;
+            }
 
 	        //查询出来数据.	       
 	        var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo ='" + orgNo + "') group by No,Name";
@@ -170,7 +176,7 @@
 	        var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
 	        DBAccess.RunSQL(sql);
 	        //获得该组织的岗位.
-	        var stas = new Entities("BP.WF.Port.Stations");
+	        var stas = new Entities("BP.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
 	        //遍历checkbox控件，然后执行插入.

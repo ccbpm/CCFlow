@@ -12,7 +12,7 @@ function InitBar(optionKey) {
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_FullData' type=button onclick='FullData()' value='填充设置' />";
-    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+    //html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");

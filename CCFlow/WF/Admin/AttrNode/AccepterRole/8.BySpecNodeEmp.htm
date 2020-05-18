@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,77 +14,92 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px">
+                <table style='width:90%;'>
+                    <caption>指定一个节点，当前节点的处理人就是他</caption>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>节点ID</th>
+                        <th>步骤</th>
+                    </tr>
+                    <tr v-for="(node,index) in nodes">
+                        <td class=Idx>{{index}}</td>
+                        <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><input type='checkbox' name='RB_NodeNo' :value='node.NodeID' checked='checked' /><label>名称:{{node.Name}}</label></td>
+                        <td v-else=v-else><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" /><label>名称:{{node.Name}}</label></td>
+                        <td>{{node.NodeID}}</td>
+                        <td>{{node.Step}}</td>
+                    </tr>
 
-    <script  type="text/javascript">
+                </table>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>当前节点的处理人与制定的节点处理人相同。</li>
+                <li>所指定的节点一般都是当前节点以前的节点，由于分支原因会导致历史的节点有多个。</li>
+                <li>如果出现多个，系统就会按照节点的发生时间排序的第一个节点计算。</li>
+            </ul>
+        </fieldset>
 
-        $(function () {
-            InitBar(DeliveryWay.BySpecNodeEmp);
-            var html = "";
-            var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-            var nodes = new Entities("BP.WF.Nodes");
-            nodes.Retrieve("FK_Flow", nd.FK_Flow);
-            var paras = nd.DeliveryParas;
-            var strList = new Array();
-            strList = paras.split(',');
-            var setHtml = "<table style='width:90%;'>";
-            setHtml += "<caption>指定一个节点，当前节点的处理人就是他</caption>";
-            setHtml += "<tr>";
-            setHtml += "<th>#</th>";
-            setHtml += "<th>名称</th>";
-            setHtml += "<th>节点ID</th>";
-            setHtml += "<th>步骤</th>";
-            setHtml += "</tr>";
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                nodes: [],
+                selectNodes: "",
+                deliverWay: DeliveryWay.BySpecNodeEmp
+            },
+            methods: {
+                OpenStation: function () {
+                    var url = "../../../Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+                        Baseinfo.stas = getStas();
+                    });
 
-            var idx = 0;
-            for (var i = 0; i < nodes.length; i++) {
-                var checkFlag = false;
-                var mynd = nodes[i];
-                var nodeID = mynd.NodeID;
+                },
+                OpenNew: function () {
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 800, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
 
-                if (nodeID == nd.NodeID)
-                    continue;
+            },
 
-                var nodeName = mynd.Name;
-                //判定是否是改选择方式
-                if (nd.DeliveryWay == DeliveryWay.BySpecNodeEmp) {
-                    for (var j = 0; j < strList.length; j++) {
-                        if (nodeID == strList[j]) {
-                            checkFlag = true;
-                            continue;
-                        }
-                    }
-                }
-
-                idx++;
-                setHtml += "<tr>";
-                setHtml += "<td class=Idx >" + idx + "</td>";
-
-                setHtml += "<td>";
-                if (checkFlag) {
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " checked=checked/>";
-                } else {
-                    setHtml += "&nbsp;&nbsp;&nbsp;<input id='RB_NodeNo_" + i + "' type='checkbox' name='RB_NodeNo' value=" + nodeID + " />";
-                }
-                setHtml += "<label for='RB_NodeNo_" + i + "' >" + nodeName + "</label>";
-
-                setHtml += "</td>";
-                setHtml += "<td>" + nodeID + "</td>";
-                setHtml += "<td>" + mynd.Step + "</td>";
-
-
-                setHtml += "</tr>";
+            created() {
+                InitBar(this.deliverWay);
+                var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+                var ens = new Entities("BP.WF.Nodes");
+                ens.Retrieve("FK_Flow", nd.FK_Flow);
+                var paras = nd.DeliveryParas;
+                //该流程的所有节点
+                this.nodes = $.grep(ens, function (obj, i) {
+                    return obj.NodeID != undefined && obj.NodeID!=nd.NodeID ;
+                });
+                this.selectNodes = paras == null ? "" : paras; //选中的节点
             }
-
-            setHtml += "</table>";
-
-            document.getElementById("NodeSelect").innerHTML = setHtml;
-
         });
-  
+
+
+
+        //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.BySpecNodeEmp;
+            node.DeliveryWay =Baseinfo.deliverWay;
             var object = document.getElementsByName("RB_NodeNo");
             var DeliveryParas = "";
             for (var i = 0; i < object.length; i++) {
@@ -97,21 +112,7 @@
             node.Update();
         }
     </script>
-</head>
-<body>
-    <div id="bar"> </div>
 
-    <div id="NodeSelect" style="margin-top:10px;margin-bottom:10px"></div>
-
-
-    <fieldset>
-        <legend id="help">说明</legend>
-        <ul>
-            <li>当前节点的处理人与制定的节点处理人相同。</li>
-            <li>所指定的节点一般都是当前节点以前的节点，由于分支原因会导致历史的节点有多个。</li>
-            <li>如果出现多个，系统就会按照节点的发生时间排序的第一个节点计算。</li>
-        </ul>
-    </fieldset>
 
 
 

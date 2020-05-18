@@ -28,7 +28,8 @@
             var nodeAppType = flow.NodeAppType;
 
             if (nodeAppType == "" || nodeAppType == undefined) {
-                alert('您没有在流程属性里定义NodeAppType枚举值,无法设置节点属性.');
+                $("#errtext").html('警告：您没有在流程属性里定义NodeAppType枚举值,无法设置节点属性.');
+                
                 return;
             }
 
@@ -58,21 +59,24 @@
 </head>
 <body>
 
-<form id="cc">
- <table style="width:99%;">
- <caption>设置节点类型</caption>
-        <tr>
-        <td>
-       请选择业务类型:  <select id="DDL_NodeAppType" name="DDL_NodeAppType" > </select>
-        </td>
-        </tr>
-        
-    </table>
-    <div style=" text-align:center">
-    <input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save()" />
-    </div>
+    <form id="cc">
+        <div style="right:30px; position:absolute; z-index:100; top:-4px">
+            <input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save()" />
+        </div>
+        <div style="position:relative;">
+            <table style="width:99%;">
+                <caption><img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />设置节点类型</caption>
+                <tr>
+                    <td>
+                        请选择业务类型:  <select id="DDL_NodeAppType" name="DDL_NodeAppType"> </select>
+                    </td>
+                </tr>
 
-</form>
+            </table>
+        </div>
+        <br />
+        <label style="color:red" id="errtext"></label>
+    </form>
 
 </body>
 </html>

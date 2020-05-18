@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>从表导入</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
@@ -17,10 +19,10 @@
             InitBar("None");
             var html = "";
             //设置按钮是否可以用?
-            
+
             $("#Btn_FullData").attr("disabled", true);
-           
-                
+
+
         });
 
         function Save() {
@@ -35,12 +37,34 @@
             window.location.href = window.location.href;
         }
     </script>
+    <style type="text/css">
+        .style1 {
+            height: 21px;
+        }
+
+        #bar {
+            text-align: left;
+        }
+
+        .cs-content-box {
+            padding: 0 5px;
+        }
+    </style>
 </head>
 <body>
     <div id="bar">
     </div>
     <fieldset>
-        <legend>帮助.</legend>不设置任何Pop窗返回值。
+        <legend id="help"></legend>
+
+        <ul>
+
+            <li>Pop返回值，就是双击一个文本框弹出一个窗体，选择窗体的内容点击确定按钮把选择的值放入到该文本框里。</li>
+            <li>当放入文本框的值以后，激活一个方法，把其他的值填充到其他控件里，我们把这种行为称为填充设置。</li>
+            <li>为了满足不同模式下的填充窗体内容的显示，我们分为很多种pop返回值，您可以根据不同的场景设置不同的模式。</li>
+
+        </ul>
+
     </fieldset>
 </body>
 </html>

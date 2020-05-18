@@ -12,13 +12,18 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node",nodeID);
+            var flowNo = GetQueryString("FK_Flow");
+            var str =nodeID.substr(nodeID.length - 2);
+            if (str == "01" && node.DeliveryWay==DeliveryWay.BySelected) {
+                node.DeliveryWay = DeliveryWay.BySelected_1;
+            }
 
-            var node = new Entity("BP.WF.Node");
-            node.NodeID = GetQueryString("FK_Node");
-            node.Retrieve();
 
             var url = '';
             switch (parseInt(node.DeliveryWay)) {
+                
                 case DeliveryWay.ByStation:
                     //Bind_1_ByStation();
                     url = "0.ByStation.htm";
@@ -36,6 +41,15 @@
                     break;
                 case DeliveryWay.BySelected:
                     url = "4.BySelected.htm";
+                    break;
+                case DeliveryWay.BySelected_1:
+                    url = "41.BySelected.htm";
+                    break;
+                  case DeliveryWay.BySelectedOrgs:
+                    url = "42.BySelectedOrgs.htm";
+                    break;
+                case DeliveryWay.ByDeptLeader: //按照部门负责人计算.
+                    url = "23.ByDeptLeader.htm";
                     break;
                 case DeliveryWay.ByPreviousNodeFormEmpsField:
                     url = "5.ByPreviousNodeFormEmpsField.htm";
@@ -79,11 +93,23 @@
                 case DeliveryWay.ByFromEmpToEmp:
                     url = "18.ByFromEmpToEmp.htm";
                     break;
+                case DeliveryWay.FindSpecDeptEmps:
+                    url = "19.FindSpecDeptEmpsInStationlist.htm";
+                    break;
                 case DeliveryWay.ByStationForPrj:
                     url = "20.ByStationForPrj.htm";
                     break;
                 case DeliveryWay.BySelectedForPrj:
                     url = "21.BySelectedForPrj.htm";
+                    break;
+                case DeliveryWay.ByTeamOrgOnly:
+                    url = "24.ByTeamOrgOnly.htm";
+                    break;
+                case DeliveryWay.ByTeamOnly:
+                    url = "25.ByTeamOnly.htm";
+                    break;
+                case DeliveryWay.ByTeamDeptOnly:
+                    url = "26.ByTeamDeptOnly.htm";
                     break;
                 case DeliveryWay.ByCCFlowBPM:
                     url = "100.ByCCFlowBPM.htm";
@@ -92,11 +118,12 @@
                     url = "100.ByCCFlowBPM.htm";
                     break;
                 default:
+                    //alert('错误：没有解析到的' + node.DeliveryWay +" "+parseInt(node.DeliveryWay) );
+                    //return;
                     url = "0.ByStation.htm";
                     break;
             }
-
-            document.location.href = url + "?FK_Node=" + node.NodeID;
+            document.location.href = url + "?FK_Node=" + node.NodeID+"&FK_Flow="+flowNo;
         });
 
         function Bind_1_ByStation() {

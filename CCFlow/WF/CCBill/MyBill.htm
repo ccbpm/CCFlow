@@ -8,13 +8,13 @@
     <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <!--<script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
-        type="text/css" />
+          type="text/css" />
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
@@ -24,11 +24,12 @@
     <script type="text/javascript" src="../CCForm/FrmGener.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFool.js"></script>
     <script type="text/javascript" src="../CCForm/FrmFree.js"></script>
-    <script src="../../DataUser/SystemConfig/WF_CCBill.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../CCForm/FrmDevelop.js"></script>
+
     <!-- 引入公共的frm加载以后的业务逻辑处理.-->
     <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
     <!-- 引入用户要重写的公共js -->
-    <script src="../../DataUser/JSLibData/CCBillRef.js" type="text/javascript"></script>
+    
     <script src="MyFrmGener.js" type="text/javascript"></script>
     <!-- 表单组件 -->
     <script src="../CCForm/JS/MultipleChoiceSearch.js" type="text/javascript"></script>
@@ -36,27 +37,40 @@
     <script src="../CCForm/JS/Pop.js" type="text/javascript"></script>
     <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
     <script src="../CCForm/JS/mselector.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/comboTreePlugin.js" type="text/javascript"></script>
+    <link href="../CCForm/JS/comboTreePlugin.css" rel="stylesheet" />
     <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
     <script type="text/javascript" src="../CCForm/MapExt2019.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-    <!--   <script src="../Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
-    <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />-->
     <!--UEditor-->
     <link href="../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
-        rel="stylesheet" />
+          rel="stylesheet" />
     <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
     <!-- end UmEditor-->
+	<script src="../../DataUser/JSLibData/CCBillRef.js" type="text/javascript"></script>
     <!--时间-->
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+    <!--配置js-->
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+
+    <style type="text/css">
+        @page {
+            size: auto; /* auto is the initial value */
+            margin: 0mm; /* this affects the margin in the printer settings */
+        }
+    </style>
+
     <script type="text/javascript">
 
         var frmBill = null;
@@ -64,6 +78,15 @@
         var webUser = new WebUser();
         //初始化函数
         $(function () {
+            if ("undefined" == typeof UserICon) {
+                UserICon = '../../DataUser/Siganture/';
+            } else {
+                UserICon = UserICon.replace("@basePath", basePath);
+            }
+            if ("undefined" == typeof UserIConExt) {
+                UserIConExt = '.jpg';
+            }
+
             InitToolbar();
         });
 
@@ -71,6 +94,8 @@
 
             //判断是否有WorkID.
             var workID = GetQueryString("WorkID");
+            if (workID == null || workID == undefined)
+                workID = GetQueryString("OID");
             if (workID == null || workID == undefined)
                 workID = 0;
 
@@ -88,7 +113,8 @@
             generBill.SetPKVal(workID);
             if (generBill.RetrieveFromDBSources() == 0)
                 return;
-         
+
+            
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
@@ -109,14 +135,40 @@
                 return;
             }
 
-            //$("#Title").html(html);
+            //获取表单的操作权限
+            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var power = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (power.indexOf("err@") != -1) {
+                alert(power);
+                return;
+            }
+            power = JSON.parse(power);
 
             //当前是归档状态.
-            if (generBill.BillState == 2)
+            if (generBill.BillState == 2 && power.IsInsert == 1)
                 toolBar += "<input type=button value='新建' onclick='NewIt();' />";
 
-            toolBar += "<input type=button value='保存' onclick='SaveIt();' />";
-            // toolBar += "<input type=button value='保存&关闭' onclick='SaveItAndClose();' />";
+            if (power.IsSave == 1 && generBill.BillState !=100) {
+                var btnSave = generBill.BtnSaveLable;
+                if (btnSave == null || btnSave == "" || btnSave == undefined)
+                    btnSave = "保存";
+                toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
+
+                //toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
+            }
+
+            //if (power.IsSave == 1 && power.IsInsert == 1) {
+            //   btnSave = "保存&新建";
+            //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
+            //}
+
+            if (power.IsSubmit == 1 && generBill.BillState != 100) {
+                var btnSubmit = generBill.BtnSubmitLable;
+                if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
+                    btnSubmit = "提交";
+                toolBar += "<input type=button value='" + btnSubmit + "' onclick='Submit(false);' />";
+            }
 
             if (frmBill.BtnSearchLabel == "") frmBill.BtnSearchLabel = "查询";
             if (frmBill.BtnGroupLabel == "") frmBill.BtnGroupLabel = "分析";
@@ -127,7 +179,7 @@
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
 
             //是初始化状态.
-            if (generBill.BillState == 0)
+            if (generBill.BillState == 0 && power.IsSave == 1)
                 toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
 
             if (generBill.BillState == 1 || generBill.BillState == 2)
@@ -154,6 +206,8 @@
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
+            toolBar += "<input type=button value='打印' onclick='wprint();' />";
+
             if (frmBill.RefBillRole != 0) {
                 if (frmBill.BtnRefBill == "") frmBill.BtnRefBill = "关联单据";
                 toolBar += "<input type='button' value='" + frmBill.BtnRefBill + "' id='Btn_BtnExpZip' onclick='RefBill(\"" + frmBill.RefBill + "\");' />";
@@ -168,7 +222,7 @@
                 if (fm.IsMyBillToolBar != 1)
                     continue;
 
-                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "');\" />";
+                toolBar += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.MethodName + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "'," + fm.RefMethodType+");\" />";
             }
 
             if (webUser.No == 'admin') {
@@ -183,9 +237,72 @@
             WinOpenFull(url);
         }
 
-        ///执行方法.
-        function Done(msg, funMyPK, methodName, afterOper, w, h) {
+        var hkey_root, hkey_path, hkey_key
+        hkey_root = "HKEY_CURRENT_USER";
+        hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\"
 
+        // 设置页眉页脚为空
+        function PageSetup_Null() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+            }
+            catch (e) { }
+        }
+
+        // 设置页眉页脚为默认值
+        function PageSetup_Default() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&w&b页码，&p/&P");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&u&b&d");
+            }
+            catch (e) { }
+        }
+        function wprint() {
+            // PageSetup_Null();
+            //var headstr = "<html><head><title></title></head><body>";
+            //var footstr = "</body>";
+            //var printData = document.getElementById("divCurrentForm").innerHTML; //获得 div 里的所有 html 数据
+            //var oldstr = document.body.innerHTML;
+            //document.body.innerHTML = headstr+newstr+footstr;
+            //window.print();
+            //document.body.innerHTML = oldstr;
+            //return false;
+
+
+            window.print();
+
+
+
+        }
+
+        ///执行方法.
+        function Done(msg, funMyPK, methodName, afterOper, w, h,methodType) {
+            //打开链接
+            if (methodType != 0) {
+                var mlink = new Entity("BP.Frm.MethodLink", funMyPK);
+                var linkUrl = mlink.MethodDoc_Url;
+                if (linkUrl != null && linkUrl != undefined && linkUrl != "") {
+                    linkUrl = linkUrl.replace("@basePath", basePath);
+                    linkUrl = DealJsonExp(frmData.MainTable[0], linkUrl);
+                    var openType = mlink.RefMethodType;
+                    //模态窗口打开
+                    if (openType == 0) {
+                        OpenBootStrapModal(url, "MethodeLink", methodName, w, h, null, true, null, null, null);
+                    }
+                    //新窗口打开
+                    if (openType == 1 || openType==2) {
+                        window.open(linkUrl);
+                    }
+                }
+                return;
+            }
             var isHaveAttr = false;
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
             for (var i = 0; i < attrs.length; i++) {
@@ -230,7 +347,6 @@
                     return;
             }
             var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
-            //WinOpen(url);
             OpenBootStrapModal(url, "Methode", methodName, w, h, null, true, null, null, function () {
 
                 //afterOper=0 关闭提示窗口，不做任何操作
@@ -258,11 +374,35 @@
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
-
             var url = "Draft.htm?FrmID=" + GetQueryString("FrmID");
             window.location.href = url;
         }
-        function SaveIt() {
+
+        function SaveIt(isClose) {
+               //保存从表数据
+            $("[name=Dtl]").each(function (i, obj) {
+                var contentWidow = obj.contentWindow;
+                if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+                    IsSaveTrue = contentWidow.SaveAll();
+
+                }
+            });
+            var data = Save(); //保存.
+            if (data != null
+                && data != undefined
+                && data.indexOf('err@') == 0)
+                return;
+
+            if (isClose == true) {
+                window.close();
+                return;
+            }
+
+            window.location.href = window.location.href;
+        }
+
+
+        function Save() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
             handler.AddUrlData();
@@ -281,184 +421,247 @@
 
             /*
             //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
-            // @yuanlina. 
+            // @yuanlina.
             */
 
             var data = handler.DoMethodReturnString("MyBill_SaveIt");
             if (data.indexOf('err@') == 0) {
                 alert(data);
+                return data;
+            }
+        }
+
+        function Submit() {
+
+            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            handler.AddUrlData();
+
+            //组织数据.
+            var dataStrs = getFormData(true, true);
+
+            $.each(dataStrs.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    handler.AddPara(param[0], param[1]);
+                } else {
+                    handler.AddPara(param[0], "");
+                }
+            });
+
+            /*
+            //需要把下拉框的标签,  abc abcT 也要copy到里面去.否则班级的名字就不能存储. 另外单选按钮的值也没有copy里面去.
+            // @yuanlina.
+            */
+
+            var data = handler.DoMethodReturnString("MyBill_Submit");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
                 return;
             }
 
-            window.location.href = window.location.href;
+            var url = window.location.href;
+            url = url.replace("IsReadonly=0", "IsReadonly=1");
+            window.location.href = url;
         }
 
         //获取表单数据
-        function getFormData(isCotainTextArea, isCotainUrlParam) {
+function getFormData(isCotainTextArea, isCotainUrlParam) {
 
-            var formss = $('#divCCForm').serialize();
+    var formss = $('#divCCForm').serialize();
 
-            var formArr = formss.split('&');
-            var formArrResult = [];
-
-            $.each(formArr, function (i, ele) {
-                if (ele.split('=')[0].indexOf('CB_') == 0) {
-                    if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                        ele = ele.split('=')[0] + '=1';
-                    } else {
-                        ele = ele.split('=')[0] + '=0';
-                    }
-
-                    formArrResult.push(ele);
-                }
-                if (ele.split('=')[0].indexOf('DDL_') == 0) {
-
-                    var ctrlID = ele.split('=')[0];
-
-                    var item = $("#" + ctrlID).children('option:checked').text();
-
-                    var mystr = '';
-                    mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
-                    formArrResult.push(mystr);
-                    formArrResult.push(ele);
-                }
-                if (ele.split('=')[0].indexOf('RB_') == 0) {
-                    formArrResult.push(ele);
-                }
-
-            });
-
-
-            $.each(formArr, function (i, ele) {
-                if (ele.split('=')[0].indexOf('TB_') == 0) {
-                    var index = isExistArray(formArrResult, ele.split('=')[0]);
-                    if (index == -1)
-                        formArrResult.push(ele);
-                }
-            });
-
-
-
-            //获取表单中禁用的表单元素的值
-            var disabledEles = $('#divCCForm :disabled');
-            $.each(disabledEles, function (i, disabledEle) {
-
-                var name = $(disabledEle).attr('id');
-
-                switch (disabledEle.tagName.toUpperCase()) {
-
-                    case "INPUT":
-                        switch (disabledEle.type.toUpperCase()) {
-                            case "CHECKBOX": //复选框
-                                formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
-                                break;
-                            case "TEXT": //文本框
-                                formArrResult.push(name + '=' + $(disabledEle).val());
-                                break;
-                            case "RADIO": //单选钮
-                                name = $(disabledEle).attr('name');
-                                var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
-                                if ($.inArray(eleResult, formArrResult) == -1) {
-                                    formArrResult.push(eleResult);
-                                }
-                                break;
-                        }
-                        break;
-                    //下拉框                  
-                    case "SELECT":
-                        formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                        var tbID = name.replace("DDL_", "TB_") + 'T';
-                        if ($("#" + tbID).length == 1) {
-                            var index = isExistArray(formArrResult, tbID);
-                            if (index == -1)
-                                formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
-                        }
-                        break;
-
-                    //文本区域                          
-                    case "TEXTAREA":
-                        formArrResult.push(name + '=' + $(disabledEle).val());
-                        break;
-                }
-            });
-
-            //获取树形结构的表单值
-            var combotrees = $(".easyui-combotree");
-            $.each(combotrees, function (i, combotree) {
-                var name = $(combotree).attr('id');
-                var tree = $('#' + name).combotree('tree');
-                //获取当前选中的节点
-                var data = tree.tree('getSelected');
-                if (data != null) {
-                    formArrResult.push(name + '=' + data.id);
-                    formArrResult.push(name + 'T=' + data.text);
-                }
-            });
-
-            if (!isCotainTextArea) {
-                formArrResult = $.grep(formArrResult, function (value) {
-                    return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
-                });
-            }
-
-            formss = formArrResult.join('&');
-            var dataArr = [];
-            //加上URL中的参数
-            if (pageData != undefined && isCotainUrlParam) {
-                var pageDataArr = [];
-                for (var data in pageData) {
-                    pageDataArr.push(data + '=' + pageData[data]);
-                }
-                dataArr.push(pageDataArr.join('&'));
-            }
-            if (formss != '')
-                dataArr.push(formss);
-            var formData = dataArr.join('&');
-
-            //为了复选框  合并一下值  复选框的值以  ，号分割
-            //用& 符号截取数据
-            var formDataArr = formData.split('&');
-
-            var formDataResultObj = {};
-            $.each(formDataArr, function (i, formDataObj) {
-                //计算出等号的INDEX
-                var indexOfEqual = formDataObj.indexOf('=');
-                var objectKey = formDataObj.substr(0, indexOfEqual);
-                var objectValue = formDataObj.substr(indexOfEqual + 1);
-                if (formDataResultObj[objectKey] == undefined) {
-                    formDataResultObj[objectKey] = objectValue;
+    var formArr = formss.split('&');
+    var formArrResult = [];
+    var haseExistStr = ",";
+    var mcheckboxs = "";
+    $.each(formArr, function (i, ele) {
+        if (ele.split('=')[0].indexOf('CB_') == 0) {
+            //如果ID获取不到值，Name获取到值为复选框多选
+            var targetId = ele.split('=')[0];
+            if ($('#' + targetId).length == 1) {
+                if ($('#' + targetId + ':checked').length == 1) {
+                    ele = targetId + '=1';
                 } else {
-                    formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+                    ele = targetId + '=0';
                 }
-            });
+                formArrResult.push(ele);
+            } else {
 
-            var formdataResultStr = '';
-            for (var ele in formDataResultObj) {
-                formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+                if (mcheckboxs.indexOf(targetId + ",") == -1) {
+                    mcheckboxs += targetId + ",";
+                    var str = "";
+                    $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                        if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                            str += $(this).val();
+                        } else {
+                            str += $(this).val() + ",";
+                        }
+                    });
+
+                    formArrResult.push(targetId + '=' + str);
+                }
+
+
             }
 
-            // 处理没有选择的文本框.
-            //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
-            var ids = GenerCheckIDs();
+        }
+        if (ele.split('=')[0].indexOf('DDL_') == 0) {
 
-            if (ids) {
-                var scores = ids.split(",");
-                var arrLength = scores.length;
-                var sum = 0;
-                var average = null;
-                for (var i = 0; i < arrLength; i++) {
-                    var field = scores[i];
-                    var index = formdataResultStr.indexOf(field);
-                    if (index == -1) {
-                        formdataResultStr += '&' + field + '=0';
+            var ctrlID = ele.split('=')[0];
+
+            var item = $("#" + ctrlID).children('option:checked').text();
+
+            var mystr = '';
+            mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
+            formArrResult.push(mystr);
+            formArrResult.push(ele);
+            haseExistStr += ctrlID.replace("DDL_", "TB_") + "T" + ",";
+        }
+        if (ele.split('=')[0].indexOf('RB_') == 0) {
+            formArrResult.push(ele);
+        }
+
+    });
+
+
+    $.each(formArr, function (i, ele) {
+        var ctrID = ele.split('=')[0];
+        if (ctrID.indexOf('TB_') == 0) {
+            if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
+                formArrResult.push(ele);
+                haseExistStr += ctrID + ",";
+            }
+
+
+        }
+    });
+
+
+
+    //获取表单中禁用的表单元素的值
+    var disabledEles = $('#divCCForm :disabled');
+    $.each(disabledEles, function (i, disabledEle) {
+
+        var name = $(disabledEle).attr('id');
+
+        switch (disabledEle.tagName.toUpperCase()) {
+
+            case "INPUT":
+                switch (disabledEle.type.toUpperCase()) {
+                    case "CHECKBOX": //复选框
+                        formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
+                        break;
+                    case "TEXT": //文本框
+                    case "HIDDEN":
+                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                        break;
+                    case "RADIO": //单选钮
+                        name = $(disabledEle).attr('name');
+                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                        if ($.inArray(eleResult, formArrResult) == -1) {
+                            formArrResult.push(eleResult);
+                        }
+                        break;
+                }
+                break;
+            //下拉框            
+            case "SELECT":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if ($("#" + tbID).length == 1) {
+                    if (haseExistStr.indexOf("," + tbID + ",") == -1) {
+                        formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                        haseExistStr += tbID + ",";
                     }
                 }
-            }
+                break;
 
-            formdataResultStr = formdataResultStr.replace('&&', '&');
-
-            return formdataResultStr;
+            //文本区域                    
+            case "TEXTAREA":
+                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                break;
         }
+    });
+
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree');
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+        if (data != null) {
+            formArrResult.push(name + '=' + data.id);
+            formArrResult.push(name.replace("DDL_","TB_") + 'T=' + data.text);
+        }
+    });
+
+    if (!isCotainTextArea) {
+        formArrResult = $.grep(formArrResult, function (value) {
+            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
+        });
+    }
+
+    formss = formArrResult.join('&');
+    var dataArr = [];
+    //加上URL中的参数
+    if (pageData != undefined && isCotainUrlParam) {
+        var pageDataArr = [];
+        for (var data in pageData) {
+            pageDataArr.push(data + '=' + pageData[data]);
+        }
+        dataArr.push(pageDataArr.join('&'));
+    }
+    if (formss != '')
+        dataArr.push(formss);
+    var formData = dataArr.join('&');
+
+    //为了复选框  合并一下值  复选框的值以  ，号分割
+    //用& 符号截取数据
+    var formDataArr = formData.split('&');
+
+    var formDataResultObj = {};
+    $.each(formDataArr, function (i, formDataObj) {
+        //计算出等号的INDEX
+        var indexOfEqual = formDataObj.indexOf('=');
+        var objectKey = formDataObj.substr(0, indexOfEqual);
+        var objectValue = formDataObj.substr(indexOfEqual + 1);
+        if (formDataResultObj[objectKey] == undefined) {
+            formDataResultObj[objectKey] = objectValue;
+        } else {
+            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+        }
+    });
+
+    var formdataResultStr = '';
+    for (var ele in formDataResultObj) {
+        formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+    }
+
+    // 处理没有选择的文本框.
+    //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
+    var ids = GenerCheckNames();
+
+    if (ids) {
+        var scores = ids.split(",");
+        var arrLength = scores.length;
+        var sum = 0;
+        var average = null;
+        for (var i = 0; i < arrLength; i++) {
+            var field = scores[i];
+            var index = formdataResultStr.indexOf(field);
+            if (index == -1) {
+                if ($("input[name='" + field + "'").length == 1)
+                    formdataResultStr += '&' + field + '=0';
+                else
+                    formdataResultStr += '&' + field + '= ';
+            }
+        }
+    }
+
+    formdataResultStr = formdataResultStr.replace('&&', '&');
+
+    return formdataResultStr;
+}
         function isExistArray(arrys, no) {
             for (var i = 0; i < arrys.length; i++) {
                 if (arrys[i].split('=')[0] == no)
@@ -479,12 +682,17 @@
 
         }
 
-        function SaveItAndClose() {
-
-            SaveIt();
-            window.close();
+        //保存并新建.
+        function SaveItAndNew() {
+            Save();
+            NewIt();
+            //window.close();
         }
 
+        function SaveItAndClose() {
+            Save();
+            window.close();
+        }
         function NewIt() {
 
             var handler = new HttpHandler("BP.Frm.WF_CCBill");
@@ -500,18 +708,18 @@
 
             //初始化退回窗口的SRC.
             var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
-       '<div class="modal-dialog">'
-           + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
-              + '<div class="modal-header">'
-                  + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                   + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
-               + '</div>'
-               + '<div class="modal-body" style="margin:0px;padding:0px">'
-                   + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
-               + '</div>'
-           + '</div><!-- /.modal-content -->'
-       + '</div><!-- /.modal-dialog -->'
-   + '</div>';
+                '<div class="modal-dialog">'
+                + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
+                + '<div class="modal-header">'
+                + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
+                + '</div>'
+                + '<div class="modal-body" style="margin:0px;padding:0px">'
+                + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
 
             $('body').append($(html));
 
@@ -574,7 +782,7 @@
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                         break;
 
-                    //发送选择接收节点和接收人                         
+                    //发送选择接收节点和接收人
                     case "sendAccepter":
                         $('#modalHeader').text("发送到节点");
                         modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
@@ -591,13 +799,12 @@
         }
     </script>
     <style type="text/css">
-        h1
-        {
+        h1 {
             font-family: "微软雅黑";
             font-weight: normal;
         }
-        td
-        {
+
+        td {
             border-right-style: none;
             border-left-style: none;
             border-style: solid;
@@ -607,29 +814,28 @@
             font-size: 12px;
             border-color: lightgrey;
         }
-        .combo
-        {
+
+        .combo {
             border-color: #d4d4d4;
             background-color: #ffffff;
             height: 22px;
         }
-        
-        .combo-arrow
-        {
+
+        .combo-arrow {
             background-color: #E0ECFF;
         }
-        .textbox-text
-        {
+
+        .textbox-text {
             border: none !important;
             outline: none !important;
             height: 28px !important;
         }
-        .combo-arrow
-        {
+
+        .combo-arrow {
             height: 28px !important;
         }
-        .textbox-addon-right
-        {
+
+        .textbox-addon-right {
             float: right;
         }
     </style>
@@ -643,9 +849,9 @@
             padding: 6px 13px;
         }
 
-        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
                 border-radius: 10px 10px 0px 0px;
-        }
+            }
 
         .errorInput {
             border: 1px red solid !important;
@@ -767,17 +973,16 @@
             border: none;
             background: #F1F1F2;
         }
-        
-        .input-group-addon 
-        {
-            <!--float:left;-->
-            width:36px;
-            height:28px;
-            margin-top:1px;
+
+        .input-group-addon {
+            <!-- float: left; -->
+            width: 36px;
+            height: 28px;
+            margin-top: 1px;
         }
-        
+
         .input-group input {
-            float:left;
+            float: left;
         }
 
         #divCurrentForm {
@@ -790,8 +995,7 @@
         }
     </style>
     <style type="text/css">
-        div.richText
-        {
+        div.richText {
             min-height: 40px;
             border: 1px solid #d4d4d4;
             cursor: text;
@@ -801,23 +1005,21 @@
             box-shadow: 2px 2px 5px #d3d6da;
             background-color: #fff;
         }
-        
-        input.align_cb
-        {
+
+        input.align_cb {
             padding-left: 4px;
             cursor: pointer;
             margin: 0;
             vertical-align: middle;
         }
-        label.align_cbl
-        {
+
+        label.align_cbl {
             display: inline-block;
             vertical-align: middle;
             margin-bottom: 2px;
         }
-        
-        #topContentDiv
-        {
+
+        #topContentDiv {
             background: #fff;
             border-radius: 5px;
             padding: 8px 0px 0px 0px;
@@ -865,7 +1067,8 @@
 
 
         });
-    </script>
+
+        /**/</script>
 </head>
 <body onclick="hiddenDiv()">
     <div id="toolbar" style="margin-left: 10px;">
@@ -882,25 +1085,25 @@
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 5px 2px; margin: 0px auto;">
-            <!-- <div id="Title"> 
-     <div style=" float:right ">
-      <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" /> 
-     </div>
-      </div>-->
+            <!-- <div id="Title">
+            <div style=" float:right ">
+             <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" />
+            </div>
+             </div>-->
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">
-                <div id="CCForm" style="">
-                    <br />
-                    <img src='./../Img/loading.gif' alt="正在初始化表单模板及数据，请耐心等待。。。" />
-                    ccbpm - 正在初始化表单模板及数据,请耐心等待...
-                    <br />
-                    <br />
-                </div>
-                <!--DIVINFO-->
-                <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
+                    <div id="CCForm" style="">
+                        <br />
+                        <img src='./../Img/loading.gif' alt="正在初始化表单模板及数据，请耐心等待。。。" />
+                        ccbpm - 正在初始化表单模板及数据,请耐心等待...
+                        <br />
+                        <br />
+                    </div>
+                    <!--DIVINFO-->
+                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
                     align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                </div>
+                    </div>
                 </form>
             </div>
         </div>

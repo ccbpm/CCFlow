@@ -87,61 +87,58 @@
 <body  >
 
 <form id="cc">
- 
- <table style="width: 70%;">
-        <caption>批处理规则设置</caption>
-        <tr>
-            <td colspan="1">规则设置：</td>
-            <td colspan="2"> 
-                <select ID="DDL_BRole" name="DDL_BRole"  style="width:130px">
-                <option value="0" > 不可以 </option>
-                <option value="1" > 批量审批 </option>
-                <option value="2" > 分组批量审核 </option>
+    <div style="right:30px; position:absolute; z-index:100; top:-4px">
+        <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+    </div>
+    <div style="position:relative;">
+        <table style="width: 100%;">
+            <caption><img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />批处理规则设置</caption>
+            <tr>
+                <td colspan="1">规则设置：</td>
+                <td colspan="2">
+                    <select ID="DDL_BRole" name="DDL_BRole" style="width:130px">
+                        <option value="0"> 不可以 </option>
+                        <option value="1"> 批量审批 </option>
+                        <option value="2"> 分组批量审核 </option>
 
-                </select>              
-            </td>
-            <td><a href="http://ccbpm.mydoc.io/?v=5404&t=17920" target="_blank">帮助</a> </td>
-        </tr>
-         <tr>
-            <td colspan="1">显示的行数：</td>
-
-            <td colspan="2">
-                <input type="text" value="12" ID="TB_BatchListCount" name="TB_BatchListCount" runat="server" style="width:56px" />
-            </td>
-
-            <td> 0表示显示所有</td>
+                    </select>
+                </td>
+                <td><a href="http://ccbpm.mydoc.io/?v=5404&t=17920" target="_blank">帮助</a> </td>
             </tr>
-        <tr>
-            <td class="Sum" colspan="4">
-                批量发起字段(需要显示的字段.)
-            </td>
-        </tr>
+            <tr>
+                <td colspan="1">显示的行数：</td>
+
+                <td colspan="2">
+                    <input type="text" value="12" ID="TB_BatchListCount" name="TB_BatchListCount" runat="server" style="width:56px" />
+                </td>
+
+                <td> 0表示显示所有</td>
+            </tr>
+            <tr>
+                <td class="Sum" colspan="4">
+                    批量发起字段(需要显示的字段.)
+                </td>
+            </tr>
 
 
-        <tr> 
-        <td colspan="4"> 
+            <tr>
+                <td colspan="4">
 
-        <table style=" width:100%;" id="table1">
-         <tr>
-            <th>序</th>
-            <th>字段</th>
-            <th>名称 </th>
-            <th>类型</th>
-        </tr>
-        
+                    <table style=" width:100%;" id="table1">
+                        <tr>
+                            <th>序</th>
+                            <th>字段</th>
+                            <th>名称 </th>
+                            <th>类型</th>
+                        </tr>
 
+
+                    </table>
+
+                </td>
+            </tr>
         </table>
-
-        </td>
-        </tr>
-       
-        <tr>
-            <td colspan="4">
-                <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-            </td>
-        </tr>
-    </table>
-
+    </div>
 </form>
 
 </body>

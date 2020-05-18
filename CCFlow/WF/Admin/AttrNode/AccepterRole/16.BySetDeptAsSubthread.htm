@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title> 
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,79 +14,68 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <script  type="text/javascript">
-
-        $(function () {
-            InitBar(DeliveryWay.BySetDeptAsSubthread);
-
-            var ens = new Entities("BP.WF.Template.NodeDepts");
-            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
-
-            var html = "<ul>";
-
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                html += "<li>" + en.FK_DeptText+"</li>";
-            }
-
-            html += "</ul>";
-
-            document.getElementById("depts").innerHTML = html;
-
-
-        });
-
-        function OpenOld() {
-            var url = "../../../Comm/RefFunc/Dot2DotSingle.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
-            OpenEasyUiDialogExt(url, '设置部门', 800, 500, true);
-        }
-
-        function OpenNew() {
-            var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
-            var nodeID = GetQueryString("FK_Node");
-            url += '&NodeID=' + nodeID + '&PKVal=' + nodeID; ;
-            OpenEasyUiDialogExt(url, '设置部门', 800, 500, true);
-        }
-
-       
-       function Save() {
-           var nodeID = GetQueryString("FK_Node");
-           var node = new Entity("BP.WF.Node", nodeID);
-           node.DeliveryWay = DeliveryWay.BySetDeptAsSubthread;
-           node.Update();
-       }
-    </script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
 </head>
-<body >
+<body>
+    <div id="App">
+        <div id="bar"> </div>
 
-<div id="bar"> </div> 
+        <fieldset>
+            <legend>设置</legend>
 
-<fieldset>
-    <legend>设置</legend>
-
-    <ul>
-        <li>
-            <a href="javascript:OpenNew()">设置与更改部门</a>
-        </li>
-        <li>仅适用于子线程节点，按照部门分组子线程上的处理人员，每个部门一个任务，如果该部门的其中有一个人处理了，就标识该部门的工作完成，可以流转到下一步。</li>
-
-        <!-- <li>
-        <a href="javascript:OpenOld()">设置/更改部门(旧版本)</a>
-      </li>-->
-    </ul>
-</fieldset>
+            <ul>
+                <li>
+                    <a href="javascript:void(0)" @click="OpenNew()">设置与更改部门</a>
+                </li>
+                <li>仅适用于子线程节点，按照部门分组子线程上的处理人员，每个部门一个任务，如果该部门的其中有一个人处理了，就标识该部门的工作完成，可以流转到下一步。</li>
+            </ul>
+        </fieldset>
 
 
-<fieldset>
-<legend>已经设置的部门</legend>
+        <fieldset>
+            <legend>已经设置的部门</legend>
 
-<div id="depts"> </div>
-</fieldset>
+            <div id="depts">
+                <ul>
+                    <li v-show="depts.length===0">未设置</li>
+                    <template v-for="dept in depts">
+                        <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                    </template>
+                </ul>
 
-     
+            </div>
+        </fieldset>
+    </div>
 
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                depts: [],
+                deliverWay: DeliveryWay.BySetDeptAsSubthread
+            },
+            methods: {
+                OpenNew: function () {
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.depts = getDepts();
+            }
+        });
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.Update();
+        }
+    </script>
 </body>
 </html>

@@ -41,7 +41,7 @@
 
             //绑定外键.
             var tables = new Entities("BP.Sys.MapAttrs");
-            tables.Retrieve("FK_MapData", frmID);
+            tables.Retrieve("FK_MapData", frmID,"MyDataType",6);
 
             GenerBindDDL("DDL_DT", tables, "KeyOfEn", "Name", en.Tag3);
 

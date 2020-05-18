@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>流程发起测试</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script language="javascript" type="text/javascript">
+
+        var fk_flow = GetQueryString('FK_Flow');
+        var fk_node = GetQueryString('FK_Node');
+        var SID = GetQueryString("SID");
+        //页面启动函数.
+        $(function () {
+
+            $("#Btn_Reset").hide();
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载可以<font color=red>发起该流程</font>的人员列表, 请稍后......");
+
+            var doType = GetQueryString("DoType");
+            if (doType == "" || doType == null)
+                doType = "TestFlow2020_Init";
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var doWhat = GetQueryString("DoWhat");
+            var userNo = GetQueryString("UserNo");
+
+            //var webUser = new WebUser();
+            //if (webUser.No != "admin") {
+            //    var url = "TestCase.htm?FK_Flow=" + fk_flow;
+            //    window.location.href = url;
+            //    return;
+            //}
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+
+            //var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
+            //var urlHost = "";
+            //if (plant == "jeesite") {
+            //    urlHost = getContextPath() + "/a/logout";
+            //    //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
+            //    document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";
+            //    //$("#demoPass").html("&nbsp;&nbsp;");
+            //}
+
+            //debugger;
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString(doType);
+
+
+            if (data.indexOf('err@') == 0) {
+
+                if (data.indexOf('访问规则') > 0) {
+                    document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                    return;
+                }
+
+                if (data.indexOf('管理员') > 0) {
+                    alert(data);
+                    window.close();
+                    window.location.href = './../CCBPMDesigner/Login.htm';
+                    return;
+                }
+
+                document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                return;
+            }
+
+
+            if (data.indexOf('url@') == 0) {
+                if (data.indexOf('Login.htm') > 0) {
+                    window.close();
+                    return;
+                }
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            //转化为Json.
+            data = JSON.parse(data);
+
+            //增加处理.
+            for (var i = 0; i < data.length; i++) {
+
+                var newRow = "";
+                var emp = data[i];
+
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + emp.No + "</td>";
+                newRow += "<td>" + emp.Name + "</td>";
+
+                var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\"  ><img src='./../../Img/ie.gif' border=0 />发起流程</a>";
+                if (emp.No == "admin")
+                    newRow += "<td><font color=green><b>" + url + "</b></font></td>";
+                else
+                    newRow += "<td>" + url + "</td>";
+
+                newRow += "<td>无</td>";
+
+                newRow += "<td>" + emp.FK_DeptText + "</td>";
+                newRow += "</tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
+
+            if (data.length == 1) {
+                $("#Btn_Reset").show();
+            } else {
+                $("#Btn_Reset").hide();
+            }
+
+            $("#Msg").html("");
+        });
+
+        //发起流程。
+        function StartIt(empNo) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("UserNo", empNo);
+            handler.AddPara("SID", SID);
+            var data = handler.DoMethodReturnString("TestFlow2020_StartIt");
+
+            if (data.indexOf('访问规则') > 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //启动测试容器.
+            //WinOpenFull(data);
+            window.location.href = data;
+        }
+
+        function ClearTester() {
+
+            $("#Btn_Reset").val("正在加载请稍候....");
+
+
+            var en = new Entity("BP.WF.Template.FlowExt", GetQueryString("FK_Flow"));
+            en.Tester = "";
+            en.Update();
+            window.location.href = window.location.href;
+        }
+
+
+        function ToParaTest() {
+            var url = "TestCase.htm?FK_Flow=" + GetQueryString("FK_Flow");
+            window.location.href = url;
+            return;
+        }
+    </script>
+</head>
+<body onkeypress="Esc()">
+
+    <center>
+        <div style="float:left; padding-left:70px;">
+            <h4><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />能发起该流程的人员列表(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>)  </h4>
+        </div>
+
+        <div style="float:right;padding-right:70px;">
+            <input type="button" value="参数测试" onclick="ToParaTest();" />
+        </div>
+
+        <table class="table table-striped" id="Table1" cellpadding="0" cellspacing="0" border="0" style="width: 90%; padding:10px; margin:10px;">
+            <tr>
+                <th style="width:50px;"> 序 </th>
+                <th> 可登录用户编号</th>
+                <th> 名称</th>
+                <th> 经典模式</th>
+                <th> 手机模式</th>
+                <th> 所在部门</th>
+            </tr>
+        </table>
+
+        <input type="button" id="Btn_Reset" value="显示更多...." onclick="ClearTester();" />
+
+    </center>
+
+    <center>
+        <div id="Info"></div>
+        <div id="Msg"></div>
+    </center>
+
+</body>
+</html>

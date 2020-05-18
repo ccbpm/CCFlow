@@ -115,15 +115,19 @@
     </script>
 </head>
 <body  >
-	<form id="cc">
-	 
-     <div id="Msg"></div>
-     
-     <br />
-     <input type=button value="+新建事件"  onclick="javascript:New()" />
-     <input type=button value="什么是事件？"  onclick="javascript:Help()" />
+    <form id="cc">
+        <div style="right:30px; position:absolute; z-index:100; top:-6px ">
+            <fieldset style="border: 0px;">
+                <input type=button value="+新建事件" onclick="javascript:New()" />
+                <input type=button value="什么是事件？" onclick="javascript:Help()" />
+            </fieldset>
+        </div>
+        <div style="position:relative;" id="Msg"></div>
+
+        <br />
+       
 
 
-	</form>
+    </form>
 </body>
 </html>

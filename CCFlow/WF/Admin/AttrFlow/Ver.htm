@@ -1,156 +1,179 @@
-﻿<!DOCTYPE html >
+﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<title>版本管理</title>
-<link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"
-	type="text/css" />
-<script type="text/javascript" src="../../Comm/JScript.js"></script>
-<script type="text/javascript"
-	src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-<script type="text/javascript"
-	src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
-<script type="text/javascript" src="../../Scripts/config.js"></script>
-<script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <meta charset="UTF-8" />
+    <title>版本管理</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
 
-<base target="_self" />
+    <base target="_self" />
 
-<script type="text/javascript">
-	//页面启动函数.
-	$(function() {
-		$("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-		InitPage();
-		$("#Msg").html("");
-	});
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
 
-	//初始化数据.
-	function InitPage() {
+        //初始化数据.
+        function InitPage() {
 
-		var flowNo = GetQueryString("FK_Flow");
-		var en = new Entity("BP.WF.Flow", flowNo);
+            var flowNo = GetQueryString("FK_Flow");
+            var en = new Entity("BP.WF.Flow", flowNo);
 
-		var data = en.DoMethodReturnJSON("VerGenerVerList");
+            var data = en.DoMethodReturnJSON("VerGenerVerList");
 
-		var html = "";
-		html += "<table style='width:100%;'>";
-		html += "<caption>版本管理</caption>";
-		html += "<tr>";
-		html += "<th>版本号</th>";
-		html += "<th>流程编号</th>";
-		html += "<th>名称</th>";
-		html += "<th>发布状态</th>";
-		html += "<th>运行中数量</th>";
-		html += "<th>完成数量</th>";
-		html += "<th>删除</th>";
-		html += "<th>操作</th>";
-		html += "<th>编辑</th>";
-		html += "</tr>";
+            var html = "";
+            html += "<table class='table table-bordered  table-hover table-condensed' style='width:100%;'>";
+            html += "<caption><img style='vertical-align:middle' src='../../Img/Event.png' />版本管理</caption>";
+            html += "<tr>";
+            html += "<th>版本号</th>";
+            html += "<th>流程编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>发布状态</th>";
+            html += "<th>运行中数量</th>";
+            html += "<th>完成数量</th>";
+            html += "<th>删除</th>";
+            html += "<th>操作</th>";
+            html += "<th>编辑</th>";
+            html += "<th>导入导出</th>";
+            html += "</tr>";
 
-		for (var i = 0; i < data.length; i++) {
-			var item = data[i];
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
 
-			html += "<tr>";
+                html += "<tr>";
 
-			var ver = item.Ver;
-			if (ver == "")
-				ver = "原始版";
+                var ver = item.Ver;
+                if (ver == "")
+                    ver = "原始版";
 
-			html += "<td>" + ver + "</td>";
-			html += "<td>" + item.No + "</td>";
-			html += "<td>" + item.Name + "</td>";
-			html += "<td>" + item.IsRel + "</td>";
-			html += "<td>" + item.NumOfRuning + "</td>";
-			html += "<td>" + item.NumOfOK + "</td>";
+                html += "<td>" + ver + "</td>";
+                html += "<td>" + item.No + "</td>";
+                html += "<td>" + item.Name + "</td>";
+                html += "<td>" + item.IsRel + "</td>";
+                html += "<td>" + item.NumOfRuning + "</td>";
+                html += "<td>" + item.NumOfOK + "</td>";
 
-			if (item.IsRel == 0) {
-				html += "<td><a href=\"javascript:Del('"
-						+ item.No
-						+ "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
-				html += "<td><a href=\"javascript:SetCurrentVer('" + item.No
-						+ "')\">设置主版本</a></td>";
-			} else {
-				html += "<td>--</td>";
-				html += "<td>主版本</td>";
-			}
+                if (item.IsRel == 0) {
+                    html += "<td><a href=\"javascript:Del('"
+                        + item.No
+                        + "')\"><img src='../../Img/Btn/Delete.gif' /></a></td>";
+                    html += "<td><a href=\"javascript:SetCurrentVer('" + item.No
+                        + "')\">设置主版本</a></td>";
+                } else {
+                    html += "<td>--</td>";
+                    html += "<td>主版本</td>";
+                }
 
-			//html += "<td><a href='../CCBPMDesigner/Designer.htm?FK_Flow=" + item.No + "' target=_blank >编辑</a></td>";
-			html += "<td><a href='javaScript:void(0)' onclick='changeOrOpenTab(\""
-					+ item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
-			html += "</tr>";
-		}
-		html += "</table>";
-		$("#docs").html(html);
-	}
+               
+                html += "<td><a class='btn btn-default btn-xs' href='javaScript:void(0)' onclick='changeOrOpenTab(\""
+                    + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
 
-	function changeOrOpenTab(flowName, flowNo) {
-		//"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
-		var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
-				+ "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
-		window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
-				"icon-flow1");
-	}
+                html += "<td><a class='btn btn-default btn-xs' href='Imp.htm?FK_Flow=" + item.No + "'>导入</a>&nbsp&nbsp<a class='btn btn-default btn-xs' href='Exp.htm?FK_Flow=" + item.No + "'>导出</a></td>";
 
-	function Del(no) {
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+        }
 
-		if (window.confirm('您确定要删除吗？') == false)
-			return;
+        function changeOrOpenTab(flowName, flowNo) {
+            //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
+                + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+            window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
+                "icon-flow1");
+        }
 
-		var en = new Entity("BP.WF.Flow", no);
-		var data = en.DoMethodReturnString("DoDelete");
+        function Del(no) {
 
-		alert("删除成功");
-		window.location.href = window.location.href;
-	}
-	//创建新版本.
-	function NewVer() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
 
-		if (window.confirm('您确定要创建新版本吗？') == false)
-			return;
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("DoDelete");
 
-		$("#Msg")
-				.html(
-						"<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
+            alert("删除成功");
+            window.location.href = window.location.href;
+        }
+        //创建新版本.
+        function NewVer() {
 
-		var flowNo = GetQueryString("FK_Flow");
-		var en = new Entity("BP.WF.Flow", flowNo);
-		var data = en.DoMethodReturnString("VerCreateNew");
+            if (window.confirm('您确定要创建新版本吗？') == false)
+                return;
 
-		$("#Msg")
-				.html(
-						"<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>版本创建成功，正在执行流程检查。。。</blue><br><br><br><br></center>");
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
 
-		en = new Entity("BP.WF.Flow", data);
-		en.DoMethodReturnString("DoCheck");
+            var flowNo = GetQueryString("FK_Flow");
+            var en = new Entity("BP.WF.Flow", flowNo);
+            var data = en.DoMethodReturnString("VerCreateNew");
 
-		//alert(data);
-		// $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>版本创建成功，正在执行流程检查。。。</blue><br><br><br><br></center>");
 
-		window.location.href = window.location.href;
-	}
-	function SetCurrentVer(no) {
+            en = new Entity("BP.WF.Flow", data);
+            en.DoMethodReturnString("DoCheck");
 
-		if (window.confirm('您确定要设置为当前版本？') == false)
-			return;
+            //alert(data);
+            // $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在创建,请稍后......</blue><br><br><br><br></center>");
 
-		$("#Msg")
-				.html(
-						"<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行设置，请稍后。。</blue><br><br><br><br></center>");
+            window.location.href = window.location.href;
+        }
+        function SetCurrentVer(no) {
 
-		var en = new Entity("BP.WF.Flow", no);
-		var data = en.DoMethodReturnString("VerSetCurrentVer");
-		en.DoMethodReturnString("DoCheck");
+            if (window.confirm('您确定要设置为当前版本？') == false)
+                return;
 
-		window.location.href = window.location.href;
-	}
-</script>
+            $("#Msg")
+                .html(
+                    "<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行设置，请稍后。。</blue><br><br><br><br></center>");
+
+            var en = new Entity("BP.WF.Flow", no);
+            var data = en.DoMethodReturnString("VerSetCurrentVer");
+            en.DoMethodReturnString("DoCheck");
+            window.location.href = window.location.href;
+        }
+
+        function More() {
+
+            var url = "https://blog.csdn.net/ccflow/article/details/100854967";
+            WinOpen(url);
+        }
+
+    </script>
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
-	<div id="docs"></div>
-	<input type="button" value="新建版本" onclick="NewVer();" />
-	<div id="Msg"></div>
+    <div id="docs"></div>
+    <div style="right:30px; position:absolute; z-index:100; top:-3px">
+        <input type="button" value="新建版本" onclick="NewVer();" />
+        <input type="button" value="帮助" onclick="More();" />
+    </div>
+    
 
+    <div style="position:relative;" id="Msg"></div>
 
 </body>
 </html>

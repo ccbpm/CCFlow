@@ -31,10 +31,16 @@
     <script type="text/javascript">
 
         var webUser = new WebUser();
-        var WorkID = GetQueryString("WorkID");
-        var NodeID = GetQueryString("ToNode");
+        var workID = GetQueryString("WorkID");
+        var toNodeID = GetQueryString("ToNode");
+        var checkedEmps = null;
         //初始化人员
         $(function () {
+
+            //求出来已经选择的人员列表.
+            var emps = new Entities("BP.WF.Template.SelectAccpers");
+            emps.Retrieve("WorkID", workID, "FK_Node", toNodeID);
+
 
             //初始化左列表
             var tps = new Entities("BP.Port.StationTypes");
@@ -48,27 +54,27 @@
             for (var idx = 0; idx < tps.length; idx++) {
                 var tp = tps[idx];
 
-                html += "<li >" + tp.Name;
+                html += "<li ><b>" + tp.Name + "</b></li>";
 
+                html += "<li>";
                 html += "<ul>";
                 for (var i = 0; i < stas.length; i++) {
                     var sta = stas[i];
                     if (sta.FK_StationType != tp.No)
                         continue;
-
-                    html += "<a href='#' onclick=ShowEmp('" + sta.No + "') id='" + sta.No + "' ><li class='list-group-item node-tree' data-nodeid='" + i + "' style='color:undefined;background-color:undefined;'>" + sta.Name + "</li></a>";
+                    html += "<li><a href=\"javascript:ShowEmp('" + sta.No + "');\" id='" + sta.No + "' >" + sta.Name + "</a></li>";
                 }
                 html += "</ul>";
-
                 html += "</li>";
             }
+
             html += "</ul>";
 
             $("#stationsList").append(html);
 
             //初始化已选择的人员
             var emps = new Entities("BP.WF.Template.SelectAccpers");
-            emps.Retrieve("WorkID", WorkID);
+            emps.Retrieve("WorkID", workID);
             html = "";
             for (var i = 0; i < emps.length; i++) {
                 var en = emps[i];
@@ -90,25 +96,28 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
             handler.AddPara("StaNo", StationNo);
             var data = handler.DoMethodReturnString("ByStation_ShowEmps");
-            var Emps = eval('(' + data + ')');
+            var emps = eval('(' + data + ')');
             var html = "";
 
-            for (var i = 0; i < Emps.length; i++) {
-                en = Emps[i];
+            for (var i = 0; i < emps.length; i++) {
 
-                var en = new Entity("BP.Port.Emp", en.No);
+                var en = emps[i];
+
                 html += "<tr class='emplist' data-index='" + i + "' data-uniqueid='" + en.No + "' >"
                 html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
+                html += "<td>" + en.DeptName + "</td>";
                 html += "</tr>";
             }
+
             $("#stationsEmpList").append(html);
             //加载后设置已存在数据库中人员的Checked的状态
             SetChecked();
         }
         //设置已存在数据库中人员的Checked的状态
         function SetChecked() {
+
             var emps = new Entities("BP.WF.Template.SelectAccpers");
             emps.RetrieveAll();
             for (var i = 0; i < emps.length; i++) {
@@ -145,11 +154,12 @@
         }
         //数据库增加选择的人员
         function AddDataOfSelectAccper(en) {
+
             var empDept = new Entity("BP.Port.Dept", en.FK_Dept);
             var empEn = new Entity("BP.WF.Template.SelectAccper");
-            empEn.MyPK = NodeID + "_" + WorkID + "_" + en.No;//设置主键
+            empEn.MyPK = toNodeID + "_" + workID + "_" + en.No;//设置主键
             if (empEn.RetrieveFromDBSources() == 0) {
-                empEn.FK_Node = NodeID;
+                empEn.FK_Node = nodeID;
                 empEn.WorkID = WorkID;
                 empEn.FK_Emp = en.No;
                 empEn.EmpName = en.Name;
@@ -161,16 +171,16 @@
         //删除按钮
         function removeRecord(No, Name) {
             if (window.confirm('您确认要删除吗？') == false) {
-               
+
                 document.getElementById(Name).checked = true;
                 return;
             }
             var MyPK = NodeID + "_" + WorkID + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
             empEn.Delete();
-           
+
             //删除后刷新当前页面
-           location.reload(true);
+            location.reload(true);
         }
         //全选
         function SelectAll() {
@@ -230,8 +240,10 @@
                                 <th class="bs-checkbox " style="width: 36px; " data-field="_checkbox">
                                     <div class="th-inner "><label><input onclick="SelectAll()" id="EmpSelectAll" type="checkbox"><span></span></label></div><div class="fht-cell" style="width: 35px;"></div>
                                 </th>
-                                <th style="" data-field="No"><div class="th-inner ">编号</div><div class="fht-cell" style="width: 551px;"></div></th>
-                                <th style="" data-field="Name"><div class="th-inner ">名称</div><div class="fht-cell" style="width: 386px;"></div></th>
+
+                                <th style="" data-field="No">编号</th>
+                                <th style="" data-field="Name">名称</th>
+                                <th style="" data-field="DeptName">部门名称</th>
                             </tr>
 
                         </table>

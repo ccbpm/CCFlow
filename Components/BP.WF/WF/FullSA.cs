@@ -42,7 +42,7 @@ namespace BP.WF
             Int64 workid = currWorkNode.HisWork.OID;
 
             //查询出来所有的节点.
-            Nodes nds = new Nodes(this.HisCurrWorkNode.HisFlow.No);
+            Nodes nds =currWorkNode.HisFlow.HisNodes;
 
             // 开始节点需要特殊处理》
             /* 如果启用了要计算未来的处理人 */
@@ -72,7 +72,11 @@ namespace BP.WF
                 //如果按照岗位计算（默认的第一个规则.）
                 if (item.HisDeliveryWay == DeliveryWay.ByStation)
                 {
-                    string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+                    // string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+
+                    string sql = "SELECT DISTINCT a.No, a.Name FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C "; // WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
+                    sql += " WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+item.NodeID;
+
                     dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count ==0)
                         continue;
@@ -106,21 +110,15 @@ namespace BP.WF
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("WorkID", currWorkNode.HisWork.OID);
-                    ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
+                    ps.SQL = "SELECT DISTINCT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)
                     {
                         if (item.HisFlow.HisFlowAppType == FlowAppType.Normal)
                         {
                             ps = new Paras();
-                            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                            {
-                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                            }
-                            else if (BP.WF.Glo.OSModel == OSModel.OneMore)
-                            {
-                                ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
-                            }
+                            ps.SQL = "SELECT DISTINCT A.No, A.Name  FROM Port_Emp A, WF_NodeDept B, Port_DeptEmp C  WHERE  A.No = C.FK_Emp AND C.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                             
 
                             ps.Add("FK_Node", item.NodeID);
                             dt = DBAccess.RunSQLReturnTable(ps);
@@ -147,15 +145,148 @@ namespace BP.WF
 
                                 sa.Insert();
                             }
-
                         }
-
                         continue;
                     }
-
                     continue;
-                   
                 }
+
+                #region 仅按组织计算  @lizhen
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamOnly)
+                {
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("err@节点绑定的仅按照 用户组 计算，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+                        sa.Insert();
+                    }
+                }
+                #endregion
+
+                #region 本组织计算  @lizhen
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
+                {
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
+
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("err@节点绑定的仅按照 用户组 ByTeamOrgOnly，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+                        sa.Insert();
+                    }
+                }
+                #endregion
+
+                #region 本组织计算  @lizhen
+                if (item.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
+                {
+                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)
+                        throw new Exception("err@节点绑定的仅按照 用户组 ByTeamDeptOnly，没有找到人员:" + item.Name + " SQL=" + ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+                        sa.Insert();
+                    }
+                }
+                #endregion
+
+                #region 2019-09-25 byzhoupeng, 仅按岗位计算 
+                if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
+                {
+                   string sql = "SELECT DISTINCT c.No,c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                    Paras ps = new Paras();
+                    ps.Add("FK_Node", item.NodeID);
+                    ps.SQL = sql;
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count == 0)                    
+                        throw new Exception("err@节点绑定的仅按照岗位计算，没有找到人员:"+item.Name +" SQL="+ps.SQLNoPara);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string no = dr[0].ToString();                         
+                        string name = dr[1].ToString();
+                        sa = new SelectAccper();
+                        sa.FK_Emp = no;
+                        sa.EmpName = name;
+                        sa.FK_Node = item.NodeID;
+
+                        sa.WorkID = workid;
+                        sa.Info = "无";
+                        sa.AccType = 0;
+                        sa.ResetPK();
+                        if (sa.IsExits)
+                            continue;
+
+                        //计算接受任务时间与应该完成任务时间.
+                        InitDT(sa, item);
+                        sa.Insert();
+                    }
+
+                }
+                #endregion
 
                 //处理与指定节点相同的人员.
                 if (item.HisDeliveryWay == DeliveryWay.BySpecNodeEmp
@@ -216,27 +347,8 @@ namespace BP.WF
 
                     //added by liuxc,2015.6.30.
                     //区别集成与BPM模式
-                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneOne)
-                    {
-                        sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                        sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
-                        sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
-                        sql += ")";
-                        sql += "AND No IN ";
-                        sql += "(";
-                        sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
-                        sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node1 )";
-                        sql += ") ORDER BY No ";
-
-                        Paras ps = new Paras();
-                        ps.Add("FK_Node1", item.NodeID);
-                        ps.Add("FK_Node2", item.NodeID);
-                        ps.SQL = sql;
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                    }
-                    else
-                    {
-                        sql = "SELECT pdes.FK_Emp AS No"
+                    
+                        sql = "SELECT DISTINCT pdes.FK_Emp AS No"
                               + " FROM   Port_DeptEmpStation pdes"
                               + "        INNER JOIN WF_NodeDept wnd"
                               + "             ON  wnd.FK_Dept = pdes.FK_Dept"
@@ -248,7 +360,7 @@ namespace BP.WF
                               + "        pdes.FK_Emp";
 
                         dt = DBAccess.RunSQLReturnTable(sql);
-                    }
+                     
 
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -279,7 +391,8 @@ namespace BP.WF
             Nodes toNDs = currND.HisToNodes;
             foreach (Node item in toNDs)
             {
-                if (item.HisDeliveryWay == DeliveryWay.ByStation || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
+                if (item.HisDeliveryWay == DeliveryWay.ByStation
+                    || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
                 {
                     /*如果按照岗位访问*/
                     #region 最后判断 - 按照岗位来执行。
@@ -293,12 +406,12 @@ namespace BP.WF
                     {
                         case DBType.MySQL: 
                         case DBType.MSSQL:
-                            sql = "select x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
+                            sql = "select DISTINCT x.No from Port_Emp x inner join (select FK_Emp from " + BP.WF.Glo.EmpStation + " a inner join WF_NodeStation b ";
                             sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x.No=y.FK_Emp inner join Port_DeptEmp z on";
                             sql += " x.No=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
                             break;
                         default:
-                            sql = "SELECT No FROM Port_Emp WHERE NO IN "
+                            sql = "SELECT DISTINCT No FROM Port_Emp WHERE NO IN "
                         + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
                         + " AND  NO IN "
                         + "(SELECT  FK_Emp  FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
@@ -370,7 +483,6 @@ namespace BP.WF
 
             //给最后的时间点复制.
             this.LastTimeDot = sa.PlanSDT;
-
         }
         /// <summary>
         /// 当前节点应该完成的日期.

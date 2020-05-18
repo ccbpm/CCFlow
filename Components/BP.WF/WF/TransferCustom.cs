@@ -310,15 +310,18 @@ namespace BP.WF
                     return item;
             }
 
-            if (currNodeID.ToString().EndsWith("01") == true)
+            Node node = new Node(currNodeID);
+            if(node.GetParaBoolen(NodeAttr.IsYouLiTai)==false)
             {
                 foreach (TransferCustom item in ens)
                 {
-                    if(item.IsEnable == true)
+                    if (item.IsEnable == true && item.FK_Node != currNodeID)
                         return (TransferCustom)item;
                 }
-
             }
+            
+
+           // }
 
             //如果当前节点是最后一个自定义节点，且有连接线连到固定节点
             if(isMeet == true)

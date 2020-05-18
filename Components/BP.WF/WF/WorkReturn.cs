@@ -52,6 +52,10 @@ namespace BP.WF
         private string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
         private Paras ps;
         public string ReturnToEmp = null;
+        /// <summary>
+        /// 退回考核规则字段
+        /// </summary>
+        public string ReturnCHDatas = null;
         #endregion
 
         /// <summary>
@@ -65,22 +69,21 @@ namespace BP.WF
         /// <param name="reutrnToEmp">退回到人</param>
         /// <param name="isBackTrack">是否需要原路返回？</param>
         /// <param name="returnInfo">退回原因</param>
-        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo)
+        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo,string pageData=null)
         {
             this.HisNode = new Node(currNodeID);
 
-
-            //如果退回的节点为0,就求出可以退回的唯一节点. @shilianyu 同步到jflow上。
+            //如果退回的节点为0,就求出可以退回的唯一节点. 
             if (returnToNodeID == 0)
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(currNodeID, workID, fid);
-                if (dt.Rows.Count==0)
+                if (dt.Rows.Count == 0)
                     throw new Exception("err@当前节点不允许退回，系统根据退回规则没有找到可以退回的到的节点。");
 
-                if (dt.Rows.Count!=1)
-                    throw new Exception("err@当前节点可以退回的节点有["+dt.Rows.Count+"]个，您需要指定要退回的节点才能退回。");
+                if (dt.Rows.Count != 1)
+                    throw new Exception("err@当前节点可以退回的节点有[" + dt.Rows.Count + "]个，您需要指定要退回的节点才能退回。");
 
-                returnToNodeID = int.Parse( dt.Rows[0][0].ToString());
+                returnToNodeID = int.Parse(dt.Rows[0][0].ToString());
             }
 
             this.ReturnToNode = new Node(returnToNodeID);
@@ -104,6 +107,8 @@ namespace BP.WF
                 this.ReurnToWork.OID = fid;
                 this.ReurnToWork.RetrieveFromDBSources();
             }
+            //退回考核规则
+            this.ReturnCHDatas = pageData;
         }
         /// <summary>
         /// 删除两个节点之间的业务数据与流程引擎控制数据.
@@ -199,11 +204,11 @@ namespace BP.WF
         {
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
-            
+
             //如果事件返回的信息不是null，就终止执行。
             string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, this.HisWork, atPara);
             if (msg != null)
-                return msg; 
+                return msg;
 
 
             //执行退回的考核.
@@ -286,6 +291,16 @@ namespace BP.WF
             rw.BeiZhu = Msg;
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
             rw.Insert();
 
             // 加入track.
@@ -309,20 +324,10 @@ namespace BP.WF
 #warning 没有考虑两种流程数据存储模式。
                 //DeleteToNodesData(this.ReturnToNode.HisToNodes);
             }
-
-            // 向他发送消息。
-            if (Glo.IsEnableSysMessage == true)
-            {
-                //   WF.Port.WFEmp wfemp = new Port.WFEmp(wnOfBackTo.HisWork.Rec);
-                string title = string.Format("工作退回：流程:{0}.工作:{1},退回人:{2},需您处理",
-                    this.HisNode.FlowName, this.ReturnToNode.Name, WebUser.Name);
-
-                BP.WF.Dev2Interface.Port_SendMsg(returnToEmp.No, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
-            }
-
+            Work work = this.HisWork;
+            work.OID = this.WorkID;
             //退回后事件
-            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, this.HisWork,
-                atPara);
+            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, work, atPara);
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
             // 返回退回信息.
@@ -351,7 +356,6 @@ namespace BP.WF
             gwfP.FK_Node = this.ReturnToNode.NodeID;
             gwfP.NodeName = this.ReturnToNode.Name;
 
-            //int toNodeID = this.ReturnToNode;
 
             //启用待办.
             GenerWorkerList gwl = new GenerWorkerList();
@@ -359,6 +363,7 @@ namespace BP.WF
             gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, gwfP.WorkID);
 
             string toEmps = "";
+            string returnEmps = "";
             foreach (GenerWorkerList item in gwls)
             {
                 item.IsPassInt = 0;
@@ -366,6 +371,7 @@ namespace BP.WF
                 gwl = item;
 
                 toEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
+                returnEmps += item.FK_Emp + ",";
             }
 
             gwfP.TodoEmps = toEmps;
@@ -385,6 +391,17 @@ namespace BP.WF
             // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_","").Replace("DDL_","").Replace("CB_",""), param[1]);
+                 }
+            }
             rw.Insert();
 
 
@@ -398,6 +415,17 @@ namespace BP.WF
 
             //设置当前为未读的状态.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);
+
+            //退回后发送的消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisWork;
+            work.OID = gwfP.WorkID;
+            work.NodeID = this.HisNode.NodeID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.ReturnToNode, work, null, null, null, returnEmps);
+            }
 
             //返回退回信息.
             return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].";
@@ -480,7 +508,7 @@ namespace BP.WF
 
 
             //删除.
-            Template.FrmWorkCheck fwc = new Template.FrmWorkCheck(this.HisNode.NodeID);
+            Template.NodeWorkCheck fwc = new Template.NodeWorkCheck(this.HisNode.NodeID);
             if (fwc.FWCIsShowReturnMsg == false)
                 BP.WF.Dev2Interface.DeleteCheckInfo(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID);
 
@@ -597,18 +625,12 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             //增加参与的人员
-            string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
-            {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
-            }
-            gwf.Emps = emps;
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += WebUser.No + "," + WebUser.Name + "@";
             gwf.Update();
 
             //更新退回到的人员信息可见.
+            string returnEmp = "";
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
             foreach (GenerWorkerList item in gwls)
@@ -616,6 +638,7 @@ namespace BP.WF
                 item.IsPassInt = 0;
                 item.Update();
                 this.ReturnToEmp = item.FK_Emp + "," + item.FK_EmpText;
+                returnEmp += item.FK_Emp + ",";
             }
 
             // 去掉合流节点工作人员的待办.
@@ -636,6 +659,44 @@ namespace BP.WF
                 item.IsPassInt = -2;
                 item.Update();
             }
+
+            // 记录退回轨迹。
+            ReturnWork rw = new ReturnWork();
+            rw.WorkID = this.WorkID;
+            rw.ReturnToNode = this.ReturnToNode.NodeID;
+            rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
+
+            rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
+            rw.ReturnToEmp = returnEmp; //退回给。
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
+
+            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.BeiZhu = Msg;
+            rw.IsBackTracking = this.IsBackTrack;
+            rw.Insert();
+
+            // 加入track.
+            this.AddToTrack(ActionType.Return, returnEmp, ReturnToEmp,
+                this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+
+
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.UndoneAfter);
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, this.HisNode.HisWork, null, null, null, returnEmp);
+            }
             return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ")";
         }
         /// <summary>
@@ -644,76 +705,109 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn5_2()
         {
-            GenerWorkFlow gwf = new GenerWorkFlow(this.FID);
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
 
-            //查询退回到的工作人员列表.
+            //子线程退回应该是单线退回到干流程
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-                GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+
+
+            //查询退回到的工作人员列表.
+            //GenerWorkerLists gwls = new GenerWorkerLists();
+            //gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+            //    GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
             string toEmp = "";
             string toEmpName = "";
+            GenerWorkerList gwl = null;
             if (gwls.Count == 1)
             {
-                /*有可能多次退回的情况，表示曾经退回过n次。*/
-                foreach (GenerWorkerList item in gwls)
-                {
-                    item.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
-                    item.IsRead = false; //
-                    item.Update();
-                    info += item.FK_Emp + "," + item.FK_EmpText;
-                    toEmp = item.FK_Emp;
-                    toEmpName = item.FK_EmpText;
-                    info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
-                }
+                gwl = gwls[0] as GenerWorkerList;
+                gwl.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
+                gwl.IsRead = false; //
+                gwl.Update();
+                info += gwl.FK_Emp + "," + gwl.FK_EmpText;
+                toEmp = gwl.FK_Emp;
+                toEmpName = gwl.FK_EmpText;
+                info += "(" + gwl.FK_Emp + "," + gwl.FK_EmpText + ")";
             }
             else
             {
-                // 找到合流点的发送人.
-                Nodes nds = this.HisNode.FromNodes;
-                gwls = new GenerWorkerLists();
-                GenerWorkerList gwl = new GenerWorkerList();
-                foreach (Node nd in nds)
-                {
-                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-                        GenerWorkerListAttr.FK_Node, nd.NodeID,
-                        GenerWorkerListAttr.IsPass, 1);
-                    if (gwls.Count == 0)
-                        continue;
+                /*有可能多次退回的情况，表示曾经退回过n次。*/
 
-                    if (gwls.Count != 1)
-                        throw new Exception("@应该只有一个记录，现在有多个，可能错误。");
-
-                    //求出分流节点的发送人.
-                    gwl = (GenerWorkerList)gwls[0];
-                    toEmp = gwl.FK_Emp;
-                    toEmpName = gwl.FK_EmpText;
-                    info += "(" + toEmp + "," + toEmpName + ")";
-                }
-
-                if (DataType.IsNullOrEmpty(toEmp) == true)
-                    throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
-
-                // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
-                gwl.WorkID = this.WorkID;
-                gwl.FID = this.FID;
-                gwl.IsPass = false;
-                if (gwl.IsExits == false)
-                    gwl.Insert();
-                else
-                    gwl.Update();
             }
+            //if (gwls.Count == 1)
+            //{
+            //    /*有可能多次退回的情况，表示曾经退回过n次。*/
+            //    foreach (GenerWorkerList item in gwls)
+            //    {
+            //        item.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
+            //        item.IsRead = false; //
+            //        item.Update();
+            //        info += item.FK_Emp + "," + item.FK_EmpText;
+            //        toEmp = item.FK_Emp;
+            //        toEmpName = item.FK_EmpText;
+            //        info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
+            //    }
+            //}
+            //else
+            //{
+            //    // 找到合流点的发送人.
+            //    Nodes nds = this.HisNode.FromNodes;
+            //    gwls = new GenerWorkerLists();
+            //    GenerWorkerList gwl = new GenerWorkerList();
+            //    foreach (Node nd in nds)
+            //    {
+            //        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+            //            GenerWorkerListAttr.FK_Node, nd.NodeID,
+            //            GenerWorkerListAttr.IsPass, 1);
+            //        if (gwls.Count == 0)
+            //            continue;
+
+            //        if (gwls.Count != 1)
+            //            throw new Exception("@应该只有一个记录，现在有多个，可能错误。");
+
+            //        //求出分流节点的发送人.
+            //        gwl = (GenerWorkerList)gwls[0];
+            //        toEmp = gwl.FK_Emp;
+            //        toEmpName = gwl.FK_EmpText;
+            //        info += "(" + toEmp + "," + toEmpName + ")";
+            //    }
+
+            //    if (DataType.IsNullOrEmpty(toEmp) == true)
+            //        throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
+
+            //    // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
+            //    gwl.WorkID = this.WorkID;
+            //    gwl.FID = this.FID;
+            //    gwl.IsPass = false;
+            //    if (gwl.IsExits == false)
+            //        gwl.Insert();
+            //    else
+            //        gwl.Update();
+            //}
 
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.HisNode.Name;
+            rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
+
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.BeiZhu = Msg;
@@ -724,8 +818,6 @@ namespace BP.WF
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
-
             gwf.WFState = WFState.ReturnSta;
             gwf.FK_Node = this.ReturnToNode.NodeID;
             gwf.NodeName = this.ReturnToNode.Name;
@@ -734,12 +826,11 @@ namespace BP.WF
             gwf.Sender = WebUser.No;
             //增加参与的人员
             string emps = gwf.Emps;
-            if (emps.Contains("@" + WebUser.No) == false)
+            if (DataType.IsNullOrEmpty(emps) == true)
+                emps = "@";
+            if (emps.Contains("@" + WebUser.No + ",") == false)
             {
-                if(DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@"+WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += WebUser.No + "," + WebUser.Name + "@";
             }
             gwf.Emps = emps;
             gwf.Update();
@@ -756,6 +847,16 @@ namespace BP.WF
             //设置当前的工作数据为退回状态,让其不能看到待办, 这个是约定的值.
             currWorker.IsPassInt = (int)WFState.ReturnSta;
             currWorker.Update();
+
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisNode.HisWork;
+            work.OID = this.WorkID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+            }
 
             // 返回退回信息.
             return info;
@@ -803,6 +904,17 @@ namespace BP.WF
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
 
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
+
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
@@ -811,23 +923,30 @@ namespace BP.WF
             // 加入track.
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
-            BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
 
             gwf.WFState = WFState.ReturnSta;
             gwf.Sender = WebUser.No;
             //增加参与的人员
             string emps = gwf.Emps;
+            if (DataType.IsNullOrEmpty(emps) == true)
+                emps = "@";
             if (emps.Contains("@" + WebUser.No) == false)
             {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += WebUser.No + "," + WebUser.Name + "@";
             }
             gwf.Emps = emps;
 
             gwf.Update();
 
+            //退回消息事件 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            Work work = this.HisNode.HisWork;
+            work.OID = this.WorkID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+            }
             // 返回退回信息.
             return info;
         }
@@ -895,8 +1014,8 @@ namespace BP.WF
             //如果事件返回的信息不是null，就终止执行。
             string msg = fl.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
                 atPara);
-            if (msg != null)
-                return msg; 
+            if (!String.IsNullOrEmpty(msg)) // 2019-08-28 zl。原来是 if(msg!=null)。返回空字符串表示执行成功，不应该终止。
+                return msg;
 
             if (this.HisNode.FocusField != "")
             {
@@ -922,13 +1041,13 @@ namespace BP.WF
             // 计算出来 退回到节点的应完成时间. 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             DateTime dtOfShould;
-            
-                //增加天数. 考虑到了节假日.             
-                dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
-                    this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
-             
+
+            //增加天数. 考虑到了节假日.             
+            dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, this.ReturnToNode.TimeLimit,
+                this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
+
             // 应完成日期.
-            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat);
+            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat + ":ss");
 
             // 改变当前待办工作节点
             gwf.WFState = WFState.ReturnSta;
@@ -954,19 +1073,20 @@ namespace BP.WF
 
             //更新当前待办人员.
             string toDoEmps = "";
+            string returnEmps = "";
             foreach (GenerWorkerList item in gwls)
             {
                 toDoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
+                returnEmps += item.FK_Emp + ",";
             }
 
             //增加参与的人员
             string emps = gwf.Emps;
+            if (DataType.IsNullOrEmpty(emps) == true)
+                emps = "@";
             if (emps.Contains("@" + WebUser.No) == false)
             {
-                if (DataType.IsNullOrEmpty(emps) == true)
-                    emps = "@" + WebUser.No + "@";
-                else
-                    emps += WebUser.No + "@";
+                emps += WebUser.No + "," + WebUser.Name + "@";
             }
 
             gwf.TodoEmps = toDoEmps;
@@ -974,14 +1094,14 @@ namespace BP.WF
             gwf.Emps = emps;
             gwf.Update();
 
-            
+
             //更新待办状态.
             foreach (GenerWorkerList item in gwls)
             {
                 item.IsPassInt = 0;
                 item.IsRead = false;
                 item.SDT = sdt;
-                item.RDT = DataType.CurrentDataTime;
+                item.RDT = DataType.CurrentDataTimess;
                 item.Sender = WebUser.Name + "," + WebUser.No;
                 item.Update();
             }
@@ -996,8 +1116,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //从工作人员列表里找到被退回人的接受人.
-            GenerWorkerList gwl = new GenerWorkerList();
-            gwl.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
+            GenerWorkerList gwl = gwls[0] as GenerWorkerList;
 
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
@@ -1037,7 +1156,16 @@ namespace BP.WF
             //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
             this.DeleteSpanNodesGenerWorkerListData();
 
-
+            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            {
+                string[] strs = this.ReturnCHDatas.Split('&');
+                foreach (string str in strs)
+                {
+                    string[] param = str.Split('=');
+                    if (param.Length == 2)
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
+            }
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.Insert();
 
@@ -1192,7 +1320,6 @@ namespace BP.WF
                         infoLog += "\r\n*****************************************************************************************";
                         infoLog += "\r\n节点ID:" + subNd.NodeID + "  工作名称:" + subWK.EnDesc;
                         infoLog += "\r\n处理人:" + subWK.Rec + " , " + wk.RecOfEmp.Name;
-                        infoLog += "\r\n接收时间:" + subWK.RDT + " 处理时间:" + subWK.CDT;
                         infoLog += "\r\n ------------------------------------------------- ";
 
                         foreach (Attr attr in wk.EnMap.Attrs)
@@ -1211,7 +1338,6 @@ namespace BP.WF
                     infoLog += "\r\n*****************************************************************************************";
                     infoLog += "\r\n节点ID:" + wk.NodeID + "  工作名称:" + wk.EnDesc;
                     infoLog += "\r\n处理人:" + wk.Rec + " , " + wk.RecOfEmp.Name;
-                    infoLog += "\r\n接收时间:" + wk.RDT + " 处理时间:" + wk.CDT;
                     infoLog += "\r\n ------------------------------------------------- ";
 
                     foreach (Attr attr in wk.EnMap.Attrs)
@@ -1348,11 +1474,12 @@ namespace BP.WF
             wl.FK_NodeText = nd.Name;
             // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
+            wl.FK_DeptT = emp.FK_DeptText;
 
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);
 
-            wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat); // DataType.CurrentDataTime;
+            wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat + ":ss"); // DataType.CurrentDataTime;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.Insert();
 

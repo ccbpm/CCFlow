@@ -83,7 +83,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -108,6 +108,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentFTP">
+      <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
+    </Reference>
     <Reference Include="FtpSupport, Version=1.0.1817.24824, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
@@ -134,6 +137,9 @@
     <Reference Include="NPOI.OpenXmlFormats">
       <HintPath>..\..\RefDLL\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -150,6 +156,9 @@
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\RefDLL\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web">
@@ -166,10 +175,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppClass.cs" />
+    <Compile Include="Data\CHNode.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
+    <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
+    <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
+    <Compile Include="DTS\Tool_RepairTodoList.cs" />
+    <Compile Include="FixFieldNames.cs" />
+    <Compile Include="Frm\CtrlModel.cs" />
+    <Compile Include="Frm\CtrlModelDtl.cs" />
     <Compile Include="Frm\Dev2Interface.cs" />
+    <Compile Include="Frm\EnumLab.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />
+    <Compile Include="Frm\FrmStationDept.cs" />
     <Compile Include="Frm\GenerBill.cs" />
     <Compile Include="Frm\Method.cs" />
     <Compile Include="Frm\EmpCreate.cs" />
@@ -183,8 +201,6 @@
     <Compile Include="Frm\FrmTemplate.cs" />
     <Compile Include="Frm\FrmDeptCreate.cs" />
     <Compile Include="CCFormAPI.cs" />
-    <Compile Include="Cloud\CCLover.cs" />
-    <Compile Include="Cloud\Glo.cs" />
     <Compile Include="Data\Delay.cs" />
     <Compile Include="Data\GenerWorkFlowViewNY.cs" />
     <Compile Include="Data\Eval.cs" />
@@ -219,30 +235,41 @@
     <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
     <Compile Include="DTS\DeletTempFiles.cs" />
     <Compile Include="DTS\Tool_Repair.cs" />
-    <Compile Include="DTS\CreateIndex.cs" />
     <Compile Include="DTS\ReadEmailSendWork.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\Service\ccbpmServices.cs" />
     <Compile Include="DTS\GenerDeptTree.cs" />
+    <Compile Include="Frm\WF_CCBill_API.cs" />
     <Compile Include="Frm\WF_CCBill_Opt.cs" />
+    <Compile Include="Frm\WF_CCBill_Portal.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HttpHandler\CCMobile_MyFlow.cs" />
+    <Compile Include="HttpHandler\DataUser_AppCoder.cs" />
     <Compile Include="HttpHandler\HttpHandlerGlo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HttpHandler\WF_Admin_AttrFlow.cs" />
     <Compile Include="HttpHandler\WF.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />
+    <Compile Include="HttpHandler\WF_Admin_AttrNode_AccepterRole.cs" />
+    <Compile Include="HttpHandler\WF_Admin_AttrNode_FrmSln.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_FrmEvent.cs" />
+    <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_SFTable.cs" />
     <Compile Include="HttpHandler\WF_Admin_Port.cs" />
     <Compile Include="HttpHandler\WF_Admin_RptDfine.cs" />
+    <Compile Include="HttpHandler\WF_Admin_Template.cs" />
+    <Compile Include="HttpHandler\WF_Admin_TestingContainer.cs" />
+    <Compile Include="HttpHandler\WF_CCForm_Components.cs" />
     <Compile Include="HttpHandler\WF_CommEntity.cs" />
     <Compile Include="HttpHandler\WF_Comm_Sys.cs" />
+    <Compile Include="HttpHandler\WF_MyCC.cs" />
+    <Compile Include="HttpHandler\WF_MyView.cs" />
     <Compile Include="HttpHandler\WF_RptDfine.cs" />
     <Compile Include="HttpHandler\WF_RptSearch.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
@@ -270,17 +297,18 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt_Selecter.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
-    <Compile Include="InterfaceFunction\InterfaceFunction.cs" />
+    <Compile Include="NetPlatformImpl\CCInterface.cs" />
+    <Compile Include="NetPlatformImpl\Cloud.cs" />
+    <Compile Include="NetPlatformImpl\WF.cs" />
+    <Compile Include="NetPlatformImpl\WF_DynamicWebService.cs" />
+    <Compile Include="NetPlatformImpl\WF_File.cs" />
     <Compile Include="OverrideFile.cs" />
-    <Compile Include="Port\AdminEmp.cs" />
+    <Compile Include="Port\Admin2\Dept.cs" />
+    <Compile Include="Port\Admin2\Org.cs" />
+    <Compile Include="Port\Admin2\OrgAdminer.cs" />
     <Compile Include="Port\Dept.cs" />
-    <Compile Include="Port\Station.cs" />
-    <Compile Include="Port\StationType.cs" />
-    <Compile Include="Port\SubInc\AdminEmp.cs" />
-    <Compile Include="Port\SubInc\Emp.cs" />
-    <Compile Include="Port\SubInc\StationType.cs" />
-    <Compile Include="Port\SubInc\Inc.cs" />
     <Compile Include="Rpt\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -288,22 +316,22 @@
     <Compile Include="Rpt\WaterImage.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
-    <Compile Include="Service References\CCInterface\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
+    <Compile Include="Template\BillTemplate2019.cs" />
     <Compile Include="Template\Direction.cs" />
+    <Compile Include="Template\DocTemplate.cs" />
     <Compile Include="Template\ExtJobSchedule.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FlowFormTree.cs" />
+    <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\Frm.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FrmNodeExt.cs" />
+    <Compile Include="Template\FrmNodeJiJian.cs" />
+    <Compile Include="Template\FrmOrg.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\MapFrmWord.cs" />
@@ -323,6 +351,10 @@
     <Compile Include="Template\NodeSimple.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Template\NodeTeam.cs" />
+    <Compile Include="Template\NodeWorkCheck.cs" />
+    <Compile Include="Template\Part\FlowRefEmp.cs" />
+    <Compile Include="Template\PowerModel.cs" />
     <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="Template\DirectionStation.cs" />
     <Compile Include="Template\SubFlow\SubFlowYanXu.cs" />
@@ -399,22 +431,15 @@
     <Compile Include="WeiXin\WeiXin.cs" />
     <Compile Include="WeiXin\WeiXinMessage.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
+    <Compile Include="WF\Auth.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
-    <Compile Include="DTS\GenerDustbinData.cs" />
     <Compile Include="DTS\ClearRepLineLab.cs" />
     <Compile Include="DTS\UpTrack.cs" />
     <Compile Include="DTS\OneKeyLoadTemplete.cs" />
-    <Compile Include="DTS\GenerDB.cs" />
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
     <Compile Include="DTS\UpdateCCFlow.cs" />
     <Compile Include="DTS\GenerCH.cs" />
-    <Compile Include="Service References\CloudWS\Reference.cs" />
-    <Compile Include="Service References\CloudWS\Reference1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Template\BtnLabExtWebOffice.cs" />
     <Compile Include="Template\TruckViewPower.cs" />
     <Compile Include="Template\FlowExt.cs" />
@@ -498,11 +523,9 @@
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\SubInc\Dept.cs" />
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\SubInc\Station.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="SMS.cs" />
     <Compile Include="EnumLib.cs" />
@@ -566,6 +589,8 @@
     <Compile Include="Data\NDXRptBase.cs" />
     <Compile Include="WF\AthUnReadLog.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
+    <Compile Include="Xml\Admin2Menu.cs" />
+    <Compile Include="Xml\Admin2MenuGroup.cs" />
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -608,26 +633,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\CCInterface\configuration91.svcinfo" />
-    <None Include="Service References\CCInterface\configuration.svcinfo" />
-    <None Include="Service References\CCInterface\PortalInterface11.wsdl" />
-    <None Include="Service References\CCInterface\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\CCInterface\PortalInterface11.disco" />
-    <Content Include="Service References\CloudWS\configuration.svcinfo" />
-    <Content Include="Service References\CloudWS\configuration91.svcinfo" />
-    <Content Include="Service References\CloudWS\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference1.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\CCInterface\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">

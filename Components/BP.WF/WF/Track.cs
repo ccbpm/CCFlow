@@ -605,7 +605,7 @@ namespace BP.WF
             //删除主键.
             DBAccess.DropTablePK(ptable);
 
-            //创建主键.
+            //创建主键. @yln 这里创建主键的时候提示错误。提示该主键应存在.
             DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
         }
         /// <summary>
@@ -756,6 +756,8 @@ namespace BP.WF
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
                 this.RDT = BP.DA.DataType.CurrentDataTimess;
+
+
 
             this.DoInsert(0);
             return false;

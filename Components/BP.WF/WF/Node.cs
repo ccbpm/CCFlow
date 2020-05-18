@@ -81,7 +81,21 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowHandNum",0);
+                return this.GetParaInt("SubFlowHandNum", 0);
+            }
+        }
+        /// <summary>
+        /// 是否是发送返回节点？
+        /// </summary>
+        public bool IsSendBackNode
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeAttr.IsSendBackNode, false);
+            }
+            set
+            {
+                this.SetPara(NodeAttr.IsSendBackNode, value);
             }
         }
         /// <summary>
@@ -91,7 +105,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowAutoNum",0);
+                return this.GetParaInt("SubFlowAutoNum", 0);
             }
         }
         /// <summary>
@@ -101,7 +115,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("SubFlowYanXuNum",0);
+                return this.GetParaInt("SubFlowYanXuNum", 0);
             }
         }
         #endregion
@@ -197,7 +211,7 @@ namespace BP.WF
                     //把所有的节点字段.
                     foreach (DataRow dr in dtNodeIDs.Rows)
                     {
-                        if(frmIDs.Contains("ND"+dr[0].ToString()) == true)
+                        if (frmIDs.Contains("ND" + dr[0].ToString()) == true)
                             continue;
                         frmIDs += "'ND" + dr[0].ToString() + "',";
                     }
@@ -227,7 +241,7 @@ namespace BP.WF
                 wk.NodeID = this.NodeID;
                 wk.SQLCash = null;
 
-                BP.DA.Cash.SQL_Cash.Remove( "ND"+this.NodeID);
+                BP.DA.Cash.SQL_Cash.Remove("ND" + this.NodeID);
                 return wk;
                 //this.SetRefObject("HisWork", obj);
 
@@ -292,37 +306,37 @@ namespace BP.WF
                 PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
                 if (obj == null)
                 {
-                     obj = new PushMsgs(this.NodeID);
+                    obj = new PushMsgs(this.NodeID);
 
                     //检查是否有默认的发送？如果没有就增加上他。
-                     bool isHaveSend = false;
-                     bool isHaveReturn = false;
-                     foreach (PushMsg item in obj)
-                     {
-                         if (item.FK_Event == EventListOfNode.SendSuccess)
-                             isHaveSend = true;
+                    bool isHaveSend = false;
+                    bool isHaveReturn = false;
+                    foreach (PushMsg item in obj)
+                    {
+                        if (item.FK_Event == EventListOfNode.SendSuccess)
+                            isHaveSend = true;
 
-                         if (item.FK_Event == EventListOfNode.ReturnAfter)
-                             isHaveReturn = true;
-                     }
+                        if (item.FK_Event == EventListOfNode.ReturnAfter)
+                            isHaveReturn = true;
+                    }
 
-                     if (isHaveSend == false)
-                     {
-                         PushMsg pm = new PushMsg();
-                         pm.FK_Event = EventListOfNode.SendSuccess;
-                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
-                         pm.SMSPushModel = "Email";
-                         obj.AddEntity(pm);
-                     }
+                    if (isHaveSend == false)
+                    {
+                        PushMsg pm = new PushMsg();
+                        pm.FK_Event = EventListOfNode.SendSuccess;
+                        pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                        pm.SMSPushModel = "Email";
+                        obj.AddEntity(pm);
+                    }
 
-                     if (isHaveReturn == false)
-                     {
-                         PushMsg pm = new PushMsg();
-                         pm.FK_Event = EventListOfNode.ReturnAfter;
-                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
-                         pm.SMSPushModel = "Email";
-                         obj.AddEntity(pm);
-                     }
+                    if (isHaveReturn == false)
+                    {
+                        PushMsg pm = new PushMsg();
+                        pm.FK_Event = EventListOfNode.ReturnAfter;
+                        pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
+                        pm.SMSPushModel = "Email";
+                        obj.AddEntity(pm);
+                    }
 
                     this.SetRefObject("PushMsg", obj);
                 }
@@ -470,6 +484,7 @@ namespace BP.WF
                 if (obj == null)
                 {
                     obj = new FrmEvents(this.NodeID);
+
                     this.SetRefObject("FrmEvents", obj);
                 }
                 return obj;
@@ -520,11 +535,11 @@ namespace BP.WF
         {
             get
             {
-                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+                return (FWCAth)this.GetValIntByKey(NodeWorkCheckAttr.FWCAth);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCAth, (int)value);
             }
         }
 
@@ -539,19 +554,16 @@ namespace BP.WF
             sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
             BP.DA.DBAccess.RunSQLs(sqls);
 
-            if (SystemConfig.OSDBSrc == OSDBSrc.Database)
-            {
-                // 删除必要的数据.
-                DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No from Port_Emp)");
-                DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
-                DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
-            }
+            // 删除垃圾数据. 
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
+            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
+
+            //DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
 
             Nodes nds = new Nodes();
             nds.Retrieve(NodeAttr.FK_Flow, fl.No);
 
             //FlowSort fs = new FlowSort(fl.FK_FlowSort);
-
             if (nds.Count == 0)
                 return "流程[" + fl.No + fl.Name + "]中没有节点数据，您需要注册一下这个流程。";
 
@@ -607,7 +619,7 @@ namespace BP.WF
                 {
                     nd.DirectUpdate();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception("err@" + ex.Message + " node=" + nd.Name);
                 }
@@ -649,6 +661,40 @@ namespace BP.WF
                 this.SetValByKey(BtnAttr.ReturnRole, (int)ReturnRole.CanNotReturn);
                 this.SetValByKey(BtnAttr.ShiftEnable, 0);
                 this.SetValByKey(BtnAttr.EndFlowEnable, 0);
+
+                Node oldN = new Node(this.NodeID);
+                if (this.Name.Equals(oldN.Name) == false)
+                {
+                    //清空WF_Emp中的StartFlows 的内容
+                    try
+                    {
+                        DBAccess.RunSQL("UPDATE WF_Emp Set StartFlows ='' ");
+                    }
+                    catch (Exception e)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                        {
+                            string sql = "";
+                            sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
+
+                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                                sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
+
+                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                                sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
+
+                            BP.DA.DBAccess.RunSQL(sql);
+                        }
+
+                    }
+                }
+
+               if (this.HisDeliveryWay != oldN.HisDeliveryWay)
+               {
+                    //清空WF_Emp中的StartFlow 
+                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+               }
             }
 
             //给icon设置默认值.
@@ -669,20 +715,19 @@ namespace BP.WF
 
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
-             
 
             #region 更新流程判断条件的标记。
             DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + this.FK_Flow + "'");
-            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
+            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1  WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
             #endregion
-
 
             Flow fl = new Flow(this.FK_Flow);
 
             Node.CheckFlow(fl);
             this.FlowName = fl.Name;
 
-            DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='ND" + this.NodeID + "'");
+            //更新表单名称.
+            DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='ND" + this.NodeID + "' AND name=''");
             switch (this.HisRunModel)
             {
                 case RunModel.Ordinary:
@@ -716,17 +761,19 @@ namespace BP.WF
                     throw new Exception("eeeee");
                     break;
             }
+
             //创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
-            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, "ND"+this.NodeID + "_FrmWorkCheck");
+            bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK,
+                "ND" + this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
-            if (isHave == false && this.FWCAth ==FWCAth.MinAth)
+            if (isHave == false && this.FWCAth == FWCAth.MinAth)
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
                 workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
                 workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
-                workCheckAth.NoOfObj =  "FrmWorkCheck";
+                workCheckAth.NoOfObj = "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.
@@ -746,21 +793,81 @@ namespace BP.WF
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
+            
             return base.beforeUpdate();
         }
+        #endregion
 
-        /// <summary>
-        /// 清空WFEmp中的StartFlows文件
-        /// </summary>
         protected override void afterInsertUpdateAction()
         {
-            if (this.IsStartNode == true)
+            Flow fl = new Flow();
+            fl.No = this.FK_Flow;
+            fl.RetrieveFromDBSources();
+            MapData mapData = new MapData();
+            mapData.No = "ND" + this.NodeID;
+            if (mapData.RetrieveFromDBSources() != 0)
             {
-                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                if (this.HisRunModel == RunModel.SubThread)
+                    mapData.PTable = mapData.No;
+                else
+                    mapData.PTable = fl.PTable;
+                mapData.Update();
             }
+            
+            //@sly
+            if (this.FormType == NodeFormType.RefOneFrmTree)
+            {
+                GEEntity en = new GEEntity(this.NodeFrmID);
+                if (this.HisRunModel == RunModel.SubThread && en.EnMap.Attrs.Contains("FID") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "FID";
+                    attr.Name = "干流程ID";
+                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+                if (en.EnMap.Attrs.Contains("Rec") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "Rec";
+                    attr.Name = "记录人";
+                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+                if (en.EnMap.Attrs.Contains("Emps") == false)
+                {
+                    MapAttr attr = new BP.Sys.MapAttr();
+                    attr.FK_MapData = this.NodeFrmID;
+                    attr.KeyOfEn = "Emps";
+                    attr.Name = "Emps";
+                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.DefVal = "0";
+                    attr.HisEditType = BP.En.EditType.Readonly;
+                    attr.Insert();
+                }
+
+            }
+
             base.afterInsertUpdateAction();
         }
-        #endregion
 
         #region 基本属性
         /// <summary>
@@ -812,11 +919,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWCVer, 0);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCVer, 0);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCVer, value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCVer, value);
             }
         }
         /// <summary>
@@ -1083,7 +1190,7 @@ namespace BP.WF
                 this.SetPara("TimeLimitMM", value);
             }
         }
-       
+
         /// <summary>
         /// 逾期提醒规则
         /// </summary>
@@ -1143,7 +1250,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.WarningDay, value);
             }
         }
-        
+
         /// <summary>
         /// 预警 - 提醒规则
         /// </summary>
@@ -1380,6 +1487,18 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.ReturnAlert, value);
             }
         }
+
+        public bool ReturnCHEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.ReturnCHEnable);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.ReturnCHEnable, value);
+            }
+        }
         /// <summary>
         /// 退回原因
         /// </summary>
@@ -1476,10 +1595,10 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
-                if (DataType.IsNullOrEmpty(str)==true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return "ND" + this.NodeID;
 
-                if (this.HisFormType == NodeFormType.FoolTruck 
+                if (this.HisFormType == NodeFormType.FoolTruck
                     || this.HisFormType == NodeFormType.SheetTree)
                     return "ND" + this.NodeID;
 
@@ -1494,8 +1613,6 @@ namespace BP.WF
                     string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
                     sql += " WHERE A.NDFrom=B.NodeID AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + ")  ";
                     sql += "  AND (FormType=0 OR FormType=1) ";
-
-                  
 
                     sql += "  AND (A.WorkID=" + this.WorkID + ") ";
 
@@ -1555,7 +1672,7 @@ namespace BP.WF
             }
         }
 
-        
+
         /// <summary>
         /// PDF打印规则
         /// </summary>
@@ -1654,7 +1771,7 @@ namespace BP.WF
                 SetValByKey(NodeAttr.PTable, value);
             }
         }
-       
+
         /// <summary>
         /// Doc
         /// </summary> 
@@ -1691,6 +1808,9 @@ namespace BP.WF
                 return strs.Length - 1;
             }
         }
+        /// <summary>
+        /// 到达的节点
+        /// </summary>
         public string HisToNDs
         {
             get
@@ -1702,6 +1822,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.HisToNDs, value);
             }
         }
+        /// <summary>
+        /// 部门Strs
+        /// </summary>
         public string HisDeptStrs
         {
             get
@@ -1913,7 +2036,7 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(NodeAttr.WhenNoWorker,value);
+                this.SetValByKey(NodeAttr.WhenNoWorker, value);
             }
         }
         /// <summary>
@@ -1965,7 +2088,7 @@ namespace BP.WF
         {
             get
             {
-//#warning 2012-01-24修订,没有自动计算出来属性。
+                //#warning 2012-01-24修订,没有自动计算出来属性。
                 switch (this.HisRunModel)
                 {
                     case RunModel.Ordinary:
@@ -2034,6 +2157,9 @@ namespace BP.WF
         {
             get
             {
+                if (this.IsSendBackNode == true)
+                    return false;
+
                 if (this.HisNodePosType == NodePosType.End)
                     return true;
                 else
@@ -2233,7 +2359,7 @@ namespace BP.WF
                 return (ThreadKillRole)this.GetValIntByKey(NodeAttr.ThreadKillRole);
             }
         }
-        
+
         /// <summary>
         /// 完成通过率
         /// </summary>
@@ -2241,7 +2367,7 @@ namespace BP.WF
         {
             get
             {
-                var val= this.GetValDecimalByKey(NodeAttr.PassRate);
+                var val = this.GetValDecimalByKey(NodeAttr.PassRate);
                 if (val == 0)
                     return 100;
                 return val;
@@ -2276,8 +2402,8 @@ namespace BP.WF
             }
         }
 
-        
-      
+
+
         /// <summary>
         /// 是否可以移交
         /// </summary>
@@ -2295,7 +2421,7 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsHandOver, value);
             }
         }
-       
+
         /// <summary>
         /// 是否可以退回？
         /// </summary>
@@ -2503,6 +2629,19 @@ namespace BP.WF
                 return this.HisNodeWorkType.ToString();
             }
         }
+
+
+        public int CHRole
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.CHRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.CHRole, value);
+            }
+        }
         #endregion
 
         #region 公共方法 (用户执行动作之后,所要做的工作)
@@ -2588,7 +2727,7 @@ namespace BP.WF
         {
             get
             {
-                string str = this.GetValStringByKey(FrmWorkCheckAttr.FWCNodeName);
+                string str = this.GetValStringByKey(NodeWorkCheckAttr.FWCNodeName);
                 if (DataType.IsNullOrEmpty(str))
                     return this.Name;
                 return str;
@@ -2603,23 +2742,37 @@ namespace BP.WF
         {
             get
             {
-               return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCOrderModel);
             }
         }
         public float FWC_H
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_H);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_H);
             }
         }
         public float FWC_W
         {
             get
             {
-                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_W);
+                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_W);
             }
         }
+
+        public HuiQianRole HuiQianRole
+        {
+            get
+            {
+                return (HuiQianRole)this.GetValIntByKey(BtnAttr.HuiQianRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.HuiQianRole, (int)value);
+            }
+        }
+
+
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -2663,17 +2816,20 @@ namespace BP.WF
                 #region 审核组件.
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
                 map.AddTBFloat(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
-                map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
-                map.AddTBInt(FrmWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
+                map.AddTBInt(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
+                map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
                 #endregion 审核组件.
 
                 #region 考核属性.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddTBInt(BtnAttr.CHRole, 0, "时限规则",true,false);
+                map.AddTBInt(BtnAttr.CHRole, 0, "时限规则", true, false);
+
+                map.AddTBString(BtnAttr.HelpLab, "帮助提示", "帮助", true, false, 0, 50, 10);
+                map.AddTBInt(BtnAttr.HelpRole, 0, "帮助提示规则", true, false);
 
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
-              //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
+                                                                             //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
 
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
@@ -2696,7 +2852,7 @@ namespace BP.WF
 
                 #endregion 考核属性.
 
-                map.AddTBString(FrmWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
+                map.AddTBString(NodeWorkCheckAttr.FWCNodeName, null, "节点意见名称", true, false, 0, 100, 10);
                 map.AddTBString(NodeAttr.Doc, null, "描述", true, false, 0, 100, 10);
                 map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true);
 
@@ -2704,17 +2860,16 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.ReturnRole, 2, "退回规则", true, true);
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 50, 10, true);
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 50, 10, true);
+                map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
 
                 map.AddTBInt(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true);
-                map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true); 
-
+                map.AddTBString(BtnAttr.ReturnField, null, "退回信息填写字段", true, false, 0, 50, 10, true);
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);
                 map.AddTBInt(NodeAttr.IsExpSender, 1, "本节点接收人不允许包含上一步发送人", true, true);
 
                 map.AddTBInt(NodeAttr.CancelRole, 0, "撤销规则", true, true);
                 map.AddTBInt(NodeAttr.CancelDisWhenRead, 0, "对方已读不能撤销", true, true);
-
 
                 map.AddTBInt(NodeAttr.WhenNoWorker, 0, "未找到处理人时", true, true);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
@@ -2733,6 +2888,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.TodolistModel, 0, "多人处理规则", true, true);
 
                 //add.
+                map.AddTBInt(BtnAttr.HuiQianRole, 0, "会签模式", true, true);
                 map.AddTBInt(NodeAttr.TeamLeaderConfirmRole, 0, "组长确认规则", true, true);
                 map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 100, 10);
                 map.AddTBInt(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true);
@@ -2767,6 +2923,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
                 //打印PDF的处理
                 map.AddTBInt(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true);
+                map.AddTBInt(BtnAttr.PRIEnable, 0, "重要性规则", true, true);
                 map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 //与未来处理人有关系.
@@ -2867,7 +3024,7 @@ namespace BP.WF
                 }
             }
             //判断是否可以被删除. 
-             num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
+            num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID);
             if (num != 0)
                 throw new Exception("@该节点[" + this.NodeID + "," + this.Name + "]有待办工作存在，您不能删除它.");
 
@@ -2887,7 +3044,7 @@ namespace BP.WF
             //删除框架
             BP.Sys.MapFrames frams = new BP.Sys.MapFrames(md.No);
             frams.Delete();
-       
+
             // 删除扩展
             BP.Sys.MapExts exts = new BP.Sys.MapExts(md.No);
             exts.Delete();
@@ -3130,6 +3287,11 @@ namespace BP.WF
                 attr.Insert();
             }
 
+            if (this.HisRunModel != RunModel.SubThread)
+                return "修复成功.";
+
+
+
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
@@ -3146,12 +3308,12 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.RDT;
+                attr.KeyOfEn = GERptAttr.RDT;
                 attr.Name = "接受时间";  //"接受时间";
                 attr.MyDataType = BP.DA.DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
@@ -3162,12 +3324,12 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.CDT;
+                attr.KeyOfEn = GERptAttr.CDT;
                 if (this.IsStartNode)
                     attr.Name = "发起时间"; //"发起时间";
                 else
@@ -3241,7 +3403,7 @@ namespace BP.WF
             }
 
 
-            if (fl.IsMD5  && attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
+            if (fl.IsMD5 && attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 /* 如果是MD5加密流程. */
                 attr = new BP.Sys.MapAttr();
@@ -3287,44 +3449,6 @@ namespace BP.WF
                     attr.Y = (float)68.4;
                     attr.Insert();
                 }
-
-                if (attrs.Contains(MapAttrAttr.KeyOfEn, "FK_NY", MapAttrAttr.FK_MapData, md.No) == false)
-                {
-                    attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = md.No;
-                    attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = "FK_NY";
-                    attr.Name = "年月"; //"年月";
-                    attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.LGType = FieldTypeS.Normal;
-                    //attr.UIBindKey = "BP.Pub.NYs";
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.MinLen = 0;
-                    attr.MaxLen = 7;
-                    attr.Insert();
-                }
-
-                if (attrs.Contains(MapAttrAttr.KeyOfEn, "MyNum", MapAttrAttr.FK_MapData, md.No) == false)
-                {
-                    attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = md.No;
-                    attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = "MyNum";
-                    attr.Name = "个数"; // "个数";
-                    attr.DefVal = "1";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.Insert();
-                }
             }
             #endregion 增加节点必要的字段.
 
@@ -3352,7 +3476,7 @@ namespace BP.WF
             md.Name = this.Name;
 
             if (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FoolTruck)
-                 md.HisFrmType = FrmType.FoolForm;
+                md.HisFrmType = FrmType.FoolForm;
 
             if (this.HisFormType == NodeFormType.FreeForm)
                 md.HisFrmType = FrmType.FreeFrm;
@@ -3395,7 +3519,7 @@ namespace BP.WF
             attr = new BP.Sys.MapAttr();
             attr.FK_MapData = md.No;
             attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.RDT;
+            attr.KeyOfEn = GERptAttr.RDT;
             attr.Name = "接受时间";  //"接受时间";
             attr.MyDataType = BP.DA.DataType.AppDateTime;
             attr.UIContralType = UIContralType.TB;
@@ -3408,7 +3532,7 @@ namespace BP.WF
             attr = new BP.Sys.MapAttr();
             attr.FK_MapData = md.No;
             attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.CDT;
+            attr.KeyOfEn = GERptAttr.CDT;
             if (this.IsStartNode)
                 attr.Name = "发起时间"; //"发起时间";
             else
@@ -3494,7 +3618,6 @@ namespace BP.WF
                 attr.Y = (float)54.4;
                 attr.Insert();
 
-
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
@@ -3511,20 +3634,7 @@ namespace BP.WF
                 attr.MaxLen = 7;
                 attr.Insert();
 
-                attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = "MyNum";
-                attr.Name = "个数"; // "个数";
-                attr.DefVal = "1";
-                attr.MyDataType = BP.DA.DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.Insert();
+               
             }
         }
     }
@@ -3591,7 +3701,7 @@ namespace BP.WF
             this.AddEntities(nds);
             return this.Count;
         }
-       
+
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

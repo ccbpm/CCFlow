@@ -27,7 +27,6 @@ namespace BP.WF
         public static void Frm_GenerBill(string templeteFullFile, string saveToDir, string saveFileName,
             BillFileType fileType, DataSet ds, string fk_mapData)
         {
-
             MapData md = new MapData(fk_mapData);
             GEEntity entity = md.GenerGEEntityByDataSet(ds);
 
@@ -59,20 +58,21 @@ namespace BP.WF
             // 创建实体..
             #region 主表
 
-            Entity en = BP.En.ClassFactory.GetEn(enName); 
+            Entity en = BP.En.ClassFactory.GetEn(enName);
             en.PKVal = pkval;
 
-           // if (DataType.IsNullOrEmpty(pkval)==false)
-                en.Retrieve();
+            // if (DataType.IsNullOrEmpty(pkval)==false)
+            en.Retrieve();
 
 
             //设置外部传入的默认值.
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                //2019-07-25 zyt改造
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -281,7 +281,6 @@ namespace BP.WF
                 Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
                 Entity myen = ens.GetNewEntity;
                 myen.DTSMapToSys_MapData();
-
                 return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
 
                 //上面这行代码的解释（2017-04-25）：
@@ -334,6 +333,15 @@ namespace BP.WF
                 AtPara ap = new AtPara(atParas);
                 foreach (string key in ap.HisHT.Keys)
                 {
+                    switch(key)
+                    {
+                        case "FrmID":
+                        case "FK_MapData":
+                            continue;
+                        default:
+                            break;
+                    }
+
                     if (en.Row.ContainsKey(key) == true) //有就该变.
                         en.Row[key] = ap.GetValStrByKey(key);
                     else
@@ -475,9 +483,9 @@ namespace BP.WF
             if (BP.Sys.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
                 }
             }
 
@@ -538,6 +546,9 @@ namespace BP.WF
                             case DtlOpenType.ForWorkID: // 按工作ID来控制
                                 qo.AddWhere(GEDtlAttr.RefPK, pkval);
                                 break;
+                            case DtlOpenType.ForPWorkID: // 按工作ID来控制
+                                qo.AddWhere(GEDtlAttr.RefPK, DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID="+ pkval) );
+                                break;
                             case DtlOpenType.ForFID: // 按流程ID来控制.
                                 qo.AddWhere(GEDtlAttr.FID, pkval);
                                 break;
@@ -587,9 +598,13 @@ namespace BP.WF
             mes = md.MapExts;
             foreach (DataRow dr in dtMapAttr.Rows)
             {
-                string uiBindKey = dr["UIBindKey"].ToString();
+                string uiBindKey = dr["UIBindKey"] as string;
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    continue;
+
                 string myPK = dr["MyPK"].ToString();
                 string lgType = dr["LGType"].ToString();
+
                 if (lgType.Equals("1"))
                 {
                     // 如果是枚举值, 判断是否存在., 
@@ -634,6 +649,12 @@ namespace BP.WF
             }
             #endregion 主表的 外键表/枚举
 
+
+            string name = "";
+            foreach (DataTable item in myds.Tables)
+            {
+                name += item.TableName + ",";
+            }
             //返回生成的dataset.
             return myds;
         }
@@ -649,7 +670,7 @@ namespace BP.WF
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
-             
+
             //实体.
             GEEntity en = new GEEntity(frmID);
             en.OID = pkval;
@@ -675,6 +696,15 @@ namespace BP.WF
                     }
                 }
             }
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in HttpContextHelper.RequestParamKeys)
+                {
+                    en.SetValByKey(k, HttpContextHelper.RequestParams(k));
+                }
+            }
+
 
             #region 加载从表表单模版信息.
 
@@ -696,6 +726,7 @@ namespace BP.WF
 
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
+            Hashtable ht = null;
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
@@ -727,40 +758,59 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 外键字段
                 string UIIsEnable = dr["UIIsEnable"].ToString();
-                if (UIIsEnable.Equals("0")) //字段未启用
-                    continue;
-
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
 
                 #region 处理下拉框数据范围. for 小杨.
-                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-                if (me != null) //有范围限制时
+                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
+                    MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                if (me != null && myds.Tables.Contains(uiBindKey) == false) //是否存在.
                 {
                     string fullSQL = me.Doc.Clone() as string;
-                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = fullSQL.Replace("~", "'");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+
+                    if (DataType.IsNullOrEmpty(fullSQL) == true)
+                        throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK+",原始的配置SQL为:"+me.Doc);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
                     dt.TableName = uiBindKey;
 
-                    dt.Columns[0].ColumnName = "No";
-                    dt.Columns[1].ColumnName = "Name";
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        if (dt.Columns.Contains("NO") == true)
+                            dt.Columns["NO"].ColumnName = "No";
+                        if (dt.Columns.Contains("NAME") == true)
+                            dt.Columns["NAME"].ColumnName = "Name";
+                        if (dt.Columns.Contains("PARENTNO") == true)
+                            dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                    }
+
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    {
+                        if (dt.Columns.Contains("no") == true)
+                            dt.Columns["no"].ColumnName = "No";
+                        if (dt.Columns.Contains("name") == true)
+                            dt.Columns["name"].ColumnName = "Name";
+                        if (dt.Columns.Contains("parentno") == true)
+                            dt.Columns["parentno"].ColumnName = "ParentNo";
+                    }
 
                     myds.Tables.Add(dt);
                     continue;
                 }
                 #endregion 处理下拉框数据范围.
 
+                #region 外键字段
+
                 // 判断是否存在.
                 if (myds.Tables.Contains(uiBindKey) == true)
                     continue;
 
                 // 获得数据.
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey,en.Row);
 
                 if (mydt == null)
                 {
@@ -779,15 +829,7 @@ namespace BP.WF
             #endregion 把从表的- 外键表/枚举 加入 DataSet.
 
             #region 把主表数据放入.
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
-            {
-                // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
-                {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
-                }
-            }
-
+           
             //重设默认值.
             en.ResetDefaultVal();
 
@@ -807,7 +849,7 @@ namespace BP.WF
                 switch (dtl.DtlOpenType)
                 {
                     case DtlOpenType.ForEmp:  // 按人员来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval);
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
                         qo.addAnd();
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
@@ -817,6 +859,7 @@ namespace BP.WF
                         qo.addOr();
                         qo.AddWhere(GEDtlAttr.FID, pkval);
                         qo.addRightBracket();
+                       
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
                         if (fid == 0)
@@ -839,11 +882,12 @@ namespace BP.WF
                 if (strs.Length == 2)
                 {
                     qo.addAnd();
-                    qo.AddWhere(strs[0], strs[1]);
+                    qo.AddWhere(strs[0], Glo.DealExp(strs[1], en));
                 }
             }
 
             //增加排序.
+            qo.addOrderBy(GEDtlAttr.OID);
             //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
 
             //从表
@@ -927,12 +971,17 @@ namespace BP.WF
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
 
+
                 //处理它的默认值.
                 if (attr.DefValReal.Contains("@") == false)
                     continue;
 
                 foreach (DataRow dr in dtDtl.Rows)
-                    dr[attr.KeyOfEn] = attr.DefVal;
+                {
+                    if(dr[attr.KeyOfEn] == null || DataType.IsNullOrEmpty(dr[attr.KeyOfEn].ToString())==true)
+                        dr[attr.KeyOfEn] = attr.DefVal;
+                }
+                    
             }
 
             dtDtl.TableName = "DBDtl"; //修改明细表的名称.

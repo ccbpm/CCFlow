@@ -451,12 +451,28 @@ namespace BP.WF
             //检查流程是否完成，如果没有完成就调用workflow流程删除.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
+
+            string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人
             if (gwf.RetrieveFromDBSources() != 0)
             {
                 if (gwf.WFState != WFState.Complete)
                 {
                     WorkFlow wf = new WorkFlow(flowNo, workid);
+                    //发送退回消息 @yuanlina
+                    PushMsgs pms1 = new PushMsgs();
+                    pms1.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
+                    Node node = new Node(gwf.FK_Node);
+                    foreach (PushMsg pm in pms1)
+                    {
+                        Work work = node.HisWork;
+                        work.OID = gwf.WorkID;
+                        work.NodeID = node.NodeID;
+                        work.SetValByKey("FK_Dept", BP.Web.WebUser.FK_Dept);
+                        pm.DoSendMessage(node, work, null, null, null, toEmps);
+                    }
+
                     wf.DoDeleteWorkFlowByReal(isDelSubFlow);
+                   
                     return;
                 }
             }
@@ -465,15 +481,15 @@ namespace BP.WF
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, flowNo);
             string strs = "";
-            foreach (FrmNode nd in fns)
+            foreach (FrmNode frmNode in fns)
             {
-                if (strs.Contains("@" + nd.FK_Frm) == true)
+                if (strs.Contains("@" + frmNode.FK_Frm) == true)
                     continue;
 
-                strs += "@" + nd.FK_Frm + "@";
+                strs += "@" + frmNode.FK_Frm + "@";
                 try
                 {
-                    MapData md = new MapData(nd.FK_Frm);
+                    MapData md = new MapData(frmNode.FK_Frm);
                     DBAccess.RunSQL("DELETE FROM " + md.PTable + " WHERE OID=" + workid);
                 }
                 catch
@@ -499,20 +515,34 @@ namespace BP.WF
             // 删除退回.
             DBAccess.RunSQL("DELETE FROM WF_ReturnWork WHERE WorkID=" + workid);
 
+            //发送退回消息 @yuanlina
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
+            Node pnd = new Node(gwf.FK_Node);
+            foreach (PushMsg pm in pms)
+            {
+                Work work = pnd.HisWork;
+                work.OID = gwf.WorkID;
+                work.NodeID = pnd.NodeID;
+                work.SetValByKey("FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                pm.DoSendMessage(pnd, work, null, null, null, toEmps);
+            }
+
             //删除它的工作.
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
 
             //删除所有节点上的数据.
-            Nodes nds = new Nodes(flowNo); // this.HisFlow.HisNodes;
-            foreach (Node nd in nds)
+            Nodes nodes = new Nodes(flowNo); // this.HisFlow.HisNodes;
+            foreach (Node node in nodes)
             {
                 try
                 {
-                    if (DBAccess.IsExitsObject("ND" + nd.NodeID) == false)
+                    if (DBAccess.IsExitsObject("ND" + node.NodeID) == false)
                         continue;
 
-                    DBAccess.RunSQL("DELETE FROM ND" + nd.NodeID + " WHERE OID=" + workid + " OR FID=" + workid);
+                    DBAccess.RunSQL("DELETE FROM ND" + node.NodeID + " WHERE OID=" + workid + " OR FID=" + workid);
                 }
                 catch (Exception ex)
                 {
@@ -524,6 +554,7 @@ namespace BP.WF
             {
                 Log.DebugWriteInfo(msg);
             }
+            
             #endregion 正常的删除信息.
         }
         /// <summary>
@@ -714,7 +745,7 @@ namespace BP.WF
                             {
                                 item.IsRead = false;
                                 item.IsPassInt = 0;
-                                item.SDT = BP.DA.DataType.CurrentDataTime;
+                                item.SDT = BP.DA.DataType.CurrentDataTimess;
                                 item.Update();
                             }
                         }
@@ -724,7 +755,7 @@ namespace BP.WF
                 {
                     gwl.IsRead = false;
                     gwl.IsPassInt = 0;
-                    gwl.SDT = BP.DA.DataType.CurrentDataTime;
+                    gwl.SDT = BP.DA.DataType.CurrentDataTimess;
                     gwl.Update();
                     return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.htm?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
 
@@ -979,7 +1010,9 @@ namespace BP.WF
                 GenerWorkerLists wls = new GenerWorkerLists(wn.HisWork.OID, wn.HisNode.NodeID);
                 if (wls.Count == 0)
                     throw new Exception("@恢复流程出现错误,产生的工作者列表");
-                BP.WF.MsgsManager.AddMsgs(wls, "恢复的流程", wn.HisNode.Name, "回复的流程");
+
+                foreach (GenerWorkerList item in wls)
+                    BP.WF.Dev2Interface.Port_SendMsg(item.FK_Emp, "流程恢复通知:" + gwf.Title, "该流程[" + gwf.Title + "]，请打开待办处理.", "rback");
             }
             catch (Exception ex)
             {
@@ -1056,29 +1089,29 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 处理子流程完成.
+        /// 处理子线程完成.
         /// </summary>
         /// <returns></returns>
-        public string DoFlowSubOver()
+        public string DoFlowThreadOver()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Node nd = new Node(gwf.FK_Node);
-
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow   WHERE WorkID=" + this.WorkID);
+            //@sly
+            //DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow   WHERE WorkID=" + this.WorkID);
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID);
 
-            string sql = "SELECT count(*) FROM WF_GenerWorkFlow WHERE  FID=" + this.FID;
+            string sql = "SELECT count(*) FROM WF_GenerWorkerlist WHERE  FID=" + this.FID;
             int num = DBAccess.RunSQLReturnValInt(sql);
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
                 /*说明这是最后一个*/
                 WorkFlow wf = new WorkFlow(gwf.FK_Flow, this.FID);
-                wf.DoFlowOver(ActionType.FlowOver, "子流程结束", null, null);
-                return "@当前子流程已完成，主流程已完成。";
+                wf.DoFlowOver(ActionType.FlowOver, "子线程结束", null, null);
+                return "@当前子线程已完成，干流程已完成。";
             }
             else
             {
-                return "@当前子流程已完成，主流程还有(" + num + ")个子流程未完成。";
+                return "@当前子线程已完成，干流程还有(" + num + ")个子线程未完成。";
             }
         }
         /// <summary>
@@ -1162,7 +1195,7 @@ namespace BP.WF
 
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, null, null, 0, null,
-                    emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null);
+                    emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null,this.HisGenerWorkFlow.FID,this.HisGenerWorkFlow.PWorkID);
 
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
@@ -1216,38 +1249,39 @@ namespace BP.WF
                     stopMsg += Glo.DealExp(exp, rpt, null);
             }
 
+            //IsMainFlow== false 这个位置是子线程
             if (this.IsMainFlow == false)
             {
-                /* 处理子流程完成*/
-                stopMsg += this.DoFlowSubOver();
+                /* 处理子线程完成*/
+                stopMsg += this.DoFlowThreadOver();
             }
 
             #region 处理明细表的汇总.
-            Node currND = new Node(this.HisGenerWorkFlow.FK_Node);
+//            Node currND = new Node(this.HisGenerWorkFlow.FK_Node);
 
-            //处理明细数据的copy问题。 首先检查：当前节点（最后节点）是否有明细表。
-            MapDtls dtls = currND.MapData.MapDtls; // new MapDtls("ND" + nd.NodeID);
-            int i = 0;
-            foreach (MapDtl dtl in dtls)
-            {
-                i++;
-                // 查询出该明细表中的数据。
-                GEDtls dtlDatas = new GEDtls(dtl.No);
-                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+//            //处理明细数据的copy问题。 首先检查：当前节点（最后节点）是否有明细表。
+//            MapDtls dtls = currND.MapData.MapDtls; // new MapDtls("ND" + nd.NodeID);
+//            int i = 0;
+//            foreach (MapDtl dtl in dtls)
+//            {
+//                i++;
+//                // 查询出该明细表中的数据。
+//                GEDtls dtlDatas = new GEDtls(dtl.No);
+//                dtlDatas.Retrieve(GEDtlAttr.RefPK, this.WorkID.ToString());
 
-                GEDtl geDtl = null;
-                try
-                {
-                    // 创建一个Rpt对象。
-                    geDtl = new GEDtl("ND" + int.Parse(this.HisFlow.No) + "RptDtl" + i.ToString());
-                    geDtl.ResetDefaultVal();
-                }
-                catch
-                {
-#warning 此处需要修复。
-                    continue;
-                }
-            }
+//                GEDtl geDtl = null;
+//                try
+//                {
+//                    // 创建一个Rpt对象。
+//                    geDtl = new GEDtl("ND" + int.Parse(this.HisFlow.No) + "RptDtl" + i.ToString());
+//                    geDtl.ResetDefaultVal();
+//                }
+//                catch
+//                {
+//#warning 此处需要修复。
+//                    continue;
+//                }
+//            }
             this._IsComplete = 1;
             #endregion 处理明细表的汇总.
 
@@ -1283,7 +1317,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //把当前的人员字符串加入到参与人里面去,以方便查询.
-            string emps = WebUser.No + "@";
+            string emps = WebUser.No+"," +WebUser.Name+"@";
 
             // 设置流程完成状态.
             ps = new Paras();
@@ -1305,7 +1339,10 @@ namespace BP.WF
 
             //执行流程结束.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            gwf.Emps += emps;
+            //增加参与的人员
+            if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
+                gwf.Emps += "@" + WebUser.No + "," + WebUser.Name;
+
             gwf.WFState = WFState.Complete;
             gwf.SetPara("StopFlowType", stopFlowType); //结束流程类型.
             gwf.Update();
@@ -1391,11 +1428,9 @@ namespace BP.WF
                 emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
                 //写入消息。
                 BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, this.HisGenerWorkFlow.Title, fixMsg, "Fix" + wl.WorkID, "Fix", wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
-
             }
 
             /* 执行 WF_GenerWorkFlow 冻结. */
-
             int sta = (int)WFState.Fix;
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
@@ -1422,7 +1457,7 @@ namespace BP.WF
             //WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             //wn.AddToTrack(ActionType.Info, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, fixMsg,);
 
-            return "已经成功执行冻结";
+            return this.WorkID+"-"+this.HisFlow.Name+"已经成功执行冻结";
         }
         /// <summary>
         /// 执行解除冻结
@@ -1850,7 +1885,7 @@ namespace BP.WF
                 if (_VirPath == null)
                 {
                     if (BP.Sys.SystemConfig.IsBSsystem)
-                        _VirPath = BP.Sys.Glo.Request.ApplicationPath;
+                        _VirPath = HttpContextHelper.RequestApplicationPath; // _VirPath = BP.Sys.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
                 }
@@ -2038,6 +2073,13 @@ namespace BP.WF
             WorkNode wn = new WorkNode(wk1, nd);
             wn.AddToTrack(ActionType.UnShift, WebUser.No, WebUser.Name, nd.NodeID, nd.Name, "撤消移交");
 
+            //删除撤销信息.
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+
+            //更新流程主表字段信息
+            gwf.WFState = WFState.Runing;
+            gwf.Update();
+
             if (wls.Count == 1)
             {
                 GenerWorkerList wl = (GenerWorkerList)wls[0];
@@ -2078,8 +2120,7 @@ namespace BP.WF
             wkNew.IsPass = false;
             wkNew.Insert();
 
-            //删除撤销信息.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + wk.FK_Node);
+          
 
             return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
         }

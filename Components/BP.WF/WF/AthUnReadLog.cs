@@ -298,7 +298,7 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBString(GERptAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
                 map.AddTBDateTime(GERptAttr.FlowStartRDT, null, "发起时间", true, true);
-                map.AddDDLEntities(GenerWorkFlowAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
+               // map.AddDDLEntities(GenerWorkFlowAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
                 map.AddDDLEntities(GenerWorkFlowAttr.FK_Flow, null, "流程", new Flows(), false);
 
 
@@ -314,7 +314,7 @@ namespace BP.WF
 
                 //查询.
                 map.AddSearchAttr(GenerWorkFlowAttr.FK_Dept);
-                map.AddSearchAttr(GenerWorkFlowAttr.FK_NY);
+              //  map.AddSearchAttr(GenerWorkFlowAttr.FK_NY);
                 map.AddSearchAttr(GenerWorkFlowAttr.FK_Flow);
 
                // map.AddHidden(FlowDataAttr.FlowEmps, " LIKE ", "'%@@WebUser.No%'");

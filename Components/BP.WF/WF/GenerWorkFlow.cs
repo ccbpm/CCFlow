@@ -262,9 +262,6 @@ namespace BP.WF
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
-        /// <summary>
-        /// FK_NY
-        /// </summary>
         public const string FK_NY = "FK_NY";
         /// <summary>
         /// 周次
@@ -302,12 +299,15 @@ namespace BP.WF
 
         public const string PrjNo = "PrjNo";
         public const string PrjName = "PrjName";
+
+        public const string OrgNo = "OrgNo";
+
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 流程实例
-	/// </summary>
-	public class GenerWorkFlow : Entity
+    /// </summary>
+    public class GenerWorkFlow : Entity
 	{	
 		#region 基本属性
         /// <summary>
@@ -318,6 +318,31 @@ namespace BP.WF
             get
             {
                 return GenerWorkFlowAttr.WorkID;
+            }
+        }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.OrgNo);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.OrgNo, value);
+            }
+        }
+        /// <summary>
+        /// 所在的域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.Domain);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.Domain, value);
             }
         }
         /// <summary>
@@ -334,10 +359,22 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.FlowNote, value);
             }
         }
-		/// <summary>
-		/// 工作流程编号
-		/// </summary>
-		public string  FK_Flow
+        public string BuessFields
+        {
+            get
+            {
+                return this.GetParaString("BuessFields");
+            }
+            set
+            {
+                this.SetPara("BuessFields", value);
+            }
+        }
+        
+        /// <summary>
+        /// 工作流程编号
+        /// </summary>
+        public string  FK_Flow
 		{
 			get
 			{
@@ -450,10 +487,10 @@ namespace BP.WF
             {
                 string str = value;
                 str = str.Replace(" ", "");
-
-                string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
-                if (val.Contains(str) == true)
-                    return;
+                //TodoEmps在会签完去掉人员此判断去不掉，暂时注释掉
+                //string val = this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
+                //if (val.Contains(str) == true)
+                //    return;
 
                 SetValByKey(GenerWorkFlowAttr.TodoEmps, str);
             }
@@ -470,7 +507,7 @@ namespace BP.WF
             }
             set
             {
-                SetValByKey(GenerWorkFlowAttr.Emps, value);
+                this.SetValByKey(GenerWorkFlowAttr.Emps, value);
             }
         }
         /// <summary>
@@ -604,12 +641,13 @@ namespace BP.WF
             }
         }
 		/// <summary>
-		/// 产生时间
+		/// 实际开始时间
 		/// </summary>
 		public string  RDT
 		{
 			get
 			{
+                //string rdt = this.GetParaString("");
 				return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
 			}
             set
@@ -618,6 +656,24 @@ namespace BP.WF
                 this.FK_NY = value.Substring(0, 7);
             }
 		}
+        /// <summary>
+        /// 计划开始时间
+        /// SDTOfFlow 就是计划完成日期.
+        /// </summary>
+        public string RDTOfSetting
+        {
+            get
+            {
+                string str = this.GetParaString("RDTOfSetting");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return this.RDT;
+                return str;
+            }
+            set
+            {
+                this.SetPara("RDTOfSetting", value);
+            }
+        }
         /// <summary>
         /// 节点应完成时间
         /// </summary>
@@ -634,6 +690,7 @@ namespace BP.WF
         }
         /// <summary>
         /// 流程应完成时间
+        /// RDTOfSetting 是计划开始日期，如果为空就是发起日期.
         /// </summary>
         public string SDTOfFlow
         {
@@ -866,7 +923,7 @@ namespace BP.WF
             {
                 if (value == WF.WFState.Complete)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == WF.WFState.Delete || value == WF.WFState.Blank)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
@@ -882,10 +939,6 @@ namespace BP.WF
             get
             {
                 return (WFSta)this.GetValIntByKey(GenerWorkFlowAttr.WFSta);
-            }
-            set
-            {
-                SetValByKey(GenerWorkFlowAttr.WFSta, (int)value);
             }
         }
         /// <summary>
@@ -1223,16 +1276,23 @@ namespace BP.WF
 
                 Map map = new Map("WF_GenerWorkFlow", "流程实例");
 
-                map.AddTBIntPK(GenerWorkFlowAttr.WorkID, 0, "WorkID", true, true);
+                map.AddTBIntPK(GenerWorkFlowAttr.WorkID, 0, "WorkID", true, true); //主键.
                 map.AddTBInt(GenerWorkFlowAttr.FID, 0, "流程ID", true, true);
 
                 map.AddTBString(GenerWorkFlowAttr.FK_FlowSort, null, "流程类别", true, false, 0, 10, 10);
+
+                //等于流程类别的Domain字段值.
                 map.AddTBString(GenerWorkFlowAttr.SysType, null, "系统类别", true, false, 0, 10, 10);
+
                 map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 1000, 10);
+
+                //两个状态，在不同的情况下使用. WFState状态 可以查询到SELECT  * FROM sys_enum WHERE EnumKey='WFState'
+                // WFState 的状态  @0=空白@1=草稿@2=运行中@3=已经完成@4=挂起@5=退回.
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
+
 
                 map.AddTBString(GenerWorkFlowAttr.Starter, null, "发起人", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);
@@ -1249,8 +1309,8 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
 
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfNode, "节点应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow, "流程应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, "流程预警时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow,null, "流程应完成时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, null,"流程预警时间", true, true);
 
                 //父子流程信息.
                 map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 3, 10);
@@ -1273,7 +1333,7 @@ namespace BP.WF
 
                 //参数.
                 map.AddTBString(GenerWorkFlowAttr.AtPara, null, "参数(流程运行设置临时存储的参数)", true, false, 0, 2000, 10);
-                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 10);
+                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人(格式:@zhangshan,张三@lishi,李四)", true, false, 0, 4000, 10);
                 map.AddTBString(GenerWorkFlowAttr.GUID, null, "GUID", false, false, 0, 36, 10);
                 map.AddTBString(GenerWorkFlowAttr.FK_NY, null, "年月", false, false, 0, 7, 7);
                 map.AddTBInt(GenerWorkFlowAttr.WeekNum, 0, "周次", true, true);
@@ -1281,16 +1341,15 @@ namespace BP.WF
 
                 //待办状态(0=待办中,1=预警中,2=逾期中,3=按期完成,4=逾期完成) 
                 map.AddTBInt(GenerWorkFlowAttr.TodoSta, 0, "待办状态", true, true);
+
                 map.AddTBString(GenerWorkFlowAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
-                map.SetHelperAlert(GenerWorkFlowAttr.Domain, "用于区分不同系统的流程,比如:一个集团有多个子系统每个子系统都有自己的流程,就需要标记那些流程是那个子系统的.");
+                //map.SetHelperAlert(GenerWorkFlowAttr.Domain, "用于区分不同系统的流程,比如:一个集团有多个子系统每个子系统都有自己的流程,就需要标记那些流程是那个子系统的.");
 
                 map.AddTBString(GenerWorkFlowAttr.PrjNo, null, "PrjNo", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.PrjName, null, "PrjNo", true, false, 0, 100, 10);
 
-
-
-                map.AddTBMyNum();
-
+                //隶属组织.
+                map.AddTBString(GenerWorkFlowAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 10);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "工作轨迹";  // "工作报告";
@@ -1321,8 +1380,21 @@ namespace BP.WF
 		/// </summary>
         protected override void afterDelete()
         {
-            // . clear bad worker .  
-            DBAccess.RunSQLReturnTable("DELETE FROM WF_GenerWorkerlist WHERE WorkID in  ( select WorkID from WF_GenerWorkerlist WHERE WorkID not in (select WorkID from WF_GenerWorkFlow) )");
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                case DBType.Oracle:
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID in  ( select WorkID from WF_GenerWorkerlist WHERE WorkID not in (select WorkID from WF_GenerWorkFlow) )");
+                    break;
+                case DBType.MySQL:
+                    DBAccess.RunSQL("DELETE A FROM WF_GenerWorkerlist A, WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
+                    break;
+                case DBType.PostgreSQL:
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist A USING WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
+                    break;
+                default:break;
+
+            }
 
             WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID,this.FID);
             wf.DoDeleteWorkFlowByReal(true); /* 删除下面的工作。*/
@@ -1337,6 +1409,10 @@ namespace BP.WF
                 this.GuestName = this.StarterName;
                 this.GuestNo = BP.Web.GuestUser.No;
             }
+
+            //加入组织no.
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
 
             return base.beforeInsert();
         }
@@ -1461,6 +1537,30 @@ namespace BP.WF
 			return DBAccess.RunSQLReturnTable(sql);
 		}
 
+        /// <summary>
+        /// 根据流程编号，标题模糊查询
+        /// </summary>
+        /// <param name="flowNo"></param>
+        /// <param name="likeKey"></param>
+        /// <returns></returns>
+        public string QueryByLike(string flowNo,string likeKey)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere("FK_Flow", flowNo);
+            if(DataType.IsNullOrEmpty(likeKey) == false)
+            {
+                qo.addAnd();
+                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                    qo.AddWhere("Title", " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "Title" + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "Title" + "+'%'"));
+                else
+                    qo.AddWhere("Title", " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "Title" + "||'%'");
+                qo.MyParas.Add("Title", likeKey);
+            }
+           
+            qo.addOrderBy("WorkID");
+            qo.DoQuery();
+            return BP.Tools.Json.ToJson(this.ToDataTableField("WF_GenerWorkFlow"));
+        }
 		#region 方法
 		/// <summary>
 		/// 得到它的 Entity 

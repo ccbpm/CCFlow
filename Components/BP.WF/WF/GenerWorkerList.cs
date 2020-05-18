@@ -149,6 +149,10 @@ namespace BP.WF
         /// 是否会签？
         /// </summary>
         public const string IsHuiQian = "IsHuiQian";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
     /// <summary>
     /// 工作者列表
@@ -240,6 +244,21 @@ namespace BP.WF
                 SetValByKey(GenerWorkerListAttr.PRI, value);
             }
         }
+
+        /// <summary>
+        /// Idx
+        /// </summary>
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(GenerWorkerListAttr.Idx);
+            }
+            set
+            {
+                SetValByKey(GenerWorkerListAttr.Idx, value);
+            }
+        }
         /// <summary>
         /// WorkID
         /// </summary>
@@ -289,7 +308,7 @@ namespace BP.WF
             {
                 return this.GetValIntByKey(GenerWorkerListAttr.IsPass);
             }
-            set
+           set
             {
                 this.SetValByKey(GenerWorkerListAttr.IsPass, value);
             }
@@ -352,6 +371,7 @@ namespace BP.WF
         {
             get
             {
+
                 return this.GetValStrByKey(GenerWorkerListAttr.FK_Dept);
             }
             set
@@ -618,33 +638,41 @@ namespace BP.WF
 
                 Map map = new Map("WF_GenerWorkerlist", "工作者");
 
+                map.IndexField = GenerWorkerListAttr.WorkID;
+
+                //三个主键: WorkID，FK_Emp，FK_Node
                 map.AddTBIntPK(GenerWorkerListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBStringPK(GenerWorkerListAttr.FK_Emp, null, "人员", true, false, 0, 20, 100);
                 map.AddTBIntPK(GenerWorkerListAttr.FK_Node, 0, "节点ID", true, false);
 
+                //干流程WorkID.
                 map.AddTBInt(GenerWorkerListAttr.FID, 0, "流程ID", true, false);
 
                 map.AddTBString(GenerWorkerListAttr.FK_EmpText, null, "人员名称", true, false, 0, 30, 100);
                 map.AddTBString(GenerWorkerListAttr.FK_NodeText, null, "节点名称", true, false, 0, 100, 100);
 
-                map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 3, 100);
-                map.AddTBString(GenerWorkerListAttr.FK_Dept, null, "使用部门", true, false, 0, 100, 100);
+                map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 4, 100);
+                map.AddTBString(GenerWorkerListAttr.FK_Dept, null, "人员所在部门", true, false, 0, 100, 100);
 
                 //如果是流程属性来控制的就按流程属性来计算。
                 map.AddTBDateTime(GenerWorkerListAttr.SDT, "应完成日期", false, false);
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfWarning, "警告日期", false, false);
                // map.AddTBFloat(GenerWorkerListAttr.WarningHour, 0, "预警天", true, false);
-                map.AddTBDateTime(GenerWorkerListAttr.RDT, "记录时间", false, false);
+                map.AddTBDateTime(GenerWorkerListAttr.RDT, "记录时间(接受工作日期)", false, false);
+
+                //完成日期.
                 map.AddTBDateTime(GenerWorkerListAttr.CDT, "完成时间", false, false);
+
+                //用于分配工作.
                 map.AddTBInt(GenerWorkerListAttr.IsEnable, 1, "是否可用", true, true);
 
-                //  add for 上海 2012-11-30
+                //add for 上海 2012-11-30 
                 map.AddTBInt(GenerWorkerListAttr.IsRead, 0, "是否读取", true, true);
 
-                //对会签节点有效
+                //是否通过？ 0=未通过 1=已经完成 , xxx标识其他状态.
                 map.AddTBInt(GenerWorkerListAttr.IsPass, 0, "是否通过(对合流节点有效)", false, false);
 
-                // 谁执行它？
+                // 谁执行它？ 0=手工执行，1=机器执行。2=混合执行.
                 map.AddTBInt(GenerWorkerListAttr.WhoExeIt, 0, "谁执行它", false, false);
 
                 //发送人. 2011-11-12 为天津用户增加。
@@ -652,6 +680,7 @@ namespace BP.WF
 
                 //优先级，2012-06-15 为青岛用户增加。
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
+
 
                 //催办次数. 为亿阳信通加.
                 map.AddTBInt(GenerWorkerListAttr.PressTimes, 0, "催办次数", true, false);
@@ -664,6 +693,8 @@ namespace BP.WF
                 //外部用户. 203-08-30
                 map.AddTBString(GenerWorkerListAttr.GuestNo, null, "外部用户编号", true, false, 0, 30, 100);
                 map.AddTBString(GenerWorkerListAttr.GuestName, null, "外部用户名称", true, false, 0, 100, 100);
+
+                map.AddTBInt(GenerWorkerListAttr.Idx, 1, "顺序号", true, true);
 
                 //参数标记 2014-04-05.
                 map.AddTBAtParas(4000); 

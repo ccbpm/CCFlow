@@ -6,6 +6,7 @@ using BP.Web;
 using BP.Sys;
 using BP.WF.Port;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace BP.WF
 {
@@ -150,6 +151,11 @@ namespace BP.WF
         /// 打开的连接
         /// </summary>
         public const string OpenUrl = "OpenUrl";
+        /// <summary>
+        /// 接受消息的工具 丁丁、微信
+        /// </summary>
+        public const string PushModel = "PushModel";
+
 
     }
     /// <summary>
@@ -168,7 +174,7 @@ namespace BP.WF
         /// <param name="msgType">类型</param>
         /// <param name="paras">扩展参数</param>
         public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-            string msgType, string paras)
+            string msgType, string paras,string pushModel= null,string openUrl= null)
         {
 
             SMS sms = new SMS();
@@ -180,6 +186,7 @@ namespace BP.WF
 
             sms.Title = msgTitle;
             sms.DocOfEmail = msgDoc;
+            sms.MobileInfo = msgDoc;
 
             sms.Sender = BP.Web.WebUser.No;
             sms.RDT = BP.DA.DataType.CurrentDataTime;
@@ -188,6 +195,12 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
+
+            if(DataType.IsNullOrEmpty(openUrl) == false)
+                sms.SetPara("OpenUrl", openUrl);
+            if (DataType.IsNullOrEmpty(pushModel) == false)
+                sms.SetPara("PushModel", pushModel);
+
             sms.Insert();
         }
         #endregion 新方法
@@ -439,6 +452,14 @@ namespace BP.WF
         }
         #endregion
 
+        public string PushModel
+        {
+            get
+            {
+                return this.GetParaString(SMSAttr.PushModel);
+            }
+        }
+
         #region 构造函数
         /// <summary>
         /// UI界面上的访问控制
@@ -570,16 +591,14 @@ namespace BP.WF
         /// </summary>
         protected override void afterInsert()
         {
-            return; 
             try
             {
-                CCInterface.PortalInterfaceSoapClient soap = null;
-                if (this.HisEmailSta == MsgSta.UnRun)
-                {
-                    /*发送邮件*/
-                    if (DataType.IsNullOrEmpty(this.Email) == true)
-                        return;
+                if (this.HisEmailSta != MsgSta.UnRun)
+                    return;
 
+                #region 发送邮件
+                if (this.PushModel.Contains("Email") == true && DataType.IsNullOrEmpty(this.Email) == false)
+                {
                     string emailStrs = this.Email;
                     emailStrs = emailStrs.Replace(",", ";");
                     emailStrs = emailStrs.Replace("，", ";");
@@ -600,51 +619,72 @@ namespace BP.WF
                     {   //单个邮箱
                         SendEmailNow(this.Email, this.Title, this.DocOfEmail);
                     }
+
+                }
+                #endregion 发送邮件
+
+                #region 发送短消息 调用接口
+                //发送短消息的前提必须是手机号不能为空
+                //if (DataType.IsNullOrEmpty(this.Mobile) == true)
+                //    return;
+                //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
+
+                string messageUrl = BP.Sys.SystemConfig.AppSettings["HandlerOfMessage"];
+                if (DataType.IsNullOrEmpty(messageUrl) == true)
                     return;
-                }
+                string httpUrl = "";
 
-                if (this.HisMobileSta == MsgSta.UnRun)
+                string json = "{";
+                json += " \"sender\": \"" + WebUser.No + "\",";
+                json += " \"sendTo\": \"" + this.SendToEmpNo + "\",";
+                json += " \"tel\": \"" + this.Mobile + "\",";
+                json += " \"title\":\"" + this.Title + "\",";
+                json += " \"content\":\"" + this.MobileInfo + " \",";
+                json += " \"openUrl\":\"" + this.OpenURL + " \"}";
+
+                //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+                //站内消息
+                if (this.PushModel.Contains("CCMsg") == true)
                 {
-                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara + "@Sender=" + this.Sender + "@SenderName=" + BP.Web.WebUser.Name;
-                    string pushModel = this.GetParaString("PushModel");
-
-                    if (DataType.IsNullOrEmpty(pushModel) == true)
-                        pushModel = BP.WF.Glo.ShortMessageWriteTo.ToString();
-                    string[] pushModels = pushModel.Split(',');
-                    foreach (string model in pushModels)
-                    {
-                        switch ((ShortMessageWriteTo)Int32.Parse(model))
-                        {
-                            case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToWebservices: // 1 写入webservices.
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-
-                                //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag, this.Title, this.OpenURL);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToDingDing: // 2 写入dingding. 
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                                soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信. 3
-                                //写入微信.
-                                BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
-                                break;
-                            case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
-                                soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                                soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    httpUrl = messageUrl + "?DoType=SendToCCMSG";
+                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    //soap.SendToCCMSG(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
+                //短信
+                if (this.PushModel.Contains("SMS") == true)
+                {
+                    httpUrl = messageUrl + "?DoType=SendToWebServices";
+                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,this.Title, this.OpenURL);
+                }
+                //钉钉
+                if (this.PushModel.Contains("DingDing") == true)
+                {
+                    httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title=" + this.Title + "&msgConten=" + this.MobileInfo;
+                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
+                }
+                //微信
+                if (this.PushModel.Contains("WeiXin") == true)
+                {
+                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo + "&msgConten=" + this.MobileInfo;
+                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
+                }
+                //WebService
+                if (this.PushModel.Contains("WS") == true)
+                {
+                    httpUrl = messageUrl + "?DoType=SendToWebServices";
+                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
+                }
+                #endregion 发送短消息 调用接口
+
             }
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
-
             base.afterInsert();
         }
     }

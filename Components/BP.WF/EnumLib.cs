@@ -6,6 +6,32 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 流程表单类型
+    /// </summary>
+    public enum FlowFrmType
+    {
+        /// <summary>
+        /// 完整版-2019年更早版本
+        /// </summary>
+        Ver2019Earlier = 0,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        DeveloperFrm= 1,
+        /// <summary>
+        /// 傻瓜表单
+        /// </summary>
+        FoolFrm=2,
+        /// <summary>
+        /// 自定义表单
+        /// </summary>
+        SelfFrm = 3,
+        /// <summary>
+        /// SDK表单
+        /// </summary>
+        SDKFrm = 4,
+    }
+    /// <summary>
     /// 子流程结束处理规则
     /// </summary>
     public enum SubFlowOver
@@ -38,7 +64,9 @@ namespace BP.WF
         /// </summary>
         TeamupGroupLeader = 4
     }
-
+    /// <summary>
+    /// 组长会签规则
+    /// </summary>
     public enum HuiQianLeaderRole
     {
         /// <summary>
@@ -55,7 +83,6 @@ namespace BP.WF
         EveryOneMain = 2
 
     }
-
     /// <summary>
     /// 方向条件控制规则
     /// </summary>
@@ -163,7 +190,19 @@ namespace BP.WF
         /// <summary>
         /// 按岗位智能计算(操作员所在部门)
         /// </summary>
-        AccepterOfDeptStationOfCurrentOper
+        AccepterOfDeptStationOfCurrentOper,
+        /// <summary>
+        /// 按本组织用户计算.
+        /// </summary>
+        TeamOrgOnly = 10,
+        /// <summary>
+        /// 按全组织用户计算
+        /// </summary>
+        TeamOnly = 11,
+        /// <summary>
+        /// 按本组织部门用户计算
+        /// </summary>
+        TeamDeptOnly = 12
     }
     /// <summary>
     /// 流程删除规则
@@ -965,6 +1004,30 @@ namespace BP.WF
         /// </summary>
         BySelectedForPrj = 21,
         /// <summary>
+        /// 按照设置的组织计算
+        /// </summary>
+        BySelectedOrgs = 22,
+        /// <summary>
+        /// 按照部门领导计算
+        /// </summary>
+        ByDeptLeader = 23,
+        /// <summary>
+        /// 按照用户组计算(本组织范围内)
+        /// </summary>
+        ByTeamOrgOnly = 24,
+        /// <summary>
+        /// 按照用户组计算(全集团)
+        /// </summary>
+        ByTeamOnly = 25,
+        /// <summary>
+        /// 按照用户组计算(本部门范围内)
+        /// </summary>
+        ByTeamDeptOnly = 26,
+        /// <summary>
+        /// 按照绑定岗位的用户组人员
+        /// </summary>
+        ByBindTeamEmp = 27,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100
@@ -1296,6 +1359,10 @@ namespace BP.WF
         /// 节点单表单
         /// </summary>
         RefOneFrmTree = 11,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        Develop = 12,
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>

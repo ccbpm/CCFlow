@@ -33,13 +33,13 @@ namespace BP.WF
                     }
                     else
                     {
-                       
-                            bool b = BP.Sys.Glo.Request.RawUrl.ToLower().Contains("oneflow");
-                            if (b)
-                                _AppType = "WF/OneFlow";
-                            else
-                                _AppType = "WF";
-                         
+
+                        bool b = HttpContextHelper.RequestRawUrl.ToLower().Contains("oneflow");
+                        if (b)
+                            _AppType = "WF/OneFlow";
+                        else
+                            _AppType = "WF";
+
                     }
                 }
                 return _AppType;
@@ -236,8 +236,9 @@ namespace BP.WF
             #region 删除当前节点数据。
 
             // 删除产生的工作列表。
-            GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+            DeleteSpanNodesGenerWorkerListData();
+            //GenerWorkerLists wls = new GenerWorkerLists();
+            //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
             // 删除工作信息,如果是按照ccflow格式存储的。
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
@@ -316,8 +317,10 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                    WF.Port.Emp myEmp = new Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
+                    wlN.FK_Dept = myEmp.FK_Dept;
+                    wlN.FK_DeptT = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -428,14 +431,14 @@ namespace BP.WF
                 {
                     //获取当前节点的子线程
                     string truckTable = "ND" + int.Parse(nd.FK_Flow) + "Track";
-                    string threadSQL = "SELECT FK_Node,WorkID FROM WF_GenerWorkFlow  WHERE FID=" + this.WorkID + " AND FK_Node"
+                    string threadSQL = "SELECT FK_Node,WorkID,Emps FROM WF_GenerWorkFlow  WHERE FID=" + this.WorkID + " AND FK_Node"
                             + " IN(SELECT DISTINCT(NDTo) FROM " + truckTable + "  WHERE ActionType=" + (int)ActionType.ForwardFL + " AND WorkID=" + this.WorkID + " AND NDFrom='" + nd.NodeID + "'"
                             + "  ) ";
                     DataTable dt = DBAccess.RunSQLReturnTable(threadSQL);
                     if (dt == null || dt.Rows.Count == 0)
                         throw new Exception("err@流程运行错误：当不存在子线程时,改过程应该处于待办状态");
 
-
+                    string toEmps="";
                     foreach (DataRow dr in dt.Rows)
                     {
                         Node threadnd = new Node(dr["FK_Node"].ToString());
@@ -445,9 +448,14 @@ namespace BP.WF
                         BP.WF.Dev2Interface.Node_FHL_KillSubFlow(threadnd.FK_Flow, this.WorkID, long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
 
                         // 调用撤消发送前事件。
-                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, nd.HisWork, null);
-                    }
+                        Work work = nd.HisWork;
+                        work.OID = this.WorkID;
+                        work.NodeID = nd.NodeID;
+                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, work, null);
 
+                        toEmps += dr["Emps"].ToString().Replace('@',',');
+                        
+                    }
                     return "撤销成功";
 
                 }
@@ -677,6 +685,20 @@ namespace BP.WF
             }
             #endregion 如果当前是协作组长模式
 
+            //记录撤销前的处理人
+            string todoEmps = gwf.TodoEmps;
+            if (DataType.IsNullOrEmpty(todoEmps) == false)
+            {
+                string[] strs = todoEmps.Split(';');
+                todoEmps = "";
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+                    todoEmps += str.Split(',')[0];
+                }
+            }
+
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。
@@ -684,6 +706,7 @@ namespace BP.WF
 
             #region 删除当前节点数据。
             // 删除产生的工作列表。
+            //DeleteSpanNodesGenerWorkerListData();
             GenerWorkerLists wls = new GenerWorkerLists();
             wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
@@ -733,7 +756,7 @@ namespace BP.WF
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
 
             //删除审核组件设置“协作模式下操作员显示顺序”为“按照接受人员列表先后顺序(官职大小)”，而生成的待审核轨迹信息
-            FrmWorkCheck fwc = new FrmWorkCheck(nd.NodeID);
+            NodeWorkCheck fwc = new NodeWorkCheck(nd.NodeID);
             if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
             {
                 BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
@@ -784,8 +807,10 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                    WF.Port.Emp myEmp = new Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
+                    wlN.FK_Dept = myEmp.FK_Dept;
+                    wlN.FK_DeptT = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -808,9 +833,9 @@ namespace BP.WF
                 }
             }
             #endregion
-
+            string atPara = "@ToNode=" + cancelToNodeID+ "@SendToEmpIDs="+ todoEmps;
             //调用撤消发送后事件。
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, atPara);
 
             if (wnOfCancelTo.HisNode.IsStartNode)
             {
@@ -926,7 +951,7 @@ namespace BP.WF
             // 更新分流节点，让其出现待办.
             gwl.IsPassInt = 0;
             gwl.IsRead = false;
-            gwl.SDT = BP.DA.DataType.CurrentDataTime;  //这里计算时间有问题.
+            gwl.SDT = BP.DA.DataType.CurrentDataTimess;  //这里计算时间有问题.
             gwl.Update();
 
             // 把设置当前流程运行到分流流程上.
@@ -1014,8 +1039,9 @@ namespace BP.WF
             wnPri.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, wnPri.HisNode.NodeID, wnPri.HisNode.Name, "无");
 
             //删除当前节点的流程
-            GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
+            DeleteSpanNodesGenerWorkerListData();
+            //GenerWorkerLists wls = new GenerWorkerLists();
+            //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
 
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
                 wn.HisWork.Delete();
@@ -1115,8 +1141,9 @@ namespace BP.WF
             string msg = wn.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, wn.HisNode, wn.HisWork, null);
 
             // 删除工作者。
-            GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
+            DeleteSpanNodesGenerWorkerListData();
+            //GenerWorkerLists wls = new GenerWorkerLists();
+            //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
 
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
                 wn.HisWork.Delete();
@@ -1152,6 +1179,92 @@ namespace BP.WF
 
             return "@撤消执行成功." + msg;
 
+
+        }
+
+
+        /// <summary>
+        /// 删除两个节点之间的业务数据与流程引擎控制数据.
+        /// </summary>
+        private void DeleteSpanNodesGenerWorkerListData()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+            Node unSendNode = new Node(this.UnSendToNode);
+            Paras ps = new Paras();
+            string dbStr = SystemConfig.AppCenterDBVarStr;
+
+            // 删除FH, 不管是否有这笔数据.
+            ps.Clear();
+
+            /*撤销到某个节点，就需要清除 两个节点之间的数据, 包括WF_GenerWorkerList的数据.*/
+            if (unSendNode.IsStartNode == true)
+            {
+                // 删除其子线程流程.
+                ps.Clear();
+                ps.SQL = "DELETE FROM WF_GenerWorkFlow WHERE FID=" + dbStr + "FID ";
+                ps.Add("FID", this.WorkID);
+                DBAccess.RunSQL(ps);
+
+                /*如果撤销到了开始的节点，就删除出开始节点以外的数据，不要删除节点表单数据，这样会导致流程轨迹打不开.*/
+                ps.Clear();
+                ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node!=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2)";
+                ps.Add(GenerWorkerListAttr.FK_Node, unSendNode.NodeID);
+                ps.Add("WorkID1", this.WorkID);
+                ps.Add("WorkID2", this.WorkID);
+                DBAccess.RunSQL(ps);
+                return;
+            }
+
+            /*找到撤销到的节点，把从这个时间点以来的数据都要删除掉.*/
+            ps.Clear();
+            ps.SQL = "SELECT RDT,ActionType,NDFrom FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.Forward + " ORDER BY RDT desc ";
+            ps.Add("NDFrom", unSendNode.NodeID);
+            ps.Add("WorkID", this.WorkID);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count >= 1)
+            {
+                string rdt = dt.Rows[0][0].ToString();
+
+                ps.Clear();
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID ORDER BY RDT ";
+                ps.Add("RDT", rdt);
+                ps.Add("WorkID", this.WorkID);
+                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ActionType at = (ActionType)int.Parse(dr["ActionType"].ToString());
+                    int nodeid = int.Parse(dr["NDFrom"].ToString());
+                    if (nodeid == unSendNode.NodeID)
+                        continue;
+
+                    //删除中间的节点.
+                    ps.Clear();
+                    ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+                    ps.Add("FK_Node", nodeid);
+                    ps.Add("WorkID1", this.WorkID);
+                    ps.Add("WorkID2", this.WorkID);
+                    DBAccess.RunSQL(ps);
+
+                    //删除审核意见
+                    ps.Clear();
+                    ps.SQL = "DELETE FROM ND" + int.Parse(unSendNode.FK_Flow) + "Track WHERE NDFrom=" + dbStr + "NDFrom AND  (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) AND ActionType=22";
+                    ps.Add("NDFrom", nodeid);
+                    ps.Add("WorkID1", this.WorkID);
+                    ps.Add("WorkID2", this.WorkID);
+                    DBAccess.RunSQL(ps);
+                }
+            }
+
+
+            //删除当前节点的数据.
+            ps.Clear();
+            ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+            ps.Add("FK_Node", gwf.FK_Node);
+            ps.Add("WorkID1", this.WorkID);
+            ps.Add("WorkID2", this.WorkID);
+            DBAccess.RunSQL(ps);
 
         }
     }

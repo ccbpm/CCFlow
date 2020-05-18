@@ -14,6 +14,16 @@ namespace BP.WF.WeiXin
         public string UserId { get; set; }
         public string DeviceId { get; set; }
     }
+    /// <summary>
+    /// 获取企业的jsapi_ticket
+    /// </summary>
+    public class Ticket
+    {
+        public string errcode { get; set; }
+        public string errmsg { get; set; }
+        public string ticket { get; set; }
+        public string expires_in { get; set; }
+    }
     public class MessageErrorModel
     {
         public string errcode { get; set; }
@@ -495,9 +505,9 @@ namespace BP.WF.WeiXin
         /// </summary>
         public string status { get; set; }
         /// <summary>
-        /// 扩展属性
+        /// 是否是上级，1=是，0=不是
         /// </summary>
-        public string extattr { get; set; }
+        public int[] is_leader_in_dept { get; set; }
     }
     #endregion
 }

@@ -10,12 +10,9 @@ namespace BP.WF.XML
     /// <summary>
     /// 管理员
     /// </summary>
-    public class AdminMenu : XmlEn
+    public class Admin2MenuGroup : XmlEn
     {
         #region 属性
-        /// <summary>
-        /// 菜单编号
-        /// </summary>
         public string No
         {
             get
@@ -27,23 +24,17 @@ namespace BP.WF.XML
                 this.SetVal("No", value);
             }
         }
-        /// <summary>
-        /// 分组编号
-        /// </summary>
-        public string GroupNo
+        public string ParentNo
         {
             get
             {
-                return this.GetValStringByKey("GroupNo");
+                return this.GetValStringByKey("ParentNo");
             }
             set
             {
-                this.SetVal("GroupNo", value);
+                this.SetVal("ParentNo", value);
             }
         }
-        /// <summary>
-        /// 名称
-        /// </summary>
         public string Name
         {
             get
@@ -55,9 +46,6 @@ namespace BP.WF.XML
                 this.SetVal("Name", value);
             }
         }
-        /// <summary>
-        /// 应用范围
-        /// </summary>
         public string For
         {
             get
@@ -69,27 +57,14 @@ namespace BP.WF.XML
                 this.SetVal("For", value);
             }
         }
-        /// <summary>
-        /// Url菜单
-        /// </summary>
-        public string Url
-        {
-            get
-            {
-                return this.GetValStringByKey("Url");
-            }
-            set
-            {
-                this.SetVal("Url", value);
-            }
-        }
+        
         #endregion
 
         #region 构造
         /// <summary>
         /// 节点扩展信息
         /// </summary>
-        public AdminMenu()
+        public Admin2MenuGroup()
         {
         }
         /// <summary>
@@ -99,7 +74,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return new AdminMenus();
+                return new Admin2MenuGroups();
             }
         }
         #endregion
@@ -111,19 +86,28 @@ namespace BP.WF.XML
         /// <returns></returns>
         public bool IsCanUse(string no)
         {
-            return true;    
+            if (BP.Web.WebUser.No.Equals("admin") == true && this.For == "admin")
+                return true;
+
+            if (BP.Web.WebUser.No.Equals("admin") == true)
+                return false;
+
+            if (this.For == "admin2")
+                return true;
+            return false;
+
         }
     }
     /// <summary>
     /// 
     /// </summary>
-    public class AdminMenus : XmlEns
+    public class Admin2MenuGroups : XmlEns
     {
         #region 构造
         /// <summary>
         /// 考核率的数据元素
         /// </summary>
-        public AdminMenus() { }
+        public Admin2MenuGroups() { }
         #endregion
 
         #region 重写基类属性或方法。
@@ -134,14 +118,14 @@ namespace BP.WF.XML
         {
             get
             {
-                return new AdminMenu();
+                return new Admin2MenuGroup();
             }
         }
         public override string File
         {
             get
             {
-                return SystemConfig.PathOfWebApp + "\\DataUser\\XML\\AdminMenu.xml";
+                return SystemConfig.PathOfWebApp + "\\DataUser\\XML\\Admin2Menu.xml";
             }
         }
         /// <summary>
@@ -151,7 +135,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return "Item";
+                return "Group";
             }
         }
         public override Entities RefEns

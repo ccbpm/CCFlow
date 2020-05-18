@@ -136,16 +136,19 @@
             var empDept = new Entity("BP.Port.Dept", en.FK_Dept);
             var empEn = new Entity("BP.WF.Template.SelectAccper");
             empEn.MyPK = NodeID + "_" + WorkID + "_" + en.No;//设置主键
-            alert(empEn.MyPK);
-
-            empEn.FK_Node = NodeID;
-            empEn.WorkID = WorkID;
-            empEn.FK_Emp = en.No;
-            empEn.EmpName = en.Name;
-            empEn.DeptName = empDept.Name;
-            empEn.Rec = webUser.No;
-            if (empEn.RetrieveFromDBSources() == 0)
+            if (empEn.RetrieveFromDBSources() == 0) {
+                empEn.FK_Node = NodeID;
+                empEn.WorkID = WorkID;
+                empEn.FK_Emp = en.No;
+                empEn.EmpName = en.Name;
+                empEn.DeptName = empDept.Name;
+                empEn.Rec = webUser.No;
                 empEn.Insert();
+            }
+
+           
+            
+               
 
         }
         //删除按钮

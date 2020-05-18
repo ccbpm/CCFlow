@@ -66,6 +66,19 @@
 
             $("#teamsList").append(html);
 
+             //初始化已选择的人员
+            var emps = new Entities("BP.WF.Template.SelectAccpers");
+            emps.RetrieveAll();
+            html = "";
+            for (var i = 0; i < emps.length; i++) {
+                var en = emps[i];
+                html += "<tr id='" + en.FK_Emp + "' data-uniqueid='" + en.FK_Emp + "'>"
+                html += "<td class='bs-checkbox ' >" + en.FK_Emp + "</td>";
+                html += "<td>" + en.EmpName + "</td>";
+                html += "<td><a class='newBtn btn-danger' href='#' onclick=removeRecord('" + en.FK_Emp + "','" + en.EmpName + "')>X</a></td>";
+                html += "</tr>"
+            }
+            $("#selectEmpList").append(html);
         });
 
         //显示人员.
@@ -78,12 +91,7 @@
             var data = handler.DoMethodReturnString("SelectEmpsByTeamStation_Init");
             var Emps = eval('(' + data + ')');
             var html = "";
-            //html += " <tr>";
-            //html += " <th class='bs-checkbox ' style='width:36px; ' data-field='_checkbox'>"
-            //html += " <div class='th-inner '><label><input name='btSelectAll' type='checkbox'><span></span></label></div><div class='fht-cell' style='width: 35px; '></div></th>";
-            //html += " <th style='' data-field='No'><div class='th-inner '>编号</div><div class='fht-cell' style='width: 551px; '></div></th>";
-            //html += " <th style='' data-field='No'><div class='th-inner '>名称</div><div class='fht-cell' style='width: 386px; '></div></th>";
-            //html += " </tr>";
+            
             for (var i = 0; i < Emps.length; i++) {
                 en = Emps[i];
 
@@ -125,7 +133,7 @@
         function AddDataOfSelectAccper(en) {
             var empEn = new Entity("BP.WF.Template.SelectAccper");
             var empDept = new Entity("BP.Port.Dept", en.FK_Dept);
-            empEn.MyPK = WorkID + "_" + NodeID + "_" + en.No;//设置主键
+            empEn.MyPK = NodeID + "_" + WorkID  + "_" + en.No;//设置主键
             empEn.FK_Node = GetQueryString("ToNode");
             empEn.WorkID = GetQueryString("WorkID");
             empEn.FK_Emp = en.No;
@@ -138,7 +146,9 @@
         }
         //删除按钮
         function removeRecord(No, Name) {
-            var MyPK = WorkID + "_" + NodeID + "_" + No;
+            if (window.confirm('您确认要删除吗？') == false)
+                return;
+            var MyPK = NodeID + "_" + WorkID  + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
             if (empEn.Delete()) {
                 document.getElementById(Name).checked = false;

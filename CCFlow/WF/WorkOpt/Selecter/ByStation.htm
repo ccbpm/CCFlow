@@ -36,7 +36,7 @@
         //初始化人员
         $(function () {
 
-
+            //初始化左列表
             var tps = new Entities("BP.Port.StationTypes");
             tps.RetrieveAll();
 
@@ -65,7 +65,21 @@
             html += "</ul>";
 
             $("#stationsList").append(html);
-
+            
+            //初始化已选择的人员
+            var emps = new Entities("BP.WF.Template.SelectAccpers");
+            emps.RetrieveAll();
+            html = "";
+            for (var i = 0; i < emps.length; i++) {
+                var en = emps[i];
+                html += "<tr id='" + en.FK_Emp + "' data-uniqueid='" + en.FK_Emp + "'>"
+                html += "<td class='bs-checkbox ' >" + en.FK_Emp + "</td>";
+                html += "<td>" + en.EmpName + "</td>";
+                html += "<td><a class='newBtn btn-danger' href='#' onclick=removeRecord('" + en.FK_Emp + "','" + en.EmpName + "')>X</a></td>";
+                html += "</tr>"
+               
+            }
+            $("#selectEmpList").append(html);
         });
 
         //显示人员.
@@ -78,22 +92,18 @@
             var data = handler.DoMethodReturnString("ByStation_ShowEmps");
             var Emps = eval('(' + data + ')');
             var html = "";
-            //html += " <tr>";
-            //html += " <th class='bs-checkbox ' style='width:36px; ' data-field='_checkbox'>"
-            //html += " <div class='th-inner '><label><input name='btSelectAll' type='checkbox'><span></span></label></div><div class='fht-cell' style='width: 35px; '></div></th>";
-            //html += " <th style='' data-field='No'><div class='th-inner '>编号</div><div class='fht-cell' style='width: 551px; '></div></th>";
-            //html += " <th style='' data-field='No'><div class='th-inner '>名称</div><div class='fht-cell' style='width: 386px; '></div></th>";
-            //html += " </tr>";
+            
             for (var i = 0; i < Emps.length; i++) {
                 en = Emps[i];
 
                 var en = new Entity("BP.Port.Emp", en.No);
-                //html += "<a href='#'><li>&nbsp&nbsp" + en.Name + "</li></a>";
                 html += "<tr class='emplist' data-index='" + i + "' data-uniqueid='" + en.No + "' >"
                 html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
                 html += "</tr>";
+               
+                
             }
             $("#stationsEmpList").append(html)
         }
@@ -112,7 +122,7 @@
                 html += "<td>" + en.Name + "</td>";
                 html += "<td><a class='newBtn btn-danger' href='#' onclick=removeRecord('" + en.No + "','" + en.Name + "')>X</a></td>";
                 html += "</tr>"
-                    ;
+
                 $("#selectEmpList").append(html);
             }
             else {
@@ -123,11 +133,13 @@
         }
         //数据库增加选择的人员
         function AddDataOfSelectAccper(en) {
-            var empEn = new Entity("BP.WF.Template.SelectAccper");
             var empDept = new Entity("BP.Port.Dept", en.FK_Dept);
-            empEn.MyPK = WorkID + "_" + NodeID + "_" + en.No;//设置主键
-            empEn.FK_Node = GetQueryString("ToNode");
-            empEn.WorkID = GetQueryString("WorkID");
+            var empEn = new Entity("BP.WF.Template.SelectAccper");
+            empEn.MyPK = NodeID + "_" + WorkID + "_" + en.No;//设置主键
+            alert(empEn.MyPK);
+
+            empEn.FK_Node = NodeID;
+            empEn.WorkID = WorkID;
             empEn.FK_Emp = en.No;
             empEn.EmpName = en.Name;
             empEn.DeptName = empDept.Name;
@@ -138,7 +150,9 @@
         }
         //删除按钮
         function removeRecord(No, Name) {
-            var MyPK = WorkID + "_" + NodeID + "_" + No;
+            if (window.confirm('您确认要删除吗？') == false)
+                return;
+            var MyPK = NodeID + "_" + WorkID + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
             if (empEn.Delete()) {
                 document.getElementById(Name).checked = false;
@@ -150,13 +164,14 @@
         }
         //全选
         function SelectAll() {
-        
+
             if (document.getElementById("EmpSelectAll").checked) {
-                
+
                 document.getElementsByName("Empcheck").checked = true;
-                
+
             }
         }
+        
         function GotoUrl(url) {
             var urlSuffix = "?WorkID=" + WorkID + "&ToNode=" + NodeID;
             url += urlSuffix;
@@ -189,7 +204,7 @@
         <div class="row row-margin-top">
             <div class="col-md-4 col-sm-4" style="height:500px">
                 <div id="stationsList" style="overflow-y:auto;height:100%">
-                    <table style="width:100%" class="table table-bordered" >
+                    <table style="width:100%" class="table table-bordered">
                         <tr>
                             <td style="cursor:pointer;text-align:center" onclick="GotoUrl('ByStation.htm')"><a href="">按部门选择</a></td>
                             <td style="cursor:pointer;text-align:center" onclick="GotoUrl('ByTeam.htm')"><a href="">按用户组选择</a></td>
@@ -232,24 +247,6 @@
             </div>
         </div>
     </div>
-    <!--<a onclick=""></a>
-    <table class="table table-bordered" style="border:1px; border-color:black ">
-        <tr>
-            <td>(@)按岗位 ()<a onclick="GotoUrl()" href="#">按用户组</a> </td>
-            <td>关键字:____ 查询 关闭 </td>
-        </tr>
-        <tr>
-            <td id="stationsList" rowspan="2">
-            </td>
-            <td id="stationsEmpList">
-            </td>
-        </tr>
-        <tr>
-            <td id="selectEmpList" rowspan="2"></td>
-
-        </tr>
-
-    </table>-->
 
 </body>
 </html>

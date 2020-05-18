@@ -169,8 +169,9 @@ namespace CCFlow.SDKFlowDemo
         /// <returns></returns>
         public string GenerWorkNode()
         {
-            BP.WF.HttpHandler.WF_MyFlow myflow = new BP.WF.HttpHandler.WF_MyFlow(this.context);
-            return myflow.GenerWorkNode();
+            //  BP.WF.HttpHandler.WF_MyFlow myflow = new BP.WF.HttpHandler.WF_MyFlow( HttpContext.context);
+            //return myflow.GenerWorkNode();
+            return null;
         }
         #endregion 工作处理.
 

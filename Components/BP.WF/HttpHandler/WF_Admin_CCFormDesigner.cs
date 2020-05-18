@@ -570,6 +570,7 @@ namespace BP.WF.HttpHandler
             string fromFrmID = GetRequestVal("FromFrmID");
             string toFrmID = GetRequestVal("ToFrmID");
             string toFrmName = GetRequestVal("ToFrmName");
+
             #region 原表单信息
             //表单信息
             MapData fromMap = new MapData(fromFrmID);
@@ -609,7 +610,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 复制表单
 
-            MapData.ImpMapData(toFrmID, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
+            MapData.ImpMapData(BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
 
             //清空缓存
             toMapData.RepairMap();

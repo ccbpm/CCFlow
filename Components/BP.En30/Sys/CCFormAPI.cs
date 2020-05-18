@@ -255,7 +255,7 @@ namespace BP.Sys
             //如果绑定的外键是树形结构的，在AtPara中增加标识
             if (sf.CodeStruct == CodeStruct.Tree)
                 attr.SetPara("CodeStruct", 1);
-            if(DataType.IsNullOrEmpty(sf.RootVal)==false)
+            if (DataType.IsNullOrEmpty(sf.RootVal) == false)
                 attr.SetPara("ParentNo", sf.RootVal);
             attr.X = x;
             attr.Y = y;
@@ -388,14 +388,14 @@ namespace BP.Sys
             //检查是否可以创建字段? 
             MapData md = new MapData(frmID);
             md.CheckPTableSaveModel(field);
-            
+
             MapAttr ma = new MapAttr();
             ma.FK_MapData = frmID;
             ma.KeyOfEn = field;
             ma.Name = fieldDesc;
             ma.MyDataType = mydataType;
-            if (mydataType==7)
-                 ma.IsSupperText = 1;  
+            if (mydataType == 7)
+                ma.IsSupperText = 1;
             ma.X = x;
             ma.Y = y;
 
@@ -887,7 +887,7 @@ namespace BP.Sys
                     || shape == FrmEle.HandSiganture)
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
-                    attrPKs = attrPKs.Replace("@"+ctrlID + "@", "@");
+                    attrPKs = attrPKs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
 
@@ -905,7 +905,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
-                    dtlPKs = dtlPKs.Replace("@"+ctrlID + "@", "@");
+                    dtlPKs = dtlPKs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
                 #endregion 数据类控件.
@@ -915,14 +915,14 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, ctrlID, x, y, height, width);
-                    athMultis = athMultis.Replace("@"+ctrlID + "@", "@");
+                    athMultis = athMultis.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
                 if (shape == "AthImg")
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveAthImg(fk_mapdata, ctrlID, x, y, height, width);
-                    athImgs = athImgs.Replace("@"+ctrlID + "@", "@");
+                    athImgs = athImgs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
 
@@ -933,7 +933,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    eleIDs = eleIDs.Replace("@"+ctrlID + "@", "@");
+                    eleIDs = eleIDs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
 
@@ -941,7 +941,7 @@ namespace BP.Sys
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveMapFrame(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    frameIDs = frameIDs.Replace("@"+ctrlID + "@", "@");
+                    frameIDs = frameIDs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
 
@@ -959,7 +959,7 @@ namespace BP.Sys
                     if (str == null)
                         continue;
 
-                    attrPKs = attrPKs.Replace("@"+str + "@", "@");
+                    attrPKs = attrPKs.Replace("@" + str + "@", "@");
                     continue;
                 }
 
@@ -1248,6 +1248,7 @@ namespace BP.Sys
         /// <param name="isSetReadonly">是否把空间设置只读？</param>
         public static void ImpFrmTemplate(string toFrmID, DataSet fromds, bool isSetReadonly)
         {
+            MapData md = new MapData(toFrmID);
             MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>
@@ -1381,7 +1382,7 @@ namespace BP.Sys
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
 
             //如果是开发者表单, 就把html信息放入到字段.
-            if (md.HisFrmType== FrmType.Develop)
+            if (md.HisFrmType == FrmType.Develop)
             {
                 Sys_MapData.Columns.Add("HtmlTemplateFile", typeof(string));
                 string text = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -1623,6 +1624,51 @@ namespace BP.Sys
             return ds;
         }
         #endregion 模版操作.
+
+        #region 模版操作 2020. @sly
+        /// <summary>
+        /// A:从一个表单导入另外一个表单模版:
+        /// 1.向已经存在的表单上导入模版.
+        /// 2.用于节点表单的导入,设计表单的时候，新建一个表单后在导入的情况.
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="specImpFrmID"></param>
+        /// <returns></returns>
+        public static MapData Template_ImpFromSpecFrmID(string frmID, string specImpFrmID)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// B:复制表单模版到指定的表单ID.
+        /// 用于复制一个表单，到另外一个表单ID上去.用于表单树的上的表单Copy.
+        /// </summary>
+        /// <param name="fromFrmID">要copy的表单ID</param>
+        /// <param name="copyToFrmID">copy到的表单ID</param>
+        /// <param name="copyToFrmName">表单名称</param>
+        /// <returns></returns>
+        public static MapData Template_CopyFrmToFrmIDAsNewFrm(string fromFrmID, string copyToFrmID,string copyToFrmName)
+        {
+
+            return null;
+        }
+        /// <summary>
+        /// C:导入模版xml文件..
+        /// 导入一个已经存在的表单,如果这个表单ID已经存在就提示错误..
+        /// </summary>
+        /// <param name="">表单元素</param>
+        /// <param name="">表单类别</param>
+        /// <returns></returns>
+        public static MapData Template_LoadXmlTemplateAsNewFrm(DataSet ds, string frmSort)
+        {
+            MapData md= MapData.ImpMapData(ds);
+            md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='"+frmSort+"'");
+            md.FK_FormTree = frmSort;
+            md.Update();
+            return md;
+        }
+        #endregion 模版操作.
+
 
         #region 其他功能.
         /// <summary>

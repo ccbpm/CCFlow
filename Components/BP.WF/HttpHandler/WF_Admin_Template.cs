@@ -47,10 +47,20 @@ namespace BP.WF.HttpHandler
                 ds.ReadXml(temp);
 
                 //执行装载.
-                MapData.ImpMapData(ds);
+                MapData md = MapData.ImpMapData(ds);
+
+                //处理表单类型.
+                md.FK_FrmSort = frmSort;
+
+                //处理表单的OrgNo.
+                BP.WF.Template.SysFormTree tree = new SysFormTree(frmSort);
+                md.OrgNo = tree.OrgNo;
+                md.Update();
+
 
                 return "导入成功.";
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -236,7 +246,7 @@ namespace BP.WF.HttpHandler
                 }
                 catch (Exception ex)
                 {
-                    dtInfo = this.ImpAddInfo(dtInfo, str,  ex.Message, "失败.");
+                    dtInfo = this.ImpAddInfo(dtInfo, str, ex.Message, "失败.");
                     continue;
                 }
 
@@ -310,11 +320,7 @@ namespace BP.WF.HttpHandler
                 FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + str, FtpLocalExists.Overwrite);
                 if (fs.ToString().Equals("Success") == false)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "文件下载失败.";
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "文件下载失败", "导入失败");
                     continue;
                 }
 
@@ -324,11 +330,8 @@ namespace BP.WF.HttpHandler
 
                 if (ds.Tables.Contains("Sys_MapData") == false)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "模版不存在Sys_MapData表.";
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "模版不存在Sys_MapData表,非法的表单.", "导入失败");
                     continue;
                 }
 
@@ -342,32 +345,22 @@ namespace BP.WF.HttpHandler
                     ds.Tables["Sys_MapData"].Rows[0]["No"] = md.No;
                     if (md.RetrieveFromDBSources() == 1)
                     {
-                        DataRow dr = dtInfo.NewRow();
-                        dr[0] = str;
-                        dr[1] = "模版编号为:" + no + "，已经存在.";
-                        dr[2] = "导入失败";
-                        dtInfo.Rows.Add(dr);
+                        dtInfo = this.ImpAddInfo(dtInfo, str, "模版编号为:" + no + "，已经存在.", "导入失败");
                         continue;
                     }
                 }
 
                 try
                 {
-                    //执行装载.
-                    MapData.ImpMapData(md.No,ds);
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "执行成功:新模板编号:" + md.No + " -名称 " + md.Name;
-                    dr[2] = "导入成功";
-                    dtInfo.Rows.Add(dr);
+                    //装载
+                    md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, sortNo);
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "执行成功:新模板编号:" + md.No + " -名称 " + md.Name, "导入成功");
                 }
                 catch (Exception ex)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = ex.Message;
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+                    md.DirectDelete();
+
+                    dtInfo = this.ImpAddInfo(dtInfo, str, ex.Message, "导入失败");
                     continue;
                 }
             }

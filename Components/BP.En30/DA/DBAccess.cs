@@ -66,6 +66,33 @@ namespace BP.DA
             throw new Exception("@没有涉及到的数据库类型");
         }
         /// <summary>
+        /// 删除指定字段的约束
+        /// </summary>
+        /// <param name="table">表名</param>
+        /// <param name="colName">列名</param>
+        /// <returns>返回删除约束的个数</returns>
+        public static int DropConstraintOfSQL(string table, string colName)
+        {
+            bool isHave = false;
+            //获得约束.
+            string sql = "select b.name from sysobjects b join syscolumns a on b.id = a.cdefault ";
+            sql += " where a.id = object_id('"+ table + "') ";
+            sql += " and a.name ='"+colName+"' ";
+
+            //遍历并删除它们.
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string name = dr[0].ToString();
+
+                DBAccess.RunSQL("exec('alter table "+table+" drop constraint "+name+" ' )");
+                isHave = true;
+            }
+
+            //返回执行的个数.
+            return dt.Rows.Count;
+        }
+        /// <summary>
         /// 获得约束
         /// </summary>
         /// <param name="table"></param>

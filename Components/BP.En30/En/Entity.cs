@@ -3401,7 +3401,13 @@ namespace BP.En
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("err@类["+this.ToString()+"],表["+this.EnMap.PhysicsTable+"],自动扩展字段:(" + attr.Key + ")的长度，修复SQL("+sql+")字段长度("+val.Length+")字段值：(" + val + ")");
+                    var valNum = DBAccess.DropConstraintOfSQL(this.EnMap.PhysicsTable, attr.Key);
+                    if (valNum > 0)
+                    {
+                        DBAccess.RunSQL(sql);
+                        isCheckIt = true; //设置是否更新到.
+                    }
+                    //throw new Exception("err@类["+this.ToString()+"],表["+this.EnMap.PhysicsTable+"],自动扩展字段:(" + attr.Key + ")的长度，修复SQL("+sql+")字段长度("+val.Length+")字段值：(" + val + ")");
                 }
             }
             //返回是否检测到。

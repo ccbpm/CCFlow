@@ -2434,7 +2434,7 @@ namespace BP.Sys
 
                             //执行保存，并统一生成PK的规则.
                             en.InitPK();
-                            en.Save();
+                            en.DirectSave(); //@sly.
                         }
                         break;
                     case "Sys_MapAttr":
@@ -2963,13 +2963,11 @@ namespace BP.Sys
                         DBAccess.RunSQL("DROP TABLE " + this.PTable);
                 }
             }
-
             MapDtls dtls = new MapDtls(this.No);
             foreach (MapDtl dtl in dtls)
                 dtl.Delete();
 
             #endregion
-
 
             #region 删除注册到的外检表.
             SFTables sfs = new SFTables();

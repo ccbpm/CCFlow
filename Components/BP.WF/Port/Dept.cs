@@ -112,11 +112,16 @@ namespace BP.WF.Port
             if (BP.Web.WebUser.No == "admin")
                 return base.RetrieveAll();
 
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
-            qo.addOr();
-            qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
-            return qo.DoQuery();
+            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOr();
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                return qo.DoQuery();
+            }
+
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
         /// <summary>
         /// 得到一个新实体
@@ -133,7 +138,6 @@ namespace BP.WF.Port
         /// </summary>
         public Depts()
         {
-
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

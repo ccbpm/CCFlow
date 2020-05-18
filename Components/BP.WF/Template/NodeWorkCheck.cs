@@ -7,9 +7,226 @@ using BP.WF;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 绑定表单的审核组件
+    /// 附件类型
     /// </summary>
-    public class FrmWorkCheck : Entity
+    public enum FWCAth
+    {
+        /// <summary>
+        /// 使用附件
+        /// </summary>
+        None,
+        /// <summary>
+        /// 多附件
+        /// </summary>
+        MinAth,
+        /// <summary>
+        /// 单附件
+        /// </summary>
+        SingerAth,
+        /// <summary>
+        /// 图片附件
+        /// </summary>
+        ImgAth
+    }
+    /// <summary>
+    /// 类型
+    /// </summary>
+    public enum FWCType
+    {
+        /// <summary>
+        /// 审核组件
+        /// </summary>
+        Check,
+        /// <summary>
+        /// 日志组件
+        /// </summary>
+        DailyLog,
+        /// <summary>
+        /// 周报
+        /// </summary>
+        WeekLog,
+        /// <summary>
+        /// 月报
+        /// </summary>
+        MonthLog
+    }
+    /// <summary>
+    /// 显示格式
+    /// </summary>
+    public enum FrmWorkShowModel
+    {
+        /// <summary>
+        /// 表格
+        /// </summary>
+        Table,
+        /// <summary>
+        /// 自由显示
+        /// </summary>
+        Free
+    }
+    /// <summary>
+    /// 显示控制方式
+    /// </summary>
+    public enum SFShowCtrl
+    {
+        /// <summary>
+        /// 所有的子线程都可以看到
+        /// </summary>
+        All,
+        /// <summary>
+        /// 仅仅查看我自己的
+        /// </summary>
+        MySelf
+    }
+  
+    /// <summary>
+    /// 审核组件状态
+    /// </summary>
+    public enum FrmWorkCheckSta
+    {
+        /// <summary>
+        /// 不可用
+        /// </summary>
+        Disable,
+        /// <summary>
+        /// 可用
+        /// </summary>
+        Enable,
+        /// <summary>
+        /// 只读
+        /// </summary>
+        Readonly
+    }
+    /// <summary>
+    /// 协作模式下操作员显示顺序
+    /// </summary>
+    public enum FWCOrderModel
+    {
+        /// <summary>
+        /// 按审批时间先后排序
+        /// </summary>
+        RDT = 0,
+        /// <summary>
+        /// 按照接受人员列表先后顺序(官职大小)
+        /// </summary>
+        SqlAccepter = 1
+    }
+    /// <summary>
+    /// 审核组件
+    /// </summary>
+    public class NodeWorkCheckAttr : EntityNoAttr
+    {
+        /// <summary>
+        /// 傻瓜表单审核标签
+        /// </summary>
+        public const string FWCLab = "FWCLab";
+        /// <summary>
+        /// 是否可以审批
+        /// </summary>
+        public const string FWCSta = "FWCSta";
+        /// <summary>
+        /// X
+        /// </summary>
+        public const string FWC_X = "FWC_X";
+        /// <summary>
+        /// Y
+        /// </summary>
+        public const string FWC_Y = "FWC_Y";
+        /// <summary>
+        /// H
+        /// </summary>
+        public const string FWC_H = "FWC_H";
+        /// <summary>
+        /// W
+        /// </summary>
+        public const string FWC_W = "FWC_W";
+        /// <summary>
+        /// 应用类型
+        /// </summary>
+        public const string FWCType = "FWCType";
+        /// <summary>
+        /// 附件
+        /// </summary>
+        public const string FWCAth = "FWCAth";
+        /// <summary>
+        /// 显示方式.
+        /// </summary>
+        public const string FWCShowModel = "FWCShowModel";
+        /// <summary>
+        /// 轨迹图是否显示?
+        /// </summary>
+        public const string FWCTrackEnable = "FWCTrackEnable";
+        /// <summary>
+        /// 历史审核信息是否显示?
+        /// </summary>
+        public const string FWCListEnable = "FWCListEnable";
+        /// <summary>
+        /// 是否显示所有的步骤？
+        /// </summary>
+        public const string FWCIsShowAllStep = "FWCIsShowAllStep";
+        /// <summary>
+        /// 默认审核信息
+        /// </summary>
+        public const string FWCDefInfo = "FWCDefInfo";
+        /// <summary>
+        /// 节点意见名称
+        /// </summary>
+        public const string FWCNodeName = "FWCNodeName";
+
+        /// <summary>
+        /// 如果用户未审核是否按照默认意见填充？
+        /// </summary>
+        public const string FWCIsFullInfo = "FWCIsFullInfo";
+        /// <summary>
+        /// 操作名词(审核，审定，审阅，批示)
+        /// </summary>
+        public const string FWCOpLabel = "FWCOpLabel";
+        /// <summary>
+        /// 操作人是否显示数字签名
+        /// </summary>
+        public const string SigantureEnabel = "SigantureEnabel";
+        /// <summary>
+        /// 操作字段
+        /// </summary>
+        public const string FWCFields = "FWCFields";
+        /// <summary>
+        /// 自定短语
+        /// </summary>
+        public const string FWCNewDuanYu = "FWCNewDuanYu";
+        /// <summary>
+        /// 是否显示未审核的轨迹
+        /// </summary>
+        public const string FWCIsShowTruck = "FWCIsShowTruck";
+        /// <summary>
+        /// 是否显示退回信息
+        /// </summary>
+        public const string FWCIsShowReturnMsg = "FWCIsShowReturnMsg";
+        /// <summary>
+        /// 协作模式下操作员显示顺序
+        /// </summary>
+        public const string FWCOrderModel = "FWCOrderModel";
+        /// <summary>
+        /// 审核意见显示模式()
+        /// </summary>
+        public const string FWCMsgShow = "FWCMsgShow";
+        /// <summary>
+        /// 审核意见版本号控制
+        /// </summary>
+        public const string FWCVer = "FWCVer";
+
+        /// <summary>
+        /// 签批字段
+        /// </summary>
+        public const string CheckField = "CheckField";
+        /// <summary>
+        /// 审核意见立场 不同意、不通过、同意、赞成
+        /// </summary>
+        public const string FWCView = "FWCView";
+    }
+    /// <summary>
+    /// 节点表单的审核组件
+    /// </summary>
+    public class NodeWorkCheck : Entity
     {
         #region 属性
         /// <summary>
@@ -420,7 +637,6 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeWorkCheckAttr.FWCView, value);
             }
         }
-
         public string CheckField
         {
             get
@@ -432,7 +648,6 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
             }
         }
-
         #endregion
 
         #region 构造方法
@@ -463,14 +678,14 @@ namespace BP.WF.Template
         /// <summary>
         /// 审核组件
         /// </summary>
-        public FrmWorkCheck()
+        public NodeWorkCheck()
         {
         }
         /// <summary>
         /// 审核组件
         /// </summary>
         /// <param name="no"></param>
-        public FrmWorkCheck(string mapData)
+        public NodeWorkCheck(string mapData)
         {
             if (mapData.Contains("ND") == false)
             {
@@ -499,7 +714,7 @@ namespace BP.WF.Template
         /// 审核组件
         /// </summary>
         /// <param name="no"></param>
-        public FrmWorkCheck(int nodeID)
+        public NodeWorkCheck(int nodeID)
         {
             this.NodeID = nodeID;
             this.Retrieve();
@@ -522,9 +737,8 @@ namespace BP.WF.Template
                 map.AddTBString(NodeWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);
 
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
-                //map.AddDDLSysEnum(NodeWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
-                 //  true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
+                   true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
                     true, true, NodeWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
@@ -577,9 +791,10 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, NodeWorkCheckAttr.FWCVer,
                 "@0=2018@1=2019");
 
-             
+                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='ND@NodeID'";
+                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", sql, true);
 
-                //map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
+               // map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
                 map.AddTBString(NodeWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
 
@@ -625,12 +840,20 @@ namespace BP.WF.Template
                     workCheckAth.Insert();
                 }
             }
+
+           
+
             return base.beforeUpdateInsertAction();
         }
 
         protected override void afterInsertUpdateAction()
         {
-            if (this.FWCLab.Equals("审核组件") == false)
+            Node fl = new Node();
+            fl.NodeID = this.NodeID;
+            fl.RetrieveFromDBSources();
+            fl.Update();
+
+            if(this.FWCLab.Equals("审核组件") == false)
             {
                 GroupFields groupFields = new GroupFields();
                 groupFields.Retrieve(GroupFieldAttr.FrmID, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
@@ -652,13 +875,13 @@ namespace BP.WF.Template
     /// <summary>
     /// 审核组件s
     /// </summary>
-    public class FrmWorkChecks : Entities
+    public class NodeWorkChecks : Entities
     {
         #region 构造
         /// <summary>
         /// 审核组件s
         /// </summary>
-        public FrmWorkChecks()
+        public NodeWorkChecks()
         {
         }
         /// <summary>
@@ -668,7 +891,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new FrmWorkCheck();
+                return new NodeWorkCheck();
             }
         }
         #endregion
@@ -678,20 +901,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmWorkCheck> ToJavaList()
+        public System.Collections.Generic.IList<NodeWorkCheck> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmWorkCheck>)this;
+            return (System.Collections.Generic.IList<NodeWorkCheck>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmWorkCheck> Tolist()
+        public System.Collections.Generic.List<NodeWorkCheck> Tolist()
         {
-            System.Collections.Generic.List<FrmWorkCheck> list = new System.Collections.Generic.List<FrmWorkCheck>();
+            System.Collections.Generic.List<NodeWorkCheck> list = new System.Collections.Generic.List<NodeWorkCheck>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmWorkCheck)this[i]);
+                list.Add((NodeWorkCheck)this[i]);
             }
             return list;
         }

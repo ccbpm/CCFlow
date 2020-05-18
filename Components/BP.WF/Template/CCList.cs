@@ -7,9 +7,9 @@ using BP.Port;
 
 namespace BP.WF.Template
 {
-	/// <summary>
-	/// 抄送 属性
-	/// </summary>
+    /// <summary>
+    /// 抄送 属性
+    /// </summary>
     public class CCListAttr : EntityMyPKAttr
     {
         #region 基本属性
@@ -58,9 +58,22 @@ namespace BP.WF.Template
         /// </summary>
         public const string CCToDeptName = "CCToDeptName";
         /// <summary>
-        /// 审核时间
+        /// 抄送到组织编号
+        /// </summary>
+        public const string CCToOrgNo = "CCToOrgNo";
+        /// <summary>
+        /// 抄送给组织名称
+        /// </summary>
+        public const string CCToOrgName = "CCToOrgName";
+
+        /// <summary>
+        /// 审核时间（回复时间）
         /// </summary>
         public const string CDT = "CDT";
+        /// <summary>
+        /// 阅读时间
+        /// </summary>
+        public const string ReadDT = "ReadDT";
         /// <summary>
         /// 抄送人员
         /// </summary>
@@ -85,8 +98,19 @@ namespace BP.WF.Template
         /// 是否加入待办列表
         /// </summary>
 	    public const string InEmpWorks = "InEmpWorks";
+        /// <summary>
+        /// domain
+        /// </summary>
+        public const string Domain = "Domain";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
+    /// <summary>
+    /// 抄送状态
+    /// </summary>
     public enum CCSta
     {
         /// <summary>
@@ -94,11 +118,11 @@ namespace BP.WF.Template
         /// </summary>
         UnRead,
         /// <summary>
-        /// 已读取
+        /// 已读
         /// </summary>
         Read,
         /// <summary>
-        /// 已经回复
+        /// 已回复
         /// </summary>
         CheckOver,
         /// <summary>
@@ -106,9 +130,9 @@ namespace BP.WF.Template
         /// </summary>
         Del
     }
-	/// <summary>
-	/// 抄送
-	/// </summary>
+    /// <summary>
+    /// 抄送
+    /// </summary>
     public class CCList : EntityMyPK
     {
         #region 属性
@@ -123,8 +147,9 @@ namespace BP.WF.Template
             }
             set
             {
+                //@sly 这里去掉了业务逻辑.
                 if (value == CCSta.Read)
-                    this.CDT = DataType.CurrentDataTime;
+                    this.ReadDT = DataType.CurrentDataTime;
                 this.SetValByKey(CCListAttr.Sta, (int)value);
             }
         }
@@ -148,6 +173,23 @@ namespace BP.WF.Template
                 return uac;
             }
         }
+        /// <summary>
+        /// 域
+        /// </summary>
+        public string Domain
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.Domain);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.Domain, value);
+            }
+        }
+        /// <summary>
+        /// 抄送给
+        /// </summary>
         public string CCTo
         {
             get
@@ -173,6 +215,28 @@ namespace BP.WF.Template
                 this.SetValByKey(CCListAttr.CCToDept, value);
             }
         }
+        public string CCToOrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.CCToOrgNo);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.CCToOrgNo, value);
+            }
+        }
+        public string CCToOrgName
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.CCToOrgName);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.CCToOrgName, value);
+            }
+        }
         /// <summary>
         /// 抄送给Name
         /// </summary>
@@ -180,9 +244,9 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStringByKey(CCListAttr.CCToName);
+                string s = this.GetValStringByKey(CCListAttr.CCToName);
                 if (DataType.IsNullOrEmpty(s))
-                    s=this.CCTo;
+                    s = this.CCTo;
                 return s;
             }
             set
@@ -402,6 +466,23 @@ namespace BP.WF.Template
                 this.SetValByKey(CCListAttr.Rec, value);
             }
         }
+        /// <summary>
+        /// 读取日期
+        /// </summary>
+        public string ReadDT
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.ReadDT);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.ReadDT, value);
+            }
+        }
+        /// <summary>
+        /// 写入日期
+        /// </summary>
         public string RDT
         {
             get
@@ -417,10 +498,24 @@ namespace BP.WF.Template
         /// 是否加入待办列表
         /// </summary>
 	    public bool InEmpWorks
-	    {
+        {
             get { return this.GetValBooleanByKey(CCListAttr.InEmpWorks); }
             set { this.SetValByKey(CCListAttr.InEmpWorks, value); }
-	    }
+        }
+        /// <summary>
+        /// 组织编码
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CCListAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(CCListAttr.OrgNo, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -441,26 +536,26 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_CCList", "抄送列表");
 
-
-
-                map.AddMyPK();
+                map.AddMyPK(); //组合主键 WorkID+"_"+FK_Node+"_"+FK_Emp 
 
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
+                map.AddTBStringDoc();
+
+                //状态  @0=抄送@1=已读@2=已回复@3=已删除
                 map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
 
+                //map.AddTBInt(CCListAttr.IsRepaly, 0, "是否回复？", true, true);
+
                 map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 10, true);
-                map.AddTBString(CCListAttr.FlowName, null, "流程名称", true, true, 0, 200, 10, true);
+                map.AddTBString(CCListAttr.FlowName, null, "名称", true, true, 0, 200, 10, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);
                 map.AddTBString(CCListAttr.NodeName, null, "节点名称", true, true, 0, 500, 10, true);
 
                 map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(CCListAttr.FID, 0, "FID", true, true);
-                
-                map.AddTBStringDoc();
 
                 map.AddTBString(CCListAttr.Rec, null, "抄送人员", true, true, 0, 50, 10, true);
-                map.AddTBDateTime(CCListAttr.RDT, null, "记录日期", true, false);
-
+                map.AddTBDateTime(CCListAttr.RDT, null, "抄送日期", true, false);
 
                 map.AddTBString(CCListAttr.CCTo, null, "抄送给", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToName, null, "抄送给(人员名称)", true, false, 0, 50, 10, true);
@@ -468,59 +563,68 @@ namespace BP.WF.Template
                 map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
 
+                map.AddTBString(CCListAttr.CCToOrgNo, null, "抄送到组织", true, false, 0, 50, 10, true);
+                map.AddTBString(CCListAttr.CCToOrgName, null, "抄送给组织名称", true, false, 0, 600, 10, true);
+
                 map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
+                map.AddTBDateTime(CCListAttr.ReadDT, null, "阅读时间", true, false);
+
 
                 map.AddTBString(CCListAttr.PFlowNo, null, "父流程编号", true, true, 0, 100, 10, true);
                 map.AddTBInt(CCListAttr.PWorkID, 0, "父流程WorkID", true, true);
                 //added by liuxc,2015.7.6，标识是否在待办列表里显示
                 map.AddBoolean(CCListAttr.InEmpWorks, false, "是否加入待办列表", true, true);
-                 
+
+                //add by zhoupeng  @sly.
+                map.AddTBString(CCListAttr.Domain, null, "Domain", true, true, 0, 50, 10, true);
+                map.AddTBString(CCListAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10, true);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
     }
-	/// <summary>
-	/// 抄送
-	/// </summary>
-	public class CCLists: EntitiesMyPK
-	{
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new CCList();
-			}
-		}
-		/// <summary>
+    /// <summary>
+    /// 抄送
+    /// </summary>
+    public class CCLists : EntitiesMyPK
+    {
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new CCList();
+            }
+        }
+        /// <summary>
         /// 抄送
-		/// </summary>
-		public CCLists(){}
+        /// </summary>
+        public CCLists() { }
 
 
         /// <summary>
         /// 查询出来所有的抄送信息
         /// </summary>
-        /// <param name="flowNo"></param>
+        /// <param name="fk_node"></param>
         /// <param name="workid"></param>
         /// <param name="fid"></param>
-        public CCLists(string flowNo, Int64 workid, Int64 fid)
+        public CCLists(int fk_node, Int64 workid, Int64 fid)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(CCListAttr.FK_Flow, flowNo);
+            qo.AddWhere(CCListAttr.FK_Node, fk_node);
             qo.addAnd();
             if (fid != 0)
                 qo.AddWhereIn(CCListAttr.WorkID, "(" + workid + "," + fid + ")");
             else
                 qo.AddWhere(CCListAttr.WorkID, workid);
             qo.DoQuery();
-        } 		 
-		#endregion
+        }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -545,5 +649,5 @@ namespace BP.WF.Template
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

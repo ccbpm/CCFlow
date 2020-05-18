@@ -108,7 +108,9 @@ namespace BP.WF.Template
 
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
-                 
+
+                map.AddTBAtParas(500);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -118,7 +120,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点集合
     /// </summary>
-    public class NodeSimples : EntitiesOIDName
+    public class NodeSimples : Entities
     {
         #region 方法
         /// <summary>
@@ -149,8 +151,6 @@ namespace BP.WF.Template
             this.Retrieve(NodeAttr.FK_Flow, fk_flow, NodeAttr.Step);
         }
         #endregion
-
-       
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

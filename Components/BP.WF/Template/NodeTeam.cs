@@ -8,23 +8,26 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 节点工作岗位属性	  
+    /// 节点用户组属性	  
     /// </summary>
-    public class NodeStationAttr
+    public class NodeTeamAttr
     {
         /// <summary>
         /// 节点
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 工作岗位
+        /// 用户组
         /// </summary>
-        public const string FK_Station = "FK_Station";
+        public const string FK_Team = "FK_Team";
     }
     /// <summary>
-    /// 节点工作岗位
+    /// 节点用户组
+    /// 节点的用户组有两部分组成.	 
+    /// 记录了从一个节点到其他的多个节点.
+    /// 也记录了到这个节点的其他的节点.
     /// </summary>
-    public class NodeStation : EntityMM
+    public class NodeTeam : EntityMM
     {
         #region 基本属性
         /// <summary>
@@ -46,41 +49,41 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(NodeStationAttr.FK_Node);
+                return this.GetValIntByKey(NodeTeamAttr.FK_Node);
             }
             set
             {
-                this.SetValByKey(NodeStationAttr.FK_Node, value);
+                this.SetValByKey(NodeTeamAttr.FK_Node, value);
             }
         }
-        public string FK_StationT
+        public string FK_TeamT
         {
             get
             {
-                return this.GetValRefTextByKey(NodeStationAttr.FK_Station);
+                return this.GetValRefTextByKey(NodeTeamAttr.FK_Team);
             }
         }
         /// <summary>
-        /// 工作岗位
+        /// 用户组
         /// </summary>
-        public string FK_Station
+        public string FK_Team
         {
             get
             {
-                return this.GetValStringByKey(NodeStationAttr.FK_Station);
+                return this.GetValStringByKey(NodeTeamAttr.FK_Team);
             }
             set
             {
-                this.SetValByKey(NodeStationAttr.FK_Station, value);
+                this.SetValByKey(NodeTeamAttr.FK_Team, value);
             }
         }
         #endregion
 
         #region 构造方法
         /// <summary>
-        /// 节点工作岗位
+        /// 节点用户组
         /// </summary>
-        public NodeStation() { }
+        public NodeTeam() { }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -91,13 +94,13 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_NodeStation", "节点岗位");
+                Map map = new Map("WF_NodeTeam", "节点岗位");
 
-                map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                map.AddTBIntPK(NodeTeamAttr.FK_Node, 0, "节点", false, false);
 
                 // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
-                map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
-                   new BP.Port.Stations(), true);
+                map.AddDDLEntitiesPK(NodeTeamAttr.FK_Team, null, "用户组",
+                   new BP.Port.Teams(), true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -115,35 +118,35 @@ namespace BP.WF.Template
             return base.beforeInsert();
         }
         #endregion
+
     }
     /// <summary>
-    /// 节点工作岗位s
+    /// 节点用户组s
     /// </summary>
-    public class NodeStations : EntitiesMM
+    public class NodeTeams : EntitiesMM
     {
-        #region 构造函数.
         /// <summary>
-        /// 节点工作岗位
+        /// 节点用户组s
         /// </summary>
-        public NodeStations() { }
+        public NodeTeams() { }
         /// <summary>
-        /// 节点工作岗位
+        /// 节点用户组s
         /// </summary>
         /// <param name="nodeID">节点ID</param>
-        public NodeStations(int nodeID)
+        public NodeTeams(int nodeID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeStationAttr.FK_Node, nodeID);
+            qo.AddWhere(NodeTeamAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
         /// <summary>
-        /// 节点工作岗位
+        /// 节点用户组
         /// </summary>
         /// <param name="StationNo">StationNo </param>
-        public NodeStations(string StationNo)
+        public NodeTeams(string StationNo)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeStationAttr.FK_Station, StationNo);
+            qo.AddWhere(NodeTeamAttr.FK_Team, StationNo);
             qo.DoQuery();
         }
         /// <summary>
@@ -153,30 +156,29 @@ namespace BP.WF.Template
         {
             get
             {
-                return new NodeStation();
+                return new NodeTeam();
             }
         }
-        #endregion 构造函数.
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<NodeStation> ToJavaList()
+        public System.Collections.Generic.IList<NodeTeam> ToJavaList()
         {
-            return (System.Collections.Generic.IList<NodeStation>)this;
+            return (System.Collections.Generic.IList<NodeTeam>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<NodeStation> Tolist()
+        public System.Collections.Generic.List<NodeTeam> Tolist()
         {
-            System.Collections.Generic.List<NodeStation> list = new System.Collections.Generic.List<NodeStation>();
+            System.Collections.Generic.List<NodeTeam> list = new System.Collections.Generic.List<NodeTeam>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((NodeStation)this[i]);
+                list.Add((NodeTeam)this[i]);
             }
             return list;
         }

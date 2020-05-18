@@ -28,12 +28,12 @@ namespace BP.WF.Template
             fl.No = flowNo;
             fl.Retrieve();
 
-           FlowExt flowExt = new FlowExt(flowNo);
-           flowExt.DesignerNo = BP.Web.WebUser.No;
-           flowExt.DesignerName = BP.Web.WebUser.Name;
-           flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-           flowExt.DirectSave();
+            FlowExt flowExt = new FlowExt(flowNo);
+            flowExt.DesignerNo = BP.Web.WebUser.No;
+            flowExt.DesignerName = BP.Web.WebUser.Name;
+            flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");         
 
+            flowExt.DirectSave();
 
             //如果为CCFlow模式则不进行写入Json串
             if (flowVer == "0")
@@ -45,6 +45,12 @@ namespace BP.WF.Template
             drToNode.Node = int.Parse(int.Parse(flowNo) + "01");
             drToNode.ToNode = int.Parse(int.Parse(flowNo) + "02");
             drToNode.Insert();
+
+            // @liuqiang  增加方向.
+            Node nd = new Node(drToNode.Node);
+            nd.HisToNDs = drToNode.ToNode.ToString();
+
+            nd.Update();
 
             //执行一次流程检查, 为了节省效率，把检查去掉了.
             fl.DoCheck();
@@ -58,11 +64,11 @@ namespace BP.WF.Template
         /// <param name="x">位置x</param>
         /// <param name="y">位置y</param>
         /// <returns>新的节点ID</returns>
-        public static int NewNode(string flowNo, int x, int y,string icon=null)
+        public static Node NewNode(string flowNo, int x, int y, string icon = null)
         {
             BP.WF.Flow fl = new WF.Flow(flowNo);
             BP.WF.Node nd = fl.DoNewNode(x, y, icon);
-            return nd.NodeID;
+            return nd;
         }
         /// <summary>
         /// 删除节点.

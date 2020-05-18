@@ -22,7 +22,7 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(NodeAttr.NodeID,value);
+                this.SetValByKey(NodeAttr.NodeID, value);
             }
         }
         /// <summary>
@@ -69,27 +69,61 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, true, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 #endregion  基础属性
 
+                #region 对应关系用户组。
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeTeams(), new BP.Port.Teams(),
+                    BP.WF.Template.NodeTeamAttr.FK_Node,
+                    BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组");
+
+                //列表模式.
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeTeams(), new BP.Port.Teams(),
+                  BP.WF.Template.NodeTeamAttr.FK_Node,
+                  BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组AddTeamListModel");
+                #endregion 
+
                 #region 对应关系
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
                     BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                //列表模式.
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddGroupListModel", StationAttr.FK_StationType);
+                  BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddTeamListModel", StationAttr.FK_StationType);
 
+                //平铺模式.
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.Port.TeamEmps(), new BP.Port.Teams(),
+                   BP.Port.TeamEmpAttr.FK_Team,
+                   BP.Port.TeamEmpAttr.FK_Emp, "节点绑定人员", TeamAttr.FK_TeamType);
+
+                //列表模式.
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.Port.TeamEmps(), new BP.Port.Teams(),
+                   BP.Port.TeamEmpAttr.FK_Team,
+                   BP.Port.TeamEmpAttr.FK_Emp, "节点绑定人员", TeamAttr.FK_TeamType);
 
                 //节点绑定部门. 节点绑定部门.
-                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
-                   BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                string defDeptVal = "@WebUser.FK_Dept";
+                if (SystemConfig.CCBPMRunModel != 0)
+                {
+                    defDeptVal = "@WebUser.OrgNo";
+                }
 
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(),
+  BP.WF.Template.NodeDeptAttr.FK_Node,
+  BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches",
+  EmpAttr.Name, EmpAttr.No, defDeptVal);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(),
+                    new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
-                   BP.WF.Template.NodeEmpAttr.FK_Emp, "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeEmpAttr.FK_Emp,
+                   "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
+                   EmpAttr.No, defDeptVal);
+
+
+
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

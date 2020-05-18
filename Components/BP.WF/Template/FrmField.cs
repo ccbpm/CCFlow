@@ -309,14 +309,17 @@ namespace BP.WF.Template
         }
         #endregion
 
-        //protected override bool beforeInsert()
-        //{
-        //    if (DataType.IsNullOrEmpty(this.EleType))
-        //        this.EleType = FrmEleType.Field;
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.EleType))
+                this.EleType = FrmEleType.Field;
 
-        //    this.MyPK = this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + this.KeyOfEn + "_" + this.EleType;
-        //    return base.beforeInsert();
-        //}
+            if(this.EleType == FrmEleType.Field)
+                this.MyPK = this.FK_MapData + "_"+ this.FK_Node + "_" + this.KeyOfEn;
+
+
+            return base.beforeInsert();
+        }
     }
 	/// <summary>
     /// 表单字段方案s

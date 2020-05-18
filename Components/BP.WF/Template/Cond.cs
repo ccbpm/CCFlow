@@ -706,8 +706,7 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     string strs1 = "";
-                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
-                    {
+                 
                         BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();
                         sts.Retrieve("FK_Emp", this.SpecOper);
                         foreach (BP.GPM.DeptEmpStation st in sts)
@@ -719,7 +718,7 @@ namespace BP.WF.Template
                             }
                             strs1 += st.FK_Station + "-" + st.FK_StationT;
                         }
-                    }
+                   
 
                     this.MsgOfCond = "@以岗位判断方向，条件为false：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + strs1;
                     return false;
@@ -733,8 +732,7 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
-                    if (SystemConfig.OSModel == OSModel.OneMore)
-                    {
+                   
                         sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
 
                         //@于庆海.
@@ -746,16 +744,7 @@ namespace BP.WF.Template
                             de.FK_Dept = emp.FK_Dept;
                             sts.AddEntity(de);
                         }
-                    }
-                    else
-                    {
-                        BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-
-                        BP.GPM.DeptEmp myen = new BP.GPM.DeptEmp();
-                        myen.FK_Dept = emp.FK_Dept;
-                        myen.FK_Emp = emp.No;
-                        sts.AddEntity(myen);
-                    }
+                   
 
                     string strs1 = "";
                     foreach (BP.GPM.DeptEmp st in sts)
@@ -1043,7 +1032,7 @@ namespace BP.WF.Template
                             return false;
                     case ">":
                     case "dayu":
-                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == 1)
+                        if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
@@ -1060,7 +1049,7 @@ namespace BP.WF.Template
                             return false;
                     case "<":
                     case "xiaoyu":
-                        if (en.GetValStringByKey(this.AttrKey).CompareTo(this.OperatorValue.ToString()) == -1)
+                        if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;

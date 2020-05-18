@@ -134,6 +134,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string PTable = "PTable";
         /// <summary>
+        /// 表单连接
+        /// </summary>
+        public const string FrmUrl = "FrmUrl";
+        /// <summary>
+        /// 流程表单类型
+        /// </summary>
+        public const string FlowFrmType = "FlowFrmType";
+        /// <summary>
         /// 流程数据存储模式
         /// </summary>
         public const string DataStoreModel = "DataStoreModel";
@@ -170,6 +178,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string BillNoFormat = "BillNoFormat";
         /// <summary>
+        /// 待办字段s
+        /// </summary>
+        public const string BuessFields = "BuessFields";
+        /// <summary>
         /// 流程备注的表达式
         /// </summary>
         public const string FlowNoteExp = "FlowNoteExp";
@@ -195,6 +207,15 @@ namespace BP.WF.Template
         /// 运行的SQL
         /// </summary>
         public const string RunSQL = "RunSQL";
+
+        /// <summary>
+        /// 流程轨迹中显示的Tab标签页的控制
+        /// </summary>
+        public const string IsFrmEnable = "IsFrmEnable";
+        public const string IsTruckEnable = "IsTruckEnable";
+        public const string IsTimeBaseEnable = "IsTimeBaseEnable";
+        public const string IsTableEnable = "IsTableEnable";
+        public const string IsOPEnable = "IsOPEnable";
         #endregion 基本属性
 
         #region 发起限制规则.
@@ -284,6 +305,10 @@ namespace BP.WF.Template
         /// 子流程结束时，让父流程自动运行到下一步
         /// </summary>
         public const string IsToParentNextNode = "IsToParentNextNode";
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion 父子流程
 
         #region 数据同步方式.

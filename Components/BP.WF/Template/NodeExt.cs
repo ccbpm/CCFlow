@@ -14,27 +14,6 @@ namespace BP.WF.Template
     /// </summary>
     public class NodeExt : Entity
     {
-        #region 索引
-        /// <summary>
-        /// 获取节点的帮助信息url
-        /// <para></para>
-        /// <para>added by liuxc,2014-8-19</para> 
-        /// </summary>
-        /// <param name="sysNo">帮助网站中所属系统No</param>
-        /// <param name="searchTitle">帮助主题标题</param>
-        /// <returns></returns>
-        private string this[string sysNo, string searchTitle]
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(sysNo) || string.IsNullOrWhiteSpace(searchTitle))
-                    return "javascript:alert('此处还没有帮助信息！')";
-
-                return string.Format("http://online.ccflow.org/KM/Tree.aspx?no={0}&st={1}", sysNo, Uri.EscapeDataString(searchTitle));
-            }
-        }
-        #endregion
-
         #region 常量
         /// <summary>
         /// CCFlow流程引擎
@@ -158,11 +137,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return (FWCAth)this.GetValIntByKey(FrmWorkCheckAttr.FWCAth);
+                return (FWCAth)this.GetValIntByKey(NodeWorkCheckAttr.FWCAth);
             }
             set
             {
-                this.SetValByKey(FrmWorkCheckAttr.FWCAth, (int)value);
+                this.SetValByKey(NodeWorkCheckAttr.FWCAth, (int)value);
             }
         }
 
@@ -268,6 +247,16 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否是返回节点?
+        /// </summary>
+        public bool IsSendBackNode
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsSendBackNode);
+            }
+        }
+        /// <summary>
         /// 主键
         /// </summary>
         public override string PK
@@ -289,17 +278,16 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (this.FK_Flow == "")
-                {
-                    uac.OpenForAppAdmin();
-                    return uac;
-                }
 
-                Flow fl = new Flow(this.FK_Flow);
-                if (BP.Web.WebUser.No == "admin")
-                    uac.IsUpdate = true;
-                else
-                    uac.IsUpdate = true; //权宜之计.
+                //@sly
+                if (BP.Web.WebUser.IsAdmin == false)
+                    throw new Exception("err@管理员登录用户信息丢失,当前会话[" + BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + "]");
+
+                uac.IsUpdate = true;
+                uac.IsDelete = false;
+                uac.IsInsert = false;
+
+                //uac.OpenForAdmin();
                 return uac;
             }
         }
@@ -348,22 +336,24 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
 
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
+                map.SetHelperAlert(NodeAttr.Name, "修改节点名称时如果节点表单名称为空着节点表单名称和节点名称相同，否则节点名称和节点表单名称可以不相同");
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,
                     "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
-
                 map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
                 "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
 
+
                 //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
 
-                map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel, 
-                    "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
-                map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
+                //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
+                //  "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
+                //map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
+
 
                 // 撤销规则.
                 map.AddDDLSysEnum(NodeAttr.CancelRole, (int)CancelRole.OnlyNextStep, "撤销规则", true, true,
@@ -376,10 +366,12 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true, false);
                 map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
                 map.AddBoolean(NodeAttr.IsOpenOver, false, "已阅即完成?", true, true, true);
+                map.SetHelperAlert(NodeAttr.IsOpenOver, "如果接受人打开了该工作，就标记该工作已经完成，而不必在点击发送按钮来标记完成。"); //增加帮助
+
 
                 map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
                 map.AddBoolean(NodeAttr.IsYouLiTai, false, "该节点是否是游离态", true, true);
-                map.SetHelperUrl(NodeAttr.IsYouLiTai, "当节点为游离状态的时候，只有连接的节点是固定节点才可以往下运行，否则流程结束");
+                map.SetHelperAlert(NodeAttr.IsYouLiTai, "当节点为游离状态的时候，只有连接的节点是固定节点才可以往下运行，否则流程结束");
 
                 map.AddTBDateTime("DTFrom", "生命周期从", true, true);
                 map.AddTBDateTime("DTTo", "生命周期到", true, true);
@@ -444,6 +436,9 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
+
+                //为广西计算中心加.
+                map.AddBoolean(NodeAttr.IsSendBackNode, false, "是否是发送返回节点(发送当前节点,自动发送给该节点的发送人,发送节点.)?", true, true, true);
                 #endregion 分合流子线程属性
 
                 #region 自动跳转规则
@@ -490,16 +485,17 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(NodeAttr.ReturnRole, 0, "退回规则", true, true, NodeAttr.ReturnRole);
-                //  map.AddTBString(NodeAttr.ReturnToNodes, null, "可退回节点", true, false, 0, 200, 10, true);
                 map.SetHelperUrl(NodeAttr.ReturnRole, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //增加帮助.
-
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 999, 10, true);
-
                 map.AddBoolean(NodeAttr.IsBackTracking, false, "是否可以原路返回(启用退回功能才有效)", true, true, false);
+                //map.AddTBString(NodeAttr.RetunFieldsLable, "退回扩展字段", "退回扩展字段", true, false, 0, 50, 20);
+
                 map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10);
                 map.SetHelperUrl(NodeAttr.IsBackTracking, "http://ccbpm.mydoc.io/?v=5404&t=16255"); //增加帮助.
 
                 map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
+
+                map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,
                    "@@0=不启用@1=按照[退回信息填写字段]作为退回意见直接退回@2=按照[审核组件]填写的信息作为退回意见直接退回", true);
@@ -533,8 +529,12 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
 
                 // add 2019.1.9 for 东孚.
-                map.AddTBString(BtnAttr.OfficeBtnLab, "公文主文件", "公文按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.OfficeBtnEnable, 0, "文件状态", true, true, BtnAttr.OfficeBtnEnable,
+                "@0=不可用@1=可编辑@2=不可编辑", false);
+
+                //map.AddTBString(BtnAttr.OfficeBtnLab, "公文主文件", "公文按钮标签", true, false, 0, 50, 10);
+                //map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
 
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
@@ -543,7 +543,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
-                map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100,true);
+                map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
@@ -564,8 +564,8 @@ namespace BP.WF.Template
                 //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "轨迹"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
-                map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", false, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", false, false);
                 map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //增加帮助.
 
                 //      map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
@@ -594,7 +594,14 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
-                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送",true);
+
+                //map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
+                //   "0=不允许增加其他协作人@1=允许增加协作人", false);
+
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送", true);
+
+                map.AddTBString(BtnAttr.AddLeaderLab, "加主持人", "加主持人", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
@@ -619,11 +626,12 @@ namespace BP.WF.Template
 
                 // add by 周朋 2015-08-06. 重要性.
                 map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.PRIEnable, 0, "重要性规则", true, true, BtnAttr.PRIEnable, @"0=不启用@1=只读@2=编辑");
+                //map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true,BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
+                map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
@@ -717,6 +725,17 @@ namespace BP.WF.Template
 
                 #region 字段相关功能（不显示在菜单里）
                 rm = new RefMethod();
+                rm.Title = "上传公文模板";
+                rm.ClassMethodName = this.ToString() + ".DocTemp";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                //设置相关字段.
+                rm.RefAttrKey = BtnAttr.OfficeBtnEnable;
+                rm.RefAttrLinkLabel = "公文模板维护";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "可退回的节点(当退回规则设置可退回指定的节点时,该设置有效.)"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCanReturnNodes";
                 rm.Icon = "../../WF/Img/Btn/DTS.gif";
@@ -734,13 +753,10 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-
-                //设置相关字段.
-                rm.RefAttrKey = NodeAttr.CancelRole;
+                rm.RefAttrKey = NodeAttr.CancelRole; //在该节点下显示连接.
                 rm.RefAttrLinkLabel = "";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 //rm = new RefMethod();
                 //rm.Title = "绑定打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)";
@@ -748,20 +764,22 @@ namespace BP.WF.Template
                 //rm.Icon = "../../WF/Img/FileType/doc.gif";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
-                //设置相关字段.
-                rm.RefAttrKey = NodeAttr.PrintDocEnable;
-                rm.RefAttrLinkLabel = "";
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-                if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
-                {
-                    /* 为海成邦达设置的个性化需求. */
-                    rm = new RefMethod();
-                    rm.Title = "DXReport设置";
-                    rm.ClassMethodName = this.ToString() + ".DXReport";
-                    rm.Icon = "../../WF/Img/FileType/doc.gif";
-                    map.AddRefMethod(rm);
-                }
+                //rm = new RefMethod();
+                //rm.Title = "打印设置"; // "可撤销发送的节点";
+                ////设置相关字段.
+                //rm.RefAttrKey = NodeAttr.PrintDocEnable;
+                //rm.Target = "_blank";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //map.AddRefMethod(rm);
+                //if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
+                //{
+                //    /* 为海成邦达设置的个性化需求. */
+                //    rm = new RefMethod();
+                //    rm.Title = "DXReport设置";
+                //    rm.ClassMethodName = this.ToString() + ".DXReport";
+                //    rm.Icon = "../../WF/Img/FileType/doc.gif";
+                //    map.AddRefMethod(rm);
+                //}
 
                 rm = new RefMethod();
                 rm.Title = "设置自动抄送规则(当节点为自动抄送时,该设置有效.)"; // "抄送规则";
@@ -813,7 +831,7 @@ namespace BP.WF.Template
                 #endregion 表单设置.
 
                 #region 考核属性.
-               
+
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
@@ -905,6 +923,25 @@ namespace BP.WF.Template
                 //rm.Visable = false;
                 map.AddRefMethod(rm);
 
+
+                if (Glo.CCBPMRunModel != CCBPMRunModel.SAAS)
+                {
+                    rm = new RefMethod();
+                    rm.Title = "设置为模版";
+
+                    string info = "如果把这个节点设置为模版,以后在新建节点的时候,就会按照当前的属性初始化节点数据.";
+                    info += "\t\n产生的数据文件存储在\\DataUser\\Xml\\下.";
+                    rm.Warning = info;
+
+                    //  rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                    rm.ClassMethodName = this.ToString() + ".DoSetTemplate()";
+                    rm.RefMethodType = RefMethodType.Func;
+                    rm.GroupName = "实验中的功能";
+                    //rm.Visable = false;
+                    map.AddRefMethod(rm);
+                }
+
+
                 rm = new RefMethod();
                 rm.Title = "批量设置节点属性";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
@@ -944,11 +981,20 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "设置提示信息";
                 rm.GroupName = "实验中的功能";
-           //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
+                //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoHelpRole";  //要执行的方法名.
                 rm.RefAttrKey = BtnAttr.HelpRole; //帮助信息.
                 rm.RefMethodType = RefMethodType.LinkeWinOpen; // 功能类型
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "退回扩展列";
+                rm.ClassMethodName = this.ToString() + ".DtlOfReturn";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = NodeAttr.ReturnCHEnable;
+                map.AddRefMethod(rm);
+
 
                 #endregion 实验中的功能
 
@@ -1030,7 +1076,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return "../../Admin/AttrNode/BlockModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 发送后转向规则
@@ -1038,7 +1084,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            return "../../Admin/AttrNode/TurnToDeal.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 抄送人规则
@@ -1088,6 +1134,17 @@ namespace BP.WF.Template
         #endregion 表单相关.
 
         #region 实验中的功能.
+        /// <summary>
+        /// 设置模版@sly
+        /// </summary>
+        /// <returns></returns>
+        public string DoSetTemplate()
+        {
+            DataTable dt = this.ToDataTableField();
+            dt.TableName = "Node";
+            dt.WriteXml(SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml");
+            return "执行成功.";
+        }
         /// <summary>
         /// 自定义参数（通用）
         /// </summary>
@@ -1159,12 +1216,20 @@ namespace BP.WF.Template
             //return nd.DoTurn();
         }
         /// <summary>
+        /// 公文模板
+        /// </summary>
+        /// <returns></returns>
+        public string DocTemp()
+        {
+            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID;
+        }
+        /// <summary>
         /// 抄送规则
         /// </summary>
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1313,6 +1378,11 @@ namespace BP.WF.Template
             }
             return doc;
         }
+        public string DtlOfReturn()
+        {
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks" + "&For=BP.WF.ReturnWorks&FK_Flow=" + this.FK_Flow;
+            return url;
+        }
         protected override bool beforeUpdate()
         {
             //更新流程版本
@@ -1331,6 +1401,26 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.HungEnable, false);
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
+
+            //是否是发送返回节点？
+            nd.IsSendBackNode = this.IsSendBackNode;
+            if (nd.IsSendBackNode == true)
+            {
+                //强制设置按照连接线控制.
+                nd.CondModel = CondModel.ByLineCond;
+                nd.DirectUpdate();
+            }
+
+
+            #region 如果有跳转，
+            //if (this.AutoJumpRole0 == true || this.AutoJumpRole0
+            //    || this.AutoJumpRole1 || this.AutoJumpRole2 == true || this.WhenNoWorker == true)
+            //{
+            //    /* 凡是到达当前节点的节点，都不能设置为让用户来选择. */
+
+            //}
+            #endregion 如果有跳转
+
 
             if (nd.HisRunModel == RunModel.HL || nd.HisRunModel == RunModel.FHL)
             {
@@ -1388,7 +1478,6 @@ namespace BP.WF.Template
             }
             #endregion 处理节点数据.
 
-
             #region 创建审核组件附件
             if (this.FWCAth == FWCAth.MinAth)
             {
@@ -1444,6 +1533,8 @@ namespace BP.WF.Template
             }
             #endregion 审核组件.
 
+            BtnLab btnLab = new BtnLab(this.NodeID);
+            btnLab.RetrieveFromDBSources();
 
             //清除所有的缓存.
             BP.DA.CashEntity.DCash.Clear();
@@ -1461,13 +1552,72 @@ namespace BP.WF.Template
                 fl.SetPara("IsYouLiTai", 0);
             fl.Update();
 
-            BtnLab btnLab = new BtnLab(this.NodeID);
+            BtnLab btnLab = new BtnLab();
+            btnLab.NodeID = this.NodeID;
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
+
+            BtnLabExtWebOffice btnLabExtWebOffice = new BtnLabExtWebOffice();
+            btnLabExtWebOffice.NodeID = this.NodeID;
+            btnLabExtWebOffice.RetrieveFromDBSources();
+            Cash2019.UpdateRow(btnLabExtWebOffice.ToString(), this.NodeID.ToString(), btnLabExtWebOffice.Row);
+
+            CC cc = new CC();
+            cc.NodeID = this.NodeID;
+            cc.RetrieveFromDBSources();
+            Cash2019.UpdateRow(cc.ToString(), this.NodeID.ToString(), cc.Row);
+
+            FrmNodeComponent frmNodeComponent = new FrmNodeComponent();
+            frmNodeComponent.NodeID = this.NodeID;
+            frmNodeComponent.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmNodeComponent.ToString(), this.NodeID.ToString(), frmNodeComponent.Row);
+
+            FrmThread frmThread = new FrmThread();
+            frmThread.NodeID = this.NodeID;
+            frmThread.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmThread.ToString(), this.NodeID.ToString(), frmThread.Row);
+
+            FrmTrack frmTrack = new FrmTrack();
+            frmTrack.NodeID = this.NodeID;
+            frmTrack.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmTrack.ToString(), this.NodeID.ToString(), frmTrack.Row);
+
+            FrmTransferCustom frmTransferCustom = new FrmTransferCustom();
+            frmTransferCustom.NodeID = this.NodeID;
+            frmTransferCustom.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmTransferCustom.ToString(), this.NodeID.ToString(), frmTransferCustom.Row);
+
+            NodeWorkCheck frmWorkCheck = new NodeWorkCheck();
+            frmWorkCheck.NodeID = this.NodeID;
+            frmWorkCheck.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmWorkCheck.ToString(), this.NodeID.ToString(), frmWorkCheck.Row);
+
+            NodeSheet nodeSheet = new NodeSheet();
+            nodeSheet.NodeID = this.NodeID;
+            nodeSheet.RetrieveFromDBSources();
+            Cash2019.UpdateRow(nodeSheet.ToString(), this.NodeID.ToString(), nodeSheet.Row);
+
+            NodeSimple nodeSimple = new NodeSimple();
+            nodeSimple.NodeID = this.NodeID;
+            nodeSimple.RetrieveFromDBSources();
+            Cash2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
+
+            FrmSubFlow frmSubFlow = new FrmSubFlow();
+            frmSubFlow.NodeID = this.NodeID;
+            frmSubFlow.RetrieveFromDBSources();
+            Cash2019.UpdateRow(frmSubFlow.ToString(), this.NodeID.ToString(), frmSubFlow.Row);
+
+            GetTask getTask = new GetTask();
+            getTask.NodeID = this.NodeID;
+            getTask.RetrieveFromDBSources();
+            Cash2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
+
             //如果是组长会签模式，通用选择器只能单项选择
             if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader && this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
             {
-                Selector selector = new Selector(this.NodeID);
+                Selector selector = new Selector();
+                selector.NodeID = this.NodeID;
+                selector.RetrieveFromDBSources();
                 selector.IsSimpleSelector = true;
                 selector.Update();
 

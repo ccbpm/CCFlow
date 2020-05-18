@@ -125,7 +125,7 @@ namespace BP.WF.Template
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true,true, 0, 100, 10);
 
-                FrmWorkCheck fwc = new FrmWorkCheck();
+                NodeWorkCheck fwc = new NodeWorkCheck();
                 map.AddAttrs(fwc.EnMap.Attrs);
 
                 FrmSubFlow subflow = new FrmSubFlow();
@@ -147,12 +147,15 @@ namespace BP.WF.Template
             }
         }
 
-        protected override bool beforeUpdate()
+        /// <summary>
+        /// 初始化GroupField
+        /// </summary>
+        public void InitGroupField()
         {
             GroupField gf = new GroupField();
 
             #region 审核组件.
-            FrmWorkCheck fwc = new FrmWorkCheck(this.NodeID);
+            NodeWorkCheck fwc = new NodeWorkCheck(this.NodeID);
             fwc.Copy(this);
             if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
@@ -262,6 +265,13 @@ namespace BP.WF.Template
                 }
             }
             #endregion 流转自定义组件.
+
+        }
+
+        protected override bool beforeUpdate()
+        {
+
+            this.InitGroupField();
 
             return base.beforeUpdate();
         }

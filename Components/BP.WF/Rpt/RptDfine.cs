@@ -211,13 +211,13 @@ namespace BP.WF.Rpt
                 rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "设置导出模板";
-                rm.Icon = "../../WF/Img/Guide.png";
-                rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyJoinFlow()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我参与的流程";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "设置导出模板";
+                //rm.Icon = "../../WF/Img/Guide.png";
+                //rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyJoinFlow()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "我参与的流程";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "执行查询";
@@ -692,7 +692,6 @@ namespace BP.WF.Rpt
         }
         #endregion 本部门发起的流程
 
-
         #region 高级查询
         /// <summary>
         /// 设置选择的列
@@ -749,7 +748,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoGroup_AdminerFlow()
         {
-            return "../../RptDfine/Search.htm?GroupType=Adminer&FK_Flow=" + this.No;
+            return "../../RptDfine/Group.htm?GroupType=Adminer&FK_Flow=" + this.No;
         }
 
         public string DoReset_AdminerFlowRight()

@@ -28,6 +28,20 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以导出
         /// </summary>
+        public bool IsImp
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.IsImp, value);
+            }
+        }
+        /// <summary>
+        /// 是否可以导入
+        /// </summary>
         public bool IsExp
         {
             get
@@ -848,25 +862,25 @@ namespace BP.WF.Template
         /// <summary>
         /// 多表头
         /// </summary>
-        public string MTR
-        {
-            get
-            {
-                string s = this.GetValStrByKey(MapDtlAttr.MTR);
-                s = s.Replace("《", "<");
-                s = s.Replace("》", ">");
-                s = s.Replace("‘", "'");
-                return s;
-            }
-            set
-            {
-                string s = value;
-                s = s.Replace("<", "《");
-                s = s.Replace(">", "》");
-                s = s.Replace("'", "‘");
-                this.SetValByKey(MapDtlAttr.MTR, value);
-            }
-        }
+        //public string MTR
+        //{
+        //    get
+        //    {
+        //        string s = this.GetValStrByKey(MapDtlAttr.MTR);
+        //        s = s.Replace("《", "<");
+        //        s = s.Replace("》", ">");
+        //        s = s.Replace("‘", "'");
+        //        return s;
+        //    }
+        //    set
+        //    {
+        //        string s = value;
+        //        s = s.Replace("<", "《");
+        //        s = s.Replace(">", "》");
+        //        s = s.Replace("'", "‘");
+        //        this.SetValByKey(MapDtlAttr.MTR, value);
+        //    }
+        //}
         #endregion
 
         #region 构造方法
@@ -897,7 +911,6 @@ namespace BP.WF.Template
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapDtlAttr.FK_MapData;
 
-
                 #region 基础信息.
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
@@ -911,7 +924,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体类", true, true, 0, 100, 20, false);
 
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true, MapDtlAttr.Model, "@0=普通@1=固定行");
-                map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
+                map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版");
 
 
                 //map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
@@ -952,6 +965,8 @@ namespace BP.WF.Template
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
                 //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
+                
+
                 //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 
                 //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
@@ -974,7 +989,7 @@ namespace BP.WF.Template
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
-                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？(导出到Excel,Txt,html类型文件.)", true, true);
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导入？", true, true);
 
                 //导入模式.
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
@@ -987,11 +1002,12 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false, true);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
                 #endregion 导入导出填充.
 
                 #region 多表头.
                 //MTR 多表头列.
-                map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
+                //map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
                 #endregion 多表头.
 
                 #region 超链接.
@@ -999,17 +1015,17 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
                 map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
                 map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
-                #endregion 多表头.
+                #endregion 超链接.
 
                 #region 工作流相关.
                 //add 2014-02-21.
-                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", true, false);
+                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", true, true);
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
                 map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", true, true);
                 string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
                 map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);
-                map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true, MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID@3=父流程WorkID");
+                map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true, MapDtlAttr.DtlOpenType, "@0=操作员@1=WorkID-流程ID@2=FID-干流程ID@3=PWorkID-父流程WorkID");
                 #endregion 工作流相关.
 
                 #region 相关方法.
@@ -1433,7 +1449,7 @@ namespace BP.WF.Template
             {
                 mapExt = new MapExt();
                 mapExt = ext;
-                mapExt.MyPK = ext.MyPK + "_" + this.FK_Node;
+                mapExt.MyPK = ext.ExtType + "_" + this.No+"_"+ ext.AttrOfOper;
                 mapExt.FK_MapData = this.No;
                 mapExt.Insert();
             }
@@ -1458,6 +1474,7 @@ namespace BP.WF.Template
                     athDesc.FK_MapData = this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
+                    athDesc.IsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();
@@ -1514,6 +1531,7 @@ namespace BP.WF.Template
                     athDesc.FK_MapData = this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
+                    athDesc.IsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();
@@ -1559,7 +1577,7 @@ namespace BP.WF.Template
             //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
             int i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
-            if (i == 0)
+            if (i == 0 && this.FK_Node ==0)
             {
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
@@ -1587,6 +1605,18 @@ namespace BP.WF.Template
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
             dtl.Delete();
+
+            //删除分组
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.No + "%");
+            gfs.Delete();
+
+            //如果启用了附件也需要删除
+            if (this.IsEnableAthM == true)
+            {
+                FrmAttachment ath = new FrmAttachment();
+                ath.Delete(FrmAttachmentAttr.MyPK, this.No + "_AthMDtl");
+            }
 
             base.afterDelete();
         }

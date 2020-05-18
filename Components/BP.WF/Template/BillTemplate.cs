@@ -294,7 +294,7 @@ namespace BP.WF.Template
                 map.IndexField = BillTemplateAttr.FK_MapData;
 
                 map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, true, 6, 6, 20);
-                map.AddTBString(BillTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
+                map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);
                 map.AddTBString(BillTemplateAttr.FK_MapData, null, "表单编号", false, false,0,300,300);

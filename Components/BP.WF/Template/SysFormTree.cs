@@ -21,6 +21,10 @@ namespace BP.WF.Template
         /// 是否是目录
         /// </summary>
         public const string IsDir = "IsDir";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     ///  独立表单树
@@ -70,6 +74,20 @@ namespace BP.WF.Template
                 this.SetValByKey(SysFormTreeAttr.ParentNo, value);
             }
         }
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SysFormTreeAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(SysFormTreeAttr.OrgNo, value);
+            }
+        }
         #endregion 属性.
 
         #region 构造方法
@@ -107,12 +125,24 @@ namespace BP.WF.Template
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
                 map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
+                map.AddTBString(SysFormTreeAttr.OrgNo, null, "OrgNo", false, false, 0, 50, 30);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion 系统方法.
+
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
+        {
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+            return base.beforeInsert();
+        }
 
         protected override bool beforeDelete()
         {

@@ -112,10 +112,11 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "累加表单方案");
                 map.AddMyPK();
 
-                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "要作用的节点ID", true, true);
-                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 200, 200);
+                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "要作用的节点ID", false, true);
+                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", false, true, 1, 200, 200);
                 map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
                    "@0=默认方案@1=只读方案@2=自定义方案");
+
 
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
 

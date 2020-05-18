@@ -47,7 +47,7 @@ namespace BP.WF.Template
             {
                 SetValByKey(SubFlowAutoAttr.FK_Flow, value);
             }
-        }   
+        }
         /// <summary>
         /// 流程编号
         /// </summary>
@@ -209,10 +209,10 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-               map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 10, 100);
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 10, 100);
 
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
-                map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
+                map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型",true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 
                 map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
@@ -221,7 +221,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "父子流程结束规则", true, true,
+                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", true, true,
                  FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
 
@@ -259,7 +259,28 @@ namespace BP.WF.Template
             this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_0";
             return base.beforeInsert();
         }
+        #region 移动.
+        /// <summary>
+        /// 上移
+        /// </summary>
+        /// <returns></returns>
+        public string DoUp()
+        {
+            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "0", SubFlowAutoAttr.Idx);
+            return "执行成功";
+        }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <returns></returns>
+        public string DoDown()
+        {
+            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "0", SubFlowAutoAttr.Idx);
+            return "执行成功";
+        }
+        #endregion 移动.
     }
+
     /// <summary>
     /// 手工启动子流程集合
     /// </summary>

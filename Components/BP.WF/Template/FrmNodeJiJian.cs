@@ -14,7 +14,7 @@ namespace BP.WF.Template
     /// 记录了从一个节点到其他的多个节点.
     /// 也记录了到这个节点的其他的节点.
     /// </summary>
-    public class FrmNodeExt : EntityMyPK
+    public class FrmNodeJiJian : EntityMyPK
     {
         #region 属性.
         public string FK_Frm
@@ -41,32 +41,6 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(FrmNodeAttr.FK_Flow);
             }
         }
-
-        /// <summary>
-        /// 是否启用节点组件?
-        /// </summary>
-        public FrmWorkCheckSta IsEnableFWC
-        {
-            get
-            {
-                return (FrmWorkCheckSta)this.GetValIntByKey(FrmNodeAttr.IsEnableFWC);
-            }
-            set
-            {
-                this.SetValByKey(FrmNodeAttr.IsEnableFWC, (int)value);
-            }
-        }
-
-        /// <summary>
-        /// 签批字段
-        /// </summary>
-        public string CheckField
-        {
-            get
-            {
-                return this.GetValStringByKey(NodeWorkCheckAttr.CheckField);
-            }
-        }
         #endregion
 
         #region 基本属性
@@ -78,15 +52,8 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-
-                //权限控制.
-                if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                    uac.OpenForSysAdmin();
-                else
-                    uac.OpenAll();
-
+                uac.OpenForSysAdmin();
                 uac.IsInsert = false;
-
                 return uac;
             }
         }
@@ -97,12 +64,12 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点表单
         /// </summary>
-        public FrmNodeExt() { }
+        public FrmNodeJiJian() { }
         /// <summary>
         /// 节点表单
         /// </summary>
         /// <param name="mypk"></param>
-        public FrmNodeExt(string mypk)
+        public FrmNodeJiJian(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -132,85 +99,60 @@ namespace BP.WF.Template
                 map.AddBoolean(FrmNodeAttr.IsCloseEtcFrm, false, "打开时是否关闭其它的页面？", true, true, true);
                 map.SetHelperAlert(FrmNodeAttr.IsCloseEtcFrm, "默认为不关闭,当该表单以tab标签也打开时,是否关闭其它的tab页?");
 
-                map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
-                map.SetHelperAlert(FrmNodeAttr.WhoIsPK, "用来控制谁是表单事例的主键的方案，对于父子流程如果子流程需要在看到父流程的表单，就需要设置ParentID是主键。");
+                //map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
+                //map.SetHelperAlert(FrmNodeAttr.WhoIsPK, "用来控制谁是表单事例的主键的方案，对于父子流程如果子流程需要在看到父流程的表单，就需要设置ParentID是主键。");
 
                 map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "控制方案", true, true, FrmNodeAttr.FrmSln,
                     "@0=默认方案@1=只读方案@2=自定义方案");
                 map.SetHelperAlert(FrmNodeAttr.FrmSln, "控制该表单数据元素权限的方案，如果是自定义方案，就要设置每个表单元素的权限.");
 
-                //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
 
+                //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
                 map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                 true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
 
-                string sql = "";
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                    case DBType.MySQL:
-                        sql = "SELECT '' AS No, '-请选择-' as Name ";
-                        break;
-                    case DBType.Oracle:
-                        sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
-                        break;
+                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;显示审核组件的前提是启用了节点表单的审核组件，审核组件的状态也是根据节点审核组件的状态决定的");
 
-                    case DBType.PostgreSQL:
-                    default:
-                        sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
-                        break;
-                }
-                sql += " union ";
+                //map.AddDDLSysEnum( BP.WF.Template.NodeWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 
-                sql += " SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
-                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", sql, true);
-
-                //map.AddDDLSysEnum(BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
+                //显示的
+                // map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
+                // map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
                 //add 2016.3.25.
-                map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);
-                map.AddTBString(FrmNodeAttr.HuiZong, null, "汇总的数据表名", true, false, 0, 300, 20);
-                map.SetHelperAlert(FrmNodeAttr.HuiZong, "子线程要汇总的数据表，对当前节点是子线程节点有效。");
+                //   map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);
+                //   map.AddTBString(FrmNodeAttr.HuiZong, null, "汇总的数据表名", true, false, 0, 300, 20);
+                //   map.SetHelperAlert(FrmNodeAttr.HuiZong, "子线程要汇总的数据表，对当前节点是子线程节点有效。");
 
                 //模版文件，对于office表单有效.
-                map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, false, 0, 500, 20);
+                //   map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, false, 0, 500, 20);
 
                 //是否显示
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
                 #region 表单启用规则. @袁丽娜
-                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false, FrmNodeAttr.FrmEnableRole,
-                    "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
+                //   map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false, FrmNodeAttr.FrmEnableRole,
+                //    "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
 
-                map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
-                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
+                //  map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
+                //   map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
                 #endregion 表单启用规则.
+
 
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
                 map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
 
-                //显示的
-                map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
-                map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
                 RefMethod rm = new RefMethod();
-
-                rm.Title = "启用规则";
-                rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                ////@袁丽娜
+                //rm.Title = "启用规则";
+                //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "字段权限";
                 rm.ClassMethodName = this.ToString() + ".DoFields()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
-
-                //@sly
-                rm = new RefMethod();
-                rm.Title = "组件权限";
-                rm.ClassMethodName = this.ToString() + ".DoComponents()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
@@ -238,11 +180,11 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "改变表单类型";
-                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
-                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "改变表单类型";
+                //rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                //rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                //map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "表单启用规则";
@@ -250,54 +192,11 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "审核组件设置";
-                //rm.Icon = ../../Img/Mobile.png";
-                rm.ClassMethodName = this.ToString() + ".DoFrmNodeWorkCheck";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单组件";
-                map.AddRefMethod(rm);
-
-
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-        /// <summary>
-        /// 审核组件
-        /// </summary>
-        /// <returns></returns>
-        public string DoFrmNodeWorkCheck()
-        {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDataTime;
-        }
-
-        /// <summary>
-        /// 改变表单类型
-        /// </summary>
-        /// <param name="val">要改变的类型</param>
-        /// <returns></returns>
-        public string DoChangeFrmType(int val)
-        {
-            MapData md = new MapData(this.FK_Frm);
-            string str = "原来的是:" + md.HisFrmTypeText + "类型，";
-            md.HisFrmTypeInt = val;
-            str += "现在修改为：" + md.HisFrmTypeText + "类型";
-            md.Update();
-
-            return str;
-        }
-
-        protected override void afterInsertUpdateAction()
-        {
-            Node node = new Node();
-            node.NodeID = this.FK_Node;
-            node.RetrieveFromDBSources();
-            node.FrmWorkCheckSta = this.IsEnableFWC;
-            node.Update();
-            base.afterInsertUpdateAction();
-        }
 
         #region 表单元素权限.
         public string DoDtls()
@@ -307,11 +206,6 @@ namespace BP.WF.Template
         public string DoFields()
         {
             return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
-        }
-
-        public string DoComponents()
-        {
-            return "../../Admin/Sln/Components.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
         }
         public string DoAths()
         {
@@ -337,13 +231,13 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点表单s
     /// </summary>
-    public class FrmNodeExts : EntitiesMyPK
+    public class FrmNodeJiJians : EntitiesMyPK
     {
         #region 构造方法..
         /// <summary>
         /// 节点表单
         /// </summary>
-        public FrmNodeExts() { }
+        public FrmNodeJiJians() { }
         #endregion 构造方法..
 
         #region 公共方法.
@@ -354,7 +248,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new FrmNodeExt();
+                return new FrmNodeJiJian();
             }
         }
         #endregion 公共方法.
@@ -364,20 +258,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmNodeExt> ToJavaList()
+        public System.Collections.Generic.IList<FrmNodeJiJian> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmNodeExt>)this;
+            return (System.Collections.Generic.IList<FrmNodeJiJian>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmNodeExt> Tolist()
+        public System.Collections.Generic.List<FrmNodeJiJian> Tolist()
         {
-            System.Collections.Generic.List<FrmNodeExt> list = new System.Collections.Generic.List<FrmNodeExt>();
+            System.Collections.Generic.List<FrmNodeJiJian> list = new System.Collections.Generic.List<FrmNodeJiJian>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmNodeExt)this[i]);
+                list.Add((FrmNodeJiJian)this[i]);
             }
             return list;
         }

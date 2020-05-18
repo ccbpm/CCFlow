@@ -583,11 +583,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 重要性 是否可用
         /// </summary>
-        public bool PRIEnable
+        public int PRIEnable
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.PRIEnable);
+                return this.GetValIntByKey(BtnAttr.PRIEnable);
             }
         }
         /// <summary>
@@ -786,12 +786,35 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.HuiQianLab);
             }
         }
-
+        
+        // public int IsCanAddHuiQianer
+        //{
+        //    get
+        //    {
+        //        return this.GetValIntByKey(BtnAttr.IsCanAddHuiQianer);
+        //    }
+        //}
         public HuiQianLeaderRole HuiQianLeaderRole
         {
             get
             {
                 return (HuiQianLeaderRole)this.GetValIntByKey(BtnAttr.HuiQianLeaderRole);
+            }
+        }
+
+        public string AddLeaderLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.AddLeaderLab);
+            }
+        }
+
+        public bool AddLeaderEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.AddLeaderEnable);
             }
         }
 
@@ -1082,8 +1105,13 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.OfficeBtnEnable);
             }
         }
-
-
+        public int OfficeBtnEnableInt
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.OfficeBtnEnable);
+            }
+        }
         /// <summary>
         /// 备注标签
         /// </summary>
@@ -1160,7 +1188,9 @@ namespace BP.WF.Template
               
                 // add 2019.1.9 for 东孚.
                 map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.OfficeBtnEnable, 0, "文件状态", true, true, BtnAttr.OfficeBtnEnable,
+                "@@0=不可用@1=可编辑@2=不可编辑", false);
+
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ReturnRole, true, "是否启用", true, true);
@@ -1222,15 +1252,21 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole,
                     "@0=不启用@1=协作模式@4=组长模式");
+                //map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
+                 //    "0=不允许增加其他协作人@1=允许增加协作人", false);
+
 
                 map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "会签组长规则", true, true, BtnAttr.HuiQianLeaderRole,
                      "0=只有一个组长@1=最后一个组长发送@2=任意组长发送",true);
 
+                map.AddTBString(BtnAttr.AddLeaderLab, "加主持人", "加主持人", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
+
                 //map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=组长模式@2=协作模式");
 
-               // map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
-              //  map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
+                // map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
+                //  map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
 
                 // add by stone 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);

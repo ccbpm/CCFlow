@@ -94,7 +94,7 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(FlowSortAttr.No, null, "编号", true, true, 1, 100, 20);
                 map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", true, true, 0, 100, 30);
-                map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 200, 30,true);
+                map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 200, 30, true);
                 map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", true, false, 0, 150, 30);
                 map.SetHelperAlert(FlowSortAttr.OrgNo, "用于区分不同组织的的流程,比如:一个集团有多个子公司,每个子公司都有自己的业务流程.");
 
@@ -107,17 +107,39 @@ namespace BP.WF.Template
             }
         }
 
-        protected override bool beforeUpdateInsertAction()
+        /// <summary>
+        /// 创建的时候，给他增加一个OrgNo。
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
         {
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+
+            return base.beforeInsert();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeUpdate()
+        {
+            //更新流程引擎控制表.
             string sql = "UPDATE WF_GenerWorkFlow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
             DBAccess.RunSQL(sql);
 
-            //@sly
-            sql = "UPDATE WF_Emp SET StartFlows='' ";
-            DBAccess.RunSQL(sql);
+            // sql = "UPDATE WF_Flow SET Domain='" + this.Domain + "' WHERE FK_FlowSort='" + this.No + "'";
+            //DBAccess.RunSQL(sql);
 
-            return base.beforeUpdateInsertAction();
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "UPDATE WF_Emp SET StartFlows='' ";
+            else
+                sql = "UPDATE WF_Emp SET StartFlows='' ";
+
+            DBAccess.RunSQL(sql);
+            return base.beforeUpdate();
         }
+
     }
     /// <summary>
     /// 流程类别
@@ -140,7 +162,10 @@ namespace BP.WF.Template
         }
         public override int RetrieveAll()
         {
-            int i = base.RetrieveAll( FlowSortAttr.Idx );
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                return this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+
+            int i = base.RetrieveAll(FlowSortAttr.Idx);
             if (i == 0)
             {
                 FlowSort fs = new FlowSort();

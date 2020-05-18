@@ -19,7 +19,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 工具栏
         /// </summary>
-        Toolbar
+        Toolbar,
+        /// <summary>
+        /// 抄送
+        /// </summary>
+        CC
     }
     /// <summary>
     /// 工具栏属性
@@ -42,7 +46,7 @@ namespace BP.WF.Template
         /// <summary>
         /// url
         /// </summary>
-        public const string Url = "Url";
+        public const string UrlExt = "UrlExt";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -71,7 +75,8 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                uac.OpenForSysAdmin();
+                //  uac.OpenForSysAdmin();
+                uac.OpenForAdmin();// 2020.5.15zsy修改
                 return uac;
             }
         }
@@ -104,7 +109,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetValStringByKey(NodeToolbarAttr.Url);
+                string s= this.GetValStringByKey(NodeToolbarAttr.UrlExt);
 
                 if (this.ExcType !=1 && s.Contains("?") == false && this.Target.ToLower() != "javascript")
                     s = s+"?1=2";
@@ -112,7 +117,7 @@ namespace BP.WF.Template
             }
             set
             {
-                SetValByKey(NodeToolbarAttr.Url, value);
+                SetValByKey(NodeToolbarAttr.UrlExt, value);
             }
         }
         public string Target
@@ -189,12 +194,12 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeToolbarAttr.ExcType, 0, "执行类型", true, true, "ToobarExcType",
                     "@0=超链接@1=函数");
 
-                map.AddTBString(NodeToolbarAttr.Url, null, "连接/函数", true, false, 0, 500, 300, true);
+                map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
                 // 显示位置.
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
-                    "@0=树形表单@1=工具栏");
+                    "@0=树形表单@1=工具栏@2=抄送工具栏");
 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);

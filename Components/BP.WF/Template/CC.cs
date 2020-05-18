@@ -78,9 +78,6 @@ namespace BP.WF.Template
             if (this.CCIsDepts == true)
             {
                 /*如果抄送到部门. */
-                if (Glo.OSModel == BP.Sys.OSModel.OneOne)
-                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B WHERE  A.FK_Dept=B.FK_Dept AND B.FK_Node=" + this.NodeID;
-                else
                     sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
 
                 mydt = DBAccess.RunSQLReturnTable(sql);
@@ -215,6 +212,35 @@ namespace BP.WF.Template
                     dr["Name"] = mydr["Name"];
                     dt.Rows.Add(dr);
                 }
+            }
+            /**按照表单字段抄送*/
+            if(this.CCIsAttr == true)
+            {
+                if (DataType.IsNullOrEmpty(this.CCFormAttr) == true)
+                    throw new Exception("抄送规则自动抄送选择按照表单字段抄送没有设置抄送人员字段");
+
+                string ccers = rpt.GetValStrByKey(this.CCFormAttr);
+                if (DataType.IsNullOrEmpty(ccers) == false)
+                {
+                    string[] emps = ccers.Split(',');
+                    foreach(string empNo in emps)
+                    {
+                        if (DataType.IsNullOrEmpty(empNo) == true)
+                            continue;
+                        Emp emp = new Emp();
+                        emp.No = empNo;
+                        if (emp.RetrieveFromDBSources() == 1)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["No"] = empNo;
+                            dr["Name"] = emp.Name;
+                            dt.Rows.Add(dr);
+                        }
+                        
+                    }
+                }
+                   
+
             }
             //将dt中的重复数据过滤掉  
             DataView myDataView = new DataView(dt);
@@ -380,7 +406,35 @@ namespace BP.WF.Template
                 this.SetValByKey(CCAttr.CCIsSQLs, value);
             }
         }
-        
+
+        /// <summary>
+        /// 是否按照表单字段抄送
+        /// </summary>
+        public bool CCIsAttr
+        {
+            get
+            {
+                return this.GetValBooleanByKey(CCAttr.CCIsAttr);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCIsAttr, value);
+            }
+        }
+
+        public string CCFormAttr
+        {
+            get
+            {
+                return this.GetValStringByKey(CCAttr.CCFormAttr);
+            }
+            set
+            {
+                this.SetValByKey(CCAttr.CCFormAttr, value);
+            }
+        }
+
+
         #endregion
 
         #region 构造函数
@@ -427,7 +481,7 @@ namespace BP.WF.Template
                 map.AddBoolean(CCAttr.CCIsDepts, false, "是否启用？-按照部门抄送", true, true, false);
                 map.AddBoolean(CCAttr.CCIsEmps, false, "是否启用？-按照人员抄送", true, true, false);
                 map.AddBoolean(CCAttr.CCIsSQLs, false, "是否启用？-按照SQL抄送", true, true, true);
-                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 200, 10, true);
+                map.AddTBString(CCAttr.CCSQL, null, "SQL表达式", true, false, 0, 500, 10, true);
 
                 map.AddTBString(CCAttr.CCTitle, null, "抄送标题", true, false, 0, 100, 10, true);
                 map.AddTBStringDoc(CCAttr.CCDoc, null, "抄送内容(标题与内容支持变量)", true, false, true);
@@ -437,30 +491,30 @@ namespace BP.WF.Template
                 // 相关功能。
 
                 //平铺模式.
-                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupPanelModel)", StationAttr.FK_StationType);
+                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组模式)", StationAttr.FK_StationType);
 
-                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(AddGroupListModel)", StationAttr.FK_StationType);
+                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组列表模式)", StationAttr.FK_StationType);
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.CCDepts(), new BP.Port.Depts(),
                    BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "抄送部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "抄送部门(树模式)", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.CCEmps(), new BP.Port.Emps(),
                    BP.WF.Template.NodeEmpAttr.FK_Node,
-                   BP.WF.Template.NodeEmpAttr.FK_Emp, "抄送接受人(AddBranchesAndLeaf)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "抄送接受人(树干叶子模式)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 #endregion 对应关系
 
                 //// 相关功能。
-                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.WF.Port.Stations(),
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                 //    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
                 //    DeptAttr.Name, DeptAttr.No, "抄送岗位");
 

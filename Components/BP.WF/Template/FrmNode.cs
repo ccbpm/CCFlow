@@ -2,7 +2,6 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
-using BP.En;
 using BP.Port;
 using BP.Sys;
 
@@ -93,6 +92,10 @@ namespace BP.WF.Template
         ///  表单启动表达式.
         /// </summary>
         public const string FrmEnableExp = "FrmEnableExp";
+        /// <summary>
+        /// 表单显示的名字
+        /// </summary>
+        public const string FrmNameShow = "FrmNameShow";
     }
     /// <summary>
     /// 谁是主键？
@@ -100,11 +103,11 @@ namespace BP.WF.Template
     public enum WhoIsPK
     {
         /// <summary>
-        /// 工作ID是主键
+        /// 流程ID是主键 
         /// </summary>
         OID,
         /// <summary>
-        /// 流程ID是主键
+        ///  FID是主键(干流程的WorkID)
         /// </summary>
         FID,
         /// <summary>
@@ -118,11 +121,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 爷爷流程ID是主键
         /// </summary>
-        PPWorkID,
+        P2WorkID,
         /// <summary>
         /// 太爷爷流程ID是主键
         /// </summary>
-        PPPWorkID
+        P3WorkID
 
     }
     /// <summary>
@@ -278,15 +281,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用节点组件?
         /// </summary>
-        public bool IsEnableFWC
+        public FrmWorkCheckSta IsEnableFWC
         {
             get
             {
-                return this.GetValBooleanByKey(FrmNodeAttr.IsEnableFWC);
+                return (FrmWorkCheckSta)this.GetValIntByKey(FrmNodeAttr.IsEnableFWC);
             }
             set
             {
-                this.SetValByKey(FrmNodeAttr.IsEnableFWC, value);
+                this.SetValByKey(FrmNodeAttr.IsEnableFWC, (int)value);
             }
         }
         /// <summary>
@@ -393,11 +396,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示
         /// </summary>
-        public string IsEnable
+        public bool IsEnable
         {
             get
             {
-                return this.GetValStringByKey(FrmNodeAttr.IsEnable);
+                return this.GetValBooleanByKey(FrmNodeAttr.IsEnable);
             }
             set
             {
@@ -587,6 +590,17 @@ namespace BP.WF.Template
                 return 0;
             }
         }
+        public string CheckField
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeWorkCheckAttr.CheckField);
+            }
+            set
+            {
+                this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -610,14 +624,19 @@ namespace BP.WF.Template
         public FrmNode(string fk_flow, int fk_node, string fk_frm)
         {
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
+
             if (i == 0)
             {
                 this.IsPrint = false;
                 //不可以编辑.
                 this.FrmSln = Template.FrmSln.Default;
-                // this.IsEdit = false;
+                Node node = new Node(fk_node);
+                if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                {
+                    this.IsEnableFWC = node.FrmWorkCheckSta;
+
+                }
                 return;
-                throw new Exception("@表单关联信息已被删除。");
             }
         }
         /// <summary>
@@ -633,7 +652,6 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 map.AddMyPK();
-
                 map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 200, 200);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点编号", true, false);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
@@ -669,6 +687,12 @@ namespace BP.WF.Template
 
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
 
+                //@2019.09.30 by zhoupeng.
+                map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
+                //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+                //签批字段不可见
+                map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -694,6 +718,7 @@ namespace BP.WF.Template
 
             if (this.FK_Flow.Length == 0)
                 throw new Exception("@流程编号为空");
+
 
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
 

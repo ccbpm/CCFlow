@@ -318,7 +318,7 @@ namespace BP.En
             DataTable dt = null;
             if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
             {
-                string sql2 = "SELECT * FROM Sys_FrmSln where FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = " + fk_node ;
+                string sql2 = "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = " + fk_node;
                 dt = DBAccess.RunSQLReturnTable(sql2);
             }
 
@@ -333,16 +333,23 @@ namespace BP.En
                 //先判断是否设置了字段权限
                 if (dt != null)
                 {
-                    DataRow[] rows = dt.Select("MyPK='" + fk_mapdata + "_" + fk_node + "_" + attr.Key);
-                    if (rows.Length != 0 && rows[0]["DefVal"]!=null)
-                        v = rows[0]["DefVal"].ToString();
+
+                    string mypk = fk_mapdata + "_" + fk_node + "_" + attr.Key;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string myp1k = dr[0].ToString();
+                        if (myp1k.Equals(mypk) == true)
+                        {
+                            v = dr[1] as string;
+                            break;
+                        }
+                    }
                 }
-                
+
                 if (v == null || v.Contains("@") == false)
                     continue;
 
                 string myval = this.GetValStrByKey(attr.Key);
-
 
                 // 设置默认值.
                 switch (v)

@@ -1072,6 +1072,22 @@ namespace BP.WF.HttpHandler
             AttrOfOneVSM vsM = null;
             foreach (AttrOfOneVSM item in oneVsM)
             {
+                //if (item.Dot2DotModel != Dot2DotModel.TreeDeptEmp)
+                //    continue;
+
+                //if (item.EnsOfMM.ToString().Equals(dot2DotEnsName) == false)
+                //    continue;
+
+                //if (item.DefaultGroupAttrKey == null)
+                //    continue;
+
+                //if (item.DefaultGroupAttrKey.Equals(dot2DotEnsName) == false)
+                //    continue;
+
+                //vsM = item;
+                //break;
+
+
                 if (item.Dot2DotModel == Dot2DotModel.TreeDeptEmp
                     && item.EnsOfMM.ToString().Equals(dot2DotEnsName)
                     && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey))

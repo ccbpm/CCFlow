@@ -75,13 +75,13 @@ namespace BP.WF.Template
                     BP.WF.Template.NodeTeamAttr.FK_Node,
                     BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组");
 
-                //列表模式.
+                //deptAndEmp列表模式. @sly 
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeTeams(), new BP.Port.Teams(),
                   BP.WF.Template.NodeTeamAttr.FK_Node,
-                  BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组AddTeamListModel");
-                #endregion 
+                  BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组AddTeamListModel", TeamAttr.FK_TeamType);
+                #endregion  对应关系用户组
 
-                #region 对应关系
+                #region 对岗位.
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
@@ -91,7 +91,9 @@ namespace BP.WF.Template
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
                   BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddTeamListModel", StationAttr.FK_StationType);
+                #endregion 对岗位.
 
+                #region 节点绑定人员.
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.Port.TeamEmps(), new BP.Port.Teams(),
                    BP.Port.TeamEmpAttr.FK_Team,

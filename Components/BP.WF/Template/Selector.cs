@@ -361,6 +361,9 @@ namespace BP.WF.Template
                 case SelectorModel.SQL:
                     ds = BySQL(nodeid, en);
                     break;
+                case SelectorModel.SQLTemplate:
+                    ds = SQLTemplate(nodeid, en);
+                    break;
                 case SelectorModel.GenerUserSelecter:
                     ds = ByGenerUserSelecter();
                     break;
@@ -429,6 +432,23 @@ namespace BP.WF.Template
             return ds;
         }
         /// <summary>
+        /// 按照模版
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        private DataSet SQLTemplate(int nodeID, Entity en)
+        {
+            //设置他的模版.
+            //Node nd = new Node(nodeID);
+
+            SQLTemplate sql = new SQLTemplate(this.SelectorP1);
+            this.SelectorP2 = sql.Docs;
+
+            return BySQL(nodeID, en);
+        }
+            
+        /// <summary>
         /// 按照SQL计算.
         /// </summary>
         /// <param name="nodeID">节点ID</param>
@@ -439,8 +459,8 @@ namespace BP.WF.Template
             DataSet ds = new DataSet();
 
             //求部门.
-            string sqlGroup = this.SelectorP1;
-            if (DataType.IsNullOrEmpty(sqlGroup) == false)
+            string sqlGroup = this.SelectorP1; // @sly
+            if (DataType.IsNullOrEmpty(sqlGroup) == false && sqlGroup.Length > 6 )
             {
                 sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);  //@祝梦娟
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);

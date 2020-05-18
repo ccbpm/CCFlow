@@ -184,6 +184,8 @@ namespace BP.WF.HttpHandler
                     dr["isAskForOrHuiQian"] = 1;
                 else
                     dr["isAskForOrHuiQian"] = 0;
+                dt.Rows.Add(dr);
+
                 ds.Tables.Add(dt);
             }
             #endregion 处理是否是加签，或者是否是会签模式，.

@@ -68,7 +68,7 @@
 
              //初始化已选择的人员
             var emps = new Entities("BP.WF.Template.SelectAccpers");
-            emps.RetrieveAll();
+            emps.Retrieve("WorkID", WorkID);
             html = "";
             for (var i = 0; i < emps.length; i++) {
                 var en = emps[i];

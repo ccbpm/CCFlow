@@ -45,10 +45,10 @@
             for (var i = 0; i < wf_Cond.length; i++) {
 
                 var cond = wf_Cond[i];
-                if (strs.indexOf('@' + cond.ToNodeID) >= 1) {
+                if (strs.indexOf('@' + cond.ToNodeID) >= 0) {
                     continue;
                 }
-                strs += "@" + cond.NodeID;
+                strs += "@" + cond.ToNodeID;
 
                 var newRow = "";
                 newRow = "<tr >";

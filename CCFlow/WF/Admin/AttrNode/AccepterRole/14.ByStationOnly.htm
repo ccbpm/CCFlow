@@ -19,27 +19,17 @@
 <body>
     <div id="App">
         <div id="bar"> </div>
-        <div id="AdminModel">
-            <fieldset v-show="adminModel===1">
-                <legend>设置岗位</legend>
-                <ul>
-                    <li><a href="javascript:void(0)" @click="OpenDot2DotStations()">设置/更改岗位 - (分组模式)</a></li>
-                    <li> <a href="javascript:void(0)" @click="OpenNew()">设置/更改岗位 - (树形模式)</a> </li>
-                </ul>
-            </fieldset>
-        </div>
-        <div id="OrgModel">
-            <fieldset v-show="orgModel===1">
-                <legend>设置（组织管理员）</legend>
-                <ul>
-                    <li> <a href="javascript:void(0)" @click="SetGroupStations()">设置集团岗位</a> </li>
-                    <li> <a href="javascript:void(0)" @clcik="SetOrgStations()">设置本组织岗位</a> </li>
-                </ul>
-            </fieldset>
-        </div>
 
         <fieldset>
-            <legend>已经设置的岗位 </legend>
+            <legend>绑定岗位</legend>
+            <ul>
+                <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafStations()">绑定岗位-左右树结构模式</a> </li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>已经绑定的岗位 </legend>
 
             <div id="stas">
                 <ul>

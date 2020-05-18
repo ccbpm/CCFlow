@@ -122,6 +122,8 @@
         //发起流程。
         function StartIt(empNo) {
 
+            $("#Btn_Reset").val("正在以[" + empNo + "]启动流程,请稍候....");
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("UserNo", empNo);

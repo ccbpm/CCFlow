@@ -129,6 +129,8 @@
 
             // alert(fls);
 
+            $("#msg").html("<img src='../../Img/loading.gif' />正在导入请稍候，10分钟左右，请不要关闭");
+
             //生成要选择的文件.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddPara("Files", fls);
@@ -146,12 +148,24 @@
             }
             //若选择的一个模板，则打开此模板
             var json = eval('(' + data + ')');
-            $.messager.alert("提示", json.Msg, "icon-info", function () {
-                //打开新建的流程
-                if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
-                    window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
-                }
-            });
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>文件</th>";
+            html += "<th>结果</th>";
+            html += "<th>信息</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < json.length; i++) {
+                var en = json[i];
+                html += "<tr>";
+                html += "<th>" + en.Name + "</th>";
+                html += "<th>" + en.Result + "</th>";
+                html += "<th>" + en.Info + "</th>";
+                html += "</tr>";
+            }
+            html += "/<table>";
+            $("#msg").html(html);
         }
     </script>
 </head>

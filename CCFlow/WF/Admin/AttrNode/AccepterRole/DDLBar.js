@@ -205,20 +205,26 @@ function Help() {
     window.open(url);
 }
 
-//通用的设置岗位的方法。for admin.
-
+//通用的设置岗位的方法。for admin. ***********************************************************
 function OpenDot2DotStations() {
-
     var nodeID = GetQueryString("FK_Node");
-
     var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
     url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations";
     url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
     OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
         Baseinfo.stas = getStas();
     });
-
 }
+//设置岗位-左右结构.
+function OpenBranchesAndLeafStations() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+        Baseinfo.stas = getStas();
+    });
+}
+
 /*
  * 获取节点绑定的岗位
  */
@@ -230,6 +236,29 @@ function getStas() {
     });
     return ens;
 }
+
+
+//绑定用户组: for admin. ***********************************************************
+function OpenDot2DotTeams() {
+    var nodeID = GetQueryString("FK_Node");
+    var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeTeams";
+    url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Team&EnsOfM=BP.Port.Teams";
+    url += "&DefaultGroupAttrKey=FK_TeamType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+    OpenEasyUiDialogExtCloseFunc(url, '设置用户组', 800, 500, function () {
+        Baseinfo.stas = getStas();
+    });
+}
+//设置岗位-左右结构.
+function OpenBranchesAndLeafTeams() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeTeams&Dot2DotEnName=BP.WF.Template.NodeTeam&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Team&EnsOfM=BP.Port.Teams&DefaultGroupAttrKey=FK_TeamType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+    OpenEasyUiDialogExtCloseFunc(url, '设置用户组', 800, 500, function () {
+        Baseinfo.stas = getStas();
+    });
+}
+
+
 /*
  * 获取节点绑定的部门
  */

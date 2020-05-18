@@ -332,7 +332,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 var frmDB = track.FrmDB;
                 if (frmDB.length > 10) {
 
-
                     _Html += "<tr>";
                     _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                         + track.EmpFromT + '</div>'

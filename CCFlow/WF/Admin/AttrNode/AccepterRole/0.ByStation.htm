@@ -21,38 +21,25 @@
         <!--<model-component></model-component>-->
         <div id="bar">
         </div>
-        <div id="AdminModel">
-            <fieldset v-show="adminModel===1">
-                <legend>设置岗位</legend>
-                <ul>
-                    <li><a href="#" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-                    <li><a href="#" @click="OpenNew()">设置/更改岗位（左右树结构）</a> </li>
 
-                </ul>
-            </fieldset>
-        </div>
-        <div id="OrgModel">
-            <fieldset v-show="orgModel===1">
-                <legend>设置（组织管理员）</legend>
-                <ul>
-                    <li><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
-                    <li><a href="#" @click="SetOrgStations()">设置本组织岗位</a> </li>
-                </ul>
-            </fieldset>
-        </div>
         <fieldset>
-            <legend>已经设置的岗位</legend>
+            <legend>绑定岗位</legend>
+            <ul>
+                <li><a href="javascript:OpenDot2DotStations()" >绑定岗位-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafStations()" >绑定岗位-左右树结构模式</a> </li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>已经绑定的岗位</legend>
             <div id="stas">
 
                 <ul>
                     <li v-show="stas.length===0">未设置</li>
-                    <template  v-for="sta in stas">
+                    <template v-for="sta in stas">
                         <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
                     </template>
-                    
                 </ul>
-
-
             </div>
         </fieldset>
 
@@ -68,48 +55,48 @@
         </fieldset>
     </div>
     <script type="text/javascript">
-       var Baseinfo = new Vue({
+        var Baseinfo = new Vue({
             el: '#App',
             data: {
                 adminModel: 1,
-                orgModel:0,
+                orgModel: 0,
                 stas: [],
                 webuser: null,
-                deliverWay:DeliveryWay.ByStation
-           },
-           methods: {
-               OpenDot2DotStations: function () {
-                   OpenDot2DotStations();
-               },
-               OpenNew: function () {
-                   var nodeID = GetQueryString("FK_Node");
-                   var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-                   OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
+                deliverWay: DeliveryWay.ByStation
+            },
+            methods: {
+                OpenDot2DotStations: function () {
+                    OpenDot2DotStations();
+                },
+                OpenNew: function () {
+                    var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
                         Baseinfo.stas = getStas();
                     });
-               },
-               SetGroupStations: function () {
+                },
+                SetGroupStations: function () {
                     OpenNodStationGroup(this.webuser.GroupNo);
-                  
-               },
-               SetOrgStations: function () {
+
+                },
+                SetOrgStations: function () {
                     OpenNodStationGroup(this.webuser.OrgNo);
-               }
-           },
+                }
+            },
             created() {
                 InitBar(this.deliverWay);
                 this.stas = getStas();
-               
+
                 //根据用户的信息，判断是否启用那个设置工具。
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
-           }
-       });
+            }
+        });
 
-         function OpenNodStationGroup(orgNo) {
+        function OpenNodStationGroup(orgNo) {
             var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-             OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600,function () {
+            OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600, function () {
                 Baseinfo.stas = getStas();
             });
         }
@@ -121,6 +108,6 @@
             node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
-   </script>
-</body >
-</html >
+    </script>
+</body>
+</html>

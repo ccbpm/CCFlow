@@ -8,7 +8,7 @@ var isChange = false;
 
 //审核组件页面初始化
 $(function () {
-   
+
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
@@ -82,8 +82,8 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
     var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
     var isShowCheck = false;
     if (checkField == keyOfEn && pageData.IsReadonly != "1") {
-        if ($("#TB_" + keyOfEn).val().indexOf("," + pageData.FK_Node)==-1)
-            $("#TB_" + keyOfEn).val($("#TB_" + keyOfEn).val()+","+pageData.FK_Node);
+        if ($("#TB_" + keyOfEn).val().indexOf("," + pageData.FK_Node) == -1)
+            $("#TB_" + keyOfEn).val($("#TB_" + keyOfEn).val() + "," + pageData.FK_Node);
         isShowCheck = true;
     }
 
@@ -97,7 +97,7 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
 
     for (var i = 0; i < tracks.length; i++) {
         var track = tracks[i];
-        if ( $("#TB_" + keyOfEn).val().indexOf(","+track.NodeID)==-1)
+        if ($("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
             continue;
         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck);
     }
@@ -158,7 +158,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
         //1.获取自定义常用短语
         var en = new Entity("BP.Sys.GloVar");
-        en.SetPKVal("ND"+pageData.FK_Node + "_WorkCheck");
+        en.SetPKVal("ND" + pageData.FK_Node + "_WorkCheck");
         var DuanYu = "";
         if (en.RetrieveFromDBSources() == 0) {
             DuanYu = en.Val;
@@ -329,12 +329,23 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
+                var frmDB = track.FrmDB;
+                if (frmDB.length > 10) {
+
+
+                    _Html += "<tr>";
+                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                        + track.EmpFromT + '</div>'
+                        + "<div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                    _Html += "</tr>";
+                    break;
+                }
                 _Html += "<tr>";
                 _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                     + track.EmpFromT + '</div>'
                     + "<div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
-                break;
+
             }
 
             if (st.SignType == 1) {
@@ -391,7 +402,7 @@ function SetDocVal() {
     if ($("#TB_Msg").length == 1) {
         $("#TB_Msg").val(val);
     }
-  
+
 }
 
 function SaveWorkCheck() {
@@ -449,16 +460,15 @@ function DelWorkCheckAth(athPK) {
 }
 
 function AthDown(fk_ath, pkVal, delPKVal, fk_mapData, fk_flow, ath) {
-    if (plant == "CCFlow")
+    if (plant == "CCFlow") {
         window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
-    else {
-        var currentPath = window.document.location.href;
-        var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-        Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
-        window.location.href = Url;
+        return;
     }
 
-
+    var currentPath = window.document.location.href;
+    var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+    Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
+    window.location.href = Url;
 }
 
 
@@ -476,13 +486,10 @@ function GetUserSiganture(userNo, userName) {
     data = handler.DoMethodReturnString("HasSealPic");
 
     //如果不存在，就显示当前人的姓名
-    if (data.length > 0) {
+    if (data.length > 0)
         return userName;
-    }
-    else {
-        return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.jpg'\" />";
-    }
 
+    return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/Templete.jpg'\" />";
 }
 
 
@@ -757,7 +764,7 @@ function ChangeWorkCheck(str) {
     if ($("#TB_Msg").length == 1) {
         $("#TB_Msg").val(str);
     }
-    
+
     $('#bootStrapdlg').modal('hide');
 }
 

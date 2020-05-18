@@ -101,11 +101,23 @@
                 html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "</tr>";
-               
-                
+                html += "</tr>";  
             }
-            $("#stationsEmpList").append(html)
+            $("#stationsEmpList").append(html);
+            //加载后设置已存在数据库中人员的Checked的状态
+            SetChecked();
+        }
+         //设置已存在数据库中人员的Checked的状态
+        function SetChecked() {
+            var emps = new Entities("BP.WF.Template.SelectAccpers");
+            emps.RetrieveAll();
+            for (var i = 0; i < emps.length; i++) {
+                var en = emps[i];
+                if (document.getElementById(en.EmpName)!= null)
+                    document.getElementById(en.EmpName).checked=true;
+                else
+                    continue;
+            }
         }
         //选择人员
         function SelectEmp(EmpNo) {
@@ -144,13 +156,14 @@
                 empEn.DeptName = empDept.Name;
                 empEn.Rec = webUser.No;
                 empEn.Insert();
-            } 
-
+            }
         }
         //删除按钮
         function removeRecord(No, Name) {
-            if (window.confirm('您确认要删除吗？') == false)
+            if (window.confirm('您确认要删除吗？') == false) {
+                document.getElementById(Name).checked=true;
                 return;
+            }
             var MyPK = NodeID + "_" + WorkID + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
             if (empEn.Delete()) {

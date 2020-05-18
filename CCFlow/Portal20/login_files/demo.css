@@ -1,0 +1,147 @@
+#container {
+	color: rgb(131, 131, 131); font-size: 12px;
+}
+#uploader .queueList {
+	margin: 20px; border: 3px dashed rgb(230, 230, 230);
+}
+#uploader .filled.queueList {
+	margin: 0px; padding: 17px; border: 3px dashed transparent;
+}
+#uploader .webuploader-dnd-over.queueList {
+	border: 3px dashed rgb(153, 153, 153);
+}
+#uploader p {
+	margin: 0px;
+}
+.element-invisible {
+	position: absolute !important; clip: rect(1px, 1px, 1px, 1px);
+}
+#uploader .placeholder {
+	background: url("../images/image.png") no-repeat center 93px; text-align: center; color: rgb(204, 204, 204); padding-top: 178px; font-size: 18px; position: relative; min-height: 350px;
+}
+#uploader .placeholder .webuploader-pick {
+	background: rgb(0, 183, 238); margin: 0px auto 20px; padding: 0px 30px; border-radius: 3px; color: rgb(255, 255, 255); line-height: 44px; font-size: 18px; display: inline-block; cursor: pointer; box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+}
+#uploader .placeholder .webuploader-pick-hover {
+	background: rgb(0, 162, 212);
+}
+#uploader .placeholder .flashTip {
+	width: 100%; text-align: center; bottom: 20px; color: rgb(102, 102, 102); font-size: 12px; position: absolute;
+}
+#uploader .placeholder .flashTip a {
+	color: rgb(7, 133, 209); text-decoration: none;
+}
+#uploader .placeholder .flashTip a:hover {
+	text-decoration: underline;
+}
+#uploader .filelist {
+	list-style: none; margin: 0px; padding: 0px;
+}
+#uploader .filelist::after {
+	width: 0px; height: 0px; overflow: hidden; clear: both; display: block; content: "";
+}
+#uploader .filelist li {
+	background: url("../images/bg.png") no-repeat; margin: 0px 8px 20px 0px; width: 110px; height: 110px; text-align: center; overflow: hidden; font-size: 12px; float: left; display: inline; position: relative;
+}
+#uploader .filelist li p.log {
+	top: -45px; position: relative;
+}
+#uploader .filelist li p.title {
+	left: 0px; top: 5px; width: 100%; text-align: left; text-indent: 5px; overflow: hidden; white-space: nowrap; position: absolute; -ms-text-overflow: ellipsis;
+}
+#uploader .filelist li p.progress {
+	background: none; margin: 0px; border-radius: 0px; left: 0px; width: 100%; height: 8px; bottom: 0px; overflow: hidden; position: absolute; z-index: 50; -webkit-box-shadow: 0 0 0;
+}
+#uploader .filelist li p.progress span {
+	background: url("../images/progress.png") repeat-x rgb(20, 131, 216); transition:width 200ms linear; animation:progressmove 2s linear infinite; width: 0px; height: 100%; overflow: hidden; display: none; -webkit-transform: translateZ(0); -webkit-animation: progressmove 2s linear infinite; -moz-animation: progressmove 2s linear infinite; -o-animation: progressmove 2s linear infinite; -moz-transition: width 200ms linear; -o-transition: width 200ms linear; -webit-transition: width 200ms linear;
+}
+#uploader .filelist li p.imgWrap {
+	transform-origin: 50% 50%; transition:200ms ease-out; width: 110px; height: 110px; line-height: 110px; overflow: hidden; vertical-align: middle; position: relative; z-index: 2; -webkit-transform-origin: 50% 50%; -moz-transition: 200ms ease-out; -o-transition: 200ms ease-out; -webit-transition: 200ms ease-out; -moz-transform-origin: 50% 50%; -o-transform-origin: 50% 50%;
+}
+#uploader .filelist li img {
+	width: 100%;
+}
+#uploader .filelist li p.error {
+	background: rgb(244, 56, 56); left: 0px; width: 100%; height: 28px; bottom: 0px; color: rgb(255, 255, 255); line-height: 28px; position: absolute; z-index: 100;
+}
+#uploader .filelist li .success {
+	background: url("../images/success.png") no-repeat right bottom; left: 0px; width: 100%; height: 40px; bottom: 0px; display: block; position: absolute; z-index: 200;
+}
+#uploader .filelist div.file-panel {
+	background: rgba(0, 0, 0, 0.5); left: 0px; top: 0px; width: 100%; height: 0px; overflow: hidden; position: absolute; z-index: 300;
+}
+#uploader .filelist div.file-panel span {
+	background: url("../images/icons.png") no-repeat; margin: 5px 1px 1px; width: 24px; height: 24px; text-indent: -9999px; overflow: hidden; float: right; display: inline; cursor: pointer;
+}
+#uploader .filelist div.file-panel span.rotateLeft {
+	background-position: 0px -24px;
+}
+#uploader .filelist div.file-panel span.rotateLeft:hover {
+	background-position: 0px 0px;
+}
+#uploader .filelist div.file-panel span.rotateRight {
+	background-position: -24px -24px;
+}
+#uploader .filelist div.file-panel span.rotateRight:hover {
+	background-position: -24px 0px;
+}
+#uploader .filelist div.file-panel span.cancel {
+	background-position: -48px -24px;
+}
+#uploader .filelist div.file-panel span.cancel:hover {
+	background-position: -48px 0px;
+}
+#uploader .statusBar {
+	padding: 0px 20px; height: 63px; line-height: 63px; vertical-align: middle; border-top-color: rgb(218, 218, 218); border-top-width: 1px; border-top-style: solid; position: relative;
+}
+#uploader .statusBar .progress {
+	background: rgb(255, 255, 255); margin: 0px 10px 0px 0px; border: 1px solid rgb(20, 131, 216); width: 198px; height: 18px; text-align: center; color: rgb(109, 191, 255); line-height: 20px; display: inline-block; position: relative;
+}
+#uploader .statusBar .progress span.percentage {
+	background: rgb(20, 131, 216); left: 0px; top: 0px; width: 0px; height: 100%; position: absolute;
+}
+#uploader .statusBar .progress span.text {
+	position: relative; z-index: 10;
+}
+#uploader .statusBar .info {
+	color: rgb(102, 102, 102); font-size: 14px; display: inline-block;
+}
+#uploader .statusBar .btns {
+	top: 10px; right: 20px; line-height: 40px; position: absolute;
+}
+#filePicker2 {
+	float: left; display: inline-block;
+}
+#uploader .statusBar .btns .webuploader-pick {
+	background: rgb(255, 255, 255); padding: 0px 18px; border-radius: 3px; border: 1px solid rgb(207, 207, 207); color: rgb(86, 86, 86); font-size: 14px; margin-left: 10px; float: left; display: inline-block; cursor: pointer;
+}
+#uploader .statusBar .btns .uploadBtn {
+	background: rgb(255, 255, 255); padding: 0px 18px; border-radius: 3px; border: 1px solid rgb(207, 207, 207); color: rgb(86, 86, 86); font-size: 14px; margin-left: 10px; float: left; display: inline-block; cursor: pointer;
+}
+#uploader .statusBar .btns .state-uploading.uploadBtn {
+	background: rgb(255, 255, 255); padding: 0px 18px; border-radius: 3px; border: 1px solid rgb(207, 207, 207); color: rgb(86, 86, 86); font-size: 14px; margin-left: 10px; float: left; display: inline-block; cursor: pointer;
+}
+#uploader .statusBar .btns .state-paused.uploadBtn {
+	background: rgb(255, 255, 255); padding: 0px 18px; border-radius: 3px; border: 1px solid rgb(207, 207, 207); color: rgb(86, 86, 86); font-size: 14px; margin-left: 10px; float: left; display: inline-block; cursor: pointer;
+}
+#uploader .statusBar .btns .webuploader-pick-hover {
+	background: rgb(240, 240, 240);
+}
+#uploader .statusBar .btns .uploadBtn:hover {
+	background: rgb(240, 240, 240);
+}
+#uploader .statusBar .btns .state-uploading.uploadBtn:hover {
+	background: rgb(240, 240, 240);
+}
+#uploader .statusBar .btns .state-paused.uploadBtn:hover {
+	background: rgb(240, 240, 240);
+}
+#uploader .statusBar .btns .uploadBtn {
+	background: rgb(0, 183, 238); border-color: transparent; color: rgb(255, 255, 255);
+}
+#uploader .statusBar .btns .uploadBtn:hover {
+	background: rgb(0, 162, 212);
+}
+#uploader .statusBar .btns .disabled.uploadBtn {
+	opacity: 0.6; pointer-events: none;
+}

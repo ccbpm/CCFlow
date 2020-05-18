@@ -158,21 +158,19 @@
                 empEn.Insert();
             }
         }
-        //删除按钮
+         //删除按钮
         function removeRecord(No, Name) {
             if (window.confirm('您确认要删除吗？') == false) {
-                document.getElementById(Name).checked=true;
+               
+                document.getElementById(Name).checked = true;
                 return;
             }
-            var MyPK = NodeID + "_" + WorkID  + "_" + No;
+            var MyPK = NodeID + "_" + WorkID + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
-            if (empEn.Delete()) {
-                document.getElementById(Name).checked = false;
-                document.getElementById(No).remove();
-            }
-            else {
-                alert("删除失败！");
-            }
+            empEn.Delete();
+           
+            //删除后刷新当前页面
+           location.reload(true);
         }
         //全选
         function SelectAll() {

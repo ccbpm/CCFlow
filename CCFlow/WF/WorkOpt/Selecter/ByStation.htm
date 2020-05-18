@@ -65,7 +65,7 @@
             html += "</ul>";
 
             $("#stationsList").append(html);
-            
+
             //初始化已选择的人员
             var emps = new Entities("BP.WF.Template.SelectAccpers");
             emps.RetrieveAll();
@@ -77,7 +77,7 @@
                 html += "<td>" + en.EmpName + "</td>";
                 html += "<td><a class='newBtn btn-danger' href='#' onclick=removeRecord('" + en.FK_Emp + "','" + en.EmpName + "')>X</a></td>";
                 html += "</tr>"
-               
+
             }
             $("#selectEmpList").append(html);
         });
@@ -92,7 +92,7 @@
             var data = handler.DoMethodReturnString("ByStation_ShowEmps");
             var Emps = eval('(' + data + ')');
             var html = "";
-            
+
             for (var i = 0; i < Emps.length; i++) {
                 en = Emps[i];
 
@@ -101,20 +101,20 @@
                 html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "</tr>";  
+                html += "</tr>";
             }
             $("#stationsEmpList").append(html);
             //加载后设置已存在数据库中人员的Checked的状态
             SetChecked();
         }
-         //设置已存在数据库中人员的Checked的状态
+        //设置已存在数据库中人员的Checked的状态
         function SetChecked() {
             var emps = new Entities("BP.WF.Template.SelectAccpers");
             emps.RetrieveAll();
             for (var i = 0; i < emps.length; i++) {
                 var en = emps[i];
-                if (document.getElementById(en.EmpName)!= null)
-                    document.getElementById(en.EmpName).checked=true;
+                if (document.getElementById(en.EmpName) != null)
+                    document.getElementById(en.EmpName).checked = true;
                 else
                     continue;
             }
@@ -161,18 +161,16 @@
         //删除按钮
         function removeRecord(No, Name) {
             if (window.confirm('您确认要删除吗？') == false) {
-                document.getElementById(Name).checked=true;
+               
+                document.getElementById(Name).checked = true;
                 return;
             }
             var MyPK = NodeID + "_" + WorkID + "_" + No;
             var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
-            if (empEn.Delete()) {
-                document.getElementById(Name).checked = false;
-                document.getElementById(No).remove();
-            }
-            else {
-                alert("删除失败！");
-            }
+            empEn.Delete();
+           
+            //删除后刷新当前页面
+           location.reload(true);
         }
         //全选
         function SelectAll() {
@@ -183,7 +181,7 @@
 
             }
         }
-        
+
         function GotoUrl(url) {
             var urlSuffix = "?WorkID=" + WorkID + "&ToNode=" + NodeID;
             url += urlSuffix;

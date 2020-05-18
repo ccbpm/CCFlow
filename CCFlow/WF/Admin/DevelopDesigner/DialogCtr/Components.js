@@ -12,10 +12,13 @@
         if (_html == "")
             return;
          editor.execCommand('insertHtml', _html);     
-    }
+}
+
+
 
     function GetHtmlByMapAttrAndFrmComponent(mapData, frmComponent) {
         var _html = "";
+
         switch (frmComponent) {
             case 4: //地图控件
                 _html = "<div style='text-align:left;padding-left:0px' id='Map_" + mapData.KeyOfEn + "' data-type='Map' data-key='" + mapData.MyPK + "' leipiplugins='component'>";
@@ -46,10 +49,10 @@
 
                 break;
             case 14://签批组件
-                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>" + mapData.Name; 
+                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>";
                 break;
             case 15://评论组件
-                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>评论组件" ;
+                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>" ;
                 break;
             case 16://系统定位
                 break;

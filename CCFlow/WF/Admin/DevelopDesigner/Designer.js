@@ -2391,7 +2391,7 @@ function Save() {
     $("#Btn_Save").val("保存");
 }
 
-
+var webUser = new WebUser();
 function GetSysEnums(enumKey) {
 
     if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {

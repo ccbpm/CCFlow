@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.SessionState;
+using BP.DA;
 
 namespace BP.WF.HttpHandler
 {
@@ -29,25 +30,25 @@ namespace BP.WF.HttpHandler
             DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType) as DirectoryPageBase;
 
             //让其支持跨域访问.
-            string origin = HttpContextHelper.Request.Headers["Origin"];
-            if (!string.IsNullOrEmpty(origin))
-            {
-                var allAccess_Control_Allow_Origin = System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"];
-                HttpContextHelper.Response.Headers["Access-Control-Allow-Origin"] = origin;
-                HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
-                HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
+            //string origin = HttpContextHelper.Request.Headers["Origin"];
+            //if (DataType.IsNullOrEmpty(origin) == false)
+            //{
+            //    var allAccess_Control_Allow_Origin = System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"];
+            //    HttpContextHelper.Response.Headers["Access-Control-Allow-Origin"] = origin;
+            //    HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+            //    HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
 
-                //if (!string.IsNullOrEmpty(allAccess_Control_Allow_Origin))
-                //{
-                //    var origin = HttpContextHelper.Request.Headers["Origin"];
-                //    if (System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"].Contains(origin))
-                //    {
-                //        HttpContextHelper.Response.Headers["Access-Control-Allow-Origin"] = origin;
-                //        HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
-                //        HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
-                //    }
-                //}
-            }
+            //    //if (!string.IsNullOrEmpty(allAccess_Control_Allow_Origin))
+            //    //{
+            //    //    var origin = HttpContextHelper.Request.Headers["Origin"];
+            //    //    if (System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"].Contains(origin))
+            //    //    {
+            //    //        HttpContextHelper.Response.Headers["Access-Control-Allow-Origin"] = origin;
+            //    //        HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+            //    //        HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
+            //    //    }
+            //    //}
+            //}
             
 
             try

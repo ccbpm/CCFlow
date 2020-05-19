@@ -144,16 +144,15 @@
         // 绑定表单信息.
         function EditFrm(frmID) {
 
-
             var url = '../../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=' + frmID + "&FrmID=" + frmID;
-
             window.open(url);
-
         }
 
         function EditFrmNode(mypk) {
 
             var url = '../../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=' + mypk;
+            window.open(url);
+            return;
 
             OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

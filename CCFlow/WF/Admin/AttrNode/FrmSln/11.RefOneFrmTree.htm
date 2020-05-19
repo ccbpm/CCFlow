@@ -85,6 +85,8 @@
         function EditFrmNode(mypk) {
 
             var url = '../../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=' + mypk;
+            window.open(url);
+            return;
 
             OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

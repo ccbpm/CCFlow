@@ -32,28 +32,10 @@
             var doWhat = GetQueryString("DoWhat");
             var userNo = GetQueryString("UserNo");
 
-            //var webUser = new WebUser();
-            //if (webUser.No != "admin") {
-            //    var url = "TestCase.htm?FK_Flow=" + fk_flow;
-            //    window.location.href = url;
-            //    return;
-            //}
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-
-            //var plant = handler.DoMethodReturnString("TestFlow_GetRunOnPlant");
-            //var urlHost = "";
-            //if (plant == "jeesite") {
-            //    urlHost = getContextPath() + "/a/logout";
-            //    //$("#Table1").attr("caption", "&nbsp;&nbsp;演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a>");
-            //    document.getElementById("Table1").caption.innerHTML = "演示所有用户的密码为:admin, <a href='/js/a/logout'> 点击这里登录前台. </a> - <font color=red><a href=\"javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');\" >提示</font>";
-            //    //$("#demoPass").html("&nbsp;&nbsp;");
-            //}
-
             //debugger;
             handler.AddUrlData();
             var data = handler.DoMethodReturnString(doType);
-
 
             if (data.indexOf('err@') == 0) {
 

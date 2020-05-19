@@ -37,6 +37,19 @@ function FrmAttr() {
 
 }
 
+//表单属性.
+function OpenFoolFrm() {
+
+    var frmID = GetQueryString("FK_MapData");
+    var nodeID = GetQueryString("NodeID");
+    var flowNo = GetQueryString("FK_Flow");
+
+    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    window.open(url);
+
+}
+
+
 //移动表单
 function FrmMobile() {
 

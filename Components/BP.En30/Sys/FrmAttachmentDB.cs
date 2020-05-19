@@ -232,8 +232,12 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
+                //@sly.
+                if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                    throw new Exception("err@错误:请首先给FK_MapData赋值..");
+
                 //获取最后"_"的位置
-                string val = value.Replace(this.FK_MapData+"_","");
+                string val = value.Replace(this.FK_MapData + "_", "");
                 this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val);
             }
         }

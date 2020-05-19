@@ -193,6 +193,7 @@ namespace BP.Sys
                     foreach (FrmAttachmentDB athDBFrom in athDBsFrom)
                     {
                         athDBFrom.MyPK = BP.DA.DBAccess.GenerGUID();
+                        athDBFrom.FK_MapData = this.FK_MapData; //@sly
                         athDBFrom.FK_FrmAttachment = ath.MyPK;
                         athDBFrom.RefPKVal = this.OID.ToString();
                         athDBFrom.Insert();

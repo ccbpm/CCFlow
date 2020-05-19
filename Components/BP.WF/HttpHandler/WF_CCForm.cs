@@ -92,9 +92,11 @@ namespace BP.WF.HttpHandler
                         FileInfo info = new FileInfo(saveTo);
                         FrmAttachmentDB dbUpload = new FrmAttachmentDB();
 
-                        dbUpload.CheckPhysicsTable();
+                        //dbUpload.CheckPhysicsTable();
                         dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
                         dbUpload.NodeID = FK_Node;
+                        dbUpload.FK_MapData = athDesc.FK_MapData;
+
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -3202,6 +3204,7 @@ namespace BP.WF.HttpHandler
 
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.MyPK = athDBPK;
+            dbUpload.FK_MapData = frmAth.FK_MapData;
             dbUpload.FK_FrmAttachment = attachPk;
             dbUpload.RefPKVal = this.WorkID.ToString();
             dbUpload.FID = fid;
@@ -3462,7 +3465,6 @@ namespace BP.WF.HttpHandler
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
                     dbUpload.NodeID = this.FK_Node;
                     dbUpload.Sort = sort;
-                    dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;

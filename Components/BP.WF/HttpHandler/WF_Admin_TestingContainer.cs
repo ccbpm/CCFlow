@@ -205,12 +205,12 @@ namespace BP.WF.HttpHandler
             DataTable dt = null;
             string sql = "";
             BP.WF.Node nd = new BP.WF.Node(nodeid);
-           /* if (nd.IsGuestNode)
-            {
-                *//*如果是 guest 节点，就让其跳转到 guest登录界面，让其发起流程。*//*
-                //这个地址需要配置.
-                return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
-            }*/
+            /* if (nd.IsGuestNode)
+             {
+                 *//*如果是 guest 节点，就让其跳转到 guest登录界面，让其发起流程。*//*
+                 //这个地址需要配置.
+                 return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
+             }*/
             #endregion 测试人员.
 
             #region 从配置里获取-测试人员.
@@ -243,7 +243,9 @@ namespace BP.WF.HttpHandler
                     dr["FK_DeptText"] = emp.FK_DeptText;
                     dtEmps.Rows.Add(dr);
                 }
-                return BP.Tools.Json.ToJson(dtEmps);
+
+                if (dtEmps.Rows.Count > 1)
+                    return BP.Tools.Json.ToJson(dtEmps);
             }
             #endregion 测试人员.
 

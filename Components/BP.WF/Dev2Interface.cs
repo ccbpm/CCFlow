@@ -4175,13 +4175,13 @@ namespace BP.WF
                 return;
             }
 
+            //@sly
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                     "RDT,FrmDB="+dbStr+"FrmDB WHERE  Tag=" + dbStr + "Tag ";
+                     "RDT,NodeData=" + dbStr+ "NodeData WHERE  Tag=" + dbStr + "Tag ";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
             ps.Add(TrackAttr.Tag, tag);
-            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
-
+            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess); //@sly
             ps.Add(TrackAttr.NodeData,"@DeptNo="+WebUser.FK_Dept + "@DeptName="+WebUser.FK_DeptName);
 
             int num = DBAccess.RunSQL(ps);
@@ -10374,6 +10374,8 @@ namespace BP.WF
                 dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                 dbUpload.Sort = sort;
                 dbUpload.NodeID = nodeid;
+                dbUpload.FK_MapData = athDesc.FK_MapData; 
+
                 dbUpload.FK_FrmAttachment = athDesc.MyPK;
                 dbUpload.FileExts = ext;
                 dbUpload.FID = fid; //流程id.

@@ -21,7 +21,8 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.IsView = true;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
+                if (BP.Web.WebUser.No.Equals("admin") 
+                    || BP.Web.WebUser.IsAdmin == true)
                 {
                     uac.IsUpdate = true;
                     uac.IsDelete = true;
@@ -320,10 +321,7 @@ namespace BP.Sys.FrmUI
             {
                 return this.GetValStringByKey(FrmAttachmentAttr.NoOfObj);
             }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.NoOfObj, value);
-            }
+           
         }
         /// <summary>
         /// Y

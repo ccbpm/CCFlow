@@ -1193,7 +1193,7 @@ namespace BP.WF.Template
 
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.ReturnRole, true, "是否启用", true, true);
+                map.AddTBInt(BtnAttr.ReturnRole, 1, "是否启用", true, true);
                 map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,

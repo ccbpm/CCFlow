@@ -79,14 +79,24 @@
             width:auto;
             height:40px;
         }
+        .uploadBts
+        {
+            height:30px!important;
+            width:85px!important;
+            
+        }
         .selectFileBt
         {
-            height:38px;
+            height:30px;
+            line-height:10px;
             width:82px;
             background-color:white !important;
             color:black !important;
             border:1px solid black !important; 
+            font-size:14px !important;
+            font-weight:normal;
         }
+
     </style>
     <script language="javascript" type="text/javascript">
         var numOfUpload = 0;  //要求上传的最小数量.
@@ -337,27 +347,27 @@
             html += "<thead>";
             if (athDesc.IsShowTitle == 1) {
                 html += "<tr style='border:0px;'>";
-                html += "<th  style='width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
+                html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                     var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                     if (sortColumn == "")
                         sortColumn = "类别";
-                    html += "<th style=' border-top: 1px solid #ddd;width:120px' nowrap=true >" + sortColumn + "</td>";
+                    html += "<th style='line-height:30px; border-top: 1px solid #ddd;width:120px' nowrap=true >" + sortColumn + "</td>";
 
                 }
 
                 //是否启用附件从表 0 禁用 1启用
                 if (athDesc.IsExpCol == 0) {
 
-                    html += "<th style='min-width:200px; border: 1px solid #ddd' nowrap=true >文件名</th>";
-                    html += "<th  style='width:50px; border: 1px solid #ddd' nowrap=true >大小KB</th>";
-                    html += "<th  style='width:120px; border: 1px solid #ddd' nowrap=true >上传时间</th>";
-                    html += "<th  style='width:80px; border: 1px solid #ddd' nowrap=true >上传人</th>";
+                    html += "<th style='line-height:30px;min-width:200px; border: 1px solid #ddd' nowrap=true >文件名<div style='float:right' id='fileUploadContent' class='fileUploadContent'></div> </th>";
+                    html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >大小KB</th>";
+                    html += "<th  style='line-height:30px;width:120px; border: 1px solid #ddd' nowrap=true >上传时间</th>";
+                    html += "<th  style='line-height:30px;width:80px; border: 1px solid #ddd' nowrap=true >上传人</th>";
                 } else {
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:200px' >文件名</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:50px' >大小KB</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:120px' >上传时间</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:80px' >上传人</th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:200px' >文件名<div style='float:right' id='fileUploadContent' class='fileUploadContent'></div></th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:50px' >大小KB</th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:120px' >上传时间</th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:80px' >上传人</th>";
 
 
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
@@ -380,7 +390,7 @@
                     }
                     columnNum = columnNum + mapAttrs.length;
                 }
-                html += "<th  nowrap=true style=' border: 1px solid #ddd;width:100px' >";
+                html += "<th  nowrap=true style='line-height:30px; border: 1px solid #ddd;width:100px' >";
 
                 if (athDesc.IsDownload == 1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' /></a>";
@@ -608,9 +618,8 @@
                     else {
                         html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%' >";
                     }
-                    html +="<div id='fileUploadContent' class='fileUploadContent'></div> ";
-                    //html += "<input type='file' style='float:left' name='uploadfile' id='uploadfile' />";
-                    //html += "</div>";
+                    
+                    
                     html += "</div>";
 
                     if (athDesc.IsNote)

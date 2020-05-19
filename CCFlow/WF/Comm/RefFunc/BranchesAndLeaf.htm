@@ -255,7 +255,7 @@
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
 
-            hander.AddPara("Key", key.replace(/'/g,'');
+            hander.AddPara("Key", key.replace(/'/g,''));
             var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
 
             //document.title =  "key="+key+" json:" +json.length;

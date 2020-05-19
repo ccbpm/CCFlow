@@ -1348,7 +1348,8 @@ namespace BP.WF.HttpHandler
         public string Draft_Init()
         {
             DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
+            string domain = this.GetRequestVal("Domain");
+            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

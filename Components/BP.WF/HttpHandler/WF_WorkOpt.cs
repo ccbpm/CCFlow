@@ -1599,6 +1599,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("Msg", typeof(string));
             tkDt.Columns.Add("EmpFrom", typeof(string));
             tkDt.Columns.Add("EmpFromT", typeof(string));
+            tkDt.Columns.Add("DeptName", typeof(string));
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
@@ -1862,6 +1863,17 @@ namespace BP.WF.HttpHandler
 
                     row["EmpFrom"] = tk.EmpFrom;
                     row["EmpFromT"] = tk.EmpFromT;
+                    //获取部门
+                    string DeptName = "";
+                    string[] Arrays = tk.NodeData.Split('@');
+                    foreach (string i in Arrays)
+                    {
+                        if (i.Contains("DeptName="))
+                        {
+                            DeptName = i.Split('=')[1];
+                        }
+                    }
+                    row["DeptName"] = DeptName;
                     row["ActionType"] = tk.HisActionType;
                     row["Tag"] = tk.Tag;
                     row["FWCView"] = fwc.FWCView;
@@ -1928,6 +1940,17 @@ namespace BP.WF.HttpHandler
                                     row["Msg"] = mysubtk.MsgHtml;
                                     row["EmpFrom"] = mysubtk.EmpFrom;
                                     row["EmpFromT"] = mysubtk.EmpFromT;
+                                    //获取部门
+                                    DeptName = "";
+                                    Arrays = tk.NodeData.Split('@');
+                                    foreach (string i in Arrays)
+                                    {
+                                        if (i.Contains("DeptName="))
+                                        {
+                                            DeptName = i.Split('=')[1];
+                                        }
+                                    }
+                                    row["DeptName"] = DeptName;
                                     row["RDT"] = mysubtk.RDT;
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
@@ -2027,6 +2050,7 @@ namespace BP.WF.HttpHandler
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
+                        row["DeptName"] = WebUser.FK_DeptName;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
@@ -2046,6 +2070,7 @@ namespace BP.WF.HttpHandler
                     row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
+                    row["DeptName"] = WebUser.FK_DeptName;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
@@ -2090,6 +2115,7 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
+                row["DeptName"] = "";
                 row["T_NodeIndex"] = ++idx;
                 row["T_CheckIndex"] = ++noneEmpIdx;
 
@@ -2165,6 +2191,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("Msg", typeof(string));
             tkDt.Columns.Add("EmpFrom", typeof(string));
             tkDt.Columns.Add("EmpFromT", typeof(string));
+            tkDt.Columns.Add("DeptName", typeof(string));
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
@@ -2391,6 +2418,16 @@ namespace BP.WF.HttpHandler
 
                             row["EmpFrom"] = tk.EmpFrom;
                             row["EmpFromT"] = tk.EmpFromT;
+                            //获取部门
+                            string DeptName = "";
+                            string[] Arrays = tk.NodeData.Split('@');
+                            foreach (string i in Arrays) {
+                                if (i.Contains("DeptName="))
+                                {
+                                    DeptName = i.Split('=')[1];
+                                }
+                            }
+                            row["DeptName"] = DeptName;
                             row["ActionType"] = tk.HisActionType;
                             row["Tag"] = tk.Tag;
                             row["FWCView"] = fwc.FWCView;
@@ -2457,6 +2494,18 @@ namespace BP.WF.HttpHandler
                                             row["Msg"] = mysubtk.MsgHtml;
                                             row["EmpFrom"] = mysubtk.EmpFrom;
                                             row["EmpFromT"] = mysubtk.EmpFromT;
+
+                                            //获取部门
+                                            DeptName = "";
+                                            Arrays = mysubtk.NodeData.Split('@');
+                                            foreach (string i in Arrays)
+                                            {
+                                                if (i.Contains("DeptName="))
+                                                {
+                                                    DeptName = i.Split('=')[1];
+                                                }
+                                            }
+                                            row["DeptName"] = DeptName;
                                             row["RDT"] = mysubtk.RDT;
                                             row["IsDoc"] = false;
                                             row["ParentNode"] = tk.NDFrom;
@@ -2545,6 +2594,7 @@ namespace BP.WF.HttpHandler
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
+                        row["DeptName"] = WebUser.FK_DeptName;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
@@ -2564,6 +2614,7 @@ namespace BP.WF.HttpHandler
                     row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
+                    row["DeptName"] = WebUser.FK_DeptName;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
@@ -2608,6 +2659,7 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
+                row["DeptName"] = "";
                 row["T_NodeIndex"] = ++idx;
                 row["T_CheckIndex"] = ++noneEmpIdx;
 

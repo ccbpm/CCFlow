@@ -8855,6 +8855,7 @@ namespace BP.WF
             t.EmpTo = gwl.FK_Emp;
             t.EmpToT = gwl.FK_EmpText;
             t.Msg = msg;
+            t.NodeData = "@DeptNo="+WebUser.FK_Dept+"@DeptName=" + WebUser.FK_DeptName;
             //t.FrmDB = frmDBJson; //表单数据Json.
 
             switch (at)
@@ -8994,6 +8995,7 @@ namespace BP.WF
             t.EmpTo = toEmp;
             t.EmpToT = toEmpName;
             t.Msg = msg;
+            t.NodeData = "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName;
             t.FrmDB = frmDBJson; //表单数据Json.
 
             switch (at)

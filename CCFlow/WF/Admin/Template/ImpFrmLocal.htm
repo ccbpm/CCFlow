@@ -45,7 +45,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
-            handler.AddFromData();
+            handler.AddFormData();
              
             var data = handler.DoMethodReturnString("ImpFrmLocal_Done");
             if (data.indexOf('err@') == 0) {
@@ -59,23 +59,23 @@
     </script>
 </head>
 <body>
-
-    <div title="从本机导入" style="">
-        <div style="text-align: left; padding: 15px;">
-            <fieldset>
-                <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
-                <ul>
-                    <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
-                </ul>
-                <label style="padding-left: 8px;">
-                </label>
-                <br />
-                <br />
-                <input type="file" id="localXmlFile" name="localXmlFile" />
-                <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
-            </fieldset>
+    <form>
+        <div title="从本机导入" style="">
+            <div style="text-align: left; padding: 15px;">
+                <fieldset>
+                    <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
+                    <ul>
+                        <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
+                    </ul>
+                    <label style="padding-left: 8px;">
+                    </label>
+                    <br />
+                    <br />
+                    <input type="file" id="localXmlFile" name="localXmlFile" />
+                    <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
+                </fieldset>
+            </div>
         </div>
-    </div>
-
+    </form>
 </body>
 </html>

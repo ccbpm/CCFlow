@@ -50,7 +50,7 @@
                         en.DefVal = "";
                     }
 
-                    if (en.MyDataType == "1" || en.MyDataType == "2" || en.MyDataType == "3")
+                    if (en.UIContralType == "0"||en.UIContralType == "1" || en.UIContralType == "2" || en.UIContralType == "3")
                         continue;
                     var html = "";
                     html += "<tr >";
@@ -66,10 +66,10 @@
 
                     html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
-                    //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                    //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                     html += "</tr>";
 
@@ -91,11 +91,11 @@
                 $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
 
                 SetCheckBox(ff, "UIVisible", ff.UIVisible, '可见');
-                //SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
+                SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
                 //SetCheckBox(ff, "IsSigan", ff.IsSigan, '签名');
                 //SetCheckBox(ff, "IsNotNull", ff.IsNotNull, '必填');
-                SetCheckBox(ff, "IsWriteToFlowTable", ff.IsWriteToFlowTable, '写入NDxxRpt');
-                SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
+                //SetCheckBox(ff, "IsWriteToFlowTable", ff.IsWriteToFlowTable, '写入NDxxRpt');
+                //SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
             }
 
         });
@@ -295,12 +295,12 @@
                     可见
                 </label>
             </th>
-            <!--<th>
+            <th>
                 <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
                     可用
                 </label>
             </th>
-            <th>
+            <!--<th>
                 <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label for="KeyOfEn_IsSigan">
                     签名
                 </label>
@@ -310,12 +310,12 @@
                     必填
                 </label>
             </th>-->
-            <th>
+            <!--<th>
                 <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
                        type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
                     写入流程数据表
                 </label>
-            </th>
+            </th>-->
             <!--<th>
                 <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
                     type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">

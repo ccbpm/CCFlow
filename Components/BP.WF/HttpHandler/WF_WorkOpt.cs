@@ -3486,6 +3486,14 @@ namespace BP.WF.HttpHandler
             if (ds.Tables["Emps"].Rows.Count == 0)
                 return "err@配置接受人范围为空,请联系管理员.";
 
+            ////只有一个人，就让其发送下去.
+            //if (ds.Tables["Emps"].Rows.Count == 1)
+            //{
+            //    string emp = ds.Tables["Emps"].Rows[0][0].ToString();
+            //    SendReturnObjs objs= BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, emp);
+            //    return  "info@"+objs.ToMsgOfText();
+            //}
+
             #region 计算上一次选择的结果, 并把结果返回过去.
             string sql = "";
             DataTable dt = new DataTable();
@@ -3505,7 +3513,6 @@ namespace BP.WF.HttpHandler
                         dt.Rows.Add(dr);
                     }
                 }
-                   
                 else
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
@@ -3552,6 +3559,7 @@ namespace BP.WF.HttpHandler
             //增加一个table.
             ds.Tables.Add(dt);
             #endregion 计算上一次选择的结果, 并把结果返回过去.
+
 
             //返回json.
             return BP.Tools.Json.DataSetToJson(ds, false);

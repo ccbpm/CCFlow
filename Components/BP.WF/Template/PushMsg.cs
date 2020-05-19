@@ -789,7 +789,7 @@ namespace BP.WF.Template
 
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
-            string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
+            string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DBAccess.GenerGUID();
             string openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
@@ -833,6 +833,7 @@ namespace BP.WF.Template
             //不启用消息
             if (this.SMSPushWay == 0)
                 return "";
+
             string generAlertMessage = ""; //定义要返回的提示消息.
             string mailTitle = this.MailTitle;// 邮件标题
             string smsDoc = this.SMSDoc;//消息模板
@@ -920,7 +921,7 @@ namespace BP.WF.Template
 
                         string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node+"_"+ empNo;
 
-                        //发送消息
+                        //发送消息.
                         BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
                         //处理短消息.
                         toEmpIDs += empName + ",";
@@ -1042,7 +1043,7 @@ namespace BP.WF.Template
                         string smsDocReal = smsDoc.Clone() as string;
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
                         openUrl = openUrl.Replace("{EmpStr}", empNo);
-                        string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid+"_"+ empNo;
+                        string paras = "@FK_Flow=" + currNode.FK_Flow + "@FK_Node=" + currNode.NodeID + "@WorkID=" + workid+"_"+ empNo;
                         BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
 
                     }

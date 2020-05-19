@@ -23,6 +23,34 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        /// <summary>
+        /// 签批组件SQL
+        /// </summary>
+        public static string SQLOfCheckField
+        {
+            get
+            {
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    case DBType.MySQL:
+                        sql = "SELECT '' AS No, '-请选择-' as Name ";
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
+                        break;
+                    case DBType.PostgreSQL:
+                    default:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
+                        break;
+                }
+                sql += " union ";
+                sql += " SELECT KeyOfEn AS No,Name From Sys_MapAttr WHERE UIContralType=14 AND FK_MapData='@FK_Frm'";
+                return sql;
+            }
+        }
+
         #region 获取[新建流程]默认值.
         /// <summary>
         /// 默认值配置
@@ -55,7 +83,6 @@ namespace BP.WF
             return SystemConfig.GetValByKeyBoolen(field, defval);
         }
         #endregion 获取[新建流程]默认值.
-
 
         #region 高级配置.
         /// <summary>

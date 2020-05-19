@@ -23,6 +23,27 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_AttrNode_FrmSln()
         {
+
+        }
+
+        /// <summary>
+        /// 获得下拉框的值.
+        /// </summary>
+        /// <returns></returns>
+        public string BatchEditSln_InitDDLData()
+        {
+            DataSet ds = new DataSet();
+
+            SysEnums ses = new SysEnums("FrmSln");
+            ds.Tables.Add(ses.ToDataTableField("FrmSln"));
+
+            SysEnums se1s = new SysEnums("FWCSta");
+            ds.Tables.Add(ses.ToDataTableField("FWCSta"));
+
+            DataTable dt = DBAccess.RunSQLReturnTable(Glo.SQLOfCheckField);
+            dt.TableName = "CheckFields";
+            ds.Tables.Add(dt);
+            return BP.Tools.Json.ToJson(ds);
         }
 
         /// <summary>

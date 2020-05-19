@@ -145,26 +145,9 @@ namespace BP.WF.Template
                 true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
                 map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
 
-                string sql = "";
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                    case DBType.MySQL:
-                        sql = "SELECT '' AS No, '-请选择-' as Name ";
-                        break;
-                    case DBType.Oracle:
-                        sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
-                        break;
 
-                    case DBType.PostgreSQL:
-                    default:
-                        sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
-                        break;
-                }
-                sql += " union ";
+                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", Glo.SQLOfCheckField, true);
 
-                sql += " SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='@FK_Frm'";
-                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", sql, true);
 
                 //map.AddDDLSysEnum(BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 

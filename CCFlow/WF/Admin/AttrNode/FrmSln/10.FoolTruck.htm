@@ -40,9 +40,10 @@
             $("#sln").html("正在加载表单方案,请稍后...");
 
             var html = "<ul>";
-            var nodes = new Entities("BP.WF.Nodes");
-            nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
 
+            //获得节点.
+            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
             var currentNode = GetQueryString("FK_Node");
 
             for (var i = 0; i < nodes.length; i++) {
@@ -80,10 +81,7 @@
 
                 html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.NodeID + " - " + json.Name + "</a> " + def + "</li>";
             }
-
-
             html += "</ul>";
-
             $("#sln").html(html);
         }
         function DefField(nodeID, FK_Flow) {

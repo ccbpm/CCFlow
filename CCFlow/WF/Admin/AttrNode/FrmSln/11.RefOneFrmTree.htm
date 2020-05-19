@@ -17,7 +17,9 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script type="text/javascript">
+
         var nodeFrmID = "";
+        var nodeID = GetQueryString("FK_Node");
         $(function () {
 
             InitBar(FormSlnType.RefOneFrmTree);
@@ -76,6 +78,8 @@
             //设置已经选定的表单库表单
             $("#MyFrm").html(node.NodeFrmID + ":" + frm.Name);
 
+            //  BindSln();
+
         });
 
         function EditFrmNode(mypk) {
@@ -102,6 +106,7 @@
         }
 
         function Save() {
+
             //判断是否已经绑定了表单
             var nodeID = GetQueryString("FK_Node");
             var node = new Entities("BP.WF.Nodes");
@@ -109,49 +114,8 @@
             if (node[0].NodeFrmID == "") {
                 alert('请选择一个表单');
                 return;
-            } else {
-                alert("保存成功.");
             }
-            /* var selectFrm = $("#DDL_RefOneFrmTree").val(); //选择的表单.
-
-             if (selectFrm == undefined || selectFrm == null) {
-                 alert('请选择一个表单');
-                 return;
-             }
-
-             var FK_Node = GetQueryString("FK_Node");
-             var node = new Entity("BP.WF.Node", FK_Node);
-             node.NodeID = FK_Node;
-             var i = node.RetrieveFromDBSources();
-
-             //更新节点表单类型.
-             node.FormType = FormSlnType.RefOneFrmTree;
-             node.NodeFrmID = selectFrm; //选择的表单
-             node.RefOneFrmTreeType = $("#DDL_FrmTree").val();
-
-             var update = node.Update(); //执行更新.
-
-             //节点表单属性
-             var frmNode = new Entity("BP.WF.Template.FrmNode");
-             frmNode.MyPK = selectFrm + "_" + node.NodeID + "_" + node.FK_Flow;
-             var i = frmNode.RetrieveFromDBSources();
-             frmNode.FK_Node = node.NodeID;
-             frmNode.FK_Flow = node.FK_Flow;
-             frmNode.FK_Frm = selectFrm;
-             frmNode.Save(); //执行保存.
-
-             var html = "<a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "')\" >编辑关联的表单属性</a> - <a href=\"javascript:SetAllNodeFrmUseThisSln()\">设置该流程所有的节点都采用此表单方案</a>";
-             $("#Div_RefOneFrmTree").html(html);
-             alert("独立表单库表单 - 保存成功.");
-             return;*/
-
-            // //更新表单类型.
-            // var frmID = "ND" + nodeID;
-            // var mapData = new Entity("BP.Sys.MapData", frmID);
-            //// mapData.FrmType = FormSlnType.RefOneFrmTree;
-            // mapData.FK_FormTree = $("#DDL_FrmTree").val();
-            // mapData.Update();
-
+            alert("保存成功.");
 
         }
 
@@ -202,8 +166,6 @@
                     frmNode.Save(); //执行保存.
                 }
 
-
-
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;
                 var mapData = new Entity("BP.Sys.MapData", frmID);
@@ -212,9 +174,10 @@
                 mapData.Update();
 
             }
-            alert('设置成功.');
-            window.location.href = window.location.href;
 
+            alert('设置成功,正在转入批量编辑页面.');
+            BatchEdit();
+            //window.location.href = window.location.href;
         }
 
         //节点表单组件属性.
@@ -222,6 +185,11 @@
             var nodeID = GetQueryString("FK_Node");
             var url = "11.RefOneFrmTreeFrms.htm?NodeID=" + nodeID;
             OpenEasyUiDialogExt(url, '选择要绑定的表单', 600, 450, false);
+        }
+        function BatchEdit() {
+            var url = "BatchEditSln.htm?NodeID=" + nodeID;
+            window.location.href = url;
+
         }
     </script>
 </head>
@@ -236,7 +204,6 @@
                 -->
             <li>已经选择的表单: <div id="MyFrm"></div> </li>
             <li><a href="javascript:SetFrm();">设置表单</a></li>
-
         </ul>
 
     </fieldset>
@@ -246,9 +213,17 @@
 
         <ul>
             <li>为该表单的元素设置权限 - <div id="Div_RefOneFrmTree">   </div> </li>
+            <li><a href="javascript:BatchEdit()">批量设置</a> </li>
+
         </ul>
 
     </fieldset>
+
+    <!--<fieldset>
+        <legend>其他节点</legend>
+        <div id="sln"></div>
+    </fieldset>-->
+
 
 
     <fieldset>

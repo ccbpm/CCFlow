@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>按照岗位选择</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
@@ -36,12 +36,6 @@
         var checkedEmps = null;
         //初始化人员
         $(function () {
-
-            //求出来已经选择的人员列表.
-            var emps = new Entities("BP.WF.Template.SelectAccpers");
-            emps.Retrieve("WorkID", workID, "FK_Node", toNodeID);
-
-
             //初始化左列表
             var tps = new Entities("BP.Port.StationTypes");
             tps.RetrieveAll();
@@ -62,7 +56,7 @@
                     var sta = stas[i];
                     if (sta.FK_StationType != tp.No)
                         continue;
-                    html += "<li><a href=\"javascript:ShowEmp('" + sta.No + "');\" id='" + sta.No + "' >" + sta.Name + "</a></li>";
+                    html += "<li class='list-group-item node-tree'><a href=\"javascript:ShowEmp('" + sta.No + "');\" id='" + sta.No + "' >" + sta.Name + "</a></li>";
                 }
                 html += "</ul>";
                 html += "</li>";
@@ -73,8 +67,7 @@
             $("#stationsList").append(html);
 
             //初始化已选择的人员
-            var emps = new Entities("BP.WF.Template.SelectAccpers");
-            emps.Retrieve("WorkID", workID);
+            var emps = GetSelectedEmps();
             html = "";
             for (var i = 0; i < emps.length; i++) {
                 var en = emps[i];
@@ -87,10 +80,10 @@
             }
             $("#selectEmpList").append(html);
         });
-
+        
         //显示人员.
         function ShowEmp(StationNo) {
-            //加载时清空人员列表
+            //选择其他岗位时清空人员列表
             $(".emplist").remove();
             //后台加载当前选中部门的人员列表
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
@@ -117,9 +110,7 @@
         }
         //设置已存在数据库中人员的Checked的状态
         function SetChecked() {
-
-            var emps = new Entities("BP.WF.Template.SelectAccpers");
-            emps.RetrieveAll();
+            var emps = GetSelectedEmps();
             for (var i = 0; i < emps.length; i++) {
                 var en = emps[i];
                 if (document.getElementById(en.EmpName) != null)
@@ -147,25 +138,23 @@
                 $("#selectEmpList").append(html);
             }
             else {
-                //删除选中的人员
+
                 removeRecord(en.No, en.Name);
                 document.getElementById(en.No).remove();
             }
         }
         //数据库增加选择的人员
         function AddDataOfSelectAccper(en) {
-
-            var empDept = new Entity("BP.Port.Dept", en.FK_Dept);
-            var empEn = new Entity("BP.WF.Template.SelectAccper");
-            empEn.MyPK = toNodeID + "_" + workID + "_" + en.No;//设置主键
-            if (empEn.RetrieveFromDBSources() == 0) {
-                empEn.FK_Node = nodeID;
-                empEn.WorkID = WorkID;
-                empEn.FK_Emp = en.No;
-                empEn.EmpName = en.Name;
-                empEn.DeptName = empDept.Name;
-                empEn.Rec = webUser.No;
-                empEn.Insert();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
+            handler.AddPara("FK_Node", toNodeID);
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Emp", en.No);
+            handler.AddPara("EmpName", en.Name);
+            handler.AddPara("FK_Dept", en.FK_Dept);
+            var data = handler.DoMethodReturnString("AddSelectEmp");
+            if (data.indexOf('err@') == 0) { //如果有错误.
+                alert(data);
+                return;
             }
         }
         //删除按钮
@@ -175,10 +164,16 @@
                 document.getElementById(Name).checked = true;
                 return;
             }
-            var MyPK = NodeID + "_" + WorkID + "_" + No;
-            var empEn = new Entity("BP.WF.Template.SelectAccper", MyPK);
-            empEn.Delete();
-
+            var MyPK = toNodeID + "_" + workID + "_" + No;
+            //删除选中的人员
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
+            handler.AddPara("MyPK", MyPK);
+            var data = handler.DoMethodReturnString("DelSelectEmp");
+            if (data.indexOf('err@') == 0) { //如果有错误.
+                alert(data);
+                return;
+            }
+            alert(data);
             //删除后刷新当前页面
             location.reload(true);
         }
@@ -191,9 +186,14 @@
 
             }
         }
-
+        //得到选中的人员
+        function GetSelectedEmps() {
+            var emps = new Entities("BP.WF.Template.SelectAccpers");
+            emps.Retrieve("WorkID", workID);
+            return emps;
+        }
         function GotoUrl(url) {
-            var urlSuffix = "?WorkID=" + WorkID + "&ToNode=" + NodeID;
+            var urlSuffix = "?WorkID=" + workID + "&ToNode=" + toNodeID;
             url += urlSuffix;
             window.location.href = url;
         }
@@ -238,9 +238,8 @@
                         <table style="width: 976px;" class="table table-bordered table-hover" id="stationsEmpList">
                             <tr>
                                 <th class="bs-checkbox " style="width: 36px; " data-field="_checkbox">
-                                    <div class="th-inner "><label><input onclick="SelectAll()" id="EmpSelectAll" type="checkbox"><span></span></label></div><div class="fht-cell" style="width: 35px;"></div>
+                                    <input onclick="SelectAll()" id="EmpSelectAll" type="checkbox">
                                 </th>
-
                                 <th style="" data-field="No">编号</th>
                                 <th style="" data-field="Name">名称</th>
                                 <th style="" data-field="DeptName">部门名称</th>
@@ -253,13 +252,10 @@
                 <div class="row row-margin-top">
                     <div class="col-md-12">
                         <table id="selectEmpList" style="width: 976px;" class="table table-bordered table-hover">
-
                             <tr>
-                                <th style="" data-field="No">
-                                    <div class="th-inner ">编号</div><div class="fht-cell" style="width: 456px;"></div>
-                                </th>
-                                <th style="" data-field="Name"><div class="th-inner ">名称</div><div class="fht-cell" style="width: 293px;"></div></th>
-                                <th style="" data-field="2"><div class="th-inner ">操作</div><div class="fht-cell" style="width: 223px;"></div></th>
+                                <th style="" data-field="No">编号</th>
+                                <th style="" data-field="Name">名称</th>
+                                <th style="" data-field="2">操作</th>
                             </tr>
 
                         </table>

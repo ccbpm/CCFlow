@@ -44,56 +44,67 @@
             //获得节点s.
             var nodes = new Entities("BP.WF.Template.NodeSimples");
             nodes.Retrieve("FK_Flow", node.FK_Flow);
-
+            var frmNode = null;
             for (var i = 0; i < nodes.length; i++) {
 
                 var json = nodes[i];
 
-                html += "<tr>";
-                html += "<td>" + (i + 1) + "</td>";
-                html += "<td>" + json.NodeID + "</td>";
-                html += "<td>" + json.Name + "</td>";
 
 
                 //找到节点与表单的对应关系.
-                var frmNode = null;
+                
                 for (var idx = 0; idx < frmNodes.length; idx++) {
                     var en = frmNodes[idx];
-                    if (en.NodeID != json.FK_Node)
+                    if (en.FK_Node != json.NodeID)
                         continue;
                     frmNode = en;
+                    
+                    html += "<tr>";
+                    html += "<td>" + (i + 1) + "</td>";
+                    html += "<td>" + json.NodeID + "</td>";
+                    html += "<td>" + json.Name + "</td>";
+                     html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
+
+                    //控制方案
+                    html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>"; //
+                    //审核组件.
+                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>"; //
+                    //签批组件.
+                    html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>"; //
+
+                    //元素权限.
+                    //    html += "<td><a href='' >编辑</a></td>"; //
+
+                    html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>"; //sss
+                    html += "</tr>";
                     break;
                 }
 
-                if (frmNode == null) {
-                    html += "<td colspan=3></td>";
-                    html += "</tr>";
-                    continue;
-                }
+                //if (frmNode == null) {
+                //    html += "<td colspan=3></td>";
+                //    html += "</tr>";
+                //    continue;
+                //}
 
-                html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
-
-                //控制方案
-                html += "<td><select id='DDL_FrmSln_" + node.NodeID + "' ></select></td>"; //
-                //审核组件.
-                html += "<td><select id='DDL_FWCSta_" + node.NodeID + "' ></select></td>"; //
-                //签批组件.
-                html += "<td><select id='DDL_CheckField_" + node.NodeID + "' ></select></td>"; //
-
-                //元素权限.
-                //    html += "<td><a href='' >编辑</a></td>"; //
-
-                html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>"; //sss
-                html += "</tr>";
+               
             }
             html += "</table>";
             $("#sln").html(html);
 
 
             //求出枚举值，然后绑定上.
-            var handler = new Httphandler("BP.WF.");
-            var data = handler.Domaxt();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
+            handler.AddPara("Fk_Frm",frmNode.FK_Frm);
+            var data = handler.DoMethodReturnString("BatchEditSln_InitDDLData"); 
+            try {
 
+                data = JSON.parse(data);
+
+            } catch (err) {
+                alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
+                return;
+            }
+            
             var frmSln = data["FrmSln"];
             var fwcSta = data["FWCSta"];
             var cfs = data["CheckFields"];
@@ -107,7 +118,7 @@
                 var frmNode = null;
                 for (var idx = 0; idx < frmNodes.length; idx++) {
                     var en = frmNodes[idx];
-                    if (en.NodeID != json.FK_Node)
+                    if (en.FK_Node != json.NodeID)
                         continue;
                     frmNode = en;
                     break;
@@ -118,14 +129,14 @@
                 }
 
                 //绑定方案.
-                GenerBindDDL("#DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);
+                GenerBindDDL("DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);
 
                 //绑定状态.
-                GenerBindDDL("#DDL_FWC_" + json.NodeID, fwcSta, "IntKey", "Lab", frmNode.FrmSln);
+                GenerBindDDL("DDL_FWCSta_" + json.NodeID, fwcSta, "IntKey", "Lab", frmNode.IsEnableFWC);
 
                 //绑定字段.
-                var ddl = $("#DDL_FrmSln_" + json.NodeID);
-                GenerBindDDL(ddl);
+                GenerBindDDL("DDL_CheckField_" + json.NodeID, cfs, "No", "Name", frmNode.CheckField);
+                $("#DDL_CheckField_" + json.NodeID+" option:first").remove();//有两个“请选择”，移除一个
             }
             return;
 
@@ -154,86 +165,41 @@
             });
         }
 
-        //设置联动
-        function change() {
-
-            //根据表单类别的默认值，初始加载默认的表单
-            var sortNo = $("#DDL_FrmTree").val();
-
-            //获取表单库中的所有表单
-            var frms = new Entities("BP.Sys.MapDatas");
-            frms.Retrieve("FK_FormTree", sortNo);
-
-            //绑定表单
-            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", nodeFrmID);
-        }
 
         function Save() {
+             //获取节点属性
+            var node = new Entity("BP.WF.Template.NodeSimple", nodeID);
+             //获得节点s.
+            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
 
-        }
+            //节点对应关系.
+            var frmNodes = new Entities("BP.WF.Template.FrmNodes");
+            frmNodes.Retrieve("FK_Flow", node.FK_Flow);
+            for (var i = 0; i < nodes.length; i++) {
 
-        ///设置该流程的所有节点都是用该方案。
-        function SetAllNodeFrmUseThisSln() {
-
-            if (confirm('您确定要设置吗？') == false)
-                return;
-
-            var nodeID = GetQueryString("FK_Node");
-            var currNode = new Entity("BP.WF.Node", nodeID);
-
-            var flowNo = currNode.FK_Flow;
-            var nds = new Entities("BP.WF.Nodes");
-            nds.Retrieve("FK_Flow", flowNo);
-
-            for (var i = 0; i < nds.length; i++) {
-
-                var jsNode = nds[i];
-                if (jsNode.NodeID == currNode.NodeID)
-                    continue;
-
-                var node = new Entity("BP.WF.Node", jsNode);
-                //修改表单属性
-                node.FormType = currNode.FormType;
-                node.RefOneFrmTreeType = currNode.RefOneFrmTreeType;
-                node.NodeFrmID = currNode.NodeFrmID;
-                node.Update();
-
-                //节点表单属性
-                var frmNode = new Entity("BP.WF.Template.FrmNode");
-                frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
-                var count = frmNode.RetrieveFromDBSources();
-                if (count == 0) {
-
-                    frmNode.FK_Node = node.NodeID;
-                    frmNode.FK_Flow = node.FK_Flow;
-                    frmNode.FK_Frm = node.NodeFrmID;
-
-                    //判断是否为开始节点
-                    var nodeID = node.NodeID.toString();
-                    if (nodeID.substring(nodeID.length - 2) == "01") {
-                        frmNode.FrmSln = 0; //默认方案
-                    } else {
-                        frmNode.FrmSln = 1; //只读方案
-                    }
-
-                    frmNode.Save(); //执行保存.
+                var json = nodes[i];
+                 //找到节点与表单的对应关系.
+                var frmNode = null;
+                for (var idx = 0; idx < frmNodes.length; idx++) {
+                    var en = frmNodes[idx];
+                    if (en.FK_Node != json.NodeID)
+                        continue;
+                    var frmNode = new Entity("BP.WF.Template.FrmNode",en);
+                    frmNode.FrmSln = $("#DDL_FrmSln_" + json.NodeID).val();
+                    frmNode.IsEnableFWC = $("#DDL_FWCSta_" + json.NodeID).val();
+                    frmNode.CheckField = $("#DDL_CheckField_" + json.NodeID).val();
+                    frmNode.Update();
+                    break;
                 }
-
-                //更新表单类型.
-                var frmID = "ND" + node.NodeID;
-                var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = FormSlnType.RefOneFrmTree;
-                //mapData.FK_FormTree = currNode.RefOneFrmTreeType;
-                mapData.Update();
-
             }
-            alert('设置成功.');
+            alert('保存成功.');
             window.location.href = window.location.href;
-
         }
+
 
         function Back() {
-
+            history.back();
         }
 
     </script>

@@ -49,8 +49,6 @@
 
                 var json = nodes[i];
 
-
-
                 //找到节点与表单的对应关系.
                 
                 for (var idx = 0; idx < frmNodes.length; idx++) {
@@ -66,16 +64,16 @@
                      html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
 
                     //控制方案
-                    html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>"; //
+                    html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>"; 
                     //审核组件.
-                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>"; //
+                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>"; 
                     //签批组件.
-                    html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>"; //
+                    html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>"; 
 
                     //元素权限.
                     //    html += "<td><a href='' >编辑</a></td>"; //
 
-                    html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>"; //sss
+                    html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>"; 
                     html += "</tr>";
                     break;
                 }
@@ -101,7 +99,7 @@
                 data = JSON.parse(data);
 
             } catch (err) {
-                alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
+                alert("转换JSON失败,请查看控制台日志,或者联系管理员.");
                 return;
             }
             
@@ -151,9 +149,6 @@
 
             window.open(url);
 
-            //OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
-            //  window.location.href = window.location.href;
-            //});
         }
 
         function EditFrmNode(mypk) {

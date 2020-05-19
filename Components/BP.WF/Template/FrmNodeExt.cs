@@ -187,14 +187,14 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "字段权限";
                 rm.ClassMethodName = this.ToString() + ".DoFields()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 //@sly
                 rm = new RefMethod();
                 rm.Title = "组件权限";
                 rm.ClassMethodName = this.ToString() + ".DoComponents()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

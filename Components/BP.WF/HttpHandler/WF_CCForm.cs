@@ -3329,23 +3329,24 @@ namespace BP.WF.HttpHandler
                 //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                    athDesc = new FrmAttachment();
-                    athDesc.MyPK = attachPk + "_" + this.FK_Node;
-                    if (athDesc.RetrieveFromDBSources() != 0)
+                    //@sly
+                    BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
+                    myathDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    if (myathDesc.RetrieveFromDBSources() != 0)
                     {
-                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.FID)
                             pkVal = this.FID.ToString();
 
-                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                             pkVal = this.PWorkID.ToString();
 
-                        if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                         {
                             //根据流程的PWorkID获取他的爷爷流程
                             string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
                             pkVal = pWorkID;
                         }
-                        if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
                         {
                             string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                             //根据流程的PWorkID获取他的P2流程

@@ -32,15 +32,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string BatchEditSln_InitDDLData()
         {
+            string fk_frm = GetRequestVal("Fk_Frm");
             DataSet ds = new DataSet();
 
             SysEnums ses = new SysEnums("FrmSln");
             ds.Tables.Add(ses.ToDataTableField("FrmSln"));
 
             SysEnums se1s = new SysEnums("FWCSta");
-            ds.Tables.Add(ses.ToDataTableField("FWCSta"));
+            ds.Tables.Add(se1s.ToDataTableField("FWCSta"));
 
-            DataTable dt = DBAccess.RunSQLReturnTable(Glo.SQLOfCheckField);
+            DataTable dt = DBAccess.RunSQLReturnTable(Glo.SQLOfCheckField.Replace("@FK_Frm", fk_frm));
             dt.TableName = "CheckFields";
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);

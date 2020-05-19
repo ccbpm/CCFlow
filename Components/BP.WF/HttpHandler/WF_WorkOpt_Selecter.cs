@@ -54,6 +54,38 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(db);
         }
         #endregion 界面方法.
-
+        public string AddSelectEmp()
+        {
+            //获得前台传来的参数
+            string FK_Node = this.GetRequestVal("FK_Node");
+            string WorkID = this.GetRequestVal("WorkID");
+            string FK_Emp = this.GetRequestVal("FK_Emp");
+            string EmpName = this.GetRequestVal("EmpName");
+            string FK_Dept = this.GetRequestVal("FK_Dept");
+            //得到部门名称
+            Dept dept = new Dept(FK_Dept);
+            string DeptName = dept.Name;
+            SelectAccper selectAccper = new SelectAccper();
+            selectAccper.MyPK = FK_Node + "_" + WorkID + "_" + FK_Emp;
+            if (selectAccper.RetrieveFromDBSources() == 0)
+            {
+                selectAccper.FK_Node =int.Parse(FK_Node);
+                selectAccper.WorkID =long.Parse(WorkID);
+                selectAccper.FK_Emp = FK_Emp;
+                selectAccper.EmpName = EmpName;
+                selectAccper.DeptName = DeptName;
+                selectAccper.Insert();
+                return "";
+            }
+            return "err@添加人员失败";
+        }
+        public string DelSelectEmp()
+        {
+            string MyPK = this.GetRequestVal("MyPK");
+            SelectAccper selectAccper = new SelectAccper(MyPK);
+            if (selectAccper.Delete()== 0)
+                return "err@删除失败";
+            return "删除成功";
+        }
     }
 }

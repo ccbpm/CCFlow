@@ -299,18 +299,18 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
         //签名，日期.
         _Html += "<tr>";
-        _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+        _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName +"<div style='float:right'><font color='Gray' >签名:</font>";
 
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;
         else
             _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
 
-        _Html += "</div>";
+        //_Html += "</div>";
 
 
-        _Html += "<div style='float:right'> ";
-        _Html += "<font color='Gray'>日期:</font>" + rdt;
+        //_Html += "<div style='float:right'> ";
+        _Html += "&nbsp;&nbsp;<font color='Gray'>日期:</font>" + rdt;
         _Html += "</div>";
         _Html += "</td>";
 
@@ -329,29 +329,19 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
-                var frmDB = track.FrmDB;
-                if (frmDB.length > 10) {
-
-                    _Html += "<tr>";
-                    _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                        + track.EmpFromT + '</div>'
-                        + "<div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
-                    _Html += "</tr>";
-                    break;
-                }
                 _Html += "<tr>";
-                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                    + track.EmpFromT + '</div>'
-                    + "<div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName +"<div style='float:right'><font color='Gray' >签名:</font>"
+                    + track.EmpFromT 
+                    + "<font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
-
+                break;
             }
 
             if (st.SignType == 1) {
                 _Html += "<tr>";
-                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                    + GetUserSiganture(track.EmpFrom, track.EmpFromT) + '</div>'
-                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName +"<div style='float:right'><font color='Gray' >签名:</font>"
+                    + GetUserSiganture(track.EmpFrom, track.EmpFromT)
+                    + "<font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 break;
             }
@@ -359,9 +349,9 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
             if (st.SignType == 2) {
 
                 _Html += "<tr>";
-                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
-                    + GetUserSiganture(track.EmpFrom, track.EmpFromT) + '</div>'
-                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName +"<div style='float:right'><font color='Gray' >签名:</font>"
+                    + GetUserSiganture(track.EmpFrom, track.EmpFromT)
+                    + "<font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 //  alert('电子签名的逻辑尚未编写.');
                 break;
@@ -372,13 +362,13 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
                 isCanSend = false; //设置不可以发送.
                 _Html += "<tr>";
-                _Html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName +"<div style='float:right'><font color='Gray' >签名:</font>";
 
                 _Html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
 
-                _Html += "</div>";
+                //_Html += "</div>";
 
-                _Html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += +"<font color='Gray' >日期:</font>" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 break;
             }

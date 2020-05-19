@@ -49,7 +49,7 @@ namespace BP.WF
                 wk.OID = workID;
 
                 wk.RetrieveFromDBSources();
-                wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
+                //wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
@@ -69,18 +69,14 @@ namespace BP.WF
                     myds.Tables["Sys_MapData"].Rows[0]["Name"]= name;
                 }
 
-                //移除MapAttr
-                myds.Tables.Remove("Sys_MapAttr"); //移除.
-
-                //获取表单的mapAttr
-                //求出集合.
-                MapAttrs mattrs = md.MapAttrs; // new MapAttrs(md.No);
                 
                 /*处理表单权限控制方案*/
                 FrmNode frmNode = new FrmNode();
                 int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
                 if (count != 0 && frmNode.FrmSln != 0)
                 {
+                    //获取表单的mapAttr
+                    MapAttrs mattrs = md.MapAttrs;
                     FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
                     foreach (FrmField item in fls)
                     {
@@ -98,11 +94,13 @@ namespace BP.WF
                             attr.DefValReal = item.DefVal;
                         }
                     }
+
+                    //移除MapAttr
+                    myds.Tables.Remove("Sys_MapAttr"); //移除.
+                    DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
+                    myds.Tables.Add(Sys_MapAttr);
                 }
                  
-
-                DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
-                myds.Tables.Add(Sys_MapAttr);
 
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
@@ -256,7 +254,7 @@ namespace BP.WF
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
-                #region 增加 groupfields
+                #region 处理累加表单增加 groupfields
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                     && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
@@ -527,122 +525,15 @@ namespace BP.WF
                         gwf.Update();
                     }
                 }
-
-                //增加转向下拉框数据.
-                if (nd.CondModel == CondModel.SendButtonSileSelect)
-                {
-                    if (nd.IsStartNode == true ||(gwf.TodoEmps.Contains(WebUser.No + ",") == true))
-                    {
-                        /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
-
-                        /*如果当前节点，是可以显示下拉框的.*/
-                        Nodes nds = nd.HisToNodes;
-
-                        DataTable dtToNDs = new DataTable();
-                        dtToNDs.TableName = "ToNodes";
-                        dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
-                        dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
-                        dtToNDs.Columns.Add("IsSelectEmps", typeof(string)); //是否弹出选择人的对话框？
-                        dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
-
-                        #region 增加到达延续子流程节点。
-                        if (nd.SubFlowYanXuNum >= 0)
-                        {
-                            SubFlowYanXus ygflows = new SubFlowYanXus(fk_node);
-                            foreach (SubFlowYanXu item in ygflows)
-                            {
-                                DataRow dr = dtToNDs.NewRow();
-                                dr["No"] = item.SubFlowNo + "01";
-                                dr["Name"] = "启动:" + item.SubFlowName;
-                                dr["IsSelectEmps"] = "1";
-                                dr["IsSelected"] = "0";
-                                dtToNDs.Rows.Add(dr);
-                            }
-                        }
-                        #endregion 增加到达延续子流程节点。
-
-                        #region 到达其他节点.
-                        //上一次选择的节点.
-                        int defalutSelectedNodeID = 0;
-                        if (nds.Count > 1)
-                        {
-                            string mysql = "";
-                            // 找出来上次发送选择的节点.
-                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                                mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
-                            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-                            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
-
-                            //获得上一次发送到的节点.
-                            defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
-                        }
-
-                        #region 为天业集团做一个特殊的判断.
-                        if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
-                        {
-                            /*如果是董事长节点, 如果是下一个节点默认的是备案. */
-                            foreach (Node item in nds)
-                            {
-                                if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
-                                {
-                                    defalutSelectedNodeID = item.NodeID;
-                                    break;
-                                }
-                            }
-                        }
-                        #endregion 为天业集团做一个特殊的判断.
-
-
-                        foreach (Node item in nds)
-                        {
-                            DataRow dr = dtToNDs.NewRow();
-                            dr["No"] = item.NodeID;
-                            dr["Name"] = item.Name;
-                            //if (item.hissel
-
-                            if (item.HisDeliveryWay == DeliveryWay.BySelected)
-                                dr["IsSelectEmps"] = "1";
-                            else
-                                dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-
-                            //设置默认选择的节点.
-                            if (defalutSelectedNodeID == item.NodeID)
-                                dr["IsSelected"] = "1";
-                            else
-                                dr["IsSelected"] = "0";
-
-                            dtToNDs.Rows.Add(dr);
-                        }
-                        #endregion 到达其他节点。
-
-
-                        //增加一个下拉框, 对方判断是否有这个数据.
-                        myds.Tables.Add(dtToNDs);
-                    }
-                }
-
-                // 节点数据.
-                //string sql = "SELECT * FROM WF_Node WHERE NodeID=" + fk_node;
-                //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //dt.TableName = "WF_NodeBar";
-                //myds.Tables.Add(dt);
-
-                //// 流程数据.
-                //Flow fl = new Flow(fk_flow);
-                //myds.Tables.Add(fl.ToDataTableField("WF_Flow"));
                 #endregion 流程设置信息.
 
                 #region 把主从表数据放入里面.
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
 
                 //重设默认值.
-                wk.ResetDefaultVal();
+                wk.ResetDefaultVal(md.No, fk_flow, fk_node);
 
-                //@樊雷伟 把这部分代码搬到jflow上去. CCFlowAPI. 114行出.
+                //URL参数替换
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
@@ -654,8 +545,6 @@ namespace BP.WF
                         wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
                     }
 
-                    // 处理传递过来的frm参数。
-                    //2019-07-25 zyt改造
                     foreach (string k in HttpContextHelper.RequestParamKeys)
                     {
                         if (DataType.IsNullOrEmpty(k) == true)

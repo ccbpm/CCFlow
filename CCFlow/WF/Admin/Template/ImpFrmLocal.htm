@@ -40,13 +40,13 @@
         //从xml文件导入
         function SaveImpFromLocalXML() {
 
-          // var doMethod = "Imp_LoadFrmTempleteFromLocalFile";
-           // var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp";
+            // var doMethod = "Imp_LoadFrmTempleteFromLocalFile";
+            // var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp";
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
             handler.AddFileData();
-             
+
             var data = handler.DoMethodReturnString("ImpFrmLocal_Done");
             if (data.indexOf('err@') == 0) {
                 alert(data);

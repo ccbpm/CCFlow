@@ -41,7 +41,7 @@
                 html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
-
+                var idx = 1;
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
                     if (en.UIVisible == 0 || en.GroupID != group.OID)
@@ -54,7 +54,7 @@
                         continue;
                     var html = "";
                     html += "<tr >";
-                    html += "<td class=Idx>" + (i + 1) + "</td>";
+                    html += "<td class=Idx>" + idx + "</td>";
                     html += "<td>" + en.KeyOfEn + "</td>";
                     html += "<td>" + en.Name + "</td>";
 
@@ -62,9 +62,9 @@
                     if (en.LGType == 1) html += "<td>枚举</td>";
                     if (en.LGType == 2) html += "<td>外键</td>";
 
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+                    //html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
 
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
+                    //html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
@@ -72,7 +72,7 @@
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                     html += "</tr>";
-
+                    idx++;
                     $("#Table1 tr:last").after(html);
                 }
             }
@@ -87,8 +87,8 @@
 
                 var ff = ffs[i];
 
-                $("#" + ff.KeyOfEn + "_DefVal").val(ff.DefVal); //设置默认值.
-                $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
+                //$("#" + ff.KeyOfEn + "_DefVal").val(ff.DefVal); //设置默认值.
+                //$("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
 
                 SetCheckBox(ff, "UIVisible", ff.UIVisible, '可见');
                 SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
@@ -153,8 +153,8 @@
                 ff.Name = en.Name;
 
                 //给其他的字段赋值.
-                ff.DefVal = $("#" + en.KeyOfEn + "_DefVal").val(); //默认值.
-                ff.RegularExp = $("#" + en.KeyOfEn + "_RegularExp").val(); //表达式.
+                //ff.DefVal = $("#" + en.KeyOfEn + "_DefVal").val(); //默认值.
+                //ff.RegularExp = $("#" + en.KeyOfEn + "_RegularExp").val(); //表达式.
 
                 if ($('#' + ff.KeyOfEn + "_UIVisible").is(':checked'))
                     ff.UIVisible = 1;
@@ -283,12 +283,12 @@
             <th>
                 类型
             </th>
-            <th>
+            <!--<th>
                 正则表达式
             </th>
             <th>
                 默认值
-            </th>
+            </th>-->
             <th>
                 <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
                 <label for="KeyOfEn_UIVisible">

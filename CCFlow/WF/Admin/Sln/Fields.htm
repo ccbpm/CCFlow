@@ -41,7 +41,7 @@
                 html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
-
+                var idx = 1;
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
                     if (en.UIVisible == 0 || en.GroupID != group.OID)
@@ -52,7 +52,7 @@
                     if (en.UIContralType == "0"||en.UIContralType == "1" || en.UIContralType == "2" || en.UIContralType == "3") {
                         var html = "";
                         html += "<tr >";
-                        html += "<td class=Idx>" + (i + 1) + "</td>";
+                        html += "<td class=Idx>" + idx + "</td>";
                         html += "<td>" + en.KeyOfEn + "</td>";
                         html += "<td>" + en.Name + "</td>";
 
@@ -70,6 +70,7 @@
                         html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
                         //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                         html += "</tr>";
+                        idx++;
                     }
                     else {
                         continue;

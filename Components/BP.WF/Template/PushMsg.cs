@@ -843,7 +843,6 @@ namespace BP.WF.Template
             mailTitle = mailTitle.Replace("{Title}", title);
             mailTitle = mailTitle.Replace("@WebUser.No", WebUser.No);
             mailTitle = mailTitle.Replace("@WebUser.Name", WebUser.Name);
-         
             #endregion 邮件标题
 
             #region  处理消息内容
@@ -922,7 +921,7 @@ namespace BP.WF.Template
                         string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node+"_"+ empNo;
 
                         //发送消息.
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
                         //处理短消息.
                         toEmpIDs += empName + ",";
                     }
@@ -964,7 +963,7 @@ namespace BP.WF.Template
                     string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
 
                     //发送消息
-                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
 
                     //处理短消息.
                     toEmpIDs += empName + ",";
@@ -992,7 +991,7 @@ namespace BP.WF.Template
                     smsDocReal = smsDocReal.Replace("{EmpStr}", emp.Name);
                     openUrl = openUrl.Replace("{EmpStr}", emp.No);
                     //发送消息
-                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
                     //处理短消息.
                     toEmpIDs += emp.Name + ",";
                 }
@@ -1022,7 +1021,7 @@ namespace BP.WF.Template
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
                         openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel);
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒信息.";
                 }
@@ -1044,7 +1043,7 @@ namespace BP.WF.Template
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
                         openUrl = openUrl.Replace("{EmpStr}", empNo);
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "@FK_Node=" + currNode.NodeID + "@WorkID=" + workid+"_"+ empNo;
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
 
                     }
                     return "@已向:{" + toEmpIDs + "}发送提醒信息.";
@@ -1089,12 +1088,12 @@ namespace BP.WF.Template
 
                         // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                         string smsDoccReal = smsDoc.Clone() as string;
-                        smsDoc = smsDoc.Replace("{EmpStr}", empNo);
+                        smsDoccReal = smsDoccReal.Replace("{EmpStr}", empNo);
                         openUrl = openUrl.Replace("{EmpStr}", empNo);
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid+"_"+ empNo;
 
                         //发送消息
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
+                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoccReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
                     }
                     return "@已向:{" + empsStrs + "}发送提醒信息.";
                 }
@@ -1119,7 +1118,7 @@ namespace BP.WF.Template
                         smsDocReal = smsDocReal.Replace("{EmpStr}", empA[0]);
                         openUrl = openUrl.Replace("{EmpStr}", empA[0]);
                         string paras = "@FK_Flow=" + currNode.FK_Flow + "&FK_Node=" + currNode.NodeID + "@WorkID=" + workid;
-                        BP.WF.Dev2Interface.Port_SendMessage(empA[0], smsDoc, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
+                        BP.WF.Dev2Interface.Port_SendMessage(empA[0], smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, paras);
                     }
                 }
                 #endregion 节点预警、逾期

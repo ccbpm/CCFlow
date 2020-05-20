@@ -1671,7 +1671,7 @@ namespace BP.Sys
         {
             return null;
         }
-
+       
         /// <summary>
         /// B:复制表单模版到指定的表单ID.
         /// 用于复制一个表单，到另外一个表单ID上去.用于表单树的上的表单Copy.
@@ -1695,6 +1695,14 @@ namespace BP.Sys
         public static MapData Template_LoadXmlTemplateAsNewFrm(DataSet ds, string frmSort)
         {
             MapData md = MapData.ImpMapData(ds);
+            md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
+            md.FK_FormTree = frmSort;
+            md.Update();
+            return md;
+        }
+        public static MapData Template_LoadXmlTemplateAsSpecFrmID(string newFrmID, DataSet ds, string frmSort)
+        {
+            MapData md = MapData.ImpMapData(newFrmID,ds);
             md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
             md.FK_FormTree = frmSort;
             md.Update();

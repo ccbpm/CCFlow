@@ -148,6 +148,9 @@
                 node.Update();
 
                 //节点表单属性
+                //先删除掉已有的，避免换绑时出现垃圾数据
+                var ens = new Entities("BP.WF.Template.FrmNodes");
+                ens.Delete("FK_Node",node.NodeID);
                 var frmNode = new Entity("BP.WF.Template.FrmNode");
                 frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
                 var count = frmNode.RetrieveFromDBSources();

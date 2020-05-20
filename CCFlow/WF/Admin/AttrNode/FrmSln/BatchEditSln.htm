@@ -45,13 +45,13 @@
             var nodes = new Entities("BP.WF.Template.NodeSimples");
             nodes.Retrieve("FK_Flow", node.FK_Flow);
 
-            var frmNode = null;
+            
             for (var i = 0; i < nodes.length; i++) {
 
                 var json = nodes[i];
 
                 //找到节点与表单的对应关系.
-
+                var frmNode = null;
                 for (var idx = 0; idx < frmNodes.length; idx++) {
                     var en = frmNodes[idx];
                     if (en.FK_Node != json.NodeID)
@@ -91,14 +91,7 @@
             $("#sln").html(html);
 
 
-            //求出枚举值，然后绑定上.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
-            handler.AddPara("Fk_Frm", frmNode.FK_Frm);
-            var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
-
-            var frmSln = data["FrmSln"];
-            var fwcSta = data["FWCSta"];
-            var cfs = data["CheckFields"];
+            
 
             //绑定ddl.
             for (var i = 0; i < nodes.length; i++) {
@@ -118,6 +111,15 @@
                 if (frmNode == null) {
                     continue;
                 }
+
+                //求出枚举值，然后绑定上.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
+                handler.AddPara("Fk_Frm", frmNode.FK_Frm);
+                var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
+
+                var frmSln = data["FrmSln"];
+                var fwcSta = data["FWCSta"];
+                var cfs = data["CheckFields"];
 
                 //绑定方案.
                 GenerBindDDL("DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);

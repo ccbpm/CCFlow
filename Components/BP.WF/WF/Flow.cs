@@ -1756,145 +1756,75 @@ namespace BP.WF
             fns.Retrieve(FrmNodeAttr.FK_Flow, this.No);
             string frms = "";
             string err = "";
+            MapData md = new MapData();
             foreach (FrmNode item in fns)
             {
                 if (frms.Contains(item.FK_Frm + ","))
                     continue;
                 frms += item.FK_Frm + ",";
-                try
-                {
-                    MapData md = new MapData(item.FK_Frm);
-                    md.RepairMap();
-                    Entity en = md.HisEn;
-                    en.CheckPhysicsTable();
-                }
-                catch (Exception ex)
-                {
-                    err += "@节点绑定的表单:" + item.FK_Frm + ",已经被删除了.异常信息." + ex.Message;
-                }
+                md.No = item.FK_Frm;
+                if (md.IsExits == false)
+                    err += "@节点" + item.FK_Node + "绑定的表单:" + item.FK_Frm + ",已经被删除了.";
             }
             #endregion
 
-            #region 检查消息推送。
-            PushMsgs pus = new PushMsgs();
-            pus.Retrieve(PushMsgAttr.FK_Flow, this.No);
-            foreach (Node nd in nds)
-            {
-                //创建默认信息.
-                CreatePushMsg(nd);
-            }
-            #endregion 检查消息推送。
 
             try
             {
                 #region 对流程的设置做必要的检查.
                 // 设置流程名称.
-                DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow)");
+                DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow) WHERE FK_Flow='" + this.No + "'");
 
                 //设置单据编号只读格式.
-                DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1");
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1 ");
 
                 //开始节点不能有会签.
-                DBAccess.RunSQL("UPDATE WF_Node SET HuiQianRole=0 WHERE NodePosType=0 AND HuiQianRole !=0");
+                DBAccess.RunSQL("UPDATE WF_Node SET HuiQianRole=0 WHERE NodePosType=0 AND HuiQianRole !=0  AND FK_Flow='" + this.No + "'");
 
                 //开始节点不能有退回.
-                DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
+                // DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
                 #endregion 对流程的设置做必要的检查.
 
                 //删除垃圾,非法数据.
-                string sqls = "DELETE FROM Sys_FrmSln WHERE FK_MapData not in (select No from Sys_MapData)";
+                string sqls = "DELETE FROM Sys_FrmSln WHERE FK_MapData NOT IN (SELECT No from Sys_MapData)";
+                sqls = "";
                 sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
                 DBAccess.RunSQLs(sqls);
 
                 //更新计算数据.
-                this.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (SELECT NodeID FROM WF_Flow WHERE No='" + this.No + "')");
-                this.NumOfDtl = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM Sys_MapDtl WHERE FK_MapData='ND" + int.Parse(this.No) + "Rpt'");
-                this.DirectUpdate();
+                //this.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (SELECT NodeID FROM WF_Flow WHERE No='" + this.No + "')");
+                //this.NumOfDtl = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM Sys_MapDtl WHERE FK_MapData='ND" + int.Parse(this.No) + "Rpt'");
+                //this.DirectUpdate();
 
                 string msg = "@  =======  关于《" + this.Name + " 》流程检查报告  ============";
                 msg += "@信息输出分为三种: 信息  警告  错误. 如果遇到输出的错误，则必须要去修改或者设置.";
                 msg += "@流程检查目前还不能覆盖100%的错误,需要手工的运行一次才能确保流程设计的正确性.";
 
-
-                #region 检查是否是数据合并模式?
-                if (this.HisDataStoreModel == Template.DataStoreModel.SpecTable)
-                {
-                    foreach (Node nd in nds)
-                    {
-                        MapData md = new MapData();
-                        md.No = "ND" + nd.NodeID;
-                        if (md.RetrieveFromDBSources() == 1)
-                        {
-                            if (md.PTable != this.PTable)
-                            {
-                                md.PTable = this.PTable;
-                                md.Update();
-                            }
-                        }
-                    }
-                }
-                #endregion 检查是否是数据合并模式?
-
-                //单据模版.
-                BillTemplates bks = new BillTemplates(this.No);
-
-                //条件集合.
-                Conds conds = new Conds(this.No);
+                ////条件集合.
+                //Conds conds = new Conds(this.No);
 
                 #region 对节点进行检查
                 //节点表单字段数据类型检查--begin---------
-                msg += CheckFormFields();
+                msg += CheckFormFields(nds);
                 //表单字段数据类型检查-------End-----
+
+
+                //获得字段用于校验sql.
+                MapAttrs mattrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
+
+                //查询所有的条件.
+                Conds conds = new Conds();
+                conds.Retrieve(CondAttr.FK_Flow, this.No);
 
                 foreach (Node nd in nds)
                 {
                     //设置它的位置类型.
-                    nd.RetrieveFromDBSources();
+                    // nd.RetrieveFromDBSources();
                     nd.SetValByKey(NodeAttr.NodePosType, (int)nd.GetHisNodePosType());
 
                     msg += "@信息: -------- 开始检查节点ID:(" + nd.NodeID + ")名称:(" + nd.Name + ")信息 -------------";
 
-                    #region 修复数节点表单数据库.
-                    msg += "@信息:开始补充&修复节点必要的字段";
-                    try
-                    {
-                        nd.RepareMap(this);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@修复节点表必要字段时出现错误:" + nd.Name + " - " + ex.Message);
-                    }
-
-                    msg += "@信息:开始修复节点物理表.";
-                    try
-                    {
-                        nd.HisWork.CheckPhysicsTable();
-                    }
-                    catch (Exception ex)
-                    {
-                        msg += "@检查节点表字段时出现错误:" + "NodeID" + nd.NodeID + " Table:" + nd.HisWork.EnMap.PhysicsTable + " Name:" + nd.Name + " , 节点类型NodeWorkTypeText=" + nd.NodeWorkTypeText + "出现错误.@err=" + ex.Message;
-                    }
-
-                    // 从表检查。
-                    Sys.MapDtls dtls = new BP.Sys.MapDtls("ND" + nd.NodeID);
-                    foreach (Sys.MapDtl dtl in dtls)
-                    {
-                        msg += "@检查明细表:" + dtl.Name;
-                        try
-                        {
-                            dtl.HisGEDtl.CheckPhysicsTable();
-                        }
-                        catch (Exception ex)
-                        {
-                            msg += "@检查明细表时间出现错误" + ex.Message;
-                        }
-                    }
-                    #endregion 修复数节点表单数据库.
-
-                    MapAttrs mattrs = new MapAttrs("ND" + nd.NodeID);
-
                     #region 对节点的访问规则进行检查
-
                     msg += "@信息:开始对节点的访问规则进行检查.";
 
                     switch (nd.HisDeliveryWay)
@@ -1948,19 +1878,9 @@ namespace BP.WF
                                 try
                                 {
                                     string sql = nd.DeliveryParas;
-                                    foreach (MapAttr item in mattrs)
-                                    {
-                                        sql = sql.Replace("@" + item.KeyOfEn, "0");
-                                    }
-
-                                    sql = sql.Replace("@WebUser.No", "ss");
-                                    sql = sql.Replace("@WebUser.Name", "ss");
-                                    sql = sql.Replace("@WebUser.FK_DeptName", "ss");
-                                    sql = sql.Replace("@WebUser.FK_Dept", "ss");
-
+                                    sql = Glo.DealExp(sql, this.HisGERpt, null);
 
                                     sql = sql.Replace("''''", "''"); //出现双引号的问题.
-
                                     if (sql.Contains("@"))
                                         throw new Exception("您编写的sql变量填写不正确，实际执行中，没有被完全替换下来" + sql);
 
@@ -2035,25 +1955,7 @@ namespace BP.WF
                             if (cond.FK_Node == nd.NodeID && cond.HisCondType == CondType.Flow)
                             {
                                 nd.IsCCFlow = true;
-                                nd.Update();
-                            }
-
-                            Node ndOfCond = new Node();
-                            ndOfCond.NodeID = ndOfCond.NodeID;
-                            if (ndOfCond.RetrieveFromDBSources() == 0)
-                                continue;
-
-                            try
-                            {
-                                if (cond.AttrKey.Length < 2)
-                                    continue;
-                                if (ndOfCond.HisWork.EnMap.Attrs.Contains(cond.AttrKey) == false)
-                                    throw new Exception("@错误:属性:" + cond.AttrKey + " , " + cond.AttrName + " 不存在。");
-                            }
-                            catch (Exception ex)
-                            {
-                                msg += "@错误:" + ex.Message;
-                                ndOfCond.Delete();
+                                nd.DirectUpdate();
                             }
                             msg += cond.AttrKey + cond.AttrName + cond.OperatorValue + "、";
                         }
@@ -2084,7 +1986,7 @@ namespace BP.WF
                     //如果是子线城，子线程的表单必须是轨迹模式。
                     if (nd.HisRunModel == RunModel.SubThread)
                     {
-                        MapData md = new MapData("ND" + nd.NodeID);
+                        md = new MapData("ND" + nd.NodeID);
                         if (md.PTable != "ND" + nd.NodeID)
                         {
                             md.PTable = "ND" + nd.NodeID;
@@ -2094,18 +1996,11 @@ namespace BP.WF
                 }
                 #endregion
 
-                //#region 执行一次保存.(暂时注释，在保存节点的时候已经更新缓存 yln修改）
-                NodeExts nes = new NodeExts();
-                nes.Retrieve(NodeAttr.FK_Flow, this.No);
-                foreach (NodeExt item in nes)
-                {
-                    item.Update(); // 调用里面的业务逻辑执行检查.
-                }
-                //#endregion
 
-                #region 检查越轨流程,子流程发起。
+                #region 检查延续流程,子流程发起。
                 SubFlowYanXus ygflows = new SubFlowYanXus();
-                ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No, SubFlowYanXuAttr.SubFlowType, (int)SubFlowType.YanXuFlow);
+                ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No, SubFlowYanXuAttr.SubFlowType,
+                    (int)SubFlowType.YanXuFlow);
                 foreach (SubFlowYanXu flow in ygflows)
                 {
                     Flow fl = new Flow(flow.SubFlowNo);
@@ -2137,17 +2032,18 @@ namespace BP.WF
                 msg += "@信息:开始检查节点流程报表.";
                 this.DoCheck_CheckRpt(this.HisNodes);
 
-                #region 检查焦点字段设置是否还有效
+                #region 检查焦点字段设置是否还有效 
                 msg += "@信息:开始检查节点的焦点字段";
 
                 //获得gerpt字段.
                 GERpt rpt = this.HisGERpt;
-
                 foreach (Attr attr in rpt.EnMap.Attrs)
                 {
                     rpt.SetValByKey(attr.Key, "0");
                 }
 
+
+                //处理焦点字段.
                 foreach (Node nd in nds)
                 {
                     if (nd.FocusField.Trim() == "")
@@ -2156,7 +2052,8 @@ namespace BP.WF
                         string attrKey = "";
                         foreach (Attr attr in wk.EnMap.Attrs)
                         {
-                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false && (attr.Key.Contains("Check") || attr.Key.Contains("Note")))
+                            if (attr.UIVisible == true && attr.UIIsDoc && attr.UIIsReadonly == false
+                                && (attr.Key.Contains("Check") || attr.Key.Contains("Note")))
                                 attrKey = attr.Desc + ":@" + attr.Key;
                         }
                         if (attrKey == "")
@@ -2208,66 +2105,28 @@ namespace BP.WF
                 msg += "@检查质量考核点完成.";
                 #endregion
 
-                #region 检查如果是合流节点必须不能是由上一个节点指定接受人员。 @dudongliang 需要翻译.
+                #region 检查如果是合流节点必须不能是由上一个节点指定接受人员.
                 foreach (Node nd in nds)
                 {
                     //如果是合流节点.
                     if (nd.HisNodeWorkType == NodeWorkType.WorkHL || nd.HisNodeWorkType == NodeWorkType.WorkFHL)
                     {
                         if (nd.HisDeliveryWay == DeliveryWay.BySelected)
-                            msg += "@错误:节点ID:" + nd.NodeID + " 名称:" + nd.Name + "是合流或者分合流节点，但是该节点设置的接收人规则为由上一步指定，这是错误的，应该为自动计算而非每个子线程人为的选择.";
-                    }
-
-                    //子线程节点
-                    if (nd.HisNodeWorkType == NodeWorkType.SubThreadWork)
-                    {
-                        if (nd.CondModel == CondModel.ByUserSelected)
                         {
-                            Nodes toNodes = nd.HisToNodes;
-                            if (toNodes.Count == 1)
-                            {
-                                //msg += "@错误:节点ID:" + nd.NodeID + " 名称:" + nd.Name + " 错误当前节点为子线程，但是该节点的到达.";
-                            }
+                            msg += "@错误:节点ID:" + nd.NodeID + " 名称:" + nd.Name + "是合流或者分合流节点，但是该节点设置的接收人规则为由上一步指定，这是错误的，应该为自动计算而非每个子线程人为的选择.";
                         }
                     }
                 }
                 #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
 
-
                 msg += "@流程报表检查完成...";
 
-                // 检查流程.
-                Node.CheckFlow(this);
-
-                //一直没有找到设置3列，自动回到四列的情况.
-                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
+                // 检查流程， 处理计算字段.
+                Node.CheckFlow(nds,this.No);
 
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.No);
-
-
-                //清空WF_Emp中的StartFlows 的内容
-                try
-                {
-                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-                }
-                catch (Exception e)
-                {
-                    /*如果没有此列，就自动创建此列.*/
-                    if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
-                    {
-                        string sql = "";
-                        if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
-                            sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
-                        else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
-                        else
-                            sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
-
-                        BP.DA.DBAccess.RunSQL(sql);
-                    }
-                }
                 return msg;
             }
             catch (Exception ex)
@@ -2276,16 +2135,16 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 节点表单字段数据类型检查，名字相同的字段出现类型不同的处理方法：依照不同于NDxxRpt表中同名字段类型为基准
+        /// 节点表单字段数据类型检查，名字相同的字段出现类型不同的处理方法：
+        /// 依照不同于NDxxRpt表中同名字段类型为基准
         /// </summary>
         /// <returns>检查结果</returns>
-        private string CheckFormFields()
+        private string CheckFormFields(Nodes nds)
         {
             StringBuilder errorAppend = new StringBuilder();
             errorAppend.Append("@信息: -------- 流程节点表单的字段类型检查: ------ ");
             try
             {
-                Nodes nds = new Nodes(this.No);
                 string fk_mapdatas = "'ND" + int.Parse(this.No) + "Rpt'";
                 foreach (Node nd in nds)
                 {
@@ -3208,6 +3067,7 @@ namespace BP.WF
             string fk_mapData = "ND" + int.Parse(this.No) + "Rpt";
             string flowId = int.Parse(this.No).ToString();
 
+
             //生成该节点的 nds 比如  "'ND101','ND102','ND103'"
             string ndsstrs = "";
             foreach (BP.WF.Node nd in nds)
@@ -3241,6 +3101,9 @@ namespace BP.WF
             foreach (DataRow dr in dtExits.Rows)
                 pks += dr[0] + "@";
 
+            //查询出来已经有的映射.
+            MapAttrs attrs = new MapAttrs(fk_mapData);
+
             //遍历 - 所有节点表单字段的合集
             foreach (DataRow dr in dt.Rows)
             {
@@ -3253,7 +3116,6 @@ namespace BP.WF
 
                 //找到这个属性.
                 BP.Sys.MapAttr ma = new BP.Sys.MapAttr(mypk);
-
                 ma.MyPK = "ND" + flowId + "Rpt_" + ma.KeyOfEn;
                 ma.FK_MapData = "ND" + flowId + "Rpt";
                 ma.UIIsEnable = false;
@@ -3264,12 +3126,14 @@ namespace BP.WF
                     ma.DefVal = "";
                 }
 
+                //如果包含他,就说已经存在.
+                if (attrs.Contains("MyPK", ma.MyPK) == true)
+                    continue;
+
                 // 如果不存在.
-                if (ma.IsExits == false)
-                    ma.Insert();
+                ma.Insert();
             }
 
-            MapAttrs attrs = new MapAttrs(fk_mapData);
 
             // 创建mapData.
             BP.Sys.MapData md = new BP.Sys.MapData();
@@ -3282,9 +3146,8 @@ namespace BP.WF
             }
             else
             {
-                md.Name = this.Name;
-                md.PTable = this.PTable;
-                md.Update();
+                if (md.Name.Equals(this.Name) || md.PTable.Equals(this.PTable) == false)
+                    md.Update();
             }
             #endregion 插入字段。
 
@@ -6109,7 +5972,6 @@ namespace BP.WF
             }
             nodeID = nd.NodeID;
 
-
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
             nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
@@ -6124,7 +5986,7 @@ namespace BP.WF
             {
                 ds.ReadXml(file);
 
-                NodeExt ndExt = new NodeExt(nd.NodeID); 
+                NodeExt ndExt = new NodeExt(nd.NodeID);
                 DataTable dt = ds.Tables[0];
                 foreach (DataColumn dc in dt.Columns)
                 {
@@ -6161,10 +6023,10 @@ namespace BP.WF
 
             //设置默认值。
 
-
             //设置审核组件的高度
             DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
 
+            //创建默认的推送消息.
             CreatePushMsg(nd);
 
             return nd;
@@ -6408,7 +6270,6 @@ namespace BP.WF
         protected override bool beforeUpdate()
         {
             this.Ver = BP.DA.DataType.CurrentDataTimess;
-            Node.CheckFlow(this);
             return base.beforeUpdate();
         }
         /// <summary>

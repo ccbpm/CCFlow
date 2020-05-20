@@ -548,42 +548,14 @@ namespace BP.WF
         /// </summary>
         /// <param name="fl">流程</param>
         /// <returns>返回检查信息</returns>
-        public static string CheckFlow(Flow fl)
+        public static string CheckFlow(Nodes nds,string flowNo)
         {
-            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
-            BP.DA.DBAccess.RunSQLs(sqls);
-
-            // 删除垃圾数据. 
-            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
-            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
-
-            //DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
-
-            Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.FK_Flow, fl.No);
-
-            //FlowSort fs = new FlowSort(fl.FK_FlowSort);
-            if (nds.Count == 0)
-                return "流程[" + fl.No + fl.Name + "]中没有节点数据，您需要注册一下这个流程。";
-
-            // 更新是否是有完成条件的节点。
-            BP.DA.DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + fl.No + "'");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node=0 OR ToNode=0");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node  NOT IN (SELECT NODEID FROM WF_Node )");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE ToNode  NOT IN (SELECT NODEID FROM WF_Node) ");
-
             string sql = "";
             DataTable dt = null;
 
             // 单据信息，岗位，节点信息。
             foreach (Node nd in nds)
             {
-                BP.Sys.MapData md = new BP.Sys.MapData();
-                md.No = "ND" + nd.NodeID;
-                if (md.IsExits == false)
-                    nd.CreateMap();
-
                 // 工作岗位。
                 sql = "SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID;
                 dt = DBAccess.RunSQLReturnTable(sql);
@@ -626,7 +598,7 @@ namespace BP.WF
             }
 
             // 处理岗位分组.
-            sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + fl.No + "' GROUP BY HisStas";
+            sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + flowNo + "' GROUP BY HisStas";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
@@ -647,11 +619,7 @@ namespace BP.WF
                     nd.DirectUpdate();
                 }
             }
-            /* 判断流程的类型 */
-            sql = "SELECT Name FROM WF_Node WHERE (NodeWorkType=" + (int)NodeWorkType.StartWorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFHL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkHL + ") AND (FK_Flow='" + fl.No + "')";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            fl.DirectUpdate();
-            return null;
+            return "检查成功.";
         }
 
         protected override bool beforeUpdate()
@@ -690,11 +658,11 @@ namespace BP.WF
                     }
                 }
 
-               if (this.HisDeliveryWay != oldN.HisDeliveryWay)
-               {
+                if (this.HisDeliveryWay != oldN.HisDeliveryWay)
+                {
                     //清空WF_Emp中的StartFlow 
                     DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-               }
+                }
             }
 
             //给icon设置默认值.
@@ -723,7 +691,7 @@ namespace BP.WF
 
             Flow fl = new Flow(this.FK_Flow);
 
-            Node.CheckFlow(fl);
+
             this.FlowName = fl.Name;
 
             //更新表单名称.
@@ -793,7 +761,7 @@ namespace BP.WF
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
-            
+
             return base.beforeUpdate();
         }
         #endregion
@@ -813,7 +781,7 @@ namespace BP.WF
                     mapData.PTable = fl.PTable;
                 mapData.Update();
             }
-            
+
             //@sly
             if (this.FormType == NodeFormType.RefOneFrmTree)
             {
@@ -848,7 +816,7 @@ namespace BP.WF
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
                 }
-                
+
 
             }
 
@@ -3278,7 +3246,6 @@ namespace BP.WF
                 return "修复成功.";
 
 
-
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
@@ -3621,7 +3588,7 @@ namespace BP.WF
                 attr.MaxLen = 7;
                 attr.Insert();
 
-               
+
             }
         }
     }

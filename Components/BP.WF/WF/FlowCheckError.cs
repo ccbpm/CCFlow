@@ -154,7 +154,6 @@ namespace BP.WF
                 //检查如果是合流节点必须不能是由上一个节点指定接受人员.
                 CheckMode_HeliuAccpterRole();
 
-                Node.CheckFlow(this.flow);
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.flow.No);

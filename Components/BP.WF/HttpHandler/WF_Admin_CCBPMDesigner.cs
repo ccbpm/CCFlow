@@ -555,7 +555,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Init()
         {
-
             //检查数据库连接.
             try
             {
@@ -565,7 +564,6 @@ namespace BP.WF.HttpHandler
             {
                 return "err@异常信息:" + ex.Message;
             }
-
 
             //检查是否缺少Port_Emp 表，如果没有就是没有安装.
             if (DBAccess.IsExitsObject("Port_Emp") == false && DBAccess.IsExitsObject("WF_Flow") == false)
@@ -589,7 +587,6 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     string str = BP.WF.Glo.UpdataCCFlowVer();
-
                     BP.WF.Dev2Interface.Port_LoginBySID(sid);
                     if (this.FK_Flow == null)
                         return "url@Default.htm?UserNo=" + userNo + "&Key=" + DateTime.Now.ToBinary();
@@ -608,13 +605,7 @@ namespace BP.WF.HttpHandler
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
                     str = "准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
-
                 return str;
-                //Hashtable ht = new Hashtable();
-                //ht.Add("Msg", str);
-                //ht.Add("Title", SystemConfig.SysName);
-                //return BP.Tools.Json.ToJson(ht);
-
             }
             catch (Exception ex)
             {

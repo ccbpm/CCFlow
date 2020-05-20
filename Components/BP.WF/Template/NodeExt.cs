@@ -386,10 +386,7 @@ namespace BP.WF.Template
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
-
-
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
-
                 #endregion  基础属性
 
                 #region 分合流子线程属性

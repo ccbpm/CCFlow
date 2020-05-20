@@ -24,6 +24,29 @@ namespace BP.WF
     public class Glo
     {
         /// <summary>
+        /// 删除垃圾数据
+        /// </summary>
+        public static void ClearDustDB()
+        {
+
+            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
+            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            // 删除垃圾数据. 
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
+            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
+
+            DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
+
+
+            // 更新是否是有完成条件的节点。
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node=0 OR ToNode=0");
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node  NOT IN (SELECT NODEID FROM WF_Node )");
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE ToNode  NOT IN (SELECT NODEID FROM WF_Node) ");
+        }
+
+        /// <summary>
         /// 签批组件SQL
         /// </summary>
         public static string SQLOfCheckField

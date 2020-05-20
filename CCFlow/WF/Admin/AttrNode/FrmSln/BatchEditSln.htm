@@ -177,6 +177,10 @@
                     frmNode.Update();
                     break;
                 }
+                var nd = new Entity("BP.WF.Template.NodeWorkCheck", json.NodeID);
+                nd.FWCSta = frmNode.IsEnableFWC;
+                nd.Update();
+
             }
             alert('保存成功.');
             window.location.href = window.location.href;

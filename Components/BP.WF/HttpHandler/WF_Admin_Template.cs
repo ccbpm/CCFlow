@@ -35,15 +35,14 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ImpFrmLocal_Done()
         {
-            try
-            {
+            
                 ///表单类型.
                 string frmSort = this.GetRequestVal("FrmSort");
 
                 //创建临时文件.
                 string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
                 HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
-
+  
                 //获得数据类型.
                 DataSet ds = new DataSet();
                 ds.ReadXml(temp);
@@ -67,42 +66,40 @@ namespace BP.WF.HttpHandler
 
 
                 frmID = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
-                #endregion 检查模版是否正确.
-
+            #endregion 检查模版是否正确.
                 string impType = this.GetRequestVal("RB_ImpType");
 
                 //执行导入.
                 return ImpFrm(impType, frmID, md, ds, frmSort);
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
+            
         }
 
         public string ImpFrm(string impType, string frmID, MapData md, DataSet ds, string frmSort)
         {
+            
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就提示错误
-            if (impType.Equals("0"))
+            if (impType=="0")
             {
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     return "err@该表单ID【" + frmID + "】已经存在数据库中,您不能导入.";
 
-                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);  // MapData.ImpMapData(ds);
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);
+                
             }
 
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就直接覆盖.
-            if (impType.Equals("1"))
+            if (impType == "1")
             {
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     md.Delete(); //直接删除.
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);  // MapData.ImpMapData(ds);
+
             }
 
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就增加@WebUser.OrgNo(组织编号)导入.
-            if (impType.Equals("2"))
+            if (impType == "2")
             {
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
@@ -117,9 +114,17 @@ namespace BP.WF.HttpHandler
             }
 
             //导入模式:按照指定的模版ID导入.
-            if (impType.Equals("3"))
+            if (impType == "3")
             {
                 frmID = this.GetRequestVal("TB_SpecFrmID");
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                    return "err@您输入的表单编号为:" + md.No + "已存在.";
+
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
+            }
+            if (impType == "3ftp")
+            {
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     return "err@您输入的表单编号为:" + md.No + "已存在.";
@@ -384,8 +389,8 @@ namespace BP.WF.HttpHandler
                 string fileName = def[0]; //文件名
                 string model = def[1]; //模式. 3=按照指定的表单ID进行导入.
                 string frmID = def[2]; //指定表单的ID.
-
-                if (model.Equals("3") && DataType.IsNullOrEmpty(frmID) == true)
+                
+                if (model=="3" && DataType.IsNullOrEmpty(frmID) == true)
                 {
                     dtInfo = this.ImpAddInfo(dtInfo, fileName, "您需要指定表单ID", "导入失败");
                     continue;
@@ -412,12 +417,11 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                //获得模版里的编号，检查是否存在.
-                if (model.Equals("3") == false)
-                    frmID = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
-
+                
                 try
                 {
+                    if (model == "3")
+                        model += "ftp";
                     string info = this.ImpFrm(model, frmID, md, ds, sortNo);
 
                     if (info.Contains("err@"))

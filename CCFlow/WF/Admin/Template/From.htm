@@ -55,7 +55,8 @@
             html += "<tr>";
             html += "<th>#</th>";
             html += "<th>模板  - <a href='#' onclick='RetrunToParent()'>上一级</a></th>";
-            html += "<th>创建日期</th>";
+            html += "<th>导入模式</th>";
+            html += "<th>表单ID</th>";
             html += "</tr>";
 
             var idx = 0;
@@ -76,7 +77,18 @@
                 html += "<tr>";
                 html += "<td class=Idx>  " + idx + " </td>";
                 html += "<td><label><input id=" + fl.FileName + " type='checkbox';  /><img src='../../Img/dot.png' style='width:15px;' />" + fl.FileName + "</label></td>";
-                html += "<td>  " + fl.RDT + " </td>";
+                html += "<td>";
+
+                html += "<select id='DDL_" + fl.FileName + "' > ";
+                html += " <option value=0 >按照模版的表单编号导入,如果该编号已经存在就提示错误. </option> ";
+                html += " <option value=1 > </option> ";
+                html += " <option value=2 > </option> ";
+                html += " <option value=3 > </option > ";
+                html += " </select> ";
+                html += " </td > ";
+                html += "</td>";
+                html += "<td> <input id='TB_" + fl.FileName + "' /> </td>";
+
                 html += "</tr>";
             }
 
@@ -118,13 +130,19 @@
                     var input = $(this); //循环中的每一个input元素
                     if (input.is(':checked')) {
                         if (input.attr("id").indexOf(".xml") > 0)//过滤文件，只选xml的
-                            fls += input.attr("id") + ";"; //查看循环中的每一个input的id
+                        {
+                            var fileName = input.attr("id");
+                            var model = $("#DDL_" + fileName).val();
+                            var frmID = $("#TB_" + fileName).val();
+
+                            fls +=  fileName+ ","+model+","+frmID+" " + ";"; //查看循环中的每一个input的id
+                        }
                     }
                 });
 
             if (fls == "") {
                 alert("未选择模板");
-                return
+                return;
             }
 
             // alert(fls);
@@ -136,11 +154,12 @@
             handler.AddPara("Files", fls);
             handler.AddPara("SortNo", GetQueryString("SortNo"));
             handler.AddPara("DirName", GetQueryString("DirName"));
-            var data = handler.DoMethodReturnString("Form_Imp");
+            var data = handler.DoMethodReturnString("Form_Step1");
             if (data.indexOf('err@') == 0) {
                 $("#msg").html(data);
                 return;
             }
+
             //若选择的多个模板
             if (data.indexOf("EndJSON") == -1) {
                 alert(data);
@@ -171,7 +190,7 @@
 </head>
 <body>
 
-    <div style="float:left;">&nbsp; &nbsp;&nbsp;&nbsp;<img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />流程模板</div>
+    <div style="float:left;">&nbsp; &nbsp;&nbsp;&nbsp;<img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />表单模版</div>
     <div style=" float:right">
         <a href="#" onclick="RetrunToParent()">返回上一级</a>&nbsp; &nbsp;&nbsp;&nbsp;
     </div>
@@ -179,7 +198,7 @@
     <table id="Table1" class="table table-hover " style="width: 100%; padding: 2px;text-align:left">
     </table>
 
-    &nbsp;&nbsp;<input type="button" id="Btn_Imp" value="导入模版" onclick='Imp();' />
+    &nbsp;&nbsp;<input type="button" id="Btn_Imp" value="下一步" onclick='Imp();' />
     <center>
         <div id="msg"></div>
     </center>

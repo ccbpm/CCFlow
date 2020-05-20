@@ -29,53 +29,68 @@
         }
     </style>
     <script type="text/javascript">
+
+        /**
+         * 修改日期:2020-05-20
+         * 负责人:李振 
+         * */
         var sortNo;
         var retrunUrl;
         $(function () {
-
-            $("#msg").html("");
+             
 
         });
 
         //从xml文件导入
-        function SaveImpFromLocalXML() {
-
-            // var doMethod = "Imp_LoadFrmTempleteFromLocalFile";
-            // var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp";
+        function Imp_Done() {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
-            handler.AddFileData();
+            handler.AddFormData();
 
             var data = handler.DoMethodReturnString("ImpFrmLocal_Done");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
-
             alert(data);
-
         }
     </script>
 </head>
 <body>
     <form>
-        <div title="从本机导入" style="">
-            <div style="text-align: left; padding: 15px;">
-                <fieldset>
-                    <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
+
+        <fieldset>
+            <legend> 从本机导入表单模版 </legend>
+            <ul>
+                <li>
+                    请选择文件:
+                    <input style="background-color:white;color:#000000" type="file" id="File_Upload" name="File_Upload" />
+                </li>
+                <li>
+                    <font color="red"> <b>导入的方式:</b></font>
                     <ul>
-                        <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
+                        <li>
+                            <input id="Import_0" type="radio" name="RB_ImpType" value="0" checked="true" /><label for="Import_0">按照模版的表单编号导入,如果该编号已经存在就提示错误.</label>
+                        </li>
+                        <li>
+                            <input id="Import_1" type="radio" name="RB_ImpType" value="1" /><label for="Import_1">按照模版的表单编号导入,如果该编号已经存在就直接覆盖.</label>
+                        </li>
+                        <li>
+                            <input id="Import_2" type="radio" name="RB_ImpType" value="2" /><label for="Import_2">按照模版的表单编号导入,如果该编号已经存在就增加@WebUser.OrgNo(组织编号)导入.</label>
+                        </li>
+                        <li>
+                            <input id="Import_3" type="radio" name="RB_ImpType" value="3" /><label for="Import_3">按照指定的模版ID导入.</label>
+                            请输入指定的表单ID:
+                            <input type="text" id="TB_SpecFrmID" />
+                        </li>
                     </ul>
-                    <label style="padding-left: 8px;">
-                    </label>
-                    <br />
-                    <br />
-                    <input type="file" id="localXmlFile" name="localXmlFile" />
-                    <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
-                </fieldset>
+                </li>
+            </ul>
+            <div style="text-align: left; padding: 5px;">
+                <input type="button" id="Btn_Do" value="执行导入" onclick="Imp_Done();" />
             </div>
-        </div>
+        </fieldset>
     </form>
 </body>
 </html>

@@ -1120,6 +1120,9 @@ namespace BP.WF.HttpHandler
                 objStreamWriter.WriteLine();
                 string strLine = "";
 
+                //添加标签，解决数字在excel中变为科学计数法问题
+                strLine = "<table cellspacing=\"0\" cellpadding=\"5\" rules=\"all\" border=\"1\"> ";
+                strLine +="<tr>";
                 //生成文件标题
                 foreach (Attr attr in selectedAttrs)
                 {
@@ -1145,16 +1148,17 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     if(attr.MyFieldType == FieldType.RefText)
-                        strLine = strLine + attr.Desc.Replace("名称","") + Convert.ToChar(9);
+                        strLine +="<td>" + attr.Desc.Replace("名称","") + Convert.ToChar(9)+"</td>";
                     else
-                        strLine = strLine + attr.Desc + Convert.ToChar(9);
+                        strLine += "<td>"  + attr.Desc + Convert.ToChar(9) + "</td>";
                 }
-
+                strLine += "</tr>";
                 objStreamWriter.WriteLine(strLine);
                 strLine = "";
 
                 foreach (DataRow dr in dt.Rows)
                 {
+                    strLine = "</tr>";
                     foreach (Attr attr in selectedAttrs)
                     {
                         if (attr.IsFKorEnum)
@@ -1183,7 +1187,7 @@ namespace BP.WF.HttpHandler
 
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
-                            strLine = strLine + (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9);
+                            strLine +="<td>"+ (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9)+"</td>";
                         }
                         else
                         {
@@ -1204,10 +1208,10 @@ namespace BP.WF.HttpHandler
                                 text = text.Replace("\n", " ");
                                 text = text.Replace("\r", " ");
                             }
-                            strLine = strLine + text + Convert.ToChar(9);
+                            strLine += "<td style=\"vnd.ms-excel.numberformat:@\">" + text+" " + Convert.ToChar(9)+"</td>";
                         }
                     }
-
+                    strLine += "</tr>";
                     objStreamWriter.WriteLine(strLine);
                     strLine = "";
                 }
@@ -1217,7 +1221,7 @@ namespace BP.WF.HttpHandler
                 objStreamWriter.WriteLine(Convert.ToChar(9) + " 制表人：" + Convert.ToChar(9) + WebUser.Name + Convert.ToChar(9) + "日期：" + Convert.ToChar(9) + DateTime.Now.ToShortDateString());
 
             }
-            catch
+            catch(Exception e)
             {
                 flag = false;
             }

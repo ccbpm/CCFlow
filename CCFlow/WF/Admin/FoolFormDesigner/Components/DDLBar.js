@@ -693,7 +693,7 @@ function ExtBtn() {
     mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
     if (mapAttrs.length >= 1) {
         alert('名称：[' + name + "]已经存在.");
-        ExtAth();
+        ExtBtn();
         return "";
     }
 

@@ -168,6 +168,14 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 $(obj.prev()).attr("onclick", "figure_Template_Map('" + mapAttr.KeyOfEn + "','" + mapAttr.UIIsEnable + "')");
                 continue;
             }
+
+            if (mapAttr.UIContralType == 6) {//字段附件
+                var _html = GetFieldAth(mapAttr);
+                $("#TB_" + mapAttr.KeyOfEn).hide();
+                $("#TB_" + mapAttr.KeyOfEn).after(_html);
+               
+                return eleHtml;
+            }
             if (mapAttr.UIContralType == 101)//评分
             {
                 var scores = $(".simplestar");//获取评分的类
@@ -739,6 +747,87 @@ function setHandWriteSrc(HandWriteID, imagePath) {
     $("#Img" + HandWriteID).attr("src", imagePath);
     $("#TB_" + HandWriteID).val(imagePath);
     $('#eudlg').dialog('close');
+}
+
+function GetFieldAth(mapAttr) {
+    //获取上传附件列表的信息及权限信息
+    var nodeID = pageData.FK_Node;
+    var no = nodeID.toString().substring(nodeID.toString().length - 2);
+    var IsStartNode = 0;
+    if (no == "01")
+        IsStartNode = 1;
+
+    //创建附件描述信息.
+    var mypk = mapAttr.MyPK;
+
+    //获取附件显示的格式
+    var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel");
+    var ath = null;
+    var aths = frmData.Sys_FrmAttachment;
+    for (var i = 0; i < aths.length; i++) {
+        if (aths[i].MyPK == mypk) {
+            ath = aths[i];
+            break;
+        }
+    }
+    if (ath==null) {
+        alert("没有找到附件属性,请联系管理员");
+        return;
+    }
+
+    //获取附件上传的URL
+    var url = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData.FID + "&Ath=" + noOfObj + "&FK_MapData=" + mapAttr.FK_MapData + "&FromFrm=" + mapAttr.FK_MapData + "&FK_FrmAttachment=" + mypk + "&IsStartNode=" + IsStartNode +"&IsReadOnly="+pageData.IsReadonly + "&M=" + Math.random();
+    //自定义表单模式.
+    if (ath.AthRunModel == 2) {
+        url = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData.FID + "&Ath=" + noOfObj + "&FK_MapData=" + mapAttr.FK_MapData + "&FK_FrmAttachment=" + mypk + "&IsStartNode=" + IsStartNode + "&IsReadOnly=" + pageData.IsReadonly + "&M=" + Math.random();
+    }
+
+
+    var noOfObj = mypk.replace(mapAttr.FK_MapData + "_", "");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    handler.AddPara("WorkID", pageData.WorkID);
+    handler.AddPara("FID", pageData.FID);
+    handler.AddPara("FK_Node", nodeID);
+    handler.AddPara("FK_Flow", pageData.FK_Flow);
+    handler.AddPara("IsStartNode", IsStartNode);
+    handler.AddPara("PKVal", pageData.WorkID);
+    handler.AddPara("Ath", noOfObj);
+    handler.AddPara("FK_MapData", mapAttr.FK_MapData);
+    handler.AddPara("FromFrm", mapAttr.FK_MapData);
+    handler.AddPara("FK_FrmAttachment", mypk);
+    data = handler.DoMethodReturnString("Ath_Init");
+
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+        var url = data.replace('url@', '');
+        window.location.href = url;
+        return;
+    }
+    data = JSON.parse(data);
+    var dbs = data["DBAths"];
+    var athDesc = data["AthDesc"][0];
+    var eleHtml = "";
+    if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0)
+        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\")'></i>]执行上传</label></div>";
+    if (dbs.length == 0) {
+            return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
+    }
+    
+    if (athShowModel == "" || athShowModel == 0)
+        return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
+
+    eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
+    for (var i = 0; i < dbs.length; i++) {
+        var db = dbs[i];
+        eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+    }
+    eleHtml += "</div>";
+
+    return eleHtml;
 }
 
 

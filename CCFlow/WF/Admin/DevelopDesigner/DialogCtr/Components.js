@@ -29,6 +29,7 @@
             case 5://录音控件
                 break;
             case 6: //字段附件
+                _html +=mapData.Name+"<input type='text'  id='TB_"+mapData.KeyOfEn+"' name='TB_"+mapData.KeyOfEn+"' data-key='"+mapData.KeyOfEn+"' data-name='"+mapData.Name+"' data-type='AthShow'   leipiplugins='component' style='width:98%' placeholder='请上传附件'/>";
                 break;
             case 7:
                 break;

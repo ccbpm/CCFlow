@@ -343,6 +343,11 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         return;
     }
 
+    if (shap == 'AthShow') {
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=' + fk_mapdata + "_" + mypk;
+        CCForm_ShowDialog(url, '附件' + mypk + '属性', null, null, shap, fk_mapdata + "_" + mypk, anchorEl);
+        return;
+    }
 
 
     if (shap == 'AthMulti') {
@@ -476,6 +481,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
             case "Score":
             case "HandWriting":
             case "Btn":
+            case "AthShow":
                 var en = new Entity("BP.Sys.MapAttr");
                 en.SetPKVal(MyPK);
                 if (en.RetrieveFromDBSources() == 0) {
@@ -1567,6 +1573,9 @@ UE.plugins['component'] = function () {
             if (dataType == "Btn")
                 _html = popup.formatHtml(
                     '<nobr>按钮: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+            if (dataType == "AthShow")
+                _html = popup.formatHtml(
+                    '<nobr>字段附件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
 
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(

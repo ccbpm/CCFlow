@@ -20,7 +20,7 @@
 
             InitBar(SelectorModel.SQLTemplate);
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
             var paras = node.DeliveryParas;
 
             var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates", "SQLType", 1)

@@ -43,10 +43,16 @@
 
         //从xml文件导入
         function Imp_Done() {
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Template");
             handler.AddUrlData();
-            handler.AddFormData();
+            var radioValue = $("input[name=RB_ImpType]:checked").val();
+            var tbValue = $("#TB_SpecFrmID").val();
+            handler.AddPara("RB_ImpType", radioValue);
+            handler.AddPara("FrmSort", GetQueryString("SortNo"));
+            
+            handler.AddPara("TB_SpecFrmID", tbValue);
+            
+            handler.AddFileData();
 
             var data = handler.DoMethodReturnString("ImpFrmLocal_Done");
             if (data.indexOf('err@') == 0) {

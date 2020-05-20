@@ -726,7 +726,6 @@ namespace BP.WF
 
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
-            Hashtable ht = null;
             foreach (DataRow dr in Sys_MapAttr.Rows)
             {
                 string lgType = dr["LGType"].ToString();
@@ -842,61 +841,8 @@ namespace BP.WF
 
             #region  把从表的数据放入.
             GEDtls dtls = new GEDtls(dtl.No);
-            QueryObject qo = null;
-            try
-            {
-                qo = new QueryObject(dtls);
-                switch (dtl.DtlOpenType)
-                {
-                    case DtlOpenType.ForEmp:  // 按人员来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
-                        qo.addAnd();
-                        qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
-                        break;
-                    case DtlOpenType.ForWorkID: // 按工作ID来控制
-                        qo.addLeftBracket();
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
-                        qo.addOr();
-                        qo.AddWhere(GEDtlAttr.FID, pkval);
-                        qo.addRightBracket();
-                       
-                        break;
-                    case DtlOpenType.ForFID: // 按流程ID来控制.
-                        if (fid == 0)
-                            qo.AddWhere(GEDtlAttr.FID, pkval);
-                        else
-                            qo.AddWhere(GEDtlAttr.FID, fid);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                dtls.GetNewEntity.CheckPhysicsTable();
-                throw ex;
-            }
-
-            //条件过滤.
-            if (dtl.FilterSQLExp != "")
-            {
-                string[] strs = dtl.FilterSQLExp.Split('=');
-                if (strs.Length == 2)
-                {
-                    qo.addAnd();
-                    qo.AddWhere(strs[0], Glo.DealExp(strs[1], en));
-                }
-            }
-
-            //增加排序.
-            qo.addOrderBy(GEDtlAttr.OID);
-            //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
-
-            //从表
-            DataTable dtDtl = qo.DoQueryToTable();
-
-            //查询所有动态SQL查询类型的字典表记录
-            SFTable sftable = null;
-            DataTable dtsftable = null;
-            DataRow[] drs = null;
+            DataTable dtDtl = GetDtlInfo(dtl, dtls, pkval, fid, en);
+       
 
             // 为明细表设置默认值.
             MapAttrs dtlAttrs = new MapAttrs(dtl.No);
@@ -999,5 +945,57 @@ namespace BP.WF
 
             return myds;
         }
+        private static  DataTable GetDtlInfo(MapDtl dtl, GEDtls dtls, Int64 pkval, Int64 fid, GEEntity en)
+        {
+            QueryObject qo = null;
+            try
+            {
+                qo = new QueryObject(dtls);
+                switch (dtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
+                        qo.addAnd();
+                        qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        qo.addLeftBracket();
+                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
+                        qo.addOr();
+                        qo.AddWhere(GEDtlAttr.FID, pkval);
+                        qo.addRightBracket();
+
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        if (fid == 0)
+                            qo.AddWhere(GEDtlAttr.FID, pkval);
+                        else
+                            qo.AddWhere(GEDtlAttr.FID, fid);
+                        break;
+                }
+                //条件过滤.
+                if (dtl.FilterSQLExp != "")
+                {
+                    string[] strs = dtl.FilterSQLExp.Split('=');
+                    if (strs.Length == 2)
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(strs[0], Glo.DealExp(strs[1], en));
+                    }
+                }
+
+                //增加排序.
+                qo.addOrderBy(GEDtlAttr.OID);
+                return qo.DoQueryToTable();
+            }
+            catch (Exception ex)
+            {
+                dtls.GetNewEntity.CheckPhysicsTable();
+                return GetDtlInfo(dtl, dtls, pkval, fid, en);
+            }
+ 
+        }
     }
+
+    
 }

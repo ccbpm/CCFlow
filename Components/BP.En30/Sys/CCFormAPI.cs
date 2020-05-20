@@ -641,6 +641,39 @@ namespace BP.Sys
             md.Insert();
         }
         /// <summary>
+        /// 一键设置元素只读
+        /// </summary>
+        /// <param name="frmID">要设置的表单.</param>
+        public static void OneKeySetFrmEleReadonly(string frmID)
+        {
+            string sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + frmID + "'";
+            DBAccess.RunSQL(sql);
+
+            MapDtls dtls = new MapDtls(frmID);
+            foreach (MapDtl dtl in dtls)
+            {
+                dtl.IsInsert = false;
+                dtl.IsUpdate = false;
+                dtl.IsDelete = false;
+                dtl.Update();
+
+                sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
+                DBAccess.RunSQL(sql);
+            }
+
+            FrmAttachments ens = new FrmAttachments(frmID);
+            foreach (FrmAttachment en in ens)
+            {
+                en.IsUpload = false;
+                en.DeleteWay = 0; 
+                en.Update();
+
+                //sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
+                //DBAccess.RunSQL(sql);
+            }
+
+        }
+        /// <summary>
         /// 修复表单.
         /// </summary>
         /// <param name="frmID"></param>
@@ -1647,7 +1680,7 @@ namespace BP.Sys
         /// <param name="copyToFrmID">copy到的表单ID</param>
         /// <param name="copyToFrmName">表单名称</param>
         /// <returns></returns>
-        public static MapData Template_CopyFrmToFrmIDAsNewFrm(string fromFrmID, string copyToFrmID,string copyToFrmName)
+        public static MapData Template_CopyFrmToFrmIDAsNewFrm(string fromFrmID, string copyToFrmID, string copyToFrmName)
         {
 
             return null;
@@ -1661,8 +1694,8 @@ namespace BP.Sys
         /// <returns></returns>
         public static MapData Template_LoadXmlTemplateAsNewFrm(DataSet ds, string frmSort)
         {
-            MapData md= MapData.ImpMapData(ds);
-            md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='"+frmSort+"'");
+            MapData md = MapData.ImpMapData(ds);
+            md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
             md.FK_FormTree = frmSort;
             md.Update();
             return md;

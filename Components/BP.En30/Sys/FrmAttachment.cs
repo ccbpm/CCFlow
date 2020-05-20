@@ -432,6 +432,17 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.IsVisable, value);
             }
         }
+        public int DeleteWay
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.DeleteWay, 0);
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.DeleteWay, value);
+            }
+        }
         /// <summary>
         /// 使用上传附件的 - 控件类型
         /// 0=批量.

@@ -380,6 +380,16 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "一键设置表单元素只读";
+                rm.Warning = "您确定要设置吗？所有的元素，包括字段、从表、附件以及其它组件都将会被设置为只读的.";
+                rm.GroupName = "高级设置";
+                //rm.Icon = "../../WF/Img/RegularExpression.png";
+                rm.ClassMethodName = this.ToString() + ".DoOneKeySetReadonly";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
                 #endregion 高级设置.
 
                 #region 方法 - 开发接口.
@@ -409,6 +419,16 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 一键设置为只读.
+        /// </summary>
+        /// <returns></returns>
+        public string DoOneKeySetReadonly()
+        {
+            BP.Sys.CCFormAPI.OneKeySetFrmEleReadonly(this.No);
+            return "设置成功.";
+        }
 
         protected override bool beforeUpdate()
         {

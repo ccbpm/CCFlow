@@ -5,6 +5,7 @@ using BP.En;
 using BP.Web;
 using BP.Port;
 using BP.GPM;
+using BP.WF.Template;
 
 namespace BP.WF.Port.Admin2
 {
@@ -103,11 +104,153 @@ namespace BP.WF.Port.Admin2
                 rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "克隆独立组织";
+                rm.Warning = "如果当前部门已经是独立组织，系统就会提示错误。";
+                rm.ClassMethodName = this.ToString() + ".DoCloneOrg";
+                rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("coneOrgNo", null, "被克隆的组织编号", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+        /// <summary>
+        /// 克隆组织
+        /// </summary>
+        /// <param name="adminer"></param>
+        /// <param name="orgNo"></param>
+        /// <returns></returns>
+        public string DoCloneOrg(string adminer, string cloneOrgNo)
+        {
+            Org orgClone = new Org(cloneOrgNo);
+
+            if (WebUser.No.Equals("admin") == false)
+                return "err@非admin管理员，您无法执行该操作.";
+
+            //检查是否有该用户.
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = adminer;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@用户编号错误:" + adminer;
+
+            //检查该部门是否是独立组织.
+            Org org = new Org();
+            org.No = this.No;
+            if (org.RetrieveFromDBSources() == 1)
+            {
+                /* 已经是独立组织了. */
+                return "info@当前部门已经是独立组织了";
+            }
+            org.Name = this.Name; //把部门名字改为组织名字.
+
+            //设置父级信息.
+            BP.Port.Dept parentDept = new BP.Port.Dept();
+
+            if (this.ParentNo.Equals("0") == true)
+                this.ParentNo = this.No;
+
+            parentDept.No = this.ParentNo;
+            parentDept.Retrieve();
+
+            org.ParentNo = this.ParentNo;
+            org.ParentName = parentDept.Name;
+
+            //设置管理员信息.
+            org.Adminer = emp.No;
+            org.AdminerName = emp.Name;
+            org.Insert();
+
+            //增加到管理员.
+            OrgAdminer oa = new OrgAdminer();
+            oa.FK_Emp = emp.No;
+            oa.OrgNo = this.No;
+            oa.Insert();
+
+
+            //初始化流程树的根节点.
+            FlowSort fsRoot = new FlowSort();
+            fsRoot.No = this.No;
+            fsRoot.ParentNo = "1";
+            fsRoot.Name = this.Name;
+            fsRoot.OrgNo = this.No;
+            fsRoot.Insert();
+
+
+            //执行 clone...
+
+            //查询出来被克隆的流程树.
+            BP.WF.Template.FlowSorts sorts = new Template.FlowSorts();
+            sorts.Retrieve(FlowSortAttr.OrgNo, cloneOrgNo);
+            foreach (FlowSort sort in sorts)
+            {
+                if (sort.ParentNo.Equals("1") == true)
+                    continue;
+
+                FlowSort fs = new FlowSort();
+                fs.Copy(sort);
+                fs.Name = sort.Name;
+                fs.ParentNo = this.No;
+                fs.No = DBAccess.GenerGUID();
+                fs.OrgNo = this.No;
+                fs.Insert();
+
+
+                //查询出来模版，开始执行clone.
+                Flows fls = new Flows();
+                fls.Retrieve(FlowAttr.FK_FlowSort, sort.No);
+                foreach (Flow fl in fls)
+                {
+                    string fileName = fl.GenerFlowXmlTemplete();
+                    var flow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                }
+            }
+
+
+            //初始化frmTree的根节点.
+            SysFormTree frmRoot = new SysFormTree();
+            frmRoot.No = this.No;
+            frmRoot.ParentNo = "1";
+            frmRoot.Name = this.Name;
+            frmRoot.OrgNo = this.No;
+            frmRoot.Insert();
+
+            //查询出来被克隆的表单树
+            BP.WF.Template.SysFormTrees frmTrees = new Template.SysFormTrees();
+            sorts.Retrieve(FlowSortAttr.OrgNo, cloneOrgNo);
+            foreach (SysFormTree sort in frmTrees)
+            {
+                if (sort.ParentNo.Equals("1") == true)
+                    continue;
+
+                SysFormTree fs = new SysFormTree();
+                fs.Copy(sort);
+                fs.Name = sort.Name;
+                fs.ParentNo = this.No;
+                fs.No = DBAccess.GenerGUID();
+                fs.OrgNo = this.No;
+                fs.Insert();
+
+
+                //查询出来模版，开始执行clone.
+                MapDataExts fls = new MapDataExts();
+                fls.Retrieve(BP.Sys.MapDataAttr.FK_FrmSort, sort.No);
+                foreach (Flow fl in fls)
+                {
+                    string fileName = fl.GenerFlowXmlTemplete();
+                    var flow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                }
+            }
+
+
+
+
+            return "设置成功.";
+
+        }
+
 
         /// <summary>
         /// 设置组织
@@ -116,6 +259,7 @@ namespace BP.WF.Port.Admin2
         /// <returns></returns>
         public string SetOrg(string adminer)
         {
+            
             if (WebUser.No.Equals("admin") == false)
                 return "err@非admin管理员，您无法执行该操作.";
 

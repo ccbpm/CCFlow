@@ -47,7 +47,7 @@ namespace BP.WF.HttpHandler
                 ds.ReadXml(temp);
 
                 //执行装载.
-                MapData md = MapData.ImpMapData(ds);
+                MapData md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);  // MapData.ImpMapData(ds);
 
                 //处理表单类型.
                 md.FK_FrmSort = frmSort;

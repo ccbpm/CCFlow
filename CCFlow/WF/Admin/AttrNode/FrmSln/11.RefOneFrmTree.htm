@@ -127,6 +127,7 @@
             if (confirm('您确定要设置吗？') == false)
                 return;
 
+
             var nodeID = GetQueryString("FK_Node");
             var currNode = new Entity("BP.WF.Node", nodeID);
 
@@ -148,40 +149,44 @@
                 node.Update();
 
                 //节点表单属性
-                //先删除掉已有的，避免换绑时出现垃圾数据
+                //先删除掉已有的，避免换绑时出现垃圾数据.
                 var ens = new Entities("BP.WF.Template.FrmNodes");
-                ens.Delete("FK_Node",node.NodeID);
+                ens.Retrieve("FK_Node", node.NodeID);
+
+                //是不是该frmNode已经存在？
+                var isHave = false;
+                for (var i = 0; i < ens.length; i++) {
+                    var en = ens[i];
+                    if (en.FK_Frm != currNode.NodeFrmID) {
+                        en = new Entity("BP.WF.Template.FrmNode", en);
+                        en.Delete();
+                        continue;
+                    }
+                    isHave = true;
+                }
+                if (isHave == true)
+                    continue; //已经存在就不处理.
+
                 var frmNode = new Entity("BP.WF.Template.FrmNode");
                 frmNode.MyPK = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
-                var count = frmNode.RetrieveFromDBSources();
-                if (count == 0) {
+                frmNode.FK_Node = node.NodeID;
+                frmNode.FK_Flow = node.FK_Flow;
+                frmNode.FK_Frm = node.NodeFrmID;
 
-                    frmNode.FK_Node = node.NodeID;
-                    frmNode.FK_Flow = node.FK_Flow;
-                    frmNode.FK_Frm = node.NodeFrmID;
-
-                    //判断是否为开始节点
-                    var nodeID = node.NodeID.toString();
-                    if (nodeID.substring(nodeID.length - 2) == "01") {
-                        frmNode.FrmSln = 0; //默认方案
-                    } else {
-                        frmNode.FrmSln = 1; //只读方案
-                    }
-
-                    frmNode.Save(); //执行保存.
+                //判断是否为开始节点
+                var nodeID = node.NodeID.toString();
+                if (nodeID.substring(nodeID.length - 2) == "01") {
+                    frmNode.FrmSln = 0; //默认方案
+                } else {
+                    frmNode.FrmSln = 1; //只读方案
                 }
 
-                //更新表单类型.
-                var frmID = "ND" + node.NodeID;
-                var mapData = new Entity("BP.Sys.MapData", frmID);
-                mapData.FrmType = FormSlnType.RefOneFrmTree;
-                //mapData.FK_FormTree = currNode.RefOneFrmTreeType;
-                mapData.Update();
-
+                frmNode.Insert();
             }
 
             alert('设置成功,正在转入批量编辑页面.');
             BatchEdit();
+
             //window.location.href = window.location.href;
         }
 

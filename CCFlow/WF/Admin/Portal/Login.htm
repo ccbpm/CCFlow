@@ -57,7 +57,10 @@
             var doType = GetQueryString("DoType");
             if (doType == null)
                 doType = "Login_Init";
+
             handler.AddUrlData();
+            //handler.AddFormData();
+            //handler.AddPara("ss",val);
             data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {

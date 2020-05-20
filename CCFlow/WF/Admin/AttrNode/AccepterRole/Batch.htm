@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>批处理</title>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -24,67 +24,38 @@
             //获取节点属性
             var node = new Entity("BP.WF.Template.NodeSimple", nodeID);
 
-            //节点对应关系.
-            var frmNodes = new Entities("BP.WF.Template.FrmNodes");
-            frmNodes.Retrieve("FK_Flow", node.FK_Flow);
+
 
             var html = "<table style='wdith:90%;'>";
             html += "<tr>";
             html += "<th>#</th>";
             html += "<th>节点ID</th>";
             html += "<th>名称</th>";
-            html += "<th>表单ID</th>";
-            html += "<th>控制方案</th>";
-            html += "<th>审核组件状态</th>";
-            html += "<th>签批组件</th>";
-            // html += "<th>元素权限</th>";
-            html += "<th>详情</th>";
+            html += "<th>接受人规则</th>";
+            html += "<th>设置详情</th>";
             html += "</tr>";
 
             //获得节点s.
-            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            var nodes = new Entities("BP.WF.Nodes");
             nodes.Retrieve("FK_Flow", node.FK_Flow);
-
             var frmNode = null;
+
             for (var i = 0; i < nodes.length; i++) {
 
                 var json = nodes[i];
 
                 //找到节点与表单的对应关系.
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>";
+                html += "<td>" + json.NodeID + "</td>";
+                html += "<td>" + json.Name + "</td>";
 
-                for (var idx = 0; idx < frmNodes.length; idx++) {
-                    var en = frmNodes[idx];
-                    if (en.FK_Node != json.NodeID)
-                        continue;
-                    frmNode = en;
+                //控制方案
+                html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
 
-                    html += "<tr>";
-                    html += "<td>" + (i + 1) + "</td>";
-                    html += "<td>" + json.NodeID + "</td>";
-                    html += "<td>" + json.Name + "</td>";
-                    html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
-
-                    //控制方案
-                    html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
-                    //审核组件.
-                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>";
-                    //签批组件.
-                    html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>";
-
-                    //元素权限.
-                    //    html += "<td><a href='' >编辑</a></td>"; //
-
-                    html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>";
-                    html += "</tr>";
-                    break;
-                }
-
-                //if (frmNode == null) {
-                //    html += "<td colspan=3></td>";
-                //    html += "</tr>";
-                //    continue;
-                //}
-
+                //元素权限.
+                html += "<td><a href=\"javascript:EditFrmNode('" + json.MyPK + "');\" >详情</a></td>";
+                html += "</tr>";
 
             }
             html += "</table>";
@@ -94,7 +65,15 @@
             //求出枚举值，然后绑定上.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
             handler.AddPara("Fk_Frm", frmNode.FK_Frm);
-            var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
+            var data = handler.DoMethodReturnString("BatchEditSln_InitDDLData");
+            try {
+
+                data = JSON.parse(data);
+
+            } catch (err) {
+                alert("转换JSON失败,请查看控制台日志,或者联系管理员.");
+                return;
+            }
 
             var frmSln = data["FrmSln"];
             var fwcSta = data["FWCSta"];
@@ -129,10 +108,14 @@
                 GenerBindDDL("DDL_CheckField_" + json.NodeID, cfs, "No", "Name", frmNode.CheckField);
                 $("#DDL_CheckField_" + json.NodeID + " option:first").remove();//有两个“请选择”，移除一个
             }
+            return;
+
         });
+
 
         // 绑定表单信息.
         function EditFrm(frmID) {
+
             var url = '../../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=' + frmID + "&FrmID=" + frmID;
             window.open(url);
         }

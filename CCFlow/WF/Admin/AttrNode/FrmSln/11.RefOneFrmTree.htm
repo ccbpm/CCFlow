@@ -155,8 +155,8 @@
 
                 //是不是该frmNode已经存在？
                 var isHave = false;
-                for (var i = 0; i < ens.length; i++) {
-                    var en = ens[i];
+                for (var idx = 0; idx < ens.length; idx++) {
+                    var en = ens[idx];
                     if (en.FK_Frm != currNode.NodeFrmID) {
                         en = new Entity("BP.WF.Template.FrmNode", en);
                         en.Delete();

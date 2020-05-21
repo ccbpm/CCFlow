@@ -39,7 +39,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FrmComponents.Btn + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮</option>";
     html += "<option value=" + FrmComponents.HandWriting + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
     html += "<option value=" + FrmComponents.Score + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
-    html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件</option>";
+    html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件(表格模式展示)</option>";
     html += "<option value=" + FrmComponents.Dtl + ">&nbsp;&nbsp;&nbsp;&nbsp;从表</option>";
     html += "<option value=" + FrmComponents.Frame + ">&nbsp;&nbsp;&nbsp;&nbsp;框架</option>";
     if (frmType == 0)//傻瓜表单
@@ -216,7 +216,7 @@ function changeOption() {
 //地图
 function ExtMap() {
     var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -309,7 +309,7 @@ function ExtDocWord() {
 //签批组件
 function ExtWorkCheck() {
     var name = window.prompt('请输入签批组件的名称:\t\n比如:办公室意见、拟办意见', '');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -456,28 +456,39 @@ function MapAttrFixed() {
 
 //附件.
 function ExtAth() {
+    var frmID = fk_mapData;
 
     var name = window.prompt('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
-    if (name == null || name == undefined)
-        return "";
-
-    var frmID = fk_mapData;
-    var mapAttrs = new Entities("BP.Sys.MapAttrs");
-    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
-    if (mapAttrs.length >= 1) {
-        alert('名称：[' + name + "]已经存在.");
+    if (name == null || name == undefined || name.trim() == "") {
+        alert("字段附件的名称不能为空");
         ExtAth();
         return "";
     }
+     
 
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+    if (mapAttrs.length >= 1) {
+        alert('名称：[' + name + ']的附件已经存在.');
+        ExtAth();
+        return "";
+    }
     //获得ID.
     var id = StrToPinYin(name);
-
+    var id = window.prompt('请输入附件编号:\t\n比如:BSCL、BXZL', id);
+    if (id == null || id == undefined || id.trim() == "") {
+        alert("字段附件的编号不能为空");
+        ExtAth();
+        return "";
+    }
+       
+    
     var mypk = frmID + "_" + id;
     var mapAttr = new Entity("BP.Sys.MapAttr");
     mapAttr.MyPK = mypk;
     if (mapAttr.IsExits == true) {
-        alert('名称：[' + name + "]已经存在.");
+        alert('名称为：[' + name + ']，编号为[' + id + ']的附件已经存在.');
+        ExtAth();
         return "";
     }
     mapAttr.FK_MapData = frmID;
@@ -518,7 +529,7 @@ function ExtAth() {
 function ExtLink() {
 
     var name = window.prompt('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -575,7 +586,7 @@ function ExtLink() {
 function ExtScore() {
 
     var name = window.prompt('请输入评分事项名称:\t\n比如:快递速度，服务水平', '评分事项');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -636,7 +647,7 @@ function ExtBigNoteHtmlText() {
 function ExtHandWriting() {
 
     var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -685,7 +696,7 @@ function ExtHandWriting() {
 function ExtBtn() {
 
     var name = window.prompt('请输入按钮名称:\t\n比如:保存、发送');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -778,7 +789,7 @@ function ExtJobSchedule() {
 function ExtImg() {
 
     var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -835,7 +846,7 @@ function ExtImg() {
 function ExtImgAth() {
 
     var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON', '肖像');
-    if (name == null || name == undefined)
+    if (name == null || name == undefined || name.trim() == "")
         return "";
 
     var frmID = fk_mapData;
@@ -887,11 +898,11 @@ function ExtImgAth() {
 
 function MultiAth() {
     var val = prompt('请输入附件ID:(要求是字母数字下划线，非中文等特殊字符.)', 'Ath1');
-    if (val == null) {
+    if (val == null ) {
         return "";
     }
 
-    if (val == '') {
+    if (val.trim() == '') {
         alert('附件ID不能为空，请重新输入！');
         return "";
     }
@@ -921,7 +932,7 @@ function MultiAth() {
 function CreateDtl() {
     var val = prompt('请输入从表ID，要求表单唯一。', fk_mapData + 'Dtl1');
 
-    if (val == null) {
+    if (val == null || val.trim() == "") {
         return;
     }
 
@@ -931,7 +942,7 @@ function CreateDtl() {
         return;
     }
 
-    if (val == '') {
+    if (val == '' || val.trim() == "") {
         alert('请输入从表ID不能为空，请重新输入！');
         CreateDtl(fk_mapData);
         return;
@@ -960,7 +971,7 @@ function CreateFrame() {
 
     var val = prompt('新建框架:' + alert, 'Frame1');
 
-    if (val == null) {
+    if (val == null || val.trim() == "") {
         return "";
     }
 

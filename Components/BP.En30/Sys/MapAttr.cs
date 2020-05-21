@@ -1856,6 +1856,17 @@ namespace BP.Sys
             BP.DA.DBAccess.RunSQLs(sqls);
             return base.beforeDelete();
         }
+        protected override void afterDelete()
+        {
+            if(this.UIContralType == UIContralType.AthShow)
+            {
+                //删除附件
+                FrmAttachment ath = new FrmAttachment();
+                ath.MyPK = this.MyPK;
+                ath.Delete();
+            }
+            base.afterDelete();
+        }
     }
     /// <summary>
     /// 实体属性s

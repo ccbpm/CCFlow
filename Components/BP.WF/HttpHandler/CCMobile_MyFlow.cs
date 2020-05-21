@@ -142,6 +142,13 @@ namespace BP.WF.HttpHandler
             BtnLab btnLab = new BtnLab(this.FK_Node);
             ds.Tables.Add(btnLab.ToDataTableField("WF_BtnLab"));
 
+            #region  加载自定义的button.
+            BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+            bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Toolbar);
+            ds.Tables.Add(bars.ToDataTableField("WF_NodeToolbar"));
+            #endregion  //加载自定义的button.
+
+
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -189,7 +196,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
-            //增加转向下拉框数据.
+            #region 按钮旁的下拉框
             if (nd.CondModel == CondModel.SendButtonSileSelect)
             {
                 if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
@@ -285,6 +292,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dtToNDs);
                 }
             }
+            #endregion 按钮旁的下拉框
             return BP.Tools.Json.ToJson(ds);
         }
         public string MyFlow_Init()

@@ -30,7 +30,10 @@
             mapAttrs.Retrieve("FK_MapData", frmID, "Y");
             fieldsData = mapAttrs;
 
+            //获得分组.
             var groups = new Entities("BP.Sys.GroupFields", "FrmID", frmID);
+
+            //遍历分组.
             for (var k = 0; k < groups.length; k++) {
                 var group = groups[k];
 
@@ -54,32 +57,31 @@
                         en.DefVal = "";
                     }
 
-                    if (en.UIContralType == "0" || en.UIContralType == "1" || en.UIContralType == "2"
-                        || en.UIContralType == "3") {
+                    if (en.UIContralType >= 4)
+                        continue; //仅仅考虑字段附件.
 
-                        var html = "";
-                        html += "<tr >";
-                        html += "<td class=Idx>" + idx + "</td>";
-                        html += "<td>" + en.KeyOfEn + "</td>";
-                        html += "<td>" + en.Name + "</td>";
+                    var html = "";
+                    html += "<tr >";
+                    html += "<td class=Idx>" + idx + "</td>";
+                    html += "<td>" + en.KeyOfEn + "</td>";
+                    html += "<td>" + en.Name + "</td>";
 
-                        if (en.LGType == 0) html += "<td>普通</td>";
-                        if (en.LGType == 1) html += "<td>枚举</td>";
-                        if (en.LGType == 2) html += "<td>外键</td>";
+                    if (en.LGType == 0) html += "<td>普通</td>";
+                    if (en.LGType == 1) html += "<td>枚举</td>";
+                    if (en.LGType == 2) html += "<td>外键</td>";
 
-                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
 
-                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可编辑</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
-                        //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
-                        html += "</tr>";
-                        idx++;
-                        $("#Table1 tr:last").after(html);
-                    }
+                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可编辑</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                    //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
+                    html += "</tr>";
+                    idx++;
+                    $("#Table1 tr:last").after(html);
                 }
             }
 
@@ -91,6 +93,10 @@
             for (var i = 0; i < ffs.length; i++) {
 
                 var ff = ffs[i];
+
+                var en = $("#" + ff.KeyOfEn + "_DefVal");
+                if (en == null)
+                    continue;
 
                 $("#" + ff.KeyOfEn + "_DefVal").val(ff.DefVal); //设置默认值.
                 $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
@@ -131,6 +137,8 @@
         //保存字段方案
         function Save() {
 
+            $("#Btn_Save").val("正在保存请稍候...");
+
             var frmID = GetQueryString("FK_MapData");
             var nodeID = parseInt(GetQueryString("FK_Node"));
             var flowNo = GetQueryString("FK_Flow");
@@ -139,17 +147,30 @@
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
 
-            //删除以前的设置..
-          //  var ff = new Entity("BP.WF.Template.FrmField");
-            //ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
+            //查询所有的的元素.
+            var ffs = new Entites("BP.WF.Template.FrmFields");
+            ffs.Retrieve("FK_MapData", frmID, "FK_Node", nodeID);
+
+            var ff = new Entity("BP.WF.Template.FrmField");
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
                 if (en.UIVisible == 0)
                     continue;
 
-                ff = new Entity("BP.WF.Template.FrmField");
-                ff.SetPKVal(frmID + '_' + nodeID + '_' + en.KeyOfEn);
+                if (en.UIContralType >= 4)
+                    continue; //仅仅考虑字段附件.
+
+                var mypk = frmID + '_' + nodeID + '_' + en.KeyOfEn;
+                ff.MyPK = mypk;
+                ff.SetPKVal(mypk);
+                for (var myidx = 0; myidx < ffs.length; myidx++) {
+                    var myff = ffs[myidx];
+                    if (myff.MyPK == ff.MyPK) {
+                        myff.Delete();
+                        break;
+                    }
+                }
 
                 ff.FK_Flow = flowNo;
                 ff.FK_Node = nodeID;
@@ -194,8 +215,6 @@
 
                 //判断变化的是否需要保存.
                 var isNeedSave = false;
-                //if (ff.IsWriteToGenerWorkFlow == 1)
-                //    isNeedSave = true;
 
                 if (ff.IsWriteToFlowTable == 1)
                     isNeedSave = true;
@@ -218,7 +237,7 @@
                 if (isNeedSave == false)
                     continue;
 
-                ff.Save();
+                ff.Insert();
             }
 
             window.location.href = window.location.href;
@@ -331,7 +350,7 @@
         </tr>
     </table>
     <center>
-        <button onclick='Save();' type='button'>
+        <button onclick='Save();' type='button' id="Btn_Save">
             &nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;
         </button>
     </center>

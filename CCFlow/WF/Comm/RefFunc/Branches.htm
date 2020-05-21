@@ -379,6 +379,7 @@
             }
         }
         function CheckAll() {
+
             $('#tree').treeview('checkAll', { silent: true });
             var selectNodes = $('#tree').treeview('getChecked');
             if (selectNodes) { //子节点不为空，则选中所有子节点
@@ -401,15 +402,17 @@
             alert("尚未实现.");
         }
 
-/**/</script>
+        /**/</script>
 </head>
 <body>
-        <div class="row row-margin-top" style="width:96%;">
-                <div id="tree"></div>
-        </div>
 
-        <input type="button" value="全选" id="Cancel" onclick="CheckAll()"  />
-        <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()"  />
+    <input type="button" value="全选" id="Cancel" onclick="CheckAll()" />
+    <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()" />
+    <div class="row row-margin-top" style="width:96%;">
+        <div id="tree"></div>
+    </div>
+
+
 
     <!--</div>-->
 </body>

@@ -33,12 +33,15 @@
             var groups = new Entities("BP.Sys.GroupFields", "FrmID", frmID);
             for (var k = 0; k < groups.length; k++) {
                 var group = groups[k];
+
                 if (group.CtrlType == "Ath" || group.CtrlType == "Dtl")
+                    continue;
+                if (group.CtrlType.length > 1)
                     continue;
 
                 html = "";
                 html += "<tr>";
-                html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
+                html += "<td colspan=12 class=Sum ><b>" + group.Lab + "</b></td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
                 var idx = 1;
@@ -46,10 +49,14 @@
                     var en = mapAttrs[i];
                     if (en.UIVisible == 0 || en.GroupID != group.OID)
                         continue;
+
                     if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
                         en.DefVal = "";
                     }
-                    if (en.UIContralType == "0" || en.UIContralType == "1" || en.UIContralType == "2" || en.UIContralType == "3") {
+
+                    if (en.UIContralType == "0" || en.UIContralType == "1" || en.UIContralType == "2"
+                        || en.UIContralType == "3") {
+
                         var html = "";
                         html += "<tr >";
                         html += "<td class=Idx>" + idx + "</td>";
@@ -71,18 +78,14 @@
                         //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                         html += "</tr>";
                         idx++;
+                        $("#Table1 tr:last").after(html);
                     }
-                    else {
-                        continue;
-                    }
-                    $("#Table1 tr:last").after(html);
                 }
             }
 
             //获得FF集合，个性化的设置信息都在这个表里面与Sys_MapAttr无关系.
             var ffs = new Entities("BP.WF.Template.FrmFields");
             ffs.Retrieve("FK_MapData", frmID, "FK_Node", nodeID);
-
 
             //给相关的字段赋值.
             for (var i = 0; i < ffs.length; i++) {
@@ -93,7 +96,7 @@
                 $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
 
                 SetCheckBox(ff, "UIVisible", ff.UIVisible, '可见');
-                SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
+                SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可编辑');
                 SetCheckBox(ff, "IsSigan", ff.IsSigan, '签名');
                 SetCheckBox(ff, "IsNotNull", ff.IsNotNull, '必填');
                 SetCheckBox(ff, "IsWriteToFlowTable", ff.IsWriteToFlowTable, '写入NDxxRpt');
@@ -111,14 +114,15 @@
             else
                 isCheckedReal = 0;
 
-            if (val != isCheckedReal) {
-                if (val == 1)
-                    $("#" + ff.KeyOfEn + "_" + key).attr("checked", true);
-                else
-                    $("#" + ff.KeyOfEn + "_" + key).attr("checked", false);
+            if (val == isCheckedReal)
+                return;
 
-                $("#lab_" + ff.KeyOfEn + "_" + key).html("<font color=green><b>" + label + "</b></font>");
-            }
+            if (val == 1)
+                $("#" + ff.KeyOfEn + "_" + key).attr("checked", true);
+            else
+                $("#" + ff.KeyOfEn + "_" + key).attr("checked", false);
+
+            $("#lab_" + ff.KeyOfEn + "_" + key).html("<font color=green><b>" + label + "</b></font>");
         }
 
         var FieldsAttrs = new Object();
@@ -136,8 +140,8 @@
             mapAttrs.Retrieve("FK_MapData", frmID);
 
             //删除以前的设置..
-            var ff = new Entity("BP.WF.Template.FrmField");
-            ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
+          //  var ff = new Entity("BP.WF.Template.FrmField");
+            //ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
@@ -214,7 +218,7 @@
                 if (isNeedSave == false)
                     continue;
 
-                ff.Insert();
+                ff.Save();
             }
 
             window.location.href = window.location.href;

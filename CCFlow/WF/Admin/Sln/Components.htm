@@ -36,9 +36,12 @@
                 if (group.CtrlType == "Ath" || group.CtrlType == "Dtl")
                     continue;
 
+                if (group.CtrlType.length > 1)
+                    continue;
+
                 html = "";
                 html += "<tr>";
-                html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
+                html += "<td colspan=12 class=Sum><font color=green><b>" + group.Lab + "</b></font></td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
                 var idx = 1;
@@ -50,7 +53,7 @@
                         en.DefVal = "";
                     }
 
-                    if (en.UIContralType == "0"||en.UIContralType == "1" || en.UIContralType == "2" || en.UIContralType == "3")
+                    if (en.UIContralType == "0" || en.UIContralType == "1" || en.UIContralType == "2" || en.UIContralType == "3")
                         continue;
                     var html = "";
                     html += "<tr >";
@@ -134,8 +137,8 @@
             mapAttrs.Retrieve("FK_MapData", frmID);
 
             //删除以前的设置..
-            var ff = new Entity("BP.WF.Template.FrmField");
-            ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
+            //var ff = new Entity("BP.WF.Template.FrmField");
+            //ff.Delete("FK_MapData", frmID, "FK_Node", nodeID);
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
@@ -165,54 +168,20 @@
                     ff.UIIsEnable = 1;
                 else
                     ff.UIIsEnable = 0;
-
-                if ($('#' + ff.KeyOfEn + "_IsSigan").is(':checked'))
-                    ff.IsSigan = 1;
-                else
-                    ff.IsSigan = 0;
-
-                if ($('#' + ff.KeyOfEn + "_IsNotNull").is(':checked'))
-                    ff.IsNotNull = 1;
-                else
-                    ff.IsNotNull = 0;
-
-                if ($('#' + ff.KeyOfEn + "_IsWriteToFlowTable").is(':checked'))
-                    ff.IsWriteToFlowTable = 1;
-                else
-                    ff.IsWriteToFlowTable = 0;
-
-                //if ($('#' + ff.KeyOfEn + "_IsWriteToGenerWorkFlow").is(':checked'))
-                //    ff.IsWriteToGenerWorkFlow = 1;
-                //else
-                //    ff.IsWriteToGenerWorkFlow = 0;
+                 
 
                 //判断变化的是否需要保存.
                 var isNeedSave = false;
-                //if (ff.IsWriteToGenerWorkFlow == 1)
-                //    isNeedSave = true;
-
-                if (ff.IsWriteToFlowTable == 1)
-                    isNeedSave = true;
-
                 if (en.UIVisible != ff.UIVisible)
                     isNeedSave = true;
 
                 if (en.UIIsEnable != ff.UIIsEnable)
                     isNeedSave = true;
 
-                if (en.DefVal != ff.DefVal)
-                    isNeedSave = true;
-
-                if (en.UIIsInput != ff.IsNotNull)
-                    isNeedSave = true;
-
-                if (ff.RegularExp != "")
-                    isNeedSave = true;
-
                 if (isNeedSave == false)
                     continue;
 
-                ff.Insert();
+                ff.Save();
             }
 
             window.location.href = window.location.href;
@@ -267,9 +236,7 @@
 </head>
 <body>
     <table id="Table1" style="width: 100%; padding: 2px;">
-        <caption>
-            节点-表单-字段权限
-        </caption>
+        <caption>组件权限</caption>
         <tr>
             <th>
                 序

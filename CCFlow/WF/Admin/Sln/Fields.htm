@@ -136,7 +136,7 @@
 
         //保存字段方案
         function Save() {
-
+            
             $("#Btn_Save").val("正在保存请稍候...");
 
             var frmID = GetQueryString("FK_MapData");
@@ -146,11 +146,12 @@
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
-
+            
             //查询所有的的元素.
-            var ffs = new Entites("BP.WF.Template.FrmFields");
+            
+            var ffs = new Entities("BP.WF.Template.FrmFields");
             ffs.Retrieve("FK_MapData", frmID, "FK_Node", nodeID);
-
+            
             var ff = new Entity("BP.WF.Template.FrmField");
 
             for (var i = 0; i < mapAttrs.length; i++) {
@@ -163,15 +164,17 @@
 
                 var mypk = frmID + '_' + nodeID + '_' + en.KeyOfEn;
                 ff.MyPK = mypk;
-                ff.SetPKVal(mypk);
+                
                 for (var myidx = 0; myidx < ffs.length; myidx++) {
                     var myff = ffs[myidx];
                     if (myff.MyPK == ff.MyPK) {
-                        myff.Delete();
+                        delff = new Entity("BP.WF.Template.FrmField", myff.MyPK);
+                        alert(delff.Name);
+                        alert(delff.Delete());
                         break;
                     }
                 }
-
+                
                 ff.FK_Flow = flowNo;
                 ff.FK_Node = nodeID;
                 ff.FK_MapData = frmID;
@@ -237,7 +240,7 @@
                 if (isNeedSave == false)
                     continue;
 
-                ff.Insert();
+                alert(ff.Insert()+"插入");
             }
 
             window.location.href = window.location.href;
@@ -350,7 +353,7 @@
         </tr>
     </table>
     <center>
-        <button onclick='Save();' type='button' id="Btn_Save">
+        <button onclick='Save();' type='button' id="Btn_Save" value="保存">
             &nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;
         </button>
     </center>

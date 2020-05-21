@@ -89,7 +89,7 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-        <table id="Table1" name="Table1" style="width: 99%;">
+        <table id="Table1" name="Table1" style="width: 99%; padding:10px; margin:5px;">
             <caption>方向条件优先级</caption>
             <tr>
                 <th>序</th>
@@ -100,18 +100,17 @@
             </tr>
         </table>
 
-        <div id="Msg" ></div>
-
-
+        <div id="Msg"></div>
+        <br />
+        <br />
         <fieldset>
-            <legend id="help">什么是方向条件的优先级？</legend>
+            <legend> 什么是方向条件的优先级? </legend>
             <ul>
                 <li>在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
                 <li>例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>
                 <li>只有一个方向条件的小于等于1就不能设置。</li>
             </ul>
         </fieldset>
-
     </form>
 </body>
 </html>

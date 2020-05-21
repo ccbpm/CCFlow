@@ -233,6 +233,7 @@ function OpenBranchesAndLeafStations() {
     });
 }
 
+
 /*
  * 获取节点绑定的岗位
  */
@@ -244,6 +245,25 @@ function getStas() {
     });
     return ens;
 }
+
+
+//绑定部门 ************************************************
+function BindDeptTree() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var rootNo = 0;
+    var webUser = new WebUser();
+    if (webUser.CCBPMRunModel != 0)
+        rootNo = webUser.OrgNo;
+
+    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+
+    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
+        //Baseinfo.depts = getDepts();
+    });
+}
+
+
 
 
 //绑定用户组: for admin. ***********************************************************

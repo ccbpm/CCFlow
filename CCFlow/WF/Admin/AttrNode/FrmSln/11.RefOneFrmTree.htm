@@ -127,9 +127,17 @@
             if (confirm('您确定要设置吗？') == false)
                 return;
 
-
             var nodeID = GetQueryString("FK_Node");
             var currNode = new Entity("BP.WF.Node", nodeID);
+
+            if (node.NodeFrmID == "")
+            {
+                alert('错误：您需要为该节点设置表单.');
+                return;
+            }
+
+                    $("#msg").html("正在执行请稍候...");
+
 
             var flowNo = currNode.FK_Flow;
             var nds = new Entities("BP.WF.Nodes");
@@ -224,8 +232,9 @@
         <ul>
             <li>为该表单的元素设置权限 - <div id="Div_RefOneFrmTree">   </div> </li>
             <li><a href="javascript:BatchEdit()">批量设置</a> </li>
-
         </ul>
+
+        <div id="msg"></div>
 
     </fieldset>
 

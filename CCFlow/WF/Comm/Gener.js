@@ -2156,7 +2156,7 @@ var HttpHandler = (function () {
     var parameters = new FormData();
 
     var formData;
-    var params="&";
+    var params = "&";
 
     function HttpHandler(handlerName) {
         this.handlerName = handlerName;
@@ -2242,14 +2242,14 @@ var HttpHandler = (function () {
                 //parameters["file"] = fileObj;
                 parameters.append("file", fileObj)
             }
-           
+
         },
         AddPara: function (key, value) {
-            if (params.indexOf("&" + key + "=")==-1) {
+            if (params.indexOf("&" + key + "=") == -1) {
                 parameters.append(key, value);
-                params +=  key + "=" + value+"&";
+                params += key + "=" + value + "&";
             }
-                
+
         },
 
         AddJson: function (json) {
@@ -2265,32 +2265,32 @@ var HttpHandler = (function () {
         },
 
         getParams: function () {
-        //    var params = [];
-        //   /* $.each(parameters, function (key, value) {
+            //    var params = [];
+            //   /* $.each(parameters, function (key, value) {
 
-        //        if (value.indexOf('<script') != -1)
-        //            value = '';
+            //        if (value.indexOf('<script') != -1)
+            //            value = '';
 
-        //        params.push(key + "=" + value);
+            //        params.push(key + "=" + value);
 
-        //    });
-        //*/
+            //    });
+            //*/
 
-        //    for (let [name, value] of formData) {
-        //        alert(`${name} = ${value}`); // key1=value1，然后是 key2=value2
-        //        if (value.indexOf('<script') != -1)
-        //            value = '';
-        //        params.push(name + "=" + value);
-        //    }
+            //    for (let [name, value] of formData) {
+            //        alert(`${name} = ${value}`); // key1=value1，然后是 key2=value2
+            //        if (value.indexOf('<script') != -1)
+            //            value = '';
+            //        params.push(name + "=" + value);
+            //    }
 
-        //    //for (var key of parameters.keys()) {
-        //    //    var val = formData.get(key);
-        //    //    if (val.indexOf('<script') != -1)
-        //    //        val = '';
-        //    //    params.push(key + "=" + val);
-                
-        //    //}
-           
+            //    //for (var key of parameters.keys()) {
+            //    //    var val = formData.get(key);
+            //    //    if (val.indexOf('<script') != -1)
+            //    //        val = '';
+            //    //    params.push(key + "=" + val);
+
+            //    //}
+
 
             return params;
         },
@@ -2764,7 +2764,7 @@ $(function () {
         && url.indexOf('registeradminer.htm') == -1
         && url.indexOf('registerorg.htm') == -1
         && url.indexOf('reqpassword.htm') == -1
-        && url.indexOf('reguser.htm') == -1       
+        && url.indexOf('reguser.htm') == -1
         && url.indexOf('port.htm') == -1) {
 
         if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {

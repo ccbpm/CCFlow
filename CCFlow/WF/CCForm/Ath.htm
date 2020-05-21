@@ -542,7 +542,7 @@
                     }
                     html += "</tr>";
                 }
-                  athSortNum.push({ "Sort": mysort, "Num": sortNum });
+                athSortNum.push({ "Sort": mysort, "Num": sortNum });
             }
             if ((i == 0 && (athDesc.Sort == null || athDesc.Sort.indexOf(",") == -1)) || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
@@ -576,7 +576,9 @@
 
             $("#ShowTable").html(html);
 
-
+            //隐藏他，如果不能上传.
+            if (athDesc.IsUpload == 0)
+                $("#fileUploadContent").hide();
         }
 
 

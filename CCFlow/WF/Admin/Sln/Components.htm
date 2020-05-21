@@ -21,6 +21,9 @@
         var fk_Node;
         $(function () {
 
+            alert("取消了，请使用字段权限，控制.");
+            return;
+
             var frmID = GetQueryString("FK_MapData");
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");

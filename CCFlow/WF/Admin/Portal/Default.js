@@ -613,7 +613,7 @@ function deleteFlowSort() {
     if (currSort == null || currSort.attributes.ISPARENT == undefined)
         return;
 
-    if (window.confirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？") == false)
+    if (window.confirm("你确定要删除“" + currSort.text + "”的流程类别吗？") == false)
         return;
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
     handler.AddPara("FK_FlowSort", currSort.id);

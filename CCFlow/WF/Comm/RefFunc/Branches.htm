@@ -165,7 +165,6 @@
         function loadTree(rootNo, global) {
 
             //var json = DBAccess.RunDBSrc(treeUrl); // 执行url返回json.
-
             var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
             ens.RetrieveAll();
             var jsonTree = createJsonToTree(ens, rootNo);

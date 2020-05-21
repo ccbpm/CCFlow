@@ -61,7 +61,7 @@ function InitBar(optionKey) {
 
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算</option>";
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
-        
+
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
 
         if (webUser.CCBPMRunModel == 1) {
@@ -263,6 +263,22 @@ function BindDeptTree() {
     });
 }
 
+function BindDeptTreeGroup() {
+
+    var nodeID = GetQueryString("FK_Node");
+    var rootNo = "14819";
+
+    //var webUser = new WebUser();
+    //if (webUser.CCBPMRunModel != 0)
+    //    rootNo = webUser.OrgNo;
+
+    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+
+    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
+        //Baseinfo.depts = getDepts();
+    });
+}
+
 
 
 
@@ -366,7 +382,7 @@ function getTeamEmps() {
     alert(GetQueryString("FK_Node"));
     var en = new Entity("BP.WF.Template.NodeTeam", GetQueryString("FK_Node"));
     var ens = new Entities("BP.Port.TeamEmps");
-    
+
     ens.Retrieve("FK_Team", en.FK_Team);
     ens = $.grep(ens, function (obj, i) {
         return obj.FK_Node != undefined

@@ -2414,20 +2414,4 @@ function GetSysEnums(enumKey) {
     return ses;
 }
 
-//预览
-function PreviewForm() {
-    debugger
-    if (leipiEditor.queryCommandState('source'))
-        leipiEditor.execCommand('source');//切换到编辑模式才提交，否则有bug
-
-    if (leipiEditor.hasContents()) {
-        leipiEditor.sync();       //同步内容
-        document.saveform.target = "mywin";
-        window.open('', 'mywin', "menubar=0,toolbar=0,status=0,resizable=1,left=0,top=0,scrollbars=1,width=" + (screen.availWidth - 10) + ",height=" + (screen.availHeight - 50) + "\"");
-        SaveForm();
-    } else {
-        alert('表单内容不能为空！');
-        return false;
-    }
-}
 

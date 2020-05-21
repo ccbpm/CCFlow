@@ -863,8 +863,16 @@ namespace BP.WF.HttpHandler
                 int i = 0;
                 if (oneVsM.Count > 0)
                 {
+                    
                     foreach (AttrOfOneVSM vsM in oneVsM)
                     {
+                        string rootNo = vsM.RootNo;
+                        if (rootNo!=null && rootNo.Contains("@") == true)
+                        {
+                            rootNo = rootNo.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                            rootNo = rootNo.Replace("@WebUser.OrgNo", WebUser.OrgNo);
+                        }
+
                         //判断该dot2dot是否显示？
                         Entity enMM = vsM.EnsOfMM.GetNewEntity;
                         enMM.SetValByKey(vsM.AttrOfOneInMM, this.PKVal);
@@ -879,42 +887,33 @@ namespace BP.WF.HttpHandler
                             string url = "";
                             if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
                             {
-                                //url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                //  url = "Branches.htm?EnName=" + en.ToString() + "&AttrKey=" + vsM.EnsOfMM.ToString();
-
                                 url = "Branches.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
-                                // url += "&PKVal=" + en.PKVal;
                                 url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
                                 url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
                                 url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
                                 url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
                                 url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  
+                                url += "&RootNo=" + rootNo;
 
                             }
                             else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
                             {
-                                //   url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
                                 url = "BranchesAndLeaf.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
-                                //   url += "&PKVal=" + en.PKVal;
                                 url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
                                 url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
                                 url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
                                 url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
                                 url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
-                                //url += "&RootNo=" + vsM.RootNo; //默认的B实体分组依据.  比如:FK_Station.
+                                url += "&RootNo=" + rootNo;
                             }
                             else
                             {
-                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
                                 url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString(); //比如:BP.WF.Template.NodeStations
                                 url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
                                 url += "&AttrOfMInMM=" + vsM.AttrOfMInMM;  //dot2dot存储表那个与实体表.  比如:FK_Station.
                                 url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体.   //比如:BP.Port.Stations
                                 url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
 
-                                //+"&RefAttrEnsName=" + vsM.EnsOfM.ToString();
-                                //url += "&RefAttrKey=" + vsM.AttrOfOneInMM + "&RefAttrEnsName=" + vsM.EnsOfM.ToString();
                             }
 
                             dr["Url"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;

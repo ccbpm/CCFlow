@@ -640,7 +640,6 @@ namespace BP.WF.HttpHandler
             {
                 return true;
             }
-
             return false;
         }
         #endregion

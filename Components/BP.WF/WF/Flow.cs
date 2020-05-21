@@ -2265,8 +2265,6 @@ namespace BP.WF
 
             this.DoExpFlowXmlTemplete(path);
 
-            // name = path + name + "." + this.Ver.Replace(":", "_") + ".xml";
-
             name = path + name + ".xml";
             return name;
         }
@@ -5266,7 +5264,13 @@ namespace BP.WF
                                 }
                                 dir.SetValByKey(dc.ColumnName, val);
                             }
-                            dir.Insert();
+                            try
+                            {
+                                dir.Insert();
+                            }
+                            catch (Exception ex)
+                            {
+                            }
                         }
                         break;
                     case "WF_Node": //导入节点信息.

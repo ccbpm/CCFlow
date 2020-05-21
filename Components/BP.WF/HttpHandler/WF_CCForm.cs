@@ -50,8 +50,8 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 如果图片显示.
 
-                #region 执行装载模版.
-                if (dbs.Count == 0 && athDesc.IsWoEnableTemplete == true)
+                #region 执行装载模版. athDesc.IsWoEnableTemplete == true
+                if (dbs.Count == 0 && 1==2)
                 {
                     /*如果数量为0,就检查一下是否有模版如果有就加载模版文件.*/
                     string templetePath = BP.Sys.SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();

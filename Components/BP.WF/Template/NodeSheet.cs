@@ -107,14 +107,13 @@ namespace BP.WF.Template
                 //节点绑定部门. 节点绑定部门.
                 string defDeptVal = "@WebUser.FK_Dept";
                 if (SystemConfig.CCBPMRunModel != 0)
-                {
                     defDeptVal = "@WebUser.OrgNo";
-                }
 
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(),
   BP.WF.Template.NodeDeptAttr.FK_Node,
   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches",
   EmpAttr.Name, EmpAttr.No, defDeptVal);
+
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(),
@@ -123,7 +122,6 @@ namespace BP.WF.Template
                    BP.WF.Template.NodeEmpAttr.FK_Emp,
                    "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
                    EmpAttr.No, defDeptVal);
-
 
 
 

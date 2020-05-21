@@ -109,7 +109,7 @@ namespace BP.WF.Port.Admin2
                 rm.Warning = "如果当前部门已经是独立组织，系统就会提示错误。";
                 rm.ClassMethodName = this.ToString() + ".DoCloneOrg";
                 rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("coneOrgNo", null, "被克隆的组织编号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("coneOrgNo", null, "被克隆的组织编号(14903)", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -179,6 +179,8 @@ namespace BP.WF.Port.Admin2
             fsRoot.Insert();
 
 
+            string info = "";
+
             //执行 clone...
 
             //查询出来被克隆的流程树.
@@ -197,17 +199,24 @@ namespace BP.WF.Port.Admin2
                 fs.OrgNo = this.No;
                 fs.Insert();
 
-
                 //查询出来模版，开始执行clone.
                 Flows fls = new Flows();
                 fls.Retrieve(FlowAttr.FK_FlowSort, sort.No);
                 foreach (Flow fl in fls)
                 {
-                    string fileName = fl.GenerFlowXmlTemplete();
-                    var flow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                    try
+                    {
+                        string fileName = BP.Sys.SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
+                        DataSet ds = fl.GetFlow(fileName);
+                        ds.WriteXml(fileName);
+                        var flow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                    }
+                    catch (Exception ex)
+                    {
+                        info += "err@" + ex.Message;
+                    }
                 }
             }
-
 
             //初始化frmTree的根节点.
             SysFormTree frmRoot = new SysFormTree();
@@ -233,25 +242,26 @@ namespace BP.WF.Port.Admin2
                 fs.OrgNo = this.No;
                 fs.Insert();
 
-
                 //查询出来模版，开始执行clone.
-                MapDataExts fls = new MapDataExts();
-                fls.Retrieve(BP.Sys.MapDataAttr.FK_FrmSort, sort.No);
-                foreach (Flow fl in fls)
+                BP.Sys.MapDatas mds = new BP.Sys.MapDatas();
+                mds.Retrieve(BP.Sys.MapDataAttr.FK_FrmSort, sort.No);
+                foreach (BP.Sys.MapData frm in mds)
                 {
-                    string fileName = fl.GenerFlowXmlTemplete();
-                    var flow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                    try
+                    {
+                        DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(frm.No, frm.Name);
+
+                        BP.WF.HttpHandler.WF_Admin_Template en = new HttpHandler.WF_Admin_Template();
+                        en.ImpFrm("2", frm.No, frm, myds, sort.No);
+                    }
+                    catch (Exception ex)
+                    {
+                        info += "err@" + ex.Message;
+                    }
                 }
             }
-
-
-
-
-            return "设置成功.";
-
+            return  info;
         }
-
-
         /// <summary>
         /// 设置组织
         /// </summary>
@@ -259,7 +269,7 @@ namespace BP.WF.Port.Admin2
         /// <returns></returns>
         public string SetOrg(string adminer)
         {
-            
+
             if (WebUser.No.Equals("admin") == false)
                 return "err@非admin管理员，您无法执行该操作.";
 

@@ -920,7 +920,6 @@ namespace BP.WF.Template
                 //rm.Visable = false;
                 map.AddRefMethod(rm);
 
-
                 if (Glo.CCBPMRunModel != CCBPMRunModel.SAAS)
                 {
                     rm = new RefMethod();

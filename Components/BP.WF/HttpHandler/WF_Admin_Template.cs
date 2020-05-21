@@ -35,57 +35,54 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ImpFrmLocal_Done()
         {
-            
-                ///表单类型.
-                string frmSort = this.GetRequestVal("FrmSort");
 
-                //创建临时文件.
-                string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
-                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
-  
-                //获得数据类型.
-                DataSet ds = new DataSet();
-                ds.ReadXml(temp);
+            ///表单类型.
+            string frmSort = this.GetRequestVal("FrmSort");
 
-                MapData md = new MapData();
+            //创建临时文件.
+            string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
 
-                //获得frmID.
-                string frmID = null;
+            //获得数据类型.
+            DataSet ds = new DataSet();
+            ds.ReadXml(temp);
 
-                #region 检查模版是否正确.
-                //检查模版是否正确.
-                string errMsg = "";
-                if (ds.Tables.Contains("WF_Flow") == true)
-                    return "err@此模板文件为流程模板。";
+            MapData md = new MapData();
 
-                if (ds.Tables.Contains("Sys_MapAttr") == false)
-                    return "err@缺少表:Sys_MapAttr";
+            //获得frmID.
+            string frmID = null;
 
-                if (ds.Tables.Contains("Sys_MapData") == false)
-                    return "err@缺少表:Sys_MapData";
+            #region 检查模版是否正确.
+            //检查模版是否正确.
+            string errMsg = "";
+            if (ds.Tables.Contains("WF_Flow") == true)
+                return "err@此模板文件为流程模板。";
+
+            if (ds.Tables.Contains("Sys_MapAttr") == false)
+                return "err@缺少表:Sys_MapAttr";
+
+            if (ds.Tables.Contains("Sys_MapData") == false)
+                return "err@缺少表:Sys_MapData";
 
 
-                frmID = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
+            frmID = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
             #endregion 检查模版是否正确.
-                string impType = this.GetRequestVal("RB_ImpType");
 
-                //执行导入.
-                return ImpFrm(impType, frmID, md, ds, frmSort);
-            
+            string impType = this.GetRequestVal("RB_ImpType");
+
+            //执行导入.
+            return ImpFrm(impType, frmID, md, ds, frmSort);
         }
 
         public string ImpFrm(string impType, string frmID, MapData md, DataSet ds, string frmSort)
         {
-            
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就提示错误
-            if (impType=="0")
+            if (impType == "0")
             {
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     return "err@该表单ID【" + frmID + "】已经存在数据库中,您不能导入.";
-
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);
-                
             }
 
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就直接覆盖.
@@ -95,7 +92,6 @@ namespace BP.WF.HttpHandler
                 if (md.RetrieveFromDBSources() == 1)
                     md.Delete(); //直接删除.
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);  // MapData.ImpMapData(ds);
-
             }
 
             //导入模式:按照模版的表单编号导入,如果该编号已经存在就增加@WebUser.OrgNo(组织编号)导入.
@@ -133,7 +129,6 @@ namespace BP.WF.HttpHandler
             }
 
             return "执行成功.";
-
         }
 
         #region  界面 .
@@ -389,8 +384,8 @@ namespace BP.WF.HttpHandler
                 string fileName = def[0]; //文件名
                 string model = def[1]; //模式. 3=按照指定的表单ID进行导入.
                 string frmID = def[2]; //指定表单的ID.
-                
-                if (model=="3" && DataType.IsNullOrEmpty(frmID) == true)
+
+                if (model == "3" && DataType.IsNullOrEmpty(frmID) == true)
                 {
                     dtInfo = this.ImpAddInfo(dtInfo, fileName, "您需要指定表单ID", "导入失败");
                     continue;
@@ -417,7 +412,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                
+
                 try
                 {
                     if (model == "3")

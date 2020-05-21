@@ -44,11 +44,10 @@
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
             //跟节点编号.
-            rootNo = "0";
-            if (rootNo == "@WebUser.FK_Dept") {
-                var webUser = new WebUser();
-                rootNo = webUser.FK_Dept;
-            }
+
+            var webUser = new WebUser();
+            if(webUser.IsAdmin && webUser!="admin")
+                rootNo = webUser.OrgNo;
 
             if (rootNo == "")
                 rootNo = "0";

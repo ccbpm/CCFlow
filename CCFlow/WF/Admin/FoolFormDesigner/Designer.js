@@ -139,7 +139,7 @@ $(function () {
                     //初始化页面的值
                     var nowKey = ddl.val();
 
-
+                    debugger
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }
@@ -147,6 +147,10 @@ $(function () {
                     /*启用了显示与隐藏.*/
                     var rb = $("#RB_" + mapAttr.KeyOfEn);
                     var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
+                    if (nowKey == undefined) {
+                        continue;
+                    }
+                    debugger
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }

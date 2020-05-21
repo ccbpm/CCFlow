@@ -25,7 +25,72 @@ namespace BP.WF.HttpHandler
         {
 
         }
+        /// <summary>
+        /// 设置该流程的所有节点都是用该方案。
+        /// </summary>
+        /// <returns></returns>
+        public void RefOneFrmTree_SetAllNodeFrmUseThisSln()
+        {
+            string nodeID = GetRequestVal("FK_Node");
+            Node currNode = new Node(nodeID);
+            string flowNo = currNode.FK_Flow;
+            Nodes nds = new Nodes();
+            nds.Retrieve("FK_Flow", flowNo);
 
+            for (var i = 0; i < nds.Count; i++)
+            {
+
+                Node jsNode = nds[i] as Node;
+                if (jsNode.NodeID == currNode.NodeID)
+                    continue;
+
+                //修改表单属性
+                jsNode.FormType = currNode.FormType;
+               
+                jsNode.NodeFrmID = currNode.NodeFrmID;
+                jsNode.Update();
+
+                //节点表单属性
+                //先删除掉已有的，避免换绑时出现垃圾数据.
+                FrmNodes ens = new FrmNodes();
+                ens.Retrieve("FK_Node", jsNode.NodeID);
+
+                //是不是该frmNode已经存在？
+                var isHave = false;
+                for (var idx = 0; idx < ens.Count; idx++)
+                {
+                    FrmNode en = ens[idx] as FrmNode;
+                    if (en.FK_Frm != currNode.NodeFrmID)
+                    {
+                        FrmNode Frm = new FrmNode(en.MyPK);
+                        Frm.Delete();
+                        continue;
+                    }
+                    isHave = true;
+                }
+                if (isHave == true)
+                    continue; //已经存在就不处理.
+
+                FrmNode frmNode = new FrmNode();
+                frmNode.MyPK = jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FK_Flow;
+                frmNode.FK_Node = jsNode.NodeID;
+                frmNode.FK_Flow = jsNode.FK_Flow;
+                frmNode.FK_Frm = jsNode.NodeFrmID;
+
+                //判断是否为开始节点
+                string nodeID1 = jsNode.NodeID.ToString();
+                if (nodeID1.Substring(nodeID1.Length - 2) == "01")
+                {
+                    frmNode.FrmSln = FrmSln.Default; //默认方案
+                }
+                else
+                {
+                    frmNode.FrmSln = FrmSln.Readonly; //只读方案
+                }
+
+                frmNode.Insert();
+            }
+        }
         /// <summary>
         /// 获得下拉框的值.
         /// </summary>

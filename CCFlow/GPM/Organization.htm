@@ -367,6 +367,10 @@
         //转换ztree需要的数据格式
         var treeJson = [];
         function createJsonToTree(jsonArray) {
+            var fk_dept = webUser.FK_Dept;
+            if (webUser.CCBPMRunModel!=0) {
+                fk_dept = webUser.OrgNo;
+            }
             if (webUser.No == "admin") {
 
                 for (var i = 0; i < jsonArray.length; i++) {
@@ -382,9 +386,10 @@
                     });
                 }
             } else {
+                
                 //添加本部门的一条数据
                 $.each(jsonArray, function (i, o) {
-                    if (o.No == webUser.FK_Dept) {
+                    if (o.No == fk_dept) {
                         treeJson.push({
                             "id": o.No,
                             "pid": o.ParentNo,
@@ -396,7 +401,7 @@
                     }
                 });
                 //循环加入本部门的所有下级部门
-                findChildren(jsonArray, webUser.FK_Dept);
+                findChildren(jsonArray, fk_dept);
             }
             return treeJson;
         }

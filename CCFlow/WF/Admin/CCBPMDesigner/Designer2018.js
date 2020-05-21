@@ -714,11 +714,11 @@ function SaveNodeName(activeId) {
 }
 
 //修改并更新节点表单名称
-function saveAndUpdateNodeName(activeId) {
+function SaveAndUpdateNodeName(activeId) {
 
     var text = document.getElementById("TB_" + activeId).value; //新修改的值.
-    $("#span_" + activeId).text(text);
-    return;
+    //$("#span_" + activeId).text(text);
+    //return;
 
     //alert(text);
 

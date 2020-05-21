@@ -318,7 +318,9 @@
             outline: none;
         }
 
-        .NewChild {
+        #state li {
+            list-style: none;
+            margin-top:3px;
         }
     </style>
     <script type="text/javascript">
@@ -802,6 +804,7 @@
             });
         }
         function AddF() {
+
             //var url = 'Do.htm?DoType=AddF&MyPK=' + mypk;
             var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + pageData.fk_mapdata;
 
@@ -811,6 +814,7 @@
             var t = (screen.height - h) / 2;
             var s = 'width=' + w + ', height=' + h + ', top=' + t + ', left=' + l;
             s += ', toolbar=no, scrollbars=no, menubar=no, location=no, resizable=no';
+
             OpenEasyUiDialog(url, "eudlgframe", '增加字段', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
@@ -1546,6 +1550,19 @@
             }
         }
 
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+
+            var ctrl = document.getElementById(ctrlID);
+
+            ctrl.style.display = 'block';
+
+            document.onclick = function () {
+
+                ctrl.style.display = "none";
+            }
+        }
+
         $(function () {
 
         });
@@ -1568,36 +1585,49 @@
                 <a href="javascript:ExpImp();" class="easyui-linkbutton btn-light-blue">
                     导入/导出
                 </a>
+                <input type="button" value="新建合集" id="Btn_Save" onmouseover="ShowHidden('state')" />
+                <div id="state" style="margin-left:133px; width:150px;height:auto; position:fixed; z-index:10;display: none; color: Gray">
+                    <ul>
+                        <li>
+                            <a href="javascript:AddF();" class="easyui-linkbutton btn-light-yellow">
+                                新建字段
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:AddComponent();" class="easyui-linkbutton btn-light-yellow">
+                                新建组件
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton btn-light-red">
+                                新建审核分组
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-blue">
+                                新建从表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
+                                新建附件
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
+                                新建框架
+                            </a>
+                        </li>
 
-                <a href="javascript:AddF();" class=" easyui-linkbutton btn-light-yellow">
-                    新建字段
-                </a>
-                <a href="javascript:AddComponent();" class=" easyui-linkbutton btn-light-yellow">
-                    新建组件
-                </a>
-
-                <a href="javascript:GroupFieldNew();" class=" easyui-linkbutton btn-light-green">
-                    新建字段分组
-                </a>
-                <a href="javascript:GroupFieldFWCNew();" class=" easyui-linkbutton btn-light-red">
-                    新建审核分组
-                </a>
-                <a href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-blue">
-                    新建从表
-                </a> <a href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
-                    新建附件
-                </a><a href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
-                    新建框架
-                </a>
-
-
+                    </ul>
+                </div>
                 <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
                     批量修改字段
                 </a>
                 <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent">节点表单组件</a>
-                <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
+                <!--<a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
                     手机表单
-                </a>
+                </a>-->
 
             </div>
         </div>

@@ -59,6 +59,7 @@
         var deptNo = "";
         global.selectedNodes = [];
         global.selectedRows = [];
+        var rootNo = "0";
 
         var saveType = GetQueryString("SaveType");
         if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
@@ -70,13 +71,10 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-            var enName = GetQueryString("EnName"); // 主表实体. A实体.
-            var dot2DotEnsName = GetQueryString("Dot2DotEnsName"); //存储实体.
-            var EnsOfMM = GetQueryString("EnsOfMM"); //B实体.
-            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
-            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应B实体外键.
-            var defaultGroupAttrKey = GetQueryString("DefaultGroupAttrKey");
-
+            rootNo = GetQueryString("RootNo");
+            if (rootNo == null || rootNo == undefined || rootNo == "")
+                rootNo = "0";
+     
             //获得数据.
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
@@ -85,7 +83,6 @@
             var dbTrees = data["DBTrees"]; //左边的树.
             selectedRows = data["DBMMs"]; //选择的数据.
 
-            var webUser = new WebUser();
             // AtPara
             var title = "请选择"; // mapExt.GetPara("Title");
             $("#title").text(title); //设置标题.
@@ -311,7 +308,7 @@
         }
 
         var nodeId = "";
-        var rootNo = "0";
+       
         function loadTree(dbTrees, rootNo, global) {
             var jsonTree = createJsonToTree(dbTrees, rootNo);
             $('#tree').treeview({

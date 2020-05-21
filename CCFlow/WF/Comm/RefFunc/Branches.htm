@@ -44,12 +44,8 @@
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
             //跟节点编号.
-
-            var webUser = new WebUser();
-            if(webUser.IsAdmin && webUser!="admin")
-                rootNo = webUser.OrgNo;
-
-            if (rootNo == "")
+            rootNo = GetQueryString("RootNo");
+            if (rootNo == null || rootNo == undefined || rootNo == "")
                 rootNo = "0";
 
             //多对多实体.

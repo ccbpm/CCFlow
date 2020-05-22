@@ -1866,7 +1866,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
 }
 
 //弹出附件
-function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
+function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData,frmType) {
     var H = document.body.clientHeight - 240;
 
     OpenBootStrapModal(url, "eudlgframe", title, flowData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
@@ -1894,7 +1894,7 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
         }
         data = JSON.parse(data);
         var dbs = data["DBAths"];
-        if (dbs.length == 0) {
+        if (dbs.length == 0 && frmType!=8) {
             $("#athModel_" + keyOfEn).html("<label>请点击[" + title + "]执行上传</label>");
             return;
         }
@@ -1909,7 +1909,10 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData) {
             var db = dbs[i];
             eleHtml += "<label><a style='font-weight:normal;font-size:12px'   href=\"javascript:Down2018('" + athMyPK + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "')\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
         }
-        $("#athModel_" + keyOfEn).html(eleHtml);
+        if (frmType == 8)
+            $("#athModel_" + keyOfEn).find("div").html(eleHtml);
+        else
+            $("#athModel_" + keyOfEn).html(eleHtml);
 
     }, null, "black", true);
 
@@ -2019,7 +2022,7 @@ function GetLab(flowData, attr) {
         if (ath[0].AthRunModel == 2) {
             src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         }
-        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\")' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
+        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\",0)' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
         return lab;
     }
 

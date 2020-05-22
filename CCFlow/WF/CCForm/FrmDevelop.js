@@ -812,21 +812,21 @@ function GetFieldAth(mapAttr) {
     var athDesc = data["AthDesc"][0];
     var eleHtml = "";
     if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0)
-        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\")'></i>]执行上传</label></div>";
-    if (dbs.length == 0) {
+        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'></i>]执行上传</label>";
+    if (dbs.length == 0 && pageData.IsReadonly == 0) {
         return eleHtml +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
     
     if (athShowModel == "" || athShowModel == 0)
         return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
 
-    eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
+    eleHtml += "<div style='text-align:left;padding-left:10px;display:inline'  data-type='1'>";
     for (var i = 0; i < dbs.length; i++) {
         var db = dbs[i];
         eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
     }
     eleHtml += "</div>";
-
+    eleHtml += "</div>";
     return eleHtml;
 }
 

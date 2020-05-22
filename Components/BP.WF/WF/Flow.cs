@@ -2122,7 +2122,7 @@ namespace BP.WF
                 msg += "@流程报表检查完成...";
 
                 // 检查流程， 处理计算字段.
-                Node.CheckFlow(nds,this.No);
+                Node.CheckFlow(nds, this.No);
 
 
                 //创建track.
@@ -4328,7 +4328,10 @@ namespace BP.WF
                     return this._enMap;
 
                 Map map = new Map("WF_Flow", "流程");
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+
+                //@sly 取消了缓存.
+                map.Java_SetDepositaryOfEntity(Depositary.None);
+                //map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("3");
 
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 5, 3);
@@ -5243,7 +5246,7 @@ namespace BP.WF
                     case "WF_NodeDept": //FAppSets.xml。
                         foreach (DataRow dr in dt.Rows)
                         {
-                            NodeDept dir = new NodeDept();
+                            NodeDept dp = new NodeDept();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -5262,11 +5265,18 @@ namespace BP.WF
                                     default:
                                         break;
                                 }
-                                dir.SetValByKey(dc.ColumnName, val);
+                                dp.SetValByKey(dc.ColumnName, val);
                             }
                             try
                             {
-                                dir.Insert();
+                                //如果部门不属于本组织的，就要删除.  @sly 
+                                if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                                {
+                                    BP.WF.Port.Admin2.Dept dept = new Port.Admin2.Dept(dp.FK_Dept);
+                                    if (dept.OrgNo.Equals(WebUser.OrgNo) == false)
+                                        continue;
+                                }
+                                dp.Insert();
                             }
                             catch (Exception ex)
                             {
@@ -6068,191 +6078,7 @@ namespace BP.WF
                 pm.Insert();
             }
         }
-        /// <summary>
-        /// 执行新建
-        /// </summary>
-        /// <param name="flowSort">类别</param>
-        /// <param name="flowName">流程名称</param>
-        /// <param name="model">数据存储模式</param>
-        /// <param name="pTable">数据存储物理表</param>
-        /// <param name="FlowMark">流程标记</param>
-        public string DoNewFlow(string flowSort, string flowName,
-            DataStoreModel model, string pTable, string FlowMark)
-        {
-            try
-            {
-                //检查参数的完整性.
-                if (DataType.IsNullOrEmpty(pTable) == false && pTable.Length >= 1)
-                {
-                    string c = pTable.Substring(0, 1);
-                    if (DataType.IsNumStr(c) == true)
-                        throw new Exception("@非法的流程数据表(" + pTable + "),它会导致ccflow不能创建该表.");
-                }
-
-                this.Name = flowName;
-                if (string.IsNullOrWhiteSpace(this.Name))
-                    this.Name = "新建流程" + this.No; //新建流程.
-
-                this.No = this.GenerNewNoByKey(FlowAttr.No);
-                this.HisDataStoreModel = model;
-                this.PTable = pTable;
-                this.FK_FlowSort = flowSort;
-                this.FlowMark = FlowMark;
-
-                if (DataType.IsNullOrEmpty(FlowMark) == false)
-                {
-                    if (this.IsExit(FlowAttr.FlowMark, FlowMark))
-                        throw new Exception("@该流程标示:" + FlowMark + "已经存在于系统中.");
-                }
-
-                /*给初始值*/
-                //this.Paras = "@StartNodeX=10@StartNodeY=15@EndNodeX=40@EndNodeY=10";
-                this.Paras = "@StartNodeX=200@StartNodeY=50@EndNodeX=200@EndNodeY=350";
-
-                this.Save();
-
-                #region 删除有可能存在的历史数据.
-                Flow fl = new Flow(this.No);
-                fl.DoDelData();
-                fl.DoDelete();
-
-                //sly
-                if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                    fl.OrgNo = WebUser.OrgNo; //隶属组织 
-                this.Save();
-                #endregion 删除有可能存在的历史数据.
-
-                Node nd = new Node();
-                nd.NodeID = int.Parse(this.No + "01");
-                nd.Name = "Start Node";//  "开始节点"; 
-                nd.Step = 1;
-                nd.FK_Flow = this.No;
-                nd.FlowName = this.Name;
-                nd.HisNodePosType = NodePosType.Start;
-                nd.HisNodeWorkType = NodeWorkType.StartWork;
-                nd.X = 200;
-                nd.Y = 150;
-                nd.NodePosType = NodePosType.Start;
-                nd.ICON = "前台";
-
-                //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-                nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
-                nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
-                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
-
-                //如果是集团模式.   
-                if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                {
-                    if (DataType.IsNullOrEmpty(WebUser.OrgNo) == true)
-                        throw new Exception("err@登录信息丢失了组织信息,请重新登录.");
-
-                    nd.HisDeliveryWay = DeliveryWay.BySelectedOrgs;
-
-                    //把本组织加入进去.
-                    FlowOrg fo = new FlowOrg();
-                    fo.Delete(FlowOrgAttr.FlowNo, nd.FK_Flow);
-                    fo.FlowNo = nd.FK_Flow;
-                    fo.OrgNo = WebUser.OrgNo;
-                    fo.Insert();
-                }
-
-                nd.Insert();
-                nd.CreateMap();
-
-                //为开始节点增加一个删除按钮. @李国文.
-                string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
-                BP.DA.DBAccess.RunSQL(sql);
-
-                //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
-                CreatePushMsg(nd);
-
-                //通用的人员选择器.
-                BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
-                select.SelectorModel = SelectorModel.GenerUserSelecter;
-                select.Update();
-
-                nd = new Node();
-
-
-                //为创建节点设置默认值 
-                string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
-                if (System.IO.File.Exists(fileNewNode) == true)
-                {
-                    DataSet myds = new DataSet();
-                    myds.ReadXml(fileNewNode);
-                    DataTable dt = myds.Tables[0];
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
-                    }
-                }
-                else
-                {
-                    nd.HisNodePosType = NodePosType.Mid;
-                    nd.HisNodeWorkType = NodeWorkType.Work;
-                    nd.X = 200;
-                    nd.Y = 250;
-                    nd.ICON = "审核";
-                    nd.NodePosType = NodePosType.End;
-
-                    //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-                    nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
-                    nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
-                    nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
-                }
-
-                nd.NodeID = int.Parse(this.No + "02");
-                nd.Name = "Node 2"; // "结束节点";
-                nd.Step = 2;
-                nd.FK_Flow = this.No;
-                nd.FlowName = this.Name;
-
-                nd.X = 200;
-                nd.Y = 250;
-
-                nd.Insert();
-                nd.CreateMap();
-                //nd.HisWork.CheckPhysicsTable(); //去掉，检查的时候会执行.
-
-
-                CreatePushMsg(nd);
-
-                //通用的人员选择器.
-                select = new Template.Selector(nd.NodeID);
-                select.SelectorModel = SelectorModel.GenerUserSelecter;
-                select.Update();
-
-                BP.Sys.MapData md = new BP.Sys.MapData();
-                md.No = "ND" + int.Parse(this.No) + "Rpt";
-                md.Name = this.Name;
-                md.Save();
-
-                // 装载模版.
-                string file = BP.Sys.SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
-                if (System.IO.File.Exists(file) == false)
-                    throw new Exception("@开始节点表单模版丢失" + file);
-
-                /*如果存在开始节点表单模版*/
-                DataSet ds = new DataSet();
-                ds.ReadXml(file);
-
-                string nodeID = "ND" + int.Parse(this.No + "01");
-                BP.Sys.MapData.ImpMapData(nodeID, ds);
-
-                //创建track.
-                Track.CreateOrRepairTrackTable(this.No);
-
-
-                return this.No;
-            }
-            catch (Exception ex)
-            {
-                ///删除垃圾数据.
-                this.DoDelete();
-                //提示错误.
-                throw new Exception("创建流程错误:" + ex.Message);
-            }
-        }
+        
         /// <summary>
         /// 检查报表
         /// </summary>
@@ -6284,8 +6110,19 @@ namespace BP.WF
             string sql = "UPDATE WF_Flow SET Ver='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
             DBAccess.RunSQL(sql);
         }
+        /// <summary>
+        /// 删除功能.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeDelete()
+        {
+            throw new Exception("err@请反馈给我们，非法的删除操作。 ");
+            return base.beforeDelete();
+        }
         public string DoDelete()
         {
+            throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
+
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)
             {
@@ -6294,16 +6131,11 @@ namespace BP.WF
                 if (dt.Rows.Count >= 1)
                     return "err@删除流程出错，该流程下有[" + dt.Rows.Count + "]个子版本您不能删除。";
             }
-
-            //删除流程数据.
-            this.DoDelData();
-
             string sql = "";
             //sql = " DELETE FROM WF_chofflow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_Cond WHERE FK_Flow='" + this.No + "'";
-
 
             //删除消息配置.
             sql += "@ DELETE FROM WF_PushMsg WHERE FK_Flow='" + this.No + "'";
@@ -6385,6 +6217,9 @@ namespace BP.WF
 
             //清空WF_Emp中的StartFlow 
             DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+
+            //删除数据的接口.
+            DoDelData();
 
             this.Delete(); //删除需要移除缓存.
 

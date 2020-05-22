@@ -8247,7 +8247,7 @@ namespace BP.WF
         /// 执行读取
         /// </summary>
         /// <param name="mypk">主键</param>
-        public static void Node_CC_SetRead(string mypk)
+        public static void Node_CC_SetRead(string mypk,string bbsSetInfo=null)
         {
             if (DataType.IsNullOrEmpty(mypk))
                 return;
@@ -8279,7 +8279,7 @@ namespace BP.WF
         /// <param name="nodeID">节点ID</param>
         /// <param name="workid">工作ID</param>
         /// <param name="empNo">读取人员编号</param>
-        public static void Node_CC_SetRead(int nodeID, Int64 workid, string empNo)
+        public static void Node_CC_SetRead(int nodeID, Int64 workid, string empNo, string bbsCheckInfo = null)
         {
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,ReadDT=" + SystemConfig.AppCenterDBVarStr + "ReadDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo";
@@ -8295,6 +8295,9 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.FK_Node, nodeID);
             ps.Add(GenerWorkerListAttr.FK_Emp, empNo);
             DBAccess.RunSQL(ps);
+
+            //   if (bbsCheckInfo!=null)
+            //     BP.WF.Dev2Interface.Track_WriteBBS()
         }
         /// <summary>
         /// 执行抄送

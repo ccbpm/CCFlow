@@ -7158,6 +7158,11 @@ namespace BP.WF
                 //做了不可能性的判断.
                 if (this.HisGenerWorkFlow.FK_Node != this.HisNode.NodeID)
                 {
+                    /*
+                    // 2020-05-21 在计算中心出现一次错误. 节点, 当前的节点，与FK_Flow不再一个流程里面。
+                    //没有找到原因.  
+                    */
+
                     string[] para = new string[5];
                     para[0] = this.WorkID.ToString();
                     para[1] = this.HisGenerWorkFlow.FK_Node.ToString();

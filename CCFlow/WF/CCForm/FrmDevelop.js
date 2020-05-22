@@ -174,7 +174,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 $("#TB_" + mapAttr.KeyOfEn).hide();
                 $("#TB_" + mapAttr.KeyOfEn).after(_html);
                
-                return eleHtml;
+                continue;
             }
             if (mapAttr.UIContralType == 101)//评分
             {
@@ -814,7 +814,7 @@ function GetFieldAth(mapAttr) {
     if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0)
         eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\")'></i>]执行上传</label></div>";
     if (dbs.length == 0) {
-            return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
+        return eleHtml +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
     
     if (athShowModel == "" || athShowModel == 0)

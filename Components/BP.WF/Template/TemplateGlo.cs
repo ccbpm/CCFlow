@@ -208,10 +208,23 @@ namespace BP.WF.Template
             drToNode.ToNode = int.Parse(int.Parse(flow.No) + "02");
             drToNode.Insert();
 
-            // @liuqiang  增加方向.
+            //增加方向.
             Node mynd = new Node(drToNode.Node);
             mynd.HisToNDs = drToNode.ToNode.ToString();
             mynd.Update();
+
+
+            //设置流程的默认值.
+            foreach (string key in SystemConfig.AppSettings.AllKeys)
+            {
+                if (key.Contains("NewFlowDefVal") == false)
+                    continue;
+
+                string val = SystemConfig.AppSettings[key];
+
+                //设置值.
+                flow.SetValByKey(key.Replace("NewFlowDefVal_",""), val);
+            }
 
 
             //执行一次流程检查, 为了节省效率，把检查去掉了.

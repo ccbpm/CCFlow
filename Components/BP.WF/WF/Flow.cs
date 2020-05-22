@@ -4286,6 +4286,7 @@ namespace BP.WF
         /// </summary>
         public Flow()
         {
+            this.No = "";
         }
         /// <summary>
         /// 流程
@@ -6116,12 +6117,15 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            throw new Exception("err@请反馈给我们，非法的删除操作。 ");
+           // throw new Exception("err@请反馈给我们，非法的删除操作。 ");
             return base.beforeDelete();
         }
         public string DoDelete()
         {
-            throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                throw new Exception("err@流程没有初始化，删除错误.");
+
+          //  throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)

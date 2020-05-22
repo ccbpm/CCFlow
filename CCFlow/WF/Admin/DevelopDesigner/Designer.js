@@ -1935,7 +1935,7 @@ function ExtDocWord() {
 
     var mypk = pageParam.fk_mapdata + "_DocWord";
     var mapAttr = new Entity("BP.Sys.MapAttr");
-    mapAttr.UIContralType = 17; //公文字号.
+    mapAttr.UIContralType = 17; //发文字号.
     mapAttr.MyPK = mypk;
     mapAttr.FK_MapData = pageParam.fk_mapdata;
     mapAttr.KeyOfEn = "DocWord";

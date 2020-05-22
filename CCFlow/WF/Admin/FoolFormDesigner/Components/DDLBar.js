@@ -284,16 +284,17 @@ function ExtMap() {
 
 //公文发文字号
 function ExtDocWord() {
+
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(fk_mapData + "_DocWord");
     if (en.RetrieveFromDBSources() == 1) {
-        alert("该表单DocWord字段已经存在，公文字号默认的字段DocWord,请确认该字段是否为公文字段");
+        alert("该表单 DocWord 字段已经存在，发文字号默认的字段 DocWord ,请确认该字段是否为公文字段");
         return "";
     }
 
     var mypk = fk_mapData + "_DocWord";
     var mapAttr = new Entity("BP.Sys.MapAttr");
-    mapAttr.UIContralType = 170; //发文字号.
+    mapAttr.UIContralType = 17; //发文字号.
     mapAttr.MyPK = mypk;
     mapAttr.FK_MapData = fk_mapData;
     mapAttr.KeyOfEn = "DocWord";
@@ -309,14 +310,13 @@ function ExtDocWord() {
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
     }
-
 }
 
 function DocWordReceive() {
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(fk_mapData + "_DocWordReceive");
     if (en.RetrieveFromDBSources() == 1) {
-        alert("该表单DocWord字段已经存在，公文字号默认的字段DocWord,请确认该字段是否为公文字段");
+        alert("该表单DocWord字段已经存在，收文字号默认的字段DocWord,请确认该字段是否为公文字段");
         return "";
     }
 
@@ -336,7 +336,7 @@ function DocWordReceive() {
     if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWordReceive&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 170)
     }
 
 }

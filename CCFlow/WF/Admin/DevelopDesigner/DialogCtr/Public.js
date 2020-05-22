@@ -214,8 +214,13 @@ function GetDataType(mapAttr) {
             return "FlowBBS";
         if (mapAttr.UIContralType == 16)//评论组件
             return "Fixed";
-        if (mapAttr.UIContralType == 17)//公文字号
+
+        if (mapAttr.UIContralType == 17) //发文字号
             return "DocWord";
+
+        if (mapAttr.UIContralType == 170) //收文字号
+            return "DocWordReceive";
+
         if (mapAttr.UIContralType == 18)//按钮
             return "Btn";
     }

@@ -157,29 +157,39 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 var _Html = "<div>" + GetWorkCheck_Node(checkData, mapAttr.KeyOfEn, checkField) + "</div>";
                 $("#TB_" + mapAttr.KeyOfEn).after(_Html);
             }
-           
             continue;
         }
 
-        if (mapAttr.UIContralType == 15) {//评论组件
+        if (mapAttr.UIContralType == 15) { //评论组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
             
             $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
-            
             continue;
         }
-        if (mapAttr.UIContralType == 17) { //公文字号
+
+        if (mapAttr.UIContralType == 17) { //发文字号
             if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
                 $("#TB_DocWord").attr("readonly","readonly");
                 $("#TB_DocWord").on("dblclick", function () {
-                    window.OpenBootStrapModal(url, "DocWordIFrame", "公文字号", 600, 200, "icon-edit", false);
+                    window.OpenBootStrapModal(url, "DocWordIFrame", "发文字号", 600, 200, "icon-edit", false);
                 })
             }
+            continue;
         }
-        
 
+        if (mapAttr.UIContralType == 170) { //收文字号
+            if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
+                var localHref = GetLocalWFPreHref();
+                var url = localHref + "/WF/CCForm/Components/DocWordReceive.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
+                $("#TB_DocWord").attr("readonly", "readonly");
+                $("#TB_DocWord").on("dblclick", function () {
+                    window.OpenBootStrapModal(url, "DocWordReceiveIFrame", "收文字号", 600, 200, "icon-edit", false);
+                })
+            }
+            continue;
+        }
     }
 
     //增加审核组件附件上传的功能

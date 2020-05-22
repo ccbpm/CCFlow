@@ -138,7 +138,11 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='评论组件'/>";
 
     if (dataType == "DocWord")
-        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='发文字号'/>";
+
+    if (dataType == "DocWordReceive")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='收文字号'/>";
+
     if (dataType == "Btn")
         _Html = "<input type='button'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='Btn' value='" + name + "'   leipiplugins='component' class='Btn'/>";
 

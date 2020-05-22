@@ -812,9 +812,9 @@ function GetFieldAth(mapAttr) {
     var athDesc = data["AthDesc"][0];
     var eleHtml = "";
     if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0)
-        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'></i>]执行上传</label>";
+        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'></i>]</label>";
     if (dbs.length == 0 && pageData.IsReadonly == 1) {
-        return eleHtml +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
+        return eleHtml; // +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
     
     if (athShowModel == "" || athShowModel == 0)

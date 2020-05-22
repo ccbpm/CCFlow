@@ -320,7 +320,7 @@
 
         #state li {
             list-style: none;
-            margin-top:3px;
+            margin-top: 3px;
         }
     </style>
     <script type="text/javascript">
@@ -1034,15 +1034,19 @@
                 }
 
                 if (uiContralType == 17) {
-                    title = '公文字号属性';
+                    title = '发文字号属性';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 170) {
+                    title = '收文字号属性';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWordReceive&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 18) {
                     title = '按钮属性';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + mypk + '&s=' + Math.random();
                 }
-
 
                 if (uiContralType == 8) {
                     title = '书写签字版';

@@ -1,16 +1,16 @@
 ﻿var localHref = GetLocalWFPreHref();
 var frmType = GetQueryString("FrmType");
-var fk_mapData = GetQueryString("FK_MapData"); 
+var fk_mapData = GetQueryString("FK_MapData");
 var groupID = 1;
 
 $(function () {
-  
+
     jQuery.getScript(localHref + "/WF/Admin/Admin.js")
         .done(function () {
-          
+
         })
         .fail(function () {
-          
+
         });
     if (frmType == 8) {
         jQuery.getScript(localHref + "/WF/Admin/DevelopDesigner/js/ueditor/dialogs/internal.js")
@@ -20,12 +20,12 @@ $(function () {
             .done(function () { })
             .fail(function () { });
     }
-        
+
 });
 
 var optionKey = 0;
 function InitBar(optionKey) {
-    
+
     var html = "<div style='padding:5px' >表单组件: ";
     html += "<select id='changBar' onchange='changeOption()' >";
 
@@ -48,7 +48,8 @@ function InitBar(optionKey) {
     html += "<option value=null  disabled='disabled'>+流程组件</option>";
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
     html += "<option value=" + FrmComponents.FlowBBS + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
-    html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;公文字号</option>";
+    html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;发文字号</option>";
+    html += "<option value=" + FrmComponents.DocWordReceive + ">&nbsp;&nbsp;&nbsp;&nbsp;收文字号</option>";
     html += "<option value=" + FrmComponents.JobSchedule + ">&nbsp;&nbsp;&nbsp;&nbsp;流程进度图</option>";
 
     html += "<option value=null  disabled='disabled'>+移动端控件</option>";
@@ -126,6 +127,9 @@ function changeOption() {
         case FrmComponents.DocWord:
             roleName = "17.DocWord.htm";
             break;
+        case FrmComponents.DocWordReceive:
+            roleName = "170.DocWordReceive.htm";
+            break;
         case FrmComponents.Btn:
             roleName = "18.Btn.htm";
             break;
@@ -151,11 +155,12 @@ function changeOption() {
             roleName = "4.Map.htm";
             break;
     }
-    window.location.href = localHref +"/WF/Admin/FoolFormDesigner/Components/"+roleName+"?FK_MapData="+GetQueryString("FK_MapData")+"&FrmType="+frmType;
+
+    window.location.href = localHref + "/WF/Admin/FoolFormDesigner/Components/" + roleName + "?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmType=" + frmType;
 }
 
 
- function Save() {
+function Save() {
     //保存控件
     var frmComponent = $("#changBar").val();
     switch (parseInt(frmComponent)) {
@@ -186,8 +191,10 @@ function changeOption() {
             return ExtFlowBBS();
         case 16://系统定位
             return MapAttrFixed();
-        case 17:// 公文字号
+        case 17:// 发文字号
             return ExtDocWord();
+        case 170:// 收文字号
+            return DocWordReceive();
         case 18://按钮
             return ExtBtn();
             break;
@@ -209,8 +216,8 @@ function changeOption() {
         default:
             break;
 
-     }
-     return "";
+    }
+    return "";
 }
 
 //地图
@@ -268,14 +275,14 @@ function ExtMap() {
     mapAttr1.Insert(); //插入字段
 
     mapAttr.Retrieve();
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=' + mapAttr.MyPK;
     if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(mapAttr,4)
-    } 
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 4)
+    }
 }
 
-//公文字号
+//公文发文字号
 function ExtDocWord() {
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(fk_mapData + "_DocWord");
@@ -284,14 +291,13 @@ function ExtDocWord() {
         return "";
     }
 
-
     var mypk = fk_mapData + "_DocWord";
     var mapAttr = new Entity("BP.Sys.MapAttr");
-    mapAttr.UIContralType = 17; //公文字号.
+    mapAttr.UIContralType = 170; //发文字号.
     mapAttr.MyPK = mypk;
     mapAttr.FK_MapData = fk_mapData;
     mapAttr.KeyOfEn = "DocWord";
-    mapAttr.Name = "公文字号";
+    mapAttr.Name = "发文字号";
     mapAttr.MyDataType = 1;
     mapAttr.LGType = 0;
     mapAttr.ColSpan = 1; //
@@ -303,7 +309,36 @@ function ExtDocWord() {
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
     }
-   
+
+}
+
+function DocWordReceive() {
+    var en = new Entity("BP.Sys.MapAttr");
+    en.SetPKVal(fk_mapData + "_DocWordReceive");
+    if (en.RetrieveFromDBSources() == 1) {
+        alert("该表单DocWord字段已经存在，公文字号默认的字段DocWord,请确认该字段是否为公文字段");
+        return "";
+    }
+
+    var mypk = fk_mapData + "_DocWordReceive";
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 170; //收文字号.
+    mapAttr.MyPK = mypk;
+    mapAttr.FK_MapData = fk_mapData;
+    mapAttr.KeyOfEn = "DocWordReceive";
+    mapAttr.Name = "收文字号";
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 1; //
+    mapAttr.UIWidth = 150;
+    mapAttr.UIHeight = 23;
+    mapAttr.Insert(); //插入字段.
+    if (frmType != 8)
+        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWordReceive&MyPK=" + mapAttr.MyPK;
+    if (frmType == 8) {
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
+    }
+
 }
 
 //签批组件
@@ -349,7 +384,7 @@ function ExtWorkCheck() {
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 14)
     }
-    
+
 }
 //评论组件
 function ExtFlowBBS() {
@@ -464,7 +499,7 @@ function ExtAth() {
         ExtAth();
         return "";
     }
-     
+
 
     var mapAttrs = new Entities("BP.Sys.MapAttrs");
     mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
@@ -481,8 +516,8 @@ function ExtAth() {
         ExtAth();
         return "";
     }
-       
-    
+
+
     var mypk = frmID + "_" + id;
     var mapAttr = new Entity("BP.Sys.MapAttr");
     mapAttr.MyPK = mypk;
@@ -518,7 +553,7 @@ function ExtAth() {
     en.CtrlWay = 4; // 按流程WorkID计算
     en.SetPara("IsShowMobile", 1);
     en.Insert(); //插入到数据库.
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 6)
@@ -575,10 +610,10 @@ function ExtLink() {
     mapAttr.Tag2 = link; // 超链接地址.
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(mapAttr,9)
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 9)
     }
 }
 
@@ -595,7 +630,7 @@ function ExtScore() {
     if (mapAttrs.length >= 1) {
         alert('名称：[' + name + "]已经存在.");
         ExtScore();
-        return "" ;
+        return "";
     }
 
     //获得ID.
@@ -629,7 +664,7 @@ function ExtScore() {
     mapAttr.Tag2 = score; // 总分
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 101)
@@ -685,7 +720,7 @@ function ExtHandWriting() {
     mapAttr.UIHeight = 170;
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 8)
@@ -722,7 +757,7 @@ function ExtBtn() {
     mapAttr.KeyOfEn = id;
     mapAttr.Name = name;
     mapAttr.GroupID = groupID;
-    mapAttr.UIContralType =18; //按钮
+    mapAttr.UIContralType = 18; //按钮
     mapAttr.MyDataType = 1;
     mapAttr.LGType = 0;
     mapAttr.ColSpan = 0; //
@@ -777,7 +812,7 @@ function ExtJobSchedule() {
     mapAttr.Idx = 0;
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-    if(frmType !=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 50)
@@ -834,10 +869,10 @@ function ExtImg() {
     en.GroupID = mapAttr.GroupID; //设置分组列.
     en.Name = name;
     en.Insert(); //插入到数据库.
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
     if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(en,11)
+        return GetHtmlByMapAttrAndFrmComponent(en, 11)
     }
 }
 
@@ -889,7 +924,7 @@ function ExtImgAth() {
     en.GroupID = mapAttr.GroupID; //设置分组列.
 
     en.Insert(); //插入到数据库.
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(en, 12);
@@ -898,7 +933,7 @@ function ExtImgAth() {
 
 function MultiAth() {
     var val = prompt('请输入附件ID:(要求是字母数字下划线，非中文等特殊字符.)', 'Ath1');
-    if (val == null ) {
+    if (val == null) {
         return "";
     }
 
@@ -922,7 +957,7 @@ function MultiAth() {
         alert(data);
         return "";
     }
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapData + '&MyPK=' + data;
     if (frmType == 8)
         return GetHtmlByMapAttrAndFrmComponent(data, 70);
@@ -958,7 +993,7 @@ function CreateDtl() {
         alert(data);
         return;
     }
-    if(frmType!=8)
+    if (frmType != 8)
         window.location.href = '../../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapData + '&No=' + data;
     if (frmType == 8)
         return GetHtmlByMapAttrAndFrmComponent(data, 80);
@@ -997,7 +1032,7 @@ function CreateFrame() {
     en.Y = 100;
     en.Insert();
     if (frmType != 8)
-    window.location.href = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + fk_mapData + '&MyPK=' + en.MyPK;
+        window.location.href = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + fk_mapData + '&MyPK=' + en.MyPK;
 
     if (frmType == 8)
         return GetHtmlByMapAttrAndFrmComponent(en, 90);

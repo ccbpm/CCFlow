@@ -1986,6 +1986,7 @@ namespace BP.WF.HttpHandler
                         mdtl.No = this.EnsName + "_" + this.FK_Node;
                         if (mdtl.RetrieveFromDBSources() == 0)
                         {
+                            mdtl.No = this.EnsName;
                             /*如果设置了自定义方案，但是没有定义，从表属性，就需要去默认值. */
                         }
                     }

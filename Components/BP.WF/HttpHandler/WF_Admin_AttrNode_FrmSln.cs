@@ -153,7 +153,7 @@ namespace BP.WF.HttpHandler
             //集团模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
-                sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
+                sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,";
                 sql += "A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
                 sql += "FROM ";
@@ -161,20 +161,17 @@ namespace BP.WF.HttpHandler
                 sql += "Sys_FormTree B ";
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "') t1 ";
+                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
 
                 sql += " UNION ";
 
-                sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
+                sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
                 sql += " FROM ";
                 sql += "Sys_MapData A, Sys_FormTree B, WF_FrmOrg C ";
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.No ";
-                sql += " AND B.OrgNo = C.OrgNo ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ) t2 ";
-                sql += "ORDER BY idx1,idx2";
-                
+                sql += " AND C.OrgNo = '" + WebUser.OrgNo + "'  ";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

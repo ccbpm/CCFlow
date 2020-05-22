@@ -94,6 +94,20 @@ namespace BP.WF.Data
         {
         }
         /// <summary>
+        /// 更新前做的事情
+        /// </summary>
+        /// <returns></returns>
+       
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (this.MyPK.Equals(""))
+            {
+                this.MyPK = DBAccess.GenerGUID();
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
+        /// <summary>
         /// 重写基类方法
         /// </summary>
         public override Map EnMap
@@ -111,7 +125,7 @@ namespace BP.WF.Data
                 map.AddTBString(FastInputAttr.ContrastKey, "CYY", "类型CYY", true, false, 0, 20, 20);
                 map.AddTBString(FastInputAttr.FK_Emp, null, "人员编号", true, false, 0, 100, 4);
                 map.AddTBString(FastInputAttr.Vals, null, "值", true, false, 0, 500, 500);
-                map.AddTBInt(FastInputAttr.Idx, 0, "Idx", true, false);
+                //map.AddTBInt(FastInputAttr.Idx, 0, "Idx", true, false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -167,7 +181,7 @@ namespace BP.WF.Data
         public override int RetrieveAll()
         {
             int val= this.Retrieve(FastInputAttr.ContrastKey, "CYY",
-                FastInputAttr.FK_Emp, BP.Web.WebUser.No, "Idx");
+                FastInputAttr.FK_Emp, BP.Web.WebUser.No);
 
             if (val==0)
             {
@@ -185,16 +199,28 @@ namespace BP.WF.Data
 
                 en = new FastInput();
                 en.MyPK = DBAccess.GenerGUID();
-                en.Vals = "不同意xxxx";
+                en.Vals = "同意，请领导批示";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.Vals = "同意办理";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.Vals = "情况属实报领导批准";
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
                 val = this.Retrieve(FastInputAttr.ContrastKey, "CYY",
-                FastInputAttr.FK_Emp, BP.Web.WebUser.No, "Idx");
+                FastInputAttr.FK_Emp, BP.Web.WebUser.No);
             }
             return val;
         }
-
+        
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

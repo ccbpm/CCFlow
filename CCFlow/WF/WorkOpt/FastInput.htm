@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>常用语维护 </title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            //   alert(html);
+            $("#msg").html('加载中....');
+
+            var ens = new Entities("BP.WF.Data.FastInputs");
+            ens.RetrieveAll();
+
+            var html = "";
+            html += "<table>";
+            html += "<tr>";
+            html += "<td>Idx</td>";
+            html += "<td>短语</td>";
+            html += "<td colspan=3> </td>";
+            html += "<tr>";
+
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td><input id='" + en.MyPK + "' value='" + en.Vals + "' /></td>";
+                html += "<td><a href=\"Delete('" + en.MyPK + "')\">删除</a></td>";
+                html += "<td><a href=\"Up('" + en.MyPK + "')\">上移</a></td>";
+                html += "<td><a href=\"Down('" + en.MyPK + "')\">下移</a></td>";
+                html += "<tr>";
+            }
+
+            for (var i = 0; i < 10; i++) {
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td><input id='TB" + i + "'  /></td>";
+                html += "<td></td>";
+                html += "<td></td>";
+                html += "<td></td>";
+                html += "<tr>";
+            }
+            html += "</table>";
+
+
+            $("#msg").html(html);
+        })
+
+        function Delete(pk) {
+        }
+    </script>
+
+</head>
+<body>
+    <div id="msg">
+    </div>
+
+    <button> 保存 </button>
+</body>
+</html>

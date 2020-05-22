@@ -254,6 +254,7 @@
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />

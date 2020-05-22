@@ -9,9 +9,9 @@ using System.Web;
 namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 公文字号组件
+    /// 收文字号
     /// </summary>
-    public class MapAttrDocWord : EntityMyPK
+    public class MapAttrDocWordReceive : EntityMyPK
     {
         #region 文本字段参数属性.
         /// <summary>
@@ -77,13 +77,13 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrDocWord()
+        public MapAttrDocWordReceive()
         {
         }
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrDocWord(string myPK)
+        public MapAttrDocWordReceive(string myPK)
         {
             this.MyPK = myPK;
             this.Retrieve();
@@ -153,7 +153,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             //设置公文字号.
-            this.UIContralType = UIContralType.DocWord;
+            this.UIContralType = UIContralType.DocWordReceive;
             return base.beforeUpdateInsertAction();
         }
 
@@ -190,15 +190,15 @@ namespace BP.Sys.FrmUI
         #endregion
     }
     /// <summary>
-    /// 公文字号组件s
+    /// 收文字号s
     /// </summary>
-    public class MapAttrDocWords : EntitiesMyPK
+    public class MapAttrDocWordReceives : EntitiesMyPK
     {
         #region 构造
         /// <summary>
-        /// 公文字号组件s
+        /// 收文字号s
         /// </summary>
-        public MapAttrDocWords()
+        public MapAttrDocWordReceives()
         {
         }
         /// <summary>
@@ -208,7 +208,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new MapAttrDocWord();
+                return new MapAttrDocWordReceive();
             }
         }
         #endregion
@@ -218,20 +218,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrDocWord> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrDocWordReceive> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrDocWord>)this;
+            return (System.Collections.Generic.IList<MapAttrDocWordReceive>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrDocWord> Tolist()
+        public System.Collections.Generic.List<MapAttrDocWordReceive> Tolist()
         {
-            System.Collections.Generic.List<MapAttrDocWord> list = new System.Collections.Generic.List<MapAttrDocWord>();
+            System.Collections.Generic.List<MapAttrDocWordReceive> list = new System.Collections.Generic.List<MapAttrDocWordReceive>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrDocWord)this[i]);
+                list.Add((MapAttrDocWordReceive)this[i]);
             }
             return list;
         }

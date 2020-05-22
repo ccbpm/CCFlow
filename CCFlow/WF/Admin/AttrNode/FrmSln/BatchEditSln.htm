@@ -166,6 +166,7 @@
                 var json = nodes[i];
                 //找到节点与表单的对应关系.
                 var frmNode = null;
+                var IsEnableFWC = 0;
                 for (var idx = 0; idx < frmNodes.length; idx++) {
                     var en = frmNodes[idx];
                     if (en.FK_Node != json.NodeID)
@@ -175,10 +176,14 @@
                     frmNode.IsEnableFWC = $("#DDL_FWCSta_" + json.NodeID).val();
                     frmNode.CheckField = $("#DDL_CheckField_" + json.NodeID).val();
                     frmNode.Update();
+
+                    if (IsEnableFWC == 0)
+                        IsEnableFWC = frmNode.IsEnableFWC;
+
                     break;
                 }
                 var nd = new Entity("BP.WF.Template.NodeWorkCheck", json.NodeID);
-                nd.FWCSta = frmNode.IsEnableFWC;
+                nd.FWCSta = IsEnableFWC;
                 nd.Update();
 
             }

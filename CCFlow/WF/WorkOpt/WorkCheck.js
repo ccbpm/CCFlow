@@ -153,44 +153,44 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";'>";
         _Html += msg;
         _Html += "</textarea>";
-
+        _Html += "<br>";
 
 
         //1.获取自定义常用短语
-        var en = new Entity("BP.Sys.GloVar");
-        en.SetPKVal("ND" + pageData.FK_Node + "_WorkCheck");
-        var DuanYu = "";
-        if (en.RetrieveFromDBSources() == 0) {
-            DuanYu = en.Val;
-        }
-        if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
+        //var en = new Entity("BP.Sys.GloVar");
+        //en.SetPKVal("ND" + pageData.FK_Node + "_WorkCheck");
+        //var DuanYu = "";
+        //if (en.RetrieveFromDBSources() == 0) {
+        //    DuanYu = en.Val;
+        //}
+        //if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
 
-            var NewDuanYu = DuanYu.split("@");
-        } else {
-            var NewDuanYu = "";
-        }
-        //2.加入常用短语.
-        _Html += "<br>";
-        _Html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
-        _Html += "<option value=''>常用短语</option>";
-        if (NewDuanYu.length > 0) {
-            for (var i = 0; i < NewDuanYu.length; i++) {
-                if (NewDuanYu[i] == "") {
-                    continue;
-                }
-                _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
-            }
-        } else {
+        //    var NewDuanYu = DuanYu.split("@");
+        //} else {
+        //    var NewDuanYu = "";
+        //}
+        ////2.加入常用短语.
+        //_Html += "<br>";
+        //_Html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
+        //_Html += "<option value=''>常用短语</option>";
+        //if (NewDuanYu.length > 0) {
+        //    for (var i = 0; i < NewDuanYu.length; i++) {
+        //        if (NewDuanYu[i] == "") {
+        //            continue;
+        //        }
+        //        _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
+        //    }
+        //} else {
 
-            _Html += "<option value='同意'>同意</option>";
-            _Html += "<option value='同意办理'>同意办理</option>";
-            _Html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-            _Html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-            _Html += "<option value='不同意'>不同意</option>";
-        }
-        _Html += "</select>";
+        //    _Html += "<option value='同意'>同意</option>";
+        //    _Html += "<option value='同意办理'>同意办理</option>";
+        //    _Html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+        //    _Html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+        //    _Html += "<option value='不同意'>不同意</option>";
+        //}
+        //_Html += "</select>";
         //_Html += "<input name='' type='button' value='编辑短语' onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'>";
-        _Html += "<a  onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"WorkCheck\");'> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
+        _Html += "<a  onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"WorkCheck\");'><span>常用短语</span> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
 
         _Html += "</div>";
         _Html += "</td>";
@@ -726,22 +726,22 @@ function AddDuanYu(nodeID, GroupKey) {
     var H = 400; // document.body.clientHeight-40;
     OpenBootStrapModal(url, "UsefulExpresIFrame", "常用短语", W, H, null, false, null, null, function () {
         //修改下来框常用短语
-        var en = new Entity("BP.Sys.GloVar", "ND" + nodeID + "_" + GroupKey);
-        var str = en.Val;
-        var duanYu;
-        if (str == null || str == undefined || DuanYu == "")
-            return;
-        var duanYu = str.split("@");
-        if (duanYu.length > 0) {
-            var _Html = "<option value=''>常用短语</option>";
-            for (var i = 0; i < duanYu.length; i++) {
-                if (duanYu[i] == "") {
-                    continue;
-                }
-                _Html += "<option value='" + duanYu[i] + "'>" + duanYu[i] + "</option>";
-            }
-            $("#DuanYu").html(_Html)
-        }
+        //var en = new Entity("BP.Sys.GloVar", "ND" + nodeID + "_" + GroupKey);
+        //var str = en.Val;
+        //var duanYu;
+        //if (str == null || str == undefined || DuanYu == "")
+        //    return;
+        //var duanYu = str.split("@");
+        //if (duanYu.length > 0) {
+        //    var _Html = "<option value=''>常用短语</option>";
+        //    for (var i = 0; i < duanYu.length; i++) {
+        //        if (duanYu[i] == "") {
+        //            continue;
+        //        }
+        //        _Html += "<option value='" + duanYu[i] + "'>" + duanYu[i] + "</option>";
+        //    }
+        //    $("#DuanYu").html(_Html)
+        //}
     });
 }
 

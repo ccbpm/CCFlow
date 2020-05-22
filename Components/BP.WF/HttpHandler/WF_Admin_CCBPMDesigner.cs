@@ -1550,7 +1550,7 @@ namespace BP.WF.HttpHandler
                 string FlowVersion = this.GetRequestVal("FlowVersion");
 
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
-                        Template.DataStoreModel.SpecTable, PTable, FlowMark, FlowVersion);
+                        Template.DataStoreModel.SpecTable, PTable, FlowMark);
 
                 Flow fl = new Flow(flowNo);
 

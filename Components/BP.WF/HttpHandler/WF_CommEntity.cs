@@ -1100,9 +1100,13 @@ namespace BP.WF.HttpHandler
 
             //组织数据.
             DataSet ds = new DataSet();
-            string rootNo = vsM.RootNo;
+            string rootNo = GetRequestVal("RootNo");
+            if (DataType.IsNullOrEmpty(rootNo) == true)
+                rootNo = vsM.RootNo;
             if (rootNo.Equals("@WebUser.FK_Dept") || rootNo.Equals("WebUser.FK_Dept"))
                 rootNo = WebUser.FK_Dept;
+            if (rootNo.Equals("@WebUser.OrgNo") || rootNo.Equals("WebUser.OrgNo"))
+                rootNo = WebUser.OrgNo;
 
             #region 生成树目录.
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
@@ -1118,12 +1122,24 @@ namespace BP.WF.HttpHandler
 
             Entities trees = attr.HisFKEns;
             //判断改类是否存在Idx
+
             Entity tree = trees.GetNewEntity;
             if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
                 && tree.EnMap.Attrs.Contains("Idx") == true)
-                trees.RetrieveAll("Idx");
+            {
+                if(rootNo.Equals("0"))
+                    trees.Retrieve("ParentNo", rootNo, "Idx");
+                else
+                    trees.Retrieve("No", rootNo, "Idx");
+            }
             else
-                trees.RetrieveAll();
+            {
+                if (rootNo.Equals("0"))
+                    trees.Retrieve("ParentNo", rootNo);
+                else
+                    trees.Retrieve("No", rootNo);
+            }
+               
 
             DataTable dt = trees.ToDataTableField("DBTrees");
             //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
@@ -1190,6 +1206,45 @@ namespace BP.WF.HttpHandler
             #endregion 生成选择的数据.
 
             return BP.Tools.Json.ToJson(ds);
+        }
+
+
+        public string BranchesAndLeaf_GetTreesByParentNo()
+        {
+            string rootNo = GetRequestVal("RootNo");
+            if (DataType.IsNullOrEmpty(rootNo))
+                rootNo = "0";
+
+            string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            Entity enMen = ensMen.GetNewEntity;
+
+            Attr attr = enMen.EnMap.GetAttrByKey(defaultGroupAttrKey);
+            if (attr == null)
+                return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不存在，请确认是否删除了该属性?";
+
+            if (attr.MyFieldType == FieldType.Normal)
+                return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
+
+            Entities trees = attr.HisFKEns;
+            //判断改类是否存在Idx
+            Entity tree = trees.GetNewEntity;
+            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+                && tree.EnMap.Attrs.Contains("Idx") == true)
+                trees.Retrieve("ParentNo",rootNo,"Idx");
+            else
+                trees.Retrieve("ParentNo", rootNo);
+
+            DataTable dt = trees.ToDataTableField("DBTrees");
+            //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
+            if (dt.Columns.Contains("ParentNo") == false)
+            {
+                dt.Columns.Add("ParentNo");
+                foreach (DataRow dr in dt.Rows)
+                    dr["ParentNo"] = rootNo;
+            }
+            return BP.Tools.Json.ToJson(dt); ;
         }
         #endregion 部门人员模式.
 

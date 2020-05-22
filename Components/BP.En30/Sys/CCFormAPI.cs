@@ -657,8 +657,8 @@ namespace BP.Sys
                 dtl.IsDelete = false;
                 dtl.Update();
 
-                sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
-                DBAccess.RunSQL(sql);
+                //sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
+                //DBAccess.RunSQL(sql);
             }
 
             FrmAttachments ens = new FrmAttachments(frmID);

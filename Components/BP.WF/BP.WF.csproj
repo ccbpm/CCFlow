@@ -309,6 +309,7 @@
     <Compile Include="Template\Frm.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data\FastInput.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
     <Compile Include="Template\FrmNodeJiJian.cs" />
     <Compile Include="Template\MapDataURL.cs" />

@@ -57,8 +57,11 @@
                 break;
             case 16://系统定位
                 break;
-            case 17:// 公文字号
-                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
+            case 17:// 发文字号
+                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='发文字号'/>";
+                break;
+            case 170:// 收文字号
+                _html = "<input type='text'  id='TB_DocWordReceive' name='TB_DocWordReceive' data-key='DocWordReceive' data-name='收文字号' data-type='DocWordReceive'   leipiplugins='component' style='width:98%' placeholder='收文字号'/>";
                 break;
             case 18:
                 _html = "<input type='button'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='Btn' value='" + mapData.Name +"'   leipiplugins='component' class='Btn'/>";
@@ -68,7 +71,7 @@
                 break;
             case 60://大文本
                 break;
-            case 70://独立附件
+            case 70: //
                 _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + mapData + "' />"
                 break;
             case 80://从表

@@ -136,7 +136,7 @@
             });
 
             // tree
-            loadTree(dbTrees, "0");
+            loadTree(dbTrees, rootNo);
 
             // grid1
             $('#selectGrid').bootstrapTable({
@@ -196,15 +196,7 @@
                 }]
             });
 
-            //		        // 初始化加载
-            //		        var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-            //		        frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
-            //		        $.each(frmEleDBs, function (i, o) {
-            //		            selectedRows.push({
-            //		                "No": o.Tag1,
-            //		                "Name": o.Tag2
-            //		            });
-            //		        });
+      
             loadViewGrid(selectedRows);
         });
 
@@ -255,9 +247,6 @@
             hander.AddPara("Key", key.replace(/'/g,''));
             var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
 
-            //document.title =  "key="+key+" json:" +json.length;
-            //alert( JSON.stringify( json));
-
             loadSelectGrid(json);
         }
 
@@ -287,10 +276,6 @@
             $('#selectGrid').bootstrapTable("showColumn", "Name");
 
 
-            //		        $.each(json[0], function (n, o) {
-            //		            $('#selectGrid').bootstrapTable("showColumn", n);
-            //		        });
-
 
             if ($.isArray(selectedRows)) {
                 $.each(json, function (i, o) {
@@ -310,12 +295,11 @@
         var nodeId = "";
        
         function loadTree(dbTrees, rootNo, global) {
-            var jsonTree = createJsonToTree(dbTrees, rootNo);
+            var jsonTree = findChildren(dbTrees, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
                 showCheckbox: false,   //是否显示复选框
                 highlightSelected: true,    //是否高亮选中
-                //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
                 nodeIcon: 'glyphicon',
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
@@ -337,65 +321,99 @@
                         tree.treeview('expandNode', data.nodeId);
                     }
 
+                },
+                onNodeExpanded: function (event, data) {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
+                    handler.AddPara("RootNo", data.id);
+                    handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
+                    handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
+                    var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
+                    var jsonTree = findChildren(json, data.id);
+                    $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+
+                    $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+
                 }
             });
         }
 
 
         //树形结构转换
-        var treeJson = [];
-        function createJsonToTree(jsonArray, parentNo) {
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (rootNo != "0") {
-                    if (data.No == parentNo) {
+        function findChildren(jsonArray, parentNo) {
+            var appendToTree = function (treeToAppend, child) {
+                $.each(treeToAppend, function (i, o) {
+                    if (o.id == child.ParentNo) {
                         var checked = false;
                         var selectedNodes = window.selectedNodes;
+
                         var sel = $.grep(selectedNodes, function (obj) {
-                            return data.No == obj.No;
+                            return child.No == obj.No;
                         });
                         if (sel.length > 0) {
                             checked = true;
                         }
-                        treeJson.push({
-                            "id": data.No,
-                            "text": data.Name,
-                            "nodes": creatTreeChildern(jsonArray, data.No),
-                            "state": { checked: checked, disabled: false }
+                        o.nodes.push({
+                            "id": child.No,
+                            "text": child.Name,
+                            "nodes": [],
+                            "state": { checked: checked, disabled: checked }
                         });
+                    } else {
+                        appendToTree(o.nodes, child);
                     }
-                } else {
-                    if (data.ParentNo == parentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
-                        var sel = $.grep(selectedNodes, function (obj) {
-                            return data.No == obj.No;
-                        });
-                        if (sel.length > 0) {
-                            checked = true;
+                });
+            };
+
+            var jsonTree = [];
+            if (jsonArray.length > 0 && typeof parentNo !== "undefined") {
+                //如果parentNo不为0，则增加parentNo的部门数据
+                if (parentNo != 0 && parentNo == rootNo) {
+                    $.each(jsonArray, function (i, item) {
+                        if (item.No == parentNo) {
+                            jsonTree.push({
+                                "id": parentNo,
+                                "text": item.Name,
+                                "nodes": []
+                            });
+                            return;
                         }
-                        treeJson.push({
-                            "id": data.No,
-                            "text": data.Name,
-                            "nodes": creatTreeChildern(jsonArray, data.No),
-                            "state": { checked: checked, disabled: false }
-                        });
-                    }
+                    });
                 }
+                $.each(jsonArray, function (i, o) {
+                    if (o.ParentNo == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return o.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
+                        jsonTree.push({
+                            "id": o.No,
+                            "text": o.Name,
+                            "nodes": [],
+                            "state": { checked: checked, disabled: checked }
+                        });
+                    } else {
+                        appendToTree(jsonTree, o);
+                    }
+                });
             }
+
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
                         if (o.nodes.length == 0) {
-                            o.nodes = undefined;
+                            //o.nodes = undefined;
                         } else {
                             _(o.nodes);
                         }
                     }
                 });
             }
-            _(treeJson);
-            return treeJson;
+            _(jsonTree);
+            return jsonTree;
         }
 
 

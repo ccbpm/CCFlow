@@ -303,8 +303,8 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
             src = "./CCForm/DtlCard.htm";
     }
         
-    src = src + "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
-
+    src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
+    src += "&WorkID=" + pageData.OID + "&FID=" + GetQueryString("FID") + "&PWorkID=" + GetQueryString("PWorkID") + "&FK_Node=" + GetQueryString("FK_Node");
     var W = element.width();
     var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='width:" + W + "px; height:auto;' ></div>");
 
@@ -811,8 +811,11 @@ function GetFieldAth(mapAttr) {
     var dbs = data["DBAths"];
     var athDesc = data["AthDesc"][0];
     var eleHtml = "";
-    if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0)
-        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'><label>[<i class='fa fa-upload' aria-hidden='true' onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'></i>]</label>";
+    if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0) {
+        var btnHtml = "<div style='float:left'><div  onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'><div><div style='height: 30px;line-height: 10px;width: 82px;background-color: white!important;color: black!important;border: 1px solid black!important;font-size: 14px!important;font-weight: normal;padding: 10px;font-size: 15px;border-radius: 2px;cursor: pointer;'>上传附件</div></div></div></div>";
+        eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'>" + btnHtml;
+
+    }
     if (dbs.length == 0 && pageData.IsReadonly == 1) {
         return eleHtml; // +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }

@@ -1903,7 +1903,7 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData,frmType) {
             eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + athMyPK + "','" + pageData.OID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + FK_MapData + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
         }
         if (frmType == 8)
-            $("#athModel_" + keyOfEn).find("div").html(eleHtml);
+            $("#athModel_" + keyOfEn).children().last().html(eleHtml);
         else
             $("#athModel_" + keyOfEn).html(eleHtml);
     }, null, "black", true);

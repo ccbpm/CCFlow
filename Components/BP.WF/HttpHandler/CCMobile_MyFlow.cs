@@ -328,7 +328,20 @@ namespace BP.WF.HttpHandler
         public string FrmGener_Save()
         {
             WF_CCForm ccfrm = new WF_CCForm();
-            return ccfrm.FrmGener_Save();
+            string str= ccfrm.FrmGener_Save();
+
+            // @sly  这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
+            string nodeIDStr = this.FK_Node.ToString();
+            if (nodeIDStr.EndsWith("01")==true)
+            {
+                Flow fl = new Flow(this.FK_Flow);
+                if (fl.DraftRole == DraftRole.SaveToDraftList)
+                    BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+
+                if (fl.DraftRole == DraftRole.SaveToTodolist)
+                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.FK_Flow, this.WorkID);
+            }
+            return str;
         }
 
         public string MyFlowGener_Delete()

@@ -163,7 +163,7 @@ namespace BP.WF.HttpHandler
                 sql += " A.FK_FormTree = B.NO ";
                 sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
 
-                sql += " UNION ";
+                sql += " UNION ALL ";
 
                 sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,A.OrgNo ,b.idx as idx1,a.idx as idx2 ";

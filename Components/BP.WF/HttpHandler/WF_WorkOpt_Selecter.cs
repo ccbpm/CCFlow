@@ -87,5 +87,24 @@ namespace BP.WF.HttpHandler
                 return "err@删除失败";
             return "删除成功";
         }
+        /// <summary>
+        /// 关键字查询
+        /// </summary>
+        /// <returns></returns>
+        public string Selecter_SearchByKey()
+        {
+            
+            string key = this.GetRequestVal("Key"); //查询关键字.
+
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            QueryObject qo = new QueryObject(ensMen); //集合.
+            qo.AddWhere("No", " LIKE ", "%" + key + "%");
+            qo.addOr();
+            qo.AddWhere("Name", " LIKE ", "%" + key + "%");
+            qo.DoQuery();
+
+            return ensMen.ToJson();
+        }
     }
 }

@@ -130,12 +130,12 @@
             for (var i = 0; i < emps.length; i++) {
 
                 var en = emps[i];
-
+                 var DeptName = new Entity("BP.Port.Dept",en.FK_Dept);
                 html += "<tr class='emplist' data-index='" + i + "' data-uniqueid='" + en.No + "' >"
                 html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
-                html += "<td>" + en.DeptName + "</td>";
+                html += "<td>" + DeptName.Name + "</td>";
                 html += "</tr>";
             }
 

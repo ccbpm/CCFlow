@@ -1121,15 +1121,22 @@ namespace BP.WF.HttpHandler
                 return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
 
             Entities trees = attr.HisFKEns;
-            //判断改类是否存在Idx
-
-            int IsExitParentNo = 1;
             Entity tree = trees.GetNewEntity;
+            
+            int IsExitParentNo = 0; //是否存在ParentNo
+            
+            int IsExitIdx = 0; //判断改类是否存在Idx
+            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+              && tree.EnMap.Attrs.Contains("Idx") == true)
+                IsExitIdx = 1;
+
             if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "ParentNo") == true
-                && tree.EnMap.Attrs.Contains("ParentNo") == true)
+               && tree.EnMap.Attrs.Contains("ParentNo") == true)
+                IsExitParentNo = 1;
+
+            if(IsExitParentNo == 1)
             {
-                if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
-               && tree.EnMap.Attrs.Contains("Idx") == true)
+                if(IsExitIdx == 1)
                 {
                     if (rootNo.Equals("0"))
                         trees.Retrieve("ParentNo", rootNo, "Idx");
@@ -1143,13 +1150,10 @@ namespace BP.WF.HttpHandler
                     else
                         trees.Retrieve("No", rootNo);
                 }
-
             }
             else
             {
-                IsExitParentNo = 0;
-                if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
-                 && tree.EnMap.Attrs.Contains("Idx") == true)
+                if (IsExitIdx == 1)
                     trees.RetrieveAll("Idx");
                 else
                     trees.RetrieveAll();

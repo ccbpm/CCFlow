@@ -79,8 +79,43 @@
 
             }
             $("#selectEmpList").append(html);
-        });
 
+            var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
+            $("#TB_Key").attr("placeholder", tip); //设置查询提示.
+
+            // search
+            $("#TB_Key").on("keyup", function () {
+                loadSelectGridByKey($(this).val());
+            });
+        });
+         //按照关键字加载数据.
+        function loadSelectGridByKey(key) {
+
+            if (key == "")
+                return;
+            $(".emplist").remove();
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
+            hander.AddUrlData();
+            hander.AddPara("Key", key.replace(/'/g,''));
+            hander.AddPara("EnsOfM", "BP.Port.Emps");
+            var json = hander.DoMethodReturnJSON("Selecter_SearchByKey");
+            html = "";
+            for (var i = 0; i < json.length; i++) {
+                
+                var en = json[i];
+
+                html += "<tr class='emplist' data-index='" + i + "' data-uniqueid='" + en.No + "' >"
+                html += "<td class='bs-checkbox ' ><input name='Empcheck' onclick=SelectEmp('" + en.No + "') id='" + en.Name + "' type='checkbox'></td>";
+                html += "<td>" + en.No + "</td>";
+                html += "<td>" + en.Name + "</td>";
+                html += "<td>" + en.FK_DeptText + "</td>";
+                html += "</tr>";
+            }
+
+            $("#teamsEmpList").append(html);
+            //加载后设置已存在数据库中人员的Checked的状态
+            SetChecked();
+        }
         //显示人员.
         function ShowEmp(TeamNo) {
             //选择其他岗位时清空人员列表

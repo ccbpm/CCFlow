@@ -510,13 +510,19 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                                 "leipiplugins": shap
                             });
                         }
+                        if (en.UIContralType == 0) {//
+                            //修改显示的样式
+                            UE.dom.domUtils.setAttributes(anchorEl, {
+                                "placeholder": en.DefVal
+                            });
+                        }
                     }
 
                     if (shap == "SignCheck" || shap == "FlowBBS") {
                         if (en.UIContralType == 0) {
                             var attributes;
                             if (en.UIHeight <= 23) {
-                                attributes = { "data-type": "Text" };
+                                attributes = { "data-type": "Text"};
                             } else {
                                 attributes = {
                                     "data-type": "Textarea",

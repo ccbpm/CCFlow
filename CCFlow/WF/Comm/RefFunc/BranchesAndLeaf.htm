@@ -60,6 +60,7 @@
         global.selectedNodes = [];
         global.selectedRows = [];
         var rootNo = "0";
+        var IsEnsOfMExitParentNo = 1;
 
         var saveType = GetQueryString("SaveType");
         if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
@@ -82,6 +83,8 @@
 
             var dbTrees = data["DBTrees"]; //左边的树.
             selectedRows = data["DBMMs"]; //选择的数据.
+            if (data["Base_Info"]!=undefined)
+                IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
 
             // AtPara
             var title = "请选择"; // mapExt.GetPara("Title");
@@ -323,16 +326,19 @@
 
                 },
                 onNodeExpanded: function (event, data) {
-                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
-                    handler.AddPara("RootNo", data.id);
-                    handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
-                    handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
-                    var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
-                    var jsonTree = findChildren(json, data.id);
-                    $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+                    if (IsEnsOfMExitParentNo == 1) {
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
+                        handler.AddPara("RootNo", data.id);
+                        handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
+                        handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
+                        var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
+                        var jsonTree = findChildren(json, data.id);
+                        $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
 
-                    $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+                        $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
 
+                    }
+                    
                 }
             });
         }

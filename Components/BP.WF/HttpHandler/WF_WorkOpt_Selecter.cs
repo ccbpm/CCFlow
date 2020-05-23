@@ -31,9 +31,9 @@ namespace BP.WF.HttpHandler
             string staNo = this.GetRequestVal("StaNo");
             string sql = "";
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
+                sql = "SELECT A.No, A.Name,A.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
             else
-                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Station='" + staNo + "'";
+                sql = "SELECT A.No, A.Name,A.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Station='" + staNo + "'";
 
             DataTable db = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(db);
@@ -46,9 +46,9 @@ namespace BP.WF.HttpHandler
             string TeamNo = this.GetRequestVal("TeamNo");
             string sql = "";
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND B.FK_Team='" + TeamNo + "'";
+                sql = "SELECT A.No, A.Name,A.FK_Dept FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND B.FK_Team='" + TeamNo + "'";
             else
-                sql = "SELECT A.No, A.Name FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Team='" + TeamNo + "'";
+                sql = "SELECT A.No, A.Name,A.FK_Dept FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Team='" + TeamNo + "'";
 
             DataTable db = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(db);

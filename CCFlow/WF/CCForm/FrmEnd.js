@@ -678,17 +678,17 @@ function AfterBindEn_DealMapExt(frmData) {
                 //获取大文本的长度
                 var left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
                 var width = tbFastInput.width() + left;
-                width = tbFastInput.parent().css('left') == "auto" ? width - 70 : width - 180;
+                width = tbFastInput.parent().css('left') == "auto" ? width - 180:  width - 70;
 
                 var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;' id='span_" + mapExt.AttrOfOper+"'></span><br/>");
-                tbFastInput.after(content);
                 content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
+                tbFastInput.after(content);
                 tbFastInput.on("mouseover", function () {
-                    $("#span_" + mapExt.AttrOfOper).show();
+                    $("#" + this.id.replace("TB_","span_")).show();
                     tbFastInput.focus();
                 });
                 tbFastInput.on("blur", function () {
-                    $("#span_" + mapExt.AttrOfOper).hide();
+                    $("#" + this.id.replace("TB_", "span_")).hide();
                     
                 });
                 $("#span_" + mapExt.AttrOfOper).hide();

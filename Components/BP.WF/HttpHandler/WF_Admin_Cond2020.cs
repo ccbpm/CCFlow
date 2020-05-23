@@ -31,6 +31,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string List_Init()
         {
+           // BP.WF.Template.CondAttr.ToNodeID
             // Conds condes = new Conds();
             // condes.RetrieveAll();
             return "";

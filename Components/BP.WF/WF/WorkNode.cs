@@ -2009,7 +2009,7 @@ namespace BP.WF
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
 
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.PRI);
             //if (dcsAll.Count == 0)
             //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 
@@ -2170,7 +2170,7 @@ namespace BP.WF
             if (toNodes.Count == 1)
                 return toNodes;
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.NodeID, this.HisNode.NodeID, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.PRI);
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
@@ -2214,7 +2214,7 @@ namespace BP.WF
                 foreach (Node nd in toNodes)
                 {
                     Conds conds = new Conds();
-                    int i = conds.Retrieve(CondAttr.NodeID, nd.NodeID, CondAttr.CondType, 2);
+                    int i = conds.Retrieve(CondAttr.FK_Node, nd.NodeID, CondAttr.CondType, 2);
                     if (i == 0)
                         continue;
 

@@ -58,8 +58,6 @@ namespace BP.WF.HttpHandler
             switch (this.GetRequestVal("MoveType"))
             {
                 case "Up":
-                    
-                   
                     Cond up = new Cond(this.MyPK);
                     string mypk = up.FK_Flow + "_" + up.FK_Node + "_" + up.ToNodeID;
                     Direction dir = new Direction(mypk);
@@ -105,7 +103,7 @@ namespace BP.WF.HttpHandler
         {
             string toNodeID = this.GetRequestVal("ToNodeID");
             var cond = new Cond();
-            cond.Retrieve(CondAttr.NodeID, this.FK_Node, CondAttr.ToNodeID, toNodeID);
+            cond.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, toNodeID);
             cond.Row.Add("HisDataFrom", cond.HisDataFrom.ToString());
 
             //   cond.HisDataFrom
@@ -177,7 +175,6 @@ namespace BP.WF.HttpHandler
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.Url;
 
-            cond.NodeID = this.GetRequestValInt("FK_MainNode");
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");
             cond.ToNodeID = this.GetRequestValInt("ToNodeID");
 
@@ -204,7 +201,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 
@@ -310,7 +307,6 @@ namespace BP.WF.HttpHandler
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.NodeForm;
-            cond.NodeID = fk_Node;
             cond.ToNodeID = toNodeID;
 
             cond.FK_Node = this.FK_Node;
@@ -332,7 +328,7 @@ namespace BP.WF.HttpHandler
             #region 方向条件，全部更新.
             Conds conds = new Conds();
             QueryObject qo = new QueryObject(conds);
-            qo.AddWhere(CondAttr.NodeID, this.FK_Node);
+            qo.AddWhere(CondAttr.FK_Node, this.FK_Node);
             qo.addAnd();
             qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
             qo.addAnd();
@@ -450,7 +446,6 @@ namespace BP.WF.HttpHandler
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.StandAloneFrm;
-            cond.NodeID = fk_Node;
             cond.ToNodeID = toNodeID;
 
             cond.FK_Node = this.FK_Node;
@@ -472,7 +467,7 @@ namespace BP.WF.HttpHandler
             #region 方向条件，全部更新.
             Conds conds = new Conds();
             QueryObject qo = new QueryObject(conds);
-            qo.AddWhere(CondAttr.NodeID, this.FK_Node);
+            qo.AddWhere(CondAttr.FK_Node, this.FK_Node);
             qo.addAnd();
             qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.StandAloneFrm);
             qo.addAnd();
@@ -661,7 +656,6 @@ namespace BP.WF.HttpHandler
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.SQLTemplate;
 
-            cond.NodeID = this.GetRequestValInt("FK_MainNode");
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");
             cond.ToNodeID = this.GetRequestValInt("ToNodeID");
 
@@ -688,7 +682,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 
@@ -744,7 +738,6 @@ namespace BP.WF.HttpHandler
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.SQL;
 
-            cond.NodeID = this.GetRequestValInt("FK_MainNode");
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");
             cond.ToNodeID = this.GetRequestValInt("ToNodeID");
 
@@ -771,7 +764,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 
@@ -838,7 +831,7 @@ namespace BP.WF.HttpHandler
             if (cond.RetrieveFromDBSources() == 0)
             {
                 cond.HisDataFrom = ConnDataFrom.Stas;
-                cond.NodeID = FK_MainNode;
+                cond.FK_Node = FK_MainNode;
                 cond.FK_Flow = this.FK_Flow;
                 cond.ToNodeID = ToNodeID;
                 cond.Insert();
@@ -880,7 +873,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 
@@ -909,7 +902,7 @@ namespace BP.WF.HttpHandler
             if (cond.RetrieveFromDBSources() == 0)
             {
                 cond.HisDataFrom = ConnDataFrom.Depts;
-                cond.NodeID = this.GetRequestValInt("FK_MainNode");
+                cond.FK_Node = this.GetRequestValInt("FK_MainNode");
                 cond.FK_Flow = this.FK_Flow;
                 cond.ToNodeID = this.GetRequestValInt("ToNodeID");
                 cond.Insert();
@@ -945,7 +938,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 
@@ -1002,7 +995,6 @@ namespace BP.WF.HttpHandler
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.Paras;
 
-            cond.NodeID = this.GetRequestValInt("FK_MainNode");
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");
             cond.ToNodeID = this.GetRequestValInt("ToNodeID");
 
@@ -1029,7 +1021,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
 
             Cond deleteCond = new Cond();
-            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
                CondAttr.CondType, (int)condTypeEnum);
 

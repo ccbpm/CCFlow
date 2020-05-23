@@ -1613,7 +1613,6 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.Conds conds = new BP.WF.Template.Conds(BP.WF.Template.CondType.Flow, node.NodeID);
                 dr["HisFinishCondsCount"] = conds.Count;
 
-
                 dt.Rows.Add(dr);
             }
             return BP.Tools.Json.ToJson(dt);

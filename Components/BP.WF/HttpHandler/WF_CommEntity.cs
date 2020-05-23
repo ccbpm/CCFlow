@@ -1123,23 +1123,38 @@ namespace BP.WF.HttpHandler
             Entities trees = attr.HisFKEns;
             //判断改类是否存在Idx
 
+            int IsExitParentNo = 1;
             Entity tree = trees.GetNewEntity;
-            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
-                && tree.EnMap.Attrs.Contains("Idx") == true)
+            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "ParentNo") == true
+                && tree.EnMap.Attrs.Contains("ParentNo") == true)
             {
-                if(rootNo.Equals("0"))
-                    trees.Retrieve("ParentNo", rootNo, "Idx");
+                if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+               && tree.EnMap.Attrs.Contains("Idx") == true)
+                {
+                    if (rootNo.Equals("0"))
+                        trees.Retrieve("ParentNo", rootNo, "Idx");
+                    else
+                        trees.Retrieve("No", rootNo, "Idx");
+                }
                 else
-                    trees.Retrieve("No", rootNo, "Idx");
+                {
+                    if (rootNo.Equals("0"))
+                        trees.Retrieve("ParentNo", rootNo);
+                    else
+                        trees.Retrieve("No", rootNo);
+                }
+
             }
             else
             {
-                if (rootNo.Equals("0"))
-                    trees.Retrieve("ParentNo", rootNo);
+                IsExitParentNo = 0;
+                if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+                 && tree.EnMap.Attrs.Contains("Idx") == true)
+                    trees.RetrieveAll("Idx");
                 else
-                    trees.Retrieve("No", rootNo);
+                    trees.RetrieveAll();
             }
-               
+
 
             DataTable dt = trees.ToDataTableField("DBTrees");
             //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
@@ -1150,6 +1165,14 @@ namespace BP.WF.HttpHandler
                     dr["ParentNo"] = rootNo;
             }
             ds.Tables.Add(dt);
+            dt = new DataTable();
+            dt.TableName = "Base_Info";
+            dt.Columns.Add("IsExitParentNo", typeof(int));
+            DataRow drr = dt.NewRow();
+            drr["IsExitParentNo"] = IsExitParentNo;
+            dt.Rows.Add(drr);
+            ds.Tables.Add(dt);
+
             #endregion 生成树目录.
 
             #region 生成选择的数据.

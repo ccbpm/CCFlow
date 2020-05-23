@@ -316,7 +316,7 @@ function DocWordReceive() {
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(fk_mapData + "_DocWordReceive");
     if (en.RetrieveFromDBSources() == 1) {
-        alert("该表单DocWord字段已经存在，收文字号默认的字段DocWord,请确认该字段是否为公文字段");
+        alert("该表单 DocWordReceive 字段已经存在，收文字号默认的字段 DocWordReceive,请确认该字段是否为公文字段");
         return "";
     }
 

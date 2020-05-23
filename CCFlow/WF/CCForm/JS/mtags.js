@@ -129,12 +129,12 @@
 		html += '<div class="main-container">';
 		if (IsPopEnableSelfInput == false) {
 			html += '<div class="ccflow-input-span-container">';
-			html += '<div id="stuff" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
+            html += '<div id="stuff" placeholder="请双击选择" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
 		} else {
 			html += '<div class="ccflow-input-span-container" style="display: flex;flex-wrap: wrap;">';
 			html += '<div id="stuff" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
 			html += '<span class="ccflow-input-span-container-span" style="display: contents;"></span>';
-			html += '<input type = "text" id = "TB_InputAuto_'+opts.KeyOfEn+'" autocomplete = "off"  style = "flex-grow: 1;width: 0.0961538%;max-width: 198px;border: none;outline: none;padding: 0;color: #666;font-size: 14px;appearance: none;height: 28px;background-color: transparent;" >';
+            html += '<input type = "text" id = "TB_InputAuto_' + opts.KeyOfEn +'" placeholder="请双击选择" autocomplete = "off"  style = "flex-grow: 1;width: 0.0961538%;max-width: 198px;border: none;outline: none;padding: 0;color: #666;font-size: 14px;appearance: none;height: 28px;background-color: transparent;" >';
         }
 		html += '</div>';
 		html += '</div>';

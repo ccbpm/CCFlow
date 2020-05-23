@@ -953,8 +953,8 @@ function calculator(o) {
         var target = o.replace("@", "");
         var element = "$(':input[name=TB_" + target + "]')";
         expression.judgement.push(element + ".length == 0");
-        expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val()))");
-        expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val())");
+        expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val().replace(/,/g,'')))");
+        expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val().replace(/,/g,''))");
     });
     (function (targets, expression, resultTarget, pk, expDefined) {
         $.each(targets, function (i, o) {
@@ -983,8 +983,12 @@ function calculator(o) {
 
                 eval(evalExpression);
 
-
-                $(":input[name=TB_" + resultTarget + "]").val(typeof result == "undefined" ? "" : result);
+                if (typeof result != "undefined") {
+                    result = numberFormat(result,2);
+                } else {
+                    result = "";
+                }
+                $(":input[name=TB_" + resultTarget + "]").val(result);
             });
             if (i == 0) {
                 $(":input[name=TB_" + target + "]").trigger("change");

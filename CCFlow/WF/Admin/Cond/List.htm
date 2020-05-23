@@ -42,7 +42,7 @@
             var toNode = new Entity("BP.WF.Node", toNodeID);
 
             var ens = new Entities("BP.WF.Template.Conds");
-            ens.Retrieve("NodeID", nodeID, "CondType", condType, "ToNodeID", toNodeID);
+            ens.Retrieve("FK_Node", nodeID, "CondType", condType, "ToNodeID", toNodeID);
 
             var html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 

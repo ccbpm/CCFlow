@@ -859,7 +859,6 @@ namespace BP.Sys
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
 
-
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);

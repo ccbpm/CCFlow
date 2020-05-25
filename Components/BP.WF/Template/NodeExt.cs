@@ -531,15 +531,32 @@ namespace BP.WF.Template
 
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在抄送工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在查看器工具栏?", true, true,true);
 
+
+                // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "(打印pdf)是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在抄送工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在查看器工具栏?", true, true, false);
+
+
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
                 map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintZipEnable, false, "(打包下载zip)是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在抄送工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在查看器工具栏?", true, true, false);
+
+
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
@@ -547,13 +564,14 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //增加帮助
 
-                // map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
+                //map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
                 //map.AddTBString(BtnAttr.AthLab, "附件", "附件按钮标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "附件权限"), true, true, 
                 //    NodeAttr.FJOpen, "@0=关闭附件@1=操作员@2=工作ID@3=流程ID");
 
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
+
                 //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "轨迹"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
@@ -603,9 +621,7 @@ namespace BP.WF.Template
 
                 //map.AddTBString(BtnAttr.AskforLabRe, "执行", "加签按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
-
                 // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "加签"]); //增加帮助
-
 
                 // 删除了这个模式,让表单方案进行控制了,保留这两个字段以兼容.
                 map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", false, false, 0, 50, 10);

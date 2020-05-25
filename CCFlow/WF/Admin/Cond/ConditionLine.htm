@@ -68,8 +68,15 @@
             for (var i = 0; i < data.length; i++) {
 
                 var en = data[i];
-
                 $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
+
+
+            }
+
+            for (var i = 0; i < data.length; i++) {
+
+                var en = data[i];
+                $("#list").append("<li> <div><b> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond2020(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "(bate2020)</span></a></b></div></li>");
             }
 
             //增加方向条件设置.
@@ -83,6 +90,14 @@
             var url = "List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
             OpenUrlInRightFrame(ele, url);
         }
+
+        
+        function OpenCond2020(ele, toNodeID) {
+
+            var url = "../Cond2020/DirList.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID ;
+            OpenUrlInRightFrame(ele, url);
+        }
+        
 
         //转向规则. 方向条件控制规则
         function OpenTurnToRole(ele) {

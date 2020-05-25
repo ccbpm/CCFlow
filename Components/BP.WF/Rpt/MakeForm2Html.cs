@@ -1507,7 +1507,7 @@ namespace BP.WF
                                 System.IO.File.Copy(fileTempDecryPath, toFile, true);
                             }
 
-                            sb.Append("<td  title='" + item.FileName + "'><a href = '' >" + item.FileName + "</a></td>");
+                            sb.Append("<td  title='" + item.FileName + "'>" + item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1534,7 +1534,7 @@ namespace BP.WF
                                 //把文件copy到,
                                 System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
                             }
-                            sb.Append("<td><a href='" + item.FileName + "'>" + item.FileName + "</a></td>");
+                            sb.Append("<td>"+item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1542,8 +1542,8 @@ namespace BP.WF
                         }
                     }
                     sb.Append("<td>" + item.FileSize + "KB</td>");
-                    sb.Append("<td>" + item.RDT+ "KB</td>");
-                    sb.Append("<td>" + item.Rec + "KB</td>");
+                    sb.Append("<td>" + item.RDT+ "</td>");
+                    sb.Append("<td>" + item.RecName + "</td>");
                     sb.Append("</tr>");
 
 

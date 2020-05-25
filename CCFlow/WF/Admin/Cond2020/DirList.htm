@@ -52,7 +52,7 @@
 
             if (condType == 1)
                 html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";
-
+             html += "<br>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>类型</th>";
@@ -326,10 +326,12 @@
 <body>
 
     <div style="right:30px; position:absolute; z-index:100; ">
+    
         表达式运算模式：
         <label><input type="radio" id="0" name="CondOrAnd" onclick="SelectModel(0)" />Or模式</label>
         <label><input type="radio" id="1" name="CondOrAnd" onclick="SelectModel(1)" />and模式</label>
         <label><input type="radio" id="2" name="CondOrAnd" onclick="SelectModel(2)" />混合模式</label>
+        <br />
         <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
         <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
             <ul>
@@ -358,6 +360,7 @@
 
     </div>
     <div style="position:relative;" id="table">
+
     </div>
 
     <!--

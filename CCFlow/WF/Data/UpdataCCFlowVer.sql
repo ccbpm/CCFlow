@@ -132,7 +132,3 @@ INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_1','按�
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_2','发送按钮旁下拉框选择','CondModel',2,'CH');
  
 
---2020.05.25 修改节点自定义按钮功能;
-UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere=1;
-UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere=2;
- 

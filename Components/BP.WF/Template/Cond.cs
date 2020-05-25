@@ -95,10 +95,10 @@ namespace BP.WF.Template
         /// 对方向条件有效
         /// </summary>
         public const string ToNodeID = "ToNodeID";
-        /// <summary>
-        /// 判断方式
-        /// </summary>
-        public const string ConnJudgeWay = "ConnJudgeWay";
+        ///// <summary>
+        ///// 判断方式
+        ///// </summary>
+        //public const string ConnJudgeWay = "ConnJudgeWay";
         /// <summary>
         /// MyPOID
         /// </summary>
@@ -141,7 +141,7 @@ namespace BP.WF.Template
         /// </summary>
         Node=0,
         /// <summary>
-        /// 流程条件
+        /// 流程完成条件
         /// </summary>
         Flow=1,
         /// <summary>
@@ -1039,8 +1039,8 @@ namespace BP.WF.Template
                 //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
 
-                //map.AddDDLSysEnum(CondAttr.CondType, 0, "条件类型", true, false, CondAttr.CondType,"@0=节点完成条件@1=流程完成条件@2=方向条件");
-                //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas岗位数据,3=Depts,4=按sql计算.5,按sql模版计算.6,按参数,7=按Url
+                //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas岗位数据,3=Depts,4=按sql计算.
+                //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
                 map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 5, 20);
 
@@ -1049,7 +1049,6 @@ namespace BP.WF.Template
                 map.AddTBInt(CondAttr.FK_Node, 0, "节点ID(对方向条件有效)", true, true);
                 map.AddTBInt(CondAttr.ToNodeID, 0, "ToNodeID（对方向条件有效）", true, true);
 
-
                 map.AddTBString(CondAttr.FK_Attr, null, "属性", true, true, 0, 80, 20);
                 map.AddTBString(CondAttr.AttrKey, null, "属性键", true, true, 0, 60, 20);
                 map.AddTBString(CondAttr.AttrName, null, "中文名称", true, true, 0, 500, 20);
@@ -1057,11 +1056,12 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-                map.AddDDLSysEnum(CondAttr.ConnJudgeWay, 0, "条件关系", true, false,
-                    CondAttr.ConnJudgeWay, "@0=or关系@1=and关系@2=混合运算");
+                //map.AddDDLSysEnum(CondAttr.ConnJudgeWay, 0, "条件关系", true, false,
+                //    CondAttr.ConnJudgeWay, "@0=or关系@1=and关系@2=混合运算");
+                // map.AddTBInt(CondAttr.MyPOID, 0, "MyPOID", true, true);
 
-                map.AddTBInt(CondAttr.MyPOID, 0, "MyPOID", true, true);
                 map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
+
                 map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);
 
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
@@ -1083,6 +1083,14 @@ namespace BP.WF.Template
     public class Conds : Entities
     {
         #region 属性
+        public string ConditionDesc
+        {
+            get
+            {
+                return "";
+
+            }
+        }
         /// <summary>
         /// 获得Entity
         /// </summary>
@@ -1246,13 +1254,6 @@ namespace BP.WF.Template
         public Conds(CondType ct, int nodeID)
         {
             this.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.CondType, (int)ct, CondAttr.PRI);
-        }
-        public string ConditionDesc
-        {
-            get
-            {
-                return "";
-            }
         }
         #endregion
 

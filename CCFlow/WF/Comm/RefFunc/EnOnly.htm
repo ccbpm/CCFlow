@@ -271,7 +271,7 @@
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(mapAttr);
-                if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002")
+                if (frmData.MainTable[0].DefValType == 0 && defValue == "10002")
                     defValue = "";
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {

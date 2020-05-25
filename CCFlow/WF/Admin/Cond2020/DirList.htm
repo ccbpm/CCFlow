@@ -17,61 +17,110 @@
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
     <script type="text/javascript">
-
-        var flowNo = null;
-        var nodeID = null;
-        var toNodeID = null;
-
+        //获得变量.
+        var flowNo = GetQueryString("FK_Flow");
+        var nodeID = GetQueryString("FK_Node");
+        var toNodeID = GetQueryString("ToNodeID");
+        var condType = GetQueryString("CondType");
         //初始化页面函数.....
         $(function () {
-
-            //获得变量.
-            var flowNo = GetQueryString("FlowNo");
-            var nodeID = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
-            var condType = GetQueryString("CondType");
-
-            condType = 2;
-            fk_flow = 101;
-            toNodeID = 102;
-
+            LoadPage(0);
+        });
+        function LoadPage(model) {
+            $("#table").html("");
+            if (condType == null || condType == undefined)
+                condType = 2; //默认为方向条件.
             //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
             conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
 
-            //获得计算模式
-            var condOrAnd = 0;
-            if (cond.length != 0)
-                condType = conds[0].CondOrAnd;
-            $("#CondOrAnd").val(condOrAnd); //绑定计算模式.
+            var toNode = new Entity("BP.WF.Node", toNodeID);
+            html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
-          
+            if (condType == 2)
+                html += "<caption><img src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
+
+            if (condType == 1)
+                html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";
+
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>类型</th>";
+            html += "<th>表达式</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
             //循环生成表格.
+            var idx = 1;
             for (var i = 0; i < conds.length; i++) {
 
                 var cond = conds[i];
-                //说明不是混合运算
-                if (condType != 2)
-                {
-                    cond.DataFrom == 100; //把运算符的条件去掉.
-                    continue;
+                //是混合运算就过滤
+                if (model == 2) {
+                    if (cond.CondOrAnd != 2) {
+                        continue;
+                    }
                 }
+                if(model == 1){
+                    if (cond.CondOrAnd != 1) {
+                        continue;
+                    }
+                }
+                if(model == 0){
+                    if (cond.CondOrAnd != 0) {
+                        continue;
+                    }
+                }
+                html += "<tr >";
+                html += "<td class=Idx>" + idx + "</td>";
+                html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
 
-                var newRow = "";
-                newRow = "<tr >";
-                newRow += "<td class=Idx>" + i + "</td>";
-                newRow += "<td>" + cond.DataFrom + "</td>"; //类型
-                newRow += "<td>" + cond.AttrName + "</td>"; //描述
-                newRow += "<td>" + cond.OperatorValue + "</td>";
-                newRow += "<td><a href=\"javascript:Up('" + cond.MyPK + "');\" >上移</a></td>"; //操作
-                newRow += "<td><a href=\"javascript:Down('" + cond.MyPK + "');\" >下移</a></td>"; //操作
-                newRow += "<td><a href=\"javascript:Delete('" + cond.MyPK + "');\" >删除</a></td>"; //操作
-                $("#Table1 tr:last").after(newRow);
+                html += "<td>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
+                html += "<td>";
+                html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
+                html += "<td>";
+                html += "</tr>"
+                idx++;
             }
-
-        });
-
+            html += "</table>";
+            $("#table").html(html);
+            document.getElementById(model).checked = true;
+        }
+        function ShowType(DataFrom) {
+            var res = "";
+            switch (DataFrom) {
+                case 0: res = "表单字段";
+                    break;
+                case 1: res = "独立表单";
+                    break;
+                case 2: res = "按岗位";
+                    break;
+                case 3: res = "按部门";
+                    break;
+                case 4: res = "按SQL";
+                    break;
+                case 5: res = "按SQL模板";
+                    break;
+                case 6: res = "按参数";
+                    break;
+                case 7: res = "按URL";
+                    break;
+                case 100: res = "运算符";
+                    break;
+            }
+            return res;
+        }
         //执行保存..
         function Save(saveType) {
 
@@ -226,30 +275,90 @@
         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondByFrm.htm', 'List.htm');
+            url = url.replace('CondByFrm.htm', 'DirList.htm');
             window.location.href = url;
+        }
+        function NewCond(type) {
+            var url = window.location.href;
+            url = url.replace('DirList.htm', type + '.htm');
+            var inputs = document.getElementsByName("CondOrAnd");
+            var model;
+            for (var i = 0; i < inputs.length;i++)
+            {
+                input = inputs[i];
+                if (input.checked) {
+                    model = input.id;
+                    break;
+                }
+            }
+            url += "&CondOrAnd=" + model
+ 
+            window.location.href = url;
+        }
+        //添加运算符
+        function AddCond(cond) {
+            var en = new Entity("BP.WF.Template.Cond");
+            //生成一个随机数添加到运算符的主键中
+            var radomNum = parseInt(Math.random() * 1000) + 1;
+            en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
+            if (en.RetrieveFromDBSources() == 1) {
+                var radomNum = parseInt(Math.random() * 1000) + 1;
+                en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
+            }
+            en.CondType = 2;
+            en.DataFrom = 100;
+            en.FK_Flow = flowNo;
+            en.FK_Node = nodeID;
+            en.FK_Operator = cond;
+            en.ToNodeID = toNodeID;
+            en.FK_Operator = cond;
+            en.CondOrAnd = 2;//带运算符的是混合模式
+            en.Insert();
+            LoadPage(2);
+        }
+        //选择模式
+        function SelectModel(model) {
+            LoadPage(model);
         }
     </script>
 
 </head>
 <body>
 
-    <div id="bar">
+    <div style="right:30px; position:absolute; z-index:100; ">
         表达式运算模式：
-        <label><input type="radio" id="RB_0" name="CondOrAnd" />Or模式</label>
-        <label><input type="radio" id="RB_1" name="CondOrAnd" />and模式</label>
-        <label><input type="radio" id="RB_2" name="CondOrAnd" />混合模式</label>
-       <a href="AddCond()"> +条件</a>,<a href="AddCond"> +运算符</a> 
-    </div>
+        <label><input type="radio" id="0" name="CondOrAnd" onclick="SelectModel(0)" />Or模式</label>
+        <label><input type="radio" id="1" name="CondOrAnd" onclick="SelectModel(1)" />and模式</label>
+        <label><input type="radio" id="2" name="CondOrAnd" onclick="SelectModel(2)" />混合模式</label>
+        <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
+        <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
+            <ul>
+                <li><a href="javascript:NewCond('../Cond/CondByFrm');">按表单条件计算</a> </li>
+                <li><a href="javascript:NewCond('../Cond/StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
+                <li><a href="javascript:NewCond('../Cond/CondStation');">按指定操作员的岗位条件</a></li>
+                <li><a href="javascript:NewCond('../Cond/CondDept');">按指定操作员的部门条件</a> </li>
+                <li><a href="javascript:NewCond('../Cond/CondBySQL');">按SQL条件计算</a> </li>
+                <li><a href="javascript:NewCond('../Cond/CondBySQLTemplate');">按SQL模版条件计算</a> </li>
+                <li><a href="javascript:NewCond('../Cond/CondByPara');">按开发者参数计算</a> </li>
+                <li><a href="javascript:NewCond('../Cond/CondByUrl');">按Url条件计算</a> </li>
+            </ul>
+        </div>
 
-    <table>
-        <tr>
-            <th>#</th>
-            <th>类型</th>
-            <th>描述</th>
-            <th>操作</th>
-        </tr>
-    </table>
+        <input type="button" value="+新建运算符bate" onclick="ShowHidden('state1')" />
+        <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px;">
+            <ul>
+                <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
+                <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+            </ul>
+        </div>
+
+        <input type="button" value="什么是条件？" onclick="javascript:Help()" />
+
+    </div>
+    <div style="position:relative;" id="table">
+    </div>
 
     <!--
         类型	表达式	操作

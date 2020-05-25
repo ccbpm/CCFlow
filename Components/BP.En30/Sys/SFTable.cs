@@ -354,11 +354,11 @@ namespace BP.Sys
                 return src.RunSQLReturnTable(sql);
             }
 
-            if(this.SrcType == Sys.SrcType.SysDict)
-            {
-                DictDtls dictDtls = new DictDtls(this.No);
-                return dictDtls.ToDataTableField();
-            }
+            //if(this.SrcType == Sys.SrcType.SysDict)
+            //{
+            //    DictDtls dictDtls = new DictDtls(this.No);
+            //    return dictDtls.ToDataTableField();
+            //}
             #endregion
 
             return null;
@@ -975,68 +975,68 @@ namespace BP.Sys
                 (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc))
             {
                 //创建dict.
-                Dict dict = new Dict();
-                dict.TableID = this.No;
-                dict.TableName = this.Name;
-                dict.OrgNo = WebUser.OrgNo;
-                dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
-                if (SystemConfig.CCBPMRunModel == 0)
-                {
-                    dict.MyPK = this.No;
-                }
-                else
-                {
-                    dict.MyPK = WebUser.OrgNo + "_" + this.No;
-                }
-                dict.Insert();
+                //Dict dict = new Dict();
+                //dict.TableID = this.No;
+                //dict.TableName = this.Name;
+                //dict.OrgNo = WebUser.OrgNo;
+                //dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
+                //if (SystemConfig.CCBPMRunModel == 0)
+                //{
+                //    dict.MyPK = this.No;
+                //}
+                //else
+                //{
+                //    dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                //}
+                //dict.Insert();
 
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.Insert();
                 }
 
                 if (this.CodeStruct == CodeStruct.Tree)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.ParentNo = "0";
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.DictMyPK = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
                 }

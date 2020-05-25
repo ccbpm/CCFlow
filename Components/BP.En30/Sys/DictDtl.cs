@@ -33,7 +33,7 @@ namespace BP.Sys
         /// <summary>
         /// 列选择
         /// </summary>
-        public const string OrgNo = "OrgNo";
+        //public const string OrgNo = "OrgNo";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -49,17 +49,17 @@ namespace BP.Sys
         /// <summary>
         /// 组织编号
         /// </summary>
-        public string OrgNo
-        {
-            get
-            {
-                return this.GetValStrByKey(DictDtlAttr.OrgNo);
-            }
-            set
-            {
-                this.SetValByKey(DictDtlAttr.OrgNo, value);
-            }
-        }
+        //public string OrgNo
+        //{
+        //    get
+        //    {
+        //        return this.GetValStrByKey(DictDtlAttr.OrgNo);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(DictDtlAttr.OrgNo, value);
+        //    }
+        //}
         public string DictMyPK
         {
             get
@@ -162,8 +162,8 @@ namespace BP.Sys
                 map.AddTBString(DictDtlAttr.ParentNo, null, "父节点ID", true, false, 0, 200, 20);
 
                 //用户注销组织的时候，方便删除数据.
-                map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
-                map.AddTBInt(DictAttr.Idx, 0, "顺序号", false, false);
+                //map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+                map.AddTBInt(DictDtlAttr.Idx, 0, "顺序号", false, false);
             this._enMap = map;
                 return this._enMap;
             }
@@ -184,13 +184,13 @@ namespace BP.Sys
             base.afterInsertUpdateAction();
         }
       
-        protected override bool beforeInsert()
-        {
-            if (BP.Sys.SystemConfig.CCBPMRunModel != 0)
-                this.OrgNo = BP.Web.WebUser.OrgNo;
+        //protected override bool beforeInsert()
+        //{
+        //    if (BP.Sys.SystemConfig.CCBPMRunModel != 0)
+        //        this.OrgNo = BP.Web.WebUser.OrgNo;
 
-            return base.beforeInsert();
-        }
+        //    return base.beforeInsert();
+        //}
     }
     /// <summary>
     /// 系统字典表s

@@ -76,8 +76,8 @@ namespace BP.DA
             bool isHave = false;
             //获得约束.
             string sql = "select b.name from sysobjects b join syscolumns a on b.id = a.cdefault ";
-            sql += " where a.id = object_id('"+ table + "') ";
-            sql += " and a.name ='"+colName+"' ";
+            sql += " where a.id = object_id('" + table + "') ";
+            sql += " and a.name ='" + colName + "' ";
 
             //遍历并删除它们.
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -85,7 +85,7 @@ namespace BP.DA
             {
                 string name = dr[0].ToString();
 
-                DBAccess.RunSQL("exec('alter table "+table+" drop constraint "+name+" ' )");
+                DBAccess.RunSQL("exec('alter table " + table + " drop constraint " + name + " ' )");
                 isHave = true;
             }
 
@@ -100,7 +100,7 @@ namespace BP.DA
         public static string SQLOfTableFieldYueShu(string table)
         {
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                return  "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
+                return "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.DM)
@@ -1418,6 +1418,11 @@ namespace BP.DA
         #endregion
 
         #region 通过主应用程序在其他库上运行sql
+        public static void DropTableColumn(string table, string column)
+        {
+            string sql = "ALTER TABLE " + table + " DROP COLUMN " + column;
+            DBAccess.RunSQL(sql);
+        }
 
         /// <summary>
         /// 删除表的主键
@@ -2327,7 +2332,7 @@ namespace BP.DA
             }
 
             while (lock_msSQL_ReturnTable)
-            { 
+            {
             }
 
             SqlDataAdapter msAda = new SqlDataAdapter(msSQL, conn);
@@ -3118,7 +3123,7 @@ namespace BP.DA
         {
             object obj = DBAccess.RunSQLReturnVal(sql);
             if (obj == null || obj == DBNull.Value)
-                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql );
+                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql);
 
             string s = obj.ToString();
             if (s.Contains("."))

@@ -1200,7 +1200,17 @@ namespace BP.WF
             //检查BPM.
             CheckGPM();
 
-            #region 升级优化集团版的应用. 2020.04.03
+            #region 升级优化集团版的应用. 2020.04.03uu
+            BP.WF.Template.NodeToolbar bar = new NodeToolbar();
+            bar.CheckPhysicsTable();
+
+            //--2020.05.25 修改节点自定义按钮功能;
+            if (DBAccess.IsExitsTableCol("WF_NodeToolbar", "ShowWhere") == true)
+            {
+                DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere = 1");
+                DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
+                DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
+            }
 
             //检查frmTrack.
             BP.Frm.Track tk = new Frm.Track();
@@ -1898,15 +1908,15 @@ namespace BP.WF
 
                 #endregion 基础数据更新.
 
-                #region 把节点的toolbarExcel, word 信息放入mapdata
-                BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
-                nss.RetrieveAll();
-                foreach (BP.WF.Template.NodeSheet ns in nss)
-                {
-                    ToolbarExcel te = new ToolbarExcel();
-                    te.No = "ND" + ns.NodeID;
-                    te.RetrieveFromDBSources();
-                }
+                #region 把节点的toolbarExcel, word 信息放入mapdata @sly 删除他.
+                //BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
+                //nss.RetrieveAll();
+                //foreach (BP.WF.Template.NodeSheet ns in nss)
+                //{
+                //    ToolbarExcel te = new ToolbarExcel();
+                //    te.No = "ND" + ns.NodeID;
+                //    te.RetrieveFromDBSources();
+                //}
                 #endregion
 
                 #region 升级SelectAccper
@@ -1923,8 +1933,6 @@ namespace BP.WF
 
 
 
-                NodeToolbar bar = new NodeToolbar();
-                bar.CheckPhysicsTable();
 
                 SysForm ssf = new SysForm();
                 ssf.CheckPhysicsTable();

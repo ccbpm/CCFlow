@@ -8259,14 +8259,35 @@ namespace BP.WF
             ps.Add(CCListAttr.MyPK, mypk);
             BP.DA.DBAccess.RunSQL(ps);
         }
-        
 
         /// <summary>
         /// 设置抄送执行完成
         /// </summary>
         /// <param name="workid">工作ID</param>
         /// <param name="checkInfo">审核信息</param>
-        public static string Node_CC_SetCheckOver(Int64 workid,string checkInfo=null)
+        public static string Node_CC_SetCheckOver(Int64 workid,  string checkInfo = null)
+        {
+            Paras ps = new Paras();
+            ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo ";
+            ps.Add(CCListAttr.Sta, (int)CCSta.CheckOver);
+            ps.Add(CCListAttr.CDT, DataType.CurrentDataTime); //设置完成日期.
+            ps.Add(CCListAttr.WorkID, workid);
+            ps.Add(CCListAttr.CCTo, WebUser.No);
+            int val = BP.DA.DBAccess.RunSQL(ps);
+            if (val == 0)
+                return "err@执行失败,没有更新到workid=" + workid + ",CCTo=" + WebUser.No + ", 的抄送数据.";
+
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+
+            BP.WF.Dev2Interface.Flow_BBSAdd(gwf.FK_Flow, workid,gwf.FID, checkInfo, BP.Web.WebUser.No, BP.Web.WebUser.Name);
+            return "执行成功.";
+        }
+        /// <summary>
+        /// 设置抄送执行完成
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="checkInfo">审核信息</param>
+        public static string Node_CC_SetCheckOver(string flowNo,Int64 workid,Int64 fid, string checkInfo=null,string empNo=null,string empName=null)
         {
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo ";
@@ -8278,8 +8299,7 @@ namespace BP.WF
             if (val == 0)
                 return "err@执行失败,没有更新到workid="+ workid + ",CCTo="+WebUser.No+", 的抄送数据.";
 
-           BP.WF.Dev2Interface.Flow_BBSAdd()
-
+            BP.WF.Dev2Interface.Flow_BBSAdd(flowNo, workid, fid, checkInfo, empNo,empName);
             return "执行成功.";
         }
         /// <summary>

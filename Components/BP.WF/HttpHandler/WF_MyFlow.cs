@@ -1251,11 +1251,11 @@ namespace BP.WF.HttpHandler
 
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
-                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node,NodeToolbarAttr.IsMyFlow,1,NodeToolbarAttr.Idx);
                 foreach (NodeToolbar bar in bars)
                 {
-                    if (bar.ShowWhere != ShowWhere.Toolbar)
-                        continue;
+                   /* if (bar.ShowWhere != ShowWhere.Toolbar)
+                        continue;*/
 
                     if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {

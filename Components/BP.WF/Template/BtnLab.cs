@@ -673,6 +673,20 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.PrintZipEnable);
             }
         }
+        public bool PrintZipMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintZipMyCC);
+            }
+        }
+        public bool PrintZipMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintZipMyView);
+            }
+        }
         /// <summary>
         /// 打包下载 标签
         /// </summary>
@@ -691,6 +705,20 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValBooleanByKey(BtnAttr.PrintPDFEnable);
+            }
+        }
+        public bool PrintPDFMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintPDFMyCC);
+            }
+        }
+        public bool PrintPDFMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintPDFMyView);
             }
         }
         /// <summary>
@@ -712,6 +740,22 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValBooleanByKey(BtnAttr.PrintHtmlEnable);
+            }
+        }
+
+        public bool PrintHtmlMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintHtmlMyCC);
+            }
+        }
+
+        public bool PrintHtmlMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintHtmlMyView);
             }
         }
         /// <summary>
@@ -1302,13 +1346,26 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
 
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true, true);
+
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
 
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在抄送工具栏?", true, true, false);
+
+
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, false);
 
                 // add 2019.3.10 增加List.
                 map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);

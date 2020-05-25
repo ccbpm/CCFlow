@@ -533,8 +533,8 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
                 // add 2020.5.25 for 交投集团.
-                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在抄送工具栏?", true, true);
-                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在查看器工具栏?", true, true,true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true,true);
 
 
                 // add 2017.9.1 for 天业集团.
@@ -542,8 +542,8 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "(打印pdf)是否启用", true, true);
 
                 // add 2020.5.25 for 交投集团.
-                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在抄送工具栏?", true, true);
-                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在查看器工具栏?", true, true, false);
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在抄送工具栏?", true, true, false);
 
 
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
@@ -553,8 +553,8 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "(打包下载zip)是否启用", true, true);
 
                 // add 2020.5.25 for 交投集团.
-                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在抄送工具栏?", true, true);
-                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在查看器工具栏?", true, true, false);
+                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, false);
 
 
 

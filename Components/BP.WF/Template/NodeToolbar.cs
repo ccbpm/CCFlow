@@ -56,6 +56,22 @@ namespace BP.WF.Template
         /// </summary>
         public const string ShowWhere = "ShowWhere";
         /// <summary>
+        /// 在工作处理器显示
+        /// </summary>
+        public const string IsMyFlow = "IsMyFlow";
+        /// <summary>
+        ///  在工作查看器显示
+        /// </summary>
+        public const string IsMyView = "IsMyView";
+        /// <summary>
+        ///  在树形表单显示
+        /// </summary>
+        public const string IsMyTree = "IsMyTree";
+        /// <summary>
+        ///  在抄送功能显示
+        /// </summary>
+        public const string IsMyCC = "IsMyCC";
+        /// <summary>
         /// 执行类型
         /// </summary>
         public const string ExcType = "ExcType";
@@ -198,8 +214,12 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
                 // 显示位置.
-                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
+                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
+                map.AddBoolean(NodeToolbarAttr.IsMyFlow, true, "IsMyFlow", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "IsMyTree", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyView, false, "IsMyView", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "IsMyCC", true, true);
 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);

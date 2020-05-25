@@ -23,7 +23,7 @@ namespace CCFlow.SDKFlowDemo
 
 
             #region 开窗返回值的demo.
-            //获得部门列表, 开窗返回值json. 这里一定要确定获取的顶级部门的ParentNo=0.
+            //获得部门列表, 开窗返回值json. 这里一定要确定获取的顶级部门的 ParentNo=0.
             if (doType == "ReqDepts")
             {
                 string rootNo = context.Request.QueryString["Key"];

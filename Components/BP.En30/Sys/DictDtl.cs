@@ -115,11 +115,10 @@ namespace BP.Sys
                 this.SetValByKey(DictDtlAttr.Idx, value);
             }
         }
-    #endregion 属性.
+        #endregion 属性.
 
-
-    #region 构造方法
-    public override UAC HisUAC
+        #region 构造方法
+        public override UAC HisUAC
         {
             get
             {
@@ -164,7 +163,7 @@ namespace BP.Sys
                 //用户注销组织的时候，方便删除数据.
                 //map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
                 map.AddTBInt(DictDtlAttr.Idx, 0, "顺序号", false, false);
-            this._enMap = map;
+                this._enMap = map;
                 return this._enMap;
             }
         }
@@ -183,7 +182,7 @@ namespace BP.Sys
         {
             base.afterInsertUpdateAction();
         }
-      
+
         //protected override bool beforeInsert()
         //{
         //    if (BP.Sys.SystemConfig.CCBPMRunModel != 0)

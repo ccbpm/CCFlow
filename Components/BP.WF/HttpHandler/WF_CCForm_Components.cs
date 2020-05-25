@@ -178,10 +178,7 @@ namespace BP.WF.HttpHandler
             //生成一个新的流水号.
             sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='" + wordname + "' ,DocWordYear='" + ny + "',DocWordLSH='" + lsh + "',DocWord='" + docword + "' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);
-            //为计算中心做个性化修改 保存到流程表里面去 zsy 2020.5.25
-            FlowExt fe1 = new FlowExt(this.FK_Flow);           
-           string  sql2 = "update " + fe1.PTable + " set DocWordKey='" + wordkey + "',DocWordName='" + wordname + "' ,DocWordYear='" + ny + "',DocWordLSH='" + lsh + "',DocWord='" + docword + "' WHERE OID=" + this.OID;
-            DBAccess.RunSQL(sql2);
+        
 
 
 

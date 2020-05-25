@@ -8259,11 +8259,14 @@ namespace BP.WF
             ps.Add(CCListAttr.MyPK, mypk);
             BP.DA.DBAccess.RunSQL(ps);
         }
+        
+
         /// <summary>
-        /// 设置已回复,由FlowBBS组件调用.
+        /// 设置抄送执行完成
         /// </summary>
         /// <param name="workid">工作ID</param>
-        public static void Node_CC_SetCheckOver(Int64 workid)
+        /// <param name="checkInfo">审核信息</param>
+        public static string Node_CC_SetCheckOver(Int64 workid,string checkInfo=null)
         {
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_CCList SET Sta=" + SystemConfig.AppCenterDBVarStr + "Sta,CDT=" + SystemConfig.AppCenterDBVarStr + "CDT  WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND CCTo=" + SystemConfig.AppCenterDBVarStr + "CCTo ";
@@ -8271,7 +8274,31 @@ namespace BP.WF
             ps.Add(CCListAttr.CDT, DataType.CurrentDataTime); //设置完成日期.
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.CCTo, WebUser.No);
-            BP.DA.DBAccess.RunSQL(ps);
+            int val=BP.DA.DBAccess.RunSQL(ps);
+            if (val == 0)
+                return "err@执行失败,没有更新到workid="+ workid + ",CCTo="+WebUser.No+", 的抄送数据.";
+
+           BP.WF.Dev2Interface.Flow_BBSAdd()
+
+            return "执行成功.";
+        }
+        /// <summary>
+        /// 批量审核
+        /// </summary>
+        /// <param name="workids">多个工作ID使用逗号分割比如:'111,233,444'</param>
+        /// <param name="checkInfo">批量审核意见</param>
+        public static string Node_CC_SetCheckOver(string workids, string checkInfo = null)
+        {
+            string[] ids = workids.Split(',');
+            string info = "";
+            foreach (string id in ids)
+            {
+                if (DataType.IsNullOrEmpty(id) == true)
+                    continue;
+
+                info += Node_CC_SetCheckOver(Int64.Parse(id), checkInfo);
+            }
+            return "执行成功.";
         }
         /// <summary>
         /// 设置抄送读取

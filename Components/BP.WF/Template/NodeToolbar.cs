@@ -62,7 +62,7 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 工具栏.	 
+    /// 工具栏.
     /// </summary>
     public class NodeToolbar : EntityOID
     {
@@ -246,7 +246,8 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   /// <summary>
+        #region 为了适应自动翻译成java的需要,把实体转换成List 
+        /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>

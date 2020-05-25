@@ -475,7 +475,7 @@ function UnSend() {
     if (window.confirm('您确定要撤销本次发送吗？') == false)
         return;
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_View");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("MyView_UnSend");
 

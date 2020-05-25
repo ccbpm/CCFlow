@@ -10,18 +10,10 @@ $(function () {
     } else {
         if ($("#JS_MyView").length == 1) {
 
-            var _html = "";
-            _html += '<input name="Close" type="button" value="关闭" enable="true" onclick="Close()"/>';
-            _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
-            _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
-            _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
-            var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
-            if (gwf.WFSta != 1) {//流程未结束
-                _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
-                _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
-            }
-            _html += '<input name="DocWord" type="button" value="公文" enable="true" />';
-            $('#ToolBar').html(_html);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
+            handler.AddUrlData();
+            barHtml = handler.DoMethodReturnString("InitToolBar");
+            $('#ToolBar').html(barHtml);
 
         } else {
 
@@ -1001,3 +993,49 @@ function PrintPDF(packUpType) {
 
 
 }
+
+//删除流程
+function DeleteFlow() {
+
+    if (window.confirm('您确定要删除吗？') == false)
+        return;
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+    var str = handler.DoMethodReturnString("DeleteFlow");
+
+    alert(str);
+
+    self.opener.location.reload();
+    window.close();
+}
+
+/**
+ * 取回审批
+ * @param {any} fk_node
+ * @param {any} toNode
+ */
+function Takeback(fk_node, toNode) {
+    if (confirm('您确定要执行吗？') == false)
+        return;
+    var url = '../../GetTask.aspx?DoType=Tackback&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + fk_node + '&ToNode=' + toNode + '&WorkID=' + GetQueryString("WorkID");
+    window.location.href = url;
+}
+/**
+ * 回滚
+ */
+function Rollback() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+    var data = handler.DoMethodReturnString("OP_ComeBack");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    window.close();
+}
+

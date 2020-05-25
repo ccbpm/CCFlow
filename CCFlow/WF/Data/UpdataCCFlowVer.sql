@@ -1,7 +1,7 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 
--- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.
+-- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.;
 update WF_Direction set mypk=replace(mypk, '_0','') ;
 
 UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
@@ -60,11 +60,11 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@OrgName','登录人员组织
 
 
  
--- 升级数据源 2016.
+-- 升级数据源 2016.;
 UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
 UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
---更新日期长度.
+--更新日期长度.;
 UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6;
 UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7;
 
@@ -91,7 +91,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=�
 
 -- 2018.07.24 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@IsFrmEnable=轨迹@DesignerNo=设计者,流程开发设计者信息');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@FlowDTSWay=流程数据与业务数据同步@IsFrmEnable=轨迹@DesignerNo=设计者,流程开发设计者信息');
 
 
 --新版本的流程属性,节点属性;
@@ -122,16 +122,20 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmBill','@No=基础信息,
 DELETE FROM Sys_EnCfg WHERE No='BP.Frm.FrmDict';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
  
- ----2019.06.03
+ ----2019.06.03;
  update Sys_MapAttr set ColSpan =0 ,TextColSpan = 2 where UIContralType=9 and ColSpan = 1;
 
- --2019.5.23
+ --2019.5.23;
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_0','由连接线条件控制','CondModel',0,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_1','按照用户选择计算','CondModel',1,'CH');
 INSERT INTO Sys_Enum(MyPK,Lab,EnumKey,IntKey,Lang) VALUES('CondModel_CH_2','发送按钮旁下拉框选择','CondModel',2,'CH');
 
 
---2020.04.30 超链接数据保存
+--2020.04.30 超链接数据保存;                                                                                                               
 UPDATE Sys_FrmLink SET URLExt= URL Where URLExt IS NULL OR URLExt='';
+
+--2020.05.25 修改节点自定义按钮功能;
+UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere=1;
+UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere=2;
  

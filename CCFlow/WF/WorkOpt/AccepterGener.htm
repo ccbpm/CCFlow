@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>接受人选择器</title>
+    <title>接受人选器</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
     1. 初始化的标记是 ?DoType=Accepter_Init&FK_Node=xxxx&ToNode=0&WorkID=xxxxx.  参数: WorkID
        返回的是 节点列表 Nodes, 部门列表 Depts, 人员列表 Emps
 
-    2, 用户选择一个节点，标记是 DoType=Accepter_Save&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi.
+    2, 用户选一个节点，标记是 DoType=Accepter_Save&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi.
        返回的是: 保存结果.
     -->
     <style type="text/css">
@@ -198,7 +198,7 @@
             var dtgArr = initData.Depts; //部门集合
             var dteArr = initData.Emps; //人员集合.
 
-            //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
+            //增加了: 默认选接收人，与强制选接收人的数据源,让其在打开的时候，可以把默认值选上.
             // 有可能值是空的.
             var defaultSelected = initData.DefaultSelected;
             var forceSelected = initData.ForceSelected;
@@ -234,7 +234,7 @@
                 var jsTreedata = [];
                 $.each(dtgArr, function (i, obj) {
                     //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
-                    // 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
+                    // 2016-12-05 by tianbaoyan 人员选器默认展开  因为数据量通过sql过滤不是很大
                     jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name, "data": obj, state: { opened: true} });
                 });
 
@@ -290,7 +290,7 @@
                 $("section").show();
                 return;
             }
-            if (selectNode[0].SELECTORMODEL == "GenerUserSelecter") { //通用人员选择
+            if (selectNode[0].SELECTORMODEL == "GenerUserSelecter") { //通用人员选
                 $('#selectEmpsDiv').css('display', 'block');
                 $('#groupTable').css('display', 'none');
 
@@ -400,7 +400,7 @@
                     noArr.push(nodeData.NO);
                 });
                 return noArr.join(';');
-            } else {//通用人员选择器
+            } else {//通用人员选器
                 return frames["iframeSelectEmpsForm"].window.returnVal.NO;
                 var checked = $('input:checked');
                 var selectedIdArrm = [];
@@ -411,12 +411,12 @@
             }
         }
 
-        //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
+        //确定【选接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
 
             var empNos = getSelectEmps();
             if (empNos == '' || empNos == null) {
-                alert('请选择人员.');
+                alert('请选人员.');
                 return;
             }
 
@@ -464,7 +464,7 @@
             $(".foot").hide();
         }
 
-        //取消【选择接收人并发送】
+        //取消【选接收人并发送】
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("取消");
@@ -478,14 +478,14 @@
                 window.close();
             }
         }
-        //初始化人员选择窗口
+        //初始化人员选窗口
         function initSelectEmpModal() {
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 80%;margin: 40px auto;">' +
                '<div class="modal-dialog" style="margin: 0px;width:700px;">'
                    + '<div class="modal-content" style="border-radius:0px;">'
                       + '<div class="modal-header">'
                           + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
-                           + '<h4 class="modal-title">选择人员</h4>'
+                           + '<h4 class="modal-title">选人员</h4>'
                        + '</div>'
                        + '<div class="modal-body">'
                            + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
@@ -535,7 +535,7 @@
         页面数据正在加载中，请稍候......</div>
     <section style="display: none;">
     <div id="searchS">
-        请选择要到达到的节点：<select id="searchS1" onclick="dtTable()" style="width: 76%;"></select>
+        请选要到达到的节点：<select id="searchS1" onclick="dtTable()" style="width: 76%;"></select>
     </div>
     <div id="groupTable" style="display: none; overflow-y: auto; text-align: left;">
         <ul id="dt" data-data="true" style="padding-left: 0px;"></ul>
@@ -543,8 +543,8 @@
     <div id="jstree" style="display: none; overflow-y: auto; text-align: left;"></div>
     <div id="selectEmpsDiv" style="display: none;">
         <div style="margin: 20px auto;">
-            请选择接受人：
-            <input type="button" id="BtnSelectEmps" value='选择接受人' style="float: right; height: 27px;"/>
+            请选接受人：
+            <input type="button" id="BtnSelectEmps" value='选接受人' style="float: right; height: 27px;"/>
             <textarea id="ToEmp" name="ToEmp" cols="20"  rows="3" style="height: 120px; resize: none;"></textarea>
          </div>
     </div>

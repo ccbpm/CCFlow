@@ -160,6 +160,7 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
@@ -181,7 +182,8 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
             cond.Insert();
@@ -620,15 +622,14 @@ namespace BP.WF.HttpHandler
         {
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
-
+            
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
             Cond cond = new Cond();
             cond.MyPK = mypk;
-            cond.RetrieveFromDBSources();
-
+            
             return cond.ToJson();
         }
         /// <summary>
@@ -641,6 +642,7 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
@@ -662,6 +664,8 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
 
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
@@ -723,6 +727,7 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
@@ -744,7 +749,8 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
             cond.Save();
@@ -814,6 +820,8 @@ namespace BP.WF.HttpHandler
         {
             int FK_MainNode = this.GetRequestValInt("FK_MainNode");
             int ToNodeID = this.GetRequestValInt("ToNodeID");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
+            
             CondType HisCondType = CondType.Dir;
 
             Cond cond = new Cond();
@@ -834,6 +842,8 @@ namespace BP.WF.HttpHandler
                 cond.FK_Node = FK_MainNode;
                 cond.FK_Flow = this.FK_Flow;
                 cond.ToNodeID = ToNodeID;
+                if (CondOrAnd != null)
+                    cond.CondOrAnd = CondOrAnd;
                 cond.Insert();
             }
 
@@ -890,6 +900,7 @@ namespace BP.WF.HttpHandler
             int FK_MainNode = this.GetRequestValInt("FK_MainNode");
             int ToNodeID = this.GetRequestValInt("ToNodeID");
             CondType condType = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
 
             Cond cond = new Cond();
            
@@ -905,6 +916,8 @@ namespace BP.WF.HttpHandler
                 cond.FK_Node = this.GetRequestValInt("FK_MainNode");
                 cond.FK_Flow = this.FK_Flow;
                 cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+                if (CondOrAnd != null)
+                    cond.CondOrAnd = CondOrAnd;
                 cond.Insert();
             }
 
@@ -979,6 +992,7 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
@@ -1001,7 +1015,8 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
             cond.Save();

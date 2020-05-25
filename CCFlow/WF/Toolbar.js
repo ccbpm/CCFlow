@@ -685,19 +685,28 @@ function clock() {
  * 关闭弹出消息页面同时关闭父页面
  */
 function closeWindow() {
-    if (window.opener) {
+    try {
+        if (window.opener) {
 
-        if (window.opener.name && window.opener.name == "main") {
-            window.opener.location.href = window.opener.location.href;
-            if (window.opener.top && window.opener.top.leftFrame) {
-                window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+            if (window.opener.name && window.opener.name == "main") {
+                window.opener.location.href = window.opener.location.href;
+                if (window.opener.top && window.opener.top.leftFrame) {
+                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                }
+            } else if (window.opener.name && window.opener.name == "运行流程") {
+                //测试运行流程，不进行刷新
+            } else {
+                //window.opener.location.href = window.opener.location.href;
             }
-        } else if (window.opener.name && window.opener.name == "运行流程") {
-            //测试运行流程，不进行刷新
-        } else {
-            //window.opener.location.href = window.opener.location.href;
         }
+    } catch (err) {
+        if (err.code == 18){
+             //可能出现跨域的问题
+        }
+       
+
     }
+    
 
     //提示消息有错误，页面不跳转
     var msg = $("#msgModalContent").html();

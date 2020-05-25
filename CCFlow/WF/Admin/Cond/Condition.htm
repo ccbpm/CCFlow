@@ -124,10 +124,13 @@
             $("#container").height(bodyHeight - selHeight - 40);
         });
 
-        //返回.
+         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondByFrm.htm', 'List.htm');
+            if (condOrAnd==null)
+                url = url.replace('Condition.htm', 'List.htm');
+            else
+                url = url.replace('Condition.htm', '../Cond2020/DirList.htm');
             window.location.href = url;
         }
     </script>

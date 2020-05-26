@@ -1972,6 +1972,7 @@ namespace BP.Sys
                                 string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
                                 if (DataType.IsNullOrEmpty(htmlCode) == false)
                                 {
+                                    htmlCode = htmlCode.Replace(oldMapID, specFrmID);
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
                                     string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";

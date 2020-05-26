@@ -3249,6 +3249,7 @@ namespace BP.WF.HttpHandler
         //多附件上传方法
         public string MoreAttach()
         {
+            string uploadFileM = ""; //上传附件数据的MyPK,用逗号分开
             string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
@@ -3370,6 +3371,8 @@ namespace BP.WF.HttpHandler
                 //HttpPostedFile file = context.Request.Files[i];
                 var file = HttpContextHelper.RequestFiles(i);
 
+                string fileName = System.IO.Path.GetFileName(file.FileName);
+
                 #region 文件上传的iis服务器上 or db数据库里.
                 if (athDesc.AthSaveWay == AthSaveWay.IISServer)
                 {
@@ -3424,9 +3427,10 @@ namespace BP.WF.HttpHandler
                         return "err@上传的文件" + file.FileName + "没有扩展名";
 
                     string guid = BP.DA.DBAccess.GenerGUID();
-                    string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
-                    string ext = System.IO.Path.GetExtension(file.FileName);
-                    string realSaveTo = savePath + "\\" + guid + "." + fileName + ext;
+
+                    
+                    
+                    string realSaveTo = savePath + "\\" + guid + "." + fileName;
 
                     realSaveTo = realSaveTo.Replace("~", "-");
                     realSaveTo = realSaveTo.Replace("'", "-");
@@ -3499,7 +3503,7 @@ namespace BP.WF.HttpHandler
                     }
                     #endregion 处理文件路径，如果是保存到数据库，就存储pk.
 
-                    dbUpload.FileName = file.FileName;
+                    dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
@@ -3511,6 +3515,8 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.UploadGUID = guid;
                     dbUpload.Insert();
+                    uploadFileM += dbUpload.MyPK + ",";
+
 
                     if (athDesc.AthSaveWay == AthSaveWay.DB)
                     {
@@ -3577,7 +3583,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.RefPKVal = pkVal.ToString();
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
-                    dbUpload.FileName = file.FileName;
+                    dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
@@ -3641,6 +3647,8 @@ namespace BP.WF.HttpHandler
                         File.Delete(temp);
                     }
 
+                    uploadFileM += dbUpload.MyPK + ",";
+
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
@@ -3657,7 +3665,7 @@ namespace BP.WF.HttpHandler
                 en.Row["AthNum"] = athNum + 1;
                 en.Update();
             }
-            return "上传成功.";
+            return uploadFileM;
         }
 
         /// <summary>

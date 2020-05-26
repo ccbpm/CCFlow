@@ -116,10 +116,12 @@
 
     function executeSql(sql, valueField, textField, key) {
         var datas = [];
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
         if (sql && $.trim(key) != "") {
             key = key.replace("'", "");
             var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
-            var dt = DBAccess.RunSQLReturnTable(_sql);
+            handler.AddPara("SQL", _sql);
+            var dt = handler.DoMethodReturnString("RunSQL_Init");
             if ($.isArray(dt)) {
                 $.each(dt, function (i, o) {
                     var option = {};

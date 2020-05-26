@@ -868,7 +868,8 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = CondType.Dir;
             cond.FK_Node = FK_MainNode;
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             cond.ToNodeID = ToNodeID;
             cond.Update();
 

@@ -69,7 +69,7 @@
             }          
 
             words.RetrieveCond("No", "In","("+f+")");
-            console.log(words);
+            
             if (words.length == 0) {
                 alert('没有配置字号，无法生成编号.');
                 return;
@@ -172,7 +172,7 @@
             var text = $("#DDL_WordKey option:selected").text();//获取字号select的text
             handler.AddUrlData(); //增加参数数据
             handler.AddPara("DocWordName", text);
-            var data = handler.DoMethodReturnString("DocWordReceive_Save");
+            var data = handler.DoMethodReturnString("DocWord_Save");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);

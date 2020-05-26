@@ -118,6 +118,9 @@ namespace BP.Sys
         #endregion 属性.
 
         #region 构造方法
+        /// <summary>
+        /// 访问权限
+        /// </summary>
         public override UAC HisUAC
         {
             get

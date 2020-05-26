@@ -863,7 +863,6 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
 
-
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 

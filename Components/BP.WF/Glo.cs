@@ -1201,10 +1201,10 @@ namespace BP.WF
             CheckGPM();
 
             #region 升级优化集团版的应用. 2020.04.03uu
-            BP.WF.Template.NodeToolbar bar = new NodeToolbar();
-            bar.CheckPhysicsTable();
 
             //--2020.05.25 修改节点自定义按钮功能;
+            BP.WF.Template.NodeToolbar bar = new NodeToolbar();
+            bar.CheckPhysicsTable();
             if (DBAccess.IsExitsTableCol("WF_NodeToolbar", "ShowWhere") == true)
             {
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere = 1");
@@ -1324,9 +1324,6 @@ namespace BP.WF
                     sub.CheckPhysicsTable();
                 }
             }
-
-
-
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();

@@ -32,7 +32,7 @@
         var nodeID = GetQueryString("FK_Node");
         var toNodeID = GetQueryString("ToNodeID");
         var condType = GetQueryString("CondType");
-        var cond = null;
+        var dir = null;
         //初始化页面函数.....
         $(function () {
 
@@ -43,11 +43,20 @@
             //组合PK.
             var dirMyPK = flowNo + "_" + nodeID + "_" + toNodeID;
             //alert(dirMyPK + "a");
-            cond = new Entity("BP.WF.Template.Direction", dirMyPK);
+            dir = new Entity("BP.WF.Template.Direction", dirMyPK);
+            //alert(cond.CondExpModel);
+
+            //设置radion 选择的值。
+            $("input:radio[value=" + dir.CondExpModel + "]").attr('checked', 'true');
+
+            //  $("input:radio[value='" + cond.CondExpModel + "']").attr('checked', 'true');
 
             //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
-            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
+            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", 2, "Idx");
+
+            //  alert(conds.length);
+
 
             var toNode = new Entity("BP.WF.Node", toNodeID);
             html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
@@ -66,21 +75,10 @@
                 var cond = conds[i];
 
                 //是混合运算就过滤
-                if (cond.CondExpModel == 2) {
-                    if (cond.CondOrAnd != 2) {
-                        continue;
-                    }
+                if (dir.CondExpModel != 2 && cond.DataFrom == 100) {
+                    continue;
                 }
-                if (cond.CondExpModel == 1) {
-                    if (cond.CondOrAnd != 1) {
-                        continue;
-                    }
-                }
-                if (cond.CondExpModel == 0) {
-                    if (cond.CondOrAnd != 0) {
-                        continue;
-                    }
-                }
+
 
                 html += "<tr >";
                 html += "<td class=Idx>" + idx + "</td>";
@@ -199,14 +197,16 @@
         function Up(mypk) {
             var en = new Entity("BP.WF.Template.Cond");
             en.SetPKVal(mypk);
-            en.DoMethodReturnString("DoUpDirCond");
+            en.Retrieve();
+            var data = en.DoMethodReturnString("DoUpDirCond");
             window.location.href = window.location.href;
             return;
         }
         function Down(mypk) {
             var en = new Entity("BP.WF.Template.Cond");
             en.SetPKVal(mypk);
-            en.DoMethodReturnString("DoDownDirCond");
+            en.Retrieve();
+            var data = en.DoMethodReturnString("DoDownDirCond");
             window.location.href = window.location.href;
             return;
         }
@@ -280,9 +280,9 @@
 
     <div style="right:30px; position:absolute; z-index:100; ">
         运算模式：
-        <label><input type="radio" id="0" name="CondExpModel" onclick="SelectModel(0)" />Or模式</label>
-        <label><input type="radio" id="1" name="CondExpModel" onclick="SelectModel(1)" />And模式</label>
-        <label><input type="radio" id="2" name="CondExpModel" onclick="SelectModel(2)" />混合模式</label>
+        <label><input type="radio" value="0" id="CondExpModel0" name="CondExpModel" onclick="SelectModel(0)" />Or模式</label>
+        <label><input type="radio" value="1" id="CondExpModel1" name="CondExpModel" onclick="SelectModel(1)" />And模式</label>
+        <label><input type="radio" value="2" id="CondExpModel2" name="CondExpModel" onclick="SelectModel(2)" />混合模式</label>
         <!--<input type="button" value="什么是条件？" onclick="javascript:Help()" />-->
     </div>
 

@@ -303,9 +303,10 @@ namespace BP.WF.HttpHandler
 
             string saveType = this.GetRequestVal("SaveType"); //保存类型.
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
 
             //把其他的条件都删除掉.
-           // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
+            // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.NodeForm;
@@ -321,7 +322,8 @@ namespace BP.WF.HttpHandler
             //  cond.OperatorValueT = ""; // this.GetOperValText;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             if (saveType == "AND")
                 cond.CondOrAnd = CondOrAnd.ByAnd;
             else

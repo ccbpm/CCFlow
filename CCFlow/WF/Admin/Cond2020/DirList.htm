@@ -190,7 +190,8 @@
         }
 
         //执行删除..
-        function Delete(mypk) {
+        function DeleteIt(mypk) {
+
             if (window.confirm('您确定要删除吗？') == false)
                 return;
             var en = new Entity("BP.WF.Template.Cond");

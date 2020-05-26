@@ -9,7 +9,6 @@ function Down2018(fk_ath, pkVal, delPKVal) {
         Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
         window.location.href = Url;
     }
-    
 }
 
 

@@ -12,6 +12,7 @@ function CheckID(val) {
     return flag;
 }
 
+
 //去左空格;
 function ltrim(s) {
     return s.replace(/(^\s*)/g, "");
@@ -2030,7 +2031,9 @@ var DBAccess = (function () {
 
     //执行方法名返回str.
     DBAccess.RunSQLReturnVal = function (sql) {
-        var dt = DBAccess.RunSQLReturnTable(sql);
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+        handler.AddPara("SQL", sql);
+        var dt = handler.DoMethodReturnString("RunSQL_Init");
         if (dt.length == 0)
             return null;
         var firItem = dt[0];

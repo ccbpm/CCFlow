@@ -44,7 +44,7 @@
 
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
-                    if (en.UIVisible == 0 || en.GroupID != group.OID)
+                    if (en.EditType != 0 || en.GroupID != group.OID ||en.KeyOfEn=="FID")
                         continue;
                     if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
                         en.DefVal = "";
@@ -62,13 +62,20 @@
                         if (en.LGType == 1) html += "<td>枚举</td>";
                         if (en.LGType == 2) html += "<td>外键</td>";
                     }
+                    if (en.UIContralType >= 4) {
+                        html += "<td colspan=2> - </td>";
+                    } else {
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
 
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
-
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
+                    }
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
+                    if (en.UIContralType == 14) {
+                        html += "<td> - </td>";
+                    } else {
 
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
+                    }
                     if (en.UIContralType >= 4) {
                         html += "<td colspan=3> - </td>";
                     } else {
@@ -146,7 +153,7 @@
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
-                if (en.UIVisible == 0)
+                if (en.EditType != 0||en.KeyOfEn=="FID")
                     continue;
 
                 ff = new Entity("BP.WF.Template.FrmField");

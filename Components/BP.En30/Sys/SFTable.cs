@@ -995,21 +995,21 @@ namespace BP.Sys
                     dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
                     dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
                     dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
                 }
 
@@ -1019,7 +1019,7 @@ namespace BP.Sys
                     dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "0";
                     dtl.Insert();
 
@@ -1027,7 +1027,7 @@ namespace BP.Sys
                     dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
 
@@ -1035,7 +1035,7 @@ namespace BP.Sys
                     dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = this.No;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
                 }

@@ -22,7 +22,7 @@ namespace BP.Sys
         /// <summary>
         /// 关联的外键
         /// </summary>
-        public const string DictMyPK = "DictMyPK";
+        public const string FK_SFTable = "FK_SFTable";
         public const string BH = "BH";
         public const string Name = "Name";
         public const string ParentNo = "ParentNo";
@@ -60,15 +60,15 @@ namespace BP.Sys
         //        this.SetValByKey(DictDtlAttr.OrgNo, value);
         //    }
         //}
-        public string DictMyPK
+        public string FK_SFTable
         {
             get
             {
-                return this.GetValStrByKey(DictDtlAttr.DictMyPK);
+                return this.GetValStrByKey(DictDtlAttr.FK_SFTable);
             }
             set
             {
-                this.SetValByKey(DictDtlAttr.DictMyPK, value);
+                this.SetValByKey(DictDtlAttr.FK_SFTable, value);
             }
         }
         public string BH
@@ -156,7 +156,7 @@ namespace BP.Sys
                 //DictMyPK+"_"+BH
                 map.AddMyPK();
 
-                map.AddTBString(DictDtlAttr.DictMyPK, null, "外键表ID", true, false, 0, 200, 20);
+                map.AddTBString(DictDtlAttr.FK_SFTable, null, "外键表ID", true, false, 0, 200, 20);
                 //map.AddTBString(DictDtlAttr.TableID, null, "TableID", true, false, 0, 200, 20);
 
                 map.AddTBString(DictDtlAttr.BH, null, "BH", true, false, 0, 200, 20);
@@ -207,9 +207,9 @@ namespace BP.Sys
         {
         }
 
-        public DictDtls(string dictMyPK)
+        public DictDtls(string fk_sftable)
         {
-            this.Retrieve(DictDtlAttr.DictMyPK, dictMyPK);
+            this.Retrieve(DictDtlAttr.FK_SFTable, fk_sftable);
         }
 
 

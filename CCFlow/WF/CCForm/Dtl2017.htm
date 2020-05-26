@@ -430,8 +430,19 @@
             }
 
 
+            var formExt = $("#formExt").val();
+            var extObj = null;
+            try {
+                if (formExt && formExt != "") {
+                    extObj = JSON.parse(formExt);
+                }
+                if (extObj) {
+                    parentStatistics(extObj);
+                }
 
-
+            } catch (e) {
+            }
+            
 
             setTdDataByTrData(newRowIndex);
 
@@ -1776,6 +1787,18 @@
                 updateTableSn(tr);
                 tr.remove();
                 triggerStatistics(); // 重新计算
+                var formExt = $("#formExt").val();
+                var extObj = null;
+                try {
+                    if (formExt && formExt != "") {
+                        extObj = JSON.parse(formExt);
+                    }
+                    if (extObj) {
+                        parentStatistics(extObj);
+                    }
+                } catch (e) {
+                }
+                
             }
         }
 

@@ -5000,7 +5000,15 @@ namespace BP.WF.HttpHandler
         #endregion
 
 
-
+        #region 前台SQL转移处理
+        public string RunSQL_Init()
+        {
+            string sql = GetRequestVal("SQL");
+            DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = new DataTable();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
 
     }
 }

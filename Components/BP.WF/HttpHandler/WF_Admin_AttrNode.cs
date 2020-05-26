@@ -669,7 +669,7 @@ namespace BP.WF.HttpHandler
             qo = new QueryObject(attrs);
             qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
             qo.addAnd();
-            qo.AddWhere(MapAttrAttr.UIVisible, true);
+            qo.AddWhere(MapAttrAttr.EditType, 0);
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
 

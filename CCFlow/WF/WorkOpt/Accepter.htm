@@ -347,7 +347,7 @@
                 }
                 selectedEmps.push(checked[i].id);
             }
-            debugger;
+            //debugger;
             selectedEmps = selectedEmps.join(';');
             if (selectedEmps == '' || selectedEmps == null) {
                 alert('请选择人员.');
@@ -390,7 +390,7 @@
             data = data.replace('@', '<br/>@');
             data = data.replace(/@/g, '<br/>&nbsp;@');
             data = data.replace('<br/><br/>&nbsp;', '');
-            console.log(data);
+            //console.log(data);
 
             if ("Accepter_Save" == doType) {
                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {

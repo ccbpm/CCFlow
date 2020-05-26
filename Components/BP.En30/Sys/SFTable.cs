@@ -107,7 +107,11 @@ namespace BP.Sys
         /// 字典表类型
         /// </summary>
         public const string CodeStruct = "CodeStruct";
-
+        /// <summary>
+        /// 是否自动生成编号
+        /// </summary>
+        public const string IsAutoGenerNo = "IsAutoGenerNo";
+        
         #region 链接到其他系统获取数据的属性。
         /// <summary>
         /// 数据源

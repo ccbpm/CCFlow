@@ -276,6 +276,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\FrmTree.cs" />
+    <Compile Include="Sys\SFTableDict.cs" />
     <Compile Include="Sys\ToolbarExcel.cs" />
     <Compile Include="Sys\ToolbarExcelSln.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />

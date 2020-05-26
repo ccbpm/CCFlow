@@ -43,7 +43,7 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
-        /// 绑定的枚举ID
+        /// 绑定的ID
         /// </summary>
         public string UIBindKey
         {
@@ -94,7 +94,6 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
-
 
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);

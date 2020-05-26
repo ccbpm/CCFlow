@@ -47,17 +47,18 @@
 
         //展现数据.
         function BindIt(data) {
-          
+            debugger;
             //1. 查询出来代字.
             var flowno =  GetQueryString("FK_Flow");
             var recwordflows = new Entities("BP.DOC.WD.RecwordFlows");
-            recwordflows.Retrieve("FK_Flow", flowno);
-          
-          
+            recwordflows.Retrieve("FK_Flow", flowno)
+            if (recwordflows.length == 0) {
+                alert("没有为该流程配置收文文号,请先配置");
+                return;
+            }
             var ensName = "BP.DOC.WD.Recwords"; 
             var words = new Entities(ensName);   
-            var f = "";
-         
+            var f = "";         
            
             for (var i = 0; i < recwordflows.length; i++) {
                 var recwordflow = recwordflows[i];
@@ -65,8 +66,7 @@
                      f += "'" + recwordflow.FK_Recword + "'";
                 }
                 f += ",'" + recwordflow.FK_Recword + "'";
-            }
-          
+            }          
 
             words.RetrieveCond("No", "In","("+f+")");
             console.log(words);

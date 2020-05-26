@@ -347,7 +347,7 @@
                 }
                 selectedEmps.push(checked[i].id);
             }
-
+            debugger;
             selectedEmps = selectedEmps.join(';');
             if (selectedEmps == '' || selectedEmps == null) {
                 alert('请选择人员.');
@@ -375,11 +375,11 @@
             data = data.replace("'WFRpt", "'../WFRpt");
             data = data.replace("'WFRpt", "'../WFRpt");
 
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
-            data = data.replace("'./Img", "'../Img");
+            //data = data.replace("'./Img", "'../Img");
+            //data = data.replace("'./Img", "'../Img");
+            //data = data.replace("'./Img", "'../Img");
+            //data = data.replace("'./Img", "'../Img");
+            //data = data.replace("'./Img", "'../Img");
 
             if (data.indexOf("UnSend.htm") == -1) {
                 data = data.replace("'./WorkOpt/", "");
@@ -389,7 +389,8 @@
 
             data = data.replace('@', '<br/>@');
             data = data.replace(/@/g, '<br/>&nbsp;@');
-
+            data = data.replace('<br/><br/>&nbsp;', '');
+            console.log(data);
 
             if ("Accepter_Save" == doType) {
                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {

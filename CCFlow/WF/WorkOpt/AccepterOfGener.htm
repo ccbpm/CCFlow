@@ -46,10 +46,10 @@
 
         #SelectEmp {
             position: relative;
-            width: 400px;
+            width: 300px;
             border-top: 0;
             display: none;
-            margin-top: -7px;
+            margin-top: 5px;
             /*border: solid 2px #3175af;*/
         }
 
@@ -58,9 +58,9 @@
         }
 
         #next {
-            float: left;
+            float: right;
             position: relative;
-            width: 600px;
+            width: auto;
         }
     </style>
     <script type="text/javascript">
@@ -331,7 +331,7 @@
             data = data.replace(/null/g, '');
             data = data.replace("<br><br/><br/>", '');
 
-            data += " <center><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></center>";
+            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></div>";
             $(".Msg").show();
             $(".Msg").html(data);
 
@@ -512,20 +512,18 @@
     </div>
 
     <div style="margin-left:20px">
-
-        <div style="float:left">
+        <div style="float:left;margin-top:4px">
             <input type="text" id="TB_Emps" name="TB_Emps"
-                   title="查张三,您可输入: zs或zhangs或zhangsan" ;=;
-                   placeholder="查张三,您可输入: zs或zhangs或zhangsan" ;=;
+                   title="查张三,您可输入: zs或zhangs或zhangsan"
+                   placeholder="查张三,您可输入: zs或zhangs或zhangsan"
                    value='' style=" width:300px; " />
-            <input type="button" id="Btn_SelectEmps" value='选择人' />
-            <input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='高级选择bate' />
-            <div id="SelectEmp"></div>
 
+            <div id="SelectEmp"></div>
         </div>
-        <!--<select id="SelectEmp"></select>-->
         <div id="next">
             <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
+            <input type="button" id="Btn_SelectEmps" value='选择人' />
+            <input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='高级选择bate' />
             <input type="button" value="发送" onclick="Send();" id="Btn_Send" />
             <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
 
@@ -538,6 +536,7 @@
                 </ul>
             </div>
         </div>
+
     </div>
 
 

@@ -34,20 +34,20 @@
             ens.Retrieve("Auther", webUser.No);
 
 
-           var  html = "<div class='container'>";
-           html += "<div class='fixed-table-header '>";
-           html += "<table class='table table-hover table-striped ' >";
-           html += "<caption style='height:auto;text-indent: 0em;'> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
-            
-           html += "<thead ><tr> ";
-           html += "<th style='background-color:#F2F2F2;'>序</th>";
-           html += "<th style='background-color:#F2F2F2;'>授权给</th>";
-           html += "<th style='background-color:#F2F2F2;'>授权类型</th>";
-           html += "<th style='background-color:#F2F2F2;'>流程</th>";
-           html += "<th style='background-color:#F2F2F2;'>收回日期</th>";
-           html += "<th style='background-color:#F2F2F2;'>状态</th>";
-           html += "<th style='background-color:#F2F2F2;'>操作</th>";
-           html += "</tr></thead>";
+            var html = "<div class='container'>";
+            html += "<div class='fixed-table-header '>";
+            html += "<table class='table table-hover table-striped ' >";
+            html += "<caption style='height:auto;text-indent: 0em;'> [" + webUser.No + "]授权列表  <a href='AuthorDtl.htm' >+增加授权列表</a> </caption>";
+
+            html += "<thead ><tr> ";
+            html += "<th style='background-color:#F2F2F2;'>序</th>";
+            html += "<th style='background-color:#F2F2F2;'>授权给</th>";
+            html += "<th style='background-color:#F2F2F2;'>授权类型</th>";
+            html += "<th style='background-color:#F2F2F2;'>流程</th>";
+            html += "<th style='background-color:#F2F2F2;'>收回日期</th>";
+            html += "<th style='background-color:#F2F2F2;'>状态</th>";
+            html += "<th style='background-color:#F2F2F2;'>操作</th>";
+            html += "</tr></thead>";
 
 
             html += "<tbody>";
@@ -58,17 +58,20 @@
                 en = ens[i];
                 //指定流程时，授权时间不同，可能会有多条合并流程的记录
                 if (en.AuthType == 2) {
-                    if (takeBackDT.indexOf(en.TakeBackDT+",") != -1) {
-                            continue;
+                    if (takeBackDT.indexOf(en.TakeBackDT + ",") != -1) {
+                        continue;
                     }
                     takeBackDT += en.TakeBackDT + ",";
 
                     var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 2 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT = '" + en.TakeBackDT + "'";
-                    var dt = DBAccess.RunSQLReturnTable(sql);
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                    handler.AddPara("SQL", sql);
+                    var dt = handler.DoMethodReturnString("RunSQL_Init");
                     
+
                     var flowName = "";
                     for (var j = 0; j < dt.length; j++) {
-                    
+
                         var da = dt[j];
                         flowName += da.FlowName + ",";
                     }
@@ -76,19 +79,19 @@
                 var AuthType = en.AuthType;
                 var AuthTypeName;
                 switch (AuthType) {
-                    case 0: AuthTypeName='不授权' ; break;
-                    case 1: AuthTypeName='全部流程授权'; break;
-                    case 2: AuthTypeName='指定流程授权';break;
-                    default: AuthTypeName = '空'; 
+                    case 0: AuthTypeName = '不授权'; break;
+                    case 1: AuthTypeName = '全部流程授权'; break;
+                    case 2: AuthTypeName = '指定流程授权'; break;
+                    default: AuthTypeName = '空';
                 }
                 var nowDate = getNowFormatDate();
                 var state = "";
-                if (nowDate<=en.TakeBackDT) {
+                if (nowDate <= en.TakeBackDT) {
                     state = "授权中";
                 } else {
                     state = "已收回";
                 }
-                
+
                 html += "<tr>";
                 html += "<td>" + num + "</td>";
                 html += "<td>" + en.EmpName + "</td>";
@@ -110,11 +113,11 @@
             html += "</div>";
             html += "</div>";
             $("#docs").html(html);
-           
+
         });
 
         //执行删除.
-        function Del(Auther,EmpNo,TakeBackDT) {
+        function Del(Auther, EmpNo, TakeBackDT) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
             var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
@@ -143,7 +146,7 @@
             return cdt;
         }
 
-</script>
+    </script>
 </head>
 <body onkeypress="Esc()" class="gray-bg">
     <form id="cc" name="cc">

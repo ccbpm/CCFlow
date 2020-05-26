@@ -55,9 +55,6 @@
             var conds = new Entities("BP.WF.Template.Conds");
             conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", 2, "Idx");
 
-            //  alert(conds.length);
-
-
             var toNode = new Entity("BP.WF.Node", toNodeID);
             html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
@@ -66,7 +63,8 @@
             html += "<th>序</th>";
             html += "<th>类型</th>";
             html += "<th>表达式</th>";
-            html += "<th>操作</th>";
+            html += "<th>移动</th>";
+            html += "<th>删除</th>";
             html += "</tr>";
             //循环生成表格.
             var idx = 1;
@@ -86,23 +84,29 @@
 
                 html += "<td>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 html += "<td>";
-                html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
                 html += " - <a class='btn btn-default btn-sm' href=\"javascript:Down('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
                 html += "<td>";
+                html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 html += "</tr>";
 
                 idx++;
             }
             html += "</table>";
             $("#table").html(html);
-            document.getElementById(model).checked = true;
 
 
             //新建运算符按钮的显示和隐藏
             $("#condBtn").hide();
-            if (model == "2")
+
+            if (dir.CondExpModel == 2) {
+
                 $("#condBtn").show();
+
+                var data = conds.DoMethodReturnString("DoCheck");
+                //alert(data);
+                $("#checkInfo").html(data);
+            }
 
         });
 
@@ -314,20 +318,7 @@
         </ul>
     </div>
 
-
-    <!--
-        类型	表达式	操作
-    ()预算符	(	上移- 下移-删除
-    ()表单字段	Age>10	上移- 下移-删除
-    ()预算符	Or	上移- 下移-删除
-    ()表单字段	TS >4	上移- 下移-删除
-    ()预算符	）	上移- 下移-删除
-    ()预算符	And	上移- 下移-删除
-    ()预算符	(	上移- 下移-删除
-    ()表单字段	Age<10 上移- 下移-删除
-                     ()预算符 Or 上移- 下移-删除
-                     ()按部门 部门是xxx部门 上移- 下移-删除
-                     ()预算符 ) 上移- 下移-删除 -->
+    <div id="checkInfo"></div>
 
 </body>
 </html>

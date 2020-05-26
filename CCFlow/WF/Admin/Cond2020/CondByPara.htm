@@ -136,10 +136,12 @@
          //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd==null)
+            if (condOrAnd == null)
                 url = url.replace('CondByPara.htm', 'List.htm');
-            else
-                url = url.replace('CondByPara.htm', '../Cond2020/DirList.htm');
+            else {
+                url = url.replace('CondByPara.htm', 'DirList.htm');
+                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
+            }
             window.location.href = url;
         }
 

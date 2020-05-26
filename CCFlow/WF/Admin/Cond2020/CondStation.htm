@@ -304,8 +304,10 @@
             var url = window.location.href;
             if (GetQueryString("CondOrAnd") == null)
                 url = url.replace('CondStation.htm', 'List.htm');
-            else
-                url = url.replace('CondStation.htm', '../Cond2020/DirList.htm');
+            else {
+                url = url.replace('CondStation.htm', 'DirList.htm');
+                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
+            }
             window.location.href = url;
         }
     </script>

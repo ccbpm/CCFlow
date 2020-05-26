@@ -444,7 +444,7 @@ namespace BP.WF.HttpHandler
 
             //节点,子线城,还是其他
             CondType condTypeEnum =  (CondType)this.GetRequestValInt("CondType");
-
+            CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             //把其他的条件都删除掉.
             ///DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.StandAloneFrm);
 
@@ -457,7 +457,8 @@ namespace BP.WF.HttpHandler
             cond.OperatorValue = operVal; //操作值.
 
             cond.FK_Attr = field; //字段属性.
-
+            if (CondOrAnd != null)
+                cond.CondOrAnd = CondOrAnd;
             //  cond.OperatorValueT = ""; // this.GetOperValText;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;

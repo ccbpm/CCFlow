@@ -14,7 +14,9 @@ function AthView(fk_ath, pkVal, delPKVal) {
 }
 
 //文件上传成功后,要激活的事件,用户进行二次开发比如：把ftp文件转化pdf进行预览.
-function AfterAthUploadOver(pkVal) {
+function AfterAthUploadOver(frmID,pkVal,guid) {
+
+    return;
 
   //  var url = "http://127.0.0.1:8012/addTask?url=ftp://xxx/test.txt";
     var url = "http://127.0.0.1:8012/addTask?id=" + pkVal;

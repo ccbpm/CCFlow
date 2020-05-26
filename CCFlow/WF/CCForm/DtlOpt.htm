@@ -170,7 +170,7 @@
             var href = window.location.href;
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             var url = Handler + "?DoType=DtlOpt_Add&PKs=" + vals + "&" + urlParam + "&m=" + Math.random();
-
+            
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
             handler.AddPara("PKs", vals);

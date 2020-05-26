@@ -354,11 +354,11 @@ namespace BP.Sys
                 return src.RunSQLReturnTable(sql);
             }
 
-            //if(this.SrcType == Sys.SrcType.SysDict)
-            //{
-            //    DictDtls dictDtls = new DictDtls(this.No);
-            //    return dictDtls.ToDataTableField();
-            //}
+            if (this.SrcType == Sys.SrcType.SysDict)
+            {
+                DictDtls dictDtls = new DictDtls(this.No);
+                return dictDtls.ToDataTableField();
+            }
             #endregion
 
             return null;

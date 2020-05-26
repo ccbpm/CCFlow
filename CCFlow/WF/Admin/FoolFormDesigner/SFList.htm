@@ -199,7 +199,7 @@
                 var en = new Entity("BP.Sys.Dict", no);
                 en.Delete();
                 var ens = new Entities("BP.Sys.DictDtls");
-                ens.Delete("DictMyPK",no);
+                ens.Delete("DictID",no);
 
             }
             if (data.indexOf('err@') >= 0) {

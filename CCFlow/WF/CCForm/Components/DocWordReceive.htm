@@ -53,7 +53,7 @@
             var recwordflows = new Entities("BP.DOC.WD.RecwordFlows");
             recwordflows.Retrieve("FK_Flow", flowno);
           
-            conso
+          
             var ensName = "BP.DOC.WD.Recwords"; 
             var words = new Entities(ensName);   
             var f = "";
@@ -92,7 +92,7 @@
             handler.AddFormData();
             handler.AddUrlData(); //增加参数数据
 
-            var data = handler.DoMethodReturnString("DocWordReceive_ReGenerDocWord");
+            var data = handler.DoMethodReturnString("DocWord_ReGenerDocWord");
          
             $("#TB_LSH").val(data);
 

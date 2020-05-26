@@ -32,15 +32,19 @@
         var nodeID = GetQueryString("FK_Node");
         var toNodeID = GetQueryString("ToNodeID");
         var condType = GetQueryString("CondType");
+        var cond = null;
         //初始化页面函数.....
         $(function () {
-            LoadPage(0);
-           
-        });
-        function LoadPage(model) {
+
             $("#table").html("");
             if (condType == null || condType == undefined)
-                condType = 2; //默认为方向条件.
+                condType = 0; //默认为方向条件.
+
+            //组合PK.
+            var dirMyPK = flowNo + "_" + nodeID + "_" + toNodeID;
+            //alert(dirMyPK + "a");
+            cond = new Entity("BP.WF.Template.Direction", dirMyPK);
+
             //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
             conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
@@ -48,12 +52,7 @@
             var toNode = new Entity("BP.WF.Node", toNodeID);
             html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
-            if (condType == 2)
-                html += "<caption><img src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
-
-            if (condType == 1)
-                html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";
-            html += "<br>";
+            html += "<caption><img src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>类型</th>";
@@ -65,22 +64,24 @@
             for (var i = 0; i < conds.length; i++) {
 
                 var cond = conds[i];
+
                 //是混合运算就过滤
-                if (model == 2) {
+                if (cond.CondExpModel == 2) {
                     if (cond.CondOrAnd != 2) {
                         continue;
                     }
                 }
-                if (model == 1) {
+                if (cond.CondExpModel == 1) {
                     if (cond.CondOrAnd != 1) {
                         continue;
                     }
                 }
-                if (model == 0) {
+                if (cond.CondExpModel == 0) {
                     if (cond.CondOrAnd != 0) {
                         continue;
                     }
                 }
+
                 html += "<tr >";
                 html += "<td class=Idx>" + idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
@@ -88,20 +89,25 @@
                 html += "<td>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 html += "<td>";
                 html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
-                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
-                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Down('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
                 html += "<td>";
-                html += "</tr>"
+                html += "</tr>";
+
                 idx++;
             }
             html += "</table>";
             $("#table").html(html);
             document.getElementById(model).checked = true;
+
+
             //新建运算符按钮的显示和隐藏
             $("#condBtn").hide();
             if (model == "2")
                 $("#condBtn").show();
-        }
+
+        });
+
         function ShowType(DataFrom) {
             var res = "";
             switch (DataFrom) {
@@ -180,36 +186,31 @@
             //$("#Msg").html("<font color=green>" + data + "</font>");
         }
 
-        function Down(mypk) {
-            var en = new Entity("BP.WF.Template.Cond");
-            en.SetPKVal(mypk);
-            en.DoDown();
-            window.location.href = window.location.href;
-        }
-        function Up(mypk) {
-            var en = new Entity("BP.WF.Template.Cond");
-            en.SetPKVal(mypk);
-            en.DoUp();
-
-            window.location.href = window.location.href;
-        }
-
         //执行删除..
         function DeleteIt(mypk) {
-
             if (window.confirm('您确定要删除吗？') == false)
                 return;
             var en = new Entity("BP.WF.Template.Cond");
             en.SetPKVal(mypk);
             en.Delete();
-            var model = 0;
-            var inputs = document.getElementsByName("CondOrAnd");
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].checked)
-                    model = inputs[i].id;
-            }
-            LoadPage(model);
+            window.location.href = window.location.href;
+            return;
         }
+        function Up(mypk) {
+            var en = new Entity("BP.WF.Template.Cond");
+            en.SetPKVal(mypk);
+            en.DoMethodReturnString("DoUpDirCond");
+            window.location.href = window.location.href;
+            return;
+        }
+        function Down(mypk) {
+            var en = new Entity("BP.WF.Template.Cond");
+            en.SetPKVal(mypk);
+            en.DoMethodReturnString("DoDownDirCond");
+            window.location.href = window.location.href;
+            return;
+        }
+
         /*隐藏与显示.*/
         function ShowHidden(ctrlID) {
 
@@ -223,87 +224,8 @@
             }
         }
 
-        //当字段选择的时候.
-        function changeCond(c) {
-
-            if (c == null || c.value.length == 0)
-                return;
-
-            var key = c.value;
-            if (key == "all")
-                return;
-
-            var fk_flow = GetQueryString("FK_Flow");
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("KeyOfEn", key);
-
-            var data = handler.DoMethodReturnString("CondByFrm_InitField");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            data = JSON.parse(data);
-
-            //获得 mapattr.
-            var mapattr = data["Sys_MapAttr"][0];
-            //操作符.
-            var opers = data["Opers"];
-
-            //两者都隐藏.
-            document.getElementById("TB_Val").style.display = "none";
-            document.getElementById("TB_Text").style.display = "none";
-            document.getElementById("DDL_Val").style.display = "none";
-            $("#opts").html("");
-
-
-            if (mapattr.LGType == "1") {
-                /*是枚举类型*/
-                var enums = data["Enums"];
-                GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
-
-                //显示.
-                document.getElementById("DDL_Val").style.display = "";
-            }
-
-            if (mapattr.LGType == "2" || (mapattr.LGType == "0" && mapattr.MyDataType == "1" && mapattr.UIContralType == 1)) {
-                document.getElementById("TB_Text").style.display = "inline";
-                $("#opts").html("<input type='button' onclick=\"javascript:SelectFKData('" + mapattr.MyPK + "');\" value='请选择数据' />");
-            }
-
-            if (mapattr.LGType == "0" && mapattr.UIContralType != 1) {
-                document.getElementById("TB_Val").style.display = "";
-            }
-
-            //绑定操作符.
-            GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
-        }
-        ///选择外部数据.
-        var newWindow = "";
-        function SelectFKData(fk_mapAttr) {
-            OpenEasyUiDialogExt('CondByFrmSelectFKData.htm?FK_MapAttr=' + fk_mapAttr, '选择一个值', '600', '400', false);
-        }
-        function getValue(data) {
-            $('#eudlg').dialog('close');
-            $("#TB_Val").val(data[0]);
-            $("#TB_Text").val(data[1]);
-        }
-        //返回.
-        function Back() {
-            var url = window.location.href;
-            url = url.replace('CondByFrm.htm', 'DirList.htm');
-            window.location.href = url;
-        }
         function NewCond(type) {
+
             var url = window.location.href;
             url = url.replace('DirList.htm', type + '.htm');
             var inputs = document.getElementsByName("CondOrAnd");
@@ -320,29 +242,36 @@
             window.location.href = url;
         }
         //添加运算符
-        function AddCond(cond) {
+        function AddCond(condExp) {
+
             var en = new Entity("BP.WF.Template.Cond");
             //生成一个随机数添加到运算符的主键中
             var radomNum = parseInt(Math.random() * 1000) + 1;
-            en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
-            if (en.RetrieveFromDBSources() == 1) {
-                var radomNum = parseInt(Math.random() * 1000) + 1;
-                en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
-            }
+
             en.CondType = 2;
-            en.DataFrom = 100;
+            en.DataFrom = 100; //运算符.
             en.FK_Flow = flowNo;
             en.FK_Node = nodeID;
-            en.FK_Operator = cond;
+            en.FK_Operator = condExp;
             en.ToNodeID = toNodeID;
-            en.FK_Operator = cond;
-            en.CondOrAnd = 2;//带运算符的是混合模式
+            en.FK_Operator = condExp;
+            en.CondOrAnd = 2; //带运算符的是混合模式
             en.Insert();
-            LoadPage(2);
+
+            window.location.href = window.location.href;
         }
         //选择模式
         function SelectModel(model) {
-            LoadPage(model);
+
+            //组合PK.
+            var dirMyPK = flowNo + "_" + nodeID + "_" + toNodeID;
+            //alert(dirMyPK + "a");
+            cond = new Entity("BP.WF.Template.Direction", dirMyPK);
+            cond.CondExpModel = model;
+            cond.Update();
+
+            window.location.href = window.location.href;
+            //LoadPage(model);
         }
     </script>
 
@@ -350,42 +279,41 @@
 <body>
 
     <div style="right:30px; position:absolute; z-index:100; ">
-
-        表达式运算模式：
-        <label><input type="radio" id="0" name="CondOrAnd" onclick="SelectModel(0)" />Or模式</label>
-        <label><input type="radio" id="1" name="CondOrAnd" onclick="SelectModel(1)" />and模式</label>
-        <label><input type="radio" id="2" name="CondOrAnd" onclick="SelectModel(2)" />混合模式</label>
-        <br />
-        <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
-        <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
-            <ul>
-                <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
-                <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
-                <li><a href="javascript:NewCond('CondStation');">按指定操作员的岗位条件</a></li>
-                <li><a href="javascript:NewCond('CondDept');">按指定操作员的部门条件</a> </li>
-                <li><a href="javascript:NewCond('CondBySQL');">按SQL条件计算</a> </li>
-                <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
-                <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
-                <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
-            </ul>
-        </div>
-
-        <input id="condBtn" type="button" value="+新建运算符bate" onclick="ShowHidden('state1')" />
-        <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px;">
-            <ul>
-                <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
-                <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-                <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-                <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-            </ul>
-        </div>
-
-        <input type="button" value="什么是条件？" onclick="javascript:Help()" />
-
+        运算模式：
+        <label><input type="radio" id="0" name="CondExpModel" onclick="SelectModel(0)" />Or模式</label>
+        <label><input type="radio" id="1" name="CondExpModel" onclick="SelectModel(1)" />And模式</label>
+        <label><input type="radio" id="2" name="CondExpModel" onclick="SelectModel(2)" />混合模式</label>
+        <!--<input type="button" value="什么是条件？" onclick="javascript:Help()" />-->
     </div>
+
+
     <div style="position:relative;" id="table">
-
     </div>
+
+    <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
+    <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
+        <ul>
+            <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
+            <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
+            <li><a href="javascript:NewCond('CondStation');">按指定操作员的岗位条件</a></li>
+            <li><a href="javascript:NewCond('CondDept');">按指定操作员的部门条件</a> </li>
+            <li><a href="javascript:NewCond('CondBySQL');">按SQL条件计算</a> </li>
+            <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
+            <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
+            <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
+        </ul>
+    </div>
+
+    <input id="condBtn" type="button" value="+新建运算符" onclick="ShowHidden('state1')" />
+    <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px;">
+        <ul>
+            <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
+            <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+            <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+            <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+        </ul>
+    </div>
+
 
     <!--
         类型	表达式	操作

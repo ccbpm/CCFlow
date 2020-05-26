@@ -36,7 +36,9 @@ function AthView(fk_ath, pkVal, delPKVal) {
 }
 
 //文件上传成功后,要激活的事件,用户进行二次开发比如：把ftp文件转化pdf进行预览.
-function AfterAthUploadOver(frmID, pkVal, guid) {
+
+//mypks=多个用逗号分开.
+function AfterAthUploadOver(frmID, pkVal, mypks) {
 
     //AthView(fk_ath, pkVal, delPKVal);
     return;

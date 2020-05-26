@@ -306,7 +306,7 @@
                 url = url.replace('CondStation.htm', 'List.htm');
             else {
                 url = url.replace('CondStation.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
+                url = url.replace('&CondOrAnd=' + GetQueryString("CondOrAnd"),'  ');
             }
             window.location.href = url;
         }

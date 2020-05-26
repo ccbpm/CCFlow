@@ -182,7 +182,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 170) { //收文字号
             if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
                 var localHref = GetLocalWFPreHref();
-                var url = localHref + "/WF/CCForm/Components/DocWordReceive.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID;
+                var url = localHref + "/WF/CCForm/Components/DocWordReceive.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID + "&FK_Flow=" + GetQueryString("FK_Flow");
                 $("#TB_DocWord").attr("readonly", "readonly");
                 $("#TB_DocWord").on("dblclick", function () {
                     window.OpenBootStrapModal(url, "DocWordReceiveIFrame", "收文字号", 600, 200, "icon-edit", false);

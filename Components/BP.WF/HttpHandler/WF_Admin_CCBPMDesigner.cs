@@ -677,8 +677,8 @@ namespace BP.WF.HttpHandler
                 adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
                 if (adminers.Count == 0)
                 {
-                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();
-                    int i = orgs.Retrieve("Adminer", WebUser.No);
+                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();                   
+                    int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
                     if (i == 0)
                         return "err@非管理员或二级管理员用户，不能登录后台.";
 

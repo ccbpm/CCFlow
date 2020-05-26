@@ -333,7 +333,7 @@
         <label><input type="radio" id="1" name="CondOrAnd" onclick="SelectModel(1)" />and模式</label>
         <label><input type="radio" id="2" name="CondOrAnd" onclick="SelectModel(2)" />混合模式</label>
         <br />
-        <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
+        <input type="button" value="+条件" onclick="ShowHidden('state')" />
         <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
             <ul>
                 <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
@@ -347,7 +347,7 @@
             </ul>
         </div>
 
-        <input type="button" value="+新建运算符bate" onclick="ShowHidden('state1')" />
+        <input type="button" value="+运算符" onclick="ShowHidden('state1')" />
         <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px;">
             <ul>
                 <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
@@ -357,7 +357,7 @@
             </ul>
         </div>
 
-        <input type="button" value="什么是条件？" onclick="javascript:Help()" />
+        <!--<input type="button" value="什么是条件？" onclick="javascript:Help()" />-->
 
     </div>
     <div style="position:relative;" id="table">

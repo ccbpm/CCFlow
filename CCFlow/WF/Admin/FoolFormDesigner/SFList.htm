@@ -214,9 +214,7 @@
         function Edit(fk_sftable, sfType) {
 
             var ensName = '';
-  
             ensName = "BP.Sys.SFTable";
-          
 
             if (fk_sftable.indexOf('.') != -1) {
                 ensName = 'BP.Sys.FrmUI.SFTableClass';
@@ -225,6 +223,8 @@
             if (sfType == "3")
                 ensName = 'BP.Sys.SFTableSQL';
 
+            if (sfType == "7")
+                ensName = 'BP.Sys.SFTableDict';
 
             var url = '../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_sftable;
             // window.location.href = url;

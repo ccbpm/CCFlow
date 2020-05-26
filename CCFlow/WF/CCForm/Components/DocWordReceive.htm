@@ -25,7 +25,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("DocWordReceive_Init");
+            var data = handler.DoMethodReturnString("DocWord_Init");
 
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
@@ -37,7 +37,7 @@
 
             //获得第一行数据.  DocWordKey字的外键,DocWordName字的名称,DocWordYear年度,DocWordLSH流水号,DocWord字号
             //比如:DocWordKey=001, DocWordName=鲁法字,DocWordYear=2019,DocWordLSH=001,DocWord=鲁法字2019-001
-            console.log(data);
+          
 
             // alert(data.DocWordKey);
 
@@ -47,11 +47,29 @@
 
         //展现数据.
         function BindIt(data) {
-
+            debugger;
             //1. 查询出来代字.
-            var ensName = "BP.DOC.WD.Words";
-            var words = new Entities(ensName);
-            words.RetrieveAll();
+            var flowno =  GetQueryString("FK_Flow");
+            var recwordflows = new Entities("BP.DOC.WD.RecwordFlows");
+            recwordflows.Retrieve("FK_Flow", flowno);
+          
+            conso
+            var ensName = "BP.DOC.WD.Recwords"; 
+            var words = new Entities(ensName);   
+            var f = "";
+         
+           
+            for (var i = 0; i < recwordflows.length; i++) {
+                var recwordflow = recwordflows[i];
+                if (i==0) {
+                     f += "'" + recwordflow.FK_Recword + "'";
+                }
+                f += ",'" + recwordflow.FK_Recword + "'";
+            }
+          
+
+            words.RetrieveCond("No", "In","("+f+")");
+            console.log(words);
             if (words.length == 0) {
                 alert('没有配置字号，无法生成编号.');
                 return;
@@ -75,7 +93,7 @@
             handler.AddUrlData(); //增加参数数据
 
             var data = handler.DoMethodReturnString("DocWordReceive_ReGenerDocWord");
-            console.log(data);
+         
             $("#TB_LSH").val(data);
 
             ////让其重新绑定.

@@ -1,5 +1,4 @@
 ﻿//点击右边的下载标签.
-var webUser = new WebUser();
 function Down2018(fk_ath, pkVal, delPKVal) {
     if (plant == "CCFlow")
         window.location.href = basePath+'/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node='+FK_Node+'&FK_Flow='+FK_Flow+'&FK_MapData='+FK_MapData+'&Ath='+Ath;
@@ -515,7 +514,7 @@ function setIframeHeight() {
     if ($("body").height() < 100) {
         h = 100;
     }
-    $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
+   // $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
 }
 
 

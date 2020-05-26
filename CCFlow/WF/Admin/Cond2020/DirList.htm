@@ -35,6 +35,7 @@
         //初始化页面函数.....
         $(function () {
             LoadPage(0);
+           
         });
         function LoadPage(model) {
             $("#table").html("");
@@ -52,7 +53,7 @@
 
             if (condType == 1)
                 html += "<caption><img src='../../Img/Event.png' />该节点上的 - 流程完成条件</caption>";
-             html += "<br>";
+            html += "<br>";
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>类型</th>";
@@ -70,12 +71,12 @@
                         continue;
                     }
                 }
-                if(model == 1){
+                if (model == 1) {
                     if (cond.CondOrAnd != 1) {
                         continue;
                     }
                 }
-                if(model == 0){
+                if (model == 0) {
                     if (cond.CondOrAnd != 0) {
                         continue;
                     }
@@ -96,6 +97,10 @@
             html += "</table>";
             $("#table").html(html);
             document.getElementById(model).checked = true;
+            //新建运算符按钮的显示和隐藏
+            $("#condBtn").hide();
+            if (model == "2")
+                $("#condBtn").show();
         }
         function ShowType(DataFrom) {
             var res = "";
@@ -197,8 +202,27 @@
             var en = new Entity("BP.WF.Template.Cond");
             en.SetPKVal(mypk);
             en.Delete();
-            window.location.href = window.location.href;
+            var model = 0;
+            var inputs = document.getElementsByName("CondOrAnd");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].checked)
+                    model = inputs[i].id;
+            }
+            LoadPage(model);
         }
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+
+            var ctrl = document.getElementById(ctrlID);
+
+            ctrl.style.display = 'block';
+
+            document.onmouseup = function () {
+
+                ctrl.style.display = "none";
+            }
+        }
+
         //当字段选择的时候.
         function changeCond(c) {
 
@@ -284,8 +308,7 @@
             url = url.replace('DirList.htm', type + '.htm');
             var inputs = document.getElementsByName("CondOrAnd");
             var model;
-            for (var i = 0; i < inputs.length;i++)
-            {
+            for (var i = 0; i < inputs.length; i++) {
                 input = inputs[i];
                 if (input.checked) {
                     model = input.id;
@@ -293,7 +316,7 @@
                 }
             }
             url += "&CondOrAnd=" + model
- 
+
             window.location.href = url;
         }
         //添加运算符
@@ -327,13 +350,13 @@
 <body>
 
     <div style="right:30px; position:absolute; z-index:100; ">
-    
+
         表达式运算模式：
         <label><input type="radio" id="0" name="CondOrAnd" onclick="SelectModel(0)" />Or模式</label>
         <label><input type="radio" id="1" name="CondOrAnd" onclick="SelectModel(1)" />and模式</label>
         <label><input type="radio" id="2" name="CondOrAnd" onclick="SelectModel(2)" />混合模式</label>
         <br />
-        <input type="button" value="+条件" onclick="ShowHidden('state')" />
+        <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
         <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; right:115px;">
             <ul>
                 <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
@@ -347,7 +370,7 @@
             </ul>
         </div>
 
-        <input type="button" value="+运算符" onclick="ShowHidden('state1')" />
+        <input id="condBtn" type="button" value="+新建运算符bate" onclick="ShowHidden('state1')" />
         <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px;">
             <ul>
                 <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
@@ -357,7 +380,7 @@
             </ul>
         </div>
 
-        <!--<input type="button" value="什么是条件？" onclick="javascript:Help()" />-->
+        <input type="button" value="什么是条件？" onclick="javascript:Help()" />
 
     </div>
     <div style="position:relative;" id="table">

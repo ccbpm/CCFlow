@@ -963,6 +963,7 @@ function PrintPDF(packUpType) {
     });
     
 
+    _html = _html.replace(/仿宋, SimSun/g, 'SimSun');
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddPara("html", _html);
     handler.AddPara("FrmID", flowData.Sys_MapData[0].No);

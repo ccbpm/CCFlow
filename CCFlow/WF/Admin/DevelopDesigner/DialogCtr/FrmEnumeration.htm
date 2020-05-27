@@ -272,28 +272,28 @@
     </script>
 </head>
 <body>
+    <div class="table-head">
+        <table style="width:100%;">
+            <tr>
+                <td>中文名 </td>
+                <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
+                <td>字段英文名 </td>
+                <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
+                <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
+                <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
 
-    <table style="width:100%;">
-        <tr>
-            <td>中文名 </td>
-            <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
-            <td>字段英文名 </td>
-            <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
-            <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
-            <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
+                <td>枚举名称 </td>
+                <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
+                <td><input type="button" id="Btn_New" class="easyui-button" onclick="SelectEnum()" value="查询" /> </td>
 
-            <td>枚举名称 </td>
-            <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
-            <td><input type="button" id="Btn_New" class="easyui-button" onclick="SelectEnum()" value="查询" /> </td>
-
-        </tr>
-    </table>
-
-
-    <div style="position:relative">
-        <div id="table"></div>
+            </tr>
+        </table>
     </div>
-
+    <div class="table-body">
+        <div style="position:relative">
+            <div id="table"></div>
+        </div>
+    </div>
     <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
     <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
 

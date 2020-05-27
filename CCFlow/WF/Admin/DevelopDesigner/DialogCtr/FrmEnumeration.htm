@@ -18,7 +18,42 @@
         .trSP {
             background-color: #B9D3EE
         }
+
+        .table-head {
+            padding-right: 17px;
+            background-color: #999;
+            color: #000;
+        }
+
+        .table-body {
+            width: 100%;
+            height: 390px;
+            overflow-y: scroll;
+        }
+
+            .table-head table, .table-body table {
+                width: 100%;
+            }
+
+            .table-head tr, .table-body tr {
+                line-height: 35px;
+            }
+
+            .table-head th, .table-body td {
+                text-align: center;
+            }
+
+            .table-body table tr:nth-child(2n+1) {
+                background-color: #f2f2f2;
+            }
+
+        .total {
+            float: right;
+            padding-right: 20px;
+            margin-top: 5px;
+        }
     </style>
+
     <script language="javascript" type="text/javascript">
         var dataType = GetQueryString("DataType");
         var fk_mapData = GetQueryString("FK_MapData");
@@ -199,7 +234,41 @@
             }
             editor.execCommand('insertHtml', _Html);
         };
+        //查询枚举
+        function SelectEnum() {
+            var EnumName = document.getElementById("EnumValue").value;
+            var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
+            sysEnumMains.Retrieve("Name", EnumName);
+            for (var i = 0; i < sysEnumMains.length; i++) {
+                sysEnumMain = sysEnumMains[i];
 
+                var newRow = "<table border=0 style='width:100%;'>";
+                newRow += "<tr>";
+                newRow += "<th>Idx</th>";
+                newRow += "<th>编号</th>";
+                newRow += "<th>名称</th>";
+                newRow += "<th>配置值</th>";
+                newRow += "<th>操作</th>";
+                newRow += "</tr>";
+                newRow += "<tr>";
+                newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
+
+                if (fk_mapData != null)
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                else
+                    newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
+
+                newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
+                newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                newRow += "<td style='width:50px;'><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
+
+                newRow += "</tr>";
+            }
+            if (newRow != undefined)
+                $("#table").html(newRow);
+            else
+                alert("枚举值名称不正确！");
+        }
     </script>
 </head>
 <body>
@@ -213,9 +282,10 @@
             <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
             <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
 
-            <td>关键字 </td>
-            <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width:60px" /> </td>
-            <td><input type="button" id="Btn_New" class="easyui-button" onclick="Search()" value="查询" /> </td>
+            <td>枚举名称 </td>
+            <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
+            <td><input type="button" id="Btn_New" class="easyui-button" onclick="SelectEnum()" value="查询" /> </td>
+
         </tr>
     </table>
 

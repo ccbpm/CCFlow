@@ -48,7 +48,15 @@ namespace BP.WF.HttpHandler
                 //    }
                 //}
             }
-            
+
+            if (WebUser.No == null)
+            {
+                //string token = this.context.Request.Headers["Token"];
+                //string tokenServ = BP.Sys.SystemConfig.GetValByKey("SS");
+                // this.context.Request.Headers["Token"];
+                //BP.Sys.SystemConfig.AppCenterDBAddStringStr();
+            }
+
 
             try
             {

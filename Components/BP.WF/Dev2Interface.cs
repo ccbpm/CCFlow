@@ -8308,8 +8308,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="workids">多个工作ID使用逗号分割比如:'111,233,444'</param>
         /// <param name="checkInfo">批量审核意见</param>
-        public static string Node_CC_SetCheckOver(string workids, string checkInfo = null)
+        public static string Node_CC_SetCheckOverBatch(string workids, string checkInfo = null)
         {
+            if (checkInfo == null)
+                checkInfo = "已阅";
+
             string[] ids = workids.Split(',');
             string info = "";
             foreach (string id in ids)
@@ -8317,7 +8320,31 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(id) == true)
                     continue;
 
-                info += Node_CC_SetCheckOver(Int64.Parse(id), checkInfo);
+                GenerWorkFlow gwf = new GenerWorkFlow(Int64.Parse(id));
+
+                //表单方案.
+                string frmID = null;
+                FrmNodes fns = new FrmNodes();
+                fns.Retrieve(FrmNodeAttr.FK_Node,gwf.FK_Node);
+                foreach (FrmNode fn in fns)
+                {
+                    if (fn.FK_Frm.Equals("ND" +  gwf.FK_Node ) == true)
+                        continue;
+
+                    frmID = fn.FK_Frm;
+                    break;
+                }
+
+                if (frmID == null)
+                {
+                    Node_CC_SetCheckOver(gwf.WorkID, checkInfo);
+                    continue;
+                }
+
+                //设置阅读track. 这里已经设置了已阅.
+                BP.WF.Dev2Interface.Track_WriteBBS(frmID, frmID, gwf.WorkID, checkInfo, gwf.FID, gwf.FK_Flow, gwf.FlowName, gwf.FK_Node, gwf.NodeName);
+
+                //info += Node_CC_SetCheckOver(Int64.Parse(id), checkInfo);
             }
             return "执行成功.";
         }

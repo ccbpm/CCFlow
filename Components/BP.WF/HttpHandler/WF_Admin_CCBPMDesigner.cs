@@ -210,7 +210,8 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
-                    sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
+                    //@sly 
+                    sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "');");
                 }
                 DBAccess.RunSQLs(sBuilder.ToString());
 

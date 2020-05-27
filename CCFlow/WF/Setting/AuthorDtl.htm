@@ -80,9 +80,9 @@
 
             $('#Btn_Auto').bind('click', function () { BindPop(); $('#selectEmpsModal').modal().show(); });//选择授权人按钮
 
-            var sql = "select No from WF_FlowSort WHERE Name='流程树'";
-            var FK_FlowSort = DBAccess.RunSQLReturnVal(sql);
-            var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F" + FK_FlowSort + "&IsSelectMore=1&treeFlowName=" + treeFlowName;
+            var FK_FlowSorts = new Entities("BP.WF.Template.FlowSorts");
+            FK_FlowSorts.Retrieve("Name","流程树");
+            var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F" + FK_FlowSorts[0].No + "&IsSelectMore=1&treeFlowName=" + treeFlowName;
 
             //设置流程字段的显示与隐藏
             var select = $("#DDL_AuthorWay").val();

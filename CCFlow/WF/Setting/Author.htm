@@ -120,8 +120,9 @@
         function Del(Auther, EmpNo, TakeBackDT) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
-            DBAccess.RunSQL(sql);
+            var Auth = new Entity("BP.WF.Auth");
+            Auth.DoMethodReturnString("doDel",Auther, EmpNo, TakeBackDT); 
+            
             alert("删除成功");
             window.location.href = window.location.href;
 

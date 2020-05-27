@@ -1623,8 +1623,7 @@ namespace BP.Sys
         }
         public string DoUp()
         {
-            this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(),
-                MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";
@@ -1651,7 +1650,7 @@ namespace BP.Sys
         /// </summary>
         public string DoDown()
         {
-            this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";

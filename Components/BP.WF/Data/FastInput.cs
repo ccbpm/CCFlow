@@ -122,7 +122,7 @@ namespace BP.WF.Data
                 map.AddMyPK();
 
                 //该表单对应的表单ID
-                map.AddTBString(FastInputAttr.ContrastKey, "CYY", "类型CYY", true, false, 0, 20, 20);
+                map.AddTBString(FastInputAttr.ContrastKey, null, "类型CYY", true, false, 0, 20, 20);
                 map.AddTBString(FastInputAttr.FK_Emp, null, "人员编号", true, false, 0, 100, 4);
                 map.AddTBString(FastInputAttr.Vals, null, "值", true, false, 0, 500, 500);
                 //map.AddTBInt(FastInputAttr.Idx, 0, "Idx", true, false);
@@ -151,6 +151,56 @@ namespace BP.WF.Data
               FastInputAttr.FK_Emp, WebUser.No, "Idx");
             return "移动成功.";
         }
+        public void Add(string groupKey)
+        {
+            if (groupKey == "Comment")
+            {
+                FastInput en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "已阅";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+            }
+                if (groupKey == "CYY")
+            {
+                FastInput en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "不同意";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意，请领导批示";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意办理";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "情况属实报领导批准";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+            }
+            
+        }
 
     }
 	/// <summary>
@@ -174,12 +224,14 @@ namespace BP.WF.Data
                 return new FastInput();
             }
         }
+        
         /// <summary>
         /// 查询全部
         /// </summary>
         /// <returns></returns>
         public override int RetrieveAll()
         {
+
             int val= this.Retrieve(FastInputAttr.ContrastKey, "CYY",
                 FastInputAttr.FK_Emp, BP.Web.WebUser.No);
 

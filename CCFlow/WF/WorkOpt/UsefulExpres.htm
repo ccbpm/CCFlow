@@ -32,6 +32,8 @@
     <script type="text/javascript">
         var nodeID = "ND"+GetQueryString("FK_Node");
         var groupKey = GetQueryString("GroupKey");
+        if (groupKey == "WorkCheck")
+            groupKey = "CYY";
         var elementID = GetQueryString("ElementID");
         var webUser = new WebUser();
         $(function () {
@@ -41,7 +43,14 @@
 
         function GetSearchData() {
             var ens = new Entities("BP.WF.Data.FastInputs");
-            ens.RetrieveAll();
+            ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
+            if (ens.length == 0) {
+                
+                var en = new Entity("BP.WF.Data.FastInput");
+                en.DoMethodReturnString("Add", groupKey); 
+                ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
+            }
+            //ens.RetrieveAll();
             var dataInfo = {}
             var mainData = [];
             //获得数据
@@ -106,7 +115,7 @@
                 }
                
                 var en = new Entity("BP.WF.Data.FastInput")
-                en.ContrastKey = "CYY";
+                en.ContrastKey = groupKey;
                 en.FK_Emp = webUser.No;
                 en.Vals = text;
                 en.Insert();

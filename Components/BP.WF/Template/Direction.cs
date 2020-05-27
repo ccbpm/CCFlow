@@ -25,9 +25,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
-        /// 是否可以原路返回
+        /// 计算模式
         /// </summary>
-        public const string IsCanBack = "IsCanBack";
+        public const string CondExpModel = "CondExpModel";
         /// <summary>
         /// 折线信息
         /// </summary>
@@ -76,7 +76,7 @@ namespace BP.WF.Template
 		/// <summary>
 		/// 转向的节点
 		/// </summary>
-		public int  ToNode
+		public int ToNode
 		{
 			get
 			{
@@ -87,29 +87,6 @@ namespace BP.WF.Template
 				this.SetValByKey(DirectionAttr.ToNode,value);
 			}
 		}
-        public bool IsCanBack
-        {
-            get
-            {
-                return this.GetValBooleanByKey(DirectionAttr.IsCanBack);
-            }
-            set
-            {
-                this.SetValByKey(DirectionAttr.IsCanBack, value);
-            }
-        }
-        public string Dots
-        {
-            get
-            {
-                return this.GetValStringByKey(DirectionAttr.Dots);
-            }
-            set
-            {
-                this.SetValByKey(DirectionAttr.Dots, value);
-            }
-        }
-
         public int Idx
         {
             get
@@ -154,12 +131,12 @@ namespace BP.WF.Template
                 map.AddTBString(DirectionAttr.FK_Flow, null, "流程", true, true, 0, 10, 0, false);
                 map.AddTBInt(DirectionAttr.Node, 0, "从节点", false, true);
 				map.AddTBInt( DirectionAttr.ToNode,0,"到节点",false,true);
-                map.AddTBInt(DirectionAttr.IsCanBack, 0, "是否可以原路返回(对后退线有效)", false, true);
-                /*
-                 * Dots 存储格式为: @x1,y1@x2,y2
-                 */
-                map.AddTBString(NodeReturnAttr.Dots, null, "轨迹信息", true, true, 0, 300, 0, false);
-                map.AddTBInt(DirectionAttr.Idx, 0, "顺序", true, true);
+
+                //以下两个字段是升级方向条件所用. WF_Cond 的两个字段移动到这里判断.
+                //CondExpModel 条件计算模式: 0=Or, 1=And, 2=Mix 
+                map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
+                map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
+
 
                 //相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),
@@ -193,20 +170,16 @@ namespace BP.WF.Template
         /// <summary>
         /// 上移
         /// </summary>
-        /// <param name="fk_node">节点ID</param>
-        public void DoUp(int fk_node)
+        public void DoUp()
         {
-            
-            this.DoOrderUp(DirectionAttr.Node, fk_node.ToString(), DirectionAttr.Idx);
+            this.DoOrderUp(DirectionAttr.Node, this.Node.ToString(), DirectionAttr.Idx);
         }
         /// <summary>
         /// 下移
         /// </summary>
-        /// <param name="fk_node">节点ID</param>
-        public void DoDown(int fk_node)
+        public void DoDown()
         {
-          
-            this.DoOrderDown(DirectionAttr.Node, fk_node.ToString(), DirectionAttr.Idx);
+            this.DoOrderDown(DirectionAttr.Node,this.Node.ToString(), DirectionAttr.Idx);
         }
     }
 	 /// <summary>

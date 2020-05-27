@@ -1350,7 +1350,8 @@ namespace BP.WF
             mygwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
-
+            //更新domian.
+            BP.DA.DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid="+wk.OID);
 
 
             return wk;

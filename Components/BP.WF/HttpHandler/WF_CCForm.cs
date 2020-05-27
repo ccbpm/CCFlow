@@ -3575,6 +3575,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                     dbUpload.Sort = sort;
                     dbUpload.NodeID = FK_Node;
+                    dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)

@@ -134,6 +134,7 @@ namespace BP.WF.HttpHandler
             sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' || Name IS Null) ";
             DBAccess.RunSQL(sql);
 
+           // BP.WF.Template.Cond
             //Node nd = new Node();
             //nd.NodeID = this.FK_Node;
             //nd.RetrieveFromDBSources();
@@ -186,7 +187,7 @@ namespace BP.WF.HttpHandler
         {
             //@sly. 
             if (BP.Web.WebUser.IsAdmin == false)
-                return "err@当前您不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
+                return "err@当前您【"+WebUser.No+","+WebUser.Name+"】不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
 
             string sql = "";
             try
@@ -197,11 +198,17 @@ namespace BP.WF.HttpHandler
                 //保存方向.
                 sBuilder = new StringBuilder();
                 string[] dirs = this.GetRequestVal("Dirs").Split('@');
+
+                Direction mydir = new Direction();
                 foreach (string item in dirs)
                 {
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
+                    mydir.MyPK = strs[0];
+                    if (mydir.IsExits == true)
+                        continue;
+
                     sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
                     sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
                 }

@@ -21,10 +21,6 @@ namespace BP.WF.Template
         /// 退回到
         /// </summary>
         public const string ReturnTo = "ReturnTo";
-        /// <summary>
-        /// 中间点
-        /// </summary>
-        public const string Dots = "Dots";
     }
     /// <summary>
     /// 可退回的节点
@@ -96,7 +92,7 @@ namespace BP.WF.Template
 
                 map.AddTBIntPK(NodeReturnAttr.FK_Node, 0, "节点", true, true);
                 map.AddTBIntPK(NodeReturnAttr.ReturnTo, 0, "退回到", true, true);
-                map.AddTBString(NodeReturnAttr.Dots, null, "轨迹信息", true, true,0,300,0,false);
+            //    map.AddTBString(NodeReturnAttr.Dots, null, "轨迹信息", true, true,0,300,0,false);
 
                 this._enMap = map;
                 return this._enMap;

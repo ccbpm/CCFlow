@@ -9,13 +9,11 @@ using System.Web;
 namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 实体属性
+    /// 证件字段
     /// </summary>
     public class MapAttrCard : EntityMyPK
     {
         #region 文本字段参数属性.
-       
-  
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -183,51 +181,19 @@ namespace BP.Sys.FrmUI
 
                 #endregion 傻瓜表单
 
-                RefMethod rm = new RefMethod();
-                rm = new RefMethod();
-                rm.Title = "字段重命名";
-                rm.ClassMethodName = this.ToString() + ".DoRenameField()";
-                rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "填充其他控件";
-                rm.ClassMethodName = this.ToString() + ".DoDDLFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+               
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-        /// <summary>
-        /// 填充其他控件
-        /// </summary>
-        /// <returns></returns>
-        public string DoDDLFullCtrl()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
-        }
-        /// <summary>
-        /// 字段分组查询语句
-        /// </summary>
-        public static string SQLOfGroupAttr
-        {
-            get
-            {
-                return "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ";
-            }
-        }
+      
      
         /// <summary>
         /// 删除
         /// </summary>
         protected override void afterDelete()
         {
-            
-
             //删除相对应的rpt表中的字段
             if (this.FK_MapData.Contains("ND") == true)
             {
@@ -257,34 +223,7 @@ namespace BP.Sys.FrmUI
         }
 
         #endregion
-
-        public string DoRenameField(string newField)
-        {
-            string sql = "";
-            if (this.FK_MapData.IndexOf("ND") == 0)
-            {
-                string strs = this.FK_MapData.Replace("ND", "");
-                strs = strs.Substring(0, strs.Length - 2);
-
-                string rptTable = "ND" + strs + "Rpt";
-                MapDatas mds = new MapDatas();
-                mds.Retrieve(MapDataAttr.PTable, rptTable);
-
-                foreach (MapData item in mds)
-                {
-                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No  + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
-                    DBAccess.RunSQL(sql);
-                }
-            }
-            else
-            {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
-                DBAccess.RunSQL(sql);
-            }
-
-            return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
-        }
-       
+        
 
         #region 重载.
         protected override bool beforeUpdateInsertAction()
@@ -292,38 +231,6 @@ namespace BP.Sys.FrmUI
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();
-
-            #region 自动扩展字段长度. 需要翻译.
-            if (attr.MaxLen < this.MaxLen )
-            {
-                attr.MaxLen = this.MaxLen;
-
-                string sql = "";
-                MapData md = new MapData();
-                md.No = this.FK_MapData;
-                if (md.RetrieveFromDBSources() == 1)
-                {
-                    if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
-                    {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle
-                            || SystemConfig.AppCenterDBType == DBType.DM )
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
-
-                        DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
-                    }
-                }
-            }
-            #endregion 自动扩展字段长度.
-
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");

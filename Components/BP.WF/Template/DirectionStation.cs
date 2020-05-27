@@ -97,7 +97,6 @@ namespace BP.WF.Template
                 Map map = new Map("WF_DirectionStation", "节点岗位");
 
                 map.AddTBIntPK(DirectionStationAttr.FK_Direction, 0,"节点", false,false);
-
                
  // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
                     map.AddDDLEntitiesPK(DirectionStationAttr.FK_Station, null, "工作岗位",

@@ -1623,7 +1623,8 @@ namespace BP.Sys
         }
         public string DoUp()
         {
-            this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(),
+                MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";

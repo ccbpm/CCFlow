@@ -18,7 +18,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_Cond : DirectoryPageBase
     {
-         /// <summary>
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_Cond()
@@ -32,8 +32,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CondPRI_Init()
         {
-            //Directions dirs = new Directions();
-            //dirs.Retrieve(DirectionAttr.Node, this.FK_Node, DirectionAttr.pr)
+            Directions dirs = new Directions();
+            dirs.Retrieve(DirectionAttr.Node, this.FK_Node, DirectionAttr.Idx);
+            return dirs.ToJson();
+
             //Node mynd = new Node(this.FK_Node);
             //return mynd.HisToNodes.ToJson();
 
@@ -49,48 +51,27 @@ namespace BP.WF.HttpHandler
             }
 
             if (cds.Count <= 1)
-                return "info@当前只有["+ cds.Count + "]个条件，无法进行排序.";
+                return "info@当前只有[" + cds.Count + "]个条件，无法进行排序.";
 
             return cds.ToJson();
         }
         public string CondPRI_Move()
         {
-            switch (this.GetRequestVal("MoveType"))
+            string mtype = this.GetRequestVal("MoveType");
+            if (mtype.Equals("Up"))
             {
-                case "Up":
-                    Cond up = new Cond(this.MyPK);
-                    string mypk = up.FK_Flow + "_" + up.FK_Node + "_" + up.ToNodeID;
-                    Direction dir = new Direction(mypk);
-                    dir.DoUp(this.FK_Node);
-                    dir.RetrieveFromDBSources();
-                    Directions dirs = new Directions(this.FK_Node);
-                    foreach(Direction dire in dirs)
-                    {
-                        DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dire.Idx + " WHERE ToNodeID=" + dire.ToNode +" AND FK_Node="+dire.Node);
-                    }
-                   
-                    break;
-                case "Down":
-                    Cond down = new Cond(this.MyPK);
-                    mypk = down.FK_Flow + "_" + down.FK_Node + "_" + down.ToNodeID;
-                    dir = new Direction(mypk);
-                    dir.DoDown(this.FK_Node);
-                    dir.RetrieveFromDBSources();
-                    dirs = new Directions(this.FK_Node);
-                    foreach (Direction dire in dirs)
-                    {
-                        DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dire.Idx + " WHERE ToNodeID=" + dire.ToNode + " AND FK_Node=" + dire.Node);
-                    }
-                    //DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + dir.Idx + " WHERE ToNodeID=" + down.ToNodeID);
-                    break;
-                default:
-                    break;
+                Direction dir = new Direction(this.MyPK);
+                dir.DoUp();
+            }
+
+            if (mtype.Equals("Down"))
+            {
+                Direction dir = new Direction(this.MyPK);
+                dir.DoDown();
             }
 
 
-            Conds cds = new Conds();
-            cds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, 2, CondAttr.PRI);
-            return cds.ToJson();
+            return "移动成功.";
         }
         #endregion 方向优先级.
 
@@ -119,7 +100,7 @@ namespace BP.WF.HttpHandler
         public string ConditionLine_Init()
         {
             ps = new Paras();
-            ps.SQL = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" +SystemConfig.AppCenterDBVarStr+ "Node";
+            ps.SQL = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + SystemConfig.AppCenterDBVarStr + "Node";
             ps.Add("Node", this.FK_Node);
             //string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + this.FK_Node;
 
@@ -171,7 +152,7 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             //cond.Delete(CondAttr.NodeID, fk_mainNode,
             //  CondAttr.ToNodeID, toNodeID,
-           //   CondAttr.CondType, (int)condTypeEnum);
+            //   CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.Url;
@@ -234,8 +215,8 @@ namespace BP.WF.HttpHandler
 
             //增加条件集合.
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode), 
-                CondAttr.ToNodeID,  int.Parse( toNodeID),CondAttr.DataFrom,(int)ConnDataFrom.NodeForm);
+            conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode),
+                CondAttr.ToNodeID, int.Parse(toNodeID), CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
 
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
@@ -246,7 +227,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
-                sql += " AND KeyOfEn Not IN ("+noteIn+") ";
+                sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -393,8 +374,8 @@ namespace BP.WF.HttpHandler
         public string StandAloneFrm_Init()
         {
             ps = new Paras();
-            ps.SQL = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node"; 
-            ps.Add("FK_Node",this.FK_Node);
+            ps.SQL = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+            ps.Add("FK_Node", this.FK_Node);
             //string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + this.FK_Node;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Frms";
@@ -413,7 +394,7 @@ namespace BP.WF.HttpHandler
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID,CondAttr.DataFrom,(int)ConnDataFrom.StandAloneFrm);
+            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID, CondAttr.DataFrom, (int)ConnDataFrom.StandAloneFrm);
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
             return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
@@ -434,7 +415,7 @@ namespace BP.WF.HttpHandler
 
             //定义变量.
             string field = this.GetRequestVal("DDL_Fields");
-            field =  frmID+ "_" + field;
+            field = frmID + "_" + field;
 
             int toNodeID = this.GetRequestValInt("ToNodeID");
             int fk_Node = this.GetRequestValInt("FK_Node");
@@ -443,7 +424,7 @@ namespace BP.WF.HttpHandler
             string operVal = this.GetRequestVal("OperVal");
 
             //节点,子线城,还是其他
-            CondType condTypeEnum =  (CondType)this.GetRequestValInt("CondType");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
             CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
             //把其他的条件都删除掉.
             ///DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.StandAloneFrm);
@@ -464,7 +445,7 @@ namespace BP.WF.HttpHandler
             cond.HisCondType = condTypeEnum;
 
             ; //保存类型.
-            if (this.GetRequestVal("SaveType").Equals("AND")==true )
+            if (this.GetRequestVal("SaveType").Equals("AND") == true)
                 cond.CondOrAnd = CondOrAnd.ByAnd;
             else
                 cond.CondOrAnd = CondOrAnd.ByOr;
@@ -523,7 +504,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功!!";
         }
-       
+
         public string StandAloneFrm_InitField()
         {
             //字段属性.
@@ -625,14 +606,14 @@ namespace BP.WF.HttpHandler
         {
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
-            
+
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
             Cond cond = new Cond();
             cond.MyPK = mypk;
-            
+
             return cond.ToJson();
         }
         /// <summary>
@@ -741,7 +722,7 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             //cond.Delete(CondAttr.NodeID, fk_mainNode,
             //  CondAttr.ToNodeID, toNodeID,
-             // CondAttr.CondType, (int)condTypeEnum);
+            // CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.SQL;
@@ -824,18 +805,18 @@ namespace BP.WF.HttpHandler
             int FK_MainNode = this.GetRequestValInt("FK_MainNode");
             int ToNodeID = this.GetRequestValInt("ToNodeID");
             CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
-            
+
             CondType HisCondType = CondType.Dir;
 
             Cond cond = new Cond();
             //cond.Delete(CondAttr.NodeID, FK_MainNode,
             //  CondAttr.ToNodeID, ToNodeID,
-             // CondAttr.CondType, (int)HisCondType);
+            // CondAttr.CondType, (int)HisCondType);
 
             string mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
 
             //把其他的条件都删除掉.
-           // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)HisCondType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + ToNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Stas);
+            // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)HisCondType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + ToNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Stas);
 
             // 删除岗位条件.
             cond.MyPK = mypk;
@@ -907,7 +888,7 @@ namespace BP.WF.HttpHandler
             CondOrAnd CondOrAnd = (CondOrAnd)this.GetRequestValInt("CondOrAnd");
 
             Cond cond = new Cond();
-           
+
             //把其他的条件都删除掉.
             //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + this.GetRequestValInt("ToNodeID") + ") AND DataFrom!=" + (int)ConnDataFrom.Depts);
 
@@ -1006,7 +987,7 @@ namespace BP.WF.HttpHandler
             //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND   NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Paras);
 
             Cond cond = new Cond();
-           // cond.Delete(CondAttr.NodeID, fk_mainNode,
+            // cond.Delete(CondAttr.NodeID, fk_mainNode,
             //  CondAttr.ToNodeID, toNodeID,
             //  CondAttr.CondType, (int)condTypeEnum);
 
@@ -1080,7 +1061,7 @@ namespace BP.WF.HttpHandler
 
 
         }
-        
+
         #endregion 按照岗位的方向条件.
 
     }

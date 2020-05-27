@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.En;
@@ -9,6 +10,24 @@ using BP.Web;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 条件表达模式
+    /// </summary>
+    public enum CondExpModel
+    {
+        /// <summary>
+        /// 或者模式
+        /// </summary>
+        OR,
+        /// <summary>
+        /// And模式
+        /// </summary>
+        AND,
+        /// <summary>
+        /// 混合模式
+        /// </summary>
+        Mix
+    }
+    /// <summary>
     /// 条件数据源
     /// </summary>
     public enum ConnDataFrom
@@ -16,35 +35,39 @@ namespace BP.WF.Template
         /// <summary>
         /// 表单数据
         /// </summary>
-        NodeForm=0,
-         /// <summary>
+        NodeForm = 0,
+        /// <summary>
         /// 独立表单
         /// </summary>
-        StandAloneFrm=1,
+        StandAloneFrm = 1,
         /// <summary>
         /// 岗位数据
         /// </summary>
-        Stas=2,
+        Stas = 2,
         /// <summary>
         /// Depts
         /// </summary>
-        Depts=3,
+        Depts = 3,
         /// <summary>
         /// 按sql计算.
         /// </summary>
-        SQL=4,
+        SQL = 4,
         /// <summary>
         /// 按sql模版计算.
         /// </summary>
-        SQLTemplate=5,
+        SQLTemplate = 5,
         /// <summary>
         /// 按参数
         /// </summary>
-        Paras=6,
+        Paras = 6,
         /// <summary>
         /// 按Url.
         /// </summary>
-        Url=7
+        Url = 7,
+        /// <summary>
+        /// 操作符
+        /// </summary>
+        Oper = 100
     }
     /// <summary>
     /// 条件属性
@@ -95,14 +118,6 @@ namespace BP.WF.Template
         /// 对方向条件有效
         /// </summary>
         public const string ToNodeID = "ToNodeID";
-        ///// <summary>
-        ///// 判断方式
-        ///// </summary>
-        //public const string ConnJudgeWay = "ConnJudgeWay";
-        /// <summary>
-        /// MyPOID
-        /// </summary>
-        public const string MyPOID = "MyPOID";
         /// <summary>
         /// PRI
         /// </summary>
@@ -139,19 +154,19 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点完成条件
         /// </summary>
-        Node=0,
+        Node = 0,
         /// <summary>
         /// 流程完成条件
         /// </summary>
-        Flow=1,
+        Flow = 1,
         /// <summary>
         /// 方向条件
         /// </summary>
-        Dir=2,
+        Dir = 2,
         /// <summary>
         /// 启动子流程
         /// </summary>
-        SubFlow=3
+        SubFlow = 3
     }
     /// <summary>
     /// 指定操作员方式
@@ -372,7 +387,15 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.CondOrAnd, (int)value);
             }
         }
-        #endregion
+        #endregion 
+
+        protected override bool beforeInsert()
+        {
+            //@sly 设置他的主键。
+            this.MyPK = DBAccess.GenerGUID();
+
+            return base.beforeInsert();
+        }
 
         /// <summary>
         /// 在更新与插入之前要做得操作。
@@ -596,6 +619,20 @@ namespace BP.WF.Template
             int condtypeInt = (int)this.HisCondType;
             this.DoOrderDown(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.PRI);
         }
+        /// <summary>
+        /// 方向条件-下移
+        /// </summary>
+        public void DoDownDirCond()
+        {
+            this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, this.ToNodeID, CondAttr.Idx);
+        }
+        /// <summary>
+        /// 方向条件-上移
+        /// </summary>
+        public void DoUpDirCond()
+        {
+            this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, this.ToNodeID, CondAttr.Idx);
+        }
         #endregion
 
         #region 构造方法
@@ -650,19 +687,19 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     string strs1 = "";
-                 
-                        BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();
-                        sts.Retrieve("FK_Emp", this.SpecOper);
-                        foreach (BP.GPM.DeptEmpStation st in sts)
+
+                    BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();
+                    sts.Retrieve("FK_Emp", this.SpecOper);
+                    foreach (BP.GPM.DeptEmpStation st in sts)
+                    {
+                        if (strs.Contains("@" + st.FK_Station + "@"))
                         {
-                            if (strs.Contains("@" + st.FK_Station + "@"))
-                            {
-                                this.MsgOfCond = "@以岗位判断方向，条件为true：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + st.FK_Station + st.FK_StationT;
-                                return true;
-                            }
-                            strs1 += st.FK_Station + "-" + st.FK_StationT;
+                            this.MsgOfCond = "@以岗位判断方向，条件为true：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + st.FK_Station + st.FK_StationT;
+                            return true;
                         }
-                   
+                        strs1 += st.FK_Station + "-" + st.FK_StationT;
+                    }
+
 
                     this.MsgOfCond = "@以岗位判断方向，条件为false：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + strs1;
                     return false;
@@ -676,19 +713,19 @@ namespace BP.WF.Template
                     strs += this.OperatorValueT.ToString();
 
                     BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
-                   
-                        sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
 
-                        //@于庆海.
-                        BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-                        emp.No = this.SpecOper;
-                        if (emp.RetrieveFromDBSources() == 1)
-                        {
-                            BP.GPM.DeptEmp de = new GPM.DeptEmp();
-                            de.FK_Dept = emp.FK_Dept;
-                            sts.AddEntity(de);
-                        }
-                   
+                    sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
+
+                    //@于庆海.
+                    BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
+                    emp.No = this.SpecOper;
+                    if (emp.RetrieveFromDBSources() == 1)
+                    {
+                        BP.GPM.DeptEmp de = new GPM.DeptEmp();
+                        de.FK_Dept = emp.FK_Dept;
+                        sts.AddEntity(de);
+                    }
+
 
                     string strs1 = "";
                     foreach (BP.GPM.DeptEmp st in sts)
@@ -828,7 +865,7 @@ namespace BP.WF.Template
                     if (SystemConfig.IsBSsystem)
                     {
                         /*是bs系统，并且是url参数执行类型.*/
-                        string myurl =HttpContextHelper.RequestRawUrl ;// BP.Sys.Glo.Request.RawUrl;
+                        string myurl = HttpContextHelper.RequestRawUrl;// BP.Sys.Glo.Request.RawUrl;
                         if (myurl.IndexOf('?') != -1)
                             myurl = myurl.Substring(myurl.IndexOf('?'));
 
@@ -864,7 +901,7 @@ namespace BP.WF.Template
                         if (SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
-                            string host =HttpContextHelper.RequestUrlHost ;//BP.Sys.Glo.Request.Url.Host;
+                            string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Glo.Request.Url.Host;
                             if (url.Contains("@AppPath"))
                                 url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Glo.Request.ApplicationPath
                             else//BP.Sys.Glo.Request.Url.Authority
@@ -940,7 +977,7 @@ namespace BP.WF.Template
                         throw new Exception("err@判断条件方向出现错误：实体：" + nd.EnDesc + " 属性" + this.AttrKey + "已经被删除方向条件判断失败.");
 
                     this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
-                    return CheckIsPass(en); 
+                    return CheckIsPass(en);
                 }
 
                 //从独立表单里判断.
@@ -964,13 +1001,13 @@ namespace BP.WF.Template
                     case "!=":
                     case "budingyu":
                     case "budengyu": //不等于.
-                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString())==false)
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString()) == false)
                             return true;
                         else
                             return false;
                     case "=":  // 如果是 = 
                     case "dengyu":
-                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString())==true)
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString()) == true)
                             return true;
                         else
                             return false;
@@ -981,10 +1018,10 @@ namespace BP.WF.Template
                         else
                             return false;
 
-                        //if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
-                        //    return true;
-                        //else
-                        //    return false;
+                    //if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
+                    //    return true;
+                    //else
+                    //    return false;
                     case ">=":
                     case "dayudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) >= Double.Parse(this.OperatorValue.ToString()))
@@ -997,10 +1034,10 @@ namespace BP.WF.Template
                             return true;
                         else
                             return false;
-                        //if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
-                        //    return true;
-                        //else
-                        //    return false;
+                    //if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
+                    //    return true;
+                    //else
+                    //    return false;
                     case "<=":
                     case "xiaoyudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) <= Double.Parse(this.OperatorValue.ToString()))
@@ -1062,14 +1099,14 @@ namespace BP.WF.Template
 
                 map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
 
+                //@0=O模式， 1=And模式 ， 2=混合模式.
                 map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);
-
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
 
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
                 map.AddTBAtParas(2000);
-                map.AddTBInt(CondAttr.Idx, 0, "Idx", true, true);
 
+                //map.AddTBInt(CondAttr.Idx, 0, "Idx", true, true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -1083,6 +1120,51 @@ namespace BP.WF.Template
     public class Conds : Entities
     {
         #region 属性
+        /// <summary>
+        /// 校验是否正确
+        /// </summary>
+        /// <returns></returns>
+        public string DoCheck()
+        {
+            try
+            {
+                string str = "";
+                foreach (Cond item in this)
+                {
+                    if (item.HisDataFrom == ConnDataFrom.Oper)
+                        str += " " + item.OperatorValue;
+                    else
+                        str += " 1=1 ";
+                }
+
+                string sql = "";
+                switch(SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                         sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + str;
+                        break;
+                    case DBType.MySQL:
+                        sql = " SELECT No FROM Port_Emp WHERE " + str + " AND limit 1 ";
+                        break;
+                    case DBType.Oracle:
+                    case DBType.DM:
+                        sql = " SELECT No FROM Port_Emp WHERE " + str + " AND rownum <=1 ";
+                        break;
+                    default:
+                        return "err@没有做的数据库类型判断.";
+                }
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 1)
+                    return "检查正确.";
+
+                return "检查正确.";
+            }
+            catch (Exception ex)
+            {
+                return "err@条件设置错误:" + ex.Message;
+            }
+        }
         public string ConditionDesc
         {
             get

@@ -5971,6 +5971,7 @@ namespace BP.WF
                 gwf.FK_Flow = flowNo;
                 BP.WF.Flow fl = new Flow(flowNo);
                 gwf.FK_FlowSort = fl.FK_FlowSort;
+                 
                 gwf.SysType = fl.SysType;
                 gwf.FK_Dept = WebUser.FK_Dept;
 
@@ -7419,7 +7420,7 @@ namespace BP.WF
             ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Title=" + dbstr
                 + "Title,FK_Dept=" + dbstr + "FK_Dept,PFlowNo=" + dbstr + "PFlowNo,PWorkID=" + dbstr + "PWorkID WHERE OID=" + dbstr + "OID";
 
-            //默认启用草稿
+            //默认启用草稿.
             if (fl.DraftRole == DraftRole.None)
             {
                 ps.Add("WFState", (int)WFState.Blank);

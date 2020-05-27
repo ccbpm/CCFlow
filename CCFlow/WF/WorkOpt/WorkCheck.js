@@ -190,7 +190,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         //}
         //_Html += "</select>";
         //_Html += "<input name='' type='button' value='编辑短语' onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'>";
-        _Html += "<a  onclick='AddDuanYu(\"" + pageData.FK_Node + "\",\"WorkCheck\");'><span>常用短语</span> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
+        _Html += "<a  onclick='AddCommUseWord(\"" + pageData.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");'><span>常用短语</span> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
 
         _Html += "</div>";
         _Html += "</td>";
@@ -388,9 +388,6 @@ function SetDocVal() {
         $("#WorkCheck_Doc").val(val);
     }
 
-    if ($("#TB_Msg").length == 1) {
-        $("#TB_Msg").val(val);
-    }
 
 }
 
@@ -720,40 +717,5 @@ function WorkCheck_CheckPass() {
 }
 
 
-function AddDuanYu(nodeID, GroupKey) {
-    var url = basePath + "/WF/WorkOpt/UsefulExpres.htm?FK_Node=" + nodeID + "&GroupKey=" + GroupKey;
-    var W = document.body.clientWidth / 2;
-    var H = 400; // document.body.clientHeight-40;
-    OpenBootStrapModal(url, "UsefulExpresIFrame", "常用短语", W, H, null, false, null, null, function () {
-        //修改下来框常用短语
-        //var en = new Entity("BP.Sys.GloVar", "ND" + nodeID + "_" + GroupKey);
-        //var str = en.Val;
-        //var duanYu;
-        //if (str == null || str == undefined || DuanYu == "")
-        //    return;
-        //var duanYu = str.split("@");
-        //if (duanYu.length > 0) {
-        //    var _Html = "<option value=''>常用短语</option>";
-        //    for (var i = 0; i < duanYu.length; i++) {
-        //        if (duanYu[i] == "") {
-        //            continue;
-        //        }
-        //        _Html += "<option value='" + duanYu[i] + "'>" + duanYu[i] + "</option>";
-        //    }
-        //    $("#DuanYu").html(_Html)
-        //}
-    });
-}
 
-function ChangeWorkCheck(str) {
-    if ($("#WorkCheck_Doc").length == 1) {
-        $("#WorkCheck_Doc").val(str);
-    }
-
-    if ($("#TB_Msg").length == 1) {
-        $("#TB_Msg").val(str);
-    }
-
-    $('#bootStrapdlg').modal('hide');
-}
 

@@ -70,24 +70,11 @@ function ShowFlowBBS(data) {
         _Html += "</select>";
         _Html += "<div style='line-height: 1px;border-top: 2px solid #ddd;margin-top: 4px;margin-bottom: 4px;margin-left: -6px;margin-right: -6px;'></div>";
         _Html += "<div>";
-        _Html += "<textarea rows='5' id='TB_Msg' name='TB_Msg' cols='60'></textarea>";
+        _Html += "<textarea rows='5' id='FlowBBS_Doc' name='FlowBBS_Doc' cols='60'></textarea>";
         _Html += "<br/>";
-        //加入常用短语.
-        _Html += "<select id='DuanYu' onchange='SetDocVal()'>";
-        _Html += "<option value=''>常用短语</option>";
-        if (NewDuanYu.length > 0) {
-            for (var i = 0; i < NewDuanYu.length; i++) {
-                if (NewDuanYu[i] == "") {
-                    continue;
-                }
-                _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
-            }
-        } else {
-            _Html += "<option value='已阅'>已阅</option>";
-        }
-        _Html += "</select>";
-        _Html += "<a onclick='AddDuanYu(\"" + paramData.FK_Node + "\",\"Comment\");'> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
-        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='提交评论'style='float:right' onclick='BBSSubmit();' />";
+       
+        _Html += "<a onclick='AddCommUseWord(\"" + paramData.FK_Node + "\",\"Comment\",\"FlowBBS_Doc\");'><span>常用短语</span> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
+        _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='发送'style='float:right' onclick='BBSSubmit();' />";
         _Html += "</div>";
 
     }
@@ -95,12 +82,26 @@ function ShowFlowBBS(data) {
     $("#FlowBBS").html(_Html);
 }
 
+function SetFlowBBSVal() {
+
+    var objS = document.getElementById("DuanYu");
+    var val = objS.options[objS.selectedIndex].value;
+
+    if (val == "")
+        return;
+    
+    if ($("#FlowBBS_Doc").length == 1) {
+        $("#FlowBBS_Doc").val(val);
+    }
+
+}
+
 /**
  * 评论组件的提交
  */
 function BBSSubmit() {
 
-    if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
+    if ($("#FlowBBS_Doc").val() == null || $("#FlowBBS_Doc").val() == "" || $("#FlowBBS_Doc").val().trim().length == 0) {
         alert("请填写评论内容!");
         return;
     }

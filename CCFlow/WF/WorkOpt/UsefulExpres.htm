@@ -32,6 +32,7 @@
     <script type="text/javascript">
         var nodeID = "ND"+GetQueryString("FK_Node");
         var groupKey = GetQueryString("GroupKey");
+        var elementID = GetQueryString("ElementID");
         var webUser = new WebUser();
         $(function () {
             $('#myModal').modal('hide');
@@ -214,7 +215,7 @@
             }
 
 
-            window.parent.ChangeWorkCheck(str);
+            window.parent.ChangeWorkCheck(elementID,str);
           
 
         }

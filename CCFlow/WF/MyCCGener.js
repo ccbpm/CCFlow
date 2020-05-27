@@ -2,6 +2,18 @@
 //阅读并关闭.
 function ReadAndClose()
 {
+    if ($("#FlowBBS_Doc").length == 1) {
+        var doc = $("#FlowBBS_Doc").val();
+        if ($("#FlowBBS_Doc").val() == null || $("#FlowBBS_Doc").val() == "" || $("#FlowBBS_Doc").val().trim().length == 0)
+            doc = "已阅";
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+        handler.AddUrlData();
+        handler.AddPara("TB_FlowBBS", doc);
+        var data = handler.DoMethodReturnString("FlowBBS_Save");
+    }
+   
+   
+    
     //抄送关闭前事件
     if (typeof beforeCCClose != 'undefined' && beforeCCClose instanceof Function)
         if (beforeCCClose() == false)

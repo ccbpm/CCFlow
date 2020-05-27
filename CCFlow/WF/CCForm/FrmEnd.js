@@ -1299,3 +1299,28 @@ function ChangeDocWordVal(docWord) {
 
     $('#bootStrapdlg').modal('hide');
 }
+/**
+ * 跳转常用短语页面
+ * @param {any} nodeID 当前节点ID
+ * @param {any} GroupKey 所属短语类型 CYY,FlowBBS,WorkReturn
+ * @param {any} elementID 选择短语后赋值元素
+ */
+function AddCommUseWord(nodeID, GroupKey, elementID) {
+    var url = basePath + "/WF/WorkOpt/UsefulExpres.htm?FK_Node=" + nodeID + "&GroupKey=" + GroupKey + "&ElementID=" + elementID;
+    var W = document.body.clientWidth / 2;
+    var H = 400; // document.body.clientHeight-40;
+    OpenBootStrapModal(url, "UsefulExpresIFrame", "常用短语", W, H, null, false, null, null, function () { });
+}
+
+/**
+ * 给指定的元素赋值
+ * @param {any} elementID 元素ID
+ * @param {any} str 值
+ */
+function ChangeWorkCheck(elementID, str) {
+    if ($("#" + elementID).length == 1) {
+        $("#" + elementID).val(str);
+    }
+
+    $('#bootStrapdlg').modal('hide');
+}

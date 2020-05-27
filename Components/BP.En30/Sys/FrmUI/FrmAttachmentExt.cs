@@ -683,12 +683,12 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpConnection conn = new FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPPort, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)
             {
-                return "err@连接失败:" + ex.Message;
+                return "err@连接失败:" + ex.Message+" ,配置信息请参考,系统配置文件.";
             }
         }
         /// <summary>

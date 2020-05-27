@@ -3614,7 +3614,8 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                     {
                         /*保存到fpt服务器上.*/
-                        BP.FtpConnection ftpconn = new BP.FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                        BP.FtpConnection ftpconn = new BP.FtpConnection(SystemConfig.FTPServerIP,
+                            SystemConfig.FTPServerPort,
                             SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                         string ny = DateTime.Now.ToString("yyyy_MM");

@@ -525,7 +525,7 @@ namespace BP.Sys
                 //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
             }
 
-            FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+            FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
             conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.Archive);
@@ -564,7 +564,7 @@ namespace BP.Sys
 
                 if (ath.AthSaveWay == Sys.AthSaveWay.FTPServer)
                 {
-                    FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                    FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                              SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                     string fullName = this.FileFullName;

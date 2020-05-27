@@ -3618,7 +3618,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 /*保存到fpt服务器上.*/
-                FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                 if (ftpconn == null)
@@ -3741,7 +3741,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 /*保存到fpt服务器上.*/
-                FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                 if (ftpconn == null)

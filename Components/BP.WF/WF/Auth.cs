@@ -154,12 +154,9 @@ namespace BP.WF
             this.MyPK = BP.DA.DBAccess.GenerGUID();
             return base.beforeInsert();
         }
-        public void doDel()
+        public void doDel(string Auther, string EmpNo, string TakeBackDT)
         {
             this.MyPK = BP.DA.DBAccess.GenerGUID();
-            string Auther = this.Auther;
-            string EmpNo = this.EmpNo;
-            string TakeBackDT = this.TakeBackDT;
             var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
             DBAccess.RunSQL(sql);
         }

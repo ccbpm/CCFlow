@@ -478,7 +478,7 @@ function checkBlanks() {
     //2.对 UMEditor 中的必填项检查
     if (document.activeEditor != null && document.activeEditor.$body != null) {
 
-    }
+    }   
 
     return checkBlankResult;
 }

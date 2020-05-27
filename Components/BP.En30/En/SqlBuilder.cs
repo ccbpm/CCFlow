@@ -1129,9 +1129,10 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-
-                        val = val + ",NVL(" + mainTable + attr.Field + "," +
-                        attr.DefaultVal + ")   " + attr.Key + "";
+                        if(attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
+                            val = val + ", "+ attr.Key;
+                        else
+                            val = val + ",NVL(" + mainTable + attr.Field + "," +attr.DefaultVal + ")   " + attr.Key + "";
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
@@ -1452,7 +1453,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull)
+                        if (attr.IsNull || (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00"))
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",ISNULL(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
@@ -1559,7 +1560,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull)
+                        if (attr.IsNull || attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",COALESCE(" + mainTable + attr.Field + "," + attr.DefaultVal + ")  AS " + attr.Key + "";
@@ -1651,8 +1652,12 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        val = val + ",IFNULL(" + mainTable + attr.Field + "," +
-                        attr.DefaultVal + ")   " + attr.Key + "";
+                        if(attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
+                            val = val + ", " +attr.Key;
+                        else
+                            val = val + ",IFNULL(" + mainTable + attr.Field + "," +
+                                attr.DefaultVal + ")   " + attr.Key + "";
+                        
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
                             if (DataType.IsNullOrEmpty(attr.UIBindKey))

@@ -1,7 +1,7 @@
 ﻿//点击右边的下载标签.
 function Down2018(fk_ath, pkVal, delPKVal) {
     if (plant == "CCFlow")
-        window.location.href = basePath+'/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node='+FK_Node+'&FK_Flow='+FK_Flow+'&FK_MapData='+FK_MapData+'&Ath='+Ath;
+        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
     else {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
@@ -69,12 +69,12 @@ function FileShowPic(athDesc, dbs) {
         _Html += "<div id='" + db.MyPK + "' class='image-item' style='background-image: url(&quot;" + url + "&quot;);'>";
         if ((athDesc.DeleteWay == AthDeleteWay.DelAll) || ((athDesc.DeleteWay == AthDeleteWay.DelSelf) && (db.Rec == WebUser.No)))
             _Html += "<div class='image-close' onclick='Del(\"" + db.FK_FrmAttachment + "\",\"" + PKVal + "\",\"" + db.MyPK + "\")'>X</div>";
-        _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>"; 
+        _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>";
         _Html += "<div class='image-name' id = 'name-0-0' > ";
         if (athDesc.IsDownload == 0)
             _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' >" + db.FileName + "</p>";
         else
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">" + db.FileName.split(".")[0]+"</a></p>";
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\">" + db.FileName.split(".")[0] + "</a></p>";
         _Html += "</div>";
         _Html += "</div>";
     }
@@ -83,7 +83,7 @@ function FileShowPic(athDesc, dbs) {
         _Html += "<div class='image-item space'><input type='file' id='file' onchange='UploadChange();'></div>";
     }
     $("#FilePic").html(_Html);
-    
+
     $(".athImg").on("click", function () {
         var _this = $(this); //将当前的pimg元素作为_this传入函数  
         var src = _this.parent().css("background-image").replace("url(\"", "").replace("\")", "")
@@ -131,10 +131,10 @@ function imgShow(outerdiv, innerdiv, bigimg, src) {
     outerdiv.click(function () {//再次点击淡出消失弹出层  
         $(this).fadeOut("fast");
     });
-}  
+}
 
 //文件下载
-function GetFileStream(mypk,FK_FrmAttachment) {
+function GetFileStream(mypk, FK_FrmAttachment) {
     if (plant == "CCFlow") {
         var Url = './DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
     } else {
@@ -269,7 +269,7 @@ function InitAthMapAttrOfCtrlFool(db, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
         if (mapAttr.UIContralType == 1)
-        //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+            //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
             return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + InitAthDDLOperation(mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
@@ -409,7 +409,7 @@ function InitRBShowContent(mapAttr, defValue, RBShowModel, enableAttr) {
     });
     $.each(enums, function (i, obj) {
         if (RBShowModel == 3)
-        //<input  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
+            //<input  " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /> &nbsp;" + mapAttr.Name + "</label</div>";
             rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' />&nbsp;" + obj.Lab + "</label>";
         else
             rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  />&nbsp;" + obj.Lab + "</label><br/>";
@@ -514,9 +514,8 @@ function setIframeHeight() {
     if ($("body").height() < 100) {
         h = 100;
     }
-   // $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
+    // $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
 }
 
 
 
-   

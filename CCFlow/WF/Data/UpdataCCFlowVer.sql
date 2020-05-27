@@ -55,8 +55,8 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日','当前日�
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@yy年MM月dd日HH时mm分','当前日期(yy年MM月dd日HH时mm分)','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@OrgNo','登录人员组织','DefVal');
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@OrgName','登录人员组织名称','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.OrgNo','登录人员组织','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.OrgName','登录人员组织名称','DefVal');
 
 
  

@@ -1192,7 +1192,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBS_Save()
         {
-            string msg = this.GetValFromFrmByKey("TB_Msg");
+            string msg = this.GetValFromFrmByKey("FlowBBS_Doc");
             string fk_mapData = this.GetRequestVal("FK_MapData");
             Node nd = new Node(this.FK_Node);
             if (DataType.IsNullOrEmpty(fk_mapData) == true)

@@ -572,7 +572,7 @@ namespace BP.WF.HttpHandler
             string toolbar = "";
             try
             {
-                toolbar += "<input name='ReadAndClose' type=button value='已阅关闭' enable=true onclick=\"ReadAndClose();\" />";
+                toolbar += "<input name='ReadAndClose' type=button value='阅读完毕' enable=true onclick=\"ReadAndClose();\" />";
 
                 #region 加载流程抄送 - 按钮
 

@@ -1351,7 +1351,7 @@ namespace BP.WF
             #endregion 给 generworkflow 初始化数据.
 
             //更新domian.
-            BP.DA.DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid="+wk.OID);
+            BP.DA.DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
 
 
             return wk;
@@ -5936,12 +5936,13 @@ namespace BP.WF
             }
 
             #region 处理数据完整性。
-            DBAccess.RunSQL("UPDATE WF_Cond SET FK_Node=NodeID WHERE FK_Node=0");
-            DBAccess.RunSQL("UPDATE WF_Cond SET ToNodeID=NodeID WHERE ToNodeID=0");
 
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE NodeID NOT IN (SELECT NodeID FROM WF_Node)");
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ToNodeID NOT IN (SELECT NodeID FROM WF_Node) ");
-            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE FK_Node NOT IN (SELECT NodeID FROM WF_Node) AND FK_Node > 0");
+            //@sly 删除.
+            //DBAccess.RunSQL("UPDATE WF_Cond SET FK_Node=NodeID WHERE FK_Node=0");
+            //DBAccess.RunSQL("UPDATE WF_Cond SET ToNodeID=NodeID WHERE ToNodeID=0");
+            // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE NodeID NOT IN (SELECT NodeID FROM WF_Node)");
+            //  DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ToNodeID NOT IN (SELECT NodeID FROM WF_Node) ");
+            // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE FK_Node NOT IN (SELECT NodeID FROM WF_Node) AND FK_Node > 0");
 
             //处理分组错误.
             Nodes nds = new Nodes(fl.No);
@@ -6080,7 +6081,7 @@ namespace BP.WF
                 pm.Insert();
             }
         }
-        
+
         /// <summary>
         /// 检查报表
         /// </summary>
@@ -6118,7 +6119,7 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-           // throw new Exception("err@请反馈给我们，非法的删除操作。 ");
+            // throw new Exception("err@请反馈给我们，非法的删除操作。 ");
             return base.beforeDelete();
         }
         public string DoDelete()
@@ -6126,7 +6127,7 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(this.No) == true)
                 throw new Exception("err@流程没有初始化，删除错误.");
 
-          //  throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
+            //  throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)

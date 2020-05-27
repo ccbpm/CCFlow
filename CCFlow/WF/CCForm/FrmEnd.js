@@ -685,7 +685,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 tbFastInput.after(content);
                 tbFastInput.on("mouseover", function () {
                     $("#" + this.id.replace("TB_","span_")).show();
-                    tbFastInput.focus();
+                   // tbFastInput.focus();
                 });
                 tbFastInput.on("blur", function () {
                     $("#" + this.id.replace("TB_", "span_")).hide();

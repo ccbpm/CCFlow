@@ -94,6 +94,7 @@
             handler.AddPara("Message", $('#Message').val());
 
             var data = handler.DoMethodReturnString("Shift");
+            data = data.replace("@null", "");
 
             $('body').append($('<div>' + data + '</div>'));
 

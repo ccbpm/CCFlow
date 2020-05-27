@@ -42,7 +42,7 @@ namespace BP.WF.HttpHandler
             //按照条件的先后计算.
             Conds cds = new Conds();
             cds.Retrieve(CondAttr.FK_Node, this.FK_Node,
-                CondAttr.CondType, 2, CondAttr.PRI);
+                CondAttr.CondType, 2, CondAttr.Idx);
 
             foreach (Cond item in cds)
             {
@@ -333,7 +333,9 @@ namespace BP.WF.HttpHandler
 
             /* 执行同步*/
             string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NODEID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
+
+            //@sly
+            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond A WHERE  CondType=1 ) ";
             BP.DA.DBAccess.RunSQLs(sqls);
 
             //string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.NodeForm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;

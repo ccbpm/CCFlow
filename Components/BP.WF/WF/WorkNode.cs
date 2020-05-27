@@ -2009,7 +2009,7 @@ namespace BP.WF
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
 
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.Idx);
             //if (dcsAll.Count == 0)
             //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 

@@ -213,16 +213,18 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
-                // 显示位置.
+
+                //显示位置.
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
-                map.AddBoolean(NodeToolbarAttr.IsMyFlow, true, "IsMyFlow", true, true);
-                map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "IsMyTree", true, true);
-                map.AddBoolean(NodeToolbarAttr.IsMyView, false, "IsMyView", true, true);
-                map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "IsMyCC", true, true);
 
-                map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
+                map.AddBoolean(NodeToolbarAttr.IsMyFlow, true, "工作处理器", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyView, false, "工作查看器", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "抄送工具栏", true, true);
                 map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);
+                
+                map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("图标");
 
                 this._enMap = map;

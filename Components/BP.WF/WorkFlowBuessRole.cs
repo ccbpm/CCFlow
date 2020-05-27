@@ -563,7 +563,7 @@ namespace BP.WF
                 throw new Exception("@没有找到它的下了步节点.");
 
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
             if (dcsAll.Count == 0)
                 throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件,有分支的地方必须有方向条件.");
 

@@ -403,9 +403,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            this.RunSQL("UPDATE WF_Node SET IsCCFlow=0");
+            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=0");
             // this.RunSQL("UPDATE WF_Node SET IsCCNode=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Node + ")");
-            this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
+            
+            //@sly
+            this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
             return base.beforeUpdateInsertAction();
         }
 
@@ -1098,6 +1100,8 @@ namespace BP.WF.Template
                 // map.AddTBInt(CondAttr.MyPOID, 0, "MyPOID", true, true);
 
                 map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
+                map.AddTBInt(CondAttr.Idx, 0, "优先级", true, true);
+
 
                 //@0=O模式， 1=And模式 ， 2=混合模式.
                 map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);

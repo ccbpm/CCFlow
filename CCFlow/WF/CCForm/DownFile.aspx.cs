@@ -318,7 +318,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
@@ -371,7 +371,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPPort,
+                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();

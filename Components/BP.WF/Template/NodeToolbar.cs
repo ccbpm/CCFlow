@@ -176,7 +176,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 显示在工作处理器
+        /// 显示在工具栏中
         /// </summary>
         public bool IsMyFlow
         {
@@ -189,6 +189,7 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.IsMyFlow, value);
             }
         }
+        //显示在流程树中
         public bool IsMyTree
         {
             get
@@ -200,6 +201,7 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.IsMyTree, value);
             }
         }
+        //显示在工作查看器
         public bool IsMyView
         {
             get
@@ -211,6 +213,7 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.IsMyView, value);
             }
         }
+        //显示在抄送工具栏中
         public bool IsMyCC
         {
             get

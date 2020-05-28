@@ -159,9 +159,11 @@
                 return;
             }
 
-            // alert(data);
-            window.location.href = window.location.href;
-
+            if (window.confirm('保存成功,是否返回？'))
+                window.location.href = window.location.href;
+            Back();
+            
+            
             //$("#Msg").html("<font color=green>" + data + "</font>");
         }
 

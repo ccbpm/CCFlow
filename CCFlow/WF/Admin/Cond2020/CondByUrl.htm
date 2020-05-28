@@ -150,11 +150,13 @@
                 return;
             }
 
-            alert(data);
+            
             document.getElementById("TB_Docs").value = "";
             document.getElementById("TB_Note").value = "";
 
-
+            if (window.confirm('保存成功,是否返回？'))
+                window.location.href = window.location.href;
+            Back();
         }
 
         //装载 CondByUrl 模版.

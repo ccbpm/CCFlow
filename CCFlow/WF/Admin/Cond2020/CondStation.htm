@@ -32,7 +32,7 @@
             ifm.height = document.documentElement.clientHeight - 67;
 
             InitPage();
-
+            document.getElementById("TB_SpecOperPara").style.display='none';
 
             $("#Msg").html("");
         });
@@ -45,12 +45,12 @@
 
             //条件属性
             var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
-
+            
             var cond = new Entity("BP.WF.Template.Cond");
             cond.MyPK = mypk;
             cond.SetPKVal(mypk);
             cond.RetrieveFromDBSources();
-
+            
             // 运算的值
             operatorValue = cond.OperatorValue.replace(/,/g, "@");
             if (cond.GetPara("orgEmps") != null)
@@ -59,6 +59,7 @@
 
             //获取已指定操作员的岗位条件
             operatorValues = operatorValue.split("@");
+            
             var operatorValueTs = operatorValueT.split("@");
 
 
@@ -94,22 +95,22 @@
             }
 
             //TODO 条件参数
-            var atpara = cond.AtPara;
-            if (atpara != "") {
+            //var atpara = cond.AtPara;
+            //if (atpara != "") {
 
-                var initDDL_SpecOperWay = atpara.split("@")[2].split("=")[1];
-                document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
-                document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
+            //    var initDDL_SpecOperWay = atpara.split("@")[2].split("=")[1];
+            //    document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
+            //    document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
 
-                var initTB_SpecOperPara = atpara.split("@")[3].split("=")[1];
-                document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
-                if (initDDL_SpecOperWay != 0) {
-                    document.getElementById("TB_SpecOperPara").disabled = "";
-                }
-                document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
-                $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
-                $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
-            }
+            //    var initTB_SpecOperPara = atpara.split("@")[3].split("=")[1];
+            //    document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
+            //    if (initDDL_SpecOperWay != 0) {
+            //        document.getElementById("TB_SpecOperPara").disabled = "";
+            //    }
+            //    document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
+            //    $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
+            //    $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
+            //}
 
             //条件参数 end
             //end
@@ -212,36 +213,30 @@
             handler.AddPara("DirType", GetQueryString("DirType"));
             handler.AddPara("CondType", GetQueryString("CondType"));
             handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
+            handler.AddPara("DDL_SpecOperWay", $('input:radio[name="RB_TodolistModel"]:checked').val());
+            
             handler.AddFormData()
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Save");
-            window.location.href = window.location.href;
+            if (window.confirm('保存成功,是否返回？'))
+                window.location.href = window.location.href;
+            Back();
 
         }
-
         function selChange() {
-            //01.如果 文本框 有初始值就赋初值
-            var idx = document.getElementById("DDL_SpecOperWay").value;
-            var idxinit = document.getElementById("initDDL_SpecOperWay").value;
-            if (idx == idxinit) {
-                document.getElementById("TB_SpecOperPara").value = document.getElementById("initTB_SpecOperPara").value;
+            
+            var rb = document.getElementById("RB_TodolistModel_1")
+            var tb = document.getElementById("TB_SpecOperPara");
+            if (rb.checked) {
+                tb.style.display = 'block';
             }
             else {
-                document.getElementById("TB_SpecOperPara").value = "";
+                tb.style.display = 'none';
             }
-
-            //02.处理文本框样式
-            if (idx == 0) {
-                document.getElementById("TB_SpecOperPara").disabled = "disabled";
-            } else {
-                document.getElementById("TB_SpecOperPara").disabled = "";
-            }
-            //03.处理标签
-            $("#span" + idx).css("display", "inline-block");
-            $("#span" + idx).siblings().css("display", "none");
         }
 
         function getChidrenValue(data) {
+    
             $('#win').window('close'); // close a window
             if (data[3] == "1") {
 
@@ -252,6 +247,7 @@
                 $("#groupEmps").html(data[0]);
                 $("#groupStations").html(data[1]);
                 $("#groupCount").html(data[2]);
+                
                 var orgCount = $("#orgCount").html();
                 var orgStations = $("#orgStations").html();
                 var orgEmps = $("#orgEmps").html();
@@ -347,9 +343,9 @@
 <body>
     <form id="cc">
         <div id="bar" class="cs-tr cs-bar">
-            <input id="Btn_Save1" type=button value="保存"  onclick="Btn_Save_Click()" />
+            <input id="button" style="background-color:#62CAE3" type=button value="保存" onclick="Btn_Save_Click()" />
             <!--<input id="Btn_Delete" type=button value="删除"  onclick="Btn_Delete_Click()" />-->
-            <input id="Btn_Back" type=button value="返回"  onclick="Back()" />
+            <input id="button" style="background-color:#62CAE3" type=button value="返回" onclick="Back()" />
         </div>
 
         <fieldset id="AdminModel">
@@ -382,7 +378,24 @@
         <label id="orgEmps" style="display:none"></label>
         <br />
         <fieldset>
-            
+            <legend>
+                <input type="radio" value="0" id="RB_TodolistModel_0" name="RB_TodolistModel" onchange="selChange()"/>
+                <label for="RB_TodolistModel_0">
+                    当前操作员
+                </label>
+            </legend>
+            <legend>
+                <input type="radio" value="0" id="RB_TodolistModel_1" name="RB_TodolistModel" onchange="selChange()" />
+                <label for="RB_TodolistModel_0">
+                    指定节点的操作员
+                </label>
+            </legend>
+            <br />
+            <span id="span0">参数：</span>
+            <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" /><!--&nbsp;&nbsp;多个值请用英文“逗号”来分隔。-->
+        </fieldset>
+        <!--<fieldset>
+
             指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
                 <option selected="selected" value="0">当前操作员</option>
                 <option value="1">指定节点的操作员</option>
@@ -400,8 +413,8 @@
                 <span id="span3" style="display: none">操作员编号：</span>
             </span>
             <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
-            
-        </fieldset>
+
+        </fieldset>-->
 
         <!--隐藏的文本框-->
         <div id="win" class="easyui-window" title="绑定岗位" style="width:600px;height:400px" closed="true"

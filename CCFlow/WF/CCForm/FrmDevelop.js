@@ -47,6 +47,8 @@ function GenerDevelopFrm(wn,fk_mapData) {
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15 )
             $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
+        if (mapAttr.UIContralType == 17)
+            $('#TB_' + mapAttr.KeyOfEn).setAttribute("placeholder", "请打击打开公文");
 
         //如果是时间控件
         if (mapAttr.MyDataType == 6 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {

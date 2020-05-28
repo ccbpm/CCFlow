@@ -206,7 +206,8 @@ namespace BP.WF.Template
         public Directions(int NodeID)
 		{
 			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(DirectionAttr.Node,NodeID);            
+			qo.AddWhere(DirectionAttr.Node,NodeID);    
+			qo.addOrderBy(DirectionAttr.Idx);  //方向条件的优先级. @sly
 		    qo.DoQuery();			
 		}
 		/// <summary>

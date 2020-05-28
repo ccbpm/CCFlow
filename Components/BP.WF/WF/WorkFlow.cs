@@ -1652,7 +1652,8 @@ namespace BP.WF
             this._FID = this.HisGenerWorkFlow.FID;
             if (wkid == 0)
                 throw new Exception("@没有指定工作ID, 不能创建工作流程.");
-            Flow flow = new Flow(fk_flow);
+
+            Flow flow = new Flow(this.HisGenerWorkFlow.FK_Flow);
             this._HisFlow = flow;
             this._WorkID = wkid;
 

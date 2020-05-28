@@ -175,55 +175,53 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.ExcType, value);
             }
         }
-        //显示在工具栏中
-        public bool isMyflow
+        /// <summary>
+        /// 显示在工作处理器
+        /// </summary>
+        public bool IsMyFlow
         {
             get
             {
-                return this.GetParaBoolen(NodeToolbarAttr.IsMyFlow);
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyFlow);
             }
             set
             {
-                this.SetPara(NodeToolbarAttr.IsMyFlow, value);
+                SetValByKey(NodeToolbarAttr.IsMyFlow, value);
             }
         }
-       // 显示在流程树中
         public bool IsMyTree
         {
             get
             {
-                return this.GetParaBoolen(NodeToolbarAttr.IsMyTree);
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyTree);
             }
             set
             {
-                this.SetPara(NodeToolbarAttr.IsMyTree, value);
+                SetValByKey(NodeToolbarAttr.IsMyTree, value);
             }
         }
-        //显示在工作查看器中
         public bool IsMyView
         {
             get
             {
-                return this.GetParaBoolen(NodeToolbarAttr.IsMyView);
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyView);
             }
             set
             {
-                this.SetPara(NodeToolbarAttr.IsMyTree, value);
+                SetValByKey(NodeToolbarAttr.IsMyView, value);
             }
         }
-       //显示在抄送工具栏中
         public bool IsMyCC
         {
             get
             {
-                return this.GetParaBoolen(NodeToolbarAttr.IsMyCC);
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyCC);
             }
             set
             {
-                this.SetPara(NodeToolbarAttr.IsMyCC, value);
+                SetValByKey(NodeToolbarAttr.IsMyCC, value);
             }
         }
-
         #endregion
 
         #region 构造函数
@@ -253,6 +251,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_NodeToolbar", "自定义工具栏");
 
                 map.AddTBIntPKOID();
+                map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false, true);
                 map.AddTBString(NodeToolbarAttr.Title, null, "标题", true, false, 0, 100, 100, true);
 
                 // 执行类型.
@@ -262,7 +261,6 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
-
                 //显示位置.
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
@@ -271,7 +269,6 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyView, false, "工作查看器", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "抄送工具栏", true, true);
-                map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);
                 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("图标");

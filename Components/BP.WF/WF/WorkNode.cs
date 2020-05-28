@@ -240,18 +240,18 @@ namespace BP.WF
             ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FK_Node =" + dbStr + "FK_Node";
             DBAccess.RunSQL(ps);
 
-          
-                /*如果设置了安ccbpm的BPM模式*/
-                while (true)
-                {
-                    FindWorker fw = new FindWorker();
-                    dt = fw.DoIt(this.HisFlow, this, town);
-                    if (dt == null)
-                        throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人.", "WorkNode", "not_found_receiver"));
 
-                    return InitWorkerLists(town, dt);
-                }
-             
+            /*如果设置了安ccbpm的BPM模式*/
+            while (true)
+            {
+                FindWorker fw = new FindWorker();
+                dt = fw.DoIt(this.HisFlow, this, town);
+                if (dt == null)
+                    throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人.", "WorkNode", "not_found_receiver"));
+
+                return InitWorkerLists(town, dt);
+            }
+
 
             throw new Exception("@此部分代码已经移除了.");
         }
@@ -1212,7 +1212,7 @@ namespace BP.WF
                             skipWork.FID = mywork.FID;
 
                         skipWork.Rec = this.Execer;
-                       
+
                         skipWork.ResetDefaultVal();
 
                         // 把里面的默认值也copy报表里面去.
@@ -1230,325 +1230,6 @@ namespace BP.WF
                         else
                             skipWork.InsertAsOID(this.WorkID);
                     }
-
-                    #region  初始化发起的工作节点。
-
-                    if (1 == 2)
-                    {
-
-#warning 被 zhoupeng 删除 2014-06-20, 不应该存在这里.
-                        if (this.HisWork.EnMap.PhysicsTable == nd.HisWork.EnMap.PhysicsTable)
-                        {
-                            /*这是数据合并模式, 就不执行 copy */
-                        }
-                        else
-                        {
-
-                            /* 如果两个数据源不想等，就执行copy。 */
-
-                            #region 复制附件。
-                            FrmAttachments athDesc = this.HisNode.MapData.FrmAttachments;
-                            if (athDesc.Count > 0)
-                            {
-                                FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + this.HisNode.NodeID,
-                                      this.WorkID.ToString());
-                                int idx = 0;
-                                if (athDBs.Count > 0)
-                                {
-                                    athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-
-                                    /*说明当前节点有附件数据*/
-                                    foreach (FrmAttachmentDB athDB in athDBs)
-                                    {
-                                        idx++;
-                                        FrmAttachmentDB athDB_N = new FrmAttachmentDB();
-                                        athDB_N.Copy(athDB);
-                                        athDB_N.FK_MapData = "ND" + nd.NodeID;
-                                        athDB_N.RefPKVal = this.WorkID.ToString();
-
-                                        // athDB_N.MyPK = this.WorkID + "_" + idx + "_" + athDB_N.FK_MapData;
-                                        // if (athDB.dbt
-                                        // athDB_N.MyPK = athDB_N.FK_FrmAttachment.Replace("ND" + this.HisNode.NodeID, "ND" + nd.NodeID) + "_" + this.WorkID;
-
-                                        athDB_N.MyPK = DBAccess.GenerGUID(); // athDB_N.FK_FrmAttachment.Replace("ND" + this.HisNode.NodeID, "ND" + nd.NodeID) + "_" + this.WorkID;
-
-                                        athDB_N.FK_FrmAttachment = athDB_N.FK_FrmAttachment.Replace("ND" + this.HisNode.NodeID,
-                                           "ND" + nd.NodeID);
-
-                                        athDB_N.Save();
-                                    }
-                                }
-                            }
-                            #endregion 复制附件。
-
-                            #region 复制图片上传附件。
-                            if (this.HisNode.MapData.FrmImgAths.Count > 0)
-                            {
-                                FrmImgAthDBs athDBs = new FrmImgAthDBs("ND" + this.HisNode.NodeID,
-                                      this.WorkID.ToString());
-                                int idx = 0;
-                                if (athDBs.Count > 0)
-                                {
-                                    athDBs.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-
-                                    /*说明当前节点有附件数据*/
-                                    foreach (FrmImgAthDB athDB in athDBs)
-                                    {
-                                        idx++;
-                                        FrmImgAthDB athDB_N = new FrmImgAthDB();
-                                        athDB_N.Copy(athDB);
-                                        athDB_N.FK_MapData = "ND" + nd.NodeID;
-                                        athDB_N.RefPKVal = this.WorkID.ToString();
-                                        athDB_N.MyPK = this.WorkID + "_" + idx + "_" + athDB_N.FK_MapData;
-                                        athDB_N.FK_FrmImgAth = athDB_N.FK_FrmImgAth.Replace("ND" + this.HisNode.NodeID, "ND" + nd.NodeID);
-                                        athDB_N.Save();
-                                    }
-                                }
-                            }
-                            #endregion 复制图片上传附件。
-
-                            #region 复制Ele
-                            if (this.HisNode.MapData.FrmEles.Count > 0)
-                            {
-                                FrmEleDBs eleDBs = new FrmEleDBs("ND" + this.HisNode.NodeID,
-                                      this.WorkID.ToString());
-                                if (eleDBs.Count > 0)
-                                {
-                                    eleDBs.Delete(FrmEleDBAttr.FK_MapData, "ND" + nd.NodeID,
-                                        FrmEleDBAttr.RefPKVal, this.WorkID.ToString());
-
-                                    /*说明当前节点有附件数据*/
-                                    foreach (FrmEleDB eleDB in eleDBs)
-                                    {
-                                        FrmEleDB eleDB_N = new FrmEleDB();
-                                        eleDB_N.Copy(eleDB);
-                                        eleDB_N.FK_MapData = "ND" + nd.NodeID;
-                                        eleDB_N.GenerPKVal();
-                                        eleDB_N.Save();
-                                    }
-                                }
-                            }
-                            #endregion 复制Ele
-
-                            #region 复制明细数据
-                            // int deBugDtlCount=
-                            Sys.MapDtls dtls = this.HisNode.MapData.MapDtls;
-                            string[] para = new string[3];
-                            para[0] = this.HisNode.NodeID.ToString();
-                            para[1] = this.WorkID.ToString();
-                            para[2] = nd.NodeID.ToString();
-
-                            string recDtlLog = BP.WF.Glo.multilingual("@记录测试明细表Copy过程,从节点ID:{0}, WorkID:{1}, 到节点ID:{2}", "WorkNode", "log_copy", para);
-                            if (dtls.Count > 0)
-                            {
-                                Sys.MapDtls toDtls = nd.MapData.MapDtls;
-                                string[] para1 = new string[1];
-                                para1[0] = dtls.Count.ToString();
-
-                                recDtlLog += BP.WF.Glo.multilingual("@到节点明细表数量是{0}个", "WorkNode", "count_of_detail_table", para1);
-
-                                Sys.MapDtls startDtls = null;
-                                bool isEnablePass = false; /*是否有明细表的审批.*/
-                                foreach (MapDtl dtl in dtls)
-                                {
-                                    if (dtl.IsEnablePass)
-                                        isEnablePass = true;
-                                }
-
-                                if (isEnablePass) /* 如果有就建立它开始节点表数据 */
-                                    startDtls = new BP.Sys.MapDtls("ND" + int.Parse(nd.FK_Flow) + "01");
-
-                                recDtlLog += BP.WF.Glo.multilingual("@进入循环开始执行逐个明细表copy:", "WorkNode", "start_copy_detail_tables", new string[0]);
-                                int i = -1;
-                                foreach (Sys.MapDtl dtl in dtls)
-                                {
-                                    if (dtl.IsCopyNDData == false)
-                                        continue;
-
-                                    string[] para2 = new string[1];
-                                    para2[0] = dtl.No;
-                                    recDtlLog += BP.WF.Glo.multilingual("@进入循环开始执行明细表({0})copy:", "WorkNode", "start_copy_detail_table", para2);
-
-                                    i++;
-                                    //if (toDtls.Count <= i)
-                                    //    continue;
-                                    Sys.MapDtl toDtl = null;
-                                    foreach (MapDtl todtl in toDtls)
-                                    {
-                                        if (todtl.Name.Substring(6, todtl.Name.Length - 6).Equals(dtl.Name.Substring(6, dtl.Name.Length - 6)))
-                                        {
-                                            if (todtl.PTable == dtl.PTable)
-                                                break;
-
-                                            toDtl = todtl;
-                                            break;
-                                        }
-                                    }
-
-                                    if (toDtl == null)
-                                        continue;
-
-                                    if (dtl.IsEnablePass == true)
-                                    {
-                                        /*如果启用了是否明细表的审核通过机制,就允许copy节点数据。*/
-                                        toDtl.IsCopyNDData = true;
-                                    }
-
-                                    if (toDtl.IsCopyNDData == false)
-                                        continue;
-
-                                    //获取明细数据。
-                                    GEDtls gedtls = new GEDtls(dtl.No);
-                                    QueryObject qo = null;
-                                    qo = new QueryObject(gedtls);
-                                    switch (dtl.DtlOpenType)
-                                    {
-                                        case DtlOpenType.ForEmp:
-                                            qo.AddWhere(GEDtlAttr.RefPK, this.WorkID);
-                                            break;
-                                        case DtlOpenType.ForWorkID:
-                                            qo.AddWhere(GEDtlAttr.RefPK, this.WorkID);
-                                            break;
-                                        case DtlOpenType.ForFID:
-                                            qo.AddWhere(GEDtlAttr.FID, this.WorkID);
-                                            break;
-                                    }
-                                    qo.DoQuery();
-
-                                    string[] para3 = new string[2];
-                                    para3[0] = dtl.No;
-                                    para3[1] = gedtls.Count.ToString();
-
-                                    recDtlLog += BP.WF.Glo.multilingual("@从明细表({0})查询数据一共{1}条.", "WorkNode", "log_detail_table_1", para3);
-
-                                    int unPass = 0;
-                                    // 是否启用审核机制。
-                                    isEnablePass = dtl.IsEnablePass;
-                                    if (isEnablePass && this.HisNode.IsStartNode == false)
-                                        isEnablePass = true;
-                                    else
-                                        isEnablePass = false;
-
-                                    if (isEnablePass == true)
-                                    {
-                                        /*判断当前节点该明细表上是否有，isPass 审核字段，如果没有抛出异常信息。*/
-                                        if (gedtls.Count != 0)
-                                        {
-                                            GEDtl dtl1 = gedtls[0] as GEDtl;
-                                            if (dtl1.EnMap.Attrs.Contains("IsPass") == false)
-                                                isEnablePass = false;
-                                        }
-                                    }
-
-                                    string[] para4 = new string[1];
-                                    para4[0] = dtl.No;
-
-                                    recDtlLog += BP.WF.Glo.multilingual("@数据删除到达明细表:{0},并开始遍历明细表,执行一行行的copy.", "WorkNode", "log_detail_table_2", para4);
-                                    DBAccess.RunSQL("DELETE FROM " + toDtl.PTable + " WHERE RefPK=" + dbStr + "RefPK", "RefPK", this.WorkID.ToString());
-
-                                    // copy数量.
-                                    int deBugNumCopy = 0;
-                                    foreach (GEDtl gedtl in gedtls)
-                                    {
-                                        if (isEnablePass)
-                                        {
-                                            if (gedtl.GetValBooleanByKey("IsPass") == false)
-                                            {
-                                                /*没有审核通过的就 continue 它们，仅复制已经审批通过的.*/
-                                                continue;
-                                            }
-                                        }
-
-                                        BP.Sys.GEDtl dtCopy = new GEDtl(toDtl.No);
-                                        dtCopy.Copy(gedtl);
-                                        dtCopy.FK_MapDtl = toDtl.No;
-                                        dtCopy.RefPK = this.WorkID.ToString();
-                                        dtCopy.InsertAsOID(dtCopy.OID);
-                                        dtCopy.RefPKInt64 = this.WorkID;
-                                        deBugNumCopy++;
-
-                                        #region  复制明细表单条 - 附件信息
-                                        if (toDtl.IsEnableAthM)
-                                        {
-                                            /*如果启用了多附件,就复制这条明细数据的附件信息。*/
-                                            FrmAttachmentDBs athDBs = new FrmAttachmentDBs(dtl.No, gedtl.OID.ToString());
-                                            if (athDBs.Count > 0)
-                                            {
-                                                i = 0;
-                                                foreach (FrmAttachmentDB athDB in athDBs)
-                                                {
-                                                    i++;
-                                                    FrmAttachmentDB athDB_N = new FrmAttachmentDB();
-                                                    athDB_N.Copy(athDB);
-                                                    athDB_N.FK_MapData = toDtl.No;
-                                                    athDB_N.MyPK = toDtl.No + "_" + dtCopy.OID + "_" + i.ToString();
-                                                    athDB_N.FK_FrmAttachment = athDB_N.FK_FrmAttachment.Replace("ND" + this.HisNode.NodeID,
-                                                        "ND" + nd.NodeID);
-                                                    athDB_N.RefPKVal = dtCopy.OID.ToString();
-                                                    athDB_N.DirectInsert();
-                                                }
-                                            }
-                                        }
-                                        #endregion  复制明细表单条 - 附件信息
-
-                                    }
-#warning 记录日志.
-                                    if (gedtls.Count != deBugNumCopy)
-                                    {
-                                        string[] para5 = new string[2];
-                                        para5[0] = dtl.No;
-                                        para5[1] = gedtls.Count.ToString();
-
-                                        recDtlLog += BP.WF.Glo.multilingual("@从明细表({0})查询数据一共{1}条.", "WorkNode", "log_detail_table_1", para5);
-
-                                        //记录日志.
-                                        Log.DefaultLogWriteLineInfo(recDtlLog);
-                                        string[] para6 = new string[1];
-                                        para6[0] = recDtlLog;
-                                        throw new Exception(BP.WF.Glo.multilingual("@系统出现错误,请将如下信息反馈给管理员,谢谢。技术信息:{0}.", "WorkNode", "system_error", para6));
-                                    }
-
-                                    #region 如果启用了审核机制
-                                    if (isEnablePass)
-                                    {
-                                        /* 如果启用了审核通过机制，就把未审核的数据copy到第一个节点上去 
-                                         * 1, 找到对应的明细点.
-                                         * 2, 把未审核通过的数据复制到开始明细表里.
-                                         */
-                                        string fk_mapdata = "ND" + int.Parse(nd.FK_Flow) + "01";
-                                        MapData md = new MapData(fk_mapdata);
-                                        string startUser = "SELECT Rec FROM " + md.PTable + " WHERE OID=" + this.WorkID;
-                                        startUser = DBAccess.RunSQLReturnString(startUser);
-
-                                        MapDtl startDtl = (MapDtl)startDtls[i];
-                                        foreach (GEDtl gedtl in gedtls)
-                                        {
-                                            if (gedtl.GetValBooleanByKey("IsPass"))
-                                                continue; /* 排除审核通过的 */
-
-                                            BP.Sys.GEDtl dtCopy = new GEDtl(startDtl.No);
-                                            dtCopy.Copy(gedtl);
-                                            dtCopy.OID = 0;
-                                            dtCopy.FK_MapDtl = startDtl.No;
-                                            dtCopy.RefPK = gedtl.OID.ToString(); //this.WorkID.ToString();
-                                            dtCopy.SetValByKey("BatchID", this.WorkID);
-                                            dtCopy.SetValByKey("IsPass", 0);
-                                            dtCopy.SetValByKey("Rec", startUser);
-                                            dtCopy.SetValByKey("Checker", this.ExecerName);
-                                            dtCopy.RefPKInt64 = this.WorkID;
-                                            dtCopy.SaveAsOID(gedtl.OID);
-                                        }
-                                        DBAccess.RunSQL("UPDATE " + startDtl.PTable + " SET Rec='" + startUser + "',Checker='" + this.Execer + "' WHERE BatchID=" + this.WorkID + " AND Rec='" + this.Execer + "'");
-                                    }
-                                    #endregion 如果启用了审核机制
-                                }
-                            }
-                            #endregion 复制明细数据
-                        }
-                    }
-                    #endregion 初始化发起的工作节点.
 
                     IsSkip = true;
                     mywork = skipWork;
@@ -1729,7 +1410,7 @@ namespace BP.WF
                             wk.OID = this.WorkID;
                             wk.ResetDefaultVal();
                         }
-                       
+
 
                         //执行表单填充，如果有，修改新昌方面同时修改本版本，added by liuxc,2015-10-16
                         MapExt item = nd.MapData.MapExts.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull) as MapExt;
@@ -1852,6 +1533,8 @@ namespace BP.WF
             }//结束循环。
 
             #endregion 计算到达的节点.
+
+
             throw new Exception(BP.WF.Glo.multilingual("@找到下一步节点.", "WorkNode", "found_next_node", new string[0]));
         }
 
@@ -1993,11 +1676,52 @@ namespace BP.WF
         /// <returns></returns>
         private Node NodeSend_GenerNextStepNode_Ext(Node currNode)
         {
-            // 检查当前的状态是是否是退回，.
-            if (this.SendNodeWFState == WFState.ReturnSta)
+            Nodes nds = currNode.HisToNodes;
+            if (nds.Count == 1)
             {
+                Node toND = (Node)nds[0];
+                return toND;
+            }
+            if (nds.Count == 0)
+                throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
+
+            //获得所有的条件. 
+            Conds dcsAll = new Conds();
+            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID,
+                CondAttr.CondType, CondType.Dir, CondAttr.Idx);
+
+            //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
+            Directions dirs = new Directions(currNode.NodeID);
+
+            //定义没有条件的节点.
+            Directions dirs0Cond = new Directions();
+            foreach (Direction dir in dirs)
+            {
+                //查询出来他的条件.
+                Conds conds = new Conds();
+                conds.Retrieve(CondAttr.FK_Node, currNode.NodeID,
+                    CondAttr.ToNodeID, dir.ToNode, CondAttr.Idx);
+                if (conds.Count == 0)
+                {
+                    dirs0Cond.AddEntity(dir); //把他加入到里面.
+                    continue;
+                }
+
+                if (conds.IsPass == true)
+                    return new Node(dir.ToNode);
             }
 
+            if (dirs0Cond.Count == 0)
+                throw new Exception("err@流程设计错误:到达的节点，所有的条件都不成立.");
+
+            if (dirs0Cond.Count != 1)
+                throw new Exception("err@流程设计错误:到达的节点，超过1个节点，没有设置方向条件.");
+
+            int toNodeID = dirs0Cond[0].GetValIntByKey(DirectionAttr.ToNode);
+            return new Node(toNodeID);
+        }
+        private Node NodeSend_GenerNextStepNode_Ext2019(Node currNode)
+        {
             Nodes nds = currNode.HisToNodes;
             if (nds.Count == 1)
             {
@@ -2036,38 +1760,38 @@ namespace BP.WF
                     continue;
                     //throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
                 }
-              
+
                 var conds = dcs.Tolist().GroupBy(x => x.HisDataFrom);
                 //说明有不同的方向条件规则
                 if (conds.Count() == dcs.Count)
                 {
                     // 如果通过了.
-                    if (dcs.IsPass) 
+                    if (dcs.IsPass)
                         myNodes.AddEntity(nd);
                 }
                 else
                 {
                     bool isPass = false;
                     var lists = conds.ToList();
-                    for(int i = 0; i < lists.Count(); i++)
+                    for (int i = 0; i < lists.Count(); i++)
                     {
                         if (isPass == true)
                             break;
                         Conds cds = new Conds();
                         var nextList = lists[i].ToList();
-                        for (int k = 0; k< nextList.Count; k++)
+                        for (int k = 0; k < nextList.Count; k++)
                         {
                             cds.AddEntity(nextList[k]);
                         }
-                        isPass = cds.IsPass;    
+                        isPass = cds.IsPass;
                     }
-                    if(isPass == true)
+                    if (isPass == true)
                         myNodes.AddEntity(nd);
                 }
-                
-                
 
-                
+
+
+
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
 
@@ -2422,7 +2146,7 @@ namespace BP.WF
 
             // 初试化他们的工作人员．
             current_gwls = this.Func_GenerWorkerLists(town);
-            if (town.HisNode.HuiQianRole == HuiQianRole.TeamupGroupLeader &&  town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && town.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && current_gwls.Count > 1)
+            if (town.HisNode.HuiQianRole == HuiQianRole.TeamupGroupLeader && town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader && town.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && current_gwls.Count > 1)
                 throw new Exception(BP.WF.Glo.multilingual("@接收人出错! 详情:{0}.", "WorkNode", "error_sendToemps_data", "@节点" + town.HisNode.NodeID + "是组长会签模式，接受人只能选择一人"));
 
             if (town.HisNode.TodolistModel == TodolistModel.Order && current_gwls.Count > 1)
@@ -2592,7 +2316,7 @@ namespace BP.WF
             {
                 if (this.HisNode.IsStartNode)
                     // this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a><a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
-                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='"+SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>", SendReturnMsgType.Info);
                 else
                     this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0 />撤销本次发送</a> ", SendReturnMsgType.Info);
             }
@@ -4635,7 +4359,6 @@ namespace BP.WF
                     throw new Exception(BP.WF.Glo.multilingual("@未能获取表单主键.", "WorkNode", "not_found_form_primary_key"));
                 #endregion 获得实体主键.
 
-
                 //初始化这个实体.
                 GEEntity geEn = new GEEntity(fn.FK_Frm, pk);
 
@@ -5476,13 +5199,13 @@ namespace BP.WF
                 //把当前的待办设置已办
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if ((gwl.IsPassInt == 0 || gwl.IsPassInt == 90)&&(gwl.FK_Emp != WebUser.No))
+                    if ((gwl.IsPassInt == 0 || gwl.IsPassInt == 90) && (gwl.FK_Emp != WebUser.No))
                     {
                         todoEmps += BP.WF.Glo.DealUserInfoShowModel(gwl.FK_Emp, gwl.FK_EmpText) + " ";
                     }
 
                     if (gwl.FK_Emp != WebUser.No)
-                    continue;
+                        continue;
 
                     //设置当前已经完成.
                     gwl.IsPassInt = 1;
@@ -6472,7 +6195,7 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);
 
             //设置消息.
-            this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.","WorkNode", "sub_wf_started", node.FlowName, toEmpIDs));
+            this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.", "WorkNode", "sub_wf_started", node.FlowName, toEmpIDs));
             //this.addMsg(SendReturnMsgFlag.MsgOfText, "需要等待子流程完成后，该流程才能向下运动。");
             this.addMsg("Msg2", BP.WF.Glo.multilingual("当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.", "WorkNode", "to_do_list_invisible"));
 
@@ -6552,7 +6275,7 @@ namespace BP.WF
                 this.HisWork.RetrieveFromDBSources();
                 this.HisWork.ResetDefaultVal();
                 this.HisWork.Rec = this.Execer;
-               // this.HisWork.RecText = this.ExecerName;
+                // this.HisWork.RecText = this.ExecerName;
                 if (DataType.IsNullOrEmpty(sendWhen) == false)
                 {
                     sendWhen = System.Web.HttpUtility.UrlDecode(sendWhen);
@@ -6638,17 +6361,17 @@ namespace BP.WF
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
                     GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass, 0);
                 if (gwls.Count == 1)
-                    isLastOne=true; //如果只有一个，本人就是lastOne.
+                    isLastOne = true; //如果只有一个，本人就是lastOne.
 
                 //WorkNode wn= this.GetPreviousWorkNode();
                 //this.JumpToEmp = wn.HisWork.Rec; //对于绑定的表单有问题.
                 //this.JumpToNode = wn.HisNode;
 
-                if (isLastOne == true || this.HisNode.TodolistModel== TodolistModel.QiangBan)
+                if (isLastOne == true || this.HisNode.TodolistModel == TodolistModel.QiangBan)
                 {
                     string ptable = "ND" + int.Parse(this.HisFlow.No) + "Track";
 
-                   var mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + this.WorkID + " AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    var mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + this.WorkID + " AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
                     //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
 
@@ -6663,7 +6386,7 @@ namespace BP.WF
                     this.HisGenerWorkFlow.DirectUpdate();
 
                     //清除上次发送的选择,不然下次还会自动发送到当前的节点上来.
-                    mysql = "DELETE FROM WF_SelectAccper WHERE FK_Node="+this.JumpToNode.NodeID+" AND WorkID="+this.WorkID;
+                    mysql = "DELETE FROM WF_SelectAccper WHERE FK_Node=" + this.JumpToNode.NodeID + " AND WorkID=" + this.WorkID;
                     DBAccess.RunSQL(mysql);
                 }
 
@@ -7302,7 +7025,7 @@ namespace BP.WF
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
 
                     //执行抄送. 2020-04-28 修改只要启动抄送规则就执行抄送 
-                     CC(this.HisNode);
+                    CC(this.HisNode);
 
 
                     //判断当前流程是否子流程，是否启用该流程结束后，主流程自动运行到下一节点@yuan
@@ -7587,7 +7310,7 @@ namespace BP.WF
 
                 #region 执行 自动 启动子流程.
                 CallAutoSubFlow(this.HisNode, 0); //启动本节点上的.
-                if (this.town!=null)
+                if (this.town != null)
                 {
                     CallAutoSubFlow(this.town.HisNode, 1);
                 }
@@ -8860,7 +8583,7 @@ namespace BP.WF
             t.EmpTo = gwl.FK_Emp;
             t.EmpToT = gwl.FK_EmpText;
             t.Msg = msg;
-            t.NodeData = "@DeptNo="+WebUser.FK_Dept+"@DeptName=" + WebUser.FK_DeptName;
+            t.NodeData = "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName;
             //t.FrmDB = frmDBJson; //表单数据Json.
 
             switch (at)
@@ -10076,7 +9799,7 @@ namespace BP.WF
             }
             return this.Count;
         }
-        
+
         public int GenerByWorkID(Flow flow, Int64 oid)
         {
             /*退回 ,需要判断跳转的情况，如果是跳转的需要退回到他开始执行的节点
@@ -10111,7 +9834,7 @@ namespace BP.WF
 
 
                 wk.Rec = dr["EmpFrom"].ToString();
-             //   wk.RecText = dr["EmpFromT"].ToString();
+                //   wk.RecText = dr["EmpFromT"].ToString();
                 wk.SetValByKey("RDT", dr["RDT"].ToString());
                 this.Add(new WorkNode(wk, nd));
             }

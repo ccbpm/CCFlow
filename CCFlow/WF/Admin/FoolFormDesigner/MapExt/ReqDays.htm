@@ -11,117 +11,74 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript">
+        var fk_MapData = GetQueryString("FK_MapData");
+        var keyOfEn = GetQueryString("KeyOfEn");
+
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
-
-            //组织主键,
-            var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
-            en.SetPKVal(mypk);
-
-            var i = en.RetrieveFromDBSources(); //执行查询..
-            if (i == 1)
-                document.getElementById("Btn_Delete").disabled = false;
-
-            document.getElementById("TB_Doc").value = en.Doc;
             $("#Msg").html("");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var data = handler.DoMethodReturnString("LoadRDTClo_Init");
 
-        });
-
-        //装载模版.
-        function LoadTemplate() {
-            var url = "../../SettingTemplate.htm?TemplateType=AutoFull";
-            WinOpen(url, 'ss');
-        }
-
-        function Save() {
-
-            var doc = $("#TB_Doc").val();
-            if (doc == null || doc == undefined || doc == "") {
-                alert("请输入内容.");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
                 return;
             }
-
-            doc = doc.replace("'", "~");
-
-            $("#Msg").html("正在保存,请稍后......");
-
-            //组织主键,
-            var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            //转json.
+            data = JSON.parse(data);
+            
+            //绑定查询.
+            GenerBindDDL("DDL_StarRDT", data, "No", "Name");
+            GenerBindDDL("DDL_EndRDT", data, "No", "Name");
+            //加载已配置的数据
+            var mypk = "ReqDays_" + fk_MapData + "_" + keyOfEn;
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
-            en.RetrieveFromDBSources();
-
-            en.SetValByKey("FK_MapData", GetQueryString("FK_MapData"));
-            en.SetValByKey("AttrOfOper", GetQueryString("KeyOfEn"));
-            en.SetValByKey("ExtType", "AutoFull");
-            en.SetValByKey("Doc", doc);
-            en.Save();
-
-            window.location.href = window.location.href;
-        }
-
-        function Delete() {
-
-            if (window.confirm('您确定要删除吗？') == false)
-                return false;
-
-            //组织主键,
-            var mypk = "AutoFull_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
-            en.Delete(); //执行删除.
-
-            window.location.href = window.location.href;
+            en.SetPKVal(mypk);
+            if (en.RetrieveFromDBSources() == 1) {
+                $("#DDL_StarRDT option[value='" + en.Tag1 + "']").attr("selected", "selected");
+                $("#DDL_EndRDT option[value='" + en.Tag2 + "']").attr("selected", "selected");
+                $("input:radio[value=" + en.Tag3 + "]").attr('checked', 'true');
+            }
+            
+            $("#Msg").html("");
+            return;
+        });
+        function Save() {
+            
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            handler.AddPara("DDL_StarRDT", $("#DDL_StarRDT").val());
+            handler.AddPara("DDL_EndRDT", $("#DDL_EndRDT").val());
+            handler.AddPara("RDTRadio", $("input[type='radio']:checked").val());
+            var data = handler.DoMethodReturnString("LoadRDTClo_Save");
+            alert(data);
         }
     </script>
 </head>
 <body>
     <form id="cc">
         <div style="right:10px; position:absolute; z-index:100; top:-3px">
-            <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
-            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
             
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
         </div>
         <table id="table" style="width: 100%;">
             <caption>
-                自动计算表达式
-                <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />填充表达式帮助:</a>
+                自动计算日期天数
             </caption>
             <tr>
                 <td colspan="3" style="width: 95%;">
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                    选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT"></select>
+                    选择结束日期:<select id="DDL_EndRDT" name="DDL_EndRDT"></select>
                 </td>
             </tr>
             <tr>
-                <td colspan="3">
-                    
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div id='sqlexp' style='color: Gray; display: none'>
-                        <ul>
-                            <li>1.如果是从表: 表达式就是列之间的计算，比如: @A+@B </li>
-                            <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia*@ShuLiang 或者 @单价*@数量 </li>
-                            <li>3.仅仅支持数值类型的计算，比如：float,int,decimal类型的数据字段。 </li>
-                        </ul>
-
-                        <fieldset>
-                            <legend>显示实例-主表</legend>
-                            <img src="AutoFull-1.png" />
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>显示实例-从表</legend>
-                            <img src="AutoFull-2.png" />
-                        </fieldset>
-
-                    </div>
+                <td colspan="3" style="width: 95%;">
+                    <label><input type="radio" value="0" name="RDTRadio" />包含节假日</label>
+                    <label><input type="radio" value="1" name="RDTRadio" />不包含节假日</label>
 
                 </td>
             </tr>

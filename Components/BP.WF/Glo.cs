@@ -6201,7 +6201,7 @@ namespace BP.WF
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                 if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(ctrlWayId));
                 }
                 else
                 {

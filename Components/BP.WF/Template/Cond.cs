@@ -1135,10 +1135,7 @@ namespace BP.WF.Template
                 string str = "";
                 foreach (Cond item in this)
                 {
-                    if (item.HisDataFrom == ConnDataFrom.Oper)
-                        str += " " + item.OperatorValue;
-                    else
-                        str += " 1=1 ";
+                    str += " "+item.AttrKey+item.FK_Operator+item.OperatorValue;
                 }
 
                 string sql = "";
@@ -1166,7 +1163,7 @@ namespace BP.WF.Template
             }
             catch (Exception ex)
             {
-                return "err@条件设置错误:" + ex.Message;
+                return "err@条件设置错误:\n" + ex.Message;
             }
         }
         public string ConditionDesc

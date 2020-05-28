@@ -49,13 +49,17 @@
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
 
+                if (en.No == 'Temp0')
+                    continue;
+
+
                 html += "<tr >";
                 html += "<td>" + i + "</td>";
                 html += "<td>" + en.SortName + "</td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
                 html += "<td>" + en.PTable + "</td>";
-                html += "<td>" + en.OrgNo + "</td>";
+                html += "<td>" + en.OrgName + "</td>";
                 html += "<td><a href=\"javascript:Save('" + en.No + "')\">绑定</a></td>";
                 html += "</tr>";
             }

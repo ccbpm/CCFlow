@@ -567,40 +567,61 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+
             BtnLab btnLab = new BtnLab(this.FK_Node);
             string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             string toolbar = "";
             try
             {
-                toolbar += "<input name='ReadAndClose' type=button value='阅读完毕' enable=true onclick=\"ReadAndClose();\" />";
-
+                DataRow dr = dt.NewRow();
+                dr["No"] = "ReadAndClose";
+                dr["Name"] = "阅读完毕";
+                dr["Oper"] = "ReadAndClose();";
+                dt.Rows.Add(dr);
                 #region 加载流程抄送 - 按钮
 
 
                 /* 打包下载zip */
                 if (btnLab.PrintZipMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=zip&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_zip'  value='" + btnLab.PrintZipLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载html */
                 if (btnLab.PrintHtmlMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=html&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_html'  value='" + btnLab.PrintHtmlLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载pdf */
                 if (btnLab.PrintPDFMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable ==true)
                 {
-                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "DocWord";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 #endregion
 
@@ -612,12 +633,20 @@ namespace BP.WF.HttpHandler
 
                     if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick='" + bar.Url + "' />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
                     }
                     else
                     {
                         string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = "WinOpen('" + urlr3 + "')";
+                        dt.Rows.Add(dr);
                     }
                 }
                 #endregion  //加载自定义的button.
@@ -628,7 +657,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
-            return toolbar;
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 工具栏

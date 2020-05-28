@@ -187,12 +187,22 @@ namespace BP.WF.HttpHandler
 
         public string InitToolBar()
         {
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+
             BtnLab btnLab = new BtnLab(this.FK_Node);
             string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             string toolbar = "";
             try
             {
-                toolbar += "<input name='Close' type=button value='关闭' enable=true onclick=\"Close();\" />";
+                DataRow dr = dt.NewRow();
+                dr["No"] = "Close";
+                dr["Name"] = "关闭";
+                dr["Oper"] = "Close();";
+                dt.Rows.Add(dr);
+
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 
@@ -207,8 +217,14 @@ namespace BP.WF.HttpHandler
                 {
                     case WFState.Runing: /* 运行时*/
                         /*删除流程.*/
-                        if (powers.Contains("FlowDataDelete") == true || (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No) == true && btnLab.DeleteEnable != 0) )
-                            toolbar += "<input name='Delete' type='button' value='删除流程' enable='true'  onclick='DeleteFlow()'/>";
+                        if (powers.Contains("FlowDataDelete") == true || (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No) == true && btnLab.DeleteEnable != 0))
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Delete";
+                            dr["Name"] = btnLab.DeleteLab;
+                            dr["Oper"] = "";
+                            dt.Rows.Add(dr);
+                        }
 
                         /*取回审批*/
                         string para = "";
@@ -218,7 +234,14 @@ namespace BP.WF.HttpHandler
                         {
                             GetTask gt = new GetTask(myNode);
                             if (gt.Can_I_Do_It())
-                                toolbar += "<input name='TackBack' type='button' value='取回审批' enable='true'  onclick='TackBack("+gwf.FK_Node+","+myNode+")'/>";
+                            {
+                                dr = dt.NewRow();
+                                dr["No"] = "TackBack";
+                                dr["Name"] = "取回审批";
+                                dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
+                                dt.Rows.Add(dr);
+
+                            }
                         }
 
                        
@@ -234,23 +257,47 @@ namespace BP.WF.HttpHandler
                         info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
 
                         if (info.DoQuery() > 0 || powers.Contains("FlowDataUnSend") == true)
-                            toolbar += "<input name='UnSend' type='button' value='撤销' enable='true' onclick='UnSend()' />";
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "UnSend";
+                            dr["Name"] = "撤销";
+                            dr["Oper"] = "UnSend()";
+                            dt.Rows.Add(dr);
+                        }
 
                         //流程结束
                         if (powers.Contains("FlowDataOver") == true)
-                            toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"javascript:DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');\" />";
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "EndFlow";
+                            dr["Name"] = btnLab.EndFlowLab;
+                            dr["Oper"] = "DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');";
+                            dt.Rows.Add(dr);
 
+                        }
 
                         //催办
-                        if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No)==true)
-                            toolbar += "<input name='Press' type='button' value='催办' enable='true'  onclick='Press()'/>";
+                        if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No) == true)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Press";
+                            dr["Name"] = "催办";
+                            dr["Oper"] = "Press();";
+                            dt.Rows.Add(dr);
+                        }
 
                         break;
                     case WFState.Complete: // 完成.
                     case WFState.Delete:   // 逻辑删除..
                         /*恢复使用流程*/
                         if (WebUser.No == "admin" || powers.Contains("FlowDataRollback") == true)
-                            toolbar += "<input name='Rollback' type='button' value='回滚' enable='true'  onclick='Rollback()'/>";
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Rollback";
+                            dr["Name"] = "回滚";
+                            dr["Oper"] = "Rollback();";
+                            dt.Rows.Add(dr);
+                        }
 
                         break;
                     //case WFState.HungUp: // 挂起.
@@ -262,7 +309,11 @@ namespace BP.WF.HttpHandler
                         break;
                 }
 
-                toolbar += "<input name='Track' type=button value='轨迹' enable=true />";
+                dr = dt.NewRow();
+                dr["No"] = "Track";
+                dr["Name"] = "轨迹";
+                dr["Oper"] = "";
+                dt.Rows.Add(dr);
                 #endregion 根据流程权限控制规则获取可以操作的按钮功能
 
 
@@ -271,27 +322,40 @@ namespace BP.WF.HttpHandler
                 /* 打包下载zip */
                 if (btnLab.PrintZipMyView == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=zip&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_zip'  value='" + btnLab.PrintZipLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载html */
                 if (btnLab.PrintHtmlMyView == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=html&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_html'  value='" + btnLab.PrintHtmlLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载pdf */
                 if (btnLab.PrintPDFMyView == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true)
                 {
-                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "DocWord";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 #endregion 加载流程查看器 - 按钮
 
@@ -303,12 +367,20 @@ namespace BP.WF.HttpHandler
 
                     if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick='" + bar.Url + "' />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
                     }
                     else
                     {
                         string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = "WinOpen('" + urlr3 + "')";
+                        dt.Rows.Add(dr);
                     }
                 }
                 #endregion  //加载自定义的button.
@@ -319,7 +391,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
-            return toolbar;
+            return BP.Tools.Json.ToJson(dt);
         }
 
         /// <summary>

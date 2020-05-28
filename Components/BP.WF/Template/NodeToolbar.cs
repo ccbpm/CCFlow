@@ -175,6 +175,55 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.ExcType, value);
             }
         }
+        //显示在工具栏中
+        public bool isMyflow
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeToolbarAttr.IsMyFlow);
+            }
+            set
+            {
+                this.SetPara(NodeToolbarAttr.IsMyFlow, value);
+            }
+        }
+       // 显示在流程树中
+        public bool IsMyTree
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeToolbarAttr.IsMyTree);
+            }
+            set
+            {
+                this.SetPara(NodeToolbarAttr.IsMyTree, value);
+            }
+        }
+        //显示在工作查看器中
+        public bool IsMyView
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeToolbarAttr.IsMyView);
+            }
+            set
+            {
+                this.SetPara(NodeToolbarAttr.IsMyTree, value);
+            }
+        }
+       //显示在抄送工具栏中
+        public bool IsMyCC
+        {
+            get
+            {
+                return this.GetParaBoolen(NodeToolbarAttr.IsMyCC);
+            }
+            set
+            {
+                this.SetPara(NodeToolbarAttr.IsMyCC, value);
+            }
+        }
+
         #endregion
 
         #region 构造函数

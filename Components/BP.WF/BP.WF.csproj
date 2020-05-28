@@ -421,7 +421,6 @@
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
     <Compile Include="DTS\UpdateCCFlow.cs" />
     <Compile Include="DTS\GenerCH.cs" />
-    <Compile Include="Template\BtnLabExtWebOffice.cs" />
     <Compile Include="Template\TruckViewPower.cs" />
     <Compile Include="Template\FlowExt.cs" />
     <Compile Include="Template\FindWorkEnum.cs" />

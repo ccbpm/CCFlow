@@ -1565,10 +1565,6 @@ namespace BP.WF.Template
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
 
-            BtnLabExtWebOffice btnLabExtWebOffice = new BtnLabExtWebOffice();
-            btnLabExtWebOffice.NodeID = this.NodeID;
-            btnLabExtWebOffice.RetrieveFromDBSources();
-            Cash2019.UpdateRow(btnLabExtWebOffice.ToString(), this.NodeID.ToString(), btnLabExtWebOffice.Row);
 
             CC cc = new CC();
             cc.NodeID = this.NodeID;

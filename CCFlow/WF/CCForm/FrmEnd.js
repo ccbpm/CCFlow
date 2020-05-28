@@ -172,7 +172,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID + "&FK_Flow=" + GetQueryString("FK_Flow");
                 $("#TB_DocWord").attr("readonly","readonly");
-                $("#TB_DocWord").on("dblclick", function () {
+                $("#TB_DocWord").on("click", function () {
                     window.OpenBootStrapModal(url, "DocWordIFrame", "发文字号", 600, 200, "icon-edit", false);
                 })
             }
@@ -184,7 +184,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWordReceive.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID + "&FK_Flow=" + GetQueryString("FK_Flow");
                 $("#TB_DocWord").attr("readonly", "readonly");
-                $("#TB_DocWord").on("dblclick", function () {
+                $("#TB_DocWord").on("click", function () {
                     window.OpenBootStrapModal(url, "DocWordReceiveIFrame", "收文字号", 600, 200, "icon-edit", false);
                 })
             }

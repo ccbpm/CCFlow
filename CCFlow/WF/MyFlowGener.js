@@ -794,60 +794,9 @@ function ShowNoticeInfo() {
             } else {
                 drdlColName = 'RB_' + drdlColName;
             }
-            //if (methodVal == value &&  obj.target.name.indexOf(drdlColName) == (obj.target.name.length - drdlColName.length)) {
             if (methodVal == value && (obj.target.name == drdlColName)) {
-                //高级JS设置;  设置表单字段的  可用 可见 不可用 
-                var fieldConfig = data[j].FieldsCfg;
-                var fieldConfigArr = fieldConfig.split('@');
-                for (var k = 0; k < fieldConfigArr.length; k++) {
-                    var fieldCon = fieldConfigArr[k];
-                    if (fieldCon != '' && fieldCon.split('=').length == 2) {
-                        var fieldConArr = fieldCon.split('=');
-                        var ele = $('[name$=' + fieldConArr[0] + ']');
-                        if (ele.length == 0) {
-                            continue;
-                        }
-                        var labDiv = undefined;
-                        var eleDiv = undefined;
-                        if (ele.css('display').toUpperCase() == "NONE") {
-                            continue;
-                        }
-
-                        if (ele.parent().attr('class').indexOf('input-group') >= 0) {
-                            labDiv = ele.parent().parent().prev();
-                            eleDiv = ele.parent().parent();
-                        } else {
-                            labDiv = ele.parent().prev();
-                            eleDiv = ele.parent();
-                        }
-                        switch (fieldConArr[1]) {
-                            case "1": //可用
-                                if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
-                                    needShowDDLids.push(ele[0].id);
-                                }
-
-                                labDiv.css('display', 'block');
-                                eleDiv.css('display', 'block');
-                                ele.removeAttr('disabled');
-
-
-                                break;
-                            case "2": //可见
-                                if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
-                                    needShowDDLids.push(ele[0].id);
-                                }
-
-                                labDiv.css('display', 'block');
-                                eleDiv.css('display', 'block');
-                                break;
-                            case "3": //不可见
-                                labDiv.css('display', 'none');
-                                eleDiv.css('display', 'none');
-                                break;
-                        }
-                    }
-                }
-                //根据下拉列表的值选择弹出提示信息
+               
+                     // 增加提示信息
                 if (noticeInfo == undefined || noticeInfo.trim() == '') {
                     break;
                 }
@@ -888,8 +837,7 @@ function ShowNoticeInfo() {
                 $('#div_NoticeInfo').css('top', top);
                 $('#div_NoticeInfo').css('left', left);
                 $('#div_NoticeInfo').css('display', 'block');
-                //$("#btnNoticeInfo").popover('show');
-                //$('#btnNoticeInfo').trigger('click');
+ 
                 break;
             }
         }
@@ -928,8 +876,6 @@ function ShowTextBoxNoticeInfo() {
 
             if (noticeInfo == undefined || noticeInfo == '')
                 return;
-
-            //noticeInfo = noticeInfo.replace(/\\n/g, '<br/>')
 
             $($('#div_NoticeInfo .popover-title span')[0]).text(mapAttr[0].Name);
             $('#div_NoticeInfo .popover-content').html(noticeInfo);
@@ -978,9 +924,8 @@ function checkAths() {
 function checkBlanks() {
 
     var checkBlankResult = true;
-    //获取所有的列名 找到带* 的LABEL mustInput
-    //var lbs = $('[class*=col-md-1] label:contains(*)');
-    var lbs = $('.mustInput'); //获得所有的class=mustInput的元素.
+   //获得所有的class=mustInput的元素.
+    var lbs = $('.mustInput'); 
 
     $.each(lbs, function (i, obj) {
 
@@ -1132,11 +1077,10 @@ function GenerWorkNode() {
     }
 
     var node = flowData.WF_Node[0];
-    var gfs = flowData.Sys_MapAttr;
 
 
     //设置标题.
-    document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
+    document.title = node.FlowName + ',' + node.Name; 
 
     //循环之前的提示信息.
     var info = "";
@@ -1161,9 +1105,9 @@ function GenerWorkNode() {
 
     //帮助提醒
     HelpAlter();
-    ShowNoticeInfo();
-
-    ShowTextBoxNoticeInfo();
+   
+    //文本框的提示信息
+    //ShowTextBoxNoticeInfo();
 
   
 
@@ -1189,34 +1133,43 @@ function GenerWorkNode() {
     }
 
     if (node.FormType == 1) {
+        Skip.addJs("./MyFlowFree2017.js");
         GenerFreeFrm(flowData);  //自由表单.
     }
 
-    if (node.FormType == 12)
+    if (node.FormType == 12) {
+        Skip.addJs("./CCForm/FrmDevelop.js");
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+    }
+       
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     if (node.FormType == 11) {
         if (flowData.FrmNode[0] != null && flowData.FrmNode[0] != undefined)
             if (flowData.FrmNode[0].FrmType == 0)
                 GenerFoolFrm(flowData); //傻瓜表单.
-        if (flowData.FrmNode[0].FrmType == 1)
+        if (flowData.FrmNode[0].FrmType == 1) {
+            Skip.addJs("./MyFlowFree2017.js");
             GenerFreeFrm(flowData);
-        if (flowData.FrmNode[0].FrmType == 8)
+        }
+           
+        if (flowData.FrmNode[0].FrmType == 8) {
+            Skip.addJs("./CCForm/FrmDevelop.js");
             GenerDevelopFrm(flowData, flowData.FrmNode[0].FK_Frm);
+        }
+           
     }
 
-    //公文表单
+   /* //公文表单
     if (node.FormType == 7) {
         var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", pageData.FK_Node);
         if (btnOffice.WebOfficeFrmModel == 1)
             GenerFreeFrm(flowData);  //自由表单.
         else
             GenerFoolFrm(flowData); //傻瓜表单.
-    }
+    }*/
 
     $.parser.parse("#CCForm");
-
 
     //单表单加载后执行.
     CCFormLoaded();
@@ -1246,9 +1199,7 @@ function GenerWorkNode() {
             frmNode = frmNode[0];
             if (frmNode.FrmSln == 1) {
                 /*只读的方案.*/
-                //alert("把表单设置为只读.");
                 SetFrmReadonly();
-                //alert('ssssssssssss');
             }
 
             if (frmNode.FrmSln != 1)
@@ -1263,7 +1214,7 @@ function GenerWorkNode() {
 
     }
 
-    Common.MaxLengthError();
+
 
     var marginLeft = $('#topContentDiv').css('margin-left');
     marginLeft = marginLeft.replace('px', '');
@@ -1287,47 +1238,12 @@ function GenerWorkNode() {
         $(obj).attr('title', $(obj).val());
     })
 
-    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-    try {
-        ////加载JS文件
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-     var enName = flowData.Sys_MapData[0].No;
-    //var filespec = "../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
-    //$.getScript(filespec);
-
-    try {
-        ////加载JS文件
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-
-    var jsSrc = '';
-    try {
-
-
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + ".js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
+    //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+    var enName = flowData.Sys_MapData[0].No;
+    loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js");
+    loadScript("../DataUser/JSLibData/" + enName + "_Self.js");
+    loadScript("../DataUser/JSLibData/" + enName + ".js");
+    
     //星级评分事件
     var scoreDiv = $(".score-star");
     $.each(scoreDiv, function (idex, item) {

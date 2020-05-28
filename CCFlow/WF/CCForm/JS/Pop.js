@@ -258,7 +258,7 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
 
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
-                            ValSetter(mapExt.Tag4, nodes[0].No);
+                            //ValSetter(mapExt.Tag4, nodes[0].No);
                             FullIt(nodes[0].No, mapExt.MyPK, targetId);
                         }
 

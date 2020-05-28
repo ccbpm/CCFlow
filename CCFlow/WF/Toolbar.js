@@ -1,48 +1,53 @@
 ﻿
 $(function () {
-    var barHtml;
-
+    var barHtml="";
+    var data;
+    //MyCC
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
-        barHtml = handler.DoMethodReturnString("InitToolBar");
+        data = handler.DoMethodReturnString("InitToolBar");
         $('#ToolBar').html(barHtml);
+    //MyView
+    } else if ($("#JS_MyView").length == 1){
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
+        handler.AddUrlData();
+        data = handler.DoMethodReturnString("InitToolBar");
+    //MyFlow   
     } else {
-        if ($("#JS_MyView").length == 1) {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
-            handler.AddUrlData();
-            barHtml = handler.DoMethodReturnString("InitToolBar");
-            $('#ToolBar').html(barHtml);
-
-        } else {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddUrlData();
-           var data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                console.log(data);
-                return;
-            }
-            data = JSON.parse(data);
-            var toolBarHtml = data.ToolBar[0].tooBarHtml;
-            $('#ToolBar').html(toolBarHtml);
-
-            InitToNodeDDL(data);
-        }
-
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData();
+        data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
     }
+
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        console.log(data);
+        return;
+    }
+    data = JSON.parse(data);
+    var toolBars = data.ToolBar;
+    if (toolBars == undefined)
+        toolBars = data;
+    var _html = "";
+    $.each(toolBars, function (i, toolBar) {
+        var Oper = "";
+        if (toolBar.Oper != "")
+            Oper = "onclick=\"" + toolBar.Oper + "\"";
+
+        if (toolBar.No == "NodeToolBar")
+            _html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
+        else
+            _html += "<input type=button name='" + toolBar.No + "' value='" + toolBar.Name + "' enable=true " + Oper + "/>";
+    });
+    $('#ToolBar').html(_html);
 
 
     //按钮旁的下来框
-   // if ("undefined" != typeof flowData && flowData != null && flowData != undefined) 
-      //  InitToNodeDDL(flowData);
+    InitToNodeDDL(data);
    
 
     if ($('[name=Return]').length > 0) {
-        $('[name=Return]').attr('onclick', '');
-        $('[name=Return]').unbind('click');
         $('[name=Return]').bind('click', function () {
             //增加退回前的事件
             if (typeof beforeReturn != 'undefined' && beforeReturn instanceof Function)
@@ -57,8 +62,6 @@ $(function () {
 
     //流转自定义
     if ($('[name=TransferCustom]').length > 0) {
-        $('[name=TransferCustom]').attr('onclick', '');
-        $('[name=TransferCustom]').unbind('click');
         $('[name=TransferCustom]').bind('click', function () {
             initModal("TransferCustom");
             $('#returnWorkModal').modal().show();
@@ -67,71 +70,47 @@ $(function () {
 
 
     if ($('[name=Shift]').length > 0) {
-
-        $('[name=Shift]').attr('onclick', '');
-        $('[name=Shift]').unbind('click');
         $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Btn_WorkCheck]').length > 0) {
-
-        $('[name=Btn_WorkCheck]').attr('onclick', '');
-        $('[name=Btn_WorkCheck]').unbind('click');
         $('[name=Btn_WorkCheck]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Askfor]').length > 0) {
-        $('[name=Askfor]').attr('onclick', '');
-        $('[name=Askfor]').unbind('click');
         $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Track]').length > 0) {
-        $('[name=Track]').attr('onclick', '');
-        $('[name=Track]').unbind('click');
         $('[name=Track]').bind('click', function () { initModal("Track"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=HuiQian]').length > 0) {
-        $('[name=HuiQian]').attr('onclick', '');
-        $('[name=HuiQian]').unbind('click');
         $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=AddLeader]').length > 0) {
-        $('[name=AddLeader]').attr('onclick', '');
-        $('[name=AddLeader]').unbind('click');
         $('[name=AddLeader]').bind('click', function () { initModal("AddLeader"); $('#returnWorkModal').modal().show(); });
     }
 
 
     if ($('[name=CC]').length > 0) {
-        $('[name=CC]').attr('onclick', '');
-        $('[name=CC]').unbind('click');
         $('[name=CC]').bind('click', function () { initModal("CC"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_zip]').length > 0) {
-        $('[name=PackUp_zip]').attr('onclick', '');
-        $('[name=PackUp_zip]').unbind('click');
         $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_html]').length > 0) {
-        $('[name=PackUp_html]').attr('onclick', '');
-        $('[name=PackUp_html]').unbind('click');
         $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_pdf]').length > 0) {
-        $('[name=PackUp_pdf]').attr('onclick', '');
-        $('[name=PackUp_pdf]').unbind('click');
         $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=SelectAccepter]').length > 0) {
-        $('[name=SelectAccepter]').attr('onclick', '');
-        $('[name=SelectAccepter]').unbind('click');
         $('[name=SelectAccepter]').bind('click', function () {
             initModal("accepter");
             $('#returnWorkModal').modal().show();
@@ -139,8 +118,6 @@ $(function () {
     }
 
     if ($('[name=DBTemplate]').length > 0) {
-        $('[name=DBTemplate]').attr('onclick', '');
-        $('[name=DBTemplate]').unbind('click');
         $('[name=DBTemplate]').bind('click', function () {
             initModal("DBTemplate");
             $('#returnWorkModal').modal().show();
@@ -148,8 +125,6 @@ $(function () {
     }
 
     if ($('[name=Delete]').length > 0) {
-        $('[name=Delete]').attr('onclick', '');
-        $('[name=Delete]').unbind('click');
         $('[name=Delete]').bind('click', function () {
             //增加删除前事件
             if (typeof beforeDelete != 'undefined' && beforeDelete instanceof Function)
@@ -161,68 +136,19 @@ $(function () {
     }
 
     if ($('[name=CH]').length > 0) {
-
-        $('[name=CH]').attr('onclick', '');
-        $('[name=CH]').unbind('click');
         $('[name=CH]').bind('click', function () { initModal("CH"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Note]').length > 0) {
-
-        $('[name=Note]').attr('onclick', '');
-        $('[name=Note]').unbind('click');
         $('[name=Note').bind('click', function () { initModal("Note"); $('#returnWorkModal').modal().show(); });
     }
 
     //公文
     if ($('[name=DocWord]').length > 0) {
-
-        $('[name=DocWord]').attr('onclick', '');
-        $('[name=DocWord]').unbind('click');
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
    
-    var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-    if ($('[name=Save]').length > 0) {
-        $('[name=Save]').attr('onclick', '');
-        $('[name=Save]').unbind('click');
-        $('[name=Save').bind('click', function () {
-            if (SysCheckFrm() == false)
-               return false;
-            Save();
-            SaveEnd(node.FormType);
-        });
-    }
-
-    if ($('[name=Send]').length > 0) {
-        $('[name=Send]').attr('onclick', '');
-        $('[name=Send]').unbind('click');
-        $('[name=Send').bind('click', function () {
-            var btnLab = new Entity("BP.WF.Template.BtnLab", GetQueryString("FK_Node"));
-            if (btnLab.SendJS != "") {
-                //引入相关的js
-                btnLab.SendJS;
-            }
-            if (SysCheckFrm() == false)
-                return false;
-            Send(false, node.FormType);
-        });
-    }
-
-    if ($('[name=SendHuiQian]').length > 0) {
-        $('[name=SendHuiQian]').attr('onclick', '');
-        $('[name=SendHuiQian]').unbind('click');
-        $('[name=SendHuiQian').bind('click', function () {
-            var btnLab = new Entity("BP.WF.Template.BtnLab", GetQueryString("FK_Node"));
-            if (btnLab.SendJS != "") {
-                //引入相关的js
-                btnLab.SendJS;
-            }
-            if (SysCheckFrm() == false)
-                return false;
-            Send(true, node.FormType);
-        });
-    }
+  
 
 });
 
@@ -421,12 +347,12 @@ function setToobarEnable() {
 }
 
 //初始化发送节点下拉框
-function InitToNodeDDL(flowData) {
+function InitToNodeDDL(JSonData) {
 
-    if (flowData.ToNodes == undefined)
+    if (JSonData.ToNodes == undefined)
         return;
 
-    if (flowData.ToNodes.length == 0)
+    if (JSonData.ToNodes.length == 0)
         return;
 
     //如果没有发送按钮，就让其刷新,说明加载不同步.
@@ -443,7 +369,7 @@ function InitToNodeDDL(flowData) {
             return;
     }
     var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-    $.each(flowData.ToNodes, function (i, toNode) {
+    $.each(JSonData.ToNodes, function (i, toNode) {
         var opt = "";
         if (toNode.IsSelected == "1") {
             var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");

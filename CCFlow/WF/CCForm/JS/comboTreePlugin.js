@@ -1,18 +1,18 @@
 ﻿(function ($, window, document, undefined) {
-    let comboTreePlugin = 'comboTree',
+    let comboTreePlugin = 'comboTree';
         //定义一个存储数据的数组，用于下面重复选择判断，删除标签,
-        defaults = {
-            source: '',
-            listSource:'',
-            isMultiple: false,
-            cascadeSelect: false,
-            selected: [],
-            selectedlength: 3,
-            keyOfEn: '',
-            isShowSignature:false
+    let defaults = {
+        source: '',
+        listSource: '',
+        isMultiple: false,
+        cascadeSelect: false,
+        selected: [],
+        selectedlength: 3,
+        keyOfEn: '',
+        isShowSignature: false
 
-        },
-        tempstructerarray = [];
+    };
+     let tempstructerarray = [];
 
     let ComboTree = function (element, options) {
         this.options = $.extend({}, defaults, options);

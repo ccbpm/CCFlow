@@ -6,7 +6,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
-        if (mapAttr.UIVisible == 0 && $("#TB_"+mapAttr.KeyOfEn).length ==0) {
+        if (mapAttr.UIVisible == 0 && $("#TB_" + mapAttr.KeyOfEn).length == 0) {
             var defval = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             html = "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + defval + "' />";
             html = $(html);
@@ -27,12 +27,12 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 18)
             continue;
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002"||val=="10002.0000"))
+        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002" || val == "10002.0000"))
             val = "";
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
         //为树形结构的外键或者外部数据源
-        if (mapAttr.AtPara !=null && mapAttr.AtPara.indexOf("@CodeStruct=1") != -1) {
+        if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf("@CodeStruct=1") != -1) {
             var parentNo = GetPara(mapAttr.AtPara, "ParentNo");
             var pushData = frmData[mapAttr.KeyOfEn];
             if (pushData == undefined)
@@ -47,18 +47,18 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 else
                     parentNo = "0";
             }
-            
-            
+
+
             pushData = findChildren(pushData, parentNo);
             $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
             if (mapAttr.UIIsEnable == 0)
                 $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
             $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', val);
-           
+
             continue;
         }
-        
+
         if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
             // 判断下拉框是否有对应option, 若没有则追加
             if (val != "" && $("option[value='" + val + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
@@ -72,9 +72,9 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             }
             if (val != "") {
                 $('#DDL_' + mapAttr.KeyOfEn).val(val);
-                $('#DDL_' + mapAttr.KeyOfEn).attr("value",val);
+                $('#DDL_' + mapAttr.KeyOfEn).attr("value", val);
             }
-                
+
             continue;
         }
 
@@ -85,7 +85,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
                 $('#editor').val(val);
             } else {
-                if (mapAttr.MyDataType == 8 && val!="") {
+                if (mapAttr.MyDataType == 8 && val != "") {
                     //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
                     var attrdefVal = mapAttr.DefVal;
                     var bit;
@@ -127,7 +127,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             }
         }
 
-       
+
 
         if (mapAttr.UIContralType == 14) {//签批组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
@@ -137,15 +137,15 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 pageData.FWCVer = 0;
             else
                 pageData.FWCVer = 1;
-            if (isFistQuestWorkCheck == true && node!=null) {
+            if (isFistQuestWorkCheck == true && node != null) {
                 //loadScript('./WorkOpt/WorkCheck.js', function () {
                 //    isFistQuestWorkCheck = false;
                 //    checkData = WorkCheck_Init();
                 //});
-                Skip.addJs(ccbpmPath+"/WF/WorkOpt/WorkCheck.js");
+                Skip.addJs(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
                 isFistQuestWorkCheck = false;
                 checkData = WorkCheck_Init();
-               
+
             }
             if (checkData != null && checkData != undefined) {
                 var checkField = ""
@@ -162,7 +162,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
         if (mapAttr.UIContralType == 15) { //评论组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
-            
+
             $("#TB_" + mapAttr.KeyOfEn).after("<div id='FlowBBS'></div>");
             continue;
         }
@@ -171,7 +171,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             if (mapAttr.UIIsEnable == 1 && pageData.IsReadonly != "1") {
                 var localHref = GetLocalWFPreHref();
                 var url = localHref + "/WF/CCForm/Components/DocWord.htm?FrmID=" + frmData.Sys_MapData[0].No + "&OID=" + pageData.WorkID + "&FK_Flow=" + GetQueryString("FK_Flow");
-                $("#TB_DocWord").attr("readonly","readonly");
+                $("#TB_DocWord").attr("readonly", "readonly");
                 $("#TB_DocWord").on("click", function () {
                     window.OpenBootStrapModal(url, "DocWordIFrame", "发文字号", 600, 200, "icon-edit", false);
                 })
@@ -237,7 +237,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
         //傻瓜表单/累加表单
         if (frmType == 0 || frmType == 10) {
-            InitFoolLink(mapAttr, frmType); 
+            InitFoolLink(mapAttr, frmType);
             continue;
         }
         //开发者表单
@@ -245,7 +245,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             InitDevelopLink(mapAttr, frmType);
         }
 
-        
+
     }
 }
 
@@ -268,7 +268,7 @@ function InitFoolLink(mapAttr, frmType) {
                 if (nowKey == null || nowKey == undefined || nowKey == "")
                     return;
 
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey,frmType);
+                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 
             }
             if (mapAttr.UIContralType == 3) {
@@ -549,6 +549,7 @@ function AfterBindEn_DealMapExt(frmData) {
         }
 
         switch (mapExt.ExtType) {
+
             case "MultipleChoiceSmall":
                 if (mapExt.DoWay == 0)
                     break;
@@ -562,7 +563,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         if (defaultVal.indexOf(ens[k].Tag1) == -1)
                             continue;
                         val += ens[k].Tag2 + ",";
-                    }                
+                    }
                     if (val == "")
                         val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
                     $("#TB_" + mapAttr.KeyOfEn).val(val);
@@ -583,8 +584,8 @@ function AfterBindEn_DealMapExt(frmData) {
                     $("#TB_" + mapAttr.KeyOfEn).val(defaultVal);
                     break;
                 }
-                    
-                
+
+
                 MultipleInputSearch(mapExt, defaultVal); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "BindFunction": //控件绑定函数
@@ -655,6 +656,36 @@ function AfterBindEn_DealMapExt(frmData) {
                     break;
                 }
                 break;
+            case "ReqDays": //配置自动计算日期天数lz
+                //获取配置的字段
+
+                var ResRDT = mapExt.AttrOfOper;//接收计算天数结果
+                var StarRDT = mapExt.Tag1;//开始日期
+                var EndRDT = mapExt.Tag2;//结束日期
+                var RDTRadio = mapExt.Tag3;//是否包含节假日
+                var frmDate = mapAttr.IsSupperText; //获取日期格式
+                var dateFmt = '';
+                if (frmDate == 0) {
+                    dateFmt = "yyyy-MM-dd";
+                } else if (frmDate == 1) {
+                    dateFmt = "yyyy-MM-dd HH:mm";
+                } else if (frmDate == 2) {
+                    dateFmt = "yyyy-MM-dd HH:mm:ss";
+                } else if (frmDate == 3) {
+                    dateFmt = "yyyy-MM";
+                } else if (frmDate == 4) {
+                    dateFmt = "HH:mm";
+                } else if (frmDate == 5) {
+                    dateFmt = "HH:mm:ss";
+                } else if (frmDate == 6) {
+                    dateFmt = "MM-dd";
+                }
+                $('#TB_' + EndRDT).blur(function () {
+                    var res = CalculateRDT($('#TB_' + StarRDT).val(), $('#TB_' + EndRDT).val(), RDTRadio);
+                    $('#TB_' + ResRDT).val(res);
+                });
+
+                break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
 
 
@@ -675,22 +706,22 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || GetQueryString("IsReadonly") == "1")
                     continue;
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
-               
+
                 //获取大文本的长度
                 var left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
                 var width = tbFastInput.width() + left;
-                width = tbFastInput.parent().css('left') == "auto" ? width - 180:  width - 70;
+                width = tbFastInput.parent().css('left') == "auto" ? width - 180 : width - 70;
 
-                var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;' id='span_" + mapExt.AttrOfOper+"'></span><br/>");
+                var content = $("<span style='margin-left:" + width + "px;top: -15px;position: relative;' id='span_" + mapExt.AttrOfOper + "'></span><br/>");
                 content.append("<a href='javascript:void(0)' onclick='TBHelp(\"TB_" + mapExt.AttrOfOper + "\",\"" + mapExt.MyPK + "\")'>常用词汇</a> <a href='javascript:void(0)' onclick='clearContent(\"TB_" + mapExt.AttrOfOper + "\")'>清空<a>");
                 tbFastInput.after(content);
                 tbFastInput.on("mouseover", function () {
-                    $("#" + this.id.replace("TB_","span_")).show();
-                   // tbFastInput.focus();
+                    $("#" + this.id.replace("TB_", "span_")).show();
+                    // tbFastInput.focus();
                 });
                 tbFastInput.on("blur", function () {
                     $("#" + this.id.replace("TB_", "span_")).hide();
-                    
+
                 });
                 $("#span_" + mapExt.AttrOfOper).hide();
                 break;
@@ -774,6 +805,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     });
                 }
                 break;
+
             case "DataFieldInputRole": //时间限制
                 if (mapExt.DoWay == 1) {
                     var tag1 = mapExt.Tag1;
@@ -813,6 +845,7 @@ function AfterBindEn_DealMapExt(frmData) {
                                 WdatePicker({
                                     dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 
+
                                         DBAccess.RunFunctionReturnStr(bindFunctionExt.Doc);
                                     }
                                 });
@@ -841,7 +874,19 @@ function AfterBindEn_DealMapExt(frmData) {
 
     });
 }
-
+//計算日期間隔
+function CalculateRDT(StarRDT, EndRDT, RDTRadio) {
+    alert(StarRDT);
+    var res;
+    var demoRDT;
+    demoRDT = StarRDT.split("-");
+    StarRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);  //转换为yyyy-MM-dd格式
+    demoRDT = EndRDT.split("-");
+    EndRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);
+    res = parseInt(Math.abs(StarRDT - EndRDT) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+    return res;
+   
+}
 /**Pop弹出框的处理**/
 function PopMapExt(mapAttr, mapExt, frmData) {
     switch (mapAttr.GetPara("PopModel")) {
@@ -875,7 +920,7 @@ function PopMapExt(mapAttr, mapExt, frmData) {
         case "PopTableSearch": //表格查询.
             PopTableSearch(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
             break;
-        
+
         default: break;
     }
 }
@@ -985,7 +1030,7 @@ function calculator(o) {
                 eval(evalExpression);
 
                 if (typeof result != "undefined") {
-                    result = numberFormat(result,2);
+                    result = numberFormat(result, 2);
                 } else {
                     result = "";
                 }
@@ -1127,7 +1172,7 @@ function SetCtrlVal(key, value) {
         return;
     }
 
-  
+
     ctrl = $("input[name='CB_" + key + "']");
     if (ctrl.length == 1) {
         ctrl.val(value);
@@ -1137,7 +1182,7 @@ function SetCtrlVal(key, value) {
             ctrl.attr('checked', true);
             document.getElementById("CB_" + key).checked = true;
         }
-           
+
         return;
     }
     if (ctrl.length > 1) {
@@ -1155,9 +1200,9 @@ function SetCtrlVal(key, value) {
     ctrl = $('input:radio[name=RB_' + key + ']');
     if (ctrl.length > 0) {
         var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
-        if(checkVal!=null && checkVal!=undefined)
+        if (checkVal != null && checkVal != undefined)
             document.getElementById("RB_" + key + "_" + checkVal).checked = false;
-        if ($("#RB_" + key + "_" + value).length==1)
+        if ($("#RB_" + key + "_" + value).length == 1)
             document.getElementById("RB_" + key + "_" + value).checked = true;
         return;
     }
@@ -1234,7 +1279,7 @@ function imgShow(outerdiv, innerdiv, bigimg, _this) {
     $(outerdiv).click(function () {//再次点击淡出消失弹出层  
         $(this).fadeOut("fast");
     });
-} 
+}
 
 //树形结构
 function findChildren(jsonArray, parentNo) {
@@ -1293,7 +1338,7 @@ function findChildren(jsonArray, parentNo) {
 
 
 function ChangeDocWordVal(docWord) {
-   
+
     if ($("#TB_DocWord").length == 1) {
         $("#TB_DocWord").val(docWord);
     }

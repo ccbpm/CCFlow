@@ -70,6 +70,33 @@ namespace BP.Sys
         /// </summary>
         GradeNoName
     }
+
+    /// <summary>
+    /// 编号生成规则
+    /// </summary>
+    public enum NoGenerModel
+    {
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        None,
+        /// <summary>
+        /// 流水号
+        /// </summary>
+        ByLSH,
+        /// <summary>
+        /// 标签的全拼
+        /// </summary>
+        ByQuanPin,
+        /// <summary>
+        /// 标签的简拼
+        /// </summary>
+        ByJianPin,
+        /// <summary>
+        /// 按GUID生成
+        /// </summary>
+        ByGUID
+    }
     /// <summary>
     /// 用户自定义表
     /// </summary>
@@ -111,7 +138,11 @@ namespace BP.Sys
         /// 是否自动生成编号
         /// </summary>
         public const string IsAutoGenerNo = "IsAutoGenerNo";
-        
+        /// <summary>
+        /// 编号生成规则
+        /// </summary>
+        public const string NoGenerModel = "NoGenerModel";
+
         #region 链接到其他系统获取数据的属性。
         /// <summary>
         /// 数据源
@@ -360,13 +391,52 @@ namespace BP.Sys
 
             if (this.SrcType == Sys.SrcType.SysDict)
             {
-                DictDtls dictDtls = new DictDtls(this.No);
-                return dictDtls.ToDataTableField();
+                string sql = "SELECT MyPK, BH, Name FROM Sys_DictDtl where DictMyPK='" + this.No+"'";
+                return src.RunSQLReturnTable(sql);
             }
             #endregion
 
             return null;
 
+        }
+        /// <summary>
+        /// 修改外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void UpdateData(string No,string Name,string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "update Sys_DictDtl set Name = '" + Name + "' where MyPK='"+ FK_SFTable + "_" + No + "'";
+            else
+                sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
+            DBAccess.RunSQL(sql);
+        }
+        /// <summary>
+        /// 新增外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void InsertData(string No, string Name, string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "insert into  Sys_DictDtl(MyPK,DictMyPK,BH,Name) values('" + FK_SFTable+"_"+ No +"','" + FK_SFTable + "','"+ No + "','"+ Name + "')";
+            else
+                sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
+            DBAccess.RunSQL(sql);
+        }
+        /// <summary>
+        /// 删除外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void DeleteData(string No, string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "delete from Sys_DictDtl where MyPK='" + FK_SFTable + "_" + No + "'";
+            else
+                sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
+            DBAccess.RunSQL(sql);
         }
         public string GenerHisJson()
         {
@@ -379,39 +449,92 @@ namespace BP.Sys
         public string GenerSFTableNewNo()
         {
             string table = this.SrcTable;
-            try
+            NoGenerModel NoGenerModel = this.NoGenerModel;
+            if (NoGenerModel == NoGenerModel.ByGUID)//编号按guid生成
             {
-                string sql = null;
-                string field = "No";
-                switch (this.EnMap.EnDBUrl.DBType)
-                {
-                    case DBType.MSSQL:
-                        sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
-                        break;
-                    case DBType.PostgreSQL:
-                        sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
-                        break;
-                    case DBType.Oracle:
-                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
-                        break;
-                    case DBType.MySQL:
-                        sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + table;
-                        break;
-                    case DBType.Informix:
-                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
-                        break;
-                    case DBType.Access:
-                        sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM " + table;
-                        break;
-                    default:
-                        throw new Exception("error");
-                }
-                string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
-                if (str == "0" || str == "")
-                    str = "1";
-                return str.PadLeft(3, '0');
+                string guid = DBAccess.GenerGUID();
+                return guid;
             }
-            catch (Exception)
+            else if (NoGenerModel == NoGenerModel.ByLSH)//编号按流水号生成
+            {
+                if (this.SrcType == SrcType.SysDict)//如果是按系统字典表
+                {
+                    try
+                    {
+                        string sql = null;
+                        string field = "BH";
+                        switch (this.EnMap.EnDBUrl.DBType)
+                        {
+                            case DBType.MSSQL:
+                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_DictDtl where DictMyPK='" + table+"'";
+                                break;
+                            case DBType.PostgreSQL:
+                                sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                break;
+                            case DBType.Oracle:
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                break;
+                            case DBType.MySQL:
+                                sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                break;
+                            case DBType.Informix:
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                break;
+                            case DBType.Access:
+                                sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                break;
+                            default:
+                                throw new Exception("error");
+                        }
+                        string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
+                        if (str == "0" || str == "")
+                            str = "1";
+                        return str.PadLeft(3, '0');
+                    }
+                    catch (Exception)
+                    {
+                        return "";
+                    }
+                }
+                
+                try
+                {
+                    string sql = null;
+                    string field = "No";
+                    switch (this.EnMap.EnDBUrl.DBType)
+                    {
+                        case DBType.MSSQL:
+                            sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
+                            break;
+                        case DBType.PostgreSQL:
+                            sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
+                            break;
+                        case DBType.Oracle:
+                            sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                            break;
+                        case DBType.MySQL:
+                            sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + table;
+                            break;
+                        case DBType.Informix:
+                            sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                            break;
+                        case DBType.Access:
+                            sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM " + table;
+                            break;
+                        default:
+                            throw new Exception("error");
+                    }
+                    string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
+                    if (str == "0" || str == "")
+                        str = "1";
+                    return str.PadLeft(3, '0');
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
+            else   //其他的生成编号默认为空
             {
                 return "";
             }
@@ -718,6 +841,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        ///编号生成规则
+        /// </summary>
+        public NoGenerModel NoGenerModel
+        {
+            get
+            {
+                return (NoGenerModel)this.GetValIntByKey(SFTableAttr.NoGenerModel);
+            }
+            set
+            {
+                this.SetValByKey(SFTableAttr.NoGenerModel, (int)value);
+            }
+        }
+        /// <summary>
         /// 编码类型
         /// </summary>
         public string CodeStructT
@@ -866,7 +1003,8 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
-
+                map.AddDDLSysEnum(SFTableAttr.NoGenerModel, 1, "编号生成规则", true, true, SFTableAttr.NoGenerModel,
+            "@0=自定义@1=流水号@2=标签的全拼@3=标签的简拼@4=按GUID生成");
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 

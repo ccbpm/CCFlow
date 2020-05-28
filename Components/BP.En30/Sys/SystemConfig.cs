@@ -127,6 +127,17 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 服务器端口
+        /// </summary>
+        public static string FTPPort
+        {
+            get
+            {
+                string str = SystemConfig.AppSettings["FTPPort"];
+                return BP.Sys.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
         /// 用户编号
         /// </summary>
         public static string FTPUserNo

@@ -13,20 +13,24 @@
         var data = null;
         $(function () {
 
-
-            //需要传递参数： Token
             var handler = new HttpHandler("BP.DOC.App_Page");
-            handler.AddUrlData();
+            var token = GetQueryString("Token");
+            handler.AddPara('myToken', token);
+
             var data = handler.DoMethodReturnString("Port_Init");
 
             if (data.indexOf('err@') == 0) {
-                // alert(data);
-                //$("#msg").html(data);
+               // alert(data);
+                $("#msg").html(data);
                 return;
             }
 
-            var login = GetQuertString("Type");
-            var isSkip = GetQuertString("IsSkip");
+            var webUser = new WebUser();
+           // alert(webUser.No + "登录成功.");
+            //return;
+
+            var login = GetQueryString("Type");
+            var isSkip = GetQueryString("IsSkip");
             if (isSkip == null)
                 return;
 
@@ -35,8 +39,9 @@
                 return;
             }
 
-            window.location.href = "../WF/Admin/Portal/Default.htm?3=23";
-            //            $("#Rows").html(row);
+
+            window.location.href = "../WF/Admin/Portal/Default.htm?UserNo=" + webUser.No;
+            //$("#Rows").html(row);
             return;
         });
 

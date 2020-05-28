@@ -411,7 +411,6 @@ namespace BP.WF
             if (gwf.WFState == WFState.Complete)
                 return "err@该流程已经完成，您不能撤销。";
 
-
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
 
@@ -456,30 +455,23 @@ namespace BP.WF
                         nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, work, null);
 
                         toEmps += dr["Emps"].ToString().Replace('@',',');
-                        
                     }
                     return "撤销成功";
-
                 }
-
             }
-
-            
 
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
             {
                 //撤销到的节点是干流程节点/子线程撤销到子线程
-                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node ,0);
+                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
                     return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
-                else
-                {
-                    //干流节点撤销到子线程
-                    i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
-                    if(i>=1)
-                        return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
-                }
+
+                //干流节点撤销到子线程
+                i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
+                if (i >= 1)
+                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
             }
 
 

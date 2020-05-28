@@ -109,7 +109,6 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
@@ -156,15 +155,26 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
-
-              
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
 
+
                 rm = new RefMethod();
-                rm.Title = "自动计算";
+                rm.Title = "正则表达式";
+                rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "取多个字段计算结果";
                 rm.ClassMethodName = this.ToString() + ".DoAutoFull()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -175,23 +185,15 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
-                rm.Title = "正则表达式";
-                rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
+                rm.Title = "设置只读文本框RMB大写";
+                rm.ClassMethodName = this.ToString() + ".DoRMBDaXie()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
-                //rm = new RefMethod();
-                //rm.Title = "脚本验证";
-                //rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
-                rm.Title = "事件绑函数";
-                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.Title = "对两个日期求天数";
+                rm.ClassMethodName = this.ToString() + ".DoReqDays()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
                 #endregion 执行的方法.
@@ -276,6 +278,22 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 基本功能.
+        /// <summary>
+        /// 人民币大写
+        /// </summary>
+        /// <returns></returns>
+        public string DoRMBDaXie()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/RMBDaXie.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 求天数
+        /// </summary>
+        /// <returns></returns>
+        public string DoReqDays()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/ReqDays.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
         /// <summary>
         /// 绑定函数
         /// </summary>

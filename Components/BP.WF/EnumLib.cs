@@ -113,7 +113,11 @@ namespace BP.WF
         /// <summary>
         /// 关系集合里的只有一个条件成立.
         /// </summary>
-        ByOr
+        ByOr,
+        /// <summary>
+        /// 混合计算
+        /// </summary>
+        ByMix
     }
     /// <summary>
     /// 待办工作超时处理方式

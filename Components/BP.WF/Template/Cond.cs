@@ -1223,6 +1223,51 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 执行计算
+        /// </summary>
+        /// <param name="runModel">模式</param>
+        /// <returns></returns>
+        public bool GenerResult(CondOrAnd runModel)
+        {
+            if (this.Count == 0)
+                throw new Exception("err@没有要计算的条件，无法计算.");
+
+            //如果只有一个条件,就直接范围该条件的执行结果.
+            if (this.Count==1)
+            {
+                Cond cond = this[0] as Cond;
+                return cond.IsPassed;
+            }
+
+            //如果按照 Or 计算任何一个条件成立，就可以.
+            if (runModel== CondOrAnd.ByOr)
+            {
+                foreach (Cond item in this)
+                {
+                    if (item.IsPassed)
+                        return true;
+                }
+                return false;
+            }
+
+            //如果按照 And 计算,所有的条件都成立.
+            if (runModel == CondOrAnd.ByOr)
+            {
+                foreach (Cond item in this)
+                {
+                    if (item.IsPassed==false)
+                        return false;
+                }
+                return true;
+            }
+
+            //如果是混合计算.
+
+
+
+            return false;
+        }
+        /// <summary>
         /// 是否通过  
         /// </summary>
         public bool IsPassAnd

@@ -2976,7 +2976,14 @@ namespace BP.WF
                 gwfs.Retrieve("FK_Flow", this.FK_Flow);
                 foreach (GenerWorkFlow gwf in gwfs)
                 {
-                    BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, gwf.WorkID, "流程成功结束");
+                    try
+                    {
+                        BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, gwf.WorkID, "流程成功结束");
+                    }catch(Exception ex)
+                    {
+                        //删除错误，有可能是删除该流程.
+                        continue;
+                    }
                 }
             }
             //判断是否可以被删除. 

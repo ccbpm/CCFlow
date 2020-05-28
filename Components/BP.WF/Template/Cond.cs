@@ -1087,10 +1087,17 @@ namespace BP.WF.Template
         {
             try
             {
+                if (this.Count == 0)
+                    return "请设置条件.";
+
                 string str = "";
                 foreach (Cond item in this)
                 {
-                    str += " "+item.AttrKey+item.FK_Operator+item.OperatorValue;
+                    if (item.HisDataFrom == ConnDataFrom.CondOperator)
+                        continue;
+
+                    // str += " "+item.AttrKey+item.FK_Operator+item.OperatorValue;
+                    str += " 1=1 "; // + item.AttrKey + item.FK_Operator + item.OperatorValue;
                 }
 
                 string sql = "";
@@ -1112,13 +1119,14 @@ namespace BP.WF.Template
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 1)
-                    return "检查正确.";
+                    return "条件设置格式正确.";
 
-                return "检查正确.";
+                return "条件设置格式正确.";
             }
             catch (Exception ex)
             {
-                return "err@条件设置错误:\n" + ex.Message;
+                //return "err@条件设置不符合规范.:\n" + ex.Message;
+                return "err@条件设置不符合规范. <font color=blue>"+ex.Message+"</font>";
             }
         }
         public string ConditionDesc

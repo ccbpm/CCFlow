@@ -1817,6 +1817,13 @@ namespace BP.WF
                 Conds conds = new Conds();
                 conds.Retrieve(CondAttr.FK_Flow, this.No);
 
+
+                //删除垃圾数据.
+                string sql = "DELETE FROM WF_Direction  WHERE FK_Node NOT IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "') AND FK_Flow='" + this.No + "' ";
+                DBAccess.RunSQL(sql);
+                sql = "DELETE FROM WF_Direction  WHERE ToNode NOT IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "') AND FK_Flow='" + this.No + "' ";
+                DBAccess.RunSQL(sql);
+
                 foreach (Node nd in nds)
                 {
                     //设置它的位置类型.
@@ -1878,7 +1885,7 @@ namespace BP.WF
                             {
                                 try
                                 {
-                                    string sql = nd.DeliveryParas;
+                                      sql = nd.DeliveryParas;
                                     sql = Glo.DealExp(sql, this.HisGERpt, null);
 
                                     sql = sql.Replace("''''", "''"); //出现双引号的问题.
@@ -2098,7 +2105,7 @@ namespace BP.WF
                     if (nd.IsEval)
                     {
                         /*如果是质量考核点，检查节点表单是否具别质量考核的特别字段？*/
-                        string sql = "SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "' AND KeyOfEn IN ('EvalEmpNo','EvalEmpName','EvalEmpCent')";
+                          sql = "SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "' AND KeyOfEn IN ('EvalEmpNo','EvalEmpName','EvalEmpCent')";
                         if (DBAccess.RunSQLReturnValInt(sql) != 3)
                             msg += "@信息:您设置了节点(" + nd.NodeID + "," + nd.Name + ")为质量考核节点，但是您没有在该节点表单中设置必要的节点考核字段.";
                     }

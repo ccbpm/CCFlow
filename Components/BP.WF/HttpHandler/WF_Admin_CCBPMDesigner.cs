@@ -759,7 +759,6 @@ namespace BP.WF.HttpHandler
         #endregion 登录窗口.
 
 
-
         #region 流程相关 Flow
         /// <summary>
         /// 获取流程所有元素
@@ -1219,7 +1218,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree where OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  OR No = 1  ORDER BY Idx ASC ; ";
                 sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
 

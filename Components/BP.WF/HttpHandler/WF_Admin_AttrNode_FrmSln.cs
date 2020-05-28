@@ -155,23 +155,25 @@ namespace BP.WF.HttpHandler
             {
                 sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,";
-                sql += "A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                sql += "A.OrgNo, '"+BP.Web.WebUser.OrgName+"' as OrgName ";
                 sql += "FROM ";
                 sql += "Sys_MapData A, ";
-                sql += "Sys_FormTree B ";
+                sql += "Sys_FormTree B, ";
+                sql += "Port_Org C ";
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
                 sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
+                sql += " AND C.No =B.OrgNo ";
 
-                sql += " UNION ALL ";
+                sql += " UNION  ";
 
-                sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
-                sql += "A.PTable,A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name,";
+                sql += "A.PTable, A.OrgNo, C.Name as OrgName ";
                 sql += " FROM ";
-                sql += "Sys_MapData A, Sys_FormTree B, WF_FrmOrg C ";
+                sql += "Sys_MapData A,  WF_FrmOrg B, Port_Org C ";
                 sql += " WHERE ";
-                sql += " A.FK_FormTree = B.No ";
-                sql += " AND C.OrgNo = '" + WebUser.OrgNo + "'  ";
+                sql += "  A.No = B.FrmID  AND B.OrgNo=C.NO  AND C.No=A.OrgNo ";
+                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

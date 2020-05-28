@@ -84,10 +84,10 @@
                 html += "<tr >";
                 html += "<td class=Idx>" + idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
-                html += "<td style='width:300px;'>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
+                html += "<td style='width:300px;'>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue+"</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 if (dir.CondExpModel == 2) {
                     html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";
-                    html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((80 + idx*30)-34) + "px; '>";
+                    html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx*40)) + "px; '>";
                     html += " <ol>";
                     html += " <li><a href=\"javascript:AddCond('(','" + cond.Idx + "')\"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>";
                     html += " <li><a href=\"javascript: AddCond(')','" + cond.Idx + "')\"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";

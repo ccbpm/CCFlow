@@ -168,8 +168,8 @@ namespace BP.Sys
             {
                 string str = SystemConfig.AppSettings["FTPServerPort"];
                 if (DataType.IsNullOrEmpty(str) == true)
-                    str = "21"; 
-                str= BP.Sys.Glo.String_JieMi(str);
+                    str = "21";
+                str = BP.Sys.Glo.String_JieMi(str);
                 return int.Parse(str);
             }
         }
@@ -411,10 +411,7 @@ namespace BP.Sys
                 else
                 {
                     if (tmp.Contains("\\"))
-                    {
                         tmp.Replace("\\", "");
-                    }
-
                     tmp = PathOfWebApp + tmp + "\\DataUser\\";
                 }
                 return tmp;
@@ -525,16 +522,9 @@ namespace BP.Sys
             get
             {
                 if (SystemConfig.IsBSsystem)
-                {
                     return HttpContextHelper.PhysicalApplicationPath;
-                }
-                else
-                {
-                    if (SystemConfig.SysNo == "FTA")
-                        return AppDomain.CurrentDomain.BaseDirectory;
-                    else
-                        return AppDomain.CurrentDomain.BaseDirectory + "..\\..\\";
-                }
+
+                return AppDomain.CurrentDomain.BaseDirectory + "..\\..\\";
             }
         }
         #endregion

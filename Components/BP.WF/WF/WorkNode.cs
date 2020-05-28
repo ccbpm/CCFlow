@@ -8,7 +8,6 @@ using BP.Web;
 using BP.Sys;
 using BP.WF.Template;
 using BP.WF.Data;
-using System.Linq;
 
 namespace BP.WF
 {
@@ -1024,7 +1023,6 @@ namespace BP.WF
                 if (this._HisNodeCompleteConditions == null)
                 {
                     _HisNodeCompleteConditions = new Conds(CondType.Node, this.HisNode.NodeID, this.WorkID, this.rptGe);
-
                     return _HisNodeCompleteConditions;
                 }
                 return _HisNodeCompleteConditions;
@@ -1685,29 +1683,28 @@ namespace BP.WF
             if (nds.Count == 0)
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
 
-            //获得所有的条件. 
-            Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID,
-                CondAttr.CondType, CondType.Dir, CondAttr.Idx);
+           
 
             //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
             Directions dirs = new Directions(currNode.NodeID);
 
-            //定义没有条件的节点.
-            Directions dirs0Cond = new Directions();
+            Directions dirs0Cond = new Directions();//定义没有条件的节点集合.
+
             foreach (Direction dir in dirs)
             {
                 //查询出来他的条件.
                 Conds conds = new Conds();
                 conds.Retrieve(CondAttr.FK_Node, currNode.NodeID,
-                    CondAttr.ToNodeID, dir.ToNode, CondAttr.Idx);
+                    CondAttr.ToNodeID, dir.ToNode, CondAttr.CondType, (int)CondType.Dir, 
+                    CondAttr.Idx);
+
                 if (conds.Count == 0)
                 {
                     dirs0Cond.AddEntity(dir); //把他加入到里面.
                     continue;
                 }
 
-                if (conds.IsPass == true)
+                if (conds.GenerResult( dir.CondExpModel ) == true)
                     return new Node(dir.ToNode);
             }
 
@@ -1719,138 +1716,6 @@ namespace BP.WF
 
             int toNodeID = dirs0Cond[0].GetValIntByKey(DirectionAttr.ToNode);
             return new Node(toNodeID);
-        }
-        private Node NodeSend_GenerNextStepNode_Ext2019(Node currNode)
-        {
-            Nodes nds = currNode.HisToNodes;
-            if (nds.Count == 1)
-            {
-                Node toND = (Node)nds[0];
-                return toND;
-            }
-
-            if (nds.Count == 0)
-                throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
-
-            Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, currNode.NodeID, CondAttr.Idx);
-            //if (dcsAll.Count == 0)
-            //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
-
-            #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
-            Nodes myNodes = new Nodes();
-            foreach (Node nd in nds)
-            {
-                Conds dcs = new Conds();
-                foreach (Cond dc in dcsAll)
-                {
-                    if (dc.ToNodeID != nd.NodeID)
-                        continue;
-
-                    dc.WorkID = this.WorkID;
-                    dc.FID = this.HisWork.FID;
-
-                    dc.en = this.rptGe;
-
-                    dcs.AddEntity(dc);
-                }
-
-                if (dcs.Count == 0)
-                {
-                    continue;
-                    //throw new Exception("@worknode 流程设计错误：流程{" + currNode.FlowName + "}从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
-                }
-
-                var conds = dcs.Tolist().GroupBy(x => x.HisDataFrom);
-                //说明有不同的方向条件规则
-                if (conds.Count() == dcs.Count)
-                {
-                    // 如果通过了.
-                    if (dcs.IsPass)
-                        myNodes.AddEntity(nd);
-                }
-                else
-                {
-                    bool isPass = false;
-                    var lists = conds.ToList();
-                    for (int i = 0; i < lists.Count(); i++)
-                    {
-                        if (isPass == true)
-                            break;
-                        Conds cds = new Conds();
-                        var nextList = lists[i].ToList();
-                        for (int k = 0; k < nextList.Count; k++)
-                        {
-                            cds.AddEntity(nextList[k]);
-                        }
-                        isPass = cds.IsPass;
-                    }
-                    if (isPass == true)
-                        myNodes.AddEntity(nd);
-                }
-
-
-
-
-            }
-            #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
-
-
-            // 如果没有找到,就找到没有设置方向条件的节点,没有设置方向条件的节点是默认同意的.
-            if (myNodes.Count == 0)
-            {
-                foreach (Node nd in nds)
-                {
-                    Conds dcs = new Conds();
-                    bool IsExistCond = false;
-                    foreach (Cond dc in dcsAll)
-                    {
-                        if (dc.ToNodeID == nd.NodeID)
-                        {
-                            IsExistCond = true;
-                            break;
-                        }
-                        continue;
-
-                    }
-                    //设置了方向条件
-                    if (IsExistCond == true)
-                        continue;
-                    //没有设置方向条件，默认同意走该节点
-                    return nd;
-
-                }
-            }
-
-            // 如果没有找到.
-            if (myNodes.Count == 0)
-            {
-                string[] para = new string[3];
-                para[0] = this.ExecerName;
-                para[1] = currNode.NodeID.ToString();
-                para[2] = currNode.Name;
-                throw new Exception(BP.WF.Glo.multilingual("@当前用户({0})定义节点的方向条件错误:从节点({1}-{2})到其它所有节点的转向条件都不成立.", "WorkNode", "error_node_jump_condition", para));
-            }
-
-            //如果找到1个.
-            if (myNodes.Count == 1)
-            {
-                Node toND = myNodes[0] as Node;
-                return toND;
-            }
-
-            //如果找到了多个.
-            foreach (Cond dc in dcsAll)
-            {
-                foreach (Node myND in myNodes)
-                {
-                    if (dc.ToNodeID == myND.NodeID)
-                    {
-                        return myND;
-                    }
-                }
-            }
-            throw new Exception("@不应该出现的异常,不应该运行到这里.");
         }
         /// <summary>
         /// 获取下一步骤的节点集合
@@ -1893,16 +1758,15 @@ namespace BP.WF
             // 如果只有一个转向节点, 就不用判断条件了,直接转向他.
             if (toNodes.Count == 1)
                 return toNodes;
+
+
             Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.PRI);
+            dcsAll.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.Idx);
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
             int toNodeId = 0;
             int numOfWay = 0;
-
-
-
 
             foreach (Node nd in toNodes)
             {
@@ -1960,9 +1824,6 @@ namespace BP.WF
                 para[1] = this.HisNode.NodeID.ToString();
                 para[2] = this.HisNode.Name;
                 throw new Exception(BP.WF.Glo.multilingual("@当前用户({0})定义节点的方向条件错误:从节点({1}-{2})到其它所有节点的转向条件都不成立.", "WorkNode", "error_node_jump_condition", para));
-
-                //throw new Exception(string.Format("@定义节点的方向条件错误:没有给从{0}节点到其它节点,定义转向条件或者您定义的所有转向条件都不成立.",
-                //    this.HisNode.NodeID + this.HisNode.Name));
             }
 
             return myNodes;
@@ -1996,7 +1857,7 @@ namespace BP.WF
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass)
+                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass )
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;

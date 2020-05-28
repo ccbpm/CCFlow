@@ -101,24 +101,7 @@ namespace BP.WF
         /// </summary>
         SendButtonSileSelect
     }
-    /// <summary>
-    /// 关系类型
-    /// </summary>
-    public enum CondOrAnd
-    {
-        /// <summary>
-        /// 关系集合里面的所有条件都成立.
-        /// </summary>
-        ByAnd,
-        /// <summary>
-        /// 关系集合里的只有一个条件成立.
-        /// </summary>
-        ByOr,
-        /// <summary>
-        /// 混合计算
-        /// </summary>
-        ByMix
-    }
+     
     /// <summary>
     /// 待办工作超时处理方式
     /// </summary>

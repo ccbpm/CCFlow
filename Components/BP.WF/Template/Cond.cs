@@ -67,7 +67,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 操作符
         /// </summary>
-        Oper = 100
+        CondOperator = 100
     }
     /// <summary>
     /// 条件属性
@@ -118,14 +118,6 @@ namespace BP.WF.Template
         /// 对方向条件有效
         /// </summary>
         public const string ToNodeID = "ToNodeID";
-        /// <summary>
-        /// PRI
-        /// </summary>
-        public const string PRI = "PRI";
-        /// <summary>
-        /// 条件类型.
-        /// </summary>
-        public const string CondOrAnd = "CondOrAnd";
         /// <summary>
         /// 备注
         /// </summary>
@@ -332,20 +324,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 优先级
-        /// </summary>
-        public int PRI
-        {
-            get
-            {
-                return this.GetValIntByKey(CondAttr.PRI);
-            }
-            set
-            {
-                this.SetValByKey(CondAttr.PRI, value);
-            }
-        }
-        /// <summary>
         /// 节点ID
         /// </summary>
         public int FK_Node
@@ -373,20 +351,7 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.ToNodeID, value);
             }
         }
-        /// <summary>
-        /// 关系类型
-        /// </summary>
-        public CondOrAnd CondOrAnd
-        {
-            get
-            {
-                return (CondOrAnd)this.GetValIntByKey(CondAttr.CondOrAnd);
-            }
-            set
-            {
-                this.SetValByKey(CondAttr.CondOrAnd, (int)value);
-            }
-        }
+       
         #endregion 
 
         protected override bool beforeInsert()
@@ -407,7 +372,7 @@ namespace BP.WF.Template
             // this.RunSQL("UPDATE WF_Node SET IsCCNode=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Node + ")");
             
             //@sly
-            this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
+            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
             return base.beforeUpdateInsertAction();
         }
 
@@ -610,7 +575,7 @@ namespace BP.WF.Template
         public void DoUp(int fk_node)
         {
             int condtypeInt = (int)this.HisCondType;
-            this.DoOrderUp(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.PRI);
+            this.DoOrderUp(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.Idx);
         }
         /// <summary>
         /// 下移
@@ -619,7 +584,7 @@ namespace BP.WF.Template
         public void DoDown(int fk_node)
         {
             int condtypeInt = (int)this.HisCondType;
-            this.DoOrderDown(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.PRI);
+            this.DoOrderDown(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.Idx);
         }
         /// <summary>
         /// 方向条件-下移
@@ -1083,8 +1048,6 @@ namespace BP.WF.Template
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
                 map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 5, 20);
 
-                //@这两个应该去掉一个?
-                //map.AddTBInt(CondAttr.NodeID, 0, "发生的事件(对方向条件有效)", true, true);
                 map.AddTBInt(CondAttr.FK_Node, 0, "节点ID(对方向条件有效)", true, true);
                 map.AddTBInt(CondAttr.ToNodeID, 0, "ToNodeID（对方向条件有效）", true, true);
 
@@ -1095,16 +1058,8 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-                //map.AddDDLSysEnum(CondAttr.ConnJudgeWay, 0, "条件关系", true, false,
-                //    CondAttr.ConnJudgeWay, "@0=or关系@1=and关系@2=混合运算");
-                // map.AddTBInt(CondAttr.MyPOID, 0, "MyPOID", true, true);
-
-                map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
                 map.AddTBInt(CondAttr.Idx, 0, "优先级", true, true);
 
-
-                //@0=O模式， 1=And模式 ， 2=混合模式.
-                map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
 
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
@@ -1182,56 +1137,26 @@ namespace BP.WF.Template
             get { return new Cond(); }
         }
         /// <summary>
-        /// 在这里面的所有条件是不是都符合.
-        /// </summary>
-        public bool IsAllPassed
-        {
-            get
-            {
-                if (this.Count == 0)
-                    throw new Exception("@没有要判断的集合.");
-
-                foreach (Cond en in this)
-                {
-                    if (en.IsPassed == false)
-                        return false;
-                }
-                return true;
-            }
-        }
-        public CondOrAnd CondOrAnd
-        {
-            get
-            {
-                foreach (Cond item in this)
-                    return item.CondOrAnd;
-
-                return CondOrAnd.ByAnd;
-            }
-        }
-        /// <summary>
-        /// 是否通过
-        /// </summary>
-        public bool IsPass
-        {
-            get
-            {
-                if (this.CondOrAnd == CondOrAnd.ByAnd)
-                    return this.IsPassAnd;
-                else
-                    return this.IsPassOr;
-            }
-        }
-        /// <summary>
         /// 执行计算
         /// </summary>
         /// <param name="runModel">模式</param>
         /// <returns></returns>
-        public bool GenerResult(CondOrAnd runModel)
+        public bool GenerResult(CondExpModel runModel, GERpt en=null)
         {
             if (this.Count == 0)
                 throw new Exception("err@没有要计算的条件，无法计算.");
 
+            //给条件赋值.
+            if (en!=null)
+            {
+                foreach (Cond cd in this)
+                {
+                    cd.WorkID = en.OID;
+                    cd.en = en;
+                }
+            }
+
+            #region 首先计算简单的.
             //如果只有一个条件,就直接范围该条件的执行结果.
             if (this.Count==1)
             {
@@ -1240,7 +1165,7 @@ namespace BP.WF.Template
             }
 
             //如果按照 Or 计算任何一个条件成立，就可以.
-            if (runModel== CondOrAnd.ByOr)
+            if (runModel== CondExpModel.OR)
             {
                 foreach (Cond item in this)
                 {
@@ -1251,7 +1176,7 @@ namespace BP.WF.Template
             }
 
             //如果按照 And 计算,所有的条件都成立.
-            if (runModel == CondOrAnd.ByOr)
+            if (runModel == CondExpModel.AND)
             {
                 foreach (Cond item in this)
                 {
@@ -1260,41 +1185,47 @@ namespace BP.WF.Template
                 }
                 return true;
             }
+            #endregion 首先计算简单的.
+
+            #region 处理混合计算。
+            string exp = "";
+            foreach (Cond  item in this)
+            {
+                if (item.HisDataFrom == ConnDataFrom.CondOperator)
+                {
+                    exp += " " + item.OperatorValue;
+                    continue;
+                }
+
+                if (item.IsPassed)
+                    exp += " 1=1 ";
+                else
+                    exp += " 1=2 ";
+            }
 
             //如果是混合计算.
-
-
-
-            return false;
-        }
-        /// <summary>
-        /// 是否通过  
-        /// </summary>
-        public bool IsPassAnd
-        {
-            get
+            string sql = "";
+            switch (SystemConfig.AppCenterDBType)
             {
-                // 判断  and. 的关系。
-                foreach (Cond en in this)
-                {
-                    if (en.IsPassed == false)
-                        return false;
-                }
-                return true;
+                case DBType.MSSQL:
+                    sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + exp;
+                    break;
+                case DBType.MySQL:
+                    sql = " SELECT No FROM Port_Emp WHERE " + exp + " AND limit 1 ";
+                    break;
+                case DBType.Oracle:
+                case DBType.DM:
+                    sql = " SELECT No FROM Port_Emp WHERE " + exp + " AND rownum <=1 ";
+                    break;
+                default:
+                    throw new Exception( "err@没有做的数据库类型判断.");
             }
-        }
-        public bool IsPassOr
-        {
-            get
-            {
-                // 判断  and. 的关系。
-                foreach (Cond en in this)
-                {
-                    if (en.IsPassed == true)
-                        return true;
-                }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
                 return false;
-            }
+            return true;
+            #endregion 处理混合计算。
         }
         /// <summary>
         /// 描述
@@ -1311,37 +1242,8 @@ namespace BP.WF.Template
                 return msg;
             }
         }
-        /// <summary>
-        /// 是不是其中的一个passed. 
-        /// </summary>
-        public bool IsOneOfCondPassed
-        {
-            get
-            {
-                foreach (Cond en in this)
-                {
-                    if (en.IsPassed == true)
-                        return true;
-                }
-                return false;
-            }
-        }
-        /// <summary>
-        /// 取出其中一个的完成条件。. 
-        /// </summary>
-        public Cond GetOneOfCondPassed
-        {
-            get
-            {
-                foreach (Cond en in this)
-                {
-                    if (en.IsPassed == true)
-                        return en;
-                }
-                throw new Exception("@没有完成条件。");
-            }
-        }
         public int NodeID = 0;
+        public bool IsPass = false;
         #endregion
 
         #region 构造
@@ -1367,7 +1269,7 @@ namespace BP.WF.Template
         public Conds(CondType ct, int nodeID, Int64 workid, GERpt enData)
         {
             this.NodeID = nodeID;
-            this.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.CondType, (int)ct, CondAttr.PRI);
+            this.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.CondType, (int)ct, CondAttr.Idx);
             foreach (Cond en in this)
             {
                 en.WorkID = workid;
@@ -1381,7 +1283,7 @@ namespace BP.WF.Template
         /// <param name="nodeID"></param>
         public Conds(CondType ct, int nodeID)
         {
-            this.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.CondType, (int)ct, CondAttr.PRI);
+            this.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.CondType, (int)ct, CondAttr.Idx);
         }
         #endregion
 

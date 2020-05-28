@@ -98,6 +98,20 @@ namespace BP.WF.Template
                 this.SetValByKey(DirectionAttr.Idx, value);
             }
         }
+        /// <summary>
+        /// 表达式类型
+        /// </summary>
+        public CondExpModel CondExpModel
+        {
+            get
+            {
+                return (CondExpModel)this.GetValIntByKey(DirectionAttr.CondExpModel);
+            }
+            set
+            {
+                this.SetValByKey(DirectionAttr.CondExpModel, (int)value);
+            }
+        }
         #endregion
 
         #region 构造方法

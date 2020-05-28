@@ -382,8 +382,6 @@ namespace BP.Web
                 return Request.PhysicalApplicationPath;
             }
         }
-
-
         public static string RequestUserAgent
         {
             get

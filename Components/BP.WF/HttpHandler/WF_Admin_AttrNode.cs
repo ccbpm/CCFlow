@@ -477,8 +477,6 @@ namespace BP.WF.HttpHandler
             DataTable mydt = nd.ToDataTableField("WF_Node");
             ds.Tables.Add(mydt);
 
-          
-
             BtnLab btn = new BtnLab(this.FK_Node);
             DataTable dtBtn = btn.ToDataTableField("WF_BtnLab");
             ds.Tables.Add(dtBtn);

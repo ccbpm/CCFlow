@@ -23,6 +23,7 @@ function ShowFlowBBS(data) {
     var strT = "";
 
     for (var i = 0; i < data.length; i++) {
+        var webUser = new WebUser();
         if (data[i].Rec == webUser.No)
             isHaveMySelf = true;
         if (str.indexOf('@' + data[i].DeptNo + '@') == -1)

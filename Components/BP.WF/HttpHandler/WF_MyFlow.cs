@@ -809,7 +809,7 @@ namespace BP.WF.HttpHandler
         /// 工具栏
         /// </summary>
         /// <returns></returns>
-        public string InitToolBar()
+        public string InitToolBar2019()
         {
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
@@ -1335,7 +1335,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
 
-        public string InitToolBarFor2020()
+        public string InitToolBar()
         {
             DataSet ds = new DataSet();
             //创建一个DataTable，返回按钮信息
@@ -2029,7 +2029,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 new Exception("err@" + ex.Message);
             }
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.ToJson(ds);
         }
 
         /// <summary>

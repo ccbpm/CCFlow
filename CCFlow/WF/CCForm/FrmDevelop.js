@@ -126,19 +126,66 @@ function GenerDevelopFrm(wn,fk_mapData) {
         }
           //为单选按钮高级设置绑定事件
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
-            if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                if (mapAttr.UIContralType == 1)//枚举下拉框
-                    $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
-                if (mapAttr.UIContralType == 3) { //枚举单选
-                    var inputs =$("input[name='RB_"+mapAttr.KeyOfEn+"']");
-                    $.each(inputs, function (i, target) {
-                        $(target).attr("onchange","clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
-                    });
-                   
-                }
+            //枚举下拉框
+            if (mapAttr.UIContralType == 1) {
+                //重新生成枚举下拉框的值
+                var _html = InitDDLOperation(frmData, mapAttr, null);
+                $("#DDL_" + mapAttr.KeyOfEn).empty();
+                $("#DDL_" + mapAttr.KeyOfEn).append(_html);
+
+                    //绑定事件
+                if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) 
+                    $("#DDL_" + mapAttr.KeyOfEn).attr("onchange", "changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
+
+            }
+            //枚举单选
+            if (mapAttr.UIContralType == 3) { 
+                //重新设置单选按钮的值
+                var _html = "";
+
+                //显示方式,默认为横向展示.
+                var RBShowModel = 3;
+                if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+                    RBShowModel = 0;
+                $.each(flowData.Sys_Enum, function (i, obj) {
+                    if (obj.EnumKey == mapAttr.UIBindKey) {
+                        var onclickEvent = "";
+                        if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                            onclickEvent = "onchange='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)'";
+                        }
+                        if (RBShowModel == 3)
+                            _html += "<label><input   type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + " />&nbsp;" + obj.Lab + "</label>";
+                        else
+                            _html += "<label><input   type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + "/>&nbsp;" + obj.Lab + "</label><br/>";
+                    }
+                        
+                });
+
+                $("#SR_" + mapAttr.KeyOfEn).empty();
+                $("#SR_" + mapAttr.KeyOfEn).append(_html);
+                  
             }
             continue;
         } 
+        //枚举多选复选框
+        if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2") {
+            //显示方式,默认为横向展示.
+            var RBShowModel = 3;
+            if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
+                RBShowModel = 0;
+            var _html = "";
+            $.each(flowData.Sys_Enum, function (i, obj) {
+                if (obj.EnumKey == mapAttr.UIBindKey) {
+                    var br = "";
+                    if (RBShowModel == 0)
+                        br = "<br>";
+                    _html += "<label style='font-weight:normal;'><input type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + obj.Lab + " </label>&nbsp;" + br;
+                }
+            });
+            $("#SC_" + mapAttr.KeyOfEn).empty();
+            $("#SC_" + mapAttr.KeyOfEn).append(_html);
+            continue;
+        }
 
         if (mapAttr.MyDataType == 1) {
             if (mapAttr.UIContralType == 8)//手写签字版

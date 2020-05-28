@@ -45,7 +45,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
-        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15 || mapAttr.UIContralType == 17)
+        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15 )
             $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
 
         //如果是时间控件

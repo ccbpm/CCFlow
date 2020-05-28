@@ -330,7 +330,7 @@ namespace BP.WF
 
                     foreach (Cond cond in conds)
                     {
-                        if (cond.FK_Node == nd.NodeID && cond.HisCondType == CondType.Flow)
+                        if (cond.FK_Node == nd.NodeID && cond.CondType == CondType.Flow)
                         {
                             nd.IsCCFlow = true;
                             nd.Update();

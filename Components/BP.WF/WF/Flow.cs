@@ -1960,7 +1960,7 @@ namespace BP.WF
                         msg += "@信息:开始检查(" + nd.Name + ")方向条件:";
                         foreach (Cond cond in conds)
                         {
-                            if (cond.FK_Node == nd.NodeID && cond.HisCondType == CondType.Flow)
+                            if (cond.FK_Node == nd.NodeID && cond.CondType == CondType.Flow)
                             {
                                 nd.IsCCFlow = true;
                                 nd.DirectUpdate();
@@ -2131,7 +2131,6 @@ namespace BP.WF
 
                 // 检查流程， 处理计算字段.
                 Node.CheckFlow(nds, this.No);
-
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.No);
@@ -5107,23 +5106,23 @@ namespace BP.WF
                             // ，开始插入。 
                             if (cd.MyPK.Contains("Stas"))
                             {
-                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.HisCondType.ToString() + "_" + ConnDataFrom.Stas.ToString();
+                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.CondType.ToString() + "_" + ConnDataFrom.Stas.ToString();
                             }
                             else if (cd.MyPK.Contains("Dept"))
                             {
-                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.HisCondType.ToString() + "_" + ConnDataFrom.Depts.ToString();
+                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.CondType.ToString() + "_" + ConnDataFrom.Depts.ToString();
                             }
                             else if (cd.MyPK.Contains("Paras"))
                             {
-                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.HisCondType.ToString() + "_" + ConnDataFrom.Paras.ToString();
+                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.CondType.ToString() + "_" + ConnDataFrom.Paras.ToString();
                             }
                             else if (cd.MyPK.Contains("Url"))
                             {
-                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.HisCondType.ToString() + "_" + ConnDataFrom.Url.ToString();
+                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.CondType.ToString() + "_" + ConnDataFrom.Url.ToString();
                             }
                             else if (cd.MyPK.Contains("SQL"))
                             {
-                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.HisCondType.ToString() + "_" + ConnDataFrom.SQL;
+                                cd.MyPK = cd.FK_Node + "_" + cd.ToNodeID + "_" + cd.CondType.ToString() + "_" + ConnDataFrom.SQL;
                             }
                             else
                             {

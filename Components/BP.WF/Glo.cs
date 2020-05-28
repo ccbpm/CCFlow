@@ -1165,8 +1165,6 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
-
-
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -1200,7 +1198,43 @@ namespace BP.WF
             //检查BPM.
             CheckGPM();
 
-            #region 升级优化集团版的应用. 2020.04.03uu
+            #region 升级优化集团版的应用. 2020.04.03
+
+            //--2020.05.28 升级方向条件;
+            BP.WF.Template.Cond cond = new Cond();
+            cond.CheckPhysicsTable();
+            if (DBAccess.IsExitsTableCol("WF_Cond", "PRI") == true)
+            {
+                DBAccess.RunSQL("UPDATE WF_Cond SET Idx=PRI ");
+                DBAccess.DropTableColumn("WF_Cond", "PRI");
+            }
+
+            //升级方向条件的计算方式.
+            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true)
+            {
+                //如果有该字段.
+                Direction dir = new Direction();
+                dir.CheckPhysicsTable();
+
+                Conds conds = new Conds();
+                conds.RetrieveAll();
+                foreach (Cond myCond in conds)
+                {
+                    if (myCond.CondType != CondType.Dir)
+                        continue;
+
+                    int type = DBAccess.RunSQLReturnValInt("SELECT CondOrAnd FROM WF_Cond WHERE MyPK='"+myCond.MyPK+"'", 0);
+
+                    Direction mydir = new Direction();
+                    mydir.Retrieve(DirectionAttr.Node, myCond.FK_Node,
+                        DirectionAttr.ToNode, myCond.ToNodeID);
+
+                    mydir.CondExpModel = (CondExpModel)type;
+                    mydir.Update();
+                }
+            }
+ 
+
 
             //--2020.05.25 修改节点自定义按钮功能;
             BP.WF.Template.NodeToolbar bar = new NodeToolbar();
@@ -1211,6 +1245,7 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
             }
+
 
             //检查frmTrack.
             BP.Frm.Track tk = new Frm.Track();

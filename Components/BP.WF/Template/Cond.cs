@@ -312,7 +312,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 条件类型(表单条件，岗位条件，部门条件，开发者参数)
         /// </summary>
-        public CondType HisCondType
+        public CondType CondType
         {
             get
             {
@@ -574,7 +574,7 @@ namespace BP.WF.Template
         /// <param name="fk_node">节点ID</param>
         public void DoUp(int fk_node)
         {
-            int condtypeInt = (int)this.HisCondType;
+            int condtypeInt = (int)this.CondType;
             this.DoOrderUp(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.Idx);
         }
         /// <summary>
@@ -583,7 +583,7 @@ namespace BP.WF.Template
         /// <param name="fk_node">节点ID</param>
         public void DoDown(int fk_node)
         {
-            int condtypeInt = (int)this.HisCondType;
+            int condtypeInt = (int)this.CondType;
             this.DoOrderDown(CondAttr.FK_Node, fk_node.ToString(), CondAttr.CondType, condtypeInt.ToString(), CondAttr.Idx);
         }
         /// <summary>

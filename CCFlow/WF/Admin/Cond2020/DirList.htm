@@ -80,14 +80,17 @@
                     continue;
                 }
 
-
                 html += "<tr >";
                 html += "<td class=Idx>" + idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
-                html += "<td style='width:300px;'>" + cond.AttrKey + cond.FK_Operator + cond.OperatorValue + "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue+"</td>";//表达式 "  " " +  + " " + en.OperatorValue;
+                html += "<td style='width:300px;'>";
+                html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue; 
+                if (cond.AttrKey != "")
+                    html += "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+                html += "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 if (dir.CondExpModel == 2) {
                     html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";
-                    html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx*40)) + "px; '>";
+                    html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx * 40)) + "px; '>";
                     html += " <ol>";
                     html += " <li><a href=\"javascript:AddCond('(','" + cond.Idx + "')\"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>";
                     html += " <li><a href=\"javascript: AddCond(')','" + cond.Idx + "')\"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
@@ -98,7 +101,7 @@
                 }
                 html += "<td>";
                 html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
-                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Down('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Down('" + cond.MyPK + "')\"><img src='../../Img/Btn/Down.gif' border=0 />下移</a>";
                 html += "<td>";
                 html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 html += "</tr>";
@@ -117,7 +120,7 @@
                 $("#condBtn").show();
 
                 var data = conds.DoMethodReturnString("DoCheck");
-                //alert(data);
+
                 $("#checkInfo").html(data);
             }
 
@@ -208,12 +211,13 @@
         }
         //添加运算符
         function AddCond(condExp, idx) {
-           
+
             var condIdx = idx - 1;
             var en = new Entity("BP.WF.Template.Cond");
             //生成一个随机数添加到运算符的主键中
             var radomNum = parseInt(Math.random() * 1000) + 1;
             en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
+            alert(en.MyPK);
             en.CondType = 2;
             en.DataFrom = 100; //运算符.
             en.FK_Flow = flowNo;

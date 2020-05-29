@@ -25,6 +25,7 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
+            var fk_mainNode = GetQueryString("FK_MainNode");
             
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
@@ -33,7 +34,7 @@
             //            handler.AddUrlData();
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("CondType", condType);
-            
+            handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             
@@ -66,7 +67,7 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            
+            var fk_mainNode = GetQueryString("FK_MainNode");
             var fk_Node = GetQueryString("FK_Node");
 
             var toNodeID = GetQueryString("ToNodeID");
@@ -84,14 +85,13 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("CondType", condType);
-            
+            handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("TB_Docs", sqlVal);
             handler.AddPara("TB_Note", note);
-            handler.AddPara("CondOrAnd", CondOrAnd);
             var data = handler.DoMethodReturnString("CondBySQLTemplate_Save");
-
+            
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
                 return;
@@ -104,7 +104,7 @@
             }
 
             alert(data);
-
+            Back();
             //$("#Msg").html("<font color=green>" + data + "</font>");
 
         }

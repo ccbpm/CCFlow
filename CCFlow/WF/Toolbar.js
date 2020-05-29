@@ -207,7 +207,17 @@ function initModal(modalType, toNode,url) {
                 $('#modalHeader').text("提示信息");
                 //按百分比自适应
                 SetPageSize(50, 60);
-                modalIframeSrc = ccbpmPath+"/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random()
+                var node = new Entity("BP.WF.Template.NodeExt", paramData.FK_Node);
+                var info = "";
+                if (node.ReturnField != "") {
+                    if ($("#" + node.ReturnField).length == 1)
+                        info = $("#" + node.ReturnField).val();
+                    if (info == undefined && $("#TB_" + node.ReturnField).length == 1)
+                        info = $("#TB_" + node.ReturnField).val();
+                    if (info == undefined)
+                        info = "";
+                }
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random()
                 break;
             case "Send":
                 SetChildPageSize(80, 80);

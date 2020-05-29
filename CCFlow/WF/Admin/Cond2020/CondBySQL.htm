@@ -77,7 +77,7 @@
             var fk_flow = GetQueryString("FK_Flow");
             
             var fk_Node = GetQueryString("FK_Node");
-
+            var fk_mainNode = GetQueryString("FK_MainNode");
             var toNodeID = GetQueryString("ToNodeID");
             var sqlVal = editor.getValue();
             var note = document.getElementById("TB_Note").value;
@@ -97,9 +97,10 @@
             
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
+            handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("TB_Docs", sqlVal);
             handler.AddPara("TB_Note", note);
-            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
+            
             var data = handler.DoMethodReturnString("CondBySQL_Save");
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
@@ -112,7 +113,7 @@
                 return;
             }
             alert("保存成功");
-                window.location.href = window.location.href;
+            Back();
             
 
         }

@@ -1760,8 +1760,7 @@ namespace BP.WF
                 return toNodes;
 
 
-            Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.Idx);
+            //dcsAll.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID, CondAttr.Idx);
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
@@ -1771,15 +1770,8 @@ namespace BP.WF
             foreach (Node nd in toNodes)
             {
                 Conds dcs = new Conds();
-                foreach (Cond dc in dcsAll)
-                {
-                    if (dc.ToNodeID != nd.NodeID)
-                        continue;
-
-                    dc.WorkID = this.HisWork.OID;
-                    dc.en = this.rptGe;
-                    dcs.AddEntity(dc);
-                }
+                dcs.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID,
+                    CondAttr.ToNodeID,nd.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
 
                 if (dcs.Count == 0)
                 {
@@ -1787,11 +1779,12 @@ namespace BP.WF
                     continue;
                 }
 
-                if (dcs.IsPass) //如果多个转向条件中有一个成立.
+                if (dcs.GenerResult(this.rptGe)==true ) 
                 {
                     myNodes.AddEntity(nd);
                     continue;
                 }
+
             }
             #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
 
@@ -1857,7 +1850,7 @@ namespace BP.WF
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass )
+                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe) )
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
@@ -8885,7 +8878,7 @@ namespace BP.WF
                     return;
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.IsPass)
+                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe))
                 {
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
                     /* 如果流程完成 */

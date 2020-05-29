@@ -1137,7 +1137,6 @@ namespace BP.WF.Template
             get
             {
                 return "";
-
             }
         }
         /// <summary>
@@ -1234,7 +1233,6 @@ namespace BP.WF.Template
             }
         }
         public int NodeID = 0;
-        public bool IsPass = false;
         #endregion
 
         #region 构造

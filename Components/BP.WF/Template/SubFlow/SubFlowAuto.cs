@@ -283,14 +283,11 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_NodeSubFlow", "自动触发子流程");
 
-
                 map.AddMyPK();
 
-
-                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, false, 0, 10, 100, true);
-
-
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 10, 100);
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
+
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型", true, false, SubFlowHandAttr.SubFlowType,
                 "@0=手动启动子流程@1=触发启动子流程@2=延续子流程");
 

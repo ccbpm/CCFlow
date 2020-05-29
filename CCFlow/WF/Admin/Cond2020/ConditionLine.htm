@@ -94,7 +94,7 @@
         
         function OpenCond2020(ele, toNodeID) {
 
-            var url = "../Cond2020/DirList.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID ;
+            var url = "../Cond2020/List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID ;
             OpenUrlInRightFrame(ele, url);
         }
         
@@ -151,12 +151,9 @@
          //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd == null)
+            
                 url = url.replace('CondByFrm.htm', 'List.htm');
-            else {
-                url = url.replace('CondByFrm.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
-            }
+
             window.location.href = url;
         }
     </script>

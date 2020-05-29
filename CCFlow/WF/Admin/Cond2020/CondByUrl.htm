@@ -169,12 +169,9 @@
          //返回.
         function Back() {
             var url = window.location.href;
-            if (GetQueryString("CondOrAnd") == null)
+             
                 url = url.replace('CondByUrl.htm', 'List.htm');
-            else {
-                url = url.replace('CondByUrl.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
-            }
+ 
 
             window.location.href = url;
         }

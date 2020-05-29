@@ -79,14 +79,13 @@
                 html += "<tr >";
                 html += "<td class=Idx>" + cond.Idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
-                html += "<td style='width:300px;'>";
+                html += "<td style='width:300px;height:40px;'>";
                 html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
                 if (cond.AttrKey != "")
                     html += "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
-
                 html += "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";
-                html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx * 40)) + "px; '>";
+                html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx * 50)) + "px; '>";
                 html += " <ol>";
                 html += " <li><a href=\"javascript:AddCond('(','" + cond.Idx + "')\"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>";
                 html += " <li><a href=\"javascript: AddCond(')','" + cond.Idx + "')\"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
@@ -205,14 +204,12 @@
             //生成一个随机数添加到运算符的主键中
             var radomNum = parseInt(Math.random() * 1000) + 1;
             en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
-            alert(en.MyPK);
             en.CondType = condType; //条件类型.
             en.DataFrom = 100; //运算符.
             en.FK_Flow = flowNo;
             en.FK_Node = nodeID;
             en.FK_Operator = condExp;
             en.ToNodeID = toNodeID;
-            en.FK_Operator = condExp;
             en.Idx = condIdx;
             en.Insert();
 

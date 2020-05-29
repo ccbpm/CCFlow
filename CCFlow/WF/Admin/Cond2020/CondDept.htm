@@ -245,9 +245,9 @@
                 alert(data);
                 return;
             }
-           if (window.confirm('保存成功,是否返回？'))
+           alert("保存成功");
                 window.location.href = window.location.href;
-            Back();
+            
 
         }
 
@@ -350,12 +350,14 @@
         </div>
         <div style="position:relative;top:10px; margin: 8px; width:100%">
             <div style="width: 100%; max-height: 600px; overflow: auto">
-                <table id="t1" style="width: 100%;">
+                <table id="t1" style="width: 100%;border:none">
                     <caption>
                         <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />
                         方向条件-按部门
                     </caption>
+
                 </table>
+                <br />
                 <div id="tree">
                 </div>
             </div>

@@ -25,7 +25,7 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
+            
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
@@ -33,7 +33,7 @@
             //            handler.AddUrlData();
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("CondType", condType);
-            handler.AddPara("FK_MainNode", fk_mainNode);
+            
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             
@@ -66,7 +66,7 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
+            
             var fk_Node = GetQueryString("FK_Node");
 
             var toNodeID = GetQueryString("ToNodeID");
@@ -84,7 +84,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("CondType", condType);
-            handler.AddPara("FK_MainNode", fk_mainNode);
+            
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("TB_Docs", sqlVal);
@@ -117,14 +117,14 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
+            
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("CondType", condType);
-            handler.AddPara("FK_MainNode", fk_mainNode);
+            
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             var data = handler.DoMethodReturnString("CondBySQLTemplate_Delete");
@@ -144,9 +144,9 @@
             
             document.getElementById("DDL_Template").value = "";
             document.getElementById("TB_Note").value = "";
-            if (window.confirm('保存成功,是否返回？'))
+            
                 window.location.href = window.location.href;
-            Back();
+            
         }
 
         //装载模版.
@@ -159,12 +159,9 @@
          //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd == null)
+             
                 url = url.replace('CondBySQLTemplate.htm', 'List.htm');
-            else {
-                url = url.replace('CondBySQLTemplate.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
-            }
+ 
             window.location.href = url;
         }
     </script>

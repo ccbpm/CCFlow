@@ -36,14 +36,14 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
+           
             var fk_Node = GetQueryString("FK_Node");
             var toNodeID = GetQueryString("ToNodeID");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_MainNode", fk_mainNode);
+            
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
 
@@ -75,7 +75,7 @@
 
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
+            
             var fk_Node = GetQueryString("FK_Node");
 
             var toNodeID = GetQueryString("ToNodeID");
@@ -94,7 +94,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_MainNode", fk_mainNode);
+            
             handler.AddPara("FK_Node", fk_Node);
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("TB_Docs", sqlVal);
@@ -111,9 +111,9 @@
                 window.location.href = url;
                 return;
             }
-            if (window.confirm('保存成功,是否返回？'))
+            alert("保存成功");
                 window.location.href = window.location.href;
-            Back();
+            
 
         }
 
@@ -165,12 +165,9 @@
          //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd == null)
+            
                 url = url.replace('CondBySQL.htm', 'List.htm');
-            else {
-                url = url.replace('CondBySQL.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
-            }
+
             window.location.href = url;
         }
     </script>

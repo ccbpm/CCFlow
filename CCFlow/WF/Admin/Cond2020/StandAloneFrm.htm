@@ -104,7 +104,7 @@
                 window.location.href = url;
                 return;
             }
-
+            alert("保存成功");
             window.location.href = window.location.href;
         }
 
@@ -187,12 +187,8 @@
         //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd == null)
-                url = url.replace('StandAloneFrm.htm', 'List.htm');
-            else {
-                url = url.replace('StandAloneFrm.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd, '  ');
-            }
+            url = url.replace('StandAloneFrm.htm', 'List.htm');
+
             window.location.href = url;
         }
     </script>

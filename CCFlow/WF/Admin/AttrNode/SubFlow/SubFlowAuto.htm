@@ -53,7 +53,7 @@
 
                 //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
-                html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >删除</a></td>";
+                html += "<td><a href=\"javascript:SetCond('" + en.MyPK + "');\" >设置条件</a></td>";
                 html += "<td>";
                 html += "<a href=\"javascript:DoUp('" + en.MyPK + "')\">上移</a> - <a href=\"javascript:DoDown('" + en.MyPK + "')\">下移</a>";
                 html += "</td>";
@@ -102,13 +102,31 @@
             window.location.href = window.location.href;
         }
 
+        //设置子流程启动条件.
+        function SetCond(pk) {
+            var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
+            var url = "../../Cond2020/List.htm?CondType=3&FK_Flow=" + en.FK_Flow + "&FK_Node=" + en.FK_Node + "&ToNodeID=" + en.FK_Node + "&SubFlowNo=" + en.SubFlowNo;
+            window.location.href = url;
+            return;
+
+
+            //var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
+
+            //OpenEasyUiDialogExt(url, '', 700, 500, true);
+
+            //OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
+            //window.location.href = url;
+        }
+
+
+
         //编辑.
         function Edit(pk) {
 
             var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
 
-            // OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
-            OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
+            OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            //OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
 
             //window.location.href = url;
 
@@ -126,7 +144,8 @@
         <input type="button" value="我需要帮助" onclick="Help()" />
     </div>
     <table id="Table1" style="width: 100%">
-        <caption><img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
+        <caption>
+            <img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
             自动触发子流程
         </caption>
         <tr>

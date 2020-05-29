@@ -570,16 +570,38 @@ namespace BP.WF.Template
         /// <summary>
         /// 方向条件-下移
         /// </summary>
-        public void DoDownDirCond()
+        public void DoDown2020Cond()
         {
-            this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, this.ToNodeID, CondAttr.Idx);
+            if (this.CondType== CondType.Dir)
+               this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
+                   this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
+
+            if (this.CondType == CondType.Flow)
+                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node,CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+
+            if (this.CondType == CondType.SubFlow)
+                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
+
+            if (this.CondType == CondType.Node)
+                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
         }
         /// <summary>
         /// 方向条件-上移
         /// </summary>
-        public void DoUpDirCond()
+        public void DoUp2020Cond()
         {
-            this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, this.ToNodeID, CondAttr.Idx);
+            if (this.CondType == CondType.Dir)
+                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
+                    this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
+
+            if (this.CondType == CondType.Flow)
+                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+
+            if (this.CondType == CondType.SubFlow)
+                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
+
+            if (this.CondType == CondType.Node)
+                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
         }
         #endregion
 

@@ -21,7 +21,11 @@
 
         var OperForString = null;
         var OperForNumber = null;
-        var condOrAnd = GetQueryString("CondOrAnd");
+        var condType = GetQueryString("CondType");
+        var fk_flow = GetQueryString("FK_Flow");
+        var fk_Node = GetQueryString("FK_Node");
+        var toNodeID = GetQueryString("ToNodeID");
+
         //初始化页面函数.....
         $(function () {
 
@@ -29,14 +33,6 @@
             document.getElementById("TB_Val").style.display = "none";
             document.getElementById("DDL_Val").style.display = "none";
 
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
-
-            //求出来 frmID .
-            // var flow = new Entity("BP.WF.Flow", fk_flow);
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
@@ -54,70 +50,16 @@
             //绑定查询.
             GenerBindDDL("DDL_Fields", sys_mapattr, "No", "Name", "all");
 
-            //绑定操作。
-            //GenerBindDDL("DDL_Operator", OperForNumber, "No", "Name", "=");
-            //document.getElementById("TB_Note").value = data.Note;
 
-            var wf_Conds = data["WF_Conds"];
-            
-            //增加处理.
-            for (var i = 0; i < wf_Conds.length; i++) {
 
-                var cond = wf_Conds[i];
-
-                var newRow = "";
-                newRow = "<tr >";
-                newRow += "<td class=Idx>" + i + "</td>";
-                newRow += "<td>" + cond.AttrKey + "</td>";
-                newRow += "<td>" + cond.AttrName + "</td>";
-                newRow += "<td>" + cond.FK_Operator + "</td>";
-                newRow += "<td>" + cond.OperatorValue + "</td>";
-                newRow += "<td>" + cond.OperatorValueT + "</td>";
-                if (cond.CondOrAnd == 0)
-                    newRow += "<td> AND </td>";
-                else
-                    newRow += "<td> OR </td>";
-
-                newRow += "<td>";
-                newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
-                newRow += "</td>";
-                newRow += "</tr>";
-                $("#Table1 tr:last").after(newRow);
-            }
-
-            //保存按钮的加载@lz
-            html = "";
-            if (condOrAnd == null) {
-                html += " <tr>";
-                html += "<td></td>";
-                html += " <td colspan=1>";
-                html += "<input type='button' value='保存为AND条件' onclick=Save('AND'); />";
-                html += "<input type='button' value='保存为OR条件' onclick=Save('OR'); />";
-                html + " </td >"
-                html += "</tr >";
-            }
-            else {
-                
-                $("#Table1").html("");
-                html += " <tr>";
-                html += "<td></td>";
-                html += " <td colspan=1>";
-                html += "<input type='button' value='保存' onclick=Save('" + condOrAnd + "'); />";
-                html + " </td >"
-                html += "</tr >";
-            }
-            $("#table tr:last").after(html);
         });
 
         //执行保存..
-        function Save(saveType) {
-             if (condOrAnd != null)
-                saveType = condOrAnd;
+        function Save() {
+
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
             var fk_Node = GetQueryString("FK_Node");
-
             var toNodeID = GetQueryString("ToNodeID");
 
             var DDL_Fields = $("#DDL_Fields").val(); //  字段.
@@ -133,19 +75,15 @@
                 OperVal = $("#DDL_Val").val(); //  操作符.
             }
 
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("DDL_Fields", DDL_Fields);
             handler.AddPara("DDL_Operator", DDL_Operator);
             handler.AddPara("OperVal", OperVal);
             handler.AddPara("OperValText", encodeURI(tbText.value));
-            handler.AddPara("SaveType", saveType);
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("FK_Node", fk_Node);
-
             var data = handler.DoMethodReturnString("CondByFrm_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -159,23 +97,9 @@
                 return;
             }
 
-            if (window.confirm('保存成功,是否返回？'))
-                window.location.href = window.location.href;
-            Back();
-            
-            
-            //$("#Msg").html("<font color=green>" + data + "</font>");
-        }
-
-        //执行删除..
-        function Delete(mypk) {
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-            var en = new Entity("BP.WF.Template.Cond");
-            en.SetPKVal(mypk);
-            en.Delete();
             window.location.href = window.location.href;
         }
+
         //当字段选择的时候.
         function changeCond(c) {
 
@@ -250,15 +174,11 @@
             $("#TB_Val").val(data[0]);
             $("#TB_Text").val(data[1]);
         }
+
         //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd == null)
-                url = url.replace('CondByFrm.htm', 'List.htm');
-            else {
-                url = url.replace('CondByFrm.htm', 'DirList.htm');
-                url = url.replace('&CondOrAnd=' + condOrAnd,'  ');
-            }
+            url = url.replace('CondByFrm.htm', 'List.htm');
             window.location.href = url;
         }
     </script>
@@ -268,7 +188,7 @@
     <form id="cc">
         <div style="right:30px; position:absolute; z-index:100; ">
             <fieldset style="border: 0px;">
-                
+
                 <input type="button" onclick="Back()" value="返回" id="Button2" />
             </fieldset>
         </div>
@@ -300,19 +220,11 @@
                 </td>
             </tr>
 
-            
-        </table>
-
-        <table id="Table1" name="Table1" style="width:99%;">
             <tr>
-                <th>序</th>
-                <th>字段的英文名</th>
-                <th>中文名 </th>
-                <th>操作符</th>
-                <th>值</th>
-                <th>标签</th>
-                <th>运算关系</th>
-                <th>操作</th>
+                <td></td>
+                <td>
+                    <input type='button' value='保存' onclick='Save();' />
+                </td>
             </tr>
         </table>
 

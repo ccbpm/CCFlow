@@ -2,14 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>方向条件</title>
+    <title>条件设置</title>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Admin.js" type="text/javascript"></script>
-
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -17,251 +16,234 @@
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
+    <style type="text/css">
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
     <script type="text/javascript">
+        //获得变量.
 
-        var flowNo = null;
-        var nodeID = null;
-        var toNodeID = null;
+        //流程编号.
+        var flowNo = GetQueryString("FK_Flow");
 
+        //作用的节点.
+        var nodeID = GetQueryString("FK_Node");
+
+        //到达的节点，对方向条件有效.
+        var toNodeID = GetQueryString("ToNodeID");
+        if (toNodeID == null)
+            toNodeID = nodeID;
+
+        //条件类型 @0=节点完成条件, 1=流程完成条件, 2=方向条件, 3=启动子流程
+        var condType = GetQueryString("CondType");
+        var dir = null;
         //初始化页面函数.....
         $(function () {
- 
-            var flowNo = GetQueryString("FlowNo");
-            var nodeID = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
 
-            //查询出来所有的条件,
+            $("#table").html("");
+            if (condType == null || condType == undefined)
+                condType = 2; //默认为方向条件.
+
+
+            //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
-            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "Idx");
+            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", 2, "Idx");
 
+            var toNode = new Entity("BP.WF.Node", toNodeID);
+            html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CondByFrm_Init");
+            html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
 
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
-                return;
+            html += "<tr>";
+            html += "<th>序</th>";
+            html += "<th>类型</th>";
+            html += "<th>表达式</th>";
+            html += "<th>插入</th>";
+            html += "<th>移动</th>";
+            html += "<th>删除</th>";
+            html += "</tr>";
+            //循环生成表格.
+            var idx = 1;
+            for (var i = 0; i < conds.length; i++) {
+
+                var cond = conds[i];
+
+                html += "<tr >";
+                html += "<td class=Idx>" + idx + "</td>";
+                html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
+                html += "<td style='width:300px;'>";
+                html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
+                if (cond.AttrKey != "")
+                    html += "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+
+                html += "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
+                html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";
+                html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx * 40)) + "px; '>";
+                html += " <ol>";
+                html += " <li><a href=\"javascript:AddCond('(','" + cond.Idx + "')\"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>";
+                html += " <li><a href=\"javascript: AddCond(')','" + cond.Idx + "')\"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
+                html += " <li><a href=\"javascript: AddCond('AND','" + cond.Idx + "')\"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
+                html += " <li><a href=\"javascript: AddCond('OR','" + cond.Idx + "')\"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
+                html += " </ol>";
+                html += "</div>";
+                html += "<td>";
+
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:Down('" + cond.MyPK + "')\"><img src='../../Img/Btn/Down.gif' border=0 />下移</a>";
+                html += "<td>";
+                html += "<a  href=\"javascript:DeleteIt('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                html += "</tr>";
+                idx++;
             }
+            html += "</table>";
+            $("#table").html(html);
 
-            //转json.
-            data = JSON.parse(data);
-            var sys_mapattr = data["Sys_MapAttr"];
+            //新建运算符按钮的显示和隐藏
+            $("#condBtn").hide();
 
-            //绑定查询.
-            GenerBindDDL("DDL_Fields", sys_mapattr, "No", "Name", "all");
+            //   if (dir.CondExpModel == 2) {
+            $("#condBtn").show();
+            var data = conds.DoMethodReturnString("DoCheck");
+            if (data.indexOf('err@') >= 0)
+                $("#checkInfo").html("<font color=red>" + data + "</font>");
+            else
+                $("#checkInfo").html(data);
 
-            //绑定操作。
-            //GenerBindDDL("DDL_Operator", OperForNumber, "No", "Name", "=");
-            //document.getElementById("TB_Note").value = data.Note;
-
-            var wf_Conds = data["WF_Conds"];
-
-            //增加处理.
-            for (var i = 0; i < wf_Conds.length; i++) {
-
-                var cond = wf_Conds[i];
-
-                var newRow = "";
-                newRow = "<tr >";
-                newRow += "<td class=Idx>" + i + "</td>";
-                newRow += "<td>" + cond.AttrKey + "</td>";
-                newRow += "<td>" + cond.AttrName + "</td>";
-                newRow += "<td>" + cond.FK_Operator + "</td>";
-                newRow += "<td>" + cond.OperatorValue + "</td>";
-                newRow += "<td>" + cond.OperatorValueT + "</td>";
-                if (cond.CondOrAnd == 0)
-                    newRow += "<td> AND </td>";
-                else
-                    newRow += "<td> OR </td>";
-
-                newRow += "<td>";
-                newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
-                newRow += "</td>";
-                newRow += "</tr>";
-                $("#Table1 tr:last").after(newRow);
-            }
+            // }
 
         });
 
-        //执行保存..
-        function Save(saveType) {
-
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-
-            var toNodeID = GetQueryString("ToNodeID");
-
-            var DDL_Fields = $("#DDL_Fields").val(); //  字段.
-            var DDL_Operator = $("#DDL_Operator").val(); //  操作符.
-
-            var OperVal = "";
-
-            var tb = document.getElementById("TB_Val");
-            var tbText = document.getElementById("TB_Text");
-            if (tb.style.display == "" || tbText.style.display == "inline") {
-                OperVal = tb.value;
-            } else {
-                OperVal = $("#DDL_Val").val(); //  操作符.
+        function ShowType(DataFrom) {
+            var res = "";
+            switch (DataFrom) {
+                case 0: res = "表单字段";
+                    break;
+                case 1: res = "独立表单";
+                    break;
+                case 2: res = "按岗位";
+                    break;
+                case 3: res = "按部门";
+                    break;
+                case 4: res = "按SQL";
+                    break;
+                case 5: res = "按SQL模板";
+                    break;
+                case 6: res = "按参数";
+                    break;
+                case 7: res = "按URL";
+                    break;
+                case 100: res = "运算符";
+                    break;
             }
-
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("DDL_Fields", DDL_Fields);
-            handler.AddPara("DDL_Operator", DDL_Operator);
-            handler.AddPara("OperVal", OperVal);
-            handler.AddPara("OperValText", encodeURI(tbText.value));
-            handler.AddPara("SaveType", saveType);
-            handler.AddPara("ToNodeID", toNodeID);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_MainNode", fk_mainNode);
-            handler.AddPara("FK_Node", fk_Node);
-            var data = handler.DoMethodReturnString("CondByFrm_Save");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            // alert(data);
-            window.location.href = window.location.href;
-
-            //$("#Msg").html("<font color=green>" + data + "</font>");
+            return res;
         }
 
+
         //执行删除..
-        function Delete(mypk) {
+        function DeleteIt(mypk) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
             var en = new Entity("BP.WF.Template.Cond");
             en.SetPKVal(mypk);
             en.Delete();
             window.location.href = window.location.href;
+            return;
         }
-        //当字段选择的时候.
-        function changeCond(c) {
-
-            if (c == null || c.value.length == 0)
-                return;
-
-            var key = c.value;
-            if (key == "all")
-                return;
-
-            var fk_flow = GetQueryString("FK_Flow");
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("KeyOfEn", key);
-
-            var data = handler.DoMethodReturnString("CondByFrm_InitField");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            data = JSON.parse(data);
-
-            //获得 mapattr.
-            var mapattr = data["Sys_MapAttr"][0];
-            //操作符.
-            var opers = data["Opers"];
-
-            //两者都隐藏.
-            document.getElementById("TB_Val").style.display = "none";
-            document.getElementById("TB_Text").style.display = "none";
-            document.getElementById("DDL_Val").style.display = "none";
-            $("#opts").html("");
-
-
-            if (mapattr.LGType == "1") {
-                /*是枚举类型*/
-                var enums = data["Enums"];
-                GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
-
-                //显示.
-                document.getElementById("DDL_Val").style.display = "";
-            }
-
-            if (mapattr.LGType == "2" || (mapattr.LGType == "0" && mapattr.MyDataType == "1" && mapattr.UIContralType == 1)) {
-                document.getElementById("TB_Text").style.display = "inline";
-                $("#opts").html("<input type='button' onclick=\"javascript:SelectFKData('" + mapattr.MyPK + "');\" value='请选择数据' />");
-            }
-
-            if (mapattr.LGType == "0" && mapattr.UIContralType != 1) {
-                document.getElementById("TB_Val").style.display = "";
-            }
-
-            //绑定操作符.
-            GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
+        function Up(mypk) {
+            var en = new Entity("BP.WF.Template.Cond");
+            en.SetPKVal(mypk);
+            en.Retrieve();
+            var data = en.DoMethodReturnString("DoUp2020Cond");
+            window.location.href = window.location.href;
+            return;
         }
-        ///选择外部数据.
-        var newWindow = "";
-        function SelectFKData(fk_mapAttr) {
-            OpenEasyUiDialogExt('CondByFrmSelectFKData.htm?FK_MapAttr=' + fk_mapAttr, '选择一个值', '600', '400', false);
+        function Down(mypk) {
+            var en = new Entity("BP.WF.Template.Cond");
+            en.SetPKVal(mypk);
+            en.Retrieve();
+            var data = en.DoMethodReturnString("DoDown2020Cond");
+            window.location.href = window.location.href;
+            return;
         }
-        function getValue(data) {
-            $('#eudlg').dialog('close');
-            $("#TB_Val").val(data[0]);
-            $("#TB_Text").val(data[1]);
+
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+
+            var ctrl = document.getElementById(ctrlID);
+
+            ctrl.style.display = 'block';
+
+            document.onmouseup = function () {
+
+                ctrl.style.display = "none";
+            }
         }
-        //返回.
-        function Back() {
+
+        function NewCond(type) {
+
             var url = window.location.href;
-            url = url.replace('CondByFrm.htm', 'List.htm');
+            url = url.replace('List.htm', type + '.htm');
             window.location.href = url;
+        }
+        //添加运算符
+        function AddCond(condExp, idx) {
+
+            var condIdx = idx - 1;
+            var en = new Entity("BP.WF.Template.Cond");
+            //生成一个随机数添加到运算符的主键中
+            var radomNum = parseInt(Math.random() * 1000) + 1;
+            en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
+            alert(en.MyPK);
+            en.CondType = condType; //条件类型.
+            en.DataFrom = 100; //运算符.
+            en.FK_Flow = flowNo;
+            en.FK_Node = nodeID;
+            en.FK_Operator = condExp;
+            en.ToNodeID = toNodeID;
+            en.FK_Operator = condExp;
+            en.Idx = condIdx;
+            en.Insert();
+
+            window.location.href = window.location.href;
         }
     </script>
 
 </head>
 <body>
 
-    <div id="bar">
-        表达式运算模式：
-        <label><input type="radio" id="x" />Or模式</label>
-        <label><input type="radio" id="x" />and模式</label>
-        <label><input type="radio" id="x" />混合模式</label>
-         +条件, +运算符
+    <div style="position:relative;" id="table">
     </div>
+    <div>
+        <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
+        <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; left:0px; ">
+            <ol>
+                <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
+                <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
+                <li><a href="javascript:NewCond('CondStation');">按指定操作员的岗位条件</a></li>
+                <li><a href="javascript:NewCond('CondDept');">按指定操作员的部门条件</a> </li>
+                <li><a href="javascript:NewCond('CondBySQL');">按SQL条件计算</a> </li>
+                <li><a href="javascript:NewCond('CondBySQLTemplate');">按SQL模版条件计算</a> </li>
+                <li><a href="javascript:NewCond('CondByPara');">按开发者参数计算</a> </li>
+                <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
+            </ol>
+        </div>
 
-    <table>
-        <tr>
-            <th>#</th>
-            <th>类型</th>
-            <th>描述</th>
-            <th>操作</th>
-        </tr>
-    </table>
-
-    <!-- 
-        类型	表达式	操作
-    ()预算符	(	上移- 下移-删除
-    ()表单字段	Age>10	上移- 下移-删除
-    ()预算符	Or	上移- 下移-删除
-    ()表单字段	TS >4	上移- 下移-删除
-    ()预算符	）	上移- 下移-删除
-    ()预算符	And	上移- 下移-删除
-    ()预算符	(	上移- 下移-删除
-    ()表单字段	Age<10 上移- 下移-删除
-                     ()预算符 Or 上移- 下移-删除
-                     ()按部门 部门是xxx部门 上移- 下移-删除
-                     ()预算符 ) 上移- 下移-删除 -->
+        <!--<input id="condBtn" type="button" value="+新建运算符" onclick="ShowHidden('state1')" />
+        <div id="state1" style=" position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;left:100px;">
+            <ol>
+                <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
+                <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+            </ol>
+        </div>-->
+    </div>
+    <div id="checkInfo"></div>
 
 </body>
 </html>

@@ -66,7 +66,7 @@
             html += "<th>类型</th>";
             html += "<th>表达式</th>";
             html += "<th>插入运算符</th>";
-            html += "<th>插入条件</th>";
+           
             html += "<th>移动</th>";
             html += "<th>删除</th>";
             html += "</tr>";
@@ -93,9 +93,6 @@
                 html += " <li><a href=\"javascript: AddCond('OR','" + cond.Idx + "')\"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
                 html += " </ol>";
                 html += "</div>";
-
-                html += "<td> - ";
-                html += "</td>";
 
                 html += "<td>";
 
@@ -223,12 +220,9 @@
 
 </head>
 <body>
-
-    <div style="position:relative;" id="table">
-    </div>
-    <div>
+    <div style="right:30px; position:absolute; z-index:100; ">
         <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
-        <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray; left:0px; ">
+        <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;left:-120px ">
             <ol>
                 <li><a href="javascript:NewCond('CondByFrm');">按表单条件计算</a> </li>
                 <li><a href="javascript:NewCond('StandAloneFrm');">按已选择的独立表单条件计算</a> </li>
@@ -240,17 +234,10 @@
                 <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
             </ol>
         </div>
-
-        <!--<input id="condBtn" type="button" value="+新建运算符" onclick="ShowHidden('state1')" />
-        <div id="state1" style=" position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;left:100px;">
-            <ol>
-                <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
-                <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-                <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-                <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
-            </ol>
-        </div>-->
     </div>
+    <div style="position:relative;" id="table">
+    </div>
+
     <div id="checkInfo"></div>
 
 </body>

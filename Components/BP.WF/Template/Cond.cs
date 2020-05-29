@@ -1068,7 +1068,7 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-                map.AddTBInt(CondAttr.Idx, 0, "优先级", true, true);
+                map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
 
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
 

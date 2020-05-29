@@ -664,15 +664,18 @@ function AfterBindEn_DealMapExt(frmData) {
                 var EndRDT = mapExt.Tag2;//结束日期
                 var RDTRadio = mapExt.Tag3;//是否包含节假日 0包含，1不包含
                 var res = "";
+                $('#TB_' + EndRDT).focus(function () {
+                    $('#TB_' + ResRDT).val("");
+                });
                 //当结束日期文本框失去焦点时
                 $('#TB_' + EndRDT).blur(function () {
                     //计算量日期天数
                     res = CalculateRDT($('#TB_' + StarRDT).val(), $('#TB_' + EndRDT).val(), RDTRadio);
-                    if (res == "")
+                    if (res == "" || res == "NaN")
                         $('#TB_' + EndRDT).val("");
                     $('#TB_' + ResRDT).val(res);
                 });
-
+ 
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
 
@@ -876,7 +879,8 @@ function AfterBindEn_DealMapExt(frmData) {
 }
 //計算日期間隔
 function CalculateRDT(StarRDT, EndRDT, RDTRadio) {
-    var res="";
+    
+    var res = "";
     var demoRDT;
     demoRDT = StarRDT.split("-");
     StarRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);  //转换为yyyy-MM-dd格式
@@ -891,13 +895,16 @@ function CalculateRDT(StarRDT, EndRDT, RDTRadio) {
     else {
         //当包含节假日的时候
         if (RDTRadio == 0) {
-            var holidayEn = new Entity("BP.Sys.GloVar", "Holiday");
-            var holidays = holidayEn.Val.split(",");
-            res = res - (holidays.length-1);
-            //检查计算的天数
-            if (res <= 0) {
-                alert("请假时间内均为节假日");
-                res = "";
+            var holidayEn = new Entity("BP.Sys.GloVar");
+            holidayEn.No = "Holiday";
+            if (holidayEn.RetrieveFromDBSources() == 1) {
+                var holidays = holidayEn.Val.split(",");
+                res = res - (holidays.length - 1);
+                //检查计算的天数
+                if (res <= 0) {
+                    alert("请假时间内均为节假日");
+                    res = "";
+                }
             }
         }
     }

@@ -197,7 +197,7 @@ namespace CCFlow.DataUser
         public string WillToNodes(int currNodeID)
         {
             Node nd = new Node(currNodeID);
-            if (nd.CondModel != CondModel.SendButtonSileSelect)
+            if (nd.CondModel != DirCondModel.SendButtonSileSelect)
                 return "err@";
 
             Directions dirs = new Directions();

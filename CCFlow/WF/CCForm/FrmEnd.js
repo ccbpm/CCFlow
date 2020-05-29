@@ -745,13 +745,13 @@ function AfterBindEn_DealMapExt(frmData) {
             case "RMBDaXie": //RMB转换成大写
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
-                
+                var tbDoc = $('#TB_' + mapExt.AttrOfOper);
                 var tb = $('#TB_' + mapExt.Doc);
-                $('#TB_' + mapExt.AttrOfOper).bind("change", function () {
-                    var expVal = $('#TB_' + mapExt.AttrOfOper).val();//获取要转换的值
+                tbDoc.bind("change", function () {
+                    var expVal = $("#"+this.id).val();//获取要转换的值
                     tb.val(Rmb2DaXie(expVal));//给大写的文本框赋值
                 });
-                var expVal = $('#TB_' + mapExt.AttrOfOper).val();//获取要转换的值
+                var expVal = tbDoc.val();//获取要转换的值
                 tb.val(Rmb2DaXie(expVal));//给大写的文本框赋值
                 break;
             case "AutoFullDtlField": //主表扩展(统计从表)

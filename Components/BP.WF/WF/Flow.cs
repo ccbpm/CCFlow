@@ -2480,8 +2480,10 @@ namespace BP.WF
             //表单信息，包含从表.
             sql = "SELECT No FROM Sys_MapData WHERE " + Glo.MapDataLikeKey(this.No, "No");
             MapDatas mds = new MapDatas();
-            mds.RetrieveInSQL(MapDataAttr.No, sql);
-            ds.Tables.Add(mds.ToDataTableField("Sys_MapData"));
+            //mds.RetrieveInSQL(MapDataAttr.No, sql);
+            DataTable dt = DBAccess.RunSQLReturnTable("Select * from Sys_MapData Where No In(" + sql + ")");
+            dt.TableName = "Sys_MapData";
+            ds.Tables.Add(dt);
 
             // Sys_MapAttr.
             sql = "SELECT MyPK FROM Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -5581,8 +5583,15 @@ namespace BP.WF
                         foreach (DataRow dr in dt.Rows)
                         {
                             Sys.MapData md = new Sys.MapData();
+                            var htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
+                                if(dc.ColumnName == "HtmlTemplateFile")
+                                {
+                                    htmlCode = dr[dc.ColumnName] as string;
+                                    continue;
+                                }
+
                                 string val = dr[dc.ColumnName] as string;
                                 if (val == null)
                                     continue;
@@ -5591,7 +5600,36 @@ namespace BP.WF
                                 md.SetValByKey(dc.ColumnName, val);
                             }
                             md.Save();
+
+                            //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
+                            if (md.HisFrmType == FrmType.Develop)
+                            {
+                                //string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", "ND" + oldFlowID, "HtmlTemplateFile");
+                                if (DataType.IsNullOrEmpty(htmlCode) == false)
+                                {
+                                    htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
+                                    //保存到数据库，存储html文件
+                                    //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    if (Directory.Exists(filePath) == false)
+                                        Directory.CreateDirectory(filePath);
+                                    filePath = filePath + md.No + ".htm";
+                                    //写入到html 中
+                                    BP.DA.DataType.WriteFile(filePath, htmlCode);
+                                    // HtmlTemplateFile 保存到数据库中
+                                    BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                                else
+                                {
+                                    //如果htmlCode是空的需要删除当前节点的html文件
+                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    if (File.Exists(filePath) == true)
+                                        File.Delete(filePath);
+                                    BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                }
+                            }
                         }
+                        
                         break;
                     case "Sys_MapDtl": //RptEmps.xml。
                         foreach (DataRow dr in dt.Rows)

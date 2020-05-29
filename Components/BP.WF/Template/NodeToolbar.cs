@@ -268,7 +268,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
 
-                map.AddBoolean(NodeToolbarAttr.IsMyFlow, true, "工作处理器", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyFlow, false, "工作处理器", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyView, false, "工作查看器", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "抄送工具栏", true, true);

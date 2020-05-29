@@ -54,19 +54,30 @@
 
             //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
-            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
+            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID,
+                "CondType", condType, "Idx");
 
-            var toNode = new Entity("BP.WF.Node", toNodeID);
             html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
-            html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
+            //输出条件类型.
+            if (condType == 0)
+                html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />节点完成条件</caption>";
+
+            if (condType == 2) {
+                var toNode = new Entity("BP.WF.Node", toNodeID);
+                html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
+            }
+
+            if (condType == 1)
+                html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />流程完成条件</caption>";
+            if (condType == 3)
+                html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />子流程启动条件</caption>";
 
             html += "<tr>";
             html += "<th>Idx</th>";
             html += "<th>类型</th>";
             html += "<th>表达式</th>";
             html += "<th>插入运算符</th>";
-           
             html += "<th>移动</th>";
             html += "<th>删除</th>";
             html += "</tr>";
@@ -81,8 +92,10 @@
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
                 html += "<td style='width:300px;height:40px;'>";
                 html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
+
                 if (cond.AttrKey != "")
-                    html += "<br>解读：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+                    html += "<br>说明：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+
                 html += "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";
                 html += "<div id='state" + i + "' style='position: absolute; z-index: 10; background-color: white; border: 1px outset black; display: none; color: Gray; left:480px;top:" + ((50 + idx * 50)) + "px; '>";
@@ -93,7 +106,6 @@
                 html += " <li><a href=\"javascript: AddCond('OR','" + cond.Idx + "')\"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
                 html += " </ol>";
                 html += "</div>";
-
                 html += "<td>";
 
                 html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
@@ -111,14 +123,16 @@
 
             //   if (dir.CondExpModel == 2) {
             $("#condBtn").show();
-            var data = conds.DoMethodReturnString("DoCheck");
+
+            //调用检查条件设置是否正确.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond2020");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("List_DoCheck");
+
             if (data.indexOf('err@') >= 0)
                 $("#checkInfo").html("<font color=red>" + data + "</font>");
             else
                 $("#checkInfo").html(data);
-
-            // }
-
         });
 
         function ShowType(DataFrom) {
@@ -202,10 +216,14 @@
             var radomNum = parseInt(Math.random() * 1000) + 1;
             en.SetPKVal(flowNo + "_" + nodeID + "_" + radomNum);
             en.CondType = condType; //条件类型.
-            en.DataFrom = 100; //运算符.
+            en.DataFrom = 100;  //运算符.
             en.FK_Flow = flowNo;
             en.FK_Node = nodeID;
-            en.FK_Operator = condExp;
+
+            en.FK_Operator = condExp; //都赋值，以免用错.
+            en.Operator = condExp;  //都赋值，以免用错.
+            en.OperatorValue = condExp; //都赋值，以免用错.
+
             en.ToNodeID = toNodeID;
             en.Idx = condIdx;
             en.Insert();

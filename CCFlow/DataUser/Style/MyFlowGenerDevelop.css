@@ -1,0 +1,84 @@
+/**计算中心.自定义表单模板样式**/
+.CurrentForm-buttom-bar{
+    background-color: #f5f5f5;
+    padding: 3px;
+    border-bottom:solid 1px #ccc;
+}
+.contentRow{
+    width:100%!important;
+    border:none!important;
+    box-sizing:border-box;
+    overflow-y:auto;
+}
+.contentRow #CCForm{
+    width:900px!important;
+    overflow:hidden;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/**表单样式**/
+.formContentH1{
+    font-size:32px;
+    line-height:1.8;
+}
+
+.formContent input,.formContent textarea{    
+   font-size:16px;
+   font-family:宋体;
+}
+
+.formTable{
+   width:100%!important;
+   border-collapse:collapse;  
+   border-spacing:0px; 
+}
+
+/**第一个表格**/
+
+.formTable-first{
+   width:100%!important;
+   border-collapse:collapse;  
+   border-spacing:0px; 
+}
+
+.formTable-first th,.formTable-first td{
+    border:none;
+}
+
+/**灰色表单样式**/
+.formTable-grey th,.formTable-grey td{
+   font-size:16px;
+   font-family:宋体;
+   border:solid 1px #333!important;
+   font-weight:normal;
+   padding:10px;
+}
+.formTable-grey th{
+    background:#e0e0e0;
+}
+
+/**灰色表单样式**/
+.formTable-grey th,.formTable-grey td{
+   font-size:16px;
+   font-family:宋体;
+   border:solid 1px #333!important;
+   font-weight:normal;
+   padding:10px;
+}
+.formTable-grey th{
+    background:#e0e0e0;
+}
+
+/**红色表单样式**/
+.formTable-red th,.formTable-red td{
+   font-size:16px;
+   font-family:宋体;
+   color:#f00;
+   border:solid 1px #f00!important;
+   font-weight:normal;
+   padding:10px;
+}
+.formTable-red th{
+    background:transparent;
+}

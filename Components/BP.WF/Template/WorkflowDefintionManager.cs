@@ -36,9 +36,9 @@ namespace BP.WF.Template
 
                     AtPara ap = new AtPara(dir);
 
-                    string dots = ap.GetValStrByKey("Dots").Replace('#', '@');
-                    if (DataType.IsNullOrEmpty(dots) == true)
-                        dots = "";
+                    //string dots = ap.GetValStrByKey("Dots").Replace('#', '@');
+                    //if (DataType.IsNullOrEmpty(dots) == true)
+                    //    dots = "";
 
                     Direction enDir = new Direction();
                     enDir.Node = ap.GetValIntByKey(DirectionAttr.Node);

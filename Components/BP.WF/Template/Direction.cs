@@ -25,10 +25,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
-        /// 折线信息
-        /// </summary>
-        public const string Dots = "Dots";
-        /// <summary>
         /// 顺序
         /// </summary>
         public const string Idx = "Idx";

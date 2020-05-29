@@ -656,7 +656,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Direction";
                 ds.Tables.Add(dt);
@@ -804,7 +804,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //获取流程中的线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Direction";
                 ds.Tables.Add(dt);
@@ -1028,7 +1028,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //获取流程中的线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_DIRECTION";
                 ds.Tables.Add(dt);

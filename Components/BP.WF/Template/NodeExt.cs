@@ -700,13 +700,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "流程完成条件"; // "流程完成条件";
-                rm.ClassMethodName = this.ToString() + ".DoCond";
-                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
-                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发送后转向"; // "调用事件接口";
@@ -728,6 +721,22 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Multiplayer.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "流程完成条件";
+                rm.ClassMethodName = this.ToString() + ".DoCondFlow";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "节点完成条件";
+                rm.ClassMethodName = this.ToString() + ".DoCondNode";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
 
 
                 #endregion 基础功能.
@@ -1280,9 +1289,21 @@ namespace BP.WF.Template
             return "../../Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
-        public string DoCond()
+        /// <summary>
+        /// 流程完成条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoCondFlow()
         {
-            return "../../Admin/Cond/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow +   "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
+        }
+        /// <summary>
+        /// 节点完成条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoCondNode()
+        {
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Node + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 设计傻瓜表单

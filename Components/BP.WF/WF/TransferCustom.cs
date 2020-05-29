@@ -319,9 +319,6 @@ namespace BP.WF
                         return (TransferCustom)item;
                 }
             }
-            
-
-           // }
 
             //如果当前节点是最后一个自定义节点，且有连接线连到固定节点
             if(isMeet == true)
@@ -343,11 +340,8 @@ namespace BP.WF
                     gwf.Update();
                     return en;
                 }
-               
             }
-                
             return null;
-            // return null;
         }
     }
     /// <summary>

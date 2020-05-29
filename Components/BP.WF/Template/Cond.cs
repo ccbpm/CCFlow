@@ -97,6 +97,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
+        /// 启动的子流程(对子流程有效)
+        /// </summary>
+        public const string SubFlowNo = "SubFlowNo";
+        /// <summary>
         /// 对方向条件有效
         /// </summary>
         public const string ToNodeID = "ToNodeID";
@@ -1050,6 +1054,9 @@ namespace BP.WF.Template
                 //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
                 map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 5, 20);
+
+                //对于启动子流程规则有效.
+                map.AddTBString(CondAttr.SubFlowNo, null, "子流程编号", true, true, 0, 5, 20);
 
                 map.AddTBInt(CondAttr.FK_Node, 0, "节点ID(对方向条件有效)", true, true);
                 map.AddTBInt(CondAttr.ToNodeID, 0, "ToNodeID（对方向条件有效）", true, true);

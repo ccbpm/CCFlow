@@ -41,6 +41,9 @@
 
         //条件类型 @0=节点完成条件, 1=流程完成条件, 2=方向条件, 3=启动子流程
         var condType = GetQueryString("CondType");
+        if (condType == null || condType == '')
+            condType = 2;
+
         var dir = null;
         //初始化页面函数.....
         $(function () {
@@ -49,10 +52,9 @@
             if (condType == null || condType == undefined)
                 condType = 2; //默认为方向条件.
 
-
             //查询出来所有的条件方向条件.
             var conds = new Entities("BP.WF.Template.Conds");
-            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", 2, "Idx");
+            conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
 
             var toNode = new Entity("BP.WF.Node", toNodeID);
             html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
@@ -60,10 +62,11 @@
             html += "<caption><img style='margin-top:8px;'; src='../../Img/Event.png' />到达节点[<font color=green>" + toNode.NodeID + " " + toNode.Name + "</font>]的方向条件</caption>";
 
             html += "<tr>";
-            html += "<th>序</th>";
+            html += "<th>Idx</th>";
             html += "<th>类型</th>";
             html += "<th>表达式</th>";
-            html += "<th>插入</th>";
+            html += "<th>插入运算符</th>";
+            html += "<th>插入条件</th>";
             html += "<th>移动</th>";
             html += "<th>删除</th>";
             html += "</tr>";
@@ -74,7 +77,7 @@
                 var cond = conds[i];
 
                 html += "<tr >";
-                html += "<td class=Idx>" + idx + "</td>";
+                html += "<td class=Idx>" + cond.Idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
                 html += "<td style='width:300px;'>";
                 html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
@@ -91,6 +94,10 @@
                 html += " <li><a href=\"javascript: AddCond('OR','" + cond.Idx + "')\"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>";
                 html += " </ol>";
                 html += "</div>";
+
+                html += "<td> - ";
+                html += "</td>";
+
                 html += "<td>";
 
                 html += " - <a class='btn btn-default btn-sm' href=\"javascript:Up('" + cond.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
@@ -208,6 +215,10 @@
             en.FK_Operator = condExp;
             en.Idx = condIdx;
             en.Insert();
+
+            en.DoMethodReturnString("DoDown2020Cond");
+            en.DoMethodReturnString("DoDown2020Cond");
+
 
             window.location.href = window.location.href;
         }

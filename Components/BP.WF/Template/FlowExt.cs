@@ -502,6 +502,36 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FlowAttr.FrmUrl, "对嵌入式表单,SDK表单的url的表单,嵌入式表单有效,用与整体流程的设置.");
                 #endregion 表单数据.
 
+                #region 数据同步方案
+                //数据同步方式.
+                /**map.AddDDLSysEnum(FlowAttr.FlowDTSWay, (int)FlowDTSWay.None, "同步方式", true, true,
+                    FlowAttr.FlowDTSWay, "@0=不同步@1=同步",true);
+                map.SetHelperUrl(FlowAttr.FlowDTSWay, "http://ccbpm.mydoc.io/?v=5404&t=17893");
+
+                map.AddDDLEntities(FlowAttr.DTSDBSrc, "", "数据库", new BP.Sys.SFDBSrcs(), true);
+
+                map.AddTBString(FlowAttr.DTSBTable, null, "业务表名", true, false, 0, 50, 50, false);
+
+                map.AddTBString(FlowAttr.DTSBTablePK, null, "业务表主键", true, false, 0, 50, 50, false);
+                map.SetHelperAlert(FlowAttr.DTSBTablePK, "如果同步方式设置了按照业务表主键字段计算,那么需要在流程的节点表单里设置一个同名同类型的字段，系统将会按照这个主键进行数据同步。");
+
+                map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 200, 100, false);
+
+                map.AddDDLSysEnum(FlowAttr.DTSTime, (int)FlowDTSTime.AllNodeSend, "执行同步时间点", true, true,
+                   FlowAttr.DTSTime, "@0=所有的节点发送后@1=指定的节点发送后@2=当流程结束时");
+                map.SetHelperUrl(FlowAttr.DTSTime, "http://ccbpm.mydoc.io/?v=5404&t=17894");
+
+                map.AddTBString(FlowAttr.DTSSpecNodes, null, "指定的节点ID", true, false, 0, 50, 50, false);
+                map.SetHelperAlert(FlowAttr.DTSSpecNodes, "如果执行同步时间点选择了按指定的节点发送后,多个节点用逗号分开.比如: 101,102,103");
+
+
+                map.AddDDLSysEnum(FlowAttr.DTSField, (int)DTSField.SameNames, "要同步的字段计算方式", true, true,
+                 FlowAttr.DTSField, "@0=字段名相同@1=按设置的字段匹配");
+                map.SetHelperUrl(FlowAttr.DTSField, "http://ccbpm.mydoc.io/?v=5404&t=17895");
+				*/
+                
+
+                #endregion 数据同步方案
                 #region 轨迹信息
                 map.AddBoolean(FlowAttr.IsFrmEnable, true, "是否显示表单", true, true, false);
                 map.AddBoolean(FlowAttr.IsTruckEnable, true, "是否显示轨迹图", true, true, false);
@@ -597,14 +627,6 @@ namespace BP.WF.Template
 
 
 
-                //rm = new RefMethod();
-                //rm.Title = "与业务表数据同步"; // "抄送规则";
-                //rm.ClassMethodName = this.ToString() + ".DoBTable";
-                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
-                //rm.RefAttrLinkLabel = "业务表字段同步配置";
-                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                //rm.Target = "_blank";
-                //map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "独立表单树";
@@ -975,6 +997,19 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "业务表字段同步配置"; 
+                rm.ClassMethodName = this.ToString() + ".DoBTable";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //设置相关字段.
+                rm.RefAttrKey = FlowAttr.DTSField;
+                rm.RefAttrLinkLabel = "业务表字段同步配置";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+
+                rm = new RefMethod();
                 rm.Title = "一键设置审核组件工作模式";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.RefMethodType = RefMethodType.Func;
@@ -1000,18 +1035,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 实验中的功能
 
-                //rm = new RefMethod();
-                //rm.Title = "执行流程数据表与业务表数据手工同步"; 
-                //rm.ClassMethodName = this.ToString() + ".DoBTableDTS";
-                //rm.Icon = ../../Img/Btn/DTS.gif";
-                //rm.Warning = "您确定要执行吗？如果执行了可能会对业务表数据造成错误。";
-                ////设置相关字段.
-                //rm.RefAttrKey = FlowAttr.DTSSpecNodes;
-                //rm.RefAttrLinkLabel = "业务表字段同步配置";
-                //rm.RefMethodType = RefMethodType.Func;
-                //rm.Target = "_blank";
-                ////map.AddRefMethod(rm);
-
+                
                 //rm = new RefMethod();
                 //rm.Title = "设置自动发起"; // "报表运行";
                 //rm.Icon = "/WF/Img/Btn/View.gif";
@@ -1258,7 +1282,7 @@ namespace BP.WF.Template
         }
         public string DoBTable()
         {
-            return "../../Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/AttrFlow/DTSBTable.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
 
         /// <summary>

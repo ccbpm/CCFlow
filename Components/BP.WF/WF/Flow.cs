@@ -93,11 +93,11 @@ namespace BP.WF
         {
             get
             {
-                return (FlowDTSWay)this.GetValIntByKey(FlowAttr.DTSWay);
+                return (FlowDTSWay)this.GetValIntByKey(FlowAttr.FlowDTSWay);
             }
             set
             {
-                this.SetValByKey(FlowAttr.DTSWay, (int)value);
+                this.SetValByKey(FlowAttr.FlowDTSWay, (int)value);
             }
         }
         public FlowDTSTime DTSTime
@@ -1819,7 +1819,7 @@ namespace BP.WF
 
 
                 //删除垃圾数据.
-                string sql = "DELETE FROM WF_Direction  WHERE FK_Node NOT IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "') AND FK_Flow='" + this.No + "' ";
+                string sql = "DELETE FROM WF_Direction  WHERE Node NOT IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "') AND FK_Flow='" + this.No + "' ";
                 DBAccess.RunSQL(sql);
                 sql = "DELETE FROM WF_Direction  WHERE ToNode NOT IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "') AND FK_Flow='" + this.No + "' ";
                 DBAccess.RunSQL(sql);
@@ -4459,7 +4459,7 @@ namespace BP.WF
 
                 #region 数据同步方案
                 //数据同步方式.
-                map.AddTBInt(FlowAttr.DTSWay, (int)FlowDTSWay.None, "同步方式", true, true);
+                map.AddTBInt(FlowAttr.FlowDTSWay, (int)FlowDTSWay.None, "同步方式", true, true);
                 map.AddTBString(FlowAttr.DTSDBSrc, null, "数据源", true, false, 0, 200, 100, false);
                 map.AddTBString(FlowAttr.DTSBTable, null, "业务表名", true, false, 0, 200, 100, false);
                 map.AddTBString(FlowAttr.DTSBTablePK, null, "业务表主键", false, false, 0, 32, 10);

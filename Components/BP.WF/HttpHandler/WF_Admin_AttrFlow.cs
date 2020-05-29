@@ -241,6 +241,7 @@ namespace BP.WF.HttpHandler
 
             flow.DTSDBSrc = this.GetRequestVal("DDL_DBSrc");
             flow.DTSBTable = this.GetRequestVal("DDL_Table");
+            flow.DTSSpecNodes = this.GetRequestVal("CheckBoxIDs");
 
             DTSField field = (DTSField)this.GetRequestValInt("DTSField");
 
@@ -278,8 +279,8 @@ namespace BP.WF.HttpHandler
                     flow.DTSFields = str.TrimEnd(',') + "@" + ywStr.TrimEnd(',');
                 else
                 {
-                    PubClass.Alert("未检测到业务主表【" + flow.PTable + "】与表【" + flow.DTSBTable + "】有相同的字段名.");
-                    return "";//不执行保存
+                    return  "未检测到业务主表【" + flow.PTable + "】与表【" + flow.DTSBTable + "】有相同的字段名.";
+                  
                 }
             }
             else//按设置的字段匹配   检查在
@@ -307,14 +308,23 @@ namespace BP.WF.HttpHandler
                 catch
                 {
                     //PubClass.Alert(ex.Message);
-                    PubClass.Alert("设置的字段有误.【" + flow.DTSFields + "】");
-                    return "";//不执行保存
+                    return "err@设置的字段有误.【" + flow.DTSFields + "】";
                 }
             }
             flow.Update();
-            return flow.ToJson();
+            return "保存成功";
         }
 
+        #endregion
+        #region 数据同步数据源变化时，关联表的列表发生变化
+        public string DTSBTable_DBSrcChange()
+        {
+            string dbsrc = this.GetRequestVal("DDL_DBSrc");
+            //绑定表. 
+            BP.Sys.SFDBSrc src = new SFDBSrc(dbsrc);
+            DataTable dt = src.GetTables();
+            return BP.Tools.Json.ToJson(dt);
+        }
         #endregion
 
         #region 数据调度 - 字段映射.

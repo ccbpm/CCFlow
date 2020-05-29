@@ -315,7 +315,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 数据同步方式.
         /// </summary>
-        public const string DTSWay = "DTSWay";
+        public const string FlowDTSWay = "FlowDTSWay";
         /// <summary>
         /// 业务表主键
         /// </summary>

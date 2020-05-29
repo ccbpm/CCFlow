@@ -163,58 +163,53 @@
         }
     </style>
 </head>
-<body onclick="hiddenDiv()">
+<body onclick="hiddenDiv()" style="background:#fff;">
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
-        <div style="WIDTH:100%;background:#fff; padding:10px 0px 0px; margin-bottom:10px">
-            <div id="ToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;" class="Bar only-print-hidden">
-            </div>
+        <div class="CurrentForm-buttom-bar">
+            <div id="ToolBar" class="Bar only-print-hidden"></div>
         </div>
        
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
-            <i class="topContentDiv-i" style="display: none;"></i>
-            <div id="contentDiv">
-                <!--页面整体颜色变更-->
-                <div style="text-align:right;padding-right:14px;display: none" id="glyphicon">
-                    <ul>
-                        <li class="dropdown user user-menu">
-                            <a href="#" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="javascript:void();" onclick="SettingTheme('Default')"><div style="background-color: #c1c1c12b;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>经典色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Black')"><div style="background-color: #393D49;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>黑色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Red')"><div style="background-color: #AA3130;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>红色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Blue')"><div style="background-color: #1E9FFF;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>蓝色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Green')"><div style="background-color: #5FB878;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>绿色色系</a></li>
-                               
-                            </ul>
-                        </li>
-                    </ul>
+        <div id="topContentDiv" class="contentRow">
+                <i class="topContentDiv-i" style="display: none;"></i>
+                <div id="contentDiv">
+                    <!--页面整体颜色变更-->
+                    <div style="text-align:right;padding-right:14px;display: none" id="glyphicon">
+                        <ul>
+                            <li class="dropdown user user-menu">
+                                <a href="#" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Default')"><div style="background-color: #c1c1c12b;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>经典色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Black')"><div style="background-color: #393D49;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>黑色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Red')"><div style="background-color: #AA3130;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>红色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Blue')"><div style="background-color: #1E9FFF;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>蓝色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Green')"><div style="background-color: #5FB878;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>绿色色系</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <form id="divCCForm" method="post">
+                        <!--头部功能按钮 发送、移交-->
+                        <div class="topBar" id="topBar"></div>
+                        <!--flowInfo-->
+                        <div class="flowInfo" id="flowInfo" style="margin: 0px 12px;"></div>
+                        <!--主表单-->
+                        <div id="CCForm">
+                            <br />
+                            <img src='./Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+                            <br />
+                            <br />
+                        </div>
+                        <!--DIVINFO-->
+                        <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer; align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'></div>
+                    </form>
                 </div>
-                <form id="divCCForm" method="post">
-                    <!--头部功能按钮 发送、移交-->
-                    <div class="topBar" id="topBar"></div>
-                    <!--flowInfo-->
-                    <div class="flowInfo" id="flowInfo" style="margin: 0px 12px;"></div>
-                    <!--主表单-->
-                    <div id="CCForm">
-                        <br />
-                        <img src='./Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
-                    </div>
-                    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
-                        align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                    </div>
-                </form>
             </div>
-        </div>
-        <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class="">
-        </div>
+            <!--底部功能按钮 发送、移交-->
+            <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class=""></div>
     </div>
     <!-- /.modal -->
     <!--下拉框选项提示信息-->

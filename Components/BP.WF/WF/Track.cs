@@ -672,9 +672,13 @@ namespace BP.WF
             }
             else
             {
-                DBAccess.RunSQL("DELETE  FROM " + ptable + " WHERE MyPK=" + mypk);
+                DBAccess.RunSQL("DELETE FROM " + ptable + " WHERE MyPK=" + mypk);
                 this.SetValByKey(TrackAttr.MyPK, mypk);
             }
+
+            //HttpWebResponse.
+            //if (HttpHandler.)
+            this.Tag += "@SheBei="+BP.Web.WebUser.SheBei;
 
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)

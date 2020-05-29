@@ -23,7 +23,7 @@ using BP.Tools;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 页面功能实体
+    /// 表单
     /// </summary>
     public class CCMobile_CCForm : DirectoryPageBase
     {
@@ -32,6 +32,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_CCForm()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
         }
         public string HandlerMapExt()
         {

@@ -24,6 +24,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
         }
 
         #region 执行父类的重写方法.

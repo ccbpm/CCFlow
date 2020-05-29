@@ -23,6 +23,8 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_WorkOpt_OneWork()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
+
         }
 
         #region xxx 界面 .

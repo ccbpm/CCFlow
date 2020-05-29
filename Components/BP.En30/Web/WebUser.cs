@@ -641,6 +641,25 @@ namespace BP.Web
             }
         }
         /// <summary>
+        /// 运行设备
+        /// </summary>
+        public static string SheBei
+        {
+            get
+            {
+                string no = BP.Web.WebUser.No;
+                string val = GetValFromCookie("SheBei", no, true);
+                if (val == null)
+                    return "PC";
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("SheBei", value);
+            }
+        }
+
+        /// <summary>
         /// 更新当前管理员的组织SID信息.
         /// </summary>
         public static void UpdateSIDAndOrgNoSQL()

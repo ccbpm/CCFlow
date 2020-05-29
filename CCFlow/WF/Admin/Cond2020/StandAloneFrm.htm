@@ -55,6 +55,7 @@
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
             var fk_Node = GetQueryString("FK_Node");
+            var fk_mainNode = GetQueryString("FK_MainNode");
             var toNodeID = GetQueryString("ToNodeID");
             var DDL_Fields = $("#DDL_Fields").val(); //  字段.
             var DDL_Operator = $("#DDL_Operator").val(); //  操作符.
@@ -89,6 +90,7 @@
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("FK_Node", fk_Node);
+            handler.AddPara("FK_MainNode", fk_mainNode);
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("FrmID", $("#DDL_Frms").val()); //表单ID.
             handler.AddFormData();

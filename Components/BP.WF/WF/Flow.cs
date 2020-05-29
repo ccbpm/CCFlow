@@ -2480,9 +2480,19 @@ namespace BP.WF
             //表单信息，包含从表.
             sql = "SELECT No FROM Sys_MapData WHERE " + Glo.MapDataLikeKey(this.No, "No");
             MapDatas mds = new MapDatas();
-            //mds.RetrieveInSQL(MapDataAttr.No, sql);
-            DataTable dt = DBAccess.RunSQLReturnTable("Select * from Sys_MapData Where No In(" + sql + ")");
-            dt.TableName = "Sys_MapData";
+            mds.RetrieveInSQL(MapDataAttr.No, sql);
+            DataTable dt = mds.ToDataTableField("Sys_MapData");
+            dt.Columns.Add("HtmlTemplateFile");
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (int.Parse(dr["FrmType"].ToString()) == (int)FrmType.Develop)
+                {
+                    string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", dr["No"].ToString(), "HtmlTemplateFile");
+                    dr["HtmlTemplateFile"] = htmlCode;
+                }
+                   
+            }
+            
             ds.Tables.Add(dt);
 
             // Sys_MapAttr.
@@ -5583,7 +5593,7 @@ namespace BP.WF
                         foreach (DataRow dr in dt.Rows)
                         {
                             Sys.MapData md = new Sys.MapData();
-                            var htmlCode = "";
+                            string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 if(dc.ColumnName == "HtmlTemplateFile")

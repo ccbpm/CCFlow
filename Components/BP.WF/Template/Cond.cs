@@ -1089,56 +1089,7 @@ namespace BP.WF.Template
     public class Conds : Entities
     {
         #region 属性
-        /// <summary>
-        /// 校验是否正确
-        /// </summary>
-        /// <returns></returns>
-        public string DoCheck()
-        {
-            try
-            {
-                if (this.Count == 0)
-                    return "请设置条件.";
-
-                string str = "";
-                foreach (Cond item in this)
-                {
-                    if (item.HisDataFrom == ConnDataFrom.CondOperator)
-                        continue;
-
-                    // str += " "+item.AttrKey+item.FK_Operator+item.OperatorValue;
-                    str += " 1=1 "; // + item.AttrKey + item.FK_Operator + item.OperatorValue;
-                }
-
-                string sql = "";
-                switch(SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                         sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + str;
-                        break;
-                    case DBType.MySQL:
-                        sql = " SELECT No FROM Port_Emp WHERE " + str + " AND limit 1 ";
-                        break;
-                    case DBType.Oracle:
-                    case DBType.DM:
-                        sql = " SELECT No FROM Port_Emp WHERE " + str + " AND rownum <=1 ";
-                        break;
-                    default:
-                        return "err@没有做的数据库类型判断.";
-                }
-
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 1)
-                    return "条件设置格式正确.";
-
-                return "条件设置格式正确.";
-            }
-            catch (Exception ex)
-            {
-                //return "err@条件设置不符合规范.:\n" + ex.Message;
-                return "err@条件设置不符合规范. <font color=blue>"+ex.Message+"</font>";
-            }
-        }
+       
         public string ConditionDesc
         {
             get

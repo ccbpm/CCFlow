@@ -335,6 +335,7 @@
     </Compile>
     <Compile Include="Template\NodeTeam.cs" />
     <Compile Include="Template\Part\FlowRefEmp.cs" />
+    <Compile Include="Template\Part\Part.cs" />
     <Compile Include="Template\PowerModel.cs" />
     <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="Template\DirectionStation.cs" />
@@ -348,7 +349,6 @@
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="Template\TestCase.cs" />
-    <Compile Include="Template\Part\Part.cs" />
     <Compile Include="Template\Part\PartParentSubGuide.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />

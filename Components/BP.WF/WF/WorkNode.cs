@@ -7746,7 +7746,7 @@ namespace BP.WF
             if (this.town != null)
             {
                 string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.WorkArrive,
-                    this.town.HisNode, this.rptGe, null, null);
+                    this.HisNode, this.rptGe, null, null,this.town.HisNode.NodeID);
             }
             #endregion 处理节点到达事件.
 

@@ -203,7 +203,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DelSubFlow()
         {
-            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.WorkID, "手工删除");
             return "删除成功.";
         }
         /// <summary>
@@ -768,7 +768,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.FK_Flow, this.WorkID, "流程成功结束");
+                string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.WorkID, "流程成功结束");
                 if (str == "" || str == null)
                     return "流程成功结束";
                 return str;

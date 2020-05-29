@@ -2978,7 +2978,7 @@ namespace BP.WF
                 {
                     try
                     {
-                        BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, gwf.WorkID, "流程成功结束");
+                        BP.WF.Dev2Interface.Flow_DoFlowOver( gwf.WorkID, "流程成功结束");
                     }catch(Exception ex)
                     {
                         //删除错误，有可能是删除该流程.

@@ -4655,7 +4655,7 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static void Flow_DoComeBackWorkFlow(string flowNo, Int64 workID, string msg)
         {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
+            WorkFlow wf = new WorkFlow( workID);
             wf.DoComeBackWorkFlow(msg);
         }
         /// <summary>
@@ -4757,7 +4757,7 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static string Flow_DoDeleteFlowByWriteLog(string flowNo, Int64 workID, string deleteNote, bool isDelSubFlow)
         {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
+            WorkFlow wf = new WorkFlow( workID);
             return wf.DoDeleteWorkFlowByWriteLog(deleteNote, isDelSubFlow);
         }
         /// <summary>
@@ -4771,7 +4771,7 @@ namespace BP.WF
         /// <returns>执行信息,执行不成功抛出异常.</returns>
         public static string Flow_DoDeleteFlowByFlag(string flowNo, Int64 workID, string msg, bool isDelSubFlow)
         {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
+            WorkFlow wf = new WorkFlow( workID);
             wf.DoDeleteWorkFlowByFlag(msg);
             if (isDelSubFlow)
             {
@@ -4802,7 +4802,7 @@ namespace BP.WF
         /// <returns>执行消息,如果撤销不成功则抛出异常.</returns>
         public static string Flow_DoUnDeleteFlowByFlag(string flowNo, Int64 workID, string msg)
         {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
+            WorkFlow wf = new WorkFlow( workID);
             wf.DoUnDeleteWorkFlowByFlag(msg);
             return "撤销删除成功.";
         }
@@ -4865,13 +4865,13 @@ namespace BP.WF
         /// <param name="isFixSubFlows">是否冻结子流程？</param>
         /// <param name="msg">冻结原因.</param>
         /// <returns>冻结的信息.</returns>
-        public static string Flow_DoFix(string flowNo, Int64 workid, bool isFixSubFlows, string msg)
+        public static string Flow_DoFix(Int64 workid, bool isFixSubFlows, string msg)
         {
             string info = "";
             try
             {
                 // 执行冻结.
-                WorkFlow wf = new WorkFlow(flowNo, workid);
+                WorkFlow wf = new WorkFlow( workid);
                 info = wf.DoFix(msg);
             }
             catch (Exception ex)
@@ -4890,7 +4890,7 @@ namespace BP.WF
                 try
                 {
                     // 执行冻结.
-                    WorkFlow wf = new WorkFlow(item.FK_Flow, item.WorkID);
+                    WorkFlow wf = new WorkFlow( item.WorkID);
                     info += wf.DoFix(msg);
                     GenerWorkFlows subgwfs = new GenerWorkFlows();
                     subgwfs.Retrieve(GenerWorkFlowAttr.PWorkID, item.WorkID);
@@ -4899,7 +4899,7 @@ namespace BP.WF
                         try
                         {
                             // 执行冻结.
-                            WorkFlow subwf = new WorkFlow(subitem.FK_Flow, subitem.WorkID);
+                            WorkFlow subwf = new WorkFlow( subitem.WorkID);
                             info += subwf.DoFix(msg);
                         }
                         catch (Exception ex)
@@ -4924,10 +4924,10 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">workid</param>
         /// <param name="msg">解除原因</param>
-        public static string Flow_DoUnFix(string flowNo, Int64 workid, string msg)
+        public static string Flow_DoUnFix( Int64 workid, string msg)
         {
             // 执行冻结.
-            WorkFlow wf = new WorkFlow(flowNo, workid);
+            WorkFlow wf = new WorkFlow(workid);
             return wf.DoUnFix(msg);
         }
         /// <summary>
@@ -4938,9 +4938,10 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         /// <param name="msg">流程结束原因</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg, int stopFlowType = 1)
+        public static string Flow_DoFlowOver(Int64 workID, string msg, int stopFlowType = 1)
         {
-            WorkFlow wf = new WorkFlow(flowNo, workID);
+            WorkFlow wf = new WorkFlow( workID);
+            string flowNo = wf.HisGenerWorkFlow.FK_Flow;
 
             Node nd = new Node(wf.HisGenerWorkFlow.FK_Node);
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
@@ -4994,7 +4995,7 @@ namespace BP.WF
                         if (pgwf.WFState == WFState.Complete)
                             return "";
                         Flow fl = new Flow(gwf.PFlowNo);
-                        string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.PFlowNo, gwf.PWorkID, "父流程[" + fl.Name + "],WorkID为[" + gwf.PWorkID + "]成功结束");
+                        string flowOver = BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.PWorkID, "父流程[" + fl.Name + "],WorkID为[" + gwf.PWorkID + "]成功结束");
                         return flowOver;
                     }
 
@@ -5026,7 +5027,7 @@ namespace BP.WF
                     {
                         if (subgwf.WFState == WFState.Complete)
                             return "";
-                        return BP.WF.Dev2Interface.Flow_DoFlowOver(slFlowNo, slWorkID, "同级子流程流程[" + fl.Name + "],WorkID为[" + slWorkID + "]成功结束");
+                        return BP.WF.Dev2Interface.Flow_DoFlowOver(slWorkID, "同级子流程流程[" + fl.Name + "],WorkID为[" + slWorkID + "]成功结束");
                     }
 
                 }
@@ -5623,16 +5624,16 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">子线程的工作ID</param>
         /// <param name="info">删除信息</param>
-        public static string Flow_DeleteSubThread(string flowNo, Int64 workid, string info)
+        public static string Flow_DeleteSubThread(Int64 workid, string info)
         {
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.SetValByKey(GenerWorkFlowAttr.WorkID, workid);
             if (gwf.RetrieveFromDBSources() > 0)
             {
-                WorkFlow wf = new WorkFlow(flowNo, workid);
+                WorkFlow wf = new WorkFlow( workid);
                 string msg = wf.DoDeleteWorkFlowByReal(false);
 
-                BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.NodeName, gwf.FID, 0, info, "删除子线程");
+                BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.FID, 0, info, "删除子线程");
                 return msg;
             }
             return null;
@@ -9311,10 +9312,10 @@ namespace BP.WF
         /// <param name="reldata">解除挂起日期(可以为空)</param>
         /// <param name="hungNote">挂起原因</param>
         /// <returns>返回执行信息</returns>
-        public static string Node_HungUpWork(string fk_flow, Int64 workid, int wayInt, string reldata, string hungNote)
+        public static string Node_HungUpWork( Int64 workid, int wayInt, string reldata, string hungNote)
         {
             HungUpWay way = (HungUpWay)wayInt;
-            BP.WF.WorkFlow wf = new WorkFlow(fk_flow, workid);
+            BP.WF.WorkFlow wf = new WorkFlow( workid);
             return wf.DoHungUp(way, reldata, hungNote);
         }
         /// <summary>
@@ -9324,9 +9325,9 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="msg">取消挂起原因</param>
         /// <returns>执行信息</returns>
-        public static void Node_UnHungUpWork(string fk_flow, Int64 workid, string msg)
+        public static void Node_UnHungUpWork( Int64 workid, string msg)
         {
-            BP.WF.WorkFlow wf = new WorkFlow(fk_flow, workid);
+            BP.WF.WorkFlow wf = new WorkFlow( workid);
             wf.DoUnHungUp();
         }
         /// <summary>
@@ -9721,9 +9722,9 @@ namespace BP.WF
         /// <param name="flowNo">撤销编号</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回撤销信息</returns>
-        public static string Node_ShiftUn(string flowNo, Int64 workID)
+        public static string Node_ShiftUn( Int64 workID)
         {
-            WorkFlow mwf = new WorkFlow(flowNo, workID);
+            WorkFlow mwf = new WorkFlow( workID);
             return mwf.DoUnShift();
         }
         /// <summary>
@@ -9797,7 +9798,7 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         public static void Node_FHL_KillSubFlow(string fk_flow, Int64 fid, Int64 workid)
         {
-            WorkFlow wkf = new WorkFlow(fk_flow, workid);
+            WorkFlow wkf = new WorkFlow( workid);
             wkf.DoDeleteWorkFlowByReal(true);
         }
         /// <summary>
@@ -9807,9 +9808,9 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         /// <param name="workid">子线程ID</param>
         /// <param name="msg">驳回消息</param>
-        public static string Node_FHL_DoReject(string fk_flow, int NodeSheetfReject, Int64 fid, Int64 workid, string msg)
+        public static string Node_FHL_DoReject(int NodeSheetfReject, Int64 fid, Int64 workid, string msg)
         {
-            WorkFlow wkf = new WorkFlow(fk_flow, workid);
+            WorkFlow wkf = new WorkFlow( workid);
             return wkf.DoReject(fid, NodeSheetfReject, msg);
         }
 

@@ -6411,7 +6411,7 @@ namespace BP.WF
                     {
                         //删除每个子线程，然后向下运动。
                         foreach (DataRow dr in dtWL.Rows)
-                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.HisFlow.No, Int64.Parse(dr[0].ToString()), BP.WF.Glo.multilingual("合流点发送时自动删除", "WorkNode", "auto_delete"));
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread( Int64.Parse(dr[0].ToString()), BP.WF.Glo.multilingual("合流点发送时自动删除", "WorkNode", "auto_delete"));
                     }
                 }
             }

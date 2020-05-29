@@ -1726,7 +1726,7 @@ namespace BP.WF.Template
         {
             try
             {
-                BP.WF.Dev2Interface.Flow_DoFlowOver(this.No, workid, note);
+                BP.WF.Dev2Interface.Flow_DoFlowOver(workid, note);
                 return "流程被强制结束 workid=" + workid + "  理由:" + note;
             }
             catch (Exception ex)

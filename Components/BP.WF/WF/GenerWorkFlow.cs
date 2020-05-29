@@ -1434,7 +1434,7 @@ namespace BP.WF
         /// <returns>终止结果</returns>
         public string DoFix(string msg)
         {
-           return BP.WF.Dev2Interface.Flow_DoFix(this.FK_Flow, this.WorkID, true, msg);
+           return BP.WF.Dev2Interface.Flow_DoFix( this.WorkID, true, msg);
         }
 
         public string DoRpt()

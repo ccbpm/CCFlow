@@ -375,7 +375,7 @@ namespace BP.WF.HttpHandler
                     case "DelSubFlow": //删除进程。
                         try
                         {
-                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread( this.WorkID, "手工删除");
                             return "info@Close";
                         }
                         catch (Exception ex)

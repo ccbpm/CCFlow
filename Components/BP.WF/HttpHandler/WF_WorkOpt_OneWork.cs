@@ -270,28 +270,28 @@ namespace BP.WF.HttpHandler
 
         public string OP_ComeBack()
         {
-            WorkFlow wf3 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf3 = new WorkFlow(WorkID);
             wf3.DoComeBackWorkFlow("无");
             return "流程已经被重新启用.";
         }
 
         public string OP_UnHungUp()
         {
-            WorkFlow wf2 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf2 = new WorkFlow( WorkID);
             //  wf2.DoUnHungUp();
             return "流程已经被解除挂起.";
         }
 
         public string OP_HungUp()
         {
-            WorkFlow wf1 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf1 = new WorkFlow( WorkID);
             //wf1.DoHungUp()
             return "流程已经被挂起.";
         }
 
         public string OP_DelFlow()
         {
-            WorkFlow wf = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf = new WorkFlow( WorkID);
             wf.DoDeleteWorkFlowByReal(true);
             return "流程已经被删除！";
         }

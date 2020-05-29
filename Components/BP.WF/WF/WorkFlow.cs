@@ -457,7 +457,7 @@ namespace BP.WF
             {
                 if (gwf.WFState != WFState.Complete)
                 {
-                    WorkFlow wf = new WorkFlow(flowNo, workid);
+                    WorkFlow wf = new WorkFlow( workid);
                     //发送退回消息 @yuanlina
                     PushMsgs pms1 = new PushMsgs();
                     pms1.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
@@ -1105,7 +1105,7 @@ namespace BP.WF
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
                 /*说明这是最后一个*/
-                WorkFlow wf = new WorkFlow(gwf.FK_Flow, this.FID);
+                WorkFlow wf = new WorkFlow(this.FID);
                 wf.DoFlowOver(ActionType.FlowOver, "子线程结束", null, null);
                 return "@当前子线程已完成，干流程已完成。";
             }
@@ -1133,7 +1133,7 @@ namespace BP.WF
             //如果是结束子流程.
             if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)
             {
-                BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
+                BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
                 return "父流程自动结束.";
             }
 
@@ -1645,7 +1645,7 @@ namespace BP.WF
         #endregion
 
         #region 构造方法
-        public WorkFlow(string fk_flow, Int64 wkid)
+        public WorkFlow(Int64 wkid)
         {
             this.HisGenerWorkFlow = new GenerWorkFlow();
             this.HisGenerWorkFlow.RetrieveByAttr(GenerWorkerListAttr.WorkID, wkid);

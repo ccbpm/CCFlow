@@ -903,7 +903,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 
@@ -981,7 +981,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 
@@ -1060,7 +1060,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 

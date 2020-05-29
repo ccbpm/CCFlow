@@ -37,7 +37,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ThreadDtl_DelSubFlow()
         {
-            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+            BP.WF.Dev2Interface.Flow_DeleteSubThread( this.WorkID, "手工删除");
             return "删除成功";
         }
         #region 打印 rtf
@@ -3266,7 +3266,7 @@ namespace BP.WF.HttpHandler
 
             if (actionType == "Kill")
             {
-                string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.WorkID, "手工删除");
                 //提示信息.
                 if (msg == "" || msg == null)
                     msg = "该工作删除成功...";
@@ -3846,7 +3846,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string UnShift()
         {
-            return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow, this.WorkID);
+            return BP.WF.Dev2Interface.Node_ShiftUn( this.WorkID);
         }
         /// <summary>
         /// 执行催办

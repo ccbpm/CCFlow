@@ -444,7 +444,9 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                uac.OpenForSysAdmin();
+                // uac.OpenForSysAdmin();
+                uac.OpenForAdmin() ; //zsy2020.5.29修改
+                
                 uac.IsDelete = false;
                 uac.IsInsert = false;
                 return uac;

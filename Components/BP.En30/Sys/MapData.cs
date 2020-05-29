@@ -1928,8 +1928,14 @@ namespace BP.Sys
                         foreach (DataRow dr in dt.Rows)
                         {
                             MapData md = new MapData();
+                            string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
+                                if(dc.ColumnName == "HtmlTemplateFile")
+                                {
+                                    htmlCode = dr[dc.ColumnName] as string;
+                                    continue;
+                                }
                                 object val = dr[dc.ColumnName] as object;
                                 if (val == null)
                                     continue;
@@ -1969,7 +1975,7 @@ namespace BP.Sys
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
                             if (frmType == FrmType.Develop)
                             {
-                                string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
+                               // string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
                                 if (DataType.IsNullOrEmpty(htmlCode) == false)
                                 {
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);

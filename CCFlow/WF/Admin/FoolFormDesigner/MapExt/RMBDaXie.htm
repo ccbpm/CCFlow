@@ -13,7 +13,6 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
             var FK_MapData = GetQueryString("FK_MapData");
             //下拉框填充
             var ens = new Entities("BP.Sys.MapAttrs");
@@ -30,7 +29,6 @@
             } else {
                 $("#DDL_Fileds").val("");   
             }
-            $("#Msg").html("");
 
         });
 
@@ -39,8 +37,6 @@
 
             var Filed = $("#DDL_Fileds").val();
             
-            $("#Msg").html("正在保存,请稍后......");
-
             //保存到MapExt
             var mypk = "RMBDaXie_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
@@ -52,7 +48,7 @@
             en.SetValByKey("ExtType", "RMBDaXie");
             en.SetValByKey("Doc", Filed);
             en.Save();
-
+            alert("保存成功！");
             window.location.href = window.location.href;
         }
         //删除

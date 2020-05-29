@@ -583,7 +583,7 @@ namespace BP.WF
                 //子线程节点
                 if (nd.HisNodeWorkType == NodeWorkType.SubThreadWork)
                 {
-                    if (nd.CondModel == CondModel.ByUserSelected)
+                    if (nd.CondModel == DirCondModel.ByUserSelected)
                     {
                         Nodes toNodes = nd.HisToNodes;
                         if (toNodes.Count == 1)

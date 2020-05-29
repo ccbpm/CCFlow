@@ -21,11 +21,11 @@ namespace BP.WF
         /// <summary>
         /// 方向条件控制规则
         /// </summary>
-        public CondModel CondModel
+        public DirCondModel CondModel
         {
             get
             {
-                return (CondModel)this.GetValIntByKey(NodeAttr.CondModel);
+                return (DirCondModel)this.GetValIntByKey(NodeAttr.CondModel);
             }
             set
             {

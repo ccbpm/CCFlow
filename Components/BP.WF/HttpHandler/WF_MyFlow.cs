@@ -1237,7 +1237,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
             Node nd = new Node(this.FK_Node);
             //增加转向下拉框数据.
-            if (nd.CondModel == CondModel.SendButtonSileSelect)
+            if (nd.CondModel == DirCondModel.SendButtonSileSelect)
             {
                 if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
                 {
@@ -1928,7 +1928,7 @@ namespace BP.WF.HttpHandler
                 #region 增加按钮旁的下拉框
                
                 //增加转向下拉框数据.
-                if (nd.CondModel == CondModel.SendButtonSileSelect)
+                if (nd.CondModel == DirCondModel.SendButtonSileSelect)
                 {
                     if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
                     {
@@ -3146,7 +3146,7 @@ namespace BP.WF.HttpHandler
             {
                 if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
                 {
-                    if (this.currND.CondModel == CondModel.ByUserSelected)
+                    if (this.currND.CondModel == DirCondModel.ByUserSelected)
                     {
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
                         return "SelectNodeUrl@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;

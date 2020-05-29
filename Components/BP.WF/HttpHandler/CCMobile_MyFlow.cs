@@ -197,7 +197,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
             #region 按钮旁的下拉框
-            if (nd.CondModel == CondModel.SendButtonSileSelect)
+            if (nd.CondModel == DirCondModel.SendButtonSileSelect)
             {
                 if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
                 {

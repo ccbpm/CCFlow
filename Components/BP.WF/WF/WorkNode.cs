@@ -1094,7 +1094,7 @@ namespace BP.WF
             //    return (Node)this.HisNode.HisToNodes[0];
 
             // 判断是否有用户选择的节点.
-            if (this.HisNode.CondModel == CondModel.ByUserSelected)
+            if (this.HisNode.CondModel == DirCondModel.ByUserSelected)
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
@@ -1704,7 +1704,7 @@ namespace BP.WF
                     continue;
                 }
 
-                if (conds.GenerResult( dir.CondExpModel ) == true)
+                if (conds.GenerResult( this.rptGe ) == true)
                     return new Node(dir.ToNode);
             }
 
@@ -1735,7 +1735,7 @@ namespace BP.WF
                 return this.HisNode.HisToNodes;
 
             #region 如果使用户选择的.
-            if (this.HisNode.CondModel == CondModel.ByUserSelected)
+            if (this.HisNode.CondModel == DirCondModel.ByUserSelected)
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;

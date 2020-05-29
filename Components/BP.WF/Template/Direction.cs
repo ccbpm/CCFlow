@@ -25,10 +25,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
-        /// 计算模式
-        /// </summary>
-        public const string CondExpModel = "CondExpModel";
-        /// <summary>
         /// 折线信息
         /// </summary>
         public const string Dots = "Dots";
@@ -98,20 +94,6 @@ namespace BP.WF.Template
                 this.SetValByKey(DirectionAttr.Idx, value);
             }
         }
-        /// <summary>
-        /// 表达式类型
-        /// </summary>
-        public CondExpModel CondExpModel
-        {
-            get
-            {
-                return (CondExpModel)this.GetValIntByKey(DirectionAttr.CondExpModel);
-            }
-            set
-            {
-                this.SetValByKey(DirectionAttr.CondExpModel, (int)value);
-            }
-        }
         #endregion
 
         #region 构造方法
@@ -146,9 +128,7 @@ namespace BP.WF.Template
                 map.AddTBInt(DirectionAttr.Node, 0, "从节点", false, true);
 				map.AddTBInt( DirectionAttr.ToNode,0,"到节点",false,true);
 
-                //以下两个字段是升级方向条件所用. WF_Cond 的两个字段移动到这里判断.
-                //CondExpModel 条件计算模式: 0=Or, 1=And, 2=Mix 
-                map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
+                //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
                 map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
 
 

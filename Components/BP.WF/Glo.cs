@@ -1210,7 +1210,7 @@ namespace BP.WF
             }
 
             //升级方向条件的计算方式.
-            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true)
+            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true && 1 == 2)
             {
                 //如果有该字段.
                 Direction dir = new Direction();
@@ -1223,18 +1223,14 @@ namespace BP.WF
                     if (myCond.CondType != CondType.Dir)
                         continue;
 
-                    int type = DBAccess.RunSQLReturnValInt("SELECT CondOrAnd FROM WF_Cond WHERE MyPK='"+myCond.MyPK+"'", 0);
+                    int type = DBAccess.RunSQLReturnValInt("SELECT CondOrAnd FROM WF_Cond WHERE MyPK='" + myCond.MyPK + "'", 0);
 
-                    Direction mydir = new Direction();
-                    mydir.Retrieve(DirectionAttr.Node, myCond.FK_Node,
-                        DirectionAttr.ToNode, myCond.ToNodeID);
-
-                    mydir.CondExpModel = (CondExpModel)type;
-                    mydir.Update();
+                    //Direction mydir = new Direction();
+                    //mydir.Retrieve(DirectionAttr.Node, myCond.FK_Node,
+                    //    DirectionAttr.ToNode, myCond.ToNodeID);
+                    //  mydir.Update();
                 }
             }
- 
-
 
             //--2020.05.25 修改节点自定义按钮功能;
             BP.WF.Template.NodeToolbar bar = new NodeToolbar();
@@ -1245,7 +1241,6 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
             }
-
 
             //检查frmTrack.
             BP.Frm.Track tk = new Frm.Track();
@@ -1345,7 +1340,6 @@ namespace BP.WF
             //sql += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
             //sql += " AND  A.DeliveryWay=22 ";
             //DBAccess.RunSQL(sql); //创建视图.
-
             #endregion 升级优化集团版的应用
 
 

@@ -86,7 +86,7 @@ namespace BP.WF
     /// <summary>
     /// 方向条件控制规则
     /// </summary>
-    public enum CondModel
+    public enum DirCondModel
     {
         /// <summary>
         /// 按照用户设置的方向条件计算

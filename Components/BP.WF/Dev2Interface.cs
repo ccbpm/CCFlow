@@ -10597,7 +10597,7 @@ namespace BP.WF
                     mynd.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
                 // 设置方向条件，就判断它。
                 if (i > 0)
-                    bIsCanDo = conds.GenerResult(dir.CondExpModel, rpt);
+                    bIsCanDo = conds.GenerResult(rpt);
 
                 //条件不符合则不通过
                 if (bIsCanDo == false)
@@ -10627,7 +10627,7 @@ namespace BP.WF
                 foreach (Direction dir in dirs)
                 {
                     if (dir.ToNode== mynd.NodeID)
-                      bIsCanDo = conds.GenerResult(dir.CondExpModel, rpt);
+                      bIsCanDo = conds.GenerResult(rpt);
                 }
                 #endregion
 
@@ -10664,15 +10664,9 @@ namespace BP.WF
                     // 设置方向条件，就判断它。
                     if (i > 0)
                     {
-                        CondExpModel model =  CondExpModel.AND;
-                        foreach (Direction dir in dirs)
-                        {
-                            if (dir.ToNode == mynd.NodeID)
-                                model = dir.CondExpModel;
-                        }
-
+                         
                         //判断是否可以通过.
-                        if (conds.GenerResult(model, rpt) == false)
+                        if (conds.GenerResult(rpt) == false)
                             continue;
                     }
                     #endregion

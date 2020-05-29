@@ -526,7 +526,7 @@ namespace BP.WF
                 return (Node)currNode.HisToNodes[0];
 
             // 判断是否有用户选择的节点。
-            if (currNode.CondModel == CondModel.ByUserSelected)
+            if (currNode.CondModel == DirCondModel.ByUserSelected)
             {
                 if (currWorkFlow == null)
                     throw new Exception("@参数错误:currWorkFlow");
@@ -812,9 +812,9 @@ namespace BP.WF
                     {
                         if (toNode.HisDeliveryWay == DeliveryWay.BySelected)
                         {
-                            if (currNode.CondModel != CondModel.SendButtonSileSelect)
+                            if (currNode.CondModel != DirCondModel.SendButtonSileSelect)
                             {
-                                currNode.CondModel = CondModel.SendButtonSileSelect;
+                                currNode.CondModel = DirCondModel.SendButtonSileSelect;
                                 currNode.Update();
                                 throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
                             }

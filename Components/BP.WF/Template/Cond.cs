@@ -10,24 +10,6 @@ using BP.Web;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 条件表达模式
-    /// </summary>
-    public enum CondExpModel
-    {
-        /// <summary>
-        /// 或者模式
-        /// </summary>
-        OR,
-        /// <summary>
-        /// And模式
-        /// </summary>
-        AND,
-        /// <summary>
-        /// 混合模式
-        /// </summary>
-        Mix
-    }
-    /// <summary>
     /// 条件数据源
     /// </summary>
     public enum ConnDataFrom
@@ -351,7 +333,6 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.ToNodeID, value);
             }
         }
-       
         #endregion 
 
         protected override bool beforeInsert()
@@ -1149,7 +1130,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="runModel">模式</param>
         /// <returns></returns>
-        public bool GenerResult(CondExpModel runModel, GERpt en=null)
+        public bool GenerResult(GERpt en=null)
         {
             if (this.Count == 0)
                 throw new Exception("err@没有要计算的条件，无法计算.");
@@ -1172,27 +1153,7 @@ namespace BP.WF.Template
                 return cond.IsPassed;
             }
 
-            //如果按照 Or 计算任何一个条件成立，就可以.
-            if (runModel== CondExpModel.OR)
-            {
-                foreach (Cond item in this)
-                {
-                    if (item.IsPassed)
-                        return true;
-                }
-                return false;
-            }
-
-            //如果按照 And 计算,所有的条件都成立.
-            if (runModel == CondExpModel.AND)
-            {
-                foreach (Cond item in this)
-                {
-                    if (item.IsPassed==false)
-                        return false;
-                }
-                return true;
-            }
+          
             #endregion 首先计算简单的.
 
             #region 处理混合计算。

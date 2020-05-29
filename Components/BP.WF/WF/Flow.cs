@@ -5996,7 +5996,7 @@ namespace BP.WF
             nodeID = nd.NodeID;
 
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-            nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
+            nd.CondModel = DirCondModel.SendButtonSileSelect; //默认的发送方向.
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
             nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
             nd.FK_Flow = this.No;

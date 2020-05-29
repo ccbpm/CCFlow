@@ -1415,7 +1415,7 @@ namespace BP.WF.Template
             if (nd.IsSendBackNode == true)
             {
                 //强制设置按照连接线控制.
-                nd.CondModel = CondModel.ByLineCond;
+                nd.CondModel = DirCondModel.ByLineCond;
                 nd.DirectUpdate();
             }
 
@@ -1450,7 +1450,7 @@ namespace BP.WF.Template
             }
 
             // @杜. 翻译&测试.
-            if (nd.CondModel == CondModel.ByLineCond)
+            if (nd.CondModel == DirCondModel.ByLineCond)
             {
                 /* 如果当前节点方向条件控制规则是按照连接线决定的, 
                  * 那就判断到达的节点的接受人规则，是否是按照上一步来选择，如果是就抛出异常.*/
@@ -1470,7 +1470,7 @@ namespace BP.WF.Template
             }
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
-            if (1 == 2 && nd.CondModel != CondModel.SendButtonSileSelect)
+            if (1 == 2 && nd.CondModel != DirCondModel.SendButtonSileSelect)
             {
                 /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
                 Nodes nds = nd.HisToNodes;
@@ -1479,7 +1479,7 @@ namespace BP.WF.Template
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
                         //强制设置安装人员选择器来选择.
-                        this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect);
+                        this.SetValByKey(NodeAttr.CondModel, (int)DirCondModel.SendButtonSileSelect);
                         break;
                     }
                 }

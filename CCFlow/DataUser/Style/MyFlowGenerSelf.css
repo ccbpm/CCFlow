@@ -18,20 +18,44 @@
 }
 
 /**表单样式**/
-.formWrap-title{
+.formContentH1{
     font-size:32px;
     line-height:1.8;
 }
 
-.formWrap input,.formWrap textarea{    
+.formContent input,.formContent textarea{    
    font-size:16px;
    font-family:宋体;
 }
 
 .formTable{
-    width:100%!important;
+   width:100%!important;
    border-collapse:collapse;  
    border-spacing:0px; 
+}
+
+/**第一个表格**/
+
+.formTable-first{
+   width:100%!important;
+   border-collapse:collapse;  
+   border-spacing:0px; 
+}
+
+.formTable-first th,.formTable-first td{
+    border:none;
+}
+
+/**灰色表单样式**/
+.formTable-grey th,.formTable-grey td{
+   font-size:16px;
+   font-family:宋体;
+   border:solid 1px #333!important;
+   font-weight:normal;
+   padding:10px;
+}
+.formTable-grey th{
+    background:#e0e0e0;
 }
 
 /**灰色表单样式**/

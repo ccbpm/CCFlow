@@ -44,7 +44,7 @@
 
             var frms = data.Frms;
 
-         //   alert(frms.length);
+            //   alert(frms.length);
 
             GenerBindDDL("DDL_Frms", frms, "No", "Name", "all");
 
@@ -87,14 +87,14 @@
             }
             else {
                 $("#Table1").html("");
-                
+
                 html += " <tr>";
                 html += "<td></td>";
                 html += " <td colspan=1>";
                 html += "<input type='button' value='保存' onclick=Save('" + condOrAnd + "'); />";
                 html + " </td >"
                 html += "</tr >";
-                
+
             }
             $("#table tr:last").after(html);
         });
@@ -251,16 +251,13 @@
 
             //绑定操作符.
             GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
-
         }
 
         //返回.
         function Back() {
+            
             var url = window.location.href;
-            if (condOrAnd==null)
-                url = url.replace('StandAloneFrm.htm', 'List.htm');
-            else
-                url = url.replace('StandAloneFrm.htm', '../Cond2020/DirList.htm');
+            url = url.replace('StandAloneFrm.htm', 'List.htm');
             window.location.href = url;
         }
     </script>
@@ -315,7 +312,7 @@
                     </select>
                 </td>
             </tr>
-           
+
         </table>
         <table id="Table1" name="Table1" style="width: 90%;">
             <tr>

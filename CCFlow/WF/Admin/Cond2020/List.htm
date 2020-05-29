@@ -209,7 +209,6 @@
         }
         //添加运算符
         function AddCond(condExp, idx) {
-            alert(idx)
             var condIdx = idx - 1;
             var en = new Entity("BP.WF.Template.Cond");
             //生成一个随机数添加到运算符的主键中
@@ -224,7 +223,6 @@
 
             en.ToNodeID = toNodeID;
             en.Idx = condIdx;
-            alert(en.Idx)
             en.Insert();
 
             //en.DoMethodReturnString("DoDown2020Cond");

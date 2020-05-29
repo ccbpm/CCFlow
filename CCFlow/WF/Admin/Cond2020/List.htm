@@ -132,7 +132,7 @@
             if (data.indexOf('err@') >= 0)
                 $("#checkInfo").html("<font color=red>" + data + "</font>");
             else
-                $("#checkInfo").html(data);
+                $("#checkInfo").html("<font color=green>" + data + "</font>");
         });
 
         function ShowType(DataFrom) {
@@ -209,7 +209,7 @@
         }
         //添加运算符
         function AddCond(condExp, idx) {
-
+            alert(idx)
             var condIdx = idx - 1;
             var en = new Entity("BP.WF.Template.Cond");
             //生成一个随机数添加到运算符的主键中
@@ -221,15 +221,13 @@
             en.FK_Node = nodeID;
 
             en.FK_Operator = condExp; //都赋值，以免用错.
-            en.Operator = condExp;  //都赋值，以免用错.
-            en.OperatorValue = condExp; //都赋值，以免用错.
 
             en.ToNodeID = toNodeID;
             en.Idx = condIdx;
+            alert(en.Idx)
             en.Insert();
 
-            en.DoMethodReturnString("DoDown2020Cond");
-            en.DoMethodReturnString("DoDown2020Cond");
+            //en.DoMethodReturnString("DoDown2020Cond");
 
 
             window.location.href = window.location.href;

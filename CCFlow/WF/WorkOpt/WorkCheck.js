@@ -190,7 +190,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         //}
         //_Html += "</select>";
         //_Html += "<input name='' type='button' value='编辑短语' onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'>";
-        _Html += "<a  onclick='AddCommUseWord(\"" + pageData.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");'><span>常用短语</span> <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
+        _Html += "<a  onclick='AddCommUseWord(\"" + pageData.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");'><a href='javascript;'>常用短语</a>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
 
         _Html += "</div>";
         _Html += "</td>";

@@ -1139,6 +1139,7 @@ function GenerWorkNode() {
 
     if (node.FormType == 12) {
         Skip.addJs("./CCForm/FrmDevelop.js");
+        $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
     }
        
@@ -1155,6 +1156,7 @@ function GenerWorkNode() {
            
         if (flowData.FrmNode[0].FrmType == 8) {
             Skip.addJs("./CCForm/FrmDevelop.js");
+            $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             GenerDevelopFrm(flowData, flowData.FrmNode[0].FK_Frm);
         }
            

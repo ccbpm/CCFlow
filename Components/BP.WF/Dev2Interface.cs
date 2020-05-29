@@ -8470,49 +8470,30 @@ namespace BP.WF
         /// <summary>
         /// 删除草稿
         /// </summary>
-        /// <param name="fk_flow">流程编号</param>
         /// <param name="workID">工作ID</param>
-        public static void Node_DeleteDraft(string fk_flow, Int64 workID)
+        public static void Node_DeleteDraft(Int64 workID)
         {
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
             if (gwf.RetrieveFromDBSources() == 1)
             {
-                if (gwf.FK_Node != int.Parse(fk_flow + "01"))
-                {
+                if (gwf.FK_Node != int.Parse(gwf.FK_Flow + "01"))
                     throw new Exception("@该流程非草稿流程不能删除:" + gwf.Title);
-                }
 
                 if (gwf.WFState != WFState.Draft)
-                {
                     throw new Exception("@非草稿状态不能删除");
-                }
 
                 gwf.Delete();
             }
 
             //删除流程.
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            Flow fl = new Flow(fk_flow);
+            Flow fl = new Flow(gwf.FK_Flow);
             Paras ps = new Paras();
             ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID ";
             ps.Add(GERptAttr.OID, workID);
             DBAccess.RunSQL(ps);
-
-
-            //删除开始节点数据.
-            try
-            {
-                ps = new Paras();
-                ps.SQL = "DELETE FROM ND" + int.Parse(fk_flow + "01") + " WHERE OID=" + dbstr + "OID ";
-                ps.Add(GERptAttr.OID, workID);
-                DBAccess.RunSQL(ps);
-            }
-            catch
-            {
-            }
-
         }
         /// <summary>
         /// 把草稿设置待办

@@ -176,7 +176,7 @@ namespace BP.Web
                     cookieValues.Add("Token", HttpContextHelper.SessionID);
                     cookieValues.Add("SID", HttpContextHelper.SessionID);
                 }
-
+                cookieValues.Add("Tel",em.Tel);
                 cookieValues.Add("Lang", lang);
                 if (authNo == null)
                     authNo = "";
@@ -727,6 +727,32 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("OrgName", value);
+            }
+        }
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public static string Tel
+        {
+            get
+            {
+                string val = GetValFromCookie("Tel", null, false);
+                if (val == null)
+                {
+                    if (WebUser.No == null)
+                        throw new Exception("@登录信息丢失，请你确认是否启用了cookie? ");
+
+                    string sql = "SELECT Tel FROM Port_Emp WHERE No='" + WebUser.No + "'";
+                    string tel = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+
+                    SetSessionByKey("Tel", tel);
+                    return tel;
+                }
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("Tel", value);
             }
         }
         /// <summary>

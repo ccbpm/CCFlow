@@ -3504,6 +3504,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("FK_Dept", "");
                 ht.Add("FK_DeptName", "");
                 ht.Add("FK_DeptNameOfFull", "");
+                ht.Add("Tel","");
 
                 ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
                 ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
@@ -3522,6 +3523,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
             ht.Add("IsAdmin", WebUser.IsAdmin == true ? 1 : 0);
             ht.Add("SID", WebUser.SID);
+            ht.Add("Tel",WebUser.Tel);
             ht.Add("OrgNo", WebUser.OrgNo);
             ht.Add("OrgName", WebUser.OrgName);
 

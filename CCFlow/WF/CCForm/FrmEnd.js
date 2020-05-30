@@ -743,8 +743,20 @@ function AfterBindEn_DealMapExt(frmData) {
                 calculator(mapExt);
                 break;
             case "RMBDaXie": //RMB转换成大写
+
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
+                //动态加载转大写的js
+                if (location.href.indexOf("CCForm")>0) {
+
+                    Skip.addJs("../Data/JSLibData/CovertMoneyToDaXie.js");
+                } else if (location.href.indexOf("CCBill") > 0) {
+
+                    Skip.addJs("../Data/JSLibData/CovertMoneyToDaXie.js");
+                } else {
+
+                    Skip.addJs("Data/JSLibData/CovertMoneyToDaXie.js");
+                }
                 var tbDoc = $('#TB_' + mapExt.AttrOfOper);
                 var tb = $('#TB_' + mapExt.Doc);
                 tbDoc.bind("change", function () {

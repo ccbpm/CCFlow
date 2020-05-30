@@ -1885,7 +1885,7 @@ namespace BP.WF
                             {
                                 try
                                 {
-                                      sql = nd.DeliveryParas;
+                                    sql = nd.DeliveryParas;
                                     sql = Glo.DealExp(sql, this.HisGERpt, null);
 
                                     sql = sql.Replace("''''", "''"); //出现双引号的问题.
@@ -2105,7 +2105,7 @@ namespace BP.WF
                     if (nd.IsEval)
                     {
                         /*如果是质量考核点，检查节点表单是否具别质量考核的特别字段？*/
-                          sql = "SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "' AND KeyOfEn IN ('EvalEmpNo','EvalEmpName','EvalEmpCent')";
+                        sql = "SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "' AND KeyOfEn IN ('EvalEmpNo','EvalEmpName','EvalEmpCent')";
                         if (DBAccess.RunSQLReturnValInt(sql) != 3)
                             msg += "@信息:您设置了节点(" + nd.NodeID + "," + nd.Name + ")为质量考核节点，但是您没有在该节点表单中设置必要的节点考核字段.";
                     }
@@ -2490,9 +2490,9 @@ namespace BP.WF
                     string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", dr["No"].ToString(), "HtmlTemplateFile");
                     dr["HtmlTemplateFile"] = htmlCode;
                 }
-                   
+
             }
-            
+
             ds.Tables.Add(dt);
 
             // Sys_MapAttr.
@@ -5596,7 +5596,7 @@ namespace BP.WF
                             string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                if(dc.ColumnName == "HtmlTemplateFile")
+                                if (dc.ColumnName == "HtmlTemplateFile")
                                 {
                                     htmlCode = dr[dc.ColumnName] as string;
                                     continue;
@@ -5639,7 +5639,7 @@ namespace BP.WF
                                 }
                             }
                         }
-                        
+
                         break;
                     case "Sys_MapDtl": //RptEmps.xml。
                         foreach (DataRow dr in dt.Rows)
@@ -6181,7 +6181,9 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(this.No) == true)
                 throw new Exception("err@流程没有初始化，删除错误.");
 
-            //  throw new Exception("err@目前暂时不支持[DoDelete]删除功能，请使用流程属性的是否可以单独发起禁用该流程.");
+            //如果是广西计算中心，不知道为什么删除了.
+            if (SystemConfig.CustomerNo.Equals("GXJSZX") == true)
+                throw new Exception("err@目前暂时不支持[DoDelete]请立即联系管理员.");
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)

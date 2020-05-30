@@ -541,8 +541,10 @@
                         if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
                             html += "<td></td>";
                         else {
-                            if (athDesc.IsUpload == true && IsReadonly != "1")
-                                html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                            if (athDesc.IsUpload == true && IsReadonly != "1") {
+                                //html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                                html += "<td> - </td>";
+                            }
                             else
                                 html += "<td></td>";
                         }

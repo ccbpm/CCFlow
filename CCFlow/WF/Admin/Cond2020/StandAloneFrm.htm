@@ -60,6 +60,7 @@
             var DDL_Fields = $("#DDL_Fields").val(); //  字段.
             var DDL_Operator = $("#DDL_Operator").val(); //  操作符.
 
+
             var OperVal = "";
 
             var tb = document.getElementById("TB_Val");
@@ -81,7 +82,6 @@
                 return;
             }
 
-            var paras = "&DDL_Fields=" + DDL_Fields + "&DDL_Operator=" + DDL_Operator + "&OperVal=" + OperVal + "&SaveType=" + saveType;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("DDL_Fields", DDL_Fields);

@@ -26,6 +26,7 @@ $(function () {
     var theme = webUser.Theme;
     if (theme == null || theme == undefined || theme == "")
         theme = "Default";
+
     $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 

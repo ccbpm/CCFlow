@@ -67,8 +67,8 @@ UE.plugins['impfrm'] = function () {
 UE.plugins['frmmobile'] = function () {
     var me = this, thePlugins = 'frmmobile';
     var frmID = pageParam.fk_mapdata;
-    var W = document.body.clientWidth - 120;
-    var H = document.body.clientHeight - 80;
+    var W = 600;
+    var H = 600;
     var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {

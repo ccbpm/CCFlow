@@ -140,7 +140,8 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把从表放入里面.
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
             ds.Tables.Add(dtls.ToDataTableField("Dtls"));
 
             //把从表的字段放入.

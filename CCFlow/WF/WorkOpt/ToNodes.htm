@@ -115,9 +115,7 @@
             $("#TableNode").append(tr);
 
 
-            $('#btnMsgModalOK').bind('click', function () {
-                window.close();
-            });
+            var int = setInterval("clock()", 1000);
 
         });
 
@@ -241,33 +239,65 @@
                 window.location.href = url;
                 return;
             }
-            OptSuc(data);
+            data = data.replace('<br/>', '');
+            data = data.replace('<br/>', '');
+            data = data.replace('<br/>', '');
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>@');
 
+
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/null/g, '');
+            data = data.replace("<br><br/><br/>", '');
+
+            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></div>";
+            $(".Msg").show();
+            $(".Msg").html(data);
+            $("#Div_ToNode").hide();
         }
 
-        //发送 退回 移交等执行成功后转到  指定页面
-        function OptSuc(msg) {
+      
 
-            if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
-                $('#returnWorkModal').modal().hide()
+        function clock() {
+            if ($("#CloseBtn").length == 0)
+                return;
+            num >= 0 ? num-- : clearInterval(int);
+            $("#CloseBtn").attr("value", "关    闭(" + num + "秒)");
+            if (num == 0)
+                CloseAll();
+        }
+
+
+        //取消移交
+        function CloseAll() {
+            // 取得父页面URL，用于判断是否是来自测试流程
+            var pareUrl = window.top.document.referrer;
+            // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
+            if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
+                // 测试流程时，发送成功刷新测试容器页面右侧
+                window.parent.parent.refreshRight();
             }
-            msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
-            $("#msgModalContent").html(msg.replace("@null", "").replace(/@/g, '<br/>'));
-            var trackA = $('#msgModalContent a:contains("工作轨迹")');
-            var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
-            trackA.remove();
-            trackImg.remove();
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.close();
+                if (window.parent.parent != null && window.parent.parent != undefined
+                    && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
+                    window.parent.parent.close();
+                window.parent.returnWorkWindowClose();
+            }
 
-            $("#msgModal").modal().show();
-
+            window.close();
         }
 
 
         //取消或者返回
         function Cancel() {
-            var url = "../MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&FID=" + FID;
-            window.location.href = url;
+            if(window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose();
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
         }
     </script>
 
@@ -275,9 +305,10 @@
 </head>
 <body>
 
-
-    <div style="text-align: center;  position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
-
+    <div class="Msg" style="text-align: left;padding-left:25px; display:none;">
+        <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
+    </div>
+    <div id="Div_ToNode" style="text-align: center;  position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
         <fieldset>
             <legend> 请选择到达的节点</legend>
             <div id="TableNode" style="width:100%;"></div>

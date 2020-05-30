@@ -3135,9 +3135,7 @@ namespace BP.WF
                     {
                         sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
                         if (isContainFuture == true)
-                        {
                             sql += futureSQL;
-                        }
                         ps.SQL = sql;
                         ps.Add("FK_Emp", userNo);
                     }

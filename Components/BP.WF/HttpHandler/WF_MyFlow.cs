@@ -180,11 +180,8 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-       
-
         public string Focus()
         {
-
             BP.WF.Dev2Interface.Flow_Focus(this.WorkID);
             return "设置成功.";
         }

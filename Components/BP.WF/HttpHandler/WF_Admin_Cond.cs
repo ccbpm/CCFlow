@@ -463,9 +463,6 @@ namespace BP.WF.HttpHandler
             #endregion
 
             /* 执行同步*/
-            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NODEID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
-            BP.DA.DBAccess.RunSQLs(sqls);
 
             //string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.StandAloneFrm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
             switch (condTypeEnum)
@@ -474,25 +471,20 @@ namespace BP.WF.HttpHandler
                 case CondType.Node:
                     cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
                     break;
                 case CondType.Dir:
-                    // cond.MyPK = cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
                     break;
                 case CondType.SubFlow: //启动子流程.
                     cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
                     break;
                 default:
                     throw new Exception("未设计的情况。" + condTypeEnum.ToString());
             }
-
             return "保存成功!!";
         }
 

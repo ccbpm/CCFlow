@@ -507,8 +507,8 @@ function execSend(toNodeID, formType) {
     if (data.indexOf('SelectNodeUrl@') == 0) {
         var url = data;
         url = url.replace('SelectNodeUrl@', '');
-        window.location.href = url;
-        //initModal("SelectNodeUrl",null,url); $('#returnWorkModal').modal().show();
+        //window.location.href = url;
+        initModal("SelectNodeUrl",null,url); $('#returnWorkModal').modal().show();
         return;
     }
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 

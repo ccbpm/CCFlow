@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta charset="utf-8" />
     <title>
         选择节点转向
     </title>
@@ -82,7 +83,7 @@
                             }
                         }
                     }
-                   
+
                 }
                 addSpan = "<span style='color:black;' id='SP_" + node.NodeID + "'>(" + addSpan + ")</span>";
 
@@ -153,7 +154,7 @@
         }
 
         function returnWorkWindowClose(data) {
-            if(data!="取消")
+            if (data != "取消")
                 document.getElementById("SP_" + toNodeID).innerHTML = "(" + data + ")";
 
             $('#returnWorkModal').modal('hide');

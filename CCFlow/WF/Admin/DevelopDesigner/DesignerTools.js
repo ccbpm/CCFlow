@@ -11,6 +11,40 @@ document.onkeydown = function () {
     }
 }
 
+//格式化
+function FormatHtml() {
+    var val = window.confirm('您确定要格式化吗？');
+    if (val == false)
+        return;
+
+    //首先执行保存.
+    SaveForm();
+
+    //数据库中查找
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+    htmlContent = handler.DoMethodReturnString("Designer_FormatHtml");
+
+    //获得table.
+  //  $("table");
+
+    //var handler = new XMLHttpRequest("BP");
+
+    // handler.DmDesigner_FormatHtml
+
+    //获得该table的 tr 集合。 
+
+    //执行删除tr 的内容.
+
+
+    //获得table 的 td集合.
+
+    //执行删除tr 的修饰内容.
+
+    //执行保存.
+
+}
+
 
 //预览.
 function PreviewForm() {

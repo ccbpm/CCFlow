@@ -111,7 +111,7 @@
             }
             var tr = $("<tr><td style='padding:10px;'>" + html + "</td></tr>");
             $("#TableNode").append(tr);
-
+            $("input:radio:first").prop("checked",true);
 
             var int = setInterval("clock()", 1000);
 

@@ -2435,6 +2435,61 @@ function Save() {
 
     }
 
+    //获取表单的附件，从表，图片附件，审核组件
+    leipiEditor.focus(true);
+    var imgs = leipiEditor.document.getElementsByTagName("Img");
+    var _html=""
+    var aths = new Entities("BP.Sys.FrmAttachments");
+    aths.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    $.each(aths, function (i, ath) {
+        document.getElementsByTagName("Im")
+        var element = getElementByAttr(imgs, "data-key", ath.MyPK );
+        //增加该元素
+        if (element==null) {
+            _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + ath.MyPK + "' />"
+            leipiEditor.execCommand('insertHtml', _html);
+        }
+    });
+
+    //从表
+    var dtls = new Entities("BP.Sys.MapDtls");
+    dtls.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    $.each(dtls, function (i, dtl) {
+        var element = getElementByAttr(imgs, "data-key", dtl.No);
+        //增加该元素
+        if (element == null) {
+            _html = "<img src='../CCFormDesigner/Controls/DataView/Dtl.png' style='width:67%;height:200px'  leipiplugins='dtl' data-key='" + dtl.No + "'/>"
+            leipiEditor.execCommand('insertHtml', _html);
+        }
+    });
+
+    //图片附件
+    var imgAths = new Entities("BP.Sys.FrmImgAths");
+    imgAths.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    $.each(imgAths, function (i, imgAth) {
+        var element = getElementByAttr(imgs, "data-key", imgAth.MyPK);
+        //增加该元素
+        if (element == null) {
+            _html = "<img src='../CCFormDesigner/Controls/DataView/AthImg.png' style='width:" + imgAth.W + "px;height:" + imgAth.H + "px'  leipiplugins='component' data-key='" + imgAth.MyPK + "' data-type='AthImg'/>"
+            leipiEditor.execCommand('insertHtml', _html);
+        }
+    });
+
+    //审核组件  判断当前是否是节点表单，节点表单才包含审核组件
+    var fk_node = GetQueryString("FK_Node");
+    if (fk_node != null && fk_node != undefined && fk_node != 0) {
+        var element = getElementByAttr(imgs, "data-type", "WorkCheck");
+        if (element == null) {
+            var node = new Entity("BP.WF.Node", fk_node);
+            if (node.FWCSta != 0) {
+                var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component' data-key='" + fk_node + "'  data-type='WorkCheck'/>"
+                leipiEditor.execCommand('insertHtml', _html);
+            }
+        }
+        
+    }
+   
+
     formeditor = leipiEditor.getContent();
     //保存表单的html信息
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
@@ -2464,5 +2519,17 @@ function GetSysEnums(enumKey) {
     ses.Retrieve("RefPK", enumKey, "IntKey");
     return ses;
 }
+
+//根据元素自定义的属性和值获取改元素
+function getElementByAttr(aElements, attr, value) {
+    for (var i = 0; i < aElements.length; i++) {
+        if (aElements[i].getAttribute(attr) == value)
+            return aElements[i];
+    }
+    return null;
+}
+
+
+
 
 

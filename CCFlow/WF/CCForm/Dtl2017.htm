@@ -380,7 +380,9 @@
                         tmplate.val(textVal);
                     }
 
-                    var td = $('<td></td>')
+                    var td = $('<td></td>');
+                    if (o.data().UIVisible == 0)
+                        td = $('<td style="display:none"></td>');
                     td.append(tmplate);
                     insertTr.append(td);
 
@@ -581,11 +583,13 @@
                     th.text(mapAttrObj.Name);
                     th.data(mapAttrObj);
                     th.css('width', mapAttrObj.UIWidth);
+                    if (mapAttrObj.UIVisible == 0)
+                        th.css("display", "none");
                     th.data().colname = mapAttrObj.KeyOfEn;
                     th.append(mustInput);
-                    if (mapAttrObj.UIVisible == 1) {
-                        threadTr.append(th);
-                    }
+                    //if (mapAttrObj.UIVisible == 1 || (mapAttrObj.UIVisible == 0 && mapAttrObj.EditType == 2)) {
+                       threadTr.append(th);
+                    //}
                 });
 
                 //增加附件.

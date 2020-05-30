@@ -707,23 +707,26 @@ Common.CustomPagePlug = function (operation) {
                     }
                     var headers = $("#" + _this.InitData.DivId + " table thead tr th");
                     for (var i = 0; i < headers.length; i++) {
+                        var style = "";
+                        if ($(headers[i]).css('display') == "none")
+                            style = "style='display:none'";
                         if ($(headers[i]).data != undefined && $(headers[i]).data().colname != undefined && obje[$(headers[i]).data().colname] != undefined) {
                             if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "date") {//类型是日期的TD
-                                html += "<td>" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
+                                html += "<td " + style+">" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
                             } else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Money") {
                                 var defValue = obje[$(headers[i]).data().colname];
                                 if (!/\./.test(defValue))
                                     defValue += '.00';
                                 defValue = formatNumber(defValue, 2, ',');
-                                html += "<td>" + defValue + "</td>"
+                                html += "<td " + style +">" + defValue + "</td>"
                             }
                             else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD
                                 //添加字符截取功能
                                 if ($(headers[i]).data().charlength != undefined) {
                                     var charlength = $(headers[i]).data().charlength;
-                                    html += "<td title='" + obje[$(headers[i]).data().colname] + "'> <a onclick=" + $(headers[i]).data().opeation + ">" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength)) + "...") + "</a></td>"
+                                    html += "<td title='" + obje[$(headers[i]).data().colname] + "'" + style +"> <a onclick=" + $(headers[i]).data().opeation + ">" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength)) + "...") + "</a></td>"
                                 } else {
-                                    html += "<td> <a onclick=" + $(headers[i]).data().opeation + ">" + obje[$(headers[i]).data().colname] + "</a></td>"
+                                    html += "<td " + style +"> <a onclick=" + $(headers[i]).data().opeation + ">" + obje[$(headers[i]).data().colname] + "</a></td>"
                                 }
                             }
                             //是否把TITLE放上去
@@ -731,10 +734,10 @@ Common.CustomPagePlug = function (operation) {
                                 if ($(headers[i]).data().title != undefined) {
                                     var title = $(headers[i]).data().title;
                                     if (title == "true" || title) {
-                                        html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + obje[$(headers[i]).data().colname] + "</td>"
+                                        html += "<td " + style +" title='" + obje[$(headers[i]).data().colname] + "'>" + obje[$(headers[i]).data().colname] + "</td>"
                                     }
                                     else {
-                                        html += "<td>" + obje[$(headers[i]).data().colname] + "</td>"
+                                        html += "<td " + style +">" + obje[$(headers[i]).data().colname] + "</td>"
                                     }
                                 }
                             }
@@ -745,18 +748,18 @@ Common.CustomPagePlug = function (operation) {
                                 if ($(headers[i]).data().charlength != undefined) {
                                     var charlength = $(headers[i]).data().charlength;
 
-                                    html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength) + "...")) + "</td>"
+                                    html += "<td title='" + obje[$(headers[i]).data().colname] + "' " + style +">" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength) + "...")) + "</td>"
                                 } else {
-                                    html += "<td>" + obje[$(headers[i]).data().colname] + "</td>";
+                                    html += "<td " + style +">" + obje[$(headers[i]).data().colname] + "</td>";
                                 }
                             }
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "SN") {//序号  序号的类型是SN colname列名称为空
                             //html += "<td><div style='width:26px'>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</div></td>";
-                            html += "<td>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
+                            html += "<td " + style +">" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
-                            html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
+                            html += ('<td ' + style+'><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
                             html += "</tr>";
                         }
                         //自定义内容
@@ -770,10 +773,10 @@ Common.CustomPagePlug = function (operation) {
                                 tmpC = tmpC.split('@');
                                 tmp += '<' + tmpC[0] + ' ' + tmpC[1] + '>' + tmpC[2] + '</' + tmpC[0] + '>';
                             }
-                            html += ('<td>' + tmp + '</td>');
+                            html += ('<td " + style+">' + tmp + '</td>');
                         }
                         else {
-                            html += "<td>" + "" + "</td>"
+                            html += "<td " + style +">" + "" + "</td>"
                         }
                     }
                 }

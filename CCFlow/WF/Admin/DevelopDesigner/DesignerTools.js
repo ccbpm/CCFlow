@@ -26,7 +26,7 @@ function FormatHtml() {
     htmlContent = handler.DoMethodReturnString("Designer_FormatHtml");
 
     //获得table.
-  //  $("table");
+    //  $("table");
 
     //var handler = new XMLHttpRequest("BP");
 

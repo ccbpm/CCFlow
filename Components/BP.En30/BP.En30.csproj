@@ -240,10 +240,6 @@
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
-    <Compile Include="Sys\ExcelField.cs" />
-    <Compile Include="Sys\ExcelFile.cs" />
-    <Compile Include="Sys\ExcelSheet.cs" />
-    <Compile Include="Sys\ExcelTable.cs" />
     <Compile Include="Sys\FormEventBase.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
@@ -423,8 +419,6 @@
     <Compile Include="Sys\FrmImgAthDB.cs" />
     <Compile Include="Sys\FrmEle.cs" />
     <Compile Include="Sys\FrmEleDB.cs" />
-    <Compile Include="Sys\FrmReportField.cs" />
-    <Compile Include="Sys\FrmRpt.cs" />
     <Compile Include="Sys\GETree.cs" />
     <Compile Include="Sys\RptTemplate.cs">
       <SubType>Code</SubType>

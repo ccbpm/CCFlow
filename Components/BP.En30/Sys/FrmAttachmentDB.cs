@@ -577,32 +577,6 @@ namespace BP.Sys
             }
 
 
-
-            //没有看明白这是什么意思.
-            string fkefs = ath.GetParaString("FK_ExcelFile", null);
-            if (DataType.IsNullOrEmpty(fkefs) == false)
-            {
-                string[] efarr = fkefs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                ExcelFile ef = null;
-                ExcelTables ets = null;
-                foreach (string fk_ef in efarr)
-                {
-                    ef = new ExcelFile();
-                    ef.No = fk_ef;
-
-                    if (ef.RetrieveFromDBSources() > 0)
-                    {
-                        ets = new ExcelTables(fk_ef);
-                        foreach (ExcelTable et in ets)
-                        {
-                            if (DBAccess.IsExitsObject(et.No))
-                                DBAccess.RunSQL(string.Format("DELETE FROM {0} WHERE FK_FrmAttachmentDB = '{1}'", et.No, this.MyPK));
-                        }
-                    }
-                }
-            }
-
-
              base.afterDelete();
         }
 

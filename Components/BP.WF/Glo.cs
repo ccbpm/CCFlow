@@ -1239,6 +1239,7 @@ namespace BP.WF
             {
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere = 1");
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
+
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
             }
 

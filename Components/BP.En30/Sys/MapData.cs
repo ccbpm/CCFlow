@@ -634,22 +634,7 @@ namespace BP.Sys
                 return obj;
             }
         }
-        /// <summary>
-        /// 报表
-        /// </summary>
-        public FrmRpts FrmRpts
-        {
-            get
-            {
-                FrmRpts obj = this.GetRefObject("FrmRpts") as FrmRpts;
-                if (obj == null)
-                {
-                    obj = new FrmRpts(this.No);
-                    this.SetRefObject("FrmRpts", obj);
-                }
-                return obj;
-            }
-        }
+         
         /// <summary>
         /// 超连接
         /// </summary>

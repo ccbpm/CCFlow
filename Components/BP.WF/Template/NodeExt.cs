@@ -1070,11 +1070,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSheet()
         {
-            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         public string DoSheetOld()
         {
-            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
 
@@ -1084,7 +1084,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepterRoleNew()
         {
-            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID+"&FK_Flow="+this.FK_Flow;
         }
 
         /// <summary>
@@ -1093,7 +1093,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 发送后转向规则
@@ -1101,7 +1101,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 抄送人规则
@@ -1109,7 +1109,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCer()
         {
-            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 加载提示信息
@@ -1117,7 +1117,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoHelpRole()
         {
-            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID;
+            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         #endregion
 
@@ -1227,7 +1227,7 @@ namespace BP.WF.Template
 
         public string DoTurn()
         {
-            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //, "节点完成转向处理", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
@@ -1238,7 +1238,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DocTemp()
         {
-            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 抄送规则
@@ -1246,7 +1246,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1343,7 +1343,7 @@ namespace BP.WF.Template
                     break;
                 default:
                 case NodeFormType.FoolForm:
-                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID;
+                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
                     break;
             }
             return null;

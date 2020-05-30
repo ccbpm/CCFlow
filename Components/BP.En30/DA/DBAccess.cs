@@ -1418,9 +1418,11 @@ namespace BP.DA
         #endregion
 
         #region 通过主应用程序在其他库上运行sql
-        public static void DropTableColumn(string table, string column)
+        public static void DropTableColumn(string table, string columnName)
         {
-            string sql = "ALTER TABLE " + table + " DROP COLUMN " + column;
+            DBAccess.DropConstraintOfSQL(table, columnName);
+
+            string sql = "ALTER TABLE " + table + " DROP COLUMN " + columnName;
             DBAccess.RunSQL(sql);
         }
 

@@ -18,67 +18,116 @@
 }*/
 
 /**表单样式**/
-.formContentH1{
-    font-size:32px;
-    line-height:1.8;
+
+.formContent {
+    width: 860px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.formContent input,.formContent textarea{    
-   font-size:16px;
-   font-family:宋体;
+    .formContent input,
+    .formContent textarea,
+    .formContent section {
+        border-radius: 4px;
+        border: solid 1px #b3b3b3;
+        padding: 7px;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-family: "宋体";
+    }
+
+    .formContent p {
+        margin: 0;
+        padding: 0;
+    }
+
+.explain {
+    line-height: 1.8;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.formTable{
-   width:100%!important;
-   border-collapse:collapse;  
-   border-spacing:0px; 
+    .explain em {
+        font-style: normal;
+        font-weight: bold;
+    }
+
+.red {
+    color: #f00;
 }
+
+.formContentH1 {
+    font-size: 32px;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.formTable {
+    width: 100% !important;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+    .formTable th,
+    .formTable td {
+        font-size: 16px;
+        font-family: "宋体";
+        padding: 8px;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .formTable th {
+        text-align: center;
+    }
+
 
 /**第一个表格**/
 
-.formTable-first{
-   width:100%!important;
-   border-collapse:collapse;  
-   border-spacing:0px; 
+.formTable-first {
+    width: 100% !important;
+    border-collapse: collapse;
+    border-spacing: 0px;
 }
 
-.formTable-first th,.formTable-first td{
-    border:none;
-}
+    .formTable-first th,
+    .formTable-first td {
+        border: none;
+        font-size: 16px;
+        font-family: "宋体";
+        padding: 8px;
+    }
 
-/**灰色表单样式**/
-.formTable-grey th,.formTable-grey td{
-   font-size:16px;
-   font-family:宋体;
-   border:solid 1px #333!important;
-   font-weight:normal;
-   padding:10px;
-}
-.formTable-grey th{
-    background:#e0e0e0;
-}
+    .formTable-first th {
+        text-align: right;
+    }
+
 
 /**灰色表单样式**/
-.formTable-grey th,.formTable-grey td{
-   font-size:16px;
-   font-family:宋体;
-   border:solid 1px #333!important;
-   font-weight:normal;
-   padding:10px;
+
+.formGrey .formTable th,
+.formGrey .formTable td {
+    border-color: #333;
 }
-.formTable-grey th{
-    background:#e0e0e0;
+
+.formGrey .formTable th {
+    background: #ededed;
 }
+
 
 /**红色表单样式**/
-.formTable-red th,.formTable-red td{
-   font-size:16px;
-   font-family:宋体;
-   color:#f00;
-   border:solid 1px #f00!important;
-   font-weight:normal;
-   padding:10px;
+
+.formContentH1 {
+    color: #f00;
 }
-.formTable-red th{
-    background:transparent;
+
+.formRed th,
+.formRed td {
+    border-color: #f00;
+    color: #f00;
+}
+
+.formRed th {
+    background: transparent;
 }

@@ -37,13 +37,14 @@
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            int num;
             if (!this.CanRead)
             {
                 throw new NotSupportedException();
             }
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
-            bool rc = NativeMethods.InternetReadFile(this.hFile, ptr, count, out int num);
+            bool rc = NativeMethods.InternetReadFile(this.hFile, ptr, count, out  num);
             handle.Free();
             FtpException.THROWONFALSE(rc);
             return num;
@@ -67,7 +68,8 @@
             }
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(buffer, offset);
-            bool rc = NativeMethods.InternetWriteFile(this.hFile, ptr, count, out _);
+            int a;
+            bool rc = NativeMethods.InternetWriteFile(this.hFile, ptr, count, out a);
             handle.Free();
             FtpException.THROWONFALSE(rc);
         }

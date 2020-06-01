@@ -149,7 +149,8 @@
             message = "";
             StringBuilder buffer = new StringBuilder(260);
             int capacity = buffer.Capacity;
-            if (!InternetGetLastResponseInfo(out int num, buffer, ref capacity))
+            int num = 1;
+            if (!InternetGetLastResponseInfo(out  num, buffer, ref capacity))
             {
                 int lastError = Marshal.GetLastWin32Error();
                 if (lastError == 0x7a)

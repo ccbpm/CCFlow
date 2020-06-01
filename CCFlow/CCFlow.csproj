@@ -2096,6 +2096,7 @@
     <Content Include="WF\Admin\Portal\Guide.htm" />
     <Content Include="WF\Admin\Portal\Img\loading_small.gif" />
     <Content Include="WF\Admin\Portal\Login.htm" />
+    <Content Include="WF\Admin\Portal\SelectOneOrg.htm" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\AdvSearchRight.htm" />
     <Content Include="WF\Admin\RptDfine\Default.htm" />

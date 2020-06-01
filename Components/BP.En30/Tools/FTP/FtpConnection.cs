@@ -99,7 +99,8 @@
         public Win32FindData[] FindFiles(string filter)
         {
             Win32FindData[] dataArray;
-            IntPtr handle = NativeMethods.FtpFindFirstFile(this.hConnect, filter, out Win32FindData data, 0, IntPtr.Zero);
+            BP.Win32FindData data;
+            IntPtr handle = NativeMethods.FtpFindFirstFile(this.hConnect, filter, out  data, 0, IntPtr.Zero);
             FtpException.THROWONNULL(handle);
             try
             {
@@ -120,7 +121,8 @@
 
         public string GetCurrentDirectory()
         {
-            FtpException.THROWONFALSE(NativeMethods.FtpGetCurrentDirectory(this.hConnect, out string str));
+            string str;
+            FtpException.THROWONFALSE(NativeMethods.FtpGetCurrentDirectory(this.hConnect, out str));
             return str;
         }
 

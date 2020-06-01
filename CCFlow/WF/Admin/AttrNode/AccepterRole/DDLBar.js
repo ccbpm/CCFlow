@@ -259,7 +259,7 @@ function BindDeptTree() {
     var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
-        //Baseinfo.depts = getDepts();
+        Baseinfo.depts = getDepts();
     });
 }
 
@@ -275,7 +275,7 @@ function BindDeptTreeGroup() {
     var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
-        //Baseinfo.depts = getDepts();
+        Baseinfo.depts = getDepts();
     });
 }
 

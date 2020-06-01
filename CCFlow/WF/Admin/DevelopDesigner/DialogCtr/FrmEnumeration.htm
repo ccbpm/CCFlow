@@ -62,7 +62,7 @@
             var enumMains = new Entities("BP.Sys.SysEnumMains");
             enumMains.RetrieveAll();
 
-            var html = "<table border=0 style='width:100%;'>";
+            var html = "<table border=0;algin='left'; style='width:100%;'>";
             html += "<tr>";
             html += "<th>Idx</th>";
             html += "<th>编号</th>";
@@ -237,37 +237,40 @@
         //查询枚举
         function SelectEnum() {
             var EnumName = document.getElementById("EnumValue").value;
-            var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
-            sysEnumMains.Retrieve("Name", EnumName);
+            if (EnumName == "")
+                var sql = "SELECT * FROM Sys_EnumMain";
+            else
+                var sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
+            var sysEnumMains = DBAccess.RunSQLReturnTable(sql);
+            var newRow = "<table border=0;algin='left'; style='width:100%;'>";
+            newRow += "<tr>";
+            newRow += "<th>Idx</th>";
+            newRow += "<th>编号</th>";
+            newRow += "<th>名称</th>";
+            newRow += "<th>配置值</th>";
+            newRow += "<th>操作</th>";
+            newRow += "</tr>";
+            newRow += "<tr>";
+
             for (var i = 0; i < sysEnumMains.length; i++) {
                 sysEnumMain = sysEnumMains[i];
-
-                var newRow = "<table border=0 style='width:100%;'>";
-                newRow += "<tr>";
-                newRow += "<th>Idx</th>";
-                newRow += "<th>编号</th>";
-                newRow += "<th>名称</th>";
-                newRow += "<th>配置值</th>";
-                newRow += "<th>操作</th>";
-                newRow += "</tr>";
-                newRow += "<tr>";
-                newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
-
+                var cfgVal = sysEnumMain.CfgVal.replace(/ /g, "[]");
+                newRow += "<td style='width:3%' class=Idx>" + i + "</td>";
                 if (fk_mapData != null)
-                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                    newRow += "<td style='width:10%'><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
                 else
-                    newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
-
-                newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
-                newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
-                newRow += "<td style='width:50px;'><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
+                    newRow += "<td style='width:10%'>" + sysEnumMain.No + "</td>";
+                newRow += "<td style='width:20%'>" + sysEnumMain.Name + "</td>";
+                newRow += "<td style='width:50%'><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                newRow += "<td style='width:10%'><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
 
                 newRow += "</tr>";
             }
+            newRow += "</table>";
             if (newRow != undefined)
                 $("#table").html(newRow);
             else
-                alert("枚举值名称不正确！");
+                alert("关键字查询无结果");
         }
     </script>
 </head>
@@ -282,7 +285,7 @@
                 <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
                 <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
 
-                <td>枚举名称 </td>
+                <td>关键字 </td>
                 <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
                 <td><input type="button" id="Btn_New" class="easyui-button" onclick="SelectEnum()" value="查询" /> </td>
 

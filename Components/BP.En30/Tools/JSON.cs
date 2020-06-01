@@ -275,7 +275,7 @@ namespace BP.Tools
                     || val.GetType() == typeof(float))
                 strs += "\"" + key + "\":" + ht[key] + ",";
                 else
-                    strs += "\"" + key + "\":\"" + ht[key] + "\",";
+                    strs += "\"" + key + "\":\"" + ht[key].ToString().Replace("\"", "\\\"") + "\",";
 
             }
             strs += "\"EndJSON\":\"0\"";

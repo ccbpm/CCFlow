@@ -60,6 +60,8 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
+            //string token=myEn.ToString
+
             try
             {
                 Type tp = myEn.GetType();

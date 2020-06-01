@@ -1,14 +1,47 @@
-﻿using BP.Web;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.SessionState;
+using BP.Web;
+using BP.DA;
+using BP.Port;
 
 namespace BP.WF.HttpHandler
 {
     abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState, IReadOnlySessionState
     {
+        /// <summary>
+        /// token for guangxi jisuanzhongxin.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public string DealToken(string token)
+        {
+            if (DataType.IsNullOrEmpty(token) == true)
+                throw new Exception("err@登录信息丢失，或者没有传递过来token.");
+
+            string host = BP.Sys.SystemConfig.GetValByKey("TokenHost", null);
+            if (DataType.IsNullOrEmpty(host) == true)
+                return null;
+
+            string url = host + token;
+            string data = BP.DA.DataType.ReadURLContext(url, 5000);
+
+            if (DataType.IsNullOrEmpty(data) == true)
+                throw new Exception("err@token失效，请重新登录。" + url + "");
+
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = data;
+            if (emp.RetrieveFromDBSources() == 0)
+                throw new Exception("err@根据token获取用户名错误:" + token + ",获取数据为:" + data);
+
+            //执行登录.
+            BP.WF.Dev2Interface.Port_Login(data);
+            //DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + token + "'  WHERE No='" + emp.No + "'");
+            return "info@登录成功.";
+        }
+
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// <para></para>
@@ -49,17 +82,12 @@ namespace BP.WF.HttpHandler
                 //}
             }
 
-            if (WebUser.No == null)
-            {
-                //string token = this.context.Request.Headers["Token"];
-                //string tokenServ = BP.Sys.SystemConfig.GetValByKey("SS");
-                // this.context.Request.Headers["Token"];
-                //BP.Sys.SystemConfig.AppCenterDBAddStringStr();
-            }
-
-
             try
             {
+                //deal token
+                if (WebUser.No == null)
+                    this.DealToken(ctrl.GetRequestVal("Token"));
+
                 //执行方法返回json.
                 string data = ctrl.DoMethod(ctrl, ctrl.DoType);
 

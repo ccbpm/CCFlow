@@ -121,7 +121,7 @@ namespace BP.WF.Template
                    BP.WF.Template.NodeEmpAttr.FK_Node,
                    BP.WF.Template.NodeEmpAttr.FK_Emp,
                    "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name,
-                   EmpAttr.No, defDeptVal);
+                   EmpAttr.No, defDeptVal, "@FK_DeptText=部门名称");
 
 
 

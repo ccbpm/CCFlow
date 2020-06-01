@@ -324,7 +324,7 @@ namespace BP.GPM
         public override int RetrieveAll()
         {
 
-            if (BP.Web.WebUser.No == "admin")
+            if (BP.Web.WebUser.No.Equals("admin")==true)
             {
                 QueryObject qo = new QueryObject(this);
                 qo.addOrderBy(GPM.DeptAttr.Idx);

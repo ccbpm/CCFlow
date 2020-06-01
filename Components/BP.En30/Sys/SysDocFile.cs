@@ -9,6 +9,9 @@ using System.Data.OleDb;
 
 namespace BP.Sys
 {
+    /// <summary>
+    /// 系统文件
+    /// </summary>
     public class SysDocFileAttr
     {
         /// <summary>
@@ -510,63 +513,6 @@ namespace BP.Sys
             sdf.FileSize = val.Length;
             sdf.DocText = val;
             sdf.Save();
-        }
-
-        public void UpdateLoadFileOfAccess(string FileName)
-        {
-            //FileInfo fi = new FileInfo( FileName );// Replace with your file name
-            //if (fi.Exists==false)
-            //    throw new Exception("文件已经不存在。");
-
-            //this.FileSize=fi.Length.ToString();
-            //this.FileName = fi.FullName;
-            //this.Name=fi.Name;
-            //this.Insert();
-
-            //byte[] bData = null;
-            ////int nNewFileID = 0;
-            //// Read file data into buffer
-            //using ( FileStream fs = fi.OpenRead() )
-            //{
-            //    bData = new byte[fi.Length];
-            //    int nReadLength = fs.Read( bData,0, (int)(fi.Length) );
-            //}
-
-            ////			// Add file info into DB
-            ////			string strQuery = "INSERT INTO FileInfo " 
-            ////				+ " ( FileName, FullName, FileData ) "
-            ////				+ " VALUES "
-            ////				+ " ( @FileName, @FullName, @FileData ) "
-            ////				+ " SELECT @@IDENTITY AS 'Identity'";
-
-            //string strQuery="UPDATE Sys_FileManager SET FileData=@FileData WHERE OID="+this.OID;
-            //OleDbConnection conn = (OleDbConnection)BP.DA.DBAccess.GetAppCenterDBConn ;
-            //conn.Open();
-
-            //OleDbCommand sqlComm = new OleDbCommand( strQuery, 
-            //    conn);
-
-            ////sqlComm.Parameters.Add( "@FileName", fi.Name );
-            ////sqlComm.Parameters.Add( "@FullName", fi.FullName );
-            //sqlComm.Parameters.AddWithValue("@FileData", bData);
-            //sqlComm.ExecuteNonQuery();
-
-            //// Get new file ID
-            ////	SqlDataReader sqlReader = sqlComm.ExecuteReader(); 
-            ////			if( sqlReader.Read() )
-            ////			{
-            ////				nNewFileID = int.Parse(sqlReader.GetValue(0).ToString());
-            ////			}
-            ////
-            ////			sqlReader.Close();
-            ////			sqlComm.Dispose();
-            ////
-            ////			if( nNewFileID > 0 )
-            ////			{
-            ////				// Add new item in list view
-            ////				//ListViewItem itmNew = lsvFileInfo.Items.Add( fi.Name );
-            ////				//itmNew.Tag = nNewFileID;
-            ////			}
         }
         #endregion
 	}

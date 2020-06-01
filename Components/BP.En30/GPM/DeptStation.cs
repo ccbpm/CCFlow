@@ -90,12 +90,12 @@ namespace BP.GPM
         /// <summary>
         /// 工作人员岗位对应
         /// </summary>
-        /// <param name="deptid">部门</param>
-        /// <param name="stationid">岗位编号</param> 	
-        public DeptStation(string deptid, string stationid)
+        /// <param name="deptNo">部门</param>
+        /// <param name="stationNo">岗位编号</param> 	
+        public DeptStation(string deptNo, string stationNo)
         {
-            this.FK_Dept = deptid;
-            this.FK_Station = stationid;
+            this.FK_Dept = deptNo;
+            this.FK_Station = stationNo;
             if (this.Retrieve(DeptStationAttr.FK_Dept, this.FK_Dept, DeptStationAttr.FK_Station, this.FK_Station) == 0)
                 this.Insert();
         }
@@ -115,7 +115,6 @@ namespace BP.GPM
 
                 map.AddTBStringPK(DeptStationAttr.FK_Dept, null, "部门", false, false, 1, 15, 1);
                 map.AddDDLEntitiesPK(DeptStationAttr.FK_Station, null, "岗位", new Stations(), true);
-                map.AddSearchAttr(DeptStationAttr.FK_Station);
 
                 this._enMap = map;
                 return this._enMap;
@@ -135,15 +134,6 @@ namespace BP.GPM
 		public DeptStations()
 		{
 		}
-		/// <summary>
-		/// 工作人员与岗位集合
-		/// </summary>
-		public DeptStations(string stationNo)
-		{
-			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(DeptStationAttr.FK_Station, stationNo);
-			qo.DoQuery();
-		}		 
 		#endregion
 
 		#region 方法
@@ -159,32 +149,6 @@ namespace BP.GPM
 		}	
 		#endregion 
 
-		#region 查询方法
-		/// <summary>
-		/// 工作部门岗位对应s
-		/// </summary>
-		/// <param name="empId">empId</param>
-		/// <returns>工作部门岗位对应s</returns> 
-		public Stations GetHisStations(string empId)
-		{
-			Stations ens = new Stations();
-			if ( Cash.IsExits("DeptStationsOf"+empId, Depositary.Application))
-			{
-				return (Stations)Cash.GetObjFormApplication("DeptStationsOf"+empId,null );				 
-			}
-			else
-			{
-				QueryObject qo = new QueryObject(this);
-				qo.AddWhere(DeptStationAttr.FK_Dept,empId);
-				qo.addOrderBy(DeptStationAttr.FK_Station);
-				qo.DoQuery();				
-				foreach(DeptStation en in this)
-					ens.AddEntity( new Station(en.FK_Station) ) ;
-				Cash.AddObj("DeptStationsOf"+empId,Depositary.Application,ens);
-				return ens;
-			}
-		}
-		#endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

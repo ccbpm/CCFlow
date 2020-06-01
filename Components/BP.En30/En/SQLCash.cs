@@ -26,15 +26,6 @@ namespace BP.En
             this.Update = SqlBuilder.UpdateForPara(en, null);
             this.Delete = SqlBuilder.DeleteForPara(en);
             this.Select = SqlBuilder.RetrieveForPara(en);
-
-            //switch (en.EnMap.EnDBUrl.DBType)
-            //{
-            //    case BP.DA.DBType.Access:
-            //        break;
-            //    default:
-                  
-            //        break;
-            //}
         }
         /// <summary>
         /// 获取指定的key, 返回更新的语句。
@@ -74,13 +65,5 @@ namespace BP.En
             }
         }
         #endregion
-
-    }
-    public class SQLCashs:System.Collections.CollectionBase
-    {
-        public SQLCashs()
-        {
-
-        }
     }
 }

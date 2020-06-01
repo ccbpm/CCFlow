@@ -11,7 +11,7 @@ namespace BP.En
     public class EntityTreeAttr
     {
         /// <summary>
-        /// 树结构编号
+        /// 树结构编号  
         /// </summary>
         public const string No = "No";
         /// <summary>
@@ -367,6 +367,7 @@ namespace BP.En
         }
         #endregion 转化为树结构的tree.
 
+        #region 构造.
         /// <summary>
         /// 查询他的子节点
         /// </summary>
@@ -410,6 +411,6 @@ namespace BP.En
         public EntitiesTree()
         {
         }
-      
+        #endregion 构造.
     }
 }

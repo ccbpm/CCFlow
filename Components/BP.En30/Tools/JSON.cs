@@ -14,15 +14,6 @@ namespace BP.Tools
     public class Json
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ht"></param>
-        /// <returns></returns>
-        public static string Hastable2Json_del(Hashtable ht)
-        {
-            return ToJsonEntityModel(ht);
-        }
-        /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>
         /// <param name="json">一个json字符串</param>
@@ -256,7 +247,6 @@ namespace BP.Tools
         /// <returns>完成后的字符串</returns>
         private static string DeleteLast(string str)
         {
-
             if (str.Length > 1)
             {
                 return str.Substring(0, str.Length - 1);

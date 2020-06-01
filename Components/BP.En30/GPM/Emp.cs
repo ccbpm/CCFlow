@@ -41,11 +41,9 @@ namespace BP.GPM
         /// 拼音
         /// </summary>
         public const string PinYin = "PinYin";
-        #endregion
-        /// <summary>
-        /// 签字类型
-        /// </summary>
         public const string SignType = "SignType";
+        #endregion
+
         /// <summary>
         /// 组织编号
         /// </summary>
@@ -64,7 +62,7 @@ namespace BP.GPM
         {
             get
             {
-                if (this.No == "admin")
+                if (this.No.Equals("admin") == true)
                     return true;
 
                 string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";
@@ -78,7 +76,7 @@ namespace BP.GPM
                 return true;
             }
         }
-       
+
         /// <summary>
         /// 拼音
         /// </summary>
@@ -195,20 +193,6 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.Idx, value);
             }
         }
-        /// <summary>
-        /// 签字类型
-        /// </summary>
-        public int SignType
-        {
-            get
-            {
-                return this.GetValIntByKey(EmpAttr.SignType);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.SignType, value);
-            }
-        }
         #endregion
 
         #region 公共方法
@@ -277,8 +261,8 @@ namespace BP.GPM
                 map.EnDBUrl =
                     new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
                 map.PhysicsTable = "Port_Emp"; // 要物理表。
-                map.Java_SetDepositaryOfMap( Depositary.Application);    //实体map的存放位置.
-                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体存放位置
+                map.Java_SetDepositaryOfMap(Depositary.Application);    //实体map的存放位置.
+                map.Java_SetDepositaryOfEntity(Depositary.Application); //实体存放位置
                 map.EnDesc = "用户"; // "用户"; // 实体的描述.
                 map.Java_SetEnType(EnType.App);   //实体类型。
                 map.EnType = EnType.App;
@@ -298,34 +282,31 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
 
-                // 0=不签名 1=图片签名, 2=电子签名.
-                map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
-                    "@0=不签名@1=图片签名@2=电子签名");
+                //// 0=不签名 1=图片签名, 2=电子签名.
+                //map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
+                //    "@0=不签名@1=图片签名@2=电子签名");
 
                 map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50, true);
-
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 
-                map.AddSearchAttr(EmpAttr.SignType);
+                RefMethod rm = new RefMethod();
+                rm.Title = "设置图片签名";
+                rm.ClassMethodName = this.ToString() + ".DoSinger";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
-                 RefMethod rm = new RefMethod();
-                 rm.Title = "设置图片签名";
-                 rm.ClassMethodName = this.ToString() + ".DoSinger";
-                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                 map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "部门岗位";
+                rm.ClassMethodName = this.ToString() + ".DoEmpDepts";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
-                 rm = new RefMethod();
-                 rm.Title = "部门岗位";
-                 rm.ClassMethodName = this.ToString() + ".DoEmpDepts";
-                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                 map.AddRefMethod(rm);
-
-                 //节点绑定部门. 节点绑定部门.
-                 map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
-                    BP.GPM.DeptEmpAttr.FK_Emp,
-                    BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
+                   BP.GPM.DeptEmpAttr.FK_Emp,
+                   BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 //用户组
                 map.AttrsOfOneVSM.Add(new TeamEmps(), new Teams(), TeamEmpAttr.FK_Emp, TeamEmpAttr.FK_Team,
@@ -355,7 +336,7 @@ namespace BP.GPM
         {
             return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
-        
+
 
         public string DoEmpDepts()
         {
@@ -402,7 +383,7 @@ namespace BP.GPM
                 }
 
                 //给拼音重新定义值,让其加上部门的信息.
-                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower()+",";
+                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new Port.Station();
                 sta.No = item.FK_Station;
@@ -437,7 +418,7 @@ namespace BP.GPM
 
             //修改Port_Emp中的缓存
             BP.Port.Emp emp = new BP.Port.Emp(this.No);
-            emp.FK_Dept=this.FK_Dept;
+            emp.FK_Dept = this.FK_Dept;
             emp.Pass = this.Pass;
             emp.Update();
 
@@ -449,15 +430,15 @@ namespace BP.GPM
         protected override void afterDelete()
         {
             DeptEmps des = new DeptEmps();
-            des.Delete(DeptEmpAttr.FK_Emp, this.No );
-           
+            des.Delete(DeptEmpAttr.FK_Emp, this.No);
+
             DeptEmpStations stas = new DeptEmpStations();
             stas.Delete(DeptEmpAttr.FK_Emp, this.No);
 
             base.afterDelete();
         }
 
-        public static string GenerPinYin(string no,string name)
+        public static string GenerPinYin(string no, string name)
         {
             //增加拼音，以方便查找.
             string pinyinQP = BP.DA.DataType.ParseStringToPinyin(name).ToLower();

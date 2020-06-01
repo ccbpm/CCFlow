@@ -754,7 +754,7 @@ namespace BP.Sys
             {
 
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;

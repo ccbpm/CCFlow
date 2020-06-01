@@ -589,7 +589,7 @@ namespace BP.Web
         {
             get
             {
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                     return true;
 
                 if (SystemConfig.CCBPMRunModel == 0)

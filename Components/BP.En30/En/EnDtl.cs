@@ -110,7 +110,7 @@ namespace BP.En
         }
 	}
 	/// <summary>
-	/// 
+	/// 从表
 	/// </summary>
 	[Serializable]
 	public class EnDtls: CollectionBase

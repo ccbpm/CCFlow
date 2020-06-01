@@ -55,7 +55,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;
@@ -199,9 +199,6 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
-
-      
-       
         #endregion
 
         #region 构造方法

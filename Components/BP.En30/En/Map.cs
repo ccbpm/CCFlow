@@ -649,7 +649,7 @@ namespace BP.En
                 if (this._HisCfgAttrs == null)
                 {
                     this._HisCfgAttrs = new Attrs();
-                    if (Web.WebUser.No == "admin")
+                    if (Web.WebUser.No.Equals("admin")==true)
                     {
 
                         this._HisCfgAttrs.AddDDLSysEnum("UIRowStyleGlo", 2, "表格数据行风格(应用全局)", true, false, "UIRowStyleGlo",

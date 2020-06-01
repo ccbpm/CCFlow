@@ -292,7 +292,7 @@ namespace BP.En
         /// <param name="AttrOfMValue">一般是No</param>
         /// <param name="rootNo">根目录节点</param>
         public void AddBranches(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
-           string desc, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo = "0")
+           string desc, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo = "0",string expShowCols=null)
         {
             //属性.
             AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
@@ -302,6 +302,7 @@ namespace BP.En
             en.Dot2DotModel = Dot2DotModel.TreeDept; //分组模式.
 
             en.RootNo = rootNo; //默认的根目录.
+            en.ExtShowCols = expShowCols; //显示的列.
             this.Add(en);
         }
         /// <summary>

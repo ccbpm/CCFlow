@@ -460,6 +460,19 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
     if (h == null || h == undefined)
         h = 460;
 
+    if (shap == "Dtl") {
+        var self = window.open(url);
+        var loop = setInterval(function () {
+            if (self.closed) {
+                var en = new Entity("BP.Sys.MapDtl");
+                en.SetPKVal(MyPK);
+                if (en.RetrieveFromDBSources() == 0)
+                    UE.dom.domUtils.remove(anchorEl, false);
+            }
+        }, 1);
+        return;
+    }
+        
     //弹出框编辑属性
     OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
         switch (shap) {
@@ -540,10 +553,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                 }
                 break;
             case "Dtl":
-                var en = new Entity("BP.Sys.MapDtl");
-                en.SetPKVal(mypk);
-                if (en.RetrieveFromDBSources() == 0)
-                    UE.dom.domUtils.remove(anchorEl, false);
+               
                 break;
             case "Img":
                 var en = new Entity("BP.Sys.FrmUI.ExtImg");
@@ -2440,7 +2450,7 @@ function Save() {
     var imgs = leipiEditor.document.getElementsByTagName("Img");
     var _html=""
     var aths = new Entities("BP.Sys.FrmAttachments");
-    aths.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    aths.Retrieve("FK_MapData", pageParam.fk_mapdata,"FK_Node",0);
     $.each(aths, function (i, ath) {
         document.getElementsByTagName("Im")
         var element = getElementByAttr(imgs, "data-key", ath.MyPK );
@@ -2453,7 +2463,7 @@ function Save() {
 
     //从表
     var dtls = new Entities("BP.Sys.MapDtls");
-    dtls.Retrieve("FK_MapData", pageParam.fk_mapdata);
+    dtls.Retrieve("FK_MapData", pageParam.fk_mapdata,"FK_Node",0);
     $.each(dtls, function (i, dtl) {
         var element = getElementByAttr(imgs, "data-key", dtl.No);
         //增加该元素

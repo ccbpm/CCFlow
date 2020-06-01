@@ -148,7 +148,7 @@ $(function () {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
    
-  
+    ToolbarIcon();//按钮添加图标
 
 });
 

@@ -36,9 +36,10 @@ $(function () {
             Oper = "onclick=\"" + toolBar.Oper + "\"";
 
         if (toolBar.No == "NodeToolBar")
+            //_html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
             _html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
         else
-            _html += "<input type=button name='" + toolBar.No + "' value='" + toolBar.Name + "' enable=true " + Oper + "/>";
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='../DataUser/OverrideFiles/ToolbarImg/" + toolBar.No + ".png' width='15px' height='15px'>&nbsp;" + toolBar.Name + "</button>";
     });
     $('#ToolBar').html(_html);
 
@@ -148,8 +149,6 @@ $(function () {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
    
-    ToolbarIcon();//按钮添加图标
-
 });
 
 function setModalMax() {

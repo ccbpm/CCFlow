@@ -61,6 +61,7 @@
         global.selectedRows = [];
         var rootNo = "0";
         var IsEnsOfMExitParentNo = 1;
+        var showCols = "@No=编号@Name=名称";
 
         var saveType = GetQueryString("SaveType");
         if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
@@ -83,8 +84,11 @@
 
             var dbTrees = data["DBTrees"]; //左边的树.
             selectedRows = data["DBMMs"]; //选择的数据.
-            if (data["Base_Info"]!=undefined)
+            if (data["Base_Info"] != undefined) {
                 IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
+                if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols!="")
+                    showCols = data["Base_Info"][0].ExtShowCols;
+            }
 
             // AtPara
             var title = "请选择"; // mapExt.GetPara("Title");
@@ -92,12 +96,6 @@
 
             var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
-
-            // global
-            var searchUrl = ""; // mapExt.Tag1;    //查询
-            var treeUrl = ""; // mapExt.Tag2;      //初始化树
-            var treeClickUrl = ""; // mapExt.Tag3; //树选择.
-
 
             var searchTableColumns = [{
                 field: "_checkbox",
@@ -112,8 +110,7 @@
             }];
 
             //显示列的中文名称.
-            var tag = "No=编号,Name=名称";
-            $.each(tag.split(","), function (i, o) {
+            $.each(showCols.split("@"), function (i, o) {
                 var exp = o.split("=");
                 var field;
                 var title;
@@ -126,6 +123,8 @@
                 if (!isLegalName(field)) {
                     return true;
                 }
+                if (field == GetQueryString("DefaultGroupAttrKey"))
+                    field = field + "Text";
                 searchTableColumns.push({
                     field: field,
                     title: title
@@ -173,6 +172,11 @@
                 }
             });
 
+            searchTableColumns.push({
+                title: '操作', formatter: function (value, row, index) {
+                    return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
+                }
+            });
             // grid2
             $('#viewGrid').bootstrapTable({
                 striped: true,
@@ -186,17 +190,8 @@
                 detailView: false,
                 height: $(document).height() / 3,
                 uniqueId: "No",
-                columns: [{
-                    field: 'No',
-                    title: '编号'
-                }, {
-                    field: 'Name',
-                    title: '名称'
-                }, {
-                    title: '操作', formatter: function (value, row, index) {
-                        return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
-                    }
-                }]
+                columns: searchTableColumns
+
             });
 
       
@@ -275,8 +270,28 @@
             // 绑定内容列表.
             $('#selectGrid').bootstrapTable("hideAllColumns");
             $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
-            $('#selectGrid').bootstrapTable("showColumn", "No");
-            $('#selectGrid').bootstrapTable("showColumn", "Name");
+
+            $.each(showCols.split("@"), function (i, o) {
+                var exp = o.split("=");
+                var field;
+                var title;
+                if (exp.length == 1) {
+                    field = title = exp[0];
+                } else if (exp.length == 2) {
+                    field = exp[0];
+                    title = exp[1];
+                }
+                if (!isLegalName(field)) {
+                    return true;
+                }
+                if (field == GetQueryString("DefaultGroupAttrKey"))
+                    field = field + "Text";
+                $('#selectGrid').bootstrapTable("showColumn", field);
+            });
+
+
+          //  $('#selectGrid').bootstrapTable("showColumn", "No");
+          //  $('#selectGrid').bootstrapTable("showColumn", "Name");
 
 
 

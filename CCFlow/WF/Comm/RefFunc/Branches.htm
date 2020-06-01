@@ -53,44 +53,36 @@
 
             var dot2DotEnName = new Entities(GetQueryString("Dot2DotEnName"));
             dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval);
-            //dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), "1000000");
 
-            //alert(dot2DotEnsName.length);
             $.each(dot2DotEnsName, function (i, o) {
 
                 var enDot = new Entity(dot2DotEnName, o);
 
                 var no = enDot[GetQueryString("AttrOfMInMM")];
                 var name = enDot[GetQueryString("AttrOfMInMM") + "Text"];
-
-                // alert(no + " - " + name);
-
                 global.selectedNodes.push({
                     "No": no,
                     "Name": name
                 });
             });
 
-            // search
-            $("#TB_Key").on("keyup", function () {
-
-                var keyWord = $(this).val();
-                if (keyWord == "") {
-                    $('#viewGrid_Panel').hide();
-                    $('#tree_Panel').show();
-                    return;
-                }
-                loadViewGrid(keyWord);
-
-            });
-
-
-            $('#viewGrid_Panel').hide();
-            $('#tree_Panel').show();
+            $('#viewGrid').hide();
+            $('#tree').show();
 
             loadTree(rootNo, global);
 
         });
+
+        function Search() {
+            var keyWord = $("#TB_Key").val();
+            if (keyWord == "") {
+                $('#viewGrid').hide();
+                $('#tree').show();
+                return;
+            }
+            loadSelectGridByKey(keyWord);
+
+        }
 
         //树形结构转换
         function findChildren(jsonArray, parentNo) {
@@ -147,7 +139,7 @@
                             "id": o.No,
                             "text": o.Name,
                             "nodes": [],
-                            "state": { checked: checked, disabled: checked }
+                            "state": { checked: checked }
                         });
                     } else {
                         appendToTree(jsonTree, o);
@@ -240,11 +232,24 @@
             });
         }
 
-        //查询列表
-        function loadViewGrid(gridUrl) {
 
-            var global = window;
-            var columns = mapExt.Tag;
+
+        //按照关键字加载数据.
+        function loadSelectGridByKey(key) {
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            hander.AddUrlData();
+
+            hander.AddPara("Key", key.replace(/'/g, ''));
+            var json = hander.DoMethodReturnJSON("Branches_SearchByKey");
+
+            loadViewGrid(json);
+        }
+
+        //查询列表
+        function loadViewGrid(json) {
+
+            var columns ;
             var searchTableColumns = [{
                 field: "_checkbox",
                 checkbox: true,
@@ -296,15 +301,13 @@
                 clickToSelect: true,
                 sortable: false,
                 maintainSelected: true,
-                singleSelect: !mapExt.ShowCheckBox,
+                singleSelect: false,
                 uniqueId: "No",
                 columns: searchTableColumns
             });
-
-            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
             if ($.isArray(json)) {
-                $('#tree_Panel').hide();
-                $('#viewGrid_Panel').show();
+                $('#tree').hide();
+                $('#viewGrid').show();
                 var selectedRows = window.selectedNodes;
                 if ($.isArray(selectedRows)) {
                     $.each(json, function (i, o) {
@@ -314,9 +317,9 @@
                         if (sel.length > 0) {
                             o.checked = true;
                             //多选时才需要禁用已选
-                            if (mapExt.ShowCheckBox == true) {
-                                o.disabled = true;
-                            }
+                            //if (mapExt.ShowCheckBox == true) {
+                             //   o.disabled = true;
+                            //}
                         }
                     });
                 }
@@ -424,11 +427,13 @@
     </script>
 </head>
 <body>
-
+    <input class="form-control" style="display:inline;width:auto" type="text" placeholder="" id="TB_Key">
+    <input type="button" value="查询" id="Cancel" onclick="Search()" />
     <input type="button" value="全选" id="Cancel" onclick="CheckAll()" />
     <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()" />
     <div class="row row-margin-top" style="width:96%;margin-left:10px">
         <div id="tree" style="overflow-y:auto; overflow-x:auto; width:auto; height:480px;"></div>
+        <table id="viewGrid"></table>
     </div>
 </body>
 </html>

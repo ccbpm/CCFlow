@@ -107,8 +107,8 @@ namespace BP.WF.HttpHandler
                     ff.UIVisible = true;
                     ff.KeyOfEn = attr.KeyOfEn;
                     ff.FK_Flow = currNode.FK_Flow;
-                    ff.FK_Node = currNode.NodeID;
-                    ff.FK_MapData = currNode.NodeFrmID; //表单ID.
+                    ff.FK_Node = jsNode.NodeID;
+                    ff.FK_MapData = jsNode.NodeFrmID; //表单ID.
                     ff.MyPK = ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn;
                     if (ff.IsExits == false)
                         ff.Insert();

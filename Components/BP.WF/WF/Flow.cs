@@ -1707,7 +1707,7 @@ namespace BP.WF
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                     uac.IsUpdate = true;
                 return uac;
             }
@@ -4645,8 +4645,8 @@ namespace BP.WF
             {
                 case ImpFlowTempleteModel.AsNewFlow: /*做为一个新流程. */
                     fl.No = fl.GenerNewNo;
-                    fl.DoDelData();
-                    fl.DoDelete(); /*删除可能存在的垃圾.*/
+                    //  fl.DoDelData();
+                    //    fl.DoDelete(); /*删除可能存在的垃圾.*/
                     fl.Insert();
                     break;
                 case ImpFlowTempleteModel.AsTempleteFlowNo: /*用流程模版中的编号*/
@@ -6183,7 +6183,7 @@ namespace BP.WF
 
             //如果是广西计算中心，不知道为什么删除了.
             if (SystemConfig.CustomerNo.Equals("GXJSZX") == true)
-                throw new Exception("err@目前暂时不支持[DoDelete]请立即联系管理员.");
+                throw new Exception("err@目前暂时不支持[DoDelete - " + this.No + "]请立即联系管理员.");
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)

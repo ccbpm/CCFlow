@@ -344,11 +344,11 @@ function GenerFrm() {
             GenerFreeFrm(mapData, frmData); //自由表单.
     }
     //xu
-    var rel = /style='[^=>]*'([(\s+\w+=)|>])/g
+    /*var rel = /style='[^=>]*'([(\s+\w+=)|>])/g
     var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
 
     $('#CCForm').html($('#CCForm').html().replace(rel, ''));
-    $('#CCForm').html($('#CCForm').html().replace(rels, ''));
+    $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
  
     $.parser.parse("#CCForm");
     var isReadonly = GetQueryString("IsReadonly");

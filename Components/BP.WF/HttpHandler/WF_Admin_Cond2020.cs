@@ -54,6 +54,20 @@ namespace BP.WF.HttpHandler
             conds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
                 toNodeID, CondAttr.CondType, this.GetRequestValInt("CondType"), CondAttr.Idx);
 
+            if (conds.Count == 0)
+                return "";
+            if (conds.Count == 1)
+            {
+                foreach (Cond item in conds)
+                {
+                    if (item.HisDataFrom == ConnDataFrom.CondOperator)
+                        return "info@请继续增加条件";
+                    else
+                        return "条件成立.";
+                }
+            }
+
+
             //遍历方向条件.
             foreach (Cond item in conds)
             {

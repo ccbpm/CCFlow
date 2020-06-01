@@ -53,6 +53,43 @@ namespace BP.WF.HttpHandler
             return val;
         }
         /// <summary>
+        /// token for guangxi jisuanzhongxin.
+        /// 1. 手机端连接服务需要,身份验证,需要token.
+        /// 2. 在全局中配置 TokenHost 地址, 每次调用服务都需要传入Token 参数.
+        /// 3. 如果不配置 TokenHost 就提示错误.
+        /// 4. 仅仅在会话信息丢失后，在调用该方法.
+        /// </summary>
+        /// <param name="token">获得token.</param>
+        /// <returns></returns>
+        public string DealToken(DirectoryPageBase page, string mothodName)
+        {
+            string token = page.GetRequestVal("Token");
+            if (DataType.IsNullOrEmpty(token) == true)
+                return null;
+            //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
+            string host = BP.Sys.SystemConfig.GetValByKey("TokenHost", null);
+            if (DataType.IsNullOrEmpty(host) == true)
+                return null;
+
+            //throw new Exception("err@全局变量:TokenHost，没有获取到.");
+
+            string url = host + token;
+            string data = BP.DA.DataType.ReadURLContext(url, 5000);
+
+            if (DataType.IsNullOrEmpty(data) == true)
+                throw new Exception("err@token失效，请重新登录。" + url + "");
+
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = data;
+            if (emp.RetrieveFromDBSources() == 0)
+                throw new Exception("err@根据token获取用户名错误:" + token + ",获取数据为:" + data);
+
+            //执行登录.
+            BP.WF.Dev2Interface.Port_Login(data);
+            //DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + token + "'  WHERE No='" + emp.No + "'");
+            return "info@登录成功.";
+        }
+        /// <summary>
         /// 执行方法
         /// </summary>
         /// <param name="obj">对象名</param>
@@ -60,6 +97,23 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
+
+            //deal token
+            if (WebUser.No == null)
+            {
+                bool isCanDealToken = true;
+
+                if (myEn.DoType.Contains("Login") == true)
+                    isCanDealToken = false;
+                if (myEn.ToString().Contains("Admin") == true)
+                    isCanDealToken = false;
+
+                if (isCanDealToken == true)
+                    this.DealToken(myEn, myEn.DoType);
+            }
+
+
+
             //string token=myEn.ToString
             try
             {

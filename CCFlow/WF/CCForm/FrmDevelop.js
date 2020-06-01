@@ -5,7 +5,7 @@
  */
 var currentURL = window.document.location.href;
 var frmData;
-function GenerDevelopFrm(wn,fk_mapData) {
+function GenerDevelopFrm(wn, fk_mapData) {
     frmData = wn;
     $('head').append('<style type="text/css"> .form-control{display: inline; }</style >');
 
@@ -14,38 +14,47 @@ function GenerDevelopFrm(wn,fk_mapData) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", fk_mapData);
     htmlContent = handler.DoMethodReturnString("Designer_Init");
-    
+
     if (htmlContent == "") {
         alert("开发者设计的表单内容丢失，请联系管理员");
         return;
     }
-    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 ||currentURL.indexOf("MyDict.htm") != -1)
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../../");
     else
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../");
     $("#CCForm").html(htmlContent);
 
     //解析表单中的数据
-   
+
     //1.加载隐藏字段，
     var mapAttrs = frmData.Sys_MapAttr;
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {
         var mapAttr = mapAttrs[i];
-        if (mapAttr.UIVisible == 0 ) {
+        if (mapAttr.UIVisible == 0) {
             $("#TB_" + mapAttr.KeyOfEn).hide();
             $("#DDL_" + mapAttr.KeyOfEn).hide();
-            $("input[name=CB_" + mapAttr.KeyOfEn+"]").hide();
-            $("input[name=RB_" + mapAttr.KeyOfEn+"]").hide();
+            $("input[name=CB_" + mapAttr.KeyOfEn + "]").hide();
+            $("input[name=RB_" + mapAttr.KeyOfEn + "]").hide();
             continue;
         }
-            
+
+        //必填属性
+        if (mapAttr.UIIsEnable == 1 && mapAttr.UIIsInput) {
+            debugger
+            var mustInput = "<span style='color:red' class='mustInput' data-keyofen='" + mapAttr.KeyOfEn + "' >*</span>";
+            $("#TB_" + mapAttr.KeyOfEn).after(mustInput);
+            $("#DDL_" + mapAttr.KeyOfEn).after(mustInput);
+            $("#CB_" + mapAttr.KeyOfEn).parent().append(mustInput);
+        }
+
         //设置字段的样式属性
         $('#TB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
-        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15 )
+        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15)
             $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
         if (mapAttr.UIContralType == 17)
             $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", "请单击进行编辑");
@@ -76,10 +85,10 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 dateFmt = "HH:mm";
             } else if (frmDate == 5) {
                 dateFmt = "HH:mm:ss";
-            } 
-            
+            }
+
             $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
-           
+
             continue;
         }
 
@@ -91,7 +100,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
             $("#DDL_" + mapAttr.KeyOfEn).append(_html);
             continue;
         }
-      
+
         if (mapAttr.MyDataType == "1" && mapAttr.IsSigan == "1") {
             //隐藏该字段值
             $("#TB_" + mapAttr.KeyOfEn).hide();
@@ -103,22 +112,22 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 var sealData = new Entities("BP.Tools.WFSealDatas");
                 sealData.Retrieve("OID", pageData.WorkID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
                 if (sealData.length > 0) {
-                    html = "<img src='" + localHref + "/DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='" + localHref+"/DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                    html = "<img src='" + localHref + "/DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
                     isSigantureChecked = true;
                 }
                 else {
                     html = "<img src='" + localHref + "/DataUser/Siganture/siganture.jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/UnName.jpg'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
                 }
-               
+
 
             } else {
-              
 
-                html = "<img src='" + localHref + "/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='" + localHref+"/DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+
+                html = "<img src='" + localHref + "/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
             }
-            
+
             $("#TB_" + mapAttr.KeyOfEn).after(html);
-            
+
         }
 
         //为复选框高级设置绑定事件
@@ -126,7 +135,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
             $("#CB_" + mapAttr.KeyOfEn).attr("onchange", "clickEnable(this, \"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
             continue;
         }
-          //为单选按钮高级设置绑定事件
+        //为单选按钮高级设置绑定事件
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {
             //枚举下拉框
             if (mapAttr.UIContralType == 1) {
@@ -135,13 +144,13 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 $("#DDL_" + mapAttr.KeyOfEn).empty();
                 $("#DDL_" + mapAttr.KeyOfEn).append(_html);
 
-                    //绑定事件
-                if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) 
+                //绑定事件
+                if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0)
                     $("#DDL_" + mapAttr.KeyOfEn).attr("onchange", "changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\",8)");
 
             }
             //枚举单选
-            if (mapAttr.UIContralType == 3) { 
+            if (mapAttr.UIContralType == 3) {
                 //重新设置单选按钮的值
                 var _html = "";
 
@@ -160,15 +169,19 @@ function GenerDevelopFrm(wn,fk_mapData) {
                         else
                             _html += "<label><input   type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + "/>&nbsp;" + obj.Lab + "</label><br/>";
                     }
-                        
+
                 });
 
                 $("#SR_" + mapAttr.KeyOfEn).empty();
                 $("#SR_" + mapAttr.KeyOfEn).append(_html);
-                  
+                if (mapAttr.UIIsEnable == 1 && mapAttr.UIIsInput) {
+                    var mustInput = "<span style='color:red' class='mustInput' data-keyofen='" + mapAttr.KeyOfEn + "' >*</span>";
+                    $("#SR_" + mapAttr.KeyOfEn).after(mustInput);
+                }
+
             }
             continue;
-        } 
+        }
         //枚举多选复选框
         if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2") {
             //显示方式,默认为横向展示.
@@ -186,6 +199,10 @@ function GenerDevelopFrm(wn,fk_mapData) {
             });
             $("#SC_" + mapAttr.KeyOfEn).empty();
             $("#SC_" + mapAttr.KeyOfEn).append(_html);
+            if (mapAttr.UIIsEnable == 1 && mapAttr.UIIsInput) {
+                var mustInput = "<span style='color:red' class='mustInput' data-keyofen='" + mapAttr.KeyOfEn + "' >*</span>";
+                $("#SC_" + mapAttr.KeyOfEn).after(mustInput);
+            }
             continue;
         }
 
@@ -205,7 +222,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 else
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
-                
+
                 element.after(eleHtml);
                 element.remove(); //移除Imge节点
                 continue;
@@ -222,7 +239,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 var _html = GetFieldAth(mapAttr);
                 $("#TB_" + mapAttr.KeyOfEn).hide();
                 $("#TB_" + mapAttr.KeyOfEn).after(_html);
-               
+
                 continue;
             }
             if (mapAttr.UIContralType == 101)//评分
@@ -232,7 +249,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                     $.each($(this).children("Img"), function () {
                         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                             $(this).attr("src", $(this).attr("src").replace("../../", "../"));
-                       else
+                        else
                             $(this).attr("src", $(this).attr("src").replace("../../", "./"));
                     });
                 });
@@ -242,7 +259,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
     }
 
 
-   
+
 
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
     var frmDtls = frmData.Sys_MapDtl;
@@ -278,7 +295,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
         var element = $("Img[data-key=" + athImg.MyPK + "]");
         if (element.length == 0)
             continue;
-        figure_Develop_ImageAth(element, athImg,fk_mapData);
+        figure_Develop_ImageAth(element, athImg, fk_mapData);
 
     }
 
@@ -308,7 +325,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
     var frmBtns = frmData.Sys_FrmBtn;
     for (var i = 0; i < frmBtns.length; i++) {
         var frmBtn = frmBtns[i];
-       
+
         figure_Develop_Btn(frmBtn);
 
     }
@@ -324,7 +341,7 @@ function GenerDevelopFrm(wn,fk_mapData) {
                 if (element.getAttribute("data-type") == "WorkCheck")
                     figure_Develop_FigureFrmCheck(nodeComponents, element, frmData);
             })
-            
+
         }
     }
 
@@ -342,8 +359,8 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
         else
             src = "./CCForm/Dtl2017.htm";
     }
-        //表格模式
-      
+    //表格模式
+
     if (frmDtl.ListShowModel == "1") {
         //卡片模式
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
@@ -351,7 +368,7 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
         else
             src = "./CCForm/DtlCard.htm";
     }
-        
+
     src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
     src += "&WorkID=" + pageData.OID + "&FID=" + GetQueryString("FID") + "&PWorkID=" + GetQueryString("PWorkID") + "&FK_Node=" + GetQueryString("FK_Node");
     var W = element.width();
@@ -387,7 +404,7 @@ function figure_Develop_Ath(element, ath) {
 }
 
 //图片附件
-function figure_Develop_ImageAth(element, frmImageAth,fk_mapData) {
+function figure_Develop_ImageAth(element, frmImageAth, fk_mapData) {
     var isEdit = frmImageAth.IsEdit;
     var img = $("<img class='pimg'/>");
 
@@ -467,18 +484,18 @@ function figure_Develop_Image(element, frmImage) {
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             errorImg = "../../DataUser/ICON/CCFlow/LogBig.png";
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
-        if (imgSrc == "" || imgSrc == null) 
+        if (imgSrc == "" || imgSrc == null)
             imgSrc = errorImg;
-            
-        
-            
-        
-       
+
+
+
+
+
 
         var a = $("<a></a>");
         var img = $("<img/>")
 
-        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='" + errorImg+"'");
+        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='" + errorImg + "'");
 
         if (frmImage.LinkURL != undefined && frmImage.LinkURL != '') {
             a.attr('href', frmImage.LinkTarget).attr('target', frmImage.LinkTarget).css('width', frmImage.W).css('height', frmImage.H);
@@ -620,17 +637,17 @@ function figure_Develop_IFrame(element, frame) {
                 url = "../WorkOpt/OneWork/Table.htm";
             else
                 url = "./WorkOpt/OneWork/Table.htm";
-        } 
+        }
         if (urlType == 3) {//轨迹图
             if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                 url = "../WorkOpt/OneWork/TimeBase.htm";
             else
                 url = "./WorkOpt/OneWork/TimeBase.htm";
         }
-        url =url+"?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
+        url = url + "?FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.OID + "&FID=" + pageData.FID;
 
     }
-    
+
     var eleHtml = $("<div id='Frame" + frame.MyPK + "' style='width:" + frame.W + "px; height:auto;' ></div>");
 
     var eleIframe = $("<iframe class= 'Fdtl' ID = 'Frame_" + frame.MyPK + "' src = '" + url + "' frameborder=0  style='width:" + frame.W + "px;"
@@ -707,7 +724,7 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
 
     if (node == null)
         return $('');
-    if (frmNode !=null && node.FormType == 5 && frmNode.IsEnableFWC == 0)
+    if (frmNode != null && node.FormType == 5 && frmNode.IsEnableFWC == 0)
         return $('');
 
     var currentURL = window.location.href;
@@ -747,7 +764,7 @@ function figure_Develop_Siganture(SigantureID, val, type) {
     }
     else {
         var src = UserICon + val + UserIConExt;    //新图片地址
-       
+
         document.getElementById("Img" + SigantureID).src = src;
     }
     isSigantureChecked = true;
@@ -819,13 +836,13 @@ function GetFieldAth(mapAttr) {
             break;
         }
     }
-    if (ath==null) {
+    if (ath == null) {
         alert("没有找到附件属性,请联系管理员");
         return;
     }
 
     //获取附件上传的URL
-    var url = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData.FID + "&Ath=" + noOfObj + "&FK_MapData=" + mapAttr.FK_MapData + "&FromFrm=" + mapAttr.FK_MapData + "&FK_FrmAttachment=" + mypk + "&IsStartNode=" + IsStartNode +"&IsReadOnly="+pageData.IsReadonly + "&M=" + Math.random();
+    var url = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData.FID + "&Ath=" + noOfObj + "&FK_MapData=" + mapAttr.FK_MapData + "&FromFrm=" + mapAttr.FK_MapData + "&FK_FrmAttachment=" + mypk + "&IsStartNode=" + IsStartNode + "&IsReadOnly=" + pageData.IsReadonly + "&M=" + Math.random();
     //自定义表单模式.
     if (ath.AthRunModel == 2) {
         url = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData.FID + "&Ath=" + noOfObj + "&FK_MapData=" + mapAttr.FK_MapData + "&FK_FrmAttachment=" + mypk + "&IsStartNode=" + IsStartNode + "&IsReadOnly=" + pageData.IsReadonly + "&M=" + Math.random();
@@ -868,7 +885,7 @@ function GetFieldAth(mapAttr) {
     if (dbs.length == 0 && pageData.IsReadonly == 1) {
         return eleHtml; // +"<div style='text-align:left;padding-left:10px;display:inline' id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
-    
+
     if (athShowModel == "" || athShowModel == 0)
         return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
 

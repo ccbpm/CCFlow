@@ -1,6 +1,17 @@
 // 增加图标
 function ToolbarIcon() {
-    //$("#userInfocancel").button("option", "icons", { primary: 'ui-icon-cancel', secondary: 'ui-icon-cancel' }); 
-    $("input[name='Send']").css('background','#FFF url(../DataUser/OverrideFiles/ToolbarImg/Send.png) no-repeat left 50%');
-    //$("input[name='Send']").css('margin-left','4px');
+
+    //定义一个Json.
+    var strs = "Send,Save,Shift,Return";
+     
+    //循环这个json.
+    for (var i = 0; i < strs.length; i++) {
+
+        var str = strs[i];
+
+        var btn = $("#Btn_" + str);
+        if (btn == null)
+            continue;
+        btn.css('background', '#FFF url(../DataUser/OverrideFiles/ToolbarImg/Send.png) no-repeat left 50%');
+    } 
 }

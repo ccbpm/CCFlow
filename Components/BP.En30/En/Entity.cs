@@ -1311,7 +1311,8 @@ namespace BP.En
 
             try
             {
-                int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select, SqlBuilder.GenerParasPK(this));
+                int num = EntityDBAccess.Retrieve(this, this.SQLCash.Select,
+                    SqlBuilder.GenerParasPK(this));
                 if (num >= 1)
                 {
                     //@wangyanyan 放入缓存.

@@ -231,7 +231,7 @@ namespace BP.WF.Template
                 UAC uac = new UAC();
                 uac.IsDelete = false;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsUpdate = true;
                     uac.IsView = true;

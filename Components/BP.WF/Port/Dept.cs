@@ -109,7 +109,7 @@ namespace BP.WF.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Web.WebUser.No == "admin")
+            if (BP.Web.WebUser.No.Equals("admin")==true)
                 return base.RetrieveAll();
 
             if (BP.Sys.SystemConfig.CCBPMRunModel == 0)

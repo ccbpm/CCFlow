@@ -7,8 +7,12 @@ namespace BP.WF.Template
     /// <summary>
     /// Btn属性
     /// </summary>
-    public class BtnAttr : BP.Sys.ToolbarExcelAttr
+    public class BtnAttr
     {
+        /// <summary>
+        /// Name
+        /// </summary>
+        public const string Name = "Name";
         /// <summary>
         /// 节点ID
         /// </summary>

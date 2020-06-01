@@ -38,7 +38,7 @@ namespace BP.WF.DTS
         {
             get
             {
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                     return true;
                 return false;
             }

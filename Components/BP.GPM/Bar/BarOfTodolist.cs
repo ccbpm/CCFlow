@@ -40,7 +40,7 @@ namespace BP.GPM
         {
             get
             {
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                     return true; //任何人都可以看到.
                 else
                     return false;

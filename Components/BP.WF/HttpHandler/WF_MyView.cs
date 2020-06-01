@@ -290,7 +290,7 @@ namespace BP.WF.HttpHandler
                     case WFState.Complete: // 完成.
                     case WFState.Delete:   // 逻辑删除..
                         /*恢复使用流程*/
-                        if (WebUser.No == "admin" || powers.Contains("FlowDataRollback") == true)
+                        if (WebUser.No.Equals("admin")==true || powers.Contains("FlowDataRollback") == true)
                         {
                             dr = dt.NewRow();
                             dr["No"] = "Rollback";

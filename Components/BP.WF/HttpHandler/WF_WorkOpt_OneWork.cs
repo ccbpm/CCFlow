@@ -445,7 +445,7 @@ namespace BP.WF.HttpHandler
                 case WFState.Complete: // 完成.
                 case WFState.Delete:   // 逻辑删除..
                     /*恢复使用流程*/
-                    if (WebUser.No == "admin")
+                    if (WebUser.No.Equals("admin")==true)
                         ht.Add("CanRollBack", 1);
                     else
                         ht.Add("CanRollBack", 0);

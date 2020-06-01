@@ -336,7 +336,7 @@ namespace BP.WF.Template
                     throw new Exception("err@管理员登录用户信息丢失,当前会话["+WebUser.No+","+WebUser.Name+"]");
                 uac.IsUpdate = true;
                 //uac.OpenForAdmin();  //zsy修改 2020.5.15
-                //if (BP.Web.WebUser.No == "admin" || this.DesignerNo == WebUser.No)
+                //if (BP.Web.WebUser.No.Equals("admin")==true || this.DesignerNo == WebUser.No)
                 uac.IsDelete = false;
                 uac.IsInsert = false;
                 return uac;

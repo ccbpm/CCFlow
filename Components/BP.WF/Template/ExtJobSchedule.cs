@@ -78,7 +78,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.Readonly();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsUpdate = true;
                     uac.IsDelete = true;

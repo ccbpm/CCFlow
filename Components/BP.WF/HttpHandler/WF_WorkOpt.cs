@@ -413,7 +413,6 @@ namespace BP.WF.HttpHandler
                         {
                             GEDtls dtls1 = new GEDtls(dtl.No);
                             mapData.EnMap.AddDtl(dtls1, "RefPK");
-
                         }
                         al = mapData.GetDtlsDatasOfList(pkval.ToString());
                     }

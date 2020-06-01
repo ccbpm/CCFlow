@@ -472,7 +472,7 @@ namespace BP.WF.Port.Admin2
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Web.WebUser.No == "admin")
+            if (BP.Web.WebUser.No.Equals("admin")==true)
                 return base.RetrieveAll();
 
             QueryObject qo = new QueryObject(this);

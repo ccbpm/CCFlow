@@ -5514,7 +5514,7 @@ namespace BP.WF
                 return true;
             }
 
-            if (userNo == "admin")
+            if (WebUser.No.Equals("admin")==true)
             {
                 return true;
             }
@@ -5577,7 +5577,7 @@ namespace BP.WF
         {
             if (userNo == null)
                 userNo = WebUser.No;
-            if (userNo == "admin")
+            if (WebUser.No.Equals("admin")==true)
                 return true;
 
             //先从轨迹里判断.
@@ -6099,7 +6099,7 @@ namespace BP.WF
         /// <returns>是否可以删除该流程</returns>
         public static bool Flow_IsCanDeleteFlowInstance(string flowNo, Int64 workid, string userNo)
         {
-            if (userNo == "admin")
+            if (WebUser.No.Equals("admin")==true)
             {
                 return true;
             }

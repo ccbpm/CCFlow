@@ -19,7 +19,7 @@ namespace BP.GPM
         {
             get
             {
-                if ( this.No == "admin")
+                if ( this.No.Equals("admin")==true)
                     return true;
 
               
@@ -137,20 +137,6 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(EmpAttr.Idx, value);
-            }
-        }
-        /// <summary>
-        /// 签字类型
-        /// </summary>
-        public int SignType
-        {
-            get
-            {
-                return this.GetValIntByKey(EmpAttr.SignType);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.SignType, value);
             }
         }
         #endregion

@@ -62,7 +62,7 @@ namespace BP.GPM.AD
         {
             get
             {
-                if (this.No == "admin")
+                if (this.No.Equals("admin")==true)
                     return true;
 
                 string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";

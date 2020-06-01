@@ -1003,6 +1003,22 @@ namespace BP.WF.HttpHandler
         }
         #endregion 实体的操作.
 
+        public string Branches_SearchByKey()
+        {
+          
+            string key = this.GetRequestVal("Key"); //查询关键字.
+
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            QueryObject qo = new QueryObject(ensMen); //集合.
+            qo.AddWhere("No", " LIKE ", "%" + key + "%");
+            qo.addOr();
+            qo.AddWhere("Name", " LIKE ", "%" + key + "%");
+            qo.DoQuery();
+
+            return ensMen.ToJson();
+        }
+
         #region 部门人员模式.
         public string BranchesAndLeaf_SearchByNodeID()
         {
@@ -1172,8 +1188,10 @@ namespace BP.WF.HttpHandler
             dt = new DataTable();
             dt.TableName = "Base_Info";
             dt.Columns.Add("IsExitParentNo", typeof(int));
+            dt.Columns.Add("ExtShowCols", typeof(string));
             DataRow drr = dt.NewRow();
             drr["IsExitParentNo"] = IsExitParentNo;
+            drr["ExtShowCols"] = vsM.ExtShowCols;
             dt.Rows.Add(drr);
             ds.Tables.Add(dt);
 
@@ -1227,6 +1245,20 @@ namespace BP.WF.HttpHandler
 
             if(saveType == false)
                 dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
+
+            if(DataType.IsNullOrEmpty(vsM.ExtShowCols)==false && vsM.ExtShowCols.Contains("@"+ defaultGroupAttrKey + "=") == true)
+            {
+               if(dtSelected.Columns.Contains(defaultGroupAttrKey)== false)
+                {
+                    dtSelected.Columns.Add(defaultGroupAttrKey, typeof(string));
+                }
+               foreach(DataRow dr in dtSelected.Rows)
+               {
+                    enMen.PKVal = dr["No"].ToString();
+                    enMen.RetrieveFromDBSources();
+                    dr[defaultGroupAttrKey] = enMen.Row[defaultGroupAttrKey+"Text"];
+               }
+            }
 
             dtSelected.Columns.Remove(AttrOfOneInMM);
             ds.Tables.Add(dtSelected); //已经选择的数据.

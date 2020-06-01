@@ -42,7 +42,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
 
         //必填属性
         if (mapAttr.UIIsEnable == 1 && mapAttr.UIIsInput) {
-            debugger
             var mustInput = "<span style='color:red' class='mustInput' data-keyofen='" + mapAttr.KeyOfEn + "' >*</span>";
             $("#TB_" + mapAttr.KeyOfEn).after(mustInput);
             $("#DDL_" + mapAttr.KeyOfEn).after(mustInput);

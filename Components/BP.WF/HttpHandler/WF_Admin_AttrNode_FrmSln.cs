@@ -37,6 +37,17 @@ namespace BP.WF.HttpHandler
             Nodes nds = new Nodes();
             nds.Retrieve("FK_Flow", flowNo);
 
+            //求出来组件s.
+            MapAttrs attrOfCommpents = new MapAttrs();
+            QueryObject qo = new QueryObject(attrOfCommpents);
+            qo.AddWhere(MapAttrAttr.FK_MapData, currNode.NodeFrmID);
+            qo.addAnd();
+            qo.AddWhere(MapAttrAttr.UIContralType, ">=", 6);
+            qo.DoQuery();
+
+         //   attrOfCommpents.Retrieve(MapAttrAttr.FK_MapData,
+           // currNode.)
+
             for (var i = 0; i < nds.Count; i++)
             {
 
@@ -87,8 +98,21 @@ namespace BP.WF.HttpHandler
                 {
                     frmNode.FrmSln = FrmSln.Readonly; //只读方案
                 }
-
                 frmNode.Insert();
+
+                //设置组件都是可用的.
+                BP.WF.Template.FrmField ff = new FrmField();
+                foreach (MapAttr attr in attrOfCommpents)
+                {
+                    ff.UIVisible = true;
+                    ff.KeyOfEn = attr.KeyOfEn;
+                    ff.FK_Flow = currNode.FK_Flow;
+                    ff.FK_Node = currNode.NodeID;
+                    ff.FK_MapData = currNode.NodeFrmID; //表单ID.
+                    ff.MyPK = ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn;
+                    if (ff.IsExits == false)
+                        ff.Insert();
+                }
             }
         }
         /// <summary>

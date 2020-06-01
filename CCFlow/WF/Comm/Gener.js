@@ -1263,6 +1263,8 @@ var Entity = (function () {
                     if (data == "")
                         return 0;
                     try {
+                        data = data.replace(/\\\\"/g,'\\"');
+                        console.log(data);
                         jsonString = JSON.parse(data);
                         setData(self);
                         result = jsonString.RetrieveFromDBSources;

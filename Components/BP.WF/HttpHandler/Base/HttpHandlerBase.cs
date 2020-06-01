@@ -20,14 +20,17 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="token">获得token.</param>
         /// <returns></returns>
-        public string DealToken(string token)
+        public string DealToken(DirectoryPageBase page, string mothodName)
         {
+            string token = page.GetRequestVal("Token");
             if (DataType.IsNullOrEmpty(token) == true)
-                throw new Exception("err@登录信息丢失，或者没有传递过来token.");
-
+                return null;
+            //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
             string host = BP.Sys.SystemConfig.GetValByKey("TokenHost", null);
             if (DataType.IsNullOrEmpty(host) == true)
-                throw new Exception("err@全局变量:TokenHost，没有获取到.");
+                return null;
+
+            //throw new Exception("err@全局变量:TokenHost，没有获取到.");
 
             string url = host + token;
             string data = BP.DA.DataType.ReadURLContext(url, 5000);
@@ -92,13 +95,14 @@ namespace BP.WF.HttpHandler
                 if (WebUser.No == null)
                 {
                     bool isCanDealToken = true;
-                    if (ctrl.DoType.Contains("Login") == false)
+
+                    if (ctrl.DoType.Contains("Login") == true)
                         isCanDealToken = false;
-                    if (ctrl.ToString().Contains("Admin") == false)
+                    if (ctrl.ToString().Contains("Admin") == true)
                         isCanDealToken = false;
 
                     if (isCanDealToken == true)
-                        this.DealToken(ctrl.GetRequestVal("Token"));
+                        this.DealToken(ctrl, ctrl.DoType);
                 }
 
                 //执行方法返回json.

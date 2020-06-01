@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
                 return "";
                 //throw new Exception("@获取Form参数错误,参数集合不包含[" + key + "]");
             }
-            
+
             val = val.Replace("'", "~");
             return val;
         }
@@ -61,7 +61,6 @@ namespace BP.WF.HttpHandler
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
             //string token=myEn.ToString
-
             try
             {
                 Type tp = myEn.GetType();
@@ -81,17 +80,16 @@ namespace BP.WF.HttpHandler
                 if (methodName.Contains(">") == true)
                     return "err@非法的脚本植入.";
 
-
                 if (ex.InnerException != null)
                     if (ex.InnerException.Message.IndexOf("err@") == 0)
                         return ex.InnerException.Message;
                     else
-                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
+                        return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
                 else
                     if (ex.Message.IndexOf("err@") == 0)
-                        return ex.Message;
-                    else
-                        return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
+                    return ex.Message;
+                else
+                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
             }
         }
         /// <summary>
@@ -354,7 +352,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str =this.GetRequestVal("Name");
+                string str = this.GetRequestVal("Name");
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
@@ -482,7 +480,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("MyPK");
-                if ( DataType.IsNullOrEmpty(str))
+                if (DataType.IsNullOrEmpty(str))
                     return null;
                 return str;
             }
@@ -566,7 +564,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(str))
                 {
                     str = this.GetRequestVal("MyPK");
-                    if (DataType.IsNullOrEmpty(str)==true)
+                    if (DataType.IsNullOrEmpty(str) == true)
                     {
                         return null;
                     }
@@ -695,7 +693,7 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
-       
+
         private Int64 _workID = 0;
         public Int64 WorkID
         {
@@ -822,7 +820,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                int i= this.GetRequestValInt("PageSize");
+                int i = this.GetRequestValInt("PageSize");
                 if (i == 0)
                     return 10;
                 return i;
@@ -942,14 +940,14 @@ namespace BP.WF.HttpHandler
         #endregion 父子流程相关的属性.
 
 
-        protected string ExportGroupExcel(System.Data.DataSet ds, string title,string paras)
+        protected string ExportGroupExcel(System.Data.DataSet ds, string title, string paras)
         {
             DataTable dt = ds.Tables["GroupSearch"];
             DataTable AttrsOfNum = ds.Tables["AttrsOfNum"];
-            DataTable AttrsOfGroup = ds.Tables["AttrsOfGroup"]; 
+            DataTable AttrsOfGroup = ds.Tables["AttrsOfGroup"];
 
             title = title.Trim();
-            string filename = title+"Ep" + title + ".xls";
+            string filename = title + "Ep" + title + ".xls";
             string file = filename;
             bool flag = true;
             string filepath = BP.Sys.SystemConfig.PathOfTemp;
@@ -989,47 +987,57 @@ namespace BP.WF.HttpHandler
                 foreach (DataRow dr in dt.Rows)
                 {
                     strLine = strLine + dr["IDX"] + Convert.ToChar(9);
-                    foreach (DataRow attr in AttrsOfGroup.Rows) {
-                        strLine = strLine + dr[attr["KeyOfEn"]+"T"] + Convert.ToChar(9);
-				      
-			        }
-			        foreach (DataRow attr in AttrsOfNum.Rows) {
+                    foreach (DataRow attr in AttrsOfGroup.Rows)
+                    {
+                        strLine = strLine + dr[attr["KeyOfEn"] + "T"] + Convert.ToChar(9);
+
+                    }
+                    foreach (DataRow attr in AttrsOfNum.Rows)
+                    {
 
                         strLine = strLine + dr[attr["KeyOfEn"].ToString()] + Convert.ToChar(9);
-			        }
+                    }
 
                     objStreamWriter.WriteLine(strLine);
                     strLine = "";
                 }
 
                 strLine = "汇总" + Convert.ToChar(9);
-                foreach (DataRow attr in AttrsOfGroup.Rows) {
-			
-			        strLine = strLine + "" + Convert.ToChar(9);
-		        }
+                foreach (DataRow attr in AttrsOfGroup.Rows)
+                {
 
-		        foreach (DataRow attr in AttrsOfNum.Rows) {
-			        double d =0;
-			        foreach(DataRow dtr in dt.Rows){
-				        d +=Double.Parse(dtr[attr["KeyOfEn"].ToString()].ToString());
-			        }
-			        if(paras.Contains(attr["KeyOfEn"]+"=AVG")){
-				        if(dt.Rows.Count!=0){
+                    strLine = strLine + "" + Convert.ToChar(9);
+                }
+
+                foreach (DataRow attr in AttrsOfNum.Rows)
+                {
+                    double d = 0;
+                    foreach (DataRow dtr in dt.Rows)
+                    {
+                        d += Double.Parse(dtr[attr["KeyOfEn"].ToString()].ToString());
+                    }
+                    if (paras.Contains(attr["KeyOfEn"] + "=AVG"))
+                    {
+                        if (dt.Rows.Count != 0)
+                        {
                             d = Double.Parse((d / dt.Rows.Count).ToString("0.0000"));
-				        }
-					
-			        }
-			
-			        if(Int32.Parse(attr["MyDataType"].ToString()) == DataType.AppInt){
-				        if(paras.Contains(attr["KeyOfEn"]+"=AVG"))
-					        strLine = strLine + d + Convert.ToChar(9); 
-				        else
-					        strLine = strLine + (Int32)d + Convert.ToChar(9);
-			        }else{
-				       strLine = strLine + d + Convert.ToChar(9); ;
-			        }
-			
-		        }
+                        }
+
+                    }
+
+                    if (Int32.Parse(attr["MyDataType"].ToString()) == DataType.AppInt)
+                    {
+                        if (paras.Contains(attr["KeyOfEn"] + "=AVG"))
+                            strLine = strLine + d + Convert.ToChar(9);
+                        else
+                            strLine = strLine + (Int32)d + Convert.ToChar(9);
+                    }
+                    else
+                    {
+                        strLine = strLine + d + Convert.ToChar(9); ;
+                    }
+
+                }
 
                 objStreamWriter.WriteLine(strLine);
                 strLine = "";
@@ -1052,21 +1060,21 @@ namespace BP.WF.HttpHandler
             if (flag)
             {
                 file = "/DataUser/Temp/" + file;
-               
+
             }
 
             return file;
         }
-        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title,Attrs mapAttrs=null,string filename=null)
+        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title, Attrs mapAttrs = null, string filename = null)
         {
-            if(filename == null)
+            if (filename == null)
                 filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
             bool flag = true;
             string filepath = BP.Sys.SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
-           
+
 
             //如果导出目录没有建立，则建立.
             if (Directory.Exists(filepath) == false)
@@ -1083,9 +1091,9 @@ namespace BP.WF.HttpHandler
 
             #region 生成导出文件
             try
-            {   
+            {
                 Attrs attrs = null;
-                if(mapAttrs!=null)
+                if (mapAttrs != null)
                     attrs = mapAttrs;
                 else
                     attrs = en.EnMap.Attrs;
@@ -1124,11 +1132,11 @@ namespace BP.WF.HttpHandler
 
                 //添加标签，解决数字在excel中变为科学计数法问题
                 strLine = "<table cellspacing=\"0\" cellpadding=\"5\" rules=\"all\" border=\"1\"> ";
-                strLine +="<tr>";
+                strLine += "<tr>";
                 //生成文件标题
                 foreach (Attr attr in selectedAttrs)
                 {
-                    if(attr.Key.Equals("OID"))
+                    if (attr.Key.Equals("OID"))
                         continue;
 
                     if (attr.Key.Equals("WorkID"))
@@ -1140,19 +1148,19 @@ namespace BP.WF.HttpHandler
                     if (attr.IsFKorEnum)
                         continue;
 
-                    if (attr.UIVisible == false && attr.MyFieldType!= FieldType.RefText)
+                    if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
                         continue;
 
-                    if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt") 
+                    if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")
                         || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
                         || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
                         || attr.Key.Equals("RefPK"))
                         continue;
 
-                    if(attr.MyFieldType == FieldType.RefText)
-                        strLine +="<td>" + attr.Desc.Replace("名称","") + Convert.ToChar(9)+"</td>";
+                    if (attr.MyFieldType == FieldType.RefText)
+                        strLine += "<td>" + attr.Desc.Replace("名称", "") + Convert.ToChar(9) + "</td>";
                     else
-                        strLine += "<td>"  + attr.Desc + Convert.ToChar(9) + "</td>";
+                        strLine += "<td>" + attr.Desc + Convert.ToChar(9) + "</td>";
                 }
                 strLine += "</tr>";
                 objStreamWriter.WriteLine(strLine);
@@ -1185,32 +1193,32 @@ namespace BP.WF.HttpHandler
                             || attr.Key.Equals("RefPK"))
                             continue;
 
-                        
+
 
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
-                            strLine +="<td>"+ (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9)+"</td>";
+                            strLine += "<td>" + (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9) + "</td>";
                         }
                         else
                         {
                             string text = "";
                             if (attr.IsFKorEnum || attr.IsFK)
                                 text = dr[attr.Key + "Text"].ToString();
-                            else if(attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                            else if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
                                 text = dr[attr.Key + "T"].ToString();
                             else
                                 text = dr[attr.Key].ToString();
 
-                            if (attr.Key == "FK_NY" && DataType.IsNullOrEmpty(text)==true)
+                            if (attr.Key == "FK_NY" && DataType.IsNullOrEmpty(text) == true)
                             {
-                               text = dr[attr.Key].ToString();
+                                text = dr[attr.Key].ToString();
                             }
                             if (DataType.IsNullOrEmpty(text) == false && (text.Contains("\n") == true || text.Contains("\r") == true))
                             {
                                 text = text.Replace("\n", " ");
                                 text = text.Replace("\r", " ");
                             }
-                            strLine += "<td style=\"vnd.ms-excel.numberformat:@\">" + text+" " + Convert.ToChar(9)+"</td>";
+                            strLine += "<td style=\"vnd.ms-excel.numberformat:@\">" + text + " " + Convert.ToChar(9) + "</td>";
                         }
                     }
                     strLine += "</tr>";
@@ -1223,7 +1231,7 @@ namespace BP.WF.HttpHandler
                 objStreamWriter.WriteLine(Convert.ToChar(9) + " 制表人：" + Convert.ToChar(9) + WebUser.Name + Convert.ToChar(9) + "日期：" + Convert.ToChar(9) + DateTime.Now.ToShortDateString());
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 flag = false;
             }
@@ -1240,7 +1248,7 @@ namespace BP.WF.HttpHandler
 
             if (flag)
             {
-               file ="/DataUser/Temp/" + file;
+                file = "/DataUser/Temp/" + file;
                 //this.Write_Javascript(" window.open('"+ Request.ApplicationPath + @"/Report/Exported/" + filename +"'); " );
                 //this.Write_Javascript(" window.open('"+Request.ApplicationPath+"/Temp/" + file +"'); " );
             }
@@ -1277,7 +1285,7 @@ namespace BP.WF.HttpHandler
 
             if (Directory.Exists(dir) == false)
                 Directory.CreateDirectory(dir);
-            
+
 
             //一个字符的像素宽度，以Arial，10磅，i进行测算
             using (Bitmap bmp = new Bitmap(10, 10))
@@ -1569,7 +1577,7 @@ namespace BP.WF.HttpHandler
             }
 
 
-            return null; 
+            return null;
         }
 
         /// <summary>

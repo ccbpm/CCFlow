@@ -1363,7 +1363,7 @@ namespace BP.En
                     break;
             }
             Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
-            throw new Exception("@没有找到记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "记录不存在,请与管理员联系, 或者确认输入错误.");
+            throw new Exception("@记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "不存在.");
         }
         /// <summary>
         /// 判断是不是存在的方法.

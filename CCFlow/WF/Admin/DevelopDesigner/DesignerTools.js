@@ -19,30 +19,22 @@ function FormatHtml() {
 
     //首先执行保存.
     SaveForm();
-
-    //数据库中查找
+    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
+    var ssss = /style\s*?=\s*?([‘"])[\s\S]*?\1/
+    var dsd = /style=\"(.*?)\"/g
+    var newHtml = ''
+    newHtml = formeditor.replace(rels, '');
+    newHtml = newHtml.replace(ssss, '');
+    newHtml = newHtml.replace(dsd, '');
+    //执行保存.
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-    htmlContent = handler.DoMethodReturnString("Designer_FormatHtml");
-
-    //获得table.
-    //  $("table");
-
-    //var handler = new XMLHttpRequest("BP");
-
-    // handler.DmDesigner_FormatHtml
-
-    //获得该table的 tr 集合。 
-
-    //执行删除tr 的内容.
-
-
-    //获得table 的 td集合.
-
-    //执行删除tr 的修饰内容.
-
-    //执行保存.
-
+    handler.AddPara("HtmlCode", encodeURIComponent(newHtml));
+    var data = handler.DoMethodReturnString("SaveForm");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
 }
 
 

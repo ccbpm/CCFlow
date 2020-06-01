@@ -2240,10 +2240,9 @@ function SaveForm() {
     $("#Btn_Save").val("保存成功");
     setTimeout(function () { $("#Btn_Save").val("保存."); }, 1000);
 }
-
+var formeditor = "";
 //保存表单的htm代码
 function Save() {
-
     //清空MapData的缓存
     var en = new Entity("BP.Sys.MapData", pageParam.fk_mapdata);
     en.SetPKVal(pageParam.fk_mapdata);
@@ -2505,7 +2504,7 @@ function Save() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
     handler.AddPara("HtmlCode", encodeURIComponent(formeditor));
-
+    
     var data = handler.DoMethodReturnString("SaveForm");
     if (data.indexOf("err@") != -1) {
         alert(data);

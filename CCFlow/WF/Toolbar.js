@@ -187,7 +187,8 @@ function initModal(modalType, toNode,url) {
         + '</div><!-- /.modal-dialog -->'
         + '</div>';
 
-    $('body').append($(html));
+    if ($("#returnWorkModal").length == 0)
+         $('body').append($(html));
    
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
@@ -305,6 +306,46 @@ function initModal(modalType, toNode,url) {
                 break;
             case "SelectNodeUrl":
                 modalIframeSrc = url;
+                break;
+
+            case "BySelfUrl"://接收人规则自定义URL
+                SetPageSize(60, 60);
+                modalIframeSrc = url;
+                if ($("#returnWorkModal .modal-footer").length == 0) {
+                    var footBtn = $('<div class="modal-footer"><div>');
+                    $("#returnWorkModal .modal-body").after(footBtn);
+                    var footerOK = $('<button type="button" class="Btn" data-dismiss="modal"> 发送</button >');
+                    footerOK.click(function () {
+
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+                        handler.AddUrlData();
+                        var data = handler.DoMethodReturnString("Send");
+                        if (data.indexOf("err@") != -1) {
+                            var reg = new RegExp('err@', "g")
+                            var data = data.replace(reg, '');
+
+                            $(".modal-body").html(data);
+                            $('#MessageDiv').modal().show();
+                            setToobarEnable();
+                            return;
+                        }
+
+                        OptSuc(data);
+                    });
+
+                    var footerClose = $('<button type="button" class="Btn" data - dismiss="modal" > 取消</button >');
+                    footerClose.click(function () {
+                        var sels = new Entities("BP.WF.Template.SelectAccpers");
+                        sels.Delete("WorkID", GetQueryString("WorkID"), "FK_Node", getQueryStringByNameFromUrl(url, "ToNode"));
+                        $("#returnWorkModal").modal('hide');
+
+                    });
+
+                   
+                    footBtn.append(footerOK).append(footerClose);
+                }
+                $(".modal-content").css("height", "auto");
+                
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");
@@ -446,14 +487,33 @@ function Send(isHuiQian,formType) {
                 $('#returnWorkModal').modal().show();
             }
             return false;
-        } else {
+        }
+        if (selectToNode.IsSelectEmps == "2") {
+            Save(1); //执行保存.
             if (isHuiQian == true) {
-                Save(1); //执行保存.
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
-                return false;
+            } else {
+                var url = selectToNode.DeliveryParas;
+                if (url != null && url != undefined && url!= "") {
+                    url = url + "?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNodeID + "&s=" + Math.random();
+                    initModal("BySelfUrl", toNodeID, url);
+                    $('#returnWorkModal').modal().show();
+                    return false;
+                }
+
+                
             }
+            
         }
+       
+        if (isHuiQian == true) {
+            Save(1); //执行保存.
+            initModal("HuiQian", toNodeID);
+            $('#returnWorkModal').modal().show();
+            return false;
+        }
+        
     }
 
     //执行发送.
@@ -503,13 +563,23 @@ function execSend(toNodeID, formType) {
         return;
     }
 
+    
+
     if (data.indexOf('SelectNodeUrl@') == 0) {
         var url = data;
         url = url.replace('SelectNodeUrl@', '');
-        //window.location.href = url;
         initModal("SelectNodeUrl",null,url); $('#returnWorkModal').modal().show();
         return;
     }
+
+    if (data.indexOf('BySelfUrl@') == 0) {  //发送成功时转到自定义的URL 
+        var url = data;
+        url = url.replace('BySelfUrl@', '');
+        initModal("BySelfUrl", null, url); $('#returnWorkModal').modal().show();
+        return;
+    }
+
+
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
         if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {

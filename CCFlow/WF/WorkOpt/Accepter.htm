@@ -175,6 +175,21 @@
                 return;
             }
 
+            if (data.indexOf('BySelfUrl@') == 0) {
+                var url = data.replace('BySelfUrl@', '');
+
+                if (url.indexOf('ToNode=') > 0)
+                    url += "&IsSend=" + GetQueryString("IsSend");
+                else
+                    url += "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend");
+
+                $('#returnWorkModal', parent.document).modal('hide');
+                window.parent.initModal("BySelfUrl", null, url); $('#returnWorkModal', parent.document).modal().show();
+
+                return;
+            }
+
+
             //把string 转化为json.
             try {
                 data = eval('(' + data + ')');

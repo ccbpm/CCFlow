@@ -39,7 +39,7 @@ $(function () {
             //_html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
             _html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
         else
-            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='../DataUser/OverrideFiles/ToolbarImg/" + toolBar.No + ".png' width='15px' height='15px'>&nbsp;" + toolBar.Name + "</button>";
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='Img/Btn/" + toolBar.No + ".png' width='15px' height='15px'>&nbsp;" + toolBar.Name + "</button>";
     });
     $('#ToolBar').html(_html);
 

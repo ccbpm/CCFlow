@@ -39,9 +39,17 @@ $(document).ready(function () {
     SetBigImgDiv();
     //设置SQL脚本编辑器.
     CheckSQLTextArea();
-   
 
+    //如何给按钮自动增加标签?
+    AddBtnIcon();
 })
+
+function AddBtnIcon()
+{
+    var ids = "Save,Delete,SaveAncClose,Cancel";
+
+}
+
 //动态添加新风格  @lz
 function SetNewCSS() {
     //body下添加一个父Div

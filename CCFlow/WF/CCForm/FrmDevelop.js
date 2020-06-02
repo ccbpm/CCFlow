@@ -836,7 +836,7 @@ function GetFieldAth(mapAttr) {
         }
     }
     if (ath == null) {
-        alert("没有找到附件属性,请联系管理员");
+        //  alert("没有找到附件属性,请联系管理员");
         return;
     }
 

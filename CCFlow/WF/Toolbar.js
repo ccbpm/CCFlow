@@ -304,7 +304,7 @@ function initModal(modalType, toNode,url) {
             //发送选择接收节点和接收人                
             case "sendAccepter":
                 $('#modalHeader').text("选择接受人");
-                SetPageSize(60, 60);
+                SetPageSize((80, 80);
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "SelectNodeUrl":
@@ -312,7 +312,7 @@ function initModal(modalType, toNode,url) {
                 break;
 
             case "BySelfUrl"://接收人规则自定义URL
-                SetPageSize(60, 60);
+                SetPageSize(80, 80);
                 modalIframeSrc = url;
                 if ($("#returnWorkModal .modal-footer").length == 0) {
                     var footBtn = $('<div class="modal-footer"><div>');
@@ -352,7 +352,7 @@ function initModal(modalType, toNode,url) {
                 break;
             case "sendAccepterOfOrg":
                 $('#modalHeader').text("选择接受人");
-                SetPageSize(60, 60);
+                SetPageSize(80, 80);
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":

@@ -1626,6 +1626,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
                     /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
                     fileNameFormat = DBAccess.GenerGUID();
                     pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";

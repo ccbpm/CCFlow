@@ -382,6 +382,11 @@
                 alert(data);
                 return;
             }
+				if (window.parent != null && window.parent.ReloadGxjtList != null) {
+					window.parent.ReloadGxjtList(data);
+				} else {
+					ReloadGxjtList(data);
+				}
 
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
             data = data.replace("'MyFlow.htm", "'../MyFlow.htm");

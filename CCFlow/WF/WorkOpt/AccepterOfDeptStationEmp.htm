@@ -279,6 +279,11 @@
                 $("#Btn_SelectEmps").attr("disabled", false);
                 return;
             }
+				if (window.parent != null && window.parent.ReloadGxjtList != null) {
+					window.parent.ReloadGxjtList(data);
+				} else {
+					ReloadGxjtList(data);
+				}
 
 
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");

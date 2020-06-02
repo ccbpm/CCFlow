@@ -1,5 +1,4 @@
 ﻿
-var flowData = null;
 
 function GenerFoolFrm(wn) {
 
@@ -1289,6 +1288,8 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
     //解析执行js脚本
     if (Script != null && Script != "" && Script != undefined)
         DBAccess.RunDBSrc(Script, 2);
+
+   //提示信息未解析
     //解决字段隐藏显示.
     var cfgs = frmRB.FieldsCfg;
 
@@ -1333,6 +1334,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
                 else
                     SetCtrlShow(key);
                 SetCtrlEnable(key);
+                NDMapAttrs.push(key);
             }
 
             if (sta == 2) { //要设置为不可编辑.

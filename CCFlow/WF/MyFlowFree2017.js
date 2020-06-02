@@ -1,4 +1,4 @@
-﻿var flowData = null;
+﻿
 var IsCC = false;
 var isSigantureChecked = false;
 function GenerFreeFrm(wn) {

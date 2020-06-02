@@ -50,14 +50,14 @@
             $('#Message').val(param.Message);
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 90%;margin: 10px auto;">' +
-                '<div class="modal-dialog" style="margin: 0px;">'
-                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                '<div class="modal-dialog" style="width:700px;">'
+                + '<div class="modal-content" style="">'
                 + '<div class="modal-header">'
                 + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                 + '<h4 class="modal-title">选择移交人</h4>'
                 + '</div>'
                 + '<div class="modal-body">'
-                + '<iframe style="width:100%;border:0px;height:800px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                + '<iframe style="width:100%;border:0px;height:600px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
                 + '</div>'
                 + '</div><!-- /.modal-content -->'
                 + '</div><!-- /.modal-dialog -->'
@@ -142,10 +142,10 @@
     </script>
 
 </head>
-<body style=" padding:10px; text-align:center">
+<body>
 
-    <div style=" text-align:center">
-        <table style="width:99%; text-align:center;  padding:10px;">
+    <div style="text-align:center;padding:10px">
+        <table style="width:100%;">
             <tr>
                 <th> 请选择要移交的人: </th>
             </tr>

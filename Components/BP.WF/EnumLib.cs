@@ -1015,6 +1015,14 @@ namespace BP.WF
         /// </summary>
         ByBindTeamEmp = 27,
         /// <summary>
+        /// 按照组织模式人员选择器
+        /// </summary>
+        BySelectedEmpsOrgModel = 43,
+        /// <summary>
+        /// 按照自定义Url模式的人员选择器
+        /// </summary>
+        BySelfUrl = 44,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

@@ -120,6 +120,8 @@ namespace BP.WF.HttpHandler
                     this.DealToken(myEn, myEn.DoType);
             }
 
+
+
             //string token=myEn.ToString
             try
             {

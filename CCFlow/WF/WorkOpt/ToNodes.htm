@@ -93,8 +93,12 @@
                     html += "<label for='CB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
                     }
+                    if (node.DeliveryWay == 43)
+                       html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+
+
                     html += "<br/>";
                 } else {
                     if (node.NodeID == selectNodeID)
@@ -103,8 +107,11 @@
                     html += "<label for='RB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\"   href='javaScript:void(0)' onclick='SelectEmps(\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"   href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
                     }
+                    if (node.DeliveryWay == 43)
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+
                     html += "<br/>";
                 }
 
@@ -159,10 +166,10 @@
 
         //选择接受人
 
-        function SelectEmps(nodeID) {
+        function SelectEmps(OperHtml,nodeID) {
             toNodeID = nodeID;
             $('#modalHeader').text("选择接受人");
-            modalIframeSrc = "./Accepter.htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + nodeID + "&IsSend=0" + "&s=" + Math.random();
+            modalIframeSrc = "./" + OperHtml+".htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + nodeID + "&IsSend=0" + "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show();
 

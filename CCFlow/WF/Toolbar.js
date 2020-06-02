@@ -350,6 +350,11 @@ function initModal(modalType, toNode,url) {
                 $(".modal-content").css("height", "auto");
                 
                 break;
+            case "sendAccepterOfOrg":
+                $('#modalHeader').text("选择接受人");
+                SetPageSize(60, 60);
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
+                break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/DBTemplate.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
@@ -509,6 +514,19 @@ function Send(isHuiQian,formType) {
             }
             
         }
+
+        if (selectToNode.IsSelectEmps == "3") {
+            Save(1); //执行保存.
+            if (isHuiQian == true) {
+                initModal("HuiQian", toNodeID);
+                $('#returnWorkModal').modal().show();
+            } else {
+                initModal("sendAccepterOfOrg", toNodeID);
+                $('#returnWorkModal').modal().show();
+            }
+
+            return false;
+        }
        
         if (isHuiQian == true) {
             Save(1); //执行保存.
@@ -585,6 +603,21 @@ function execSend(toNodeID, formType) {
 
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
+        if (data.indexOf("AccepterOfOrg")!=-1) {
+            var params = data.split("&");
+
+            for (var i = 0; i < params.length; i++) {
+                if (params[i].indexOf("ToNode") == -1)
+                    continue;
+
+                toNodeID = params[i].split("=")[1];
+                break;
+            }
+            initModal("sendAccepterOfOrg", toNodeID);
+            $('#returnWorkModal').modal().show();
+            return;
+        }
+
         if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
 
             //求出来 url里面的FK_Node=xxxx 
@@ -601,6 +634,7 @@ function execSend(toNodeID, formType) {
             $('#returnWorkModal').modal().show();
             return;
         }
+        
 
         var url = data;
         url = url.replace('url@', '');

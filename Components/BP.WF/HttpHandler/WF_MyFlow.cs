@@ -2001,12 +2001,14 @@ namespace BP.WF.HttpHandler
 
                             if (item.HisDeliveryWay == DeliveryWay.BySelected)
                                 dr["IsSelectEmps"] = "1";
-                            if(item.HisDeliveryWay == DeliveryWay.BySelfUrl)
+                            else if(item.HisDeliveryWay == DeliveryWay.BySelfUrl)
                             {
                                 dr["IsSelectEmps"] = "2";
                                 dr["DeliveryParas"] = item.DeliveryParas;
                             }
-                                
+                            else if(item.HisDeliveryWay == DeliveryWay.BySelectedEmpsOrgModel)
+                                dr["IsSelectEmps"] = "3";
+
                             else
                                 dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
 

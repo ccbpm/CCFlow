@@ -1641,16 +1641,16 @@ namespace BP.WF
                 System.IO.FileInfo finfo = new FileInfo(zipFile);
                 ZipFilePath = finfo.FullName; //文件路径.
 
-                try
-                {
+                //try
+                //{
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
                     ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".zip");
-                }
-                catch (Exception ex)
-                {
-                    ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfFile);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfFile);
+                //}
 
                 //把所有的文件做成一个zip文件.
 
@@ -2306,8 +2306,8 @@ namespace BP.WF
         public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
             BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
-            try
-            {
+            //try
+            //{
                 //横向打印.
                 // wkhtmltopdf.exe --orientation Landscape  http://baidu.com afqc.pdf  .
 
@@ -2326,12 +2326,12 @@ namespace BP.WF
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
-            }
-            catch (Exception ex)
-            {
-                //BP.DA.Log.DebugWriteError("@生成PDF错误" + ex.Message + "@pdf=" + pdf + "@htmFile="+htmFile);
-                throw ex;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //BP.DA.Log.DebugWriteError("@生成PDF错误" + ex.Message + "@pdf=" + pdf + "@htmFile="+htmFile);
+            //    throw ex;
+            //}
         }
         /// <summary>
         /// 签名

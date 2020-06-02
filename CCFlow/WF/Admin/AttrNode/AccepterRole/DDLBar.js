@@ -141,6 +141,9 @@ function InitBar(optionKey) {
             html += "<option value=" + DeliveryWay.BySelectedEmpsOrgModel + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人(集团模式)</option>";
         }
 
+
+        html += "<option value=" + DeliveryWay.BySelfUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义人员选择器</option>";
+
         html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;按上一节点表单指定的字段值作为本步骤的接受人</option>";
 
         html += "<option value=" + DeliveryWay.ByDtlAsSubThreadEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点的明细表来决定子线程的接受人</option>";

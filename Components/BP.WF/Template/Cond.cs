@@ -355,7 +355,7 @@ namespace BP.WF.Template
         {
             //this.RunSQL("UPDATE WF_Node SET IsCCFlow=0");
             // this.RunSQL("UPDATE WF_Node SET IsCCNode=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Node + ")");
-            
+
             //@sly
             //this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
             return base.beforeUpdateInsertAction();
@@ -403,6 +403,10 @@ namespace BP.WF.Template
             {
                 return this.GetValStringByKey(CondAttr.AttrKey);
             }
+            set
+            {
+                this.SetValByKey(CondAttr.AttrKey, value);
+            }
         }
         /// <summary>
         /// 属性名称
@@ -412,6 +416,24 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValStringByKey(CondAttr.AttrName);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.AttrName, value);
+            }
+        }
+        /// <summary>
+        /// Idx
+        /// </summary>
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(CondAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.Idx, value);
             }
         }
         /// <summary>
@@ -534,6 +556,7 @@ namespace BP.WF.Template
                 _FID = value;
             }
         }
+
         /// <summary>
         /// workid
         /// </summary>
@@ -576,12 +599,12 @@ namespace BP.WF.Template
         /// </summary>
         public void DoDown2020Cond()
         {
-            if (this.CondType== CondType.Dir)
-               this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
-                   this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
+            if (this.CondType == CondType.Dir)
+                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
+                    this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
 
             if (this.CondType == CondType.Flow)
-                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node,CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
 
             if (this.CondType == CondType.SubFlow)
                 this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
@@ -1068,9 +1091,9 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-                map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
 
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
+                map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
 
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
                 map.AddTBAtParas(2000);
@@ -1089,7 +1112,6 @@ namespace BP.WF.Template
     public class Conds : Entities
     {
         #region 属性
-       
         public string ConditionDesc
         {
             get
@@ -1109,13 +1131,13 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="runModel">模式</param>
         /// <returns></returns>
-        public bool GenerResult(GERpt en=null)
+        public bool GenerResult(GERpt en = null)
         {
             if (this.Count == 0)
                 throw new Exception("err@没有要计算的条件，无法计算.");
 
             //给条件赋值.
-            if (en!=null)
+            if (en != null)
             {
                 foreach (Cond cd in this)
                 {
@@ -1126,18 +1148,18 @@ namespace BP.WF.Template
 
             #region 首先计算简单的.
             //如果只有一个条件,就直接范围该条件的执行结果.
-            if (this.Count==1)
+            if (this.Count == 1)
             {
                 Cond cond = this[0] as Cond;
                 return cond.IsPassed;
             }
 
-          
+
             #endregion 首先计算简单的.
 
             #region 处理混合计算。
             string exp = "";
-            foreach (Cond  item in this)
+            foreach (Cond item in this)
             {
                 if (item.HisDataFrom == ConnDataFrom.CondOperator)
                 {
@@ -1156,17 +1178,17 @@ namespace BP.WF.Template
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
-                    sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + exp;
+                    sql = " SELECT TOP 1 No FROM WF_Emp WHERE " + exp;
                     break;
                 case DBType.MySQL:
-                    sql = " SELECT No FROM Port_Emp WHERE " + exp + " AND limit 1 ";
+                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "   limit 1 ";
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
-                    sql = " SELECT No FROM Port_Emp WHERE " + exp + " AND rownum <=1 ";
+                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "   rownum <=1 ";
                     break;
                 default:
-                    throw new Exception( "err@没有做的数据库类型判断.");
+                    throw new Exception("err@没有做的数据库类型判断.");
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

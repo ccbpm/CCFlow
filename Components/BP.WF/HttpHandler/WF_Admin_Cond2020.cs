@@ -67,12 +67,11 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-
             //遍历方向条件.
             foreach (Cond item in conds)
             {
                 if (item.HisDataFrom == ConnDataFrom.CondOperator)
-                    str += " " + item.FK_Operator;
+                    str += " " + item.OperatorValue;
                 else
                     str += " 1=1 "; // + item.AttrKey + item.FK_Operator + item.OperatorValue;
             }
@@ -84,11 +83,11 @@ namespace BP.WF.HttpHandler
                     sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + str;
                     break;
                 case DBType.MySQL:
-                    sql = " SELECT No FROM Port_Emp WHERE " + str + " AND limit 1 ";
+                    sql = " SELECT No FROM Port_Emp WHERE " + str + "  limit 1 ";
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
-                    sql = " SELECT No FROM Port_Emp WHERE " + str + " AND rownum <=1 ";
+                    sql = " SELECT No FROM Port_Emp WHERE " + str + "  rownum <=1 ";
                     break;
                 default:
                     return "err@没有做的数据库类型判断.";

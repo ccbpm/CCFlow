@@ -1155,8 +1155,9 @@ namespace BP.WF
         #region 执行安装/升级.
         /// <summary>
         /// 当前版本号-为了升级使用.
+        /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20200507;
+        public static int Ver = 20100602;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1360,6 +1361,83 @@ namespace BP.WF
             //md.FormJson = "";
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
+            #region 升级方向条件. 2020.06.02
+            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true)
+            {
+                DataTable dt = DBAccess.RunSQLReturnTable("SELECT DISTINCT FK_Node, toNodeID, CondOrAnd, CondType  FROM wf_cond WHERE DataFrom!=100 ");
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int nodeID = int.Parse(dr["FK_Node"].ToString());
+                    int toNodeID = int.Parse(dr["toNodeID"].ToString());
+
+                    Conds conds = new Conds();
+                    conds.Retrieve(CondAttr.FK_Node, nodeID,
+                        CondAttr.ToNodeID, toNodeID, CondAttr.Idx);
+
+                    //判断是否需要修复？
+                    if (conds.Count == 1 || conds.Count == 0)
+                        continue;
+
+                    //判断是否有？
+                    bool isHave = false;
+                    foreach (Cond myCond in conds)
+                    {
+                        if (myCond.HisDataFrom == ConnDataFrom.CondOperator)
+                            isHave = true;
+                    }
+                    if (isHave == true)
+                        continue;
+
+
+                    //获得类型.
+                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID);
+
+                    int idx = 0;
+                    int idxSave = 0;
+                    int count = conds.Count;
+                    foreach (Cond item in conds)
+                    {
+                        idx++;
+
+                        idxSave++;
+                        item.Idx = idxSave;
+                        item.Update();
+
+                        if (count == idx)
+                            continue;
+
+                        Cond operCond = new Cond();
+                        operCond.Copy(item);
+                        operCond.MyPK = DBAccess.GenerGUID();
+                        operCond.HisDataFrom = ConnDataFrom.CondOperator;
+
+                        if (OrAndType == 0)
+                        {
+                            operCond.OperatorValue = " OR ";
+                            operCond.Note = " OR ";
+                            operCond.OperatorValue = " OR ";
+                            operCond.Note = " OR ";
+                        }
+                        else
+                        {
+                            operCond.OperatorValue = " AND ";
+                            operCond.Note = " AND ";
+                            operCond.OperatorValue = " AND ";
+                            operCond.Note = " AND ";
+                        }
+
+                        idxSave++;
+                        operCond.Idx = idxSave;
+                        operCond.Insert();
+                    }
+                }
+
+                //升级后删除指定的列.
+                DBAccess.DropTableColumn("WF_Cond", "CondOrAnd");
+                DBAccess.DropTableColumn("WF_Cond", "NodeID");
+            }
+            #endregion 升级方向条件.
+
             #region 枚举值
             SysEnumMains enumMains = new SysEnumMains();
             enumMains.RetrieveAll();
@@ -1425,6 +1503,8 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
             }
             #endregion 升级视图.
+
+
 
             //升级从表的 fk_node .
             //获取需要修改的从表

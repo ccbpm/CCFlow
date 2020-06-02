@@ -113,8 +113,8 @@
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
-
-                this.depts = getDepts(this.webuser.OrgNo);
+                var orgNo = this.webuser.No == "admin" ? null : this.webuser.OrgNo
+                this.depts = getDepts(orgNo);
 
             }
         });

@@ -1939,6 +1939,7 @@ namespace BP.WF.HttpHandler
                         dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
                         dtToNDs.Columns.Add("IsSelectEmps", typeof(string)); //是否弹出选择人的对话框？
                         dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
+                        dtToNDs.Columns.Add("DeliveryParas", typeof(string));  //自定义URL
 
                         #region 增加到达延续子流程节点。
                         if (nd.SubFlowYanXuNum >= 0)
@@ -1997,10 +1998,15 @@ namespace BP.WF.HttpHandler
                             dr = dtToNDs.NewRow();
                             dr["No"] = item.NodeID;
                             dr["Name"] = item.Name;
-                            //if (item.hissel
 
                             if (item.HisDeliveryWay == DeliveryWay.BySelected)
                                 dr["IsSelectEmps"] = "1";
+                            if(item.HisDeliveryWay == DeliveryWay.BySelfUrl)
+                            {
+                                dr["IsSelectEmps"] = "2";
+                                dr["DeliveryParas"] = item.DeliveryParas;
+                            }
+                                
                             else
                                 dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
 

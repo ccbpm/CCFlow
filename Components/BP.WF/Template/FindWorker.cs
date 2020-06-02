@@ -890,10 +890,11 @@ namespace BP.WF.Template
                     if (i == 0)
                     {
                        Node toNode = this.town.HisNode;
+                        GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                         if (DataType.IsNullOrEmpty(toNode.DeliveryParas) == true)
                             throw new Exception("节点" + toNode.NodeID + "_" + toNode.Name + "设置的接收人规则是自定义的URL,现在未获取到设置的信息");
                         else
-                            throw new Exception("BySelfUrl@"+ toNode.DeliveryParas+"?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                            throw new Exception("BySelfUrl@"+ toNode.DeliveryParas+"?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID+"&PWorkID="+gwf.PWorkID+"&FID="+gwf.FID);
                     }
 
                     //插入里面.

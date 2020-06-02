@@ -3526,6 +3526,9 @@ namespace BP.WF.HttpHandler
             if (select.SelectorModel == SelectorModel.AccepterOfDeptStationEmp)
                 return "url@AccepterOfDeptStationEmp.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
 
+            if (select.SelectorModel == SelectorModel.Url)
+                return "BySelfUrl@"+select.SelectorP1+"?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
+
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);
 

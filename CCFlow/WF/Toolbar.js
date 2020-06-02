@@ -879,11 +879,11 @@ function SaveEnd(formType) {
 //关注 按钮.
 function FocusBtn(btn, workid) {
 
-    if (btn.value == '关注') {
-        btn.value = '取消关注';
+    if (btn.innerText.trim() == "关注") {
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;取消关注";
     }
     else {
-        btn.value = '关注';
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;关注";
     }
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
@@ -894,14 +894,14 @@ function FocusBtn(btn, workid) {
 //确认 按钮.
 function ConfirmBtn(btn, workid) {
 
-    if (btn.value == '确认') {
-        btn.value = '取消确认';
+    if (btn.innerText.trim() == '确认') {
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;取消确认";
     }
     else {
-        btn.value = '确认';
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;确认";
     }
 
-    btn.value = (btn.value == '确认' ? '取消确认' : '确认');
+    //btn.value = (btn.value == '确认' ? '取消确认' : '确认');
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("WorkID", workid);

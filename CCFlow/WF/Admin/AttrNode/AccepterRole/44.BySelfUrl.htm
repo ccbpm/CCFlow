@@ -21,62 +21,34 @@
 <body>
     <div id="App">
         <div id="bar"> </div>
-        <form>
-          
-        </form>
+        <fieldset>
+            <legend>请在文本框里输入url.</legend>
+            <br />
+            <textarea id="TB_URL" class="URL" style="width: 95%; height: 50px" v-model="url"></textarea>
+        </fieldset>
     </div>
     <script type="text/javascript">
         var Baseinfo = new Vue({
             el: '#App',
             data: {
                 deliverWay: DeliveryWay.BySelfUrl,
-                nodeId: GetQueryString("FK_Node"),
-                isAutoLoadEmps: false,
-                isSimpleSelector: false,
-                isEnableDeptRange: false,
-                isEnableStaRange: false,
-                nodeExt: null
-            },
-            methods: {
-                OpenDialog2019: function () {
-                    var url = "../Selector/Default.htm";
-                    var nodeID = GetQueryString("FK_Node");
-                    url += '?NodeID=' + nodeID+ "&FK_Flow=" + GetQueryString("FK_Flow");
-                    
-                    window.location.href = url;
-                },
-                IsChange: function () {
-                    if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {
-                        if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) {
-                            this.isSimpleSelector = true;
-                            alert("该节点会签模式为组长模式，只能单项选择");
-                        }
-                    }
-                },
+                url: '',
+                nodeId: GetQueryString("FK_Node")
             },
             created() {
                 InitBar(this.deliverWay);
-                var node = new Entity("BP.WF.Template.Selector", this.nodeId);
-                if (node.IsAutoLoadEmps == 1)
-                    this.isAutoLoadEmps = true;
-                if (node.IsSimpleSelector == 1)
-                    this.isSimpleSelector = true;
-                if (node.IsEnableDeptRange == 1)
-                    this.isEnableDeptRange = true;
-                if (node.IsEnableStaRange == 1)
-                    this.isEnableStaRange = true;
-                this.nodeExt = new Entity("BP.WF.Template.NodeExt", this.nodeId);
-                if (this.nodeExt.HuiQianRole == 4 && this.nodeExt.HuiQianLeaderRole == 0) //组长模式
-                    this.isSimpleSelector = false;
+                var node = new Entity("BP.WF.Node", this.nodeId);
+                if (node.DeliveryWay == DeliveryWay.BySelfUrl) {
+
+                    this.url = node.DeliveryParas;
+
+                }
             }
         });
         function Save() {
-
             var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
-            node.DeliveryWay = Baseinfo.BySelfUrl;
-            node.Update();
-            var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
-            node.CopyForm();  //按照规则把数据放入到entity.
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryParas = document.getElementById("TB_URL").value;
             node.Update();
         }
     </script>

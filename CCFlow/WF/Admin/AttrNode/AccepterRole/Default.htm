@@ -13,17 +13,16 @@
         //页面启动函数.
         $(function () {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node",nodeID);
+            var node = new Entity("BP.WF.Node", nodeID);
             var flowNo = GetQueryString("FK_Flow");
-            var str =nodeID.substr(nodeID.length - 2);
-            if (str == "01" && node.DeliveryWay==DeliveryWay.BySelected) {
+            var str = nodeID.substr(nodeID.length - 2);
+            if (str == "01" && node.DeliveryWay == DeliveryWay.BySelected) {
                 node.DeliveryWay = DeliveryWay.BySelected_1;
             }
 
 
             var url = '';
             switch (parseInt(node.DeliveryWay)) {
-                
                 case DeliveryWay.ByStation:
                     //Bind_1_ByStation();
                     url = "0.ByStation.htm";
@@ -45,7 +44,7 @@
                 case DeliveryWay.BySelected_1:
                     url = "41.BySelected.htm";
                     break;
-                  case DeliveryWay.BySelectedOrgs:
+                case DeliveryWay.BySelectedOrgs:
                     url = "42.BySelectedOrgs.htm";
                     break;
                 case DeliveryWay.ByDeptLeader: //按照部门负责人计算.
@@ -111,6 +110,15 @@
                 case DeliveryWay.ByTeamDeptOnly:
                     url = "26.ByTeamDeptOnly.htm";
                     break;
+                case DeliveryWay.BySelectedOrgs:
+                    url = "42.BySelectedOrgs.htm";
+                    break;
+                case DeliveryWay.BySelectedEmpsOrgModel:
+                    url = "43.BySelectedEmpsOrgModel.htm";
+                    break;
+                case DeliveryWay.BySelfUrl: //自定义url.
+                    url = "44.BySelfUrl.htm";
+                    break;
                 case DeliveryWay.ByCCFlowBPM:
                     url = "100.ByCCFlowBPM.htm";
                     break;
@@ -123,7 +131,7 @@
                     url = "0.ByStation.htm";
                     break;
             }
-            document.location.href = url + "?FK_Node=" + node.NodeID+"&FK_Flow="+flowNo;
+            document.location.href = url + "?FK_Node=" + node.NodeID + "&FK_Flow=" + flowNo;
         });
 
         function Bind_1_ByStation() {

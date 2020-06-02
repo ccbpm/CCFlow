@@ -388,7 +388,6 @@ function getEmps() {
  * 获取节点绑定岗位的用户组人员
  */
 function getTeamEmps() {
-    alert(GetQueryString("FK_Node"));
     var en = new Entity("BP.WF.Template.NodeTeam", GetQueryString("FK_Node"));
     var ens = new Entities("BP.Port.TeamEmps");
 
@@ -499,7 +498,7 @@ function changeOption() {
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";
             break;
-        case DeliveryWay.BySelectedOrgModel:
+        case DeliveryWay.BySelectedEmpsOrgModel:
             roleName = "43.BySelectedEmpsOrgModel.htm";
             break;
         case DeliveryWay.BySelfUrl: //自定义url.
@@ -508,8 +507,6 @@ function changeOption() {
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";
             break;
-       
-            
         default:
             roleName = "0.ByStation.htm";
             break;

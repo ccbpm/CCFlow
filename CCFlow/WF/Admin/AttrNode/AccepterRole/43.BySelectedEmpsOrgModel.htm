@@ -6,7 +6,6 @@
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -21,62 +20,24 @@
 <body>
     <div id="App">
         <div id="bar"> </div>
-        <form>
-          
-        </form>
+        <fieldset>
+            <img style="width:900px; height:600px;" src="43BySelectEmpsOrgModel.png" />
+        </fieldset>
     </div>
     <script type="text/javascript">
         var Baseinfo = new Vue({
             el: '#App',
             data: {
-                deliverWay: DeliveryWay.BySelectedEmpsOrgModel,
-                nodeId: GetQueryString("FK_Node"),
-                isAutoLoadEmps: false,
-                isSimpleSelector: false,
-                isEnableDeptRange: false,
-                isEnableStaRange: false,
-                nodeExt: null
-            },
-            methods: {
-                OpenDialog2019: function () {
-                    var url = "../Selector/Default.htm";
-                    var nodeID = GetQueryString("FK_Node");
-                    url += '?NodeID=' + nodeID+ "&FK_Flow=" + GetQueryString("FK_Flow");
-                    
-                    window.location.href = url;
-                },
-                IsChange: function () {
-                    if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {
-                        if (nodeExt.HuiQianRole == 4 && nodeExt.HuiQianLeaderRole == 0) {
-                            this.isSimpleSelector = true;
-                            alert("该节点会签模式为组长模式，只能单项选择");
-                        }
-                    }
-                },
+                deliverWay: DeliveryWay.BySelectedEmpsOrgModel
             },
             created() {
                 InitBar(this.deliverWay);
-                var node = new Entity("BP.WF.Template.Selector", this.nodeId);
-                if (node.IsAutoLoadEmps == 1)
-                    this.isAutoLoadEmps = true;
-                if (node.IsSimpleSelector == 1)
-                    this.isSimpleSelector = true;
-                if (node.IsEnableDeptRange == 1)
-                    this.isEnableDeptRange = true;
-                if (node.IsEnableStaRange == 1)
-                    this.isEnableStaRange = true;
-                this.nodeExt = new Entity("BP.WF.Template.NodeExt", this.nodeId);
-                if (this.nodeExt.HuiQianRole == 4 && this.nodeExt.HuiQianLeaderRole == 0) //组长模式
-                    this.isSimpleSelector = false;
             }
         });
         function Save() {
-
-            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
-            node.DeliveryWay = Baseinfo.BySelectedEmpsOrgModel;
-            node.Update();
-            var node = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
-            node.CopyForm();  //按照规则把数据放入到entity.
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }
     </script>

@@ -94,9 +94,10 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.ByTeamDeptOnly = 26,
         //按照集团模式的选择人接收器. 2020.06 for xinxizhongxin.
         DeliveryWay.BySelectedEmpsOrgModel = 43,
+        //按照自定义url.
+        DeliveryWay.BySelfUrl = 44,
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
-
 }
 
 

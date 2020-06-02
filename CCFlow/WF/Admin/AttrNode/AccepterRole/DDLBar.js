@@ -499,6 +499,9 @@ function changeOption() {
         case DeliveryWay.BySelectedOrgModel:
             roleName = "43.BySelectedEmpsOrgModel.htm";
             break;
+        case DeliveryWay.BySelfUrl: //自定义url.
+            roleName = "44.BySelfUrl.htm";
+            break;
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";
             break;

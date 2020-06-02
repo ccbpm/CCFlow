@@ -6141,7 +6141,7 @@ namespace BP.WF
         /// 删除临时文件
         /// </summary>
         public static void DeleteTempFiles()
-        {
+      {
             try
             {
                 //删除目录.
@@ -6193,20 +6193,47 @@ namespace BP.WF
                 ctrlWayId = fid.ToString();
             if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
 
-                //workID相同或者是协作模式
+                //协作模式
                 if (pkval.Equals(ctrlWayId) == true || athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
+                {
+                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId, FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                }
+                /* 继承模式 */
                 else if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }
                 return dbs;
             }
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+            {
+                /* 继承模式 */
+                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(ctrlWayId));
+                else
+                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
+
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+
+                if (isContantSelf == false)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+                }
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+
 
             if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
             {
@@ -6225,31 +6252,7 @@ namespace BP.WF
                 return dbs;
             }
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-            {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                {
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(ctrlWayId));
-                }
-                else
-                {
-                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
-                    qo.addAnd();
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
-                }
-
-                if (isContantSelf == false)
-                {
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
-                }
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
-
+           
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {

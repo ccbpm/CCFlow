@@ -728,9 +728,12 @@ namespace BP.Sys.FrmUI
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
             }
 
+            if (this.HisCtrlWay != AthCtrlWay.WorkID)
+                this.AthUploadWay = AthUploadWay.Interwork;
+
 
             #region 处理分组.
-            //更新相关的分组信息.
+                //更新相关的分组信息.
             if (this.IsVisable == true && this.FK_Node == 0)
             {
                 GroupField gf = new GroupField();

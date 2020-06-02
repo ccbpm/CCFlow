@@ -175,7 +175,7 @@ function initModal(modalType, toNode,url) {
     var html = '<div style=" height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog" style="border-radius:0px;width:920px;">'
         + '<div class="modal-content" id="viewModal" style="border-radius:0px;height:560px;">'
-        + '<div class="modal-header" style="background-color:#f2f2f2">'
+        + '<div class="modal-header" style="background-color:#f2f2f2;margin-bottom:8px">'
         + '<button id="ClosePageBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
         + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader" style="color:#000000;">提示信息</h4>'

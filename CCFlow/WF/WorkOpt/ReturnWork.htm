@@ -155,6 +155,10 @@
         // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
         function ReturnWork(isBack) {
 
+            //判断退回并原路返回复选框是否被选中
+            if ($("#btnIsBackTracking").prop("checked")==true) 
+                isBack = 1;
+            
             //获得选择退回的节点.
             var selectedNodeID = $('#DDL_Nodes').val();
             if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID == "") {
@@ -248,8 +252,8 @@
         <div style="height:100px;">上传附件预留：该功能正在建设中</div>
     -->
     <div style="position: fixed;right: 10px;bottom: 40px;" class="foot">
+        <input type="checkbox" id="btnIsBackTracking" /><label for="btnIsBackTracking">退回后并发送给我</label>
         <input type="button" value="确定退回" onclick="ReturnWork(0);" id="btnReturn" />
-        <input type="button" value="退回后并发送给我" onclick="ReturnWork(1);" id="btnIsBackTracking" />
         <input type="button" value="关闭" onclick="Close();" id="btnClose" />
     </div>
 

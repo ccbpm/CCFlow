@@ -188,7 +188,10 @@ function initModal(modalType, toNode,url) {
         + '</div>';
 
     if ($("#returnWorkModal").length == 0)
-         $('body').append($(html));
+        $('body').append($(html));
+
+    if ($("#returnWorkModal .modal-footer").length == 1)
+        $("#returnWorkModal .modal-footer").remove();
    
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();

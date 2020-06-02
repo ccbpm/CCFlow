@@ -199,6 +199,11 @@
 
             //调用退回方法.
             var data = handler.DoMethodReturnString("DoReturnWork"); //执行方法.
+				if (window.parent != null && window.parent.ReloadGxjtList != null) {
+					window.parent.ReloadGxjtList(data);
+				} else {
+					ReloadGxjtList(data);
+				}
 
             //提示退回消息， 并关闭窗口，刷新父父窗口.
             data = data.replace(/null/g, '');

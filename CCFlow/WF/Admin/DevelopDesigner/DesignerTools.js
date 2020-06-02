@@ -13,16 +13,17 @@ document.onkeydown = function () {
 
 //格式化
 function FormatHtml() {
-    var val = window.confirm('您确定要格式化吗？');
+   /* var val = window.confirm('您确定要格式化吗？');
     if (val == false)
         return;
-
+    debugger
     //首先执行保存.
     SaveForm();
     var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
     var ssss = /style\s*?=\s*?([‘"])[\s\S]*?\1/
     var dsd = /style=\"(.*?)\"/g
     var newHtml = ''
+
     newHtml = formeditor.replace(rels, '');
     newHtml = newHtml.replace(ssss, '');
     newHtml = newHtml.replace(dsd, '');
@@ -35,6 +36,9 @@ function FormatHtml() {
         alert(data);
         return;
     }
+
+    leipiEditor.getContent(newHtml);
+    leipiEditor.sync();       //同步内容*/
 }
 
 

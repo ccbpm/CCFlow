@@ -87,14 +87,23 @@
 
                 var cond = conds[i];
 
-                html += "<tr >";
+                if (cond.DataFrom == 100)
+                    html += "<tr Class=Sum >";
+                else
+                    html += "<tr >";
+
                 html += "<td class=Idx>" + cond.Idx + "</td>";
                 html += "<td>" + ShowType(cond.DataFrom) + "</td>"; //类型
                 html += "<td style='width:300px;height:40px;'>";
-                html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
 
-                if (cond.AttrKey != "")
-                    html += "<br>说明：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+                if (cond.DataFrom == 100) {
+                    html += " " + cond.OperatorValue;
+                } else {
+                    html += cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
+
+                    if (cond.AttrKey != "")
+                        html += "<br>说明：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+                }
 
                 html += "</td>";//表达式 "  " " +  + " " + en.OperatorValue;
                 html += "<td><a  href=\"javascript:ShowHidden('state" + i + "')\">插入运算符</a></td>";

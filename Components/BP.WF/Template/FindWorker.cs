@@ -874,6 +874,41 @@ namespace BP.WF.Template
             }
             #endregion 按指定的节点人员，做为下一步骤的流程接受人。
 
+            #region 按照自定义的URL来计算
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelfUrl)
+            {
+                ps = new Paras();
+                ps.Add("FK_Node", this.town.HisNode.NodeID);
+                ps.Add("WorkID", this.currWn.HisWork.OID);
+                ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                {
+                    /*从上次发送设置的地方查询. */
+                    SelectAccpers sas = new SelectAccpers();
+                    int i = sas.QueryAccepterPriSetting(this.town.HisNode.NodeID);
+                    if (i == 0)
+                    {
+                       Node toNode = this.town.HisNode;
+                        if (DataType.IsNullOrEmpty(toNode.DeliveryParas) == true)
+                            throw new Exception("节点" + toNode.NodeID + "_" + toNode.Name + "设置的接收人规则是自定义的URL,现在未获取到设置的信息");
+                        else
+                            throw new Exception("BySelfUrl@"+ toNode.DeliveryParas+"?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                    }
+
+                    //插入里面.
+                    foreach (SelectAccper item in sas)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr[0] = item.FK_Emp;
+                        dt.Rows.Add(dr);
+                    }
+                    return dt;
+                }
+                return dt;
+            }
+            #endregion 按照自定义的URL来计算
+
             #region 最后判断 - 按照岗位来执行。
             if (this.currWn.HisNode.IsStartNode == false)
             {

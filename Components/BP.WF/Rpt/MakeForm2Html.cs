@@ -1752,7 +1752,6 @@ namespace BP.WF
 
         public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false,string htmlString=null)
         {
-
             string resultMsg = "";
 
             //  获取单据的属性信息
@@ -1760,7 +1759,6 @@ namespace BP.WF
             string fileNameFormat = null;
 
             //存放信息地址
-            string hostURL = SystemConfig.GetValByKey("HostURL", "");
             string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid;
 
             //处理正确的文件名.

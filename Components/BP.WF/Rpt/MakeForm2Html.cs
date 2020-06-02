@@ -2306,10 +2306,8 @@ namespace BP.WF
         public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
             BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
-            //try
-            //{
-                //横向打印.
-                // wkhtmltopdf.exe --orientation Landscape  http://baidu.com afqc.pdf  .
+            try
+            {
 
                 string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
                 //Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
@@ -2326,12 +2324,12 @@ namespace BP.WF
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    //BP.DA.Log.DebugWriteError("@生成PDF错误" + ex.Message + "@pdf=" + pdf + "@htmFile="+htmFile);
-            //    throw ex;
-            //}
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
+                throw ex;
+            }
         }
         /// <summary>
         /// 签名

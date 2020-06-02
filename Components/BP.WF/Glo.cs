@@ -1157,7 +1157,7 @@ namespace BP.WF
         /// 当前版本号-为了升级使用.
         /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20100602;
+        public static int Ver = 20200603;
         /// <summary>
         /// 执行升级
         /// </summary>

@@ -1622,17 +1622,10 @@ namespace BP.WF
                         ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                     else
                         ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
-
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
-                    /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
-                    fileNameFormat = DBAccess.GenerGUID();
-                    pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
-
-                    Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                    throw new Exception("err@html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
                 }
 
                 //生成压缩文件

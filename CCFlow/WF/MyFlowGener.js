@@ -1134,6 +1134,7 @@ function GenerWorkNode() {
     }
 
     if (node.FormType == 1) {
+        debugger
         Skip.addJs("./MyFlowFree2017.js");
         GenerFreeFrm(flowData);  //自由表单.
     }

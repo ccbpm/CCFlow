@@ -579,7 +579,7 @@ namespace BP.WF.HttpHandler
             {
                 DataRow dr = dt.NewRow();
                 dr["No"] = "ReadAndClose";
-                dr["Name"] = "阅读完毕";
+                dr["Name"] = "阅件完毕";
                 dr["Oper"] = "ReadAndClose();";
                 dt.Rows.Add(dr);
                 #region 加载流程抄送 - 按钮

@@ -150,6 +150,8 @@ namespace BP.WF.Template
                 nd.Step = 2;
                 nd.FK_Flow = flow.No;
                 nd.FlowName = flow.Name;
+                nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
                 nd.X = 200;
                 nd.Y = 250;

@@ -16,8 +16,17 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
     <style>
-        label{
-            font-weight:normal;
+         label {
+            font-weight: normal;
+        }
+        #Btn_Setting {
+            border: 1px solid #031f5d;
+            background-color: #fff;
+            color: #031f5d;
+            background-image: url(../../Img/Btn/Setting.png) !important;
+            background-repeat:no-repeat;
+            background-size: 13px 13px !important;
+            background-position: 1px 6px !important;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -127,7 +136,7 @@
     <form id="cc">
 
         <div style="float:right;">
-            <input type="button" value="设置字段的特别权限" onclick="SaveField()" />
+            <input id="Btn_Setting" type="button" value="设置字段的特别权限" onclick="SaveField()" />
         </div>
         <table class="table table-hover" id="Table1">
             <tr>

@@ -35,11 +35,24 @@ $(function () {
         if (toolBar.Oper != "")
             Oper = "onclick=\"" + toolBar.Oper + "\"";
 
-        if (toolBar.No == "NodeToolBar")
-            //_html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
-            _html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
-        else
+        if (toolBar.No == "NodeToolBar") {//自定义工具栏按钮
+
+            var Icon = toolBar.Icon;
+            //自定义的默认按钮
+            var img = "<img src='Img/Btn/CH.png' width='22px' height='22px'>&nbsp;"
+            //有上传的icon
+            if (Icon != "") {
+                Icon = Icon.replace(Icon.substr(0, Icon.indexOf("\DataUser")), "../");
+                img = "<img src='" + Icon + "' width='22px' height='22px'>&nbsp;";
+            }
+            
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
+
+        }
+        else {
+
             _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+        }
     });
     $('#ToolBar').html(_html);
 

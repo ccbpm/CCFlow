@@ -609,7 +609,7 @@ function CheckInput(oInput, filter) {
 function CheckRegInput(oInput, filter, tipInfo) {
     var mapExt = $('#' + oInput).data();
     var filter = mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
-    var oInputVal = $("[name=" + oInput + ']').val();
+    var oInputVal = $("#" + oInput).val();
     var result = true;
     if (oInput != '') {
         var re = filter;

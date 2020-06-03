@@ -1101,7 +1101,7 @@ namespace BP.WF.HttpHandler
                 if (uiContralType == UIContralType.SignCheck || uiContralType == UIContralType.FlowBBS)
                 {
                     attr.UIIsEnable = false;
-                    attr.UIVisible = false;
+                    attr.UIVisible = true;
                 }
                 else
                 {

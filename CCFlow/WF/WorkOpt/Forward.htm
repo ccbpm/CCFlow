@@ -95,7 +95,7 @@
 
             var data = handler.DoMethodReturnString("Shift");
             data = data.replace("@null", "");
-            if (window.parent != null && window.parent.WindowCloseReloadPage != null && WindowCloseReloadPage instanceof Function) {
+            if (window.parent != null && window.parent.WindowCloseReloadPage != null && window.parent.WindowCloseReloadPage instanceof Function) {
                 window.parent.WindowCloseReloadPage(data);
             } else {
                 if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)

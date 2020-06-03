@@ -199,7 +199,7 @@
 
             //调用退回方法.
             var data = handler.DoMethodReturnString("DoReturnWork"); //执行方法.
-            if (window.parent != null && window.parent.WindowCloseReloadPage != null && WindowCloseReloadPage instanceof Function) {
+            if (window.parent != null && window.parent.WindowCloseReloadPage != null && window.parent.WindowCloseReloadPage instanceof Function) {
                 window.parent.WindowCloseReloadPage(data);
             } else {
                 if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)

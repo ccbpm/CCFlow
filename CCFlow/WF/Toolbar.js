@@ -647,7 +647,7 @@ function execSend(toNodeID, formType) {
 //发送 退回 移交等执行成功后转到  指定页面
 var interval;
 function OptSuc(msg) {
-    if (window.parent != null && window.parent.WindowCloseReloadPage != null && WindowCloseReloadPage instanceof Function) {
+    if (window.parent != null && window.parent.WindowCloseReloadPage != null && window.parent.WindowCloseReloadPage instanceof Function) {
         window.parent.WindowCloseReloadPage(msg);
     } else {
         if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)

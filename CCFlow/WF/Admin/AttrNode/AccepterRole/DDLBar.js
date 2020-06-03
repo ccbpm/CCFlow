@@ -153,8 +153,8 @@ function InitBar(optionKey) {
     }
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveRole()' value='保存' />";
-    html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级' />";
-    html += "<input id='Btn' type=button onclick='Batch()' value='批处理设置' />";
+    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='高级' />";
+    html += "<input id='Btn_Batch' type=button onclick='Batch()' value='批处理设置' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;

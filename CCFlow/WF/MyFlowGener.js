@@ -120,16 +120,16 @@ function CCFormLoaded() {
 
         $(window).resize(function () {
             //$("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); 
-            $("#divCCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
+            $("#divCCForm").height($(window).height() - 100 + "px").css("overflow-y", "auto");
         });
     }
     else {
         //新加
         //计算高度，展示滚动条
-        var height = $("#divCCForm").height($(window).height() - 135 + "px").css("overflow-y", "auto");
+        var height = $("#divCCForm").height($(window).height() - 57 + "px").css("overflow-y", "auto");
 
         $(window).resize(function () {
-            $("#divCCForm").height($(window).height() - 135 + "px").css("overflow-y", "auto");
+            $("#divCCForm").height($(window).height() - 57 + "px").css("overflow-y", "auto");
         });
     }
 

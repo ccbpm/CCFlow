@@ -66,7 +66,7 @@
                         html += "<td colspan=2> - </td>";
                     } else {
                         html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
-                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','"+en.KeyOfEn+"')>选择默认值<a/></td>";
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','"+en.KeyOfEn+"')>默认值<a/></td>";
                     }
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
                     if (en.UIContralType == 14) {
@@ -125,6 +125,7 @@
             //var sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
             //var dts = DBAccess.RunSQLReturnTable(sql);
             html = "<div id='state' style='padding-top:20px; padding-left:60px; width:360px; height:400px; position: absolute; z-index: 10; background-color: #F5F5F5; border: 2px outset black; display: none; color: Gray; top:100px;left:500px;>";
+            html += "<h4>系统默认值</h4>";
             html += " <ol style='padding:10px;'>";
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];

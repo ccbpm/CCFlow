@@ -7768,7 +7768,12 @@ namespace BP.WF
 
                 names += emp.Name + "、";
 
-                list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                list.MyPK =  gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No;
+                if (list.IsExits == true)
+                    continue; //判断是否存在?
+
+
                 list.FK_Flow = gwf.FK_Flow;
                 list.FlowName = gwf.FlowName;
                 list.FK_Node = fromNode.NodeID;

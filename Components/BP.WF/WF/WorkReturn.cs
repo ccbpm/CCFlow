@@ -411,7 +411,7 @@ namespace BP.WF
             #endregion
 
             //删除当前的流程.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwf.FK_Flow, this.WorkID, true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.WorkID, true);
 
             //设置当前为未读的状态.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);

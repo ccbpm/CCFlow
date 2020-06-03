@@ -204,7 +204,7 @@ namespace BP.UnitTesting.SendCase
             #endregion 检查流程引擎表是否正确?
 
             //删除该测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.fk_flow, workid, true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
         }
     }
 }

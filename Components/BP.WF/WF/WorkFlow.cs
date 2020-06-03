@@ -297,7 +297,7 @@ namespace BP.WF
                 GenerWorkFlows gwfs = new GenerWorkFlows();
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workID);
                 foreach (GenerWorkFlow item in gwfs)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.WorkID, true);
             }
             #endregion 删除该流程下面的子流程.
 
@@ -441,16 +441,17 @@ namespace BP.WF
         /// <summary>
         /// 删除已经完成的流程
         /// </summary>
-        /// <param name="flowNo">流程编号</param>
         /// <param name="workid">工作ID</param>
         /// <param name="isDelSubFlow">是否删除子流程</param>
         /// <returns>删除错误会抛出异常</returns>
-        public static void DeleteFlowByReal(string flowNo, Int64 workid, bool isDelSubFlow)
+        public static void DeleteFlowByReal(Int64 workid, bool isDelSubFlow)
         {
-            BP.WF.Flow fl = new Flow(flowNo);
             //检查流程是否完成，如果没有完成就调用workflow流程删除.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
+
+            BP.WF.Flow fl = new Flow(gwf.FK_Flow);
+
 
             string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人
             if (gwf.RetrieveFromDBSources() != 0)
@@ -479,7 +480,7 @@ namespace BP.WF
 
             #region 删除独立表单的数据.
             FrmNodes fns = new FrmNodes();
-            fns.Retrieve(FrmNodeAttr.FK_Flow, flowNo);
+            fns.Retrieve(FrmNodeAttr.FK_Flow, gwf.FK_Flow);
             string strs = "";
             foreach (FrmNode frmNode in fns)
             {
@@ -500,7 +501,7 @@ namespace BP.WF
             #endregion 删除独立表单的数据.
 
             //删除流程数据.
-            DBAccess.RunSQL("DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid);
+            DBAccess.RunSQL("DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workid);
             DBAccess.RunSQL("DELETE FROM " + fl.PTable + " WHERE OID=" + workid);
             DBAccess.RunSQL("DELETE FROM WF_CHEval WHERE  WorkID=" + workid); // 删除质量考核数据。
 
@@ -530,11 +531,11 @@ namespace BP.WF
             }
 
             //删除它的工作.
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
 
             //删除所有节点上的数据.
-            Nodes nodes = new Nodes(flowNo); // this.HisFlow.HisNodes;
+            Nodes nodes = new Nodes(gwf.FK_Flow); // this.HisFlow.HisNodes;
             foreach (Node node in nodes)
             {
                 try
@@ -949,7 +950,7 @@ namespace BP.WF
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
 
                 foreach (GenerWorkFlow item in gwfs)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.WorkID, true);
             }
             #endregion 删除该流程下面的子流程.
 

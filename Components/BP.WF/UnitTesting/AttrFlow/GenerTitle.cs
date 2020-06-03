@@ -92,7 +92,7 @@ namespace BP.UnitTesting.AttrFlow
             #endregion 
 
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workID, false);
 
 
             //创建空白工作, 让ccflow根据规则自动生成标题.
@@ -122,7 +122,7 @@ namespace BP.UnitTesting.AttrFlow
             #endregion 
 
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workID, false);
         }
     }
 }

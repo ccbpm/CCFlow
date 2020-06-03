@@ -188,7 +188,7 @@ namespace BP.WF.DTS
                 {
                     //删除流程数据
                     if (workID != 0)
-                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workID);
+                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workID);
 
                     //如果发送错误。
                     info += ex.Message;

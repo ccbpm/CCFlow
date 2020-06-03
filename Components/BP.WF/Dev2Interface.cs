@@ -4677,15 +4677,14 @@ namespace BP.WF
         /// 2, 节点数据,NDxxRpt数据.
         /// 3, 轨迹表数据.
         /// </summary>
-        /// <param name="flowNo">流程编号</param>
         /// <param name="workID">工作ID</param>
         /// <param name="isDelSubFlow">是否要删除它的子流程</param>
         /// <returns>执行信息</returns>
-        public static string Flow_DoDeleteFlowByReal(string flowNo, Int64 workID, bool isDelSubFlow = false)
+        public static string Flow_DoDeleteFlowByReal(Int64 workID, bool isDelSubFlow = false)
         {
             try
             {
-                WorkFlow.DeleteFlowByReal(flowNo, workID, isDelSubFlow);
+                WorkFlow.DeleteFlowByReal(workID, isDelSubFlow);
             }
             catch (Exception ex)
             {

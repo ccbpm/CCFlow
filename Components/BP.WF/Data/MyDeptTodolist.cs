@@ -770,7 +770,7 @@ namespace BP.WF.Data
 
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  this.WorkID, true);
                 return "删除成功";
             }
             catch (Exception ex)

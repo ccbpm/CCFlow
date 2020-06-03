@@ -69,7 +69,7 @@ namespace BP.UnitTesting.NodeAttr
                 throw new Exception("@按表单字段控制方向错误，大于等于10天的应该让[总经理审批]");
 
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion
 
             #region 让中层 qifenglin登录.
@@ -80,7 +80,7 @@ namespace BP.UnitTesting.NodeAttr
             if (objs.VarToNodeID != 202)
                 throw new Exception("@按照岗位做方向条件错误，中层人员没有发送到[总经理审批]节点。");
             // 删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion 让中层 qifenglin登录.
 
             #region 让高层 zhoupeng 登录.
@@ -91,7 +91,7 @@ namespace BP.UnitTesting.NodeAttr
             if (objs.VarToNodeID != 203)
                 throw new Exception("@按照岗位做方向条件错误，高层人员没有发送到[人力资源审批]节点。");
             //delete it.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion
         }
     }

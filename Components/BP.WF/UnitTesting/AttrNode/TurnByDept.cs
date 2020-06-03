@@ -46,7 +46,7 @@ namespace BP.UnitTesting.NodeAttr
                 throw new Exception("@财务部门人员发起没有转入到财务部节点上去。");
 
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion yangyilei
 
             #region  qifenglin登录.
@@ -57,7 +57,7 @@ namespace BP.UnitTesting.NodeAttr
             if (objs.VarToNodeID != 2899)
                 throw new Exception("@研发部人员发起没有转入研发部节点上去。");
             // 删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion  qifenglin登录.
 
             #region  liyan登录.
@@ -68,7 +68,7 @@ namespace BP.UnitTesting.NodeAttr
             if (objs.VarToNodeID != 2803)
                 throw new Exception("@没有转入人力资源部上去。");
             // 删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  objs.VarWorkID, false);
             #endregion liyan登录.
         }
     }

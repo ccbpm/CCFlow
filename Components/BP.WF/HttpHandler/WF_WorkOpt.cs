@@ -3333,7 +3333,7 @@ namespace BP.WF.HttpHandler
 
             //彻底删除.
             if (deleteWay == "3")
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, isDelSubFlow);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  this.WorkID, isDelSubFlow);
 
             //彻底并放入到删除轨迹里.
             if (deleteWay == "2")

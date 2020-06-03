@@ -476,7 +476,7 @@ namespace BP.UnitTesting
             Int64 threakWorkID = Int64.Parse(dt.Rows[0][0].ToString());
 
             // 执行删除子线程. 删除子线程与删除流程是同一个方法。
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.fk_flow, threakWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( threakWorkID, false);
 
             #region 第1步: 检查发送后的变量.
             // 检查 zhangyifan 是否有待办工作？
@@ -514,7 +514,7 @@ namespace BP.UnitTesting
 
 
             // 删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.fk_flow, workid, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, false);
 
         }
     }

@@ -671,8 +671,6 @@ namespace BP.WF
                     {
                         myds.Tables.Add(mydt);
                     }
-
-                    
                 }
                 ddlTable.TableName = "UIBindKey";
                 myds.Tables.Add(ddlTable);
@@ -832,6 +830,9 @@ namespace BP.WF
 
 
                 myds.Tables.Add(dtAlert);
+
+               // myds.WriteXml("c:\\11.xml");
+
                 return myds;
             }
             catch (Exception ex)

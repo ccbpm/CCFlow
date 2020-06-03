@@ -128,7 +128,7 @@ namespace BP.WF.DTS
                             "感谢您选择ccflow.", "SpecEmp" + workid);
                         break;
                     case OutTimeDeal.DeleteFlow: //删除流程.
-                        msg += BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, true);
+                        msg += BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
                         break;
                     case OutTimeDeal.RunSQL:
                         msg += BP.DA.DBAccess.RunSQL(nd.DoOutTime);

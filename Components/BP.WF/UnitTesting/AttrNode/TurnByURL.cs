@@ -50,7 +50,7 @@ namespace BP.UnitTesting.NodeAttr
                 throw new Exception("@应该转向7502 ");
 
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( objs.VarWorkID, false);
 
             //测试流程完成条件.
             workid = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow);

@@ -91,7 +91,7 @@ namespace BP.UnitTesting.ReturnCase
 
 
             //删除此测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, objs.VarWorkID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( objs.VarWorkID, false);
 
         }
     }

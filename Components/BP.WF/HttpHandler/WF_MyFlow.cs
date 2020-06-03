@@ -783,7 +783,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string str = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID);
+                string str = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  this.WorkID);
                 if (str == "" || str == null)
                     return "流程成功结束";
                 return str;
@@ -3042,7 +3042,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, true);
+                return BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( this.WorkID, true);
             }
             catch (Exception ex)
             {

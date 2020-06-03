@@ -1123,7 +1123,7 @@ namespace BP.WF.Template
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, false);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( workid, false);
                 msg += " " + workid;
             }
             return msg;
@@ -1714,7 +1714,7 @@ namespace BP.WF.Template
         {
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.No, workid, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
             }
             catch (Exception ex)

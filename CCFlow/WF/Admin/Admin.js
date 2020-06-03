@@ -47,18 +47,43 @@ $(document).ready(function () {
 function AddBtnIcon()
 {
     //保存按钮icon
-    $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_Save").height() > 25)
+        $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //返回按钮icon
-    $("#Btn_Back").attr('style', 'background-image: url(../../../Img/Btn/Back.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_Back").height() > 25)
+        $("#Btn_Back").attr('style', 'background-image: url(../../../Img/Btn/Back.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Back").attr('style', 'background-image: url(../../../Img/Btn/Back.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //导入按钮icon
-    $("#Btn_Imp").attr('style', 'background-image: url(../../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_Imp").height() > 25)
+        $("#Btn_Imp").attr('style', 'background-image: url(../../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Imp").attr('style', 'background-image: url(../../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //帮助按钮icon
-    $("#Btn_Help").attr('style', 'background-image: url(../../../Img/Btn/Help.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_Help").height() > 25)
+        $("#Btn_Help").attr('style', 'background-image: url(../../../Img/Btn/Help.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Help").attr('style', 'background-image: url(../../../Img/Btn/Help.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //高级按钮icon
-    $("#Btn_Advanced").attr('style', 'background-image: url(../../../Img/Btn/Advanced.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_Advanced").height() > 25)
+        $("#Btn_Advanced").attr('style', 'background-image: url(../../../Img/Btn/Advanced.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Advanced").attr('style', 'background-image: url(../../../Img/Btn/Advanced.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //批处理按钮
     $("#Btn_Batch").attr('style', 'background-image: url(../../../Img/Btn/Batch.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    if ($("#Btn_New").height() > 25)
+        $("#Btn_New").attr('style', 'background-image: url(../../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_New").attr('style', 'background-image: url(../../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
 }
+
 style = ''
 //动态添加新风格  @lz
 function SetNewCSS() {

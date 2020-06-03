@@ -4653,7 +4653,7 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static void Flow_DoComeBackWorkFlow(string flowNo, Int64 workID, string msg)
         {
-            WorkFlow wf = new WorkFlow( workID);
+            WorkFlow wf = new WorkFlow(workID);
             wf.DoComeBackWorkFlow(msg);
         }
         /// <summary>
@@ -4755,7 +4755,7 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static string Flow_DoDeleteFlowByWriteLog(string flowNo, Int64 workID, string deleteNote, bool isDelSubFlow)
         {
-            WorkFlow wf = new WorkFlow( workID);
+            WorkFlow wf = new WorkFlow(workID);
             return wf.DoDeleteWorkFlowByWriteLog(deleteNote, isDelSubFlow);
         }
         /// <summary>
@@ -4769,7 +4769,7 @@ namespace BP.WF
         /// <returns>执行信息,执行不成功抛出异常.</returns>
         public static string Flow_DoDeleteFlowByFlag(string flowNo, Int64 workID, string msg, bool isDelSubFlow)
         {
-            WorkFlow wf = new WorkFlow( workID);
+            WorkFlow wf = new WorkFlow(workID);
             wf.DoDeleteWorkFlowByFlag(msg);
             if (isDelSubFlow)
             {
@@ -4800,7 +4800,7 @@ namespace BP.WF
         /// <returns>执行消息,如果撤销不成功则抛出异常.</returns>
         public static string Flow_DoUnDeleteFlowByFlag(string flowNo, Int64 workID, string msg)
         {
-            WorkFlow wf = new WorkFlow( workID);
+            WorkFlow wf = new WorkFlow(workID);
             wf.DoUnDeleteWorkFlowByFlag(msg);
             return "撤销删除成功.";
         }
@@ -4869,7 +4869,7 @@ namespace BP.WF
             try
             {
                 // 执行冻结.
-                WorkFlow wf = new WorkFlow( workid);
+                WorkFlow wf = new WorkFlow(workid);
                 info = wf.DoFix(msg);
             }
             catch (Exception ex)
@@ -4888,7 +4888,7 @@ namespace BP.WF
                 try
                 {
                     // 执行冻结.
-                    WorkFlow wf = new WorkFlow( item.WorkID);
+                    WorkFlow wf = new WorkFlow(item.WorkID);
                     info += wf.DoFix(msg);
                     GenerWorkFlows subgwfs = new GenerWorkFlows();
                     subgwfs.Retrieve(GenerWorkFlowAttr.PWorkID, item.WorkID);
@@ -4897,7 +4897,7 @@ namespace BP.WF
                         try
                         {
                             // 执行冻结.
-                            WorkFlow subwf = new WorkFlow( subitem.WorkID);
+                            WorkFlow subwf = new WorkFlow(subitem.WorkID);
                             info += subwf.DoFix(msg);
                         }
                         catch (Exception ex)
@@ -4922,7 +4922,7 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">workid</param>
         /// <param name="msg">解除原因</param>
-        public static string Flow_DoUnFix( Int64 workid, string msg)
+        public static string Flow_DoUnFix(Int64 workid, string msg)
         {
             // 执行冻结.
             WorkFlow wf = new WorkFlow(workid);
@@ -4938,7 +4938,7 @@ namespace BP.WF
         /// <returns>返回成功执行信息</returns>
         public static string Flow_DoFlowOver(Int64 workID, string msg, int stopFlowType = 1)
         {
-            WorkFlow wf = new WorkFlow( workID);
+            WorkFlow wf = new WorkFlow(workID);
             string flowNo = wf.HisGenerWorkFlow.FK_Flow;
 
             Node nd = new Node(wf.HisGenerWorkFlow.FK_Node);
@@ -5514,7 +5514,7 @@ namespace BP.WF
                 return true;
             }
 
-            if (WebUser.No.Equals("admin")==true)
+            if (WebUser.No.Equals("admin") == true)
             {
                 return true;
             }
@@ -5577,7 +5577,7 @@ namespace BP.WF
         {
             if (userNo == null)
                 userNo = WebUser.No;
-            if (WebUser.No.Equals("admin")==true)
+            if (WebUser.No.Equals("admin") == true)
                 return true;
 
             //先从轨迹里判断.
@@ -5628,7 +5628,7 @@ namespace BP.WF
             gwf.SetValByKey(GenerWorkFlowAttr.WorkID, workid);
             if (gwf.RetrieveFromDBSources() > 0)
             {
-                WorkFlow wf = new WorkFlow( workid);
+                WorkFlow wf = new WorkFlow(workid);
                 string msg = wf.DoDeleteWorkFlowByReal(false);
 
                 BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.FID, 0, info, "删除子线程");
@@ -6099,7 +6099,7 @@ namespace BP.WF
         /// <returns>是否可以删除该流程</returns>
         public static bool Flow_IsCanDeleteFlowInstance(string flowNo, Int64 workid, string userNo)
         {
-            if (WebUser.No.Equals("admin")==true)
+            if (WebUser.No.Equals("admin") == true)
             {
                 return true;
             }
@@ -7735,6 +7735,103 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 写入抄送
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="toEmps">抄送给: zhangsan,lisi,wangwu </param>
+        /// <returns>执行结果</returns>
+        public static string Node_CCTo(Int64 workid, string toEmps)
+        {
+            if (DataType.IsNullOrEmpty(toEmps) == true)
+                return "没有指定人";
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            //if (gwf.WFState == WFState.Complete)
+            //  throw new Exception("err@");
+
+            Node fromNode = new Node(gwf.FK_Node);
+
+            toEmps = toEmps.Replace(";", ",");
+            string[] strs = toEmps.Split(',');
+            BP.Port.Emp emp = new Emp();
+            CCList list = new CCList();
+
+            string names = "";
+            foreach (string str in strs)
+            {
+                if (DataType.IsNullOrEmpty(str) == true)
+                    continue;
+
+                emp.No = str;
+                int i = emp.RetrieveFromDBSources();
+                if (i == 0)
+                    continue;
+
+                names += emp.Name + "、";
+
+                list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                list.FK_Flow = gwf.FK_Flow;
+                list.FlowName = gwf.FlowName;
+                list.FK_Node = fromNode.NodeID;
+                list.NodeName = gwf.NodeName;
+                list.Title = gwf.Title;
+                list.Doc = gwf.Title;
+                list.CCTo = emp.No;
+                list.CCToName = emp.Name;
+
+                //增加抄送人部门.
+                list.CCToDept = emp.FK_Dept;
+                list.RDT = DataType.CurrentDataTime;
+                list.Rec = WebUser.No;
+                list.WorkID = gwf.WorkID;
+                list.FID = gwf.FID;
+                list.PFlowNo = gwf.PFlowNo;
+                list.PWorkID = gwf.PWorkID;
+
+                //是否要写入待办.
+                if (fromNode.CCWriteTo == CCWriteTo.CCList)
+                {
+                    list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                }
+                else
+                {
+                    list.InEmpWorks = true;    //added by liuxc,2015.7.6
+                }
+
+                //写入待办和写入待办与抄送列表,状态不同
+                if (fromNode.CCWriteTo == CCWriteTo.All
+                    || fromNode.CCWriteTo == CCWriteTo.Todolist)
+                {
+                    list.HisSta = fromNode.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                }
+
+                if (fromNode.IsEndNode == true)//结束节点只写入抄送列表
+                {
+                    list.HisSta = CCSta.UnRead;
+                    list.InEmpWorks = false;
+                }
+
+                try
+                {
+                    list.Insert();
+                }
+                catch
+                {
+                    list.CheckPhysicsTable();
+                    list.Update();
+                }
+
+                //发送消息给他们.
+                BP.WF.Dev2Interface.Port_SendMsg(emp.No, gwf.Title,
+                    "抄送消息:" + gwf.Title, "CC" + gwf.FK_Node + "_" + gwf.WorkID + "_" + emp.No, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+            }
+
+            //记录日志.
+            Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+                WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmps, names, gwf.Title, null);
+
+            return "已经成功的把工作抄送给:" + names;
+        }
+        /// <summary>
         /// 把抄送写入待办列表
         /// </summary>
         /// <param name="nodeID">节点ID</param>
@@ -7756,7 +7853,8 @@ namespace BP.WF
         /// <param name="msgTitle">标题</param>
         /// <param name="msgDoc">内容</param>
         /// <returns>执行信息</returns>
-        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID, string toEmpNo, string toEmpName,
+        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID,
+            string toEmpNo, string toEmpName,
             string msgTitle, string msgDoc)
         {
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -9310,10 +9408,10 @@ namespace BP.WF
         /// <param name="reldata">解除挂起日期(可以为空)</param>
         /// <param name="hungNote">挂起原因</param>
         /// <returns>返回执行信息</returns>
-        public static string Node_HungUpWork( Int64 workid, int wayInt, string reldata, string hungNote)
+        public static string Node_HungUpWork(Int64 workid, int wayInt, string reldata, string hungNote)
         {
             HungUpWay way = (HungUpWay)wayInt;
-            BP.WF.WorkFlow wf = new WorkFlow( workid);
+            BP.WF.WorkFlow wf = new WorkFlow(workid);
             return wf.DoHungUp(way, reldata, hungNote);
         }
         /// <summary>
@@ -9323,9 +9421,9 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="msg">取消挂起原因</param>
         /// <returns>执行信息</returns>
-        public static void Node_UnHungUpWork( Int64 workid, string msg)
+        public static void Node_UnHungUpWork(Int64 workid, string msg)
         {
-            BP.WF.WorkFlow wf = new WorkFlow( workid);
+            BP.WF.WorkFlow wf = new WorkFlow(workid);
             wf.DoUnHungUp();
         }
         /// <summary>
@@ -9720,9 +9818,9 @@ namespace BP.WF
         /// <param name="flowNo">撤销编号</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回撤销信息</returns>
-        public static string Node_ShiftUn( Int64 workID)
+        public static string Node_ShiftUn(Int64 workID)
         {
-            WorkFlow mwf = new WorkFlow( workID);
+            WorkFlow mwf = new WorkFlow(workID);
             return mwf.DoUnShift();
         }
         /// <summary>
@@ -9796,7 +9894,7 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         public static void Node_FHL_KillSubFlow(string fk_flow, Int64 fid, Int64 workid)
         {
-            WorkFlow wkf = new WorkFlow( workid);
+            WorkFlow wkf = new WorkFlow(workid);
             wkf.DoDeleteWorkFlowByReal(true);
         }
         /// <summary>
@@ -9808,7 +9906,7 @@ namespace BP.WF
         /// <param name="msg">驳回消息</param>
         public static string Node_FHL_DoReject(int NodeSheetfReject, Int64 fid, Int64 workid, string msg)
         {
-            WorkFlow wkf = new WorkFlow( workid);
+            WorkFlow wkf = new WorkFlow(workid);
             return wkf.DoReject(fid, NodeSheetfReject, msg);
         }
 
@@ -10606,8 +10704,8 @@ namespace BP.WF
                 bool bIsCanDo = false;
                 foreach (Direction dir in dirs)
                 {
-                    if (dir.ToNode== mynd.NodeID)
-                      bIsCanDo = conds.GenerResult(rpt);
+                    if (dir.ToNode == mynd.NodeID)
+                        bIsCanDo = conds.GenerResult(rpt);
                 }
                 #endregion
 
@@ -10640,11 +10738,11 @@ namespace BP.WF
                     #region 判断方向条件,如果设置了方向条件，判断是否可以通过，不能通过的，就不让其显示.
                     Conds conds = new Conds();
                     int i = conds.Retrieve(CondAttr.FK_Node, nd.NodeID,
-                        CondAttr.ToNodeID, mynd.NodeID, CondAttr.CondType,(int) CondType.Dir, CondAttr.Idx);
+                        CondAttr.ToNodeID, mynd.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
                     // 设置方向条件，就判断它。
                     if (i > 0)
                     {
-                         
+
                         //判断是否可以通过.
                         if (conds.GenerResult(rpt) == false)
                             continue;

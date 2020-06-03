@@ -192,7 +192,7 @@ namespace BP.WF.HttpHandler
                 sql += " UNION  ";
 
                 sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name, ";
-                sql += " A.PTable, A.OrgNo, C.Name as OrgName ";
+                sql += " A.PTable, A.OrgNo, '其他组织' as OrgName ";
                 sql += " FROM ";
                 sql += " Sys_MapData A,  WF_FrmOrg B, Port_Org C ";
                 sql += " WHERE ";
@@ -203,7 +203,9 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             #warning 需要判断不同的数据库类型
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["SORTNAME"].ColumnName = "SortName";
                 dt.Columns["NO"].ColumnName = "No";

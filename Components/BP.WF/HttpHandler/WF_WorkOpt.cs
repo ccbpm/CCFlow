@@ -3137,6 +3137,19 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
+        /// <summary>
+        /// 执行发送.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_Send2020()
+        {
+            //人员信息. 格式 zhangsan,张三;lisi,李四;
+            string emps = this.GetRequestVal("Emps");
+
+            //调用抄送接口执行抄送.
+            string ccRec = BP.WF.Dev2Interface.Node_CCTo( this.WorkID, emps);
+            return ccRec;
+        }
 
         /// <summary>
         /// 抄送发送.

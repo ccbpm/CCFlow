@@ -647,11 +647,11 @@ function execSend(toNodeID, formType) {
 //发送 退回 移交等执行成功后转到  指定页面
 var interval;
 function OptSuc(msg) {
-				if (window.parent != null && window.parent.ReloadGxjtList != null) {
+			/*	if (window.parent != null && window.parent.ReloadGxjtList != null) {
 					window.parent.ReloadGxjtList(msg);
 				} else {
 					ReloadGxjtList(msg);
-				}
+				}*/
 
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()

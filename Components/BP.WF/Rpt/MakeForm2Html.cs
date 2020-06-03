@@ -2307,6 +2307,9 @@ namespace BP.WF
 
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                BP.DA.Log.DebugWriteInfo("@ProcessStartInfo");
+
                 startInfo.FileName = pdfFileExe;//设定需要执行的命令  
                 startInfo.Arguments = " --disable-external-links " + htmFile + " " + pdf;//“/C”表示执行完命令后马上退出  
                 startInfo.UseShellExecute = false;//不使用系统外壳程序启动  
@@ -2314,9 +2317,13 @@ namespace BP.WF
                 startInfo.RedirectStandardOutput = true; //重定向输出  
                 startInfo.CreateNoWindow = true;//不创建窗口  
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                BP.DA.Log.DebugWriteInfo("@ProcessWindowStyle");
+
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
+
+                BP.DA.Log.DebugWriteInfo("@Close");
             }
             catch (Exception ex)
             {

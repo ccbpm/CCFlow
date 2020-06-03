@@ -884,6 +884,7 @@ var Entity = (function () {
                         return;
 
                     try {
+                        data = data.replace(/\\\\"/g, '\\"');
                         jsonString = JSON.parse(data);
                         setData(self);
                     } catch (e) {
@@ -1135,6 +1136,7 @@ var Entity = (function () {
                     }
 
                     try {
+                        data = data.replace(/\\\\"/g, '\\"');
                         jsonString = JSON.parse(data);
                         setData(self);
                         result = jsonString.Retrieve;

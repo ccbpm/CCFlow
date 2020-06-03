@@ -191,13 +191,13 @@ namespace BP.WF.HttpHandler
 
                 sql += " UNION  ";
 
-                sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name,";
-                sql += "A.PTable, A.OrgNo, C.Name as OrgName ";
+                sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name, ";
+                sql += " A.PTable, A.OrgNo, C.Name as OrgName ";
                 sql += " FROM ";
-                sql += "Sys_MapData A,  WF_FrmOrg B, Port_Org C ";
+                sql += " Sys_MapData A,  WF_FrmOrg B, Port_Org C ";
                 sql += " WHERE ";
-                sql += "  A.No = B.FrmID  AND B.OrgNo=C.NO  AND C.No=A.OrgNo ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
+                sql += "  A.No = B.FrmID  AND B.OrgNo=C.No ";
+                sql += "  AND B.OrgNo = '" + WebUser.OrgNo + "' ";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

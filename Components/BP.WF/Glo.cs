@@ -1209,29 +1209,7 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_Cond SET Idx=PRI ");
                 DBAccess.DropTableColumn("WF_Cond", "PRI");
             }
-
-            //升级方向条件的计算方式.
-            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true && 1 == 2)
-            {
-                //如果有该字段.
-                Direction dir = new Direction();
-                dir.CheckPhysicsTable();
-
-                Conds conds = new Conds();
-                conds.RetrieveAll();
-                foreach (Cond myCond in conds)
-                {
-                    if (myCond.CondType != CondType.Dir)
-                        continue;
-
-                    int type = DBAccess.RunSQLReturnValInt("SELECT CondOrAnd FROM WF_Cond WHERE MyPK='" + myCond.MyPK + "'", 0);
-
-                    //Direction mydir = new Direction();
-                    //mydir.Retrieve(DirectionAttr.Node, myCond.FK_Node,
-                    //    DirectionAttr.ToNode, myCond.ToNodeID);
-                    //  mydir.Update();
-                }
-            }
+           
 
             //--2020.05.25 修改节点自定义按钮功能;
             BP.WF.Template.NodeToolbar bar = new NodeToolbar();
@@ -1387,6 +1365,8 @@ namespace BP.WF
                     }
                     if (isHave == true)
                         continue;
+
+
 
 
                     //获得类型.

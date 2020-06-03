@@ -39,7 +39,7 @@ $(function () {
             //_html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
             _html += "<input type=button  value='" + toolBar.Name + "' enable=true " + Oper + "/>";
         else
-            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='Img/Btn/" + toolBar.No + ".png' width='15px' height='15px'>&nbsp;" + toolBar.Name + "</button>";
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
     });
     $('#ToolBar').html(_html);
 
@@ -168,7 +168,6 @@ function initModal(modalType, toNode,url) {
             }
         }
     }
-    
 
 
     //初始化退回窗口的SRC.
@@ -304,7 +303,7 @@ function initModal(modalType, toNode,url) {
             //发送选择接收节点和接收人                
             case "sendAccepter":
                 $('#modalHeader').text("选择接受人");
-                SetPageSize((80, 80);
+                SetPageSize(80, 80);
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "SelectNodeUrl":
@@ -919,10 +918,10 @@ function SaveEnd(formType) {
 function FocusBtn(btn, workid) {
 
     if (btn.innerText.trim() == "关注") {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;取消关注";
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消关注";
     }
     else {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;关注";
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;关注";
     }
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
@@ -934,10 +933,10 @@ function FocusBtn(btn, workid) {
 function ConfirmBtn(btn, workid) {
 
     if (btn.innerText.trim() == '确认') {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;取消确认";
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消确认";
     }
     else {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='15px' height='15px'>&nbsp;确认";
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;确认";
     }
 
     //btn.value = (btn.value == '确认' ? '取消确认' : '确认');

@@ -92,7 +92,7 @@ function SetFlowBBSVal() {
 function BBSSubmit() {
 
     if ($("#FlowBBS_Doc").val() == null || $("#FlowBBS_Doc").val() == "" || $("#FlowBBS_Doc").val().trim().length == 0) {
-        alert("请填写评论内容!");
+        alert("未填写意见!");
         return;
     }
 
@@ -104,7 +104,7 @@ function BBSSubmit() {
         alert(data);
         return;
     }
-    alert("提交评论成功");
+    alert("发送成功");
 
     //获取所有的评论内容
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");

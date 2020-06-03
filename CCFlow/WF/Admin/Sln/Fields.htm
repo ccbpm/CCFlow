@@ -118,15 +118,17 @@
             document.getElementById(id + "_DefVal").value = no;
         }
         /*隐藏与显示.*/
-        function ShowHidden(ctrlID,inputID) {
-
-            var sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
-            var dts = DBAccess.RunSQLReturnTable(sql);
+        function ShowHidden(ctrlID, inputID) {
+            var ens = new Entities("BP.Sys.GloVars");
+            ens.Retrieve("GroupKey", "DefVal");
+            
+            //var sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
+            //var dts = DBAccess.RunSQLReturnTable(sql);
             html = "<div id='state' style='padding-top:20px; padding-left:60px; width:360px; height:400px; position: absolute; z-index: 10; background-color: #F5F5F5; border: 2px outset black; display: none; color: Gray; top:100px;left:500px;>";
             html += " <ol style='padding:10px;'>";
-            for (var i = 0; i < dts.length; i++) {
-                var dt = dts[i];
-                html += " <li><a href=\"javascript:AddDefVal('" + dt.No + "','"+inputID+"')\"> " + dt.Name + " </a> </li>";
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                html += " <li><a href=\"javascript:AddDefVal('" + en.No + "','"+inputID+"')\"> " + en.Name + " </a> </li>";
             }
             html += " </ol>";
             html += "</div>";

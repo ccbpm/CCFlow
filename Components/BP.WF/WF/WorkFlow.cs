@@ -449,12 +449,11 @@ namespace BP.WF
             //检查流程是否完成，如果没有完成就调用workflow流程删除.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
+            int i = gwf.RetrieveFromDBSources();
 
             BP.WF.Flow fl = new Flow(gwf.FK_Flow);
-
-
             string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人
-            if (gwf.RetrieveFromDBSources() != 0)
+            if (i != 0)
             {
                 if (gwf.WFState != WFState.Complete)
                 {
@@ -473,7 +472,6 @@ namespace BP.WF
                     }
 
                     wf.DoDeleteWorkFlowByReal(isDelSubFlow);
-                   
                     return;
                 }
             }

@@ -451,6 +451,20 @@ namespace BP.WF
                         }
                         break;
                     case FieldTypeS.Enum:
+                        if (attr.UIContralType == UIContralType.CheckBok)
+                        {
+                            string s = en.GetValStrByKey(attr.KeyOfEn) + ",";
+                            SysEnums enums = new SysEnums(attr.UIBindKey);
+                            foreach (SysEnum se in enums)
+                            {
+                                if (s.IndexOf(se.IntKey + ",") != -1)
+                                    text += se.Lab + " ";
+                            }
+
+                        }
+                        else
+                            text = en.GetValRefTextByKey(attr.KeyOfEn);
+                        break;
                     case FieldTypeS.FK:
                         text = en.GetValRefTextByKey(attr.KeyOfEn);
                         break;
@@ -976,6 +990,19 @@ namespace BP.WF
 
                                 break;
                             case FieldTypeS.Enum:
+                                if(attr.UIContralType == UIContralType.CheckBok)
+                                {
+                                    string s = en.GetValStrByKey(attr.KeyOfEn)+",";
+                                    SysEnums enums = new SysEnums(attr.UIBindKey);
+                                    foreach(SysEnum se in enums){
+                                        if (s.IndexOf(se.IntKey + ",") != -1)
+                                            text += se.Lab + " ";
+                                    }
+
+                                } 
+                                else
+                                    text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                break;
                             case FieldTypeS.FK:
                                 text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 break;

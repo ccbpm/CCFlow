@@ -73,24 +73,25 @@ namespace BP.DA
         /// <returns>返回删除约束的个数</returns>
         public static int DropConstraintOfSQL(string table, string colName)
         {
-            bool isHave = false;
-            //获得约束.
-            string sql = "select b.name from sysobjects b join syscolumns a on b.id = a.cdefault ";
-            sql += " where a.id = object_id('" + table + "') ";
-            sql += " and a.name ='" + colName + "' ";
 
-            //遍历并删除它们.
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
-                string name = dr[0].ToString();
-
-                DBAccess.RunSQL("exec('alter table " + table + " drop constraint " + name + " ' )");
-                isHave = true;
+                //获得约束.
+                string sql = "select b.name from sysobjects b join syscolumns a on b.id = a.cdefault ";
+                sql += " where a.id = object_id('" + table + "') ";
+                sql += " and a.name ='" + colName + "' ";
+                //遍历并删除它们.
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string name = dr[0].ToString();
+                    DBAccess.RunSQL("exec('alter table " + table + " drop constraint " + name + " ' )");
+                }
+                //返回执行的个数.
+                return dt.Rows.Count;
             }
 
-            //返回执行的个数.
-            return dt.Rows.Count;
+            return 0;
         }
         /// <summary>
         /// 获得约束

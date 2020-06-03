@@ -625,16 +625,16 @@ function CheckRegInput(oInput, filter, tipInfo) {
         result = re.test(oInputVal);
     }
     if (!result) {
-        $("[name=" + oInput + ']').addClass('errorInput');
+        $("#" + oInput).addClass('errorInput');
         var errorId = oInput+"error";
         if($("#"+errorId).length == 0){
            var span = $("<span id='"+errorId+"' style='color:red'></span>");
-           $("[name=" + oInput + ']').parent().append(span);
+           $("#" + oInput ).parent().append(span);
         }
         $("#"+errorId).html(tipInfo);
 
     } else {
-        $("[name=" + oInput + ']').removeClass('errorInput');
+        $("#" + oInput).removeClass('errorInput');
         var errorId = oInput+"error";
         if ($("#" + errorId).length != 0)
             $("#" + errorId).remove();

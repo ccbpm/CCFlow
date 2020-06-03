@@ -1999,7 +1999,7 @@
                         } else {
                             tb.addClass("CheckRegInput");
                             tb.data(mapExt)
-                            tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "','','" + mapExt.Tag1 + "')");
+                            tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('id') + "','','" + mapExt.Tag1 + "')");
                         }
                         break;
                     case "InputCheck": //输入检查
@@ -2496,14 +2496,14 @@
             for (var idx = 0; idx < trs.length; idx++) {
                 var regInputs = $($('table tbody tr')[idx]).find('.CheckRegInput');
                 $.each(regInputs, function (i, obj) {
-                    var name = obj.name;
+                    var objId = obj.id;
                     var mapExtData = $(obj).data();
                     if (mapExtData.Doc != undefined) {
                         var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
                         var tag1 = mapExtData.Tag1;
                         if ($(obj).val() != undefined && $(obj).val() != '') {
 
-                            var result = CheckRegInput(name, regDoc, tag1);
+                            var result = CheckRegInput(objId, regDoc, tag1);
                             if (!result) {
                                 $(obj).addClass('errorInput');
                                 checkRegResult = false;

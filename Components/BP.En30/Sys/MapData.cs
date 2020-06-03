@@ -1801,7 +1801,6 @@ namespace BP.Sys
                 //如果是从开始节点表单导入的,就默认为, 按照主键PK的方式显示.
                 if (fk_mapdata.IndexOf("ND") == 0)
                 {
-                    item.HisCtrlWay = AthCtrlWay.PK;
                     item.DataRefNoOfObj = "AttachM1";
                 }
                 item.Update();

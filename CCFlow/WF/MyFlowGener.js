@@ -1032,6 +1032,8 @@ function GenerWorkNode() {
     handler.AddUrlData(urlParam);
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 
+    console.log(data);
+
 
     if (data.indexOf('err@') == 0) {
         alert(data);

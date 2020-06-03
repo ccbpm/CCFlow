@@ -528,10 +528,21 @@
         </div>
         <div id="next">
             <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
-            <input type="button" id="Btn_SelectEmps" value='选人' />
-            <input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='选Bate' />
-            <input type="button" value="发送" onclick="Send();" id="Btn_Send" />
-            <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
+
+            <button   id="Btn_SelectEmps">
+                <img src="../Img/Btn/AddLeader.png" /> 选人
+            </button>
+
+            <!--<input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='选Bate' />-->
+
+
+            <button onclick="Send();" id="Btn_Send">
+                <img src="../Img/Btn/Send.png" /> 发送
+            </button>
+
+            <button onclick="CloseModel();" id="Btn_Close">
+                <img src="../Img/Btn/Close.png" /> 关闭
+            </button>
 
             <a href="javascript:Help()">帮助?</a>
             <div id="HelpInfo">

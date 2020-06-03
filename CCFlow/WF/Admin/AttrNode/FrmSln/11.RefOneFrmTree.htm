@@ -130,16 +130,15 @@
             var nodeID = GetQueryString("FK_Node");
             var currNode = new Entity("BP.WF.Node", nodeID);
 
-            if (currNode.NodeFrmID == "")
-            {
+            if (currNode.NodeFrmID == "") {
                 alert('错误：您需要为该节点设置表单.');
                 return;
             }
 
-             $("#msg").html("正在执行请稍候...");
+            $("#msg").html("正在执行请稍候...");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
-            handler.AddPara("FK_Node",GetQueryString("FK_Node"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             var data = handler.DoMethodReturnString("RefOneFrmTree_SetAllNodeFrmUseThisSln");
 
             alert('设置成功,正在转入批量编辑页面.');
@@ -170,7 +169,14 @@
             <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
                 -->
             <li>已经选择的表单: <div id="MyFrm"></div> </li>
-            <li><a href="javascript:SetFrm();">设置表单</a></li>
+            <li> <button onclick="SetFrm()" id="Btn_Setting"> <img src="../../../Img/Btn//Setting.png" />  设置表单 </button>  </li>
+
+            <li><font color="green"><b>不成文的开发规范</b></font></li>
+            <li>1.设置的表单所有的字段与元素是只读的,并且字段不设置动态的默认值, 比如@WebUser.* 。</li>
+            <li>2.使用下面的设置字段权限设置[为该表单的元素设置权限],然后执行批量设置. </li>
+            <li>3.一般来说，开始节点设置为自定义方案，其他节点设置为只读方案. </li>
+            <li>4.在批量设置里，使用不同的签批组件对应不同的节点. </li>
+
         </ul>
 
     </fieldset>

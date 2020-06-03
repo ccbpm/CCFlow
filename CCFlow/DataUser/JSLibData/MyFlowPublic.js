@@ -77,8 +77,11 @@ function beforeCCClose() {
     return true;
 }
 
-//关闭弹出窗刷新页面
-function WindowCloseReloadPage() {
+/**
+ * 关闭弹出窗刷新页面
+ * @param {msg} 显示弹出窗的消息内容，点确定关闭
+ */
+function WindowCloseReloadPage(msg) {
 
 }
 //广西抄送阅读页面增加关闭前事件结束

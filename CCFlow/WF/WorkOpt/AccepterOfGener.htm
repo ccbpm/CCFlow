@@ -292,11 +292,11 @@
                 $("#Btn_SelectEmps").attr("disabled", false);
                 return;
             }
-				if (window.parent != null && window.parent.ReloadGxjtList != null) {
-					window.parent.ReloadGxjtList(data);
-				} else {
-					ReloadGxjtList(data);
-				}
+			//if (window.parent != null && window.parent.ReloadGxjtList != null) {
+			//	window.parent.ReloadGxjtList(data);
+			//} else {
+			//	ReloadGxjtList(data);
+			//}
 
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
                 var url = data;

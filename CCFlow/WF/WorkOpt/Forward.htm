@@ -95,11 +95,11 @@
 
             var data = handler.DoMethodReturnString("Shift");
             data = data.replace("@null", "");
-				if (window.parent != null && window.parent.ReloadGxjtList != null) {
+				/*if (window.parent != null && window.parent.ReloadGxjtList != null) {
 					window.parent.ReloadGxjtList(data);
 				} else {
 					ReloadGxjtList(data);
-				}
+				}*/
 
             $('body').append($('<div>' + data + '</div>'));
 

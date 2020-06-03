@@ -46,10 +46,20 @@ $(document).ready(function () {
 
 function AddBtnIcon()
 {
-    var ids = "Save,Delete,SaveAncClose,Cancel";
-
+    //保存按钮icon
+    $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    //返回按钮icon
+    $("#Btn_Back").attr('style', 'background-image: url(../../../Img/Btn/Back.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    //导入按钮icon
+    $("#Btn_Imp").attr('style', 'background-image: url(../../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    //帮助按钮icon
+    $("#Btn_Help").attr('style', 'background-image: url(../../../Img/Btn/Help.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    //高级按钮icon
+    $("#Btn_Advanced").attr('style', 'background-image: url(../../../Img/Btn/Advanced.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    //批处理按钮
+    $("#Btn_Batch").attr('style', 'background-image: url(../../../Img/Btn/Batch.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
 }
-
+style = ''
 //动态添加新风格  @lz
 function SetNewCSS() {
     //body下添加一个父Div

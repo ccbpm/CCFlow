@@ -1341,6 +1341,8 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Name");
             dt.Columns.Add("Oper");
             dt.Columns.Add("Role", typeof(int));
+            dt.Columns.Add("Icon");
+
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             BtnLab btnLab = new BtnLab(this.FK_Node);
@@ -1905,6 +1907,7 @@ namespace BP.WF.HttpHandler
                         dr["No"] = "NodeToolBar";
                         dr["Name"] = bar.Title;
                         dr["Oper"] = bar.Url;
+                        dr["Icon"] = bar.Row["WebPath"];
                         dt.Rows.Add(dr);
                     }
                     else
@@ -1915,6 +1918,7 @@ namespace BP.WF.HttpHandler
                         dr["No"] = "NodeToolBar";
                         dr["Name"] = bar.Title;
                         dr["Oper"] = "WinOpen('" + urlr3 + "')";
+                        dr["Icon"] = bar.Row["WebPath"];
                         dt.Rows.Add(dr);
 
                     }

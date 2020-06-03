@@ -173,8 +173,8 @@
 
             //执行发送.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-            handler.AddUrlData();
             handler.AddPara("Emps", empStr);
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
             var data = handler.DoMethodReturnString("CC_Send2020");
 
             window.location.href = window.location.href;

@@ -246,7 +246,6 @@ namespace BP.Tools
                 return encryptString;
 
             strEncrypt = MD5_Encrypt(strEncrypt);
-            strEncrypt = MD5_Encrypt(strEncrypt);
             return strEncrypt.ToUpper();
         }
         /// <summary> 

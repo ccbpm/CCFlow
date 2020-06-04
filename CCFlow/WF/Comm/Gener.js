@@ -222,12 +222,10 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
         // var no = json[i][noCol].toString();
         //   var no = json[i][nameCol].toString();
 
-
         if (json[i][noCol] == undefined)
             $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
         else
             $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
-
     }
 
     //设置选中的值.
@@ -246,6 +244,44 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal, filterKey1, fi
     }
 }
 
+function GenerBindDDLAppend(ddlCtrlID, data, noCol, nameCol) {
+
+    if (noCol == null)
+        noCol = "No";
+
+    if (nameCol == null)
+        nameCol = "Name";
+
+    //判断data是否是一个数组，如果是一个数组，就取第1个对象.
+    var json = data;
+
+    //如果他的数量==0，就return.
+    if (json.length == 0)
+        return;
+
+    if (data[0].length == 1)
+        json = data[0];
+
+    if (json[0][noCol] == undefined) {
+        alert('@在绑定[' + ddlCtrlID + ']错误，No列名' + noCol + '不存在,无法行程期望的下拉框value . ');
+        return;
+    }
+
+    if (json[0][nameCol] == undefined) {
+        alert('@在绑定[' + ddlCtrlID + ']错误，Name列名' + nameCol + '不存在,无法行程期望的下拉框value. ');
+        return;
+    }
+
+    for (var i = 0; i < json.length; i++) {
+
+        if (json[i][noCol] == undefined)
+            $("#" + ddlCtrlID).append("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
+        else
+            $("#" + ddlCtrlID).append("<option value='" + json[i][noCol] + "'>" + json[i][nameCol] + "</option>");
+    }
+}
+
+
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
     if (dynamicHandler == "")
@@ -256,7 +292,7 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
         type: 'post',
         async: false,
         xhrFields: {
-            withCredentials: IsIELower10==true?false:true
+            withCredentials: IsIELower10 == true ? false : true
         },
         crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
@@ -1265,7 +1301,7 @@ var Entity = (function () {
                     if (data == "")
                         return 0;
                     try {
-                        data = data.replace(/\\\\"/g,'\\"');
+                        data = data.replace(/\\\\"/g, '\\"');
                         console.log(data);
                         jsonString = JSON.parse(data);
                         setData(self);
@@ -2161,12 +2197,12 @@ var DBAccess = (function () {
 var HttpHandler = (function () {
 
     var parameters;
-   
+
 
     if (IsIELower10 == true)
         parameters = {};
     else
-        parameters=new FormData();
+        parameters = new FormData();
 
     var formData;
     var params = "&";
@@ -2263,7 +2299,7 @@ var HttpHandler = (function () {
         },
         AddPara: function (key, value) {
             if (params.indexOf("&" + key + "=") == -1) {
-                if(IsIELower10 == true)
+                if (IsIELower10 == true)
                     parameters[key] = value;
                 else
                     parameters.append(key, value);
@@ -2336,7 +2372,7 @@ var HttpHandler = (function () {
                     url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                     data: parameters,
                     dataType: 'html',
-                    contentType:  false,
+                    contentType: false,
                     processData: false,
                     success: function (data) {
                         jsonString = data;

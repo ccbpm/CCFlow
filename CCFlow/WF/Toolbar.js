@@ -163,7 +163,20 @@ $(function () {
     }
    
 });
+//添加保存动态
+function SaveOnly() {
 
+    $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;正在保存...");
+    
+    try {
+        Save();
+    } catch (e) {
+        alert(e);
+        return;
+    }
+    $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;保存成功");
+    setTimeout(function () { $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;保存"); }, 1000);
+}
 function setModalMax() {
     //设置bootstrap最大化窗口
     var w = ddocument.body.clientWidth - 40;

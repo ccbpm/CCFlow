@@ -562,16 +562,11 @@
                 //制造表头
                 //添加序号列
                 workNodeData = data;
-                 
 
                 //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
                 // ==1,==2 是打开父窗口出现卡片.
                 var EditModel = sys_MapDtl.EditModel;
                 window.EditModel = EditModel;
-
-                //获得多表头设置.
-                var multiTitle = sys_MapDtl.GetPara("MultiTitle");
-                var multiTitle = sys_MapDtl.MultiTitle;
 
                 var snTh = $('<th data-coltype="SN" style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
 
@@ -579,13 +574,9 @@
                 $.each(sys_mapAttr, function (i, mapAttrObj) {
 
                     var mustInput = "";
-
-                    //必填项.
                     if (mapAttrObj.UIIsInput == 1)
                         mustInput = '<span style="color:red" class="mustInput" data-keyofen="' + mapAttrObj.KeyOfEn + '">*</span>';
-
                     var th = $('<th class="thStyle"></th>');
-                    //金额格式.
                     if (mapAttrObj.MyDataType == 8)
                         th = $('<th data-coltype="Money"></th>');
 
@@ -596,7 +587,6 @@
                         th.css("display", "none");
                     th.data().colname = mapAttrObj.KeyOfEn;
                     th.append(mustInput);
-
                     //if (mapAttrObj.UIVisible == 1 || (mapAttrObj.UIVisible == 0 && mapAttrObj.EditType == 2)) {
                        threadTr.append(th);
                     //}

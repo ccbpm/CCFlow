@@ -45,6 +45,10 @@ namespace BP.Sys
         /// 是否必填项
         /// </summary>
         public const string IsRequired = "IsRequired";
+        /// <summary>
+        /// 显示分组
+        /// </summary>
+        public const string GroupID = "GroupID";
     }
     /// <summary>
     /// 图片附件

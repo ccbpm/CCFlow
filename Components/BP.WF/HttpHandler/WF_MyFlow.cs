@@ -1489,7 +1489,7 @@ namespace BP.WF.HttpHandler
                         dr = dt.NewRow();
                         dr["No"] = "Save";
                         dr["Name"] = btnLab.SaveLab;
-                        dr["Oper"] = "if(SysCheckFrm()==false) return false;Save();SaveEnd("+(int)nd.FormType+");";
+                        dr["Oper"] = "if(SysCheckFrm()==false) return false;SaveOnly();SaveEnd("+(int)nd.FormType+");";
                         dt.Rows.Add(dr);
                     }
                 }
@@ -1532,7 +1532,7 @@ namespace BP.WF.HttpHandler
                         dr = dt.NewRow();
                         dr["No"] = "Save";
                         dr["Name"] = btnLab.SaveLab;
-                        dr["Oper"] = "if (SysCheckFrm() == false) return false; Save();SaveEnd(" + (int)nd.FormType + "); ";
+                        dr["Oper"] = "if (SysCheckFrm() == false) return false; SaveOnly();SaveEnd(" + (int)nd.FormType + "); ";
                         dt.Rows.Add(dr);
                     }
                 }

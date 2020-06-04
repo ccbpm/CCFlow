@@ -21,7 +21,6 @@
                 KeyOfEn: GetQueryString("KeyOfEn"),
                 SelectIntKey: GetQueryString("SelectIntKey"),
                 MyPK: GetQueryString("MyPK")
-
             };
             if (pageData.selectIntKey == null)
                 pageData.selectIntKey = "0";
@@ -287,10 +286,14 @@
 </head>
 <body>
     <div style="right:10px; position:absolute; z-index:100; top:-3px">
-        <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+        <button onclick="Save()" id="Btn_Save">
+            <img src="../../../Img/Btn/Save.png" /> 保存
+        </button>
+
+        <!--<input type="button" id="Btn_Save" value="保存"  />-->
         <!--<input type="button" value="保存并关闭" onclick="SaveAndClose()" />
         <input type="button" value="关闭" onclick="Close()" />-->
-        
+
     </div>
     <table style="width: 100%;">
         <caption>
@@ -311,11 +314,21 @@
                     <label for="RB_IsEnableJS_0">
                         禁用
                     </label>
+                    <ul>
+                        <li>禁用当前的配置就不生效.</li>
+                    </ul>
                 </fieldset>
                 <fieldset>
                     <legend>列表值 </legend>
                     <ul id="ulListValues" style="margin: 0; border: 0; padding: 0;">
                     </ul>
+
+                    <br />
+
+                    <ul>
+                        <li>需要为每个选择项设置显示与隐藏的内容，设置js,top的提示信息.</li>
+                    </ul>
+
                 </fieldset>
                 <fieldset>
                     <legend>执行JS脚本(可以为空)</legend>

@@ -3,40 +3,35 @@
 <head>
     <meta charset="utf-8" />
     <title>多表头</title>
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
             //获得配置信息.
             var dtlID = GetQueryString("DtlID");
-            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
-
-            //配置信息.
-            var multiTitle = mapDtl.MultiTitle;
-
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs")
             mapAttrs.Retrieve("FK_MapData", dtlID, "Idx");
 
             var html = "<table style='width:100%;'>";
-            html += "<tr>";
+            html += "<caption><img style='margin-top:5px;'; src='../../../Img/Event.png' />创建表头</caption>";
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
 
                 if (attr.UIVisible == 0)
                     continue;
+                html += "<th>" + attr.Name + "</th>";
 
-                html += "<th>"+attr.Name+"</th>";
-            } 
-
-            html += "</tr>";
+            }
             html += "</table>";
             $("#Table").html(html);
             //形成标头.
@@ -46,41 +41,17 @@
         function AddGroup() {
 
             var url = "MultiTitleDtl.htm?DtlID=" + GetQueryString("DtlID");
-            window.open(url);
-            //window.location.href = window.location.href;
-        }
-
-        function Delete() {
-
-            //if (confirm('您确定要删除吗？') == false)
-            //    return;
-            //var mapExt = new Entity("BP.Sys.MapExt");
-            //mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
-            //mapExt.RetrieveFromDBSources(); //从数据库来查询.
-            //mapExt.Delete();
-            //window.location.href = window.location.href;
-        }
-
-        function Save() {
-
-            //var mapExt = new Entity("BP.Sys.MapExt");
-            //mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
-            //mapExt.RetrieveFromDBSources(); //从数据库来查询.
-
-            //mapExt.CopyURL();  //从url里面copy数据.
-            //mapExt.CopyForm(); //从from里面copy数据.
-            //mapExt.ExtType = "DtlImp";
-            //mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-            //var val = mapExt.Save();
+            WinOpenFull(url);
             //window.location.href = window.location.href;
         }
     </script>
 </head>
 <body>
-
-    <h3>列表</h3> <button onclick="AddGroup()">增加标题分组 </button>  
-    <hr />
-    <div id="Table" ></div>
+    <div style="right:30px; position:absolute; z-index:100; ">
+        <input id="Btn_New" type="button" value="增加标题分组" onclick="AddGroup()" />
+    </div>
+    <div style="position:relative;" id="Table">
+    </div>
 
 </body>
 </html>

@@ -450,6 +450,8 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
             int i = gwf.RetrieveFromDBSources();
+            if (i == 0)
+                throw new Exception("err@错误：该流程应不存在");
 
             BP.WF.Flow fl = new Flow(gwf.FK_Flow);
             string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人

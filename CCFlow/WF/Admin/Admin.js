@@ -64,6 +64,12 @@ function AddBtnIcon()
     else
         $("#Btn_Imp").attr('style', 'background-image: url(../../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
 
+    //导出按钮icon
+    if ($("#Btn_Exp").height() > 25)
+        $("#Btn_Exp").attr('style', 'background-image: url(../../../Img/Btn/Exp.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Exp").attr('style', 'background-image: url(../../../Img/Btn/Exp.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //帮助按钮icon
     if ($("#Btn_Help").height() > 25)
         $("#Btn_Help").attr('style', 'background-image: url(../../../Img/Btn/Help.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');

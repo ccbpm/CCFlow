@@ -161,10 +161,8 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见?", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑?", true, true);
-
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
-                map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", false, true); //参数字段.
                 //CCS样式
                 map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本信息.
@@ -227,8 +225,10 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-
-
+        /// <summary>
+        /// 处理业务逻辑.
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
 
@@ -236,19 +236,17 @@ namespace BP.Sys.FrmUI
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();
 
-            //是否启用高级js设置.
-            attr.IsEnableJS = this.GetValBooleanByKey("IsEnableJS");
-
             //单选按钮的展现方式.
             attr.RBShowModel = this.GetValIntByKey("RBShowModel");
 
-            if (this.UIContralType == UIContralType.DDL || this.UIContralType == UIContralType.RadioBtn)
+            if (this.UIContralType == UIContralType.DDL
+                || this.UIContralType == UIContralType.RadioBtn)
                 attr.MyDataType = DataType.AppInt;
             else
                 attr.MyDataType = DataType.AppString;
 
             //执行保存.
-            attr.Save();
+            attr.Update();
 
             return base.beforeUpdateInsertAction();
         }

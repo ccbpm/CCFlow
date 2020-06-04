@@ -138,6 +138,23 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(FrmImgAthAttr.IsRequired, value);
             }
         }
+        /// <summary>
+        /// 所在的分组
+        /// </summary>
+        public int GroupID
+        {
+            get
+            {
+                string str = this.GetValStringByKey(FrmImgAthAttr.GroupID);
+                if (str == "无" || str == "")
+                    return 1;
+                return int.Parse(str);
+            }
+            set
+            {
+                this.SetValByKey(FrmImgAthAttr.GroupID, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -201,7 +218,7 @@ namespace BP.Sys.FrmUI
                 //map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddBoolean(FrmImgAthAttr.IsRequired, false, "是否必填项", true, true);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(FrmImgAthAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
 
                 //跨单元格
@@ -234,6 +251,10 @@ namespace BP.Sys.FrmUI
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
+            MapAttr attr = new MapAttr(this.FK_MapData,imgAth.CtrlID);
+            attr.GroupID = this.GroupID;
+            attr.DirectUpdate();
 
             base.afterInsertUpdateAction();
         }

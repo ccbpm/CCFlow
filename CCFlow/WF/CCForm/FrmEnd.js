@@ -1384,6 +1384,15 @@ function ChangeDocWordVal(docWord) {
 
     $('#bootStrapdlg').modal('hide');
 }
+//此方法用于显示收文编号的值
+function ChangeDocWordReceive(docWord) {
+
+    if ($("#TB_DocWordReceive").length == 1) {
+        $("#TB_DocWordReceive").val(docWord);
+    }
+
+    $('#bootStrapdlg').modal('hide');
+}
 /**
  * 跳转常用短语页面
  * @param {any} nodeID 当前节点ID

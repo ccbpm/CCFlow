@@ -15,7 +15,7 @@ namespace BP.WF.DTS
     public class TableFieldAddComment : Method
     {
         /// <summary>
-        /// 为表的字段增加中文注释
+        /// 为表的字段增加中文注释DSDSD
         /// </summary>
         public TableFieldAddComment()
         {

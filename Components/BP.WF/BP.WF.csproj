@@ -116,7 +116,7 @@
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\ccflow\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\RefDLL\itextsharp.dll</HintPath>
@@ -157,7 +157,7 @@
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http">
-      <HintPath>..\..\RefDLL\System.Net.Http.dll</HintPath>
+      <HintPath>..\..\..\ccflow\RefDLL\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />

@@ -2452,7 +2452,9 @@ function Save() {
     aths.Retrieve("FK_MapData", pageParam.fk_mapdata,"FK_Node",0);
     $.each(aths, function (i, ath) {
         document.getElementsByTagName("Im")
-        var element = getElementByAttr(imgs, "data-key", ath.MyPK );
+        var element = getElementByAttr(imgs, "data-key", ath.MyPK);
+        if (element == null)
+            element = leipiEditor.document.getElementById("TB_" + ath.NoOfObj);
         //增加该元素
         if (element==null) {
             _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + ath.MyPK + "' />"

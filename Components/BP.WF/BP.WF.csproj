@@ -476,7 +476,7 @@
     <Compile Include="Template\CCDept.cs" />
     <Compile Include="Template\CCEmp.cs" />
     <Compile Include="Template\CCStation.cs" />
-    <Compile Include="Template\CCList.cs" />
+    <Compile Include="WF\CCList.cs" />
     <Compile Include="Template\Cond.cs" />
     <Compile Include="Template\BtnLab.cs">
       <SubType>Code</SubType>

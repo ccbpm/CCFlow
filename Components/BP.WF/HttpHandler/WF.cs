@@ -350,7 +350,7 @@ namespace BP.WF.HttpHandler
                         string Sta = this.GetRequestVal("Sta");
                         if (Sta == "0")
                         {
-                            BP.WF.Template.CCList cc1 = new BP.WF.Template.CCList();
+                            CCList cc1 = new CCList();
                             cc1.MyPK = this.MyPK;
                             cc1.Retrieve();
                             cc1.HisSta = CCSta.Read;

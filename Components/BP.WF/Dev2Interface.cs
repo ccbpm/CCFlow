@@ -9961,8 +9961,7 @@ namespace BP.WF
                 fid, checkNote, fwc.FWCOpLabel);
 
             //设置审核完成.
-            BP.WF.Dev2Interface.Node_CC_SetSta(fk_node, workid, BP.Web.WebUser.No, BP.WF.Template.CCSta.CheckOver);
-
+            BP.WF.Dev2Interface.Node_CC_SetSta(fk_node, workid, BP.Web.WebUser.No, BP.WF.CCSta.CheckOver);
         }
         /// <summary>
         /// 设置是此工作为读取状态

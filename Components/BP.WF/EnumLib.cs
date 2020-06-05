@@ -6,6 +6,28 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 抄送状态
+    /// </summary>
+    public enum CCSta
+    {
+        /// <summary>
+        /// 未读
+        /// </summary>
+        UnRead,
+        /// <summary>
+        /// 已读
+        /// </summary>
+        Read,
+        /// <summary>
+        /// 已回复
+        /// </summary>
+        CheckOver,
+        /// <summary>
+        /// 已删除
+        /// </summary>
+        Del
+    }
+    /// <summary>
     /// 流程表单类型
     /// </summary>
     public enum FlowFrmType

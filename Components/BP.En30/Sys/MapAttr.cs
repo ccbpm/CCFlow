@@ -388,7 +388,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen("IsEnableJS",false);
+                return this.GetParaBoolen("IsEnableJS", false);
             }
             set
             {
@@ -442,7 +442,7 @@ namespace BP.Sys
                         {
                             myens.RetrieveAll();
                         }
-                        
+
                         _ens = myens;
                     }
                     else
@@ -470,7 +470,7 @@ namespace BP.Sys
                         throw new Exception("@属性：" + this.MyPK + " 丢失属性 UIBindKey 字段。");
 
                     SFTable sf = new SFTable(this.UIBindKey);
-                    _dt= sf.GenerHisDataTable();
+                    _dt = sf.GenerHisDataTable();
                 }
                 return _dt;
             }
@@ -510,7 +510,7 @@ namespace BP.Sys
                 attr.MinLength = this.MinLen;
                 attr.UIBindKey = this.UIBindKey;
                 attr.UIIsLine = this.UIIsLine;
-                attr.UIHeight = 0; 
+                attr.UIHeight = 0;
                 if (this.UIHeight > 30)
                     attr.UIHeight = (int)this.UIHeight;
 
@@ -725,8 +725,8 @@ namespace BP.Sys
         {
             get
             {
-                int i= this.GetValIntByKey(MapAttrAttr.ColSpan);
-                if (this.UIIsLine && i ==1)
+                int i = this.GetValIntByKey(MapAttrAttr.ColSpan);
+                if (this.UIIsLine && i == 1)
                     return 3;
                 if (i == 0)
                     return 1;
@@ -811,7 +811,7 @@ namespace BP.Sys
                         return DateTime.Now.ToString("yy年MM月dd日HH时mm分");
                     default:
                         return s;
-                    //throw new Exception("没有约定的变量默认值类型" + s);
+                        //throw new Exception("没有约定的变量默认值类型" + s);
                 }
                 return this.GetValStrByKey(MapAttrAttr.DefVal);
             }
@@ -995,8 +995,8 @@ namespace BP.Sys
         {
             get
             {
-                string str= this.GetValStringByKey(MapAttrAttr.GroupID);
-                if (str == "无" || str=="")
+                string str = this.GetValStringByKey(MapAttrAttr.GroupID);
+                if (str == "无" || str == "")
                     return 1;
                 return int.Parse(str);
             }
@@ -1170,7 +1170,7 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.IsSigan, value);
             }
         }
-     /// <summary>
+        /// <summary>
         /// 签名类型
         /// </summary>
         public SignType SignType
@@ -1455,7 +1455,7 @@ namespace BP.Sys
 
                 Map map = new Map("Sys_MapAttr", "实体属性");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
@@ -1470,7 +1470,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
                 map.AddTBInt(MapAttrAttr.MyDataType, 1, "数据类型", true, false);
 
-                map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 
+                map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType,
                     "@0=普通@1=枚举@2=外键@3=打开系统页面");
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
@@ -1496,7 +1496,7 @@ namespace BP.Sys
 
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
                 map.AddTBInt(MapAttrAttr.IsSigan, 0, "签字？", true, false);
-             
+
                 map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
                 map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
@@ -1512,14 +1512,14 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", false, true, 0, 200, 20);
 
                 //单元格数量。2013-07-24 增加。
-              //  map.AddTBString(MapAttrAttr.ColSpan, "1", "单元格数量", true, false, 0, 3, 3);
+                //  map.AddTBString(MapAttrAttr.ColSpan, "1", "单元格数量", true, false, 0, 3, 3);
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 //文本占单元格数量
-                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true,false);
+                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, false);
 
                 //文本跨行
-                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true,false);
+                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
 
                 //显示的分组.
@@ -1572,7 +1572,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\"+ this.FK_MapData + ".htm";
+            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
             //若文件夹不存在，则创建
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) == false)
@@ -1585,12 +1585,12 @@ namespace BP.Sys
         public string DeleteBigNoteHtmlText()
         {
             string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
-            
+
             if (System.IO.File.Exists(file) == true)
                 System.IO.File.Delete(file);
 
             this.Delete();
-            
+
 
             return "删除成功！";
         }
@@ -1603,14 +1603,15 @@ namespace BP.Sys
             string doc = "";
             string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
-            if (System.IO.Directory.Exists(folder) != false) {
+            if (System.IO.Directory.Exists(folder) != false)
+            {
                 if (File.Exists(file))
                 {
                     doc = BP.DA.DataType.ReadTextFile(file);
 
                 }
             }
-                
+
             return doc;
         }
         public void DoDownTabIdx()
@@ -1629,8 +1630,8 @@ namespace BP.Sys
             attr.MyPK = this.FK_MapData + "_Title";
             if (attr.RetrieveFromDBSources() == 1)
             {
-              //  attr.Idx = -1;
-                attr.Update("Idx",-1);
+                //  attr.Idx = -1;
+                attr.Update("Idx", -1);
             }
             return "执行成功";
         }
@@ -1644,7 +1645,7 @@ namespace BP.Sys
             SFTable sf = new SFTable(this.UIBindKey);
             return BP.Tools.Json.ToJson(sf.GenerHisDataTable());
         }
-    
+
         /// <summary>
         /// 下移
         /// </summary>
@@ -1670,7 +1671,7 @@ namespace BP.Sys
             gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
             BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
 
-            this.DoOrderUp(MapAttrAttr.FK_MapData,this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";
@@ -1850,7 +1851,7 @@ namespace BP.Sys
             sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
 
             //如果外部数据，或者ws数据，就删除其影子字段.
-            if (this.UIContralType== En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
+            if (this.UIContralType == En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
 
             BP.DA.DBAccess.RunSQLs(sqls);
@@ -1858,7 +1859,7 @@ namespace BP.Sys
         }
         protected override void afterDelete()
         {
-            if(this.UIContralType == UIContralType.AthShow)
+            if (this.UIContralType == UIContralType.AthShow)
             {
                 //删除附件
                 FrmAttachment ath = new FrmAttachment();
@@ -1897,7 +1898,7 @@ namespace BP.Sys
             qo.addAnd();
             qo.AddWhere(MapAttrAttr.UIVisible, 1);
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
-           // qo.addOrderBy(MapAttrAttr.Idx);
+            // qo.addOrderBy(MapAttrAttr.Idx);
             return qo.DoQuery();
         }
         /// <summary>
@@ -1926,6 +1927,12 @@ namespace BP.Sys
             }
         }
         #endregion
+
+
+        #region 业务方法.
+         
+        #endregion
+
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

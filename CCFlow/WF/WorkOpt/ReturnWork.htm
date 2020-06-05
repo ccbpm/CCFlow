@@ -135,6 +135,9 @@
                     return true; //退回这个字段里包含 IsHuiQian=1的字符，就排除掉.
                 }
 
+                if (nodeListHtml.indexOf(returnNode.No + '@') != -1)
+                    return true;
+
                 nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
             });
 

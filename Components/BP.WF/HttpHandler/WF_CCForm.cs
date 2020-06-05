@@ -763,9 +763,13 @@ namespace BP.WF.HttpHandler
             obj.addAnd();
             obj.AddWhere(FrmImgAthDBAttr.FK_FrmImgAth, ImgAthPK);
             obj.addAnd();
-            obj.AddWhere(FrmImgAthDBAttr.RefPKVal, this.MyPK);
+            obj.AddWhere(FrmImgAthDBAttr.RefPKVal, this.RefPKVal);
             obj.DoQuery();
-            return BP.Tools.Entitis2Json.ConvertEntities2ListJson(imgAthDBs);
+
+            //return BP.Tools.Entitis2Json.ConvertEntities2ListJson(imgAthDBs);
+            DataTable dt = imgAthDBs.ToDataTableField();
+            dt.TableName = "FrmImgAthDB";
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 上传编辑图片
@@ -807,6 +811,12 @@ namespace BP.WF.HttpHandler
                 //源图像  
                 System.Drawing.Bitmap oldBmp = new System.Drawing.Bitmap(saveToPath);
 
+                if (zoomW == 0 && zoomH == 0)
+                {
+                    zoomW = oldBmp.Width;
+                    zoomH = oldBmp.Height;
+                }
+
                 //新图像,并设置新图像的宽高  
                 System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(zoomW, zoomH);
                 System.Drawing.Graphics draw = System.Drawing.Graphics.FromImage(newBmp);//从新图像获取对应的Graphics  
@@ -819,31 +829,46 @@ namespace BP.WF.HttpHandler
 
                 //复制一份
                 File.Copy(saveToPath, fileUPloadPath, true);
-                ////获取文件大小
-                //FileInfo fileInfo = new FileInfo(saveToPath);
-                //float fileSize = 0;
-                //if (fileInfo.Exists)
-                //    fileSize = float.Parse(fileInfo.Length.ToString());
+                //获取文件大小
+                FileInfo fileInfo = new FileInfo(saveToPath);
+                float fileSize = 0;
+                if (fileInfo.Exists)
+                    fileSize = float.Parse(fileInfo.Length.ToString());
 
                 ////更新数据表                
-                //FrmImgAthDB imgAthDB = new FrmImgAthDB();
-                //imgAthDB.MyPK = myName;
-                //imgAthDB.FK_MapData = this.FK_MapData;
-                //imgAthDB.FK_FrmImgAth = ImgAthPK;
-                //imgAthDB.RefPKVal = this.MyPK;
-                //imgAthDB.FileFullName = webPath;
-                //imgAthDB.FileName = newName;
-                //imgAthDB.FileExts = "png";
-                //imgAthDB.FileSize = fileSize;
-                //imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
-                //imgAthDB.Rec = BP.Web.WebUser.No;
-                //imgAthDB.RecName = BP.Web.WebUser.Name;
-                //imgAthDB.Save();
+                FrmImgAthDB imgAthDB = new FrmImgAthDB();
+                imgAthDB.MyPK = myName;
+                imgAthDB.FK_MapData = this.FK_MapData;
+                imgAthDB.FK_FrmImgAth = CtrlID;
+                imgAthDB.RefPKVal = this.RefPKVal;
+                imgAthDB.FileFullName = webPath;
+                imgAthDB.FileName = fileInfo.Name;
+                imgAthDB.FileExts = "png";
+                imgAthDB.FileSize = fileSize;
+                imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
+                imgAthDB.Rec = BP.Web.WebUser.No;
+                imgAthDB.RecName = BP.Web.WebUser.Name;
+                imgAthDB.Save();
                 return "{SourceImage:\"" + webPath + "\"}";
             }
             return "{err:\"没有选择文件\"}";
         }
+        public string ImgUpload_Del()
+        {
+            //执行删除.
+            string delPK = this.GetRequestVal("DelPKVal");
 
+            FrmImgAthDB delDB = new FrmImgAthDB();
+            delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.RetrieveFromDBSources();
+            delDB.Delete(); //删除上传的文件.
+
+            string saveToPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+
+            FileInfo fileInfo = new FileInfo(saveToPath+"/"+ delDB.FileName);
+            fileInfo.Delete();
+            return "删除成功.";
+        }
         /// <summary>
         /// 剪切图片
         /// </summary>

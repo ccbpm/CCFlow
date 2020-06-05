@@ -301,8 +301,8 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                if (emp.CheckPass(pass) == false)
-                    return "err@用户名或者密码错误.";
+                //if (emp.CheckPass(pass) == false)
+                    //return "err@用户名或者密码错误.";
 
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.No);

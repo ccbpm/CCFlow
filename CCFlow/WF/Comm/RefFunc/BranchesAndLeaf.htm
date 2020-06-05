@@ -127,7 +127,13 @@
                     field = field + "Text";
                 searchTableColumns.push({
                     field: field,
-                    title: title
+                    title: title,
+                    formatter: function (value, row, index) {
+                        if (row.TYPE != null && row.TYPE != undefined && row.TYPE == -1)
+                            return "<font style='color:blue'>" + value + "</font>";
+                        else
+                            return value;
+                    }
                 });
             });
 

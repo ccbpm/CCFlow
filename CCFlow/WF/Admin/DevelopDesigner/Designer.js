@@ -526,7 +526,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                         if (en.UIContralType == 0) {//
                             //修改显示的样式
                             UE.dom.domUtils.setAttributes(anchorEl, {
-                                "placeholder": en.DefVal
+                                "placeholder": en.Tip
                             });
                         }
                     }

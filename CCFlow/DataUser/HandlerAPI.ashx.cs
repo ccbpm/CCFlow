@@ -75,7 +75,8 @@ namespace CCFlow.DataUser
         public void Flow_NeiFa()
         {
             BP.DOC.App_Page page = new BP.DOC.App_Page();
-            string str=page.NeiFa_Init_To(this.MyPK);
+            int WorkID = Convert.ToInt32(this.WorkID);
+            string str=page.NeiFa_Init_To(WorkID);
             Output(str);
         }
         public void Flow_DoFlowOver()

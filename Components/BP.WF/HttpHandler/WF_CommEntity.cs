@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using ICSharpCode.SharpZipLib.Zip;
+using BP.GPM;
 
 namespace BP.WF.HttpHandler
 {
@@ -1025,8 +1026,57 @@ namespace BP.WF.HttpHandler
             string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
             string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
             string key = this.GetRequestVal("Key"); //查询关键字.
-
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+
+            //如果是部门人员信息，关联的有兼职部门
+            if ((ensOfM.Equals("BP.Port.Emps")== true ||ensOfM.Equals("BP.GPM.Emps")==true) && defaultGroupAttrKey.Equals("FK_Dept") == true)
+            {
+                string sql = "Select  E.No , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='"+key+"'";
+                
+                sql += " union ";
+                sql += "select  E.No , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
+                DataTable dtt = DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = dtt.Clone();
+                string emps = "";
+                foreach(DataRow drr in dtt.Rows)
+                {
+                    if (emps.Contains(drr["No"].ToString() + ",") == true)
+                        continue;
+                    emps += drr["No"].ToString() + ",";
+
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = drr["No"];
+                    dr["Name"] = drr["Name"];
+                    dr["FK_DeptText"] = drr["FK_DeptText"];
+                    dr["type"] = drr["TYPE"];
+                    dt.Rows.Add(dr);
+                }
+                foreach (DataColumn col in dt.Columns)
+                {
+                    string colName = col.ColumnName.ToLower();
+                    switch (colName)
+                    {
+                        case "no":
+                            col.ColumnName = "No";
+                            break;
+                        case "name":
+                            col.ColumnName = "Name";
+                            break;
+                        case "fk_depttext":
+                            col.ColumnName = "FK_DeptText";
+                            break;
+                        case "type":
+                            col.ColumnName = "TYPE";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return BP.Tools.Json.ToJson(dt);
+            }
+
+
+
             Entities ensMen = ClassFactory.GetEns(ensOfM);
             QueryObject qo = new QueryObject(ensMen); //集合.
             qo.AddWhere(defaultGroupAttrKey, key);

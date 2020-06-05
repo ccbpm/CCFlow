@@ -4560,13 +4560,22 @@ namespace BP.WF
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.None)
                         continue;
 
+                    Int64 pkval = this.WorkID;
+                    if (ath.HisCtrlWay == AthCtrlWay.FID)
+                        pkval = this.HisGenerWorkFlow.FID;
+                    if (ath.HisCtrlWay == AthCtrlWay.PWorkID)
+                        pkval = this.HisGenerWorkFlow.PWorkID;
+                    if (ath.HisCtrlWay == AthCtrlWay.PWorkID)
+                        pkval = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.HisGenerWorkFlow.PWorkID, 0);
+                    if (ath.HisCtrlWay == AthCtrlWay.P3WorkID)
+                        pkval = BP.DA.DBAccess.RunSQLReturnValInt("Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.HisGenerWorkFlow.PWorkID + ")", 0);
+
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.NotEmpty)
                     {
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmAttachmentDB WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND FK_FrmAttachment=" + SystemConfig.AppCenterDBVarStr + "FK_FrmAttachment AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
-                        ps.Add("FK_MapData", "ND" + this.HisNode.NodeID);
-                        ps.Add("FK_FrmAttachment", ath.MyPK);
-                        ps.Add("RefPKVal", this.WorkID);
+                        ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmAttachmentDB WHERE NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
+                        ps.Add("NoOfObj", ath.NoOfObj) ;
+                        ps.Add("RefPKVal", pkval);
                         int count = DBAccess.RunSQLReturnValInt(ps);
                         if (count == 0)
                             err += BP.WF.Glo.multilingual("@您没有上传附件:{0}.", "WorkNode", "not_upload_attachment", ath.Name);
@@ -4577,11 +4586,12 @@ namespace BP.WF
 
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.EverySortNoteEmpty)
                     {
+                        
+
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT COUNT(MyPK) as Num, MyNote FROM Sys_FrmAttachmentDB WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND FK_FrmAttachment=" + SystemConfig.AppCenterDBVarStr + "FK_FrmAttachment AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal Group BY MyNote";
-                        ps.Add("FK_MapData", "ND" + this.HisNode.NodeID);
-                        ps.Add("FK_FrmAttachment", ath.MyPK);
-                        ps.Add("RefPKVal", this.WorkID);
+                        ps.SQL = "SELECT COUNT(MyPK) as Num, Sort FROM Sys_FrmAttachmentDB WHERE  NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal Group BY Sort";
+                        ps.Add("NoOfObj", ath.NoOfObj);
+                        ps.Add("RefPKVal", pkval);
 
                         DataTable dt = DBAccess.RunSQLReturnTable(ps);
                         if (dt.Rows.Count == 0)
@@ -4595,7 +4605,7 @@ namespace BP.WF
                             bool isHave = false;
                             foreach (DataRow dr in dt.Rows)
                             {
-                                if (dr["MyNote"].ToString() == str)
+                                if (dr[1].ToString() == str)
                                 {
                                     isHave = true;
                                     break;

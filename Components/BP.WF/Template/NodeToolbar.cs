@@ -72,6 +72,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsMyCC = "IsMyCC";
         /// <summary>
+        /// IconPath 图片附件
+        /// </summary>
+        public const string IconPath = "IconPath";
         /// 执行类型
         /// </summary>
         public const string ExcType = "ExcType";
@@ -272,6 +275,14 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyView, false, "工作查看器", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "抄送工具栏", true, true);
+
+                map.AddTBString(NodeToolbarAttr.IconPath, null, "ICON路径", true, false, 0, 100, 100, true);
+                string msg = "提示：";
+                msg += "\t\n 1. 给工具栏按钮设置图标两种方式,上传图标模式与设置指定的Icon的ID模式.";
+                msg += "\t\n 2. 我们优先解决Icon的ID解析模式.";
+                msg += "\t\n 3. 比如: ./Img/Btn/Save.png ";
+                map.SetHelperAlert(NodeToolbarAttr.IconPath, msg);
+
                 
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
                 map.AddMyFile("图标");

@@ -1437,8 +1437,8 @@ namespace BP.WF.Template
             {
                 //强制设置按照连接线控制.
                 nd.CondModel = DirCondModel.ByLineCond;
-                nd.DirectUpdate();
             }
+            nd.DirectUpdate(); //直接更新.
 
 
             #region 如果有跳转，

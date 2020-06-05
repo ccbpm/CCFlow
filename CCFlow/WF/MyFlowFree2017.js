@@ -734,22 +734,6 @@ function figure_Template_Image(frmImage) {
     }
     return eleHtml;
 }
-//图片附件编辑
-function ImgAth(url, athMyPK) {
-    var dgId = "iframDg";
-    url = url + "&s=" + Math.random();
-    OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
-
-    }, null, null, function () {
-        //关闭也切换图片
-        //var obj = document.getElementById(dgId);
-        //var win =(obj.contentWindow || obj.contentDocument); 
-        var imgSrc = $("#imgSrc").val();
-        if (imgSrc != null && imgSrc != "")
-            document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc + "?t=" + Math.random());
-        $("#imgSrc").val("");
-    });
-}
 
 //初始化 IMAGE附件
 function figure_Template_ImageAth(frmImageAth) {

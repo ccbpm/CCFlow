@@ -357,7 +357,8 @@
             data = data.replace(/null/g, '');
             data = data.replace("<br><br/><br/>", '');
 
-            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></div>";
+            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'>";
+            data += " <button id='CloseBtn' type = 'button'  onclick = 'CloseAll();'><img src='../Img/Btn/Close.png' />关  闭(30秒)</button></div> ";
             $(".Msg").show();
             $(".Msg").html(data);
 
@@ -386,7 +387,7 @@
             if ($("#CloseBtn").length == 0)
                 return;
             num >= 0 ? num-- : clearInterval(int);
-            $("#CloseBtn").attr("value", "关    闭(" + num + "秒)");
+            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + num + "秒)");
             if (num == 0)
                 CloseAll();
         }

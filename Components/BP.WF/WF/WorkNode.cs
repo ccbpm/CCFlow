@@ -1683,7 +1683,7 @@ namespace BP.WF
             if (nds.Count == 0)
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
 
-           
+
 
             //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
             Directions dirs = new Directions(currNode.NodeID);
@@ -1695,7 +1695,7 @@ namespace BP.WF
                 //查询出来他的条件.
                 Conds conds = new Conds();
                 conds.Retrieve(CondAttr.FK_Node, currNode.NodeID,
-                    CondAttr.ToNodeID, dir.ToNode, CondAttr.CondType, (int)CondType.Dir, 
+                    CondAttr.ToNodeID, dir.ToNode, CondAttr.CondType, (int)CondType.Dir,
                     CondAttr.Idx);
 
                 if (conds.Count == 0)
@@ -1704,7 +1704,7 @@ namespace BP.WF
                     continue;
                 }
 
-                if (conds.GenerResult( this.rptGe ) == true)
+                if (conds.GenerResult(this.rptGe) == true)
                     return new Node(dir.ToNode);
             }
 
@@ -1771,7 +1771,7 @@ namespace BP.WF
             {
                 Conds dcs = new Conds();
                 dcs.Retrieve(CondAttr.FK_Node, this.HisNode.NodeID,
-                    CondAttr.ToNodeID,nd.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
+                    CondAttr.ToNodeID, nd.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
 
                 if (dcs.Count == 0)
                 {
@@ -1779,7 +1779,7 @@ namespace BP.WF
                     continue;
                 }
 
-                if (dcs.GenerResult(this.rptGe)==true ) 
+                if (dcs.GenerResult(this.rptGe) == true)
                 {
                     myNodes.AddEntity(nd);
                     continue;
@@ -1850,7 +1850,7 @@ namespace BP.WF
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe) )
+                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe))
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
                     string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
@@ -6225,12 +6225,17 @@ namespace BP.WF
                 {
                     string ptable = "ND" + int.Parse(this.HisFlow.No) + "Track";
 
-                    var mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + this.WorkID + " AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    var mysql = "";
+                    if (this.HisNode.HisRunModel == RunModel.SubThread)
+                        mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + this.WorkID + " AND FID="+this.HisGenerWorkFlow.FID+") AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    else
+                        mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + this.WorkID + ") AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+
                     //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
-
                     if (mydt.Rows.Count == 0)
                         throw new Exception("系统错误，没有找到上一个节点.");
+
                     this.JumpToEmp = mydt.Rows[0][1].ToString();
                     var priNodeID = int.Parse(mydt.Rows[0][0].ToString());
                     this.JumpToNode = new Node(priNodeID);
@@ -6411,7 +6416,7 @@ namespace BP.WF
                     {
                         //删除每个子线程，然后向下运动。
                         foreach (DataRow dr in dtWL.Rows)
-                            BP.WF.Dev2Interface.Flow_DeleteSubThread( Int64.Parse(dr[0].ToString()), BP.WF.Glo.multilingual("合流点发送时自动删除", "WorkNode", "auto_delete"));
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread(Int64.Parse(dr[0].ToString()), BP.WF.Glo.multilingual("合流点发送时自动删除", "WorkNode", "auto_delete"));
                     }
                 }
             }
@@ -7745,7 +7750,7 @@ namespace BP.WF
             if (this.town != null)
             {
                 string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.WorkArrive,
-                    this.HisNode, this.rptGe, null, null,this.town.HisNode.NodeID);
+                    this.HisNode, this.rptGe, null, null, this.town.HisNode.NodeID);
             }
             #endregion 处理节点到达事件.
 

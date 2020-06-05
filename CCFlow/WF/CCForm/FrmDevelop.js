@@ -328,18 +328,28 @@ function GenerDevelopFrm(wn, fk_mapData) {
         figure_Develop_Btn(frmBtn);
 
     }
+    debugger
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
         if (nodeComponents != null) {
-            var elements = $("Img[data-key=" + nodeComponents.NodeID + "]");
-            $.each(elements, function (i, element) {
-                //父子流程
-                if (element.getAttribute("data-type") == "SubFlow")
-                    figure_Develop_FigureSubFlowDtl(nodeComponents, element);
-                //如果有审核组件，增加审核组件的HTML
-                if (element.getAttribute("data-type") == "WorkCheck")
-                    figure_Develop_FigureFrmCheck(nodeComponents, element, frmData);
-            })
+            var element = $("Img[data-type=WorkCheck]");
+            if (element.length != 0)
+                figure_Develop_FigureFrmCheck(nodeComponents, element, frmData);
+
+            element = $("Img[data-type=SubFlow]");
+            if (element.length != 0)
+                figure_Develop_FigureSubFlowDtl(nodeComponents, element);
+
+
+            //var elements = $("Img[data-key=" + nodeComponents.NodeID + "]");
+            //$.each(elements, function (i, element) {
+            //    //父子流程
+            //    if (element.getAttribute("data-type") == "SubFlow")
+            //        figure_Develop_FigureSubFlowDtl(nodeComponents, element);
+            //    //如果有审核组件，增加审核组件的HTML
+            //    if (element.getAttribute("data-type") == "WorkCheck")
+                    
+            //})
 
         }
     }

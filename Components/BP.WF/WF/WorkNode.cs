@@ -7828,8 +7828,10 @@ namespace BP.WF
             try
             {
                 //删除发生的日志.
+                #warning 有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间
                 DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID +
-                                " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward);
+                                " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward +
+                                " AND RDT=(Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID + ")");
 
                 // 删除考核信息。
                 this.DealEvalUn();

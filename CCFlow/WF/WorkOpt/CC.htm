@@ -125,7 +125,7 @@
 
 
             //查询出来抄送的信息.
-            var ccs = new Entities("BP.WF.Template.CCLists");
+            var ccs = new Entities("BP.WF.CCLists");
             ccs.Retrieve("FK_Node", GetQueryString("FK_Node"), "WorkID", GetQueryString("WorkID"));
 
             BindTable(ccs);

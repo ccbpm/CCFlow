@@ -826,6 +826,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
             case "DataFieldInputRole": //时间限制
                 if (mapExt.DoWay == 1) {
+                    //限制历史日期
                     var tag1 = mapExt.Tag1;
                     if (tag1 == 1) {
                         $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
@@ -846,7 +847,6 @@ function AfterBindEn_DealMapExt(frmData) {
                         } else if (frmDate == 6) {
                             dateFmt = "MM-dd";
                         }
-
                         var minDate = '%y-%M-#{%d}';
                         $('#TB_' + mapExt.AttrOfOper).attr("data-info", minDate); //绑定时间大小限制的记录
                         var functionPK = $('#TB_' + mapExt.AttrOfOper).attr("data-funcionPK");
@@ -854,9 +854,9 @@ function AfterBindEn_DealMapExt(frmData) {
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                                 WdatePicker({ dateFmt: dateFmt, minDate: minDate });
                             });
+                            
                         } else {
                             $('#TB_' + mapExt.AttrOfOper).unbind("focus");
-
                             var bindFunctionExt = new Entity("BP.Sys.MapExt", functionPK);
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
 
@@ -870,8 +870,58 @@ function AfterBindEn_DealMapExt(frmData) {
                             });
 
                         }
+                    }
+                    //限制用户指定选择的日期
+                    var tag2 = mapExt.Tag2;
+                    if (tag2 == 1) {
+                        var frmDate = mapAttr.IsSupperText; //获取日期格式
+                        var dateFmt = '';
+                        if (frmDate == 0) {
+                            dateFmt = "yyyy-MM-dd";
+                        } else if (frmDate == 1) {
+                            dateFmt = "yyyy-MM-dd HH:mm";
+                        } else if (frmDate == 2) {
+                            dateFmt = "yyyy-MM-dd HH:mm:ss";
+                        } else if (frmDate == 3) {
+                            dateFmt = "yyyy-MM";
+                        } else if (frmDate == 4) {
+                            dateFmt = "HH:mm";
+                        } else if (frmDate == 5) {
+                            dateFmt = "HH:mm:ss";
+                        } else if (frmDate == 6) {
+                            dateFmt = "MM-dd";
+                        }
+                        //根据选择的条件进行日期限制
+                        switch (mapExt.Tag3) {
+                            case "dayu":
+                                $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: $('#TB_' + mapExt.Tag4).val() });
+                                });
+                                break;
+                            case "dayudengyu":
+                                $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: $('#TB_' + mapExt.Tag4).val() });
+                                });
+                                break;
+                            case "xiaoyu":
+                                $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                    WdatePicker({ dateFmt: dateFmt, minDate: $('#TB_' + mapExt.Tag4).val() });
+                                });
+                                break;
+                            case "xiaoyudengyu":
+                                $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                    WdatePicker({ dateFmt: dateFmt, minDate: $('#TB_' + mapExt.Tag4).val() });
+                                });
+                                break;
+                            case "budengyu":
+                                if ($('#TB_' + mapExt.AttrOfOper).val() == $('#TB_' + mapExt.Tag4).val()) {
+                                    alert("所选日期不能等于" + $('#TB_' + mapExt.Tag4).val());
+                                    $('#TB_' + mapExt.AttrOfOper).val("");
 
-
+                                }
+                                break;
+                        }
+                        
                     }
 
                 }

@@ -811,12 +811,13 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "调整";
-                rm.HisAttrs.AddTBString("wenben", null, "调整到人员", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
-                 
+                rm.HisAttrs.AddTBString("RenYuan", null, "调整到人员", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
+                rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
+                    "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'",true);
+
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
 
@@ -828,9 +829,10 @@ namespace BP.WF.Data
 
         #region 执行功能.
         //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string toEmpNo, int toNodeID)
+        public string DoTest(string toEmpNo, string toNodeID)
         {
-           return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, toNodeID, toEmpNo,"admin调整");
+           return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID,  int.Parse( toNodeID),
+               toEmpNo, BP.Web.WebUser.Name+":调整.");
         }
         public string RepairDataIt()
         {

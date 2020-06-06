@@ -6273,7 +6273,6 @@ namespace BP.WF
             gwf.SetValByKey(GenerWorkFlowAttr.TodoEmps, todoEmps);
             gwf.TodoEmpsNum = num;
 
-
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.WFState = WFState.Runing;
 
@@ -6281,9 +6280,7 @@ namespace BP.WF
             GenerWorkerList gwl = new GenerWorkerList();
             int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
             if (i == 0)
-            {
                 return "err@没有找到当前的待办人员.";
-            }
 
             //删除当前节点人员信息.
             gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
@@ -6312,6 +6309,7 @@ namespace BP.WF
             //更新当前节点状态.
             gwf.FK_Node = toNodeID;
             gwf.NodeName = nd.Name;
+            gwf.Paras_ToNodes = "";
             gwf.Update();
 
             return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" + todoEmps;

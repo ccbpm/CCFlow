@@ -1332,12 +1332,13 @@ namespace BP.Sys
                 DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
                 ds.Tables.Add(Sys_FrmLab);
 
-                //img.
-                DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
-                ds.Tables.Add(Sys_FrmImg);
-
             }
             #endregion 如果是 自由表单类型，就把自由表单的元素加上.
+
+
+            //img.
+            DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+            ds.Tables.Add(Sys_FrmImg);
 
 
             //Sys_MapFrame.

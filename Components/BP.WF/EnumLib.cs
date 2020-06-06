@@ -113,15 +113,15 @@ namespace BP.WF
         /// <summary>
         /// 按照用户设置的方向条件计算
         /// </summary>
-        ByLineCond,
+        ByLineCond=0,
         /// <summary>
         /// 按照用户选择计算
         /// </summary>
-        ByUserSelected,
+        ByUserSelected=1,
         /// <summary>
         /// 发送按钮旁下拉框选择
         /// </summary>
-        SendButtonSileSelect
+        SendButtonSileSelect=2
     }
      
     /// <summary>

@@ -1098,7 +1098,7 @@ namespace BP.WF
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
-                if (DataType.IsNullOrEmpty(nodes))
+                if (DataType.IsNullOrEmpty(nodes) || nodes.Equals(",")==true)
                     throw new Exception(BP.WF.Glo.multilingual("@用户没有选择发送到的节点.", "WorkNode", "no_choice_of_target_node", new string[0]));
 
                 string[] mynodes = nodes.Split(',');
@@ -1681,26 +1681,29 @@ namespace BP.WF
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
 
 
-
             //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
             Directions dirs = new Directions(currNode.NodeID);
 
-            Directions dirs0Cond = new Directions();//定义没有条件的节点集合.
+            //定义没有条件的节点集合.
+            Directions dirs0Cond = new Directions();
 
             foreach (Direction dir in dirs)
             {
                 //查询出来他的条件.
                 Conds conds = new Conds();
                 conds.Retrieve(CondAttr.FK_Node, currNode.NodeID,
-                    CondAttr.ToNodeID, dir.ToNode, CondAttr.CondType, (int)CondType.Dir,
+                    CondAttr.ToNodeID, dir.ToNode, CondAttr.CondType,
+                    (int)CondType.Dir,
                     CondAttr.Idx);
 
+                //可以到达的节点.
                 if (conds.Count == 0)
                 {
                     dirs0Cond.AddEntity(dir); //把他加入到里面.
                     continue;
                 }
 
+                //按条件计算.
                 if (conds.GenerResult(this.rptGe) == true)
                     return new Node(dir.ToNode);
             }
@@ -4571,7 +4574,7 @@ namespace BP.WF
                     {
                         Paras ps = new Paras();
                         ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmAttachmentDB WHERE NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
-                        ps.Add("NoOfObj", ath.NoOfObj) ;
+                        ps.Add("NoOfObj", ath.NoOfObj);
                         ps.Add("RefPKVal", pkval);
                         int count = DBAccess.RunSQLReturnValInt(ps);
                         if (count == 0)
@@ -4583,7 +4586,7 @@ namespace BP.WF
 
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.EverySortNoteEmpty)
                     {
-                        
+
 
                         Paras ps = new Paras();
                         ps.SQL = "SELECT COUNT(MyPK) as Num, Sort FROM Sys_FrmAttachmentDB WHERE  NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal Group BY Sort";
@@ -6234,7 +6237,7 @@ namespace BP.WF
 
                     var mysql = "";
                     if (this.HisNode.HisRunModel == RunModel.SubThread)
-                        mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + this.WorkID + " AND FID="+this.HisGenerWorkFlow.FID+") AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                        mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + this.WorkID + " AND FID=" + this.HisGenerWorkFlow.FID + ") AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
                     else
                         mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + this.WorkID + ") AND NDTo = " + this.HisNode.NodeID + " AND(NDTo != NDFrom) ";
 
@@ -7825,7 +7828,7 @@ namespace BP.WF
             try
             {
                 //删除发生的日志.
-                #warning 有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间
+#warning 有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间
                 DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID +
                                 " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward +
                                 " AND RDT=(Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID + ")");

@@ -37,7 +37,6 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static void CreatePublicNoNameCtrl(string fk_mapdata, string ctrlType, string no, string name, float x, float y)
         {
-            FrmEle fe = null;
             switch (ctrlType)
             {
                 case "Dtl":
@@ -52,21 +51,6 @@ namespace BP.Sys
                 case "AthImg":
                     CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
                     break;
-                case "Fieldset": //分组.
-                    fe = new FrmEle();
-                    fe.MyPK = fk_mapdata + "_" + no;
-                    if (fe.RetrieveFromDBSources() != 0)
-                        throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
-                    fe.FK_MapData = fk_mapdata;
-                    fe.EleType = "Fieldset";
-                    fe.EleName = name;
-                    fe.EleID = no;
-                    fe.X = x;
-                    fe.Y = y;
-                    fe.Insert();
-                    //CreateOrSaveAthImg(fk_mapdata, no, name, x, y);
-                    break;
-
                 case "iFrame": //框架.
                     MapFrame mapFrame = new MapFrame();
                     mapFrame.MyPK = fk_mapdata + "_" + no;
@@ -805,14 +789,6 @@ namespace BP.Sys
             athImgs += "@";
 
 
-            //附加元素..
-            string eleIDs = "@";
-            FrmEles feles = new FrmEles(); ;
-            feles.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (FrmEle item in feles)
-                eleIDs += item.EleID + "@";
-            eleIDs += "@";
-
             //框架
             string frameIDs = "@";
             MapFrames frames = new MapFrames();
@@ -916,8 +892,7 @@ namespace BP.Sys
 
                 #region 数据类控件.
                 if (shape.Contains("TextBox") == true
-                    || shape.Contains("DropDownList") == true
-                    || shape == FrmEle.HandSiganture)
+                    || shape.Contains("DropDownList") == true )
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
                     attrPKs = attrPKs.Replace("@" + ctrlID + "@", "@");
@@ -956,17 +931,6 @@ namespace BP.Sys
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveAthImg(fk_mapdata, ctrlID, x, y, height, width);
                     athImgs = athImgs.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-
-                //存储到FrmEle 类的控件，都可以使用该方法保存.
-                if (shape == "Fieldset"
-                    || shape == FrmEle.Fieldset
-                    )
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    eleIDs = eleIDs.Replace("@" + ctrlID + "@", "@");
                     continue;
                 }
 
@@ -1308,6 +1272,7 @@ namespace BP.Sys
         /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null)
         {
+            //首先从缓存获取数据.
             DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrmDataSetModel(frmID);
             if (dsFrm != null)
                 return dsFrm;
@@ -1344,33 +1309,36 @@ namespace BP.Sys
             DataTable Sys_MapExt = md.MapExts.ToDataTableField("Sys_MapExt");
             ds.Tables.Add(Sys_MapExt);
 
-            //线.
-            DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
-            ds.Tables.Add(Sys_FrmLine);
-
-            //link.
-            DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
-            ds.Tables.Add(Sys_FrmLink);
-
-            //btn.
-            DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
-            ds.Tables.Add(Sys_FrmBtn);
-
-            //Sys_FrmLab.
-            DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
-            ds.Tables.Add(Sys_FrmLab);
-
-            //img.
-            DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
-            ds.Tables.Add(Sys_FrmImg);
-
             //Sys_FrmRB.
             DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");
             ds.Tables.Add(Sys_FrmRB);
 
-            //Sys_FrmEle.
-            DataTable Sys_FrmEle = md.FrmEles.ToDataTableField("Sys_FrmEle");
-            ds.Tables.Add(Sys_FrmEle);
+            #region 如果是 自由表单类型，就把自由表单的元素加上.
+            if (md.HisFrmType == FrmType.FreeFrm)
+            {
+                //线.
+                DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
+                ds.Tables.Add(Sys_FrmLine);
+
+                //link.
+                DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
+                ds.Tables.Add(Sys_FrmLink);
+
+                //btn.
+                DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
+                ds.Tables.Add(Sys_FrmBtn);
+
+                //Sys_FrmLab.
+                DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
+                ds.Tables.Add(Sys_FrmLab);
+
+                //img.
+                DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+                ds.Tables.Add(Sys_FrmImg);
+
+            }
+            #endregion 如果是 自由表单类型，就把自由表单的元素加上.
+
 
             //Sys_MapFrame.
             DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
@@ -1482,9 +1450,6 @@ namespace BP.Sys
             DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");
             ds.Tables.Add(Sys_FrmRB);
 
-            //Sys_FrmEle.
-            DataTable Sys_FrmEle = md.FrmEles.ToDataTableField("Sys_FrmEle");
-            ds.Tables.Add(Sys_FrmEle);
 
             //Sys_MapFrame.
             DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");

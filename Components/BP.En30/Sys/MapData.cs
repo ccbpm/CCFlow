@@ -481,22 +481,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.Idx, value);
             }
         }
-        /// <summary>
-        /// 扩展控件
-        /// </summary>
-        public FrmEles HisFrmEles
-        {
-            get
-            {
-                FrmEles obj = this.GetRefObject("FrmEles") as FrmEles;
-                if (obj == null)
-                {
-                    obj = new FrmEles(this.No);
-                    this.SetRefObject("FrmEles", obj);
-                }
-                return obj;
-            }
-        }
+         
         /// <summary>
         /// 框架
         /// </summary>
@@ -668,22 +653,7 @@ namespace BP.Sys
             }
         }
 
-        /// <summary>
-        /// 元素
-        /// </summary>
-        public FrmEles FrmEles
-        {
-            get
-            {
-                FrmEles obj = this.GetRefObject("FrmEles") as FrmEles;
-                if (obj == null)
-                {
-                    obj = new FrmEles(this.No);
-                    this.SetRefObject("FrmEles", obj);
-                }
-                return obj;
-            }
-        }
+        
         /// <summary>
         /// 线
         /// </summary>
@@ -1638,21 +1608,7 @@ namespace BP.Sys
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
-
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLineBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Line;
-                    //ele.BorderColor = dr["BorderColor"].ToString();
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
+                
             }
             if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
             {
@@ -1660,47 +1616,13 @@ namespace BP.Sys
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
 
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Label;
-
-                    ele.EleName = dr[FrmLabAttr.Text].ToString();
-
-                    //ele.FontColor = dr[FrmLabAttr.FontColor].ToString();
-                    //ele.FontName = dr[FrmLabAttr.FontName].ToString();
-                    //ele.FontSize = int.Parse(dr[FrmLabAttr.FontSize].ToString());
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
+               
             }
             if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
             {
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
-
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Line;
-                    //ele.BorderColor = dr["BorderColor"].ToString();
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
             }
             #endregion 升级ccform控件.
         }
@@ -2060,26 +1982,6 @@ namespace BP.Sys
                             }
                             //en.MyPK = "LK_" + idx + "_" + fk_mapdata;
                             en.MyPK = DBAccess.GenerGUID();
-                            en.Insert();
-                        }
-                        break;
-                    case "Sys_FrmEle":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            FrmEle en = new FrmEle();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                object val = dr[dc.ColumnName] as object;
-                                if (val == null)
-                                    continue;
-
-
-
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
-                            }
-
-
                             en.Insert();
                         }
                         break;

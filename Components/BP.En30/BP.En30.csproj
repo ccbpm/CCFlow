@@ -406,7 +406,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\FrmImgAthDB.cs" />
-    <Compile Include="Sys\FrmEle.cs" />
     <Compile Include="Sys\FrmEleDB.cs" />
     <Compile Include="Sys\GETree.cs" />
     <Compile Include="Sys\RptTemplate.cs">

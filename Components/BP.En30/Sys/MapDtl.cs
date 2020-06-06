@@ -674,22 +674,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 元素
-        /// </summary>
-        public FrmEles FrmEles
-        {
-            get
-            {
-                FrmEles obj = this.GetRefObject("FrmEles") as FrmEles;
-                if (obj == null)
-                {
-                    obj = new FrmEles(this.No);
-                    this.SetRefObject("FrmEles", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
         /// 线
         /// </summary>
         public FrmLines FrmLines

@@ -216,6 +216,7 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.IsMyView, value);
             }
         }
+        
         //显示在抄送工具栏中
         public bool IsMyCC
         {
@@ -226,6 +227,18 @@ namespace BP.WF.Template
             set
             {
                 SetValByKey(NodeToolbarAttr.IsMyCC, value);
+            }
+        }
+        //图片附件路径
+        public string IconPath
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeToolbarAttr.IconPath);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IconPath, value);
             }
         }
         #endregion

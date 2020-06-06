@@ -1907,7 +1907,12 @@ namespace BP.WF.HttpHandler
                         dr["No"] = "NodeToolBar";
                         dr["Name"] = bar.Title;
                         dr["Oper"] = bar.Url;
-                        dr["Icon"] = bar.Row["WebPath"];
+                        //判断按钮图片路径是否有值
+                        string IconPath = bar.IconPath;
+                        if (DataType.IsNullOrEmpty(IconPath))
+                            dr["Icon"] = bar.Row["WebPath"];
+                        else
+                            dr["Icon"] = IconPath;
                         dt.Rows.Add(dr);
                     }
                     else
@@ -1918,7 +1923,12 @@ namespace BP.WF.HttpHandler
                         dr["No"] = "NodeToolBar";
                         dr["Name"] = bar.Title;
                         dr["Oper"] = "WinOpen('" + urlr3 + "')";
-                        dr["Icon"] = bar.Row["WebPath"];
+                        //判断按钮图片路径是否有值
+                        string IconPath = bar.IconPath;
+                        if (DataType.IsNullOrEmpty(IconPath))
+                            dr["Icon"] = bar.Row["WebPath"];
+                        else
+                            dr["Icon"] = IconPath;
                         dt.Rows.Add(dr);
 
                     }

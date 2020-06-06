@@ -208,7 +208,8 @@
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, pkval) + "</td>";
                 }
                 //主键中还有双引号的进行转义
-                pkval = pkval.replace(/"/g, "&quot;");
+                if (pkval != null && pkval !=undefined && pkval instanceof String )
+                    pkval = pkval.replace(/"/g, "&quot;");
                 html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";
                 if (mapData.GetPara("IsDelete") == "1")
                     html += "<td><a href=\"javascript:Delete('" + pkval + "')\"><img src='../../Img/Btn/Delete.png' /></a></td>";

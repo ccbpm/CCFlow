@@ -51,7 +51,7 @@
             background: #d4e6fe !important;
         }
 
-        .btn {
+        /*.btn {
             background: #2884fa !important;
             border-radius: 3px !important;
             color: white !important;
@@ -63,7 +63,7 @@
             border-radius: 3px !important;
             color: white !important;
             padding: 4px 17px !important;
-        }
+        }*/
 
         input[type=text], select {
             border-radius: 15px !important;
@@ -73,7 +73,7 @@
             padding-left: 6px;
         }
 
-        #btnSearch {
+        /*#btnSearch {
             height: 30px;
             border: none;
             border-radius: 20px;
@@ -82,7 +82,7 @@
             font-size: 14px;
             background: #2884fa !important;
             color: #fff;
-        }
+        }*/
 
         #txbSearchVal {
             font-size: 14px;
@@ -97,16 +97,16 @@
             background: #f4f9ff;
         }
 
-            .form_tree #orgTxt {
-                border-radius: 15px 0px 0px 15px !important;
-                margin: 0px !important;
-                /*border:#2884fa 1px solid;*/
-            }
+        .form_tree #orgTxt {
+            border-radius: 15px 0px 0px 15px !important;
+            margin: 0px !important;
+            /*border:#2884fa 1px solid;*/
+        }
 
-            .form_tree .input-group-addon {
-                border-radius: 0px 15px 15px 0px !important;
-                /*broder:#2884fa 1px solid;*/
-            }
+        .form_tree .input-group-addon {
+            border-radius: 0px 15px 15px 0px !important;
+            /*broder:#2884fa 1px solid;*/
+        }
 
         #groupTable #dt ul {
             /*background: #f4f9ff;*/
@@ -122,12 +122,25 @@
             overflow: hidden;
         }
 
-            #searchS div {
-                height: 40px;
-                line-height: 40px;
-                text-align: left;
-                float: left;
-            }
+        #searchS div {
+            height: 40px;
+            line-height: 40px;
+            text-align: left;
+            float: left;
+        }
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+        button:hover {
+            background: #f5f5f5 !important;
+            color: #000;
+            border: 1px solid #ccc !important;
+        }
     </style>
     <script type="text/javascript">
         var doType = GetQueryString("DoType");
@@ -517,10 +530,21 @@
     <div id="table">
     </div>
     <div style="position: fixed; bottom: 5px; right: 5px;" class="foot">
-        <button id="btnOKAndClose" class="btn btn-info" style="display:none" onclick="SaveNodeEmps()">确定</button>
+        <!--<button id="btnOKAndClose" class="btn btn-info" style="display:none" onclick="SaveNodeEmps()">确定</button>
         <button id="btnSave" class="btn btn-info" onclick="SendNode()">发送</button>
         <button id="btnCancel" class="btn btn-info" onclick="Close()">
             取消
+        </button>-->
+
+        <button onclick="SaveNodeEmps();" id="btnOKAndClose" style="display:none">
+            <img src="../Img/Btn/Confirm.png" /> 发送
+        </button>
+        <button onclick="SendNode();" id="btnSave">
+            <img src="../Img/Btn/Send.png" /> 发送
+        </button>
+
+        <button onclick="Close();" id="btnCancel">
+            <img src="../Img/Btn/Close.png" /> 关闭
         </button>
     </div>
     <br />

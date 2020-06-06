@@ -40,9 +40,11 @@ $(function () {
             var Icon = toolBar.Icon;
             //自定义的默认按钮
             var img = "<img src='Img/Btn/CH.png' width='22px' height='22px'>&nbsp;"
-            //有上传的icon
+            //有上传的icon,否则用默认的
             if (Icon != "") {
-                Icon = Icon.replace(Icon.substr(0, Icon.indexOf("\DataUser")), "../");
+                var index = Icon.indexOf("\DataUser");
+                if (index != -1) 
+                    Icon = Icon.replace(Icon.substr(0, index), "../");
                 img = "<img src='" + Icon + "' width='22px' height='22px'>&nbsp;";
             }
             

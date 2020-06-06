@@ -891,26 +891,31 @@ function AfterBindEn_DealMapExt(frmData) {
                         } else if (frmDate == 6) {
                             dateFmt = "MM-dd";
                         }
+                        var RDTVal="";
                         //根据选择的条件进行日期限制
                         switch (mapExt.Tag3) {
                             case "dayu":
+                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, maxDate: $('#TB_' + mapExt.Tag4).val() });
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: RDTVal.val() });
                                 });
                                 break;
                             case "dayudengyu":
+                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, maxDate: $('#TB_' + mapExt.Tag4).val() });
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: RDTVal.val() });
                                 });
                                 break;
                             case "xiaoyu":
+                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, minDate: $('#TB_' + mapExt.Tag4).val() });
+                                    WdatePicker({ dateFmt: dateFmt, minDate: RDTVal.val() });
                                 });
                                 break;
                             case "xiaoyudengyu":
+                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, minDate: $('#TB_' + mapExt.Tag4).val() });
+                                    WdatePicker({ dateFmt: dateFmt, minDate: RDTVal.val() });
                                 });
                                 break;
                             case "budengyu":
@@ -921,9 +926,7 @@ function AfterBindEn_DealMapExt(frmData) {
                                 }
                                 break;
                         }
-                        
                     }
-
                 }
                 break;
             default:

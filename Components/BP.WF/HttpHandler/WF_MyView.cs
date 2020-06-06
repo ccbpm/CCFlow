@@ -1168,11 +1168,10 @@ namespace BP.WF.HttpHandler
                 DataSet ds = new DataSet();
 
                 Int64 workID = this.WorkID;
-                Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
+                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1195,7 +1194,7 @@ namespace BP.WF.HttpHandler
 
                 }
 
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No);
 
                 //Node nd = new Node(this.FK_Node);

@@ -3875,68 +3875,44 @@ namespace BP.WF.HttpHandler
         public string GenerWorkNode()
         {
             string json = string.Empty;
+            DataSet ds = new DataSet();
+            Int64 workID = this.WorkID; //表单的主表.
+
+            #region 判断当前的节点类型,获得表单的ID.
+            if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                //获取绑定的表单
+                FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
+                switch (frmnode.WhoIsPK)
+                {
+                    case WhoIsPK.FID:
+                        workID = this.FID;
+                        break;
+                    case WhoIsPK.PWorkID:
+                        workID = this.PWorkID;
+                        break;
+                    case WhoIsPK.P2WorkID:
+                        GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
+                        workID = gwff.PWorkID;
+                        break;
+                    case WhoIsPK.P3WorkID:
+                        string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                        workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion 判断当前的节点类型,获得表单的ID.
+
             try
             {
-                DataSet ds = new DataSet();
 
-                Int64 workID = this.WorkID;
-                Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-                {
-                    //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
-                    switch (frmnode.WhoIsPK)
-                    {
-                        case WhoIsPK.FID:
-                            workID = this.FID;
-                            break;
-                        case WhoIsPK.PWorkID:
-                            workID = this.PWorkID;
-                            break;
-                        case WhoIsPK.P2WorkID:
-                            GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
-                            workID = gwff.PWorkID;
-                            break;
-                        case WhoIsPK.P3WorkID:
-                            string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No);
 
-                //Node nd = new Node(this.FK_Node);
-                //if (nd.HisFormType == NodeFormType.SheetTree)
-                //{
-                //    /*把树形表单的表单信息加载到ds里面.*/
-                //}
-                //把他转化小写,适应多个数据库.
-                //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                 // ds.Tables.Add(wf_generWorkFlowDt);
                 // ds.WriteXml("c:\\xx.xml");
-
-                #region 如果是移动应用就考虑多表单的问题.
-                if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
-                {
-                    /*如果是表单树并且是，移动模式.*/
-                    FrmNodes fns = new FrmNodes();
-                    QueryObject qo = new QueryObject(fns);
-
-                    qo.AddWhere(FrmNodeAttr.FK_Node, currND.NodeID);
-                    qo.addAnd();
-                    qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)FrmEnableRole.Disable);
-                    qo.addOrderBy("Idx");
-                    qo.DoQuery();
-
-
-                    //把节点与表单的关联管理放入到系统.
-                    ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
-                }
-                #endregion 如果是移动应用就考虑多表单的问题.
 
                 if (WebUser.SysLang.Equals("CH") == true)
                     return BP.Tools.Json.ToJson(ds);
@@ -3951,8 +3927,6 @@ namespace BP.WF.HttpHandler
                 #endregion 处理多语言.
 
                 return BP.Tools.Json.ToJson(ds);
-
-
             }
             catch (Exception ex)
             {
@@ -3960,7 +3934,5 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
-
     }
 }

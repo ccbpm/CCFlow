@@ -1486,10 +1486,7 @@ namespace BP.WF
                                 string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                                 myPK = myPK + "_" + wk.OID + "_" + img.MyPK;
 
-                                FrmEleDB imgDb = new FrmEleDB();
-                                QueryObject queryInfo = new QueryObject(imgDb);
-                                queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
-                                queryInfo.DoQuery();
+                                FrmEleDB imgDb = new FrmEleDB(myPK);
                                 //判断是否存在
                                 if (imgDb != null && !DataType.IsNullOrEmpty(imgDb.FK_MapData))
                                 {

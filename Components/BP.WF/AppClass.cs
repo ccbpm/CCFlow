@@ -174,9 +174,11 @@ namespace BP.WF
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
+                Node nd = new Node(gwf.FK_Node);
+
                 //加载接口.
                 DataSet ds = new DataSet();
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID,
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(gwf.FK_Flow, nd, gwf.WorkID,
                     gwf.FID, BP.Web.WebUser.No);
 
                 //要保留的tables.

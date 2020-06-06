@@ -53,22 +53,6 @@ namespace BP.WF
             //float wtX = 0;
             float x = 0;
 
-            #region 输出Ele
-            FrmEles eles = mapData.FrmEles;
-            if (eles.Count >= 1)
-            {
-                foreach (FrmEle ele in eles)
-                {
-                    float y = ele.Y;
-                    x = ele.X + wtX;
-                    sb.Append("<DIV id=" + ele.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-
-                    sb.Append("\t\n</DIV>");
-                }
-
-            }
-            #endregion 输出Ele
-
             #region 输出竖线与标签 & 超连接 Img.
             FrmLabs labs = mapData.FrmLabs;
             foreach (FrmLab lab in labs)
@@ -274,10 +258,8 @@ namespace BP.WF
                         string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                         myPK = myPK + "_" + en.GetValStrByKey("OID") + "_" + img.MyPK;
 
-                        FrmEleDB imgDb = new FrmEleDB();
-                        QueryObject queryInfo = new QueryObject(imgDb);
-                        queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
-                        queryInfo.DoQuery();
+                        FrmEleDB imgDb = new FrmEleDB(myPK);
+                      
                         //判断是否存在
                         if (imgDb == null || DataType.IsNullOrEmpty(imgDb.FK_MapData))
                         {
@@ -299,16 +281,15 @@ namespace BP.WF
                         FrmEleDB realDB = null;
                         FrmEleDB imgDb = new FrmEleDB();
                         QueryObject objQuery = new QueryObject(imgDb);
-                        objQuery.AddWhere(FrmEleAttr.FK_MapData, img.EnPK);
+                        objQuery.AddWhere(FrmEleDBAttr.FK_MapData, img.EnPK);
                         objQuery.addAnd();
-                        objQuery.AddWhere(FrmEleAttr.EleID, en.GetValStrByKey("OID"));
+                        objQuery.AddWhere(FrmEleDBAttr.EleID, en.GetValStrByKey("OID"));
 
                         if (objQuery.DoQuery() == 0)
                         {
                             FrmEleDBs imgdbs = new FrmEleDBs();
-                            QueryObject objQuerys = new QueryObject(imgdbs);
-                            objQuerys.AddWhere(FrmEleAttr.EleID, en.GetValStrByKey("OID"));
-                            if (objQuerys.DoQuery() > 0)
+                            imgdbs.Retrieve(FrmEleDBAttr.EleID, en.GetValStrByKey("OID"));
+                            if (imgdbs.Count  > 0)
                             {
                                 foreach (FrmEleDB single in imgdbs)
                                 {

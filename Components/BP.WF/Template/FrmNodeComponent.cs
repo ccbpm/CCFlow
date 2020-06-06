@@ -121,7 +121,6 @@ namespace BP.WF.Template
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
 
-
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true,true, 0, 100, 10);
 

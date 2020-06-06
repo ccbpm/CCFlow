@@ -2561,15 +2561,7 @@ namespace BP.WF
             FrmLabs frmlabs = new FrmLabs();
             frmlabs.RetrieveInSQL(sql);
             ds.Tables.Add(frmlabs.ToDataTableField("Sys_FrmLab"));
-
-
-
-            // Sys_FrmEle.
-            sql = "SELECT MyPK FROM Sys_FrmEle WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
-
-            FrmEles frmEles = new FrmEles();
-            frmEles.RetrieveInSQL(sql);
-            ds.Tables.Add(frmEles.ToDataTableField("Sys_FrmEle"));
+             
 
             // Sys_FrmLink.
             sql = "SELECT MyPK FROM Sys_FrmLink WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -5697,24 +5689,6 @@ namespace BP.WF
                             // DBAccess.GenerOIDByGUID(); "LIE" + timeKey + "_" + idx;
                             //if (en.IsExitGenerPK())
                             //    continue;
-                            en.Insert();
-                        }
-                        break;
-                    case "Sys_FrmEle":
-                        idx = 0;
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            FrmEle en = new FrmEle();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                                en.SetValByKey(dc.ColumnName, val);
-                            }
                             en.Insert();
                         }
                         break;

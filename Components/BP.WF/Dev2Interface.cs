@@ -11042,42 +11042,7 @@ namespace BP.WF
         #endregion
 
         #region 附件上传
-        public static string SaveImageAsFile(byte[] img, string pkval, string fk_Frm_Ele)
-        {
-            FrmEle fe = new FrmEle(fk_Frm_Ele);
-            System.Drawing.Image newImage;
-            using (MemoryStream ms = new MemoryStream(img, 0, img.Length))
-            {
-                ms.Write(img, 0, img.Length);
-                newImage = Image.FromStream(ms, true);
-                Bitmap bitmap = new Bitmap(newImage, new Size(fe.WOfInt, fe.HOfInt));
-
-                if (System.IO.Directory.Exists(fe.HandSigantureSavePath + "\\" + fe.FK_MapData + "\\") == false)
-                {
-                    System.IO.Directory.CreateDirectory(fe.HandSigantureSavePath + "\\" + fe.FK_MapData + "\\");
-                }
-
-                string saveTo = fe.HandSigantureSavePath + "\\" + fe.FK_MapData + "\\" + pkval + ".jpg";
-                bitmap.Save(saveTo, ImageFormat.Jpeg);
-
-                string pathFile = HttpContextHelper.RequestApplicationPath + fe.HandSiganture_UrlPath + fe.FK_MapData + "/" + pkval + ".jpg";
-                FrmEleDB ele = new FrmEleDB();
-                ele.FK_MapData = fe.FK_MapData;
-                ele.EleID = fe.EleID;
-                ele.RefPKVal = pkval;
-                ele.Tag1 = pathFile.Replace("\\\\", "\\");
-                ele.Tag1 = pathFile.Replace("////", "//");
-
-                ele.Tag2 = saveTo.Replace("\\\\", "\\");
-                ele.Tag2 = saveTo.Replace("////", "//");
-
-                ele.GenerPKVal();
-                ele.Save();
-
-                return pathFile;
-            }
-        }
-
+        
         /// <summary>
         /// 上传文件.
         /// </summary>

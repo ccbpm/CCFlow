@@ -1228,7 +1228,8 @@ namespace BP.WF.HttpHandler
                     //如果是累加表单.
                     if (nd.HisFormType == NodeFormType.FoolTruck)
                     {
-                        DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                        DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow,
+                            nd, this.WorkID,
                   this.FID, BP.Web.WebUser.No, this.GetRequestVal("FromWorkOpt"));
 
                         return BP.Tools.Json.ToJson(myds);

@@ -1556,8 +1556,10 @@ namespace BP.WF
                     || this.HisFormType == NodeFormType.SheetTree)
                     return "ND" + this.NodeID;
 
+                //与指定的节点相同 =  Pri 
                 if (str.Equals("Pri") == true &&
-                    (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FreeForm))
+                    (this.HisFormType == NodeFormType.FoolForm 
+                    || this.HisFormType == NodeFormType.FreeForm))
                 {
                     if (this.WorkID == 0)
                         return "ND" + this.NodeID;
@@ -1578,6 +1580,8 @@ namespace BP.WF
 
                     return "ND" + nodeID;
                 }
+
+                //返回设置的表单ID.
                 return str;
             }
             set

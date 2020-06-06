@@ -920,6 +920,7 @@ var Entity = (function () {
                         return;
 
                     try {
+                        //处理特殊字符，字段中的值含有双引号
                         data = data.replace(/\\\\"/g, '\\"');
                         jsonString = JSON.parse(data);
                         setData(self);
@@ -1172,6 +1173,7 @@ var Entity = (function () {
                     }
 
                     try {
+                        //处理特殊字符，字段中的值含有双引号
                         data = data.replace(/\\\\"/g, '\\"');
                         jsonString = JSON.parse(data);
                         setData(self);
@@ -1301,6 +1303,7 @@ var Entity = (function () {
                     if (data == "")
                         return 0;
                     try {
+                        //处理特殊字符，字段中的值含有双引号
                         data = data.replace(/\\\\"/g, '\\"');
                         console.log(data);
                         jsonString = JSON.parse(data);

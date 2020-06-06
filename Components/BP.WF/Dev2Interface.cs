@@ -4175,10 +4175,13 @@ namespace BP.WF
 
             //@sly
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                     "RDT,NodeData=" + dbStr + "NodeData WHERE  Tag=" + dbStr + "Tag ";
+                     "RDT,NodeData=" + dbStr + "NodeData WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID="+dbStr+"WorkID AND FID="+dbStr+"FID AND EmpFrom="+dbStr+"EmpFrom";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
-            ps.Add(TrackAttr.Tag, tag);
+            ps.Add(TrackAttr.NDFrom, currNodeID);
+            ps.Add(TrackAttr.WorkID, workid);
+            ps.Add(TrackAttr.FID, fid);
+            ps.Add(TrackAttr.EmpFrom, WebUser.No);
             ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess); //@sly
             ps.Add(TrackAttr.NodeData, "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName);
 
@@ -4187,8 +4190,11 @@ namespace BP.WF
             if (num > 1)
             {
                 ps.Clear();
-                ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag=" + dbStr + "Tag ";
-                ps.Add(TrackAttr.Tag, tag);
+                ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND EmpFrom=" + dbStr + "EmpFrom";
+                ps.Add(TrackAttr.NDFrom, currNodeID);
+                ps.Add(TrackAttr.WorkID, workid);
+                ps.Add(TrackAttr.FID, fid);
+                ps.Add(TrackAttr.EmpFrom, WebUser.No);
                 DBAccess.RunSQL(ps);
                 num = 0;
             }

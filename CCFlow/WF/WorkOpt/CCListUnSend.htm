@@ -85,7 +85,7 @@
         //页面启动函数.
         $(function () {
             var webUser = new WebUser();
-            var ccl = new Entities("BP.WF.Template.CCLists");
+            var ccl = new Entities("BP.WF.CCLists");
             ccl.Retrieve("WorkID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "Rec", webUser.No);
             var row = "";
             for (var i = 0; i < ccl.length; i++) {

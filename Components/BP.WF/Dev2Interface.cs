@@ -7758,6 +7758,7 @@ namespace BP.WF
             toEmps = toEmps.Replace(";", ",");
             string[] strs = toEmps.Split(',');
             BP.Port.Emp emp = new Emp();
+            BP.Port.Dept dept = new Dept();
             CCList list = new CCList();
 
             string names = "";
@@ -7770,6 +7771,10 @@ namespace BP.WF
                 int i = emp.RetrieveFromDBSources();
                 if (i == 0)
                     continue;
+
+                //根据人员的部门编号获取所在部门名称
+                dept.No = emp.FK_Dept;
+                dept.RetrieveFromDBSources();
 
                 names += emp.Name + "、";
 
@@ -7790,6 +7795,7 @@ namespace BP.WF
 
                 //增加抄送人部门.
                 list.CCToDept = emp.FK_Dept;
+                list.CCToDeptName = dept.Name;
                 list.RDT = DataType.CurrentDataTime;
                 list.Rec = WebUser.No;
                 list.WorkID = gwf.WorkID;

@@ -747,7 +747,7 @@ namespace BP.WF.Data
 
                 //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
-                map.AddSearchAttr(MyStartFlowAttr.TSpan);
+                map.AddSearchAttr(MyStartFlowAttr.TSpan,4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 //我发起的流程.

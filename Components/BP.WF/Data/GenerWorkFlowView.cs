@@ -752,7 +752,7 @@ namespace BP.WF.Data
                 //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
-                map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY);
+                map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY,4000);
 
 
                 //把不等于 0 的去掉.

@@ -28,12 +28,25 @@
              text-align:center;
         }
 
-            body div {
-                text-align: left;
-            }
+        body div {
+            text-align: left;
+        }
 
         #Message {
             width: 100%;
+        }
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+        button:hover {
+            background: #f5f5f5 !important;
+            color: #000;
+            border: 1px solid #ccc !important;
         }
     </style>
     <script type="text/javascript">
@@ -159,7 +172,10 @@
             <tr>
                 <td>
                     <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 81%;" />
-                    <input type="button" id="BtnSelectEmps" value='选择接受人' />
+                    <button id="BtnSelectEmps" type="button">
+                        <img src="../Img/Btn/AddLeader.png" /> 选人
+                    </button>
+                    <!--<input type="button" id="BtnSelectEmps" value='选择接受人' />-->
                 </td>
             </tr>
 
@@ -175,14 +191,22 @@
                 </td>
             </tr>
 
-            <tr>
-                <td>
-                    <input type=button value="确定移交" onclick="ShiftWork();" /><input type="button" id="" value="关闭" onclick="Close();" />
-                </td>
-            </tr>
+
+
         </table>
 
-    </div>
 
+    </div>
+    <div style="position: fixed; bottom: 60px; right: 5px;">
+        <button type="button" onclick="ShiftWork();">
+            <img src="../Img/Btn/Send.png" /> 确定移交
+        </button>
+
+        <button type="button" onclick="Close();">
+            <img src="../Img/Btn/Close.png" /> 关闭
+        </button>
+        <!--<input type=button value="确定移交" onclick="ShiftWork();" /><input type="button" id="" value="关闭" onclick="Close();" />-->
+
+    </div>
 </body>
 </html>

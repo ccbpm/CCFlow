@@ -87,9 +87,9 @@
         var param = {};
         var isSigleSelect = false;
         var selectEmp = "";
+        var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
         $(function () {
 
-            var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
             if (IsSend == null || IsSend == undefined || IsSend == "")
                 IsSend = "1";
             if (IsSend == "0")
@@ -416,10 +416,14 @@
         //关闭model.
         function CloseModel() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                //获取接收人
-                if (selectEmp != "")
+                //获取接收人,作用于toNodes.htm页面
+                if (selectEmp != "" && IsSend == "1") {
                     selectEmp = selectEmp.substring(0, selectEmp.length - 1);
-                window.parent.returnWorkWindowClose(selectEmp);
+                    window.parent.returnWorkWindowClose(selectEmp);
+                } else {
+                    window.parent.returnWorkWindowClose();
+                }
+                
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();

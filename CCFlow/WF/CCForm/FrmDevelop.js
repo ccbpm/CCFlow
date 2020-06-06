@@ -320,14 +320,14 @@ function GenerDevelopFrm(wn, fk_mapData) {
 
     }
 
-    //按钮
-    var frmBtns = frmData.Sys_FrmBtn;
-    for (var i = 0; i < frmBtns.length; i++) {
-        var frmBtn = frmBtns[i];
+    ////按钮
+    //var frmBtns = frmData.Sys_FrmBtn;
+    //for (var i = 0; i < frmBtns.length; i++) {
+    //    var frmBtn = frmBtns[i];
 
-        figure_Develop_Btn(frmBtn);
+    //    figure_Develop_Btn(frmBtn);
 
-    }
+    //}
     debugger
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件

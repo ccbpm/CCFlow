@@ -3163,6 +3163,13 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                //清楚上次选择的节点信息.
+                if (DataType.IsNullOrEmpty(this.HisGenerWorkFlow.Paras_ToNodes)==false)
+                {
+                    this.HisGenerWorkFlow.Paras_ToNodes = "";
+                    this.HisGenerWorkFlow.Update();
+                }
+
                 if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
                 {
                     if (this.currND.CondModel == DirCondModel.ByUserSelected)

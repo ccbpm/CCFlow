@@ -16,5 +16,5 @@ var IsShowDevelopFieldLab = false; //开发者表单设计器设计插入字段�
 var IsPopEnableSelfInput = true;
 
 //工作处理器:发送退回成功后,提示信息关闭倒计时设置(单位:秒)
-var TimeNum = 30;
+//调用的页面  /WF/Toolbar.js  , /WF/WorkOpt/AccepterOfGener.htm
 var WF_WorkOpt_LeftSecond = 30;

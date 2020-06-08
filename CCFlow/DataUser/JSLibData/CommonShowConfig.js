@@ -14,4 +14,6 @@ var IsShowDevelopFieldLab = false; //开发者表单设计器设计插入字段�
 
 //Pop弹出框是否可以选择，有可以输入，输入是按回车键或者失去焦点的时候默认是输入完一条信息
 var IsPopEnableSelfInput = true;
+//提示信息关闭倒计时设置(单位:秒)
+var TimeNum = 30;
 

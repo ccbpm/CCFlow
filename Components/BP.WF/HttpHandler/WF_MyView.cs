@@ -428,6 +428,29 @@ namespace BP.WF.HttpHandler
             }
         }
 
+        public bool IsCanView(GenerWorkFlow gwf)
+        {
+            //是否可以处理当前工作？
+            bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
+            if (isCanDoCurrWorker)
+                return true;
+
+            //是否是工作参与人?
+            bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
+            if (isWorker == true)
+                return true;
+
+            if (WebUser.No.Equals("admin") == true)
+                return true;
+
+            if (WebUser.IsAdmin  == true &&  gwf.OrgNo.Equals(WebUser.OrgNo)==true)
+                return true;
+
+            //处理流程控制权限.
+
+            return false;
+        }
+
 
         /// <summary>
         /// 初始化(处理分发)
@@ -472,19 +495,8 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            //判断是否可以查看.
-            if (isWorker==false && WebUser.No.Equals("admin")==false && WebUser.IsAdmin)
-            {
-                if (gwf.OrgNo.Equals(WebUser.OrgNo) == false)
-                    return "err@您无权查看其他组织的流程信息.";
-            }else
-            {
-
-            }
-
-            //if (isWorker==false && WebUser.No.Equals("admin") == false)
-            //    return "err@您无权查看其他组织的流程信息.";
-
+            if (IsCanView(gwf) == false)
+                return "err@您无权查看该工作.";
 
             //当前工作.
             Work currWK = this.currND.HisWork;

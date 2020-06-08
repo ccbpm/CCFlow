@@ -205,7 +205,7 @@ namespace BP.WF.HttpHandler
 
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                
+
                 #region 根据流程权限控制规则获取可以操作的按钮功能
                 string sql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
                     + " UNION "
@@ -244,7 +244,7 @@ namespace BP.WF.HttpHandler
                             }
                         }
 
-                       
+
                         /*撤销发送*/
                         GenerWorkerLists workerlists = new GenerWorkerLists();
                         QueryObject info = new QueryObject(workerlists);
@@ -290,7 +290,7 @@ namespace BP.WF.HttpHandler
                     case WFState.Complete: // 完成.
                     case WFState.Delete:   // 逻辑删除..
                         /*恢复使用流程*/
-                        if (WebUser.No.Equals("admin")==true || powers.Contains("FlowDataRollback") == true)
+                        if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true)
                         {
                             dr = dt.NewRow();
                             dr["No"] = "Rollback";
@@ -437,7 +437,40 @@ namespace BP.WF.HttpHandler
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
-          
+            //是否可以处理当前工作？
+            bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
+
+            //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
+            if (gwf.WFState != WFState.Complete && isCanDoCurrWorker == true)
+            {
+                WF_MyFlow handler = new WF_MyFlow();
+                return handler.MyFlow_Init();
+                // return "url@MyFlow.htm?WorkID=" + this.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID;
+            }
+
+            //是否是工作参与人?
+            bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
+            if (isWorker == true || WebUser.No.Equals("admin") == true
+                || WebUser.IsAdmin == true)
+            {
+                //可以查看工作。
+
+            }
+            else
+            {
+                //判断是否是抄送人员?
+                CCList list = new CCList();
+                bool isExit = list.IsExit(CCListAttr.WorkID, this.WorkID,
+                    CCListAttr.CCTo, WebUser.No);
+                //如果是抄送人员.
+                if (isExit == true)
+                {
+                    //是一个抄送人员.
+
+                }
+            }
+
+            //if (gwf.TodoEmps.Contains)
 
             //当前工作.
             Work currWK = this.currND.HisWork;
@@ -710,7 +743,7 @@ namespace BP.WF.HttpHandler
             url = url.Replace("&&", "&");
             return url;
         }
-       
+
         /// <summary>
         /// 获取主表的方法.
         /// </summary>

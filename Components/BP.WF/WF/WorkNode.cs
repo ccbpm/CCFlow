@@ -7396,7 +7396,6 @@ namespace BP.WF
 
                 #endregion 计算未来处理人.
 
-
                 #region 判断当前处理人员，可否处理下一步工作.
                 if (this.town != null
                     && this.HisRememberMe != null

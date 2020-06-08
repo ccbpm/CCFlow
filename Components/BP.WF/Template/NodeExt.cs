@@ -255,6 +255,10 @@ namespace BP.WF.Template
             {
                 return this.GetValBooleanByKey(NodeAttr.IsSendBackNode);
             }
+            set
+            {
+                this.SetValByKey(NodeAttr.IsSendBackNode, value);
+            }
         }
         /// <summary>
         /// 主键
@@ -335,7 +339,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 map.SetHelperAlert(NodeAttr.Name, "修改节点名称时如果节点表单名称为空着节点表单名称和节点名称相同，否则节点名称和节点表单名称可以不相同");
 
-                
+
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,
                     "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
@@ -534,7 +538,7 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
                 // add 2020.5.25 for 交投集团.
                 map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
-                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true,true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true, true);
 
 
                 // add 2017.9.1 for 天业集团.
@@ -1084,7 +1088,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepterRoleNew()
         {
-            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID+"&FK_Flow="+this.FK_Flow;
+            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
         /// <summary>
@@ -1295,7 +1299,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCondFlow()
         {
-            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow +   "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 节点完成条件
@@ -1439,6 +1443,14 @@ namespace BP.WF.Template
                 nd.CondModel = DirCondModel.ByLineCond;
             }
             nd.DirectUpdate(); //直接更新.
+
+            if (this.IsSendBackNode == true)
+            {
+                if (nd.HisToNDNum != 0)
+                    this.IsSendBackNode = false;
+
+                //    throw new Exception("err@您设置当前节点为【发送自动返回节点】，但是该节点配置到到达节点，是不正确的。");
+            }
 
 
             #region 如果有跳转，

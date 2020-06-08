@@ -21,7 +21,7 @@ namespace BP.WF.Template
             Flow flow = new Flow(flowNo);
 
             Node nd = new Node();
-            int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHRER FK_Flow='"+flowNo+"'",0);
+            int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHERE FK_Flow='"+flowNo+"'",0);
             if (idx == 0)
                 idx++;
 

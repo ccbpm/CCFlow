@@ -7410,16 +7410,17 @@ namespace BP.WF
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 
-
                 //处理事件.
                 this.Deal_Event();
-
 
                 //返回这个对象.
                 return this.HisMsgObjs;
             }
             catch (Exception ex)
             {
+                if (ex.Message.Equals("url@")==true)
+                    throw new Exception(ex.Message);
+
                 this.WhenTranscactionRollbackError(ex);
                 DBAccess.DoTransactionRollback();
 

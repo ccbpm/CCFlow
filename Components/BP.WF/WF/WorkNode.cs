@@ -7418,7 +7418,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                if (ex.Message.Equals("url@")==true)
+                if (ex.Message.IndexOf("url@")== 0 )
                     throw new Exception(ex.Message);
 
                 this.WhenTranscactionRollbackError(ex);

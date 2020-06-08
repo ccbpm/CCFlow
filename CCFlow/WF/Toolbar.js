@@ -1,4 +1,5 @@
 ﻿
+var wf_node = null;
 $(function () {
     var barHtml="";
     var data;
@@ -26,6 +27,11 @@ $(function () {
         return;
     }
     data = JSON.parse(data);
+
+    //当前节点的信息
+    if(data.WF_Node!=undefined)
+        wf_node = data.WF_Node[0];
+
     var toolBars = data.ToolBar;
     if (toolBars == undefined)
         toolBars = data;
@@ -60,7 +66,8 @@ $(function () {
 
 
     //按钮旁的下来框
-    InitToNodeDDL(data);
+    if (wf_node != null  && wf_node.IsBackTrack == 0)
+        InitToNodeDDL(data);
    
 
     if ($('[name=Return]').length > 0) {
@@ -504,8 +511,7 @@ function Send(isHuiQian, formType) {
             return;
 
     /**发送前处理的信息 End**/
-    var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-    if (nd.CondModel == 1) {
+    if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack== 0) {
         var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") +"&IsSend=0"+ "&s=" + Math.random();
        
         initModal("SelectNodeUrl", null, url); $('#returnWorkModal').modal().show();
@@ -527,6 +533,7 @@ function Send(isHuiQian, formType) {
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
             } else {
+
                 initModal("sendAccepter", toNodeID);
                 $('#returnWorkModal').modal().show();
             }

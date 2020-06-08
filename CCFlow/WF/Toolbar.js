@@ -842,7 +842,7 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
-    //保存前事件
+    //发送前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
             return false;

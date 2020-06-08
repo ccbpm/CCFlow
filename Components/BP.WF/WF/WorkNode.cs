@@ -6219,6 +6219,9 @@ namespace BP.WF
             #region 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
             if (this.HisNode.IsSendBackNode == true)
             {
+                if (this.HisNode.HisRunModel != RunModel.Ordinary)
+                    throw new Exception("err@流程配置错误:只能是线性节点才能设置[发送并返回]属性,当前节点是["+this.HisNode.HisRunModel.ToString()+"]");
+
                 //判断是否是最后一个人？
                 bool isLastOne = false;
                 GenerWorkerLists gwls = new GenerWorkerLists();

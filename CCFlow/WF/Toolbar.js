@@ -476,7 +476,8 @@ function InitToNodeDDL(JSonData) {
  * @param {isHuiQian} isHuiQian 是否是会签模式
  * @param {formType} formType 表单方案模式
  */
-function Send(isHuiQian,formType) {
+function Send(isHuiQian, formType) {
+
     SetPageSize(80, 80);
 
     /**发送前处理的信息 Start**/
@@ -514,6 +515,7 @@ function Send(isHuiQian,formType) {
     window.hasClickSend = true; //标志用来刷新待办.
 
     var toNodeID = 0;
+
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {

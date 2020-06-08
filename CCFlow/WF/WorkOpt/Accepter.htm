@@ -145,15 +145,17 @@
     <script type="text/javascript">
         var doType = GetQueryString("DoType");
         $(function () {
-            var IsSend = GetQueryString("IsSend");
-            //  alert(IsSend);
 
-            if (IsSend != null && IsSend != undefined && IsSend == 0) {
-                $("#btnOKAndClose").show();
-                $("#btnSave").hide();
+            var IsSend = GetQueryString("IsSend");
+            if (IsSend == null || IsSend == undefined)
+                IsSend = 1;
+
+            if ( IsSend == 0) {
+                $("#Btn_Save").show();
+                $("#Btn_Send").hide();
             } else {
-                $("#btnOKAndClose").hide();
-                $("#btnSave").show();
+                $("#Btn_Save").hide();
+                $("#Btn_Send").show();
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData(); //这里是获得Url的参数.
@@ -318,7 +320,8 @@
                 $("#" + no).attr("checked", "checked");
 
                 //执行发送.
-                SendNode();
+                if (IsSend==1)
+                    SendNode();
             }
 
         });
@@ -530,16 +533,12 @@
     <div id="table">
     </div>
     <div style="position: fixed; bottom: 5px; right: 5px;" class="foot">
-        <!--<button id="btnOKAndClose" class="btn btn-info" style="display:none" onclick="SaveNodeEmps()">确定</button>
-        <button id="btnSave" class="btn btn-info" onclick="SendNode()">发送</button>
-        <button id="btnCancel" class="btn btn-info" onclick="Close()">
-            取消
-        </button>-->
 
-        <button onclick="SaveNodeEmps();" id="btnOKAndClose" style="display:none">
-            <img src="../Img/Btn/Confirm.png" /> 发送
+        <button onclick="SaveNodeEmps();" 
+                id="Btn_Save" style="display:none">
+            <img src="../Img/Btn/Confirm.png" /> 保存
         </button>
-        <button onclick="SendNode();" id="btnSave">
+        <button onclick="SendNode();" id="Btn_Send">
             <img src="../Img/Btn/Send.png" /> 发送
         </button>
 

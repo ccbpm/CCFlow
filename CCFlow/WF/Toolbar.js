@@ -47,7 +47,7 @@ $(function () {
             //自定义的默认按钮
             var img = "<img src='Img/Btn/CH.png' width='22px' height='22px'>&nbsp;"
             //有上传的icon,否则用默认的
-            if (Icon != "") {
+            if (Icon != "" && Icon != undefined) {
                 var index = Icon.indexOf("\DataUser");
                 if (index != -1) 
                     Icon = Icon.replace(Icon.substr(0, index), "../");
@@ -345,7 +345,10 @@ function initModal(modalType, toNode,url) {
 
             //发送选择接收节点和接收人                
             case "sendAccepter":
-                $('#modalHeader').text("选择接受人");
+                //获取到达节点
+                var nodeOne = new Entity("BP.WF.Node", toNode);
+
+                $('#modalHeader').text("选择接受人(到达节点:" + nodeOne.Name+")");
                 SetPageSize(80, 80);
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;

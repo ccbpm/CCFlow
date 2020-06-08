@@ -435,6 +435,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyView_Init()
         {
+            //获得注册实体.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
             //是否可以处理当前工作？
@@ -453,7 +454,7 @@ namespace BP.WF.HttpHandler
             if (isWorker == true || WebUser.No.Equals("admin") == true
                 || WebUser.IsAdmin == true)
             {
-                //可以查看工作。
+                //可以查看工作,就执行以后的.
 
             }
             else
@@ -466,11 +467,24 @@ namespace BP.WF.HttpHandler
                 if (isExit == true)
                 {
                     //是一个抄送人员.
-
+                    WF_MyCC mycc = new WF_MyCC();
+                    return mycc.MyCC_Init();
                 }
             }
 
-            //if (gwf.TodoEmps.Contains)
+            //判断是否可以查看.
+            if (isWorker==false && WebUser.No.Equals("admin")==false && WebUser.IsAdmin)
+            {
+                if (gwf.OrgNo.Equals(WebUser.OrgNo) == false)
+                    return "err@您无权查看其他组织的流程信息.";
+            }else
+            {
+
+            }
+
+            //if (isWorker==false && WebUser.No.Equals("admin") == false)
+            //    return "err@您无权查看其他组织的流程信息.";
+
 
             //当前工作.
             Work currWK = this.currND.HisWork;

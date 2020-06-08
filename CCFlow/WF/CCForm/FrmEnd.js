@@ -84,27 +84,32 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 0) {
             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
                 $('#editor').val(val);
-            } else {
-                if (mapAttr.MyDataType == 8 && val != "") {
-                    //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
-                    var attrdefVal = mapAttr.DefVal;
-                    var bit;
-                    if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
-                        bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
-                    else
-                        bit = 2;
-                    if (bit == 2)
-                        val = formatNumber(val, 2, ",");
-                }
-                if (mapAttr.IsSupperText == 1) {
-                    if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7)
-                        $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
-                    else
-                        $('#TB_' + mapAttr.KeyOfEn).html(val);
-                }  else
-                    $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
-                $('#TB_' + mapAttr.KeyOfEn).val(val);
+                continue;
             }
+            if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+                $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
+                continue;
+            }
+
+            if (mapAttr.IsSupperText == 1) {
+                $('#TB_' + mapAttr.KeyOfEn).html(val);
+                continue;
+            }
+
+            if (mapAttr.MyDataType == 8 && val != "") {
+                //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+                var attrdefVal = mapAttr.DefVal;
+                var bit;
+                if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+                    bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+                else
+                    bit = 2;
+                if (bit == 2)
+                    val = formatNumber(val, 2, ",");
+            }
+
+            $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
+            $('#TB_' + mapAttr.KeyOfEn).val(val);
             continue;
         }
 
@@ -681,7 +686,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         $('#TB_' + EndRDT).val("");
                     $('#TB_' + ResRDT).val(res);
                 });
- 
+
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
 
@@ -753,7 +758,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
                 //动态加载转大写的js
-                if (location.href.indexOf("CCForm")>0) {
+                if (location.href.indexOf("CCForm") > 0) {
 
                     Skip.addJs("../Data/JSLibData/CovertMoneyToDaXie.js");
                 } else if (location.href.indexOf("CCBill") > 0) {
@@ -766,7 +771,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 var tbDoc = $('#TB_' + mapExt.AttrOfOper);
                 var tb = $('#TB_' + mapExt.Doc);
                 tbDoc.bind("change", function () {
-                    var expVal = $("#"+this.id).val();//获取要转换的值
+                    var expVal = $("#" + this.id).val();//获取要转换的值
                     tb.val(Rmb2DaXie(expVal));//给大写的文本框赋值
                 });
                 var expVal = tbDoc.val();//获取要转换的值
@@ -857,7 +862,7 @@ function AfterBindEn_DealMapExt(frmData) {
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                                 WdatePicker({ dateFmt: dateFmt, minDate: minDate });
                             });
-                            
+
                         } else {
                             $('#TB_' + mapExt.AttrOfOper).unbind("focus");
                             var bindFunctionExt = new Entity("BP.Sys.MapExt", functionPK);
@@ -894,7 +899,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         } else if (frmDate == 6) {
                             dateFmt = "MM-dd";
                         }
-                        var RDTVal="";
+                        var RDTVal = "";
                         //根据选择的条件进行日期限制
                         switch (mapExt.Tag3) {
                             case "dayu":
@@ -950,7 +955,7 @@ function AfterBindEn_DealMapExt(frmData) {
 }
 //計算日期間隔
 function CalculateRDT(StarRDT, EndRDT, RDTRadio) {
-    
+
     var res = "";
     var demoRDT;
     demoRDT = StarRDT.split("-");

@@ -768,9 +768,9 @@ function OptSuc(msg) {
 
 function clock() {
     
-    TimeNum >= 0 ? TimeNum-- : clearInterval(interval);
-    $("#btnMsgModalOK").html("确定(" + TimeNum + "秒)");
-    if (TimeNum == 0)
+    WF_WorkOpt_LeftSecond >= 0 ? WF_WorkOpt_LeftSecond-- : clearInterval(interval);
+    $("#btnMsgModalOK").html("确定(" + WF_WorkOpt_LeftSecond + "秒)");
+    if (WF_WorkOpt_LeftSecond == 0)
         closeWindow();
 }
 

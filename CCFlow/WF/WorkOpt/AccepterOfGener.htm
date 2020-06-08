@@ -85,8 +85,8 @@
         var selectEmp = "";
         var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
         //判断读秒关闭的参数是否存在
-        if ("undefined" == typeof TimeNum) {
-            var TimeNum = 30;
+        if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
+            var WF_WorkOpt_LeftSecond = 30;
         }
         $(function () {
 
@@ -391,9 +391,9 @@
            
             if ($("#CloseBtn").length == 0)
                 return;
-            TimeNum >= 0 ? TimeNum-- : clearInterval(int);
-            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + TimeNum + "秒)");
-            if (TimeNum == 0)
+            WF_WorkOpt_LeftSecond >= 0 ? WF_WorkOpt_LeftSecond-- : clearInterval(int);
+            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + WF_WorkOpt_LeftSecond + "秒)");
+            if (WF_WorkOpt_LeftSecond == 0)
                 CloseAll();
         }
 

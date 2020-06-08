@@ -367,7 +367,7 @@ function Save(saveType) {
 
     //保存前事件
     if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
-        if (beforeSave() == false)
+        if (beforeSave(saveType) == false)
             return false;
 
     //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。

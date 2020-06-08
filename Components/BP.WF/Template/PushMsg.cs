@@ -1035,6 +1035,7 @@ namespace BP.WF.Template
                 {
                     /*如果向接受人发送消息.*/
                     toEmpIDs = objs.VarAcceptersID;
+                    string toEmpNames = objs.VarAcceptersName;
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string empNo in emps)
                     {
@@ -1048,7 +1049,7 @@ namespace BP.WF.Template
                         BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel,null, atParas);
 
                     }
-                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
+                    return "@已向:{" + toEmpNames + "}发送提醒信息.";
                 }
                 #endregion 节点发送成功后
 

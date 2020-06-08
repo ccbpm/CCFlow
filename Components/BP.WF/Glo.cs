@@ -23,6 +23,11 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
+        #region 新建节点-流程-默认值.
+
+        #endregion 默认值.
+
+
         /// <summary>
         /// 删除垃圾数据
         /// </summary>
@@ -74,36 +79,17 @@ namespace BP.WF
             }
         }
 
-        #region 获取[新建流程]默认值.
+        #region 获取[新建-节点-流程]默认值.
         /// <summary>
-        /// 默认值配置
+        /// 新建节点的审核意见默认值.
         /// </summary>
-        /// <param name="field">字段</param>
-        /// <param name="defval">默认值</param>
-        /// <returns></returns>
-        public static string DefValString(string field, string defval)
+        public static string DefVal_WF_Node_FWCDefInfo
         {
-            return SystemConfig.GetValByKey(field, defval);
-        }
-        /// <summary>
-        /// 默认值配置
-        /// </summary>
-        /// <param name="field">字段</param>
-        /// <param name="defval">默认值</param>
-        /// <returns></returns>
-        public static int DefValInt(string field, int defval)
-        {
-            return SystemConfig.GetValByKeyInt(field, defval);
-        }
-        /// <summary>
-        /// 获得默认值
-        /// </summary>
-        /// <param name="field"></param>
-        /// <param name="defval"></param>
-        /// <returns></returns>
-        public static bool DefValBoolen(string field, bool defval)
-        {
-            return SystemConfig.GetValByKeyBoolen(field, defval);
+            get
+            {
+                return SystemConfig.GetValByKey("DefVal_WF_Node_FWCDefInfo",
+                    "同意");
+            }
         }
         #endregion 获取[新建流程]默认值.
 

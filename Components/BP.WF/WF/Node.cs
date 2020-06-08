@@ -2779,6 +2779,7 @@ namespace BP.WF
                 map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
                 map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
+                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, null, "默认意见", true, false, 0, 100, 10);
                 #endregion 审核组件.
 
                 #region 考核属性.

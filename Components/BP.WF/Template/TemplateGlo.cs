@@ -16,6 +16,125 @@ namespace BP.WF.Template
     /// </summary>
     public class TemplateGlo
     {
+        public static Node NewNode(string flowNo, int x, int y, string icon = null)
+        {
+            Flow flow = new Flow(flowNo);
+
+            Node nd = new Node();
+            int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHRER FK_Flow='"+flowNo+"'",0);
+            if (idx == 0)
+                idx++;
+
+            var nodeID = 0;
+            //设置节点ID.
+            while (true)
+            {
+                string strID = flowNo + idx.ToString().PadLeft(2, '0');
+                nd.NodeID = int.Parse(strID);
+                if (nd.IsExits == false)
+                    break;
+                idx++;
+            }
+            nodeID = nd.NodeID;
+
+            //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+            nd.CondModel = DirCondModel.SendButtonSileSelect; //默认的发送方向.
+            nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
+            nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+            nd.FK_Flow = flowNo;
+
+            nd.Insert();
+
+            //为创建节点设置默认值  @sly 部分方法
+            string file = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
+            DataSet ds = new DataSet();
+            if (System.IO.File.Exists(file) == true)
+            {
+                ds.ReadXml(file);
+
+                NodeExt ndExt = new NodeExt(nd.NodeID);
+                DataTable dt = ds.Tables[0];
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                    ndExt.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                }
+
+                ndExt.FK_Flow =flowNo;
+                ndExt.NodeID = nodeID;
+                ndExt.DirectUpdate();
+            }
+            nd.FWCVer = 1;
+            nd.NodeID = nodeID;
+
+            nd.X = x;
+            nd.Y = y;
+            nd.ICON = icon;
+            nd.Step = idx;
+
+            //节点类型.
+            nd.HisNodeWorkType = NodeWorkType.Work;
+            nd.Name = "New Node " + idx;
+            nd.HisNodePosType = NodePosType.Mid;
+            nd.FK_Flow = flow.No;
+            nd.FlowName = flow.Name;
+
+            //设置审核意见的默认值.
+            nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,
+                BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
+
+            nd.Update(); //执行更新. @sly
+            nd.CreateMap();
+
+            //通用的人员选择器.
+            BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
+            select.SelectorModel = SelectorModel.GenerUserSelecter;
+            select.Update();
+
+            //设置默认值。
+
+            //设置审核组件的高度
+            DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
+
+            //创建默认的推送消息.
+            CreatePushMsg(nd);
+
+            return nd;
+        }
+        private static void CreatePushMsg(Node nd)
+        {
+            /*创建发送短消息,为默认的消息.*/
+            BP.WF.Template.PushMsg pm = new BP.WF.Template.PushMsg();
+            int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.SendSuccess,
+                PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
+            if (i == 0)
+            {
+                pm.FK_Event = EventListOfNode.SendSuccess;
+                pm.FK_Node = nd.NodeID;
+                pm.FK_Flow = nd.FK_Flow;
+
+                pm.SMSPushWay = 1;  // 发送短消息.
+                pm.SMSPushModel = "Email";
+                pm.MyPK = DBAccess.GenerGUID();
+                pm.Insert();
+            }
+
+            //设置退回消息提醒.
+            i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter,
+                 PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
+            if (i == 0)
+            {
+                pm.FK_Event = EventListOfNode.ReturnAfter;
+                pm.FK_Node = nd.NodeID;
+                pm.FK_Flow = nd.FK_Flow;
+
+                pm.SMSPushWay = 1;  // 发送短消息.
+                pm.MailPushWay = 0; //不发送邮件消息.
+                pm.MyPK = DBAccess.GenerGUID();
+                pm.Insert();
+            }
+        }
+
         /// <summary>
         /// 创建一个流程模版
         /// </summary>
@@ -109,7 +228,7 @@ namespace BP.WF.Template
                 BP.DA.DBAccess.RunSQL(sql);
 
                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
-                flow.CreatePushMsg(nd);
+                CreatePushMsg(nd);
 
                 //通用的人员选择器.
                 BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
@@ -156,10 +275,13 @@ namespace BP.WF.Template
                 nd.X = 200;
                 nd.Y = 250;
 
+                //设置审核意见的默认值.
+                nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
+
                 nd.Insert();
                 nd.CreateMap();
                 //nd.HisWork.CheckPhysicsTable(); //去掉，检查的时候会执行.
-                flow.CreatePushMsg(nd);
+                CreatePushMsg(nd);
 
                 //通用的人员选择器.
                 select = new Template.Selector(nd.NodeID);
@@ -228,24 +350,9 @@ namespace BP.WF.Template
                 flow.SetValByKey(key.Replace("NewFlowDefVal_",""), val);
             }
 
-
             //执行一次流程检查, 为了节省效率，把检查去掉了.
             flow.DoCheck();
-            
             return flow.No;
-        }
-        /// <summary>
-        /// 创建一个节点
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="x">位置x</param>
-        /// <param name="y">位置y</param>
-        /// <returns>新的节点ID</returns>
-        public static Node NewNode(string flowNo, int x, int y, string icon = null)
-        {
-            BP.WF.Flow fl = new WF.Flow(flowNo);
-            BP.WF.Node nd = fl.DoNewNode(x, y, icon);
-            return nd;
         }
         /// <summary>
         /// 删除节点.

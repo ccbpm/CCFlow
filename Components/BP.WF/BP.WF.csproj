@@ -223,6 +223,7 @@
     <Compile Include="DTS\GenerDeptTree.cs" />
     <Compile Include="Frm\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
+    <Compile Include="GloDefVal.cs" />
     <Compile Include="GloSQL.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

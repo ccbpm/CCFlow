@@ -77,7 +77,8 @@ $(function () {
                 if (beforeReturn() == false)
                     return false;
 
-            if (Save() == false) return;
+            if (Save() == false)
+                return;
             initModal("returnBack");
             $('#returnWorkModal').modal().show();
         });
@@ -245,8 +246,15 @@ function initModal(modalType, toNode,url) {
                 //按百分比自适应
                 SetPageSize(50, 60);
                 var node = new Entity("BP.WF.Template.NodeExt", paramData.FK_Node);
+
                 var info = "";
-                if (node.ReturnField != "") {
+                if (node.ReturnField == "")
+                {
+                    if ($("#WorkCheck_Doc").length == 1)
+                        info = $("#WorkCheck_Doc").val();
+                }
+
+                if (info=="" && node.ReturnField != "") {
                     if ($("#" + node.ReturnField).length == 1)
                         info = $("#" + node.ReturnField).val();
                     if (info == undefined && $("#TB_" + node.ReturnField).length == 1)

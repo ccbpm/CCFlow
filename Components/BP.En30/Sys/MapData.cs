@@ -2595,7 +2595,6 @@ namespace BP.Sys
             #region 删除相关的数据。
             sql = "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmLine WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_FrmEle WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmEvent WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmBtn WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmLab WHERE " + whereFK_MapData;

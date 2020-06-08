@@ -758,7 +758,7 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
 
                 map.AddTBString(NodeWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
-                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
+                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "", "默认审核信息", true, false, 0, 50, 10);
                 map.AddBoolean(NodeWorkCheckAttr.SigantureEnabel, false, "操作人是否显示为图片签名？", true, true);
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 

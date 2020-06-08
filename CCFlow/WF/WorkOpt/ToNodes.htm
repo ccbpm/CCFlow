@@ -11,6 +11,7 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <link rel="Stylesheet" href="../../DataUser/Style/ccbpm.css" />
     <style type="text/css">
         label {
@@ -19,6 +20,19 @@
             margin-bottom: 0px;
             font-weight: normal;
         }
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+        button:hover {
+            background: #f5f5f5 !important;
+            color: #000;
+            border: 1px solid #ccc !important;
+        }
     </style>
     <script type="text/javascript">
         var WorkID;
@@ -26,6 +40,10 @@
         var FK_Node;
         var FID;
         var toNodeID = 0;//当前选中的节点
+         //判断读秒关闭的参数是否存在
+        if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
+            var WF_WorkOpt_LeftSecond = 30;
+        }
         //初始化数据
         $(function () {
             WorkID = GetQueryString("WorkID");
@@ -258,7 +276,7 @@
             data = data.replace(/null/g, '');
             data = data.replace("<br><br/><br/>", '');
 
-            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'><input id='CloseBtn' type='button' value='    关    闭(30秒)    ' onclick='CloseAll();'  /></div>";
+            data += " <div style='text-align:right;margin-right:10px;margin-bottom:10px'><button id='CloseBtn' type='button'  onclick='CloseAll();'><img src='../Img/Btn/Close.png' />关 闭(30秒)</button></div>";
             $(".Msg").show();
             $(".Msg").html(data);
             $("#Div_ToNode").hide();
@@ -267,12 +285,20 @@
       
 
         function clock() {
+
             if ($("#CloseBtn").length == 0)
                 return;
-            num >= 0 ? num-- : clearInterval(int);
-            $("#CloseBtn").attr("value", "关    闭(" + num + "秒)");
-            if (num == 0)
+            WF_WorkOpt_LeftSecond >= 0 ? WF_WorkOpt_LeftSecond-- : clearInterval(int);
+            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + WF_WorkOpt_LeftSecond + "秒)");
+            if (WF_WorkOpt_LeftSecond == 0)
                 CloseAll();
+
+            //if ($("#CloseBtn").length == 0)
+            //    return;
+            //num >= 0 ? num-- : clearInterval(int);
+            //$("#CloseBtn").attr("value", "关    闭(" + num + "秒)");
+            //if (num == 0)
+            //    CloseAll();
         }
 
 
@@ -322,8 +348,16 @@
             <div id="TableNode" style="width:100%;"></div>
 
             <br />
-            <input type=button id="Btn_Send" onclick="Send();" value="发送" />
-            <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />
+            <!--<input type=button id="Btn_Send" onclick="Send();" value="发送" />
+            <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />-->
+
+            <button type=button onclick="Send();" id="Btn_Send">
+                <img src="../Img/Btn/Send.png" /> 发送
+            </button>
+
+            <button type=button onclick="Cancel();" id="Btn_Cancel">
+                <img src="../Img/Btn/cancel_dafalut.png" /> 取消/返回
+            </button>
         </fieldset>
 
     </div>
@@ -349,7 +383,7 @@
                     </div>
                     <div style="text-align: right;">
                         <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">
-                            确定
+                            <img src="../Img/Btn/Confirm.png" />确定
                         </button>
                     </div>
                 </div>

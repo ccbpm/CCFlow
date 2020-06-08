@@ -4459,19 +4459,25 @@ namespace BP.WF
         /// <param name="workId"></param>
         /// <param name="nodeFrom"></param>
         /// <returns></returns>
-        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom)
+        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom,string isNullAsVal = null)
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
-                return BP.WF.Glo.DefVal_WF_Node_FWCDefInfo;
+                if (isNullAsVal == null)
+                    return BP.WF.Glo.DefVal_WF_Node_FWCDefInfo;
+                else
+                    return isNullAsVal;
             }
             string checkinfo = dt.Rows[0][0].ToString();
             if (DataType.IsNullOrEmpty(checkinfo))
             {
-                return BP.WF.Glo.DefVal_WF_Node_FWCDefInfo;
+                if (isNullAsVal == null)
+                    return BP.WF.Glo.DefVal_WF_Node_FWCDefInfo;
+                else
+                    return isNullAsVal;
             }
 
             return checkinfo;

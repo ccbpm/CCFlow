@@ -366,7 +366,7 @@ function Save(saveType) {
     }
 
     //保存前事件
-    if (typeof beforeSave != 'undefined' && beforeSave instanceof Function)
+    if (typeof beforeSave != 'undefined' && beforeSave(saveType) instanceof Function)
         if (beforeSave(saveType) == false)
             return false;
 
@@ -398,8 +398,8 @@ function Save(saveType) {
     }
 
     if (formCheckResult == false) {
-      // alert("请检查表单必填项和正则表达式");
-       alert("请检查表单必填项");
+       // alert("请检查表单必填项和正则表达式");
+        alert("请检查表单必填项"); 
         return false;
     }
 

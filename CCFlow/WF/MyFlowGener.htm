@@ -139,6 +139,12 @@
                 }
             };
         }
+
+        //判断读秒关闭的参数是否存在
+        if ("undefined" == typeof TimeNum) {
+            var TimeNum = 30;
+        }
+
         //设置页面配色方案
         function SettingTheme(theme) {
             //把客户选择的色系保存WF_Emp中
@@ -150,8 +156,6 @@
             }
 
         }
-
-
     </script>
 
     <style type="text/css">

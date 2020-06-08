@@ -756,11 +756,13 @@ function OptSuc(msg) {
     interval = setInterval("clock()", 1000);
 }
 
-var num = 30;
+//var num = 30;
+
 function clock() {
-    num >= 0 ? num-- : clearInterval(interval);
-    $("#btnMsgModalOK").html("确定(" + num + "秒)");
-    if (num == 0)
+    
+    TimeNum >= 0 ? TimeNum-- : clearInterval(interval);
+    $("#btnMsgModalOK").html("确定(" + TimeNum + "秒)");
+    if (TimeNum == 0)
         closeWindow();
 }
 

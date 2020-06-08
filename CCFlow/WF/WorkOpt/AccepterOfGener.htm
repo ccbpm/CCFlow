@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
-
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
 
@@ -84,6 +84,10 @@
         var isSigleSelect = false;
         var selectEmp = "";
         var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
+        //判断读秒关闭的参数是否存在
+        if ("undefined" == typeof TimeNum) {
+            var TimeNum = 30;
+        }
         $(function () {
 
             if (IsSend == null || IsSend == undefined || IsSend == "")
@@ -364,7 +368,7 @@
             //隐藏table.
             document.getElementById("Table1").style.display = "none";
             document.getElementById("TB_Emps").style.display = "none";
-            document.getElementById("Btn_SelectEmps").style.display = "none";
+            //document.getElementById("Btn_SelectEmps").style.display = "none";
 
             var ctrl = document.getElementById("Btn_Send");
             if (ctrl != null)
@@ -377,14 +381,19 @@
             ctrl = document.getElementById("Btn_Close");
             if (ctrl != null)
                 ctrl.style.display = "none";
+
+            ctrl = document.getElementById("Btn_SelectEmps");
+            if (ctrl != null)
+                ctrl.style.display = "none";
         }
-        var num = 30;
+        //var num = 30;
         function clock() {
+           
             if ($("#CloseBtn").length == 0)
                 return;
-            num >= 0 ? num-- : clearInterval(int);
-            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + num + "秒)");
-            if (num == 0)
+            TimeNum >= 0 ? TimeNum-- : clearInterval(int);
+            $("#CloseBtn").html("<img src='../Img/Btn/Close.png' />关  闭(" + TimeNum + "秒)");
+            if (TimeNum == 0)
                 CloseAll();
         }
 

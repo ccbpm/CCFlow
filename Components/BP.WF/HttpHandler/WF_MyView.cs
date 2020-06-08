@@ -460,6 +460,14 @@ namespace BP.WF.HttpHandler
         {
             //获得注册实体.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.WFState == WFState.Delete)
+                return "err@当前流程已经删除无法查看.";
+
+            if (gwf.WFState == WFState.Blank)
+                return "err@当前流程还没有启动.";
+
+            if (gwf.WFState == WFState.Draft)
+                return "err@当前流程还是草稿.";
 
             //是否可以处理当前工作？
             bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");

@@ -96,9 +96,12 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     if (bit == 2)
                         val = formatNumber(val, 2, ",");
                 }
-                if (mapAttr.IsSupperText == 1)
-                    $('#TB_' + mapAttr.KeyOfEn).html(val);
-                else
+                if (mapAttr.IsSupperText == 1) {
+                    if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7)
+                        $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
+                    else
+                        $('#TB_' + mapAttr.KeyOfEn).html(val);
+                }  else
                     $('#TB_' + mapAttr.KeyOfEn).attr("value", val);
                 $('#TB_' + mapAttr.KeyOfEn).val(val);
             }

@@ -505,7 +505,7 @@ function Send(isHuiQian,formType) {
     /**发送前处理的信息 End**/
     var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
     if (nd.CondModel == 1) {
-        var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&s=" + Math.random();
+        var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") +"&IsSend=0"+ "&s=" + Math.random();
        
         initModal("SelectNodeUrl", null, url); $('#returnWorkModal').modal().show();
         return;

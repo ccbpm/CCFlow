@@ -2741,15 +2741,15 @@ namespace BP.WF
                 sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitPublicData.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
             }
-            else
-            {
-                FlowSort fs = new FlowSort();
-                fs.No = "1";
-                fs.ParentNo = "0";
-                fs.Name = "流程树";
-                fs.DirectInsert();
+            // else
+            // {
+                // FlowSort fs = new FlowSort();
+                // fs.No = "1";
+                // fs.ParentNo = "0";
+                // fs.Name = "流程树";
+                // fs.DirectInsert();
 
-            }
+            // }
             #endregion 初始化数据
 
             #region 6, 生成临时的 wf_emp 数据。

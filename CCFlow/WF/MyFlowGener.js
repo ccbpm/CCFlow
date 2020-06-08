@@ -398,7 +398,7 @@ function Save(saveType) {
     }
 
     if (formCheckResult == false) {
-        //alert("请检查表单必填项和正则表达式");
+       alert("请检查表单必填项和正则表达式");
         return false;
     }
 

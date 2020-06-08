@@ -2042,6 +2042,25 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 #endregion 增加按钮旁的下拉框
+
+                #region 当前节点的流程信息
+
+                dt = nd.ToDataTableField("WF_Node");
+                dt.Columns.Add("IsBackTrack", typeof(int));
+                dt.Rows[0]["IsBackTrack"] = 0;
+                if (gwf.WFState == WFState.ReturnSta)
+                {
+                    //当前节点是退回状态，是否原路返回
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
+                    DataTable mydt = DBAccess.RunSQLReturnTable(ps);
+                    //说明退回并原路返回
+                    if (mydt.Rows.Count > 0)
+                        dt.Rows[0]["IsBackTrack"] = 1;
+                }
+                ds.Tables.Add(dt);
+                #endregion 
             }
             catch (Exception ex)
             {

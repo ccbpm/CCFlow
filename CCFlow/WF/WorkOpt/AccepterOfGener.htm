@@ -413,7 +413,7 @@
         function CloseModel() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 //获取接收人,作用于toNodes.htm页面
-                if (selectEmp != "" && IsSend == "1") {
+                if (selectEmp != "" && IsSend == "0") {
                     selectEmp = selectEmp.substring(0, selectEmp.length - 1);
                     window.parent.returnWorkWindowClose(selectEmp);
                 } else {

@@ -103,7 +103,7 @@
 
                 newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
 
-                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
 
@@ -185,7 +185,7 @@
         }
 
         //删除.
-        function Del(no, SrcType) {
+        function Del(no,name, SrcType) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
@@ -193,19 +193,18 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("FK_SFTable", no);
             var data = handler.DoMethodReturnString("SFList_Delete");
-
-            //删除系统字典表
-            if (SrcType == 7) {
-                var en = new Entity("BP.Sys.Dict", no);
-                en.Delete();
-                var ens = new Entities("BP.Sys.DictDtls");
-                ens.Delete("DictID",no);
-
-            }
             if (data.indexOf('err@') >= 0) {
                 alert(data);
                 return;
             }
+            //删除系统字典表
+            if (SrcType == 7) {
+                
+                var ens = new Entities("BP.Sys.DictDtls");
+                ens.Delete("FK_SFTable",no);
+
+            }
+            
             alert(data);
             window.location.href = window.location.href; //刷新页面.
         }

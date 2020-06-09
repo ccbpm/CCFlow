@@ -354,6 +354,10 @@ namespace BP.WF.Template
             {
                 return this.GetValStringByKey(BtnAttr.SendLab);
             }
+            set
+            {
+                this.SetValByKey(BtnAttr.SendLab, value);
+            }
         }
         /// <summary>
         /// 是否启用发送?

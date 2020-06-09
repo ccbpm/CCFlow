@@ -562,6 +562,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\RememberMe.cs" />
+    <Compile Include="WF\WorkNodePlus.cs" />
     <Compile Include="WF\WorkReturn.cs" />
     <Compile Include="WF\WorkUnSend.cs" />
     <Compile Include="WF\WorkFlowDeleteLog.cs" />

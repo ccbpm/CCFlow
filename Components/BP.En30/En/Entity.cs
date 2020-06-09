@@ -3534,6 +3534,12 @@ namespace BP.En
             if (this._enMap.IsView)
                 return;
 
+            //检查是否有对应的主键.
+            string pk = this.PK;
+            if (pk.Contains(",")==false)
+                if (this.EnMap.Attrs.Contains(pk) == false)
+                    throw new Exception("err@Entity" + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【"+ pk + "】但是没有"+ pk + "的属性.");
+
             DBType dbtype = this._enMap.EnDBUrl.DBType;
 
             // 如果不是主应用程序的数据库就不让执行检查. 考虑第三方的系统的安全问题.

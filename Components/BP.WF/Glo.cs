@@ -1194,7 +1194,7 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_Cond SET Idx=PRI ");
                 DBAccess.DropTableColumn("WF_Cond", "PRI");
             }
-           
+
 
             //--2020.05.25 修改节点自定义按钮功能;
             BP.WF.Template.NodeToolbar bar = new NodeToolbar();
@@ -2742,11 +2742,11 @@ namespace BP.WF
             }
             // else
             // {
-                // FlowSort fs = new FlowSort();
-                // fs.No = "1";
-                // fs.ParentNo = "0";
-                // fs.Name = "流程树";
-                // fs.DirectInsert();
+            // FlowSort fs = new FlowSort();
+            // fs.No = "1";
+            // fs.ParentNo = "0";
+            // fs.Name = "流程树";
+            // fs.DirectInsert();
 
             // }
             #endregion 初始化数据
@@ -6186,7 +6186,7 @@ namespace BP.WF
         /// 删除临时文件
         /// </summary>
         public static void DeleteTempFiles()
-      {
+        {
             try
             {
                 //删除目录.
@@ -6233,7 +6233,17 @@ namespace BP.WF
                     ctrlWayId = pkval;
             }
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            {
+                if (pworkid == 0)
+                {
+                    pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM wf_generworkflow WHERE WorkID=" + pkval, 0);
+                    if (pworkid == 0)
+                        throw new Exception("err@当前的附件数据显示控制权限按照PWorkID计算,没有接收到PWorkID!=0");
+                }
+
                 ctrlWayId = pworkid.ToString();
+            }
+
             if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                 ctrlWayId = fid.ToString();
             if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
@@ -6297,7 +6307,7 @@ namespace BP.WF
                 return dbs;
             }
 
-           
+
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {

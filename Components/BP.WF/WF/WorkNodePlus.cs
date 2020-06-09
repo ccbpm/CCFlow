@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using BP.En;
+using BP.DA;
+using System.Collections;
 using System.Data;
-using System.Text;
-using System.Threading.Tasks;
-using BP.WF;
 using BP.Port;
 using BP.Web;
-using BP.DA;
-
+using BP.Sys;
+using BP.WF.Template;
+using BP.WF.Data;
 namespace BP.WF
 {
     /// <summary>
@@ -52,8 +52,16 @@ namespace BP.WF
                 }
             }
 
+            //按照岗位删除.
             if (nd.GenerWorkerListDelRole == 2)
+            {
+                NodeStations nss = new NodeStations();
+                nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
+                if (nss.Count==0)
+
+
                 throw new Exception("err@尚未解析.");
+            }
 
         }
 

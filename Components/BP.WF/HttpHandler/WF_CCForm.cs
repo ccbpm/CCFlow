@@ -4786,7 +4786,6 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理权限方案。
 
-
             return athDesc;
         }
         /// <summary>

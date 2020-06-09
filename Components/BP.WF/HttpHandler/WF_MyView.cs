@@ -470,7 +470,7 @@ namespace BP.WF.HttpHandler
                 return "err@当前流程还是草稿.";
 
             //是否可以处理当前工作？
-            bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
+            bool isCanDoCurrWorker = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
 
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
             if (gwf.WFState != WFState.Complete && isCanDoCurrWorker == true)

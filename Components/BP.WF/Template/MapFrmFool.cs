@@ -101,7 +101,8 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 //uac.OpenForSysAdmin();
-                uac.OpenForAdmin();//2020.5.15修改
+                uac.OpenForAdmin();//2020.5.15修改.
+                uac.IsInsert = false;
                 return uac;
             }
         }

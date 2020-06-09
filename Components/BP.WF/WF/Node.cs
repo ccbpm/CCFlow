@@ -47,6 +47,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 待办删除规则
+        /// </summary>
+        public int GenerWorkerListDelRole
+        {
+            get
+            {
+                return this.GetParaInt("GenerWorkerListDelRole",0);
+            }
+            set
+            {
+                this.SetPara("GenerWorkerListDelRole", value);
+            }
+        }
+        /// <summary>
         /// 超时处理内容.
         /// </summary>
         public string DoOutTime

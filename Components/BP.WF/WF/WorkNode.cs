@@ -1078,7 +1078,6 @@ namespace BP.WF
         private Node JumpToNode = null;
         private string JumpToEmp = null;
 
-
         #region NodeSend 的附属功能.
         /// <summary>
         /// 获得下一个节点.
@@ -6479,6 +6478,11 @@ namespace BP.WF
             //如果是协作模式节点, 就判断当前的队列人员是否走完.
             if (this.TodolistModel == TodolistModel.Teamup)
             {
+                //判断删除其他人员待办的规则.
+                if  (this.HisNode.GenerWorkerListDelRole!=0)
+                    WorkNodePlus.GenerWorkerListDelRole(this.HisNode, this.HisGenerWorkFlow);
+
+
                 // @fanleiwei ,增加了此部分.
                 string todoEmps = this.HisGenerWorkFlow.TodoEmps;
                 todoEmps = todoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "");

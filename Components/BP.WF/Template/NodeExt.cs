@@ -741,8 +741,12 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-
-
+                rm = new RefMethod();
+                rm.Title = "待办删除规则";
+                rm.ClassMethodName = this.ToString() + ".DoGenerWorkerListDelRole";
+                //rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）
@@ -1044,6 +1048,14 @@ namespace BP.WF.Template
         #endregion 考核规则.
 
         #region 基础设置.
+        /// <summary>
+        /// 待办删除规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoGenerWorkerListDelRole()
+        {
+            return "../../Admin/AttrNode/GenerWorkerListDelRole.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+        }
         /// <summary>
         /// 多人处理规则.
         /// </summary>

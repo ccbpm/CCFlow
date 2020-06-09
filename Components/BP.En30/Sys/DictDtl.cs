@@ -153,7 +153,7 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-                //DictMyPK+"_"+BH
+                //FK_SFTable+"_"+BH
                 map.AddMyPK();
 
                 map.AddTBString(DictDtlAttr.FK_SFTable, null, "外键表ID", true, false, 0, 200, 20);

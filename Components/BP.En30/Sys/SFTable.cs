@@ -391,7 +391,7 @@ namespace BP.Sys
 
             if (this.SrcType == Sys.SrcType.SysDict)
             {
-                string sql = "SELECT MyPK, BH, Name FROM Sys_DictDtl where DictMyPK='" + this.No+"'";
+                string sql = "SELECT MyPK, BH, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No+"'";
                 return src.RunSQLReturnTable(sql);
             }
             #endregion
@@ -407,7 +407,7 @@ namespace BP.Sys
         {
             var sql = "";
             if (this.SrcType == Sys.SrcType.SysDict)
-                sql = "update Sys_DictDtl set Name = '" + Name + "' where MyPK='"+ FK_SFTable + "_" + No + "'";
+                sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='"+ FK_SFTable + "_" + No + "'";
             else
                 sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
             DBAccess.RunSQL(sql);
@@ -420,7 +420,7 @@ namespace BP.Sys
         {
             var sql = "";
             if (this.SrcType == Sys.SrcType.SysDict)
-                sql = "insert into  Sys_DictDtl(MyPK,DictMyPK,BH,Name) values('" + FK_SFTable+"_"+ No +"','" + FK_SFTable + "','"+ No + "','"+ Name + "')";
+                sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable+"_"+ No +"','" + FK_SFTable + "','"+ No + "','"+ Name + "')";
             else
                 sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
             DBAccess.RunSQL(sql);
@@ -433,7 +433,7 @@ namespace BP.Sys
         {
             var sql = "";
             if (this.SrcType == Sys.SrcType.SysDict)
-                sql = "delete from Sys_DictDtl where MyPK='" + FK_SFTable + "_" + No + "'";
+                sql = "delete from Sys_SFTableDtl where MyPK='" + FK_SFTable + "_" + No + "'";
             else
                 sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
             DBAccess.RunSQL(sql);
@@ -466,22 +466,22 @@ namespace BP.Sys
                         switch (this.EnMap.EnDBUrl.DBType)
                         {
                             case DBType.MSSQL:
-                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_DictDtl where DictMyPK='" + table+"'";
+                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table+"'";
                                 break;
                             case DBType.PostgreSQL:
-                                sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Oracle:
-                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.MySQL:
-                                sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Informix:
-                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Access:
-                                sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM Sys_DictDtl where DictMyPK='" + table + "'";
+                                sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             default:
                                 throw new Exception("error");

@@ -262,53 +262,57 @@ namespace BP.Sys.FrmUI
                 mapAttr.MyDataType = DataType.AppString;
                 MapData mapData = new MapData(this.FK_MapData);
                 GEEntity en = new GEEntity(this.FK_MapData);
-               
-                switch(SystemConfig.AppCenterDBType)
+
+                if(DBAccess.IsExitsTableCol(en.EnMap.PhysicsTable, this.KeyOfEn) == true)
                 {
-                    case DBType.MSSQL:
-                    //先检查是否存在约束
-                    string sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + en.EnMap.PhysicsTable + "') ";
-                    DataTable dtYueShu = DBAccess.RunSQLReturnTable(sqlYueShu);
-                    foreach (DataRow dr in dtYueShu.Rows)
+                    switch (SystemConfig.AppCenterDBType)
                     {
-                        if (dr["FName"].ToString().ToLower() == this.KeyOfEn.ToLower())
+                        case DBType.MSSQL:
+                            //先检查是否存在约束
+                            string sqlYueShu = "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + en.EnMap.PhysicsTable + "') ";
+                            DataTable dtYueShu = DBAccess.RunSQLReturnTable(sqlYueShu);
+                            foreach (DataRow dr in dtYueShu.Rows)
                             {
-                                DBAccess.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " drop constraint " + dr[0].ToString());
-                                break;
+                                if (dr["FName"].ToString().ToLower() == this.KeyOfEn.ToLower())
+                                {
+                                    DBAccess.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " drop constraint " + dr[0].ToString());
+                                    break;
+                                }
+
                             }
-                            
+                            this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " VARCHAR(20)");
+                            break;
+                        case DBType.Oracle:
+                            //判断数据库当前字段的类型
+                            string sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + en.EnMap.PhysicsTable.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + this.KeyOfEn.ToUpper() + "' ";
+                            string val = DBAccess.RunSQLReturnString(sql);
+                            if (val == null)
+                                Log.DefaultLogWriteLineError("@没有检测到字段eunm" + this.KeyOfEn);
+                            if (val.IndexOf("NUMBER") != -1)
+                            {
+                                this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " RENAME COLUMN " + this.KeyOfEn + " TO " + this.KeyOfEn + "_tmp");
+
+                                /*增加一个和原字段名同名的字段name*/
+                                this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ADD " + this.KeyOfEn + " varchar2(20)");
+
+                                /*将原字段name_tmp数据更新到增加的字段name*/
+                                this.RunSQL("UPDATE " + en.EnMap.PhysicsTable + " SET " + this.KeyOfEn + "= trim(" + this.KeyOfEn + "_tmp)");
+
+                                /*更新完，删除原字段name_tmp*/
+                                this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " DROP COLUMN " + this.KeyOfEn + "_tmp");
+
+                                //this.RunSQL(sql);
+                            }
+                            break;
+                        case DBType.MySQL:
+                            this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " modify " + this.KeyOfEn + " NVARCHAR(20)");
+                            break;
+                        case DBType.PostgreSQL:
+                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " type character varying(20)");
+                            break;
                     }
-                    this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " VARCHAR(20)");
-                        break;
-                    case DBType.Oracle:
-                        //判断数据库当前字段的类型
-                        string sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + en.EnMap.PhysicsTable.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + this.KeyOfEn.ToUpper() + "' ";
-                        string val = DBAccess.RunSQLReturnString(sql);
-                        if (val == null)
-                            Log.DefaultLogWriteLineError("@没有检测到字段eunm" + this.KeyOfEn);
-                        if (val.IndexOf("NUMBER") != -1)
-                        {
-                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable+" RENAME COLUMN "+ this.KeyOfEn+" TO " + this.KeyOfEn+"_tmp");
-
-                            /*增加一个和原字段名同名的字段name*/
-                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ADD " + this.KeyOfEn + " varchar2(20)");
-
-                            /*将原字段name_tmp数据更新到增加的字段name*/
-                            this.RunSQL("UPDATE " + en.EnMap.PhysicsTable+" SET "+ this.KeyOfEn +"= trim(" + this.KeyOfEn + "_tmp)");
-
-                            /*更新完，删除原字段name_tmp*/
-                            this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable+" DROP COLUMN "+ this.KeyOfEn+"_tmp");
-
-                            //this.RunSQL(sql);
-                        }
-                        break;
-                    case DBType.MySQL:
-                        this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " modify " + this.KeyOfEn + " NVARCHAR(20)");
-                        break;
-                    case DBType.PostgreSQL:
-                        this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " type character varying(20)");
-                        break;
-                }   
+                }
+               
             }
             mapAttr.Update();
 

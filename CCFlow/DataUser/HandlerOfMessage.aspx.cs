@@ -1,15 +1,12 @@
-﻿using BP.EAI.Plugins;
-using BP.EAI.Plugins.DINGTalk;
-using BP.EAI.Plugins.WXin;
+﻿
+using BP.GPM.DTalk.DINGTalk;
+using BP.GPM.WeiXin;
 using BP.Sys;
 using BP.Web;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+
 
 namespace CCFlow.DataUser
 {
@@ -47,7 +44,7 @@ namespace CCFlow.DataUser
                         string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
                         if (agentId != null)
                         {
-                            string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();//获取 AccessToken
+                            string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
                             News_Articles newArticle = new News_Articles();
                             newArticle.description = this.Request.QueryString["msgConten"];
@@ -81,7 +78,7 @@ namespace CCFlow.DataUser
                     if (dId != null)
                     {
                         Ding_Msg_OA msgOA = new Ding_Msg_OA();
-                        msgOA.Access_Token = DingDing.getAccessToken();
+                        msgOA.Access_Token = BP.GPM.DTalk.DingDing.getAccessToken();
                         msgOA.agentid = SystemConfig.Ding_AgentID;
                         msgOA.touser = this.Request.QueryString["sendTo"];
                         msgOA.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/DingTalk.aspx";

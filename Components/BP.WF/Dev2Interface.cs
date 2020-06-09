@@ -3869,9 +3869,8 @@ namespace BP.WF
 
                 msgDoc += " <hr>打开工作: " + url;
             }
-
-            string para = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@FK_Node=" + nodeID + "@Sender=" + BP.Web.WebUser.No;
-            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, para, pushModel, url);
+            string atParas = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@NodeID=" + nodeID + "@FK_Node=" + nodeID;
+            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, atParas, pushModel, url);
         }
 
 

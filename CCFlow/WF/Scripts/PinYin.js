@@ -41,8 +41,8 @@ function SpecWords(str) {
     if (str == '邮件') return 'Email';
     if (str == '手机') return 'Mobile';
     if (str == '合计') return 'HeJi';
-    if (str.indexOf('编号') != -1) return 'BillNo';
-    if (str.indexOf('单据') != -1) return 'BillNo';
+   // if (str.indexOf('编号') != -1) return 'BillNo';
+   // if (str.indexOf('单据') != -1) return 'BillNo';
 
  //   str = str.replace('单', 'Dan');
  //   str = str.replace('称', 'Cheng');

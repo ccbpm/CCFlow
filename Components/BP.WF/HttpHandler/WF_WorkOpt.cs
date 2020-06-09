@@ -2406,14 +2406,8 @@ namespace BP.WF.HttpHandler
                             row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                             row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
-                            if (gwf.WFState == WFState.Complete)
-                            {
-                                row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
-                            }
-                            else
-                            {
-                                row["Msg"] = tk.MsgHtml;
-                            }
+                            row["Msg"] = tk.MsgHtml;
+ 
 
                             row["EmpFrom"] = tk.EmpFrom;
                             row["EmpFromT"] = tk.EmpFromT;
@@ -2432,29 +2426,30 @@ namespace BP.WF.HttpHandler
                             row["FWCView"] = fwc.FWCView;
                             tkDt.Rows.Add(row);
 
-                            #region //审核组件附件数据
-                            athDBs = new FrmAttachmentDBs();
-                            QueryObject obj_Ath = new QueryObject(athDBs);
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
-                            obj_Ath.addAnd();
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-                            obj_Ath.addAnd();
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
-                            obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
-                            obj_Ath.DoQuery();
+                            #region 审核组件附件数据
+                             
+                            //athDBs = new FrmAttachmentDBs();
+                            //QueryObject obj_Ath = new QueryObject(athDBs);
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
+                            //obj_Ath.addAnd();
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                            //obj_Ath.addAnd();
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
+                            //obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
+                            //obj_Ath.DoQuery();
 
-                            foreach (FrmAttachmentDB athDB in athDBs)
-                            {
-                                row = athDt.NewRow();
-                                row["NodeID"] = tk.NDFrom;
-                                row["MyPK"] = athDB.MyPK;
-                                row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
-                                row["FK_MapData"] = athDB.FK_MapData;
-                                row["FileName"] = athDB.FileName;
-                                row["FileExts"] = athDB.FileExts;
-                                row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly == false;
-                                athDt.Rows.Add(row);
-                            }
+                            //foreach (FrmAttachmentDB athDB in athDBs)
+                            //{
+                            //    row = athDt.NewRow();
+                            //    row["NodeID"] = tk.NDFrom;
+                            //    row["MyPK"] = athDB.MyPK;
+                            //    row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
+                            //    row["FK_MapData"] = athDB.FK_MapData;
+                            //    row["FileName"] = athDB.FileName;
+                            //    row["FileExts"] = athDB.FileExts;
+                            //    row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly == false;
+                            //    athDt.Rows.Add(row);
+                            //}
                             #endregion
 
                             #region //子流程的审核组件数据

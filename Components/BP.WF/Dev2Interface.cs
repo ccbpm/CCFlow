@@ -5409,19 +5409,15 @@ namespace BP.WF
             if (workID == 0)
                 return true;
 
+            //判断是否有待办.
+            GenerWorkerList gwl = new GenerWorkerList();
+            int inum = gwl.Retrieve(GenerWorkerListAttr.WorkID, workID,
+                GenerWorkerListAttr.FK_Emp, userNo,
+               GenerWorkerListAttr.IsPass, 0);
+            if (inum >= 1)
+                return true;
+
             GenerWorkFlow mygwf = new GenerWorkFlow(workID);
-
-            if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
-            {
-                GenerWorkerList gwl = new GenerWorkerList();
-                int inum = gwl.Retrieve(GenerWorkerListAttr.WorkID, workID, GenerWorkerListAttr.FK_Emp, userNo,
-                   GenerWorkerListAttr.FK_Node, mygwf.FK_Node);
-                if (inum == 1 && gwl.IsPassInt == 0)
-                {
-                    return true;
-                }
-            }
-
 
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */

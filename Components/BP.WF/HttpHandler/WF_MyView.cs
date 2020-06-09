@@ -473,11 +473,15 @@ namespace BP.WF.HttpHandler
             bool isCanDoCurrWorker = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
 
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
-            if (gwf.WFState != WFState.Complete && isCanDoCurrWorker == true)
+            if (gwf.WFState != WFState.Complete && gwf.TodoEmps.Contains(WebUser.No) )
             {
-                WF_MyFlow handler = new WF_MyFlow();
-                return handler.MyFlow_Init();
-                // return "url@MyFlow.htm?WorkID=" + this.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID;
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                int i = gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, WebUser.No, GenerWorkerListAttr.IsPass, 0);
+                if (i >= 1)
+                {
+                    WF_MyFlow handler = new WF_MyFlow();
+                    return handler.MyFlow_Init();
+                }
             }
 
             //是否是工作参与人?

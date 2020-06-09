@@ -24,7 +24,6 @@ namespace BP.WF.HttpHandler
         public CCMobile_MyFlow()
         {
             BP.Web.WebUser.SheBei = "Mobile";
-
         }
         /// <summary>
         /// 获得工作节点

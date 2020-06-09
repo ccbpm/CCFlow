@@ -525,7 +525,7 @@ $(function () {
         $("#Btn_Save").html("保存中...");
 
         SaveFlow(_canvas);
-
+        alert("保存成功！");
 
     });
     /*保存*/

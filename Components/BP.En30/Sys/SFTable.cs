@@ -1074,15 +1074,7 @@ namespace BP.Sys
             }
             else
             {
-                if ( this.SrcType == Sys.SrcType.SysDict)
-                {
-                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SysDictEditData.htm?FK_SFTable=" + this.No;
-                }
-                else
-                {
-                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
-
-                }
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
             }
         }
         public string IsCanDelete()

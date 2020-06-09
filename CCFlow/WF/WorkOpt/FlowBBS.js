@@ -26,9 +26,11 @@ function ShowFlowBBS(data) {
         var webUser = new WebUser();
         if (data[i].Rec == webUser.No)
             isHaveMySelf = true;
-        if (str.indexOf('@' + data[i].DeptNo + '@') == -1)
+        if (str.indexOf('@' + data[i].DeptNo + '@') == -1) {
             str += '@' + data[i].DeptNo + '@';
-        strT += '@' + data[i].DeptName + '@';
+            strT += '@' + data[i].DeptName + '@';
+        }
+            
     }
     _Html += "<div>";
     var strs = str.split("@"); //生成数组.

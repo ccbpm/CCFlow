@@ -463,13 +463,15 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
     if (shap == "Dtl") {
         var self = window.open(url);
         var loop = setInterval(function () {
-            if (self.closed) {
+            if (self != null && self.closed) {
+                clearInterval(loop);
                 var en = new Entity("BP.Sys.MapDtl");
                 en.SetPKVal(MyPK);
                 if (en.RetrieveFromDBSources() == 0)
                     UE.dom.domUtils.remove(anchorEl, false);
+                self = null;
             }
-        }, 1);
+        }, 1000);
         return;
     }
         
@@ -1445,10 +1447,10 @@ UE.plugins['component'] = function () {
             if (dataType == "WorkCheck") { //审核组件
                 var mypk = GetQueryString("FK_Node");
 
-                if (mypk == null || mypk == undefined) {
-                    alert('非节点表单,不能添加审核组件');
-                    return;
-                }
+                //if (mypk == null || mypk == undefined) {
+                //    alert('非节点表单,不能添加审核组件');
+                //    return;
+                //}
                 var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + mypk + '&tab=审核组件';
                 OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                     //加载js

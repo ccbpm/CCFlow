@@ -3,45 +3,9 @@
 2. 开发者可以重写该文件处理通用的应用,比如通用的函数.
 
 */
-//为广西计算中心增加初始化引用js文件
 $(function () {
   
-    jQuery.getScript("/WF/ntko_demo/officecontrol/ntkobackground.min.js").done(function () {
-       
-    }
-    );
 });
-//外发公文.
-function WaiFa() {
-
-    var workid = GetQueryString('WorkID');
-    var flowNo = GetQueryString('FK_Flow');
-    var nodeid = GetQueryString('NodeID');
-
-
-    var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&NodeID=" + nodeid;
-    WinOpen(url);
-    //window.open(url);
-}
-
-//转内发公文.
-function NeiFa()
-{
-    var workid = GetQueryString('WorkID');
-    var flowNo = GetQueryString('FK_Flow');
-    var mypk = GetQueryString('MyPK');
-    var pkVal = GetQueryString('PKVal');
-
-    var url = "../App/NeiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&MyPK=" + pkVal;
-    WinOpen(url);
-}
-
-function DZ() {
-
-    alert('sss');
-    var url = 'pop.htm';
-    window.open(url);
-}
 
 /*
 

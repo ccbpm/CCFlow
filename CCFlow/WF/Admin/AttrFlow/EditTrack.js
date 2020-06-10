@@ -241,7 +241,8 @@ function InitPage() {
 
 function Edit(mypk)
 {
-    alert(mypk);
+    var url = "/WF/Admin/AttrFlow/EditTrackDtl.htm?&MyPk="+mypk;
+    window.OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200, "icon-edit", false);
 }
 
 function OpenFrm(nodeID) {

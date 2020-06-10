@@ -13,6 +13,11 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
+    <style>
+        #Btn_Save{
+            background-image: url(../../Img/Btn/Save.png)!important;
+        }
+    </style>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         /*
@@ -30,8 +35,8 @@
             //获得参数值
             var delRole = node.GetPara("GenerWorkerListDelRole");
             //将获取的值绑定到radio
-            $(':radio[name="GenerWorkerListDelRole"]').attr("checked",delRole);
-
+            
+            $('input:radio[name="GenerWorkerListDelRole"]').eq(delRole).attr('checked', 'true');
             $("#Msg").html("");
         });
 
@@ -41,7 +46,8 @@
             var node = new Entity("BP.WF.Node", fk_node);
             var role = $("input[name='GenerWorkerListDelRole']:checked").val();
             node.SetPara("GenerWorkerListDelRole", role);
-            node.Update();
+            if(node.Update());
+                alert("保存成功！");
             window.location.href = window.location.href;
         }
 

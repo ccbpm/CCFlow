@@ -27,17 +27,15 @@
 
             var fk_node = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", fk_node);
-
-            //调用公共类库的方法:执行批量主表赋值.
-            //GenerFullAllCtrlsVal(node);
+            //获得参数值
+            var delRole = node.GetPara("GenerWorkerListDelRole");
+            //将获取的值绑定到radio
+            $(':radio[name="GenerWorkerListDelRole"]').attr("checked",delRole);
 
             $("#Msg").html("");
         });
 
         function Save() {
-
-            // var frmData = $("#cc").serialize();
-
             var fk_node = GetQueryString("FK_Node");
 
             var node = new Entity("BP.WF.Node", fk_node);

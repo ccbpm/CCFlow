@@ -21,6 +21,28 @@ input[type="button"], input[type="submit"], input[type="file"]
     border-radius: 3px;
     border:1px solid #d2cdcd;
 }
+/* 按钮加图标后样式 */
+button[type="button"]{
+    border: 0; /*background: #4D77A7;*/
+    background: #fff;
+    color: #545454;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #d2cdcd;
+}
+/* 按钮加图标后样式 */
+button:hover[type="button"] {
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #1d7dd4;
+}
 input:hover[type="button"]
 {
     border: 0; /*background: #4D77A7;*/
@@ -30,7 +52,7 @@ input:hover[type="button"]
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
     border-radius: 3px;
-     border:1px solid #1d7dd4;
+    border:1px solid #1d7dd4;
 }
 .form-control[disabled],
 .form-control[readonly],
@@ -38,6 +60,23 @@ input:hover[type="button"]
     background-color: white;
 }
 
+.CurrentForm-buttom-bar button{
+    font-size:14px!important;
+    border-radius:4px;
+    padding: 4px 10px!important;
+    float:left;
+}
+.CurrentForm-buttom-bar button:hover{
+    background:#f5f5f5;
+    color:#000;
+    border:1px solid #ccc;
+}
+.CurrentForm-buttom-bar select{
+    height: 34px;
+    margin: 5px 3px 5px 3px;
+    padding: 4px 10px!important;
+    float:left;
+}
 
 /*�ı���ֻ�����.*/
  input[type=text]:disabled

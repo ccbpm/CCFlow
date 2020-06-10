@@ -32,6 +32,28 @@ input:hover[type="button"]
     border-radius: 3px;
      border:1px solid #1d7dd4;
 }
+/* 按钮加图标风格 */
+button[type="button"] {
+    border: 0; /*background: #4D77A7;*/
+    background: #fff;
+    color: #545454;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #d2cdcd;
+}
+
+button:hover[type="button"] {
+    border: 0; /*background: #4D77A7;*/
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 3px;
+    border: 1px solid #1d7dd4;
+}
 .form-control[disabled],
 .form-control[readonly],
     fieldset[disabled] {

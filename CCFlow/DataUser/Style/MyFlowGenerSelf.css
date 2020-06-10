@@ -1,0 +1,141 @@
+/**计算中心.自定义表单模板样式**/
+
+.CurrentForm-buttom-bar {
+	background-color: #f5f5f5;
+	padding: 3px;
+	border-bottom: solid 1px #ccc;
+}
+
+.contentRow {
+	width: 100%!important;
+	border: none!important;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.contentRow #CCForm {
+	width: 900px!important;
+	overflow: hidden;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#topContentDiv{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/**表单样式**/
+
+.formContent {
+	width: 860px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.formContent input,
+.formContent textarea,
+.formContent section {
+	border-radius: 4px;
+	border: solid 1px #b3b3b3;
+	padding: 7px;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 16px;
+	font-family: "宋体";
+}
+
+.formContent p {
+	margin: 0;
+	padding: 0;
+}
+
+.explain {
+	line-height: 1.8;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.explain em {
+	font-style: normal;
+	font-weight: bold;
+}
+
+.red {
+	color: #f00;
+}
+
+.formContentH1 {
+	font-size: 32px;
+	line-height: 1.8;
+	text-align: center;
+}
+
+.formTable {
+	width: 100%!important;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.formTable th,
+.formTable td {
+	font-size: 16px;
+	font-family: "宋体";
+	padding: 8px;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.formTable th {
+	text-align: center;
+}
+
+
+/**第一个表格**/
+
+.formTable-first {
+	width: 100%!important;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+.formTable-first th,
+.formTable-first td {
+	border: none;
+	font-size: 16px;
+	font-family: "宋体";
+	padding: 8px;
+}
+
+.formTable-first th {
+	text-align: right;
+}
+
+
+/**灰色表单样式**/
+
+.formGrey .formTable th,
+.formGrey .formTable td {
+	border-color: #333;
+}
+
+.formGrey .formTable th {
+	background: #ededed;
+}
+
+
+/**红色表单样式**/
+
+.formContentH1 {
+	color: #f00;
+}
+
+.formRed th,
+.formRed td {
+	border-color: #f00;
+	color: #f00;
+}
+
+.formRed th {
+	background: transparent;
+}

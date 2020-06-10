@@ -1,4 +1,28 @@
 ﻿
+.CurrentForm-buttom-bar {
+    background-color: #f5f5f5;
+    padding: 3px;
+    border-bottom: solid 1px #ccc;
+}
+
+.contentRow {
+    width: 100% !important;
+    border: none !important;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.contentRow #CCForm {
+    width: 900px !important;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+#topContentDiv {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .Btn
 {
     border: 0;

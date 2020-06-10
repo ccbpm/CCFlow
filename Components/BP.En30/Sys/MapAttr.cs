@@ -1538,33 +1538,15 @@ namespace BP.Sys
         }
         #endregion
 
-
-
-        protected override void afterInsert()
+        /// <summary>
+        /// 移动插入
+        /// </summary>
+        /// <param name="insertPK"></param>
+        /// <returns></returns>
+        public string InsertTo(string insertPK)
         {
-            //switch (map.EnDBUrl.DBUrlType)
-            //{
-            //    case DBUrlType.AppCenterDSN:
-            //        switch (map.EnDBUrl.DBType)
-            //        {
-            //            case DBType.MSSQL:
-            //                BP.DA.DBAccess.RunSQL("ALERT ");
-            //                break;
-            //            case DBType.Oracle:
-            //                break;
-            //            case DBType.Informix:
-            //                break;
-            //            case DBType.MSSQL:
-            //                BP.DA.DBAccess.RunSQL("ALERT ");
-            //                break;
-            //            default:
-            //                break;
-            //        }
-            //        break;
-            //    default:
-            //        break;
-            //}
-            base.afterInsert();
+            this.DoOrderInsertTo("Idx", insertPK, MapAttrAttr.GroupID);
+            return "执行成功.";
         }
         /// <summary>
         /// 保存大块html文本

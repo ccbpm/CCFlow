@@ -918,8 +918,8 @@ namespace BP.En
         /// <param name="gKey3"></param>
         /// <param name="gVal3"></param>
         /// <param name="idxAttr"></param>
-        protected void DoOrderUp(string groupKeyAttr, object gVal1, string gKey2, object gVal2, 
-            string gKey3,object gVal3, string idxAttr)
+        protected void DoOrderUp(string groupKeyAttr, object gVal1, string gKey2, object gVal2,
+            string gKey3, object gVal3, string idxAttr)
         {
             //  string pkval = this.PKVal as string;
             string pkval = this.PKVal.ToString();
@@ -949,8 +949,33 @@ namespace BP.En
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
         }
+        /// <summary>
+        /// 插队
+        /// </summary>
+        /// <param name="idxAttr">Idx列</param>
+        /// <param name="entityPKVal">要插入的指定实体主键值</param>
+        /// <param name="groupKey">列名</param>
+        /// <param name="groupVal">列值</param>
+        protected void DoOrderInsertTo(string idxAttr,object entityPKVal, string groupKey)
+        {
+            string ptable = this.EnMap.PhysicsTable; // Sys_MapAttr
+            string pk = this.PK; //MyPK
+            int idx = this.GetValIntByKey(idxAttr); // 当前实体的idx. 10 
+         //   string groupVal = this.GetValStringByKey(groupKey); //分组的val.   101
 
+            //求出来要被插队的 idx.
+            string sql = "SELECT " + idxAttr + "," + groupKey + " FROM " + ptable + " WHERE " + pk + "='" + entityPKVal + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int idxFirst = int.Parse(dt.Rows[0].ToString());
+            string groupValFirst=  dt.Rows[1].ToString();
 
+            sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, "+ groupKey + "='"+ groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
+            DBAccess.RunSQL(sql);
+        }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        /// <param name="idxAttr"></param>
         protected void DoOrderDown(string idxAttr)
         {
             string pkval = this.PKVal.ToString();
@@ -1124,7 +1149,8 @@ namespace BP.En
             {
                 return EntityDBAccess.Update(this, null);
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 if (ex.Message.Contains("列名") || ex.Message.Contains("将截断字符串") || ex.Message.Contains("缺少") || ex.Message.Contains("的值太大"))
                 {
@@ -3436,7 +3462,7 @@ namespace BP.En
                 case DBType.DM:
                     break;
                 case DBType.MySQL:
-                   // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                    // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
                     //return CheckPhysicsTableAutoExtFieldLength_MySQL(sql);
                     break;
                 case DBType.Informix:
@@ -3536,9 +3562,9 @@ namespace BP.En
 
             //检查是否有对应的主键.
             string pk = this.PK;
-            if (pk.Contains(",")==false)
+            if (pk.Contains(",") == false)
                 if (this.EnMap.Attrs.Contains(pk) == false)
-                    throw new Exception("err@Entity" + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【"+ pk + "】但是没有"+ pk + "的属性.");
+                    throw new Exception("err@Entity" + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有" + pk + "的属性.");
 
             DBType dbtype = this._enMap.EnDBUrl.DBType;
 

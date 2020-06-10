@@ -177,6 +177,19 @@ namespace CCFlow.WF.CCForm
             this.Response.ContentEncoding = System.Text.UTF8Encoding.UTF8;
             this.Request.ContentEncoding = System.Text.UTF8Encoding.UTF8;
 
+            #region 增加跨域.
+            //让其支持跨域访问.
+            string origin = this.Request.Headers["Origin"];
+            if (!string.IsNullOrEmpty(origin))
+            {
+                var allAccess_Control_Allow_Origin = System.Web.Configuration.WebConfigurationManager.AppSettings["Access-Control-Allow-Origin"];
+                this.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                this.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                this.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
+            }
+            #endregion
+
+
             if (this.DoType == "Down")
             {
                 //获取文件是否加密
@@ -318,7 +331,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                     SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();

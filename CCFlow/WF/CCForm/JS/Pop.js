@@ -59,7 +59,7 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    container.height(height);
+    container.css("min-height", height);
     if (index == null || index == undefined) {
         container.attr("id", mapExt.AttrOfOper + "_mtags");
         mtagsId = mapExt.AttrOfOper + "_mtags";
@@ -69,8 +69,13 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
     }
     var mtags = $("#" + mtagsId);
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal":oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
             console.log("unselect: " + JSON.stringify(record));
@@ -81,8 +86,7 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
+   
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -92,7 +96,7 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index,oid,objtr) {
     $.each(frmEleDBs, function (i, o) {
         initJsonData.push({
             "No": o.Tag1,
-            "Name": o.Tag2
+            "Name": o.Tag2,
         });
     });
 
@@ -171,7 +175,7 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    container.css("height", height);
+    container.css("min-height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
     var mtags;
     if (index == null || index == undefined) {
@@ -183,9 +187,13 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
     }
     var mtags = $("#" + mtagsId);
-
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
         "onUnselect": function (record) {
             console.log("unselect: " + JSON.stringify(record));
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
@@ -196,8 +204,7 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
+    
     //初始加载
     Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid, val, targetId, mtagsId);
     //这里需要相对路径.
@@ -227,11 +234,12 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
                 //var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     //删除保存的数据
-                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
-                    var nodes = iframe.GetCheckNodes();
-
-                    mtags = $("#" + mtagsId);
                     var initJsonData = [];
+                    initJsonData = Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid, initJsonData);
+                    var nodes = iframe.GetCheckNodes();
+                    
+                    mtags = $("#" + mtagsId);
+                   
                     if ($.isArray(nodes)) {
                         $.each(nodes, function (i, node) {
                             //SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
@@ -240,6 +248,9 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
                                 "Name": node.Name
                             });
                         });
+
+                       
+
                         mtags.mtags("loadData", initJsonData);
                         $("#" + targetId).val(mtags.mtags("getText"));
                         //重新加载
@@ -247,7 +258,7 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
 
                         // 单选复制当前表单
                         if (selectType == "0" && nodes.length == 1) {
-                            ValSetter(mapExt.Tag4, nodes[0].No);
+                            //ValSetter(mapExt.Tag4, nodes[0].No);
                             FullIt(nodes[0].No, mapExt.MyPK, targetId);
                         }
 
@@ -297,9 +308,16 @@ function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
         container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
     }
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
+
+
     var mtags = $("#" + mtagsId);
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -310,9 +328,7 @@ function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
-
+   
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
 
@@ -406,10 +422,15 @@ function PopGroupList(mapExt, targetId, index, oid) {
         container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
     }
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     var mtags = $("#" + mtagsId);
 
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -420,8 +441,7 @@ function PopGroupList(mapExt, targetId, index, oid) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
+  
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -506,9 +526,12 @@ function PopBindSFTable(mapExt, targetId, index, oid) {
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
     }
     var mtags = $("#" + mtagsId);
-
+    var oid = GetPKVal();
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -519,7 +542,7 @@ function PopBindSFTable(mapExt, targetId, index, oid) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    var oid = GetPKVal();
+   
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -605,9 +628,13 @@ function PopTableList(mapExt, targetId, index, oid) {
     }
     var mtags = $("#" + mtagsId);
 
-
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     mtags.mtags({
         "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -618,8 +645,7 @@ function PopTableList(mapExt, targetId, index, oid) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
+   
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -639,7 +665,7 @@ function PopTableList(mapExt, targetId, index, oid) {
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/TableList.htm?FK_MapExt=" + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + oid + "&OID=" + oid + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-    container.on("click", function () {
+    container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", true, function () {
                 var selectType = mapExt.GetPara("SelectType");
@@ -708,9 +734,13 @@ function PopBindEnum(mapExt, targetId, index, oid) {
     }
     var mtags = $("#" + mtagsId);
 
-
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
    mtags.mtags({
-        "fit": true,
+       "fit": true,
+       "FK_MapData": mapExt.FK_MapData,
+       "KeyOfEn": mapExt.AttrOfOper,
+       "RefPKVal": oid,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -721,8 +751,7 @@ function PopBindEnum(mapExt, targetId, index, oid) {
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (oid == null || oid == undefined)
-        oid = GetPKVal();
+    
 
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -791,16 +820,26 @@ function ValSetter(tag4, key) {
 }
 
 //删除数据.
-function Delete_FrmEleDBs(FK_MapData, keyOfEn, oid) {
+function Delete_FrmEleDBs(FK_MapData, keyOfEn, oid, initJsonData) {
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", keyOfEn, "RefPKVal", oid);
     $.each(frmEleDBs, function (i, obj) {
-        var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-        frmEleDB.MyPK = obj.MyPK
-        frmEleDB.Delete();
+        if (obj.Tag5 != "1") {
+            var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+            frmEleDB.MyPK = obj.MyPK
+            frmEleDB.Delete();
+        } else {
+          initJsonData.push({
+                "No": obj.Tag1,
+                "Name": obj.Tag2
+            });
+        }
+        
     });
     $("#TB_" + keyOfEn).val('');
+    return initJsonData;
 }
+
 //删除数据.
 function Delete_FrmEleDB(keyOfEn, oid, No) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
@@ -809,7 +848,7 @@ function Delete_FrmEleDB(keyOfEn, oid, No) {
     $("#TB_" + keyOfEn).val('');
 }
 //设置值.
-function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
+function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2, tag5) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
     frmEleDB.FK_MapData = fk_mapdata;
@@ -817,6 +856,7 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
     frmEleDB.RefPKVal = oid;
     frmEleDB.Tag1 = val1;
     frmEleDB.Tag2 = val2;
+    frmEleDB.Tag5 = tag5;
     if (frmEleDB.Update() == 0) {
         frmEleDB.Insert();
     }

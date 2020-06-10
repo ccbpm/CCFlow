@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>ccform正在加载请稍候...</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
@@ -133,17 +135,17 @@
 
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
-                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
+                html += "<input style='background-image: url(../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='新建' id='Btn_New' onclick='New()' />";
             }
 
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input type='button' value='保存' id='Btn_Save' onclick='Save()' />";
+                html += "<input style='background-image: url(../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='保存' id='Btn_Save' onclick='Save()' />";
             }
             if (mapData.GetPara("IsImp") == 1) {
-                html += "<input type='button' value='导入' id='Btn_Import' onclick='Import()' />";
+                html += "<input style='background-image: url(../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='导入' id='Btn_Imp' onclick='Import()' />";
             }
 
-            html += "<input type='button' value='导出' id='Btn_Export' onclick='Export()' />";
+            html += "<input style='background-image: url(../../Img/Btn/PackUp_zip.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='导出' id='Btn_Exp' onclick='Export()' />";
 
 
             $("#Btns").append(html);
@@ -205,7 +207,9 @@
 
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, pkval) + "</td>";
                 }
-
+                //主键中还有双引号的进行转义
+                if (pkval != null && pkval !=undefined && pkval instanceof String )
+                    pkval = pkval.replace(/"/g, "&quot;");
                 html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";
                 if (mapData.GetPara("IsDelete") == "1")
                     html += "<td><a href=\"javascript:Delete('" + pkval + "')\"><img src='../../Img/Btn/Delete.png' /></a></td>";

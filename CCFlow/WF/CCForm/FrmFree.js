@@ -142,6 +142,12 @@ function GenerFreeFrm(mapData, frmData) {
             $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent, mapData));
         }
     }
+    //xu
+    /*var rel = /style='[^=>]*'([(\s+\w+=)|>])/g
+    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
+    $('#CCForm').html($('#CCForm').html().replace(rel, ''));
+    $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
+   
 
 }
 

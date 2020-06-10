@@ -369,7 +369,7 @@
                     var item = {};
                     item.No = row.No;
                     item.Name = row.Name;
-                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
+                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, row.No, row.Name);
                     nodeIds.push(item);
                 });
             }

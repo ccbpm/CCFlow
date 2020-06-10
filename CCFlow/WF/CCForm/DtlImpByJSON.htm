@@ -58,7 +58,7 @@
                 alert("参数配置错误，请联系管理员。");
                 return;
             }
-
+            
             //分组标签
             InitGroupLabel();
             //输入关键字查询数据
@@ -89,9 +89,11 @@
         //初始化标签
         function InitGroupLabel() {
             var ifcData = null;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag2;
-                ifcData = DBAccess.RunSQLReturnTable(sql);
+                handler.AddPara("SQL", sql);
+                ifcData = handler.DoMethodReturnString("RunSQL_Init");
             }
 
             if (mapExt.DBType == 1) {//JSON模式
@@ -137,13 +139,17 @@
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
             var keyWord = $("#TB_Key").val();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
+            
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag1;
                 while (sql.indexOf("@Key") > -1) {
                     sql = sql.replace("@Key", keyWord);
                 }
                 sql = encodeURI(sql);
-                data = DBAccess.RunSQLReturnTable(sql);
+                handler.AddPara("SQL", sql);
+                data = handler.DoMethodReturnString("RunSQL_Init");
+               // data = DBAccess.RunSQLReturnTable(sql);
             }
             if (mapExt.DBType == 1) {//JSON模式
                 var url = mapExt.Tag1;
@@ -166,12 +172,14 @@
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
             groupValue = groupValue == "all" ? "" : groupValue;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag3;
                 while (sql.indexOf("@Key") > -1) {
                     sql = sql.replace("@Key", groupValue);
                 }
-                data = DBAccess.RunSQLReturnTable(sql);
+                handler.AddPara("SQL", sql);
+                data =handler.DoMethodReturnString("RunSQL_Init");
             }
             if (mapExt.DBType == 1) {//JSON模式
                 var url = mapExt.Tag3;

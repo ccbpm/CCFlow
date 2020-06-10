@@ -5,11 +5,14 @@
     <meta charset="UTF-8" />
     <base target="_self" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-form.js" type="text/javascript"></script>
+
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
     <script src="Ath.js" type="text/javascript"></script>
+
 
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
@@ -34,6 +37,7 @@
         .table > thead > tr > th {
             border-bottom: 1px solid #ddd;
         }
+
         .image-item {
             width: 75px !important;
             height: 75px;
@@ -45,39 +49,58 @@
             margin-right: 10px;
             margin-bottom: 10px;
             border: solid 1px #e8e8e8;
-            float:left;
+            float: left;
         }
-        .image-item input[type="file"] {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 0;
+
+            .image-item input[type="file"] {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+                z-index: 0;
+            }
+
+            .image-item .image-close {
+                position: absolute;
+                display: inline-block;
+                right: -6px;
+                top: -6px;
+                width: 20px;
+                height: 20px;
+                text-align: center;
+                line-height: 20px;
+                border-radius: 12px;
+                background-color: #FF5053;
+                color: #f3f3f3;
+                border: solid 1px #FF5053;
+                font-size: 9px;
+                font-weight: 200;
+                z-index: 1;
+            }
+
+        .form-control {
+            display: inline;
+            width: auto;
+            height: 40px;
         }
-        .image-item .image-close {
-            position: absolute;
-            display: inline-block;
-            right: -6px;
-            top: -6px;
-            width: 20px;
-            height: 20px;
-            text-align: center;
-            line-height: 20px;
-            border-radius: 12px;
-            background-color: #FF5053;
-            color: #f3f3f3;
-            border: solid 1px #FF5053;
-            font-size: 9px;
-            font-weight: 200;
-            z-index: 1;
+
+        .uploadBts {
+            height: 30px !important;
+            width: 85px !important;
         }
-        .form-control{
-            display:inline;
-            width:auto;
-            height:40px;
+
+        .selectFileBt {
+            height: 30px;
+            line-height: 10px;
+            width: 82px;
+            background-color: white !important;
+            color: black !important;
+            border: 1px solid black !important;
+            font-size: 14px !important;
+            font-weight: normal;
         }
     </style>
     <script language="javascript" type="text/javascript">
@@ -141,12 +164,14 @@
         var athDesc;
         var athSortNum = [];
 
+        //文件上传执行的URL
+        var uploadUrl = "";
 
         //检查上传的附件数量是否符合要求
         function CheckAthNum() {
-            
+
             if (numOfUpload > numOfAths) {
-                return "上传附件数量不能小于"+numOfUpload;
+                return "上传附件数量不能小于" + numOfUpload;
             }
 
             //判断附件上传最大数量
@@ -154,9 +179,9 @@
                 return "您最多上传[" + topNumOfUpload + "]个附件";
             }
 
-             if (athSortNum.length != 0 && athDesc.UploadFileNumCheck==2) {
+            if (athSortNum.length != 0 && athDesc.UploadFileNumCheck == 2) {
                 var msg = "";
-                for (var idx=0; idx < athSortNum.length; idx++) {
+                for (var idx = 0; idx < athSortNum.length; idx++) {
                     if (athSortNum[idx].Num == 0)
                         msg += athSortNum[idx].Sort + ",";
                 }
@@ -164,7 +189,7 @@
                     return msg.substring(0, msg.length - 1) + "分组至少上传一个附件";
                 }
                 return "";
-                    
+
 
             }
 
@@ -253,45 +278,44 @@
                 if (fileShowWay == FileShowWay.Table)
                     FileShowWayTable(athDesc, dbs, mapAttrs);
             }
-            //文件上传
-            var url = "";
 
-         
+
+
             if (plant == 'CCFlow')
-               url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
+                uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + FK_FrmAttachment + '&DoType=MoreAttach&EnsName=' + EnsName + '&FK_Flow=' + FK_Flow + '&PKVal=' + PKVal;
             else {
-                url = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + FK_FrmAttachment + '&FK_Flow=' + FK_Flow + "&PKVal=" + PKVal;
+                uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + FK_FrmAttachment + '&FK_Flow=' + FK_Flow + "&PKVal=" + PKVal;
             }
-            url += "&WorkID=" + GetQueryString("WorkID");
-            url += "&FID=" + GetQueryString("FID");
-            url += "&FK_Node=" + GetQueryString("FK_Node");
-            url += "&PWorkID=" + GetQueryString("PWorkID");
-            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            uploadUrl += "&WorkID=" + GetQueryString("WorkID");
+            uploadUrl += "&FID=" + GetQueryString("FID");
+            uploadUrl += "&FK_Node=" + GetQueryString("FK_Node");
+            uploadUrl += "&PWorkID=" + GetQueryString("PWorkID");
+            uploadUrl += "&FK_MapData=" + GetQueryString("FK_MapData");
 
             var realFileExts = athDesc.Exts;
-            if(realFileExts==null || realFileExts ==""||realFileExts=="*.*")
-                realFileExts="*";
-            else{
-                realFileExts = realFileExts.replace(/\s*/g,"").replace(/[*.]/g,"").split(",");
+            if (realFileExts == null || realFileExts == "" || realFileExts == "*.*")
+                realFileExts = "*";
+            else {
+                realFileExts = realFileExts.replace(/\s*/g, "").replace(/[*.]/g, "").split(",");
             }
 
-
+            /*if(IsIELower10 == false)*/
             $("#fileUploadContent").initUpload({
                 //"uploadId":athDesc.MyPK,
-                "uploadUrl":url,//上传文件信息地址
-                "progressUrl":"#",//获取进度信息地址，可选，注意需要返回的data格式如下（{bytesRead: 102516060, contentLength: 102516060, items: 1, percent: 100, startTime: 1489223136317, useTime: 2767}）
-                "showSummerProgress":false,//总进度条，默认限制
-                //"size":350,//文件大小限制，单位kb,默认不限制
+                "uploadUrl": uploadUrl,//上传文件信息地址
+                "progressUrl": "#",//获取进度信息地址，可选，注意需要返回的data格式如下（{bytesRead: 102516060, contentLength: 102516060, items: 1, percent: 100, startTime: 1489223136317, useTime: 2767}）
+                "showSummerProgress": false,//总进度条，默认限制
+                "size": athDesc.FileMaxSize,//文件大小限制，单位kb,默认不限制
                 //"maxFileNumber":3,//文件个数限制，为整数
                 //"filelSavePath":realFileExts,//文件上传地址，后台设置的根目录
-                 "ismultiple":true,
-                "beforeUpload":beforeUploadFun,//在上传前执行的函数
-                 "onUpload":function(opt,data){
-                     uploadTools.uploadError(opt);//显示上传错误
-                     window.location.href = window.location.href;
-                 },//在上传后执行的函数
-                autoCommit:true,//文件是否自动上传
-                "fileType":realFileExts//文件类型限制，默认不限制，注意写的是文件后缀
+                "ismultiple": true,
+                "beforeUpload": beforeUploadFun,//在上传前执行的函数
+                "onUpload": function (opt, data) {
+                    uploadTools.uploadError(opt);//显示上传错误
+                    window.location.href = window.location.href;
+                },//在上传后执行的函数
+                autoCommit: true,//文件是否自动上传
+                "fileType": realFileExts//文件类型限制，默认不限制，注意写的是文件后缀
             });
 
             setIframeHeight();
@@ -303,9 +327,9 @@
             if (parseInt(athDesc.IsExpCol) == 0) {
                 var sort = $("#Sort").val();
                 if (sort != null && sort != "" && sort != undefined)
-                    opt.otherData = [{ "name": "Sort","value":sort }];
-        }
-            if (parseInt(athDesc.IsExpCol) ==1) {
+                    opt.otherData = [{ "name": "Sort", "value": sort }];
+            }
+            if (parseInt(athDesc.IsExpCol) == 1) {
                 var parasData = $("form").serialize();
                 parasData = decodeURIComponent(parasData, true);
                 parasData = parasData.replace(/&/g, '@');
@@ -316,9 +340,9 @@
                 //获取分组
                 var sort = $("#Sort").val();
                 if (sort != null && sort != "" && sort != undefined)
-                    opt.otherData = [{ "name": "Sort","value":sort }];
+                    opt.otherData = [{ "name": "Sort", "value": sort }];
 
-                opt.otherData =[{"name":"parasData","value":parasData}];
+                opt.otherData = [{ "name": "parasData", "value": parasData }];
             }
         }
         //Table模式
@@ -329,27 +353,28 @@
             html += "<thead>";
             if (athDesc.IsShowTitle == 1) {
                 html += "<tr style='border:0px;'>";
-                html += "<th  style='width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
+                html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                     var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                     if (sortColumn == "")
                         sortColumn = "类别";
-                    html += "<th style=' border-top: 1px solid #ddd;width:120px' nowrap=true >" + sortColumn + "</td>";
+                    html += "<th style='line-height:30px; border-top: 1px solid #ddd;width:120px' nowrap=true >" + sortColumn + "</td>";
 
                 }
 
                 //是否启用附件从表 0 禁用 1启用
                 if (athDesc.IsExpCol == 0) {
 
-                    html += "<th style='min-width:200px; border: 1px solid #ddd' nowrap=true >文件名</th>";
-                    html += "<th  style='width:50px; border: 1px solid #ddd' nowrap=true >大小KB</th>";
-                    html += "<th  style='width:120px; border: 1px solid #ddd' nowrap=true >上传时间</th>";
-                    html += "<th  style='width:80px; border: 1px solid #ddd' nowrap=true >上传人</th>";
+                    html += "<th style='line-height:30px;min-width:200px; border: 1px solid #ddd' nowrap=true >文件名<div style='float:right' id='fileUploadContent' class='fileUploadContent'></div> </th>";
+                    html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >大小KB</th>";
+                    html += "<th  style='line-height:30px;width:120px; border: 1px solid #ddd' nowrap=true >上传时间</th>";
+                    html += "<th  style='line-height:30px;width:80px; border: 1px solid #ddd' nowrap=true >上传人</th>";
                 } else {
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:200px' >文件名</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:50px' >大小KB</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:120px' >上传时间</th>";
-                    html += "<th nowrap=true style='border: 1px solid #ddd;width:80px' >上传人</th>";
+
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:200px' >文件名<div style='float:right' id='fileUploadContent' class='fileUploadContent'></div></th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:50px' >大小KB</th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:120px' >上传时间</th>";
+                    html += "<th nowrap=true style='line-height:30px;border: 1px solid #ddd;width:80px' >上传人</th>";
 
 
                     for (var ii = 0; ii < mapAttrs.length; ii++) {
@@ -372,7 +397,7 @@
                     }
                     columnNum = columnNum + mapAttrs.length;
                 }
-                html += "<th  nowrap=true style=' border: 1px solid #ddd;width:100px' >";
+                html += "<th  nowrap=true style='line-height:30px; border: 1px solid #ddd;width:100px' >";
 
                 if (athDesc.IsDownload == 1 && dbs.length > 0)
                     html += "<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' /></a>";
@@ -432,11 +457,11 @@
                     }
                     if (athDesc.IsDownload == 1) {
                         if (athDesc.IsWoEnableWF && CanEditor(db.FileExts))
-                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:AthView('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         else if (IsImgExt(db.FileExts) == true)
-                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:AthView('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         else
-                            html += addTdTitle(db.FileName, "<a href=\"javascript:Down2018('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                            html += addTdTitle(db.FileName, "<a href=\"javascript:AthView('" + FK_FrmAttachment + "','" + PKVal + "','" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                     }
                     else
                         html += "<td><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</td>";
@@ -516,15 +541,17 @@
                         if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
                             html += "<td></td>";
                         else {
-                            if (athDesc.IsUpload == true && IsReadonly != "1")
-                                html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                            if (athDesc.IsUpload == true && IsReadonly != "1") {
+                                //html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\")'>上传</a></td>";
+                                html += "<td> - </td>";
+                            }
                             else
                                 html += "<td></td>";
                         }
                     }
                     html += "</tr>";
                 }
-                  athSortNum.push({ "Sort": mysort, "Num": sortNum });
+                athSortNum.push({ "Sort": mysort, "Num": sortNum });
             }
             if ((i == 0 && (athDesc.Sort == null || athDesc.Sort.indexOf(",") == -1)) || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true)) {
                 html += "<tr>";
@@ -558,7 +585,9 @@
 
             $("#ShowTable").html(html);
 
-
+            //隐藏他，如果不能上传.
+            if (athDesc.IsUpload == 0)
+                $("#fileUploadContent").hide();
         }
 
 
@@ -579,74 +608,59 @@
 
 
                 var explorer = window.navigator.userAgent;
-                var isIE = explorer.indexOf("compatible") > -1 && explorer.indexOf("MSIE") > -1; //判断是否IE<11浏览器
-                //if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0))) {
 
-                    html += "<div id='file_upload-queue' class='uploadify-queue'></div>";
+                html += "<div id='file_upload-queue' class='uploadify-queue'></div>";
 
-                    if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
-                        var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
-                        var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
-                        var operations = "";
-                        for (var idx = 0; idx < strs.length; idx++) {
-                            operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
-                        }
-                        html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%'  >";
-                        html += "<div style='float:left;padding-right:2px'>";
-                        html += "请选择" + sortColumn + "：";
-                        html += "<select id='Sort' class='form-control'>" + operations + "</select>";
-                        html += "</div>";
+                if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
+                    var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
+                    var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
+                    var operations = "";
+                    for (var idx = 0; idx < strs.length; idx++) {
+                        operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
                     }
-                    else {
-                        html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%' >";
-                    }
-                    html +="<div id='fileUploadContent' class='fileUploadContent'></div> ";
-                    //html += "<input type='file' style='float:left' name='uploadfile' id='uploadfile' />";
-                    //html += "</div>";
+                    html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%'  >";
+                    html += "<div style='float:left;padding-right:2px'>";
+                    html += "请选择" + sortColumn + "：";
+                    html += "<select id='Sort' class='form-control'>" + operations + "</select>";
                     html += "</div>";
+                }
+                else {
+                    html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%' >";
+                }
 
-                    if (athDesc.IsNote)
-                        html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
 
-                /*} else {
-                    realFileExts = realFileExts.replace(/;/g, ',');
-                    realFileExts = replaceAll(realFileExts, '[*]', '');
-                    html += "<div id='s' style='text-align:right;float:left;display:inline;' >";
-                    // 让石家庄客户，来完善附件类别支持sql.
-                    if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
-                        var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
-                        var strs = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.lastIndexOf("@") + 1).split(',') : athDesc.Sort.split(',');
-                        var operations = "";
-                        for (var idx = 0; idx < strs.length; idx++) {
-                            if (strs[idx] == "")
-                                continue;
-                            operations += "<option  value='" + strs[idx] + "'>" + strs[idx] + "</option>";
-                        }
+                html += "</div>";
 
-                        html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
-                        html += "请选择" + sortColumn + "：";
-                        html += "<select id='Sort'>" + operations + "</select>";
-                        html += "</div>";
-                    }
-                    html += "<div style='float:left;padding-top:7px;padding-right:2px'>";
-
-                    if (realFileExts == '.,' || realFileExts == '.')
-                        realFileExts = "*.*";
-
-                    if (athDesc.IsExpCol == 1)
-                        html += " <label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' accept='" + realFileExts + "'><span>文件上传</span></label>";
-                    else
-                        html += " <label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;'  accept='" + realFileExts + "' onclick='return Upload();' onchange='UploadChange();'><span>文件上传</span> </label>";
-
-                    if (athDesc.IsNote)
-                        html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
-                    html += "</div>";
-                }*/
+                if (athDesc.IsNote)
+                    html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
                 html += "</div>";
                 html += "</td>";
                 html += "</tr>";
             }
             return html;
+        }
+
+        //在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
+        function AthView(fk_ath, pkVal, delPKVal) {
+
+            if (typeof AthViewOverWrite === 'function') {
+                AthViewOverWrite(fk_ath, pkVal, delPKVal);
+                return;
+            }
+
+            //AthViewOverWrite(fk_ath, pkVal, delPKVal)
+            //alert(fk_ath + pkVal + delPKVal + ":AthView执行成功.");
+            //AthView(fk_ath, pkVal, delPKVal);
+            //return;
+
+            if (plant == "CCFlow")
+                window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
+            else {
+                var currentPath = window.document.location.href;
+                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+                Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + Ath;
+                window.location.href = Url;
+            }
         }
 
         function changeSort(sort) {
@@ -669,7 +683,7 @@
             }
         }
         function SaveUpload() {
-            
+
             //必填项和正则表达式检查
             var formCheckResult = true;
 
@@ -696,28 +710,29 @@
             UploadChange();
         }
         function UploadChange() {
-            var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
+            debugger
+            var fileObj = $("#file").val();
             if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
                 alert("请选择上传的文件.");
                 return;
             }
-            var fileName = fileObj.name;
-            //判断附件上传大小的限制
-            var fileSize = fileObj.size;
-            if (fileSize > fileMaxSize * 1024) {
-                alert("附件大小超过了" + fileMaxSize + "KB的限制！");
-                return;
-            }  
-            //判断附件上传最大数量
-            if (topNumOfUpload <= numOfAths) {
-                alert("您最多上传[" + topNumOfUpload + "]个附件");
-                return;
-            }
+            //var fileName = fileObj.name;
+            ////判断附件上传大小的限制
+            //var fileSize = fileObj.size;
+            //if (fileSize > fileMaxSize * 1024) {
+            //    alert("附件大小超过了" + fileMaxSize + "KB的限制！");
+            //    return;
+            //}
+            ////判断附件上传最大数量
+            //if (topNumOfUpload <= numOfAths) {
+            //    alert("您最多上传[" + topNumOfUpload + "]个附件");
+            //    return;
+            //}
 
-            if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.')).toLowerCase()) == -1) {
-                alert("上传附件类型不正确，只能上传" + realFileExts);
-                return;
-            }
+            //if (realFileExts != "*.*" && realFileExts.indexOf(fileName.substr(fileName.lastIndexOf('.')).toLowerCase()) == -1) {
+            //    alert("上传附件类型不正确，只能上传" + realFileExts);
+            //    return;
+            //}
 
             //form表单序列话
             var parasData = $("form").serialize();
@@ -730,62 +745,28 @@
             parasData = parasData.replace(/CB_/g, '');
             parasData = parasData.replace(/DDL_/g, '');
 
-            var formData = new FormData();
-            var name = $("input").val();
-            formData.append("file", fileObj);
-            formData.append("name", name);
-            var AttachPK = FK_FrmAttachment;
-            var Url = "";
-            var doMethod = "MoreAttach";
-            var httpHandlerName = "BP.WF.HttpHandler.WF_CCForm";
-            if (plant == 'CCFlow')
-                Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + FK_FrmAttachment + "&WorkID=" + WorkID + "&PKVal=" + PKVal + "&AttachPK=" + AttachPK + "&parasData=" + parasData + "&t=" + new Date().getTime();
-            else {
-                Url = basePath + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + PKVal + "&parasData=" + parasData;
-            }
-
-            Url += "&FID=" + GetQueryString("FID");
-            Url += "&FK_Node=" + GetQueryString("FK_Node");
-            Url += "&PWorkID=" + GetQueryString("PWorkID");
-            Url += "&FK_MapData=" + GetQueryString("FK_MapData");
-            //获取分组
-            var sort = $("#Sort").val();
-            if (sort != null && sort != "" && sort != undefined)
-                Url += "&Sort=" + sort;
-
-
-            $.ajax({
-                url: Url,
+            //提交数据
+            var option = {
+                url: uploadUrl,
                 type: 'POST',
-                data: formData,
-                async: false,
-                xhrFields: {
-                    withCredentials: true
-                },
-                crossDomain: true,
-                // 告诉jQuery不要去处理发送的数据
-                processData: false,
-                // 告诉jQuery不要去设置Content-Type请求头
-                contentType: false,
-                beforeSend: function () {
-                    console.log("正在进行，请稍候");
-                },
-                success: function (responseStr) {
-                    if (responseStr.indexOf('err@') != -1)
-                        alert(responseStr);
-
-                },
-                error: function (responseStr) {
-                    if (responseStr.indexOf('err@') != -1)
-                        alert(responseStr);
-
-                    console.log(responseStr);
+                dataType: 'json',
+                headers: { "ClientCallMode": "ajax" },
+                success: function (data) {
+                    if (data != null && data.indexOf("err@") != -1) {
+                        alert(data.replace("err@", ""));
+                        return;
+                    }
+                    window.location.href = window.location.href;
                 }
-            });
 
-            window.location.href = window.location.href;
+            };
+
+            $("#Ath_Form").ajaxSubmit(option);
+            return false;
+
+
         }
-    
+
 
         // 上传Img.
         function UploadImg() {
@@ -808,7 +789,7 @@
     <script src="JS/FileUpload/fileUpload.js"></script>
 </head>
 <body>
-    <form id="Ath_Form">
+    <form id="Ath_Form" enctype="multipart/form-data" method="post">
         <div id="Msg"></div>
         <div style="width: 99%">
             <table id="ShowTable" class="table"></table>

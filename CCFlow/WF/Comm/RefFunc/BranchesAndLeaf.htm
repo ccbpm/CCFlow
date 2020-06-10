@@ -59,6 +59,9 @@
         var deptNo = "";
         global.selectedNodes = [];
         global.selectedRows = [];
+        var rootNo = "0";
+        var IsEnsOfMExitParentNo = 1;
+        var showCols = "@No=编号@Name=名称";
 
         var saveType = GetQueryString("SaveType");
         if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
@@ -70,13 +73,10 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-            var enName = GetQueryString("EnName"); // 主表实体. A实体.
-            var dot2DotEnsName = GetQueryString("Dot2DotEnsName"); //存储实体.
-            var EnsOfMM = GetQueryString("EnsOfMM"); //B实体.
-            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM"); //存储实体对应主表的外键.
-            var AttrOfMInMM = GetQueryString("AttrOfMInMM"); //存储实体对应B实体外键.
-            var defaultGroupAttrKey = GetQueryString("DefaultGroupAttrKey");
-
+            rootNo = GetQueryString("RootNo");
+            if (rootNo == null || rootNo == undefined || rootNo == "")
+                rootNo = "0";
+     
             //获得数据.
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
@@ -84,20 +84,18 @@
 
             var dbTrees = data["DBTrees"]; //左边的树.
             selectedRows = data["DBMMs"]; //选择的数据.
+            if (data["Base_Info"] != undefined) {
+                IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
+                if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols!="")
+                    showCols = data["Base_Info"][0].ExtShowCols;
+            }
 
-            var webUser = new WebUser();
             // AtPara
             var title = "请选择"; // mapExt.GetPara("Title");
             $("#title").text(title); //设置标题.
 
             var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
-
-            // global
-            var searchUrl = ""; // mapExt.Tag1;    //查询
-            var treeUrl = ""; // mapExt.Tag2;      //初始化树
-            var treeClickUrl = ""; // mapExt.Tag3; //树选择.
-
 
             var searchTableColumns = [{
                 field: "_checkbox",
@@ -112,8 +110,7 @@
             }];
 
             //显示列的中文名称.
-            var tag = "No=编号,Name=名称";
-            $.each(tag.split(","), function (i, o) {
+            $.each(showCols.split("@"), function (i, o) {
                 var exp = o.split("=");
                 var field;
                 var title;
@@ -126,9 +123,17 @@
                 if (!isLegalName(field)) {
                     return true;
                 }
+                if (field == GetQueryString("DefaultGroupAttrKey"))
+                    field = field + "Text";
                 searchTableColumns.push({
                     field: field,
-                    title: title
+                    title: title,
+                    formatter: function (value, row, index) {
+                        if (row.TYPE != null && row.TYPE != undefined && row.TYPE == -1)
+                            return "<font style='color:blue'>" + value + "</font>";
+                        else
+                            return value;
+                    }
                 });
             });
 
@@ -139,7 +144,7 @@
             });
 
             // tree
-            loadTree(dbTrees, "0");
+            loadTree(dbTrees, rootNo);
 
             // grid1
             $('#selectGrid').bootstrapTable({
@@ -173,6 +178,11 @@
                 }
             });
 
+            searchTableColumns.push({
+                title: '操作', formatter: function (value, row, index) {
+                    return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
+                }
+            });
             // grid2
             $('#viewGrid').bootstrapTable({
                 striped: true,
@@ -186,28 +196,11 @@
                 detailView: false,
                 height: $(document).height() / 3,
                 uniqueId: "No",
-                columns: [{
-                    field: 'No',
-                    title: '编号'
-                }, {
-                    field: 'Name',
-                    title: '名称'
-                }, {
-                    title: '操作', formatter: function (value, row, index) {
-                        return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
-                    }
-                }]
+                columns: searchTableColumns
+
             });
 
-            //		        // 初始化加载
-            //		        var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-            //		        frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
-            //		        $.each(frmEleDBs, function (i, o) {
-            //		            selectedRows.push({
-            //		                "No": o.Tag1,
-            //		                "Name": o.Tag2
-            //		            });
-            //		        });
+      
             loadViewGrid(selectedRows);
         });
 
@@ -255,11 +248,8 @@
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
 
-            hander.AddPara("Key", key);
+            hander.AddPara("Key", key.replace(/'/g,''));
             var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
-
-            //document.title =  "key="+key+" json:" +json.length;
-            //alert( JSON.stringify( json));
 
             loadSelectGrid(json);
         }
@@ -286,13 +276,29 @@
             // 绑定内容列表.
             $('#selectGrid').bootstrapTable("hideAllColumns");
             $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
-            $('#selectGrid').bootstrapTable("showColumn", "No");
-            $('#selectGrid').bootstrapTable("showColumn", "Name");
+
+            $.each(showCols.split("@"), function (i, o) {
+                var exp = o.split("=");
+                var field;
+                var title;
+                if (exp.length == 1) {
+                    field = title = exp[0];
+                } else if (exp.length == 2) {
+                    field = exp[0];
+                    title = exp[1];
+                }
+                if (!isLegalName(field)) {
+                    return true;
+                }
+                if (field == GetQueryString("DefaultGroupAttrKey"))
+                    field = field + "Text";
+                $('#selectGrid').bootstrapTable("showColumn", field);
+            });
 
 
-            //		        $.each(json[0], function (n, o) {
-            //		            $('#selectGrid').bootstrapTable("showColumn", n);
-            //		        });
+          //  $('#selectGrid').bootstrapTable("showColumn", "No");
+          //  $('#selectGrid').bootstrapTable("showColumn", "Name");
+
 
 
             if ($.isArray(selectedRows)) {
@@ -311,14 +317,13 @@
         }
 
         var nodeId = "";
-        var rootNo = "0";
+       
         function loadTree(dbTrees, rootNo, global) {
-            var jsonTree = createJsonToTree(dbTrees, rootNo);
+            var jsonTree = findChildren(dbTrees, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
                 showCheckbox: false,   //是否显示复选框
                 highlightSelected: true,    //是否高亮选中
-                //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
                 nodeIcon: 'glyphicon',
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
@@ -340,65 +345,102 @@
                         tree.treeview('expandNode', data.nodeId);
                     }
 
+                },
+                onNodeExpanded: function (event, data) {
+                    if (IsEnsOfMExitParentNo == 1) {
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
+                        handler.AddPara("RootNo", data.id);
+                        handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
+                        handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
+                        var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
+                        var jsonTree = findChildren(json, data.id);
+                        $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+
+                        $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+
+                    }
+                    
                 }
             });
         }
 
 
         //树形结构转换
-        var treeJson = [];
-        function createJsonToTree(jsonArray, parentNo) {
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (rootNo != "0") {
-                    if (data.No == parentNo) {
+        function findChildren(jsonArray, parentNo) {
+            var appendToTree = function (treeToAppend, child) {
+                $.each(treeToAppend, function (i, o) {
+                    if (o.id == child.ParentNo) {
                         var checked = false;
                         var selectedNodes = window.selectedNodes;
+
                         var sel = $.grep(selectedNodes, function (obj) {
-                            return data.No == obj.No;
+                            return child.No == obj.No;
                         });
                         if (sel.length > 0) {
                             checked = true;
                         }
-                        treeJson.push({
-                            "id": data.No,
-                            "text": data.Name,
-                            "nodes": creatTreeChildern(jsonArray, data.No),
-                            "state": { checked: checked, disabled: false }
+                        o.nodes.push({
+                            "id": child.No,
+                            "text": child.Name,
+                            "nodes": [],
+                            "state": { checked: checked, disabled: checked }
                         });
+                    } else {
+                        appendToTree(o.nodes, child);
                     }
-                } else {
-                    if (data.ParentNo == parentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
-                        var sel = $.grep(selectedNodes, function (obj) {
-                            return data.No == obj.No;
-                        });
-                        if (sel.length > 0) {
-                            checked = true;
+                });
+            };
+
+            var jsonTree = [];
+            if (jsonArray.length > 0 && typeof parentNo !== "undefined") {
+                //如果parentNo不为0，则增加parentNo的部门数据
+                if (parentNo != 0 && parentNo == rootNo) {
+                    $.each(jsonArray, function (i, item) {
+                        if (item.No == parentNo) {
+                            jsonTree.push({
+                                "id": parentNo,
+                                "text": item.Name,
+                                "nodes": []
+                            });
+                            return;
                         }
-                        treeJson.push({
-                            "id": data.No,
-                            "text": data.Name,
-                            "nodes": creatTreeChildern(jsonArray, data.No),
-                            "state": { checked: checked, disabled: false }
-                        });
-                    }
+                    });
                 }
+                $.each(jsonArray, function (i, o) {
+                    if (o.ParentNo == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return o.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
+                        jsonTree.push({
+                            "id": o.No,
+                            "text": o.Name,
+                            "nodes": [],
+                            "state": { checked: checked, disabled: checked }
+                        });
+                    } else {
+                        appendToTree(jsonTree, o);
+                    }
+                });
             }
+
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
                         if (o.nodes.length == 0) {
-                            o.nodes = undefined;
+                            //o.nodes = undefined;
                         } else {
                             _(o.nodes);
                         }
                     }
                 });
             }
-            _(treeJson);
-            return treeJson;
+            _(jsonTree);
+            return jsonTree;
         }
 
 
@@ -490,8 +532,8 @@
             }
         }
     </script>
-    <head>
-        <body style="overflow-y:hidden">
+    </head>
+        <body>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -508,8 +550,8 @@
                     </div>
                 </div>
                 <div class="row row-margin-top">
-                    <div class="col-md-4 col-sm-4" style="height:500px">
-                        <div id="tree" style="overflow-y:auto;height:100%"></div>
+                    <div class="col-md-4 col-sm-4">
+                        <div id="tree" class="pre-scrollable"></div>
                     </div>
                     <div class="col-md-8 col-sm-8">
                         <div class="row">

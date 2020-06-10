@@ -3653,27 +3653,34 @@
 }
 
     .cs-bar #Btn, .cs-bar #Btn_Adv {
-        border: 1px solid #888;
-        color: #333;
+        border: 1px solid #031f5d;
+        background-color: #fff;
+        color: #031f5d;
     }
 
-        .cs-bar #Btn:hover, .cs-bar #Btn_Adv:hover {
-            background-color: #fff;
-        }
 
-    .cs-bar #Btn_Save {
-        background-color: #62CAE3;
+    .cs-bar #Btn_Save, #Btn_Imp, #Btn_Save, #Btn_New, #Btn_SaveAndClose, #Btn_Help, #Btn_Back, #Btn_Advanced, #Btn_Batch, #Btn_Exp, #Btn_Close, #Btn_Delete, #Btn_Setting {
+        border: 1px solid #031f5d;
+        background-color: #fff;
+        color: #031f5d;
+    }
+    /*.cs-bar #Btn_New {
+        border: 1px solid #031f5d;
+        background-color: #fff;
+        color: #031f5d;
     }
 
     .cs-bar #Btn_SaveAndClose {
-        background-color: #f74f52;
+        border: 1px solid #031f5d;
+        background-color: #fff;
+        color: #031f5d;
     }
 
     .cs-bar #Btn_Help {
         border: 1px solid #031f5d;
         background-color: #fff;
         color: #031f5d;
-    }
+    }*/
 
     .cs-bar select {
         margin-left: 10px;

@@ -7,6 +7,12 @@ var basePath = basePath();
 var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
 var MyFlow = "MyFlow.ashx"; //工作处理器.
 var webUser = null; //定义通用变量用户信息
+var IsIELower10 = false;
+
+var ver = IEVersion();
+if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
+    IsIELower10 = true;
+
 
 function basePath() {
     
@@ -145,7 +151,25 @@ Skip.addJs = function (url) {
     oXmlHttp.send(null);
     var rootObject = document.getElementsByTagName('script')[0];
     Skip.includeJsText(rootObject, oXmlHttp.responseText);
+    }
+
+
+function IEVersion() {
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+    var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+    if (isIE) {
+        if (document.documentMode) return document.documentMode;
+    } else if (isEdge) {
+        return 'edge';//edge
+    } else if (isIE11) {
+        return 11; //IE11  
+    } else {
+        return -1;//不是ie浏览器
+    }
 }
+
  
 
 

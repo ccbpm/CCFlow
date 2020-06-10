@@ -154,7 +154,6 @@ namespace BP.WF
                 //检查如果是合流节点必须不能是由上一个节点指定接受人员.
                 CheckMode_HeliuAccpterRole();
 
-                Node.CheckFlow(this.flow);
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.flow.No);
@@ -331,7 +330,7 @@ namespace BP.WF
 
                     foreach (Cond cond in conds)
                     {
-                        if (cond.FK_Node == nd.NodeID && cond.HisCondType == CondType.Flow)
+                        if (cond.FK_Node == nd.NodeID && cond.CondType == CondType.Flow)
                         {
                             nd.IsCCFlow = true;
                             nd.Update();
@@ -584,7 +583,7 @@ namespace BP.WF
                 //子线程节点
                 if (nd.HisNodeWorkType == NodeWorkType.SubThreadWork)
                 {
-                    if (nd.CondModel == CondModel.ByUserSelected)
+                    if (nd.CondModel == DirCondModel.ByUserSelected)
                     {
                         Nodes toNodes = nd.HisToNodes;
                         if (toNodes.Count == 1)

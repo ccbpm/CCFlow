@@ -354,6 +354,10 @@ namespace BP.WF.Template
             {
                 return this.GetValStringByKey(BtnAttr.SendLab);
             }
+            set
+            {
+                this.SetValByKey(BtnAttr.SendLab, value);
+            }
         }
         /// <summary>
         /// 是否启用发送?
@@ -673,6 +677,20 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.PrintZipEnable);
             }
         }
+        public bool PrintZipMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintZipMyCC);
+            }
+        }
+        public bool PrintZipMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintZipMyView);
+            }
+        }
         /// <summary>
         /// 打包下载 标签
         /// </summary>
@@ -691,6 +709,20 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValBooleanByKey(BtnAttr.PrintPDFEnable);
+            }
+        }
+        public bool PrintPDFMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintPDFMyCC);
+            }
+        }
+        public bool PrintPDFMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintPDFMyView);
             }
         }
         /// <summary>
@@ -712,6 +744,22 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValBooleanByKey(BtnAttr.PrintHtmlEnable);
+            }
+        }
+
+        public bool PrintHtmlMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintHtmlMyCC);
+            }
+        }
+
+        public bool PrintHtmlMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintHtmlMyView);
             }
         }
         /// <summary>
@@ -852,238 +900,7 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.WebOfficeLab);
             }
         }
-        /// <summary>
-        /// 打开本地文件
-        /// </summary>
-        public bool OfficeOpenEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeOpenEnable); }
-        }
-        /// <summary>
-        /// 打开本地标签      
-        /// </summary>
-        public string OfficeOpenLab
-        {
-            get { return this.GetValStrByKey(BtnAttr.OfficeOpenLab); }
-        }
-        /// <summary>
-        /// 打开模板
-        /// </summary>
-        public bool OfficeOpenTemplateEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeOpenTemplateEnable); }
-        }
-        /// <summary>
-        /// 打开模板标签
-        /// </summary>
-        public string OfficeOpenTemplateLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeOpenTemplateLab); }
-        }
-        /// <summary>
-        /// 保存按钮
-        /// </summary>
-        public bool OfficeSaveEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeSaveEnable); }
-        }
-        /// <summary>
-        /// 保存标签
-        /// </summary>
-        public string OfficeSaveLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeSaveLab); }
-        }
-        /// <summary>
-        /// 接受修订
-        /// </summary>
-        public bool OfficeAcceptEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeAcceptEnable); }
-        }
-        /// <summary>
-        /// 接受修订标签
-        /// </summary>
-        public string OfficeAcceptLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeAcceptLab); }
-        }
-        /// <summary>
-        /// 拒绝修订
-        /// </summary>
-        public bool OfficeRefuseEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeRefuseEnable); }
-        }
-        /// <summary>
-        /// 拒绝修订标签
-        /// </summary>
-        public string OfficeRefuseLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeRefuseLab); }
-        }
-        public string OfficeOVerLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeOverLab); }
-        }
-        /// <summary>
-        /// 是否套红
-        /// </summary>
-        public bool OfficeOverEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeOverEnable); }
-        }
-        /// <summary>
-        /// 套红按钮标签
-        /// </summary>
-        public string OfficeOverLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeOverLab); }
-        }
-        /// <summary>
-        /// 是否打印
-        /// </summary>
-        public bool OfficePrintEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficePrintEnable); }
-        }
-        /// <summary>
-        /// 是否查看用户留痕
-        /// </summary>
-        public bool OfficeMarksEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeMarksEnable); }
-        }
-        /// <summary>
-        /// 打印按钮标签
-        /// </summary>
-        public string OfficePrintLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficePrintLab); }
-        }
-        /// <summary>
-        /// 签章按钮
-        /// </summary>
-        public bool OfficeSealEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeSealEnable); }
-        }
-        /// <summary>
-        /// 签章标签
-        /// </summary>
-        public string OfficeSealLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeSealLab); }
-        }
-
-        /// <summary>
-        ///插入流程
-        /// </summary>
-        public bool OfficeInsertFlowEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeInsertFlowEnable); }
-        }
-        /// <summary>
-        /// 流程标签
-        /// </summary>
-        public string OfficeInsertFlowLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeInsertFlowLab); }
-        }
-
-
-        /// <summary>
-        /// 是否自动记录节点信息
-        /// </summary>
-        public bool OfficeNodeInfo
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeNodeInfo); }
-        }
-
-        /// <summary>
-        /// 是否自动记录节点信息
-        /// </summary>
-        public bool OfficeReSavePDF
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeReSavePDF); }
-        }
-
-        /// <summary>
-        /// 是否进入留痕模式
-        /// </summary>
-        public bool OfficeIsMarks
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeIsMarks); }
-        }
-
-        /// <summary>
-        /// 风险点模板
-        /// </summary>
-        public String OfficeFengXianTemplate
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeFengXianTemplate); }
-        }
-
-        public bool OfficeReadOnly
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeReadOnly); }
-        }
-
-        /// <summary>
-        /// 下载按钮标签
-        /// </summary>
-        public String OfficeDownLab
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeDownLab); }
-        }
-        /// <summary>
-        /// 下载按钮标签
-        /// </summary>
-        public bool OfficeIsDown
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeDownEnable); }
-        }
-
-        /// <summary>
-        /// 是否启用下载
-        /// </summary>
-        public bool OfficeDownEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeDownEnable); }
-        }
-
-        /// <summary>
-        /// 指定文档模板
-        /// </summary>
-        public String OfficeTemplate
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeTemplate); }
-        }
-
-
-        /// <summary>
-        /// 是否使用父流程的文档
-        /// </summary>
-        public bool OfficeIsParent
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeIsParent); }
-        }
-
-        /// <summary>
-        /// 是否自动套红
-        /// </summary>
-        public bool OfficeTHEnable
-        {
-            get { return this.GetValBooleanByKey(BtnAttr.OfficeTHEnable); }
-        }
-        /// <summary>
-        /// 自动套红模板
-        /// </summary>
-        public string OfficeTHTemplate
-        {
-            get { return this.GetValStringByKey(BtnAttr.OfficeTHTemplate); }
-        }
-
+                    
 
         /// <summary>
         /// 公文标签
@@ -1193,7 +1010,7 @@ namespace BP.WF.Template
 
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.ReturnRole, true, "是否启用", true, true);
+                map.AddTBInt(BtnAttr.ReturnRole, 1, "是否启用", true, true);
                 map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,
@@ -1302,13 +1119,26 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
 
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true, true);
+
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
 
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在抄送工具栏?", true, true, false);
+
+
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, false);
 
                 // add 2019.3.10 增加List.
                 map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);
@@ -1322,52 +1152,6 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.HelpLab, "帮助", "帮助标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HelpRole, 0, "帮助显示规则", true, true, BtnAttr.HelpRole, @"0=禁用@1=启用@2=强制提示@3=选择性提示");
 
-
-                #region 公文按钮
-                map.AddTBString(BtnAttr.OfficeOpenLab, "打开本地", "打开本地标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeOpenEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeOpenTemplateLab, "打开模板", "打开模板标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeOpenTemplateEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeSaveLab, "保存", "保存标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeSaveEnable, true, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeAcceptLab, "接受修订", "接受修订标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeAcceptEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeRefuseLab, "拒绝修订", "拒绝修订标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeRefuseEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeOverLab, "套红", "套红标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeOverEnable, false, "是否启用", true, true);
-
-                map.AddBoolean(BtnAttr.OfficeMarksEnable, true, "是否查看用户留痕", true, true, true);
-
-                map.AddTBString(BtnAttr.OfficePrintLab, "打印", "打印标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficePrintEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeSealLab, "签章", "签章标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeSealEnable, false, "是否启用", true, true);
-
-                map.AddTBString(BtnAttr.OfficeInsertFlowLab, "插入流程", "插入流程标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeInsertFlowEnable, false, "是否启用", true, true);
-
-                map.AddBoolean(BtnAttr.OfficeNodeInfo, false, "是否记录节点信息", true, true);
-                map.AddBoolean(BtnAttr.OfficeReSavePDF, false, "是否该自动保存为PDF", true, true);
-
-
-                map.AddTBString(BtnAttr.OfficeDownLab, "下载", "下载按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.OfficeDownEnable, false, "是否启用", true, true);
-
-                map.AddBoolean(BtnAttr.OfficeIsMarks, true, "是否进入留痕模式", true, true);
-                map.AddTBString(BtnAttr.OfficeTemplate, "", "指定文档模板", true, false, 0, 100, 10);
-                map.AddBoolean(BtnAttr.OfficeIsParent, true, "是否使用父流程的文档", true, true);
-
-                map.AddBoolean(BtnAttr.OfficeTHEnable, false, "是否自动套红", true, true);
-                map.AddTBString(BtnAttr.OfficeTHTemplate, "", "自动套红模板", true, false, 0, 200, 10);
-
-                #endregion
 
                 this._enMap = map;
                 return this._enMap;

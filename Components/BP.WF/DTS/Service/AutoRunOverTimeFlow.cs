@@ -184,7 +184,7 @@ namespace BP.WF.DTS
                             }
                             break;
                         case OutTimeDeal.DeleteFlow:
-                            info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, true);
+                            info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, true);
                             msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                   "'超时处理规则为'删除流程'," + info;
                             SetText(msg);

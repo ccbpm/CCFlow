@@ -205,7 +205,7 @@ namespace BP.UnitTesting.SendCase
 
 
             //删除该测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.fk_flow, workid, true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, true);
         }
     }
 }

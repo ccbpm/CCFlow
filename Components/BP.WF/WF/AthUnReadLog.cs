@@ -301,7 +301,6 @@ namespace BP.WF
                // map.AddDDLEntities(GenerWorkFlowAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
                 map.AddDDLEntities(GenerWorkFlowAttr.FK_Flow, null, "流程", new Flows(), false);
 
-
                 map.AddTBInt(AthUnReadLogAttr.FK_Node, 0, "节点ID", true, true);
                 map.AddTBString(AthUnReadLogAttr.NodeName, null, "节点名称", true, true, 0, 20, 10);
 

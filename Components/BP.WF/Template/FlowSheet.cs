@@ -234,7 +234,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin" || this.DesignerNo == WebUser.No)
+                if (BP.Web.WebUser.No.Equals("admin")==true || this.DesignerNo == WebUser.No)
                 {
                     uac.IsUpdate = true;
                 }
@@ -757,7 +757,7 @@ namespace BP.WF.Template
         {
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.No, workid, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
             }
             catch(Exception ex)

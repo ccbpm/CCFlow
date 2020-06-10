@@ -291,7 +291,6 @@ namespace BP.WF.Port.Admin2
             {
                 this.ParentName = deptParent.Name;
                 err += "info@父级部门名称与组织名称已经同步.";
-
             }
             this.Update(); //执行更新.
 
@@ -336,7 +335,6 @@ namespace BP.WF.Port.Admin2
                 en.OrgNo = this.No;
                 en.Domain = "ShouWen";
                 en.DirectUpdate();
-
 
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;

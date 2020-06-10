@@ -270,28 +270,28 @@ namespace BP.WF.HttpHandler
 
         public string OP_ComeBack()
         {
-            WorkFlow wf3 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf3 = new WorkFlow(WorkID);
             wf3.DoComeBackWorkFlow("无");
             return "流程已经被重新启用.";
         }
 
         public string OP_UnHungUp()
         {
-            WorkFlow wf2 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf2 = new WorkFlow( WorkID);
             //  wf2.DoUnHungUp();
             return "流程已经被解除挂起.";
         }
 
         public string OP_HungUp()
         {
-            WorkFlow wf1 = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf1 = new WorkFlow( WorkID);
             //wf1.DoHungUp()
             return "流程已经被挂起.";
         }
 
         public string OP_DelFlow()
         {
-            WorkFlow wf = new WorkFlow(FK_Flow, WorkID);
+            WorkFlow wf = new WorkFlow( WorkID);
             wf.DoDeleteWorkFlowByReal(true);
             return "流程已经被删除！";
         }
@@ -445,7 +445,7 @@ namespace BP.WF.HttpHandler
                 case WFState.Complete: // 完成.
                 case WFState.Delete:   // 逻辑删除..
                     /*恢复使用流程*/
-                    if (WebUser.No == "admin")
+                    if (WebUser.No.Equals("admin")==true)
                         ht.Add("CanRollBack", 1);
                     else
                         ht.Add("CanRollBack", 0);
@@ -656,7 +656,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Direction";
                 ds.Tables.Add(dt);
@@ -804,7 +804,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //获取流程中的线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Direction";
                 ds.Tables.Add(dt);
@@ -1028,7 +1028,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
 
                 //获取流程中的线段方向信息
-                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\",Dots \"Dots\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
+                sql = "SELECT Node \"Node\", ToNode \"ToNode\", 0 as  \"DirType\", 0 as \"IsCanBack\" FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_DIRECTION";
                 ds.Tables.Add(dt);
@@ -1192,7 +1192,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBS_Save()
         {
-            string msg = this.GetValFromFrmByKey("TB_Msg");
+            string msg = this.GetValFromFrmByKey("FlowBBS_Doc");
             string fk_mapData = this.GetRequestVal("FK_MapData");
             Node nd = new Node(this.FK_Node);
             if (DataType.IsNullOrEmpty(fk_mapData) == true)

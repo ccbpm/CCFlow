@@ -231,7 +231,7 @@ namespace BP.WF.Template
                 UAC uac = new UAC();
                 uac.IsDelete = false;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsUpdate = true;
                     uac.IsView = true;
@@ -296,7 +296,7 @@ namespace BP.WF.Template
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP3, null, "默认选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, 0, 300, 100, 3);
                 map.AddTBStringDoc(SelectorAttr.SelectorP4, null, "强制选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, 0, 300, 100, 3);
-
+                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
                 #endregion
 
                 #region 对应关系
@@ -360,6 +360,9 @@ namespace BP.WF.Template
                     break;
                 case SelectorModel.SQL:
                     ds = BySQL(nodeid, en);
+                    break;
+                case SelectorModel.SQLTemplate:
+                    ds = SQLTemplate(nodeid, en);
                     break;
                 case SelectorModel.GenerUserSelecter:
                     ds = ByGenerUserSelecter();
@@ -429,6 +432,23 @@ namespace BP.WF.Template
             return ds;
         }
         /// <summary>
+        /// 按照模版
+        /// </summary>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        private DataSet SQLTemplate(int nodeID, Entity en)
+        {
+            //设置他的模版.
+            //Node nd = new Node(nodeID);
+
+            SQLTemplate sql = new SQLTemplate(this.SelectorP1);
+            this.SelectorP2 = sql.Docs;
+
+            return BySQL(nodeID, en);
+        }
+            
+        /// <summary>
         /// 按照SQL计算.
         /// </summary>
         /// <param name="nodeID">节点ID</param>
@@ -439,8 +459,8 @@ namespace BP.WF.Template
             DataSet ds = new DataSet();
 
             //求部门.
-            string sqlGroup = this.SelectorP1;
-            if (DataType.IsNullOrEmpty(sqlGroup) == false)
+            string sqlGroup = this.SelectorP1; // @sly
+            if (DataType.IsNullOrEmpty(sqlGroup) == false && sqlGroup.Length > 6 )
             {
                 sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);  //@祝梦娟
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);

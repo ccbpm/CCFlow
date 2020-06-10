@@ -91,7 +91,7 @@ namespace BP.UnitTesting.NodeAttr
             #endregion
 
             //删除草稿.
-            BP.WF.Dev2Interface.Node_DeleteDraft(fl.No, workid);
+            BP.WF.Dev2Interface.Node_DeleteDraft(workid);
 
             //执行创建工作,一个新的workid.
             Int64 workidNew = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);

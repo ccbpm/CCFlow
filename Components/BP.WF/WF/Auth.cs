@@ -86,6 +86,28 @@ namespace BP.WF
                 this.SetValByKey(AuthAttr.TakeBackDT, value);
             }
         }
+        public string Auther
+        {
+            get
+            {
+                return this.GetValStringByKey(AuthAttr.Auther);
+            }
+            set
+            {
+                this.SetValByKey(AuthAttr.Auther, value);
+            }
+        }
+        public string EmpNo
+        {
+            get
+            {
+                return this.GetValStringByKey(AuthAttr.EmpNo);
+            }
+            set
+            {
+                this.SetValByKey(AuthAttr.EmpNo, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -131,6 +153,12 @@ namespace BP.WF
         {
             this.MyPK = BP.DA.DBAccess.GenerGUID();
             return base.beforeInsert();
+        }
+        public void doDel(string Auther, string EmpNo, string TakeBackDT)
+        {
+            this.MyPK = BP.DA.DBAccess.GenerGUID();
+            var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
+            DBAccess.RunSQL(sql);
         }
     }
     /// <summary>

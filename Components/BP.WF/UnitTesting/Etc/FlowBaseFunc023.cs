@@ -163,7 +163,7 @@ namespace BP.UnitTesting
             BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
 
             //执行删除.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID,false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workID,false);
 
             #region 检查删除功能是否符合预期.
             gwf = new GenerWorkFlow();

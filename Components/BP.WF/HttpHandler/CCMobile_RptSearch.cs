@@ -43,6 +43,8 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_RptSearch()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
+
         }
 
         #region 关键字查询.

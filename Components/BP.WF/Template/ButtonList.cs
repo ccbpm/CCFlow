@@ -7,8 +7,12 @@ namespace BP.WF.Template
     /// <summary>
     /// Btn属性
     /// </summary>
-    public class BtnAttr : BP.Sys.ToolbarExcelAttr
+    public class BtnAttr
     {
+        /// <summary>
+        /// Name
+        /// </summary>
+        public const string Name = "Name";
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -254,6 +258,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string PrintHtmlEnable = "PrintHtmlEnable";
         /// <summary>
+        /// 显示在抄送?
+        /// </summary>
+        public const string PrintHtmlMyView = "PrintHtmlMyView";
+        /// <summary>
+        /// 显示在查看器?
+        /// </summary>
+        public const string PrintHtmlMyCC = "PrintHtmlMyCC";
+        /// <summary>
         /// 打印pdf
         /// </summary>
         public const string PrintPDFLab = "PrintPDFLab";
@@ -261,6 +273,11 @@ namespace BP.WF.Template
         /// 打印pdf
         /// </summary>
         public const string PrintPDFEnable = "PrintPDFEnable";
+        public const string PrintPDFMyView = "PrintPDFMyView";
+        public const string PrintPDFMyCC = "PrintPDFMyCC";
+
+
+
         /// <summary>
         /// 打印pdf规则
         /// </summary>
@@ -277,6 +294,9 @@ namespace BP.WF.Template
         /// 是否启用打包下载
         /// </summary>
         public const string PrintZipEnable = "PrintZipEnable";
+        public const string PrintZipMyView = "PrintZipMyView";
+        public const string PrintZipMyCC = "PrintZipMyCC";
+        
 
         /// <summary>
         /// 分配

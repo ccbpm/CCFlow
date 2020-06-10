@@ -56,13 +56,32 @@ namespace BP.WF.Template
         /// </summary>
         public const string ShowWhere = "ShowWhere";
         /// <summary>
+        /// 在工作处理器显示
+        /// </summary>
+        public const string IsMyFlow = "IsMyFlow";
+        /// <summary>
+        ///  在工作查看器显示
+        /// </summary>
+        public const string IsMyView = "IsMyView";
+        /// <summary>
+        ///  在树形表单显示
+        /// </summary>
+        public const string IsMyTree = "IsMyTree";
+        /// <summary>
+        ///  在抄送功能显示
+        /// </summary>
+        public const string IsMyCC = "IsMyCC";
+        /// <summary>
+        /// IconPath 图片附件
+        /// </summary>
+        public const string IconPath = "IconPath";
         /// 执行类型
         /// </summary>
         public const string ExcType = "ExcType";
         #endregion
     }
     /// <summary>
-    /// 工具栏.	 
+    /// 工具栏.
     /// </summary>
     public class NodeToolbar : EntityOID
     {
@@ -159,6 +178,69 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.ExcType, value);
             }
         }
+        /// <summary>
+        /// 显示在工具栏中
+        /// </summary>
+        public bool IsMyFlow
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyFlow);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IsMyFlow, value);
+            }
+        }
+        //显示在流程树中
+        public bool IsMyTree
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyTree);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IsMyTree, value);
+            }
+        }
+        //显示在工作查看器
+        public bool IsMyView
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyView);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IsMyView, value);
+            }
+        }
+        
+        //显示在抄送工具栏中
+        public bool IsMyCC
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeToolbarAttr.IsMyCC);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IsMyCC, value);
+            }
+        }
+        //图片附件路径
+        public string IconPath
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeToolbarAttr.IconPath);
+            }
+            set
+            {
+                SetValByKey(NodeToolbarAttr.IconPath, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -188,6 +270,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_NodeToolbar", "自定义工具栏");
 
                 map.AddTBIntPKOID();
+                map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false, true);
                 map.AddTBString(NodeToolbarAttr.Title, null, "标题", true, false, 0, 100, 100, true);
 
                 // 执行类型.
@@ -197,12 +280,24 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.UrlExt, null, "连接/函数", true, false, 0, 500, 300, true);
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
-                // 显示位置.
-                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", true,true, NodeToolbarAttr.ShowWhere,
+                //显示位置.
+                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
                     "@0=树形表单@1=工具栏@2=抄送工具栏");
 
+                map.AddBoolean(NodeToolbarAttr.IsMyFlow, false, "工作处理器", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyView, false, "工作查看器", true, true);
+                map.AddBoolean(NodeToolbarAttr.IsMyCC, false, "抄送工具栏", true, true);
+
+                map.AddTBString(NodeToolbarAttr.IconPath, null, "ICON路径", true, false, 0, 100, 100, true);
+                string msg = "提示：";
+                msg += "\t\n 1. 给工具栏按钮设置图标两种方式,上传图标模式与设置指定的Icon的ID模式.";
+                msg += "\t\n 2. 我们优先解决Icon的ID解析模式.";
+                msg += "\t\n 3. 比如: ./Img/Btn/Save.png ";
+                map.SetHelperAlert(NodeToolbarAttr.IconPath, msg);
+
+                
                 map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
-                map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);
                 map.AddMyFile("图标");
 
                 this._enMap = map;
@@ -246,7 +341,8 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   /// <summary>
+        #region 为了适应自动翻译成java的需要,把实体转换成List 
+        /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>

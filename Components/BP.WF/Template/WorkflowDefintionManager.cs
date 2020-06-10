@@ -20,7 +20,7 @@ namespace BP.WF.Template
         /// <param name="nodes">节点信息，格式为:@NodeID=xxxx@X=xxx@Y=xxx@Name=xxxx@RunModel=1</param>
         /// <param name="dirs">方向信息，格式为: @Node=xxxx@ToNode=xxx@X=xxx@Y=xxx@Name=xxxx   </param>
         /// <param name="labes">标签信息，格式为:@MyPK=xxxxx@Label=xxx@X=xxx@Y=xxxx</param>
-        public static string SaveFlow(string fk_flow, string nodes, string dirs, string labes)
+        public static string SaveFlow_del(string fk_flow, string nodes, string dirs, string labes)
         {
             try
             {
@@ -36,17 +36,17 @@ namespace BP.WF.Template
 
                     AtPara ap = new AtPara(dir);
 
-                    string dots = ap.GetValStrByKey("Dots").Replace('#', '@');
-                    if (DataType.IsNullOrEmpty(dots) == true)
-                        dots = "";
+                    //string dots = ap.GetValStrByKey("Dots").Replace('#', '@');
+                    //if (DataType.IsNullOrEmpty(dots) == true)
+                    //    dots = "";
 
                     Direction enDir = new Direction();
                     enDir.Node = ap.GetValIntByKey(DirectionAttr.Node);
                     enDir.ToNode = ap.GetValIntByKey(DirectionAttr.ToNode);
-                    enDir.IsCanBack = ap.GetValBoolenByKey(DirectionAttr.IsCanBack);
+                   // enDir.IsCanBack = ap.GetValBoolenByKey(DirectionAttr.IsCanBack);
                     // enDir.DirType = ap.GetValIntByKey(DirectionAttr.DirType);
                     enDir.FK_Flow = fk_flow;
-                    enDir.Dots = dots;
+                    //enDir.Dots = dots;
                     try
                     {
                         enDir.Insert();
@@ -92,7 +92,6 @@ namespace BP.WF.Template
                     ln.Insert();
                 }
                 #endregion 处理标签。
-
 
                 // 备份文件
                 //f1.WriteToXml();

@@ -96,7 +96,7 @@ namespace BP.UnitTesting.AttrFlow
                    throw new Exception("应该两次生成的WorkID不相同， 但是现在相同.");
              
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workID, false);
         }
     }
 }

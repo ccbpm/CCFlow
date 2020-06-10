@@ -50,8 +50,8 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 如果图片显示.
 
-                #region 执行装载模版.
-                if (dbs.Count == 0 && athDesc.IsWoEnableTemplete == true)
+                #region 执行装载模版. athDesc.IsWoEnableTemplete == true
+                if (dbs.Count == 0 && 1==2)
                 {
                     /*如果数量为0,就检查一下是否有模版如果有就加载模版文件.*/
                     string templetePath = BP.Sys.SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();
@@ -92,9 +92,11 @@ namespace BP.WF.HttpHandler
                         FileInfo info = new FileInfo(saveTo);
                         FrmAttachmentDB dbUpload = new FrmAttachmentDB();
 
-                        dbUpload.CheckPhysicsTable();
+                        //dbUpload.CheckPhysicsTable();
                         dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
                         dbUpload.NodeID = FK_Node;
+                        dbUpload.FK_MapData = athDesc.FK_MapData;
+
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
@@ -761,9 +763,13 @@ namespace BP.WF.HttpHandler
             obj.addAnd();
             obj.AddWhere(FrmImgAthDBAttr.FK_FrmImgAth, ImgAthPK);
             obj.addAnd();
-            obj.AddWhere(FrmImgAthDBAttr.RefPKVal, this.MyPK);
+            obj.AddWhere(FrmImgAthDBAttr.RefPKVal, this.RefPKVal);
             obj.DoQuery();
-            return BP.Tools.Entitis2Json.ConvertEntities2ListJson(imgAthDBs);
+
+            //return BP.Tools.Entitis2Json.ConvertEntities2ListJson(imgAthDBs);
+            DataTable dt = imgAthDBs.ToDataTableField();
+            dt.TableName = "FrmImgAthDB";
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 上传编辑图片
@@ -805,6 +811,12 @@ namespace BP.WF.HttpHandler
                 //源图像  
                 System.Drawing.Bitmap oldBmp = new System.Drawing.Bitmap(saveToPath);
 
+                if (zoomW == 0 && zoomH == 0)
+                {
+                    zoomW = oldBmp.Width;
+                    zoomH = oldBmp.Height;
+                }
+
                 //新图像,并设置新图像的宽高  
                 System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(zoomW, zoomH);
                 System.Drawing.Graphics draw = System.Drawing.Graphics.FromImage(newBmp);//从新图像获取对应的Graphics  
@@ -817,31 +829,46 @@ namespace BP.WF.HttpHandler
 
                 //复制一份
                 File.Copy(saveToPath, fileUPloadPath, true);
-                ////获取文件大小
-                //FileInfo fileInfo = new FileInfo(saveToPath);
-                //float fileSize = 0;
-                //if (fileInfo.Exists)
-                //    fileSize = float.Parse(fileInfo.Length.ToString());
+                //获取文件大小
+                FileInfo fileInfo = new FileInfo(saveToPath);
+                float fileSize = 0;
+                if (fileInfo.Exists)
+                    fileSize = float.Parse(fileInfo.Length.ToString());
 
                 ////更新数据表                
-                //FrmImgAthDB imgAthDB = new FrmImgAthDB();
-                //imgAthDB.MyPK = myName;
-                //imgAthDB.FK_MapData = this.FK_MapData;
-                //imgAthDB.FK_FrmImgAth = ImgAthPK;
-                //imgAthDB.RefPKVal = this.MyPK;
-                //imgAthDB.FileFullName = webPath;
-                //imgAthDB.FileName = newName;
-                //imgAthDB.FileExts = "png";
-                //imgAthDB.FileSize = fileSize;
-                //imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
-                //imgAthDB.Rec = BP.Web.WebUser.No;
-                //imgAthDB.RecName = BP.Web.WebUser.Name;
-                //imgAthDB.Save();
+                FrmImgAthDB imgAthDB = new FrmImgAthDB();
+                imgAthDB.MyPK = myName;
+                imgAthDB.FK_MapData = this.FK_MapData;
+                imgAthDB.FK_FrmImgAth = CtrlID;
+                imgAthDB.RefPKVal = this.RefPKVal;
+                imgAthDB.FileFullName = webPath;
+                imgAthDB.FileName = fileInfo.Name;
+                imgAthDB.FileExts = "png";
+                imgAthDB.FileSize = fileSize;
+                imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
+                imgAthDB.Rec = BP.Web.WebUser.No;
+                imgAthDB.RecName = BP.Web.WebUser.Name;
+                imgAthDB.Save();
                 return "{SourceImage:\"" + webPath + "\"}";
             }
             return "{err:\"没有选择文件\"}";
         }
+        public string ImgUpload_Del()
+        {
+            //执行删除.
+            string delPK = this.GetRequestVal("DelPKVal");
 
+            FrmImgAthDB delDB = new FrmImgAthDB();
+            delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.RetrieveFromDBSources();
+            delDB.Delete(); //删除上传的文件.
+
+            string saveToPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+
+            FileInfo fileInfo = new FileInfo(saveToPath+"/"+ delDB.FileName);
+            fileInfo.Delete();
+            return "删除成功.";
+        }
         /// <summary>
         /// 剪切图片
         /// </summary>
@@ -1201,7 +1228,8 @@ namespace BP.WF.HttpHandler
                     //如果是累加表单.
                     if (nd.HisFormType == NodeFormType.FoolTruck)
                     {
-                        DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                        DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow,
+                            nd, this.WorkID,
                   this.FID, BP.Web.WebUser.No, this.GetRequestVal("FromWorkOpt"));
 
                         return BP.Tools.Json.ToJson(myds);
@@ -1984,6 +2012,7 @@ namespace BP.WF.HttpHandler
                         mdtl.No = this.EnsName + "_" + this.FK_Node;
                         if (mdtl.RetrieveFromDBSources() == 0)
                         {
+                            mdtl.No = this.EnsName;
                             /*如果设置了自定义方案，但是没有定义，从表属性，就需要去默认值. */
                         }
                     }
@@ -3202,6 +3231,7 @@ namespace BP.WF.HttpHandler
 
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.MyPK = athDBPK;
+            dbUpload.FK_MapData = frmAth.FK_MapData;
             dbUpload.FK_FrmAttachment = attachPk;
             dbUpload.RefPKVal = this.WorkID.ToString();
             dbUpload.FID = fid;
@@ -3245,6 +3275,7 @@ namespace BP.WF.HttpHandler
         //多附件上传方法
         public string MoreAttach()
         {
+            string uploadFileM = ""; //上传附件数据的MyPK,用逗号分开
             string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
@@ -3326,23 +3357,24 @@ namespace BP.WF.HttpHandler
                 //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                    athDesc = new FrmAttachment();
-                    athDesc.MyPK = attachPk + "_" + this.FK_Node;
-                    if (athDesc.RetrieveFromDBSources() != 0)
+                    //@sly
+                    BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
+                    myathDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    if (myathDesc.RetrieveFromDBSources() != 0)
                     {
-                        if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.FID)
                             pkVal = this.FID.ToString();
 
-                        if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                             pkVal = this.PWorkID.ToString();
 
-                        if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                         {
                             //根据流程的PWorkID获取他的爷爷流程
                             string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
                             pkVal = pWorkID;
                         }
-                        if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
                         {
                             string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                             //根据流程的PWorkID获取他的P2流程
@@ -3364,6 +3396,8 @@ namespace BP.WF.HttpHandler
             {
                 //HttpPostedFile file = context.Request.Files[i];
                 var file = HttpContextHelper.RequestFiles(i);
+
+                string fileName = System.IO.Path.GetFileName(file.FileName);
 
                 #region 文件上传的iis服务器上 or db数据库里.
                 if (athDesc.AthSaveWay == AthSaveWay.IISServer)
@@ -3419,9 +3453,10 @@ namespace BP.WF.HttpHandler
                         return "err@上传的文件" + file.FileName + "没有扩展名";
 
                     string guid = BP.DA.DBAccess.GenerGUID();
-                    string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
-                    string ext = System.IO.Path.GetExtension(file.FileName);
-                    string realSaveTo = savePath + "\\" + guid + "." + fileName + ext;
+
+                    
+                    
+                    string realSaveTo = savePath + "\\" + guid + "." + fileName;
 
                     realSaveTo = realSaveTo.Replace("~", "-");
                     realSaveTo = realSaveTo.Replace("'", "-");
@@ -3462,7 +3497,6 @@ namespace BP.WF.HttpHandler
                     dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
                     dbUpload.NodeID = this.FK_Node;
                     dbUpload.Sort = sort;
-                    dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
@@ -3495,7 +3529,7 @@ namespace BP.WF.HttpHandler
                     }
                     #endregion 处理文件路径，如果是保存到数据库，就存储pk.
 
-                    dbUpload.FileName = file.FileName;
+                    dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
@@ -3507,6 +3541,8 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.UploadGUID = guid;
                     dbUpload.Insert();
+                    uploadFileM += dbUpload.MyPK + ",";
+
 
                     if (athDesc.AthSaveWay == AthSaveWay.DB)
                     {
@@ -3565,6 +3601,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                     dbUpload.Sort = sort;
                     dbUpload.NodeID = FK_Node;
+                    dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)
@@ -3573,7 +3610,7 @@ namespace BP.WF.HttpHandler
                     dbUpload.RefPKVal = pkVal.ToString();
                     dbUpload.FK_MapData = athDesc.FK_MapData;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
-                    dbUpload.FileName = file.FileName;
+                    dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
                     dbUpload.RDT = DataType.CurrentDataTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
@@ -3637,6 +3674,8 @@ namespace BP.WF.HttpHandler
                         File.Delete(temp);
                     }
 
+                    uploadFileM += dbUpload.MyPK + ",";
+
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
@@ -3653,7 +3692,7 @@ namespace BP.WF.HttpHandler
                 en.Row["AthNum"] = athNum + 1;
                 en.Update();
             }
-            return "上传成功.";
+            return uploadFileM;
         }
 
         /// <summary>
@@ -4746,7 +4785,6 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理权限方案。
 
-
             return athDesc;
         }
         /// <summary>
@@ -4996,7 +5034,15 @@ namespace BP.WF.HttpHandler
         #endregion
 
 
-
+        #region 前台SQL转移处理
+        public string RunSQL_Init()
+        {
+            string sql = GetRequestVal("SQL");
+            DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = new DataTable();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
 
     }
 }

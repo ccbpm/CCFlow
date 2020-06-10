@@ -98,8 +98,6 @@ namespace BP.WF
                         qo.AddWhere(TrackAttr.WorkID, this.FID);
                         qo.addOr();
                         qo.AddWhere(TrackAttr.FID, this.FID);
-                       
-                       
                     }
                     else
                     {
@@ -116,7 +114,18 @@ namespace BP.WF
 
                     string sql = qo.SQL;
                     sql = sql.Replace("WF_Track", "ND" + int.Parse(this.FlowNo) + "Track");
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql, qo.MyParas);
+                    DataTable dt = null;
+
+                    //修复track 表.
+                    try
+                    {
+                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql, qo.MyParas);
+                    }
+                    catch (Exception ex)
+                    {
+                        Track.CreateOrRepairTrackTable(this.FlowNo);
+                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql, qo.MyParas);
+                    }
 
                     dt.DefaultView.Sort = "RDT desc";
 

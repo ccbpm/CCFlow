@@ -90,6 +90,22 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 格式化html的文档.
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_FormatHtml()
+        {
+            string html = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No",
+                this.FrmID, "HtmlTemplateFile");
+
+
+
+
+            return "替换成功.";
+            //return html;
+        }
+
+        /// <summary>
         /// 表单重置
         /// </summary>
         /// <returns></returns>

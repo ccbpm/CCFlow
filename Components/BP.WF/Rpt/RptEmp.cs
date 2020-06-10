@@ -33,7 +33,7 @@ namespace BP.WF.Rpt
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsView = true;
                     uac.IsDelete = true;

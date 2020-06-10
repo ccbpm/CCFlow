@@ -163,118 +163,130 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
 
         }
+        /// <summary>
+        /// 创建表单
+        /// </summary>
+        /// <returns></returns>
         public string NewFrmGuide_Create()
         {
             MapData md = new MapData();
-            md.Name = this.GetRequestVal("TB_Name");
-            md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
 
-            md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
-
-            //表单的物理表.
-            if (md.HisFrmType == BP.Sys.FrmType.Url || md.HisFrmType == BP.Sys.FrmType.Entity)
-                md.PTable = this.GetRequestVal("TB_PTable");
-            else
-                md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
-
-            //数据表模式。 @周朋 需要翻译.
-            md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
-
-            //@李国文 需要对比翻译.
-            string sort = this.GetRequestVal("FK_FrmSort");
-            if (DataType.IsNullOrEmpty(sort) == true)
-                sort = this.GetRequestVal("DDL_FrmTree");
-
-            md.FK_FrmSort = sort;
-            md.FK_FormTree = sort;
-
-            md.AppType = "0";//独立表单
-            md.DBSrc = this.GetRequestVal("DDL_DBSrc");
-            if (md.IsExits == true)
-                return "err@表单ID:" + md.No + "已经存在.";
-
-            switch (md.HisFrmType)
+            try
             {
-                //自由，傻瓜，SL表单不做判断
-                case BP.Sys.FrmType.FreeFrm:
-                case BP.Sys.FrmType.FoolForm:
-                case BP.Sys.FrmType.Develop:
-                    break;
-                case BP.Sys.FrmType.Url:
-                case BP.Sys.FrmType.Entity:
-                    md.Url = md.PTable;
-                    md.PTable = "";
-                    break;
-                //如果是以下情况，导入模式
-                case BP.Sys.FrmType.WordFrm:
-                case BP.Sys.FrmType.ExcelFrm:
-                case BP.Sys.FrmType.VSTOForExcel:
-                    break;
-                default:
-                    throw new Exception("未知表单类型." + md.HisFrmType.ToString());
+                md.Name = this.GetRequestVal("TB_Name");
+                md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
+
+                md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
+
+                //表单的物理表.
+                if (md.HisFrmType == BP.Sys.FrmType.Url || md.HisFrmType == BP.Sys.FrmType.Entity)
+                    md.PTable = this.GetRequestVal("TB_PTable");
+                else
+                    md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
+
+                //数据表模式。 @周朋 需要翻译.
+                md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
+
+                //@李国文 需要对比翻译.
+                string sort = this.GetRequestVal("FK_FrmSort");
+                if (DataType.IsNullOrEmpty(sort) == true)
+                    sort = this.GetRequestVal("DDL_FrmTree");
+
+                md.FK_FrmSort = sort;
+                md.FK_FormTree = sort;
+
+                md.AppType = "0";//独立表单
+                md.DBSrc = this.GetRequestVal("DDL_DBSrc");
+                if (md.IsExits == true)
+                    return "err@表单ID:" + md.No + "已经存在.";
+
+                switch (md.HisFrmType)
+                {
+                    //自由，傻瓜，SL表单不做判断
+                    case BP.Sys.FrmType.FreeFrm:
+                    case BP.Sys.FrmType.FoolForm:
+                    case BP.Sys.FrmType.Develop:
+                        break;
+                    case BP.Sys.FrmType.Url:
+                    case BP.Sys.FrmType.Entity:
+                        md.Url = md.PTable;
+                        md.PTable = "";
+                        break;
+                    //如果是以下情况，导入模式
+                    case BP.Sys.FrmType.WordFrm:
+                    case BP.Sys.FrmType.ExcelFrm:
+                    case BP.Sys.FrmType.VSTOForExcel:
+                        break;
+                    default:
+                        throw new Exception("未知表单类型." + md.HisFrmType.ToString());
+                }
+                md.Insert();
+
+                //增加上OID字段.
+                BP.Sys.CCFormAPI.RepareCCForm(md.No);
+
+                BP.Frm.EntityType entityType = (EntityType)this.GetRequestValInt("EntityType");
+
+                #region 如果是单据.
+                if (entityType == EntityType.FrmBill)
+                {
+                    BP.Frm.FrmBill bill = new FrmBill(md.No);
+                    bill.EntityType = EntityType.FrmBill;
+                    bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
+
+                    //设置默认的查询条件.
+                    bill.SetPara("IsSearchKey", 1);
+                    bill.SetPara("DTSearchWay", 0);
+
+                    bill.Update();
+                    bill.CheckEnityTypeAttrsFor_Bill();
+                }
+                #endregion 如果是单据.
+
+                #region 如果是实体 EnityNoName .
+                if (entityType == EntityType.FrmDict)
+                {
+                    BP.Frm.FrmDict entityDict = new FrmDict(md.No);
+                    entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+                    entityDict.BtnNewModel = 0;
+
+                    //设置默认的查询条件.
+                    entityDict.SetPara("IsSearchKey", 1);
+                    entityDict.SetPara("DTSearchWay", 0);
+
+                    entityDict.EntityType = EntityType.FrmDict;
+
+                    entityDict.Update();
+                    entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+                }
+                #endregion 如果是实体 EnityNoName .
+
+                //创建表与字段.
+                GEEntity en = new GEEntity(md.No);
+                en.CheckPhysicsTable();
+
+                if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
+                {
+                    /*把表单模版存储到数据库里 */
+                    return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
+                }
+
+                if (md.HisFrmType == BP.Sys.FrmType.Entity)
+                    return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
+
+                if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
+                    return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
+
+                if (md.HisFrmType == BP.Sys.FrmType.Develop)
+                    return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + md.No + "&FrmID=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
+
+                return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
             }
-            md.Insert();
-
-            //增加上OID字段.
-            BP.Sys.CCFormAPI.RepareCCForm(md.No);
-
-            BP.Frm.EntityType entityType = (EntityType)this.GetRequestValInt("EntityType");
-
-            #region 如果是单据.
-            if (entityType == EntityType.FrmBill)
+            catch (Exception ex)
             {
-                BP.Frm.FrmBill bill = new FrmBill(md.No);
-                bill.EntityType = EntityType.FrmBill;
-                bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
-
-                //设置默认的查询条件.
-                bill.SetPara("IsSearchKey", 1);
-                bill.SetPara("DTSearchWay", 0);
-
-                bill.Update();
-                bill.CheckEnityTypeAttrsFor_Bill();
+                md.Delete();
+                return "err@" + ex.Message;
             }
-            #endregion 如果是单据.
-
-            #region 如果是实体 EnityNoName .
-            if (entityType == EntityType.FrmDict)
-            {
-                BP.Frm.FrmDict entityDict = new FrmDict(md.No);
-                entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
-                entityDict.BtnNewModel = 0;
-
-                //设置默认的查询条件.
-                entityDict.SetPara("IsSearchKey", 1);
-                entityDict.SetPara("DTSearchWay", 0);
-
-                entityDict.EntityType = EntityType.FrmDict;
-
-                entityDict.Update();
-                entityDict.CheckEnityTypeAttrsFor_EntityNoName();
-            }
-            #endregion 如果是实体 EnityNoName .
-
-            //创建表与字段.
-            GEEntity en = new GEEntity(md.No);
-            en.CheckPhysicsTable();
-
-            if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
-            {
-                /*把表单模版存储到数据库里 */
-                return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
-            }
-
-            if (md.HisFrmType == BP.Sys.FrmType.Entity)
-                return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
-
-            if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
-                return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
-
-            if (md.HisFrmType == BP.Sys.FrmType.Develop)
-                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + md.No + "&FrmID="+md.No+"&EntityType=" + this.GetRequestVal("EntityType");
-
-
-            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
         }
         #endregion 创建表单.
 
@@ -284,7 +296,7 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
-       
+
 
         public string GoToFrmDesigner_Init()
         {
@@ -299,7 +311,7 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.Develop)
             {
                 /* 开发者表单 */
-                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + this.FK_MapData + "&FrmID="+this.FK_MapData+"&IsFirst=1";
+                return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + this.FK_MapData + "&FrmID=" + this.FK_MapData + "&IsFirst=1";
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
@@ -570,6 +582,7 @@ namespace BP.WF.HttpHandler
             string fromFrmID = GetRequestVal("FromFrmID");
             string toFrmID = GetRequestVal("ToFrmID");
             string toFrmName = GetRequestVal("ToFrmName");
+
             #region 原表单信息
             //表单信息
             MapData fromMap = new MapData(fromFrmID);
@@ -609,7 +622,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 复制表单
 
-            MapData.ImpMapData(toFrmID, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
+            MapData.ImpMapData(BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
 
             //清空缓存
             toMapData.RepairMap();

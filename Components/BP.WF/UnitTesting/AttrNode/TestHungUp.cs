@@ -85,7 +85,7 @@ namespace BP.UnitTesting.NodeAttr
             BP.WF.Dev2Interface.Port_Login(objs.VarAcceptersID);
 
             //执行挂起。
-            BP.WF.Dev2Interface.Node_HungUpWork(fl.No, workID, 0, null, "hungup test");
+            BP.WF.Dev2Interface.Node_HungUpWork(workID, 0, null, "hungup test");
 
             #region 检查执行挂起的预期结果.
             GenerWorkFlow gwf = new GenerWorkFlow(this.workID);
@@ -116,7 +116,7 @@ namespace BP.UnitTesting.NodeAttr
             #endregion 检查执行挂起的预期结果
 
             //解除挂起。
-            BP.WF.Dev2Interface.Node_UnHungUpWork(fl.No, workID, "un hungup test");
+            BP.WF.Dev2Interface.Node_UnHungUpWork( workID, "un hungup test");
 
             #region 检查接触执行挂起的预期结果.
             gwf = new GenerWorkFlow(this.workID);
@@ -125,8 +125,8 @@ namespace BP.UnitTesting.NodeAttr
             #endregion 检查接触执行挂起的预期结果
 
             //执行多次挂起于解除挂起.
-            BP.WF.Dev2Interface.Node_HungUpWork(fl.No, workID, 0, null, "hungup test");
-            BP.WF.Dev2Interface.Node_UnHungUpWork(fl.No, workID, "un hungup test");
+            BP.WF.Dev2Interface.Node_HungUpWork(workID, 0, null, "hungup test");
+            BP.WF.Dev2Interface.Node_UnHungUpWork( workID, "un hungup test");
         }
     }
 }

@@ -21,11 +21,11 @@ namespace BP.WF
         /// <summary>
         /// 方向条件控制规则
         /// </summary>
-        public CondModel CondModel
+        public DirCondModel CondModel
         {
             get
             {
-                return (CondModel)this.GetValIntByKey(NodeAttr.CondModel);
+                return (DirCondModel)this.GetValIntByKey(NodeAttr.CondModel);
             }
             set
             {
@@ -44,6 +44,20 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(NodeAttr.OutTimeDeal, (int)value);
+            }
+        }
+        /// <summary>
+        /// 待办删除规则
+        /// </summary>
+        public int GenerWorkerListDelRole
+        {
+            get
+            {
+                return this.GetParaInt("GenerWorkerListDelRole",0);
+            }
+            set
+            {
+                this.SetPara("GenerWorkerListDelRole", value);
             }
         }
         /// <summary>
@@ -508,7 +522,7 @@ namespace BP.WF
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                     uac.IsUpdate = true;
                 return uac;
             }
@@ -548,42 +562,14 @@ namespace BP.WF
         /// </summary>
         /// <param name="fl">流程</param>
         /// <returns>返回检查信息</returns>
-        public static string CheckFlow(Flow fl)
+        public static string CheckFlow(Nodes nds,string flowNo)
         {
-            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
-            BP.DA.DBAccess.RunSQLs(sqls);
-
-            // 删除垃圾数据. 
-            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
-            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
-
-            //DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
-
-            Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.FK_Flow, fl.No);
-
-            //FlowSort fs = new FlowSort(fl.FK_FlowSort);
-            if (nds.Count == 0)
-                return "流程[" + fl.No + fl.Name + "]中没有节点数据，您需要注册一下这个流程。";
-
-            // 更新是否是有完成条件的节点。
-            BP.DA.DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + fl.No + "'");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node=0 OR ToNode=0");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node  NOT IN (SELECT NODEID FROM WF_Node )");
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE ToNode  NOT IN (SELECT NODEID FROM WF_Node) ");
-
             string sql = "";
             DataTable dt = null;
 
             // 单据信息，岗位，节点信息。
             foreach (Node nd in nds)
             {
-                BP.Sys.MapData md = new BP.Sys.MapData();
-                md.No = "ND" + nd.NodeID;
-                if (md.IsExits == false)
-                    nd.CreateMap();
-
                 // 工作岗位。
                 sql = "SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID;
                 dt = DBAccess.RunSQLReturnTable(sql);
@@ -626,7 +612,7 @@ namespace BP.WF
             }
 
             // 处理岗位分组.
-            sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + fl.No + "' GROUP BY HisStas";
+            sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + flowNo + "' GROUP BY HisStas";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
@@ -647,11 +633,7 @@ namespace BP.WF
                     nd.DirectUpdate();
                 }
             }
-            /* 判断流程的类型 */
-            sql = "SELECT Name FROM WF_Node WHERE (NodeWorkType=" + (int)NodeWorkType.StartWorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFHL + " OR NodeWorkType=" + (int)NodeWorkType.WorkFL + " OR NodeWorkType=" + (int)NodeWorkType.WorkHL + ") AND (FK_Flow='" + fl.No + "')";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            fl.DirectUpdate();
-            return null;
+            return "检查成功.";
         }
 
         protected override bool beforeUpdate()
@@ -690,11 +672,11 @@ namespace BP.WF
                     }
                 }
 
-               if (this.HisDeliveryWay != oldN.HisDeliveryWay)
-               {
+                if (this.HisDeliveryWay != oldN.HisDeliveryWay)
+                {
                     //清空WF_Emp中的StartFlow 
                     DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-               }
+                }
             }
 
             //给icon设置默认值.
@@ -723,7 +705,7 @@ namespace BP.WF
 
             Flow fl = new Flow(this.FK_Flow);
 
-            Node.CheckFlow(fl);
+
             this.FlowName = fl.Name;
 
             //更新表单名称.
@@ -793,7 +775,7 @@ namespace BP.WF
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=");
                 workCheckAth.Insert();
             }
-            
+
             return base.beforeUpdate();
         }
         #endregion
@@ -813,7 +795,7 @@ namespace BP.WF
                     mapData.PTable = fl.PTable;
                 mapData.Update();
             }
-            
+
             //@sly
             if (this.FormType == NodeFormType.RefOneFrmTree)
             {
@@ -848,21 +830,7 @@ namespace BP.WF
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
                 }
-                if (en.EnMap.Attrs.Contains("Emps") == false)
-                {
-                    MapAttr attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = this.NodeFrmID;
-                    attr.KeyOfEn = "Emps";
-                    attr.Name = "Emps";
-                    attr.MyDataType = BP.DA.DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
-                    attr.DefVal = "0";
-                    attr.HisEditType = BP.En.EditType.Readonly;
-                    attr.Insert();
-                }
+
 
             }
 
@@ -1602,8 +1570,10 @@ namespace BP.WF
                     || this.HisFormType == NodeFormType.SheetTree)
                     return "ND" + this.NodeID;
 
+                //与指定的节点相同 =  Pri 
                 if (str.Equals("Pri") == true &&
-                    (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FreeForm))
+                    (this.HisFormType == NodeFormType.FoolForm 
+                    || this.HisFormType == NodeFormType.FreeForm))
                 {
                     if (this.WorkID == 0)
                         return "ND" + this.NodeID;
@@ -1624,6 +1594,8 @@ namespace BP.WF
 
                     return "ND" + nodeID;
                 }
+
+                //返回设置的表单ID.
                 return str;
             }
             set
@@ -2785,7 +2757,8 @@ namespace BP.WF
 
                 Map map = new Map("WF_Node", "节点");
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                //出现 缓存问题.现在把缓存取消了. @sly
+                map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
 
                 #region 基本属性.
@@ -2819,6 +2792,8 @@ namespace BP.WF
                 map.AddTBInt(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
                 map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
+                map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
+                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, null, "默认意见", true, false, 0, 100, 10);
                 #endregion 审核组件.
 
                 #region 考核属性.
@@ -3020,7 +2995,14 @@ namespace BP.WF
                 gwfs.Retrieve("FK_Flow", this.FK_Flow);
                 foreach (GenerWorkFlow gwf in gwfs)
                 {
-                    BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, gwf.WorkID, "流程成功结束");
+                    try
+                    {
+                        BP.WF.Dev2Interface.Flow_DoFlowOver( gwf.WorkID, "流程成功结束");
+                    }catch(Exception ex)
+                    {
+                        //删除错误，有可能是删除该流程.
+                        continue;
+                    }
                 }
             }
             //判断是否可以被删除. 
@@ -3056,7 +3038,6 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_FrmNode  WHERE FK_Node=" + this.NodeID);
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_CCEmp  WHERE FK_Node=" + this.NodeID);
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_CH  WHERE FK_Node=" + this.NodeID);
-
 
             //删除附件.
             BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.NodeID + "'");
@@ -3289,7 +3270,6 @@ namespace BP.WF
 
             if (this.HisRunModel != RunModel.SubThread)
                 return "修复成功.";
-
 
 
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
@@ -3634,7 +3614,7 @@ namespace BP.WF
                 attr.MaxLen = 7;
                 attr.Insert();
 
-               
+
             }
         }
     }

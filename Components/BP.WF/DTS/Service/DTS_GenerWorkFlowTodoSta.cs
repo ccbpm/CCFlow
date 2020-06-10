@@ -41,7 +41,9 @@ namespace BP.WF.DTS
         {
             get
             {
-                return true;
+                if (BP.Web.WebUser.IsAdmin == true)
+                    return true;
+                return false;
             }
         }
         /// <summary>

@@ -23,39 +23,74 @@ namespace BP.WF
     /// </summary>
     public class Glo
     {
-        #region 获取[新建流程]默认值.
+        #region 新建节点-流程-默认值.
+
+        #endregion 默认值.
+
         /// <summary>
-        /// 默认值配置
+        /// 删除垃圾数据
         /// </summary>
-        /// <param name="field">字段</param>
-        /// <param name="defval">默认值</param>
-        /// <returns></returns>
-        public static string DefValString(string field, string defval)
+        public static void ClearDustDB()
         {
-            return SystemConfig.GetValByKey(field, defval);
+
+            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
+            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            // 删除垃圾数据. 
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
+            DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
+
+            DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
+
+
+            // 更新是否是有完成条件的节点。
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node=0 OR ToNode=0");
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node  NOT IN (SELECT NODEID FROM WF_Node )");
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_Direction WHERE ToNode  NOT IN (SELECT NODEID FROM WF_Node) ");
         }
+
         /// <summary>
-        /// 默认值配置
+        /// 签批组件SQL
         /// </summary>
-        /// <param name="field">字段</param>
-        /// <param name="defval">默认值</param>
-        /// <returns></returns>
-        public static int DefValInt(string field, int defval)
+        public static string SQLOfCheckField
         {
-            return SystemConfig.GetValByKeyInt(field, defval);
+            get
+            {
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    case DBType.MySQL:
+                        sql = "SELECT '' AS No, '-请选择-' as Name ";
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
+                        break;
+                    case DBType.PostgreSQL:
+                    default:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
+                        break;
+                }
+                sql += " union ";
+                sql += " SELECT KeyOfEn AS No,Name From Sys_MapAttr WHERE UIContralType=14 AND FK_MapData='@FK_Frm'";
+                return sql;
+            }
         }
+
+        #region 获取[新建-节点-流程]默认值.
         /// <summary>
-        /// 获得默认值
+        /// 新建节点的审核意见默认值.
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="defval"></param>
-        /// <returns></returns>
-        public static bool DefValBoolen(string field, bool defval)
+        public static string DefVal_WF_Node_FWCDefInfo
         {
-            return SystemConfig.GetValByKeyBoolen(field, defval);
+            get
+            {
+                return SystemConfig.GetValByKey("DefVal_WF_Node_FWCDefInfo",
+                    "同意");
+            }
         }
         #endregion 获取[新建流程]默认值.
-
 
         #region 高级配置.
         /// <summary>
@@ -1105,8 +1140,9 @@ namespace BP.WF
         #region 执行安装/升级.
         /// <summary>
         /// 当前版本号-为了升级使用.
+        /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20200507;
+        public static int Ver = 20200603;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1115,8 +1151,6 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
-
-
             /*
              * 升级版本记录:
              * 20150330: 优化发起列表的效率, by:zhoupeng.
@@ -1151,6 +1185,27 @@ namespace BP.WF
             CheckGPM();
 
             #region 升级优化集团版的应用. 2020.04.03
+
+            //--2020.05.28 升级方向条件;
+            BP.WF.Template.Cond cond = new Cond();
+            cond.CheckPhysicsTable();
+            if (DBAccess.IsExitsTableCol("WF_Cond", "PRI") == true)
+            {
+                DBAccess.RunSQL("UPDATE WF_Cond SET Idx=PRI ");
+                DBAccess.DropTableColumn("WF_Cond", "PRI");
+            }
+
+
+            //--2020.05.25 修改节点自定义按钮功能;
+            BP.WF.Template.NodeToolbar bar = new NodeToolbar();
+            bar.CheckPhysicsTable();
+            if (DBAccess.IsExitsTableCol("WF_NodeToolbar", "ShowWhere") == true)
+            {
+                DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyFlow = 1 Where ShowWhere = 1");
+                DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
+
+                DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
+            }
 
             //检查frmTrack.
             BP.Frm.Track tk = new Frm.Track();
@@ -1250,7 +1305,6 @@ namespace BP.WF
             //sql += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
             //sql += " AND  A.DeliveryWay=22 ";
             //DBAccess.RunSQL(sql); //创建视图.
-
             #endregion 升级优化集团版的应用
 
 
@@ -1265,13 +1319,89 @@ namespace BP.WF
                 }
             }
 
-
-
-
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
             //md.FormJson = "";
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
+
+            #region 升级方向条件. 2020.06.02
+            if (DBAccess.IsExitsTableCol("WF_Cond", "CondOrAnd") == true)
+            {
+                DataTable dt = DBAccess.RunSQLReturnTable("SELECT DISTINCT FK_Node, toNodeID, CondOrAnd, CondType  FROM wf_cond WHERE DataFrom!=100 ");
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int nodeID = int.Parse(dr["FK_Node"].ToString());
+                    int toNodeID = int.Parse(dr["toNodeID"].ToString());
+
+                    Conds conds = new Conds();
+                    conds.Retrieve(CondAttr.FK_Node, nodeID,
+                        CondAttr.ToNodeID, toNodeID, CondAttr.Idx);
+
+                    //判断是否需要修复？
+                    if (conds.Count == 1 || conds.Count == 0)
+                        continue;
+
+                    //判断是否有？
+                    bool isHave = false;
+                    foreach (Cond myCond in conds)
+                    {
+                        if (myCond.HisDataFrom == ConnDataFrom.CondOperator)
+                            isHave = true;
+                    }
+                    if (isHave == true)
+                        continue;
+
+
+
+
+                    //获得类型.
+                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID);
+
+                    int idx = 0;
+                    int idxSave = 0;
+                    int count = conds.Count;
+                    foreach (Cond item in conds)
+                    {
+                        idx++;
+
+                        idxSave++;
+                        item.Idx = idxSave;
+                        item.Update();
+
+                        if (count == idx)
+                            continue;
+
+                        Cond operCond = new Cond();
+                        operCond.Copy(item);
+                        operCond.MyPK = DBAccess.GenerGUID();
+                        operCond.HisDataFrom = ConnDataFrom.CondOperator;
+
+                        if (OrAndType == 0)
+                        {
+                            operCond.OperatorValue = " OR ";
+                            operCond.Note = " OR ";
+                            operCond.OperatorValue = " OR ";
+                            operCond.Note = " OR ";
+                        }
+                        else
+                        {
+                            operCond.OperatorValue = " AND ";
+                            operCond.Note = " AND ";
+                            operCond.OperatorValue = " AND ";
+                            operCond.Note = " AND ";
+                        }
+
+                        idxSave++;
+                        operCond.Idx = idxSave;
+                        operCond.Insert();
+                    }
+                }
+
+                //升级后删除指定的列.
+                DBAccess.DropTableColumn("WF_Cond", "CondOrAnd");
+                DBAccess.DropTableColumn("WF_Cond", "NodeID");
+            }
+            #endregion 升级方向条件.
 
             #region 枚举值
             SysEnumMains enumMains = new SysEnumMains();
@@ -1338,6 +1468,8 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
             }
             #endregion 升级视图.
+
+
 
             //升级从表的 fk_node .
             //获取需要修改的从表
@@ -1848,15 +1980,15 @@ namespace BP.WF
 
                 #endregion 基础数据更新.
 
-                #region 把节点的toolbarExcel, word 信息放入mapdata
-                BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
-                nss.RetrieveAll();
-                foreach (BP.WF.Template.NodeSheet ns in nss)
-                {
-                    ToolbarExcel te = new ToolbarExcel();
-                    te.No = "ND" + ns.NodeID;
-                    te.RetrieveFromDBSources();
-                }
+                #region 把节点的toolbarExcel, word 信息放入mapdata @sly 删除他.
+                //BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
+                //nss.RetrieveAll();
+                //foreach (BP.WF.Template.NodeSheet ns in nss)
+                //{
+                //    ToolbarExcel te = new ToolbarExcel();
+                //    te.No = "ND" + ns.NodeID;
+                //    te.RetrieveFromDBSources();
+                //}
                 #endregion
 
                 #region 升级SelectAccper
@@ -1873,8 +2005,6 @@ namespace BP.WF
 
 
 
-                NodeToolbar bar = new NodeToolbar();
-                bar.CheckPhysicsTable();
 
                 SysForm ssf = new SysForm();
                 ssf.CheckPhysicsTable();
@@ -2610,15 +2740,15 @@ namespace BP.WF
                 sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitPublicData.sql";
                 BP.DA.DBAccess.RunSQLScript(sqlscript);
             }
-            else
-            {
-                FlowSort fs = new FlowSort();
-                fs.No = "1";
-                fs.ParentNo = "0";
-                fs.Name = "流程树";
-                fs.DirectInsert();
+            // else
+            // {
+            // FlowSort fs = new FlowSort();
+            // fs.No = "1";
+            // fs.ParentNo = "0";
+            // fs.Name = "流程树";
+            // fs.DirectInsert();
 
-            }
+            // }
             #endregion 初始化数据
 
             #region 6, 生成临时的 wf_emp 数据。
@@ -6103,25 +6233,62 @@ namespace BP.WF
                     ctrlWayId = pkval;
             }
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            {
+                if (pworkid == 0)
+                {
+                    pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM wf_generworkflow WHERE WorkID=" + pkval, 0);
+                    if (pworkid == 0)
+                        throw new Exception("err@当前的附件数据显示控制权限按照PWorkID计算,没有接收到PWorkID!=0");
+                }
+
                 ctrlWayId = pworkid.ToString();
+            }
+
             if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                 ctrlWayId = fid.ToString();
             if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
 
-                //workID相同或者是协作模式
+                //协作模式
                 if (pkval.Equals(ctrlWayId) == true || athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
+                {
+                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId, FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                }
+                /* 继承模式 */
                 else if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }
                 return dbs;
             }
+
+            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
+            {
+                /* 继承模式 */
+                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(ctrlWayId));
+                else
+                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
+
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+
+                if (isContantSelf == false)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+                }
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+
 
             if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
             {
@@ -6140,30 +6307,6 @@ namespace BP.WF
                 return dbs;
             }
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-            {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                {
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
-                }
-                else
-                {
-                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK);
-                    qo.addAnd();
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
-                }
-
-                if (isContantSelf == false)
-                {
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
-                }
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
 
 
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)

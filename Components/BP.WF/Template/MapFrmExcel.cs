@@ -102,7 +102,7 @@ namespace BP.WF.Template
 			get
 			{
 				UAC uac = new UAC();
-				if (BP.Web.WebUser.No == "admin")
+				if (BP.Web.WebUser.No.Equals("admin")==true)
 				{
 					uac.IsDelete = false;
 					uac.IsUpdate = true;
@@ -323,10 +323,20 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
-				#endregion 高级设置.
+                rm = new RefMethod();
+                rm.Title = "一键设置表单元素只读";
+                rm.Warning = "您确定要设置吗？所有的元素，包括字段、从表、附件以及其它组件都将会被设置为只读的.";
+                rm.GroupName = "高级设置";
+                //rm.Icon = "../../WF/Img/RegularExpression.png";
+                rm.ClassMethodName = this.ToString() + ".DoOneKeySetReadonly";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
 
-				#region 方法 - 开发接口.
-				rm = new RefMethod();
+
+                #endregion 高级设置.
+
+                #region 方法 - 开发接口.
+                rm = new RefMethod();
 				rm.Title = "调用查询API"; // "设计表单";
 				rm.ClassMethodName = this.ToString() + ".DoSearch";
 				rm.Icon = "../../WF/Img/Table.gif";
@@ -351,9 +361,18 @@ namespace BP.WF.Template
 				return this._enMap;
 			}
 		}
-		#endregion
+        #endregion
 
-		#region 节点表单方法.
+        #region 节点表单方法.
+        /// <summary>
+        /// 一键设置为只读.
+        /// </summary>
+        /// <returns></returns>
+        public string DoOneKeySetReadonly()
+        {
+            BP.Sys.CCFormAPI.OneKeySetFrmEleReadonly(this.No);
+            return "设置成功.";
+        }
 
         public string DoMapExcel()
         {

@@ -567,149 +567,86 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+
             BtnLab btnLab = new BtnLab(this.FK_Node);
             string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             string toolbar = "";
             try
             {
-                toolbar += "<input name='ReadAndClose' type=button value='已阅关闭' enable=true onclick=\"ReadAndClose();\" />";
+                DataRow dr = dt.NewRow();
+                dr["No"] = "ReadAndClose";
+                dr["Name"] = "阅件完毕";
+                dr["Oper"] = "ReadAndClose();";
+                dt.Rows.Add(dr);
+                #region 加载流程抄送 - 按钮
 
-                #region 加载流程控制器 - 按钮
-                if (btnLab.WorkCheckEnable)
-                {
-                    /*审核*/
-                    toolbar += "<input  name='workcheckBtn' type=button  value='" + btnLab.WorkCheckLab + "' enable=true />";
-                }
-
-                if (btnLab.ThreadEnable)
-                {
-                    /*如果要查看子线程.*/
-                    string ur2 = "./WorkOpt/ThreadDtl.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
-                }
-
-                if (btnLab.ShowParentFormEnable && this.PWorkID != 0)
-                {
-                    /*如果要查看父流程.*/
-                    GenerWorkFlow gwf1 = new GenerWorkFlow(this.PWorkID);
-                    string ur2 = "./WorkOpt/OneWork/FrmGuide.htm?FK_Node=" + gwf1.FK_Node + "&FID=" + gwf1.FID + "&WorkID=" + gwf1.WorkID + "&FK_Flow=" + gwf1.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.ShowParentFormLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" />";
-                }
-
-                if (btnLab.TCEnable == true)
-                {
-                    /*流转自定义..*/
-                    string ur3 = "./WorkOpt/TransferCustom.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='TransferCustom'  value='" + btnLab.TCLab + "' enable=true onclick=\"TransferCustom('" + ur3 + "'); \" />";
-                }
-
-                if (btnLab.HelpRole != 0)
-                {
-                    toolbar += "<input type=button  value='" + btnLab.HelpLab + "' enable=true onclick=\"HelpAlter(); \" />";
-                }
-
-                if (btnLab.JumpWayEnable && 1 == 2)
-                {
-                    /*跳转*/
-                    string urlr = "./WorkOpt/JumpWay.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
-                }
-
-
-                // @李国文.
-                if (btnLab.PrintDocEnable == true)
-                {
-                    string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" />";
-                }
-
-                if (btnLab.TrackEnable)
-                    toolbar += "<input type=button name='Track'  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
-
-
-                if (btnLab.SearchEnable)
-                    toolbar += "<input type=button name='Search'  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('./RptDfine/Default.htm?RptNo=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&SearchType=My&s=" + tKey + "','dsd0'); \" />";
-
-                if (btnLab.BatchEnable)
-                {
-                    /*批量处理*/
-                    string urlr = appPath + "WF/Batch.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='Batch' value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
-                }
-
-
-                if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
-                {
-                    /*公文正文 */
-                    string urlr = appPath + "WF/WorkOpt/WebOffice.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button name='WebOffice'  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" />";
-                }
-
-                if (btnLab.NoteEnable != 0)
-                {
-                    /* 备注设置 */
-                    toolbar += "<input type=button name='Note'  value='" + btnLab.NoteLab + "' enable=true  />";
-                }
-
-                /* 关注 */
-                if (btnLab.FocusEnable == true)
-                {
-                    if (HisGenerWorkFlow.Paras_Focus == true)
-                        toolbar += "<input type=button  value='取消关注' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" />";
-                    else
-                        toolbar += "<input type=button name='Focus' value='" + btnLab.FocusLab + "' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" />";
-                }
-
-                /* 确认 */
-                if (btnLab.ConfirmEnable == true)
-                {
-                    if (HisGenerWorkFlow.Paras_Confirm == true)
-                        toolbar += "<input type=button  value='取消确认' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
-                    else
-                        toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
-                }
 
                 /* 打包下载zip */
-                if (btnLab.PrintZipEnable == true)
+                if (btnLab.PrintZipMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=zip&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_zip'  value='" + btnLab.PrintZipLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载html */
-                if (btnLab.PrintHtmlEnable == true)
+                if (btnLab.PrintHtmlMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=html&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_html'  value='" + btnLab.PrintHtmlLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
 
                 /* 打包下载pdf */
-                if (btnLab.PrintPDFEnable == true)
+                if (btnLab.PrintPDFMyCC == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable ==true)
                 {
-                    toolbar += "<input type=button name='Btn_Office'  onclick='OpenOffice(\"" + btnLab.OfficeBtnEnable + "\");'  value='" + btnLab.OfficeBtnLab + "' enable=true/>";
+                    dr = dt.NewRow();
+                    dr["No"] = "DocWord";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
                 }
                 #endregion
 
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
-                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node,NodeToolbarAttr.ShowWhere, (int)ShowWhere.CC);
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.IsMyCC, 1, NodeToolbarAttr.Idx);
                 foreach (NodeToolbar bar in bars)
                 {
 
                     if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
                     {
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick='" + bar.Url + "' />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
                     }
                     else
                     {
                         string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar += "<input type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />";
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = "WinOpen('" + urlr3 + "')";
+                        dt.Rows.Add(dr);
                     }
                 }
                 #endregion  //加载自定义的button.
@@ -720,7 +657,7 @@ namespace BP.WF.HttpHandler
                 BP.DA.Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
-            return toolbar;
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 工具栏
@@ -1958,11 +1895,10 @@ namespace BP.WF.HttpHandler
                 DataSet ds = new DataSet();
 
                 Int64 workID = this.WorkID;
-                Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
+                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1985,7 +1921,7 @@ namespace BP.WF.HttpHandler
 
                 }
 
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No);
 
                 //Node nd = new Node(this.FK_Node);
@@ -2002,8 +1938,6 @@ namespace BP.WF.HttpHandler
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
                 {
                     /*如果是表单树并且是，移动模式.*/
-
-
                     FrmNodes fns = new FrmNodes();
                     QueryObject qo = new QueryObject(fns);
 

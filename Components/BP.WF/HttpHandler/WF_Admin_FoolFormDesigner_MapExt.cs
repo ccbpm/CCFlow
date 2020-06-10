@@ -140,7 +140,8 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把从表放入里面.
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
             ds.Tables.Add(dtls.ToDataTableField("Dtls"));
 
             //把从表的字段放入.
@@ -668,6 +669,70 @@ namespace BP.WF.HttpHandler
         }
         #endregion ActiveDDL 功能界面.
 
+        #region 配置自动计算日期天数lz
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string LoadRDTClo_Init()
+        {
+            DataSet ds = new DataSet();
+            string FK_MapData = GetRequestVal("FK_MapData");
+            string KeyOfEn = GetRequestVal("KeyOfEn");
+            string sql = "";
+            //if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            //{
+            //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
+            //}
+            //else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            //{
+            //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
+            //}
+            //else
+            //{
+            //    sql = "SELECT Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
+            //}
+
+            sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE (MyDataType='6' OR MyDataType='7') AND FK_MapData='" + FK_MapData + "'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string LoadRDTClo_Save()
+        {
+            string FK_MapData = GetRequestVal("FK_MapData");
+            string KeyOfEn = GetRequestVal("KeyOfEn");
+            string StarRDT = GetRequestVal("DDL_StarRDT");//开始日期
+            string EndRDT = GetRequestVal("DDL_EndRDT");//结束日期
+            string RDTRadio = GetRequestVal("RDTRadio");//是否包含节假日 
+
+            MapExt mapExt = new MapExt();
+            mapExt.MyPK = "ReqDays_"+ FK_MapData+"_"+ KeyOfEn;
+            if (mapExt.RetrieveFromDBSources() == 0)
+            {
+                mapExt.FK_MapData = FK_MapData;
+                mapExt.ExtType = "ReqDays";
+                mapExt.AttrOfOper = KeyOfEn;
+                mapExt.Tag1 = StarRDT;
+                mapExt.Tag2 = EndRDT;
+                mapExt.Tag3 = RDTRadio;
+                mapExt.Insert();
+            }
+            else
+            {
+                mapExt.FK_MapData = FK_MapData;
+                mapExt.ExtType = "ReqDays";
+                mapExt.AttrOfOper = KeyOfEn;
+                mapExt.Tag1 = StarRDT;
+                mapExt.Tag2 = EndRDT;
+                mapExt.Tag3 = RDTRadio;
+                mapExt.Update();
+            }
+            return "保存成功！！";
+        }
+        #endregion
         #region 单选按钮事件
         /// <summary>
         /// 返回信息。

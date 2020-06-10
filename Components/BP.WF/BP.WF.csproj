@@ -115,7 +115,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ccflow\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
@@ -156,9 +157,6 @@
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http">
-      <HintPath>..\..\..\ccflow\RefDLL\System.Net.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web">
@@ -176,6 +174,7 @@
   <ItemGroup>
     <Compile Include="AppClass.cs" />
     <Compile Include="Data\CHNode.cs" />
+    <Compile Include="Data\FastInput.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
@@ -243,6 +242,8 @@
     <Compile Include="Frm\WF_CCBill_Opt.cs" />
     <Compile Include="Frm\WF_CCBill_Portal.cs" />
     <Compile Include="Glo.cs" />
+    <Compile Include="GloDefVal.cs" />
+    <Compile Include="GloSQL.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -257,6 +258,7 @@
     <Compile Include="HttpHandler\WF_Admin_AttrNode_AccepterRole.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode_FrmSln.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_FrmEvent.cs" />
+    <Compile Include="HttpHandler\WF_Admin_Cond2020.cs" />
     <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
@@ -354,21 +356,22 @@
     <Compile Include="Template\NodeTeam.cs" />
     <Compile Include="Template\NodeWorkCheck.cs" />
     <Compile Include="Template\Part\FlowRefEmp.cs" />
+    <Compile Include="Template\Part\Part.cs" />
+    <Compile Include="Template\Part\PartParentSubGuide.cs" />
     <Compile Include="Template\PowerModel.cs" />
     <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="Template\DirectionStation.cs" />
-    <Compile Include="Template\SubFlow\SubFlowYanXu.cs" />
     <Compile Include="Template\MapFrmNode.cs" />
-    <Compile Include="Template\SubFlow\SubFlowHand.cs" />
-    <Compile Include="Template\SubFlow\SubFlowAuto.cs" />
+    <Compile Include="Template\SubFlow\FrmSubFlow.cs" />
     <Compile Include="Template\SubFlow\SubFlow.cs" />
+    <Compile Include="Template\SubFlow\SubFlowAuto.cs" />
+    <Compile Include="Template\SubFlow\SubFlowHand.cs" />
+    <Compile Include="Template\SubFlow\SubFlowYanXu.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="Template\TestCase.cs" />
-    <Compile Include="Template\Part\Part.cs" />
-    <Compile Include="Template\Part\PartParentSubGuide.cs" />
     <Compile Include="UnitTesting\Etc\AboutTitle.cs" />
     <Compile Include="UnitTesting\AttrFlow\CreateStartWork.cs" />
     <Compile Include="UnitTesting\AttrFlow\GenerBillNo.cs" />
@@ -432,6 +435,7 @@
     <Compile Include="WeiXin\WeiXinMessage.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\Auth.cs" />
+    <Compile Include="WF\CCList.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\ClearRepLineLab.cs" />
@@ -440,7 +444,6 @@
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
     <Compile Include="DTS\UpdateCCFlow.cs" />
     <Compile Include="DTS\GenerCH.cs" />
-    <Compile Include="Template\BtnLabExtWebOffice.cs" />
     <Compile Include="Template\TruckViewPower.cs" />
     <Compile Include="Template\FlowExt.cs" />
     <Compile Include="Template\FindWorkEnum.cs" />
@@ -496,7 +499,6 @@
     <Compile Include="Template\CCDept.cs" />
     <Compile Include="Template\CCEmp.cs" />
     <Compile Include="Template\CCStation.cs" />
-    <Compile Include="Template\CCList.cs" />
     <Compile Include="Template\Cond.cs" />
     <Compile Include="Template\BtnLab.cs">
       <SubType>Code</SubType>
@@ -540,7 +542,6 @@
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />
     <Compile Include="WF\GenerWorkFlow.cs" />
-    <Compile Include="Template\SubFlow\FrmSubFlow.cs" />
     <Compile Include="WF\FlowEventBase.cs" />
     <Compile Include="WF\FlowOpList.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
@@ -583,6 +584,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\RememberMe.cs" />
+    <Compile Include="WF\WorkNodePlus.cs" />
     <Compile Include="WF\WorkReturn.cs" />
     <Compile Include="WF\WorkUnSend.cs" />
     <Compile Include="WF\WorkFlowDeleteLog.cs" />

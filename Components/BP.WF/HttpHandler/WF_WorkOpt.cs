@@ -37,7 +37,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ThreadDtl_DelSubFlow()
         {
-            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+            BP.WF.Dev2Interface.Flow_DeleteSubThread( this.WorkID, "手工删除");
             return "删除成功";
         }
         #region 打印 rtf
@@ -413,7 +413,6 @@ namespace BP.WF.HttpHandler
                         {
                             GEDtls dtls1 = new GEDtls(dtl.No);
                             mapData.EnMap.AddDtl(dtls1, "RefPK");
-
                         }
                         al = mapData.GetDtlsDatasOfList(pkval.ToString());
                     }
@@ -1599,6 +1598,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("Msg", typeof(string));
             tkDt.Columns.Add("EmpFrom", typeof(string));
             tkDt.Columns.Add("EmpFromT", typeof(string));
+            tkDt.Columns.Add("DeptName", typeof(string));
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
@@ -1862,6 +1862,17 @@ namespace BP.WF.HttpHandler
 
                     row["EmpFrom"] = tk.EmpFrom;
                     row["EmpFromT"] = tk.EmpFromT;
+                    //获取部门
+                    string DeptName = "";
+                    string[] Arrays = tk.NodeData.Split('@');
+                    foreach (string i in Arrays)
+                    {
+                        if (i.Contains("DeptName="))
+                        {
+                            DeptName = i.Split('=')[1];
+                        }
+                    }
+                    row["DeptName"] = DeptName;
                     row["ActionType"] = tk.HisActionType;
                     row["Tag"] = tk.Tag;
                     row["FWCView"] = fwc.FWCView;
@@ -1928,6 +1939,17 @@ namespace BP.WF.HttpHandler
                                     row["Msg"] = mysubtk.MsgHtml;
                                     row["EmpFrom"] = mysubtk.EmpFrom;
                                     row["EmpFromT"] = mysubtk.EmpFromT;
+                                    //获取部门
+                                    DeptName = "";
+                                    Arrays = tk.NodeData.Split('@');
+                                    foreach (string i in Arrays)
+                                    {
+                                        if (i.Contains("DeptName="))
+                                        {
+                                            DeptName = i.Split('=')[1];
+                                        }
+                                    }
+                                    row["DeptName"] = DeptName;
                                     row["RDT"] = mysubtk.RDT;
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
@@ -2027,6 +2049,7 @@ namespace BP.WF.HttpHandler
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
+                        row["DeptName"] = WebUser.FK_DeptName;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
@@ -2046,6 +2069,7 @@ namespace BP.WF.HttpHandler
                     row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
+                    row["DeptName"] = WebUser.FK_DeptName;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
@@ -2090,6 +2114,7 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
+                row["DeptName"] = "";
                 row["T_NodeIndex"] = ++idx;
                 row["T_CheckIndex"] = ++noneEmpIdx;
 
@@ -2165,6 +2190,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("Msg", typeof(string));
             tkDt.Columns.Add("EmpFrom", typeof(string));
             tkDt.Columns.Add("EmpFromT", typeof(string));
+            tkDt.Columns.Add("DeptName", typeof(string));
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
@@ -2380,45 +2406,50 @@ namespace BP.WF.HttpHandler
                             row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                             row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
-                            if (gwf.WFState == WFState.Complete)
-                            {
-                                row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
-                            }
-                            else
-                            {
-                                row["Msg"] = tk.MsgHtml;
-                            }
+                            row["Msg"] = tk.MsgHtml;
+ 
 
                             row["EmpFrom"] = tk.EmpFrom;
                             row["EmpFromT"] = tk.EmpFromT;
+                            //获取部门
+                            string DeptName = "";
+                            string[] Arrays = tk.NodeData.Split('@');
+                            foreach (string i in Arrays) {
+                                if (i.Contains("DeptName="))
+                                {
+                                    DeptName = i.Split('=')[1];
+                                }
+                            }
+                            row["DeptName"] = DeptName;
                             row["ActionType"] = tk.HisActionType;
                             row["Tag"] = tk.Tag;
                             row["FWCView"] = fwc.FWCView;
                             tkDt.Rows.Add(row);
 
-                            #region //审核组件附件数据
-                            athDBs = new FrmAttachmentDBs();
-                            QueryObject obj_Ath = new QueryObject(athDBs);
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
-                            obj_Ath.addAnd();
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-                            obj_Ath.addAnd();
-                            obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
-                            obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
-                            obj_Ath.DoQuery();
+                            #region 审核组件附件数据
+                             
+                            //athDBs = new FrmAttachmentDBs();
+                            //QueryObject obj_Ath = new QueryObject(athDBs);
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, "ND" + tk.NDFrom + "_FrmWorkCheck");
+                            //obj_Ath.addAnd();
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+                            //obj_Ath.addAnd();
+                            //obj_Ath.AddWhere(FrmAttachmentDBAttr.Rec, tk.EmpFrom);
+                            //obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
+                            //obj_Ath.DoQuery();
 
-                            foreach (FrmAttachmentDB athDB in athDBs)
-                            {
-                                row = athDt.NewRow();
-                                row["NodeID"] = tk.NDFrom;
-                                row["MyPK"] = athDB.MyPK;
-                                row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
-                                row["FK_MapData"] = athDB.FK_MapData;
-                                row["FileName"] = athDB.FileName;
-                                row["FileExts"] = athDB.FileExts;
-                                row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly == false;
-                                athDt.Rows.Add(row);
-                            }
+                            //foreach (FrmAttachmentDB athDB in athDBs)
+                            //{
+                            //    row = athDt.NewRow();
+                            //    row["NodeID"] = tk.NDFrom;
+                            //    row["MyPK"] = athDB.MyPK;
+                            //    row["FK_FrmAttachment"] = athDB.FK_FrmAttachment;
+                            //    row["FK_MapData"] = athDB.FK_MapData;
+                            //    row["FileName"] = athDB.FileName;
+                            //    row["FileExts"] = athDB.FileExts;
+                            //    row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly == false;
+                            //    athDt.Rows.Add(row);
+                            //}
                             #endregion
 
                             #region //子流程的审核组件数据
@@ -2457,6 +2488,18 @@ namespace BP.WF.HttpHandler
                                             row["Msg"] = mysubtk.MsgHtml;
                                             row["EmpFrom"] = mysubtk.EmpFrom;
                                             row["EmpFromT"] = mysubtk.EmpFromT;
+
+                                            //获取部门
+                                            DeptName = "";
+                                            Arrays = mysubtk.NodeData.Split('@');
+                                            foreach (string i in Arrays)
+                                            {
+                                                if (i.Contains("DeptName="))
+                                                {
+                                                    DeptName = i.Split('=')[1];
+                                                }
+                                            }
+                                            row["DeptName"] = DeptName;
                                             row["RDT"] = mysubtk.RDT;
                                             row["IsDoc"] = false;
                                             row["ParentNode"] = tk.NDFrom;
@@ -2545,6 +2588,7 @@ namespace BP.WF.HttpHandler
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
+                        row["DeptName"] = WebUser.FK_DeptName;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
@@ -2564,6 +2608,7 @@ namespace BP.WF.HttpHandler
                     row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node, wcDesc.FWCDefInfo);
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
+                    row["DeptName"] = WebUser.FK_DeptName;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
@@ -2608,6 +2653,7 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
+                row["DeptName"] = "";
                 row["T_NodeIndex"] = ++idx;
                 row["T_CheckIndex"] = ++noneEmpIdx;
 
@@ -3086,6 +3132,19 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
+        /// <summary>
+        /// 执行发送.
+        /// </summary>
+        /// <returns></returns>
+        public string CC_Send2020()
+        {
+            //人员信息. 格式 zhangsan,张三;lisi,李四;
+            string emps = this.GetRequestVal("Emps");
+
+            //调用抄送接口执行抄送.
+            string ccRec = BP.WF.Dev2Interface.Node_CCTo( this.WorkID, emps);
+            return ccRec;
+        }
 
         /// <summary>
         /// 抄送发送.
@@ -3214,7 +3273,7 @@ namespace BP.WF.HttpHandler
 
             if (actionType == "Kill")
             {
-                string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.WorkID, "手工删除");
                 //提示信息.
                 if (msg == "" || msg == null)
                     msg = "该工作删除成功...";
@@ -3269,7 +3328,7 @@ namespace BP.WF.HttpHandler
 
             //彻底删除.
             if (deleteWay == "3")
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, isDelSubFlow);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  this.WorkID, isDelSubFlow);
 
             //彻底并放入到删除轨迹里.
             if (deleteWay == "2")
@@ -3475,6 +3534,9 @@ namespace BP.WF.HttpHandler
             if (select.SelectorModel == SelectorModel.AccepterOfDeptStationEmp)
                 return "url@AccepterOfDeptStationEmp.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
 
+            if (select.SelectorModel == SelectorModel.Url)
+                return "BySelfUrl@"+select.SelectorP1+"?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
+
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);
 
@@ -3485,6 +3547,14 @@ namespace BP.WF.HttpHandler
             //增加判断.
             if (ds.Tables["Emps"].Rows.Count == 0)
                 return "err@配置接受人范围为空,请联系管理员.";
+
+            ////只有一个人，就让其发送下去.
+            //if (ds.Tables["Emps"].Rows.Count == 1)
+            //{
+            //    string emp = ds.Tables["Emps"].Rows[0][0].ToString();
+            //    SendReturnObjs objs= BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, emp);
+            //    return  "info@"+objs.ToMsgOfText();
+            //}
 
             #region 计算上一次选择的结果, 并把结果返回过去.
             string sql = "";
@@ -3505,7 +3575,6 @@ namespace BP.WF.HttpHandler
                         dt.Rows.Add(dr);
                     }
                 }
-                   
                 else
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
@@ -3552,6 +3621,7 @@ namespace BP.WF.HttpHandler
             //增加一个table.
             ds.Tables.Add(dt);
             #endregion 计算上一次选择的结果, 并把结果返回过去.
+
 
             //返回json.
             return BP.Tools.Json.DataSetToJson(ds, false);
@@ -3786,7 +3856,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string UnShift()
         {
-            return BP.WF.Dev2Interface.Node_ShiftUn(this.FK_Flow, this.WorkID);
+            return BP.WF.Dev2Interface.Node_ShiftUn( this.WorkID);
         }
         /// <summary>
         /// 执行催办
@@ -4039,7 +4109,7 @@ namespace BP.WF.HttpHandler
             {
                 if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
                 {
-                    if (currNode.CondModel == CondModel.ByLineCond)
+                    if (currNode.CondModel == DirCondModel.ByLineCond)
                     {
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
                         //return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;

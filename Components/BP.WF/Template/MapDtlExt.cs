@@ -19,6 +19,7 @@ namespace BP.WF.Template
         {
             get
             {
+
                 UAC uac = new UAC();
                 uac.OpenForAppAdmin();
                 uac.IsInsert = false;
@@ -384,22 +385,7 @@ namespace BP.WF.Template
                 return obj;
             }
         }
-        /// <summary>
-        /// 元素
-        /// </summary>
-        public FrmEles FrmEles
-        {
-            get
-            {
-                FrmEles obj = this.GetRefObject("FrmEles") as FrmEles;
-                if (obj == null)
-                {
-                    obj = new FrmEles(this.No);
-                    this.SetRefObject("FrmEles", obj);
-                }
-                return obj;
-            }
-        }
+      
         /// <summary>
         /// 线
         /// </summary>
@@ -1005,11 +991,6 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
                 #endregion 导入导出填充.
 
-                #region 多表头.
-                //MTR 多表头列.
-                //map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
-                #endregion 多表头.
-
                 #region 超链接.
                 map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
@@ -1059,6 +1040,15 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".ImpFromDtlID";
                 rm.HisAttrs.AddTBString("ID", null, "请输入要导入的从表ID", true, false, 0, 100, 100);
                 rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "多表头"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoMultiTitle";
+               // rm.Icon = "../Img/AttachmentM.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1254,7 +1244,14 @@ namespace BP.WF.Template
             string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
-
+        /// <summary>
+        /// 多表头
+        /// </summary>
+        /// <returns></returns>
+        public string DoMultiTitle()
+        {
+            return "../../Admin/FoolFormDesigner/DtlSetting/MultiTitle.htm?DtlID=" + this.No + "&t=" + DataType.CurrentDataTime;
+        }
         /// <summary>
         /// 设计自由表单
         /// </summary>
@@ -1354,15 +1351,11 @@ namespace BP.WF.Template
             }
             return strs;
         }
-
-        /// <summary>
-        /// 高级设置
-        /// </summary>
-        /// <returns></returns>
         public string DoAction()
         {
             return "../../Admin/FoolFormDesigner/ActionForDtl.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
+       
         public string HidAttr()
         {
             return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;

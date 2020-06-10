@@ -66,9 +66,6 @@ namespace BP.WF.HttpHandler
 
                 Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY,icon);
 
-            //    BP.WF.Node node = new BP.WF.Node(nodeId);
-             //   node.DirectUpdate();
-
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);
                 ht.Add("Name", node.Name);

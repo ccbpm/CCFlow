@@ -25,102 +25,113 @@ namespace BP.WF
         /// 产生一个WorkNode 
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">节点ID</param>
+        /// <param name="Node">节点</param>
         /// <param name="workID">工作ID</param>
         /// <param name="fid">FID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
-        public static DataSet GenerWorkNode(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0")
+        public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0")
         {
-            //节点.
-            if (fk_node == 0)
-                fk_node = int.Parse(fk_flow + "01");
-
             if (workID == 0)
                 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, null, null, userNo, null);
 
-            Node nd = new Node(fk_node);        
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
-                MapData md = new MapData(nd.NodeFrmID);
 
                 Work wk = nd.HisWork;
                 wk.OID = workID;
-
                 wk.RetrieveFromDBSources();
-                wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
+
+                //wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
                     wk, null);
 
+               // MapData md = new MapData(nd.NodeFrmID);
 
                 //获得表单模版.
-                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No, nd.Name);
+                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, nd.Name);
 
+                //更换表单的名字.
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
                     && (nd.HisFormType== NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm))
                 {
-                    string name  =  md.Name;
-                    if (DataType.IsNullOrEmpty(md.Name) == true)
-                        name = nd.Name;
-
-                    myds.Tables["Sys_MapData"].Rows[0]["Name"]= name;
+                    string realName = myds.Tables["Sys_MapData"].Rows[0]["Name"] as string;
+                    if (DataType.IsNullOrEmpty(realName) == true)
+                    {
+                        myds.Tables["Sys_MapData"].Rows[0]["Name"] = nd.Name;
+                    }
                 }
 
-                //移除MapAttr
-                myds.Tables.Remove("Sys_MapAttr"); //移除.
 
-                //获取表单的mapAttr
-                //求出集合.
-                MapAttrs mattrs = md.MapAttrs; // new MapAttrs(md.No);
-                
-                /*处理表单权限控制方案*/
-                FrmNode frmNode = new FrmNode();
-                int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, md.No, FrmNodeAttr.FK_Node, fk_node);
-                if (count != 0 && frmNode.FrmSln != 0)
+                #region 处理表单权限控制方案: 如果是绑定单个表单的时候. 
+                /*处理表单权限控制方案: 如果是绑定单个表单的时候. */
+
+                //这两个变量在累加表单用到. 
+                FrmNode frmNode=new FrmNode();
+
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree 
+                    || nd.HisFormType == NodeFormType.FoolTruck)
                 {
-                    FrmFields fls = new FrmFields(md.No, frmNode.FK_Node);
-                    foreach (FrmField item in fls)
+                        frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,
+                        FrmNodeAttr.FK_Node, nd.NodeID);
+                    if (DataType.IsNullOrEmpty(frmNode.MyPK)==false && frmNode.FrmSln != 0)
                     {
-                        foreach (MapAttr attr in mattrs)
+                        FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.FK_Node);
+                        foreach (FrmField item in fls)
                         {
-                            if (attr.KeyOfEn != item.KeyOfEn)
-                                continue;
+                            foreach (DataRow dr in myds.Tables["Sys_MapAttr"].Rows)
+                            {
+                                string keyOfEn = dr["KeyOfEn"].ToString();
+                                if (keyOfEn.Equals(item.KeyOfEn) == false)
+                                    continue;
 
-                            if (item.IsSigan)
-                                item.UIIsEnable = false;
+                                if (item.IsSigan == true)
+                                    item.UIIsEnable = false;
 
-                            attr.UIIsEnable = item.UIIsEnable;
-                            attr.UIVisible = item.UIVisible;
-                            attr.IsSigan = item.IsSigan;
-                            attr.DefValReal = item.DefVal;
+                                if (item.UIIsEnable == true)
+                                    dr["UIIsEnable"] = 1;
+                                else
+                                    dr["UIIsEnable"] = 0;
+
+                                if (item.UIVisible == true)
+                                    dr["UIVisible"] = 1;
+                                else
+                                    dr["UIVisible"] = 0;
+
+                                if (item.IsSigan == true)
+                                    dr["IsSigan"] = 1;
+                                else
+                                    dr["IsSigan"] = 0;
+
+                                dr["DefVal"] = item.DefVal;
+                            }
                         }
                     }
                 }
-                 
-
-                DataTable Sys_MapAttr = mattrs.ToDataTableField("Sys_MapAttr");
-                myds.Tables.Add(Sys_MapAttr);
+                #endregion 处理表单权限控制方案: 如果是绑定单个表单的时候. 
 
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
                 myds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
+
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
-                BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
-
+                FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                 nd.WorkID = workID; //为获取表单ID提供参数.
-                if (nd.NodeFrmID != "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
+
+                // 处理自由表单.
+                if (nd.NodeFrmID.Equals("ND" + nd.NodeID)==false 
+                    && nd.HisFormType == NodeFormType.FreeForm)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
-
                     int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
                     BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
@@ -162,57 +173,21 @@ namespace BP.WF
                     fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
                     fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                     fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
-
-                    #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                    if (md.HisFrmType == FrmType.FoolForm)
-                    {
-                        //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
-                        DataTable gf = myds.Tables["Sys_GroupField"];
-                        bool isHave = false;
-                        foreach (DataRow dr in gf.Rows)
-                        {
-                            string cType = dr["CtrlType"] as string;
-                            if (cType == null)
-                                continue;
-
-                            if (cType.Equals("FWC") == true)
-                                isHave = true;
-                        }
-
-                        if (isHave == false)
-                        {
-                            DataRow dr = gf.NewRow();
-
-                            nd.WorkID = workID; //为获取表单ID提供参数.
-                            dr[GroupFieldAttr.OID] = 100;
-                            dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
-                            dr[GroupFieldAttr.CtrlType] = "FWC";
-                            dr[GroupFieldAttr.CtrlID] = "FWCND" + nd.NodeID;
-                            dr[GroupFieldAttr.Idx] = 100;
-                            dr[GroupFieldAttr.Lab] = "审核信息";
-                            gf.Rows.Add(dr);
-
-                            myds.Tables.Remove("Sys_GroupField");
-                            myds.Tables.Add(gf);
-
-                            //执行更新,就自动生成那个丢失的字段分组.
-                            refFnc.Update();
-                        }
-
-                    }
-                    #endregion 没有审核组件分组就增加上审核组件分组.
-
                 }
 
-                #region 没有审核组件分组就增加上审核组件分组. @杜需要翻译&测试.
-                if (nd.NodeFrmID == "ND" + nd.NodeID || (nd.HisFormType == NodeFormType.RefOneFrmTree && count != 0))
+                #region 没有审核组件分组就增加上审核组件分组. 
+                if (nd.NodeFrmID.Equals( "ND" + nd.NodeID)==true ||
+                    (nd.HisFormType == NodeFormType.RefOneFrmTree 
+                    && DataType.IsNullOrEmpty(frmNode.MyPK) == false ))
                 {
                     bool isHaveFWC = false;
                     //绑定表单库中的表单
-                    if ((count != 0 && frmNode.IsEnableFWC != FrmWorkCheckSta.Disable) || (nd.NodeFrmID == "ND" + nd.NodeID && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
+                    if ((DataType.IsNullOrEmpty(frmNode.MyPK) == false
+                        && frmNode.IsEnableFWC != FrmWorkCheckSta.Disable) || (nd.NodeFrmID == "ND" + nd.NodeID && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                         isHaveFWC = true;
                  
-                    if ((nd.FormType == NodeFormType.FoolForm || frmNode.HisFrmType== FrmType.FoolForm)&& isHaveFWC == true)
+                    if ((nd.FormType == NodeFormType.FoolForm 
+                        || frmNode.HisFrmType== FrmType.FoolForm)&& isHaveFWC == true)
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];
@@ -246,17 +221,17 @@ namespace BP.WF
                             //更新,为了让其自动增加审核分组.
                             BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(nd.NodeID);
                             refFnc.Update();
-
                         }
                     }
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
 
+                //把审核组件信息，放入ds.
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
 
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
-                #region 增加 groupfields
+                #region 处理累加表单增加 groupfields
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                     && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
@@ -267,13 +242,13 @@ namespace BP.WF
                     if (fromWorkOpt.Equals("1") == true)
                     {
                         if (gwf.WFState == WFState.Complete)
-                            myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                            myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                         else
                             myFrmIDs = wk.HisPassedFrmIDs; //流程未完成并且是查看表单的情况.
                     }
                     else
                     {
-                        myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                        myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                     }
 
                     GroupFields gfs = new GroupFields();
@@ -456,7 +431,7 @@ namespace BP.WF
                     #region 把枚举放入里面去.
                     myds.Tables.Remove("Sys_Enum");
 
-                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                     SysEnums enums = new SysEnums();
                     enums.RetrieveInSQL(SysEnumAttr.EnumKey,
                             "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData in(" + myFrmIDs + ")", SysEnumAttr.IntKey);
@@ -469,7 +444,7 @@ namespace BP.WF
                     myds.Tables.Remove("Sys_MapExt");
 
                     // 把扩展放入里面去.
-                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                     BP.Sys.MapExts exts = new MapExts();
                     qo = new QueryObject(exts);
                     qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
@@ -483,7 +458,7 @@ namespace BP.WF
                     myds.Tables.Remove("Sys_MapDtl");
 
                     //把从表放里面
-                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                     BP.Sys.MapDtls dtls = new MapDtls();
                     qo = new QueryObject(dtls);
                     qo.AddWhere(MapDtlAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
@@ -500,7 +475,7 @@ namespace BP.WF
                     myds.Tables.Remove("Sys_FrmAttachment");
 
                     //把附件放里面
-                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + fk_node + "'";
+                    myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
                     BP.Sys.FrmAttachment frmAtchs = new FrmAttachment();
                     qo = new QueryObject(frmAtchs);
                     qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
@@ -517,8 +492,7 @@ namespace BP.WF
                 #endregion 增加 groupfields
 
                 #region 流程设置信息.
-                BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
-
+                BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, workID);
                 if (nd.IsStartNode == false)
                 {
                     if (gwf.TodoEmps.Contains(BP.Web.WebUser.No+",") == false)
@@ -527,122 +501,15 @@ namespace BP.WF
                         gwf.Update();
                     }
                 }
-
-                //增加转向下拉框数据.
-                if (nd.CondModel == CondModel.SendButtonSileSelect)
-                {
-                    if (nd.IsStartNode == true ||(gwf.TodoEmps.Contains(WebUser.No + ",") == true))
-                    {
-                        /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
-
-                        /*如果当前节点，是可以显示下拉框的.*/
-                        Nodes nds = nd.HisToNodes;
-
-                        DataTable dtToNDs = new DataTable();
-                        dtToNDs.TableName = "ToNodes";
-                        dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
-                        dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
-                        dtToNDs.Columns.Add("IsSelectEmps", typeof(string)); //是否弹出选择人的对话框？
-                        dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
-
-                        #region 增加到达延续子流程节点。
-                        if (nd.SubFlowYanXuNum >= 0)
-                        {
-                            SubFlowYanXus ygflows = new SubFlowYanXus(fk_node);
-                            foreach (SubFlowYanXu item in ygflows)
-                            {
-                                DataRow dr = dtToNDs.NewRow();
-                                dr["No"] = item.SubFlowNo + "01";
-                                dr["Name"] = "启动:" + item.SubFlowName;
-                                dr["IsSelectEmps"] = "1";
-                                dr["IsSelected"] = "0";
-                                dtToNDs.Rows.Add(dr);
-                            }
-                        }
-                        #endregion 增加到达延续子流程节点。
-
-                        #region 到达其他节点.
-                        //上一次选择的节点.
-                        int defalutSelectedNodeID = 0;
-                        if (nds.Count > 1)
-                        {
-                            string mysql = "";
-                            // 找出来上次发送选择的节点.
-                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                                mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
-                            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-                            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
-
-                            //获得上一次发送到的节点.
-                            defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
-                        }
-
-                        #region 为天业集团做一个特殊的判断.
-                        if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
-                        {
-                            /*如果是董事长节点, 如果是下一个节点默认的是备案. */
-                            foreach (Node item in nds)
-                            {
-                                if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
-                                {
-                                    defalutSelectedNodeID = item.NodeID;
-                                    break;
-                                }
-                            }
-                        }
-                        #endregion 为天业集团做一个特殊的判断.
-
-
-                        foreach (Node item in nds)
-                        {
-                            DataRow dr = dtToNDs.NewRow();
-                            dr["No"] = item.NodeID;
-                            dr["Name"] = item.Name;
-                            //if (item.hissel
-
-                            if (item.HisDeliveryWay == DeliveryWay.BySelected)
-                                dr["IsSelectEmps"] = "1";
-                            else
-                                dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-
-                            //设置默认选择的节点.
-                            if (defalutSelectedNodeID == item.NodeID)
-                                dr["IsSelected"] = "1";
-                            else
-                                dr["IsSelected"] = "0";
-
-                            dtToNDs.Rows.Add(dr);
-                        }
-                        #endregion 到达其他节点。
-
-
-                        //增加一个下拉框, 对方判断是否有这个数据.
-                        myds.Tables.Add(dtToNDs);
-                    }
-                }
-
-                // 节点数据.
-                //string sql = "SELECT * FROM WF_Node WHERE NodeID=" + fk_node;
-                //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //dt.TableName = "WF_NodeBar";
-                //myds.Tables.Add(dt);
-
-                //// 流程数据.
-                //Flow fl = new Flow(fk_flow);
-                //myds.Tables.Add(fl.ToDataTableField("WF_Flow"));
                 #endregion 流程设置信息.
 
                 #region 把主从表数据放入里面.
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
 
                 //重设默认值.
-                wk.ResetDefaultVal();
+                wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
-                //@樊雷伟 把这部分代码搬到jflow上去. CCFlowAPI. 114行出.
+                //URL参数替换
                 if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
@@ -654,8 +521,6 @@ namespace BP.WF
                         wk.SetValByKey(k, HttpContextHelper.RequestParams(k));
                     }
 
-                    // 处理传递过来的frm参数。
-                    //2019-07-25 zyt改造
                     foreach (string k in HttpContextHelper.RequestParamKeys)
                     {
                         if (DataType.IsNullOrEmpty(k) == true)
@@ -667,6 +532,9 @@ namespace BP.WF
                     //更新到数据库里.
                     wk.DirectUpdate();
                 }
+
+                MapData md = new MapData();
+                md.No = nd.NodeFrmID;
 
                 // 执行表单事件..
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
@@ -680,7 +548,8 @@ namespace BP.WF
                     wk.RetrieveFromDBSources();
 
                 //执行装载填充.
-                MapExt me = new MapExt();
+                
+                MapExt me=new MapExt();
                 if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, wk.NodeFrmID) == 1)
                 {
                     //执行通用的装载方法.
@@ -703,8 +572,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    DataTable mainTable = wk.ToDataTableField(md.No);
-                    mainTable.TableName = "MainTable";
+                    DataTable mainTable = wk.ToDataTableField("MainTable");
                     myds.Tables.Add(mainTable);
                 }
                 string sql = "";
@@ -713,7 +581,9 @@ namespace BP.WF
 
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
-                MapExts mes = md.MapExts;
+
+                MapExts mes = new MapExts(nd.NodeFrmID); // md.MapExts;
+
                 DataTable ddlTable = new DataTable();
                 ddlTable.Columns.Add("No");
 
@@ -783,8 +653,6 @@ namespace BP.WF
                     {
                         myds.Tables.Add(mydt);
                     }
-
-                    
                 }
                 ddlTable.TableName = "UIBindKey";
                 myds.Tables.Add(ddlTable);
@@ -793,7 +661,6 @@ namespace BP.WF
                 #region 处理流程-消息提示.
                 DataTable dtAlert = new DataTable();
                 dtAlert.TableName = "AlertMsg";
-
                 dtAlert.Columns.Add("Title", typeof(string));
                 dtAlert.Columns.Add("Msg", typeof(string));
                 dtAlert.Columns.Add("URL", typeof(string));
@@ -831,7 +698,7 @@ namespace BP.WF
 
                             DataRow drMsg = dtAlert.NewRow();
                             drMsg["Title"] = worker + "," + workerName + "请求加签:";
-                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
+                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
                             dtAlert.Rows.Add(drMsg);
 
                             //提示信息.
@@ -843,22 +710,12 @@ namespace BP.WF
                     case WFState.ReturnSta:
                         /* 如果工作节点退回了*/
                         ReturnWorks rws = new ReturnWorks();
-                        rws.Retrieve(ReturnWorkAttr.ReturnToNode, fk_node,
+                        rws.Retrieve(ReturnWorkAttr.ReturnToNode, nd.NodeID,
                             ReturnWorkAttr.WorkID, workID,
                             ReturnWorkAttr.RDT);
 
                         if (rws.Count != 0)
                         {
-                            //string msgInfo = "";
-                            //foreach (BP.WF.ReturnWork rw in rws)
-                            //{
-                            //    DataRow drMsg = dtAlert.NewRow();
-                            //    //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
-                            //    drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
-                            //    drMsg["Msg"] = rw.BeiZhuHtml;
-                            //    dtAlert.Rows.Add(drMsg);
-                            //}
-
                             string msgInfo = "";
                             foreach (BP.WF.ReturnWork rw in rws)
                             {
@@ -902,7 +759,7 @@ namespace BP.WF
                         BP.En.QueryObject qo = new QueryObject(fws);
                         qo.AddWhere(ShiftWorkAttr.WorkID, workID);
                         qo.addAnd();
-                        qo.AddWhere(ShiftWorkAttr.FK_Node, fk_node);
+                        qo.AddWhere(ShiftWorkAttr.FK_Node, nd.NodeID);
                         qo.addOrderBy(ShiftWorkAttr.RDT);
                         qo.DoQuery();
                         if (fws.Count >= 1)
@@ -944,6 +801,9 @@ namespace BP.WF
 
 
                 myds.Tables.Add(dtAlert);
+
+               // myds.WriteXml("c:\\11.xml");
+
                 return myds;
             }
             catch (Exception ex)

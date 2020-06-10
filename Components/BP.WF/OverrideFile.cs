@@ -11,5 +11,9 @@ namespace BP.WF
     public class OverrideFile
     {
 
+        public  static void SendMsg()
+        {
+        }
+
     }
 }

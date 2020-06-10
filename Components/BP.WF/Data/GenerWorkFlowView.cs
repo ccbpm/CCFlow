@@ -2,16 +2,16 @@
 using System.Data;
 using BP.DA;
 using BP.WF;
-using BP.Port ;
+using BP.Port;
 using BP.Sys;
 using BP.En;
 using BP.WF.Template;
 
 namespace BP.WF.Data
 {
-	/// <summary>
+    /// <summary>
     /// 流程实例
-	/// </summary>
+    /// </summary>
     public class GenerWorkFlowViewAttr
     {
         #region 基本属性
@@ -165,9 +165,9 @@ namespace BP.WF.Data
         public const string GUID = "GUID";
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 流程实例
-	/// </summary>
+    /// </summary>
     public class GenerWorkFlowView : Entity
     {
         #region 基本属性
@@ -752,7 +752,7 @@ namespace BP.WF.Data
                 //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
-                map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY);
+                map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY, 4000);
 
 
                 //把不等于 0 的去掉.
@@ -786,11 +786,14 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
-                rm.ClassMethodName =  this.ToString()+ ".Rollback";
+                rm.ClassMethodName = this.ToString() + ".DoRollback";
+
                 //rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-               // rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-                rm.HisAttrs.AddTBString("NodeID", null, "NodeID", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("EmpNo", null, "回滚到人员编号",true,false,0,100,100);
+                // rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+
+                rm.HisAttrs.AddDDLSQL("NodeID", "0", "回滚到节点",
+                   "SELECT NodeID+'' as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
+                rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
 
@@ -811,12 +814,13 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "调整";
-                rm.HisAttrs.AddTBString("wenben", null, "调整到人员", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
-                 
+                rm.HisAttrs.AddTBString("RenYuan", null, "调整到人员", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
+                rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
+                    "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
+
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
 
@@ -828,9 +832,10 @@ namespace BP.WF.Data
 
         #region 执行功能.
         //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string toEmpNo, int toNodeID)
+        public string DoTest(string toEmpNo, string toNodeID)
         {
-           return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, toNodeID, toEmpNo,"admin调整");
+            return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, int.Parse(toNodeID),
+                toEmpNo, BP.Web.WebUser.Name + ":调整.");
         }
         public string RepairDataIt()
         {
@@ -870,7 +875,7 @@ namespace BP.WF.Data
             {
                 string jsonVal = mydr[attr.Key].ToString();
                 string enVal = wk.GetValStringByKey(attr.Key);
-                if ( DataType.IsNullOrEmpty(enVal)==true)
+                if (DataType.IsNullOrEmpty(enVal) == true)
                 {
                     wk.SetValByKey(attr.Key, jsonVal);
                     isHave = true;
@@ -895,7 +900,7 @@ namespace BP.WF.Data
 
             foreach (Flow fl in fls)
             {
-                string sql = "SELECT OID FROM " + fl.PTable + " WHERE BillNo IS NULL AND OID="+this.WorkID;
+                string sql = "SELECT OID FROM " + fl.PTable + " WHERE BillNo IS NULL AND OID=" + this.WorkID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                 Node nd = new Node(int.Parse(fl.No + "01"));
@@ -935,7 +940,7 @@ namespace BP.WF.Data
                     {
                         string jsonVal = mydr[attr.Key].ToString();
                         string enVal = wk.GetValStringByKey(attr.Key);
-                        if ( DataType.IsNullOrEmpty(enVal) ==true)
+                        if (DataType.IsNullOrEmpty(enVal) == true)
                         {
                             wk.SetValByKey(attr.Key, jsonVal);
                             isHave = true;
@@ -958,10 +963,17 @@ namespace BP.WF.Data
         /// <param name="nodeid">节点ID</param>
         /// <param name="note">回滚原因</param>
         /// <returns>回滚的结果</returns>
-        public string Rollback(string nodeid, string note)
+        public string DoRollback(string nodeID, string note)
         {
-            BP.WF.Template.FlowSheet fl = new Template.FlowSheet(this.FK_Flow);
-            return fl.DoRebackFlowData(this.WorkID, int.Parse(nodeid), note);
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoRebackWorkFlow(this.FK_Flow, this.WorkID,
+                    int.Parse(nodeID), note);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
 
         public string DoTrack()
@@ -1000,7 +1012,7 @@ namespace BP.WF.Data
 
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.WorkID, true);
                 return "删除成功";
             }
             catch (Exception ex)
@@ -1035,27 +1047,27 @@ namespace BP.WF.Data
         }
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 流程实例s
-	/// </summary>
-	public class GenerWorkFlowViews : Entities
-	{
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{			 
-				return new GenerWorkFlowView();
-			}
-		}
-		/// <summary>
-		/// 流程实例集合
-		/// </summary>
-		public GenerWorkFlowViews(){}
-		#endregion
+    /// </summary>
+    public class GenerWorkFlowViews : Entities
+    {
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new GenerWorkFlowView();
+            }
+        }
+        /// <summary>
+        /// 流程实例集合
+        /// </summary>
+        public GenerWorkFlowViews() { }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -1080,6 +1092,6 @@ namespace BP.WF.Data
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
-	
+    }
+
 }

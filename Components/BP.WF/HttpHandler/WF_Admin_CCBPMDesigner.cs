@@ -134,6 +134,7 @@ namespace BP.WF.HttpHandler
             sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' || Name IS Null) ";
             DBAccess.RunSQL(sql);
 
+           // BP.WF.Template.Cond
             //Node nd = new Node();
             //nd.NodeID = this.FK_Node;
             //nd.RetrieveFromDBSources();
@@ -186,7 +187,7 @@ namespace BP.WF.HttpHandler
         {
             //@sly. 
             if (BP.Web.WebUser.IsAdmin == false)
-                return "err@当前您不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
+                return "err@当前您【"+WebUser.No+","+WebUser.Name+"】不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
 
             string sql = "";
             try
@@ -197,13 +198,20 @@ namespace BP.WF.HttpHandler
                 //保存方向.
                 sBuilder = new StringBuilder();
                 string[] dirs = this.GetRequestVal("Dirs").Split('@');
+
+                Direction mydir = new Direction();
                 foreach (string item in dirs)
                 {
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
+                    mydir.MyPK = strs[0];
+                    if (mydir.IsExits == true)
+                        continue;
+
                     sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
-                    sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode,IsCanBack) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "'," + "0);");
+                    //@sly 
+                    sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "');");
                 }
                 DBAccess.RunSQLs(sBuilder.ToString());
 
@@ -555,7 +563,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Init()
         {
-
             //检查数据库连接.
             try
             {
@@ -565,7 +572,6 @@ namespace BP.WF.HttpHandler
             {
                 return "err@异常信息:" + ex.Message;
             }
-
 
             //检查是否缺少Port_Emp 表，如果没有就是没有安装.
             if (DBAccess.IsExitsObject("Port_Emp") == false && DBAccess.IsExitsObject("WF_Flow") == false)
@@ -589,7 +595,6 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     string str = BP.WF.Glo.UpdataCCFlowVer();
-
                     BP.WF.Dev2Interface.Port_LoginBySID(sid);
                     if (this.FK_Flow == null)
                         return "url@Default.htm?UserNo=" + userNo + "&Key=" + DateTime.Now.ToBinary();
@@ -608,13 +613,7 @@ namespace BP.WF.HttpHandler
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
                     str = "准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
-
                 return str;
-                //Hashtable ht = new Hashtable();
-                //ht.Add("Msg", str);
-                //ht.Add("Title", SystemConfig.SysName);
-                //return BP.Tools.Json.ToJson(ht);
-
             }
             catch (Exception ex)
             {
@@ -686,8 +685,8 @@ namespace BP.WF.HttpHandler
                 adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
                 if (adminers.Count == 0)
                 {
-                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();
-                    int i = orgs.Retrieve("Adminer", WebUser.No);
+                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();                   
+                    int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
                     if (i == 0)
                         return "err@非管理员或二级管理员用户，不能登录后台.";
 
@@ -758,7 +757,6 @@ namespace BP.WF.HttpHandler
             // return "登录成功.";
         }
         #endregion 登录窗口.
-
 
 
         #region 流程相关 Flow
@@ -1220,7 +1218,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree where OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  OR No = 1  ORDER BY Idx ASC ; ";
                 sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
 
@@ -1559,7 +1557,7 @@ namespace BP.WF.HttpHandler
                 string FlowVersion = this.GetRequestVal("FlowVersion");
 
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
-                        Template.DataStoreModel.SpecTable, PTable, FlowMark, FlowVersion);
+                        Template.DataStoreModel.SpecTable, PTable, FlowMark);
 
                 Flow fl = new Flow(flowNo);
 

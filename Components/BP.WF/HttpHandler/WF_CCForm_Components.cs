@@ -106,14 +106,18 @@ namespace BP.WF.HttpHandler
             //初始化数据.
             sql = "UPDATE " + ptable + " SET DocWordLSH='" + lsh + "', DocWordYear='" + year + "' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);
-
-            //做个性化处理,为计算中心.
-            if (DBAccess.IsExitsObject("Gov_SendFileCopy") ==true)
+            //为了计算机中心做个性化处理为一下两个表名跟新orgno和orgname
+            if(ptable== "gov_receivefile")
             {
-              
+                string sql1 = "UPDATE gov_receivefile set OrgNo='" + WebUser.OrgNo + "',OrgName='" + WebUser.OrgName + "' where oid=" + this.OID;
+                DBAccess.RunSQL(sql1);
+            }
+            if (ptable == "gov_sendfilecopy")
+            {
                 string sql1 = "UPDATE gov_sendfilecopy set OrgNo='" + WebUser.OrgNo + "',OrgName='" + WebUser.OrgName + "' where oid=" + this.OID;
                 DBAccess.RunSQL(sql1);
             }
+        
 
             //转成Json，返回出去.
             return BP.Tools.Json.ToJson(dt);
@@ -149,6 +153,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DocWord_Save()
         {
+           
+         
             //创建实体.
             GEEntity en = new GEEntity(this.FrmID, this.OID);
 
@@ -172,6 +178,9 @@ namespace BP.WF.HttpHandler
             //生成一个新的流水号.
             sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='" + wordname + "' ,DocWordYear='" + ny + "',DocWordLSH='" + lsh + "',DocWord='" + docword + "' WHERE OID=" + this.OID;
             DBAccess.RunSQL(sql);
+        
+
+
 
             return docword;
         }

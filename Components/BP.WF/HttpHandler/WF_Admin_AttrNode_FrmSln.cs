@@ -23,6 +23,117 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_AttrNode_FrmSln()
         {
+
+        }
+        /// <summary>
+        /// 设置该流程的所有节点都是用该方案。
+        /// </summary>
+        /// <returns></returns>
+        public void RefOneFrmTree_SetAllNodeFrmUseThisSln()
+        {
+            string nodeID = GetRequestVal("FK_Node");
+            Node currNode = new Node(nodeID);
+            string flowNo = currNode.FK_Flow;
+            Nodes nds = new Nodes();
+            nds.Retrieve("FK_Flow", flowNo);
+
+            //求出来组件s.
+            MapAttrs attrOfCommpents = new MapAttrs();
+            QueryObject qo = new QueryObject(attrOfCommpents);
+            qo.AddWhere(MapAttrAttr.FK_MapData, currNode.NodeFrmID);
+            qo.addAnd();
+            qo.AddWhere(MapAttrAttr.UIContralType, ">=", 6);
+            qo.DoQuery();
+
+         //   attrOfCommpents.Retrieve(MapAttrAttr.FK_MapData,
+           // currNode.)
+
+            for (var i = 0; i < nds.Count; i++)
+            {
+
+                Node jsNode = nds[i] as Node;
+                if (jsNode.NodeID == currNode.NodeID)
+                    continue;
+
+                //修改表单属性
+                jsNode.FormType = currNode.FormType;
+               
+                jsNode.NodeFrmID = currNode.NodeFrmID;
+                jsNode.Update();
+
+                //节点表单属性
+                //先删除掉已有的，避免换绑时出现垃圾数据.
+                FrmNodes ens = new FrmNodes();
+                ens.Retrieve("FK_Node", jsNode.NodeID);
+
+                //是不是该frmNode已经存在？
+                var isHave = false;
+                for (var idx = 0; idx < ens.Count; idx++)
+                {
+                    FrmNode en = ens[idx] as FrmNode;
+                    if (en.FK_Frm != currNode.NodeFrmID)
+                    {
+                        FrmNode Frm = new FrmNode(en.MyPK);
+                        Frm.Delete();
+                        continue;
+                    }
+                    isHave = true;
+                }
+                if (isHave == true)
+                    continue; //已经存在就不处理.
+
+                FrmNode frmNode = new FrmNode();
+                frmNode.MyPK = jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FK_Flow;
+                frmNode.FK_Node = jsNode.NodeID;
+                frmNode.FK_Flow = jsNode.FK_Flow;
+                frmNode.FK_Frm = jsNode.NodeFrmID;
+
+                //判断是否为开始节点
+                string nodeID1 = jsNode.NodeID.ToString();
+                if (nodeID1.Substring(nodeID1.Length - 2) == "01")
+                {
+                    frmNode.FrmSln = FrmSln.Default; //默认方案
+                }
+                else
+                {
+                    frmNode.FrmSln = FrmSln.Readonly; //只读方案
+                }
+                frmNode.Insert();
+
+                //设置组件都是可用的.
+                BP.WF.Template.FrmField ff = new FrmField();
+                foreach (MapAttr attr in attrOfCommpents)
+                {
+                    ff.UIVisible = true;
+                    ff.KeyOfEn = attr.KeyOfEn;
+                    ff.FK_Flow = currNode.FK_Flow;
+                    ff.FK_Node = jsNode.NodeID;
+                    ff.FK_MapData = jsNode.NodeFrmID; //表单ID.
+                    ff.MyPK = ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn;
+                    if (ff.IsExits == false)
+                        ff.Insert();
+                }
+            }
+        }
+        /// <summary>
+        /// 获得下拉框的值.
+        /// </summary>
+        /// <returns></returns>
+        public string BatchEditSln_InitDDLData()
+        {
+            string fk_frm = GetRequestVal("Fk_Frm");
+            DataSet ds = new DataSet();
+
+            SysEnums ses = new SysEnums("FrmSln");
+            ds.Tables.Add(ses.ToDataTableField("FrmSln"));
+
+            SysEnums se1s = new SysEnums("FWCSta");
+            ds.Tables.Add(se1s.ToDataTableField("FWCSta"));
+
+            DataTable dt = DBAccess.RunSQLReturnTable(Glo.SQLOfCheckField.Replace("@FK_Frm", fk_frm));
+            dt.TableName = "CheckFields";
+            ds.Tables.Add(dt);
+            return BP.Tools.Json.ToJson(ds);
         }
 
         /// <summary>
@@ -66,34 +177,35 @@ namespace BP.WF.HttpHandler
             //集团模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
-                sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
+                sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
                 sql += "A.PTable,";
-                sql += "A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                sql += "A.OrgNo, '"+BP.Web.WebUser.OrgName+"' as OrgName ";
                 sql += "FROM ";
                 sql += "Sys_MapData A, ";
-                sql += "Sys_FormTree B ";
+                sql += "Sys_FormTree B, ";
+                sql += "Port_Org C ";
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "') t1 ";
+                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
+                sql += " AND C.No =B.OrgNo ";
 
-                sql += " UNION ";
+                sql += " UNION  ";
 
-                sql += "select * from (SELECT  b.NAME AS SortName, a.No, A.Name,";
-                sql += "A.PTable,A.OrgNo ,b.idx as idx1,a.idx as idx2 ";
+                sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name, ";
+                sql += " A.PTable, A.OrgNo, '其他组织' as OrgName ";
                 sql += " FROM ";
-                sql += "Sys_MapData A, Sys_FormTree B, WF_FrmOrg C ";
+                sql += " Sys_MapData A,  WF_FrmOrg B, Port_Org C ";
                 sql += " WHERE ";
-                sql += " A.FK_FormTree = B.No ";
-                sql += " AND B.OrgNo = C.OrgNo ";
-                sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ) t2 ";
-                sql += "ORDER BY idx1,idx2";
-                
+                sql += "  A.No = B.FrmID  AND B.OrgNo=C.No ";
+                sql += "  AND B.OrgNo = '" + WebUser.OrgNo + "' ";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             #warning 需要判断不同的数据库类型
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.DM
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["SORTNAME"].ColumnName = "SortName";
                 dt.Columns["NO"].ColumnName = "No";

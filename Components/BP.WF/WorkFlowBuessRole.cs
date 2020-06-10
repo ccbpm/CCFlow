@@ -511,139 +511,6 @@ namespace BP.WF
         }
         #endregion 产生单据编号
 
-        #region 获得下一个节点.
-        /// <summary>
-        /// 获得下一个节点
-        /// </summary>
-        /// <param name="currNode">当前的节点</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="currWorkFlow">当前的工作主表信息</param>
-        /// <param name="enPara">参数</param>
-        /// <returns>返回找到的节点</returns>
-        public static Node RequestNextNode(Node currNode, Int64 workid, GenerWorkFlow currWorkFlow, GERpt enPara = null)
-        {
-            if (currNode.HisToNodes.Count == 1)
-                return (Node)currNode.HisToNodes[0];
-
-            // 判断是否有用户选择的节点。
-            if (currNode.CondModel == CondModel.ByUserSelected)
-            {
-                if (currWorkFlow == null)
-                    throw new Exception("@参数错误:currWorkFlow");
-                // 获取用户选择的节点.
-                string nodes = currWorkFlow.Paras_ToNodes;
-                if (DataType.IsNullOrEmpty(nodes))
-                    throw new Exception("@用户没有选择发送到的节点.");
-
-                string[] mynodes = nodes.Split(',');
-                foreach (string item in mynodes)
-                {
-                    if (DataType.IsNullOrEmpty(item))
-                        continue;
-                    //排除到达自身节点
-                    if (currNode.NodeID.ToString() == item)
-                        continue;
-
-                    return new Node(int.Parse(item));
-                }
-
-                //设置他为空,以防止下一次发送出现错误.
-                currWorkFlow.Paras_ToNodes = "";
-            }
-
-
-            // 检查当前的状态是是否是退回，.
-            Nodes nds = currNode.HisToNodes;
-            if (nds.Count == 1)
-            {
-                Node toND = (Node)nds[0];
-                return toND;
-            }
-            if (nds.Count == 0)
-                throw new Exception("@没有找到它的下了步节点.");
-
-            Conds dcsAll = new Conds();
-            dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
-            if (dcsAll.Count == 0)
-                throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件,有分支的地方必须有方向条件.");
-
-            #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
-            Nodes myNodes = new Nodes();
-            int toNodeId = 0;
-            int numOfWay = 0;
-            foreach (Node nd in nds)
-            {
-                Conds dcs = new Conds();
-                foreach (Cond dc in dcsAll)
-                {
-                    if (dc.ToNodeID != nd.NodeID)
-                        continue;
-
-                    dc.WorkID = workid;
-                    dc.FID = workid;
-
-                    //如果当前的参数不为空.
-                    if (enPara != null)
-                        dc.en = enPara;
-
-                    dcs.AddEntity(dc);
-                }
-
-                if (dcs.Count == 0)
-                {
-                    // throw new Exception("@流程设计错误：从节点(" + currNode.Name + ")到节点(" + nd.Name + ")，没有设置方向条件，有分支的节点必须有方向条件。");
-                    continue;
-                }
-
-                if (dcs.IsPass) // 如果通过了.
-                    myNodes.AddEntity(nd);
-            }
-            #endregion 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
-
-            // 如果没有找到,就找到没有设置方向条件的节点,没有设置方向条件的节点是默认同意的.
-            if (myNodes.Count == 0)
-            {
-                foreach (Node nd in nds)
-                {
-                    Conds dcs = new Conds();
-                    foreach (Cond dc in dcsAll)
-                    {
-                        if (dc.ToNodeID != nd.NodeID)
-                            continue;
-                        dcs.AddEntity(dc);
-                    }
-
-                    if (dcs.Count == 0)
-                        return nd;
-                }
-            }
-
-            if (myNodes.Count == 0)
-                throw new Exception("@当前用户(" + BP.Web.WebUser.Name + "),定义节点的方向条件错误:从{" + currNode.NodeID + currNode.Name + "}节点到其它节点,定义的所有转向条件都不成立.");
-
-            //如果找到1个.
-            if (myNodes.Count == 1)
-            {
-                Node toND = myNodes[0] as Node;
-                return toND;
-            }
-
-            //如果找到了多个.
-            foreach (Cond dc in dcsAll)
-            {
-                foreach (Node myND in myNodes)
-                {
-                    if (dc.ToNodeID == myND.NodeID)
-                    {
-                        return myND;
-                    }
-                }
-            }
-
-            throw new Exception("@找到下一步节点.");
-        }
-        #endregion
-
         #region 找到下一个节点的接受人员
         /// <summary>
         /// 找到下一个节点的接受人员
@@ -812,9 +679,9 @@ namespace BP.WF
                     {
                         if (toNode.HisDeliveryWay == DeliveryWay.BySelected)
                         {
-                            if (currNode.CondModel != CondModel.SendButtonSileSelect)
+                            if (currNode.CondModel != DirCondModel.SendButtonSileSelect)
                             {
-                                currNode.CondModel = CondModel.SendButtonSileSelect;
+                                currNode.CondModel = DirCondModel.SendButtonSileSelect;
                                 currNode.Update();
                                 throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
                             }

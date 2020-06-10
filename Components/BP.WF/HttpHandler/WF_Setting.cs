@@ -98,8 +98,8 @@ namespace BP.WF.HttpHandler
 
 
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
-            ht.Add("Tel", wfemp.Tel);
-            ht.Add("Email", wfemp.Email);
+            ht.Add("Tel", emp.Tel);
+            ht.Add("Email", emp.Email);
             ht.Add("Author", wfemp.Author);
 
             return BP.Tools.Json.ToJson(ht);

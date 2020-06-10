@@ -96,7 +96,7 @@ namespace BP.UnitTesting.AttrFlow
                 throw new Exception("@没有找到它的待办工作."+sql);
              
             //删除测试数据.
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID, false);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workID, false);
 
           // BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fl.No, workID2, false);
         }

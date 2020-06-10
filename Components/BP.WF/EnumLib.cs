@@ -6,6 +6,28 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 抄送状态
+    /// </summary>
+    public enum CCSta
+    {
+        /// <summary>
+        /// 未读
+        /// </summary>
+        UnRead,
+        /// <summary>
+        /// 已读
+        /// </summary>
+        Read,
+        /// <summary>
+        /// 已回复
+        /// </summary>
+        CheckOver,
+        /// <summary>
+        /// 已删除
+        /// </summary>
+        Del
+    }
+    /// <summary>
     /// 流程表单类型
     /// </summary>
     public enum FlowFrmType
@@ -86,35 +108,22 @@ namespace BP.WF
     /// <summary>
     /// 方向条件控制规则
     /// </summary>
-    public enum CondModel
+    public enum DirCondModel
     {
         /// <summary>
         /// 按照用户设置的方向条件计算
         /// </summary>
-        ByLineCond,
+        ByLineCond=0,
         /// <summary>
         /// 按照用户选择计算
         /// </summary>
-        ByUserSelected,
+        ByUserSelected=1,
         /// <summary>
         /// 发送按钮旁下拉框选择
         /// </summary>
-        SendButtonSileSelect
+        SendButtonSileSelect=2
     }
-    /// <summary>
-    /// 关系类型
-    /// </summary>
-    public enum CondOrAnd
-    {
-        /// <summary>
-        /// 关系集合里面的所有条件都成立.
-        /// </summary>
-        ByAnd,
-        /// <summary>
-        /// 关系集合里的只有一个条件成立.
-        /// </summary>
-        ByOr
-    }
+     
     /// <summary>
     /// 待办工作超时处理方式
     /// </summary>
@@ -1027,6 +1036,14 @@ namespace BP.WF
         /// 按照绑定岗位的用户组人员
         /// </summary>
         ByBindTeamEmp = 27,
+        /// <summary>
+        /// 按照组织模式人员选择器
+        /// </summary>
+        BySelectedEmpsOrgModel = 43,
+        /// <summary>
+        /// 按照自定义Url模式的人员选择器
+        /// </summary>
+        BySelfUrl = 44,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

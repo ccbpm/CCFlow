@@ -255,6 +255,10 @@ namespace BP.WF.Template
             {
                 return this.GetValBooleanByKey(NodeAttr.IsSendBackNode);
             }
+            set
+            {
+                this.SetValByKey(NodeAttr.IsSendBackNode, value);
+            }
         }
         /// <summary>
         /// 主键
@@ -328,16 +332,13 @@ namespace BP.WF.Template
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.SetHelperUrl(NodeAttr.NodeID, "http://ccbpm.mydoc.io/?v=5404&t=17901");
 
-                map.AddTBInt(NodeAttr.Step, 0, "步骤(无计算意义)", true, false);
-                map.SetHelperUrl(NodeAttr.Step, "http://ccbpm.mydoc.io/?v=5404&t=17902");
-
                 //map.SetHelperAlert(NodeAttr.Step, "它用于节点的排序，正确的设置步骤可以让流程容易读写."); //使用alert的方式显示帮助信息.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 3, 3, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17023");
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
 
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=17903");
                 map.SetHelperAlert(NodeAttr.Name, "修改节点名称时如果节点表单名称为空着节点表单名称和节点名称相同，否则节点名称和节点表单名称可以不相同");
-                map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
+
 
                 map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt,
                     "@0=操作员执行@1=机器执行@2=混合执行");
@@ -349,11 +350,9 @@ namespace BP.WF.Template
 
 
                 //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
-
                 //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                 //  "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 //map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
-
 
                 // 撤销规则.
                 map.AddDDLSysEnum(NodeAttr.CancelRole, (int)CancelRole.OnlyNextStep, "撤销规则", true, true,
@@ -386,10 +385,12 @@ namespace BP.WF.Template
                 map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
-
-
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
 
+
+                map.AddTBInt(NodeAttr.Step, 0, "步骤(无计算意义)", true, false);
+                map.SetHelperUrl(NodeAttr.Step, "http://ccbpm.mydoc.io/?v=5404&t=17902");
+                map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
                 #endregion  基础属性
 
                 #region 分合流子线程属性
@@ -420,20 +421,16 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "多人待办处理模式", true, true, NodeAttr.TodolistModel,
                 //    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式@4=协作组长模式");
                 //map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //增加帮助.
-
                 //发送阻塞模式.
                 //map.AddDDLSysEnum(NodeAttr.BlockModel, (int)BlockModel.None, "发送阻塞模式", true, true, NodeAttr.BlockModel,
                 //    "@0=不阻塞@1=当前节点有未完成的子流程时@2=按约定格式阻塞未完成子流程@3=按照SQL阻塞@4=按照表达式阻塞");
                 //map.SetHelperUrl(NodeAttr.BlockModel, "http://ccbpm.mydoc.io/?v=5404&t=17948"); //增加帮助.
-
                 //map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 700, 10,true);
                 //map.SetHelperUrl(NodeAttr.BlockExp, "http://ccbpm.mydoc.io/?v=5404&t=17948");
-
                 //map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞时提示信息", true, false, 0, 700, 10, true);
                 //map.SetHelperUrl(NodeAttr.BlockAlert, "http://ccbpm.mydoc.io/?v=5404&t=17948");
 
                 map.AddBoolean(NodeAttr.IsAllowRepeatEmps, false, "是否允许子线程接受人员重复(仅当分流点向子线程发送时有效)?", true, true, true);
-
                 map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
 
@@ -538,15 +535,32 @@ namespace BP.WF.Template
 
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true, true);
 
+
+                // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "(打印pdf)是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在抄送工具栏?", true, true, false);
+
+
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
                 map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
 
                 map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintZipEnable, false, "(打包下载zip)是否启用", true, true);
+
+                // add 2020.5.25 for 交投集团.
+                map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, false);
+
+
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
@@ -554,13 +568,14 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.PrintDocEnable, "http://ccbpm.mydoc.io/?v=5404&t=17979"); //增加帮助
 
-                // map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
+                //map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
                 //map.AddTBString(BtnAttr.AthLab, "附件", "附件按钮标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "附件权限"), true, true, 
                 //    NodeAttr.FJOpen, "@0=关闭附件@1=操作员@2=工作ID@3=流程ID");
 
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
+
                 //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "轨迹"]); //增加帮助
                 map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
@@ -610,9 +625,7 @@ namespace BP.WF.Template
 
                 //map.AddTBString(BtnAttr.AskforLabRe, "执行", "加签按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
-
                 // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "加签"]); //增加帮助
-
 
                 // 删除了这个模式,让表单方案进行控制了,保留这两个字段以兼容.
                 map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", false, false, 0, 50, 10);
@@ -691,13 +704,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "流程完成条件"; // "流程完成条件";
-                rm.ClassMethodName = this.ToString() + ".DoCond";
-                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
-                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发送后转向"; // "调用事件接口";
@@ -720,7 +726,27 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "流程完成条件";
+                rm.ClassMethodName = this.ToString() + ".DoCondFlow";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "节点完成条件";
+                rm.ClassMethodName = this.ToString() + ".DoCondNode";
+                rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "待办删除规则";
+                rm.ClassMethodName = this.ToString() + ".DoGenerWorkerListDelRole";
+                //rm.Icon = "../../WF/Admin/AttrNode/Img/Cond.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
                 #endregion 基础功能.
 
                 #region 字段相关功能（不显示在菜单里）
@@ -923,7 +949,6 @@ namespace BP.WF.Template
                 //rm.Visable = false;
                 map.AddRefMethod(rm);
 
-
                 if (Glo.CCBPMRunModel != CCBPMRunModel.SAAS)
                 {
                     rm = new RefMethod();
@@ -1024,6 +1049,14 @@ namespace BP.WF.Template
 
         #region 基础设置.
         /// <summary>
+        /// 待办删除规则
+        /// </summary>
+        /// <returns></returns>
+        public string DoGenerWorkerListDelRole()
+        {
+            return "../../Admin/AttrNode/GenerWorkerListDelRole.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+        }
+        /// <summary>
         /// 多人处理规则.
         /// </summary>
         /// <returns></returns>
@@ -1053,11 +1086,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSheet()
         {
-            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         public string DoSheetOld()
         {
-            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
 
@@ -1067,7 +1100,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepterRoleNew()
         {
-            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
         /// <summary>
@@ -1076,7 +1109,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 发送后转向规则
@@ -1084,7 +1117,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 抄送人规则
@@ -1092,7 +1125,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCer()
         {
-            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 加载提示信息
@@ -1100,7 +1133,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoHelpRole()
         {
-            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID;
+            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         #endregion
 
@@ -1210,7 +1243,7 @@ namespace BP.WF.Template
 
         public string DoTurn()
         {
-            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //, "节点完成转向处理", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
@@ -1221,7 +1254,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DocTemp()
         {
-            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 抄送规则
@@ -1229,7 +1262,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1272,9 +1305,21 @@ namespace BP.WF.Template
             return "../../Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
 
-        public string DoCond()
+        /// <summary>
+        /// 流程完成条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoCondFlow()
         {
-            return "../../Admin/Cond/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
+        }
+        /// <summary>
+        /// 节点完成条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoCondNode()
+        {
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Node + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 设计傻瓜表单
@@ -1314,7 +1359,7 @@ namespace BP.WF.Template
                     break;
                 default:
                 case NodeFormType.FoolForm:
-                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID;
+                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
                     break;
             }
             return null;
@@ -1407,8 +1452,16 @@ namespace BP.WF.Template
             if (nd.IsSendBackNode == true)
             {
                 //强制设置按照连接线控制.
-                nd.CondModel = CondModel.ByLineCond;
-                nd.DirectUpdate();
+                nd.CondModel = DirCondModel.ByLineCond;
+            }
+            nd.DirectUpdate(); //直接更新.
+
+            if (this.IsSendBackNode == true)
+            {
+                if (nd.HisToNDNum != 0)
+                    this.IsSendBackNode = false;
+
+                //    throw new Exception("err@您设置当前节点为【发送自动返回节点】，但是该节点配置到到达节点，是不正确的。");
             }
 
 
@@ -1442,7 +1495,7 @@ namespace BP.WF.Template
             }
 
             // @杜. 翻译&测试.
-            if (nd.CondModel == CondModel.ByLineCond)
+            if (nd.CondModel == DirCondModel.ByLineCond)
             {
                 /* 如果当前节点方向条件控制规则是按照连接线决定的, 
                  * 那就判断到达的节点的接受人规则，是否是按照上一步来选择，如果是就抛出异常.*/
@@ -1462,7 +1515,7 @@ namespace BP.WF.Template
             }
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
-            if (1 == 2 && nd.CondModel != CondModel.SendButtonSileSelect)
+            if (1 == 2 && nd.CondModel != DirCondModel.SendButtonSileSelect)
             {
                 /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
                 Nodes nds = nd.HisToNodes;
@@ -1471,7 +1524,7 @@ namespace BP.WF.Template
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
                         //强制设置安装人员选择器来选择.
-                        this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect);
+                        this.SetValByKey(NodeAttr.CondModel, (int)DirCondModel.SendButtonSileSelect);
                         break;
                     }
                 }
@@ -1557,10 +1610,6 @@ namespace BP.WF.Template
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
 
-            BtnLabExtWebOffice btnLabExtWebOffice = new BtnLabExtWebOffice();
-            btnLabExtWebOffice.NodeID = this.NodeID;
-            btnLabExtWebOffice.RetrieveFromDBSources();
-            Cash2019.UpdateRow(btnLabExtWebOffice.ToString(), this.NodeID.ToString(), btnLabExtWebOffice.Row);
 
             CC cc = new CC();
             cc.NodeID = this.NodeID;

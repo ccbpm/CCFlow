@@ -28,32 +28,107 @@ namespace BP.WF.HttpHandler
 
         }
         /// <summary>
-        /// 导入本机模版
+        /// 导入本机模版 
+        /// 负责人：lizhen.
+        /// @sly
         /// </summary>
         /// <returns></returns>
         public string ImpFrmLocal_Done()
         {
-            try
+
+            ///表单类型.
+            string frmSort = this.GetRequestVal("FrmSort");
+
+            //创建临时文件.
+            string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
+
+            //获得数据类型.
+            DataSet ds = new DataSet();
+            ds.ReadXml(temp);
+
+            MapData md = new MapData();
+
+            //获得frmID.
+            string frmID = null;
+
+            #region 检查模版是否正确.
+            //检查模版是否正确.
+            string errMsg = "";
+            if (ds.Tables.Contains("WF_Flow") == true)
+                return "err@此模板文件为流程模板。";
+
+            if (ds.Tables.Contains("Sys_MapAttr") == false)
+                return "err@缺少表:Sys_MapAttr";
+
+            if (ds.Tables.Contains("Sys_MapData") == false)
+                return "err@缺少表:Sys_MapData";
+
+
+            frmID = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
+            #endregion 检查模版是否正确.
+
+            string impType = this.GetRequestVal("RB_ImpType");
+
+            //执行导入.
+            return ImpFrm(impType, frmID, md, ds, frmSort);
+        }
+
+        public string ImpFrm(string impType, string frmID, MapData md, DataSet ds, string frmSort)
+        {
+            //导入模式:按照模版的表单编号导入,如果该编号已经存在就提示错误
+            if (impType == "0")
             {
-                ///表单类型.
-                string frmSort = this.GetRequestVal("FrmSort");
-
-                //创建临时文件.
-                string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
-                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
-
-                //获得数据类型.
-                DataSet ds = new DataSet();
-                ds.ReadXml(temp);
-
-                //执行装载.
-                MapData.ImpMapData(ds);
-
-                return "导入成功.";
-            }catch(Exception ex)
-            {
-                return "err@" + ex.Message;
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                    return "err@该表单ID【" + frmID + "】已经存在数据库中,您不能导入.";
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);
             }
+
+            //导入模式:按照模版的表单编号导入,如果该编号已经存在就直接覆盖.
+            if (impType == "1")
+            {
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                    md.Delete(); //直接删除.
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsNewFrm(ds, frmSort);  // MapData.ImpMapData(ds);
+            }
+
+            //导入模式:按照模版的表单编号导入,如果该编号已经存在就增加@WebUser.OrgNo(组织编号)导入.
+            if (impType == "2")
+            {
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                {
+                    md.No = frmID + WebUser.OrgNo;
+                    if (md.RetrieveFromDBSources() == 1)
+                        return "err@表单编号为:" + md.No + "已存在.";
+                    frmID = frmID + "" + WebUser.OrgNo;
+                }
+
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
+            }
+
+            //导入模式:按照指定的模版ID导入.
+            if (impType == "3")
+            {
+                frmID = this.GetRequestVal("TB_SpecFrmID");
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                    return "err@您输入的表单编号为:" + md.No + "已存在.";
+
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
+            }
+            if (impType == "3ftp")
+            {
+                md.No = frmID;
+                if (md.RetrieveFromDBSources() == 1)
+                    return "err@您输入的表单编号为:" + md.No + "已存在.";
+
+                md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
+            }
+
+            return "执行成功.";
         }
 
         #region  界面 .
@@ -236,7 +311,7 @@ namespace BP.WF.HttpHandler
                 }
                 catch (Exception ex)
                 {
-                    dtInfo = this.ImpAddInfo(dtInfo, str,  ex.Message, "失败.");
+                    dtInfo = this.ImpAddInfo(dtInfo, str, ex.Message, "失败.");
                     continue;
                 }
 
@@ -279,7 +354,7 @@ namespace BP.WF.HttpHandler
         /// 导入表单模板
         /// </summary>
         /// <returns></returns>
-        public string Form_Imp()
+        public string Form_Step1()
         {
             //构造返回数据.
             DataTable dtInfo = new DataTable();
@@ -298,23 +373,32 @@ namespace BP.WF.HttpHandler
             FtpClient conn = this.GenerFTPConn;
             string remotePath = conn.GetWorkingDirectory() + dirName;
 
+            MapData md = new MapData();
             ///遍历选择的文件.
             foreach (string str in strs)
             {
                 if (str == "" || str.IndexOf(".xml") == -1)
                     continue;
+
+                string[] def = str.Split(',');
+                string fileName = def[0]; //文件名
+                string model = def[1]; //模式. 3=按照指定的表单ID进行导入.
+                string frmID = def[2]; //指定表单的ID.
+
+                if (model == "3" && DataType.IsNullOrEmpty(frmID) == true)
+                {
+                    dtInfo = this.ImpAddInfo(dtInfo, fileName, "您需要指定表单ID", "导入失败");
+                    continue;
+                }
+
                 //设置要到的路径.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileName;
 
                 //下载目录下
-                FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + str, FtpLocalExists.Overwrite);
+                FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + fileName, FtpLocalExists.Overwrite);
                 if (fs.ToString().Equals("Success") == false)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "文件下载失败.";
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+                    dtInfo = this.ImpAddInfo(dtInfo, fileName, "文件下载失败", "导入失败");
                     continue;
                 }
 
@@ -324,53 +408,28 @@ namespace BP.WF.HttpHandler
 
                 if (ds.Tables.Contains("Sys_MapData") == false)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "模版不存在Sys_MapData表.";
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
+                    dtInfo = this.ImpAddInfo(dtInfo, str, "模版不存在Sys_MapData表,非法的表单.", "导入失败");
                     continue;
                 }
 
-                //获得模版里的编号，检查是否存在.
-                string no = ds.Tables["Sys_MapData"].Rows[0]["No"].ToString();
-                MapData md = new MapData();
-                md.No = no;
-                if (md.RetrieveFromDBSources() == 1)
-                {
-                    md.No = no + "" + WebUser.OrgNo;
-                    ds.Tables["Sys_MapData"].Rows[0]["No"] = md.No;
-                    if (md.RetrieveFromDBSources() == 1)
-                    {
-                        DataRow dr = dtInfo.NewRow();
-                        dr[0] = str;
-                        dr[1] = "模版编号为:" + no + "，已经存在.";
-                        dr[2] = "导入失败";
-                        dtInfo.Rows.Add(dr);
-                        continue;
-                    }
-                }
 
                 try
                 {
-                    //执行装载.
-                    MapData.ImpMapData(md.No,ds);
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = "执行成功:新模板编号:" + md.No + " -名称 " + md.Name;
-                    dr[2] = "导入成功";
-                    dtInfo.Rows.Add(dr);
+                    if (model == "3")
+                        model += "ftp";
+                    string info = this.ImpFrm(model, frmID, md, ds, sortNo);
+
+                    if (info.Contains("err@"))
+                        dtInfo = this.ImpAddInfo(dtInfo, fileName, info, "导入失败");
+                    else
+                        dtInfo = this.ImpAddInfo(dtInfo, fileName, info, "导入成功");
                 }
                 catch (Exception ex)
                 {
-                    DataRow dr = dtInfo.NewRow();
-                    dr[0] = str;
-                    dr[1] = ex.Message;
-                    dr[2] = "导入失败";
-                    dtInfo.Rows.Add(dr);
-                    continue;
+                    dtInfo = this.ImpAddInfo(dtInfo, str, ex.Message, "导入失败");
                 }
             }
+
             //返回执行结果.
             return BP.Tools.Json.ToJson(dtInfo);
         }

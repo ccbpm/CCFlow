@@ -3504,6 +3504,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("FK_Dept", "");
                 ht.Add("FK_DeptName", "");
                 ht.Add("FK_DeptNameOfFull", "");
+                ht.Add("Tel","");
 
                 ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
                 ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
@@ -3522,6 +3523,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
             ht.Add("IsAdmin", WebUser.IsAdmin == true ? 1 : 0);
             ht.Add("SID", WebUser.SID);
+           // ht.Add("Tel",WebUser.Tel);
             ht.Add("OrgNo", WebUser.OrgNo);
             ht.Add("OrgName", WebUser.OrgName);
 
@@ -3618,8 +3620,8 @@ namespace BP.WF.HttpHandler
                 }
 
                 /*保存到fpt服务器上.*/
-                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
-                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                           SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);  
 
                 if (ftpconn == null)
                     return "err@FTP服务器连接失败";
@@ -3742,7 +3744,7 @@ namespace BP.WF.HttpHandler
 
                 /*保存到fpt服务器上.*/
                 FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
-                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);  
 
                 if (ftpconn == null)
                     return "err@FTP服务器连接失败";
@@ -4985,6 +4987,16 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 常用词汇结束
+
+        #region 前台SQL转移处理
+        public string RunSQL_Init()
+        {
+            string sql = GetRequestVal("SQL");
+            DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = new DataTable();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
 
     }
 

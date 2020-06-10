@@ -23,6 +23,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_MyFlow()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
         }
         /// <summary>
         /// 获得工作节点
@@ -142,6 +143,13 @@ namespace BP.WF.HttpHandler
             BtnLab btnLab = new BtnLab(this.FK_Node);
             ds.Tables.Add(btnLab.ToDataTableField("WF_BtnLab"));
 
+            #region  加载自定义的button.
+            BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+            bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Toolbar);
+            ds.Tables.Add(bars.ToDataTableField("WF_NodeToolbar"));
+            #endregion  //加载自定义的button.
+
+
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -184,11 +192,13 @@ namespace BP.WF.HttpHandler
                     dr["isAskForOrHuiQian"] = 1;
                 else
                     dr["isAskForOrHuiQian"] = 0;
+                dt.Rows.Add(dr);
+
                 ds.Tables.Add(dt);
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
-            //增加转向下拉框数据.
-            if (nd.CondModel == CondModel.SendButtonSileSelect)
+            #region 按钮旁的下拉框
+            if (nd.CondModel == DirCondModel.SendButtonSileSelect)
             {
                 if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
                 {
@@ -283,6 +293,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dtToNDs);
                 }
             }
+            #endregion 按钮旁的下拉框
             return BP.Tools.Json.ToJson(ds);
         }
         public string MyFlow_Init()
@@ -318,7 +329,20 @@ namespace BP.WF.HttpHandler
         public string FrmGener_Save()
         {
             WF_CCForm ccfrm = new WF_CCForm();
-            return ccfrm.FrmGener_Save();
+            string str= ccfrm.FrmGener_Save();
+
+            // @sly  这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
+            string nodeIDStr = this.FK_Node.ToString();
+            if (nodeIDStr.EndsWith("01")==true)
+            {
+                Flow fl = new Flow(this.FK_Flow);
+                if (fl.DraftRole == DraftRole.SaveToDraftList)
+                    BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+
+                if (fl.DraftRole == DraftRole.SaveToTodolist)
+                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.FK_Flow, this.WorkID);
+            }
+            return str;
         }
 
         public string MyFlowGener_Delete()

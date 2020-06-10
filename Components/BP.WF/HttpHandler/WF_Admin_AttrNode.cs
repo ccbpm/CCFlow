@@ -477,10 +477,6 @@ namespace BP.WF.HttpHandler
             DataTable mydt = nd.ToDataTableField("WF_Node");
             ds.Tables.Add(mydt);
 
-            BtnLabExtWebOffice mybtn = new BtnLabExtWebOffice(this.FK_Node);
-            DataTable mydt2 = mybtn.ToDataTableField("WF_BtnLabExtWebOffice");
-            ds.Tables.Add(mydt2);
-
             BtnLab btn = new BtnLab(this.FK_Node);
             DataTable dtBtn = btn.ToDataTableField("WF_BtnLab");
             ds.Tables.Add(dtBtn);
@@ -603,43 +599,6 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            //如果公文表单选择了
-            if (selectFModel == "WebOffice")
-            {
-                nd.FormType = NodeFormType.WebOffice;
-                nd.Update();
-
-                //按钮标签.
-                BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
-
-                // tab 页工作风格.
-                string WebOfficeStyle = this.GetValFromFrmByKey("WebOfficeStyle");
-                if (WebOfficeStyle == "0")
-                    btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
-                else
-                    btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
-
-
-                string WebOfficeFrmType = this.GetValFromFrmByKey("WebOfficeFrmType");
-                //表单工作模式.
-                if (WebOfficeFrmType == "0")
-                {
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
-
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同时更新表单表住表.
-                    md.Update();
-                }
-                else
-                {
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
-
-                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
-                    md.Update();
-                }
-
-                btn.Update();
-            }
-
             return "保存成功...";
         }
         #endregion 表单模式
@@ -669,7 +628,7 @@ namespace BP.WF.HttpHandler
             qo = new QueryObject(attrs);
             qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
             qo.addAnd();
-            qo.AddWhere(MapAttrAttr.UIVisible, true);
+            qo.AddWhere(MapAttrAttr.EditType, 0);
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
 
@@ -1487,44 +1446,6 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
             }
-
-            //如果公文表单选择了
-            if (selectFModel == "WebOffice")
-            {
-                nd.FormType = NodeFormType.WebOffice;
-                nd.Update();
-
-                //按钮标签.
-                BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
-
-                // tab 页工作风格.
-                string WebOfficeStyle = this.GetValFromFrmByKey("WebOfficeStyle");
-                if (WebOfficeStyle == "0")
-                    btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
-                else
-                    btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
-
-
-                string WebOfficeFrmType = this.GetValFromFrmByKey("WebOfficeFrmType");
-                //表单工作模式.
-                if (WebOfficeFrmType == "0")
-                {
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
-
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同时更新表单表住表.
-                    md.Update();
-                }
-                else
-                {
-                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
-
-                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
-                    md.Update();
-                }
-
-                btn.Update();
-            }
-
             return "保存成功...";
         }
         #endregion 表单模式
@@ -1612,7 +1533,6 @@ namespace BP.WF.HttpHandler
                 //流程完成条件Count
                 BP.WF.Template.Conds conds = new BP.WF.Template.Conds(BP.WF.Template.CondType.Flow, node.NodeID);
                 dr["HisFinishCondsCount"] = conds.Count;
-
 
                 dt.Rows.Add(dr);
             }

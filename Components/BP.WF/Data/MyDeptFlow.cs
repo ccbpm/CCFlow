@@ -743,7 +743,7 @@ namespace BP.WF.Data
 
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptFlowAttr.WFSta);
-                map.AddSearchAttr(MyDeptFlowAttr.TSpan);
+                map.AddSearchAttr(MyDeptFlowAttr.TSpan,4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
 

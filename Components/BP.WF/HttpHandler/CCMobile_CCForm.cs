@@ -11,7 +11,6 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using System.Net.Http;
 using System.Collections;
 using NPOI.SS.Formula.Functions;
 using LitJson;
@@ -23,7 +22,7 @@ using BP.Tools;
 namespace BP.WF.HttpHandler
 {
     /// <summary>
-    /// 页面功能实体
+    /// 表单
     /// </summary>
     public class CCMobile_CCForm : DirectoryPageBase
     {
@@ -32,6 +31,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_CCForm()
         {
+          //  BP.Web.WebUser.SheBei = "Mobile";
         }
         public string HandlerMapExt()
         {
@@ -441,6 +441,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*保存到fpt服务器上.*/
                         FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                            
                             SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                         string ny = DateTime.Now.ToString("yyyy_MM");
@@ -480,22 +481,24 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string getAccessToken()
         {
-            string ak = Sys.SystemConfig.APIKey;
-            string sk = Sys.SystemConfig.SecretKey;
+            return "";
 
-            //百度云应用获取token
-            String authHost = "https://aip.baidubce.com/oauth/2.0/token";
-            HttpClient client = new HttpClient();
-            List<KeyValuePair<String, String>> paraList = new List<KeyValuePair<string, string>>();
-            paraList.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
-            paraList.Add(new KeyValuePair<string, string>("client_id", ak));
-            paraList.Add(new KeyValuePair<string, string>("client_secret", sk));
+            //string ak = Sys.SystemConfig.APIKey;
+            //string sk = Sys.SystemConfig.SecretKey;
 
-            HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
-            String result = response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(result);
+            ////百度云应用获取token
+            //String authHost = "https://aip.baidubce.com/oauth/2.0/token";
+            //HttpClient client = new HttpClient();
+            //List<KeyValuePair<String, String>> paraList = new List<KeyValuePair<string, string>>();
+            //paraList.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+            //paraList.Add(new KeyValuePair<string, string>("client_id", ak));
+            //paraList.Add(new KeyValuePair<string, string>("client_secret", sk));
 
-            return result;
+            //HttpResponseMessage response = client.PostAsync(authHost, new FormUrlEncodedContent(paraList)).Result;
+            //String result = response.Content.ReadAsStringAsync().Result;
+            //Console.WriteLine(result);
+
+            //return result;
         }
         /// <summary>
         /// 调用企业号获取地理位置

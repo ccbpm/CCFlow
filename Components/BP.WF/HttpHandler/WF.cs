@@ -350,7 +350,7 @@ namespace BP.WF.HttpHandler
                         string Sta = this.GetRequestVal("Sta");
                         if (Sta == "0")
                         {
-                            BP.WF.Template.CCList cc1 = new BP.WF.Template.CCList();
+                            CCList cc1 = new CCList();
                             cc1.MyPK = this.MyPK;
                             cc1.Retrieve();
                             cc1.HisSta = CCSta.Read;
@@ -375,7 +375,7 @@ namespace BP.WF.HttpHandler
                     case "DelSubFlow": //删除进程。
                         try
                         {
-                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread( this.WorkID, "手工删除");
                             return "info@Close";
                         }
                         catch (Exception ex)
@@ -1348,7 +1348,8 @@ namespace BP.WF.HttpHandler
         public string Draft_Init()
         {
             DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
+            string domain = this.GetRequestVal("Domain");
+            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

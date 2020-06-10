@@ -293,25 +293,7 @@ namespace BP.WF
         }
         #endregion
 
-        #region 扩展属性
-        /// <summary>
-        /// 他的记录人
-        /// </summary>
-        public Emp HisRec
-        {
-            get
-            {
-              //  return new Emp(this.Rec);
-                Emp emp = this.GetValByKey("HisRec"+this.Rec) as Emp;
-                if (emp == null)
-                {
-                    emp = new Emp(this.Rec);
-                    this.SetValByKey("HisRec" + this.Rec, emp);
-                }
-                return emp;
-            }
-        }
-        #endregion
+        
 
         #region 构造函数
         /// <summary>

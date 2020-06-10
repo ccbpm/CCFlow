@@ -181,20 +181,334 @@ namespace BP.WF.HttpHandler
         public string appPath = "/";
 
 
-     
+
         #endregion
 
-     
-      
+
+        public string InitToolBar()
+        {
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+            string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
+            string toolbar = "";
+            try
+            {
+                DataRow dr = dt.NewRow();
+                dr["No"] = "Close";
+                dr["Name"] = "关闭";
+                dr["Oper"] = "Close();";
+                dt.Rows.Add(dr);
+
+
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+                #region 根据流程权限控制规则获取可以操作的按钮功能
+                string sql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
+                    + " UNION "
+                    + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+                sql = "SELECT PowerFlag From(" + sql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
+
+                string powers = DBAccess.RunSQLReturnStringIsNull(sql, "");
+                switch (gwf.WFState)
+                {
+                    case WFState.Runing: /* 运行时*/
+                        /*删除流程.*/
+                        if (powers.Contains("FlowDataDelete") == true || (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No) == true && btnLab.DeleteEnable != 0))
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Delete";
+                            dr["Name"] = btnLab.DeleteLab;
+                            dr["Oper"] = "";
+                            dt.Rows.Add(dr);
+                        }
+
+                        /*取回审批*/
+                        string para = "";
+                        sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
+                        int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
+                        if (myNode != 0)
+                        {
+                            GetTask gt = new GetTask(myNode);
+                            if (gt.Can_I_Do_It())
+                            {
+                                dr = dt.NewRow();
+                                dr["No"] = "TackBack";
+                                dr["Name"] = "取回审批";
+                                dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
+                                dt.Rows.Add(dr);
+
+                            }
+                        }
+
+
+                        /*撤销发送*/
+                        GenerWorkerLists workerlists = new GenerWorkerLists();
+                        QueryObject info = new QueryObject(workerlists);
+                        info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsPass, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
+                        info.addAnd();
+                        info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+
+                        if (info.DoQuery() > 0 || powers.Contains("FlowDataUnSend") == true)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "UnSend";
+                            dr["Name"] = "撤销";
+                            dr["Oper"] = "UnSend()";
+                            dt.Rows.Add(dr);
+                        }
+
+                        //流程结束
+                        if (powers.Contains("FlowDataOver") == true)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "EndFlow";
+                            dr["Name"] = btnLab.EndFlowLab;
+                            dr["Oper"] = "DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');";
+                            dt.Rows.Add(dr);
+
+                        }
+
+                        //催办
+                        if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No) == true)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Press";
+                            dr["Name"] = "催办";
+                            dr["Oper"] = "Press();";
+                            dt.Rows.Add(dr);
+                        }
+
+                        break;
+                    case WFState.Complete: // 完成.
+                    case WFState.Delete:   // 逻辑删除..
+                        /*恢复使用流程*/
+                        if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "Rollback";
+                            dr["Name"] = "回滚";
+                            dr["Oper"] = "Rollback();";
+                            dt.Rows.Add(dr);
+                        }
+
+                        break;
+                    //case WFState.HungUp: // 挂起.
+                    //    /*撤销挂起*/
+                    //    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No) == true)
+                    //        toolbar += "<input name='UnHungUp' type='button' value='撤销挂起' enable='true'  onclick='UnHungUp()'/>";
+                    //    break;
+                    default:
+                        break;
+                }
+
+                dr = dt.NewRow();
+                dr["No"] = "Track";
+                dr["Name"] = "轨迹";
+                dr["Oper"] = "";
+                dt.Rows.Add(dr);
+                #endregion 根据流程权限控制规则获取可以操作的按钮功能
+
+
+                #region 加载流程查看器 - 按钮
+
+                /* 打包下载zip */
+                if (btnLab.PrintZipMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载html */
+                if (btnLab.PrintHtmlMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载pdf */
+                if (btnLab.PrintPDFMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                /* 公文标签 */
+                if (btnLab.OfficeBtnEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "DocWord";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                #endregion 加载流程查看器 - 按钮
+
+                #region  加载自定义的button.
+                BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.IsMyView, 1, NodeToolbarAttr.Idx);
+                foreach (NodeToolbar bar in bars)
+                {
+
+                    if (bar.ExcType == 1 || (!DataType.IsNullOrEmpty(bar.Target) == false && bar.Target.ToLower() == "javascript"))
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = bar.Url;
+                        dt.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        dr = dt.NewRow();
+                        dr["No"] = "NodeToolBar";
+                        dr["Name"] = bar.Title;
+                        dr["Oper"] = "WinOpen('" + urlr3 + "')";
+                        dt.Rows.Add(dr);
+                    }
+                }
+                #endregion  //加载自定义的button.
+
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex);
+                toolbar = "err@" + ex.Message;
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+        /// <summary>
+        /// 撤销
+        /// </summary>
+        /// <returns></returns>
+        public string MyView_UnSend()
+        {
+            //获取用户当前所在的节点
+            String currNode = "";
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.Oracle:
+                    currNode = "SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1";
+                    break;
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                    currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1";
+                    break;
+                case DBType.MSSQL:
+                    currNode = "SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
+                    break;
+                default:
+                    break;
+            }
+            String unSendToNode = DBAccess.RunSQLReturnString(currNode);
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, int.Parse(unSendToNode), this.FID);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public bool IsCanView(GenerWorkFlow gwf)
+        {
+            //是否可以处理当前工作？
+            bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
+            if (isCanDoCurrWorker)
+                return true;
+
+            //是否是工作参与人?
+            bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
+            if (isWorker == true)
+                return true;
+
+            if (WebUser.No.Equals("admin") == true)
+                return true;
+
+            if (WebUser.IsAdmin  == true &&  gwf.OrgNo.Equals(WebUser.OrgNo)==true)
+                return true;
+
+            //处理流程控制权限.
+
+            return false;
+        }
+
+
         /// <summary>
         /// 初始化(处理分发)
         /// </summary>
         /// <returns></returns>
         public string MyView_Init()
         {
+            //获得注册实体.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.WFState == WFState.Delete)
+                return "err@当前流程已经删除无法查看.";
 
-          
+            if (gwf.WFState == WFState.Blank)
+                return "err@当前流程还没有启动.";
+
+            if (gwf.WFState == WFState.Draft)
+                return "err@当前流程还是草稿.";
+
+            //是否可以处理当前工作？
+            bool isCanDoCurrWorker = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
+
+            //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
+            if (gwf.WFState != WFState.Complete && gwf.TodoEmps.Contains(WebUser.No) )
+            {
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                int i = gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, WebUser.No, GenerWorkerListAttr.IsPass, 0);
+                if (i >= 1)
+                {
+                    WF_MyFlow handler = new WF_MyFlow();
+                    return handler.MyFlow_Init();
+                }
+            }
+
+            //是否是工作参与人?
+            bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
+            if (isWorker == true || WebUser.No.Equals("admin") == true
+                || WebUser.IsAdmin == true)
+            {
+                //可以查看工作,就执行以后的.
+
+            }
+            else
+            {
+                //判断是否是抄送人员?
+                CCList list = new CCList();
+                bool isExit = list.IsExit(CCListAttr.WorkID, this.WorkID,
+                    CCListAttr.CCTo, WebUser.No);
+                //如果是抄送人员.
+                if (isExit == true)
+                {
+                    //是一个抄送人员.
+                    WF_MyCC mycc = new WF_MyCC();
+                    return mycc.MyCC_Init();
+                }
+            }
+
+            if (IsCanView(gwf) == false)
+                return "err@您无权查看该工作.";
 
             //当前工作.
             Work currWK = this.currND.HisWork;
@@ -467,7 +781,7 @@ namespace BP.WF.HttpHandler
             url = url.Replace("&&", "&");
             return url;
         }
-       
+
         /// <summary>
         /// 获取主表的方法.
         /// </summary>
@@ -925,11 +1239,10 @@ namespace BP.WF.HttpHandler
                 DataSet ds = new DataSet();
 
                 Int64 workID = this.WorkID;
-                Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, nd.NodeFrmID);
+                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -952,7 +1265,7 @@ namespace BP.WF.HttpHandler
 
                 }
 
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, workID,
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No);
 
                 //Node nd = new Node(this.FK_Node);
@@ -1008,44 +1321,6 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
-
-        /// <summary>
-        /// 撤销发送
-        /// </summary>
-        /// <returns></returns>
-        public string MyView_UnSend()
-        {
-            //获取用户当前所在的节点
-            string currNodeSQL = "";
-            switch (DBAccess.AppCenterDBType)
-            {
-                case DBType.Oracle:
-                    currNodeSQL = "SELECT FK_Node FROM (SELECT FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE RowNum=1";
-                    break;
-                case DBType.MySQL:
-                case DBType.PostgreSQL:
-                    currNodeSQL = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1";
-                    break;
-                case DBType.MSSQL:
-                    currNodeSQL = "SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
-                    break;
-                default:
-                    break;
-            }
-            try
-            {
-                //获取撤销到的节点
-                int unSendToNode = DBAccess.RunSQLReturnValInt(currNodeSQL);
-                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, unSendToNode, this.FID);
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        
-
 
     }
 }

@@ -24,6 +24,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_WorkOpt()
         {
+            BP.Web.WebUser.SheBei = "Mobile";
         }
         /// <summary>
         /// 打包下载

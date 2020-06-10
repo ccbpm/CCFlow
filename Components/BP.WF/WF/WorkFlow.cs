@@ -297,7 +297,7 @@ namespace BP.WF
                 GenerWorkFlows gwfs = new GenerWorkFlows();
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workID);
                 foreach (GenerWorkFlow item in gwfs)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.WorkID, true);
             }
             #endregion 删除该流程下面的子流程.
 
@@ -441,23 +441,25 @@ namespace BP.WF
         /// <summary>
         /// 删除已经完成的流程
         /// </summary>
-        /// <param name="flowNo">流程编号</param>
         /// <param name="workid">工作ID</param>
         /// <param name="isDelSubFlow">是否删除子流程</param>
         /// <returns>删除错误会抛出异常</returns>
-        public static void DeleteFlowByReal(string flowNo, Int64 workid, bool isDelSubFlow)
+        public static void DeleteFlowByReal(Int64 workid, bool isDelSubFlow)
         {
-            BP.WF.Flow fl = new Flow(flowNo);
             //检查流程是否完成，如果没有完成就调用workflow流程删除.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
+            int i = gwf.RetrieveFromDBSources();
+            if (i == 0)
+                throw new Exception("err@错误：该流程应不存在");
 
+            BP.WF.Flow fl = new Flow(gwf.FK_Flow);
             string toEmps = gwf.Emps.Replace('@',',');//流程的所有处理人
-            if (gwf.RetrieveFromDBSources() != 0)
+            if (i != 0)
             {
                 if (gwf.WFState != WFState.Complete)
                 {
-                    WorkFlow wf = new WorkFlow(flowNo, workid);
+                    WorkFlow wf = new WorkFlow( workid);
                     //发送退回消息 @yuanlina
                     PushMsgs pms1 = new PushMsgs();
                     pms1.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.AfterFlowDel);
@@ -472,14 +474,13 @@ namespace BP.WF
                     }
 
                     wf.DoDeleteWorkFlowByReal(isDelSubFlow);
-                   
                     return;
                 }
             }
 
             #region 删除独立表单的数据.
             FrmNodes fns = new FrmNodes();
-            fns.Retrieve(FrmNodeAttr.FK_Flow, flowNo);
+            fns.Retrieve(FrmNodeAttr.FK_Flow, gwf.FK_Flow);
             string strs = "";
             foreach (FrmNode frmNode in fns)
             {
@@ -500,7 +501,7 @@ namespace BP.WF
             #endregion 删除独立表单的数据.
 
             //删除流程数据.
-            DBAccess.RunSQL("DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid);
+            DBAccess.RunSQL("DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workid);
             DBAccess.RunSQL("DELETE FROM " + fl.PTable + " WHERE OID=" + workid);
             DBAccess.RunSQL("DELETE FROM WF_CHEval WHERE  WorkID=" + workid); // 删除质量考核数据。
 
@@ -530,11 +531,11 @@ namespace BP.WF
             }
 
             //删除它的工作.
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + flowNo + "'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
 
             //删除所有节点上的数据.
-            Nodes nodes = new Nodes(flowNo); // this.HisFlow.HisNodes;
+            Nodes nodes = new Nodes(gwf.FK_Flow); // this.HisFlow.HisNodes;
             foreach (Node node in nodes)
             {
                 try
@@ -949,7 +950,7 @@ namespace BP.WF
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
 
                 foreach (GenerWorkFlow item in gwfs)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.WorkID, true);
             }
             #endregion 删除该流程下面的子流程.
 
@@ -1105,7 +1106,7 @@ namespace BP.WF
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
                 /*说明这是最后一个*/
-                WorkFlow wf = new WorkFlow(gwf.FK_Flow, this.FID);
+                WorkFlow wf = new WorkFlow(this.FID);
                 wf.DoFlowOver(ActionType.FlowOver, "子线程结束", null, null);
                 return "@当前子线程已完成，干流程已完成。";
             }
@@ -1133,7 +1134,7 @@ namespace BP.WF
             //如果是结束子流程.
             if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)
             {
-                BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
+                BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
                 return "父流程自动结束.";
             }
 
@@ -1645,14 +1646,15 @@ namespace BP.WF
         #endregion
 
         #region 构造方法
-        public WorkFlow(string fk_flow, Int64 wkid)
+        public WorkFlow(Int64 wkid)
         {
             this.HisGenerWorkFlow = new GenerWorkFlow();
             this.HisGenerWorkFlow.RetrieveByAttr(GenerWorkerListAttr.WorkID, wkid);
             this._FID = this.HisGenerWorkFlow.FID;
             if (wkid == 0)
                 throw new Exception("@没有指定工作ID, 不能创建工作流程.");
-            Flow flow = new Flow(fk_flow);
+
+            Flow flow = new Flow(this.HisGenerWorkFlow.FK_Flow);
             this._HisFlow = flow;
             this._WorkID = wkid;
 

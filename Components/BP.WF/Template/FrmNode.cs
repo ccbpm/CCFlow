@@ -146,7 +146,6 @@ namespace BP.WF.Template
         /// </summary>
         Self
     }
-
     /// <summary>
     /// 表单启用规则
     /// </summary>

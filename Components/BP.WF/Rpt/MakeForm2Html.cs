@@ -53,22 +53,6 @@ namespace BP.WF
             //float wtX = 0;
             float x = 0;
 
-            #region 输出Ele
-            FrmEles eles = mapData.FrmEles;
-            if (eles.Count >= 1)
-            {
-                foreach (FrmEle ele in eles)
-                {
-                    float y = ele.Y;
-                    x = ele.X + wtX;
-                    sb.Append("<DIV id=" + ele.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-
-                    sb.Append("\t\n</DIV>");
-                }
-
-            }
-            #endregion 输出Ele
-
             #region 输出竖线与标签 & 超连接 Img.
             FrmLabs labs = mapData.FrmLabs;
             foreach (FrmLab lab in labs)
@@ -274,10 +258,8 @@ namespace BP.WF
                         string myPK = DataType.IsNullOrEmpty(img.EnPK) ? "seal" : img.EnPK;
                         myPK = myPK + "_" + en.GetValStrByKey("OID") + "_" + img.MyPK;
 
-                        FrmEleDB imgDb = new FrmEleDB();
-                        QueryObject queryInfo = new QueryObject(imgDb);
-                        queryInfo.AddWhere(FrmEleAttr.MyPK, myPK);
-                        queryInfo.DoQuery();
+                        FrmEleDB imgDb = new FrmEleDB(myPK);
+                      
                         //判断是否存在
                         if (imgDb == null || DataType.IsNullOrEmpty(imgDb.FK_MapData))
                         {
@@ -299,16 +281,15 @@ namespace BP.WF
                         FrmEleDB realDB = null;
                         FrmEleDB imgDb = new FrmEleDB();
                         QueryObject objQuery = new QueryObject(imgDb);
-                        objQuery.AddWhere(FrmEleAttr.FK_MapData, img.EnPK);
+                        objQuery.AddWhere(FrmEleDBAttr.FK_MapData, img.EnPK);
                         objQuery.addAnd();
-                        objQuery.AddWhere(FrmEleAttr.EleID, en.GetValStrByKey("OID"));
+                        objQuery.AddWhere(FrmEleDBAttr.EleID, en.GetValStrByKey("OID"));
 
                         if (objQuery.DoQuery() == 0)
                         {
                             FrmEleDBs imgdbs = new FrmEleDBs();
-                            QueryObject objQuerys = new QueryObject(imgdbs);
-                            objQuerys.AddWhere(FrmEleAttr.EleID, en.GetValStrByKey("OID"));
-                            if (objQuerys.DoQuery() > 0)
+                            imgdbs.Retrieve(FrmEleDBAttr.EleID, en.GetValStrByKey("OID"));
+                            if (imgdbs.Count  > 0)
                             {
                                 foreach (FrmEleDB single in imgdbs)
                                 {
@@ -451,6 +432,20 @@ namespace BP.WF
                         }
                         break;
                     case FieldTypeS.Enum:
+                        if (attr.UIContralType == UIContralType.CheckBok)
+                        {
+                            string s = en.GetValStrByKey(attr.KeyOfEn) + ",";
+                            SysEnums enums = new SysEnums(attr.UIBindKey);
+                            foreach (SysEnum se in enums)
+                            {
+                                if (s.IndexOf(se.IntKey + ",") != -1)
+                                    text += se.Lab + " ";
+                            }
+
+                        }
+                        else
+                            text = en.GetValRefTextByKey(attr.KeyOfEn);
+                        break;
                     case FieldTypeS.FK:
                         text = en.GetValRefTextByKey(attr.KeyOfEn);
                         break;
@@ -976,6 +971,19 @@ namespace BP.WF
 
                                 break;
                             case FieldTypeS.Enum:
+                                if(attr.UIContralType == UIContralType.CheckBok)
+                                {
+                                    string s = en.GetValStrByKey(attr.KeyOfEn)+",";
+                                    SysEnums enums = new SysEnums(attr.UIBindKey);
+                                    foreach(SysEnum se in enums){
+                                        if (s.IndexOf(se.IntKey + ",") != -1)
+                                            text += se.Lab + " ";
+                                    }
+
+                                } 
+                                else
+                                    text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                break;
                             case FieldTypeS.FK:
                                 text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 break;
@@ -1507,7 +1515,7 @@ namespace BP.WF
                                 System.IO.File.Copy(fileTempDecryPath, toFile, true);
                             }
 
-                            sb.Append("<td  title='" + item.FileName + "'><a href = '' >" + item.FileName + "</a></td>");
+                            sb.Append("<td  title='" + item.FileName + "'>" + item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1534,7 +1542,7 @@ namespace BP.WF
                                 //把文件copy到,
                                 System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
                             }
-                            sb.Append("<td><a href='" + item.FileName + "'>" + item.FileName + "</a></td>");
+                            sb.Append("<td>"+item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1542,8 +1550,8 @@ namespace BP.WF
                         }
                     }
                     sb.Append("<td>" + item.FileSize + "KB</td>");
-                    sb.Append("<td>" + item.RDT+ "KB</td>");
-                    sb.Append("<td>" + item.Rec + "KB</td>");
+                    sb.Append("<td>" + item.RDT+ "</td>");
+                    sb.Append("<td>" + item.RecName + "</td>");
                     sb.Append("</tr>");
 
 
@@ -1622,16 +1630,10 @@ namespace BP.WF
                         ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                     else
                         ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
-
                 }
                 catch (Exception ex)
                 {
-                    /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
-                    fileNameFormat = DBAccess.GenerGUID();
-                    pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
-
-                    Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                    throw new Exception("err@html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
                 }
 
                 //生成压缩文件
@@ -1751,7 +1753,6 @@ namespace BP.WF
 
         public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false,string htmlString=null)
         {
-
             string resultMsg = "";
 
             //  获取单据的属性信息
@@ -1759,7 +1760,6 @@ namespace BP.WF
             string fileNameFormat = null;
 
             //存放信息地址
-            string hostURL = SystemConfig.GetValByKey("HostURL", "");
             string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid;
 
             //处理正确的文件名.
@@ -2280,7 +2280,7 @@ namespace BP.WF
                             if (nd.IsEndNode == true)
                             {
                                 //让流程自动结束.
-                                BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.FK_Flow, workid, "打印并自动结束", 0);
+                                BP.WF.Dev2Interface.Flow_DoFlowOver(workid, "打印并自动结束", 0);
                             }
                         }
                     }
@@ -2309,14 +2309,15 @@ namespace BP.WF
             BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
             try
             {
-                //横向打印.
-                // wkhtmltopdf.exe --orientation Landscape  http://baidu.com afqc.pdf  .
 
                 string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
                 //Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
 
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                BP.DA.Log.DebugWriteInfo("@ProcessStartInfo");
+
                 startInfo.FileName = pdfFileExe;//设定需要执行的命令  
                 startInfo.Arguments = " --disable-external-links " + htmFile + " " + pdf;//“/C”表示执行完命令后马上退出  
                 startInfo.UseShellExecute = false;//不使用系统外壳程序启动  
@@ -2324,13 +2325,17 @@ namespace BP.WF
                 startInfo.RedirectStandardOutput = true; //重定向输出  
                 startInfo.CreateNoWindow = true;//不创建窗口  
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                BP.DA.Log.DebugWriteInfo("@ProcessWindowStyle");
+
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
+
+                BP.DA.Log.DebugWriteInfo("@Close");
             }
             catch (Exception ex)
             {
-                //BP.DA.Log.DebugWriteError("@生成PDF错误" + ex.Message + "@pdf=" + pdf + "@htmFile="+htmFile);
+                BP.DA.Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
                 throw ex;
             }
         }

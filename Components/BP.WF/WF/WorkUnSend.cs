@@ -338,7 +338,7 @@ namespace BP.WF
                     foreach (GenerWorkFlow item in gwfs)
                     {
                         /*删除每个子线程.*/
-                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.WorkID, true);
                     }
                 }
             }
@@ -406,9 +406,10 @@ namespace BP.WF
         private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            this.FlowNo = gwf.FK_Flow;  //@sly
+             
             if (gwf.WFState == WFState.Complete)
                 return "err@该流程已经完成，您不能撤销。";
-
 
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
@@ -454,30 +455,23 @@ namespace BP.WF
                         nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, work, null);
 
                         toEmps += dr["Emps"].ToString().Replace('@',',');
-                        
                     }
                     return "撤销成功";
-
                 }
-
             }
-
-            
 
             //如果启用了对方已读，就不能撤销.
             if (nd.CancelDisWhenRead == true)
             {
                 //撤销到的节点是干流程节点/子线程撤销到子线程
-                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node ,0);
+                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
                     return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
-                else
-                {
-                    //干流节点撤销到子线程
-                    i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
-                    if(i>=1)
-                        return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
-                }
+
+                //干流节点撤销到子线程
+                i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
+                if (i >= 1)
+                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
             }
 
 
@@ -489,7 +483,7 @@ namespace BP.WF
                 GenerWorkFlow gwfSubFlow = new GenerWorkFlow();
                 int i = gwfSubFlow.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
                 if (i == 1)
-                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID,true);
+                    BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( gwfSubFlow.WorkID,true);
 
                 //执行回复当前节点待办..
                 sql = "UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND FK_Node="+gwf.FK_Node+" AND WorkID="+this.WorkID;
@@ -828,7 +822,7 @@ namespace BP.WF
                     foreach (GenerWorkFlow item in gwfs)
                     {
                         /*删除每个子线程.*/
-                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(item.FK_Flow, item.WorkID, true);
+                        BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( item.WorkID, true);
                     }
                 }
             }
@@ -909,7 +903,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 
@@ -987,7 +981,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 
@@ -1066,7 +1060,7 @@ namespace BP.WF
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     gwfs.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
                     foreach (GenerWorkFlow en in gwfs)
-                        BP.WF.Dev2Interface.Flow_DeleteSubThread(gwf.FK_Flow, en.WorkID, "合流节点撤销发送前，删除子线程.");
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread( en.WorkID, "合流节点撤销发送前，删除子线程.");
                     continue;
                 }
 

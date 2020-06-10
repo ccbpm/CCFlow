@@ -1030,7 +1030,7 @@ namespace BP.Sys
                 //map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
                 //  "@0=不用校验@1=不能为空@2=每个类别下不能为空");
 
-                map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
+             //   map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
 
                 map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", true, false);

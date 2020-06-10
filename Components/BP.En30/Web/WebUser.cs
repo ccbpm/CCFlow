@@ -670,6 +670,7 @@ namespace BP.Web
         {
             get
             {
+                return "";
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
                 {
@@ -691,6 +692,8 @@ namespace BP.Web
         {
             get
             {
+                return "";
+
                 string val = GetValFromCookie("OrgName", null, true);
                 if (val == null)
                 {

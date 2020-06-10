@@ -1480,7 +1480,9 @@ namespace BP.Frm
                 foreach (DataRow dr in dt.Rows)
                 {
                     string no = dr[noColName].ToString();
-                    string name = dr[nameColName].ToString();
+                    string name = "";
+                    if(dt.Columns.Contains(nameColName) == true)
+                        name = dr[nameColName].ToString();
                     myen.OID = 0;
 
                     //判断是否是自增序列，序列的格式
@@ -1496,7 +1498,7 @@ namespace BP.Frm
                     }
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
+                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0, bill);
                     count++;
                     successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
                 }
@@ -1521,7 +1523,7 @@ namespace BP.Frm
                     if (myen.Retrieve("BillNo", no) == 1)
                     {
                         //给实体赋值
-                        errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 1);
+                        errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 1, bill);
                         changeCount++;
                         successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
                         continue;
@@ -1529,7 +1531,7 @@ namespace BP.Frm
 
 
                     //给实体赋值
-                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0);
+                    errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0, bill);
                     count++;
                     successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
                 }
@@ -1539,8 +1541,9 @@ namespace BP.Frm
             return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
         }
 
-        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType)
+        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType,FrmBill fbill)
         {
+            //单据数据不存在
             if (saveType == 0)
             {
                 string OID = MyDict_CreateBlankDictID();
@@ -1552,12 +1555,12 @@ namespace BP.Frm
             //按照属性赋值.
             foreach (Attr item in attrs)
             {
-                if (item.Key == "BillNo")
+                if (item.Key.Equals("BillNo") && dt.Columns.Contains(item.Desc) == true)
                 {
                     en.SetValByKey(item.Key, no);
                     continue;
                 }
-                if (item.Key == "Title")
+                if (item.Key.Equals("Title") && dt.Columns.Contains(item.Desc) == true)
                 {
                     en.SetValByKey(item.Key, dr[item.Desc].ToString());
                     continue;
@@ -1624,6 +1627,36 @@ namespace BP.Frm
 
             en.SetValByKey("BillState", (int)BillState.Editing);
             en.Update();
+
+            GenerBill gb = new GenerBill();
+            gb.WorkID = en.OID;
+            if (gb.RetrieveFromDBSources() == 0)
+            {
+                gb.BillState = BillState.Over; //初始化状态.
+                gb.Starter = BP.Web.WebUser.No;
+                gb.StarterName = BP.Web.WebUser.Name;
+                gb.FrmName = fbill.Name; //单据名称.
+                gb.FrmID = fbill.No; //单据ID
+                if (en.Row.ContainsKey("Title") == true)
+                    gb.Title = en.GetValStringByKey("Title");
+                if (en.Row.ContainsKey("BillNo") == true)
+                    gb.BillNo = en.GetValStringByKey("BillNo");
+                gb.FK_FrmTree = fbill.FK_FormTree; //单据类别.
+                gb.RDT = BP.DA.DataType.CurrentDataTime;
+                gb.NDStep = 1;
+                gb.NDStepName = "启动";
+                gb.Insert();
+
+            }
+            else
+            {
+                gb.BillState = BillState.Editing;
+                if (en.Row.ContainsKey("Title")==true)
+                    gb.Title = en.GetValStringByKey("Title");
+                if (en.Row.ContainsKey("BillNo") == true)
+                    gb.BillNo = en.GetValStringByKey("BillNo");
+                gb.Update();
+            }
 
             return errInfo;
         }

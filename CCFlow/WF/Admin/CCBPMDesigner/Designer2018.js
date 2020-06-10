@@ -525,7 +525,7 @@ $(function () {
         $("#Btn_Save").html("保存中...");
 
         SaveFlow(_canvas);
-
+        alert("保存成功！");
 
     });
     /*保存*/
@@ -662,7 +662,7 @@ function SaveFlow(_canvas) {
     //alert('保存成功!');
 
     $("#Btn_Save").attr("disabled", false);
-    $("#Btn_Save").html("保存");
+    $("#Btn_Save").html("<image src='../../Img/Btn/Save.png' width='14px' height='14px'>&nbsp;保存");
     return;
 }
 

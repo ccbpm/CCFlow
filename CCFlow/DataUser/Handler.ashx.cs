@@ -11,9 +11,7 @@ namespace CCFlow.SDKFlowDemo
     /// </summary>
     public class Handler : IHttpHandler
     {
-
         public HttpContext myHttpContext = null;
-
         public void ProcessRequest(HttpContext context)
         {
             myHttpContext = context;
@@ -86,7 +84,10 @@ namespace CCFlow.SDKFlowDemo
             if (doType == "ReqEmpsByDeptNo")
             {
                 string deptNo = context.Request.QueryString["DeptNo"];
-                sql = "SELECT No,Name  FROM Port_Emp WHERE FK_Dept='" + deptNo + "'";
+
+                sql = " SELECT A.No,A.Name FROM Port_Emp A, Port_DeptEmp B ";
+                sql+=" WHERE ( A.FK_Dept=B.FK_Dept AND B.FK_Dept='"+ deptNo + "') OR A.FK_Dept = '"+ deptNo + "'";
+
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);

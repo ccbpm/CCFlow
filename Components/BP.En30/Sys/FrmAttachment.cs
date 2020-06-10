@@ -238,10 +238,6 @@ namespace BP.Sys
         /// </summary>
         public const string AthSaveWay = "AthSaveWay";
         /// <summary>
-        /// 保存到
-        /// </summary>
-        public const string SaveTo = "SaveTo";
-        /// <summary>
         /// 是否要转换成html，方便在线浏览.
         /// </summary>
         public const string IsTurn2Html = "IsTurn2Html";
@@ -302,7 +298,7 @@ namespace BP.Sys
         /// 上传最大数量
         /// </summary>
         public const string TopNumOfUpload = "TopNumOfUpload";
-             /// <summary>
+        /// <summary>
         /// 附件最大限制
         /// </summary>
         public const string FileMaxSize = "FileMaxSize";
@@ -311,9 +307,9 @@ namespace BP.Sys
         /// </summary>
         public const string IsVisable = "IsVisable";
 
-       /// <summary>
-       /// 附件类型 0 普通附件 1 图片附件
-       /// </summary>
+        /// <summary>
+        /// 附件类型 0 普通附件 1 图片附件
+        /// </summary>
         public const string FileType = "FileType";
         /// <summary>
         /// 移动端图片附件上传的方式
@@ -335,7 +331,7 @@ namespace BP.Sys
         /// </summary>
         public const string ReadRole = "ReadRole";
         #endregion 数据引用.
-       
+
 
         #region 快捷键.
         /// <summary>
@@ -347,7 +343,7 @@ namespace BP.Sys
         /// </summary>
         public const string FastKeyGenerRole = "FastKeyGenerRole";
         #endregion
-     
+
     }
     /// <summary>
     /// 附件
@@ -712,25 +708,18 @@ namespace BP.Sys
             {
                 if (this.AthSaveWay == Sys.AthSaveWay.IISServer)
                 {
-                    string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
-                    if (s == "" || s == null)
-                        s = SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
-                    return s;
+                    //string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
+                    //if (s == "" || s == null)
+                    return SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
+                    // return s;
                 }
 
                 if (this.AthSaveWay == Sys.AthSaveWay.FTPServer)
                 {
-                    string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
-                    if (s == "" || s == null)
-                        s =   @"//"+ this.FK_MapData + "//";
-                    return s;
+                        return @"//" + this.FK_MapData + "//";
                 }
 
                 return this.FK_MapData;
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.SaveTo, value);
             }
         }
         /// <summary>
@@ -740,7 +729,7 @@ namespace BP.Sys
         {
             get
             {
-                string str= this.GetValStringByKey(FrmAttachmentAttr.DataRefNoOfObj);
+                string str = this.GetValStringByKey(FrmAttachmentAttr.DataRefNoOfObj);
                 if (str == "")
                     str = this.NoOfObj;
                 return str;
@@ -845,7 +834,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.ReadRole, value);
             }
         }
-        
+
 
         public int RowIdx
         {
@@ -942,7 +931,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.FK_MapData, value);
             }
         }
-        
+
         #endregion
 
         #region 快捷键
@@ -1005,7 +994,7 @@ namespace BP.Sys
                 Map map = new Map("Sys_FrmAttachment", "附件");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = FrmAttachmentAttr.FK_MapData;
 
@@ -1030,7 +1019,7 @@ namespace BP.Sys
                 //map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
                 //  "@0=不用校验@1=不能为空@2=每个类别下不能为空");
 
-                map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
+                // map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
 
                 map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", true, false);
@@ -1041,7 +1030,7 @@ namespace BP.Sys
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否可见", false, false);
                 //  map.AddTBInt(FrmAttachmentAttr.IsDelete, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的)", false, false);
-                map.AddTBInt(FrmAttachmentAttr.FileType, 0, "附件类型", false,false);
+                map.AddTBInt(FrmAttachmentAttr.FileType, 0, "附件类型", false, false);
                 map.AddTBInt(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true);
                 map.AddTBInt(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true);
 
@@ -1071,7 +1060,7 @@ namespace BP.Sys
                 //参数属性.
                 map.AddTBAtParas(3000);
 
-              //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
+                //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
@@ -1103,7 +1092,7 @@ namespace BP.Sys
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             else
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
-            
+
             //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
             if (this.FK_Node != 0 && this.HisCtrlWay == AthCtrlWay.PK)
                 this.HisCtrlWay = AthCtrlWay.WorkID;

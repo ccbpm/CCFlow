@@ -298,20 +298,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(FrmAttachmentAttr.Exts, value);
             }
         }
-        public string SaveTo
-        {
-            get
-            {
-                string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
-                if (s == "" || s == null)
-                    s = SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.SaveTo, value);
-            }
-        }
+       
         /// <summary>
         /// 附件标识
         /// </summary>
@@ -568,7 +555,6 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
-                map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", false, false, 0, 150, 20, true, null);
 
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他，也可以设置一个SQL，比如select Name FROM Port_Dept  \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");

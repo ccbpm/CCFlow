@@ -427,7 +427,6 @@ namespace BP.WF.Template
             //if (feb == null)
             //    this.FromEventEntity = "";
             //else
-
             //    this.FromEventEntity = feb.ToString();
 
             if (this.NodeID != 0)

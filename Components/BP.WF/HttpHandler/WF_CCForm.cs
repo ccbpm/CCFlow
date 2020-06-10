@@ -4683,7 +4683,7 @@ namespace BP.WF.HttpHandler
                 athDesc.Exts = "*.*";
 
                 //存储路径.
-                athDesc.SaveTo = "/DataUser/UploadFile/";
+               // athDesc.SaveTo = "/DataUser/UploadFile/";
                 athDesc.IsNote = false; //不显示note字段.
                 athDesc.IsVisable = false; // 让其在form 上不可见.
 

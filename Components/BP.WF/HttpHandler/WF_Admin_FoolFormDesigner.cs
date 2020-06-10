@@ -1851,7 +1851,7 @@ namespace BP.WF.HttpHandler
                 /*初始化默认值.*/
                 ath.NoOfObj = "Ath1";
                 ath.Name = "我的附件";
-                ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + this.FK_MapData + "\\";
+              //  ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + this.FK_MapData + "\\";
                 ath.W = 150;
                 ath.H = 40;
                 ath.Exts = "*.*";

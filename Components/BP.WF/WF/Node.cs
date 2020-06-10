@@ -759,7 +759,6 @@ namespace BP.WF
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.
-                workCheckAth.SaveTo = "/DataUser/UploadFile/";
                 workCheckAth.IsNote = false; //不显示note字段.
                 workCheckAth.IsVisable = false; // 让其在form 上不可见.
 

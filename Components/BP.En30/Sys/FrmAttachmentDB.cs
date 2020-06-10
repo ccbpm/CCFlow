@@ -232,8 +232,12 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
+                //@sly.
+                if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                    throw new Exception("err@错误:请首先给FK_MapData赋值..");
+
                 //获取最后"_"的位置
-                string val = value.Replace(this.FK_MapData+"_","");
+                string val = value.Replace(this.FK_MapData + "_", "");
                 this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val);
             }
         }
@@ -560,7 +564,7 @@ namespace BP.Sys
 
                 if (ath.AthSaveWay == Sys.AthSaveWay.FTPServer)
                 {
-                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                              SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                     string fullName = this.FileFullName;
@@ -570,32 +574,6 @@ namespace BP.Sys
             catch (Exception ex)
             {
                 Log.DebugWriteError(ex.Message);
-            }
-
-
-
-            //没有看明白这是什么意思.
-            string fkefs = ath.GetParaString("FK_ExcelFile", null);
-            if (DataType.IsNullOrEmpty(fkefs) == false)
-            {
-                string[] efarr = fkefs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                ExcelFile ef = null;
-                ExcelTables ets = null;
-                foreach (string fk_ef in efarr)
-                {
-                    ef = new ExcelFile();
-                    ef.No = fk_ef;
-
-                    if (ef.RetrieveFromDBSources() > 0)
-                    {
-                        ets = new ExcelTables(fk_ef);
-                        foreach (ExcelTable et in ets)
-                        {
-                            if (DBAccess.IsExitsObject(et.No))
-                                DBAccess.RunSQL(string.Format("DELETE FROM {0} WHERE FK_FrmAttachmentDB = '{1}'", et.No, this.MyPK));
-                        }
-                    }
-                }
             }
 
 

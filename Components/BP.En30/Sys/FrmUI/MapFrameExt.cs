@@ -100,17 +100,17 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 // map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
 
-                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.Y, null, "Y", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.X, null, "x", true, false, 0, 20, 20);
 
-                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
 
-                map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
+                map.AddTBString(MapFrameAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
 
-                map.AddTBString(FrmEleAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+                map.AddTBString(MapFrameAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 

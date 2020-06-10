@@ -688,6 +688,19 @@ namespace BP.Web
                 SetSessionByKey("OrgNo", value);
             }
         }
+        public static string SheBei
+        {
+            get
+            {
+                string val = GetValFromCookie("SheBei", null, true);
+                return val;
+            }
+            set
+            {
+                SetSessionByKey("SheBei", value);
+            }
+        }
+
         public static string OrgName
         {
             get

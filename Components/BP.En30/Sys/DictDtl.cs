@@ -22,7 +22,7 @@ namespace BP.Sys
         /// <summary>
         /// 关联的外键
         /// </summary>
-        public const string DictMyPK = "DictMyPK";
+        public const string FK_SFTable = "FK_SFTable";
         public const string BH = "BH";
         public const string Name = "Name";
         public const string ParentNo = "ParentNo";
@@ -33,7 +33,7 @@ namespace BP.Sys
         /// <summary>
         /// 列选择
         /// </summary>
-        public const string OrgNo = "OrgNo";
+        //public const string OrgNo = "OrgNo";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -49,26 +49,26 @@ namespace BP.Sys
         /// <summary>
         /// 组织编号
         /// </summary>
-        public string OrgNo
+        //public string OrgNo
+        //{
+        //    get
+        //    {
+        //        return this.GetValStrByKey(DictDtlAttr.OrgNo);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(DictDtlAttr.OrgNo, value);
+        //    }
+        //}
+        public string FK_SFTable
         {
             get
             {
-                return this.GetValStrByKey(DictDtlAttr.OrgNo);
+                return this.GetValStrByKey(DictDtlAttr.FK_SFTable);
             }
             set
             {
-                this.SetValByKey(DictDtlAttr.OrgNo, value);
-            }
-        }
-        public string DictMyPK
-        {
-            get
-            {
-                return this.GetValStrByKey(DictDtlAttr.DictMyPK);
-            }
-            set
-            {
-                this.SetValByKey(DictDtlAttr.DictMyPK, value);
+                this.SetValByKey(DictDtlAttr.FK_SFTable, value);
             }
         }
         public string BH
@@ -115,11 +115,13 @@ namespace BP.Sys
                 this.SetValByKey(DictDtlAttr.Idx, value);
             }
         }
-    #endregion 属性.
+        #endregion 属性.
 
-
-    #region 构造方法
-    public override UAC HisUAC
+        #region 构造方法
+        /// <summary>
+        /// 访问权限
+        /// </summary>
+        public override UAC HisUAC
         {
             get
             {
@@ -146,15 +148,15 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_DictDtl", "系统字典表");
+                Map map = new Map("Sys_SFTableDtl", "系统字典表");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-                //DictMyPK+"_"+BH
+                //FK_SFTable+"_"+BH
                 map.AddMyPK();
 
-                map.AddTBString(DictDtlAttr.DictMyPK, null, "外键表ID", true, false, 0, 200, 20);
+                map.AddTBString(DictDtlAttr.FK_SFTable, null, "外键表ID", true, false, 0, 200, 20);
                 //map.AddTBString(DictDtlAttr.TableID, null, "TableID", true, false, 0, 200, 20);
 
                 map.AddTBString(DictDtlAttr.BH, null, "BH", true, false, 0, 200, 20);
@@ -162,9 +164,9 @@ namespace BP.Sys
                 map.AddTBString(DictDtlAttr.ParentNo, null, "父节点ID", true, false, 0, 200, 20);
 
                 //用户注销组织的时候，方便删除数据.
-                map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
-                map.AddTBInt(DictAttr.Idx, 0, "顺序号", false, false);
-            this._enMap = map;
+                //map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+                map.AddTBInt(DictDtlAttr.Idx, 0, "顺序号", false, false);
+                this._enMap = map;
                 return this._enMap;
             }
         }
@@ -183,14 +185,14 @@ namespace BP.Sys
         {
             base.afterInsertUpdateAction();
         }
-      
-        protected override bool beforeInsert()
-        {
-            if (BP.Sys.SystemConfig.CCBPMRunModel != 0)
-                this.OrgNo = BP.Web.WebUser.OrgNo;
 
-            return base.beforeInsert();
-        }
+        //protected override bool beforeInsert()
+        //{
+        //    if (BP.Sys.SystemConfig.CCBPMRunModel != 0)
+        //        this.OrgNo = BP.Web.WebUser.OrgNo;
+
+        //    return base.beforeInsert();
+        //}
     }
     /// <summary>
     /// 系统字典表s
@@ -205,9 +207,9 @@ namespace BP.Sys
         {
         }
 
-        public DictDtls(string dictMyPK)
+        public DictDtls(string fk_sftable)
         {
-            this.Retrieve(DictDtlAttr.DictMyPK, dictMyPK);
+            this.Retrieve(DictDtlAttr.FK_SFTable, fk_sftable);
         }
 
 

@@ -66,6 +66,34 @@ namespace BP.DA
             throw new Exception("@没有涉及到的数据库类型");
         }
         /// <summary>
+        /// 删除指定字段的约束
+        /// </summary>
+        /// <param name="table">表名</param>
+        /// <param name="colName">列名</param>
+        /// <returns>返回删除约束的个数</returns>
+        public static int DropConstraintOfSQL(string table, string colName)
+        {
+
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            {
+                //获得约束.
+                string sql = "select b.name from sysobjects b join syscolumns a on b.id = a.cdefault ";
+                sql += " where a.id = object_id('" + table + "') ";
+                sql += " and a.name ='" + colName + "' ";
+                //遍历并删除它们.
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string name = dr[0].ToString();
+                    DBAccess.RunSQL("exec('alter table " + table + " drop constraint " + name + " ' )");
+                }
+                //返回执行的个数.
+                return dt.Rows.Count;
+            }
+
+            return 0;
+        }
+        /// <summary>
         /// 获得约束
         /// </summary>
         /// <param name="table"></param>
@@ -73,7 +101,7 @@ namespace BP.DA
         public static string SQLOfTableFieldYueShu(string table)
         {
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                return  "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
+                return "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.DM)
@@ -1391,6 +1419,19 @@ namespace BP.DA
         #endregion
 
         #region 通过主应用程序在其他库上运行sql
+        public static void DropTableColumn(string table, string columnName)
+        {
+            try
+            {
+                DBAccess.DropConstraintOfSQL(table, columnName);
+
+                string sql = "ALTER TABLE " + table + " DROP COLUMN " + columnName;
+                DBAccess.RunSQL(sql);
+            }catch(Exception ex) 
+            {
+
+            }
+        }
 
         /// <summary>
         /// 删除表的主键
@@ -2300,7 +2341,7 @@ namespace BP.DA
             }
 
             while (lock_msSQL_ReturnTable)
-            { 
+            {
             }
 
             SqlDataAdapter msAda = new SqlDataAdapter(msSQL, conn);
@@ -3091,7 +3132,7 @@ namespace BP.DA
         {
             object obj = DBAccess.RunSQLReturnVal(sql);
             if (obj == null || obj == DBNull.Value)
-                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql );
+                throw new Exception("@没有获取您要查询的数据,请检查SQL:" + sql);
 
             string s = obj.ToString();
             if (s.Contains("."))

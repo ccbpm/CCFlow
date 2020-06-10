@@ -488,7 +488,7 @@ namespace BP.Sys
             }
             else
             {
-                return WebUser.No == "admin" || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
+                return WebUser.No.Equals("admin")==true || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
             }
         }
 
@@ -510,7 +510,7 @@ namespace BP.Sys
             }
             else
             {
-                return WebUser.No == "admin" || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
+                return WebUser.No.Equals("admin")==true || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
             }
         }
     }

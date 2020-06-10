@@ -857,24 +857,7 @@ namespace BP.Sys
                     return ex.Message;
                 }
             }
-            //From Zhou IBM删除
-            //if (this.DBSrcType == Sys.DBSrcType.Informix)
-            //{
-            //    try
-            //    {
-            //        IfxConnection conn = new IfxConnection();
-
-            //        conn.ConnectionString = this.ConnString;
-            //        conn.Open();
-            //        conn.Close();
-            //        return "恭喜您，该(" + this.Name + ")连接配置成功。";
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return ex.Message;
-            //    }
-            //}
-
+           
             if (this.DBSrcType == Sys.DBSrcType.WebServices)
             {
                 string url = this.IP +
@@ -1626,6 +1609,9 @@ namespace BP.Sys
         {
             if (this.No != "local" && this.DBSrcType == Sys.DBSrcType.Localhost)
                 throw new Exception("@在该系统中只能有一个本地连接，请选择其他数据源类型。");
+
+            //测试数据库连接
+            DoConn();
 
             return base.beforeUpdateInsertAction();
         }

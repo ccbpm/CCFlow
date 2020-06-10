@@ -99,7 +99,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "公文字号组件");
+                Map map = new Map("Sys_MapAttr", "收文字号");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -154,7 +154,6 @@ namespace BP.Sys.FrmUI
         {
             //设置公文字号.
             this.UIContralType = UIContralType.DocWord;
-
             return base.beforeUpdateInsertAction();
         }
 
@@ -177,7 +176,6 @@ namespace BP.Sys.FrmUI
             base.afterDelete();
         }
 
-
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
@@ -185,10 +183,8 @@ namespace BP.Sys.FrmUI
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
-
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
             base.afterInsertUpdateAction();
         }
         #endregion

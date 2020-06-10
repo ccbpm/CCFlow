@@ -27,6 +27,14 @@ namespace BP.Port
         /// sid
         /// </summary>
         public const string SID = "SID";
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public const string Tel = "Tel";
+		 /// <summary>
+        /// 邮箱
+        /// </summary>
+        public const string Email = "Email";
         #endregion
     }
     /// <summary>
@@ -100,6 +108,28 @@ namespace BP.Port
             set
             {
                 this.SetValByKey(EmpAttr.SID, value);
+            }
+        }
+        public string Tel
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.Tel);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.Tel, value);
+            }
+        }
+		public string Email
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.Email);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.Email, value);
             }
         }
         #endregion
@@ -232,7 +262,8 @@ namespace BP.Port
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
-
+                map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
+				map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
                 // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
                 #endregion 字段
 

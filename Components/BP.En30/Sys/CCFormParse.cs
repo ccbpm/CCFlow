@@ -13,35 +13,7 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
-        /// <summary>
-        /// 保存元素
-        /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
-        /// <param name="eleType">元素类型</param>
-        /// <param name="ctrlID">控件ID</param>
-        /// <param name="x">位置</param>
-        /// <param name="y">位置</param>
-        /// <param name="h">高度</param>
-        /// <param name="w">宽度</param>
-        public static void SaveFrmEle(string fk_mapdata, string eleType, string ctrlID, float x, float y, float h, float w)
-        {
-            FrmEle en = new FrmEle();
-
-            en.EleType = eleType;
-            en.FK_MapData = fk_mapdata;
-            en.EleID = ctrlID;
-            
-            int i = en.Retrieve(FrmEleAttr.FK_MapData, fk_mapdata, FrmEleAttr.EleID, ctrlID);
-            en.X = x;
-            en.Y = y;
-            en.W = w;
-            en.H = h;
-
-            if (i == 0)
-                en.Insert();
-            else
-                en.Update();
-        }
+        
 
         /// <summary>
         /// 保存元素
@@ -153,21 +125,7 @@ namespace BP.Sys
             dtl.H = h;
             dtl.Update();
         }
-        public static void SaveiFrame(string fk_mapdata, string ctrlID, float x, float y, float h, float w)
-        {
-            FrmEle en = new FrmEle();
-            en.FK_MapData = fk_mapdata;
-            en.EleID = ctrlID;
-            en.MyPK = en.FK_MapData + "_" + en.EleID;
-            if (en.RetrieveFromDBSources() == 0)
-                en.Insert();
-
-            en.X = x;
-            en.Y = y;
-            en.W = w;
-            en.H = h;
-            en.Update();
-        }
+        
         public static void SaveMapAttr(string fk_mapdata, string fieldID, string shape, JsonData control, JsonData properties, string pks)
         {
             MapAttr attr = new MapAttr();

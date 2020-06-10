@@ -42,7 +42,9 @@ namespace BP.Sys
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
-
+        public const string Y = "Y";
+        public const string X = "X";
+        public const string EleType = "EleType";
     }
     /// <summary>
     /// 框架
@@ -55,7 +57,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;
@@ -112,11 +114,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey(FrmEleAttr.EleType);
+                return this.GetValStrByKey(MapFrameAttr.EleType);
             }
             set
             {
-                this.SetValByKey(FrmEleAttr.EleType, value);
+                this.SetValByKey(MapFrameAttr.EleType, value);
             }
         }
         /// <summary>
@@ -140,22 +142,22 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValFloatByKey(FrmEleAttr.X);
+                return this.GetValFloatByKey(MapFrameAttr.X);
             }
             set
             {
-                this.SetValByKey(FrmEleAttr.X, value);
+                this.SetValByKey(MapFrameAttr.X, value);
             }
         }
         public float Y
         {
             get
             {
-                return this.GetValFloatByKey(FrmEleAttr.Y);
+                return this.GetValFloatByKey(MapFrameAttr.Y);
             }
             set
             {
-                this.SetValByKey(FrmEleAttr.Y, value);
+                this.SetValByKey(MapFrameAttr.Y, value);
             }
         }
         /// <summary>
@@ -199,9 +201,6 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
-
-      
-       
         #endregion
 
         #region 构造方法
@@ -246,20 +245,20 @@ namespace BP.Sys
               //  map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                 //"@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
 
-                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.Y, null, "Y", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.X, null, "x", true, false, 0, 20, 20);
 
-                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
-                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
 
-                map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
+                map.AddTBString(MapFrameAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
 
                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
                // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
 
-                map.AddTBString(FrmEleAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+                map.AddTBString(MapFrameAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 this._enMap = map;
                 return this._enMap;

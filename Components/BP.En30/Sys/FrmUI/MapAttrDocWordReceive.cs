@@ -9,9 +9,9 @@ using System.Web;
 namespace BP.Sys.FrmUI
 {
     /// <summary>
-    /// 证件字段
+    /// 收文字号
     /// </summary>
-    public class MapAttrCard : EntityMyPK
+    public class MapAttrDocWordReceive : EntityMyPK
     {
         #region 文本字段参数属性.
         /// <summary>
@@ -28,21 +28,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
         }
-        /// <summary>
-        /// 最大长度
-        /// </summary>
-        public int MaxLen
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.MaxLen);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MaxLen, value);
-            }
-        }
-        
+
         /// <summary>
         /// 字段
         /// </summary>
@@ -91,13 +77,13 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrCard()
+        public MapAttrDocWordReceive()
         {
         }
         /// <summary>
         /// 实体属性
         /// </summary>
-        public MapAttrCard(string myPK)
+        public MapAttrDocWordReceive(string myPK)
         {
             this.MyPK = myPK;
             this.Retrieve();
@@ -113,7 +99,7 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "证件字段");
+                Map map = new Map("Sys_MapAttr", "收文字号");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -125,35 +111,14 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
-                map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
-                map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
-                map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");
-
-
+                map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", false, false);
+                map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", false, false);
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
-               
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
+                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
+                //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
 
-                /**map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
-                map.SetHelperAlert(MapAttrAttr.UIVisible, "对于不可见的字段可以在隐藏功能的栏目里找到这些字段进行编辑或者删除.");
-
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-                map.SetHelperAlert(MapAttrAttr.UIIsEnable, "不可编辑,让该字段设置为只读.");
-
-                map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
-                map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
-                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
-
-                map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
-                map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
-
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
-                map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
-                //CCS样式
-                */
                 map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
@@ -168,27 +133,30 @@ namespace BP.Sys.FrmUI
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
                 map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
-
-                //文本跨行
+                //文本跨行.
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
+                map.SetHelperAlert(MapAttrAttr.RowSpan, "对于傻瓜表单有效: 占的单元格row的数量.");
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-                
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
 
                 #endregion 傻瓜表单
 
-               
-
                 this._enMap = map;
                 return this._enMap;
             }
         }
-      
-     
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            //设置公文字号.
+          //  this.UIContralType = UIContralType.DocWordReceive;
+            return base.beforeUpdateInsertAction();
+        }
+
         /// <summary>
         /// 删除
         /// </summary>
@@ -198,7 +166,7 @@ namespace BP.Sys.FrmUI
             if (this.FK_MapData.Contains("ND") == true)
             {
                 string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn+"')";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
@@ -207,7 +175,6 @@ namespace BP.Sys.FrmUI
 
             base.afterDelete();
         }
-
 
         protected override void afterInsertUpdateAction()
         {
@@ -218,53 +185,20 @@ namespace BP.Sys.FrmUI
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
             base.afterInsertUpdateAction();
-        }
-
-        #endregion
-        
-
-        #region 重载.
-        protected override bool beforeUpdateInsertAction()
-        {
-            MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
-            attr.RetrieveFromDBSources();
-
-            //默认值.
-            string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
-            {
-                string defVal = this.GetValStrByKey("DefVal");
-                if (defval.Contains("@") == true)
-                    this.SetValByKey("DefVal", "");
-            }
-            else
-            {
-                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
-            }
-
-            //执行保存.
-            attr.Save();
-
-            if (this.GetValStrByKey("GroupID") == "无")
-                this.SetValByKey("GroupID", "0");
-
-            return base.beforeUpdateInsertAction();
         }
         #endregion
     }
     /// <summary>
-    /// 实体属性s
+    /// 收文字号s
     /// </summary>
-    public class MapAttrCards : EntitiesMyPK
+    public class MapAttrDocWordReceives : EntitiesMyPK
     {
         #region 构造
         /// <summary>
-        /// 实体属性s
+        /// 收文字号s
         /// </summary>
-        public MapAttrCards()
+        public MapAttrDocWordReceives()
         {
         }
         /// <summary>
@@ -274,7 +208,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new MapAttrCard();
+                return new MapAttrDocWordReceive();
             }
         }
         #endregion
@@ -284,20 +218,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapAttrCard> ToJavaList()
+        public System.Collections.Generic.IList<MapAttrDocWordReceive> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapAttrCard>)this;
+            return (System.Collections.Generic.IList<MapAttrDocWordReceive>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapAttrCard> Tolist()
+        public System.Collections.Generic.List<MapAttrDocWordReceive> Tolist()
         {
-            System.Collections.Generic.List<MapAttrCard> list = new System.Collections.Generic.List<MapAttrCard>();
+            System.Collections.Generic.List<MapAttrDocWordReceive> list = new System.Collections.Generic.List<MapAttrDocWordReceive>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapAttrCard)this[i]);
+                list.Add((MapAttrDocWordReceive)this[i]);
             }
             return list;
         }

@@ -176,17 +176,20 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\AtPara.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
-    <Compile Include="DA\DBLoad.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DTTemp.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\EncodingBP.cs" />
+    <Compile Include="DA\Cash.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DA\CashFrmTemplate.cs" />
+    <Compile Include="DA\DataType.cs" />
+    <Compile Include="DA\DBAccess.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
+    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
+    <Compile Include="DA\DBLoad.cs" />
+    <Compile Include="DA\DBUrl.cs" />
+    <Compile Include="DA\DTTemp.cs" />
+    <Compile Include="DA\EncodingBP.cs" />
+    <Compile Include="DA\EnumDA.cs" />
+    <Compile Include="DA\Log.cs" />
+    <Compile Include="DA\Para.cs" />
     <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -194,11 +197,33 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\Sys\TableFieldAddComment.cs" />
-    <Compile Include="En\EnObj.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="En\Attr.cs" />
+    <Compile Include="En\AttrFile.cs" />
+    <Compile Include="En\AttrOfOneVSM.cs" />
+    <Compile Include="En\AttrOfSearch.cs" />
+    <Compile Include="En\AttrSearch.cs" />
+    <Compile Include="En\ClassFactory.cs" />
+    <Compile Include="En\ControlsEnum.cs" />
+    <Compile Include="En\EnDtl.cs" />
+    <Compile Include="En\EnObj.cs" />
+    <Compile Include="En\Entity.cs" />
+    <Compile Include="En\EntityDBAccess.cs" />
+    <Compile Include="En\EntityMM.cs" />
+    <Compile Include="En\EntityMyPK.cs" />
+    <Compile Include="En\EntityNo.cs" />
+    <Compile Include="En\EntityNoName.cs" />
+    <Compile Include="En\EntityOID.cs" />
+    <Compile Include="En\EntityOIDName.cs" />
+    <Compile Include="En\EntityTree.cs" />
     <Compile Include="En\KeyVal.cs" />
-    <Compile Include="En\GloEntity.cs" />
+    <Compile Include="En\Map.cs" />
+    <Compile Include="En\Method.cs" />
+    <Compile Include="En\QueryObject.cs" />
+    <Compile Include="En\RefMethod.cs" />
+    <Compile Include="En\Row.cs" />
+    <Compile Include="En\SqlBuilder.cs" />
+    <Compile Include="En\SQLCash.cs" />
+    <Compile Include="En\UAC.cs" />
     <Compile Include="NetPlatformImpl\CacheHelper.cs" />
     <Compile Include="NetPlatformImpl\DA.cs" />
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
@@ -211,7 +236,10 @@
     <Compile Include="Port\Team.cs" />
     <Compile Include="Port\TeamEmp.cs" />
     <Compile Include="Port\TeamType.cs" />
-    <Compile Include="Pub\Day.cs" />
+    <Compile Include="Pub\ND.cs" />
+    <Compile Include="Pub\NY.cs" />
+    <Compile Include="Pub\Rpt2Base.cs" />
+    <Compile Include="Pub\YF.cs" />
     <Compile Include="References\IJsonWrapper.cs" />
     <Compile Include="References\JsonData.cs" />
     <Compile Include="References\JsonException.cs" />
@@ -221,7 +249,6 @@
     <Compile Include="References\JsonWriter.cs" />
     <Compile Include="References\Lexer.cs" />
     <Compile Include="References\ParserToken.cs" />
-    <Compile Include="Pub\Rpt2Base.cs" />
     <Compile Include="Service References\ccportal\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,113 +257,102 @@
     <Compile Include="Sys\BuessUnitBase.cs" />
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
-    <Compile Include="Sys\Contrast.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\Dict.cs" />
+    <Compile Include="Sys\CField.cs" />
+    <Compile Include="Sys\DefVal.cs" />
     <Compile Include="Sys\DictDtl.cs" />
+    <Compile Include="Sys\EnCfg.cs" />
+    <Compile Include="Sys\EnsAppGroupXml.cs" />
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
-    <Compile Include="Sys\ExcelField.cs" />
-    <Compile Include="Sys\ExcelFile.cs" />
-    <Compile Include="Sys\ExcelSheet.cs" />
-    <Compile Include="Sys\ExcelTable.cs" />
+    <Compile Include="Sys\EventBase.cs" />
+    <Compile Include="Sys\EventDemo.cs" />
+    <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\FormEventBase.cs" />
+    <Compile Include="Sys\FormEventBaseDtl.cs" />
+    <Compile Include="Sys\FrmAttachment.cs" />
+    <Compile Include="Sys\FrmAttachmentDB.cs" />
+    <Compile Include="Sys\FrmBtn.cs" />
+    <Compile Include="Sys\FrmEleDB.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
+    <Compile Include="Sys\FrmImg.cs" />
+    <Compile Include="Sys\FrmImgAth.cs" />
+    <Compile Include="Sys\FrmImgAthDB.cs" />
+    <Compile Include="Sys\FrmLab.cs" />
+    <Compile Include="Sys\FrmLine.cs" />
+    <Compile Include="Sys\FrmLink.cs" />
+    <Compile Include="Sys\FrmRB.cs" />
+    <Compile Include="Sys\FrmTree.cs" />
     <Compile Include="Sys\FrmUI\ComponentsFieldList.cs" />
+    <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
+    <Compile Include="Sys\FrmUI\ExtImg.cs" />
+    <Compile Include="Sys\FrmUI\ExtLink.cs" />
     <Compile Include="Sys\FrmUI\ExtMap.cs" />
     <Compile Include="Sys\FrmUI\ExtScore.cs" />
+    <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
-    <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFlowBBS.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
-    <Compile Include="Sys\FrmUI\SFTableClass.cs" />
-    <Compile Include="Sys\FrmUI\SFTable.cs" />
-    <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrSFSQL.cs" />
-    <Compile Include="Sys\FrmUI\ExtLink.cs" />
-    <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
-    <Compile Include="Sys\GloVarExt.cs" />
-    <Compile Include="Sys\MapExtXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\MapFrame.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\FrmTree.cs" />
-    <Compile Include="Sys\ToolbarExcel.cs" />
-    <Compile Include="Sys\ToolbarExcelSln.cs" />
-    <Compile Include="Sys\GEEntityExcelFrm.cs" />
-    <Compile Include="Sys\GEEntityWordFrm.cs" />
-    <Compile Include="Sys\Glo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\GloVar.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\PubClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\SysFileManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\SystemConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\ExtContral.cs" />
-    <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrString.cs" />
     <Compile Include="Sys\FrmUI\MapAttrNum.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrSFSQL.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrString.cs" />
+    <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
+    <Compile Include="Sys\FrmUI\SFTable.cs" />
+    <Compile Include="Sys\FrmUI\SFTableClass.cs" />
+    <Compile Include="Sys\GEDtl.cs" />
+    <Compile Include="Sys\GEEntity.cs" />
+    <Compile Include="Sys\GEEntityExcelFrm.cs" />
     <Compile Include="Sys\GEEntityMyPK.cs" />
-    <Compile Include="Sys\FormEventBaseDtl.cs" />
-    <Compile Include="Sys\ChMulTone.cs" />
-    <Compile Include="Sys\MapDataTemplate.cs" />
-    <Compile Include="Sys\XML\ActiveAttr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\EnumInfoXml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\RegularExpression.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\RegularExpressionDtl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\SQLList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\XmlEn.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\XML\XmlMenu.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Sys\GEEntityWordFrm.cs" />
+    <Compile Include="Sys\GENoName.cs" />
+    <Compile Include="Sys\GETree.cs" />
+    <Compile Include="Sys\Glo.cs" />
+    <Compile Include="Sys\GloVar.cs" />
+    <Compile Include="Sys\GloVarExt.cs" />
+    <Compile Include="Sys\GroupEnsTemplate.cs" />
+    <Compile Include="Sys\GroupField.cs" />
     <Compile Include="Sys\Langue.cs" />
+    <Compile Include="Sys\MapAttr.cs" />
+    <Compile Include="Sys\MapData.cs" />
+    <Compile Include="Sys\MapDataTemplate.cs" />
+    <Compile Include="Sys\MapDtl.cs" />
+    <Compile Include="Sys\MapExt.cs" />
+    <Compile Include="Sys\MapExtXml.cs" />
+    <Compile Include="Sys\MapFrame.cs" />
+    <Compile Include="Sys\PubClass.cs" />
+    <Compile Include="Sys\RptTemplate.cs" />
+    <Compile Include="Sys\Serial.cs" />
+    <Compile Include="Sys\SFDBSrc.cs" />
+    <Compile Include="Sys\SFTable.cs" />
+    <Compile Include="Sys\SFTableDict.cs" />
     <Compile Include="Sys\SFTableSQL.cs" />
+    <Compile Include="Sys\SysDocFile.cs" />
+    <Compile Include="Sys\SysEnum.cs" />
+    <Compile Include="Sys\SysEnumMain.cs" />
+    <Compile Include="Sys\SysFileManager.cs" />
+    <Compile Include="Sys\SystemConfig.cs" />
+    <Compile Include="Sys\UserLog.cs" />
+    <Compile Include="Sys\UserRegedit.cs" />
+    <Compile Include="Sys\XML\ActiveAttr.cs" />
+    <Compile Include="Sys\XML\ChMulTone.cs" />
+    <Compile Include="Sys\XML\EnumInfoXml.cs" />
+    <Compile Include="Sys\XML\RegularExpression.cs" />
+    <Compile Include="Sys\XML\RegularExpressionDtl.cs" />
+    <Compile Include="Sys\XML\SQLList.cs" />
+    <Compile Include="Sys\XML\XmlEn.cs" />
+    <Compile Include="Sys\XML\XmlMenu.cs" />
     <Compile Include="Tools\Cryptography.cs" />
-    <Compile Include="DA\EnumDA.cs" />
-    <Compile Include="DA\Cash.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DataType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DA\DBAccess.cs" />
-    <Compile Include="DA\DBUrl.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Tools\chs2py.cs" />
     <Compile Include="Tools\CRC32Helper.cs" />
     <Compile Include="Tools\DataSet2Json.cs">
@@ -350,10 +366,6 @@
     <Compile Include="Tools\JiaMi\decode.cs" />
     <Compile Include="Tools\JiaMi\DecryptAndEncryptionHelper.cs" />
     <Compile Include="Tools\JSON.cs" />
-    <Compile Include="DA\Log.cs" />
-    <Compile Include="DA\Para.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Tools\NPinyin\Pinyin.cs" />
     <Compile Include="Tools\NPinyin\PyCode.cs" />
     <Compile Include="Tools\NPinyin\PyHash.cs" />
@@ -370,95 +382,13 @@
     <Compile Include="DTS\FF.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="En\EntityOIDName.cs" />
-    <Compile Include="En\EnDtl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\Entity.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityMM.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityNo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityNoName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityOID.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\Attr.cs" />
-    <Compile Include="En\AttrFile.cs" />
-    <Compile Include="En\AttrOfOneVSM.cs" />
-    <Compile Include="En\AttrSearch.cs" />
-    <Compile Include="En\ControlsEnum.cs" />
-    <Compile Include="En\Map.cs" />
-    <Compile Include="En\Row.cs" />
-    <Compile Include="En\SimpleNoNameFix.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityTree.cs" />
     <Compile Include="Tools\WFSealData.cs" />
-    <Compile Include="Sys\EventBase.cs" />
-    <Compile Include="Sys\EventDemo.cs" />
     <Compile Include="GPM\Dept.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
     <Compile Include="GPM\DeptEmpStation.cs" />
     <Compile Include="GPM\DeptStation.cs" />
     <Compile Include="GPM\Emp.cs" />
     <Compile Include="Web\GuestUser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\ND.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\NY.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Pub\YF.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\GroupEnsTemplate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\FrmImgAthDB.cs" />
-    <Compile Include="Sys\FrmEle.cs" />
-    <Compile Include="Sys\FrmEleDB.cs" />
-    <Compile Include="Sys\FrmReportField.cs" />
-    <Compile Include="Sys\FrmRpt.cs" />
-    <Compile Include="Sys\GETree.cs" />
-    <Compile Include="Sys\RptTemplate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\EnsAppGroupXml.cs" />
-    <Compile Include="Sys\GEDtl.cs" />
-    <Compile Include="Sys\GroupField.cs" />
-    <Compile Include="Sys\MapData.cs" />
-    <Compile Include="Sys\MapAttr.cs" />
-    <Compile Include="En\AttrOfSearch.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\RefMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\SimpleNoName.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityMyPK.cs" />
-    <Compile Include="En\SQLCash.cs" />
-    <Compile Include="En\ClassFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityDBAccess.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\QueryObject.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\Method.cs" />
-    <Compile Include="En\SqlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Port\Emp.cs" />
@@ -471,40 +401,6 @@
     <Compile Include="Web\WebUser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\GENoName.cs" />
-    <Compile Include="Sys\MapDtl.cs" />
-    <Compile Include="Sys\GEEntity.cs" />
-    <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\FrmLine.cs" />
-    <Compile Include="Sys\FrmLab.cs" />
-    <Compile Include="Sys\FrmLink.cs" />
-    <Compile Include="Sys\FrmRB.cs" />
-    <Compile Include="Sys\FrmImg.cs" />
-    <Compile Include="Sys\FrmAttachment.cs" />
-    <Compile Include="Sys\FrmImgAth.cs" />
-    <Compile Include="Sys\FrmBtn.cs" />
-    <Compile Include="Sys\FrmAttachmentDB.cs" />
-    <Compile Include="Sys\SFTable.cs" />
-    <Compile Include="Sys\CField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\DefVal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\Serial.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\SysEnum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\UserRegedit.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sys\SysDocFile.cs" />
-    <Compile Include="Sys\SysEnumMain.cs" />
-    <Compile Include="Sys\EnCfg.cs" />
-    <Compile Include="Sys\UserLog.cs" />
-    <Compile Include="Sys\SFDBSrc.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

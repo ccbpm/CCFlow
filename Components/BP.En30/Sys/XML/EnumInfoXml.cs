@@ -5,7 +5,6 @@ using BP.DA;
 using BP.En;
 using BP.Sys.XML;
 
-
 namespace BP.Sys.XML
 {
 	/// <summary>

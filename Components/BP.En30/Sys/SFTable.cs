@@ -70,6 +70,33 @@ namespace BP.Sys
         /// </summary>
         GradeNoName
     }
+
+    /// <summary>
+    /// 编号生成规则
+    /// </summary>
+    public enum NoGenerModel
+    {
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        None,
+        /// <summary>
+        /// 流水号
+        /// </summary>
+        ByLSH,
+        /// <summary>
+        /// 标签的全拼
+        /// </summary>
+        ByQuanPin,
+        /// <summary>
+        /// 标签的简拼
+        /// </summary>
+        ByJianPin,
+        /// <summary>
+        /// 按GUID生成
+        /// </summary>
+        ByGUID
+    }
     /// <summary>
     /// 用户自定义表
     /// </summary>
@@ -107,6 +134,14 @@ namespace BP.Sys
         /// 字典表类型
         /// </summary>
         public const string CodeStruct = "CodeStruct";
+        /// <summary>
+        /// 是否自动生成编号
+        /// </summary>
+        public const string IsAutoGenerNo = "IsAutoGenerNo";
+        /// <summary>
+        /// 编号生成规则
+        /// </summary>
+        public const string NoGenerModel = "NoGenerModel";
 
         #region 链接到其他系统获取数据的属性。
         /// <summary>
@@ -354,15 +389,54 @@ namespace BP.Sys
                 return src.RunSQLReturnTable(sql);
             }
 
-            if(this.SrcType == Sys.SrcType.SysDict)
+            if (this.SrcType == Sys.SrcType.SysDict)
             {
-                DictDtls dictDtls = new DictDtls(this.No);
-                return dictDtls.ToDataTableField();
+                string sql = "SELECT MyPK, BH, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No+"'";
+                return src.RunSQLReturnTable(sql);
             }
             #endregion
 
             return null;
 
+        }
+        /// <summary>
+        /// 修改外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void UpdateData(string No,string Name,string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='"+ FK_SFTable + "_" + No + "'";
+            else
+                sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
+            DBAccess.RunSQL(sql);
+        }
+        /// <summary>
+        /// 新增外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void InsertData(string No, string Name, string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable+"_"+ No +"','" + FK_SFTable + "','"+ No + "','"+ Name + "')";
+            else
+                sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
+            DBAccess.RunSQL(sql);
+        }
+        /// <summary>
+        /// 删除外键数据
+        /// </summary>
+        /// <returns></returns>
+        public void DeleteData(string No, string FK_SFTable)
+        {
+            var sql = "";
+            if (this.SrcType == Sys.SrcType.SysDict)
+                sql = "delete from Sys_SFTableDtl where MyPK='" + FK_SFTable + "_" + No + "'";
+            else
+                sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
+            DBAccess.RunSQL(sql);
         }
         public string GenerHisJson()
         {
@@ -375,39 +449,92 @@ namespace BP.Sys
         public string GenerSFTableNewNo()
         {
             string table = this.SrcTable;
-            try
+            NoGenerModel NoGenerModel = this.NoGenerModel;
+            if (NoGenerModel == NoGenerModel.ByGUID)//编号按guid生成
             {
-                string sql = null;
-                string field = "No";
-                switch (this.EnMap.EnDBUrl.DBType)
-                {
-                    case DBType.MSSQL:
-                        sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
-                        break;
-                    case DBType.PostgreSQL:
-                        sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
-                        break;
-                    case DBType.Oracle:
-                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
-                        break;
-                    case DBType.MySQL:
-                        sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + table;
-                        break;
-                    case DBType.Informix:
-                        sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
-                        break;
-                    case DBType.Access:
-                        sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM " + table;
-                        break;
-                    default:
-                        throw new Exception("error");
-                }
-                string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
-                if (str == "0" || str == "")
-                    str = "1";
-                return str.PadLeft(3, '0');
+                string guid = DBAccess.GenerGUID();
+                return guid;
             }
-            catch (Exception)
+            else if (NoGenerModel == NoGenerModel.ByLSH)//编号按流水号生成
+            {
+                if (this.SrcType == SrcType.SysDict)//如果是按系统字典表
+                {
+                    try
+                    {
+                        string sql = null;
+                        string field = "BH";
+                        switch (this.EnMap.EnDBUrl.DBType)
+                        {
+                            case DBType.MSSQL:
+                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table+"'";
+                                break;
+                            case DBType.PostgreSQL:
+                                sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
+                                break;
+                            case DBType.Oracle:
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
+                                break;
+                            case DBType.MySQL:
+                                sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
+                                break;
+                            case DBType.Informix:
+                                sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
+                                break;
+                            case DBType.Access:
+                                sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
+                                break;
+                            default:
+                                throw new Exception("error");
+                        }
+                        string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
+                        if (str == "0" || str == "")
+                            str = "1";
+                        return str.PadLeft(3, '0');
+                    }
+                    catch (Exception)
+                    {
+                        return "";
+                    }
+                }
+                
+                try
+                {
+                    string sql = null;
+                    string field = "No";
+                    switch (this.EnMap.EnDBUrl.DBType)
+                    {
+                        case DBType.MSSQL:
+                            sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
+                            break;
+                        case DBType.PostgreSQL:
+                            sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
+                            break;
+                        case DBType.Oracle:
+                            sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                            break;
+                        case DBType.MySQL:
+                            sql = "SELECT CONVERT(MAX(CAST(" + field + " AS SIGNED INTEGER)),SIGNED) +1 AS No FROM " + table;
+                            break;
+                        case DBType.Informix:
+                            sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
+                            break;
+                        case DBType.Access:
+                            sql = "SELECT MAX( [" + field + "]) +1 AS  No FROM " + table;
+                            break;
+                        default:
+                            throw new Exception("error");
+                    }
+                    string str = DBAccess.RunSQLReturnValInt(sql, 1).ToString();
+                    if (str == "0" || str == "")
+                        str = "1";
+                    return str.PadLeft(3, '0');
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
+            else   //其他的生成编号默认为空
             {
                 return "";
             }
@@ -714,6 +841,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        ///编号生成规则
+        /// </summary>
+        public NoGenerModel NoGenerModel
+        {
+            get
+            {
+                return (NoGenerModel)this.GetValIntByKey(SFTableAttr.NoGenerModel);
+            }
+            set
+            {
+                this.SetValByKey(SFTableAttr.NoGenerModel, (int)value);
+            }
+        }
+        /// <summary>
         /// 编码类型
         /// </summary>
         public string CodeStructT
@@ -859,12 +1000,11 @@ namespace BP.Sys
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
 
-
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
-
-
+                map.AddDDLSysEnum(SFTableAttr.NoGenerModel, 1, "编号生成规则", true, true, SFTableAttr.NoGenerModel,
+            "@0=自定义@1=流水号@2=标签的全拼@3=标签的简拼@4=按GUID生成");
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 
@@ -934,15 +1074,7 @@ namespace BP.Sys
             }
             else
             {
-                if ( this.SrcType == Sys.SrcType.SysDict)
-                {
-                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SysDictEditData.htm?FK_SFTable=" + this.No;
-                }
-                else
-                {
-                    return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
-
-                }
+                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
             }
         }
         public string IsCanDelete()
@@ -976,68 +1108,68 @@ namespace BP.Sys
                 (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc))
             {
                 //创建dict.
-                Dict dict = new Dict();
-                dict.TableID = this.No;
-                dict.TableName = this.Name;
-                dict.OrgNo = WebUser.OrgNo;
-                dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
-                if (SystemConfig.CCBPMRunModel == 0)
-                {
-                    dict.MyPK = this.No;
-                }
-                else
-                {
-                    dict.MyPK = WebUser.OrgNo + "_" + this.No;
-                }
-                dict.Insert();
+                //Dict dict = new Dict();
+                //dict.TableID = this.No;
+                //dict.TableName = this.Name;
+                //dict.OrgNo = WebUser.OrgNo;
+                //dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
+                //if (SystemConfig.CCBPMRunModel == 0)
+                //{
+                //    dict.MyPK = this.No;
+                //}
+                //else
+                //{
+                //    dict.MyPK = WebUser.OrgNo + "_" + this.No;
+                //}
+                //dict.Insert();
 
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.Insert();
                 }
 
                 if (this.CodeStruct == CodeStruct.Tree)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_001";
+                    dtl.MyPK = this.No + "_001";
                     dtl.BH = "001";
                     dtl.Name = "Item1";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "0";
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_002";
+                    dtl.MyPK = this.No + "_002";
                     dtl.BH = "002";
                     dtl.Name = "Item2";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = dict.MyPK + "_003";
+                    dtl.MyPK = this.No + "_003";
                     dtl.BH = "003";
                     dtl.Name = "Item3";
-                    dtl.DictMyPK = dict.MyPK;
+                    dtl.FK_SFTable = this.No;
                     dtl.ParentNo = "001";
                     dtl.Insert();
                 }

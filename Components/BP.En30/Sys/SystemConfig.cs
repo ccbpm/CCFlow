@@ -127,6 +127,17 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 服务器端口
+        /// </summary>
+        public static string FTPPort
+        {
+            get
+            {
+                string str = SystemConfig.AppSettings["FTPPort"];
+                return BP.Sys.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
         /// 用户编号
         /// </summary>
         public static string FTPUserNo
@@ -151,14 +162,14 @@ namespace BP.Sys
         /// <summary>
         /// 端口号
         /// </summary>
-        public static int FTPPort
+        public static int FTPServerPort
         {
             get
             {
-                string str = SystemConfig.AppSettings["FTPPort"];
+                string str = SystemConfig.AppSettings["FTPServerPort"];
                 if (DataType.IsNullOrEmpty(str) == true)
-                    str = "21"; 
-                str= BP.Sys.Glo.String_JieMi(str);
+                    str = "21";
+                str = BP.Sys.Glo.String_JieMi(str);
                 return int.Parse(str);
             }
         }
@@ -400,10 +411,7 @@ namespace BP.Sys
                 else
                 {
                     if (tmp.Contains("\\"))
-                    {
                         tmp.Replace("\\", "");
-                    }
-
                     tmp = PathOfWebApp + tmp + "\\DataUser\\";
                 }
                 return tmp;
@@ -514,16 +522,9 @@ namespace BP.Sys
             get
             {
                 if (SystemConfig.IsBSsystem)
-                {
                     return HttpContextHelper.PhysicalApplicationPath;
-                }
-                else
-                {
-                    if (SystemConfig.SysNo == "FTA")
-                        return AppDomain.CurrentDomain.BaseDirectory;
-                    else
-                        return AppDomain.CurrentDomain.BaseDirectory + "..\\..\\";
-                }
+
+                return AppDomain.CurrentDomain.BaseDirectory + "..\\..\\";
             }
         }
         #endregion

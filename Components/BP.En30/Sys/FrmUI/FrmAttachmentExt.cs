@@ -21,7 +21,8 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.IsView = true;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
+                if (BP.Web.WebUser.No.Equals("admin") 
+                    || BP.Web.WebUser.IsAdmin == true)
                 {
                     uac.IsUpdate = true;
                     uac.IsDelete = true;
@@ -320,10 +321,7 @@ namespace BP.Sys.FrmUI
             {
                 return this.GetValStringByKey(FrmAttachmentAttr.NoOfObj);
             }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.NoOfObj, value);
-            }
+           
         }
         /// <summary>
         /// Y
@@ -478,228 +476,6 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
-        #region weboffice文档属性(参数属性)
-        /// <summary>
-        /// 是否启用锁定行
-        /// </summary>
-        public bool IsRowLock
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsRowLock, false);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsRowLock, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用打印
-        /// </summary>
-        public bool IsWoEnablePrint
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnablePrint);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnablePrint, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用只读
-        /// </summary>
-        public bool IsWoEnableReadonly
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableReadonly);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableReadonly, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用修订
-        /// </summary>
-        public bool IsWoEnableRevise
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableRevise);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableRevise, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用保存
-        /// </summary>
-        public bool IsWoEnableSave
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSave);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSave, value);
-            }
-        }
-        /// <summary>
-        /// 是否查看用户留痕
-        /// </summary>
-        public bool IsWoEnableViewKeepMark
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableViewKeepMark);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableViewKeepMark, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用weboffice
-        /// </summary>
-        public bool IsWoEnableWF
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableWF);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableWF, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用套红
-        /// </summary>
-        public bool IsWoEnableOver
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableOver);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableOver, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用签章
-        /// </summary>
-        public bool IsWoEnableSeal
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSeal);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableSeal, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用公文模板
-        /// </summary>
-        public bool IsWoEnableTemplete
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableTemplete);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableTemplete, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否记录节点信息
-        /// </summary>
-        public bool IsWoEnableCheck
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableCheck);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableCheck, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否插入流程图
-        /// </summary>
-        public bool IsWoEnableInsertFlow
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFlow);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFlow, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否插入风险点
-        /// </summary>
-        public bool IsWoEnableInsertFengXian
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFengXian);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableInsertFengXian, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否启用留痕模式
-        /// </summary>
-        public bool IsWoEnableMarks
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableMarks);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableMarks, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否插入风险点
-        /// </summary>
-        public bool IsWoEnableDown
-        {
-            get
-            {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableDown);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.IsWoEnableDown, value);
-            }
-        }
-
-        #endregion weboffice文档属性
-
         #region 快捷键
         /// <summary>
         /// 是否启用快捷键
@@ -844,24 +620,6 @@ namespace BP.Sys.FrmUI
                 //    "@0=当前组件ID@1=指定的组件ID");
                 #endregion 权限控制。
 
-                #region WebOffice控制方式。
-                map.AddBoolean(FrmAttachmentAttr.IsRowLock, true, "是否启用锁定行", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSave, true, "是否启用保存", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableReadonly, true, "是否只读", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableRevise, true, "是否启用修订", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableViewKeepMark, true, "是否查看用户留痕", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnablePrint, true, "是否打印", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableSeal, true, "是否启用签章", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableOver, true, "是否启用套红", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableTemplete, true, "是否启用公文模板", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableCheck, true, "是否自动写入审核信息", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFlow, true, "是否插入流程", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableInsertFengXian, true, "是否插入风险点", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableMarks, true, "是否启用留痕模式", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsWoEnableDown, true, "是否启用下载", true, true);
-                #endregion WebOffice控制方式。
-
                 #region 节点相关
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DtlOpenType, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                 //    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
@@ -925,12 +683,12 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP,  SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)
             {
-                return "err@连接失败:" + ex.Message;
+                return "err@连接失败:" + ex.Message+" ,配置信息请参考,系统配置文件.";
             }
         }
         /// <summary>
@@ -970,9 +728,12 @@ namespace BP.Sys.FrmUI
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
             }
 
+            if (this.HisCtrlWay != AthCtrlWay.WorkID)
+                this.AthUploadWay = AthUploadWay.Interwork;
+
 
             #region 处理分组.
-            //更新相关的分组信息.
+                //更新相关的分组信息.
             if (this.IsVisable == true && this.FK_Node == 0)
             {
                 GroupField gf = new GroupField();
@@ -1007,19 +768,6 @@ namespace BP.Sys.FrmUI
         }
         protected override bool beforeInsert()
         {
-            this.IsWoEnableWF = true;
-
-            this.IsWoEnableSave = false;
-            this.IsWoEnableReadonly = false;
-            this.IsWoEnableRevise = false;
-            this.IsWoEnableViewKeepMark = false;
-            this.IsWoEnablePrint = false;
-            this.IsWoEnableOver = false;
-            this.IsWoEnableSeal = false;
-            this.IsWoEnableTemplete = false;
-            this.IsToHeLiuHZ = true;
-            this.IsHeLiuHuiZong = true;
-
             if (this.FK_Node == 0)
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             else

@@ -36,7 +36,6 @@ namespace BP.Sys
             if (1 == 2)
                 throw new Exception("@执行错误xxxxxx.");
 
-
             //如果你要向用户提示执行成功的信息，就给他赋值，否则就不必赋值。
             this.SucessInfo = "执行成功提示.";
         }

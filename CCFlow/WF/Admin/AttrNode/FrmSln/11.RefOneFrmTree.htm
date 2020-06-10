@@ -75,36 +75,12 @@
 
             var frm = new Entity("BP.Sys.MapData", nodeFrmID);
 
-            //设置已经选定的表单库表单.
-            var html = "<b>" + node.NodeFrmID + ":" + frm.Name + ",存储表:" + frm.PTable + "</b>";
-            var flow = new Entity("BP.WF.Flow", node.FK_Flow);
+            //设置已经选定的表单库表单
+            $("#MyFrm").html(node.NodeFrmID + ":" + frm.Name);
 
-            if (flow.PTable != frm.PTable)
-                html + "<a href=\"javascript:SetFlowPTable('" + node.FK_Flow + "','" + frm.PTable + "')\" >您绑定的表单库的表单与当前流程的业务表单不一致，我们建议您设置为一致.</a>";
-
-            $("#MyFrm").html(html);
+            //  BindSln();
 
         });
-
-        //设置流程业务表与表单的业务表一致.
-        function SetFlowPTable(flowNo, ptable) {
-            var msg = "";
-            msg += "警告:如果您执行该操作，将会有如下问题.";
-            msg += "\t\n 1.系统将会扩展一些流程系统字段比如:Title,Starter, WFState,BillNo 等加到表:" + ptable + "里面去.";
-            msg += "\t\n 2.如果该表单上需要这些字段,就可以直接使用.";
-            msg += "\t\n 3.比如:您需要增加一个自动编号列就可以使用BillNo来完成.";
-            msg += "\t\n 4.在处理业务过程中，不必要关联流程业务表NDxxxRpt来管理流程状态等字段信息.";
-            if (confirm(msg) == false)
-                return;
-
-            var flow = new Entity("BP.WF.Flow", flowNo);
-            flow.PTable = ptable;
-            flow.Update();
-            flow.DoMethodReturnString("");
-            alert('系统已经设置成功.');
-
-            return;
-        }
 
         function EditFrmNode(mypk) {
 
@@ -192,9 +168,14 @@
             <!--<li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()"> </select> </li>
             <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
                 -->
-            <li> <b>已经选择的表单:</b> <font color="green"> <div id="MyFrm"></div></font> </li>
+            <li>已经选择的表单: <div id="MyFrm"></div> </li>
             <li> <button onclick="SetFrm()" id="Btn_Setting"> <img style="width:14px; height:14px;" src="../../../Img/Btn//Setting.png" />  设置表单 </button>  </li>
 
+            <li><font color="green"><b>不成文的开发规范</b></font></li>
+            <li>1.设置的表单所有的字段与元素是只读的,并且字段不设置动态的默认值, 比如@WebUser.* 。</li>
+            <li>2.使用下面的设置字段权限设置[为该表单的元素设置权限],然后执行批量设置. </li>
+            <li>3.一般来说，开始节点设置为自定义方案，其他节点设置为只读方案. </li>
+            <li>4.在批量设置里，使用不同的签批组件对应不同的节点. </li>
 
         </ul>
 
@@ -212,20 +193,18 @@
 
     </fieldset>
 
-    <fieldset>
-        <legend>不成文的开发规范</legend>
-        <ul>
-            <li>设置的表单所有的字段与元素是只读的,并且字段不设置动态的默认值, 比如@WebUser.* 。</li>
-            <li>2.使用下面的设置字段权限设置[为该表单的元素设置权限],然后执行批量设置. </li>
-            <li>3.一般来说，开始节点设置为自定义方案，其他节点设置为只读方案. </li>
-            <li>4.在批量设置里，使用不同的签批组件对应不同的节点. </li>
-        </ul>
+    <!--<fieldset>
+        <legend>其他节点</legend>
+        <div id="sln"></div>
+    </fieldset>-->
 
-        <legend>如何设置表单的自动编号？</legend>
+
+
+    <fieldset>
+        <legend id="help">说明</legend>
         <ul>
-            <li>1. 让流程的的业务存储表与表单的表保持一致,请参考设置.</li>
-            <li>2. 在表单上创建一个 BillNo 的只读字段.</li>
-            <li>3. 打开流程属性，设置编号生成规则, 设置该编号的规则，就可以作用到当前表单上.</li>
+            <li>表单库里选择一个表单绑定到当前节点上.</li>
+            <li>该表单的工作方式与内置表单工作模式一致.</li>
         </ul>
     </fieldset>
 

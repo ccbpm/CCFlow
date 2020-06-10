@@ -1045,6 +1045,47 @@ namespace BP.Sys
                 }
             }
         }
+
+        public string GetDataTableByField(string field,string paras)
+        {
+            //执行SQL获取
+            if(this.DBType.Equals("0") == true && this.Row.ContainsKey(field) == true)
+            {
+                string sql = this.GetValStringByKey(field);
+                if (DataType.IsNullOrEmpty(sql) == true)
+                    return "err@字段" + field+"执行的SQL为空";
+
+                sql = sql.Replace("~", "'");
+                
+                if(DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
+                {
+                    string[] strs = paras.Split('@');
+                    foreach (string key in strs)
+                    {
+                        if (DataType.IsNullOrEmpty(key) == true)
+                            continue;
+                        var attrKeyOfEn = key.Split('=')[0];
+                        var val = key.Split('=')[1];
+                        sql= sql.Replace("@" + attrKeyOfEn, val);
+                        if (sql.Contains("@") == false)
+                            break;
+                           
+                    }
+                }
+                else
+                {
+                    sql = sql.Replace("@Key", paras);
+                }
+                    
+                
+                if(sql.Contains("@") == true)
+                    return "err@字段" + field + "执行的SQL中有@符号";
+                return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
+
+            }
+            string msg = this.DBType.Equals("1") == true ? "执行url返回JSON" : "执行JS返回的JSON";
+            return "err@执行有误，是根据" + msg;
+        }
     }
     /// <summary>
     /// 扩展s

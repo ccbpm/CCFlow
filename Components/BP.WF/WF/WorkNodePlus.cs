@@ -24,6 +24,7 @@ namespace BP.WF
         /// <param name="gwf"></param>
         public static void GenerWorkerListDelRole(Node nd,GenerWorkFlow gwf)
         {
+            //不删除.
             if (nd.GenerWorkerListDelRole == 0)
                 return;
 
@@ -58,23 +59,25 @@ namespace BP.WF
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
                 if (nss.Count == 0)
-                    return;
-                //获得要删除的人员.
-                string sql = " SELECT FK_Emp FROM WF_GenerWorkerlist WHERE ";
-                sql += " WHERE ";
-                sql += " WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=0 ";
+                    throw new Exception("err@流程配置错误，您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
 
-                //获得要删除的数据.
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
+                //求出来，节点配置的岗位，与当前人员岗位的交集.
+                string sql = " SELECT A.FK_Station FROM WF_NodeStation A, Port_DeptEmpStation B ";
+                sql += " WHERE A.FK_Station = B.FK_Station AND A.FK_Node ="+gwf.FK_Node+"  AND B.FK_Emp = '"+WebUser.No+"' ";
+
+                //当前的待办人员集合.
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
+                foreach (GenerWorkerList item in gwls)
                 {
-                    string empNo = dr[0].ToString();
-                    sql = "UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + empNo + "'";
-                    DBAccess.RunSQL(sql);
+                    if (item.IsPassInt != 0)
+                        continue;
+                    string mysql = "SELECT * FROM Port_DeptEmpStation WHERE FK_Emp='' AND FK_Station IN (" + sql + ")";
+                    DataTable dt = DBAccess.RunSQLReturnTable(mysql);
+                    if (dt.Rows.Count != 0)
+                        item.Delete();
                 }
             }
-
         }
-
     }
 }

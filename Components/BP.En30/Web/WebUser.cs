@@ -689,6 +689,10 @@ namespace BP.Web
         {
             get
             {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    return "";
+
+
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
                 {
@@ -711,6 +715,9 @@ namespace BP.Web
         {
             get
             {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    return "";
+
                 string val = GetValFromCookie("OrgName", null, true);
                 if (val == null)
                 {

@@ -16,21 +16,28 @@
 </head>
 <body>
     <script type="text/javascript">
-        var currtab = GetQueryString("CurrTab");
-        var fk_node = GetQueryString("FK_Node");
-        var fk_flow = GetQueryString("FK_Flow");
-        var workid = GetQueryString("WorkID");
-        var fid = GetQueryString("FID");
-        var tpo = {};
+     
 
         $(function () {
 
-            InitPage();
+            var mypk = GetQueryString("MyPk");
+            var handler = new HttpHandler("BP.DOC.App_Page");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("EditTrack_Msg");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                return;
+            }
+
+            data = JSON.parse(data);
+            alert(data);
 
         });
 
         function Save()
         {
+            alert("ss");
 
         }
 
@@ -40,14 +47,14 @@
         <table id="Table1" class="table table-hover" style="width:90%">
             <tr>
                 <td>
-                    <textarea>
+                    <input  type="text" id="Msg"/>
+                 
 
-</textarea>
                 </td>
             </tr>
         </table>
 
-        <button> 保存 </button>
+     <a href="javascript:Save();">保存</a>
 
     </div>
 

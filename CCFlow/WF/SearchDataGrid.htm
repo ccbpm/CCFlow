@@ -104,7 +104,7 @@
         var _tspan = GetQueryString("TSpan");
         var _flowNo = GetQueryString("FK_Flow");
         var pageInfo;
-        var keyWord;
+        var keyWord="";
         var IsSearchClick = false;//是否点的查询 : fasle 不是 true 是
 		var	 IsPageClick = false;//是否是点的页数 : false 不是 true 是
         $(function () {
@@ -140,7 +140,9 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("TSpan", _tspan);
             handler.AddPara("FK_Flow", _flowNo);
-            handler.AddPara("KeyWord", keyWord);
+            if (keyWord != undefined) {
+                handler.AddPara("KeyWord", keyWord);
+            }
             handler.AddPara("pageIdx", pageIdx);
 
             handler.AddPara("pageSize", pageSize);

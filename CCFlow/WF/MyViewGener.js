@@ -475,7 +475,7 @@ function UnSend() {
     if (window.confirm('您确定要撤销本次发送吗？') == false)
         return;
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_View");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("MyView_UnSend");
 
@@ -608,21 +608,30 @@ function GenerWorkNode() {
     }
 
     if (node.FormType == 1) {
+        Skip.addJs("./MyFlowFree2017.js");
         GenerFreeFrm(flowData);  //自由表单.
     }
 
-    if (node.FormType == 12)
+    if (node.FormType == 12) {
+        Skip.addJs("./CCForm/FrmDevelop.js");
+        $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+    }
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     if (node.FormType == 11) {
         if (flowData.FrmNode[0] != null && flowData.FrmNode[0] != undefined)
             if (flowData.FrmNode[0].FrmType == 0)
                 GenerFoolFrm(flowData); //傻瓜表单.
-        if (flowData.FrmNode[0].FrmType == 1)
+        if (flowData.FrmNode[0].FrmType == 1) {
+            Skip.addJs("./MyFlowFree2017.js");
             GenerFreeFrm(flowData);
-        if (flowData.FrmNode[0].FrmType == 8)
+        }
+        if (flowData.FrmNode[0].FrmType == 8) {
+            Skip.addJs("./CCForm/FrmDevelop.js");
+            $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             GenerDevelopFrm(flowData, flowData.FrmNode[0].FK_Frm);
+        }
     }
 
     //公文表单

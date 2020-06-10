@@ -1,63 +1,84 @@
 ﻿
+var wf_node = null;
 $(function () {
-    var barHtml;
-
+    var barHtml="";
+    var data;
+    //MyCC
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
-        barHtml = handler.DoMethodReturnString("InitToolBar");
+        data = handler.DoMethodReturnString("InitToolBar");
         $('#ToolBar').html(barHtml);
+    //MyView
+    } else if ($("#JS_MyView").length == 1){
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
+        handler.AddUrlData();
+        data = handler.DoMethodReturnString("InitToolBar");
+    //MyFlow   
     } else {
-        if ($("#JS_MyView").length == 1) {
-
-            var _html = "";
-            _html += '<input name="Close" type="button" value="关闭" enable="true" onclick="Close()"/>';
-            _html += '<input name="PackUp_html" type="button" value="打印Html" enable="true" />';
-            _html += '<input name="PackUp_pdf" type="button" value="打印PDF" enable="true" />';
-            _html += '<input name="PackUp_zip" type="button" value="打包下载" enable="true" />';
-            var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
-            if (gwf.WFSta != 1) {//流程未结束
-                _html += '<input name="UnSend" type="button" value="撤销" enable="true" onclick="UnSend()" />';
-                _html += '<input name="Press" type="button" value="催办" enable="true"  onclick="Press()"/>';
-            }
-            _html += '<input name="DocWord" type="button" value="公文" enable="true" />';
-            $('#ToolBar').html(_html);
-
-        } else {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddUrlData();
-           var data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
-            if (data.indexOf("err@") != -1) {
-                alert(data);
-                console.log(data);
-                return;
-            }
-            data = JSON.parse(data);
-            var toolBarHtml = data.ToolBar[0].tooBarHtml;
-            $('#ToolBar').html(toolBarHtml);
-
-            InitToNodeDDL(data);
-        }
-
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData();
+        data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
     }
+
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        console.log(data);
+        return;
+    }
+    data = JSON.parse(data);
+
+    //当前节点的信息
+    if(data.WF_Node!=undefined)
+        wf_node = data.WF_Node[0];
+
+    var toolBars = data.ToolBar;
+    if (toolBars == undefined)
+        toolBars = data;
+    var _html = "";
+    $.each(toolBars, function (i, toolBar) {
+        var Oper = "";
+        if (toolBar.Oper != "")
+            Oper = "onclick=\"" + toolBar.Oper + "\"";
+
+        if (toolBar.No == "NodeToolBar") {//自定义工具栏按钮
+
+            var Icon = toolBar.Icon;
+            //自定义的默认按钮
+            var img = "<img src='Img/Btn/CH.png' width='22px' height='22px'>&nbsp;"
+            //有上传的icon,否则用默认的
+            if (Icon != "" && Icon != undefined) {
+                var index = Icon.indexOf("\DataUser");
+                if (index != -1) 
+                    Icon = Icon.replace(Icon.substr(0, index), "../");
+                img = "<img src='" + Icon + "' width='22px' height='22px'>&nbsp;";
+            }
+            
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
+
+        }
+        else {
+
+            _html += "<Button type=button name='" + toolBar.No + "' enable=true " + Oper + "><img src='Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+        }
+    });
+    $('#ToolBar').html(_html);
 
 
     //按钮旁的下来框
-   // if ("undefined" != typeof flowData && flowData != null && flowData != undefined) 
-      //  InitToNodeDDL(flowData);
+    if (wf_node != null  && wf_node.IsBackTrack == 0)
+        InitToNodeDDL(data);
    
 
     if ($('[name=Return]').length > 0) {
-        $('[name=Return]').attr('onclick', '');
-        $('[name=Return]').unbind('click');
         $('[name=Return]').bind('click', function () {
             //增加退回前的事件
             if (typeof beforeReturn != 'undefined' && beforeReturn instanceof Function)
                 if (beforeReturn() == false)
                     return false;
 
-            if (Save() == false) return;
+            if (Save() == false)
+                return;
             initModal("returnBack");
             $('#returnWorkModal').modal().show();
         });
@@ -65,8 +86,6 @@ $(function () {
 
     //流转自定义
     if ($('[name=TransferCustom]').length > 0) {
-        $('[name=TransferCustom]').attr('onclick', '');
-        $('[name=TransferCustom]').unbind('click');
         $('[name=TransferCustom]').bind('click', function () {
             initModal("TransferCustom");
             $('#returnWorkModal').modal().show();
@@ -75,71 +94,47 @@ $(function () {
 
 
     if ($('[name=Shift]').length > 0) {
-
-        $('[name=Shift]').attr('onclick', '');
-        $('[name=Shift]').unbind('click');
         $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Btn_WorkCheck]').length > 0) {
-
-        $('[name=Btn_WorkCheck]').attr('onclick', '');
-        $('[name=Btn_WorkCheck]').unbind('click');
         $('[name=Btn_WorkCheck]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Askfor]').length > 0) {
-        $('[name=Askfor]').attr('onclick', '');
-        $('[name=Askfor]').unbind('click');
         $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Track]').length > 0) {
-        $('[name=Track]').attr('onclick', '');
-        $('[name=Track]').unbind('click');
         $('[name=Track]').bind('click', function () { initModal("Track"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=HuiQian]').length > 0) {
-        $('[name=HuiQian]').attr('onclick', '');
-        $('[name=HuiQian]').unbind('click');
         $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=AddLeader]').length > 0) {
-        $('[name=AddLeader]').attr('onclick', '');
-        $('[name=AddLeader]').unbind('click');
         $('[name=AddLeader]').bind('click', function () { initModal("AddLeader"); $('#returnWorkModal').modal().show(); });
     }
 
 
     if ($('[name=CC]').length > 0) {
-        $('[name=CC]').attr('onclick', '');
-        $('[name=CC]').unbind('click');
         $('[name=CC]').bind('click', function () { initModal("CC"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_zip]').length > 0) {
-        $('[name=PackUp_zip]').attr('onclick', '');
-        $('[name=PackUp_zip]').unbind('click');
         $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_html]').length > 0) {
-        $('[name=PackUp_html]').attr('onclick', '');
-        $('[name=PackUp_html]').unbind('click');
         $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=PackUp_pdf]').length > 0) {
-        $('[name=PackUp_pdf]').attr('onclick', '');
-        $('[name=PackUp_pdf]').unbind('click');
         $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=SelectAccepter]').length > 0) {
-        $('[name=SelectAccepter]').attr('onclick', '');
-        $('[name=SelectAccepter]').unbind('click');
         $('[name=SelectAccepter]').bind('click', function () {
             initModal("accepter");
             $('#returnWorkModal').modal().show();
@@ -147,8 +142,6 @@ $(function () {
     }
 
     if ($('[name=DBTemplate]').length > 0) {
-        $('[name=DBTemplate]').attr('onclick', '');
-        $('[name=DBTemplate]').unbind('click');
         $('[name=DBTemplate]').bind('click', function () {
             initModal("DBTemplate");
             $('#returnWorkModal').modal().show();
@@ -156,8 +149,6 @@ $(function () {
     }
 
     if ($('[name=Delete]').length > 0) {
-        $('[name=Delete]').attr('onclick', '');
-        $('[name=Delete]').unbind('click');
         $('[name=Delete]').bind('click', function () {
             //增加删除前事件
             if (typeof beforeDelete != 'undefined' && beforeDelete instanceof Function)
@@ -169,71 +160,33 @@ $(function () {
     }
 
     if ($('[name=CH]').length > 0) {
-
-        $('[name=CH]').attr('onclick', '');
-        $('[name=CH]').unbind('click');
         $('[name=CH]').bind('click', function () { initModal("CH"); $('#returnWorkModal').modal().show(); });
     }
 
     if ($('[name=Note]').length > 0) {
-
-        $('[name=Note]').attr('onclick', '');
-        $('[name=Note]').unbind('click');
         $('[name=Note').bind('click', function () { initModal("Note"); $('#returnWorkModal').modal().show(); });
     }
 
     //公文
     if ($('[name=DocWord]').length > 0) {
-
-        $('[name=DocWord]').attr('onclick', '');
-        $('[name=DocWord]').unbind('click');
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
    
-    var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-    if ($('[name=Save]').length > 0) {
-        $('[name=Save]').attr('onclick', '');
-        $('[name=Save]').unbind('click');
-        $('[name=Save').bind('click', function () {
-            if (SysCheckFrm() == false)
-               return false;
-            Save();
-            SaveEnd(node.FormType);
-        });
-    }
-
-    if ($('[name=Send]').length > 0) {
-        $('[name=Send]').attr('onclick', '');
-        $('[name=Send]').unbind('click');
-        $('[name=Send').bind('click', function () {
-            var btnLab = new Entity("BP.WF.Template.BtnLab", GetQueryString("FK_Node"));
-            if (btnLab.SendJS != "") {
-                //引入相关的js
-                btnLab.SendJS;
-            }
-            if (SysCheckFrm() == false)
-                return false;
-            Send(false, node.FormType);
-        });
-    }
-
-    if ($('[name=SendHuiQian]').length > 0) {
-        $('[name=SendHuiQian]').attr('onclick', '');
-        $('[name=SendHuiQian]').unbind('click');
-        $('[name=SendHuiQian').bind('click', function () {
-            var btnLab = new Entity("BP.WF.Template.BtnLab", GetQueryString("FK_Node"));
-            if (btnLab.SendJS != "") {
-                //引入相关的js
-                btnLab.SendJS;
-            }
-            if (SysCheckFrm() == false)
-                return false;
-            Send(true, node.FormType);
-        });
-    }
-
 });
+//添加保存动态
+function SaveOnly() {
 
+    $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;正在保存...");
+    
+    try {
+        Save();
+    } catch (e) {
+        alert(e);
+        return;
+    }
+    $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;保存成功");
+    setTimeout(function () { $("button[name=Save]").html("<img src='Img/Btn/Save.png' width='22px' height='22px'>&nbsp;保存"); }, 1000);
+}
 function setModalMax() {
     //设置bootstrap最大化窗口
     var w = ddocument.body.clientWidth - 40;
@@ -251,14 +204,13 @@ function initModal(modalType, toNode,url) {
             }
         }
     }
-    
 
 
     //初始化退回窗口的SRC.
     var html = '<div style=" height:auto;" class="modal fade" id="returnWorkModal" data-backdrop="static">' +
         '<div class="modal-dialog" style="border-radius:0px;width:920px;">'
         + '<div class="modal-content" id="viewModal" style="border-radius:0px;height:560px;">'
-        + '<div class="modal-header" style="background-color:#f2f2f2">'
+        + '<div class="modal-header" style="background-color:#f2f2f2;margin-bottom:8px">'
         + '<button id="ClosePageBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
         + '<button id="MaxSizeBtn" type="button" style="color:#000000;float: right;background: transparent;border: none;" aria-hidden="true" >□</button>'
         + '<h4 class="modal-title" id="modalHeader" style="color:#000000;">提示信息</h4>'
@@ -270,7 +222,11 @@ function initModal(modalType, toNode,url) {
         + '</div><!-- /.modal-dialog -->'
         + '</div>';
 
-    $('body').append($(html));
+    if ($("#returnWorkModal").length == 0)
+        $('body').append($(html));
+
+    if ($("#returnWorkModal .modal-footer").length == 1)
+        $("#returnWorkModal .modal-footer").remove();
    
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
@@ -289,7 +245,24 @@ function initModal(modalType, toNode,url) {
                 $('#modalHeader').text("提示信息");
                 //按百分比自适应
                 SetPageSize(50, 60);
-                modalIframeSrc = ccbpmPath+"/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random()
+                var node = new Entity("BP.WF.Template.NodeExt", paramData.FK_Node);
+
+                var info = "";
+                if (node.ReturnField == "")
+                {
+                    if ($("#WorkCheck_Doc").length == 1)
+                        info = $("#WorkCheck_Doc").val();
+                }
+
+                if (info=="" && node.ReturnField != "") {
+                    if ($("#" + node.ReturnField).length == 1)
+                        info = $("#" + node.ReturnField).val();
+                    if (info == undefined && $("#TB_" + node.ReturnField).length == 1)
+                        info = $("#TB_" + node.ReturnField).val();
+                    if (info == undefined)
+                        info = "";
+                }
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random()
                 break;
             case "Send":
                 SetChildPageSize(80, 80);
@@ -372,12 +345,60 @@ function initModal(modalType, toNode,url) {
 
             //发送选择接收节点和接收人                
             case "sendAccepter":
-                $('#modalHeader').text("选择接受人");
-                SetPageSize(60, 60);
+                //获取到达节点
+                var nodeOne = new Entity("BP.WF.Node", toNode);
+
+                $('#modalHeader').text("选择接受人(到达节点:" + nodeOne.Name+")");
+                SetPageSize(80, 80);
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "SelectNodeUrl":
                 modalIframeSrc = url;
+                break;
+
+            case "BySelfUrl"://接收人规则自定义URL
+                SetPageSize(80, 80);
+                modalIframeSrc = url;
+                if ($("#returnWorkModal .modal-footer").length == 0) {
+                    var footBtn = $('<div class="modal-footer"><div>');
+                    $("#returnWorkModal .modal-body").after(footBtn);
+                    var footerOK = $('<button type="button" class="Btn" data-dismiss="modal"> 发送</button >');
+                    footerOK.click(function () {
+
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+                        handler.AddUrlData();
+                        var data = handler.DoMethodReturnString("Send");
+                        if (data.indexOf("err@") != -1) {
+                            var reg = new RegExp('err@', "g")
+                            var data = data.replace(reg, '');
+
+                            $(".modal-body").html(data);
+                            $('#MessageDiv').modal().show();
+                            setToobarEnable();
+                            return;
+                        }
+
+                        OptSuc(data);
+                    });
+
+                    var footerClose = $('<button type="button" class="Btn" data - dismiss="modal" > 取消</button >');
+                    footerClose.click(function () {
+                        var sels = new Entities("BP.WF.Template.SelectAccpers");
+                        sels.Delete("WorkID", GetQueryString("WorkID"), "FK_Node", getQueryStringByNameFromUrl(url, "ToNode"));
+                        $("#returnWorkModal").modal('hide');
+
+                    });
+
+                   
+                    footBtn.append(footerOK).append(footerClose);
+                }
+                $(".modal-content").css("height", "auto");
+                
+                break;
+            case "sendAccepterOfOrg":
+                $('#modalHeader').text("选择接受人");
+                SetPageSize(80, 80);
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "DBTemplate":
                 $('#modalHeader').text("历史发起记录&模版");
@@ -429,12 +450,12 @@ function setToobarEnable() {
 }
 
 //初始化发送节点下拉框
-function InitToNodeDDL(flowData) {
+function InitToNodeDDL(JSonData) {
 
-    if (flowData.ToNodes == undefined)
+    if (JSonData.ToNodes == undefined)
         return;
 
-    if (flowData.ToNodes.length == 0)
+    if (JSonData.ToNodes.length == 0)
         return;
 
     //如果没有发送按钮，就让其刷新,说明加载不同步.
@@ -451,7 +472,7 @@ function InitToNodeDDL(flowData) {
             return;
     }
     var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-    $.each(flowData.ToNodes, function (i, toNode) {
+    $.each(JSonData.ToNodes, function (i, toNode) {
         var opt = "";
         if (toNode.IsSelected == "1") {
             var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
@@ -473,7 +494,8 @@ function InitToNodeDDL(flowData) {
  * @param {isHuiQian} isHuiQian 是否是会签模式
  * @param {formType} formType 表单方案模式
  */
-function Send(isHuiQian,formType) {
+function Send(isHuiQian, formType) {
+
     SetPageSize(80, 80);
 
     /**发送前处理的信息 Start**/
@@ -500,10 +522,17 @@ function Send(isHuiQian,formType) {
             return;
 
     /**发送前处理的信息 End**/
+    if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack== 0) {
+        var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") +"&IsSend=0"+ "&s=" + Math.random();
+       
+        initModal("SelectNodeUrl", null, url); $('#returnWorkModal').modal().show();
+        return;
+    }
 
     window.hasClickSend = true; //标志用来刷新待办.
 
     var toNodeID = 0;
+
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
@@ -515,18 +544,51 @@ function Send(isHuiQian,formType) {
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
             } else {
+
                 initModal("sendAccepter", toNodeID);
                 $('#returnWorkModal').modal().show();
             }
             return false;
-        } else {
+        }
+        if (selectToNode.IsSelectEmps == "2") {
+            Save(1); //执行保存.
             if (isHuiQian == true) {
-                Save(1); //执行保存.
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
-                return false;
+            } else {
+                var url = selectToNode.DeliveryParas;
+                if (url != null && url != undefined && url!= "") {
+                    url = url + "?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNodeID + "&s=" + Math.random();
+                    initModal("BySelfUrl", toNodeID, url);
+                    $('#returnWorkModal').modal().show();
+                    return false;
+                }
+
+                
             }
+            
         }
+
+        if (selectToNode.IsSelectEmps == "3") {
+            Save(1); //执行保存.
+            if (isHuiQian == true) {
+                initModal("HuiQian", toNodeID);
+                $('#returnWorkModal').modal().show();
+            } else {
+                initModal("sendAccepterOfOrg", toNodeID);
+                $('#returnWorkModal').modal().show();
+            }
+
+            return false;
+        }
+       
+        if (isHuiQian == true) {
+            Save(1); //执行保存.
+            initModal("HuiQian", toNodeID);
+            $('#returnWorkModal').modal().show();
+            return false;
+        }
+        
     }
 
     //执行发送.
@@ -576,14 +638,39 @@ function execSend(toNodeID, formType) {
         return;
     }
 
+    
+
     if (data.indexOf('SelectNodeUrl@') == 0) {
         var url = data;
         url = url.replace('SelectNodeUrl@', '');
-        //window.location.href = url;
         initModal("SelectNodeUrl",null,url); $('#returnWorkModal').modal().show();
         return;
     }
+
+    if (data.indexOf('BySelfUrl@') == 0) {  //发送成功时转到自定义的URL 
+        var url = data;
+        url = url.replace('BySelfUrl@', '');
+        initModal("BySelfUrl", null, url); $('#returnWorkModal').modal().show();
+        return;
+    }
+
+
     if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
+
+        if (data.indexOf("AccepterOfOrg")!=-1) {
+            var params = data.split("&");
+
+            for (var i = 0; i < params.length; i++) {
+                if (params[i].indexOf("ToNode") == -1)
+                    continue;
+
+                toNodeID = params[i].split("=")[1];
+                break;
+            }
+            initModal("sendAccepterOfOrg", toNodeID);
+            $('#returnWorkModal').modal().show();
+            return;
+        }
 
         if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
 
@@ -601,6 +688,7 @@ function execSend(toNodeID, formType) {
             $('#returnWorkModal').modal().show();
             return;
         }
+        
 
         var url = data;
         url = url.replace('url@', '');
@@ -614,6 +702,12 @@ function execSend(toNodeID, formType) {
 //发送 退回 移交等执行成功后转到  指定页面
 var interval;
 function OptSuc(msg) {
+    if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+        window.parent.WindowCloseReloadPage(msg);
+    } else {
+        if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+            WindowCloseReloadPage(msg);
+    }
 
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
@@ -624,14 +718,14 @@ function OptSuc(msg) {
     var html = '<div class="modal fade" id="msgModal" data-backdrop="static">'
         + '<div class="modal-dialog">'
         + '<div class="modal-content" style="border-radius: 0px;">'
-        + '<div class="modal-header" style="background:#1d7dd4;">'
+        + '<div class="modal-header" style="background:#f2f2f2;">'
         + '<button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: #0000007a;display: none;">&times;</button>'
-        + '<h4 class="modal-title" style="color:white;">提示信息</h4>'
+        + '<h4 class="modal-title" style="color:#000;">提示信息</h4>'
         + '</div>'
         + '<div class="modal-body" style="text-align: left; word-wrap: break-word;">'
-        + '<div style="width:100%; border: 0px; height: 200px;" id="msgModalContent" name="iframePopModalForm"></div>'
+        + '<div style="width:100%; border: 0px; height: 200px;overflow-y:auto" id="msgModalContent" name="iframePopModalForm"></div>'
         + '<div style="text-align: right;">'
-        + ' <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">确定(5秒)</button >'
+        + ' <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">确定(30秒)</button >'
         + '</div>'
         + '</div>'
         + '</div><!-- /.modal-content -->'
@@ -673,11 +767,13 @@ function OptSuc(msg) {
     interval = setInterval("clock()", 1000);
 }
 
-var num = 30;
+//var num = 30;
+
 function clock() {
-    num >= 0 ? num-- : clearInterval(interval);
-    $("#btnMsgModalOK").html("确定(" + num + "秒)");
-    if (num == 0)
+    
+    WF_WorkOpt_LeftSecond >= 0 ? WF_WorkOpt_LeftSecond-- : clearInterval(interval);
+    $("#btnMsgModalOK").html("确定(" + WF_WorkOpt_LeftSecond + "秒)");
+    if (WF_WorkOpt_LeftSecond == 0)
         closeWindow();
 }
 
@@ -685,19 +781,28 @@ function clock() {
  * 关闭弹出消息页面同时关闭父页面
  */
 function closeWindow() {
-    if (window.opener) {
+    try {
+        if (window.opener) {
 
-        if (window.opener.name && window.opener.name == "main") {
-            window.opener.location.href = window.opener.location.href;
-            if (window.opener.top && window.opener.top.leftFrame) {
-                window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+            if (window.opener.name && window.opener.name == "main") {
+                window.opener.location.href = window.opener.location.href;
+                if (window.opener.top && window.opener.top.leftFrame) {
+                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                }
+            } else if (window.opener.name && window.opener.name == "运行流程") {
+                //测试运行流程，不进行刷新
+            } else {
+                //window.opener.location.href = window.opener.location.href;
             }
-        } else if (window.opener.name && window.opener.name == "运行流程") {
-            //测试运行流程，不进行刷新
-        } else {
-            //window.opener.location.href = window.opener.location.href;
         }
+    } catch (err) {
+        if (err.code == 18){
+             //可能出现跨域的问题
+        }
+       
+
     }
+    
 
     //提示消息有错误，页面不跳转
     var msg = $("#msgModalContent").html();
@@ -740,7 +845,7 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
-    //保存前事件
+    //发送前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
             return false;
@@ -870,11 +975,11 @@ function SaveEnd(formType) {
 //关注 按钮.
 function FocusBtn(btn, workid) {
 
-    if (btn.value == '关注') {
-        btn.value = '取消关注';
+    if (btn.innerText.trim() == "关注") {
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消关注";
     }
     else {
-        btn.value = '关注';
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;关注";
     }
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
@@ -885,14 +990,14 @@ function FocusBtn(btn, workid) {
 //确认 按钮.
 function ConfirmBtn(btn, workid) {
 
-    if (btn.value == '确认') {
-        btn.value = '取消确认';
+    if (btn.innerText.trim() == '确认') {
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消确认";
     }
     else {
-        btn.value = '确认';
+        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;确认";
     }
 
-    btn.value = (btn.value == '确认' ? '取消确认' : '确认');
+    //btn.value = (btn.value == '确认' ? '取消确认' : '确认');
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("WorkID", workid);
@@ -962,6 +1067,7 @@ function PrintPDF(packUpType) {
     });
     
 
+    _html = _html.replace(/仿宋, SimSun/g, 'SimSun');
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddPara("html", _html);
     handler.AddPara("FrmID", flowData.Sys_MapData[0].No);
@@ -992,3 +1098,49 @@ function PrintPDF(packUpType) {
 
 
 }
+
+//删除流程
+function DeleteFlow() {
+
+    if (window.confirm('您确定要删除吗？') == false)
+        return;
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+    var str = handler.DoMethodReturnString("DeleteFlow");
+
+    alert(str);
+
+    self.opener.location.reload();
+    window.close();
+}
+
+/**
+ * 取回审批
+ * @param {any} fk_node
+ * @param {any} toNode
+ */
+function Takeback(fk_node, toNode) {
+    if (confirm('您确定要执行吗？') == false)
+        return;
+    var url = '../../GetTask.aspx?DoType=Tackback&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + fk_node + '&ToNode=' + toNode + '&WorkID=' + GetQueryString("WorkID");
+    window.location.href = url;
+}
+/**
+ * 回滚
+ */
+function Rollback() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+    handler.AddPara("WorkID", GetQueryString("WorkID"));
+    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+    var data = handler.DoMethodReturnString("OP_ComeBack");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    window.close();
+}
+

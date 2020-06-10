@@ -9,9 +9,8 @@ var isEqualsDomain = false;  //调用ccbpm.js的页面和ccbpm.js域是否相同
 var ccbpmPath = GetPath();
 var paramData = {};
 $(function () {
-    if (window.location.href.startsWith(ccbpmPath) == false)
+    if (window.location.href.indexOf(ccbpmPath) == -1)
         isEqualsDomain = true;
-    debugger
     //引入关联的js
     jQuery.getScript(ccbpmPath + "/WF/Scripts/config.js", function () {
         jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {

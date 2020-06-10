@@ -9,9 +9,9 @@
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../DataUser/SFTable.js" type="text/javascript"></script>
     <script src="./Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <script src="Scripts/config.js"  type="text/javascript"></script>
-    <script src="Comm/Gener.js"  type="text/javascript"></script>
-    <script src="Scripts/QueryString.js"  type="text/javascript"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
+    <script src="Scripts/QueryString.js" type="text/javascript"></script>
     <link href="./Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <link href="./Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
     <link rel="stylesheet" href="./Scripts/bootstrap/css/css.css" type="text/css" media="all" />
@@ -31,10 +31,13 @@
     <link href="./Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
 
 
-
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一.  -->
     <!--<link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />-->
     <!--<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />-->
+    <!-- 增加一个用户自定义的 css文件,用于控制开发者表单或者其他表单的样式. for: 计算中心 -->
+    <!--<link href="../DataUser/Style/MyFlowGenerSelf.css" rel="Stylesheet" />-->
+
+
     <script src="./Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <link href="./Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
 
@@ -62,9 +65,10 @@
 
     <!-- 引入解析表单的三个重要js文件. -->
     <!--<script src="MyFlowGener.js?ver=1" type="text/javascript"></script>-->
-    <script src="MyFlowFree2017.js?ver=1" type="text/javascript"></script>
+    <!--<script src="MyFlowFree2017.js?ver=1" type="text/javascript"></script>
+    <script src="CCForm/FrmDevelop.js" type="text/javascript"></script>-->
     <script src="MyFlowFool2017.js?ver=1" type="text/javascript"></script>
-    <script src="CCForm/FrmDevelop.js" type="text/javascript"></script>
+
     <!-- 引入公共的frm加载以后的业务逻辑处理.-->
     <script src="./CCForm/FrmEnd.js?ver=1" type="text/javascript"></script>
 
@@ -78,13 +82,10 @@
     <script src="CCForm/JS/comboTreePlugin.js" type="text/javascript"></script>
     <link href="CCForm/JS/comboTreePlugin.css" rel="stylesheet" />
     <script src="../DataUser/JSLibData/CommonShowConfig.js"></script>
-
-    <script src="../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/MyFlowPublic.js?v=20200609001" type="text/javascript"></script>
     <script src="../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
+    <script src="../DataUser/OverrideFiles/ToolbarImg/ToolbarIcon.js"></script>
     <style type="text/css">
-        .only-print-hidden {
-            display: block !important;
-        }
     </style>
 
     <!--JS 加载-->
@@ -92,23 +93,7 @@
 
         var load = {};
 
-        //删除流程
-        function DeleteFlow() {
 
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            handler.AddPara("WorkID", GetQueryString("WorkID"));
-            var str = handler.DoMethodReturnString("DeleteFlow");
-
-            alert(str);
-
-            self.opener.location.reload();
-            window.close();
-        }
     </script>
 
     <script type="text/javascript">
@@ -154,6 +139,12 @@
                 }
             };
         }
+
+        //判断读秒关闭的参数是否存在
+        if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
+            var WF_WorkOpt_LeftSecond = 30;
+        }
+
         //设置页面配色方案
         function SettingTheme(theme) {
             //把客户选择的色系保存WF_Emp中
@@ -165,65 +156,64 @@
             }
 
         }
-
-
     </script>
 
     <style type="text/css">
+        /*pop的div添加默认值样式*/
+        div #stuff:empty:before {
+            content: attr(placeholder);
+            color: #ccc;
+            font-size: 16px;
+        }
     </style>
 </head>
-<body onclick="hiddenDiv()">
+<body onclick="hiddenDiv()" style="background:#fff;">
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
-        <div style="WIDTH:100%;background:#fff; padding:10px 0px 0px; margin-bottom:10px">
-            <div id="ToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;" class="Bar only-print-hidden">
-            </div>
+        <div class="CurrentForm-buttom-bar">
+            <div id="ToolBar" class="Bar only-print-hidden"></div>
         </div>
        
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
-            <i class="topContentDiv-i" style="display: none;"></i>
-            <div id="contentDiv">
-                <!--页面整体颜色变更-->
-                <div style="text-align:right;padding-right:14px;display: none" id="glyphicon">
-                    <ul>
-                        <li class="dropdown user user-menu">
-                            <a href="#" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-cog"></span>
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="javascript:void();" onclick="SettingTheme('Default')"><div style="background-color: #c1c1c12b;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>经典色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Black')"><div style="background-color: #393D49;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>黑色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Red')"><div style="background-color: #AA3130;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>红色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Blue')"><div style="background-color: #1E9FFF;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>蓝色色系</a></li>
-                                <li><a href="javascript:void();" onclick="SettingTheme('Green')"><div style="background-color: #5FB878;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>绿色色系</a></li>
-                               
-                            </ul>
-                        </li>
-                    </ul>
+        <div id="topContentDiv" class="contentRow">
+                <i class="topContentDiv-i" style="display: none;"></i>
+                <div id="contentDiv">
+                    <!--页面整体颜色变更-->
+                    <div style="text-align:right;padding-right:14px;display: none" id="glyphicon">
+                        <ul>
+                            <li class="dropdown user user-menu">
+                                <a href="#" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Default')"><div style="background-color: #c1c1c12b;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>经典色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Black')"><div style="background-color: #393D49;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>黑色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Red')"><div style="background-color: #AA3130;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>红色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Blue')"><div style="background-color: #1E9FFF;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>蓝色色系</a></li>
+                                    <li><a href="javascript:void();" onclick="SettingTheme('Green')"><div style="background-color: #5FB878;height: 10px;width: 40px;display: inline-block;margin-right: 10px;"></div>绿色色系</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <form id="divCCForm" method="post">
+                        <!--头部功能按钮 发送、移交-->
+                        <div class="topBar" id="topBar"></div>
+                        <!--flowInfo-->
+                        <div class="flowInfo" id="flowInfo" style="margin: 0px 12px;"></div>
+                        <!--主表单-->
+                        <div id="CCForm">
+                            <br />
+                            <img src='./Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+                            <br />
+                            <br />
+                        </div>
+                        <!--DIVINFO-->
+                        <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer; align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'></div>
+                    </form>
                 </div>
-                <form id="divCCForm" method="post">
-                    <!--头部功能按钮 发送、移交-->
-                    <div class="topBar" id="topBar"></div>
-                    <!--flowInfo-->
-                    <div class="flowInfo" id="flowInfo" style="margin: 0px 12px;"></div>
-                    <!--主表单-->
-                    <div id="CCForm">
-                        <br />
-                        <img src='./Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
-                    </div>
-                    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
-                        align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                    </div>
-                </form>
             </div>
-        </div>
-        <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class="">
-        </div>
+            <!--底部功能按钮 发送、移交-->
+            <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class=""></div>
     </div>
     <!-- /.modal -->
     <!--下拉框选项提示信息-->

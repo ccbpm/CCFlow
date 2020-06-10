@@ -230,7 +230,7 @@ function InitPage() {
 
         //    //签名，日期.
         //    html += "<tr>";
-        //    html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+        //    html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:";
 
         //    if (wcDesc.SigantureEnabel == "0")
         //        html += GetUserSmallIcon(this.EmpFrom, this.EmpFromT);
@@ -241,7 +241,7 @@ function InitPage() {
 
 
         //    html += "<div style='float:right'> ";
-        //    html += "<font color='Gray'>日期:</font>" + rdt;
+        //    html += "<font color='Gray'>日期:" + rdt;
         //    html += "</div>";
         //    html += "</td>";
 
@@ -261,18 +261,18 @@ function InitPage() {
         //        if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
         //            html += "<tr>";
-        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
         //                            + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
-        //                            + "<div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+        //                            + "<div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
         //            html += "</tr>";
         //            break;
         //        }
 
         //        if (st.SignType == 1) {
         //            html += "<tr>";
-        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
         //                            + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-        //                            + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+        //                            + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
         //            html += "</tr>";
         //            break;
         //        }
@@ -280,9 +280,9 @@ function InitPage() {
         //        if (st.SignType == 2) {
 
         //            html += "<tr>";
-        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
         //                            + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-        //                            + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+        //                            + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
         //            html += "</tr>";
         //            //  alert('电子签名的逻辑尚未编写.');
         //            break;
@@ -293,13 +293,13 @@ function InitPage() {
 
         //            isCanSend = false; //设置不可以发送.
         //            html += "<tr>";
-        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+        //            html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:";
 
         //            html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
 
         //            html += "</div>";
 
-        //            html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+        //            html += +" <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
         //            html += "</tr>";
         //            break;
         //        }
@@ -360,7 +360,7 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
 
         //签名，日期.
         html += "<tr>";
-        html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+        html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:";
 
         if (wcDesc.SigantureEnabel == "0")
             html += GetUserSmallIcon(EmpFrom, EmpFromT);
@@ -371,7 +371,7 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
 
 
         html += "<div style='float:right'> ";
-        html += "<font color='Gray'>日期:</font>" + rdt;
+        html += "<font color='Gray'>日期:" + rdt;
         html += "</div>";
         html += "</td>";
 
@@ -391,18 +391,18 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
                 html += "<tr>";
-                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
                     + GetUserSmallIcon(EmpFrom, EmpFromT) + '</div>'
-                    + "<div style='float:right' ><font color='Gray' >日期:</font>" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
+                    + "<div style='float:right' >日期:" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
                 html += "</tr>";
                 break;
             }
 
             if (st.SignType == 1) {
                 html += "<tr>";
-                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
                     + GetUserSiganture(EmpFrom, EmpFromT) + '</div>'
-                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
+                    + " <div style='float:right' >日期:" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
                 html += "</tr>";
                 break;
             }
@@ -410,9 +410,9 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
             if (st.SignType == 2) {
 
                 html += "<tr>";
-                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
+                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
                     + GetUserSiganture(EmpFrom, EmpFromT) + '</div>'
-                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
+                    + " <div style='float:right' >日期:" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
                 html += "</tr>";
                 //  alert('电子签名的逻辑尚未编写.');
                 break;
@@ -423,13 +423,13 @@ function GetAtthAndSignature(subaths, IsDoc, NodeID, SignType, RDT, wcDesc, EmpF
 
                 isCanSend = false; //设置不可以发送.
                 html += "<tr>";
-                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:";
 
                 html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
 
                 html += "</div>";
 
-                html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
+                html += +" <div style='float:right' >日期:" + (IsDoc ? "<span id='rdt'>" : "") + rdt + (IsDoc ? "</span>" : "") + "</div></td>";
                 html += "</tr>";
                 break;
             }

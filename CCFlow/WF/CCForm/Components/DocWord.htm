@@ -47,11 +47,30 @@
 
         //展现数据.
         function BindIt(data) {
+             //1. 查询出来发文流程对应的发文.
+            var flowno =  GetQueryString("FK_Flow");
+            var wordflows = new Entities("BP.DOC.WD.WordFlows");
+            wordflows.Retrieve("FK_Flow", flowno)
+            if (wordflows.length == 0) {
+                alert("没有为该流程配置收文文号,请先配置");
+                return;
+            }
 
-            //1. 查询出来代字.
+
+             //1. 查询出来代字.
             var ensName = "BP.DOC.WD.Words";
-            var words = new Entities(ensName);
-            words.RetrieveAll();
+            var words = new Entities(ensName); 
+            var f = "";         
+           
+            for (var i = 0; i < wordflows.length; i++) {
+                var wordflow = wordflows[i];
+                if (i==0) {
+                     f += "'" + wordflow.FK_Word + "'";
+                }
+                f += ",'" + wordflow.FK_Word + "'";
+            }          
+
+            words.RetrieveCond("No", "In","("+f+")");                  
             if (words.length == 0) {
                 alert('没有配置字号，无法生成编号.');
                 return;

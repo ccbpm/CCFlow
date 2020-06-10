@@ -824,6 +824,16 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+               // rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Title = "修改轨迹";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoEditTrack";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -975,7 +985,18 @@ namespace BP.WF.Data
                 return "err@" + ex.Message;
             }
         }
-
+        /// <summary>
+        /// 修改轨迹
+        /// </summary>
+        /// <returns></returns>
+        public string DoEditTrack()
+        {
+            return "../../Admin/AttrFlow/EditTrack.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string DoTrack()
         {
             return "../../WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;

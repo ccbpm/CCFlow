@@ -279,6 +279,12 @@
                 $("#Btn_SelectEmps").attr("disabled", false);
                 return;
             }
+            if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+                window.parent.WindowCloseReloadPage(data);
+            } else {
+                if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+                    WindowCloseReloadPage(data);
+            }
 
 
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");

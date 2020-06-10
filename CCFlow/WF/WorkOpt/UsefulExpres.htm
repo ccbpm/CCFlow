@@ -28,39 +28,53 @@
             border-right: 1px solid #ddd;
             border-bottom-color: transparent;
         }
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+        button:hover {
+            background: #f5f5f5;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
     </style>
     <script type="text/javascript">
         var nodeID = "ND"+GetQueryString("FK_Node");
         var groupKey = GetQueryString("GroupKey");
-    
+        if (groupKey == "WorkCheck")
+            groupKey = "CYY";
+        var elementID = GetQueryString("ElementID");
+        var webUser = new WebUser();
         $(function () {
             $('#myModal').modal('hide');
             LoadGridData(1, 10);
         });
 
         function GetSearchData() {
-            var en = new Entity("BP.Sys.GloVar");
-            en.SetPKVal(nodeID + "_" + groupKey);
-            if (en.RetrieveFromDBSources() == 0) {
-                en.No = nodeID + "_" + groupKey;
-                en.Name = "";
-                en.Val = "";
-                en.GroupKey = groupKey;
-                en.Insert();
+            var ens = new Entities("BP.WF.Data.FastInputs");
+            ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
+            if (ens.length == 0) {
+                
+                var en = new Entity("BP.WF.Data.FastInput");
+                en.DoMethodReturnString("Add", groupKey); 
+                ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
             }
-            
+            //ens.RetrieveAll();
             var dataInfo = {}
             var mainData = [];
             //获得数据
-            var data = en.Val;
            
-            if (data != null && data != "") {
-                var strs = data.split("@");
-                $.each(strs, function (i, item) {
-                    if(item!="")
-                        mainData.push({ "MYPK": i, "CURVALUE": item });
-                })
-            }
+            $.each(ens, function (i, item) {
+                if(item!="")
+                    mainData.push({ "MYPK": item.MyPK, "CURVALUE": item.Vals });
+            })
             dataInfo.rows = mainData;
             dataInfo.total = mainData.length;
 
@@ -115,19 +129,18 @@
                     $('#TextArea').focus();
                     return;
                 }
-                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
-                if (en.Val.indexOf("@" + text + "@") != -1) {
-                    alert("常用短语中已存在，不能重复添加");
-                    return;
-                }
-                en.Val += "@" + text + "@";
-                en.SetValByKey(nodeID + "_" + groupKey);
-                en.Update();
+               
+                var en = new Entity("BP.WF.Data.FastInput")
+                en.ContrastKey = groupKey;
+                en.FK_Emp = webUser.No;
+                en.Vals = text;
+                en.Insert();
                 $('#myModal').modal('hide');
                 LoadGridData();
                     
             } else {//编辑
                 var text = $('#TextArea').val();
+                var mypk = $('#MyPK').val();
                 text = replaceTrim(text);
                 //没有输入数据
                 if (text == "") {
@@ -142,13 +155,8 @@
                     return;
                 }
 
-                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
-                if (en.Val.indexOf("@" + text + "@") != -1) {
-                    alert("常用短语中已存在，不能重复添加");
-                    return;
-                }
-                en.Val = en.Val .replace("@" + againText + "@", "@" + text + "@");
-                en.SetValByKey(nodeID + "_" + groupKey);
+                var en = new Entity("BP.WF.Data.FastInput",mypk)
+                en.Vals = text;
                 en.Update();
                 $('#myModal').modal('hide');
                 LoadGridData();
@@ -166,6 +174,7 @@
                 againText = rows[0].CURVALUE;
                 defValPK = rows[0].MYPK;
                 $('#TextArea').val(rows[0].CURVALUE);
+                $('#MyPK').val(defValPK);
                 $('#myModal').modal('show');
                 $('#TextArea').focus();
             }
@@ -184,23 +193,19 @@
         function btnDelete() {
             
             var rows = $('#newsGrid').bootstrapTable('getAllSelections');
-
             if (rows.length >= 1) {
                 if (confirm('确定要删除这' + rows.length + '条数据吗？') == false)
                     return;
 
-                var en = new Entity("BP.Sys.GloVar", nodeID + "_" + groupKey);
-                var val =en.Val;
                 $.each(rows, function (i, item) {
-                    val = val.replace("@" + item.CURVALUE+"@", "");
+                    var en = new Entity("BP.WF.Data.FastInput", item.MYPK);
+                    en.Delete();
                 });
-                en.Val = val;
-                en.SetPKVal(nodeID + "_" + groupKey);
-                en.Update();
+               
                 LoadGridData();
             }
             else {
-                alert("请选择一条数据");
+                alert("请选择要删除的数据");
             }
         }
         //关闭主窗体
@@ -235,7 +240,7 @@
             }
 
 
-            window.parent.ChangeWorkCheck(str);
+            window.parent.ChangeWorkCheck(elementID,str);
           
 
         }
@@ -246,10 +251,9 @@
         <!--button按钮-->
         <div>
             <div id="tools" style="text-align: left; float: left;margin:3px 5px">
-                <button class=" btn btn-info btn-xs" type="button" id="btnAdd" onclick='btnOpenWindow()'><i class="glyphicon-plus"></i> 添加数据</button>
-                <button class=" btn btn-info btn-xs" type="button" id="btnEdit" onclick='btnEdit()'><i class="fa fa-edit"></i> 编辑</button>
-                <button class=" btn btn-info btn-xs" type="button" id="btnDel" onclick='btnDelete()'><i class="fa fa-remove"></i> 删除</button>
-
+                <button type="button" id="btnAdd" onclick='btnOpenWindow()'><img src="../Img/Btn/addDT.png" width="22" height="22"/>添加数据 </button>
+                <button  type="button" id="btnEdit" onclick='btnEdit()'><img src="../Img/Btn/Edit.png" width="18" height="18"/> 编辑</button>
+                <button  type="button" id="btnDel" onclick='btnDelete()'><img src="../Img/Btn/Delete.png" /> 删除</button>
             </div>
 
         </div>
@@ -268,8 +272,8 @@
 
         <div>
             <div style="float: right; margin:3px 5px">
-                <button class=" btn btn-success btn-xs" type="button" onclick='btnOk()' id='btnOk'><i class="fa fa-check"></i> 确定</button>
-                <button class=" btn btn-danger btn-xs" type="button" onclick='btnClose()' id='btnClose'><i class="fa fa-mail-reply"></i> 取消</button>
+                <button type="button" onclick='btnOk()' id='btnOk'><img src="../Img/Btn/Confirm.png" /> 确定</button>
+                <button type="button" onclick='btnClose()' id='btnClose'><img src="../Img/Btn/cancel_dafalut.png" /> 取消</button>
             </div>
         </div>
     </div>
@@ -282,11 +286,13 @@
                     <h4 class="modal-title" id="myModalLabel">请输入</h4>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="MyPK" name="MyPK" value="" />
                     <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px; overflow: hidden;"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="AddWorks()">保存</a></button>
+                    
+                    <button type="button"  data-dismiss="modal"><img src="../Img/Btn/cancel_dafalut.png"/> 取消</button>
+                    <button type="button"  onclick="AddWorks()"><img src="../Img/Btn/Save.png" /> 保存</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->

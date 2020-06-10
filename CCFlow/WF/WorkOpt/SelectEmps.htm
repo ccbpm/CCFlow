@@ -29,6 +29,19 @@
             height: 132px;
             width: 433px;
         }
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+        button:hover {
+            background: #f5f5f5;
+            color: #000;
+            border: 1px solid #ccc !important;
+        }
     </style>
     <script type="text/javascript">
 
@@ -315,9 +328,19 @@
 </head>
 <body>
     <div style="text-align:right">
-        <input type="button" value="上一级" id="toPrevDept" />
+        <button type="button" id="toPrevDept">
+            <img src="../Img/Btn/JumpWay.png" /> 上一级
+        </button>
+        <button type="button"  onclick="Close()">
+            <img src="../Img/Btn/Return.png" /> 取消
+        </button>
+        <button type="button" onclick="SelectEmps()">
+            <img src="../Img/Btn/Confirm.png" /> 确定
+        </button>
+
+        <!--<input type="button" value="上一级" id="toPrevDept" />
         <input type="button" onclick="Close()" value="取消" />
-        <input type="button" onclick="SelectEmps()" value="确定" />
+        <input type="button" onclick="SelectEmps()" value="确定" />-->
     </div>
    
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">

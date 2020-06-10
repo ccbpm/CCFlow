@@ -12,6 +12,7 @@
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -34,13 +35,12 @@
         #Message {
             width: 100%;
         }
-
         #SelectEmp {
             position: relative;
-            width: 400px;
+            width: 300px;
             border-top: 0;
             display: none;
-            margin-top: -7px; /*border: solid 2px #3175af;*/
+            margin-top: 5px;
         }
 
         .item {
@@ -54,18 +54,43 @@
         }
 
         #next {
-            float: left;
+            float: right;
             position: relative;
-            width: 600px;
+            width: auto;
+            margin-right: 10px;
         }
 
         .addbg {
             background: #CFCFCF;
         }
+
+        button {
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc !important;
+            border-radius: 3px;
+            margin: 5px 3px 5px 3px;
+            padding: 4px 15px;
+        }
+
+            button:hover {
+                background: #f5f5f5 !important;
+                color: #000;
+                border: 1px solid #ccc !important;
+            }
     </style>
     <script type="text/javascript">
         var param = {};
         $(function () {
+
+            // 如果您要把该页面转入其他页面，请按照如下方式处理.
+            var webuser = new WebUser();
+            if (webuser.CustomerNo == "GXJSZX") {
+                var url = window.location.href;
+                url = url.replace('CC.htm?', '../../App/gxjtoaPicker/userOrgPicker.html?IsCC=1&');
+                window.location.href = url;
+                return;
+            }
 
             Help();
 
@@ -82,8 +107,8 @@
 
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
-                '<div class="modal-dialog">'
-                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                '<div class="modal-dialog" style="width:700px;">'
+                + '<div class="modal-content" >'
                 + '<div class="modal-header">'
                 + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                 + '<h4 class="modal-title">选择抄送人</h4>'
@@ -116,7 +141,7 @@
 
 
             //查询出来抄送的信息.
-            var ccs = new Entities("BP.WF.Template.CCLists");
+            var ccs = new Entities("BP.WF.CCLists");
             ccs.Retrieve("FK_Node", GetQueryString("FK_Node"), "WorkID", GetQueryString("WorkID"));
 
             BindTable(ccs);
@@ -146,81 +171,34 @@
 
         function DeleteIt(mypk, row) {
 
-            var cc = new Entity("BP.WF.Template.CCList");
+            var cc = new Entity("BP.WF.CCList");
             cc.MyPK = mypk;
             cc.SetPKVal(mypk);
             cc.Delete();
             window.location.href = window.location.href;
             return;
-
         }
 
 
         //确定  执行抄送操作
         function DoCC(empStr) {
-            var fk_node = GetQueryString("FK_Node");
-            var fk_flow = GetQueryString("FK_Flow");
-            var workID = GetQueryString("WorkID");
-            var fid = GetQueryString("FID");
 
             var webUser = new WebUser();
             if (empStr == null || empStr == "")
                 return;
-            var empNos = empStr.split(",");
-            $.each(empNos, function (i, empNo) {
 
-                if (empNo == "")
-                    return;
+            //执行发送.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("Emps", empStr);
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            var data = handler.DoMethodReturnString("CC_Send2020");
 
-                var cc = new Entity("BP.WF.Template.CCList");
-                cc.MyPK = workID + "_" + fk_node + "_" + empNo;
-                if (cc.IsExits() == true) {
-                    alert('该人员[' + cc.CCToName + ']已经存在.');
-                    return;
-                }
-
-               
-                var emp = new Entity("BP.Port.Emp", empNo);
-                var empName = emp.Name;
-                var empDeptNo = emp.FK_Dept;
-                var empDeptName = emp.FK_DeptText;
-
-                var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-                var title = gwf.Title;
-                var nodeName = gwf.NodeName;
-                var flowName = gwf.FlowName;
-
-                cc = new Entity("BP.WF.Template.CCList");  
-                cc.MyPK = workID + "_" + fk_node + "_" + empNo;
-                //当前人员的信息.
-                cc.Rec = webUser.No;
-                cc.RecName = webUser.Name;
-
-                //抄送给人员的信息.
-                cc.CCTo = empNo;
-                cc.CCToName = empName;
-                //抄送给部门的信息.
-                cc.CCToDept = empDeptNo;
-                cc.CCToDeptName = empDeptName;
-
-                cc.WorkID = workID;
-                cc.FID = gwf.FID;
-                cc.PWorkID = gwf.PWorkID;
-                cc.FK_Node = fk_node;
-                cc.NodeName = nodeName;
-                cc.FK_Flow = fk_flow;
-                cc.FlowName = flowName;
-                cc.Title = title;
-                cc.Insert();
-                
-                
-            });
             window.location.href = window.location.href;
 
             $(".foot").hide();
         }
 
-        
+
         //取消移交
         function CloseAll() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
@@ -325,74 +303,59 @@
     </script>
 </head>
 <body>
-    <table id="Table1" style="width: 98%;">
-        <thead>
-            <tr id='title'>
-                <th>名称</th>
-                <th> 所在部门 </th>
-                <th> 操作 </th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <br />
-    <div>
-        <div id="labInfo">
-            输入关键字: <input type="text" id="TB_Emps" title="查张三,您可输入: zs或zhangs或zhangsan"
-                          placeholder="查张三,您可输入:zs或zhangs或zhangsan" name="TB_Emps" value='' style="width: 300px;" />
-            <input type="button" id="Btn_SelectEmps" value='选择抄送人' />
-            <br/>
-            <br /><img src="../Img/CC.png" style="width:27px;" /><a href="javascript:Help()">帮助</a>
-            <div id="SelectEmp">
-            </div>
-            <br />
-            <div id="next">
-                <!--
-                                <input type="button" id="Btn_CC" value="执行抄送" onclick="SaveAndClose();" />
-                                <img src="../Img/CC.png"  onclick="SaveAndClose();"  style="width:27px;"/>-->
 
-                <div id="HelpInfo" style="">
-                    <ul>
-                        <span style="color:#337ab7"> 1、此处只是添加被抄送人不执行抄送动作，只有在发送成功后执行抄送动作并在提示信息中显示抄送成功的信息</span>
-                            <br />2、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。
-                            <br />3、被抄送人，可以在抄送列表里查看抄送信息。
-                            <br />4、可以使用人员名称拼音，支持全拼和简拼。
-                            <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
-                            <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
-                        </span></ul>
-                </div>
-            </div>
+    <div id="labInfo" style="margin-left:20px">
+        
+        <div style="float:left;margin-top:4px">
+            <input type="text" id="TB_Emps" name="TB_Emps"
+                   title="查张三,您可输入: zs或zhangs或zhangsan"
+                   placeholder="查张三,您可输入: zs或zhangs或zhangsan"
+                   value='' style=" width:300px; " />
+
+            <div id="SelectEmp"></div>
+        </div>
+        <div id="next">
+
+            <button id="Btn_SelectEmps">
+                <img src="../Img/Btn/AddLeader.png" /> 选人
+            </button>
+
+            <button onclick="closeWin();" id="Btn_Close">
+                <img src="../Img/Btn/Close.png" /> 关闭
+            </button>
+
+            <a href="javascript:Help()">帮助?</a>
+
         </div>
         <div class="Msg" style="float: left;">
             <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
         </div>
     </div>
-    <br />
+    <br/>
 
-    <div style="position: fixed; bottom: 50px; right: 10px;" class="foot">
-        <input type="button" value="关闭" onclick="closeWin()" />
+    <table class="table table-striped" id="Table1" style="width:98%;padding:5px; margin:10px;">
+        <!-- <caption>下一步接受人员列表</caption>-->
+        <thead>
+            <tr id="title" class="Sum">
+                <!--<td style="width:40px; font-weight:bolder">#</td>-->
+                <!--<th>编号 </th>-->
+                <td style="width:30%; font-weight:bolder">姓名</td>
+                <td style="width:40%; font-weight:bolder">所在部门</td>
+                <td style="width:60px; font-weight:bolder" colspan="3">操作</td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="HelpInfo" >
+        <ul>
+            <li>1、此处只是添加被抄送人不执行抄送动作，只有在发送成功后执行抄送动作并在提示信息中显示抄送成功的信息</li>
+            <li>2、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。</li>
+            <li>3、被抄送人，可以在抄送列表里查看抄送信息。</li>
+            <li>4、可以使用人员名称拼音，支持全拼和简拼。</li>
+            <li>例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua</li>
+            <li>支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx</li>
+        </ul>
     </div>
-    <!--
-
-    <section style="display: none;">
-        <div>
-            请选择要抄送的人：
-            <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
-        </div>
-        <div>
-            抄送原因:
-            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea><br/>
-        </div>
-        <div style="margin: 20px auto;">
-            <h5> 抄送模式:</h5>
-            <input type="radio" value="0" name="RB_Model" checked=checked checked=checked id="RB_Model_0"/> <label for="RB_Model_0">抄送后直接发送给下一步处理人</label>
-            <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">抄送后发送给我由我发送给下一步处理人</label>
-        </div>
-        <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-            <input type=button value="确定" onclick="DoCC();"/>
-            <input type="button" id="" value="关闭" onclick="Close();"/>
-        </div>
-    </section>-->
 </body>
 </html>

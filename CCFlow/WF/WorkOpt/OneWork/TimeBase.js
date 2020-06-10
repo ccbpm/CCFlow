@@ -97,18 +97,29 @@ function InitPage() {
                 doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid+"','" + track.NDFrom + "')\">查看表单</a></span></p>";
             }
 
-            //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
-                var checkTrack = tracks[myIdx];
-                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+            //说明审核组件采用的是2019版本
+            if (track.Msg != null && track.Msg != undefined && track.Msg.indexOf("WorkCheck@") != -1) {
+                var val = track.Msg.split("WorkCheck@");
+                if (val.length == 2) {
+                    track.Msg = val[1];
                     isHaveCheck = true;
-                    var val = track.Msg.split("WorkCheck@");
-                    if (val.length == 2)
-                        track.Msg = val[1];
                     doc += "<p><span>审批意见：</span><font color=green>" + track.Msg + "</font> </p>";
                 }
+            } else {
+                //查找关联的审核意见
+                //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+                for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+                    var checkTrack = tracks[myIdx];
+                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                        isHaveCheck = true;
+                        doc += "<p><span>审批意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
+                        break;
+                    }
+                }
             }
+            
+                
+           
         }
 
         //协作发送.

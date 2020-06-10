@@ -24,7 +24,10 @@
             <legend>设置</legend>
             <ul>
                 <li>
-                    <a href="javascript:void(0)" @click="OpenDialog()">设置/更改处理人</a>
+                    <a href="javascript:void(0)" @click="OpenDialog(0)">设置/更改本组织处理人</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" @click="OpenDialog(1)">设置/更改集团处理人</a>
                 </li>
                 <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
                 <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
@@ -54,11 +57,27 @@
                 deliverWay:DeliveryWay.ByBindEmp
             },
             methods: {
-                OpenDialog: function () {
+                OpenDialog: function (type) {
 
                     var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeEmps&Dot2DotEnName=BP.WF.Template.NodeEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept";
                     var nodeID = GetQueryString("FK_Node");
                     url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
+                    var rootNo = 0;
+                    var webUser = new WebUser();
+                    if (type == 0) {
+                        if (webUser.CCBPMRunModel != 0)
+                            rootNo = webUser.OrgNo;
+                        url += "&RootNo=" + rootNo;
+                    }
+                    if (type == 1) {
+                        if (webUser.CCBPMRunModel != 0) {
+                            var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
+                            orgs.RetrieveCond("No", "=", "ParentNo");
+                            if (orgs.length != 0)
+                                rootNo = orgs[0].No;
+                        }
+                        url += "&RootNo=" + rootNo;
+                    }
                     OpenEasyUiDialogExtCloseFunc(url, '设置人员', 800, 500, function () {
                         Baseinfo.emps = getEmps();
                     });

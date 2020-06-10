@@ -71,7 +71,7 @@ function InitBar(optionKey) {
 
     //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     
-    html += "<input id='Btn' type=button onclick='AdvSetting()' value='高级设置' />";
+    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='高级设置' />";
 
 
     document.getElementById("bar").innerHTML = html;

@@ -40,9 +40,10 @@
             $("#sln").html("正在加载表单方案,请稍后...");
 
             var html = "<ul>";
-            var nodes = new Entities("BP.WF.Nodes");
-            nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
 
+            //获得节点.
+            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", node.FK_Flow, "NodeID");
             var currentNode = GetQueryString("FK_Node");
 
             for (var i = 0; i < nodes.length; i++) {
@@ -80,10 +81,7 @@
 
                 html += "<li>[" + sln.FrmSlnText + "]<a href=\"javascript:EditSln('" + sln.MyPK + "')\">" + json.NodeID + " - " + json.Name + "</a> " + def + "</li>";
             }
-
-
             html += "</ul>";
-
             $("#sln").html(html);
         }
         function DefField(nodeID, FK_Flow) {
@@ -235,6 +233,21 @@
                 node.NodeFrmID = "ND" + node.NodeID;
                 node.Update();
 
+                $.each(nds, function (index, item) {
+                    if (node.NodeID != item.NodeID) {
+                        var sln = new Entity("BP.WF.Template.FoolTruckNodeFrm");
+                        sln.MyPK = "ND" + item.NodeID + "_" + node.NodeID + "_" + node.FK_Flow;
+
+                        if (sln.RetrieveFromDBSources() == 0) {
+                            sln.FK_Flow = node.FK_Flow;
+                            sln.FK_Frm = "ND" + item.NodeID;
+                            sln.FK_Node = node.NodeID; //节点ID.
+                            sln.FrmSln = 1; //只读方案.
+                            sln.Insert();
+                        }
+                    }
+                   
+                })
 
                 //更新表单类型.
                 var frmID = "ND" + node.NodeID;

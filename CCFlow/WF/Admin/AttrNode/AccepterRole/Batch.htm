@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>批处理</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var nodeID = GetQueryString("NodeID");
+        $(function () {
+
+            //获取节点属性
+            var node = new Entity("BP.WF.Template.NodeSimple", nodeID);
+            html = "";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>节点ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>接受人规则</th>";
+            html += "<th>设置详情</th>";
+            html += "</tr>";
+
+            //获得节点s.
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+            var frmNode = null;
+
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+
+                ////找到节点与表单的对应关系.
+                //html += "<tr>";
+                //html += "<td>" + (i + 1) + "</td>";
+                //html += "<td>" + json.NodeID + "</td>";
+                //html += "<td>" + json.Name + "</td>";
+
+                ////控制方案
+                //html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
+
+                ////元素权限.
+                //html += "<td><a href=\"javascript:EditFrmNode('" + json.MyPK + "');\" >详情</a></td>";
+                //html += "</tr>";
+                $("<tr><td>" + (i + 1) + "</td><td>" + json.NodeID + "</td><td>" + json.Name + "</td><td><select id='DDL_FrmSln_" + json.NodeID + "' onchange=Save('" + json.NodeID + "')></select></td><td><a href=\"javascript:changeOption('" + json.NodeID + "','"+node.FK_Flow+"');\" >详情</a></td></tr>").appendTo($("#sln"));
+                InitBar(json.NodeID,node.FK_Flow);
+            }
+
+
+            return;
+
+        });
+        function InitBar(nodeID, flowNo) {
+            //var str = nodeID.substr(nodeID.length - 2);
+            var isSatrtNode = false;
+            //if (str == "01")
+            //    isSatrtNode = true;
+            html = "";
+            html += "<option value=null  disabled='disabled'>+按组织结构绑定</option>";
+            var webUser = new WebUser();
+
+            if (isSatrtNode == true) {
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
+
+                if (webUser.CCBPMRunModel == 1) {
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+                }
+
+
+            } else {
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStationOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;仅按绑定的岗位计算</option>";
+                if (webUser.CCBPMRunModel == 1) {
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+                }
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySpecNodeEmpStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定节点的人员岗位计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySetDeptAsSubthread + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定部门计算，该部门一人处理标识该工作结束(子线程)</option>";
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.FindSpecDeptEmps + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门范围内的岗位集合里面的人员.</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByDeptLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门的领导(负责人).</option>";
+
+                // 与按照岗位智能计算不同的是，仅仅找本部门的人员.
+            }
+
+            //不常用的放入到下面.
+            html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
+
+            if (isSatrtNode == false) {
+                html += "<option id='" + nodeID + "' value=null disabled='disabled' >+按指定节点处理人</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStarter + " >&nbsp;&nbsp;&nbsp;&nbsp;与开始节点处理人相同</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByPreviousNodeEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;与上一节点处理人相同</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySpecNodeEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;与指定节点处理人相同</option>";
+            }
+
+            if (isSatrtNode == false) {
+                html += "<option id='" + nodeID + "' value=null disabled='disabled' >+按自定义SQL查询</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQL获取接受人计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按设置的SQLTempate获取接受人计算</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySQLAsSubThreadEmpsAndData + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL确定子线程接受人与数据源</option>";
+            }
+
+
+            if (isSatrtNode == false) {
+                //检查是否是项目类的流程如果
+                var isPrjFlow = false;
+                var node = new Entity("BP.WF.Node", nodeID);
+                var flowNo = node.FK_Flow;
+                var flow = new Entity("BP.WF.Flow", flowNo);
+                if (flow.FlowAppType == 1) {
+                    html += "<option id='" + nodeID + "' value=null disabled='disabled' >+项目类流程</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByStationForPrj + ">&nbsp;&nbsp;&nbsp;&nbsp;按项目组内的岗位计算</option>";
+                    html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySelectedForPrj + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“项目组人员选择器”选择接受人</option>";
+                }
+            }
+
+
+            html += "<option value=null disabled='disabled' >+其他方式</option>";
+
+            if (isSatrtNode == true) {
+
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySelected_1 + ">&nbsp;&nbsp;&nbsp;&nbsp;所有的人员都可以发起.</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySelectedOrgs + ">&nbsp;&nbsp;&nbsp;&nbsp;指定的组织可以发起(对集团版有效).</option>";
+
+            } else {
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.BySelected + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;按上一节点表单指定的字段值作为本步骤的接受人</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByDtlAsSubThreadEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点的明细表来决定子线程的接受人</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByFEE + " >&nbsp;&nbsp;&nbsp;&nbsp;由FEE来决定</option>";
+                html += "<option id='" + nodeID + "' value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
+                html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
+            }
+
+            var selid = "DDL_FrmSln_" + nodeID;
+            //加载保存的下拉选项
+            document.getElementById(selid).innerHTML = html;
+            var en = new Entity("BP.WF.Node", nodeID);
+            $("#" + selid + " option[value='" + en.DeliveryWay + "']").attr("selected", "selected");
+        }
+        function changeOption(nodeID, flowNo) {
+            var selid = "DDL_FrmSln_" + nodeID;
+            var obj = document.getElementById(selid);
+            var sele = obj.options;
+            var index = obj.selectedIndex;
+            var optionKey = 0;
+            if (index > 1) {
+                optionKey = sele[index].value
+            }
+            var roleName = "";
+            switch (parseInt(optionKey)) {
+                case DeliveryWay.ByStation:
+                    roleName = "0.ByStation.htm";
+                    break;
+                case DeliveryWay.ByDept:
+                    roleName = "1.ByDept.htm";
+                    break;
+                case DeliveryWay.BySQL:
+                    roleName = "2.BySQL.htm";
+                    break;
+                case DeliveryWay.ByBindEmp:
+                    roleName = "3.ByBindEmp.htm";
+                    break;
+                case DeliveryWay.BySelected:
+                    roleName = "4.BySelected.htm";
+                    break;
+                case DeliveryWay.BySelected_1:
+                    roleName = "41.BySelected.htm";
+                    break;
+                case DeliveryWay.ByPreviousNodeFormEmpsField:
+                    roleName = "5.ByPreviousNodeFormEmpsField.htm";
+                    break;
+                case DeliveryWay.ByPreviousNodeEmp:
+                    roleName = "6.ByPreviousNodeEmp.htm";
+                    break;
+                case DeliveryWay.ByStarter:
+                    roleName = "7.ByStarter.htm";
+                    break;
+                case DeliveryWay.BySpecNodeEmp:
+                    roleName = "8.BySpecNodeEmp.htm";
+                    break;
+                case DeliveryWay.ByDeptAndStation:
+                    roleName = "9.ByDeptAndStation.htm";
+                    break;
+                case DeliveryWay.ByStationAndEmpDept:
+                    roleName = "10.ByStationAndEmpDept.htm";
+                    break;
+                case DeliveryWay.BySpecNodeEmpStation:
+                    roleName = "11.BySpecNodeEmpStation.htm";
+                    break;
+                case DeliveryWay.BySQLAsSubThreadEmpsAndData:
+                    roleName = "12.BySQLAsSubThreadEmpsAndData.htm";
+                    break;
+                case DeliveryWay.ByDtlAsSubThreadEmps:
+                    roleName = "13.ByDtlAsSubThreadEmps.htm";
+                    break;
+                case DeliveryWay.ByStationOnly:
+                    roleName = "14.ByStationOnly.htm";
+                    break;
+                case DeliveryWay.ByFEE:
+                    roleName = "15.ByFEEp.htm";
+                    break;
+                case DeliveryWay.BySetDeptAsSubthread:
+                    roleName = "16.BySetDeptAsSubthread.htm";
+                    break;
+                case DeliveryWay.BySQLTemplate:
+                    roleName = "17.BySQLTemplate.htm";
+                    break;
+                case DeliveryWay.ByFromEmpToEmp:
+                    roleName = "18.ByFromEmpToEmp.htm";
+                    break;
+                case DeliveryWay.FindSpecDeptEmps:
+                    roleName = "19.FindSpecDeptEmpsInStationlist.htm";
+                    break;
+                case DeliveryWay.ByStationForPrj:
+                    roleName = "20.ByStationForPrj.htm";
+                    break;
+                case DeliveryWay.BySelectedForPrj:
+                    roleName = "21.BySelectedForPrj.htm";
+                    break;
+                case DeliveryWay.ByDeptLeader:
+                    roleName = "23.ByDeptLeader.htm";
+                    break;
+                case DeliveryWay.ByTeamOrgOnly:
+                    roleName = "24.ByTeamOrgOnly.htm";
+                    break;
+                case DeliveryWay.ByTeamOnly:
+                    roleName = "25.ByTeamOnly.htm";
+                    break;
+                case DeliveryWay.ByTeamDeptOnly:
+                    roleName = "26.ByTeamDeptOnly.htm";
+                    break;
+                case DeliveryWay.ByBindTeamEmp:
+                    roleName = "27.SelectEmpsByTeamStation.htm";
+                    break;
+                case DeliveryWay.BySelectedOrgs:
+                    roleName = "42.BySelectedOrgs.htm";
+                    break;
+                case DeliveryWay.ByCCFlowBPM:
+                    roleName = "100.ByCCFlowBPM.htm";
+                    break;
+                default:
+                    roleName = "0.ByStation.htm";
+                    break;
+            }
+            window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo;
+        }
+
+        //下拉列表选择的时候自动保存
+        function Save(nodeID) {
+            var id = "DDL_FrmSln_" + nodeID;
+            var obj = document.getElementById(id);
+            var sele = obj.options;
+            var index = obj.selectedIndex;
+            var optionKey = 0;
+            if (index > 1) {
+                optionKey = sele[index].value
+            }
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = optionKey;
+            node.Update();
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.CopyForm();  //按照规则把数据放入到entity.
+            node.Update();
+        }
+
+        //清除缓存，本组织的.
+        function AccepterRole_ClearStartFlowsCash() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            var data = handler.DoMethodReturnString("AccepterRole_ClearStartFlowsCash");
+        }
+        function Back() {
+            history.back();
+        }
+
+    </script>
+</head>
+<body style=" margin:10px; padding:20px;">
+
+    <center>
+        <h3>批量编辑节点绑定接收人规则 - <a href="javascript:Back()">返回</a> </h3>
+        <div>
+            <table id="sln" style="width:90%;">
+            </table>
+        </div>
+    </center>
+
+</body>
+</html>

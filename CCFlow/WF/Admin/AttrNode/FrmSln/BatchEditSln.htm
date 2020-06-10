@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/JS/layer/layer.css" rel="stylesheet" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var nodeID = GetQueryString("NodeID");
+        $(function () {
+
+            $("#sln").html("正在加载表单方案,请稍后...");
+
+            //获取节点属性
+            var node = new Entity("BP.WF.Template.NodeSimple", nodeID);
+
+            //节点对应关系.
+            var frmNodes = new Entities("BP.WF.Template.FrmNodes");
+            frmNodes.Retrieve("FK_Flow", node.FK_Flow);
+
+            var html = "<table style='wdith:90%;'>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>节点ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>表单ID</th>";
+            html += "<th>控制方案</th>";
+            html += "<th>审核组件状态</th>";
+            html += "<th>签批组件</th>";
+            // html += "<th>元素权限</th>";
+            html += "<th>详情</th>";
+            html += "</tr>";
+
+            //获得节点s.
+            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+
+            
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+
+                //找到节点与表单的对应关系.
+                var frmNode = null;
+                for (var idx = 0; idx < frmNodes.length; idx++) {
+                    var en = frmNodes[idx];
+                    if (en.FK_Node != json.NodeID)
+                        continue;
+                    frmNode = en;
+
+                    html += "<tr>";
+                    html += "<td>" + (i + 1) + "</td>";
+                    html += "<td>" + json.NodeID + "</td>";
+                    html += "<td>" + json.Name + "</td>";
+                    html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
+
+                    //控制方案
+                    html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
+                    //审核组件.
+                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>";
+                    //签批组件.
+                    html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>";
+
+                    //元素权限.
+                    //    html += "<td><a href='' >编辑</a></td>"; //
+
+                    html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>";
+                    html += "</tr>";
+                    break;
+                }
+
+                //if (frmNode == null) {
+                //    html += "<td colspan=3></td>";
+                //    html += "</tr>";
+                //    continue;
+                //}
+
+
+            }
+            html += "</table>";
+            $("#sln").html(html);
+
+
+
+
+            //绑定ddl.
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+
+                //找到节点与表单的对应关系.
+                var frmNode = null;
+                for (var idx = 0; idx < frmNodes.length; idx++) {
+                    var en = frmNodes[idx];
+                    if (en.FK_Node != json.NodeID)
+                        continue;
+                    frmNode = en;
+                    break;
+                }
+
+                if (frmNode == null) {
+                    continue;
+                }
+
+                //求出枚举值，然后绑定上.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
+                handler.AddPara("Fk_Frm", frmNode.FK_Frm);
+                var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
+
+                var frmSln = data["FrmSln"];
+                var fwcSta = data["FWCSta"];
+                var cfs = data["CheckFields"];
+
+                //绑定方案.
+                GenerBindDDL("DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);
+
+                //绑定状态.
+                GenerBindDDL("DDL_FWCSta_" + json.NodeID, fwcSta, "IntKey", "Lab", frmNode.IsEnableFWC);
+
+                //绑定字段.
+                GenerBindDDL("DDL_CheckField_" + json.NodeID, cfs, "No", "Name", frmNode.CheckField);
+                $("#DDL_CheckField_" + json.NodeID + " option:first").remove();//有两个“请选择”，移除一个
+            }
+        });
+
+        // 绑定表单信息.
+        function EditFrm(frmID) {
+            var url = '../../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=' + frmID + "&FrmID=" + frmID;
+            window.open(url);
+        }
+
+        function EditFrmNode(mypk) {
+
+            var url = '../../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=' + mypk;
+            window.open(url);
+            return;
+
+            OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+
+        function Save() {
+            //获取节点属性
+            var node = new Entity("BP.WF.Template.NodeSimple", nodeID);
+            //获得节点s.
+            var nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
+
+            //节点对应关系.
+            var frmNodes = new Entities("BP.WF.Template.FrmNodes");
+            frmNodes.Retrieve("FK_Flow", node.FK_Flow);
+            layer.load();//正在loading
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+                //找到节点与表单的对应关系.
+                var frmNode = null;
+                var IsEnableFWC = 0;
+                for (var idx = 0; idx < frmNodes.length; idx++) {
+                    var en = frmNodes[idx];
+                    if (en.FK_Node != json.NodeID)
+                        continue;
+                    var frmNode = new Entity("BP.WF.Template.FrmNode", en);
+                    frmNode.FrmSln = $("#DDL_FrmSln_" + json.NodeID).val();
+                    frmNode.IsEnableFWC = $("#DDL_FWCSta_" + json.NodeID).val();
+                    frmNode.CheckField = $("#DDL_CheckField_" + json.NodeID).val();
+                    frmNode.Update();
+
+                    if (IsEnableFWC == 0)
+                        IsEnableFWC = frmNode.IsEnableFWC;
+
+                    break;
+                }
+                var nd = new Entity("BP.WF.Template.NodeWorkCheck", json.NodeID);
+                nd.FWCSta = IsEnableFWC;
+                nd.Update();
+
+            }
+            layer.closeAll('loading'); 
+            alert('保存成功.');
+            window.location.href = window.location.href;
+        }
+
+
+        function Back() {
+            history.back();
+        }
+
+    </script>
+</head>
+<body style=" margin:10px; padding:20px;">
+
+    <center>
+        <h3><a href="javascript:Back()">返回</a> -<a href="javascript:Save()">保存</a>  -  批量编辑节点与表单对应关系</h3>
+        <div id="sln"></div>
+    </center>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自定义URL人员选择器</title>
+
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar">
+        </div>
+        <fieldset>
+            <legend>请在文本框里输入弹出人员选择的URL.</legend>
+            <br />
+            <textarea id="TB_URL" style="width: 95%; height: 50px" v-model="urlExt"></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">说明</legend>
+            <ul>
+                <li>该URL是点击发送直接弹出自定义的人员选择的页面，需要客户自动的处理人员选择的保存。</li>
+            </ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.BySelfUrl,
+                urlExt: '',
+                nodeId: GetQueryString("FK_Node")
+            },
+            created() {
+                InitBar(this.deliverWay);
+                var node = new Entity("BP.WF.Node", this.nodeId);
+                if (node.DeliveryWay == DeliveryWay.BySelfUrl) {
+
+                    this.urlExt = node.DeliveryParas;
+
+
+                }
+            }
+        });
+        function Save() {
+            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            if (Baseinfo.urlExt == "") {
+                alert("请输入自定义的URL.");
+                return;
+            }
+
+            node.DeliveryParas = Baseinfo.urlExt;
+            node.Update();
+        }
+    </script>
+</body>
+</html>

@@ -32,8 +32,10 @@
             var rootNo = "0";
 
             var webUser = new WebUser();
-            rootNo = webUser.OrgNo
+            if (orgNo == null)
+                orgNo = webUser.OrgNo;
 
+            rootNo = orgNo;  
 
             //多对多实体.
             var nodeDepts = new Entities("BP.WF.Template.NodeDepts");
@@ -50,7 +52,7 @@
                 global.selectedNodes.push({
                     "No": no,
                     "Name": name
-                });
+                }); 
             });
 
             loadTree(rootNo, global, orgNo, nodeID);
@@ -183,7 +185,7 @@
             var nodeID = GetQueryString("FK_Node");
             var orgNo = GetQueryString("OrgNo");
 
-            //删除,该组织下已经保存的岗位.
+            //删除,该组织下已经保存的岗位. 
             var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "')";
             DBAccess.RunSQL(sql);
 

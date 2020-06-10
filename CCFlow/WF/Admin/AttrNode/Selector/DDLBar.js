@@ -53,7 +53,7 @@ function InitBar(key) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_Save' type=button onclick='Back()' value='返回' />";
+    html += "<input  id='Btn_Back' type=button onclick='Back()' value='返回' />";
     //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
     //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
     html += "</div>";
@@ -85,8 +85,11 @@ function getStas() {
  * 获取节点绑定的部门
  */
 function getDepts(orgNo) {
-
-    var sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
+    var sql = "";
+    if (orgNo != null)
+        sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
+    else
+        sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") ;
     var ens = DBAccess.RunSQLReturnTable(sql);
     //var ens = new Entities("BP.WF.Template.NodeDepts");
     //ens.Retrieve("FK_Node", GetQueryString("FK_Node"));

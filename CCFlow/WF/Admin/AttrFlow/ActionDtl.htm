@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>节点-事件</title>
     <!--SQL编辑器-->
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <link href="../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
     <link href="../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
     <script src="../../Scripts/CodeMirror/lib/codemirror.js"></script>
@@ -24,7 +25,16 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <style>
+        #Btn_Save {
+            background-image: url(../../Img/Btn/Save.png) !important;
+        }
 
+        #Btn_Back {
+            background-image: url(../../Img/Btn/Back.png) !important;
+        }
+    </style>
     <script type="text/javascript">
         //页面启动函数.
         $(function () {
@@ -105,7 +115,7 @@
                 //$("#TB_SQL").hide();
                 $("#DDL_Doc").show();
             } else {
-               // $("#TB_SQL").show();
+                // $("#TB_SQL").show();
                 $("#DDL_Doc").hide();
             }
         }
@@ -120,7 +130,7 @@
     <form id="cc">
         <div style="right:30px; position:absolute; z-index:100; top:-3px">
             <input id="Btn_Save" name="Btn_Save" value="保存" onclick="Save();" type="button" />
-            <input id="Button1" name="Button1" value="返回" onclick="Back();" type="button" />
+            <input id="Btn_Back" name="Button1" value="返回" onclick="Back();" type="button" />
         </div>
         <div style="position:relative;">
             <table style="width:100%;" id="Table2">

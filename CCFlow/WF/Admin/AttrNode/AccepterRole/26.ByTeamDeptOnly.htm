@@ -19,16 +19,13 @@
     <div id="App">
         <div id="bar"> </div>
 
-        <div id="AdminModel">
-            <fieldset>
-                <legend>设置</legend>
-                <ul>
-                    <li><a href="#" @click="OpenNew()"> 设置/更改用户组</a></li>
-                    <!-- <li><a href="javascript:OpenOld()">设置/更改部门(旧版本)</a></li>-->
-                    <li>该用户组下所有的人员都可以处理该节点的工作。</li>
-                </ul>
-            </fieldset>
-        </div>
+        <fieldset>
+            <legend>绑定用户组</legend>
+            <ul>
+                <li><a href="javascript:OpenDot2DotTeams()">绑定用户组-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafTeams()">绑定用户组-左右树结构模式</a> </li>
+            </ul>
+        </fieldset>
 
         <fieldset>
             <legend>已经选择的用户组</legend>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
 
     <title>流程-事件</title>
-    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
@@ -17,15 +17,22 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
+    <script src="../Admin.js"></script>
     <style type="text/css">
-        caption
-        {
-            text-align:left;
-            font-family:'Microsoft YaHei';
-            font-weight:bolder;
-            border-bottom:none;
-            margin-bottom:10px;
+        caption {
+            text-align: left;
+            font-family: 'Microsoft YaHei';
+            font-weight: bolder;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+
+        #Btn_New {
+            background-image: url(../../Img/Btn/New.png) !important;
+        }
+
+        #Btn_Help {
+            background-image: url(../../Img/Btn/Help.png) !important;
         }
     </style>
     <script type="text/javascript">
@@ -128,8 +135,8 @@
 <body  >
 	<form id="cc">
         <div style="right:30px; position:absolute; z-index:100; ">
-            <input type=button value="新建流程事件" onclick="javascript:New()" />
-            <input type=button value="什么是流程事件？" onclick="javascript:Help()" />
+            <input id="Btn_New" type=button value="新建流程事件" onclick="javascript:New()" />
+            <input id="Btn_Help" type=button value="什么是流程事件？" onclick="javascript:Help()" />
         </div>
      <div style="position:relative;" id="Msg"></div>
      

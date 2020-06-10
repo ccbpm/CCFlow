@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>待办删除规则</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        /*
+         * 负责人：lizhen.
+         * 说明：调用参数 FK_Node
+         * 1. 保存到 WF_Node表的AtPara字段里面.
+         * 2. 通过Entity的SetPara, GetPara 方法设置或者获取参数字段.
+         */
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var fk_node = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", fk_node);
+
+            //调用公共类库的方法:执行批量主表赋值.
+            //GenerFullAllCtrlsVal(node);
+
+            $("#Msg").html("");
+        });
+
+        function Save() {
+
+            // var frmData = $("#cc").serialize();
+
+            var fk_node = GetQueryString("FK_Node");
+
+            var node = new Entity("BP.WF.Node", fk_node);
+            var role = $("input[name='GenerWorkerListDelRole']:checked").val();
+            node.SetPara("GenerWorkerListDelRole", role);
+            node.Update();
+            window.location.href = window.location.href;
+        }
+
+        function rb_onchange(obj) {
+
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+        <div id="bar" class="cs-tr cs-bar">
+            <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">
+                协作模式下的待办删除规则.
+            </label>
+
+            <input type="button" ID="Btn_Save" value="保存" onclick="Save()" />
+        </div>
+
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_0" name="GenerWorkerListDelRole" value="0"
+                       onclick="rb_onchange(0)" /><label for="RB_GenerWorkerListDelRole_0">不删除</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>正常处理待办工作，不对其他人员的待办做删除处理。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_1" name="GenerWorkerListDelRole" value="1"
+                       onClick="rb_onchange(1)" /><label for="RB_GenerWorkerListDelRole_1">删除同部门的人员(包括兼职部门)</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>如果当前节点是协作模式的节点。</li>
+                <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_2" name="GenerWorkerListDelRole" value="2"
+                       onClick="rb_onchange(2)" /><label for="RB_GenerWorkerListDelRole_2"> 删除同岗位的人员 </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>如果当前节点是协作模式的节点。</li>
+                <li>当前工作完成后，该节点绑定的岗位集合，当前操作员的岗位集合，与剩余每个人员的岗位集合对比如果有交集，该人员就被删除。</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>应用背景</legend>
+            <ul>
+                <li>当前节点必须是协作模式的节点.</li>
+                <li>多个部门的不同岗位上的人员一起处理工作.</li>
+                <li>比如：一个节点上有资产岗、财务岗、审法岗三个不同的岗位上的人员一起协作.</li>
+                <li>每个岗位上的人有可能大于等于2，需求是只要有一个人审批，这个岗位上的另外一个人的待办自动消失.</li>
+                <li>比如财务岗上有3个人可以审批，分别是zhangsan,lisi,wangwu,其中一个lisi审批完毕后，其余两个人就不审批了.</li>
+
+            </ul>
+
+        </fieldset>
+
+
+
+    </form>
+
+</body>
+</html>

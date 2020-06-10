@@ -19,29 +19,18 @@
 <body>
     <div id="App">
         <div id="bar"> </div>
-        <div id="AdminModel" v-show="adminModel===1">
-            <fieldset>
-                <legend>设置岗位</legend>
-                <ul>
-                    <li><a href="javascript:void(0)" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
-                    <li> <a href="javascript:void(0)" @click="OpenNew()">设置/更改岗位（左右树结构）</a> </li>
-                    <li>
-                        <a href='http://ccbpm.mydoc.io' target='_blank'><img src='../../../Img/Help.png' style="vertical-align: middle" />帮助</a>
-                    </li>
-                </ul>
-            </fieldset>
-        </div>
-        <div id="OrgModel">
-            <fieldset v-show="orgModel===1">
-                <legend>设置（组织管理员）</legend>
-                <ul>
-                    <li> <a href="javascript:void(0)" @click="SetGroupStations()">设置集团岗位</a> </li>
-                    <li> <a href="javascript:void(0)" @click="SetOrgStations()">设置本组织岗位</a> </li>
-                </ul>
-            </fieldset>
-        </div>
+
+        <fieldset>
+            <legend>绑定岗位</legend>
+            <ul>
+                <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafStations()">绑定岗位-左右树结构模式</a> </li>
+            </ul>
+        </fieldset>
+
+
         <div class="cs-content-box">
-            <div  style="background-color:#ffffff;  box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 3px; padding: 0 28px 12px;margin: -6px 0 10px; border: 0;font-size: 13px;">
+            <div style="background-color:#ffffff;  box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 3px; padding: 0 28px 12px;margin: -6px 0 10px; border: 0;font-size: 13px;">
                 <table style="width:60%;">
                     <caption>已经设置的岗位,合计:(<font color=red>{{stas.length}}</font>)条</caption>
                     <tr v-show="index ==0 ||(index+1)%8 == 0" v-for="(m,index) in stas">

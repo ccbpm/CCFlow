@@ -67,7 +67,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         // 如果你要删除，就执行删除接口.
         if (1 == 2)
         {
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(flowNo, workid, false);
+           // BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(flowNo, workid, false);
             return;
         }
 

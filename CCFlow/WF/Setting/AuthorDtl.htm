@@ -59,30 +59,30 @@
         var emp = null;
         var currPowerFlag = "";
         var flows = [];
-        var treeFlowName="";
+        var treeFlowName = "";
         $(function () {
             BindPop();
             var mtags = $("#TB_Flows");
-            //初始化mtags 
+            //初始化mtags
             mtags.mtags({
                 "fit": true,
                 "onUnselect": function (record) {
                     //点×时同时删除数组元素
-                    for(var i = 0; i < flows.length; i++) {
-                        if(flows[i].Name == record.Name) {
-                         flows.splice(i, 1);
-                         break;
+                    for (var i = 0; i < flows.length; i++) {
+                        if (flows[i].Name == record.Name) {
+                            flows.splice(i, 1);
+                            break;
                         }
-                       }
+                    }
                 }
             });
             webUser = new WebUser();
-           
+
             $('#Btn_Auto').bind('click', function () { BindPop(); $('#selectEmpsModal').modal().show(); });//选择授权人按钮
 
-            var sql = "select No from WF_FlowSort WHERE Name='流程树'";
-            var FK_FlowSort = DBAccess.RunSQLReturnVal(sql);
-            var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F"+FK_FlowSort+"&IsSelectMore=1&treeFlowName="+treeFlowName;
+            var FK_FlowSorts = new Entities("BP.WF.Template.FlowSorts");
+            FK_FlowSorts.Retrieve("Name","流程树");
+            var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F" + FK_FlowSorts[0].No + "&IsSelectMore=1&treeFlowName=" + treeFlowName;
 
             //设置流程字段的显示与隐藏
             var select = $("#DDL_AuthorWay").val();
@@ -100,7 +100,7 @@
                     $("#flowID").hide();
                 }
             });
-            
+
             //流程选择事件
 
             $("#TB_Flows").bind("dblclick", function () {
@@ -158,7 +158,9 @@
             }
             //判断是否已有全部流程授权
             var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 1 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT >= '" + en.TakeBackDT + "'";
-            var dt = DBAccess.RunSQLReturnTable(sql); 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("SQL", sql);
+            var dt = handler.DoMethodReturnString("RunSQL_Init");
             if (dt.length != 0) {
                 alert("已按全部流程授权！");
                 return;
@@ -177,7 +179,7 @@
                 }
             } else {
 
-                en.Insert();   
+                en.Insert();
             }
             window.location.href = 'Author.htm';
 
@@ -243,7 +245,7 @@
             <caption style="height:auto;text-indent: 0em;">
                 授权详细信息
             </caption>
-           
+
             <tr>
                 <td>
                     授权给
@@ -253,7 +255,7 @@
                     <input type="text" id="TB_EmpName" name="TB_EmpName" class="form-control" readonly="readonly" />
                 </td>
                 <td>
-                    <input type="button" value="选择授权人" id="Btn_Auto"  />
+                    <input type="button" value="选择授权人" id="Btn_Auto" />
                 </td>
             </tr>
             <tr>
@@ -261,7 +263,7 @@
                     收回授权日期:
                 </td>
                 <td>
-                    <input name="TB_DT" class="Wdate" type="text"  maxlength="20"
+                    <input name="TB_DT" class="Wdate" type="text" maxlength="20"
                            id="TB_DT" onfocus="WdatePicker({minDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'});" />
                 </td>
                 <td>
@@ -292,7 +294,6 @@
                     <!--<input class="form-control mtags" type="text" id="TB_Flows" name="TB_Flows" />-->
                 </td>
                 <td>
-
                 </td>
             </tr>
 
@@ -301,8 +302,8 @@
                     <input type="button" name="Btn_Save" value="保存" id="Btn_Save"
                            onclick="Save();" />
 
-                    <input type="button" name="Btn_Sa2ve" value="返回" id="Btn_bACK" 
-                           onclick="javascript: window.location.href = 'Author.htm'"  />
+                    <input type="button" name="Btn_Sa2ve" value="返回" id="Btn_bACK"
+                           onclick="javascript: window.location.href = 'Author.htm'" />
 
                 </td>
             </tr>

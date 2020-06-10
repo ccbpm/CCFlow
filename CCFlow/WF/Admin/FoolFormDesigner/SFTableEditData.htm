@@ -14,23 +14,26 @@
     <!--<link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />-->
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Scripts/PinYin.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" language="javascript" >
-        // 负责人：史连雨
+  
         var maxIndx = 0;//定义新增之后的最大序号
+        var fk_sftable = GetQueryString("FK_SFTable");
+        var QueryType = GetQueryString("QueryType");
         $(function () {
             InitPage();
 
         });
 
         function InitPage() {
-            var fk_sftable = GetQueryString("FK_SFTable");
-            var QueryType = GetQueryString("QueryType");
+            //外键是sql形式的时候，只能查看
             if (QueryType == "Sql") {
                 $("#Btns").hide();
             }
             var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
             var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");
+            
             maxIndx = ens.length;
             var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
             html += "<tr>";
@@ -40,9 +43,14 @@
             html += "</tr>";
             //绑定数据.
             for (var i = 0; i < ens.length; i++) {
+                var No = ens[i].No;
+                //系统字典表时查的是BH
+                if (QueryType == "Dict") {
+                    No = ens[i].BH;
+                }
                 html += "<tr>";
-                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + ens[i].No + "'  type='checkbox' name='IDX_" + ens[i].No + "' /><label for='IDX_" + ens[i].No + "'>" + (i + 1) + "</label></td>";
-                html += "<td><input  name='TB_No_" + (i + 1) + "' id='TB_No_" + (i + 1) + "' type='text' disabled='disabled' value='" + ens[i].No + "'/></td>";
+                html += "<td class='Idx' nowrap style='width:70px'><input id='IDX_" + No + "'  type='checkbox' name='IDX_" + No + "' /><label for='IDX_" + No + "'>" + (i + 1) + "</label></td>";
+                html += "<td><input  name='TB_No_" + (i + 1) + "' id='TB_No_" + (i + 1) + "' type='text' disabled='disabled' value='" + No + "'/></td>";
                 html += "<td><input  name='TB_Name_" + (i + 1) + "' id='TB_Name_" + (i + 1) + "' type='text' value='" + ens[i].Name + "' style='width:98%;'/></td>";
                 html += "</tr>";
             }
@@ -60,10 +68,34 @@
             maxIndx++;
             var html = "";
 
-            if (isSave == true) {
+            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            if (sfTable.NoGenerModel == 1) {//按流水号的生成规则计算方式
+                if (isSave == true ) {
 
-                var fk_sftable = GetQueryString("FK_SFTable");
-                var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                    var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                    if (generNewNo.indexOf('err@') == 0)
+                        generNewNo = "";
+
+                    currNewNo = generNewNo;
+                }
+                if (isSave == false) {
+                    if (currNewNo != "") {
+                     generNewNo = parseInt(currNewNo) + 1;
+                        if (generNewNo >= 10) {
+                            generNewNo = "0" + generNewNo;
+                        }
+                        if (generNewNo > 0 && generNewNo < 10) {
+                            generNewNo = "00" + generNewNo;
+                        }
+
+                        currNewNo++;
+                    } else {
+                        generNewNo = "";
+
+                    }
+               
+                }
+            } else {//其他
                 var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
                 if (generNewNo.indexOf('err@') == 0)
                     generNewNo = "";
@@ -71,46 +103,51 @@
                 currNewNo = generNewNo;
             }
 
-            if (isSave == false) {
-                if (currNewNo != "") {
-                 generNewNo = parseInt(currNewNo) + 1;
-                    if (generNewNo >= 10) {
-                        generNewNo = "0" + generNewNo;
-                    }
-                    if (generNewNo > 0 && generNewNo < 10) {
-                        generNewNo = "00" + generNewNo;
-                    }
-
-                    currNewNo++;
-                } else {
-                    generNewNo = "";
-
-                }
-               
-            }
-
-
             html += "<tr>";
             html += "<td class='Idx'><font color=red>*</font></td>";
-            html += "<td ><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
+            if (sfTable.NoGenerModel == 2 || sfTable.NoGenerModel == 3) 
+                html += "<td ><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' readonly='readonly' type='text' value='"+generNewNo+"' /></td>";
+            else
+                html += "<td ><input  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='"+generNewNo+"' /></td>";
             html += "<td ><input  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' style='width:98%;' /></td>";
             html += "</tr>";
 
             $("#mytable tbody:last").append(html);
 
+            //按全拼生成编号
+            if (sfTable.NoGenerModel == 2) {
+
+                $("#TB_Name_" + maxIndx).blur(function () {
+                    var TB_Name = $("#TB_Name_" + maxIndx).val();
+                    ParsePinYin(TB_Name, true, "TB_No_" + maxIndx);
+
+                });
+            }
+            //按简拼生成编号
+            if (sfTable.NoGenerModel == 3) {
+
+            $("#TB_Name_" + maxIndx).blur(function () {
+                var TB_Name = $("#TB_Name_" + maxIndx).val();
+                ParsePinYin(TB_Name, false, "TB_No_" + maxIndx);
+
+            });
+            }
             isSave = false;
         }
 
         //更新.
         function Save() {
             //保存更新
-            var FK_SFTable = GetQueryString("FK_SFTable");
-            var sql = "select No, Name from " + FK_SFTable;
-            var ens = DBAccess.RunSQLReturnTable(sql);
+            var SFTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var ens = SFTable.DoMethodReturnJSON("GenerDataOfJson");
             for (var i = 0; i < ens.length; i++) {
+                var No = ens[i].No;
+                if (QueryType == "Dict") {
+                    No = ens[i].BH;
+                }
                 var newName = $("#TB_Name_" + (i + 1)).val();
-                var sql = "update " + FK_SFTable + " set Name = '" + newName + "' where No = '" + ens[i].No+"'";
-                DBAccess.RunSQLReturnTable(sql);
+                SFTable.DoMethodReturnString("UpdateData", No, newName, fk_sftable);
+                
             }
             //保存新增
             for (var j = ens.length; j < maxIndx; j++) {
@@ -121,24 +158,19 @@
                 }
                 var Name = $("#TB_Name_" + (j + 1)).val();
                 if (No != undefined || Name != undefined) {
-                    var FK_SFTable = GetQueryString("FK_SFTable");
-                    var sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
-                    var flag = DBAccess.RunSQLReturnTable(sql);
+                    SFTable.DoMethodReturnString("InsertData", No, Name, fk_sftable);
                 }
             }
 
             isSave = true;
-            alert("保存成功！");
             InitPage(); //刷新.
         }
         //删除
         function Delete() {
-            //            var ensName = GetQueryString("EnsName");
-            var FK_SFTable = GetQueryString("FK_SFTable");
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-
-            //获得存储的值.
+            var SFTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            //获得选中的所有.
             var cbs = $("input[type='checkbox']:checked");
             var str = "";
 
@@ -146,8 +178,7 @@
                 if (this.id.indexOf('IDX_') == -1)
                     return true;
                 str = this.id.substring(4);
-                var sql = "delete from " + FK_SFTable + " where No = '" + str + "'";
-                var flag = DBAccess.RunSQLReturnTable(sql);
+                SFTable.DoMethodReturnString("DeleteData", str, fk_sftable);
 
             });
             InitPage(); //刷新.
@@ -174,7 +205,7 @@
 <body  >
 
 <form id="divCCForm">
-  <div data-options="region:'center'" style="padding: 0px;" border="false" style="overflow: hidden;">
+  <div data-options="region:'center'" style="padding: 0px;overflow: hidden;" border="false" >
          <div class="easyui-panel" >
              <div id="Btns" class="ToolBar" style="width:auto">
               

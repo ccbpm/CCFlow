@@ -211,6 +211,7 @@
             handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
             handler.AddPara("DirType", GetQueryString("DirType"));
             handler.AddPara("CondType", GetQueryString("CondType"));
+            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
             handler.AddFormData()
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Save");
@@ -298,10 +299,13 @@
             //cond.Save();
         }
 
-        //返回.
+         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondStation.htm', 'List.htm');
+            if (GetQueryString("CondOrAnd") == null)
+                url = url.replace('CondStation.htm', 'List.htm');
+            else
+                url = url.replace('CondStation.htm', '../Cond2020/DirList.htm');
             window.location.href = url;
         }
     </script>

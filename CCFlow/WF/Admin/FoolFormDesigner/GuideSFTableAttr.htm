@@ -2,7 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"
+            defer="defer"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript">
         function load() {
@@ -16,6 +26,15 @@
             } else {
                 ensName = 'BP.Sys.FrmUI.SFTable';
             }
+
+            var en = new Entity("BP.Sys.SFTable", fk_SFTable);
+
+            if (en.SrcType == 7)
+                ensName = "BP.Sys.SFTableDict";
+
+            if (en.SrcType == 3)
+                ensName = "BP.Sys.SFTableSQL";
+
 
             var myurl = '../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_SFTable;
             window.location.href = myurl;

@@ -38,15 +38,15 @@
 
                 html = "";
                 html += "<tr>";
-                html += "<td colspan=12><font color=green><b>" + group.Lab + "</b></font></td>";
+                html += "<td colspan=12 class=Sum><font color=green><b>" + group.Lab + "</b></font></td>";
                 html += "</tr>";
                 $("#Table1 tr:last").after(html);
 
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
-                    if (en.UIVisible == 0 || en.GroupID != group.OID)
+                    if (en.EditType != 0 || en.GroupID != group.OID || en.KeyOfEn == "FID")
                         continue;
-                    if (en.MyDataType==2 && en.DefValType == 0 && en.DefVal=='10002') {
+                    if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
                         en.DefVal = "";
                     }
                     var html = "";
@@ -55,18 +55,34 @@
                     html += "<td>" + en.KeyOfEn + "</td>";
                     html += "<td>" + en.Name + "</td>";
 
-                    if (en.LGType == 0) html += "<td>普通</td>";
-                    if (en.LGType == 1) html += "<td>枚举</td>";
-                    if (en.LGType == 2) html += "<td>外键</td>";
-
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
-
-                    html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/></td>";
+                    if (en.UIContralType >= 4) {
+                        html += "<td class=Sum>组件</td>";
+                    } else {
+                        if (en.LGType == 0) html += "<td>普通</td>";
+                        if (en.LGType == 1) html += "<td>枚举</td>";
+                        if (en.LGType == 2) html += "<td>外键</td>";
+                    }
+                    if (en.UIContralType >= 4) {
+                        html += "<td colspan=2> - </td>";
+                    } else {
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','"+en.KeyOfEn+"')>默认值<a/></td>";
+                    }
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                    if (en.UIContralType == 14) {
+                        html += "<td> - </td>";
+                    } else {
+
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
+                    }
+                    if (en.UIContralType >= 4) {
+                        html += "<td colspan=3> - </td>";
+                    } else {
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+
+                    }
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
                     html += "</tr>";
 
@@ -95,8 +111,40 @@
                 SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
             }
 
-        });
+           
 
+        });
+        function AddDefVal(no, id) {
+            document.getElementById(id + "_DefVal").value = no;
+        }
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID, inputID) {
+            var ens = new Entities("BP.Sys.GloVars");
+            ens.Retrieve("GroupKey", "DefVal");
+            
+            //var sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
+            //var dts = DBAccess.RunSQLReturnTable(sql);
+            html = "<div id='state' style='padding-top:20px; padding-left:60px; width:360px; height:400px; position: absolute; z-index: 10; background-color: #F5F5F5; border: 2px outset black; display: none; color: Gray; top:100px;left:500px;>";
+            html += "<h4>系统默认值</h4>";
+            html += " <ol style='padding:10px;'>";
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                html += " <li><a href=\"javascript:AddDefVal('" + en.No + "','"+inputID+"')\"> " + en.Name + " </a> </li>";
+            }
+            html += " </ol>";
+            html += "</div>";
+
+            $("#Table1").after(html);
+
+            var ctrl = document.getElementById(ctrlID);
+
+            ctrl.style.display = 'block';
+
+            document.onmouseup = function () {
+
+                ctrl.style.display = "none";
+            }
+        }
         function SetCheckBox(ff, key, val, label) {
 
             //是否可用.
@@ -136,7 +184,7 @@
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var en = mapAttrs[i];
-                if (en.UIVisible == 0)
+                if (en.EditType != 0 || en.KeyOfEn == "FID")
                     continue;
 
                 ff = new Entity("BP.WF.Template.FrmField");
@@ -273,7 +321,7 @@
             </th>
             <th>
                 字段
-            </th>
+            </th >
             <th>
                 名称
             </th>
@@ -321,8 +369,15 @@
             </th>-->
         </tr>
     </table>
-    <button onclick='Save();' type='button'>
-        保存
-    </button>
+    <br />
+    <center>
+        <button onclick='Save();' type='button'>
+            &nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;
+        </button>
+    </center>
+    <br />
+    <br />
+    <br />
+
 </body>
 </html>

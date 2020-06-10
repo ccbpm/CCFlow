@@ -25,7 +25,7 @@
         var fk_sftable = GetQueryString("FK_SFTable");
         function InitPage() {
             var ens = new Entities("BP.Sys.DictDtls");
-	        ens.Retrieve("DictMyPK", fk_sftable);
+	        ens.Retrieve("FK_SFTable", fk_sftable);
 
             maxIndx = ens.length;
             var html = "<table border=0 cellpadding='0'  style='border-collapse: collapse;width:100%' cellspacing='0' >";
@@ -102,7 +102,7 @@
             //保存更新
             //var FK_SFTable = GetQueryString("FK_SFTable");
             var ens = new Entities("BP.Sys.DictDtls");
-	        ens.Retrieve("DictMyPK", fk_sftable);
+	        ens.Retrieve("FK_SFTable", fk_sftable);
             for (var i = 0; i < ens.length; i++) {
                 var bh = $("#TB_No_" + (i + 1)).val();
                 var newName = $("#TB_Name_" + (i + 1)).val();
@@ -122,9 +122,9 @@
                     var en = new Entity("BP.Sys.DictDtl");
                     en.BH = No;
                     en.Name = Name;
-                    en.DictMyPK = fk_sftable;
+                    en.FK_SFTable = fk_sftable;
                     en.MyPK = fk_sftable + "_" + No;
-                    en.OrgNo = WebUser.OrgNo;
+                    //en.OrgNo = WebUser.OrgNo;
                     en.Insert();
                 }
             }

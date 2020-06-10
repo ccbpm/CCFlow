@@ -1,40 +1,47 @@
 ﻿
+if ("undefined" == typeof IsShowDevelopFieldLab) {
+    IsShowDevelopFieldLab =true;
+}
+
 //插入html.
 function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolType)
 {
     var _Html = "";
+    var fieldName = "";
+    if (IsShowDevelopFieldLab == true)
+        fieldName = name
     //文本
     if (dataType == "Text")
-        _Html = "<input type='text' value= ''  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>"+name;
+        _Html = "<input type='text' value= ''  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + fieldName;
     if (dataType == "Textarea") {
         if (uicontrolType == 14)
-            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>" + name;
+            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>" + fieldName;
         else if (uicontrolType == 15)
-            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='FlowBBS'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>" + name;
+            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='FlowBBS'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>" + fieldName;
         else
-            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>" + name;
+            _Html = "<textarea id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;'></textarea>" + fieldName;
     }
     //int型
     if (dataType == "Int")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + fieldName;
     //Float型
     if (dataType == "Float")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + fieldName;
     //浮点型
     if (dataType == "Double")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + fieldName;
     //金额
     if (dataType == "Money")
-        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + name;
+        _Html = "<input type='text' value= '' id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  class='form-control' leipiplugins='text' style='width:120px'/>" + fieldName;
     //日期
     if (dataType == "Date")
-        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"   leipiplugins="text" style="width:120px"/>' + name;
+        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"   leipiplugins="text" style="width:120px"/>' + fieldName;
     //时间
     if (dataType == "DateTime")
-        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>' + name;
+        _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>' + fieldName;
     //复选框
     if (dataType == "CheckBox")
-        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name + "</label>" + name;
+        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name + "</label>" + fieldName;
 
     if (dataType == "Radio") {
         //获取枚举值
@@ -131,7 +138,11 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='评论组件'/>";
 
     if (dataType == "DocWord")
-        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='发文字号'/>";
+
+    if (dataType == "DocWordReceive")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='收文字号'/>";
+
     if (dataType == "Btn")
         _Html = "<input type='button'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='Btn' value='" + name + "'   leipiplugins='component' class='Btn'/>";
 
@@ -203,8 +214,13 @@ function GetDataType(mapAttr) {
             return "FlowBBS";
         if (mapAttr.UIContralType == 16)//评论组件
             return "Fixed";
-        if (mapAttr.UIContralType == 17)//公文字号
+
+        if (mapAttr.UIContralType == 17) //发文字号
             return "DocWord";
+
+        if (mapAttr.UIContralType == 170) //收文字号
+            return "DocWordReceive";
+
         if (mapAttr.UIContralType == 18)//按钮
             return "Btn";
     }

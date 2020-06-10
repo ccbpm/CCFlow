@@ -39,23 +39,27 @@
             }
 
             //转json.
-            var wf_Cond = JSON.parse(data);
+            var conds = JSON.parse(data);
+
+             
 
             var strs = "";
-            for (var i = 0; i < wf_Cond.length; i++) {
+            for (var i = 0; i < conds.length; i++) {
 
-                var cond = wf_Cond[i];
-                if (strs.indexOf('@' + cond.ToNodeID) >= 1) {
-                    continue;
-                }
-                strs += "@" + cond.NodeID;
+                var cond = conds[i];
+                //if (strs.indexOf('@' + cond.ToNodeID) >= 0) {
+                //    continue;
+                //}
+                //strs += "@" + cond.ToNodeID;
+
+                var nd = new Entity("BP.WF.Template.NodeSimple", cond.ToNode);
 
                 var newRow = "";
                 newRow = "<tr >";
                 newRow += "<td class=Idx>" + i + "</td>";
-                newRow += "<td>" + cond.ToNodeID + "</td>";
-                newRow += "<td>" + cond.Note + "</td>";
-                newRow += "<td>" + cond.PRI + "</td>";
+                newRow += "<td>" + cond.ToNode + "</td>";
+                newRow += "<td>" + nd.Name + "</td>";
+
                 newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Up')\">上移</a> - <a href=\"javascript:DoIt('" + cond.MyPK + "','Down')\">下移</a></td>";
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
@@ -89,29 +93,28 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-        <table id="Table1" name="Table1" style="width: 99%;">
+        <table id="Table1" name="Table1" style="width: 99%; padding:10px; margin:5px;">
             <caption>方向条件优先级</caption>
             <tr>
                 <th>序</th>
                 <th>到节点ID</th>
                 <th>名称</th>
                 <th>优先级</th>
-                <th>操作</th>
+                
             </tr>
         </table>
 
-        <div id="Msg" ></div>
-
-
+        <div id="Msg"></div>
+        <br />
+        <br />
         <fieldset>
-            <legend id="help">什么是方向条件的优先级？</legend>
+            <legend> 什么是方向条件的优先级? </legend>
             <ul>
                 <li>在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
                 <li>例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>
                 <li>只有一个方向条件的小于等于1就不能设置。</li>
             </ul>
         </fieldset>
-
     </form>
 </body>
 </html>

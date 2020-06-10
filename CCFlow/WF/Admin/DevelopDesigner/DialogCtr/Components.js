@@ -12,10 +12,13 @@
         if (_html == "")
             return;
          editor.execCommand('insertHtml', _html);     
-    }
+}
+
+
 
     function GetHtmlByMapAttrAndFrmComponent(mapData, frmComponent) {
         var _html = "";
+
         switch (frmComponent) {
             case 4: //地图控件
                 _html = "<div style='text-align:left;padding-left:0px' id='Map_" + mapData.KeyOfEn + "' data-type='Map' data-key='" + mapData.MyPK + "' leipiplugins='component'>";
@@ -26,6 +29,7 @@
             case 5://录音控件
                 break;
             case 6: //字段附件
+                _html +=mapData.Name+"<input type='text'  id='TB_"+mapData.KeyOfEn+"' name='TB_"+mapData.KeyOfEn+"' data-key='"+mapData.KeyOfEn+"' data-name='"+mapData.Name+"' data-type='AthShow'   leipiplugins='component' style='width:98%' placeholder='请上传附件'/>";
                 break;
             case 7:
                 break;
@@ -46,15 +50,18 @@
 
                 break;
             case 14://签批组件
-                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>" + mapData.Name; 
+                _html = "<textarea id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='SignCheck'  leipiplugins='textarea' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='签批组件'></textarea>";
                 break;
             case 15://评论组件
-                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>评论组件" ;
+                _html = "<textarea id='TB_FlowBBS' name='TB_FlowBBS' data-key='FlowBBS' data-name='评论组件' data-type='FlowBBS'  leipiplugins='component' value='' orgrich='0' orgfontsize='12' orgwidth='600' orgheight='80' style='font-size: 12px; width: 528px; height: 59px; margin: 0px;' placeholder='评论组件'></textarea>" ;
                 break;
             case 16://系统定位
                 break;
-            case 17:// 公文字号
-                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='公文字号'/>";
+            case 17:// 发文字号
+                _html = "<input type='text'  id='TB_DocWord' name='TB_DocWord' data-key='DocWord' data-name='公文字号' data-type='DocWord'   leipiplugins='component' style='width:98%' placeholder='发文字号'/>";
+                break;
+            case 170:// 收文字号
+                _html = "<input type='text'  id='TB_DocWordReceive' name='TB_DocWordReceive' data-key='DocWordReceive' data-name='收文字号' data-type='DocWordReceive'   leipiplugins='component' style='width:98%' placeholder='收文字号'/>";
                 break;
             case 18:
                 _html = "<input type='button'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='Btn' value='" + mapData.Name +"'   leipiplugins='component' class='Btn'/>";
@@ -64,7 +71,7 @@
                 break;
             case 60://大文本
                 break;
-            case 70://独立附件
+            case 70: //
                 _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + mapData + "' />"
                 break;
             case 80://从表

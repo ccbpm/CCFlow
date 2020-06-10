@@ -29,7 +29,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
+            $("#table").html("正在加载,请稍后......");
 
             //初始化groupID.
             var nodeID = GetQueryString("FK_MainNode");
@@ -42,7 +42,7 @@
             var toNode = new Entity("BP.WF.Node", toNodeID);
 
             var ens = new Entities("BP.WF.Template.Conds");
-            ens.Retrieve("NodeID", nodeID, "CondType", condType, "ToNodeID", toNodeID);
+            ens.Retrieve("FK_Node", nodeID, "CondType", condType, "ToNodeID", toNodeID);
 
             var html = "<table class='table table-striped table-bordered table-hover table-condensed' style='width:98%;'>";
 
@@ -54,7 +54,7 @@
 
             html += "<tr>";
             html += "<th>序</th>";
-            html += "<th>标识</th>";
+            //html += "<th>标识</th>";
             html += "<th>类型编号</th>";
             html += "<th>类型</th>";
             html += "<th>内容描述</th>";
@@ -68,7 +68,7 @@
 
                 html += "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
-                html += "<td>" + en.MyPK + "</td>";
+                //html += "<td>" + en.MyPK + "</td>";
                 html += "<td>" + condDesc.No + "</td>";
                 html += "<td><a href=\"javascript:NewCond('" + condDesc.No + "');\">" + condDesc.Name + "</a></td>";
 
@@ -85,12 +85,18 @@
 
                 html += "<td>" + docs + "</td>";
 
-                html += "<td><a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a></td>";
+                html += "<td>";
+                html += "<a  href=\"javascript:DeleteIt('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + en.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />上移</a>";
+                html += " - <a class='btn btn-default btn-sm' href=\"javascript:DeleteIt('" + en.MyPK + "')\"><img src='../../Img/Btn/Up.gif' border=0 />下移</a>";
+
+                html += "<td>";
+
                 html += "</tr>";
             }
             html += "</table>";
 
-            $("#Msg").html(html);
+            $("#table").html(html);
         });
 
 
@@ -147,6 +153,7 @@
         function NewCond(type) {
             var url = window.location.href;
             url = url.replace('List.htm', type + '.htm');
+   
             window.location.href = url;
         }
     </script>
@@ -154,6 +161,7 @@
 <body>
     <form id="cc">
         <div style="right:30px; position:absolute; z-index:100; ">
+
             <input type="button" value="+新建条件" onclick="ShowHidden('state')" />
             <div id="state" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray">
                 <ul>
@@ -167,13 +175,23 @@
                     <li><a href="javascript:NewCond('CondByUrl');">按Url条件计算</a> </li>
                 </ul>
             </div>
+
+            <input type="button" value="+新建运算符bate" onclick="ShowHidden('state1')" />
+            <div id="state1" style="position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: Gray;right:115px">
+                <ul>
+                    <li><a href="javascript:AddCond('(');"> ( 左括号 &nbsp;&nbsp;&nbsp;&nbsp; </a> </li>
+                    <li><a href="javascript:AddCond(')');"> ) 右括号&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                    <li><a href="javascript:AddCond('AND');"> AND 并且&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                    <li><a href="javascript:AddCond('OR');"> OR 或者&nbsp;&nbsp;&nbsp;&nbsp;</a> </li>
+                </ul>
+            </div>
+
             <input type="button" value="什么是条件？" onclick="javascript:Help()" />
         </div>
-        <div style="position:relative;" id="Msg">
+        <div style="position:relative;" id="table">
         </div>
-        <br />
-        
-        
+
+
     </form>
 </body>
 </html>

@@ -94,12 +94,12 @@
 
                     str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
                 } else {
-                    str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+                    str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
                 
                 }
-                str += "<td ><select  id=\"TB_UIIsEnable_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
-                str += "<td ><select id=\"TB_UIVisible_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
-                str += "<td ><select id=\"TB_UIIsInput_" + (i + 1) + "\"   style='width:60px;'><option value ='1'>是</option><option value ='0'>否</option></select></td>";
+                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='TB_UIIsEnable_" + (i + 1) + "' type='checkbox' />只读</label></td>";
+                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='TB_UIVisible_" + (i + 1) + "' type='checkbox' />可见</label></td>";
+                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsInput' id='TB_UIIsInput_" + (i + 1) +  "' type='checkbox' />必填</label></td>";
 
                 str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + attr.Idx + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
 
@@ -113,7 +113,16 @@
                 $("#TB_MyDataType_" + (i + 1)).val(attr.MyDataType);
                 $("#TB_UIIsEnable_" + (i + 1)).val(attr.UIIsEnable);
                 $("#TB_UIVisible_"+ (i + 1) ).val(attr.UIVisible);
-                $("#TB_UIIsInput_"+ (i + 1)).val(attr.UIIsInput);
+                $("#TB_UIIsInput_" + (i + 1)).val(attr.UIIsInput);
+                if (attr.UIIsEnable == 1) {
+                    $("#TB_UIIsEnable_" + (i + 1)).prop("checked", "true");
+                }
+                if (attr.UIVisible == 1) {
+                    $("#TB_UIVisible_" + (i + 1)).prop("checked", "true");
+                }
+                if (attr.UIIsInput == 1) {
+                    $("#TB_UIIsInput_" + (i + 1)).prop("checked", "true");
+                }
             }
             
         }
@@ -136,7 +145,26 @@
 
            $(obj).parent().parent().remove();
         }
+        //function upischange(index) {
+        //    fieldsData[index].IsChange = true;
+        //}
+        //绑定是否全选或者取消全选
+        function checkclick(o, index) {
+            //upischange(index);
+            var ischeckedall = true;
+            var rowstype = o.classList;
+            $('.' + rowstype).each(function () {
+                if (this.type == 'checkbox' && !this.checked) {
+                    ischeckedall = false;
+                    return ischeckedall;
+                }
+            });
 
+            if (ischeckedall)
+                $('#KeyOfEn_' + rowstype)[0].checked = true;
+            else
+                $('#KeyOfEn_' + rowstype)[0].checked = false;
+        }
         function Btn_Save_Click() {
 
             //获取数据列表
@@ -150,9 +178,22 @@
                         mapAttr.Name = tdArr.eq(2).find('input').val();
                         mapAttr.MyDataType = tdArr.eq(3).find('select').val();
                         mapAttr.MaxLen = tdArr.eq(4).find('input').val();
-                        mapAttr.UIIsEnable = tdArr.eq(5).find('select').val();
-                        mapAttr.UIVisible = tdArr.eq(6).find('select').val();
-                        mapAttr.UIIsInput = tdArr.eq(7).find('select').val();
+                        if (tdArr.eq(5).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIIsEnable = 1;
+                        } else {
+                            mapAttr.UIIsEnable = 0;
+                        }
+                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIVisible = 1;
+                        } else {
+                            mapAttr.UIVisible = 0;
+                        }
+                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIIsInput = 1;
+                        } else {
+                            mapAttr.UIIsInput = 0;
+                        }
+                        
                         mapAttr.Idx = tdArr.eq(8).find('input').val();
                         mapAttr.Update();
                         
@@ -167,9 +208,21 @@
                         mapAttr.Name = tdArr.eq(2).find('input').val();
                         mapAttr.MyDataType = tdArr.eq(3).find('select').val();
                         mapAttr.MaxLen = tdArr.eq(4).find('input').val();
-                        mapAttr.UIIsEnable = tdArr.eq(5).find('select').val();
-                        mapAttr.UIVisible = tdArr.eq(6).find('select').val();
-                        mapAttr.UIIsInput = tdArr.eq(7).find('select').val();
+                        if (tdArr.eq(5).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIIsEnable = 1;
+                        } else {
+                            mapAttr.UIIsEnable = 0;
+                        }
+                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIVisible = 1;
+                        } else {
+                            mapAttr.UIVisible = 0;
+                        }
+                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
+                            mapAttr.UIIsInput = 1;
+                        } else {
+                            mapAttr.UIIsInput = 0;
+                        }
                         mapAttr.Idx = tdArr.eq(8).find('input').val();
                         mapAttr.FK_MapData = fk_MapData;
                         mapAttr.UIWidth = 100;
@@ -192,7 +245,17 @@
             window.location.href = window.location.href;
 
         }
+         //全选或者反选
+        function CheckAll(rowstype) {
 
+            $('.' + rowstype).each(function () {
+                if (this.type == 'checkbox') {
+                    $('#KeyOfEn_' + rowstype)[0].checked ? this.checked = true : this.checked = false;
+                }
+            });
+
+            //upstate(true);
+        }
         //设置字段宽度
         function setWidth(url) {
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=" + url;
@@ -238,15 +301,33 @@
         <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
             <TR>
                 <!--<TD class='GroupTitle' style='text-align:center;width:50px'>序</TD>-->
-                <TD class='GroupTitle'>字段</TD>
-                <TD class='GroupTitle'>中文名</TD>
-                <TD class='GroupTitle'>类型</TD>
-                <TD class='GroupTitle'>最大长度</TD>
-                <TD class='GroupTitle'>是否只读</TD>
-                <TD class='GroupTitle'>是否可见</TD>
-                <TD class='GroupTitle'>是否必填</TD>
-                <TD class='GroupTitle'>顺序号</TD>
-                <TD class='GroupTitle'>操作</TD>
+                <th >字段</th>
+                <th >中文名</th>
+                <th >类型</th>
+                <th >最大长度</th>
+                <th>
+                    <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type="checkbox" />
+                    <label for="KeyOfEn_UIIsEnable">
+                        是否只读
+                    </label>
+                </th>
+                <th>
+                    <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
+                    <label for="KeyOfEn_UIVisible">
+                        是否可见
+                    </label>
+                </th>
+                <th>
+                    <input onclick="CheckAll('UIIsInput');" id='KeyOfEn_UIIsInput' type="checkbox" />
+                    <label for="KeyOfEn_UIIsInput">
+                        是否必填
+                    </label>
+                </th>
+               
+                <th>
+                    顺序号
+                </th>
+                <th>操作</th>
             </TR>
         </Table>
 

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>设置只读文本框的RMB大写</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var FK_MapData = GetQueryString("FK_MapData");
+            //下拉框填充
+            var ens = new Entities("BP.Sys.MapAttrs");
+	        ens.Retrieve("FK_MapData", FK_MapData,"MyDataType",1,"UIVisible",1,"UIIsEnable",0);
+            for (var i = 0; i < ens.length; i++) {
+                $("#DDL_Fileds").append("<option value='"+ens[i].KeyOfEn+"'>"+ens[i].Name+"</option>");
+            }
+            //赋值
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = "RMBDaXie_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            en.RetrieveFromDBSources();
+            if (en.Doc != "" && en.Doc != undefined) {
+                $("#DDL_Fileds").val(en.Doc);   
+            } else {
+                $("#DDL_Fileds").val("");   
+            }
+
+        });
+
+        //保存
+        function Save() {
+
+            var Filed = $("#DDL_Fileds").val();
+            
+            //保存到MapExt
+            var mypk = "RMBDaXie_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.SetValByKey("FK_MapData", GetQueryString("FK_MapData"));
+            en.SetValByKey("AttrOfOper", GetQueryString("KeyOfEn"));
+            en.SetValByKey("ExtType", "RMBDaXie");
+            en.SetValByKey("Doc", Filed);
+            en.Save();
+            alert("保存成功！");
+            window.location.href = window.location.href;
+        }
+        //删除
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return false;
+            var mypk = "RMBDaXie_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            var i = en.RetrieveFromDBSources();
+            if (i != 0) {
+                en.Delete();
+            }
+            alert("删除成功！");
+            window.location.href = window.location.href;
+        }
+
+
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Save" />
+        </div>
+        <table id="table" style="width: 100%;">
+            <caption>
+                设置只读文本框的RMB大写
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    要转化大写的字段名:
+                    <select id="DDL_Fileds" name="DDL_Fileds">
+                        <option value=''>-请选择-</option>
+                    </select>
+                </td>
+            </tr>
+           
+           
+        </table>
+
+
+        <div id="Msg">
+        </div>
+
+
+    </form>
+</body>
+</html>

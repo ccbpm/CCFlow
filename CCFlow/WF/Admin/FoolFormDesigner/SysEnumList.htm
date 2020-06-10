@@ -3,28 +3,65 @@
 <head>
     <title>枚举值列表</title>
 
-        <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-        <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-        <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-        <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-        <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-        <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-        <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-        <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
-        <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-        <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
-        <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
-        <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
-        <base target="_self" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
+    <base target="_self" />
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script language="javascript" type="text/javascript" >
-        
-		closeWhileEscUp();
+    <style>
+        <style >
+        .table-head {
+            padding-right: 17px;
+            background-color: #999;
+            color: #000;
+        }
 
-          //页面启动函数.
+        .table-body {
+            width: 100%;
+            height: 390px;
+            overflow-y: scroll;
+        }
+
+            .table-head table, .table-body table {
+                width: 100%;
+            }
+
+            .table-head tr, .table-body tr {
+                line-height: 35px;
+            }
+
+            .table-head th, .table-body td {
+                text-align: center;
+            }
+
+            .table-body table tr:nth-child(2n+1) {
+                background-color: #f2f2f2;
+            }
+
+        .total {
+            float: right;
+            padding-right: 20px;
+            margin-top: 5px;
+        }
+    </style>
+    </style>
+    <script language="javascript" type="text/javascript">
+
+        closeWhileEscUp();
+        var fk_mapData = GetQueryString("FK_MapData");
+        //页面启动函数.
         $(function () {
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
@@ -32,91 +69,89 @@
             InitPage();
 
             $("#Msg").html("");
-         });
+        });
 
-         //初始化数据.
-         function InitPage() {
+        //初始化数据.
+        function InitPage() {
 
-             var fk_mapData = GetQueryString("FK_MapData");
+            var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
+            sysEnumMains.RetrieveAll();
 
-             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
-             sysEnumMains.RetrieveAll();
+            var fields = null; // = data["Fields"];
+            var numEnum = 0;
 
-             var fields =null; // = data["Fields"];
-             var numEnum = 0;
+            //增加处理.
+            for (var i = 0; i < sysEnumMains.length; i++) {
 
-             //增加处理.
-             for (var i = 0; i < sysEnumMains.length; i++) {
+                var sysEnumMain = sysEnumMains[i];
 
-                 var sysEnumMain = sysEnumMains[i];
+                //如果需要字段从集合里选择，排除没有的字段.
+                if (fields != null) {
 
-                 //如果需要字段从集合里选择，排除没有的字段.
-                 if (fields != null) {
+                    var isHave = false; //是否存在.
+                    for (var idx = 0; idx < fields.length; idx++) {
 
-                     var isHave = false; //是否存在.
-                     for (var idx = 0; idx < fields.length; idx++) {
+                        var field = fields[idx];
 
-                         var field = fields[idx];
+                        if (field.FType.indexOf('int') == -1) {
+                            continue;
+                        }
 
-                         if (field.FType.indexOf('int') == -1) {
-                             continue;
-                         }
+                        if (field.FName != sysEnumMain.No) {
+                            continue;
+                        }
 
-                         if (field.FName != sysEnumMain.No) {
-                             continue;
-                         }
+                        isHave = true;
+                        break;
+                    }
+                    if (isHave == false)
+                        continue;
+                }
 
-                         isHave = true;
-                         break;
-                     }
-                     if (isHave == false)
-                         continue;
-                 }
+                numEnum++;
 
-                 numEnum++;
+                var newRow = "";
+                newRow += "<tr>";
+                newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
-                 var newRow = "";
-                 newRow += "<tr>";
-                 newRow += "<td class=Idx>" + i + "</td>";
+                if (fk_mapData != null)
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                else
+                    newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
 
-                 if (fk_mapData != null)
-                     newRow += "<td><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
-                 else
-                     newRow += "<td>" + sysEnumMain.No + "</td>";
+                newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
 
-                 newRow += "<td>" + sysEnumMain.Name + "</td>";
+                //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
 
-                 //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
-                 //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
+                newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
 
-                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
-                 newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+                newRow += "</tr>";
 
-                 newRow += "</tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
 
-                 $("#Table1 tr:last").after(newRow);
-             }
+        }
 
-         }
+        function AddFrm(enumID, fk_mapdata) {
 
-         function AddFrm(enumID, fk_mapdata) {
+            var url = '';
+            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
 
-             var url = '';
-             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
+            if (str == null)
+                return;
 
-             if (str == null)
-                 return;
+            var groupField = GetQueryString("GroupField");
+            if (groupField == null)
+                groupField = "0";
 
-             var groupField = GetQueryString("GroupField");
-             if (groupField == null)
-                 groupField = "0";
-
-             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-             handler.AddPara("KeyOfEn", str);
-             handler.AddPara("FK_MapData", fk_mapdata);
-             handler.AddPara("GroupFeid", groupField);
-             handler.AddPara("EnumKey", enumID);
-             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("KeyOfEn", str);
+            handler.AddPara("FK_MapData", fk_mapdata);
+            handler.AddPara("GroupFeid", groupField);
+            handler.AddPara("EnumKey", enumID);
+            var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
             if (data.indexOf("err@") >= 0) {
                 alert(data);
                 return;
@@ -125,7 +160,7 @@
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + data;
             window.location.href = url;
 
-         }
+        }
 
         function NewEnum() {
 
@@ -136,8 +171,32 @@
                 window.location.href = window.location.href;
             });
         }
+        //查询枚举
+        function SelectEnum() {
+            var EnumName = document.getElementById("EnumValue").value;
+            var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
+            sysEnumMains.Retrieve("Name", EnumName);
+            for (var i=0; i < sysEnumMains.length; i++) {
+                sysEnumMain = sysEnumMains[i];
+                
+                var newRow = "";
+                newRow += "<tr>";
+                newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
-        function Edit(enumKey,name,cfgKeys) {
+                if (fk_mapData != null)
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                else
+                    newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
+
+                newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
+                newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+
+                newRow += "</tr>";
+            }
+            $("#Table1").html(newRow);
+        }
+        function Edit(enumKey, name, cfgKeys) {
 
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
             var W = document.body.clientWidth - 120;
@@ -189,20 +248,28 @@
 
     </script>
 </head>
-<body onkeypress="Esc()" >
+<body onkeypress="Esc()">
+    <div class="table-head">
+        <table style=" width:98%;">
+            <caption>枚举值列表  <a href="javascript:NewEnum()">新建枚举</a>  <span style="float:right;">枚举值名称:<input id="EnumValue" />&nbsp;&nbsp;<a href="javascript:SelectEnum()">查询</a></span></caption>
 
-<table id="Table1" style=" width:100%;">
-<caption>枚举值列表  <a href="javascript:NewEnum()">新建枚举</a>  </caption>
-<tr>
-<th>序</th>
-<th>枚举值</th>
-<th>名称</th>
-<th>枚举信息</th>
-<th >操作</th>
-</tr>
-</table>
+            <tr>
+                <th style='width:53px;'>序</th>
+                <th style='width:103px;'>枚举值</th>
+                <th style='width:103px;'>名称</th>
+                <th>枚举信息</th>
+                <th style='width:53px;'>操作</th>
+            </tr>
+        </table>
+    </div>
+    <div class="table-body">
+        <table id="Table1" style=" width:100%;">
+            <tr>
+            </tr>
+        </table>
+    </div>
 
-<div id="Msg"></div>
+    <div id="Msg"></div>
 
 </body>
 </html>

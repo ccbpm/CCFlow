@@ -11,6 +11,36 @@ document.onkeydown = function () {
     }
 }
 
+//格式化
+function FormatHtml() {
+   /* var val = window.confirm('您确定要格式化吗？');
+    if (val == false)
+        return;
+    debugger
+    //首先执行保存.
+    SaveForm();
+    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
+    var ssss = /style\s*?=\s*?([‘"])[\s\S]*?\1/
+    var dsd = /style=\"(.*?)\"/g
+    var newHtml = ''
+
+    newHtml = formeditor.replace(rels, '');
+    newHtml = newHtml.replace(ssss, '');
+    newHtml = newHtml.replace(dsd, '');
+    //执行保存.
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+    handler.AddPara("HtmlCode", encodeURIComponent(newHtml));
+    var data = handler.DoMethodReturnString("SaveForm");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+
+    leipiEditor.getContent(newHtml);
+    leipiEditor.sync();       //同步内容*/
+}
+
 
 //预览.
 function PreviewForm() {
@@ -36,6 +66,19 @@ function FrmAttr() {
     window.open(url);
 
 }
+
+//表单属性.
+function OpenFoolFrm() {
+
+    var frmID = GetQueryString("FK_MapData");
+    var nodeID = GetQueryString("NodeID");
+    var flowNo = GetQueryString("FK_Flow");
+
+    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    window.open(url);
+
+}
+
 
 //移动表单
 function FrmMobile() {

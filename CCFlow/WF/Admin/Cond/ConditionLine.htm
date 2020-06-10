@@ -59,30 +59,46 @@
                 return;
             }
 
-            $("#list").append("<li><div><a id='role' href='javascript:void(0)' onclick='OpenTurnToRole(this);'><span class='nav'>转向规则</span></a></div></li>");
-
+            $("#list").append("<li><div><a id='role' href='javascript:void(0)' onclick='OpenTurnToRole(this);'><img src='../../Img/Home.gif' style='width:16px;height:10px' border='0'><span class='nav'>转向规则</span></a></div></li>");
+            
+            //增加方向条件设置.
+            $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI(this);'><img src='../../../WF/Admin/AttrNode/Img/Cond.png' style='width:16px;height:10px' border='0'><span class='nav' >优先级设置</span></a></div></li>");
 
             //转json.
             data = JSON.parse(data);
             var ul = document.getElementById("list");
+            //for (var i = 0; i < data.length; i++) {
+
+            //    var en = data[i];
+            //    $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
+
+
+            //}
+
             for (var i = 0; i < data.length; i++) {
 
                 var en = data[i];
-
-                $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
+                $("#list").append("<li> <div><b> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond2020(this,'" + en.NodeID + "');\" ><img src='../../../WF/Img/Message24.png' style='width:16px;height:10px;' border='0'><span class='nav' >到达:" + en.Name + "</span></a></b></div></li>");
             }
 
-            //增加方向条件设置.
-            $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI(this);'><span class='nav' >优先级设置</span></a></div></li>");
+            
 
             initNodeTree();
         });
 
-        function OpenCond(ele, toNodeID) {
+        //function OpenCond(ele, toNodeID) {
 
-            var url = "List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
+        //    var url = "List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
+        //    OpenUrlInRightFrame(ele, url);
+        //}
+
+        
+        function OpenCond2020(ele, toNodeID) {
+
+            var url = "../Cond2020/List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID ;
             OpenUrlInRightFrame(ele, url);
         }
+        
 
         //转向规则. 方向条件控制规则
         function OpenTurnToRole(ele) {
@@ -108,7 +124,7 @@
             }
 
             var li = $('ul.navlist').find("a[id='a" + toNodeID + "']");
-            OpenCond(li, toNodeID);
+            OpenCond2020(li, toNodeID);
             //$('ul.navlist').find("a[id='a" + toNodeID + "']").click();
         }
 
@@ -133,10 +149,10 @@
 
             }
         }
-        //返回.
+         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondByFrm.htm', 'List.htm');
+                url = url.replace('CondByFrm.htm', 'List.htm');
             window.location.href = url;
         }
     </script>
@@ -149,7 +165,7 @@
                     <ul class="navlist" id="list">
                     </ul>
                 </div>
-                <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
+                <div data-options="region:'center',noheader:true" style="overflow-y: hidden;">
                     <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%;
                     height: 100%;"></iframe>
                 </div>

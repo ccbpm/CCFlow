@@ -94,7 +94,7 @@
 
                 newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../../Img/Btn/Edit.gif' border=0 />编辑</a>";
 
-                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "')\"><img src='../../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "','" + sfTable.SrcType + "')\"><img src='../../../Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
 
@@ -168,6 +168,9 @@
             if(srcType ==6)
                 srcType = "JQuery";//JQuery
 
+            if (srcType == 7)
+                srcType = "SQL";//SQL
+
            var groupID = GetQueryString("GroupField");
             if (groupID == null || groupID == "null")
                 groupID = "0";
@@ -200,7 +203,7 @@
 
 
         //删除.
-        function Del(no, name) {
+        function Del(no,name, SrcType) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
@@ -212,6 +215,13 @@
             if (data.indexOf('err@') >= 0) {
                 alert(data);
                 return;
+            }
+            //删除系统字典表
+            if (SrcType == 7) {
+                
+                var ens = new Entities("BP.Sys.DictDtls");
+                ens.Delete("FK_SFTable",no);
+
             }
             alert(data);
             window.location.href = window.location.href; //刷新页面.
@@ -232,7 +242,8 @@
             if (sfType == "3")
                 ensName = 'BP.Sys.SFTableSQL';
 
-
+            if (sfType == "7")
+                ensName = 'BP.Sys.SFTableDict';
             var url = '../../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_sftable;
             // window.location.href = url;
 

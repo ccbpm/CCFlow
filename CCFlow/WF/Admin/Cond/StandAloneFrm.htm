@@ -22,7 +22,7 @@
 
         var OperForString = null;
         var OperForNumber = null;
-
+        var condOrAnd = GetQueryString("CondOrAnd");
         //初始化页面函数.....
         $(function () {
 
@@ -44,7 +44,7 @@
 
             var frms = data.Frms;
 
-         //   alert(frms.length);
+            //   alert(frms.length);
 
             GenerBindDDL("DDL_Frms", frms, "No", "Name", "all");
 
@@ -74,11 +74,35 @@
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
             }
+            //保存按钮的加载@lz
+            html = "";
+            if (condOrAnd == null) {
+                html += " <tr>";
+                html += "<td></td>";
+                html += " <td colspan=1>";
+                html += "<input type='button' value='保存为AND条件' onclick=Save('AND'); />";
+                html += "<input type='button' value='保存为OR条件' onclick=Save('OR'); />";
+                html + " </td >"
+                html += "</tr >";
+            }
+            else {
+                $("#Table1").html("");
+
+                html += " <tr>";
+                html += "<td></td>";
+                html += " <td colspan=1>";
+                html += "<input type='button' value='保存' onclick=Save('" + condOrAnd + "'); />";
+                html + " </td >"
+                html += "</tr >";
+
+            }
+            $("#table tr:last").after(html);
         });
 
         //执行保存..
         function Save(saveType) {
-
+            if (condOrAnd != null)
+                saveType = condOrAnd;
             var condType = GetQueryString("CondType");
             var fk_flow = GetQueryString("FK_Flow");
             var fk_mainNode = GetQueryString("FK_MainNode");
@@ -227,11 +251,11 @@
 
             //绑定操作符.
             GenerBindDDL("DDL_Operator", opers, "No", "Name", "=");
-
         }
 
         //返回.
         function Back() {
+            
             var url = window.location.href;
             url = url.replace('StandAloneFrm.htm', 'List.htm');
             window.location.href = url;
@@ -246,7 +270,7 @@
                 <input type="button" onclick="Back()" value="返回" id="Button2" />
             </fieldset>
         </div>
-        <table style="position:relative;top:10px; margin: 8px; width:100%">
+        <table id="table" style="position:relative;top:10px; margin: 8px; width:100%">
             <caption>
                 <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' /> 按照独立表单做方向条件
             </caption>
@@ -288,14 +312,7 @@
                     </select>
                 </td>
             </tr>
-            <tr>
-                <td>
-                </td>
-                <td colspan="1">
-                    <input type="button" value="保存为AND条件" onclick="Save('AND');" />
-                    <input type="button" value="保存为OR条件" onclick="Save('OR');" />
-                </td>
-            </tr>
+
         </table>
         <table id="Table1" name="Table1" style="width: 90%;">
             <tr>

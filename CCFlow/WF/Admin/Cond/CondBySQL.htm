@@ -30,7 +30,7 @@
                 window.close();
             return true;
         }
-
+        var condOrAnd = GetQueryString("CondOrAnd");
         //初始化页面函数.....
         $(function () {
 
@@ -99,6 +99,7 @@
             handler.AddPara("ToNodeID", toNodeID);
             handler.AddPara("TB_Docs", sqlVal);
             handler.AddPara("TB_Note", note);
+            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
             var data = handler.DoMethodReturnString("CondBySQL_Save");
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
@@ -159,10 +160,13 @@
             newWindow.focus();
 
         }
-        //返回.
+         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondBySQL.htm', 'List.htm');
+            if (condOrAnd==null)
+                url = url.replace('CondBySQL.htm', 'List.htm');
+            else
+                url = url.replace('CondBySQL.htm', '../Cond2020/DirList.htm');
             window.location.href = url;
         }
     </script>

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>多表头</title>
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+            var dtlID = GetQueryString("DtlID");
+            //获得字段集合.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs")
+            mapAttrs.Retrieve("FK_MapData", dtlID, "Idx");
+            var idx = 0;
+            var html = "<table style='width:100%'>";
+            html += "<caption>选择要合并的列</caption>";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+
+                if (attr.UIVisible == 0)
+                    continue;
+                html += "<tr>";
+                html += "<th> <label > <input id='" + attr.KeyOfEn + "' value='" + idx + "' type=checkbox /> " + attr.Name + "  </label></th>";
+                html += "</tr>";
+                idx++;
+            }
+
+            html += "</table>";
+            $("#Table").html(html);
+            //形成标头.
+
+        });
+
+        function Save() {
+
+            //获得配置信息.
+            var dtlID = GetQueryString("DtlID");
+            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
+            //检查设置的完整性.
+            //求出来选择的字段.
+            var filds = "";
+            var inputArray = $("input[type='checkbox']:checked"); //取到所有的input 并且放到一个数组中
+            for (var i = 0; i < inputArray.length; i++) {
+                var input = inputArray[i];
+                filds += input.id + ",";//获得选中的input的id拼接成字符串
+            }
+            // 1. 选择的数量小于等于1 是错误的.
+            var fls = filds.split(',');
+            if (fls.length - 1 <= 1) {
+                alert("所选的分组不可少于一列");
+                return;
+            }
+            // 2. 选择的没有按照连续选择，也是错误的.
+            for (var i = 0; i < inputArray.length; i++) {
+                //比较次数在inputArray.length之内
+                if (i + 1 < inputArray.length) {
+                    //根据value的值判断是否是连续的列
+                    if (parseInt(inputArray[i].value) + 1 != inputArray[i + 1].value) {
+                        alert("所选的列不连续！");
+                        return;
+                    }
+                }
+            }
+           
+            // 3. 选择的字段，在历史的选择中出现也是错误的.
+            for (var i = 0; i < fls.length; i++) {
+                if (multiTitle!="" && multiTitle.indexOf(fls[i]) > 0) {
+                    alert("错误:该列已经选择过.");
+                    return;
+                }
+            }
+            //获取分组名称；
+            var name = prompt("输入新建分组名称", null);
+            if (name == null)
+                return;
+            //检查名称是否重复
+            if (multiTitle.indexOf(name) > 0) {
+                alert("错误:名称已经存在.");
+                return;
+            }
+            //拼接目标数据.
+            multiTitle = name + "," + filds +";";
+            //赋值
+            mapDtl.SetPara("MultiTitle", multiTitle);
+            mapDtl.Update();
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    <div style="right:10px; position:absolute; z-index:100; ">
+        <input id="Btn_New" type="button" onclick="Save()" value="增加" />
+    </div>
+    <div style="position:relative;" id="Table">
+    </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>枚举值</title>
     <!-- 增加一个配置  -->
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -18,7 +18,42 @@
         .trSP {
             background-color: #B9D3EE
         }
+
+        .table-head {
+            padding-right: 17px;
+            background-color: #999;
+            color: #000;
+        }
+
+        .table-body {
+            width: 100%;
+            height: 390px;
+            overflow-y: scroll;
+        }
+
+            .table-head table, .table-body table {
+                width: 100%;
+            }
+
+            .table-head tr, .table-body tr {
+                line-height: 35px;
+            }
+
+            .table-head th, .table-body td {
+                text-align: center;
+            }
+
+            .table-body table tr:nth-child(2n+1) {
+                background-color: #f2f2f2;
+            }
+
+        .total {
+            float: right;
+            padding-right: 20px;
+            margin-top: 5px;
+        }
     </style>
+
     <script language="javascript" type="text/javascript">
         var dataType = GetQueryString("DataType");
         var fk_mapData = GetQueryString("FK_MapData");
@@ -27,13 +62,13 @@
             var enumMains = new Entities("BP.Sys.SysEnumMains");
             enumMains.RetrieveAll();
 
-            var html = "<table border=0 style='width:100%;'>";
+            var html = "<table border=0;algin='left'; style='width:100%;'>";
             html += "<tr>";
-            html += "<th>Idx</th>";
-            html += "<th>编号</th>";
-            html += "<th>名称</th>";
-            html += "<th>配置值</th>";
-            html += "<th>操作</th>";
+            html += "<td>Idx</td>";
+            html += "<td>编号</td>";
+            html += "<td>名称</td>";
+            html += "<td>配置值</td>";
+            html += "<td>操作</td>";
             html += "</tr>";
 
             for (var i = 0; i < enumMains.length; i++) {
@@ -145,7 +180,7 @@
             handler.AddPara("EnumKey", UIBindKey);
             if (dataType == "Radio")
                 handler.AddPara("UIContralType", 3);
-            else if(dataType =="Select")
+            else if (dataType == "Select")
                 handler.AddPara("UIContralType", 1);
             else if (dataType == "CheckBox")
                 handler.AddPara("UIContralType", 2);
@@ -166,7 +201,7 @@
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
-                            _Html += "<label><input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;</label>";
+                            _Html += "<label><input type='radio' value= '" + keyVal[0] + "' id='RB_" + KeyOfEn + "_" + keyVal[0] + "' name='RB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1] + "&nbsp;&nbsp;</label>";
                     }
                     _Html += "</span>";
 
@@ -192,46 +227,79 @@
                     for (var i = 0; i < strs.length; i++) {
                         var keyVal = strs[i].split("=")
                         if (keyVal.length == 2)
-                            _Html += "<label><input type='checkbox' value= '" + keyVal[0] + "' id='CB_" + KeyOfEn + "_" + keyVal[0] + "' name='CB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1]+"&nbsp;&nbsp;</label>";
+                            _Html += "<label><input type='checkbox' value= '" + keyVal[0] + "' id='CB_" + KeyOfEn + "_" + keyVal[0] + "' name='CB_" + KeyOfEn + "' data-key='" + KeyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + UIBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + keyVal[1] + "&nbsp;&nbsp;</label>";
                     }
                     _Html += "</span>";
                 }
             }
             editor.execCommand('insertHtml', _Html);
-
-
         };
+        //查询枚举
+        function SelectEnum() {
+            var EnumName = document.getElementById("EnumValue").value;
+            if (EnumName == "")
+                var sql = "SELECT * FROM Sys_EnumMain";
+            else
+                var sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
+            var sysEnumMains = DBAccess.RunSQLReturnTable(sql);
+            var newRow = "<table border=0;algin='left'; style='width:100%;'>";
+            newRow += "<tr>";
+            newRow += "<td>Idx</td>";
+            newRow += "<td>编号</td>";
+            newRow += "<td>名称</td>";
+            newRow += "<td>配置值</td>";
+            newRow += "<td>操作</td>";
+            newRow += "</tr>";
+            newRow += "<tr>";
 
+            for (var i = 0; i < sysEnumMains.length; i++) {
+                sysEnumMain = sysEnumMains[i];
+                var cfgVal = sysEnumMain.CfgVal.replace(/ /g, "[]");
+                newRow += "<td style='width:3%' class=Idx>" + i + "</td>";
+                if (fk_mapData != null)
+                    newRow += "<td style='width:10%'><label onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + cfgVal + "'," + i + ") ><input type=Radio name='aa' />" + sysEnumMain.No + "</label></td>";
+                else
+                    newRow += "<td style='width:10%'>" + sysEnumMain.No + "</td>";
+                newRow += "<td style='width:20%'>" + sysEnumMain.Name + "</td>";
+                newRow += "<td style='width:50%'><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+                newRow += "<td style='width:10%'><img src='../../../Img/Btn/Delete.gif' onclick=\"Del('" + sysEnumMain.No + "')\" /></td>";
 
-</script>
+                newRow += "</tr>";
+            }
+            newRow += "</table>";
+            if (newRow != undefined)
+                $("#table").html(newRow);
+            else
+                alert("关键字查询无结果");
+        }
+    </script>
 </head>
 <body>
-        
-
-        <div id="table"></div>
-                
+    <div class="table-head">
         <table style="width:100%;">
-        <tr>
-        <td>中文名 </td>
+            <tr class="Sum">
+                <td>
+                    中文名
+                    <input id="TB_Name" class="easyui-textbox" style="width: 150px" />
+                </td>
+                <td>字段英文名   <input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
+                <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
+                <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建" /> </td>
 
-        <td><input id="TB_Name" class="easyui-textbox" style="width: 150px" /> </td>
+                <td>关键字 </td>
+                <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
+                <td><input type="button" id="Btn_New" class="easyui-button" onclick="SelectEnum()" value="查询" /> </td>
 
-
-        <td>字段英文名 </td>
-        <td><input id="TB_KeyOfEn" class="easyui-textbox" style="width: 150px" /> </td>
-
-        <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
-
-        <td> <input type="button" id="Btn_New" class="easyui-button" onclick="NewEnum()" value="新建枚举" /> </td>
-        </tr>
+            </tr>
         </table>
-           
-                             
-        <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
-        <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+    </div>
+    <div class="table-body">
+        <div style="position:relative">
+            <div id="table"></div>
+        </div>
+    </div>
+    <input id="TB_UIBindKey" class="easyui-textbox" style="width: 200px; visibility:hidden" />
+    <input id="TB_Vals" class="easyui-textbox" style="width: 200px; visibility:hidden" />
 
-                          
-                           
-             
 </body>
 </html>

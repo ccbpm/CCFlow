@@ -20,7 +20,7 @@
                 window.close();
             return true;
         }
-
+        var condOrAnd = GetQueryString("CondOrAnd");
         //初始化页面函数.....
         $(function () {
 
@@ -80,6 +80,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
             handler.AddFormData();
+            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"))
             var data = handler.DoMethodReturnString("CondByPara_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -132,10 +133,13 @@
             var url = "../SettingTemplate.htm?TemplateType=CondByPara&CondType=2&m=" + Math.random();
             WinOpen(url, 'ss');
         }
-        //返回.
+         //返回.
         function Back() {
             var url = window.location.href;
-            url = url.replace('CondByPara.htm', 'List.htm');
+            if (condOrAnd==null)
+                url = url.replace('CondByPara.htm', 'List.htm');
+            else
+                url = url.replace('CondByPara.htm', '../Cond2020/DirList.htm');
             window.location.href = url;
         }
 

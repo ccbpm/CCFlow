@@ -23,6 +23,7 @@
     <script src="../../Scripts/vue.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="js/ueditor/dialogs/internal.js"></script>
+    <script src="../../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="DialogCtr/Public.js"></script>
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
 </head>
@@ -48,6 +49,19 @@
                 <td> <a href="#" @click="Delete(value.MyPK);">删除</a></td>
             </tr>
         </table>
+
+         
+        <div style=" text-align:left; float:left" >
+            <fieldset style=" float:left">
+                <legend>帮助 </legend>
+                <ul style=" float:left">
+                    <li> 1.该表格列的是模版设置里有，但是没有显示到html了里面的字段. </li>
+                    <li> 2.您可以插入到您指定的位置. </li>
+                    <li> 3.一些附件、从表、审核组件等控件如果在html模版里丢失了，点击保存后，系统会<font color="red">自动追加的Html</font>后面. </li>
+                </ul>
+            </fieldset>
+        </div>
+
     </center>
 
     <script type="text/javascript">
@@ -60,9 +74,9 @@
                 delData: []
             },
             created() {
-                this.delData =  InitData();
+                this.delData = InitData();
 
-                
+
             },
             methods: {
                 Edit: function (myPK) {
@@ -91,10 +105,10 @@
                     if (window.confirm('您确定要删除吗?') == false)
                         return;
 
-                     var attr = new Entity("BP.Sys.MapAttr", myPK);
-                     attr.Delete();
-                     alert('删除成功,需要手工刷新');
-                     window.location.href = window.location.href;
+                    var attr = new Entity("BP.Sys.MapAttr", myPK);
+                    attr.Delete();
+                    alert('删除成功,需要手工刷新');
+                    window.location.href = window.location.href;
                 }
             }
         })
@@ -115,17 +129,17 @@
             if (mapData.EntityType == 0)
                 fields = "OID,RDT.FID";
             else
-             fields ="BillNo,Title,AtPara,BillState,RDT,Starter,StarterName,FK_Dept,OrgNo,OID"
+                fields = "BillNo,Title,AtPara,BillState,RDT,Starter,StarterName,FK_Dept,OrgNo,OID"
             list.data.map(function (item, index) {
-                if (fields.indexOf(item.KeyOfEn)==-1 && item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1) ) {
+                if (fields.indexOf(item.KeyOfEn) == -1 && item.KeyOfEn && (html.indexOf('data-key="' + item.KeyOfEn + '"') == -1 && html.indexOf('data-key="' + item.MyPK + '"') == -1)) {
                     item.contralType = GetFieldType(item);
                     deldate.push(item);
                 }
             });
             return deldate;
-               
+
         }
-        
+
         function GetFieldType(mapAttr) {
 
             if (mapAttr.UIContralType == 0) {
@@ -181,8 +195,10 @@
                     return "评论组件";
                 if (mapAttr.UIContralType == 16)//系统定位
                     return "系统定位";
-                if (mapAttr.UIContralType == 17)//公文字号
-                    return "公文字号";
+                if (mapAttr.UIContralType == 170)//收文字号
+                    return "收文字号";
+                if (mapAttr.UIContralType == 17)//发文字号
+                    return "发文字号";
             }
             return "其他类型";
         }
@@ -261,9 +277,15 @@
                     title = '系统定位组件属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
                 }
+
                 if (uiContralType == 17) {
-                    title = '公文字号属性';
+                    title = '发文字号属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 170) {
+                    title = '收文字号属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDocWordReceive&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
             }
@@ -291,9 +313,9 @@
             }
 
             OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-                 Baseinfo.delData =  InitData();
+                Baseinfo.delData = InitData();
             });
-           
+
             return;
         }
 
@@ -323,10 +345,6 @@
                 window.location.href = window.location.href;
             });
         }
-
-
-
-
     </script>
 
 

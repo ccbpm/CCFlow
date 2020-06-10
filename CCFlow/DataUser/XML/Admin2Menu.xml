@@ -48,16 +48,16 @@
 
   <Group No="DOC" Name="公文管理" For="admin" />
   <Item No="8012" GroupNo="DOC" Name="公文类型"   Url="../../Comm/Ens.htm?EnsName=BP.DOC.WD.DocTypes"  />
-
   <Item No="8002" GroupNo="DOC" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />
   <Item No="8003" GroupNo="DOC" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Words"  />
   <Item No="8104" GroupNo="DOC" Name="流程设置"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Flows"  />
-  <Item No="8105" GroupNo="DOC" Name="收文流水号"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.RecWords"  />
+  <Item No="8105" GroupNo="DOC" Name="收文流水号"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Recwords"  />
 
   <Group No="DOC2" Name="公文管理（二级管理员）" For="admin2" />
   <Item No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Templates"  />
   <Item No="7003" GroupNo="DOC2" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Words"  />
   <Item No="7004" GroupNo="DOC2" Name="流程设置"   Url="../../Comm/Search.htm?EnsName=BP.DOC.WD.Flows"  />
+  <Item No="7004" GroupNo="DOC2" Name="工具箱"  Url="../../Comm/MethodLink.htm"  />
 
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />

@@ -57,7 +57,7 @@ namespace BP.WF
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
                 if (nss.Count == 0)
-                    return;
+                    throw new Exception("err@流程配置错误，您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
                 //定义岗位人员
                 string station = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='"+WebUser.No+"'";
                 station = DBAccess.RunSQLReturnVal(station).ToString();

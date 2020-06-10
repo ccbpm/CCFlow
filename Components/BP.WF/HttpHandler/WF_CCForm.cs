@@ -35,7 +35,7 @@ namespace BP.WF.HttpHandler
 
                 //查询出来数据实体.
                 string pkVal = this.PKVal;
-                
+
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
 
                 #region 如果图片显示.(先不考虑.)
@@ -51,7 +51,7 @@ namespace BP.WF.HttpHandler
                 #endregion 如果图片显示.
 
                 #region 执行装载模版. athDesc.IsWoEnableTemplete == true
-                if (dbs.Count == 0 && 1==2)
+                if (dbs.Count == 0 && 1 == 2)
                 {
                     /*如果数量为0,就检查一下是否有模版如果有就加载模版文件.*/
                     string templetePath = BP.Sys.SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();
@@ -865,7 +865,7 @@ namespace BP.WF.HttpHandler
 
             string saveToPath = SystemConfig.PathOfWebApp + (BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
 
-            FileInfo fileInfo = new FileInfo(saveToPath+"/"+ delDB.FileName);
+            FileInfo fileInfo = new FileInfo(saveToPath + "/" + delDB.FileName);
             fileInfo.Delete();
             return "删除成功.";
         }
@@ -1366,7 +1366,7 @@ namespace BP.WF.HttpHandler
                         DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         {
-                            if(dt.Columns.Contains("NO") == true)
+                            if (dt.Columns.Contains("NO") == true)
                                 dt.Columns["NO"].ColumnName = "No";
                             if (dt.Columns.Contains("NAME") == true)
                                 dt.Columns["NAME"].ColumnName = "Name";
@@ -1384,7 +1384,7 @@ namespace BP.WF.HttpHandler
                                 dt.Columns["parentno"].ColumnName = "ParentNo";
                         }
 
-                            dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                         ds.Tables.Add(dt);
                         continue;
                     }
@@ -1488,7 +1488,7 @@ namespace BP.WF.HttpHandler
 
 
                     #region 没有审核组件分组就增加上审核组件分组.
-                    if (fn.IsEnableFWC !=FrmWorkCheckSta.Disable)
+                    if (fn.IsEnableFWC != FrmWorkCheckSta.Disable)
                     {
                         //如果启用了审核组件，并且 节点表单与当前一致。
                         if (md.HisFrmType == FrmType.FoolForm)
@@ -2182,12 +2182,12 @@ namespace BP.WF.HttpHandler
                     qo.addAnd();
                     qo.AddWhere(FrmEleDBAttr.RefPKVal, Refval);
                     qo.DoQuery();
-                    if (FrmEleDBs!=null&& FrmEleDBs.Count==0)
+                    if (FrmEleDBs != null && FrmEleDBs.Count == 0)
                         continue;
                     foreach (FrmEleDB FrmEleDB in FrmEleDBs)
                     {
                         FrmEleDB athDB_N = new FrmEleDB();
-                        athDB_N.MyPK = attr.Key + "_" + dtl.OID + "_"+FrmEleDB.Tag1;
+                        athDB_N.MyPK = attr.Key + "_" + dtl.OID + "_" + FrmEleDB.Tag1;
                         athDB_N.FK_MapData = FrmEleDB.FK_MapData;
                         athDB_N.EleID = FrmEleDB.EleID;
                         athDB_N.RefPKVal = dtl.OID.ToString();
@@ -2200,7 +2200,7 @@ namespace BP.WF.HttpHandler
                         athDB_N.DirectInsert();
                         FrmEleDB.Delete();
                     }
-                 
+
                 }
             }
             else
@@ -3335,8 +3335,13 @@ namespace BP.WF.HttpHandler
                         {
                             if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                                 pkVal = this.FID.ToString();
+
                             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                                pkVal = this.PWorkID.ToString();
+                            {
+                                if (this.PWorkID != 0)
+                                    pkVal = this.PWorkID.ToString();
+                            }
+
                             if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                             {
                                 //根据流程的PWorkID获取他的P2流程
@@ -3366,7 +3371,9 @@ namespace BP.WF.HttpHandler
                             pkVal = this.FID.ToString();
 
                         if (myathDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                            pkVal = this.PWorkID.ToString();
+                            if (this.PWorkID != 0)
+                                pkVal = this.PWorkID.ToString();
+
 
                         if (myathDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                         {
@@ -3382,7 +3389,7 @@ namespace BP.WF.HttpHandler
                             pkVal = pWorkID;
                         }
                     }
-                    
+
                 }
             }
 
@@ -3454,8 +3461,8 @@ namespace BP.WF.HttpHandler
 
                     string guid = BP.DA.DBAccess.GenerGUID();
 
-                    
-                    
+
+
                     string realSaveTo = savePath + "\\" + guid + "." + fileName;
 
                     realSaveTo = realSaveTo.Replace("~", "-");
@@ -4683,7 +4690,7 @@ namespace BP.WF.HttpHandler
                 athDesc.Exts = "*.*";
 
                 //存储路径.
-               // athDesc.SaveTo = "/DataUser/UploadFile/";
+                // athDesc.SaveTo = "/DataUser/UploadFile/";
                 athDesc.IsNote = false; //不显示note字段.
                 athDesc.IsVisable = false; // 让其在form 上不可见.
 

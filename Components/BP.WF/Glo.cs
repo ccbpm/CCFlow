@@ -6236,10 +6236,8 @@ namespace BP.WF
             {
                 if (pworkid == 0)
                 {
-                    pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM wf_generworkflow WHERE WorkID=" + pkval, 0);
-                    //if (pworkid == 0)
-                    //    throw new Exception("err@当前的附件数据显示控制权限按照PWorkID计算,没有接收到PWorkID参数,当前不是子流程，无法打开附件.");
-                    pworkid = workid;
+                    pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerworkFlow WHERE WorkID=" + pkval, 0);
+                   
                     if (pworkid == 0)
                         pworkid = int.Parse(pkval);
                 }

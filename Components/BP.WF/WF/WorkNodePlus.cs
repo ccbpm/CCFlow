@@ -57,10 +57,21 @@ namespace BP.WF
             {
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
-                if (nss.Count==0)
+                if (nss.Count == 0)
+                    return;
+                //获得要删除的人员.
+                string sql = " SELECT FK_Emp FROM WF_GenerWorkerlist WHERE ";
+                sql += " WHERE ";
+                sql += " WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=0 ";
 
-
-                throw new Exception("err@尚未解析.");
+                //获得要删除的数据.
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string empNo = dr[0].ToString();
+                    sql = "UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + empNo + "'";
+                    DBAccess.RunSQL(sql);
+                }
             }
 
         }

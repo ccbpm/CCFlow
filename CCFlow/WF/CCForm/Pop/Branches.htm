@@ -52,7 +52,7 @@
                             "id": child.No,
                             "text": child.Name,
                             "nodes": [],
-                            "state": { checked: checked, disabled: checked }
+                            "state": { checked: checked}
                         });
                     } else {
                         appendToTree(o.nodes, child);
@@ -89,7 +89,7 @@
                             "id": o.No,
                             "text": o.Name,
                             "nodes": [],
-                            "state": { checked: checked, disabled: checked }
+                            "state": { checked: checked }
                         });
                     } else {
                         appendToTree(jsonTree, o);
@@ -113,7 +113,12 @@
         }
 
         function loadTree(treeUrl, rootNo, global) {
-            var json = DBAccess.RunDBSrc(treeUrl); //执行url返回json.
+             var json = null;
+            if (global.dbType == 0) {
+                json = GetDataTableByField("Tag2", rootNo);
+            } else 
+                json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
+
             var jsonTree = findChildren(json, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
@@ -140,8 +145,13 @@
                 },
                 onNodeExpanded: function (event, data) {
                     if (global.TreeUrl.indexOf("@Key") != -1) {
-                        var url = global.TreeUrl.replace("@Key", data.id);
-                        var json = DBAccess.RunDBSrc(url, global.dbType);
+                        var json;
+                        if (global.dbType == 0) {
+                            json = GetDataTableByField("Tag2", data.id);
+                        } else {
+                            var url = global.TreeUrl.replace("@Key", data.id);
+                            json = DBAccess.RunDBSrc(url, global.dbType);
+                        }
                         var jsonTree = findChildren(json, data.id, global.lazyLoad);
                         $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
 
@@ -154,7 +164,7 @@
         }
 
         //查询列表
-        function loadViewGrid(gridUrl) {
+        function loadViewGrid(gridUrl, keyWord) {
             var global = window;
             var columns = mapExt.Tag;
             var searchTableColumns = [{
@@ -212,8 +222,14 @@
                 uniqueId: "No",
                 columns: searchTableColumns
             });
+            var json;
+            if (global.dbType == 0) {
+                json = GetDataTableByField("Tag1", keyWord);
+            } else {
+                gridUrl = replaceAll(gridUrl, "@Key", keyWord);
+                json = DBAccess.RunDBSrc(gridUrl);
+            }
 
-            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
             if ($.isArray(json)) {
                 $('#tree_Panel').hide();
                 $('#viewGrid_Panel').show();
@@ -325,9 +341,8 @@
                     return;
                 }
                 keyWord = replaceAll(keyWord, "'", "");
-                var gridUrl = replaceAll(treeTag1, "@Key", keyWord);
-                // tree
-                loadViewGrid(gridUrl);
+                
+                loadViewGrid(treeTag1,keyWord);
             });
 
             if (treeUrl.indexOf("@Key") > -1) {
@@ -387,6 +402,26 @@
             if (frmEleDB.Update() == 0) {
                 frmEleDB.Insert();
             }
+        }
+
+        /**
+       * 根据字段，参数，查询类型获取JSON数据
+       * @param field mapExt需要查询的字段
+       * @param paras 参数值
+       */
+        function GetDataTableByField(field, paras) {
+
+            if (atParas != "")
+                paras = atParas + "@Key=" + paras;
+            var en = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+            var json = en.DoMethodReturnString("GetDataTableByField", field, paras);
+            if (json.indexOf("err@") != -1) {
+                alert(json);
+                return "";
+            }
+            json = JSON.parse(json);
+
+            return json;
         }
     </script>
 </head>

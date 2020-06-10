@@ -54,6 +54,26 @@
                 }
             });
         }
+
+        /**
+         * 根据字段，参数，查询类型获取JSON数据
+         * @param field mapExt需要查询的字段
+         * @param paras 参数值
+         */
+        function GetDataTableByField(field, paras) {
+            
+            if(atParas != "")
+                paras = atParas + "@Key=" + paras;
+            var en = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+            var json = en.DoMethodReturnString("GetDataTableByField", field, paras);
+            if (json.indexOf("err@") != -1) {
+                alert(json);
+                return "";
+            }
+            json = JSON.parse(json);
+           
+            return json;    
+        }
         function removeSelectedData(globalSelectedRows, selectedRows) {
             if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
                 return;
@@ -78,12 +98,17 @@
             }
             selectedRows = [];
         }
-        function loadSelectGrid(dbSrc, selectedRows, dbType) {
-
-            //获得json.
-            var json = DBAccess.RunDBSrc(dbSrc, dbType);
-
-            //  alert(JSON.stringify(json));
+        function loadSelectGrid(dbSrc, selectedRows, dbType, field, key) {
+            var json;
+            if (dbType == 0) {
+                json = GetDataTableByField(field, key);
+            } else {
+                key = replaceAll(key, "'", "");
+                dbSrc = replaceAll(dbSrc, "@Key", key);
+                dbSrc = replaceAll(dbSrc, "~", "'");
+                //获得json.
+                json = DBAccess.RunDBSrc(dbSrc, dbType);
+            }
 
             if (!$.isArray(json) || json.length == 0) {
                 $('#selectGrid').bootstrapTable("load", json);
@@ -186,7 +211,11 @@
         function loadTree(treeUrl, treeClickUrl, rootNo, global) {
 
            
-            var json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
+            var json = null;
+            if (global.dbType == 0) {
+                json = GetDataTableByField("Tag2", rootNo);
+            } else 
+                json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
 
            
             var jsonTree = findChildren(json, rootNo);
@@ -203,15 +232,21 @@
                     //alert(data.id);
                 },
                 onNodeSelected: function (event, data) {
-                    var myurl = replaceAll(treeClickUrl, "@Key", data.id);
-                    myurl = replaceAll(myurl, "~", "'");
-                    loadSelectGrid(myurl, global.selectedRows, global.dbType);
+                   
+                    loadSelectGrid(treeClickUrl,global.selectedRows, global.dbType,"Tag3", data.id);
 
                 },
                 onNodeExpanded: function (event, data) {
                     if (global.TreeUrl.indexOf("@Key") != -1) {
-                        var url = global.TreeUrl.replace("@Key", data.id);
-                        var json = DBAccess.RunDBSrc(url, global.dbType);
+                        var json;
+                        if (global.dbType == 0) {
+                            json = GetDataTableByField("Tag2", data.id);
+                        } else {
+                            var url = global.TreeUrl.replace("@Key", data.id);
+                            json = DBAccess.RunDBSrc(url, global.dbType);
+                        }
+                           
+                       
                         var jsonTree = findChildren(json, data.id, global.lazyLoad);
                         $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
 
@@ -228,10 +263,12 @@
             }
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
         }
+        var mapExt;
+        var atParas;
         $(function () {
 
             var mypk = GetQueryString("MyPK");
-            var mapExt = new Entity("BP.Sys.MapExt", mypk);
+            mapExt = new Entity("BP.Sys.MapExt", mypk);
 
             var webUser = new WebUser();
 
@@ -268,24 +305,28 @@
             var searchUrl = mapExt.Tag1;    //查询
             var treeUrl = mapExt.Tag2;      //初始化树
             var treeClickUrl = mapExt.Tag3; //树选择.
+            atParas = GetQueryString("AtParas");
+            if (atParas == null || atParas == undefined)
+                atParas = "";
 
-            var atParas = GetQueryString("AtParas");
-            var treeUrl = mapExt.Tag2;
-            var treeTag1 = mapExt.Tag1;
-            if (atParas.indexOf('@') == 0) {
-                var paras = atParas.split('@');
-                for (i = 0, len = paras.length; i < len; i++) {
-                    var key = paras[i];
-                    if (key == "" || key == null) {
-                        continue;
+            if (global.dbType != 0) {
+                if (atParas.indexOf('@') == 0) {
+                    var paras = atParas.split('@');
+                    for (i = 0, len = paras.length; i < len; i++) {
+                        var key = paras[i];
+                        if (key == "" || key == null) {
+                            continue;
+                        }
+                        var attrKeyOfEn = key.split('=')[0];
+                        var val = key.split('=')[1];
+                        searchUrl = searchUrl.replace("@" + attrKeyOfEn, val);
+                        treeUrl = treeUrl.replace("@" + attrKeyOfEn, val);
+                        treeClickUrl = treeClickUrl.replace("@" + attrKeyOfEn, val);
                     }
-                    var attrKeyOfEn = key.split('=')[0];
-                    var val = key.split('=')[1];
-                    searchUrl = searchUrl.replace("@" + attrKeyOfEn, val);
-                    treeUrl = treeUrl.replace("@" + attrKeyOfEn, val);
-                    treeClickUrl = treeClickUrl.replace("@" + attrKeyOfEn, val);
                 }
             }
+
+            
             global.TreeUrl = mapExt.Tag2;
             treeUrl = treeUrl.replace("@Key", rootNo);
             if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
@@ -346,10 +387,9 @@
             // search
             $("#TB_Key").on("keyup", function () {
 
-                var key = replaceAll($(this).val(), "'", "");
-                var mySrc = replaceAll(searchUrl, "@Key", key);
-                mySrc = replaceAll(mySrc, "~", "'");
-                loadSelectGrid(mySrc, global.selectedRows, global.dbType);
+                var key = $(this).val();
+                key = replaceAll(key, "'", "");
+                loadSelectGrid(searchUrl, global.selectedRows, global.dbType, "Tag1",key);
 
             });
 

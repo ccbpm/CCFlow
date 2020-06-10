@@ -33,10 +33,15 @@
             var showSpan = mapExt.GetPara("ShowCol");
             if (showSpan == null || showSpan == undefined || showSpan == "")
                 showSpan = 3;
-
-            var srcOfEntitis = mapExt.Tag2; //实体.
-            srcOfEntitis = DealSQL(srcOfEntitis);
-            var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
+            var entities;
+            if (mapExt.DBType == 0) {
+                entities = GetDataTableByField("Tag2");
+            } else {
+                var srcOfEntitis = mapExt.Tag2; //实体.
+                srcOfEntitis = DealSQL(srcOfEntitis);
+                entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
+            }
+         
 
             //创建实体.
             //var sfTableEn = new Entity("BP.Sys.SFTable", mapExt.Tag2);
@@ -251,6 +256,23 @@
                 }
             });
             return array;
+        }
+
+        /**
+       * 根据字段，参数，查询类型获取JSON数据
+       * @param field mapExt需要查询的字段
+       * @param paras 参数值
+       */
+        function GetDataTableByField(field, paras) {
+            var en = new Entity("BP.Sys.MapExt", mapExt.MyPK);
+            var json = en.DoMethodReturnString("GetDataTableByField", field, paras);
+            if (json.indexOf("err@") != -1) {
+                alert(json);
+                return "";
+            }
+            json = JSON.parse(json);
+
+            return json;
         }
     </script>
 </head>

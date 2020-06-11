@@ -1872,7 +1872,7 @@ function Ath_Init(mypk, FK_MapData) {
 function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData,frmType) {
     var H = document.body.clientHeight - 240;
 
-    OpenBootStrapModal(url, "eudlgframe", title, frmData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
+    OpenBootStrapModalByContent(url, "AthTable_Init('" + athMyPK + "','Div_" + athMyPK + "')", 'Div_' + athMyPK, title, frmData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
 
 
         //获取附件显示的格式

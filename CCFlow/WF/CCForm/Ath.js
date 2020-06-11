@@ -1,35 +1,5 @@
 ﻿
-//文件上传执行的URL
-var uploadUrl = "";
 
-//检查上传的附件数量是否符合要求
-function CheckAthNum() {
-
-    if (numOfUpload > numOfAths) {
-        return "上传附件数量不能小于" + numOfUpload;
-    }
-
-    //判断附件上传最大数量
-    if (topNumOfUpload < numOfAths) {
-        return "您最多上传[" + topNumOfUpload + "]个附件";
-    }
-
-    if (athSortNum.length != 0 && athDesc.UploadFileNumCheck == 2) {
-        var msg = "";
-        for (var idx = 0; idx < athSortNum.length; idx++) {
-            if (athSortNum[idx].Num == 0)
-                msg += athSortNum[idx].Sort + ",";
-        }
-        if (msg != "") {
-            return msg.substring(0, msg.length - 1) + "分组至少上传一个附件";
-        }
-        return "";
-
-
-    }
-
-    return "";
-}
 //1.初始化附件全局使用的参数
 var AthParams = {};
 
@@ -40,7 +10,9 @@ AthParams.AthInfo = {};
 * @param athchment 附件属性
 * @param athDivID 生成的附件信息追加的位置
 */
-function AthTable_Init(athchment,athDivID) {
+function AthTable_Init(athchment, athDivID) {
+    if (typeof athchment != "object" && typeof athchment != "String")
+        athchment = new Entity("BP.Sys.FrmAttachment", athchment);
     AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
     AthParams.FK_MapData = athchment.FK_MapData;
 
@@ -62,7 +34,7 @@ function AthTable_Init(athchment,athDivID) {
 
     //4.调用附件上传的功能
     
-
+    debugger
 
     $("#fileUpload_" + athchment.MyPK).initUpload({
         "uploadUrl": uploadUrl,//上传文件信息地址

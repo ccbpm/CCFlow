@@ -24,12 +24,20 @@
             var handler = new HttpHandler("BP.DOC.App_Page");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("EditTrack_Init");
+             if (data.indexOf("WorkCheck@") != -1) {
+            var val = data.replace('null', '').split("WorkCheck@");
+                 if (val.length == 2)
+                     data = val[1];
+                 else {
+                     data = "";
+                 }
+        }
 
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
                 return;
             }
-            console.log(data);        
+               
             $("#Msg").val(data);
       
 

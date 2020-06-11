@@ -69,9 +69,11 @@ namespace BP.WF
                 //获得要删除的数据.
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
+                for(int i=0;i< dt.Rows.Count;i++)
                 {
-                    string empNo = dr[0].ToString();
+                    string empNo = dt.Rows[i][0].ToString();
+                    if (empNo == WebUser.No)
+                        continue;
                     sql = "UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + empNo + "'";
                     DBAccess.RunSQL(sql);
                 }

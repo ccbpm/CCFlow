@@ -96,6 +96,8 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelectedEmpsOrgModel = 43,
         //按照自定义url.
         DeliveryWay.BySelfUrl = 44,
+        //按API/URL
+        DeliveryWay.ByAPIUrl = 45,
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
 }

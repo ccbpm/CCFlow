@@ -1045,6 +1045,10 @@ namespace BP.WF
         /// </summary>
         BySelfUrl = 44,
         /// <summary>
+        /// 按照自定义API-URL
+        /// </summary>
+        ByAPIUrl = 45,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

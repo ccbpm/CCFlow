@@ -41,7 +41,7 @@ $(function () {
         if (toolBar.Oper != "")
             Oper = "onclick=\"" + toolBar.Oper + "\"";
 
-        if (toolBar.No == "NodeToolBar") {//自定义工具栏按钮
+        if (toolBar.No == "NodeToolBar") { //自定义工具栏按钮
 
             var Icon = toolBar.Icon;
             //自定义的默认按钮
@@ -242,7 +242,7 @@ function initModal(modalType, toNode,url) {
 
         switch (modalType) {
             case "returnBack":
-                $('#modalHeader').text("提示信息");
+                $('#modalHeader').text("退回");
                 //按百分比自适应
                 SetPageSize(50, 60);
                 var node = new Entity("BP.WF.Template.NodeExt", paramData.FK_Node);
@@ -353,6 +353,8 @@ function initModal(modalType, toNode,url) {
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random()
                 break;
             case "SelectNodeUrl":
+                $('#modalHeader').text("请选择到达的节点");
+                SetPageSize(50, 80);
                 modalIframeSrc = url;
                 break;
 
@@ -532,8 +534,9 @@ function Send(isHuiQian, formType) {
     if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack == 0) {
         Save(1); //执行保存.
         var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") +"&IsSend=0"+ "&s=" + Math.random();
-       
-        initModal("SelectNodeUrl", null, url); $('#returnWorkModal').modal().show();
+
+        initModal("SelectNodeUrl", null, url);
+        $('#returnWorkModal').modal().show();
         return;
     }
 

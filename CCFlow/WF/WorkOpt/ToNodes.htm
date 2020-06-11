@@ -20,6 +20,7 @@
             margin-bottom: 0px;
             font-weight: normal;
         }
+
         button {
             background: #fff;
             color: #000;
@@ -28,11 +29,12 @@
             margin: 5px 3px 5px 3px;
             padding: 4px 15px;
         }
-        button:hover {
-            background: #f5f5f5 !important;
-            color: #000;
-            border: 1px solid #ccc !important;
-        }
+
+            button:hover {
+                background: #f5f5f5 !important;
+                color: #000;
+                border: 1px solid #ccc !important;
+            }
     </style>
     <script type="text/javascript">
         var WorkID;
@@ -40,7 +42,7 @@
         var FK_Node;
         var FID;
         var toNodeID = 0;//当前选中的节点
-         //判断读秒关闭的参数是否存在
+        //判断读秒关闭的参数是否存在
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
         }
@@ -74,8 +76,8 @@
                     if (node.NodeID == selectNodeID)
                         checked = "checked=checked";
                     html += "<span><input type='radio' id='RB_UnSameSheet' name='nodeSelect' value='RB_UnSameSheet' " + checked + " onclick='RBUnSameSheet(this);'>";
-                    html += "<label for='RB_UnSameSheet'><b>可以分发启动的异表单节点</b></label></span>";
-                    html += "<br/>";
+                    html += "<label for='RB_UnSameSheet'><b><font color=green>可以分发启动的异表单节点</font></b></label></span>";
+                    html += "<br/><br>";
                     isSubYBD = true;
                     continue;
                 }
@@ -111,32 +113,33 @@
                     html += "<label for='CB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
                     }
                     if (node.DeliveryWay == 43)
-                       html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
 
 
-                    html += "<br/>";
+                    html += "<br/><br/>";
                 } else {
                     if (node.NodeID == selectNodeID)
                         checked = "checked=checked";
                     html += "<input type='radio' id='RB_" + node.NodeID + "' name='nodeSelect' value='RB_" + node.NodeID + "' " + checked + "  onclick='SetUnEable(this);'>";
+                    html += "<input type='radio' id='RB_" + node.NodeID + "' name='nodeSelect' value='RB_" + node.NodeID + "' " + checked + "  onclick='SetUnEable(this);'>";
                     html += "<label for='RB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\"   href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"   href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
                     }
                     if (node.DeliveryWay == 43)
-                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择接受人员" + addSpan + "</a>";
+                        html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
 
-                    html += "<br/>";
+                    html += "<br/><br/>";
                 }
 
             }
-            var tr = $("<tr><td style='padding:10px;'>" + html + "</td></tr>");
+            var tr = $(html);
             $("#TableNode").append(tr);
-            $("input:radio:first").prop("checked",true);
+            $("input:radio:first").prop("checked", true);
 
             var int = setInterval("clock()", 1000);
 
@@ -184,10 +187,10 @@
 
         //选择接受人
 
-        function SelectEmps(OperHtml,nodeID) {
+        function SelectEmps(OperHtml, nodeID) {
             toNodeID = nodeID;
             $('#modalHeader').text("选择接受人");
-            modalIframeSrc = "./" + OperHtml+".htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + nodeID + "&IsSend=0" + "&s=" + Math.random();
+            modalIframeSrc = "./" + OperHtml + ".htm?FK_Node=" + FK_Node + "&FID=" + FID + "&WorkID=" + WorkID + "&FK_Flow=" + FK_Flow + "&ToNode=" + nodeID + "&IsSend=0" + "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show();
         }
@@ -282,8 +285,6 @@
             $("#Div_ToNode").hide();
         }
 
-      
-
         function clock() {
 
             if ($("#CloseBtn").length == 0)
@@ -300,7 +301,6 @@
             //if (num == 0)
             //    CloseAll();
         }
-
 
         //取消移交
         function CloseAll() {
@@ -326,7 +326,7 @@
 
         //取消或者返回
         function Cancel() {
-            if(window.parent != null && window.parent.returnWorkWindowClose != null) {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose();
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
@@ -334,36 +334,50 @@
             }
         }
     </script>
-
     <base target="_self" />
+    <style>
+        input {
+            width:24px;
+            height:24px;
+            margin-right:10px!important;
+            float:left;
+        }
+        .button-bar {
+            position:absolute;
+            left:0;
+            right:0;
+            bottom:0;
+            background:#e5e5e5;
+            border-top:solid 1px #ccc;
+            padding:6px 6px 0px 6px;
+            text-align:center
+        }
+    </style>
 </head>
 <body>
 
-    <div class="Msg" style="text-align: left;padding-left:25px; display:none;">
-        <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
-    </div>
-    <div id="Div_ToNode" style="text-align: center;  position: absolute; background-color: white; height: 100%;left: 15%; right: 15%">
-        <fieldset>
-            <legend> 请选择到达的节点</legend>
-            <div id="TableNode" style="width:100%;"></div>
 
-            <br />
-            <!--<input type=button id="Btn_Send" onclick="Send();" value="发送" />
-            <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />-->
+    <div id="Div_ToNode" style="padding:15px; font-size:16px;">
 
+        <div class="Msg" style="text-align: left;padding-left:55px; display:none;">
+            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
+        </div>
+
+        <div id="TableNode" style="width:100%;"></div>
+        <br />
+        <!--<input type=button id="Btn_Send" onclick="Send();" value="发送" />
+        <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />-->
+
+        <div class="button-bar">
             <button type=button onclick="Send();" id="Btn_Send">
-                <img src="../Img/Btn/Send.png" /> 发送
+               发送
             </button>
 
             <button type=button onclick="Cancel();" id="Btn_Cancel">
-                <img src="../Img/Btn/cancel_dafalut.png" /> 取消/返回
+                取消/返回
             </button>
-        </fieldset>
-
+        </div>
     </div>
-
-
-
 
     <!--杨玉慧加   提示信息弹出窗口-->
     <div class="modal fade" id="msgModal" data-backdrop="static">

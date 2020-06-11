@@ -1353,9 +1353,10 @@ namespace BP.WF
 
 
 
-
                     //获得类型.
-                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID);
+                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID,-1);
+                    if (OrAndType == -1)
+                        continue;
 
                     int idx = 0;
                     int idxSave = 0;

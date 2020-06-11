@@ -150,7 +150,7 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByFEE + " >&nbsp;&nbsp;&nbsp;&nbsp;由FEE来决定</option>";
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
-        html += "<option value=" + DeliveryWay.ByAPIUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;按API-URL模式处理</option>";
+        html += "<option value=" + DeliveryWay.ByAPIUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;按API/URL模式处理</option>";
     }
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveRole()' value='保存' />";

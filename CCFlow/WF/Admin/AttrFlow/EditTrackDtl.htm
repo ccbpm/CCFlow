@@ -23,21 +23,39 @@
             var mypk = GetQueryString("MyPk");
             var handler = new HttpHandler("BP.DOC.App_Page");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("EditTrack_Msg");
+            var data = handler.DoMethodReturnString("EditTrack_Init");
 
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
                 return;
             }
-
-            data = JSON.parse(data);
-            alert(data);
+            console.log(data);        
+            $("#Msg").val(data);
+      
 
         });
 
         function Save()
         {
-            alert("ss");
+           var mypk = GetQueryString("MyPk");
+            var handler = new HttpHandler("BP.DOC.App_Page");
+            handler.AddUrlData();
+            var msg = $("#Msg").val();
+
+            if (msg == "" || msg == undefined || msg == null) {
+                alert("办理情况不能为空");
+                return;
+            }
+            handler.AddPara("Msg", msg);
+            var data = handler.DoMethodReturnString("EditTrack_Save");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                return;
+            }
+            alert("保存成功");
+               
+          
 
         }
 

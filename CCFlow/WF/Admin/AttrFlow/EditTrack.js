@@ -241,7 +241,8 @@ function InitPage() {
 
 function Edit(mypk)
 {
-    var url = "/WF/Admin/AttrFlow/EditTrackDtl.htm?&MyPk="+mypk;
+    var flowno = GetQueryString("FK_Flow");
+    var url = "/WF/Admin/AttrFlow/EditTrackDtl.htm?&MyPk=" + mypk + "&Fk_Flow=" + flowno;
     window.OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200, "icon-edit", false);
 }
 

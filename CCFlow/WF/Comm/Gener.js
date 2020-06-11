@@ -1305,7 +1305,6 @@ var Entity = (function () {
                     try {
                         //处理特殊字符，字段中的值含有双引号
                         data = data.replace(/\\\\"/g, '\\"');
-                        console.log(data);
                         jsonString = JSON.parse(data);
                         setData(self);
                         result = jsonString.RetrieveFromDBSources;
@@ -1870,13 +1869,11 @@ var Entities = (function () {
             // { data: [{}, {}, {}], length: 3, name: 'xxx' };
             var result = [];
             for (var key in this) {
-                console.log(typeof this[key]);
                 if (typeof this[key] === 'object') {
                     result.push(this[key]);
                 }
             }
             this.data = result;
-            console.log('data', this);
             return this;
         },
 

@@ -22,6 +22,7 @@ $(function () {
     pageData.fk_mapdata = GetQueryString("FK_MapData");
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
+    //pageData.IsReadonly = 1;
 
     $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
@@ -112,6 +113,7 @@ $(function () {
 
     // alert(html);
     tbody.append($(html));
+   
     $(".NewChild").hide();
     //contentTable
     $('#contentTable').children().remove();
@@ -121,7 +123,18 @@ $(function () {
 
     if ($("#FlowBBS").length == 1)
         loadScript("../../WorkOpt/FlowBBS.js");
-   
+
+    if (data.Sys_FrmAttachment.length != 0) {
+        Skip.addJs("../../CCForm/Ath.js");
+        Skip.addJs("../../CCForm/JS/FileUpload/fileUpload.js");
+        $('head').append("<link href='../../CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+    }
+
+
+    $.each(data.Sys_FrmAttachment, function (idex, ath) {
+        AthTable_Init(ath, "Div_" + ath.MyPK);
+    });
+
 
     var mapAttrs = data.Sys_MapAttr;
     //解析设置表单字段联动显示与隐藏.
@@ -138,19 +151,18 @@ $(function () {
                     var ddl = $("#DDL_" + mapAttr.KeyOfEn);
                     //初始化页面的值
                     var nowKey = ddl.val();
-
-                    debugger
+                    if (nowKey == undefined || nowKey == "")
+                        continue;
+                    
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }
                 if (mapAttr.UIContralType == 3) {
                     /*启用了显示与隐藏.*/
-                    var rb = $("#RB_" + mapAttr.KeyOfEn);
                     var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                    if (nowKey == undefined) {
+                    if (nowKey == undefined || nowKey == "")
                         continue;
-                    }
-                    debugger
+
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }

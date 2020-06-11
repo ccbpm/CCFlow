@@ -910,14 +910,27 @@ function ShowTextBoxNoticeInfo() {
 
 //检查附件数量.
 function checkAths() {
-
     // 不支持火狐浏览器。
-    var frm = document.getElementById('Ath1');
+    if (AthParams.AthInfo != undefined) {
+        var aths = document.getElementsByName("Ath");
+        for (var i = 0; i < aths.length; i++) {
+            var athment = aths[i].id.replace("Div_", "");
+            if (AthParams.AthInfo[athment] != undefined && AthParams.AthInfo[athment].length > 0) {
+                var athInfo = AthParams.AthInfo[athment][0];
+                var minNum = athInfo[0];
+                var maxNum = athInfo[1];
+                var athNum = $("#Div_" + athment + " table tbody .athInfo").length;
+                if(athNum.length == 0)
+                    athNum = $("#Div_" + athment + " .athInfo").length;
 
-    if (frm == null || frm == undefined) {
-        return "";
+                if (athNum < minNum)
+                    return athment + "上传附件数量不能小于" + minNum;;
+                if (athNum > maxNum)
+                    return athment + "您最多上传[" + maxNum + "]个附件";
+            }
+        }
     }
-    return frm.contentWindow.CheckAthNum();
+    return "";
 
 }
 
@@ -1051,6 +1064,15 @@ function GenerWorkNode() {
         return;
     }
 
+    //处理附件的问题 
+    if (flowData.Sys_FrmAttachment.length != 0) {
+        Skip.addJs("./CCForm/Ath.js");
+        Skip.addJs("./CCForm/JS/FileUpload/fileUpload.js");
+        Skip.addJs("./Scripts/jquery-form.js");
+        $('head').append("<link href='./CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+    }
+
+
 
     //获取没有解析的外部数据源
     var uiBindKeys = flowData["UIBindKey"];
@@ -1177,6 +1199,8 @@ function GenerWorkNode() {
     }*/
 
     $.parser.parse("#CCForm");
+
+   
 
     //单表单加载后执行.
     CCFormLoaded();

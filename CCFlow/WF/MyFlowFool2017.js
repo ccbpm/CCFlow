@@ -89,17 +89,19 @@ function GenerFoolFrm(wn) {
                 if (MyPK == "")
                     continue;
                 //创建附件描述信息.
-                var ath = $.grep(flowData.Sys_FrmAttachment, function (obj, idx) {
-                    if (obj.MyPK == gf.CtrlID)
-                        return obj;
-                });
-                if (ath.length == 0)
-                    continue;
-                if (ath[0].IsVisable == "0" || ath[0].NoOfObj == "FrmWorkCheck")
+                var aths = $.grep(flowData.Sys_FrmAttachment, function (ath) { return ath.MyPK == gf.CtrlID });
+                var ath = aths.length > 0 ? aths[0] : null;
+                var athInfo = "";
+                if (ath == null)
+                    athInfo = "附件" + gf.CtrlID + "信息丢失";
+                else
+                    athInfo = "<div id='Div_" + ath.MyPK + "'></div>";
+
+                if (ath != null && (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck"))
                     continue;
                 html += "<tr>";
                 html += "  <td colspan='" + tableCol + "' >";
-                html += Ele_Attachment(flowData, gf, node, ath[0]);
+                html += athInfo;
                 html += "  </td>";
                 html += "</tr>";
                 html += "</table>";
@@ -208,24 +210,25 @@ function GenerFoolFrm(wn) {
 
             //附件类的控件.
             if (gf.CtrlType == 'Ath') {
-
-                //获取附件的主键
-                var MyPK = gf.CtrlID;
-                if (MyPK == "")
+                if (gf.CtrlID == "")
                     continue;
                 //创建附件描述信息.
-                var ath = new Entity("BP.Sys.FrmAttachment");
-                ath.MyPK = gf.CtrlID;
-                if (ath.RetrieveFromDBSources() == 0)
-                    continue;
-                if (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck")
+                var aths = $.grep(flowData.Sys_FrmAttachment, function (ath) { return ath.MyPK == gf.CtrlID });
+                var ath = aths.length > 0 ? aths[0] : null;
+                var athInfo = "";
+                if (ath == null)
+                    athInfo = "附件" + gf.CtrlID + "信息丢失";
+                else
+                    athInfo = "<div id='Div_" + ath.MyPK + "' name='Ath'></div>";
+
+                if (ath!=null &&(ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck"))
                     continue;
                 html += "<tr>";
                 html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
                 html += "</tr>";
                 html += "<tr>";
-                html += "  <td colspan='" + tableCol + "' class='FDesc'>";
-                html += Ele_Attachment(flowData, gf, node, ath);
+                html += "<td colspan='" + tableCol + "' class='FDesc'>";
+                html += athInfo;
                 html += "  </td>";
                 html += "</tr>";
                 continue;
@@ -307,10 +310,16 @@ function GenerFoolFrm(wn) {
 
     $('#CCForm').html(html);
 
-
-    //处理附件的问题
+    //表格附件
+    $.each(flowData.Sys_FrmAttachment, function (idex, ath) {
+        if ($("#Div_" + ath.MyPK).length == 1)
+            AthTable_Init(ath, "Div_" + ath.MyPK);
+    });
+   
+    //字段附件
     var aths = $(".athModel");
     $.each(aths, function (idx, ath) {
+        
         //获取ID
         var name = $(ath).attr('id');
         var keyOfEn = name.replace("athModel_", "");
@@ -1764,49 +1773,49 @@ function Ele_Frame(flowData, gf) {
 }
 
 
-//初始化 附件
-function Ele_Attachment(flowData, gf, node, ath) {
+////初始化 附件
+//function Ele_Attachment(flowData, gf, node, ath) {
 
-    var eleHtml = '';
-    var nodeID = GetQueryString("FK_Node");
-    var url = "";
-    url += "&WorkID=" + GetQueryString("WorkID");
-    url += "&FK_Node=" + nodeID;
-    url += "&FK_Flow=" + node.FK_Flow;
-    url += "&FormType=" + node.FormType; //表单类型，累加表单，傻瓜表单，自由表单.
-    var no = node.NodeID.toString().substring(node.NodeID.toString().length - 2);
-    var IsStartNode = 0;
-    if (no == "01")
-        url += "&IsStartNode=" + 1; //是否是开始节点
+//    var eleHtml = '';
+//    var nodeID = GetQueryString("FK_Node");
+//    var url = "";
+//    url += "&WorkID=" + GetQueryString("WorkID");
+//    url += "&FK_Node=" + nodeID;
+//    url += "&FK_Flow=" + node.FK_Flow;
+//    url += "&FormType=" + node.FormType; //表单类型，累加表单，傻瓜表单，自由表单.
+//    var no = node.NodeID.toString().substring(node.NodeID.toString().length - 2);
+//    var IsStartNode = 0;
+//    if (no == "01")
+//        url += "&IsStartNode=" + 1; //是否是开始节点
 
-    var isReadonly = false;
-    //if (gf.FrmID.indexOf(nodeID) == -1)
-    //    isReadonly = true;
+//    var isReadonly = false;
+//    //if (gf.FrmID.indexOf(nodeID) == -1)
+//    //    isReadonly = true;
 
-    if (isReadonly == false) {
-        var strRD = GetQueryString("IsReadonly");
-        if (strRD == 1)
-            isReadonly = true;
-    }
+//    if (isReadonly == false) {
+//        var strRD = GetQueryString("IsReadonly");
+//        if (strRD == 1)
+//            isReadonly = true;
+//    }
 
-    var athPK = gf.CtrlID;
-    var noOfObj = athPK.replace(gf.FrmID + "_", "");
+//    var athPK = gf.CtrlID;
+//    var noOfObj = athPK.replace(gf.FrmID + "_", "");
 
-    var src = "";
+//    var src = "";
 
-    //这里的连接要取 FK_MapData的值.
-    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
-    if (isReadonly == true)
-        src += "&IsReadOnly=1";
+//    //这里的连接要取 FK_MapData的值.
+//    src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=ND" + node.NodeID + "&FromFrm=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+//    if (isReadonly == true)
+//        src += "&IsReadOnly=1";
 
-    //自定义表单模式.
-    if (ath.AthRunModel == 2) {
-        src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
-    }
+//    //自定义表单模式.
+//    if (ath.AthRunModel == 2) {
+//        src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&PWorkID=" + GetQueryString("PWorkID") + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + gf.FrmID + "&FK_FrmAttachment=" + athPK + url + "&M=" + Math.random();
+//    }
 
-    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' id='Ath1' name='Ath1'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    return eleHtml;
-}
+//    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' id='Ath1' name='Ath1'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+//    return eleHtml;
+//}
 
 var appPath = "../../";
 var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量

@@ -87,7 +87,7 @@
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.SetPKVal(urMyPK);
             ur.RetrieveFromDBSources();
-
+            
             //获取Url传的查询Key值
             var key = GetQueryString("Key");
             if (key != null && key != undefined && firstLoadTable == true) {

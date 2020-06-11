@@ -584,10 +584,7 @@
                     if (athEn[0].IsVisable == "0")
                         return "";
 
-                    var src = "../../CCForm/Ath.htm?PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&FK_FrmAttachment=" + athEn[0].MyPK + "&IsReadonly=1";
-
-                    var frameUrl = "<iframe ID='F" + athEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + athEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " id='TD" + athEn[0].MyPK + "' style='width:" + athEn[0].H + "px;'>" + frameUrl + "</td></tr>";
+                    return "<tr><td colspan=" + tableCol + " style='width:" + athEn[0].H + "px;'><div id='Div_" + athEn[0].MyPK + "'></div></td></tr>";
 
                     break;
                 case "SubFlow":

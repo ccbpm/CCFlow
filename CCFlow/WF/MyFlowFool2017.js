@@ -1880,7 +1880,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
 function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData,frmType) {
     var H = document.body.clientHeight - 240;
 
-    OpenBootStrapModal(url, "eudlgframe", title, flowData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
+    OpenBootStrapModalByContent(url, "AthTable_Init('" + athMyPK + "','Div_" + athMyPK + "')",'Div_'+athMyPK, title, flowData.Sys_MapData[0].FrmW, H, "icon-property", null, null, null, function () {
 
         //获取附件显示的格式
         var athShowModel = GetPara(atPara, "AthShowModel");
@@ -2025,7 +2025,7 @@ function GetLab(flowData, attr) {
         var src = "";
 
         //这里的连接要取 FK_MapData的值.
-        src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FromFrm=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
+        src = "./CCForm/Ath.js?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FromFrm=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         if (isReadonly == true)
             src += "&IsReadOnly=1";
 

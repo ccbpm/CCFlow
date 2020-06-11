@@ -23,11 +23,11 @@
             var isEnable = en.GetPara("IsFullData");
 
             if (isEnable == "" || isEnable == 0 || isEnable == undefined) {
-                $("#Btn_FullData").attr("disabled", true);
+                $("#Btn_FullData").hide();
                 $("#RB_IsEnableJS_0").attr("checked", true);
             } else {
 
-                $("#Btn_FullData").removeAttr("disabled");
+                $("#Btn_FullData").show();
                 $("#RB_IsEnableJS_1").attr("checked", true);
             }
             //设置那个单选按钮可以被选择。
@@ -106,10 +106,10 @@
                 var isEnable = $("input[name='RB_IsEnableJS']:checked").val();
                 if (isEnable == "1") {
                     en.SetPara("IsFullData", 1);
-                    $("#Btn_FullData").removeAttr("disabled");
+                    $("#Btn_FullData").show();
                 } else {
                     en.SetPara("IsFullData", 0);
-                    $("#Btn_FullData").attr("disabled", true);
+                    $("#Btn_FullData").hide();
                 }
                 en.Update();
                 window.location.href = window.location.href;
@@ -117,6 +117,7 @@
             }
 
             function Set() {
+                
                 var keyOfEn = GetQueryString("KeyOfEn");
                 var frmID = GetQueryString("FK_MapData");
                 var extType = GetQueryString("ExtType");

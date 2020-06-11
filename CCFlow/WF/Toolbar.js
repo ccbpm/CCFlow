@@ -529,7 +529,8 @@ function Send(isHuiQian, formType) {
             return;
 
     /**发送前处理的信息 End**/
-    if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack== 0) {
+    if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack == 0) {
+        Save(1); //执行保存.
         var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") +"&IsSend=0"+ "&s=" + Math.random();
        
         initModal("SelectNodeUrl", null, url); $('#returnWorkModal').modal().show();

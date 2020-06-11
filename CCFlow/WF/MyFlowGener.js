@@ -911,7 +911,7 @@ function ShowTextBoxNoticeInfo() {
 //检查附件数量.
 function checkAths() {
     // 不支持火狐浏览器。
-    if (AthParams.AthInfo != undefined) {
+    if ("undefined" != typeof AthParams &&  AthParams.AthInfo != undefined) {
         var aths = document.getElementsByName("Ath");
         for (var i = 0; i < aths.length; i++) {
             var athment = aths[i].id.replace("Div_", "");

@@ -4174,7 +4174,7 @@ namespace BP.WF
 
             //@sly
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                     "RDT,NodeData=" + dbStr + "NodeData WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID="+dbStr+"WorkID AND FID="+dbStr+"FID AND EmpFrom="+dbStr+"EmpFrom";
+                     "RDT,NodeData=" + dbStr + "NodeData WHERE ActionType="+(int)ActionType.WorkCheck+" AND  NDFrom=" + dbStr + "NDFrom AND WorkID="+dbStr+"WorkID AND FID="+dbStr+"FID AND EmpFrom="+dbStr+"EmpFrom";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
             ps.Add(TrackAttr.NDFrom, currNodeID);

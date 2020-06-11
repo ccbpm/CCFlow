@@ -18,7 +18,7 @@ $(function () {
     } else {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
         handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar"); //执行保存方法.
+        data = handler.DoMethodReturnString("InitToolBar"); 
     }
 
     if (data.indexOf("err@") != -1) {
@@ -603,10 +603,14 @@ function Send(isHuiQian, formType) {
 }
 
 function execSend(toNodeID, formType) {
-
+    //正在发送弹出层
+    var index = layer.msg('正在发送，请稍后..', {
+        icon: 16
+        , shade: 0.01
+    });
     //先设置按钮等不可用.
     setToobarDisiable();
-
+    
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     if (formType != 3 && formType!=2) {
         //组织数据.
@@ -626,7 +630,7 @@ function execSend(toNodeID, formType) {
     handler.AddPara("ToNode", toNodeID);
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("Send"); //执行保存方法.
-
+    layer.close(index);//关闭正在发送
     if (data.indexOf('err@') == 0) { //发送时发生错误
 
         var reg = new RegExp('err@', "g")
@@ -1008,7 +1012,7 @@ function ConfirmBtn(btn, workid) {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("WorkID", workid);
-    handler.DoMethodReturnString("Confirm"); //执行保存方法.
+    handler.DoMethodReturnString("Confirm"); 
 
 }
 //结束流程.

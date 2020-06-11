@@ -351,6 +351,11 @@ function CheckMinMaxLength() {
 
 //保存 0单保存 1发送的保存
 function Save(saveType) {
+    //正在保存弹出层
+    var index = layer.msg('正在保存，请稍后..', {
+        icon: 16
+        , shade: 0.01
+    });
     //保存从表数据
     $("[name=Dtl]").each(function (i, obj) {
         var contentWidow = obj.contentWindow;
@@ -441,7 +446,7 @@ function Save(saveType) {
         }
     });
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-
+    layer.close(index);//关闭正在保存
     setToobarEnable();
     //刷新 从表的IFRAME
     var dtls = $('.Fdtl');

@@ -272,16 +272,18 @@ function GenerDevelopFrm(wn, fk_mapData) {
 
     }
     var aths = frmData.Sys_FrmAttachment;//附件
-    for (var i = 0; i < aths.length; i++) {
-        var ath = aths[i];
-        //根据data-key获取从表元素
+   
+    //表格附件
+    $.each(aths, function (idex, ath) {
         var element = $("Img[data-key=" + ath.MyPK + "]");
-        if (element.length == 0)
-            continue;
-        figure_Develop_Ath(element, ath);
-
-    }
-
+        if (element.length != 0) {
+            var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;' ></div>");
+            $(element).after(eleHtml);
+            $(element).remove(); //移除Imge节点
+            AthTable_Init(ath, "Div_" + ath.MyPK);
+        }  
+    });
+  
     //图片附件
     var athImgs = frmData.Sys_FrmImgAth;
     if (athImgs.length > 0) {
@@ -328,7 +330,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
     //    figure_Develop_Btn(frmBtn);
 
     //}
-    debugger
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
         if (nodeComponents != null) {
@@ -381,9 +382,9 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
     src += "&WorkID=" + pageData.OID + "&FID=" + GetQueryString("FID") + "&PWorkID=" + GetQueryString("PWorkID") + "&FK_Node=" + GetQueryString("FK_Node");
     var W = element.width();
-    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='width:" + W + "px; height:auto;' ></div>");
+    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='width:99%px; height:auto;' ></div>");
 
-    var eleIframe = $("<iframe class= 'Fdtl' name='Dtl'  ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:" + W + "px;"
+    var eleIframe = $("<iframe class= 'Fdtl' name='Dtl'  ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:100%;"
         + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     eleHtml.append(eleIframe);
     $(element).after(eleHtml);
@@ -404,12 +405,7 @@ function figure_Develop_Ath(element, ath) {
     src += "&FID=" + fid;
     src += "&PWorkID=" + pWorkID;
     var W = element.width();
-    var eleHtml = $("<div id='Fd" + ath.MyPK + "' name='Ath' style=' height:auto;' ></div>");
-
-    var eleIframe = $("<iframe class= 'Fdtl' ID = 'Attach_" + ath.MyPK + "' src = '" + src + "' frameborder=0  style='height: auto; text-align: left; ' leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-    eleHtml.append(eleIframe);
-    $(element).after(eleHtml);
-    $(element).remove(); //移除Imge节点
+   
 }
 
 //图片附件

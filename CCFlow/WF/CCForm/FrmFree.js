@@ -61,6 +61,7 @@ function GenerFreeFrm(mapData, frmData) {
         var frmImgAth = frmData.Sys_FrmImgAth[i];
         var createdFigure = figure_Template_ImageAth(frmImgAth);
         $('#CCForm').append(createdFigure);
+       
     }
 
 
@@ -71,6 +72,7 @@ function GenerFreeFrm(mapData, frmData) {
             continue;
         var createdFigure = figure_Template_Attachment(frmAttachment);
         $('#CCForm').append(createdFigure);
+        AthTable_Init(frmAttachment, "Div_" + frmAttachment.MyPK);
     }
 
     // 主表扩展(统计从表)
@@ -1165,26 +1167,9 @@ function figure_Template_Attachment(frmAttachment) {
         return $('');
     }
 
-    var src = "Ath.htm";
-    var local = window.location.href;
-    if (local.indexOf('CCBill') != -1) {
-        src = '../CCForm/' + src;
-    }
-
-    if (pageData.IsReadonly == "1")
-        src = src + "?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
-    else
-        src = src + "?PKVal=" + pageData.OID + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
-
-    var fid = GetQueryString("FID");
-    var pWorkID = GetQueryString("PWorkID");
-
-    src += "&FID=" + fid;
-    src += "&PWorkID=" + pWorkID;
-
-    eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "' name='Attach'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    eleHtml += '<div id="Div_' + frmAttachment.MyPK + '" name="Ath"></div>';
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', ath.Y + 'px').css('left', ath.X + 'px').css('width', ath.W).css('height', ath.H);
+    eleHtml.css('position', 'absolute').css('top', ath.Y).css('left', ath.X).css('width', ath.W).css('height', ath.H);
 
     return eleHtml;
 }

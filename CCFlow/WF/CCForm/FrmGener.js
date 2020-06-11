@@ -229,6 +229,16 @@ function GenerFrm() {
         return;
     }
 
+    //处理附件的问题 
+    if (frmData.Sys_FrmAttachment.length != 0) {
+        Skip.addJs("./Ath.js");
+        Skip.addJs("./JS/FileUpload/fileUpload.js");
+        Skip.addJs("../Scripts/jquery-form.js");
+        $('head').append("<link href='./JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+    }
+
+
+
     //获取没有解析的外部数据源
     var uiBindKeys = frmData["UIBindKey"];
     if (uiBindKeys.length != 0) {

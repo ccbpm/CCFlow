@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Collections;
-using System.Web;
 using System.Data;
 using System.Web.Services;
 using BP.WF.Template;
@@ -10,7 +8,7 @@ using BP.Sys;
 using BP.Web;
 using BP.DA;
 using BP.En;
-using System.Drawing;
+
 
 namespace CCFlow.WF.CCForm
 {

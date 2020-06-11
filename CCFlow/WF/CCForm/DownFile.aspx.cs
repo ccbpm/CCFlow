@@ -96,13 +96,7 @@ namespace CCFlow.WF.CCForm
                 return "ND" + this.FK_Node + "_DocMultiAth"; // this.Request.QueryString["FK_FrmAttachment"];
             }
         }
-        public string FK_Flow
-        {
-            get
-            {
-                return this.Request.QueryString["FK_Flow"];
-            }
-        }
+        
         public int _fk_node = 0;
         public int FK_Node
         {
@@ -141,23 +135,7 @@ namespace CCFlow.WF.CCForm
                 return Int64.Parse(str);
             }
         }
-        public string FK_MapData
-        {
-            get
-            {
-                string fk_mapdata = this.Request.QueryString["FK_MapData"];
-                if (string.IsNullOrEmpty(fk_mapdata))
-                    fk_mapdata = "ND" + FK_Node;
-                return fk_mapdata;
-            }
-        }
-        public string Ath
-        {
-            get
-            {
-                return this.Request.QueryString["Ath"];
-            }
-        }
+        
         public string IsCC
         {
             get

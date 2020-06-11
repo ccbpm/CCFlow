@@ -44,7 +44,7 @@ namespace BP.Frm
 
             FrmBill fb = new FrmBill(frmID);
 
-            gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
+            gb.WorkID = BP.DA.DBAccess.GenerOID(frmID);
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;

@@ -473,7 +473,7 @@ function returnWorkWindowClose(data) {
 
     $('#returnWorkModal').modal('hide');
     //通过下发送按钮旁的下拉框选择下一个节点
-    if (data.indexOf('SaveOK@') == 0) {
+    if (data!=null && data!=undefined && data.indexOf('SaveOK@') == 0) {
         //说明保存人员成功,开始调用发送按钮.
         var toNode = 0;
         //含有发送节点 且接收
@@ -489,7 +489,7 @@ function returnWorkWindowClose(data) {
         winSelectAccepter = null;
     }
 
-    if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
+    if (data != null && data !=undefined(data.indexOf('err@') == 0 || data == "取消")) {//发送时发生错误
         $('#Message').html(data);
         $('#MessageDiv').modal().show();
         return;
@@ -1051,11 +1051,9 @@ function GenerWorkNode() {
     handler.AddUrlData(urlParam);
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 
-    console.log(data);
-
-
     if (data.indexOf('err@') == 0) {
         alert(data);
+        console.log(data);
         return;
     }
 
@@ -1142,15 +1140,15 @@ function GenerWorkNode() {
 
   
 
-    if (node.FormType == 11) {
-        //获得配置信息.
-        var frmNode = flowData["FrmNode"];
-        if (frmNode) {
-            frmNode = frmNode[0];
-            if (frmNode.FrmSln == 1)
-                pageData.IsReadonly = 1
-        }
-    }
+    //if (node.FormType == 11) {
+    //    //获得配置信息.
+    //    var frmNode = flowData["FrmNode"];
+    //    if (frmNode) {
+    //        frmNode = frmNode[0];
+    //        if (frmNode.FrmSln == 1)
+    //            pageData.IsReadonly = 1
+    //    }
+    //}
     //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
     if (node.FormType == 5) {
@@ -1360,6 +1358,10 @@ function SetFrmReadonly() {
     $('#CCForm').find('input,textarea,select').attr('disabled', false);
     $('#CCForm').find('input,textarea,select').attr('readonly', true);
     $('#CCForm').find('input,textarea,select').attr('disabled', true);
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#WorkCheck_Doc").removeAttr("readonly");
+        $("#WorkCheck_Doc").removeAttr("disabled");
+    }
 
     $('#Btn_Save').attr('disabled', true);
 }

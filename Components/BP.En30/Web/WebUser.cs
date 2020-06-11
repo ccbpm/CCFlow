@@ -176,7 +176,7 @@ namespace BP.Web
                     cookieValues.Add("Token", HttpContextHelper.SessionID);
                     cookieValues.Add("SID", HttpContextHelper.SessionID);
                 }
-                cookieValues.Add("Tel",em.Tel);
+                cookieValues.Add("Tel", em.Tel);
                 cookieValues.Add("Lang", lang);
                 if (authNo == null)
                     authNo = "";
@@ -567,7 +567,6 @@ namespace BP.Web
             HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
             if (hc != null)
                 BP.Sys.Glo.Request.Cookies.Remove("CCS");
-
             HttpCookie cookie = new HttpCookie("CCS");
             cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
             */
@@ -589,7 +588,7 @@ namespace BP.Web
         {
             get
             {
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                     return true;
 
                 if (SystemConfig.CCBPMRunModel == 0)
@@ -692,14 +691,12 @@ namespace BP.Web
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     return "";
 
-
                 string val = GetValFromCookie("OrgNo", null, true);
                 if (val == null)
                 {
                     if (WebUser.No == null)
                         return "";
-                        //throw new Exception("@err-005 OrgNo 登录信息丢失.");
-
+                    //throw new Exception("@err-005 OrgNo 登录信息丢失.");
                     string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
                     SetSessionByKey("OrgNo", no);
                     return no;
@@ -726,7 +723,7 @@ namespace BP.Web
 
                     val = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Org WHERE No='" + WebUser.OrgNo + "'");
                     SetSessionByKey("OrgName", val);
-                   
+
                 }
                 if (val == null)
                     val = "";
@@ -807,6 +804,7 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("SID", value);
+             // WebUser.SetValToCookie("SID", value);
             }
         }
         /// <summary>

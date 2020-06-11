@@ -475,7 +475,7 @@ namespace BP.WF
             }
 
 
-            #region 如果是越轨流程状态 @fanleiwei.
+            #region 如果是越轨流程状态 .
             string sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE WorkID="+this.WorkID+" AND IsPass=80";
             if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
             {
@@ -769,9 +769,13 @@ namespace BP.WF
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
             }
 
-            //首先删除当前节点的，审核意见.
-            string delTrackSQl = "DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType =22 ";
-            DBAccess.RunSQL(delTrackSQl);
+            //首先删除当前节点的,审核意见. 2020.06.11
+            // 如果是断头路节点为了响应计算中心的需求.
+            if (nd.IsSendBackNode == false)
+            {
+                string delTrackSQl = "DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType =22 ";
+                DBAccess.RunSQL(delTrackSQl);
+            }
 
             if (wn.HisNode.IsEval)
             {

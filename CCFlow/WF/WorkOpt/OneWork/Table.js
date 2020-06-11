@@ -92,41 +92,38 @@ function InitPage() {
         //            doc += "<p><span>退回意见如下</span>  </p>";
         //        }
 
-        if (at == ActionType.Forward || at == ActionType.FlowOver) {
+        if (at == ActionType.Forward || at == ActionType.FlowOver || at == ActionType.TeampUp) {
 
 
             //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+            if (fwc.FWCVer == 0) {
+                for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
 
-                var checkTrack = tracks[myIdx];
-                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    var val = track.Msg.replace('null', '').split("WorkCheck@");
-                    if (val.length == 2)
-                        track.Msg = val[1];
-                    Msg = track.Msg;
+                    var checkTrack = tracks[myIdx];
+                    if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                        track.Msg = track.Msg;
+                    }
                 }
-            }
-        }
-        //协作发送.
-        if (at == ActionType.TeampUp) {
+            } else {
+                var val = track.Msg.replace('null', '').split("WorkCheck@");
+                if (val.length == 2)
+                    track.Msg = val[1];
 
-            for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
-
-                var checkTrack = tracks[myIdx];
-                if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
-                    var val = track.Msg.replace('null', '').split("WorkCheck@");
-                    if (val.length == 2)
-                        track.Msg = val[1];
-                    Msg = track.Msg;
-                }
             }
+
         }
+
         //输出备注信息.
         var tag = track.Tag;
         if (tag != null)
             tag = tag.replace("~", "'");
 
         msg = track.Msg;
+        if (msg.indexOf("WorkCheck@") != -1) {
+            var val = track.Msg.replace('null', '').split("WorkCheck@");
+            if (val.length == 2)
+                msg = val[1];
+        }
         if (msg == "0")
             msg = "";
 

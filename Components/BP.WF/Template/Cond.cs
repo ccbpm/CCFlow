@@ -1132,7 +1132,7 @@ namespace BP.WF.Template
         /// <param name="runModel">模式</param>
         /// <returns></returns>
         public bool GenerResult(GERpt en = null)
-        {
+        {   
             if (this.Count == 0)
                 throw new Exception("err@没有要计算的条件，无法计算.");
 

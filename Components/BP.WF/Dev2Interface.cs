@@ -10716,6 +10716,13 @@ namespace BP.WF
                     CondAttr.ToNodeID, mynd.NodeID, CondAttr.CondType, (int)CondType.Dir,
                     CondAttr.Idx);
 
+                //数量.
+                if (conds.Count == 0)
+                {
+                    nds.AddEntity(mynd);
+                    continue;
+                }
+
                 //是否可以处理.
                 bool bIsCanDo = false;
                 foreach (Direction dir in dirs)
@@ -10725,7 +10732,9 @@ namespace BP.WF
                 }
                 #endregion
 
-                nds.AddEntity(mynd);
+                //如果通过了.
+                if (bIsCanDo == true)
+                    nds.AddEntity(mynd);
             }
 
             // 检查是否具有异表单的子线程.

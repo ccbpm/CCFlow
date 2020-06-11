@@ -150,6 +150,7 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByFEE + " >&nbsp;&nbsp;&nbsp;&nbsp;由FEE来决定</option>";
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
+        html += "<option value=" + DeliveryWay.ByAPIUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;按API-URL模式处理</option>";
     }
     html += "</select >";
     html += "<input  id='Btn_Save' type=button onclick='SaveRole()' value='保存' />";
@@ -495,7 +496,6 @@ function changeOption() {
         case DeliveryWay.ByBindTeamEmp:
             roleName = "27.SelectEmpsByTeamStation.htm";
             break;
-
         case DeliveryWay.BySelectedOrgs:
             roleName = "42.BySelectedOrgs.htm";
             break;
@@ -505,7 +505,9 @@ function changeOption() {
         case DeliveryWay.BySelfUrl: //自定义url.
             roleName = "44.BySelfUrl.htm";
             break;
-       
+        case DeliveryWay.ByAPIUrl:
+            roleName = "45.ByAPIUrl.htm";
+            break;
         case DeliveryWay.ByCCFlowBPM:
             roleName = "100.ByCCFlowBPM.htm";
             break;

@@ -346,7 +346,7 @@ function initModal(modalType, toNode,url) {
             //发送选择接收节点和接收人                
             case "sendAccepter":
                 //获取到达节点
-                var nodeOne = new Entity("BP.WF.Node", toNode);
+                var nodeOne = new Entity("BP.WF.Template.NodeSimple", toNode);
 
                 $('#modalHeader').text("选择接受人(到达节点:" + nodeOne.Name+")");
                 SetPageSize(80, 80);
@@ -496,6 +496,13 @@ function InitToNodeDDL(JSonData) {
  */
 function Send(isHuiQian, formType) {
 
+    //正在发送
+    //layer.msg('正在发送，请稍后..', {
+    //    icon: 16
+    //    , shade: 0.01
+    //    ,time:1000000
+    //});
+    
     SetPageSize(80, 80);
 
     /**发送前处理的信息 Start**/

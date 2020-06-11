@@ -23,11 +23,12 @@
     <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
     <style type="text/css">
-        *{
-            margin:0px;
-            padding:0px;
+        * {
+            margin: 0px;
+            padding: 0px;
         }
-       .ccflow-input-span-container {
+
+        .ccflow-input-span-container {
             border: 0;
         }
 
@@ -79,7 +80,6 @@
                 html += "</tr>";
             }
 
-
             //要排列的节点.
             var IsShowSave = false;
             html += "<tr><th colspan=5>运行的节点</tr>";
@@ -103,7 +103,6 @@
                 html += "<td style='text-align:center; line-height:50%;  padding:3px;'><a class='btn btn-default'; href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>&nbsp&nbsp&nbsp&nbsp<a class='btn btn-default'; href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>&nbsp&nbsp&nbsp&nbsp<a class='btn btn-default'; href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a></td>";
                 html += "</tr>";
             }
-
             //可选步骤.
             html += "<tr><th colspan=5>可选步骤</tr>";
             for (var i = 0; i < tcs.length; i++) {
@@ -121,6 +120,8 @@
             }
 
             $("#docs").html(html);
+
+            var u = new WebUser();
             var initJsonData = [];
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
             if (dept == null || dept == '' || dept == undefined) {
@@ -128,7 +129,6 @@
             }
 
             if (dept == null || dept == '' || dept == undefined) {
-                var u = new WebUser();
                 dept = u.FK_Dept;
             }
 
@@ -138,10 +138,14 @@
 
             for (var i = 0; i < tcs.length; i++) {
                 initJsonData = [];
+
                 var tc = tcs[i];
+                if (tc.Worker == null) tc.Worker = "";
+                if (tc.WorkerName == null) tc.WorkerName = "";
+
                 var workers = tc.Worker.split(',');
                 var workerNames = tc.WorkerName.split(',');
-                var FK_Node = tc.FK_Node;
+
                 $.each(workers, function (k, o) {
                     if (o != null && o != "")
                         initJsonData.push({
@@ -299,14 +303,16 @@
             <div class="modal-content" style="border-radius: 0px; width:100%;">
                 <div class="modal-header">
                     <button type="button" class="close" style="color: #000; opacity: 1;" data-dismiss="modal"
-                        aria-hidden="true">
-                        &times;</button>
+                            aria-hidden="true">
+                        &times;
+                    </button>
                     <h4 class="modal-title">
-                        接受人</h4>
+                        接受人
+                    </h4>
                 </div>
                 <div class="modal-body">
                     <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeSelectEmpsForm"
-                        name="iframeSelectEmpsForm"></iframe>
+                            name="iframeSelectEmpsForm"></iframe>
                 </div>
             </div>
             <!-- /.modal-content -->

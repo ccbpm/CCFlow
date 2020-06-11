@@ -13,10 +13,10 @@
 }
 
 .contentRow #CCForm {
-    width: 900px !important;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
+    padding-top:40px;
 }
 #topContentDiv {
     margin-left: auto;
@@ -274,12 +274,6 @@ body iframe
     padding-left: 10px;
     background: white;
 }
-        
-      
-body
-{
-    background: #f0f3f4;
-}
 fieldset
 {
     border: 1px solid silver;
@@ -329,6 +323,5 @@ legend
 }
 a, a:link, a:visited
 {
-    color:#333333;
     font-size:14px;
 }

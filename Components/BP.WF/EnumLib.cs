@@ -1045,7 +1045,7 @@ namespace BP.WF
         /// </summary>
         BySelfUrl = 44,
         /// <summary>
-        /// 按照自定义API-URL
+        /// 按照自定义API/URL
         /// </summary>
         ByAPIUrl = 45,
         /// <summary>

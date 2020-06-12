@@ -74,7 +74,7 @@ function GenerFoolFrm(mapData, frmData) {
             if (MyPK == "")
                 continue;
             //创建附件描述信息.
-            var aths = $.grep(flowData.Sys_FrmAttachment, function (ath) { return ath.MyPK == gf.CtrlID });
+            var aths = $.grep(frmData.Sys_FrmAttachment, function (ath) { return ath.MyPK == gf.CtrlID });
             var ath = aths.length > 0 ? aths[0] : null;
             var athInfo = "";
             if (ath == null)

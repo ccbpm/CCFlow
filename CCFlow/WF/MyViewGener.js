@@ -538,6 +538,13 @@ function GenerWorkNode() {
         return;
     }
 
+    //处理附件的问题 
+    if (flowData.Sys_FrmAttachment.length != 0) {
+        Skip.addJs("./CCForm/Ath.js");
+        Skip.addJs("./CCForm/JS/FileUpload/fileUpload.js");
+        Skip.addJs("./Scripts/jquery-form.js");
+        $('head').append("<link href='./CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+    }
 
     //获取没有解析的外部数据源
     var uiBindKeys = flowData["UIBindKey"];

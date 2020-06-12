@@ -143,6 +143,11 @@ function InitPage() {
             tag = tag.replace("~", "'");
 
         var msg = track.Msg;
+        if (msg.indexOf("WorkCheck@") != -1) {
+            var val = track.Msg.replace('null', '').split("WorkCheck@");
+            if (val.length == 2)
+                msg = val[1];
+        }
         if (msg == "0")
             msg = "";
 

@@ -748,7 +748,8 @@ function OptSuc(msg) {
         + '</div>';
 
     $('body').append($(html));
-
+    if (msg == null || msg == undefined)
+        msg = "";
     msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
 
     $("#msgModalContent").html(msg.replace(/@/g, '<br/>').replace(/null/g, ''));

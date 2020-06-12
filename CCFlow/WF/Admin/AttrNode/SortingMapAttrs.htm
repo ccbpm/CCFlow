@@ -458,23 +458,23 @@
                         var tda = "";
                         attrIdx += 1; //记录当前分组的个数，与idx不一样。
 
-                        //字段的上移与下移的按钮
-                        var attrDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
-                        var attrUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移&nbsp&nbsp</span></span></a>";
-                        if (attrIdx == 1) {//如果是第一个，只显示下移
-                            tda += attrDown;
-                        }
-                        else if (attrIdx == rows_Attrs.length) {//如果是最后一个，只显示上移
-                            tda += attrUp;
-                        }
-                        else {
-                            tda += attrUp;
-                            tda += attrDown;
-                        }
+                        ////字段的上移与下移的按钮
+                        //var attrDown = "<a onclick=btnDown('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
+                        //var attrUp = "<a onclick=btnUp('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "','attr','" + rows_Attrs[j].GroupID + "') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移&nbsp&nbsp</span></span></a>";
+                        //if (attrIdx == 1) {//如果是第一个，只显示下移
+                        //    tda += attrDown;
+                        //}
+                        //else if (attrIdx == rows_Attrs.length) {//如果是最后一个，只显示上移
+                        //    tda += attrUp;
+                        //}
+                        //else {
+                        //    tda += attrUp;
+                        //    tda += attrDown;
+                        //}
 
-                        if (rows_Attrs.length == 1) {
-                            tda = "";
-                        }
+                        //if (rows_Attrs.length == 1) {
+                        //    tda = "";
+                        //}
 
                         //定义下拉框备用
                         var ddl = "<select name='#DDLID#' onchange=\"javascript:From_GroupChange('" + dtGroups[i].FrmID + "','" + rows_Attrs[j].KeyOfEn + "')\" id='" + rows_Attrs[j].KeyOfEn + "'>";

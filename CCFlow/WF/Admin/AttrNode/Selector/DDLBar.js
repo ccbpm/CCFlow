@@ -70,9 +70,10 @@ function Back() {
 }
 
 /*
- * 获取节点绑定的岗位
- */
+* 获取节点绑定的岗位
+*/
 function getStas() {
+
     var ens = new Entities("BP.WF.Template.NodeStations");
     ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
     ens = $.grep(ens, function (obj, i) {
@@ -82,15 +83,21 @@ function getStas() {
 
 }
 /*
- * 获取节点绑定的部门
- */
+* 获取节点绑定的部门
+*/
 function getDepts(orgNo) {
-    var sql = "";
-    if (orgNo != null)
-        sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") + " AND p.OrgNo='" + orgNo + "'";
-    else
-        sql = "SELECT w.*,p.Name as FK_DeptText FROM WF_NodeDept  w ,Port_Dept p WHERE w.FK_Dept=p.No AND w.FK_Node=" + GetQueryString("FK_Node") ;
-    var ens = DBAccess.RunSQLReturnTable(sql);
+
+
+    var ens = new Entities("BP.WF.Template.NodeDepts");
+    ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+    ens = $.grep(ens, function (obj, i) {
+        return obj.FK_Node != undefined
+    });
+    return ens;
+
+    // var handler = new HttpHandler();
+
+
     //var ens = new Entities("BP.WF.Template.NodeDepts");
     //ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
     ens = $.grep(ens, function (obj, i) {
@@ -100,8 +107,8 @@ function getDepts(orgNo) {
 
 }
 /*
- * 获取节点绑定的用户组@lz
- */
+* 获取节点绑定的用户组@lz
+*/
 function getGroups() {
 
     var ens = new Entities("BP.WF.Template.NodeTeams");

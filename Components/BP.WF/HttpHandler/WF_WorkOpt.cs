@@ -1395,7 +1395,15 @@ namespace BP.WF.HttpHandler
             DBAccess.RunSQL(sql);
 
             gwf.TodoEmps = gwf.TodoEmps + empsLeader;
-            gwf.Update();
+            gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing;
+            Node nd = new Node(gwf.FK_Node);
+            if (nd.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && nd.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+
+                gwf.HuiQianZhuChiRen = WebUser.No;
+                gwf.HuiQianZhuChiRenName = WebUser.Name;
+            }
+             gwf.Update();
             return "主持人增加成功";
 
         }

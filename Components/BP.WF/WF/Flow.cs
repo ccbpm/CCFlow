@@ -1123,8 +1123,16 @@ namespace BP.WF
                             GEDtl dtlData = new GEDtl(dtl.No);
 
                             //删除以前的数据.
-                            sql = "DELETE FROM " + dtlData.EnMap.PhysicsTable + " WHERE RefPK=" + wk.OID;
-                            DBAccess.RunSQL(sql);
+                            try
+                            {
+                                sql = "DELETE FROM " + dtlData.EnMap.PhysicsTable + " WHERE RefPK=" + wk.OID;
+                                DBAccess.RunSQL(sql);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                            
 
 
                             MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;

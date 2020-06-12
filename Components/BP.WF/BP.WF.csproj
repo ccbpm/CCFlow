@@ -168,6 +168,7 @@
     <Compile Include="Frm\EnumLab.cs" />
     <Compile Include="Frm\FrmAttr.cs" />
     <Compile Include="Frm\FrmBill.cs" />
+    <Compile Include="Frm\FrmStationDept.cs" />
     <Compile Include="Frm\GenerBill.cs" />
     <Compile Include="Frm\Method.cs" />
     <Compile Include="Frm\EmpCreate.cs" />
@@ -223,7 +224,6 @@
     <Compile Include="DTS\GenerDeptTree.cs" />
     <Compile Include="Frm\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
-    <Compile Include="GloDefVal.cs" />
     <Compile Include="GloSQL.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
@@ -289,6 +289,7 @@
     <Compile Include="NetPlatformImpl\WF_File.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Admin2\OrgAdminer.cs" />
+    <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\Admin2\Org.cs" />

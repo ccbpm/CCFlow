@@ -44,7 +44,7 @@
 
             //通用赋值控件.
             GenerFullAllCtrlsVal(flow);
-
+            
             //设置选择按钮选中.
             if (flow.FlowRunWay == 1)
                 document.getElementById("TB_SpecEmp").value = flow.RunObj;
@@ -70,7 +70,7 @@
             }
 
             if (flow.FlowRunWay == "2") {
-                flow.RunObj = $("#TB_SQL").val();
+                flow.RunObj = editor.getValue();
             }
             flow.Update();
 

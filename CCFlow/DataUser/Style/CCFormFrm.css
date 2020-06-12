@@ -206,3 +206,80 @@ a, a:link, a:visited
 .form-gray-table td textarea{
     font-size:16px;
 }
+.form-gray-table-first{    
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:'宋体';
+    box-sizing:border-box;
+}
+.form-gray-table-first,.form-gray-table-first th,.form-gray-table-first td{
+    border:none;
+}
+.form-gray-table-first th,.form-gray-table-first td{
+    padding:6px!important;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size:16px;
+}
+
+
+.form-red-title{
+    font-size:36px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.2;
+    margin-bottom:30px;
+    font-family:'宋体';
+    color: #f00;
+}
+.form-red-table{
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:'宋体';
+    box-sizing:border-box;
+}
+.form-red-table th,.form-red-table td{
+    border:solid 1px #f00;
+    padding:6px!important;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size:16px;
+    color:#f00;
+}
+
+.form-red-table th{
+    text-align:center;
+    width:140px!important;
+    background:#fff;
+}
+.form-red-table td th,.form-red-table td td{
+    font-size:12px!important;
+    /*white-space: nowrap;*/
+}
+
+.form-red-table td input,
+.form-red-table td button,
+.form-red-table td select,
+.form-red-table td textarea{
+    font-size:16px;
+}
+.form-red-table-first{    
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:'宋体';
+    box-sizing:border-box;
+    color:#f00;
+}
+.form-red-table-first,.form-red-table-first th,.form-red-table-first td{
+    border:none;
+    color:#f00;
+}
+.form-red-table-first th,.form-red-table-first td{
+    padding:6px!important;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size:16px;
+}

@@ -101,10 +101,20 @@
                 }
             });
         }
-
+        function GetDocName() {
+            var DocName = "公文模板";
+            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
+            var ens = new Entities("BP.WF.Template.DocTemplates");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+            if (GetQueryString("DocName") == null)
+                DocName = ens[0].Name;
+            else
+                DocName = GetQueryString("DocName");
+            return DocName;
+        }
         function Edit(id,path) {
 
-              var DocName = GetDocName();
+            var DocName = GetDocName();
             //插件参数
             var paras = "WorkID=" + GetQueryString("WorkID") + ",";
             paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";

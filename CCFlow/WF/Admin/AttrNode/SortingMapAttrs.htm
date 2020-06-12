@@ -34,8 +34,6 @@
         label {
             font-weight: normal;
         }
-
-       
     </style>
     <script language="javascript" type="text/javascript">
 
@@ -231,32 +229,36 @@
             $('#btns').hide();
             //可拖动table
             var fixHelperModified = function (e, tr) {
-                    //children() 方法返回返回被选元素的所有直接子元素
-                    var $originals = tr.children();
-                    //clone() 方法生成被选元素的副本，包含子节点、文本和属性
-                    var $helper = tr.clone();
-                    //each() 方法规定为每个匹配元素规定运行的函数
-                    $helper.children().each(function (index) {
-                        //width() 方法返回或设置匹配元素的宽度
-                        //eq() 方法将匹配元素集缩减值指定 index 上的一个
-                        $(this).width($originals.eq(index).width())
-                    });
-                    return $helper;
-                },
+                //children() 方法返回返回被选元素的所有直接子元素
+                var $originals = tr.children();
+                //clone() 方法生成被选元素的副本，包含子节点、文本和属性
+                var $helper = tr.clone();
+                //each() 方法规定为每个匹配元素规定运行的函数
+                $helper.children().each(function (index) {
+                    //width() 方法返回或设置匹配元素的宽度
+                    //eq() 方法将匹配元素集缩减值指定 index 上的一个
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            },
                 updateIndex = function (e, ui) {
-                        //ui.item - 表示当前拖拽的元素
-                        //parent() 获得当前匹配元素集合中每个元素的父元素，使用选择器进行筛选是可选的
-                        $('td.index', ui.item.parent()).each(function (i) {
-                            //html() 方法返回或设置被选元素的内容 (inner HTML)
-                            $(this).html(i + 1);
-                        });
-                    };
-                $("#sort tbody").sortable({
-                    //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
-                    helper: fixHelperModified,
-                    //当排序动作结束时触发此事件。
-                    stop: updateIndex
-                }).disableSelection();
+                    //ui.item - 表示当前拖拽的元素
+                    //parent() 获得当前匹配元素集合中每个元素的父元素，使用选择器进行筛选是可选的
+                    $('td.index', ui.item.parent()).each(function (i) {
+                        //html() 方法返回或设置被选元素的内容 (inner HTML)
+                        $(this).html(i + 1);
+                    });
+                   
+                    
+                    //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+
+                };
+            $("#sort tbody").sortable({
+                //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
+                helper: fixHelperModified,
+                //当排序动作结束时触发此事件。
+                stop: updateIndex
+            }).disableSelection();
         });
 
         function InitPage() {
@@ -601,7 +603,7 @@
     <form id="form1">
 
         <div id="p" style="padding:5px">
-         </div>
+        </div>
         <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px;background-color:#F5F5F5;left:10px;">
             <div id="nodes_panel" style="width:100%;height:100%;"></div>
         </div>

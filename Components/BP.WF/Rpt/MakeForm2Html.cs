@@ -1405,26 +1405,36 @@ namespace BP.WF
         }
 
 
-        private static  string GetDtlHtmlByID(MapDtl dtl,Int64 workid)
+        private static  string GetDtlHtmlByID(MapDtl dtl,Int64 workid,float width)
         {
             StringBuilder sb = new System.Text.StringBuilder();
             MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
-
-            sb.Append("<table style='wdith:100%' >");
-            sb.Append("<tr>");
+            int columNum = 0;
             foreach (MapAttr item in attrsOfDtls)
             {
                 if (item.KeyOfEn == "OID")
                     continue;
                 if (item.UIVisible == false)
                     continue;
+                columNum++;
+            }
+            int columWidth = (int)width*(100/columNum);
 
-                sb.Append("<th class='DtlTh'>" + item.Name + "</th>");
+            sb.Append("<table style='wdith:100%' >");
+            sb.Append("<tr>");
+           
+            foreach (MapAttr item in attrsOfDtls)
+            {
+                if (item.KeyOfEn == "OID")
+                    continue;
+                if (item.UIVisible == false)
+                    continue;
+                sb.Append("<th class='DtlTh' style='width:"+ columWidth + "px'>" + item.Name + "</th>");
             }
             sb.Append("</tr>");
             //#endregion 输出标题.
 
-
+            
             //#region 输出数据.
             GEDtls gedtls = new GEDtls(dtl.No);
             gedtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
@@ -1445,11 +1455,11 @@ namespace BP.WF
 
                     if (item.IsNum)
                     {
-                        sb.Append("<td class='DtlTd' style='text-align:right' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                        sb.Append("<td class='DtlTd' style='text-align:right;' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                         continue;
                     }
 
-                    sb.Append("<td class='DtlTd'>" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                    sb.Append("<td class='DtlTd' >" + gedtl.GetValStrByKey(item.KeyOfEn) + "</td>");
                 }
                 sb.Append("</tr>");
             }
@@ -2166,7 +2176,7 @@ namespace BP.WF
                     {
                         if (dtl.IsView == false)
                             continue;
-                        string html = GetDtlHtmlByID(dtl, workid);
+                        string html = GetDtlHtmlByID(dtl, workid, mapData.FrmW);
                         htmlString = htmlString.Replace("@Dtl_Fd" + dtl.No, html);
                     }
                     FrmAttachments aths = new FrmAttachments(frmID);

@@ -956,7 +956,7 @@ namespace BP.WF
                                     if (attr.IsSigan == true)
                                     {
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
-                                        String src = SystemConfig.HostURLOfBS + "/DataUser/Siganture/";
+                                        String src = SystemConfig.HostURL + "/DataUser/Siganture/";
                                         text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\""+src+ "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
                                     }
                                     else
@@ -1022,7 +1022,7 @@ namespace BP.WF
                             isDropTR = true;
                             html += " <tr>";
                             html += " <td  class='FDesc' style='width:143px' >" + attr.Name + "</td>";
-                            html += " <td  ColSpan=3 style='width:712.5px'>";
+                            html += " <td  ColSpan=3 style='width:712.5px' class='FContext'>";
                             html += text;
                             html += " </td>";
                             html += " </tr>";
@@ -1037,7 +1037,7 @@ namespace BP.WF
                             html += " <td ColSpan=4 class='FDesc' >" + attr.Name + "</td>";
                             html += " </tr>";
                             html += " <tr>";
-                            html += " <td ColSpan=4>";
+                            html += " <td ColSpan=4 class='FContext'>";
                             html += text;
                             html += " </td>";
                             html += " </tr>";
@@ -1352,7 +1352,7 @@ namespace BP.WF
 
 
                         html += "<tr>";
-                        html += " <td valign=middle style='font-size:18px'>" + dr["NDFromT"] + "</td>";
+                        html += " <td valign=middle class='FContext'>" + dr["NDFromT"] + "</td>";
 
                         String msg = dr["Msg"].ToString();
 
@@ -1384,7 +1384,7 @@ namespace BP.WF
 
                             if (singType == "1")
                             {
-                                String src = SystemConfig.HostURLOfBS + "/DataUser/Siganture/";
+                                String src = SystemConfig.HostURL + "/DataUser/Siganture/";
                                 empStrs = "<img src='"+src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
                             }
 

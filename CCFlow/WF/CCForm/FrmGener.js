@@ -231,10 +231,19 @@ function GenerFrm() {
 
     //处理附件的问题 
     if (frmData.Sys_FrmAttachment.length != 0) {
-        Skip.addJs("./Ath.js");
-        Skip.addJs("./JS/FileUpload/fileUpload.js");
-        Skip.addJs("../Scripts/jquery-form.js");
-        $('head').append("<link href='./JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+        var url = window.location.href;
+        if (url.indexOf("MyBill.htm") != -1 || url.indexOf("MyDict.htm") != -1) {
+            Skip.addJs("../CCForm/Ath.js");
+            Skip.addJs("../CCForm/JS/FileUpload/fileUpload.js");
+            Skip.addJs("../Scripts/jquery-form.js");
+            $('head').append("<link href='../CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+        } else {
+            Skip.addJs("./Ath.js");
+            Skip.addJs("./JS/FileUpload/fileUpload.js");
+            Skip.addJs("../Scripts/jquery-form.js");
+            $('head').append("<link href='./JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+        }
+       
     }
 
 

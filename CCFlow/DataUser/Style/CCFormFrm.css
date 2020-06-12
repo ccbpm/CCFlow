@@ -288,3 +288,8 @@ a, a:link, a:visited
     height:auto;
     margin-bottom:30px;
 }
+.view{
+    width:780px;
+    margin-left:auto;
+    margin-right:auto;
+}

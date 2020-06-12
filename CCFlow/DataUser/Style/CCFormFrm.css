@@ -256,7 +256,7 @@ a, a:link, a:visited
 }
 .form-red-table td th,.form-red-table td td{
     font-size:12px!important;
-    /*white-space: nowrap;*/
+    white-space: nowrap;
 }
 
 .form-red-table td input,

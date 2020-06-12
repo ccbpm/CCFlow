@@ -454,7 +454,6 @@ input[type=text], input[type=password], select
 {
     border-radius: 4px;
     border: thin solid #CCCCCC;
-    margin: 1px 1px;
     height:40px;
     box-sizing:border-box;
     box-shadow:none;

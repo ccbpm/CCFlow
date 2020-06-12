@@ -631,7 +631,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         }
         //写字板
         if (mapAttr.UIContralType == 8) {
-            return "<img  src='../../../DataUser/Siganture/admin.jpg' onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
+            return "<img  src='../../../DataUser/Siganture/admin.jpg'  style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
         }
         //地图控件
         if (mapAttr.UIContralType == 4) {

@@ -21,6 +21,7 @@
 
         //关闭页面登录admin
         $(window).on('beforeunload', function () {
+
             LetAdminerLogin();
 
         });
@@ -52,11 +53,8 @@
             var url = 'error.htm?err=' + workID;
 
             confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
-
             // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-
             window.close();
-
         }
 
         var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + adminerSID;
@@ -83,7 +81,6 @@
             handler.AddPara("SID", sid);
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
             window.close();
-
         }
     </script>
     <style type="text/css">

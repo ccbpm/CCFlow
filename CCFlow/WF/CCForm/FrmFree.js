@@ -669,12 +669,12 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                         eleHtml += data + html;
                     }
                     else {
-                        eleHtml += "<img src='/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='/DataUser/Siganture/Templete.JPG'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                        eleHtml += "<img src='/DataUser/Siganture/" + val + ".jpg' alt='" + val + "'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                     }
                     isSigantureChecked = true;
                 }
                 else {
-                    eleHtml += "<img src='/DataUser/Siganture/siganture.jpg' onerror=\"this.src='/DataUser/Siganture/Templete.JPG'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\",\"0\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    eleHtml += "<img src='/DataUser/Siganture/siganture.jpg'   ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\",\"0\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 }
                 return eleHtml;
             }
@@ -687,7 +687,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                 sealData.Retrieve("OID", GetQueryString("OID"), "FK_Node", GetQueryString("FK_Node"), "SealData", mapAttr.DefVal);
 
                 if (sealData.length > 0) {
-                    eleHtml += "<img src='/DataUser/Siganture/" + mapAttr.DefVal + ".jpg' style='border:0px;'  id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    eleHtml += "<img src='/DataUser/Siganture/" + mapAttr.DefVal + ".jpg' alt='" + mapAttr.DefVal +"' style='border:0px;'  id='Img" + mapAttr.KeyOfEn + "' />" + html;
                     isSigantureChecked = true;
                 }
                 else {
@@ -707,7 +707,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
                     eleHtml += data + html;
                 }
                 else {
-                    eleHtml += "<img src='/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='/DataUser/Siganture/Templete.JPG'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                    eleHtml += "<img src='/DataUser/Siganture/" + val + ".jpg' alt='" + val + "' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
 
                 }
                 return eleHtml;
@@ -715,7 +715,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             if (mapAttr.IsSigan == "4") {
                 //var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.DefVal + "' type=hidden />";
-                eleHtml += "<img src='/DataUser/Siganture/" + mapAttr.DefVal + ".jpg' onerror=\"this.src='/DataUser/Siganture/Templete.JPG'\"  style='border:0px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                eleHtml += "<img src='/DataUser/Siganture/" + mapAttr.DefVal + ".jpg' alt='" + mapAttr.DefVal +"'  style='border:0px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 //eleHtml += "<img src='../DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 return eleHtml;
             }

@@ -60,17 +60,15 @@ function chageFramPage(obj) {
 }
 
 
-
 //重新启动.
 function Restart() {
 
-    if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
-        return;
+    //if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
+    //    return;
     // 使用最初用户登录
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
     handler.AddPara("FK_Emp", userNo);
     //handler.AddPara("WorkID", workID);
-
     //handler.AddPara("Adminer", adminer);
     handler.AddPara("SID", sid);
 
@@ -89,11 +87,8 @@ function Restart() {
         var url = 'error.htm?err=' + workID;
 
         confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
-
         // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-
         window.close();
-
     }
 
     urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + adminerSID;
@@ -115,8 +110,8 @@ function SelectOneUser() {
 //如果关闭的时候，就让admin登录.
 function LetAdminerLoginLeft() {
 
-    if (window.confirm('您确定要退出到管理员[]吗？') == false)
-        return;
+    //if (window.confirm('您确定要退出到管理员[]吗？') == false)
+    //    return;
 
     LetAdminerLogin();
     //window.parent.window.close();

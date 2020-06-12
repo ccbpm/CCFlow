@@ -111,18 +111,15 @@ function GenerDevelopFrm(wn, fk_mapData) {
                 var sealData = new Entities("BP.Tools.WFSealDatas");
                 sealData.Retrieve("OID", pageData.WorkID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
                 if (sealData.length > 0) {
-                    html = "<img src='" + localHref + "/DataUser/Siganture/" + defValue + ".jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                    html = "<img src='" + localHref + "/DataUser/Siganture/" + defValue + ".jpg' alt='" + defValue +"'   style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
                     isSigantureChecked = true;
                 }
                 else {
-                    html = "<img src='" + localHref + "/DataUser/Siganture/siganture.jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/UnName.jpg'\" ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                    html = "<img src='" + localHref + "/DataUser/Siganture/siganture.jpg'  ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
                 }
 
-
             } else {
-
-
-                html = "<img src='" + localHref + "/DataUser/Siganture/" + val + ".jpg' onerror=\"this.src='" + localHref + "/DataUser/Siganture/siganture.jpg'\" style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
+                html = "<img src='" + localHref + "/DataUser/Siganture/" + val + ".jpg' alt='" + val + "'   style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />";
             }
 
             $("#TB_" + mapAttr.KeyOfEn).after(html);

@@ -568,6 +568,17 @@ namespace BP.WF.HttpHandler
                 dtOper.Rows.Add(dr);
 
                 dr = dtOper.NewRow();
+                dr["No"] = "dayu";
+                dr["Name"] = ">大于";
+                dtOper.Rows.Add(dr);
+                dr = dtOper.NewRow();
+                dr["No"] = "xiaoyu";
+                dr["Name"] = "<小于";
+                dtOper.Rows.Add(dr);
+
+
+
+                dr = dtOper.NewRow();
                 dr["No"] = "budengyu";
                 dr["Name"] = " != 不等于";
                 dtOper.Rows.Add(dr);

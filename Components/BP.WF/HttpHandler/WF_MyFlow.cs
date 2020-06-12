@@ -1733,7 +1733,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //原始会签主持人可以增加组长
-                if (((DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true && gwf.TodoEmps.Contains(WebUser.No) == true) || gwf.HuiQianZhuChiRen.Contains(WebUser.No) == true) && btnLab.AddLeaderEnable == true)
+                if (btnLab.HuiQianRole != HuiQianRole.None &&  btnLab.AddLeaderEnable == true)
                 {
                     /*增加组长 */
                     dr = dt.NewRow();

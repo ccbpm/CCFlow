@@ -52,6 +52,11 @@ function AddBtnIcon()
     else
         $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
 
+    if ($("#Btn_Delete").height() > 25)
+        $("#Btn_Delete").attr('style', 'background-image: url(../../../Img/Btn/Delete.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    else
+        $("#Btn_Delete").attr('style', 'background-image: url(../../../Img/Btn/Delete.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
     //返回按钮icon
     if ($("#Btn_Back").height() > 25)
         $("#Btn_Back").attr('style', 'background-image: url(../../../Img/Btn/Back.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');

@@ -18,19 +18,22 @@
     <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    
+
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script src="../../Admin.js"></script>
     <script type="text/javascript">
+        var frmID = "";
+        var flowNo = GetQueryString("FK_Flow");
         //页面启动函数.
         $(function () {
 
-            var frmID = GetQueryString("FK_MapData");
-            
+            var nodeID = flowNo + "01";
+            frmID = "ND" + parseInt(nodeID);
+
             //定义主键值.
-            var pkval = "PageLoadFull_" + frmID;
+            var pkval = "StartFlow_" + frmID;
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
@@ -53,7 +56,7 @@
                 var mapDtl = mapDtls[i];
 
                 html += "<tr>";
-                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name +"</th>";
+                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name + "</th>";
                 html += "<td><font color=green>" + GenerFields(mapDtl.No) + "</font></td>";
                 html += "</tr>";
 
@@ -111,19 +114,19 @@
             var frmID = GetQueryString("FK_MapData");
 
             //定义主键值.
-            var pkval = "PageLoadFull_" + frmID;
+            var pkval = "StartFlow_" + frmID;
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.Tag = editor.getValue();
-            
+
             if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;
             }
 
             mapExt.FK_MapData = frmID;
-            mapExt.ExtType = "PageLoadFull";
+            mapExt.ExtType = "StartFlow";
 
             //求从表信息.
             //求从表个数
@@ -153,10 +156,8 @@
             if (confirm('您确认要删除吗?') == false)
                 return;
 
-            var frmID = GetQueryString("FK_MapData");
-
             //定义主键值.
-            var pkval = "PageLoadFull_" + frmID;
+            var pkval = "StartFlow_" + frmID;
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
@@ -166,24 +167,35 @@
             window.location.href = window.location.href;
         }
 
+        function Back() {
+            var url = "../../AttrFlow/AutoStart.htm?FK_Flow=" + flowNo;
+            window.location.href = url;
+        }
+
+        function Help() {
+            var url = "http://ccbpm.mydoc.io/?v=5404&t=17088&s2=" + flowNo;
+            window.open(url);
+        }
+
     </script>
     <base target="_self" />
 </head>
 <body>
     <form method="post" action="" id="form1">
         <div id="bar" class="cs-tr cs-bar">
-            <label style="float:left;font-size:15px;font-weight:bolder;">装载填充</label>
+            <label style="float:left;font-size:15px;font-weight:bolder;">自动发起按照SQL设置数据源</label>
 
             <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
             <input id="Btn_Delete" type="button" value="删除" onclick="Delete()" />
-
+            <input id="Btn_Back" type="button" value="返回" onclick="Back()" />
+            <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
         </div>
 
         <fieldset>
             <legend>主表SQL设置</legend>
             <br />
             <textarea name="TB_SQL" class="SQL" rows="7" cols="70" id="TB_SQL" style="width: 99%;"></textarea>
-            <font color="green"><div id="fields"></div> </font> 
+            <font color="green"><div id="fields"></div> </font>
         </fieldset>
         <fieldset>
 
@@ -192,18 +204,6 @@
             </div>
         </fieldset>
 
-
-        <fieldset>
-            <legend id="Help">帮助</legend>
-            <ul>
-                <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式. 比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
-                <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
-                <li> 比如2: SELECT No,Name,Tel FROM Port_Emp WHERE No='@MyFieldName' </li>
-                <li> 返回的数据是一行多列，如果列名与主表的字段名匹配就自动赋值. </li>
-                <li> 注意：sql查询返回的列名要区分大小写,为了避免字段输入拼写错误，我们为您列出了本表单的字段信息. </li>
-                <!--<li><font color="green">  </font> </li>-->
-            </ul>
-        </fieldset>
 
 
     </form>

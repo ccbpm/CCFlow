@@ -17,6 +17,7 @@
 
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script src="../../Scripts/jquery-ui.min.js"></script>
     <style>
         select::-ms-expand {
             display: none;
@@ -29,9 +30,12 @@
             -moz-appearance: none;
             appearance: none; /*去掉下拉箭头*/
         }
-        label{
-            font-weight:normal;
+
+        label {
+            font-weight: normal;
         }
+
+       
     </style>
     <script language="javascript" type="text/javascript">
 
@@ -102,6 +106,7 @@
         //复制顺序到节点
         function Form_Copy(FK_MapData, FK_Flow) {
             $('#nodes').dialog('open');
+            $('#btns').show();
         }
         //重置字段顺序
         function From_ReSet(FK_MapData) {
@@ -222,6 +227,36 @@
 
         $(function () {
             InitPage();
+            $('#nodes').dialog('close');
+            $('#btns').hide();
+            //可拖动table
+            var fixHelperModified = function (e, tr) {
+                    //children() 方法返回返回被选元素的所有直接子元素
+                    var $originals = tr.children();
+                    //clone() 方法生成被选元素的副本，包含子节点、文本和属性
+                    var $helper = tr.clone();
+                    //each() 方法规定为每个匹配元素规定运行的函数
+                    $helper.children().each(function (index) {
+                        //width() 方法返回或设置匹配元素的宽度
+                        //eq() 方法将匹配元素集缩减值指定 index 上的一个
+                        $(this).width($originals.eq(index).width())
+                    });
+                    return $helper;
+                },
+                updateIndex = function (e, ui) {
+                        //ui.item - 表示当前拖拽的元素
+                        //parent() 获得当前匹配元素集合中每个元素的父元素，使用选择器进行筛选是可选的
+                        $('td.index', ui.item.parent()).each(function (i) {
+                            //html() 方法返回或设置被选元素的内容 (inner HTML)
+                            $(this).html(i + 1);
+                        });
+                    };
+                $("#sort tbody").sortable({
+                    //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
+                    helper: fixHelperModified,
+                    //当排序动作结束时触发此事件。
+                    stop: updateIndex
+                }).disableSelection();
         });
 
         function InitPage() {
@@ -249,14 +284,14 @@
                     return item.No == FK_MapData;
                 });
 
-               
+
                 //1.1 在面板里添加表格
                 var htmlstr = ""
-                htmlstr += "<table id='t1' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%;border:none'>";
+                htmlstr += "<table id='sort' class='Table' border='0' cellpadding='0' cellspacing='0' style='width: 100%;border:none'>";
                 htmlstr += "</table>";
 
                 $("#p").append(htmlstr);
-                 //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
+                //TODO 增加底部按钮，如果是明细表，只显示 “返回”“保存” 按钮
                 var backHtml = "";
                 if (trdtl[0].tdDtl == "1") {
                     backHtml = "<tr style='border:none'><td style='border:none' colspan=6>";
@@ -292,7 +327,7 @@
                     backHtml += "</table>";
                     backHtml += "</td></tr>";
                 }
-                $("#t1").append(backHtml);
+                $("#sort").append(backHtml);
                 //1.1.1在表格里添加分组
                 for (var i = 0, length = dtGroups.length; i < length; i++) {
                     //1.1.1-01、当前分组标题行tr
@@ -318,7 +353,7 @@
 
                         tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
                         tr += "</td></tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                     }
 
                     //1.1.1-02、当前分组每个字段一行（循环）
@@ -352,7 +387,7 @@
                         });
                         table += "</tbody></table>";
                         tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                         continue;
                     }
                     //多附件
@@ -387,7 +422,7 @@
 
                         tr += "&nbsp;&nbsp;<a href=\"javascript:GroupField('" + dtGroups[i].FrmID + "','" + dtGroups[i].OID + "')\" >分组：" + dtGroups[i].Lab + "</a>";
                         tr += "</td></tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                         //重新生成多附件表头
                         var table = "";
                         table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
@@ -410,7 +445,7 @@
                         });
                         table += "</tbody></table>";
                         tr = "<tr><td colspan='6' npwrap>" + table + "</td></tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                         continue;
 
                     }
@@ -468,7 +503,7 @@
                         tr = "";
                         //TODO 拼接html
                         tr += "<tr>";
-                        tr += "<td style='text-align:center' >" + (j + 1) + "</td>"; //序号
+                        tr += "<td class='index' style='text-align:center' >" + (j + 1) + "</td>"; //序号
                         tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].KeyOfEn + "</a></td>";
                         tr += "<td  nowrap='nowrap' >" + rows_Attrs[j].Name + "</td>"; //名称
                         tr += "<td >";
@@ -479,7 +514,7 @@
                         tr += cbox; //是否显示在手机端
                         tr += "</td>";
                         tr += "</tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                     }
 
                     //TODO构建html
@@ -495,7 +530,7 @@
                     if (rows_Attrs.length == 0) {
                         // 该分组下面没有任何字段
                         tr = "<tr><td colspan='6'  nowrap='nowrap' >&nbsp;&nbsp;无字段或控件</td>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
 
                     }
                 }
@@ -504,7 +539,7 @@
                 if (dtNoGroupAttrs.length > 0) {
                     //01、分组行
                     tr = "<tr><td colspan='6' class='GroupTitle' nowrap=''>&nbsp;&nbsp;未分组字段</td></tr>";
-                    $("#t1").append(tr);
+                    $("#sort").append(tr);
                     for (j = 0, len = dtNoGroupAttrs.length; j < len; j++) {
 
                         //定义下拉框备用
@@ -535,11 +570,11 @@
                         tr += cbox;
                         tr += "</td>";
                         tr += "</tr>";
-                        $("#t1").append(tr);
+                        $("#sort").append(tr);
                     }
                 }
-               
-                $("#t1").append("</table>");
+
+                $("#sort").append("</table>");
 
                 //用于复制到其他节点
                 //将当前流程的节点显示出来，用于用户选择节点，然后进行复制分组、字段排序
@@ -564,26 +599,24 @@
 </head>
 <body class="easyui-layout">
     <form id="form1">
-        
-            <div id="p" style="padding:5px">
-            </div>
+
+        <div id="p" style="padding:5px">
+         </div>
+        <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px;background-color:#F5F5F5;left:10px;">
+            <div id="nodes_panel" style="width:100%;height:100%;"></div>
+        </div>
+
+        <div id="btns" class="dialog-button">
+            <a onclick="BtnCopy()" class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
+                <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span>
+            </a>
+            <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
+                <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span>
+            </a>
+        </div>
 
 
-            <div id="nodes" class="easyui-dialog" data-options="title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'" style="width:280px;height:340px;background-color:#F5F5F5;">
-                <div id="nodes_panel" style="width:100%;height:100%"></div>
-            </div>
 
-            <div id="btns" class="dialog-button">
-                <a onclick="BtnCopy()" class="easyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-                    <span class='l-btn-text icon-copy l-btn-icon-left'>复制</span>
-                </a>
-                <a onclick="$('#nodes').dialog('close');" class="eeasyui-linkbutton l-btn" data-options="plain:false" href="#" group="">
-                    <span class='l-btn-left'><span class='l-btn-text icon-cancel l-btn-icon-left'>取消</span></span>
-                </a>
-            </div>
-
-
-        
     </form>
 </body>
 </html>

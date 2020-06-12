@@ -1013,3 +1013,8 @@ body table tr td {
     word-break: break-all;
     font-size:16px;
 }
+.from-logo{
+    width:180px;
+    height:auto;
+    margin-bottom:30px;
+}

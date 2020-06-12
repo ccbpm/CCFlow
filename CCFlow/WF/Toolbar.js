@@ -1079,7 +1079,7 @@ function PrintPDF(packUpType) {
     });
     var aths = $("[name=Ath]");
     $.each(aths, function (i, ath) {
-        _html = _html.replace(ath.innerHTML, "@Ath_" + ath.id);
+        _html = _html.replace(ath.innerHTML, "@Ath_" + ath.id.replace("Div_",""));
     });
     
 

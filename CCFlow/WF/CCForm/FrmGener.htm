@@ -54,7 +54,6 @@
 
     <style type="text/css">
         h1 {
-            font-family: "微软雅黑";
             font-weight: normal;
         }
 
@@ -169,14 +168,13 @@
             vertical-align: middle;
             margin-bottom: 2px;
         }
-
-        #topContentDiv {
-            background: #fff;
-            border-radius: 5px;
-            padding: 8px 0px 0px 0px;
-            margin: 8px 15px 15px 15px;
-            border: #EFEFEF 1px solid;
-            overflow: hidden;
+        #topContentDiv{
+            margin-left:auto;
+            margin-right:auto;
+        }
+        #CCForm{
+            padding-top:30px;
+            padding-bottom:30px;
         }
     </style>
     <!--JS 加载-->
@@ -209,14 +207,14 @@
 </head>
 <body onclick="hiddenDiv()">
 
-    <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+    <div id="divCurrentForm" style="position: relative;overflow-y:auto;">
         <!--底部功能按钮 发送、移交-->
         <div style="WIDTH:100%;background:#fff; padding:10px 0px 0px; margin-bottom:10px">
             <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;" class="Bar">
             </div>
         </div>
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
+        <div id="topContentDiv">
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">

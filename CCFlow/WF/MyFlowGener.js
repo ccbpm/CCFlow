@@ -489,7 +489,7 @@ function returnWorkWindowClose(data) {
         winSelectAccepter = null;
     }
 
-    if (data != null && data !=undefined(data.indexOf('err@') == 0 || data == "取消")) {//发送时发生错误
+    if (data != null && data !=undefined && (data.indexOf('err@') == 0 || data == "取消")) {//发送时发生错误
         $('#Message').html(data);
         $('#MessageDiv').modal().show();
         return;

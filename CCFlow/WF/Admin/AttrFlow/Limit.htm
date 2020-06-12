@@ -174,7 +174,7 @@
                 case "RB_SQL":
                     var DDL_SQL = $("#DDL_SQL").val();
                     startLimitRole = DDL_SQL == 0 ? "7" : "8";
-                    startLimitPara = $("#TB_SQL").val();
+                    startLimitPara = editor.getValue();
                     break;
                 default:
                     break;

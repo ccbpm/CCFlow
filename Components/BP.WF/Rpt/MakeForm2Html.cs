@@ -2175,7 +2175,7 @@ namespace BP.WF
                         if (ath.IsVisable == false)
                             continue;
                         string html = GetAthHtmlByID(ath, workid,path);
-                        htmlString = htmlString.Replace("@Ath_Fd" + ath.MyPK, html);
+                        htmlString = htmlString.Replace("@Ath_" + ath.MyPK, html);
                     }
 
 

@@ -353,7 +353,7 @@
             html += "<thead>";
             if (athDesc.IsShowTitle == 1) {
                 html += "<tr style='border:0px;'>";
-                html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >序</td>";
+                html += "<th  style='line-height:30px;width:50px; border: 1px solid #ddd' nowrap=true >序号</td>";
                 if (athDesc.Sort != null && athDesc.Sort.indexOf(",") != -1) {
                     var sortColumn = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(0, athDesc.Sort.indexOf("@")) : "类别";
                     if (sortColumn == "")

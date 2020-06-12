@@ -131,8 +131,7 @@ th {
     border-color: #e6e6e6;
     border-style: solid;
     line-height: 25px;
-    color: 0a0a0a;
-    white-space: nowrap;
+    color: #0a0a0a;
     padding: 5px 2px;
     background-color: #F5F5F5;
     font-size: 14px;
@@ -874,7 +873,7 @@ body table tr td {
 /**新增表格样式设置**/
 #divCCForm table td{
     padding:6px!important;
-    font-size:16px!important;
+    font-size:16px;
 }
 #ShowTable a{
     word-wrap: break-word;
@@ -887,5 +886,61 @@ body table tr td {
     margin:0 6px!important;
 }
 #CCForm table th,#CCForm table td{
+    font-size:16px;
+}
+
+
+/**表单新增样式**/
+
+#CCForm{
+    width:800px;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:'宋体';
+    box-sizing:border-box;
+}
+
+.form-gray-title{
+    font-size:36px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.2;
+    margin-bottom:30px;
+    font-family:'宋体';
+    color: #000;
+}
+.form-gray-table{
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:'宋体';
+    box-sizing:border-box;
+}
+.form-gray-table th,.form-gray-table td{
+    border:solid 1px #666;
+    padding:6px!important;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size:16px;
+}
+
+.form-gray-table th{
+    text-align:center;
+    width:140px!important;
+    background:#e5e5e5;
+}
+.form-gray-table td th,.form-gray-table td td{
+    font-size:12px!important;
+    /*white-space: nowrap;*/
+}
+.form-remarks{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.form-gray-table td input,
+.form-gray-table td button,
+.form-gray-table td select,
+.form-gray-table td textarea{
     font-size:16px;
 }

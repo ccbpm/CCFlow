@@ -193,7 +193,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
 
         var colstyle = "line-height:30px;border: 1px solid #ddd;background-color:white;";
 
-        _html += "<th  style='" + colstyle +"width:50px;'>序</th>";
+        _html += "<th  style='" + colstyle + "width:50px;'>序号</th>";
         if (isHaveSort == true)
             _html += "<th style='" + colstyle + "width:120px' nowrap=true >" + sortColoum +"</th>";  
         if ((athDesc.IsUpload == 0 || pageData.IsReadonly == "1") || athDesc.IsExpCol == 1)

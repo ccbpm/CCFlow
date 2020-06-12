@@ -493,10 +493,6 @@ textarea,iframe[src*="Ath.htm"] {
 
 #topContentDiv {
     background: #fff;
-    border-radius: 4px;
-    padding: 8px 0px 0px 0px;
-    margin: 8px 15px 15px 15px;
-    border: #EFEFEF 1px solid;
     overflow: auto;
 }
  

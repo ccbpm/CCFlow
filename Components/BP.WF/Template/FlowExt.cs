@@ -333,7 +333,7 @@ namespace BP.WF.Template
                 UAC uac = new UAC();
                 //@sly
                 if (WebUser.IsAdmin == false)
-                    throw new Exception("err@管理员登录用户信息丢失,当前会话["+WebUser.No+","+WebUser.Name+"]");
+                    throw new Exception("err@管理员登录用户信息丢失,当前会话[" + WebUser.No + "," + WebUser.Name + "]");
                 uac.IsUpdate = true;
                 //uac.OpenForAdmin();  //zsy修改 2020.5.15
                 //if (BP.Web.WebUser.No.Equals("admin")==true || this.DesignerNo == WebUser.No)
@@ -382,8 +382,21 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
                 map.SetHelperUrl(FlowAttr.No, "http://ccbpm.mydoc.io/?v=5404&t=17023"); //使用alert的方式显示帮助信息.
 
-                map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
-                map.SetHelperUrl(FlowAttr.FK_FlowSort, "http://ccbpm.mydoc.io/?v=5404&t=17024");
+                map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
+
+                //处理流程类别.
+                string sql = "";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                {
+                    // map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), true);
+                }
+
+                sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='@WebUser.OrgNo'";
+                map.AddDDLSQL(FlowAttr.FK_FlowSort, null, "类别", sql, true);
+
+                //map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
+                //map.SetHelperUrl(FlowAttr.FK_FlowSort, "http://ccbpm.mydoc.io/?v=5404&t=17024");
+
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 50, 10, true);
 
                 // add 2013-02-14 唯一确定此流程的标记
@@ -439,7 +452,7 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.Tester, null, "发起测试人", true, false, 0, 100, 10, true);
 
-                String sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
+                sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
                 map.AddDDLSQL("NodeAppType", null, "业务类型枚举(可为Null)", sql, true);
 
                 // add 2014-10-19.
@@ -529,7 +542,7 @@ namespace BP.WF.Template
                  FlowAttr.DTSField, "@0=字段名相同@1=按设置的字段匹配");
                 map.SetHelperUrl(FlowAttr.DTSField, "http://ccbpm.mydoc.io/?v=5404&t=17895");
 				*/
-                
+
 
                 #endregion 数据同步方案
                 #region 轨迹信息
@@ -997,7 +1010,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "业务表字段同步配置"; 
+                rm.Title = "业务表字段同步配置";
                 rm.ClassMethodName = this.ToString() + ".DoBTable";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
                 //设置相关字段.
@@ -1035,7 +1048,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 实验中的功能
 
-                
+
                 //rm = new RefMethod();
                 //rm.Title = "设置自动发起"; // "报表运行";
                 //rm.Icon = "/WF/Img/Btn/View.gif";
@@ -1123,7 +1136,7 @@ namespace BP.WF.Template
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal( workid, false);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, false);
                 msg += " " + workid;
             }
             return msg;
@@ -1714,7 +1727,7 @@ namespace BP.WF.Template
         {
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
             }
             catch (Exception ex)
@@ -1819,7 +1832,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/Exp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-        
+
         /// <summary>
         /// 删除数据.
         /// </summary>

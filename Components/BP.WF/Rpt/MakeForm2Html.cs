@@ -2188,7 +2188,8 @@ namespace BP.WF
                         htmlString = htmlString.Replace("@Ath_" + ath.MyPK, html);
                     }
 
-
+                    htmlString = htmlString.Replace("../../DataUser", SystemConfig.HostURLOfBS+ "/DataUser");
+                    htmlString = htmlString.Replace("../DataUser", SystemConfig.HostURLOfBS + "/DataUser");
                     ddocs = ddocs.Replace("@Docs", htmlString);
 
                     ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");

@@ -187,7 +187,7 @@ namespace BP.WF
                     if (this.HisToNDNum == 1)
                         obj.AddEntities(this.HisToNDs);
                     if (this.HisToNDNum > 1)
-                        obj.RetrieveInSQL("SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ");
+                        obj.RetrieveInSQL("NodeID","SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ", "Step" );
                     this.SetRefObject("HisToNodesSipm", obj);
                 }
                 return obj;

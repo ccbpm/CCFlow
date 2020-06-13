@@ -18,6 +18,20 @@ namespace BP.WF
     public class WorkNodePlus
     {
         /// <summary>
+        /// 开始执行数据同步
+        /// </summary>
+        /// <param name="fl">流程</param>
+        /// <param name="gwf">实体</param>
+        /// <param name="rpt">实体</param>
+        public static void DTSData(Flow fl, GenerWorkFlow gwf,GERpt rpt)
+        {
+            //判断同步类型.
+            if (fl.DTSWay == FlowDTSWay.None)
+                return;
+
+            SFDBSrc db = new SFDBSrc();
+        }
+        /// <summary>
         /// 处理协作模式下的删除规则
         /// </summary>
         /// <param name="nd">节点</param>

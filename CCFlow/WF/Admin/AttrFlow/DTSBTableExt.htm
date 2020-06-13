@@ -62,6 +62,7 @@
                 var attr = mapAttrs[i];
 
                 var keyOfEn = mapAttrs[i].KeyOfEn;
+                field = keyOfEn;
                 if (keyOfEn != "OID")
                     continue;
 
@@ -77,8 +78,10 @@
                 newRow += "<td>" + rb + "</td>";
                 newRow += "<td>主键<img src='../../Img/PRI/2.png' /></td>";
 
-                Fields = DTSFields.split("OID=")[1];
-                field = Fields.split('@')[0];
+                if (DTSFields != "" || DTSFields != undefined) {
+                    Fields = DTSFields.split("OID=")[1];
+                    field = Fields.split('@')[0];
+                }
 
                 var ddl = "<select name='DDL_OID' >" + InitDDLOperation(cols, field) + "</select>";
 
@@ -97,19 +100,21 @@
                     continue;
 
                 var keyOfEn = attr.KeyOfEn;
-
+                field = keyOfEn;
 
                 newRow = "";
                 newRow = "<tr><td class=Idx>" + i + "</td>";
 
-                if (DTSFields.indexOf(keyOfEn + "=") > 0) {
-                    newRow += "<td><input  type='checkbox' checked='checked' name='CB_" + attr.KeyOfEn + "' />";
-                    Fields = DTSFields.split(keyOfEn + "=")[1];
-                    field = Fields.split('@')[0];
-                }
-                else {
-                    newRow += "<td><input  type='checkbox' name='CB_" + attr.KeyOfEn + "' />";
-                    field = keyOfEn;
+                if (DTSFields != "" || DTSFields != undefined) {
+                    if (DTSFields.indexOf(keyOfEn + "=") > 0) {
+                        newRow += "<td><input  type='checkbox' checked='checked' name='CB_" + attr.KeyOfEn + "' />";
+                        Fields = DTSFields.split(keyOfEn + "=")[1];
+                        field = Fields.split('@')[0];
+                    }
+                    else {
+                        newRow += "<td><input  type='checkbox' name='CB_" + attr.KeyOfEn + "' />";
+                        
+                    }
                 }
                 
                 newRow += '<label for="CB_' + attr.KeyOfEn + '\" >' + attr.KeyOfEn + ' - ' + attr.Name + '</label></td>';

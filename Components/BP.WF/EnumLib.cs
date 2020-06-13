@@ -877,11 +877,11 @@ namespace BP.WF
         /// <summary>
         /// 数据集按时启动
         /// </summary>
-        DataModel,
+        SelectSQLModel,
         /// <summary>
         /// 触发式启动
         /// </summary>
-        InsertModel
+        WF_TaskTableInsertModel
     }
     /// <summary>
     /// 保存模式

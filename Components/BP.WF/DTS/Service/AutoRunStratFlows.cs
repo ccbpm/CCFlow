@@ -124,11 +124,11 @@ namespace BP.WF.DTS
                             BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
                         }
                         continue;
-                    case BP.WF.FlowRunWay.DataModel: //按数据集合驱动的模式执行。
-                        this.DTS_Flow(fl);
+                    case BP.WF.FlowRunWay.SelectSQLModel: //按数据集合驱动的模式执行。
+                        this.SelectSQLModel(fl);
                         continue;
-                    case BP.WF.FlowRunWay.InsertModel: //按数据集合驱动的模式执行。
-                        this.InsertModel(fl);
+                    case BP.WF.FlowRunWay.WF_TaskTableInsertModel: //按数据集合驱动的模式执行。
+                        this.WF_TaskTableInsertModel(fl);
                         continue;
                     default:
                         break;
@@ -147,21 +147,19 @@ namespace BP.WF.DTS
         /// 触发模式
         /// </summary>
         /// <param name="fl"></param>
-        public void InsertModel(BP.WF.Flow fl)
+        public void WF_TaskTableInsertModel(BP.WF.Flow fl)
         {
         }
 
-        public void DTS_Flow(BP.WF.Flow fl)
+        public void SelectSQLModel(BP.WF.Flow fl)
         {
             #region 读取数据.
             BP.Sys.MapExt me = new MapExt();
-            me.MyPK = "ND" + int.Parse(fl.No) + "01" + "_" + MapExtXmlList.StartFlow;
+            me.MyPK = MapExtXmlList.StartFlow + "_ND" + int.Parse(fl.No) + "01";
             int i = me.RetrieveFromDBSources();
             if (i == 0)
-            {
-                BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return;
-            }
+
             if (string.IsNullOrEmpty(me.Tag))
             {
                 BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");

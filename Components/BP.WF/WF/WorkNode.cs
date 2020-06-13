@@ -256,18 +256,7 @@ namespace BP.WF
         }
         #endregion GenerWorkerList 相关方法.
 
-        /// <summary>
-        /// 生成一个 word
-        /// </summary>
-        public void DoPrint()
-        {
-            string tempFile = SystemConfig.PathOfTemp + "\\" + this.WorkID + ".doc";
-            Work wk = this.HisNode.HisWork;
-            wk.OID = this.WorkID;
-            wk.Retrieve();
-            Glo.GenerWord(tempFile, wk);
-            //return tempFile;
-        }
+     
         string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = new Paras();
         /// <summary>
@@ -319,7 +308,7 @@ namespace BP.WF
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2 ) AND FK_Node=" + dbStr + "FK_Node",
                     "WorkID1", this.WorkID, "WorkID2", this.WorkID, "FK_Node", nd.NodeID);
 
-                if (nd.IsFL)
+                if (nd.IsFL==true)
                 {
                     /* 如果是分流 */
                     GenerWorkerLists wls = new GenerWorkerLists();

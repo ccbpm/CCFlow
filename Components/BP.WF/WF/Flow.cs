@@ -1556,7 +1556,7 @@ namespace BP.WF
                         return info_send;
                     }
                     return info_send;
-                case BP.WF.FlowRunWay.DataModel: //按数据集合驱动的模式执行。
+                case BP.WF.FlowRunWay.SelectSQLModel: //按数据集合驱动的模式执行。
                     break;
                 default:
                     return "@该流程您没有设置为自动启动的流程类型。";

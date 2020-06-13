@@ -481,12 +481,13 @@ select {
 textarea,iframe[src*="Ath.htm"] {
     border-radius: 4px !important;
     line-height: 15px !important;
-    padding: 10px;
+    padding: 6px;
     width:100%;
     text-align: left;
     min-height: 40px;
     border:solid 1px #ccc;
     margin:0!important;
+    box-sizing:border-box;
 }
  
 

@@ -53,7 +53,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaInt("GenerWorkerListDelRole",0);
+                return this.GetParaInt("GenerWorkerListDelRole", 0);
             }
             set
             {
@@ -168,7 +168,10 @@ namespace BP.WF
                     if (this.HisToNDNum == 1)
                         obj.AddEntities(this.HisToNDs);
                     if (this.HisToNDNum > 1)
-                        obj.RetrieveInSQL("SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ");
+                    {
+
+                        obj.RetrieveInSQL("NodeID", "SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ", "Step");
+                    }
                     this.SetRefObject("HisToNodes", obj);
                 }
                 return obj;
@@ -186,8 +189,26 @@ namespace BP.WF
                         obj = new NodeSimples();
                     if (this.HisToNDNum == 1)
                         obj.AddEntities(this.HisToNDs);
+
                     if (this.HisToNDNum > 1)
-                        obj.RetrieveInSQL("NodeID","SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ", "Step" );
+                    {
+                        string inStrs = this.HisToNDs.Replace('@', ',');
+                        inStrs = inStrs.Substring(1);
+                        obj.RetrieveIn("NodeID", inStrs);
+
+                        //@101@102@103.
+                        string[] nds = this.HisToNDs.Split('@');
+
+                        NodeSimples myobjs = new NodeSimples();
+                        foreach (string nd in nds)
+                        {
+                            if (DataType.IsNullOrEmpty(nd) == true)
+                                continue;
+                            Entity mynd = obj.GetEntityByKey("NodeID", int.Parse(nd));
+                            myobjs.AddEntity(mynd);
+                        }
+                        obj = myobjs;
+                    }
                     this.SetRefObject("HisToNodesSipm", obj);
                 }
                 return obj;
@@ -546,7 +567,7 @@ namespace BP.WF
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                     uac.IsUpdate = true;
                 return uac;
             }
@@ -586,7 +607,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="fl">流程</param>
         /// <returns>返回检查信息</returns>
-        public static string CheckFlow(Nodes nds,string flowNo)
+        public static string CheckFlow(Nodes nds, string flowNo)
         {
             string sql = "";
             DataTable dt = null;
@@ -783,7 +804,7 @@ namespace BP.WF
                 workCheckAth.Exts = "*.*";
 
                 //存储路径.
-              //  workCheckAth.SaveTo = "/DataUser/UploadFile/";
+                //  workCheckAth.SaveTo = "/DataUser/UploadFile/";
                 workCheckAth.IsNote = false; //不显示note字段.
                 workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
@@ -1596,7 +1617,7 @@ namespace BP.WF
 
                 //与指定的节点相同 =  Pri 
                 if (str.Equals("Pri") == true &&
-                    (this.HisFormType == NodeFormType.FoolForm 
+                    (this.HisFormType == NodeFormType.FoolForm
                     || this.HisFormType == NodeFormType.FreeForm))
                 {
                     if (this.WorkID == 0)
@@ -3021,8 +3042,9 @@ namespace BP.WF
                 {
                     try
                     {
-                        BP.WF.Dev2Interface.Flow_DoFlowOver( gwf.WorkID, "流程成功结束");
-                    }catch(Exception ex)
+                        BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.WorkID, "流程成功结束");
+                    }
+                    catch (Exception ex)
                     {
                         //删除错误，有可能是删除该流程.
                         continue;

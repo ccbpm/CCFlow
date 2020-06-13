@@ -1420,7 +1420,10 @@ namespace BP.WF.HttpHandler
                         /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 
                         /*如果当前节点，是可以显示下拉框的.*/
-                       NodeSimples nds = nd.HisToNodeSimples;
+                       //Nodes nds = nd.HisToNodes;
+
+                       BP.WF.Template.NodeSimples nds = nd.HisToNodeSimples;
+
 
                         DataTable dtToNDs = new DataTable("ToNodes");
                         dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
@@ -1480,7 +1483,8 @@ namespace BP.WF.HttpHandler
                         }
                         #endregion 为天业集团做一个特殊的判断.
 
-                        foreach (Node item in nds)
+
+                        foreach (BP.WF.Template.NodeSimple item in nds)
                         {
                             dr = dtToNDs.NewRow();
                             dr["No"] = item.NodeID;

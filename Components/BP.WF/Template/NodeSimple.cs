@@ -32,6 +32,20 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeAttr.NodeID, value);
             }
         }
+        public DeliveryWay HisDeliveryWay
+        {
+            get
+            {
+                return (DeliveryWay)this.GetValIntByKey(NodeAttr.DeliveryWay);
+            }
+        }
+        public string DeliveryParas
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeAttr.DeliveryParas);
+            }
+        }
         public string Name
         {
             get
@@ -103,6 +117,10 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", true, false, 0, 150, 10);
                 map.AddTBInt(NodeAttr.RunModel, 0, "运行模式", true, true);
+
+                map.AddTBInt(NodeAttr.DeliveryWay, 0, "运行模式", true, true);
+                map.AddTBString(NodeAttr.DeliveryParas, null, "参数", true, false, 0, 300, 10);
+
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", true, true);
                 #endregion 基本属性.
 

@@ -367,10 +367,10 @@ namespace BP.GPM
                     "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
 
                 map.AddTBString(MenuAttr.Flag, null, "标记", true, false, 0, 500, 20, false);
-                //map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
-                //map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
-                //map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
-                //map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
+                map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 500, 20, true);
+                map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
+                map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
+                map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
                 //  map.AddMyFile("图标");  //附件.
 
                 map.AddSearchAttr(MenuAttr.FK_App);

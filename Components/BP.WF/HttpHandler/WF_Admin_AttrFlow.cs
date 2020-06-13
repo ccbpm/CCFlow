@@ -201,9 +201,19 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
+            // 把流程信息放入.
+            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            DataTable dtFlow = fl.ToDataTableField("Flow");
+            ds.Tables.Add(dtFlow);
+
             //获得数据源的表.
-            BP.Sys.SFDBSrc src = new SFDBSrc("local");
+            BP.Sys.SFDBSrc src = new SFDBSrc(fl.DTSDBSrc);
             DataTable dt = src.GetTables();
+            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+            }
             dt.TableName = "Tables";
             ds.Tables.Add(dt);
 
@@ -214,10 +224,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtNode);
 
 
-            // 把流程信息放入.
-            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            DataTable dtFlow = fl.ToDataTableField("Flow");
-            ds.Tables.Add(dtFlow);
+            
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
@@ -228,8 +235,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DTSBTable_Save()
         {
+            //获取流程属性
             Flow flow = new Flow(this.FK_Flow);
-
+            //获取主键方式
             BP.WF.Template.FlowDTSWay dtsWay = (BP.WF.Template.FlowDTSWay)this.GetRequestValInt("RB_DTSWay");
 
             flow.DTSWay = dtsWay;
@@ -239,6 +247,7 @@ namespace BP.WF.HttpHandler
                 return "保存成功.";
             }
 
+            //保存配置信息
             flow.DTSDBSrc = this.GetRequestVal("DDL_DBSrc");
             flow.DTSBTable = this.GetRequestVal("DDL_Table");
             flow.DTSSpecNodes = this.GetRequestVal("CheckBoxIDs");
@@ -279,6 +288,7 @@ namespace BP.WF.HttpHandler
                     flow.DTSFields = str.TrimEnd(',') + "@" + ywStr.TrimEnd(',');
                 else
                 {
+                    flow.Update();
                     return  "未检测到业务主表【" + flow.PTable + "】与表【" + flow.DTSBTable + "】有相同的字段名.";
                   
                 }
@@ -323,6 +333,11 @@ namespace BP.WF.HttpHandler
             //绑定表. 
             BP.Sys.SFDBSrc src = new SFDBSrc(dbsrc);
             DataTable dt = src.GetTables();
+            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
@@ -338,18 +353,24 @@ namespace BP.WF.HttpHandler
             DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
             dtColms.TableName = "Cols";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";
             }
-
+            Hashtable ht = new Hashtable();
+            
             ds.Tables.Add(dtColms);
 
             //属性列表.
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
             DataTable dtAttrs = attrs.ToDataTableStringField("Sys_MapAttr");
             ds.Tables.Add(dtAttrs);
+
+            //加入流程配置信息
+            Flow flow = new Flow(this.FK_Flow);
+            DataTable dtFlow = flow.ToDataTableField("Flow");
+            ds.Tables.Add(dtFlow);
 
             //转化成json,返回.
             return BP.Tools.Json.DataSetToJson(ds, false);
@@ -370,7 +391,7 @@ namespace BP.WF.HttpHandler
             string err = "";
             foreach (MapAttr attr in attrs)
             {
-                int val = this.GetRequestValInt("CB_" + attr.KeyOfEn);
+                int val = this.GetRequestValChecked("CB_" + attr.KeyOfEn);
                 if (val == 0)
                     continue;
 
@@ -382,7 +403,7 @@ namespace BP.WF.HttpHandler
                     err += "@配置【" + attr.KeyOfEn + " - " + attr.Name +
                         "】错误, 请确保选中业务字段的唯一性，该业务字段已经被其他字段所使用。";
                 }
-                lcStr += "@" + attr.KeyOfEn + "@,";
+                lcStr += "" + attr.KeyOfEn + "="+ refField + "@";
                 ywStr += "@" + refField + "@,";
             }
 
@@ -398,7 +419,7 @@ namespace BP.WF.HttpHandler
                     err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
                         "】已经被其他字段所使用。";
                 }
-                lcStr = "@OID@," + lcStr;
+                lcStr = "OID="+ ddl_key + "@" + lcStr;
                 ywStr = "@" + ddl_key + "@," + ywStr;
             }
             else
@@ -408,14 +429,14 @@ namespace BP.WF.HttpHandler
                     err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
                         "】已经被其他字段所使用。";
                 }
-                lcStr = "@GUID@," + lcStr;
+                lcStr = "GUID="+ ddl_key + "@" + lcStr;
                 ywStr = "@" + ddl_key + "@," + ywStr;
             }
 
             if (err != "")
                 return "err@" + err;
 
-            lcStr = lcStr.Replace("@", "");
+            //lcStr = lcStr.Replace("@", "");
             ywStr = ywStr.Replace("@", "");
 
 
@@ -429,7 +450,7 @@ namespace BP.WF.HttpHandler
 
 
             //数据存储格式   a,b,c@a_1,b_1,c_1
-            fl.DTSFields = lcStr + "@" + ywStr;
+            fl.DTSFields = lcStr;
             fl.DTSBTablePK = pk;
             fl.Update();
 

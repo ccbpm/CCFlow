@@ -1053,10 +1053,10 @@ namespace BP.Sys
                     sql.AppendLine("  FROM user_objects uo");
                     sql.AppendLine(" WHERE (uo.OBJECT_TYPE = 'TABLE' OR uo.OBJECT_TYPE = 'VIEW')");
                     //sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'ND%'");
-                    sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'Demo_%'");
-                    sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'Sys_%'");
-                    sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'WF_%'");
-                    sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'GPM_%'");
+                    //sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'Demo_%'");
+                    //sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'Sys_%'");
+                    //sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'WF_%'");
+                    //sql.AppendLine("   AND uo.OBJECT_NAME NOT LIKE 'GPM_%'");
                     sql.AppendLine(" ORDER BY uo.OBJECT_TYPE, uo.OBJECT_NAME");
                     break;
                 case Sys.DBSrcType.MySQL:
@@ -1250,7 +1250,7 @@ namespace BP.Sys
                       ";Timeout=999;MultipleActiveResultSets=true";
                     break;
                 case Sys.DBSrcType.Oracle:
-                    dsn = "user id=" + this.UserID + ";data source=" + this.DBName + ";password=" + this.Password + ";Max Pool Size=200";
+                    dsn = "user id=" + this.UserID + ";data source=" + this.IP + ";password=" + this.Password + ";Max Pool Size=200";
                     break;
                 case Sys.DBSrcType.MySQL:
                     dsn = "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
@@ -1449,7 +1449,51 @@ namespace BP.Sys
                     throw new Exception("@没有涉及到的数据库类型。");
             }
         }
-
+        /// <summary>
+        /// 获取判断指定表达式如果为空，则返回指定值的SQL表达式
+        /// <para>注：目前只对MSSQL/ORACLE/MYSQL三种数据库做兼容</para>
+        /// <para>added by liuxc,2017-03-07</para>
+        /// </summary>
+        /// <param name="expression">要判断的表达式，在SQL中的写法</param>
+        /// <param name="isNullBack">判断的表达式为NULL，返回值的表达式，在SQL中的写法</param>
+        /// <returns></returns>
+        public string GetIsNullInSQL(string expression, string isNullBack)
+        {
+            var dbType = this.DBSrcType;
+            if (dbType == Sys.DBSrcType.Localhost)
+            {
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        dbType = Sys.DBSrcType.SQLServer;
+                        break;
+                    case DBType.Oracle:
+                        dbType = Sys.DBSrcType.Oracle;
+                        break;
+                    case DBType.MySQL:
+                        dbType = Sys.DBSrcType.MySQL;
+                        break;
+                    case DBType.Informix:
+                        dbType = Sys.DBSrcType.Informix;
+                        break;
+                    default:
+                        throw new Exception("没有涉及到的连接测试类型...");
+                }
+            }
+            switch (dbType)
+            {
+                case Sys.DBSrcType.SQLServer:
+                    return " ISNULL(" + expression + "," + isNullBack + ")";
+                case Sys.DBSrcType.Oracle:
+                    return " NVL(" + expression + "," + isNullBack + ")";
+                case Sys.DBSrcType.MySQL:
+                    return " IFNULL(" + expression + "," + isNullBack + ")";
+                case Sys.DBSrcType.PostgreSQL:
+                    return " COALESCE(" + expression + "," + isNullBack + ")";
+                default:
+                    throw new Exception("GetIsNullInSQL未涉及的数据库类型");
+            }
+        }
 
         /// <summary>
         /// 获取表的字段信息
@@ -1495,7 +1539,7 @@ namespace BP.Sys
                     sql.AppendLine("           END");
                     sql.AppendLine("       ) AS DBLength,");
                     sql.AppendLine("       sc.colid,");
-                    sql.AppendLine(string.Format("       {0} AS [Name]", SqlBuilder.GetIsNullInSQL("ep.[value]", "''")));
+                    sql.AppendLine(string.Format("       {0} AS [Name]", GetIsNullInSQL("ep.[value]", "''")));
                     sql.AppendLine("FROM   dbo.syscolumns sc");
                     sql.AppendLine("       INNER JOIN dbo.systypes st");
                     sql.AppendLine("            ON  sc.xtype = st.xusertype");
@@ -1510,7 +1554,7 @@ namespace BP.Sys
                     sql.AppendLine("       utc.DATA_TYPE   AS DBType,");
                     sql.AppendLine("       utc.CHAR_LENGTH AS DBLength,");
                     sql.AppendLine("       utc.COLUMN_ID   AS colid,");
-                    sql.AppendLine(string.Format("       {0}    AS Name", SqlBuilder.GetIsNullInSQL("ucc.comments", "''")));
+                    sql.AppendLine(string.Format("       {0}    AS Name", GetIsNullInSQL("ucc.comments", "''")));
                     sql.AppendLine("  FROM user_tab_cols utc");
                     sql.AppendLine("  LEFT JOIN user_col_comments ucc");
                     sql.AppendLine("    ON ucc.table_name = utc.TABLE_NAME");
@@ -1523,7 +1567,7 @@ namespace BP.Sys
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    column_name AS 'No',");
                     sql.AppendLine("    data_type AS 'DBType',");
-                    sql.AppendLine(string.Format("    {0} AS DBLength,", SqlBuilder.GetIsNullInSQL("character_maximum_length", "numeric_precision")));
+                    sql.AppendLine(string.Format("    {0} AS DBLength,", GetIsNullInSQL("character_maximum_length", "numeric_precision")));
                     sql.AppendLine("    ordinal_position AS colid,");
                     sql.AppendLine("    column_comment AS 'Name'");
                     sql.AppendLine("FROM");

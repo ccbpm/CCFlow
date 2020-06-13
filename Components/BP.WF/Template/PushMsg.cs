@@ -704,7 +704,7 @@ namespace BP.WF.Template
                 map.AddTBString(PushMsgAttr.SMSNodes, null, "SMS节点s", true, false, 0, 100, 10);
 
                 // 邮件,站内消息,短信,钉钉,微信,WebServices.
-                map.AddTBString(PushMsgAttr.SMSPushModel, "Email", "短消息发送设置", true, false, 0, 50, 10);
+                map.AddTBString(PushMsgAttr.SMSPushModel, "", "短消息发送设置", true, false, 0, 50, 10);
                 #endregion 短消息.
 
                 #region 邮件.

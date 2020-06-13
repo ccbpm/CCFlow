@@ -2788,7 +2788,7 @@ namespace BP.WF
                         DBAccess.RunSQL(sql);
                     }
                 }
-
+                
                 DataTable dtStudent = BP.DA.DBAccess.RunSQLReturnTable("SELECT No FROM Demo_Student");
                 foreach (DataRow dr in dtStudent.Rows)
                 {
@@ -2801,8 +2801,8 @@ namespace BP.WF
                         DBAccess.RunSQL(sql);
                     }
                 }
-
-
+                GenerWorkFlowViewNY ny = new GenerWorkFlowViewNY();
+                ny.CheckPhysicsTable();
                 // 生成年度月份数据.
                 string sqls = "";
                 DateTime dtNow = DateTime.Now;

@@ -711,6 +711,19 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 密码加密方式
+        /// </summary>
+        public static String GetPasswordEncryptionType
+        {
+            get
+            {
+                string s = AppSettings["PasswordEncryptionType"] as string;
+                if (string.IsNullOrWhiteSpace(s))
+                    return "1";
+                return s;
+            }
+        }
+        /// <summary>
         /// 是否多语言？
         /// </summary>
         public static bool IsMultilingual

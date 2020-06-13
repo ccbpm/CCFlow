@@ -121,7 +121,7 @@ namespace BP.WF.DTS
             dirs = dirInfo.GetDirectories();
 
             FlowSort fsRoot = new FlowSort();
-            fsRoot.No = "99";
+            fsRoot.No = "1";
             fsRoot.Name = "流程树";
             fsRoot.ParentNo = "0";
             fsRoot.DirectInsert();

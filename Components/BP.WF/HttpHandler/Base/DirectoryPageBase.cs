@@ -198,6 +198,14 @@ namespace BP.WF.HttpHandler
                 return 0;
             }
         }
+        public int GetRequestValChecked(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "" || str == "null" || str == "undefined")
+                return 0;
+
+            return 1;
+        }
         /// <summary>
         /// 公共方法获取值
         /// </summary>

@@ -283,7 +283,7 @@ function initModal(modalType, toNode,url) {
             case "shift":
                 $('#modalHeader').text("工作移交");
                 SetPageSize(80, 80);
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Forward.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "DocWord":
                 $('#modalHeader').text("公文");

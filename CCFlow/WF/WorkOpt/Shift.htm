@@ -25,16 +25,17 @@
         body {
             background: transparent;
             padding: 10px;
-             text-align:center;
+            text-align: center;
         }
 
-        body div {
-            text-align: left;
-        }
+            body div {
+                text-align: left;
+            }
 
         #Message {
             width: 100%;
         }
+
         button {
             background: #fff;
             color: #000;
@@ -43,11 +44,12 @@
             margin: 5px 3px 5px 3px;
             padding: 4px 15px;
         }
-        button:hover {
-            background: #f5f5f5 !important;
-            color: #000;
-            border: 1px solid #ccc !important;
-        }
+
+            button:hover {
+                background: #f5f5f5 !important;
+                color: #000;
+                border: 1px solid #ccc !important;
+            }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -93,7 +95,7 @@
         });
 
         //确定  执行移交操作
-        function ShiftWork() {
+        function Save() {
 
             //WorkID, this.FID, this.FK_Node
             var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
@@ -106,10 +108,10 @@
             handler.AddPara("ToEmp", empNos);
             handler.AddPara("Message", $('#Message').val());
 
-            var data = handler.DoMethodReturnString("Shift");
+            var data = handler.DoMethodReturnString("Shift_Save");
             data = data.replace("@null", "");
 
-  
+
             if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
                 window.parent.WindowCloseReloadPage(data);
             } else {
@@ -200,7 +202,7 @@
 
     </div>
     <div style="position: fixed; bottom: 60px; right: 5px;">
-        <button type="button" onclick="ShiftWork();">
+        <button type="button" onclick="Save();">
             <img src="../Img/Btn/Send.png" /> 确定移交
         </button>
 

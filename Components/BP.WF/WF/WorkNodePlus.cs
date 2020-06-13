@@ -18,7 +18,8 @@ namespace BP.WF
     public class WorkNodePlus
     {
         /// <summary>
-        /// 开始执行数据同步
+        /// 开始执行数据同步,在流程运动的过程中，
+        /// 数据需要同步到不同的表里去.
         /// </summary>
         /// <param name="fl">流程</param>
         /// <param name="gwf">实体</param>
@@ -57,11 +58,10 @@ namespace BP.WF
             string[] lcArr = dtsArray[0].Split(',');//取出对应的主表字段
             string[] ywArr = dtsArray[1].Split(',');//取出对应的业务表字段
 
-
             string sql = "SELECT " + dtsArray[0] + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
             DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
-            if (lcDt.Rows.Count == 0)//没有记录就return掉
-                return  ;
+            if (lcDt.Rows.Count == 0) 
+                throw new Exception("没有找到业务表数据.");
 
             BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
             sql = "SELECT " + dtsArray[1] + " FROM " + fl.DTSBTable.ToUpper();
@@ -70,7 +70,6 @@ namespace BP.WF
 
             string values = "";
             string upVal = "";
-
 
             for (int i = 0; i < lcArr.Length; i++)
             {
@@ -141,10 +140,7 @@ namespace BP.WF
             DataTable dt = src.RunSQLReturnTable(sql);
             //如果存在，执行更新，如果不存在，执行插入
             if (dt.Rows.Count > 0)
-            {
-
                 sql = "UPDATE " + fl.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
-            }
             else
                 sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + dtsArray[1] + ") VALUES(" + values + ")";
 

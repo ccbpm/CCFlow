@@ -27,6 +27,7 @@
         legend {
             border-bottom: none;
         }
+
         #Btn_Save {
             background-image: url(../../Img/Btn/Save.png) !important;
         }
@@ -38,7 +39,6 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-            
 
             //初始化groupID.
             var fk_flow = GetQueryString("FK_Flow");
@@ -67,17 +67,20 @@
             $("#RB_DTSWay_" + flow.FlowDTSWay).attr("Checked", true);
             $("#RB_DTSField" + flow.DTSField).attr("Checked", true);
 
+            if (flow.DTSDBSrc == "")
+                flow.DTSDBSrc = "local";
+
             //绑定数据源.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", flow.DTSDBSrc);
             //绑定表.
             GenerBindDDL("DDL_Table", tables, "No", "Name", flow.DTSBTable);
-            
+
 
             $("#Msg").html("");
             //绑定select事件
             $("#DDL_DBSrc").change(function () {
                 DTSBTable_DBSrcChange();
-            });  
+            });
         });
 
     //设置字段匹配
@@ -151,8 +154,8 @@
         alert("保存成功")
         window.location.href = window.location.href;
         return;
-        }
-      //选择事件
+    }
+    //选择事件
     function DTSBTable_DBSrcChange() {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
         handler.AddFormData();
@@ -160,9 +163,9 @@
         data = JSON.parse(data);
 
         var dllSrc = $("#DDL_DBSrc").val();
-            //绑定表.
+        //绑定表.
         GenerBindDDL("DDL_Table", data, "No", "Name", dllSrc);
-     }
+    }
     </script>
 </head>
 <body>
@@ -211,7 +214,7 @@
                     <td>
                         <select id="DDL_Table" name="DDL_Table">
                         </select>
-                        <br/> 要把数据同步到那个数据表里去？
+                        <br /> 要把数据同步到那个数据表里去？
                     </td>
                 </tr>
                 <tr>
@@ -219,14 +222,16 @@
                         同步的计算方式
                     </td>
                     <td>
-                        <input type="radio" value="0" id="RB_DTSField0" name="DTSField" />
-                        <span for="RB_DTSField0">
+
+                        <label for="RB_DTSField0">
+                            <input type="radio" value="0" id="RB_DTSField0" name="DTSField" />
                             字段名相同
-                        </span>
-                        <input type="radio" value="1" id="RB_DTSField1" name="DTSField" />
-                        <span for="RB_DTSField1">
+                        </label>
+
+                        <label for="RB_DTSField1">
+                            <input type="radio" value="1" id="RB_DTSField1" name="DTSField" />
                             按设置字段
-                        </span>
+                        </label>
                         &nbsp; <a class="btn btn-default btn-sm" href="javascript:OpenFields()">设置字段匹配</a>
                     </td>
                 </tr>
@@ -236,16 +241,16 @@
                         同步的时间
                     </td>
                     <td style="border-bottom: none;">
-                        <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="RB_DTSTime_0" checked="checked" /><span for="RB_DTSTime_0">所有的节点发送后</span>
+                        <label for="RB_DTSTime_0"> <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="RB_DTSTime_0" checked="checked" />所有的节点发送后</label>
                         <br />
-                        <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="RB_DTSTime_2" /><span for="RB_DTSTime_2">流程结束时</span>
+                        <label for="RB_DTSTime_2">  <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="RB_DTSTime_2" />流程结束时</label>
                         <br />
-                        <input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="RB_DTSTime_1" /><span for="RB_DTSTime_1">指定的节点发送后</span>
+                        <label for="RB_DTSTime_1"><input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="RB_DTSTime_1" />指定的节点发送后</label>
                         [<a href="javascript:void(0)" onclick="OpenDTSNodes()">设置同步的节点</a>]
                         <div id="dis" style="display: none;">
                         </div>
                     </td>
-                   
+
                 </tr>
             </table>
         </fieldset>

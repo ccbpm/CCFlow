@@ -7186,7 +7186,7 @@ namespace BP.WF
 
                 #region 处理流程数据与业务表的数据同步.
                 if (this.HisFlow.DTSWay != FlowDTSWay.None)
-                    this.HisFlow.DoBTableDTS(this.rptGe, this.HisNode, this.IsStopFlow);
+                    WorkNodePlus.DTSData(this.HisFlow, this.HisGenerWorkFlow,this.rptGe, this.HisNode, this.IsStopFlow);
 
                 #endregion 处理流程数据与业务表的数据同步.
 

@@ -23,13 +23,141 @@ namespace BP.WF
         /// <param name="fl">流程</param>
         /// <param name="gwf">实体</param>
         /// <param name="rpt">实体</param>
-        public static void DTSData(Flow fl, GenerWorkFlow gwf,GERpt rpt)
+        public static void DTSData(Flow fl, GenerWorkFlow gwf,GERpt rpt, Node currNode, bool isStopFlow)
         {
             //判断同步类型.
             if (fl.DTSWay == FlowDTSWay.None)
                 return;
 
-            SFDBSrc db = new SFDBSrc();
+            bool isActiveSave = false;
+            // 判断是否符合流程数据同步条件.
+            switch (fl.DTSTime)
+            {
+                case FlowDTSTime.AllNodeSend:
+                    isActiveSave = true;
+                    break;
+                case FlowDTSTime.SpecNodeSend:
+                    if (fl.DTSSpecNodes.Contains(currNode.NodeID.ToString()) == true)
+                        isActiveSave = true;
+                    break;
+                case FlowDTSTime.WhenFlowOver:
+                    if (isStopFlow)
+                        isActiveSave = true;
+                    break;
+                default:
+                    break;
+            }
+            if (isActiveSave == false)
+                return;
+
+            #region qinfaliang, 编写同步的业务逻辑,执行错误就抛出异常.
+
+            string[] dtsArray = fl.DTSFields.Split('@');
+
+            string[] lcArr = dtsArray[0].Split(',');//取出对应的主表字段
+            string[] ywArr = dtsArray[1].Split(',');//取出对应的业务表字段
+
+
+            string sql = "SELECT " + dtsArray[0] + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
+            DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
+            if (lcDt.Rows.Count == 0)//没有记录就return掉
+                return  ;
+
+            BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
+            sql = "SELECT " + dtsArray[1] + " FROM " + fl.DTSBTable.ToUpper();
+
+            DataTable ywDt = src.RunSQLReturnTable(sql);
+
+            string values = "";
+            string upVal = "";
+
+
+            for (int i = 0; i < lcArr.Length; i++)
+            {
+                switch (src.DBSrcType)
+                {
+                    case Sys.DBSrcType.Localhost:
+                        switch (SystemConfig.AppCenterDBType)
+                        {
+                            case DBType.MSSQL:
+                                break;
+                            case DBType.Oracle:
+                                if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
+                                {
+                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
+                                    {
+                                        values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
+                                    }
+                                    else
+                                    {
+                                        values += "'',";
+                                    }
+                                    continue;
+                                }
+                                values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                                continue;
+                                break;
+                            case DBType.MySQL:
+                                break;
+                            case DBType.Informix:
+                                break;
+                            default:
+                                throw new Exception("没有涉及到的连接测试类型...");
+                        }
+                        break;
+                    case Sys.DBSrcType.SQLServer:
+                        break;
+                    case Sys.DBSrcType.MySQL:
+                        break;
+                    case Sys.DBSrcType.Oracle:
+                        if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
+                        {
+                            if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
+                            {
+                                values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
+                            }
+                            else
+                            {
+                                values += "'',";
+                            }
+                            continue;
+                        }
+                        values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                        continue;
+                    default:
+                        throw new Exception("暂时不支您所使用的数据库类型!");
+                }
+                values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                //获取除主键之外的其他值
+                if (i > 0)
+                    upVal = upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+            }
+
+            values = values.Substring(0, values.Length - 1);
+            upVal = upVal.Substring(0, upVal.Length - 1);
+
+            //查询对应的业务表中是否存在这条记录
+            sql = "SELECT * FROM " + fl.DTSBTable.ToUpper() + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
+            DataTable dt = src.RunSQLReturnTable(sql);
+            //如果存在，执行更新，如果不存在，执行插入
+            if (dt.Rows.Count > 0)
+            {
+
+                sql = "UPDATE " + fl.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
+            }
+            else
+                sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + dtsArray[1] + ") VALUES(" + values + ")";
+
+            try
+            {
+                src.RunSQL(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            #endregion qinfaliang, 编写同步的业务逻辑,执行错误就抛出异常.
+            return ;
         }
         /// <summary>
         /// 处理协作模式下的删除规则

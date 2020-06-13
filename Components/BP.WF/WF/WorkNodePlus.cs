@@ -27,7 +27,7 @@ namespace BP.WF
         public static void DTSData(Flow fl, GenerWorkFlow gwf,GERpt rpt, Node currNode, bool isStopFlow)
         {
             //判断同步类型.
-            if (fl.DTSWay == FlowDTSWay.None)
+            if (fl.DTSWay == DataDTSWay.None)
                 return;
 
             bool isActiveSave = false;

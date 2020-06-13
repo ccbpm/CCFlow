@@ -1907,7 +1907,7 @@ namespace BP.WF.Template
 
             #region 检查数据完整性 - 同步业务表数据。
             // 检查业务是否存在.
-            if (fl.DTSWay != FlowDTSWay.None)
+            if (fl.DTSWay != DataDTSWay.None)
             {
                 /*检查业务表填写的是否正确.*/
                 string sql = "select count(*) as Num from  " + fl.DTSBTable + " where 1=2";

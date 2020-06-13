@@ -238,10 +238,10 @@ namespace BP.WF.HttpHandler
             //获取流程属性
             Flow flow = new Flow(this.FK_Flow);
             //获取主键方式
-            BP.WF.Template.FlowDTSWay dtsWay = (BP.WF.Template.FlowDTSWay)this.GetRequestValInt("RB_DTSWay");
+            BP.WF.Template.DataDTSWay dtsWay = (BP.WF.Template.DataDTSWay)this.GetRequestValInt("RB_DTSWay");
 
             flow.DTSWay = dtsWay;
-            if (flow.DTSWay == FlowDTSWay.None)
+            if (flow.DTSWay == DataDTSWay.None)
             {
                 flow.Update();
                 return "保存成功.";
@@ -252,49 +252,9 @@ namespace BP.WF.HttpHandler
             flow.DTSBTable = this.GetRequestVal("DDL_Table");
             flow.DTSSpecNodes = this.GetRequestVal("CheckBoxIDs");
 
-            DTSField field = (DTSField)this.GetRequestValInt("DTSField");
-
-            if (field == 0)
-                field = DTSField.SameNames;
-            flow.DTSField = field;
 
             SFDBSrc s = new SFDBSrc("local");
-            if (field == DTSField.SameNames)
-            {
-                DataTable dt = s.GetColumns(flow.PTable);
-
-                s = new SFDBSrc(flow.DTSDBSrc);// this.src);
-                DataTable ywDt = s.GetColumns(flow.DTSBTable);// this.ywTableName);
-
-                string str = "";
-                string ywStr = "";
-                foreach (DataRow ywDr in ywDt.Rows)
-                {
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        if (ywDr["No"].ToString().ToUpper() == dr["No"].ToString().ToUpper())
-                        {
-                            if (dr["No"].ToString().ToUpper() == "OID")
-                            {
-                                flow.DTSBTablePK = "OID";
-                            }
-                            str += dr["No"].ToString() + ",";
-                            ywStr += ywDr["No"].ToString() + ",";
-                        }
-                    }
-                }
-
-                if (!DataType.IsNullOrEmpty(str))
-                    flow.DTSFields = str.TrimEnd(',') + "@" + ywStr.TrimEnd(',');
-                else
-                {
-                    flow.Update();
-                    return  "未检测到业务主表【" + flow.PTable + "】与表【" + flow.DTSBTable + "】有相同的字段名.";
-                  
-                }
-            }
-            else//按设置的字段匹配   检查在
-            {
+            
                 try
                 {
                     s = new SFDBSrc("local");
@@ -320,7 +280,7 @@ namespace BP.WF.HttpHandler
                     //PubClass.Alert(ex.Message);
                     return "err@设置的字段有误.【" + flow.DTSFields + "】";
                 }
-            }
+             
             flow.Update();
             return "保存成功";
         }
@@ -350,17 +310,15 @@ namespace BP.WF.HttpHandler
 
             //获得数据表列.
             SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_DBSrc"));
+
             DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
             dtColms.TableName = "Cols";
-
             if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";
             }
-            Hashtable ht = new Hashtable();
-            
-            ds.Tables.Add(dtColms);
+            ds.Tables.Add(dtColms); //列名.
 
             //属性列表.
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
@@ -373,7 +331,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtFlow);
 
             //转化成json,返回.
-            return BP.Tools.Json.DataSetToJson(ds, false);
+            return BP.Tools.Json.DataSetToJson(ds);
         }
         public string DTSBTableExt_Save()
         {

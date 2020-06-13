@@ -7188,7 +7188,7 @@ namespace BP.WF
                 #endregion 执行启动子流程.
 
                 #region 处理流程数据与业务表的数据同步.
-                if (this.HisFlow.DTSWay != FlowDTSWay.None)
+                if (this.HisFlow.DTSWay != DataDTSWay.None)
                     WorkNodePlus.DTSData(this.HisFlow, this.HisGenerWorkFlow,this.rptGe, this.HisNode, this.IsStopFlow);
 
                 #endregion 处理流程数据与业务表的数据同步.

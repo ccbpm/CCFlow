@@ -315,7 +315,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 数据同步方式.
         /// </summary>
-        public const string FlowDTSWay = "FlowDTSWay";
+        public const string DataDTSWay = "DataDTSWay";
         /// <summary>
         /// 业务表主键
         /// </summary>
@@ -486,7 +486,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 数据同步方案
     /// </summary>
-    public enum FlowDTSWay
+    public enum DataDTSWay
     {
         /// <summary>
         /// 不同步
@@ -498,7 +498,7 @@ namespace BP.WF.Template
         Syn
     }
     /// <summary>
-    /// 数据同步方案
+    /// 数据同步的时间
     /// </summary>
     public enum FlowDTSTime
     {
@@ -515,25 +515,6 @@ namespace BP.WF.Template
         /// </summary>
         WhenFlowOver
     }
-    /// <summary>
-    /// 要同步的字段计算方式
-    /// </summary>
-    public enum DTSField
-    {
-        /// <summary>
-        /// 字段名相同
-        /// </summary>
-        SameNames,
-        /// <summary>
-        /// 设置的字段匹配
-        /// </summary>
-        SpecField,
-        /// <summary>
-        /// 以上两者都使用
-        /// </summary>
-        Above
-    }
-
     /// <summary>
     /// 流程数据存储模式
     /// </summary>

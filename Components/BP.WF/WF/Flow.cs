@@ -89,15 +89,15 @@ namespace BP.WF
         /// <summary>
         /// 同步方式
         /// </summary>
-        public FlowDTSWay DTSWay
+        public DataDTSWay DTSWay
         {
             get
             {
-                return (FlowDTSWay)this.GetValIntByKey(FlowAttr.FlowDTSWay);
+                return (DataDTSWay)this.GetValIntByKey(FlowAttr.DataDTSWay);
             }
             set
             {
-                this.SetValByKey(FlowAttr.FlowDTSWay, (int)value);
+                this.SetValByKey(FlowAttr.DataDTSWay, (int)value);
             }
         }
         public FlowDTSTime DTSTime
@@ -111,17 +111,7 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.DTSTime, (int)value);
             }
         }
-        public DTSField DTSField
-        {
-            get
-            {
-                return (DTSField)this.GetValIntByKey(FlowAttr.DTSField);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DTSField, (int)value);
-            }
-        }
+
         /// <summary>
         /// 数据源
         /// </summary>
@@ -129,14 +119,14 @@ namespace BP.WF
         {
             get
             {
-                string str = this.GetValStringByKey(FlowAttr.DTSDBSrc);
+                string str = this.GetParaString(FlowAttr.DTSDBSrc);
                 if (DataType.IsNullOrEmpty(str))
                     return "local";
                 return str;
             }
             set
             {
-                this.SetValByKey(FlowAttr.DTSDBSrc, value);
+                this.SetPara(FlowAttr.DTSDBSrc, value);
             }
         }
         /// <summary>
@@ -146,22 +136,22 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValStringByKey(FlowAttr.DTSBTable);
+                return this.GetParaString(FlowAttr.DTSBTable);
             }
             set
             {
-                this.SetValByKey(FlowAttr.DTSBTable, value);
+                this.SetPara(FlowAttr.DTSBTable, value);
             }
         }
         public string DTSBTablePK
         {
             get
             {
-                return this.GetValStringByKey(FlowAttr.DTSBTablePK);
+                return this.GetParaString(FlowAttr.DTSBTablePK);
             }
             set
             {
-                this.SetValByKey(FlowAttr.DTSBTablePK, value);
+                this.SetPara(FlowAttr.DTSBTablePK, value);
             }
         }
         /// <summary>
@@ -171,11 +161,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValStringByKey(FlowAttr.DTSSpecNodes);
+                return this.GetParaString(FlowAttr.DTSSpecNodes);
             }
             set
             {
-                this.SetValByKey(FlowAttr.DTSSpecNodes, value);
+                this.SetPara(FlowAttr.DTSSpecNodes, value);
             }
         }
         /// <summary>
@@ -1132,7 +1122,7 @@ namespace BP.WF
                             {
 
                             }
-                            
+
 
 
                             MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;
@@ -1369,7 +1359,7 @@ namespace BP.WF
         #region 其他通用方法.
         public string DoBTableDTS()
         {
-            if (this.DTSWay == FlowDTSWay.None)
+            if (this.DTSWay == DataDTSWay.None)
                 return "执行失败，您没有设置同步方式。";
 
             string info = "";
@@ -1383,9 +1373,9 @@ namespace BP.WF
 
                 info += "@开始同步:" + gwf.Title + ",WorkID=" + gwf.WorkID;
                 if (gwf.WFSta == WFSta.Complete)
-                     WorkNodePlus.DTSData(this,gwf, rpt, new Node(gwf.FK_Node), true);
+                    WorkNodePlus.DTSData(this, gwf, rpt, new Node(gwf.FK_Node), true);
                 else
-                      WorkNodePlus.DTSData(this, gwf, rpt, new Node(gwf.FK_Node), false);
+                    WorkNodePlus.DTSData(this, gwf, rpt, new Node(gwf.FK_Node), false);
                 info += "同步成功.";
             }
             return info;
@@ -2430,7 +2420,7 @@ namespace BP.WF
             FrmLabs frmlabs = new FrmLabs();
             frmlabs.RetrieveInSQL(sql);
             ds.Tables.Add(frmlabs.ToDataTableField("Sys_FrmLab"));
-             
+
 
             // Sys_FrmLink.
             sql = "SELECT MyPK FROM Sys_FrmLink WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData");
@@ -4314,11 +4304,6 @@ namespace BP.WF
                 //批量发起 add 2013-12-27. 
                 map.AddTBInt(FlowAttr.IsBatchStart, 0, "是否可以批量发起", true, false);
                 map.AddTBString(FlowAttr.BatchStartFields, null, "批量发起字段(用逗号分开)", true, false, 0, 200, 10, true);
-
-                // map.AddTBInt(FlowAttr.IsEnableTaskPool, 0, "是否启用共享任务池", true, false);
-                //map.AddDDLSysEnum(FlowAttr.TimelineRole, (int)TimelineRole.ByNodeSet, "时效性规则",
-                // true, true, FlowAttr.TimelineRole, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
-
                 map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "(当前节点为子流程时)是否检查所有子流程完成后父流程自动发送", true, true);
 
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
@@ -4332,14 +4317,12 @@ namespace BP.WF
 
                 #region 数据同步方案
                 //数据同步方式.
-                map.AddTBInt(FlowAttr.FlowDTSWay, (int)FlowDTSWay.None, "同步方式", true, true);
-                map.AddTBString(FlowAttr.DTSDBSrc, null, "数据源", true, false, 0, 200, 100, false);
-                map.AddTBString(FlowAttr.DTSBTable, null, "业务表名", true, false, 0, 200, 100, false);
-                map.AddTBString(FlowAttr.DTSBTablePK, null, "业务表主键", false, false, 0, 32, 10);
+                map.AddTBInt(FlowAttr.DataDTSWay, (int)DataDTSWay.None, "同步方式", true, true);
+                //map.AddTBString(FlowAttr.DTSDBSrc, null, "数据源", true, false, 0, 200, 100, false);
+                //map.AddTBString(FlowAttr.DTSBTable, null, "业务表名", true, false, 0, 200, 100, false);
+                //map.AddTBString(FlowAttr.DTSBTablePK, null, "业务表主键", false, false, 0, 32, 10);
 
                 map.AddTBInt(FlowAttr.DTSTime, (int)FlowDTSTime.AllNodeSend, "执行同步时间点", true, true);
-                map.AddTBString(FlowAttr.DTSSpecNodes, null, "指定的节点ID", true, false, 0, 200, 100, false);
-                map.AddTBInt(FlowAttr.DTSField, (int)DTSField.SameNames, "要同步的字段计算方式", true, true);
                 map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 900, 100, false);
                 #endregion 数据同步方案
 
@@ -5867,7 +5850,7 @@ namespace BP.WF
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
         }
-       
+
         /// <summary>
         /// 检查报表
         /// </summary>

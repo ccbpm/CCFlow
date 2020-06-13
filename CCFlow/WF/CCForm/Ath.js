@@ -726,17 +726,17 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
 
 
     
-//关闭窗口  适用于扩展属性
-function close() {
-    if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
-        var nameTds = $('.Idx').next();
-        var nameStrs = [];
-        $.each(nameTds, function (i, nameTd) {
-            nameStrs.push($(nameTd).children('a').text());
-        })
-        parent.SetAth(nameStrs);
-    }
-}
+////关闭窗口  适用于扩展属性
+//function close() {
+//    if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
+//        var nameTds = $('.Idx').next();
+//        var nameStrs = [];
+//        $.each(nameTds, function (i, nameTd) {
+//            nameStrs.push($(nameTd).children('a').text());
+//        })
+//        parent.SetAth(nameStrs);
+//    }
+//}
 //解析附件扩张字段
 function InitAthMapAttrOfCtrlFool(db, mapAttr) {
     var defValue = "";

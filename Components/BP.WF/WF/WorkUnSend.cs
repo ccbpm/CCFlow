@@ -1074,9 +1074,6 @@ namespace BP.WF
                     wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
  
-            ShiftWorks fws = new ShiftWorks();
-            fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(),
-                ShiftWorkAttr.WorkID, this.WorkID.ToString());
 
             #region 恢复工作轨迹，解决工作抢办。
             if (wnPri.HisNode.IsStartNode == false)
@@ -1151,8 +1148,8 @@ namespace BP.WF
             gwf.Update();
 
             BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
-            ShiftWorks fws = new ShiftWorks();
-            fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(), ShiftWorkAttr.WorkID, this.WorkID.ToString());
+            //ShiftWorks fws = new ShiftWorks();
+            //fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(), ShiftWorkAttr.WorkID, this.WorkID.ToString());
 
             #region 判断撤消的百分比条件的临界点条件
             if (wn.HisNode.PassRate != 0)

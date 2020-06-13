@@ -864,10 +864,25 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 这里更新事件的数量,做一个标记.
+        /// </summary>
+        private void UpdataFrmEventsNum()
+        {
+            FrmEvents ens = new FrmEvents(this.FK_MapData);
+            MapData md = new MapData(this.FK_MapData);
+            md.SetPara("FrmEventsNum", ens.Count);
+            md.Update();
+        }
         protected override bool beforeUpdateInsertAction()
         {
-            //this.MyPK = this.FK_MapData + "_" + this.FK_Event;
+            UpdataFrmEventsNum();
             return base.beforeUpdateInsertAction();
+        }
+        protected override void afterDelete()
+        {
+            UpdataFrmEventsNum();
+            base.afterDelete();
         }
     }
     /// <summary>

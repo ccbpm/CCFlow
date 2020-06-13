@@ -43,20 +43,20 @@ namespace BP.WF
                 wk.OID = workID;
                 wk.RetrieveFromDBSources();
 
+                MapData md = new MapData(nd.NodeFrmID);
+
                 //wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
                     wk, null);
 
-               // MapData md = new MapData(nd.NodeFrmID);
-
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, nd.Name);
 
                 //更换表单的名字.
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
-                    && (nd.HisFormType== NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm))
+                    && (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm))
                 {
                     string realName = myds.Tables["Sys_MapData"].Rows[0]["Name"] as string;
                     if (DataType.IsNullOrEmpty(realName) == true)
@@ -65,19 +65,18 @@ namespace BP.WF
                     }
                 }
 
-
                 #region 处理表单权限控制方案: 如果是绑定单个表单的时候. 
                 /*处理表单权限控制方案: 如果是绑定单个表单的时候. */
 
                 //这两个变量在累加表单用到. 
-                FrmNode frmNode=new FrmNode();
+                FrmNode frmNode = new FrmNode();
 
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree 
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree
                     || nd.HisFormType == NodeFormType.FoolTruck)
                 {
-                        frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,
-                        FrmNodeAttr.FK_Node, nd.NodeID);
-                    if (DataType.IsNullOrEmpty(frmNode.MyPK)==false && frmNode.FrmSln != 0)
+                    frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,
+                    FrmNodeAttr.FK_Node, nd.NodeID);
+                    if (DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.FrmSln != 0)
                     {
                         FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.FK_Node);
                         foreach (FrmField item in fls)
@@ -128,7 +127,7 @@ namespace BP.WF
                 nd.WorkID = workID; //为获取表单ID提供参数.
 
                 // 处理自由表单.
-                if (nd.NodeFrmID.Equals("ND" + nd.NodeID)==false 
+                if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == false
                     && nd.HisFormType == NodeFormType.FreeForm)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
@@ -176,18 +175,18 @@ namespace BP.WF
                 }
 
                 #region 没有审核组件分组就增加上审核组件分组. 
-                if (nd.NodeFrmID.Equals( "ND" + nd.NodeID)==true ||
-                    (nd.HisFormType == NodeFormType.RefOneFrmTree 
-                    && DataType.IsNullOrEmpty(frmNode.MyPK) == false ))
+                if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == true ||
+                    (nd.HisFormType == NodeFormType.RefOneFrmTree
+                    && DataType.IsNullOrEmpty(frmNode.MyPK) == false))
                 {
                     bool isHaveFWC = false;
                     //绑定表单库中的表单
                     if ((DataType.IsNullOrEmpty(frmNode.MyPK) == false
                         && frmNode.IsEnableFWC != FrmWorkCheckSta.Disable) || (nd.NodeFrmID == "ND" + nd.NodeID && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                         isHaveFWC = true;
-                 
-                    if ((nd.FormType == NodeFormType.FoolForm 
-                        || frmNode.HisFrmType== FrmType.FoolForm)&& isHaveFWC == true)
+
+                    if ((nd.FormType == NodeFormType.FoolForm
+                        || frmNode.HisFrmType == FrmType.FoolForm) && isHaveFWC == true)
                     {
                         //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                         DataTable gf = myds.Tables["Sys_GroupField"];
@@ -298,7 +297,7 @@ namespace BP.WF
                             FWCG = mygf;
                             continue;
                         }
-                           
+
                         gfsNew.AddEntity(mygf); //把分组字段加入里面去.
                     }
                     if (FWCG != null)
@@ -321,21 +320,23 @@ namespace BP.WF
                     MapAttrs attrsLeiJia = new MapAttrs();
 
                     //存在表单方案只读
-                    string sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In("+wk.HisPassedFrmIDs+") And FrmSln="+(int)FrmSln.Readonly +" And FK_Node="+nd.NodeID;
+                    string sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Readonly + " And FK_Node=" + nd.NodeID;
                     DataTable dt1 = DBAccess.RunSQLReturnTable(sql1);
-                    if(dt1.Rows.Count > 0){
+                    if (dt1.Rows.Count > 0)
+                    {
                         //获取节点
-                        string nodes ="";
-                        foreach(DataRow dr in dt1.Rows)
-                            nodes+="'"+dr[0].ToString()+"',";
+                        string nodes = "";
+                        foreach (DataRow dr in dt1.Rows)
+                            nodes += "'" + dr[0].ToString() + "',";
 
-                        nodes = nodes.Substring(0,nodes.Length-1);
+                        nodes = nodes.Substring(0, nodes.Length - 1);
                         qo = new QueryObject(attrsLeiJia);
-                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + nodes + ")");
                         qo.addOrderBy(MapAttrAttr.Idx);
                         qo.DoQuery();
 
-                        foreach(MapAttr item in attrsLeiJia){
+                        foreach (MapAttr item in attrsLeiJia)
+                        {
                             if (item.KeyOfEn.Equals("RDT") || item.KeyOfEn.Equals("Rec"))
                                 continue;
                             item.UIIsEnable = false; //设置为只读的.
@@ -347,15 +348,16 @@ namespace BP.WF
                     //存在表单方案默认
                     sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Default + " And FK_Node=" + nd.NodeID;
                     dt1 = DBAccess.RunSQLReturnTable(sql1);
-                     if(dt1.Rows.Count > 0){
-                         //获取节点
-                        string nodes ="";
-                        foreach(DataRow dr in dt1.Rows)
-                            nodes+="'"+dr[0].ToString()+"',";
+                    if (dt1.Rows.Count > 0)
+                    {
+                        //获取节点
+                        string nodes = "";
+                        foreach (DataRow dr in dt1.Rows)
+                            nodes += "'" + dr[0].ToString() + "',";
 
-                        nodes = nodes.Substring(0,nodes.Length-1);
+                        nodes = nodes.Substring(0, nodes.Length - 1);
                         qo = new QueryObject(attrsLeiJia);
-                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + nodes + ")");
                         qo.addOrderBy(MapAttrAttr.Idx);
                         qo.DoQuery();
 
@@ -369,22 +371,23 @@ namespace BP.WF
                     }
 
                     //存在表单方案自定义
-                     sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Self + " And FK_Node=" + nd.NodeID;
+                    sql1 = "Select FK_Frm From WF_FrmNode Where FK_Frm In(" + wk.HisPassedFrmIDs + ") And FrmSln=" + (int)FrmSln.Self + " And FK_Node=" + nd.NodeID;
                     dt1 = DBAccess.RunSQLReturnTable(sql1);
 
-                     if(dt1.Rows.Count > 0){
-                         //获取节点
-                        string nodes ="";
-                        foreach(DataRow dr in dt1.Rows)
-                            nodes+="'"+dr[0].ToString()+"',";
+                    if (dt1.Rows.Count > 0)
+                    {
+                        //获取节点
+                        string nodes = "";
+                        foreach (DataRow dr in dt1.Rows)
+                            nodes += "'" + dr[0].ToString() + "',";
 
-                        nodes = nodes.Substring(0,nodes.Length-1);
+                        nodes = nodes.Substring(0, nodes.Length - 1);
                         qo = new QueryObject(attrsLeiJia);
-                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" +nodes + ")");
+                        qo.AddWhere(MapAttrAttr.FK_MapData, " IN ", "(" + nodes + ")");
                         qo.addOrderBy(MapAttrAttr.Idx);
                         qo.DoQuery();
 
-                         //获取累加表单的权限
+                        //获取累加表单的权限
                         FrmFields fls = new FrmFields();
                         qo = new QueryObject(fls);
                         qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + nodes + ")");
@@ -495,9 +498,9 @@ namespace BP.WF
                 BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, workID);
                 if (nd.IsStartNode == false)
                 {
-                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No+",") == false)
+                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
                     {
-                        gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name+";";
+                        gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
                         gwf.Update();
                     }
                 }
@@ -533,28 +536,20 @@ namespace BP.WF
                     wk.DirectUpdate();
                 }
 
-                MapData md = new MapData();
-                md.No = nd.NodeFrmID;
-
-                // 执行表单事件..
+                //执行表单事件
                 string msg = md.DoEvent(FrmEventList.FrmLoadBefore, wk);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
-                // 执行FEE事件.
-                string msgOfLoad = nd.HisFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, nd,
-                    wk, null);
-                if (msgOfLoad != null)
-                    wk.RetrieveFromDBSources();
-
                 //执行装载填充.
-                
-                MapExt me=new MapExt();
-                if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, wk.NodeFrmID) == 1)
+                MapExts mes = md.MapExts;
+                string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
+                MapExt me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
+                if (me!=null)
                 {
                     //执行通用的装载方法.
-                    MapAttrs attrs = new MapAttrs(wk.NodeFrmID);
-                    MapDtls dtls = new MapDtls(wk.NodeFrmID);
+                    MapAttrs attrs = md.MapAttrs; 
+                    MapDtls dtls = md.MapDtls; 
                     wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
                 }
 
@@ -562,12 +557,10 @@ namespace BP.WF
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
-
                     GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
                     rpt.Copy(wk);
 
                     DataTable rptdt = rpt.ToDataTableField("MainTable");
-
                     myds.Tables.Add(rptdt);
                 }
                 else
@@ -579,10 +572,8 @@ namespace BP.WF
                 DataTable dt = null;
                 #endregion
 
-                #region 把外键表加入DataSet
+                #region 把外键表加入 DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
-
-                MapExts mes = new MapExts(nd.NodeFrmID); // md.MapExts;
 
                 DataTable ddlTable = new DataTable();
                 ddlTable.Columns.Add("No");
@@ -609,14 +600,13 @@ namespace BP.WF
                     string keyOfEn = dr["KeyOfEn"].ToString();
                     string fk_mapData = dr["FK_MapData"].ToString();
 
-
                     #region 处理下拉框数据范围. for 小杨.
                     me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
                     if (me != null && myds.Tables.Contains(keyOfEn) == false)
                     {
                         string fullSQL = me.Doc.Clone() as string;
                         if (fullSQL == null)
-                            throw new Exception("err@字段["+ keyOfEn + "]下拉框AutoFullDLL，没有配置SQL");
+                            throw new Exception("err@字段[" + keyOfEn + "]下拉框AutoFullDLL，没有配置SQL");
 
                         fullSQL = fullSQL.Replace("~", "'");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
@@ -755,27 +745,27 @@ namespace BP.WF
                         break;
                     case WFState.Shift:
                         /* 判断移交过来的。 */
-                        ShiftWorks fws = new ShiftWorks();
-                        BP.En.QueryObject qo = new QueryObject(fws);
-                        qo.AddWhere(ShiftWorkAttr.WorkID, workID);
-                        qo.addAnd();
-                        qo.AddWhere(ShiftWorkAttr.FK_Node, nd.NodeID);
-                        qo.addOrderBy(ShiftWorkAttr.RDT);
-                        qo.DoQuery();
-                        if (fws.Count >= 1)
+                      
+
+                        string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
+                        DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
+
+                        if (dtshift.Rows.Count >= 1)
                         {
                             DataRow drMsg = dtAlert.NewRow();
                             drMsg["Title"] = "移交历史信息";
                             msg = "";
-                            foreach (ShiftWork fw in fws)
+                            foreach (DataRow dr in dtshift.Rows)
                             {
-                                string temp = "@移交人[" + fw.FK_Emp + "," + fw.FK_EmpName + "]。@接受人：" + fw.ToEmp + "," + fw.ToEmpName + "。<br>移交原因：-------------" + fw.NoteHtml;
-                                if (fw.FK_Emp == WebUser.No)
-                                    temp = "<b>" + temp + "</b>";
+                                string empFromT = dr[TrackAttr.EmpFromT].ToString();
+                                string empToT = dr[TrackAttr.EmpToT].ToString();
+                                string msgShift = dr[TrackAttr.Msg].ToString();
 
+                                string temp = "@移交人[" + empFromT + "]。@接受人：" + empToT  + "。<br>移交原因：-------------" + msgShift;
                                 temp = temp.Replace("@", "<br>@");
                                 msg += temp + "<hr/>";
                             }
+
                             drMsg["Msg"] = msg;
                             dtAlert.Rows.Add(drMsg);
                         }
@@ -789,7 +779,6 @@ namespace BP.WF
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     /* 独立流程节点表单. */
-
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
 
                     FrmNode fn = new FrmNode();
@@ -799,10 +788,9 @@ namespace BP.WF
                 }
                 #endregion 增加流程节点表单绑定信息.
 
-
                 myds.Tables.Add(dtAlert);
 
-               // myds.WriteXml("c:\\11.xml");
+                // myds.WriteXml("c:\\11.xml");
 
                 return myds;
             }

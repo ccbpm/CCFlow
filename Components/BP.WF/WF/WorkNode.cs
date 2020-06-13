@@ -255,7 +255,6 @@ namespace BP.WF
             throw new Exception("@此部分代码已经移除了.");
         }
         #endregion GenerWorkerList 相关方法.
-
      
         string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = new Paras();

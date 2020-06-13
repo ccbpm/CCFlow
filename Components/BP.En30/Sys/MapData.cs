@@ -537,13 +537,34 @@ namespace BP.Sys
         {
             get
             {
-                FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (obj == null)
+                //判断内存是否有？.
+                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
+                if (objs != null)
+                    return objs; //如果缓存有值，就直接返回.
+
+                int count = this.GetParaInt("FrmEventsNum", -1);
+                if (count == -1)
                 {
-                    obj = new FrmEvents(this.No);
-                    this.SetRefObject("FrmEvents", obj);
+                    objs = new FrmEvents(this.No);
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.DirectUpdate();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
                 }
-                return obj;
+
+                if (count == 0)
+                {
+                    objs = new FrmEvents();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
+                }
+                else
+                {
+                    objs = new FrmEvents(this.No);
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.SetRefObject("FrmEvents", objs);
+                }
+                return objs;
             }
         }
         /// <summary>
@@ -1366,8 +1387,9 @@ namespace BP.Sys
         /// </summary>
         /// <param name="no">映射编号</param>
         public MapData(string no)
-            : base(no)
         {
+            this.No = no;
+            this.Retrieve();
         }
         /// <summary>
         /// EnMap
@@ -1380,7 +1402,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单注册表");
-                //map.Java_SetDepositaryOfEntity(Depositary.None);  会出错如果放入到内存.
+              //  map.Java_SetDepositaryOfEntity(Depositary.Application); // 会出错如果放入到内存.
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");
@@ -1564,7 +1586,6 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEvent(string eventType, Entity en, string atParas = null)
         {
-
             #region 首先执行通用的事件重载方法.
             if (FrmEventList.FrmLoadBefore.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_LoadBefore(this.No, en);
@@ -2527,37 +2548,6 @@ namespace BP.Sys
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
             if (SystemConfig.CCBPMRunModel != 0)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
-
-            #region  检查是否有ca认证设置.
-            bool isHaveCA = false;
-            foreach (MapAttr item in this.MapAttrs)
-            {
-                if (item.SignType == SignType.CA)
-                {
-                    isHaveCA = true;
-                    break;
-                }
-            }
-            this.IsHaveCA = isHaveCA;
-            if (IsHaveCA == true)
-            {
-                //就增加隐藏字段.
-                //MapAttr attr = new BP.Sys.MapAttr();
-                // attr.MyPK = this.No + "_SealData";
-                // attr.FK_MapData = this.No;
-                // attr.HisEditType = BP.En.EditType.UnDel;
-                //attr.KeyOfEn = "SealData";
-                // attr.Name = "SealData";
-                // attr.MyDataType = BP.DA.DataType.AppString;
-                // attr.UIContralType = UIContralType.TB;
-                //  attr.LGType = FieldTypeS.Normal;
-                // attr.UIVisible = false;
-                // attr.UIIsEnable = false;
-                // attr.MaxLen = 4000;
-                // attr.MinLen = 0;
-                // attr.Save();
-            }
-            #endregion  检查是否有ca认证设置.
 
             //清除缓存.
             this.ClearCash();

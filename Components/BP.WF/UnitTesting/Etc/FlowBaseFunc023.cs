@@ -143,12 +143,6 @@ namespace BP.UnitTesting
             if (dt.Rows[0]["FK_Emp"].ToString() !="zhoushengyu" )
                 throw new Exception("@没有移交给 zhoushengyu");
 
-            ShiftWork sw = new ShiftWork();
-            int i = sw.Retrieve(ShiftWorkAttr.WorkID,workID, ShiftWorkAttr.FK_Node, 2302, ShiftWorkAttr.ToEmp, "zhoushengyu");
-            if (i==0)
-                throw new Exception("@没有写入移交数据在WF_ShiftWork表中 zhoushengyu");
-            if (i != 1)
-                throw new Exception("@移交数据写入了多次，在WF_ShiftWork表中 zhoushengyu");
             #endregion 检查预期结果
         }
         /// <summary>

@@ -1047,7 +1047,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoFlowShift()
         {
-            return "../../WorkOpt/Forward.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Shift.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 回滚流程

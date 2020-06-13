@@ -3852,7 +3852,7 @@ namespace BP.WF.HttpHandler
         /// 执行移交.
         /// </summary>
         /// <returns></returns>
-        public string Shift()
+        public string Shift_Save()
         {
             string msg = this.GetRequestVal("Message");
             string toEmp = this.GetRequestVal("ToEmp");

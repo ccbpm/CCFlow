@@ -163,8 +163,32 @@ namespace BP.WF
                 if (obj == null)
                 {
                     obj = new Nodes();
-                    obj.AddEntities(this.HisToNDs);
+                    if (this.HisToNDNum == 0)
+                        obj = new Nodes();
+                    if (this.HisToNDNum == 1)
+                        obj.AddEntities(this.HisToNDs);
+                    if (this.HisToNDNum > 1)
+                        obj.RetrieveInSQL("SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ");
                     this.SetRefObject("HisToNodes", obj);
+                }
+                return obj;
+            }
+        }
+        public BP.WF.Template.NodeSimples HisToNodeSimples
+        {
+            get
+            {
+                NodeSimples obj = this.GetRefObject("HisToNodesSipm") as NodeSimples;
+                if (obj == null)
+                {
+                    obj = new NodeSimples();
+                    if (this.HisToNDNum == 0)
+                        obj = new NodeSimples();
+                    if (this.HisToNDNum == 1)
+                        obj.AddEntities(this.HisToNDs);
+                    if (this.HisToNDNum > 1)
+                        obj.RetrieveInSQL("SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ");
+                    this.SetRefObject("HisToNodesSipm", obj);
                 }
                 return obj;
             }

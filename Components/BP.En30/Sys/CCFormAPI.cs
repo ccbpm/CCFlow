@@ -150,9 +150,9 @@ namespace BP.Sys
 
             if (i == 0)
             {
-               // if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
-                    //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
-                   // ath.SaveTo = "/DataUser/UploadFile/" + fk_mapdata + "/";
+                // if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
+                //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
+                // ath.SaveTo = "/DataUser/UploadFile/" + fk_mapdata + "/";
                 if (fk_mapdata.Contains("ND") == true)
                     ath.HisCtrlWay = AthCtrlWay.WorkID;
             }
@@ -649,7 +649,7 @@ namespace BP.Sys
             foreach (FrmAttachment en in ens)
             {
                 en.IsUpload = false;
-                en.DeleteWay = 0; 
+                en.DeleteWay = 0;
                 en.Update();
 
                 //sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
@@ -892,7 +892,7 @@ namespace BP.Sys
 
                 #region 数据类控件.
                 if (shape.Contains("TextBox") == true
-                    || shape.Contains("DropDownList") == true )
+                    || shape.Contains("DropDownList") == true)
                 {
                     BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
                     attrPKs = attrPKs.Replace("@" + ctrlID + "@", "@");
@@ -1270,7 +1270,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="frmID">表单</param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null)
+        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null, MapData md = null)
         {
             //首先从缓存获取数据.
             DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrmDataSetModel(frmID);
@@ -1280,7 +1280,8 @@ namespace BP.Sys
             DataSet ds = new DataSet();
 
             //创建实体对象.
-            MapData md = new MapData(frmID);
+            if (md == null)
+                md = new MapData(frmID);
 
             if (DataType.IsNullOrEmpty(md.Name) == true && frmName != null)
                 md.Name = frmName;
@@ -1331,15 +1332,12 @@ namespace BP.Sys
                 //Sys_FrmLab.
                 DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
                 ds.Tables.Add(Sys_FrmLab);
-
             }
             #endregion 如果是 自由表单类型，就把自由表单的元素加上.
-
 
             //img.
             DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
             ds.Tables.Add(Sys_FrmImg);
-
 
             //Sys_MapFrame.
             DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
@@ -1637,7 +1635,7 @@ namespace BP.Sys
         {
             return null;
         }
-       
+
         /// <summary>
         /// B:复制表单模版到指定的表单ID.
         /// 用于复制一个表单，到另外一个表单ID上去.用于表单树的上的表单Copy.
@@ -1668,7 +1666,7 @@ namespace BP.Sys
         }
         public static MapData Template_LoadXmlTemplateAsSpecFrmID(string newFrmID, DataSet ds, string frmSort)
         {
-            MapData md = MapData.ImpMapData(newFrmID,ds);
+            MapData md = MapData.ImpMapData(newFrmID, ds);
             md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
             md.FK_FormTree = frmSort;
             md.Update();

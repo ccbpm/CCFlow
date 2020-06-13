@@ -533,9 +533,6 @@
     </Compile>
     <Compile Include="DTS\ToImplement\RepariDB.cs" />
     <Compile Include="WF\SendReturnObj.cs" />
-    <Compile Include="WF\ShiftWork.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WF\WorkCheck.cs" />
     <Compile Include="WF\WorkFlow.cs">
       <SubType>Code</SubType>

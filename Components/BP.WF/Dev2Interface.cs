@@ -7113,7 +7113,6 @@ namespace BP.WF
             #endregion 赋值
 
             Paras ps = new Paras();
-
             if (DataType.IsNullOrEmpty(title) == true)
                 title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
@@ -7158,7 +7157,8 @@ namespace BP.WF
             if (parentWorkID != 0)
                 BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);//设置父流程信息
 
-#warning 增加是防止手动启动子流程或者平级子流程时关闭子流程页面找不到待办 保存到待办
+#warning 增加是防止手动启动子流程或者平级子流程时关闭子流程页面找不到待办 保存到待办。
+
             if (isStartSameLevelFlow != null)
                 BP.WF.Dev2Interface.Node_SaveWork(flowNo, int.Parse(flowNo + "01"), wk.OID);
             // 如果有跳转.
@@ -9805,16 +9805,6 @@ namespace BP.WF
             gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
             gwf.Update();
 
-
-            ShiftWork sf = new ShiftWork();
-            sf.WorkID = workID;
-            sf.FK_Node = gwf.FK_Node;
-            sf.ToEmp = toEmp;
-            sf.ToEmpName = emp.Name;
-            sf.Note = msg;
-            sf.FK_Emp = WebUser.No;
-            sf.FK_EmpName = WebUser.Name;
-            sf.Insert();
 
             //记录日志.
             Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,

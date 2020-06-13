@@ -245,8 +245,7 @@ namespace BP.WF
                 map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
                 map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回?", true, true);
 
-             //   map.AddTBString(ReturnWorkAttr.FrmDB, null, "退回的Frm格式化数据", true, true, 0, 3999, 10);
-
+                // map.AddTBString(ReturnWorkAttr.FrmDB, null, "退回的Frm格式化数据", true, true, 0, 3999, 10);
                 // map.AddAttrsFromMapData("BP.WF.ReturnWorks");
                 this._enMap = map;
                 return this._enMap;

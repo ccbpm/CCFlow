@@ -151,7 +151,6 @@ a, a:link, a:visited
 /**表单新增样式**/
 
 #CCForm{
-    width:800px;
     margin-left:auto;
     margin-right:auto;
     font-family:'宋体';
@@ -283,9 +282,4 @@ a, a:link, a:visited
     width:180px;
     height:auto;
     margin-bottom:30px;
-}
-.view{
-    width:780px;
-    margin-left:auto;
-    margin-right:auto;
 }

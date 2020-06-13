@@ -1254,27 +1254,6 @@ namespace BP.Sys
                     }
                     this.RunSQL(sql);
                 }
-
-                //if (this.SrcType == Sys.SrcType.SQL)
-                //{
-                //    //暂时这样处理
-                //    string sql = "CREATE VIEW " + this.No + " (";
-                //    sql += "[No],";
-                //    sql += "[Name]";
-                //    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
-                //    sql += " AS ";
-                //    sql += this.SelectStatement;
-
-                //    if (Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
-                //    {
-                //        sql = sql.Replace("[", "`").Replace("]", "`");
-                //    }
-                //    else
-                //    {
-                //        sql = sql.Replace("[", "").Replace("]", "");
-                //    }
-                //    this.RunSQL(sql);
-                //}
             }
             catch (Exception ex)
             {

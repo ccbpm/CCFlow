@@ -4959,6 +4959,7 @@ namespace BP.WF
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    
                 }
                 else
                 {
@@ -4968,9 +4969,11 @@ namespace BP.WF
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
 
 
                 }
+                
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
@@ -9424,9 +9427,9 @@ namespace BP.WF
             get
             {
                 //如果当前的节点是按照ccbpm定义的方式运行的，就返回当前节点的多人待办模式，否则就返回自定义的模式。
-                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
-                    return this.HisNode.TodolistModel;
-                return this.HisGenerWorkFlow.TodolistModel;
+                ///if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
+                 return this.HisNode.TodolistModel;
+                //return this.HisGenerWorkFlow.TodolistModel;
             }
         }
         #endregion

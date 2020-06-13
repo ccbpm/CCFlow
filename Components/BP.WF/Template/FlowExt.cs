@@ -388,11 +388,14 @@ namespace BP.WF.Template
                 string sql = "";
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
+                    map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
                     // map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), true);
                 }
-
-                sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='@WebUser.OrgNo'";
-                map.AddDDLSQL(FlowAttr.FK_FlowSort, null, "类别", sql, true);
+                else
+                {
+                    sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='@WebUser.OrgNo'";
+                    map.AddDDLSQL(FlowAttr.FK_FlowSort, null, "类别", sql, true);
+                }
 
                 //map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
                 //map.SetHelperUrl(FlowAttr.FK_FlowSort, "http://ccbpm.mydoc.io/?v=5404&t=17024");

@@ -571,6 +571,17 @@ namespace BP.WF.HttpHandler
                 dr["No"] = "dayu";
                 dr["Name"] = ">大于";
                 dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "xiaoyudengyu";
+                dr["Name"] = " <= 小于等于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "dayudengyu";
+                dr["Name"] = " >= 大于等于";
+                dtOper.Rows.Add(dr);
+
                 dr = dtOper.NewRow();
                 dr["No"] = "xiaoyu";
                 dr["Name"] = "<小于";

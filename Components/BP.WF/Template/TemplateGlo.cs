@@ -105,11 +105,11 @@ namespace BP.WF.Template
         {
             /*创建发送短消息,为默认的消息.*/
             BP.WF.Template.PushMsg pm = new BP.WF.Template.PushMsg();
-            int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.SendSuccess,
+            int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListNode.SendSuccess,
                 PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
             if (i == 0)
             {
-                pm.FK_Event = EventListOfNode.SendSuccess;
+                pm.FK_Event = EventListNode.SendSuccess;
                 pm.FK_Node = nd.NodeID;
                 pm.FK_Flow = nd.FK_Flow;
 
@@ -120,11 +120,11 @@ namespace BP.WF.Template
             }
 
             //设置退回消息提醒.
-            i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter,
+            i = pm.Retrieve(PushMsgAttr.FK_Event, EventListNode.ReturnAfter,
                  PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
             if (i == 0)
             {
-                pm.FK_Event = EventListOfNode.ReturnAfter;
+                pm.FK_Event = EventListNode.ReturnAfter;
                 pm.FK_Node = nd.NodeID;
                 pm.FK_Flow = nd.FK_Flow;
 

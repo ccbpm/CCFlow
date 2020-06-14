@@ -272,7 +272,7 @@ namespace BP.WF.HttpHandler
                     HttpContextHelper.UploadFile(file, realSaveTo);
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
                     if (!string.IsNullOrEmpty(msg))
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -339,7 +339,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
                     if (!string.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
@@ -365,7 +365,7 @@ namespace BP.WF.HttpHandler
                     //  fu.SaveAs(temp);
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
                     if (string.IsNullOrEmpty(msg) == false)
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -468,7 +468,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (!string.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }

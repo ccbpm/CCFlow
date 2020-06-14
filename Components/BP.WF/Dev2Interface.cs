@@ -1330,9 +1330,8 @@ namespace BP.WF
                 throw new Exception("err@登录信息丢失.");
 
             string wfStateSql = "";
-            if (DataType.IsNullOrEmpty(showWhat) == true)
-                wfStateSql = " A.WFState!=" + (int)WFState.Batch;
-            else
+
+            if (DataType.IsNullOrEmpty(showWhat) == false)
                 wfStateSql = "  A.WFState=" + showWhat;
 
             Paras ps = new Paras();
@@ -1641,11 +1640,11 @@ namespace BP.WF
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0  ORDER BY FK_Flow,ADT DESC ";
                     }
                     else
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  ORDER BY FK_Flow,ADT DESC ";
                     }
 
                     ps.Add("FK_Emp", userNo);
@@ -1654,11 +1653,11 @@ namespace BP.WF
                 {
                     if (BP.WF.Glo.IsEnableTaskPool == true)
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Flow=" + dbstr + "FK_Flow  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND FK_Flow=" + dbstr + "FK_Flow   ORDER BY  ADT DESC ";
                     }
                     else
                     {
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Flow=" + dbstr + "FK_Flow  AND WFState!=" + (int)WFState.Batch + " ORDER BY  ADT DESC ";
+                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND FK_Flow=" + dbstr + "FK_Flow ORDER BY  ADT DESC ";
                     }
 
                     ps.Add("FK_Flow", fk_flow);
@@ -5470,9 +5469,7 @@ namespace BP.WF
             }
 
             if (wfsta == WFState.Delete)
-            {
                 return false;
-            }
 
             //判断是否是客户处理节点. 
             int isGuestNode = int.Parse(dt.Rows[0]["IsGuestNode"].ToString());
@@ -5665,7 +5662,7 @@ namespace BP.WF
                 wls = new GenerWorkerLists(gwf.FID, gwf.FK_Node);
             }
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListOfNode.PressAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListNode.PressAfter);
 
             foreach (GenerWorkerList wl in wls)
             {
@@ -6672,14 +6669,13 @@ namespace BP.WF
                 {
                     switch (str)
                     {
-                        case StartWorkAttr.OID:
-                        case StartWorkAttr.MD5:
-                        case StartWorkAttr.Emps:
-                        case StartWorkAttr.FID:
-                        case StartWorkAttr.FK_Dept:
-                        case StartWorkAttr.PRI:
-                        case StartWorkAttr.Rec:
-                        case StartWorkAttr.Title:
+                        case GERptAttr.OID:
+                        case WorkAttr.MD5:
+                        case WorkAttr.Emps:
+                        case GERptAttr.FID:
+                        case GERptAttr.FK_Dept:
+                        case GERptAttr.Rec:
+                        case GERptAttr.Title:
                             continue;
                         default:
                             break;
@@ -6829,9 +6825,9 @@ namespace BP.WF
             //{
             //    /*如果不是 执行的从已经完成的流程copy.*/
 
-            //    wk.SetValByKey(StartWorkAttr.PFlowNo, PFlowNo);
-            //    wk.SetValByKey(StartWorkAttr.PNodeID, PNodeID);
-            //    wk.SetValByKey(StartWorkAttr.PWorkID, PWorkID);
+            //    wk.SetValByKey(GERptAttr.PFlowNo, PFlowNo);
+            //    wk.SetValByKey(GERptAttr.PNodeID, PNodeID);
+            //    wk.SetValByKey(GERptAttr.PWorkID, PWorkID);
 
             //    rpt.SetValByKey(GERptAttr.PFlowNo, PFlowNo);
             //    rpt.SetValByKey(GERptAttr.PNodeID, PNodeID);
@@ -7060,14 +7056,13 @@ namespace BP.WF
                 {
                     switch (str)
                     {
-                        case StartWorkAttr.OID:
-                        case StartWorkAttr.MD5:
-                        case StartWorkAttr.Emps:
-                        case StartWorkAttr.FID:
-                        case StartWorkAttr.FK_Dept:
-                        case StartWorkAttr.PRI:
-                        case StartWorkAttr.Rec:
-                        case StartWorkAttr.Title:
+                        case GERptAttr.OID:
+                        case WorkAttr.MD5:
+                        case WorkAttr.Emps:
+                        case GERptAttr.FID:
+                        case GERptAttr.FK_Dept:
+                        case GERptAttr.Rec:
+                        case GERptAttr.Title:
                             continue;
                         default:
                             break;
@@ -7263,14 +7258,12 @@ namespace BP.WF
                 {
                     switch (str)
                     {
-                        case StartWorkAttr.OID:
-                        case StartWorkAttr.MD5:
-                        case StartWorkAttr.Emps:
-                        case StartWorkAttr.FID:
-                        case StartWorkAttr.FK_Dept:
-                        case StartWorkAttr.PRI:
-                        case StartWorkAttr.Rec:
-                        case StartWorkAttr.Title:
+                        case GERptAttr.OID:
+                        case WorkAttr.MD5:
+                        case GERptAttr.FID:
+                        case GERptAttr.FK_Dept:
+                        case GERptAttr.Rec:
+                        case GERptAttr.Title:
                             continue;
                         default:
                             break;
@@ -7289,9 +7282,8 @@ namespace BP.WF
                     foreach (MapDtl dtl in wk.HisMapDtls)
                     {
                         if (dt.TableName != dtl.No)
-                        {
                             continue;
-                        }
+
                         //获取dtls
                         GEDtls daDtls = new GEDtls(dtl.No);
                         daDtls.Delete(GEDtlAttr.RefPK, wk.OID); // 清除现有的数据.
@@ -8794,14 +8786,13 @@ namespace BP.WF
                 {
                     switch (str)
                     {
-                        case StartWorkAttr.OID:
-                        case StartWorkAttr.MD5:
-                        case StartWorkAttr.Emps:
-                        case StartWorkAttr.FID:
-                        case StartWorkAttr.FK_Dept:
-                        case StartWorkAttr.PRI:
-                        case StartWorkAttr.Rec:
-                        case StartWorkAttr.Title:
+                        case GERptAttr.OID:
+                        case WorkAttr.MD5:
+                        case WorkAttr.Emps:
+                        case GERptAttr.FID:
+                        case GERptAttr.FK_Dept:
+                        case GERptAttr.Rec:
+                        case GERptAttr.Title:
                             continue;
                         default:
                             break;
@@ -8833,8 +8824,7 @@ namespace BP.WF
 
                 wk.Rec = WebUser.No;
                 // wk.RecText = WebUser.Name;
-                wk.SetValByKey(StartWorkAttr.FK_Dept, WebUser.FK_Dept);
-                wk.BeforeSave();
+                wk.SetValByKey(GERptAttr.FK_Dept, WebUser.FK_Dept);
                 wk.Save();
 
                 #region 保存从表
@@ -8910,7 +8900,7 @@ namespace BP.WF
                     if (rptGe.RetrieveFromDBSources() == 0)
                     {
                         rptGe.SetValByKey("OID", workID);
-                        wn.DoCopyRptWork(wk);
+                        wn.DoCopyWorkToRpt(wk);
 
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                         {
@@ -8936,7 +8926,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        wn.DoCopyRptWork(wk);
+                        wn.DoCopyWorkToRpt(wk);
                         rptGe.Update();
                     }
                 }
@@ -8980,10 +8970,10 @@ namespace BP.WF
                 //        Attrs wkAttrs = wk.EnMap.Attrs;
                 //        foreach (Attr wkattr in wkAttrs)
                 //        {
-                //            if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
-                //                || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
-                //                || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
-                //                || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(GERptAttr.FK_NY) || wkattr.Key.Equals(GERptAttr.FlowEmps)
+                //            if (wkattr.Key.Equals(GERptAttr.OID) || wkattr.Key.Equals(GERptAttr.FID) || wkattr.Key.Equals(GERptAttr.CDT)
+                //                || wkattr.Key.Equals(GERptAttr.RDT) || wkattr.Key.Equals(GERptAttr.MD5) || wkattr.Key.Equals(GERptAttr.Emps)
+                //                || wkattr.Key.Equals(GERptAttr.FK_Dept) || wkattr.Key.Equals(GERptAttr.PRI) || wkattr.Key.Equals(GERptAttr.Rec)
+                //                || wkattr.Key.Equals(GERptAttr.Title) || wkattr.Key.Equals(GERptAttr.FK_NY) || wkattr.Key.Equals(GERptAttr.FlowEmps)
                 //                || wkattr.Key.Equals(GERptAttr.FlowStarter) || wkattr.Key.Equals(GERptAttr.FlowStartRDT) || wkattr.Key.Equals(GERptAttr.WFState))
                 //            {
                 //                continue;
@@ -9010,11 +9000,10 @@ namespace BP.WF
                 try
                 {
                     //处理表单保存后.
-                    string s = nd.MapData.DoEvent(FrmEventList.SaveAfter, wk);
-
+                    string s = nd.MapData.DoEvent(EventListFrm.SaveAfter, wk);
 
                     //执行保存前事件.
-                    s += nd.HisFlow.DoFlowEventEntity(EventListOfNode.SaveAfter, nd, wk, null);
+                    s += ExecEvent.DoNode(EventListNode.NodeFrmSaveAfter, workNode, null);
 
                     if (s != null)
                     {
@@ -9157,7 +9146,7 @@ namespace BP.WF
 
             en.SetValByKey("OID", workID);
 
-            md.DoEvent(FrmEventList.SaveBefore, en);
+            md.DoEvent(EventListFrm.SaveBefore, en);
 
             if (i == 0)
             {
@@ -9168,7 +9157,7 @@ namespace BP.WF
                 en.Update();
             }
 
-            md.DoEvent(FrmEventList.SaveAfter, en);
+            md.DoEvent(EventListFrm.SaveAfter, en);
 
 
             if (workDtls != null)
@@ -9208,7 +9197,7 @@ namespace BP.WF
                 }
             }
 
-            md.DoEvent(FrmEventList.SaveAfter, en);
+            md.DoEvent(EventListFrm.SaveAfter, en);
         }
         /// <summary>
         /// 从任务池里取出来一个子任务
@@ -9601,8 +9590,10 @@ namespace BP.WF
             currWK.OID = gwf.WorkID;
             currWK.Retrieve();
 
+            WorkNode wn = new WorkNode(currWK, hisNode);
+
             //执行加签后的事件.
-            msg += fl.DoFlowEventEntity(EventListOfNode.AskerAfter, hisNode, currWK, null);
+            msg += ExecEvent.DoNode(EventListNode.AskerAfter, wn, null);
 
             return msg;
         }
@@ -9649,8 +9640,9 @@ namespace BP.WF
             wk.OID = workid;
             wk.RetrieveFromDBSources();
 
-            //恢复加签后执行事件
-            info += node.HisFlow.DoFlowEventEntity(EventListOfNode.AskerReAfter, node, wk, null);
+            //恢复加签后执行事件.
+            WorkNode wn = new WorkNode(wk, node);
+            info +=  ExecEvent.DoNode(EventListNode.AskerReAfter, wn, null);
             return info;
         }
         /// <summary>
@@ -9767,13 +9759,14 @@ namespace BP.WF
 
                 //移交后事件 @yuanlina
                 string atPara1 = "@SendToEmpIDs=" + emp.No;
-                info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, work, atPara1);
+
+                info += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
 
                 info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
 
                 //处理移交后发送的消息事件 @yuanlina
                 PushMsgs pms1 = new PushMsgs();
-                pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ShitAfter);
+                pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
                 foreach (PushMsg pm in pms1)
                 {
                     pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.No);
@@ -9814,7 +9807,8 @@ namespace BP.WF
             string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
             //移交后事件 @yuanlina
             string atPara = "@SendToEmpIDs=" + emp.No;
-            inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, work, atPara);
+            WorkNode wn = new WorkNode(work, nd);
+            inf1o += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, wn,null,atPara);
 
 
             return inf1o;
@@ -10118,7 +10112,13 @@ namespace BP.WF
             Work wk = nd.HisWork;
             wk.OID = workid;
             wk.RetrieveFromDBSources();
-            nd.HisFlow.DoFlowEventEntity(EventListOfNode.WhenReadWork, nd, wk, null);
+
+
+            WorkNode wn = new WorkNode(wk, nd);
+            
+            //执行事件.
+            ExecEvent.DoNode(EventListNode.WhenReadWork, wn,null,null);
+            ///nd.HisFlow.DoFlowEventEntity(EventListNode.WhenReadWork, nd, wk, null);
 
         }
         /// <summary>
@@ -10953,10 +10953,8 @@ namespace BP.WF
             DataTable dtDB = DBAccess.RunSQLReturnTable(sqlDB);
             dtDB.TableName = "Port_Emp";
             ds.Tables.Add(dtDB);
-
             return ds;
         }
-
         /// <summary>
         /// 按BindByEmp 方式
         /// </summary>
@@ -11000,9 +10998,7 @@ namespace BP.WF
             foreach (string str in strs)
             {
                 if (DataType.IsNullOrEmpty(str) == true)
-                {
                     continue;
-                }
 
                 SelectAccper en = new SelectAccper();
                 en.MyPK = nodeID + "_" + workid + "_" + str;

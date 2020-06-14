@@ -523,17 +523,17 @@ namespace BP.WF
 			#region 执行事件.
 			switch (eventType)
 			{
-				case EventListOfNode.CreateWorkID: // 节点表单事件。
+				case EventListFlow.FlowOnCreateWorkID: // 节点表单事件。
 					return this.CreateWorkID();
-				case EventListOfNode.FrmLoadAfter: // 节点表单事件。
+				case EventListNode.FrmLoadAfter: // 节点表单事件。
 					return this.FrmLoadAfter();
-				case EventListOfNode.FrmLoadBefore: // 节点表单事件。
+				case EventListNode.FrmLoadBefore: // 节点表单事件。
 					return this.FrmLoadBefore();
-				case EventListOfNode.SaveAfter: // 节点事件 保存后。
+				case EventListNode.NodeFrmSaveAfter: // 节点事件 保存后。
 					return this.SaveAfter();
-				case EventListOfNode.SaveBefore: // 节点事件 - 保存前.。
+				case EventListNode.NodeFrmSaveBefore: // 节点事件 - 保存前.。
 					return this.SaveBefore();
-				case EventListOfNode.SendWhen: // 节点事件 - 发送前。
+				case EventListNode.SendWhen: // 节点事件 - 发送前。
 
 					this.IsStopFlow = false;
 
@@ -548,37 +548,36 @@ namespace BP.WF
 					//返回这个格式, NodeSend 来解析.
 					return "@Info=" + str + "@ToNodeID=" + this.JumpToNodeID + "@ToEmps=" + this.JumpToEmps;
 
-				case EventListOfNode.SendSuccess: // 节点事件 - 发送成功时。
+				case EventListNode.SendSuccess: // 节点事件 - 发送成功时。
 					return this.SendSuccess();
-				case EventListOfNode.SendError: // 节点事件 - 发送失败。
+				case EventListNode.SendError: // 节点事件 - 发送失败。
 					return this.SendError();
-				case EventListOfNode.ReturnBefore: // 节点事件 - 退回前。
+				case EventListNode.ReturnBefore: // 节点事件 - 退回前。
 					return this.ReturnBefore();
-				case EventListOfNode.ReturnAfter: // 节点事件 - 退回后。
+				case EventListNode.ReturnAfter: // 节点事件 - 退回后。
 					return this.ReturnAfter();
-				case EventListOfNode.UndoneBefore: // 节点事件 - 撤销前。
+				case EventListNode.UndoneBefore: // 节点事件 - 撤销前。
 					return this.UndoneBefore();
-				case EventListOfNode.UndoneAfter: // 节点事件 - 撤销后。
+				case EventListNode.UndoneAfter: // 节点事件 - 撤销后。
 					return this.UndoneAfter();
-				case EventListOfNode.ShitAfter:// 节点事件-移交后
+				case EventListNode.ShitAfter:// 节点事件-移交后
 					return this.ShiftAfter();
-				case EventListOfNode.AskerAfter://节点事件 加签后
+				case EventListNode.AskerAfter://节点事件 加签后
 					return this.AskerAfter();
-				case EventListOfNode.AskerReAfter://节点事件加签回复后
+				case EventListNode.AskerReAfter://节点事件加签回复后
 					return this.FlowOverBefore();
-				case EventListOfNode.QueueSendAfter://队列节点发送后
+				case EventListNode.QueueSendAfter://队列节点发送后
 					return this.AskerReAfter();
-				case EventListOfNode.FlowOnCreateWorkID: // 流程事件 -------------------------------------------。
-					return this.FlowOnCreateWorkID();
-				case EventListOfNode.FlowOverBefore: // 流程结束前.。
+			
+				case EventListFlow.FlowOverBefore: // 流程结束前.。
 					return this.FlowOverBefore();
-				case EventListOfNode.FlowOverAfter: // 流程结束后。
+				case EventListFlow.FlowOverAfter: // 流程结束后。
 					return this.FlowOverAfter();
-				case EventListOfNode.BeforeFlowDel: // 流程删除前。
+				case EventListFlow.BeforeFlowDel: // 流程删除前。
 					return this.BeforeFlowDel();
-				case EventListOfNode.AfterFlowDel: // 删除后.
+				case EventListFlow.AfterFlowDel: // 删除后.
 					return this.AfterFlowDel();
-				case EventListOfNode.WorkArrive: // 工作到达时.
+				case EventListNode.WorkArrive: // 工作到达时.
 					return this.WorkArrive();
 				default:
 					throw new Exception("@没有判断的事件类型:" + eventType);

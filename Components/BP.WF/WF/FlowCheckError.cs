@@ -795,7 +795,7 @@ namespace BP.WF
             {
                 switch (attr.KeyOfEn)
                 {
-                    case StartWorkAttr.FK_Dept:
+                    case GERptAttr.FK_Dept:
                         attr.UIContralType = UIContralType.TB;
                         attr.LGType = FieldTypeS.Normal;
                         attr.UIVisible = true;

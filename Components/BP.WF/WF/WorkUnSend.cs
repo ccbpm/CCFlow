@@ -214,12 +214,12 @@ namespace BP.WF
                 case NodeWorkType.WorkFL:
 
                     // 调用撤消发送前事件。
-                   nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
+                    ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wn.HisWork, null);
 
                     BP.WF.Dev2Interface.Node_FHL_KillSubFlow(cancelToNode.FK_Flow, this.FID, this.WorkID); //杀掉子线程.
 
                     // 调用撤消发送前事件。
-                    nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+                    ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork, null);
                       return "KillSubThared@子线程撤销成功.";
                 default:
                     break;
@@ -231,7 +231,7 @@ namespace BP.WF
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。
-            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
+            string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wn.HisWork, null);
 
             #region 删除当前节点数据。
 
@@ -373,7 +373,7 @@ namespace BP.WF
             #endregion
 
             //调用撤消发送后事件。
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
+            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork, null);
 
             if (wnOfCancelTo.HisNode.IsStartNode)
                 return "@撤消执行成功. " + msg;
@@ -444,7 +444,7 @@ namespace BP.WF
                     {
                         Node threadnd = new Node(dr["FK_Node"].ToString());
                         // 调用撤消发送前事件。
-                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, nd.HisWork, null);
+                        ExecEvent.DoNode(EventListNode.UndoneBefore, nd, nd.HisWork, null);
 
                         BP.WF.Dev2Interface.Node_FHL_KillSubFlow(threadnd.FK_Flow, this.WorkID, long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
 
@@ -452,7 +452,7 @@ namespace BP.WF
                         Work work = nd.HisWork;
                         work.OID = this.WorkID;
                         work.NodeID = nd.NodeID;
-                        nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, work, null);
+                        ExecEvent.DoNode(EventListNode.UndoneAfter, nd, work, null);
 
                         toEmps += dr["Emps"].ToString().Replace('@',',');
                     }
@@ -696,7 +696,7 @@ namespace BP.WF
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。
-            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
+            string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wn.HisWork, null);
 
             #region 删除当前节点数据。
             // 删除产生的工作列表。
@@ -833,7 +833,7 @@ namespace BP.WF
             #endregion
             string atPara = "@ToNode=" + cancelToNodeID+ "@SendToEmpIDs="+ todoEmps;
             //调用撤消发送后事件。
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, atPara);
+            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork,null, atPara);
 
             if (wnOfCancelTo.HisNode.IsStartNode)
             {
@@ -888,7 +888,7 @@ namespace BP.WF
             wk.OID = gwf.WorkID;
             wk.RetrieveFromDBSources();
 
-            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wk, null);
+            string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wk, null);
 
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
@@ -924,7 +924,7 @@ namespace BP.WF
             Node cNode = new Node(gwf.FK_Node);
             Work cWork = cNode.HisWork;
             cWork.OID = this.WorkID;
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wk, null);
+            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wk, null);
 
             return "@撤消执行成功." + msg;
         }
@@ -965,7 +965,7 @@ namespace BP.WF
             wk.OID = gwf.WorkID;
             wk.RetrieveFromDBSources();
 
-            string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wk, null);
+            string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wk, null);
 
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
@@ -1000,7 +1000,7 @@ namespace BP.WF
             Node cNode = new Node(gwf.FK_Node);
             Work cWork = cNode.HisWork;
             cWork.OID = this.WorkID;
-            msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wk, null);
+            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wk, null);
             if (cNode.IsStartNode)
             {
 
@@ -1133,7 +1133,7 @@ namespace BP.WF
                 return "@您不能执行撤消发送，因为当前工作不是您发送的。";
 
             // 处理事件。
-            string msg = wn.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, wn.HisNode, wn.HisWork, null);
+            string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, wn.HisNode, wn.HisWork, null);
 
             // 删除工作者。
             DeleteSpanNodesGenerWorkerListData();
@@ -1165,7 +1165,7 @@ namespace BP.WF
             #endregion
 
             // 处理事件。
-            msg += wn.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, wn.HisNode, wn.HisWork, null);
+            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, wn.HisNode, wn.HisWork, null);
 
             // 记录日志..
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, "无");

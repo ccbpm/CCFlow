@@ -638,8 +638,6 @@ namespace BP.WF
         /// 为平级子流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
         SameLevelSubFlow
-
-
     }
     /// <summary>
     /// 节点工作批处理
@@ -1220,15 +1218,11 @@ namespace BP.WF
         /// <summary>
         /// 冻结
         /// </summary>
-        Fix=9,
-        /// <summary>
-        /// 批处理
-        /// </summary>
-        Batch=10,
+        Fix=9,        
         /// <summary>
         /// 加签回复状态
         /// </summary>
-        AskForReplay=11
+        AskForReplay=10
     }
     /// <summary>
     /// 节点工作类型

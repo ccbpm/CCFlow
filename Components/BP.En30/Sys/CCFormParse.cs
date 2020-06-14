@@ -451,7 +451,7 @@ namespace BP.Sys
                         btn.Text = val == null ? "" : val.Replace(" ", "&nbsp;").Replace("\n", "@");
                         break;
                     case "ButtonEvent":
-                        btn.EventType = val == null ? 0 : int.Parse(val);
+                        btn.EventSource = val == null ? 0 : int.Parse(val);
                         break;
                     case "BtnEventDoc":
                         btn.EventContext = val == null ? "" : val;

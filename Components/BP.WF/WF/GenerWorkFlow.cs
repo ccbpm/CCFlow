@@ -942,6 +942,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 是否可以批处理？
+        /// </summary>
+        public bool IsCanBatch
+        {
+            get
+            {
+                return this.GetParaBoolen("IsCanBatch");
+            }
+            set
+            {
+                this.SetPara("IsCanBatch", value);
+            }
+        }
+        /// <summary>
         /// 状态
         /// </summary>
         public string WFStateText

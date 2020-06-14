@@ -531,7 +531,9 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 事件
+        /// 事件:
+        /// 1.该事件与Node,Flow,MapDtl,MapData一样的算法.
+        /// 2.如果一个业务逻辑有变化，其他的也要变化.
         /// </summary>
         public FrmEvents FrmEvents
         {
@@ -545,7 +547,9 @@ namespace BP.Sys
                 int count = this.GetParaInt("FrmEventsNum", -1);
                 if (count == -1)
                 {
-                    objs = new FrmEvents(this.No);
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+
                     this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
                     this.DirectUpdate();
                     this.SetRefObject("FrmEvents", objs);
@@ -560,7 +564,9 @@ namespace BP.Sys
                 }
                 else
                 {
-                    objs = new FrmEvents(this.No);
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+
                     this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
                     this.SetRefObject("FrmEvents", objs);
                 }
@@ -1587,19 +1593,19 @@ namespace BP.Sys
         public string DoEvent(string eventType, Entity en, string atParas = null)
         {
             #region 首先执行通用的事件重载方法.
-            if (FrmEventList.FrmLoadBefore.Equals(eventType) == true)
+            if (EventListFrm.FrmLoadBefore.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_LoadBefore(this.No, en);
 
             //装载之后.
-            if (FrmEventList.FrmLoadAfter.Equals(eventType) == true)
+            if (EventListFrm.FrmLoadAfter.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_FrmLoadAfter(this.No, en);
 
             ///保存之前.
-            if (FrmEventList.SaveBefore.Equals(eventType) == true)
+            if (EventListFrm.SaveBefore.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_SaveBefore(this.No, en);
 
             //保存之后.
-            if (FrmEventList.SaveAfter.Equals(eventType) == true)
+            if (EventListFrm.SaveAfter.Equals(eventType) == true)
                 BP.En.OverrideFile.FrmEvent_SaveAfter(this.No, en);
             #endregion 首先执行通用的事件重载方法.
 

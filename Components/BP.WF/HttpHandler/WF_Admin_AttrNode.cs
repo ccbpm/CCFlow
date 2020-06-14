@@ -397,7 +397,7 @@ namespace BP.WF.HttpHandler
             msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
             //节点预警
-            if (this.FK_Event == BP.Sys.EventListOfNode.NodeWarning)
+            if (this.FK_Event == BP.Sys.EventListNode.NodeWarning)
             {
                 int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
                 msg.SetPara("NoticeType", noticeType);
@@ -406,7 +406,7 @@ namespace BP.WF.HttpHandler
             }
 
             //节点逾期
-            if (this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+            if (this.FK_Event == BP.Sys.EventListNode.NodeOverDue)
             {
                 int noticeType = Convert.ToInt32(HttpContextHelper.RequestParams("RB_NoticeType").Replace("RB_NoticeType", ""));
                 msg.SetPara("NoticeType", noticeType);

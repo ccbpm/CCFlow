@@ -10,236 +10,8 @@ using BP.Web;
 
 namespace BP.Sys
 {
-    /// <summary>
-    /// 消息控制方式
-    /// </summary>
-    public enum MsgCtrl
-    {
-        /// <summary>
-        /// bufasong 
-        /// </summary>
-        None,
-        /// <summary>
-        /// 按照设置计算
-        /// </summary>
-        BySet,
-        /// <summary>
-        /// 按照表单的是否发送字段计算，字段:IsSendMsg
-        /// </summary>
-        ByFrmIsSendMsg,
-        /// <summary>
-        /// 按照SDK参数计算.
-        /// </summary>
-        BySDK
-    }
-    public enum EventDoType
-    {
-        /// <summary>
-        /// 禁用
-        /// </summary>
-        Disable = 0,
-        /// <summary>
-        /// 执行存储过程
-        /// </summary>
-        SP = 1,
-        /// <summary>
-        /// 运行SQL
-        /// </summary>
-        SQL = 2,
-        /// <summary>
-        /// 自定义URL
-        /// </summary>
-        URLOfSelf = 3,
-        /// <summary>
-        /// 自定义WS
-        /// </summary>
-        WSOfSelf = 4,
-        /// <summary>
-        /// 执行ddl文件的类与方法
-        /// </summary>
-        SpecClass = 5,
-        /// <summary>
-        /// 基类
-        /// </summary>
-        EventBase = 6,
-        /// <summary>
-        /// 执行的业务单元
-        /// </summary>
-        BuessUnit = 7
-    }
-    public class FrmEventList
-    {
-        /// <summary>
-        /// 表单载入前
-        /// </summary>
-        public const string FrmLoadBefore = "FrmLoadBefore";
-        /// <summary>
-        /// 表单载入后
-        /// </summary>
-        public const string FrmLoadAfter = "FrmLoadAfter";
-        /// <summary>
-        /// 表单保存前
-        /// </summary>
-        public const string SaveBefore = "SaveBefore";
-        /// <summary>
-        /// 表单保存后
-        /// </summary>
-        public const string SaveAfter = "SaveAfter";
-        /// <summary>
-        /// 创建OID
-        /// </summary>
-        public const string CreateOID = "CreateOID";
-        /// <summary>
-        /// 附件上传前
-        /// </summary>
-        public const string AthUploadeBefore = "AthUploadeBefore";
-        /// <summary>
-        /// 上传后.
-        /// </summary>
-        public const string AthUploadeAfter = "AthUploadeAfter";
-        /// <summary>
-        /// 从表保存前
-        /// </summary>
-        public const string DtlRowSaveBefore = "DtlRowSaveBefore";
-        /// <summary>
-        /// 从表保存后
-        /// </summary>
-        public const string DtlRowSaveAfter = "DtlRowSaveAfter";
-    }
-    public class FrmEventListDtl
-    {
-        /// <summary>
-        /// 从表保存前
-        /// </summary>
-        public const string RowSaveBefore = "DtlRowSaveBefore";
-        /// <summary>
-        /// 从表保存后
-        /// </summary>
-        public const string RowSaveAfter = "DtlRowSaveAfter";
-
-        /// <summary>
-        /// 从表保存前
-        /// </summary>
-        public const string DtlRowDelBefore = "DtlRowDelBefore";
-        /// <summary>
-        /// 从表保存后
-        /// </summary>
-        public const string DtlRowDelAfter = "DtlRowDelAfter";
-
-    }
-    /// <summary>
-    /// 事件标记列表
-    /// </summary>
-    public class EventListOfNode : FrmEventList
-    {
-        #region 节点事件
-        /// <summary>
-        /// 创建工作ID
-        /// </summary>
-        public const string CreateWorkID = "CreateWorkID";
-        /// <summary>
-        /// 节点发送前
-        /// </summary>
-        public const string SendWhen = "SendWhen";
-        /// <summary>
-        /// 工作到达
-        /// </summary>
-        public const string WorkArrive = "WorkArrive";
-        /// <summary>
-        /// 节点发送成功后
-        /// </summary>
-        public const string SendSuccess = "SendSuccess";
-        /// <summary>
-        /// 节点发送失败后
-        /// </summary>
-        public const string SendError = "SendError";
-        /// <summary>
-        /// 当节点退回前
-        /// </summary>
-        public const string ReturnBefore = "ReturnBefore";
-        /// <summary>
-        /// 当节点退后
-        /// </summary>
-        public const string ReturnAfter = "ReturnAfter";
-        /// <summary>
-        /// 当节点撤销发送前
-        /// </summary>
-        public const string UndoneBefore = "UndoneBefore";
-        /// <summary>
-        /// 当节点撤销发送后
-        /// </summary>
-        public const string UndoneAfter = "UndoneAfter";
-        /// <summary>
-        /// 当前节点移交后
-        /// </summary>
-        public const string ShitAfter = "ShitAfter";
-        /// <summary>
-        /// 节点催办后
-        /// </summary>
-        public const string PressAfter = "PressAfter";
-        /// <summary>
-        /// 节点抄送后
-        /// </summary>
-        public const string CCAfter = "CCAfter";
-        /// <summary>
-        /// 当节点加签后
-        /// </summary>
-        public const string AskerAfter = "AskerAfter";
-        /// <summary>
-        /// 当节点加签答复后
-        /// </summary>
-        public const string AskerReAfter = "AskerReAfter";
-        /// <summary>
-        /// 队列节点发送后
-        /// </summary>
-        public const string QueueSendAfter = "QueueSendAfter";
-        /// <summary>
-        /// 节点打开后.
-        /// </summary>
-        public const string WhenReadWork = "WhenReadWork";
-        /// <summary>
-        /// 节点预警
-        /// </summary>
-        public const string NodeWarning = "NodeWarning";
-        /// <summary>
-        /// 节点逾期
-        /// </summary>
-        public const string NodeOverDue = "NodeOverDue";
-        /// <summary>
-        /// 流程预警
-        /// </summary>
-        public const string FlowWarning = "FlowWarning";
-        /// <summary>
-        /// 流程逾期
-        /// </summary>
-        public const string FlowOverDue = "FlowOverDue";
-
-
-        #endregion 节点事件
-
-        #region 流程事件
-        /// <summary>
-        /// 当创建workid的时候.
-        /// </summary>
-        public const string FlowOnCreateWorkID = "FlowOnCreateWorkID";
-        /// <summary>
-        /// 流程完成时.
-        /// </summary>
-        public const string FlowOverBefore = "FlowOverBefore";
-        /// <summary>
-        /// 结束后.
-        /// </summary>
-        public const string FlowOverAfter = "FlowOverAfter";
-        /// <summary>
-        /// 流程删除前
-        /// </summary>
-        public const string BeforeFlowDel = "BeforeFlowDel";
-        /// <summary>
-        /// 流程删除后
-        /// </summary>
-        public const string AfterFlowDel = "AfterFlowDel";
-        #endregion 流程事件
-    }
+   
+    
     /// <summary>
     /// 事件属性
     /// </summary>
@@ -261,6 +33,10 @@ namespace BP.Sys
         /// 节点ID
         /// </summary>
         public const string FK_Node = "FK_Node";
+        /// <summary>
+        /// 事件源
+        /// </summary>
+        public const string EventSource = "EventSource";
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -600,19 +376,19 @@ namespace BP.Sys
                     return str;
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.SendSuccess:
                         return "新工作@Title,发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         return "移交来的新工作@Title,移交人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         return "被退回来@Title,退回人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         return "工作被撤销@Title,发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.AskerReAfter:
+                    case EventListNode.AskerReAfter:
                         return "加签新工作@Title,发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.AfterFlowDel:
+                    case EventListFlow.AfterFlowDel:
                         return "工作流程被删除@Title,发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.FlowOverAfter:
+                    case EventListFlow.FlowOverAfter:
                         return "流程结束@Title,发送人@WebUser.No,@WebUser.Name";
                     default:
                         throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
@@ -662,49 +438,49 @@ namespace BP.Sys
                     return str;
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.SendSuccess:
                         str += "\t\n您好:";
                         str += "\t\n    有新工作@Title需要您处理, 点击这里打开工作{Url} .";
                         str += "\t\n致! ";
                         str += "\t\n    @WebUser.No, @WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         str += "\t\n您好:";
                         str += "\t\n    工作@Title被退回来了, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作@Title, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作@Title, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.AskerReAfter: //加签.
+                    case EventListNode.AskerReAfter: //加签.
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作@Title, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.AfterFlowDel: //流程删除
+                    case EventListFlow.AfterFlowDel: //流程删除
                         str += "\t\n您好:";
                         str += "\t\n    被删除的工作@Title.";
                         str += "\t\n 致! ";
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.FlowOverAfter: //流程结束
+                    case EventListFlow.FlowOverAfter: //流程结束
                         str += "\t\n您好:";
                         str += "\t\n    工作@Title已经结束，点击这里查看工作{Url}.";
                         str += "\t\n 致! ";
@@ -760,19 +536,19 @@ namespace BP.Sys
 
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.SendSuccess:
                         str = "有新工作@Title需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         str = "工作@Title被退回,退回人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         str = "移交工作@Title,移交人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         str = "工作撤销@Title,撤销人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
-                    case EventListOfNode.AskerReAfter: //加签.
+                    case EventListNode.AskerReAfter: //加签.
                         str = "工作加签@Title,加签人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
                     default:
@@ -817,32 +593,32 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_FrmEvent", "事件");
+                Map map = new Map("Sys_FrmEvent", "外部自定义事件(表单，从表，流程，节点)");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.IndexField = FrmEventAttr.FK_MapData; 
-
+                map.IndexField = FrmEventAttr.FK_MapData;
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);
-                map.AddTBString(FrmEventAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 10);
+                //0=表单事件,1=流程，2=节点事件.
+                map.AddTBInt(FrmEventAttr.EventSource, 0, "事件类型", true, true);
+                map.AddTBString(FrmEventAttr.FK_Event, null, "事件标记", true, true, 0, 400, 10);
+
+                //事件类型的主键.
+                map.AddTBString(FrmEventAttr.FK_MapData, null, "表单ID(包含Dtl表)", true, true, 0, 100, 10);
                 map.AddTBString(FrmEventAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
-                map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件类型", true, true);
-              //  map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
-
+                //执行内容. EventDoType 0=SQL,1=URL.... 
+                map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件执行类型", true, true);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
-
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgError, null, "异常信息提示", true, true, 0, 400, 10);
 
                 #region 消息设置. 如下属性放入了节点参数信息了.
                 map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
                     "@0=不发送@1=按设置的下一步接受人自动发送（默认）@2=由本节点表单系统字段(IsSendEmail,IsSendSMS)来决定@3=由SDK开发者参数(IsSendEmail,IsSendSMS)来决定", true);
-
 
                 map.AddBoolean(FrmEventAttr.MailEnable, true, "是否启用邮件发送？(如果启用就要设置邮件模版，支持ccflow表达式。)", true, true, true);
                 map.AddTBString(FrmEventAttr.MailTitle, null, "邮件标题模版", true, false, 0, 200, 20, true);
@@ -856,7 +632,6 @@ namespace BP.Sys
 
                 //参数属性
                 map.AddTBAtParas(4000);
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -1090,7 +865,7 @@ namespace BP.Sys
                     doc = doc.Replace("@" + s, ap.GetValStrByKey(s));
             }
 
-            if (dotype == FrmEventList.FrmLoadBefore)
+            if (dotype == EventListFrm.FrmLoadBefore)
                 en.Retrieve(); /*如果不执行，就会造成实体的数据与查询的数据不一致.*/
 
             switch (nev.HisDoType)
@@ -1206,11 +981,11 @@ namespace BP.Sys
 
                         try
                         {
-                            r.Add("EventType", nev.FK_Event);
+                            r.Add("EventSource", nev.FK_Event);
                         }
                         catch
                         {
-                            r["EventType"] = nev.FK_Event;
+                            r["EventSource"] = nev.FK_Event;
                         }
 
                         if (atPara != null)
@@ -1506,11 +1281,9 @@ namespace BP.Sys
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
-
         public FrmEvents(int nodeID,string fk_flow)
         {
             QueryObject qo = new QueryObject(this);
-
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.addOr();
             qo.addLeftBracket();

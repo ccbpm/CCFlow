@@ -265,7 +265,7 @@ namespace BP.Frm
             }
 
             //执行保存前事件
-            md.DoEvent(FrmEventList.SaveBefore, rpt, null);
+            md.DoEvent(EventListFrm.SaveBefore, rpt, null);
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Editing);
@@ -274,7 +274,7 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
 
             //执行保存后事件
-            md.DoEvent(FrmEventList.SaveAfter, rpt, null);
+            md.DoEvent(EventListFrm.SaveAfter, rpt, null);
             return str;
         }
 
@@ -297,7 +297,7 @@ namespace BP.Frm
             }
 
             //执行保存前事件
-            md.DoEvent(FrmEventList.SaveBefore, rpt, null);
+            md.DoEvent(EventListFrm.SaveBefore, rpt, null);
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Over);
@@ -306,7 +306,7 @@ namespace BP.Frm
             string str = BP.Frm.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
 
             //执行保存后事件
-            md.DoEvent(FrmEventList.SaveAfter, rpt, null);
+            md.DoEvent(EventListFrm.SaveAfter, rpt, null);
             return str;
         }
 

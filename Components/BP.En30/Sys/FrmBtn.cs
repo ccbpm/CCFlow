@@ -132,7 +132,7 @@ namespace BP.Sys
         /// </summary>
         public const string UACContext = "UACContext";
         /// <summary>
-        /// 是否粗体
+        /// 事件类型
         /// </summary>
         public const string EventType = "EventType";
         /// <summary>
@@ -161,7 +161,6 @@ namespace BP.Sys
     /// </summary>
     public class FrmBtn : EntityMyPK
     {
-
         #region 属性
         /// <summary>
         /// 所在的分组

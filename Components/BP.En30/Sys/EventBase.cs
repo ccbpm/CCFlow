@@ -71,11 +71,11 @@ namespace BP.Sys
         /// <summary>
         /// 事件类型
         /// </summary>
-        public string EventType
+        public string EventSource
         {
             get
             {
-                return this.GetValStr("EventType");
+                return this.GetValStr("EventSource");
             }
         }
       

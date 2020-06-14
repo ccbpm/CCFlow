@@ -387,14 +387,6 @@ namespace BP.WF
 
         #region  公共方法
         /// <summary>
-        /// 直接的保存前要做的工作
-        /// </summary>
-        public virtual void BeforeSave()
-        {
-            // 执行保存前的事件。
-            this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.HisNode, this.HisNode.HisWork, "@WorkID=" + this.OID + "@FID=" + this.FID);
-        }
-        /// <summary>
         /// 直接的保存
         /// </summary>
         public new void DirectSave()

@@ -1521,7 +1521,7 @@ namespace BP.WF
                     list.Update();
                 }
                 PushMsgs pms = new PushMsgs();
-                pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
+                pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
                 if (pms.Count > 0)
                 {
@@ -1591,7 +1591,7 @@ namespace BP.WF
             string basePath = BP.WF.Glo.HostURL;
 
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListOfNode.CCAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
             string mailTemp = BP.DA.DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)

@@ -6,6 +6,84 @@ using System.Text;
 namespace BP.Sys
 {
     /// <summary>
+    /// 消息控制方式
+    /// </summary>
+    public enum MsgCtrl
+    {
+        /// <summary>
+        /// bufasong 
+        /// </summary>
+        None,
+        /// <summary>
+        /// 按照设置计算
+        /// </summary>
+        BySet,
+        /// <summary>
+        /// 按照表单的是否发送字段计算，字段:IsSendMsg
+        /// </summary>
+        ByFrmIsSendMsg,
+        /// <summary>
+        /// 按照SDK参数计算.
+        /// </summary>
+        BySDK
+    }
+    /// <summary>
+    /// 事件执行内容
+    /// </summary>
+    public enum EventDoType
+    {
+        /// <summary>
+        /// 禁用
+        /// </summary>
+        Disable = 0,
+        /// <summary>
+        /// 执行存储过程
+        /// </summary>
+        SP = 1,
+        /// <summary>
+        /// 运行SQL
+        /// </summary>
+        SQL = 2,
+        /// <summary>
+        /// 自定义URL
+        /// </summary>
+        URLOfSelf = 3,
+        /// <summary>
+        /// 自定义WS
+        /// </summary>
+        WSOfSelf = 4,
+        /// <summary>
+        /// 执行ddl文件的类与方法
+        /// </summary>
+        SpecClass = 5,
+        /// <summary>
+        /// 基类
+        /// </summary>
+        EventBase = 6,
+        /// <summary>
+        /// 执行的业务单元
+        /// </summary>
+        BuessUnit = 7
+    }
+    /// <summary>
+    /// 事件类型
+    /// </summary>
+    public enum EventSource
+    {
+        /// <summary>
+        /// 表单
+        /// </summary>
+        Frm,
+        /// <summary>
+        /// 流程
+        /// </summary>
+        Flow,
+        /// <summary>
+        /// 节点
+        /// </summary>
+        Node
+    }
+    /// <summary>
     /// 从表显示模式
     /// </summary>
     public enum ListShowModel

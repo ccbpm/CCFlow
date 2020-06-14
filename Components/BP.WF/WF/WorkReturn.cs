@@ -206,7 +206,7 @@ namespace BP.WF
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
 
             //如果事件返回的信息不是null，就终止执行。
-            string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, this.HisWork, atPara);
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork,null,atPara);
             if (msg != null)
                 return msg;
 
@@ -327,7 +327,7 @@ namespace BP.WF
             Work work = this.HisWork;
             work.OID = this.WorkID;
             //退回后事件
-            string text = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, work, atPara);
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, work,null, atPara);
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
             // 返回退回信息.
@@ -418,7 +418,7 @@ namespace BP.WF
 
             //退回后发送的消息事件 @yuanlina
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisWork;
             work.OID = gwfP.WorkID;
             work.NodeID = this.HisNode.NodeID;
@@ -692,7 +692,7 @@ namespace BP.WF
 
             //退回消息事件 @yuanlina
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.UndoneAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.UndoneAfter);
             foreach (PushMsg pm in pms)
             {
                 pm.DoSendMessage(this.HisNode, this.HisNode.HisWork, null, null, null, returnEmp);
@@ -850,7 +850,7 @@ namespace BP.WF
 
             //退回消息事件 @yuanlina
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisNode.HisWork;
             work.OID = this.WorkID;
             foreach (PushMsg pm in pms)
@@ -940,7 +940,7 @@ namespace BP.WF
 
             //退回消息事件 @yuanlina
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisNode.HisWork;
             work.OID = this.WorkID;
             foreach (PushMsg pm in pms)
@@ -1012,7 +1012,7 @@ namespace BP.WF
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
 
             //如果事件返回的信息不是null，就终止执行。
-            string msg = fl.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, rpt,
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork,null,
                 atPara);
             if (!String.IsNullOrEmpty(msg)) // 2019-08-28 zl。原来是 if(msg!=null)。返回空字符串表示执行成功，不应该终止。
                 return msg;
@@ -1195,12 +1195,12 @@ namespace BP.WF
 
 
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
-            // string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
+            // string text = fl.DoFlowEventEntity(EventListNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
 
             // 把消息
             atPara += "@SendToEmpIDs=" + gwl.FK_Emp;
 
-            string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt, atPara);
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
             if (text == null)
                 text = "";
 

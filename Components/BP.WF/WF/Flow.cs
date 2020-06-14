@@ -186,6 +186,22 @@ namespace BP.WF
 
         #region 基础属性.
         /// <summary>
+        /// 消息推送.
+        /// </summary>
+        public PushMsgs HisPushMsgs
+        {
+            get
+            {
+                PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
+                if (obj == null)
+                {
+                    obj = new PushMsgs(this.No);
+                    this.SetRefObject("PushMsg", obj);
+                }
+                return obj;
+            }
+        }
+        /// <summary>
         /// 流程事件实体
         /// </summary>
         public string FlowEventEntity
@@ -653,7 +669,7 @@ namespace BP.WF
             BP.WF.Node nd = new BP.WF.Node(this.StartNodeID);
 
             //从草稿里看看是否有新工作？
-            StartWork wk = (StartWork)nd.HisWork;
+            Work wk =nd.HisWork;
             try
             {
                 wk.ResetDefaultVal();
@@ -726,8 +742,8 @@ namespace BP.WF
                     wk.ResetDefaultVal();
                     wk.Rec = WebUser.No;
 
-                    wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
-                    wk.SetValByKey(StartWorkAttr.Emps, emp.No);
+                 //   wk.SetValByKey(GERptAttr.RecText, emp.Name);
+                  //  wk.SetValByKey(GERptAttr.Emps, emp.No);
 
                     //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
                     // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
@@ -820,8 +836,7 @@ namespace BP.WF
                     }
 
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
-                    this.DoFlowEventEntity(EventListOfNode.FlowOnCreateWorkID, nd, wk, null);
-
+                    ExecEvent.DoFlow(EventListFlow.FlowOnCreateWorkID,  wk, nd, null);
                 }
 
                 if (wk.OID != 0)
@@ -847,7 +862,7 @@ namespace BP.WF
             }
 
             //在创建WorkID的时候调用的事件.
-            this.DoFlowEventEntity(EventListOfNode.CreateWorkID, nd, wk, null);
+            ExecEvent.DoFlow(EventListFlow.FlowOnCreateWorkID, wk, nd, null);
 
             #region copy数据.
             // 记录这个id ,不让其它在复制时间被修改。
@@ -1049,9 +1064,9 @@ namespace BP.WF
                 {
                     /*如果不是 执行的从已经完成的流程copy.*/
 
-                    wk.SetValByKey(StartWorkAttr.PFlowNo, PFlowNo);
-                    wk.SetValByKey(StartWorkAttr.PNodeID, PNodeID);
-                    wk.SetValByKey(StartWorkAttr.PWorkID, PWorkID);
+                    wk.SetValByKey(GERptAttr.PFlowNo, PFlowNo);
+                    wk.SetValByKey(GERptAttr.PNodeID, PNodeID);
+                    wk.SetValByKey(GERptAttr.PWorkID, PWorkID);
 
                     rpt.SetValByKey(GERptAttr.PFlowNo, PFlowNo);
                     rpt.SetValByKey(GERptAttr.PNodeID, PNodeID);
@@ -1271,7 +1286,7 @@ namespace BP.WF
                 //wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
                 //wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
                 wk.FID = 0;
-                // wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
+                // wk.SetValByKey(GERptAttr.RecText, emp.Name);
 
                 int jumpNodeID = int.Parse(paras["JumpToNode"].ToString());
                 Node jumpNode = new Node(jumpNodeID);
@@ -1298,7 +1313,7 @@ namespace BP.WF
             //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
             // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
             wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
-            wk.FK_Dept = emp.FK_Dept;
+            wk.SetValByKey("FK_Dept", emp.FK_Dept);
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
             wk.SetValByKey("FK_DeptText", emp.FK_DeptText);
 
@@ -1306,7 +1321,6 @@ namespace BP.WF
                 wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
 
             wk.FID = 0;
-            wk.SetValByKey(StartWorkAttr.RecText, emp.Name);
             if (wk.IsExits == false)
                 wk.DirectInsert();
             else
@@ -3025,7 +3039,7 @@ namespace BP.WF
             {
                 switch (attr.KeyOfEn)
                 {
-                    case StartWorkAttr.FK_Dept:
+                    case GERptAttr.FK_Dept:
                         attr.UIContralType = UIContralType.TB;
                         attr.LGType = FieldTypeS.Normal;
                         attr.UIVisible = true;
@@ -3522,143 +3536,17 @@ namespace BP.WF
         #endregion 其他公用方法1
 
         #region 执行流程事件.
-        /// <summary>
-        /// 执行运动事件
-        /// </summary>
-        /// <param name="doType">事件类型</param>
-        /// <param name="currNode">当前节点</param>
-        /// <param name="en">实体</param>
-        /// <param name="atPara">参数</param>
-        /// <param name="objs">发送对象，可选</param>
-        /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs
-            objs, int toNodeID = 0, string toEmps = null)
-        {
-            if (currNode == null)
-                return null;
-
-            string str = null;
-            if (this.FEventEntity == null)
-            {
-                /* 如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法. */
-                //if (doType == EventListOfNode.SendSuccess)
-                //{
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.SendSuccess(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
-
-                //if (doType == EventListOfNode.SendWhen)
-                //{
-                //    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.SendWhen(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
-
-                //if (doType == EventListOfNode.FlowOverBefore)
-                //{
-                //    /*如果是发送成功了, 并且在没有任何设置的情况下，就执行默认的方法.*/
-                //    CCInterface.PortalInterfaceSoapClient soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //    soap.FlowOverBefore(currNode.FK_Flow, currNode.NodeID, Int64.Parse(en.PKVal.ToString()), BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                //}
-            }
-
-            if (this.FEventEntity != null)
-            {
-                this.FEventEntity.SendReturnObjs = objs;
-                str = this.FEventEntity.DoIt(doType, currNode, en, atPara, toNodeID, toEmps);
-            }
-
-            if (doType == EventListOfNode.SendSuccess)
-            {
-
-                int i = 100;
-
-                //  throw new Exception("ss@xxx");
-            }
-
-            FrmEvents fes = currNode.FrmEvents;
-            //增加对流程事件的支持，流程事件时，FrmEvent.FK_MapData=FK_Flow，added by liuxc,2017-05-20
-            switch (doType)
-            {
-                case EventListOfNode.FlowOverAfter:
-                case EventListOfNode.FlowOverBefore:
-                case EventListOfNode.AfterFlowDel:
-                case EventListOfNode.BeforeFlowDel:
-                    if (fes.GetEntityByKey(FrmEventAttr.FK_Event, doType) == null)
-                    {
-                        FrmEvents flowEvents = new FrmEvents();
-                        flowEvents.Retrieve(FrmEventAttr.FK_MapData, this.No);
-                        fes.AddEntities(flowEvents);
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            // 2019-08-27 取消节点事件 zl
-            if (str == null)
-                str = fes.DoEventNode(doType, en, atPara);
-
-            #region 处理消息推送, edit  by zhoupeng for dengzhou gov project. 2016.05.01
-            //有一些事件没有消息，直接 return ;
-            switch (doType)
-            {
-                case EventListOfNode.WorkArrive:
-                case EventListOfNode.SendSuccess:
-                case EventListOfNode.ShitAfter:
-                case EventListOfNode.ReturnAfter:
-                case EventListOfNode.UndoneAfter:
-                case EventListOfNode.AskerReAfter:
-                case EventListOfNode.FlowOverAfter: //流程结束后.
-                    break;
-                default:
-                    return str;
-            }
-
-            //执行消息的发送.
-            PushMsgs pms = currNode.HisPushMsgs;
-            if (doType == EventListOfNode.UndoneAfter)
-            {
-                AtPara ap = new AtPara(atPara);
-                if (toNodeID == 0)
-                    toNodeID = ap.GetValIntByKey("ToNode");
-                if (toNodeID == 0)
-                    return str;
-
-                Node toNode = new Node(toNodeID);
-                pms = toNode.HisPushMsgs;
-            }
-            string msgAlert = ""; //生成的提示信息.
-            foreach (PushMsg item in pms)
-            {
-                if (item.FK_Event != doType)
-                    continue;
-
-                if (item.SMSPushWay == 0)
-                    continue; /* 如果都没有消息设置，就放过.*/
-
-                //执行发送消息.
-                msgAlert += item.DoSendMessage(currNode, en, atPara, objs);
-            }
-            return str + msgAlert;
-            #endregion 处理消息推送.
-
-            return str;
-        }
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara)
-        {
-            string str = this.DoFlowEventEntity(doType, currNode, en, atPara, null);
-            return str;
-        }
         private BP.WF.FlowEventBase _FDEventEntity = null;
         /// <summary>
         /// 节点实体类，没有就返回为空.
         /// </summary>
-        private BP.WF.FlowEventBase FEventEntity
+        public BP.WF.FlowEventBase FEventEntity
         {
             get
             {
-                if (_FDEventEntity == null && this.FlowMark != "" && this.FlowEventEntity != "")
+                if (_FDEventEntity == null 
+                    && DataType.IsNullOrEmpty(this.FlowMark)==false 
+                    && DataType.IsNullOrEmpty(this.FlowEventEntity) ==false)
                     _FDEventEntity = BP.WF.Glo.GetFlowEventEntityByEnName(this.FlowEventEntity);
                 return _FDEventEntity;
             }
@@ -4059,6 +3947,48 @@ namespace BP.WF
             set
             {
                 _HisNodes = value;
+            }
+        }
+        /// <summary>
+        /// 事件:
+        /// 1.该事件与Node,Flow,MapDtl,MapData一样的算法.
+        /// 2.如果一个业务逻辑有变化，其他的也要变化.
+        /// </summary>
+        public FrmEvents FrmEvents
+        {
+            get
+            {
+                //判断内存是否有？.
+                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
+                if (objs != null)
+                    return objs; //如果缓存有值，就直接返回.
+
+                int count = this.GetParaInt("FrmEventsNum", -1);
+                if (count == -1)
+                {
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_Flow, this.No);
+
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.DirectUpdate();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
+                }
+
+                if (count == 0)
+                {
+                    objs = new FrmEvents();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
+                }
+                else
+                {
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_Flow, this.No);
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.SetRefObject("FrmEvents", objs);
+                }
+                return objs;
             }
         }
         /// <summary>

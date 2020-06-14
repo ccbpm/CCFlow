@@ -4667,11 +4667,11 @@ namespace BP.WF
                 {
                     case WorkAttr.MD5:
                     case WorkAttr.Rec:
-                    case StartWorkAttr.Title:
-                    case StartWorkAttr.Emps:
-                    case StartWorkAttr.FK_Dept:
-                    case StartWorkAttr.PRI:
-                    case StartWorkAttr.FID:
+                    case GERptAttr.Title:
+                   // case GERptAttr.Emps:
+                    case GERptAttr.FK_Dept:
+                    //case GERptAttr.PRI:
+                    case GERptAttr.FID:
                         continue;
                     default:
                         break;
@@ -4803,7 +4803,7 @@ namespace BP.WF
                 }
 
                 wk.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                //  wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                //  wk.SetValByKey(GERptAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
                 // wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 wk.Update();
 
@@ -4947,7 +4947,7 @@ namespace BP.WF
                     wk.SetValByKey(dc.ColumnName.Trim(), dr[dc.ColumnName].ToString().Trim());
 
                 wk.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                //wk.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                //wk.SetValByKey(GERptAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
                 //wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 //wk.SetValByKey(WorkAttr.MyNum, 1);
                 wk.Update();
@@ -4976,7 +4976,7 @@ namespace BP.WF
                     wkEnd.SetValByKey(dc.ColumnName.Trim(), dr[dc.ColumnName].ToString().Trim());
 
                 wkEnd.SetValByKey(WorkAttr.Rec, BP.Web.WebUser.No);
-                //wkEnd.SetValByKey(StartWorkAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                //wkEnd.SetValByKey(GERptAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
                 //wkEnd.SetValByKey("FK_NY", DataType.CurrentYearMonth);
                 //wkEnd.SetValByKey(WorkAttr.MyNum, 1);
                 wkEnd.Update();
@@ -6677,96 +6677,7 @@ namespace BP.WF
             return true;
         }
 
-        /// <summary>
-        /// 当要发送是检查流程是否可以允许发起.
-        /// </summary>
-        /// <param name="flow">流程</param>
-        /// <param name="wk">开始节点工作</param>
-        /// <returns></returns>
-        public static bool CheckIsCanStartFlow_SendStartFlow(Flow flow, Work wk)
-        {
-            StartLimitRole role = flow.StartLimitRole;
-            if (role == StartLimitRole.None)
-                return true;
-
-            string sql = "";
-            string ptable = flow.PTable;
-
-            if (role == StartLimitRole.ColNotExit)
-            {
-                /* 指定的列名集合不存在，才可以发起流程。*/
-
-                //求出原来的值.
-                string[] strs = flow.StartLimitPara.Split(',');
-                string val = "";
-                foreach (string str in strs)
-                {
-                    if (string.IsNullOrEmpty(str) == true)
-                        continue;
-                    try
-                    {
-                        val += wk.GetValStringByKey(str);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@流程设计错误,您配置的检查参数(" + flow.StartLimitPara + "),中的列(" + str + ")已经不存在表单里.");
-                    }
-                }
-
-                //找出已经发起的全部流程.
-                sql = "SELECT " + flow.StartLimitPara + " FROM " + ptable + " WHERE  WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    string v = dr[0] + "" + dr[1] + "" + dr[2];
-                    if (v == val)
-                        return false;
-                }
-                return true;
-            }
-
-            // 配置的sql,执行后,返回结果是 0 .
-            if (role == StartLimitRole.ResultIsZero)
-            {
-                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, wk, null);
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            // 配置的sql,执行后,返回结果是 <> 0 .
-            if (role == StartLimitRole.ResultIsNotZero)
-            {
-                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, wk, null);
-                if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            //为子流程的时候，该子流程只能被调用一次.
-            if (role == StartLimitRole.OnlyOneSubFlow)
-            {
-                sql = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + wk.OID;
-                string pWorkidStr = DBAccess.RunSQLReturnStringIsNull(sql, "0");
-                if (pWorkidStr == "0")
-                    return true;
-
-                sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pWorkidStr + " AND FK_Flow='" + flow.No + "'";
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
-                    return true;
-
-                //  string title = dt.Rows[0]["Title"].ToString();
-                string starter = dt.Rows[0]["Starter"].ToString();
-                string rdt = dt.Rows[0]["RDT"].ToString();
-
-                throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
-            }
-
-            return true;
-        }
+       
 
         /// <summary>
         /// 复制表单权限-从一个节点到另一个节点.
@@ -6930,6 +6841,7 @@ namespace BP.WF
             return result;
         }
         #endregion 其他方法。
+
         #region http请求
         /// <summary>
         /// Http Get请求

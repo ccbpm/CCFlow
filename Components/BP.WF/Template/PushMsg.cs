@@ -251,7 +251,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FK_Event == EventListOfNode.WorkArrive)
+                if (this.FK_Event == EventListNode.WorkArrive)
                 {
                     if (this.MailPushWay == 0)
                         return "不发送";
@@ -263,7 +263,7 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
-                if (this.FK_Event == EventListOfNode.SendSuccess)
+                if (this.FK_Event == EventListNode.SendSuccess)
                 {
                     if (this.MailPushWay == 0)
                         return "不发送";
@@ -275,7 +275,7 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
-                if (this.FK_Event == EventListOfNode.ReturnAfter)
+                if (this.FK_Event == EventListNode.ReturnAfter)
                 {
                     if (this.MailPushWay == 0)
                         return "不发送";
@@ -316,21 +316,21 @@ namespace BP.WF.Template
                     return str;
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.WorkArrive:
+                    case EventListNode.WorkArrive:
                         return "新工作{{Title}},发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.SendSuccess:
                         return "新工作{{Title}},发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         return "移交来的新工作{{Title}},移交人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         return "被退回来{{Title}},退回人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         return "工作被撤销{{Title}},发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.AskerReAfter:
+                    case EventListNode.AskerReAfter:
                         return "加签新工作{{Title}},发送人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.FlowOverAfter:
+                    case EventListFlow.FlowOverAfter:
                         return "流程{{Title}}已经结束,处理人@WebUser.No,@WebUser.Name";
-                    case EventListOfNode.AfterFlowDel:
+                    case EventListFlow.AfterFlowDel:
                         return "流程{{Title}}已经删除,处理人@WebUser.No,@WebUser.Name";
                     default:
                         throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
@@ -391,7 +391,7 @@ namespace BP.WF.Template
                     return str;
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.WorkArrive:
+                    case EventListNode.WorkArrive:
                         str += "\t\n您好:";
                         str += "\t\n    有新工作{{Title}}需要您处理, 点击这里打开工作报告{Url} .";
                         str += "\t\n ";
@@ -400,7 +400,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No, @WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.SendSuccess:
 
                         str += "\t\nHi,您好您有新工作.";
                         str += "\t\n    标题:{{Title}} .";
@@ -412,7 +412,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No, @WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         str += "\t\n您好:";
                         str += "\t\n    工作{{Title}}被退回来了, 点击这里打开工作报告{Url} .";
                         str += "\t\n    退回意见: \t\n ";
@@ -424,7 +424,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         str += "\t\n 您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开工作{Url} .";
                         str += "\t\n 致! ";
@@ -434,7 +434,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开工作报告{Url} .";
                         str += "\t\n ";
@@ -444,7 +444,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.AskerReAfter: //加签.
+                    case EventListNode.AskerReAfter: //加签.
                         str += "\t\n您好:";
                         str += "\t\n    移交给您的工作{{Title}}, 点击这里打开报告{Url} .";
                         str += "\t\n ";
@@ -454,7 +454,7 @@ namespace BP.WF.Template
                         str += "\t\n    @WebUser.No,@WebUser.Name";
                         str += "\t\n    @RDT";
                         break;
-                    case EventListOfNode.FlowOverAfter: //流程结束后.
+                    case EventListFlow.FlowOverAfter: //流程结束后.
                         str += "\t\n您好:";
                         str += "\t\n    工作{{Title}}已经结束, 点击这里打开工作报告{Url} .";
                         str += "\t\n 致! ";
@@ -525,7 +525,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FK_Event == EventListOfNode.WorkArrive)
+                if (this.FK_Event == EventListNode.WorkArrive)
                 {
                     if (this.SMSPushWay == 0)
                         return "不发送";
@@ -537,7 +537,7 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
-                if (this.FK_Event == EventListOfNode.SendSuccess)
+                if (this.FK_Event == EventListNode.SendSuccess)
                 {
                     if (this.SMSPushWay == 0)
                         return "不发送";
@@ -549,7 +549,7 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
-                if (this.FK_Event == EventListOfNode.ReturnAfter)
+                if (this.FK_Event == EventListNode.ReturnAfter)
                 {
                     if (this.SMSPushWay == 0)
                         return "不发送";
@@ -561,7 +561,7 @@ namespace BP.WF.Template
                         return "向指定的字段发送";
                 }
 
-                if (this.FK_Event == EventListOfNode.FlowOverAfter)
+                if (this.FK_Event == EventListFlow.FlowOverAfter)
                 {
                     if (this.SMSPushWay == 0)
                         return "不发送";
@@ -604,23 +604,23 @@ namespace BP.WF.Template
 
                 switch (this.FK_Event)
                 {
-                    case EventListOfNode.WorkArrive:
-                    case EventListOfNode.SendSuccess:
+                    case EventListNode.WorkArrive:
+                    case EventListNode.SendSuccess:
                         str = "有新工作{{Title}}需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.ReturnAfter:
+                    case EventListNode.ReturnAfter:
                         str = "工作{{Title}}被退回,退回人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.ShitAfter:
+                    case EventListNode.ShitAfter:
                         str = "移交工作{{Title}},移交人:@WebUser.No, @WebUser.Name,打开{Url} .";
                         break;
-                    case EventListOfNode.UndoneAfter:
+                    case EventListNode.UndoneAfter:
                         str = "工作撤销{{Title}},撤销人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
-                    case EventListOfNode.AskerReAfter: //加签.
+                    case EventListNode.AskerReAfter: //加签.
                         str = "工作加签{{Title}},加签人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
-                    case EventListOfNode.FlowOverAfter: //加签.
+                    case EventListFlow.FlowOverAfter: //加签.
                         str = "流程{{Title}}已经结束,最后处理人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
                     default:
@@ -685,7 +685,7 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(PushMsgAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
+                map.AddTBString(PushMsgAttr.FK_Flow, null, "流程", true, false, 0, 5, 10);
                 map.AddTBInt(PushMsgAttr.FK_Node, 0, "节点", true, false);
                 map.AddTBString(PushMsgAttr.FK_Event, null, "事件类型", true, false, 0, 20, 10);
 
@@ -797,7 +797,6 @@ namespace BP.WF.Template
             openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion
 
-
             // 有可能是退回信息. 翻译.
             if (jumpToEmps == null)
             {
@@ -810,11 +809,6 @@ namespace BP.WF.Template
 
             //发送消息
             string msg = this.SendMessage(title,en,currNode,workid,jumpToEmps,openWorkURl,objs,r);
-
-            //发送短消息.
-           // string msg1 = this.SendShortMessageToSpecNodes(title, openWorkURl, en, currNode, workid, objs, null, jumpToEmps);
-            //发送邮件.
-            //string msg2 = this.SendEmail(title, openWorkURl, en, jumpToEmps, currNode, workid, objs, r);
 
             return msg;
         }
@@ -860,7 +854,7 @@ namespace BP.WF.Template
             if (smsDoc.Contains("@") == true)
                 smsDoc = BP.WF.Glo.DealExp(smsDoc, en, null);
 
-            if (this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
+            if (this.FK_Event == BP.Sys.EventListNode.ReturnAfter)
             {
                 //获取退回原因
                 Paras ps = new Paras();
@@ -1005,10 +999,10 @@ namespace BP.WF.Template
             if (this.SMSPushWay == 1)
             {
                 #region 工作到达、退回、移交、撤销
-                if ((this.FK_Event == BP.Sys.EventListOfNode.WorkArrive
-                    || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter
-                    || this.FK_Event == BP.Sys.EventListOfNode.ShitAfter
-                    || this.FK_Event == BP.Sys.EventListOfNode.UndoneAfter)
+                if ((this.FK_Event == BP.Sys.EventListNode.WorkArrive
+                    || this.FK_Event == BP.Sys.EventListNode.ReturnAfter
+                    || this.FK_Event == BP.Sys.EventListNode.ShitAfter
+                    || this.FK_Event == BP.Sys.EventListNode.UndoneAfter)
                      && DataType.IsNullOrEmpty(jumpToEmps) == false)
                 {
                     /*当前节点的处理人.*/
@@ -1031,7 +1025,7 @@ namespace BP.WF.Template
                 #endregion 工作到达、退回、移交、撤销
 
                 #region 节点发送成功后
-                if (this.FK_Event == BP.Sys.EventListOfNode.SendSuccess && objs.VarAcceptersID != null)
+                if (this.FK_Event == BP.Sys.EventListNode.SendSuccess && objs.VarAcceptersID != null)
                 {
                     /*如果向接受人发送消息.*/
                     toEmpIDs = objs.VarAcceptersID;
@@ -1052,10 +1046,10 @@ namespace BP.WF.Template
                     return "@已向:{" + toEmpNames + "}发送提醒信息.";
                 }
                 #endregion 节点发送成功后
-
                
                 #region 流程结束后、流程删除后
-                if (this.FK_Event == BP.Sys.EventListOfNode.FlowOverAfter || this.FK_Event == BP.Sys.EventListOfNode.AfterFlowDel)
+                if (this.FK_Event == BP.Sys.EventListFlow.FlowOverAfter 
+                    || this.FK_Event == BP.Sys.EventListFlow.AfterFlowDel)
                 {
                     /*向所有参与人发送消息. */
                     DataTable dt = DBAccess.RunSQLReturnTable("SELECT Emps,TodoEmps FROM WF_GenerWorkFlow WHERE WorkID=" + workid);
@@ -1101,8 +1095,8 @@ namespace BP.WF.Template
                 #endregion 流程结束后、流程删除后
 
                 #region 节点预警、逾期
-                if(this.FK_Event == BP.Sys.EventListOfNode.NodeWarning
-                    || this.FK_Event == BP.Sys.EventListOfNode.NodeOverDue)
+                if(this.FK_Event == BP.Sys.EventListNode.NodeWarning
+                    || this.FK_Event == BP.Sys.EventListNode.NodeOverDue)
                 {
                     //获取当前节点的接收人
                     GenerWorkFlow gwf = new GenerWorkFlow(workid);
@@ -1161,12 +1155,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 消息推送
         /// </summary>
-        /// <param name="fk_flow"></param>
-        public PushMsgs(string fk_flow)
+        /// <param name="flowNo">流程编号</param>
+        public PushMsgs(string flowNo)
         {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhereInSQL(PushMsgAttr.FK_Node, "SELECT NodeID FROM WF_Node WHERE FK_Flow='" + fk_flow + "'");
-            qo.DoQuery();
+            //this.RetrieveFromCash(PushMsgAttr.FK_Flow, flowNo);
+            this.Retrieve(PushMsgAttr.FK_Flow, flowNo);
         }
         /// <summary>
         /// 消息推送
@@ -1174,9 +1167,8 @@ namespace BP.WF.Template
         /// <param name="nodeid">节点ID</param>
         public PushMsgs(int nodeid)
         {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(PushMsgAttr.FK_Node, nodeid);
-            qo.DoQuery();
+           // this.RetrieveFromCash(PushMsgAttr.FK_Node, nodeid);
+            this.Retrieve(PushMsgAttr.FK_Node, nodeid);
         }
         /// <summary>
         /// 得到它的 Entity 
@@ -1188,6 +1180,7 @@ namespace BP.WF.Template
                 return new PushMsg();
             }
         }
+
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

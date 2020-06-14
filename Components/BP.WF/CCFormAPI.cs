@@ -309,7 +309,7 @@ namespace BP.WF
                 if (wk.RetrieveFromDBSources() == 0)
                     wk.Insert();
 
-                md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
+                md.DoEvent(EventListFrm.FrmLoadBefore, wk, null);
 
                 en = wk;
             }
@@ -321,7 +321,7 @@ namespace BP.WF
                 wk.MyPK = pkval.ToString();
                 if (wk.RetrieveFromDBSources() == 0)
                     wk.Insert();
-                md.DoEvent(FrmEventList.FrmLoadBefore, wk, null);
+                md.DoEvent(EventListFrm.FrmLoadBefore, wk, null);
                 en = wk;
             }
 
@@ -490,7 +490,7 @@ namespace BP.WF
             }
 
             // 执行表单事件..
-            string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
+            string msg = md.DoEvent(EventListFrm.FrmLoadBefore, en);
             if (DataType.IsNullOrEmpty(msg) == false)
                 throw new Exception("err@错误:" + msg);
 

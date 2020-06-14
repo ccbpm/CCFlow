@@ -120,7 +120,7 @@ namespace BP.DA
         /// <param name="ens">实体集合</param>
         public static void PutEns(string ensName, Entities ens)
         {
-            //StackExchange.Redis
+
         }
         /// <summary>
         /// 获取实体集合类

@@ -222,13 +222,7 @@ namespace BP.WF
             get
             {
                 Work wk = null;
-                if (this.IsStartNode)
-                {
-                    wk = new BP.WF.GEStartWork(this.NodeID, this.NodeFrmID);
-                    wk.HisNode = this;
-                    wk.NodeID = this.NodeID;
-                    return wk;
-                }
+                
 
                 if (this.FormType != NodeFormType.FoolTruck || this.WorkID == 0 || this.IsStartNode == true)
                 {
@@ -372,17 +366,17 @@ namespace BP.WF
                     bool isHaveReturn = false;
                     foreach (PushMsg item in obj)
                     {
-                        if (item.FK_Event == EventListOfNode.SendSuccess)
+                        if (item.FK_Event == EventListNode.SendSuccess)
                             isHaveSend = true;
 
-                        if (item.FK_Event == EventListOfNode.ReturnAfter)
+                        if (item.FK_Event == EventListNode.ReturnAfter)
                             isHaveReturn = true;
                     }
 
                     if (isHaveSend == false)
                     {
                         PushMsg pm = new PushMsg();
-                        pm.FK_Event = EventListOfNode.SendSuccess;
+                        pm.FK_Event = EventListNode.SendSuccess;
                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
                         pm.SMSPushModel = "Email";
                         obj.AddEntity(pm);
@@ -391,7 +385,7 @@ namespace BP.WF
                     if (isHaveReturn == false)
                     {
                         PushMsg pm = new PushMsg();
-                        pm.FK_Event = EventListOfNode.ReturnAfter;
+                        pm.FK_Event = EventListNode.ReturnAfter;
                         pm.SMSPushWay = 1;  /*默认:让其使用短消息提醒.*/
                         pm.SMSPushModel = "Email";
                         obj.AddEntity(pm);
@@ -533,20 +527,45 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 节点事件
+        /// 事件:
+        /// 1.该事件与Node,Flow,MapDtl,MapData一样的算法.
+        /// 2.如果一个业务逻辑有变化，其他的也要变化.
         /// </summary>
         public FrmEvents FrmEvents
         {
             get
             {
-                FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (obj == null)
-                {
-                    obj = new FrmEvents(this.NodeID);
+                //判断内存是否有？.
+                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
+                if (objs != null)
+                    return objs; //如果缓存有值，就直接返回.
 
-                    this.SetRefObject("FrmEvents", obj);
+                int count = this.GetParaInt("FrmEventsNum", -1);
+                if (count == -1)
+                {
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_Node, this.NodeID);
+
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.DirectUpdate();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
                 }
-                return obj;
+
+                if (count == 0)
+                {
+                    objs = new FrmEvents();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
+                }
+                else
+                {
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_Node, this.NodeID);
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.SetRefObject("FrmEvents", objs);
+                }
+                return objs;
             }
         }
         #endregion
@@ -3410,12 +3429,12 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attrs.Contains(MapAttrAttr.KeyOfEn, StartWorkAttr.FK_Dept, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.FK_Dept, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = StartWorkAttr.FK_Dept;
+                attr.KeyOfEn = GERptAttr.FK_Dept;
                 attr.Name = "操作员部门"; //"操作员部门";
                 attr.MyDataType = BP.DA.DataType.AppString;
                 attr.UIContralType = UIContralType.DDL;
@@ -3435,7 +3454,7 @@ namespace BP.WF
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = StartWorkAttr.MD5;
+                attr.KeyOfEn = WorkAttr.MD5;
                 attr.UIBindKey = attr.KeyOfEn;
                 attr.Name = "MD5";
                 attr.MyDataType = BP.DA.DataType.AppString;
@@ -3453,12 +3472,12 @@ namespace BP.WF
             if (this.NodePosType == NodePosType.Start)
             {
 
-                if (attrs.Contains(MapAttrAttr.KeyOfEn, StartWorkAttr.Title, MapAttrAttr.FK_MapData, md.No) == false)
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.Title, MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
                     attr.FK_MapData = md.No;
                     attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = StartWorkAttr.Title;
+                    attr.KeyOfEn = GERptAttr.Title;
                     attr.Name = "标题"; // "流程标题";
                     attr.MyDataType = BP.DA.DataType.AppString;
                     attr.UIContralType = UIContralType.TB;
@@ -3606,11 +3625,10 @@ namespace BP.WF
             attr.MinLen = 0;
             attr.Insert();
 
-
             attr = new BP.Sys.MapAttr();
             attr.FK_MapData = md.No;
             attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = StartWorkAttr.FK_Dept;
+            attr.KeyOfEn = GERptAttr.FK_Dept;
             attr.Name = "操作员部门"; //"操作员部门";
             attr.MyDataType = BP.DA.DataType.AppString;
             attr.UIContralType = UIContralType.TB;

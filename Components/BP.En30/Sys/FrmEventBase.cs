@@ -292,15 +292,15 @@ namespace BP.Sys
             #region 执行事件.
             switch (eventType)
             {
-                case EventListOfNode.CreateWorkID: // 节点表单事件。
+                case EventListFrm.CreateOID: // 节点表单事件。
                     return this.CreateOID();
-                case EventListOfNode.FrmLoadAfter: // 节点表单事件。
+                case EventListFrm.FrmLoadAfter: // 节点表单事件。
                     return this.FrmLoadAfter();
-                case EventListOfNode.FrmLoadBefore: // 节点表单事件。
+                case EventListFrm.FrmLoadBefore: // 节点表单事件。
                     return this.FrmLoadBefore();
-                case EventListOfNode.SaveAfter: // 节点事件 保存后。
+                case EventListFrm.SaveAfter: // 节点事件 保存后。
                     return this.SaveAfter();
-                case EventListOfNode.SaveBefore: // 节点事件 - 保存前.。
+                case EventListFrm.SaveBefore: // 节点事件 - 保存前.。
                     return this.SaveBefore();
                 default:
                     throw new Exception("@没有判断的事件类型:" + eventType);

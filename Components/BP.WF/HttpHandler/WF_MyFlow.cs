@@ -2846,10 +2846,10 @@ namespace BP.WF.HttpHandler
             //        Attrs wkAttrs = wk.EnMap.Attrs;
             //        foreach (Attr wkattr in wkAttrs)
             //        {
-            //            if (wkattr.Key.Equals(StartWorkAttr.OID) || wkattr.Key.Equals(StartWorkAttr.FID) || wkattr.Key.Equals(StartWorkAttr.CDT)
-            //                || wkattr.Key.Equals(StartWorkAttr.RDT) || wkattr.Key.Equals(StartWorkAttr.MD5) || wkattr.Key.Equals(StartWorkAttr.Emps)
-            //                || wkattr.Key.Equals(StartWorkAttr.FK_Dept) || wkattr.Key.Equals(StartWorkAttr.PRI) || wkattr.Key.Equals(StartWorkAttr.Rec)
-            //                || wkattr.Key.Equals(StartWorkAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
+            //            if (wkattr.Key.Equals(GERptAttr.OID) || wkattr.Key.Equals(GERptAttr.FID) || wkattr.Key.Equals(GERptAttr.CDT)
+            //                || wkattr.Key.Equals(GERptAttr.RDT) || wkattr.Key.Equals(GERptAttr.MD5) || wkattr.Key.Equals(GERptAttr.Emps)
+            //                || wkattr.Key.Equals(GERptAttr.FK_Dept) || wkattr.Key.Equals(GERptAttr.PRI) || wkattr.Key.Equals(GERptAttr.Rec)
+            //                || wkattr.Key.Equals(GERptAttr.Title) || wkattr.Key.Equals(Data.GERptAttr.FK_NY) || wkattr.Key.Equals(Data.GERptAttr.FlowEmps)
             //                || wkattr.Key.Equals(Data.GERptAttr.FlowStarter) || wkattr.Key.Equals(Data.GERptAttr.FlowStartRDT) || wkattr.Key.Equals(Data.GERptAttr.WFState))
             //            {
             //                continue;

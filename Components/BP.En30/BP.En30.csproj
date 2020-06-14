@@ -237,6 +237,9 @@
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
+    <Compile Include="Sys\EvenListFlow.cs" />
+    <Compile Include="Sys\EvenListFrm.cs" />
+    <Compile Include="Sys\EvenListNode.cs" />
     <Compile Include="Sys\FormEventBase.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />

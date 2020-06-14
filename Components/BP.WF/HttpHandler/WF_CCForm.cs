@@ -16,6 +16,7 @@ using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using LitJson;
 using BP.NetPlatformImpl;
+using BP.Sys;
 
 namespace BP.WF.HttpHandler
 {
@@ -1087,7 +1088,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 // 执行表单事件. FrmLoadBefore .
-                string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
+                string msg = md.DoEvent(EventListFrm.FrmLoadBefore, en);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@错误:" + msg;
 
@@ -1106,7 +1107,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //执行事件
-                md.DoEvent(FrmEventList.SaveBefore, en, null);
+                md.DoEvent(EventListFrm.SaveBefore, en, null);
 
 
                 //增加主表数据.
@@ -1284,7 +1285,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 // 执行表单事件. FrmLoadBefore .
-                string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
+                string msg = md.DoEvent(EventListFrm.FrmLoadBefore, en);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@错误:" + msg;
 
@@ -1322,7 +1323,7 @@ namespace BP.WF.HttpHandler
 
                 //执行事件, 不应该加.
                 if (1 == 2)
-                    md.DoEvent(FrmEventList.SaveBefore, en, null);
+                    md.DoEvent(EventListFrm.SaveBefore, en, null);
                 #endregion 执行装载填充.与相关的事件.
 
                 #region 把外键表加入 DataSet.
@@ -1880,7 +1881,7 @@ namespace BP.WF.HttpHandler
                     GEEntity mainEn = null;
                     if (fes.Count > 0)
                     {
-                        string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, en);
+                        string msg = fes.DoEventNode(BP.Sys.EventListFrm.DtlRowSaveBefore, en);
                         if (DataType.IsNullOrEmpty(msg) == false)
                             return "err@" + msg;
                     }
@@ -1896,14 +1897,14 @@ namespace BP.WF.HttpHandler
                             febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                             febd.HisEnDtl = en;
 
-                            febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, en, null);
+                            febd.DoIt(EventListFrm.DtlRowSaveBefore, febd.HisEn, en, null);
                         }
                     }
                     #endregion 从表保存前处理事件.
                 }
                 else
                 {
-                    md.DoEvent(FrmEventList.SaveBefore, en);
+                    md.DoEvent(EventListFrm.SaveBefore, en);
                 }
                 #endregion 调用事件.  @李国文.
 
@@ -1938,14 +1939,14 @@ namespace BP.WF.HttpHandler
                             febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                             febd.HisEnDtl = en;
 
-                            febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, en, null);
+                            febd.DoIt(EventListFrm.DtlRowSaveAfter, febd.HisEn, en, null);
                         }
                     }
                     #endregion 从表保存前处理事件.
                 }
                 else
                 {
-                    md.DoEvent(FrmEventList.SaveAfter, en);
+                    md.DoEvent(EventListFrm.SaveAfter, en);
                 }
                 #endregion 调用事件.  @李国文.
 
@@ -2106,6 +2107,7 @@ namespace BP.WF.HttpHandler
                 }
             }
             #endregion 处理权限方案。
+        
 
             //从表实体.
             GEDtl dtl = new GEDtl(fk_mapDtl);
@@ -2148,7 +2150,7 @@ namespace BP.WF.HttpHandler
             if (fes.Count > 0)
             {
                 mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
+                string msg = fes.DoEventNode(EventListFrm.DtlRowSaveBefore, mainEn);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
@@ -2161,7 +2163,7 @@ namespace BP.WF.HttpHandler
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
 
-                febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, dtl, null);
+                febd.DoIt(EventListFrm.DtlRowSaveBefore, febd.HisEn, dtl, null);
             }
             #endregion 从表保存前处理事件.
 
@@ -2210,13 +2212,14 @@ namespace BP.WF.HttpHandler
             #endregion 给实体循环赋值/并保存.
 
             #region 从表保存后处理事件。
+            //页面定义的事件.
             if (fes.Count > 0)
             {
-                string msg = fes.DoEventNode(EventListDtlList.DtlSaveEnd, mainEn);
+                string msg = fes.DoEventNode( BP.Sys.EventListFrm.DtlRowSaveAfter, mainEn);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
-
+            //事件实体类.
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
@@ -2224,8 +2227,7 @@ namespace BP.WF.HttpHandler
 
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
-
-                febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, dtl, null);
+                febd.DoIt(EventListFrm.DtlRowSaveAfter, febd.HisEn, dtl, null);
             }
             #endregion 处理事件.
 
@@ -2248,7 +2250,7 @@ namespace BP.WF.HttpHandler
             GEEntity mainEn = null;
             if (fes.Count > 0)
             {
-                string msg = fes.DoEventNode(FrmEventListDtl.DtlRowDelBefore, dtl);
+                string msg = fes.DoEventNode(EventListFrm.DtlRowDelBefore, dtl);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
@@ -2262,7 +2264,7 @@ namespace BP.WF.HttpHandler
                 {
                     febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                     febd.HisEnDtl = dtl;
-                    febd.DoIt(FrmEventListDtl.DtlRowDelBefore, febd.HisEn, dtl, null);
+                    febd.DoIt(EventListFrm.DtlRowDelBefore, febd.HisEn, dtl, null);
                 }
             }
             #endregion 从表 删除 前处理事件.
@@ -2276,7 +2278,7 @@ namespace BP.WF.HttpHandler
             fes = new FrmEvents(this.FK_MapDtl); //获得事件.
             if (fes.Count > 0)
             {
-                string msg = fes.DoEventNode(FrmEventListDtl.DtlRowDelAfter, dtl);
+                string msg = fes.DoEventNode(EventListFrm.DtlRowDelAfter, dtl);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@" + msg;
             }
@@ -2290,7 +2292,7 @@ namespace BP.WF.HttpHandler
                     febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                     febd.HisEnDtl = dtl;
 
-                    febd.DoIt(FrmEventListDtl.DtlRowDelAfter, febd.HisEn, dtl, null);
+                    febd.DoIt(EventListFrm.DtlRowDelAfter, febd.HisEn, dtl, null);
                 }
             }
 
@@ -3485,7 +3487,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
                     if (!DataType.IsNullOrEmpty(msg))
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -3558,7 +3560,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
                     if (!DataType.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
@@ -3587,7 +3589,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -3685,7 +3687,7 @@ namespace BP.WF.HttpHandler
                     uploadFileM += dbUpload.MyPK + ",";
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
+                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 

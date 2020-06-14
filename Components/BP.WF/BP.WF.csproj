@@ -495,6 +495,7 @@
     <Compile Include="Template\FrmNode.cs" />
     <Compile Include="Template\CC.cs" />
     <Compile Include="Template\NodeCancel.cs" />
+    <Compile Include="WF\ExecEvent.cs" />
     <Compile Include="WF\Flow.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -502,6 +503,7 @@
     <Compile Include="WF\FullSA.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WF\GetTask.cs" />
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -540,7 +542,6 @@
     <Compile Include="WF\WorkNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WF\GetTask.cs" />
     <Compile Include="WF\ReturnWork.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -551,10 +552,6 @@
     <Compile Include="WF\Work.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StartWork.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\GEStartWork.cs" />
     <Compile Include="Port\WFEmp.cs" />
     <Compile Include="WF\GenerWorkerList.cs">
       <SubType>Code</SubType>

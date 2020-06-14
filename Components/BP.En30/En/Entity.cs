@@ -5333,6 +5333,9 @@ namespace BP.En
 
             return qo.DoQuery();
         }
+
+       
+            
         public virtual int RetrieveInSQL(string attr, string sql)
         {
             QueryObject qo = new QueryObject(this);

@@ -610,19 +610,45 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 事件
+        /// 事件:
+        /// 1.该事件与Node,Flow,MapDtl,MapData一样的算法.
+        /// 2.如果一个业务逻辑有变化，其他的也要变化.
         /// </summary>
         public FrmEvents FrmEvents
         {
             get
             {
-                FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (obj == null)
+                //判断内存是否有？.
+                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
+                if (objs != null)
+                    return objs; //如果缓存有值，就直接返回.
+
+                int count = this.GetParaInt("FrmEventsNum", -1);
+                if (count == -1)
                 {
-                    obj = new FrmEvents(this.No);
-                    this.SetRefObject("FrmEvents", obj);
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.DirectUpdate();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
                 }
-                return obj;
+
+                if (count == 0)
+                {
+                    objs = new FrmEvents();
+                    this.SetRefObject("FrmEvents", objs);
+                    return objs;
+                }
+                else
+                {
+                    objs = new FrmEvents();
+                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
+                    this.SetRefObject("FrmEvents", objs);
+                }
+                return objs;
             }
         }
         /// <summary>

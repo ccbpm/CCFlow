@@ -106,7 +106,7 @@ namespace BP.WF.DTS
                 string title = dr["Title"] + "";
                 //判断流程是否设置逾期消息
                 PushMsg pushMsg = new PushMsg();
-                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListOfNode.FlowOverDue);
+                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListNode.FlowOverDue);
                 if (count != 0)
                 {
                     Node node = new Node(fk_node);
@@ -132,7 +132,7 @@ namespace BP.WF.DTS
                 string title = dr["Title"] + "";
                 //判断流程是否设置逾期消息
                 PushMsg pushMsg = new PushMsg();
-                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListOfNode.FlowWarning);
+                int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListNode.FlowWarning);
                 if (count != 0)
                 {
                     Node node = new Node(fk_node);
@@ -162,7 +162,7 @@ namespace BP.WF.DTS
                 if (node.IsStartNode)
                     continue;
                 PushMsgs pushMsgs = new PushMsgs();
-                int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeWarning);
+                int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeWarning);
                 int maxHour = 0;
                 int minHour = 0;
                 if (count != 0)
@@ -256,7 +256,7 @@ namespace BP.WF.DTS
                         continue;
                     #region 启动逾期消息设置
                     PushMsgs pushMsgs = new PushMsgs();
-                    int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListOfNode.NodeOverDue);
+                    int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeOverDue);
                     int maxDay = 0;
                     int minDay = 0;
                     if (count != 0)

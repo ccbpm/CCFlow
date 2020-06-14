@@ -116,7 +116,7 @@ namespace BP.UnitTesting
 
             foreach (BP.WF.SMS item in smss)
             {
-                if (item.MsgType == EventListOfNode.SendSuccess)
+                if (item.MsgType == EventListNode.SendSuccess)
                 {
                     if (item.HisMobileSta != MsgSta.UnRun)
                         throw new Exception("@应该在工作到达的事件里产生一条短信息.");
@@ -156,13 +156,13 @@ namespace BP.UnitTesting
 
             foreach (BP.WF.SMS item in smss)
             {
-                if (item.MsgType == EventListOfNode.SendSuccess)
+                if (item.MsgType == EventListNode.SendSuccess)
                 {
                     if (item.HisEmailSta != MsgSta.UnRun)
                         throw new Exception("@应该在发送成功的事件里产生一条邮件信息.");
                 }
 
-                if (item.MsgType == EventListOfNode.WorkArrive)
+                if (item.MsgType == EventListNode.WorkArrive)
                 {
                     if (item.HisMobileSta != MsgSta.UnRun)
                         throw new Exception("@应该在工作到达的事件里产生一条短信息.");

@@ -253,12 +253,12 @@ namespace BP.Sys
         /// <summary>
         /// 执行事件
         /// </summary>
-        /// <param name="eventType"></param>
+        /// <param name="EventSource"></param>
         /// <param name="en"></param>
         /// <param name="atPara"></param>
         /// <param name="jumpToEmps"></param>
         /// <returns></returns>
-        public string DoIt(string eventType, Entity en, string atPara)
+        public string DoIt(string EventSource, Entity en, string atPara)
         {
             this.HisEn = en;
 
@@ -310,30 +310,30 @@ namespace BP.Sys
             #endregion 处理参数.
 
             #region 执行事件.
-            switch (eventType)
+            switch (EventSource)
             {
-                case FrmEventList.CreateOID: // 节点表单事件。
+                case EventListFrm.CreateOID: // 节点表单事件。
                     return this.CreateOID();
-                case FrmEventList.FrmLoadAfter: // 节点表单事件。
+                case EventListFrm.FrmLoadAfter: // 节点表单事件。
                     return this.FrmLoadAfter();
-                case FrmEventList.FrmLoadBefore: // 节点表单事件。
+                case EventListFrm.FrmLoadBefore: // 节点表单事件。
                     return this.FrmLoadBefore();
-                case FrmEventList.SaveAfter: // 节点事件 保存后。
+                case EventListFrm.SaveAfter: // 节点事件 保存后。
                     return this.SaveAfter();
-                case FrmEventList.SaveBefore: // 节点事件 - 保存前.。
+                case EventListFrm.SaveBefore: // 节点事件 - 保存前.。
                     return this.SaveBefore();
 
-                case FrmEventList.AthUploadeBefore: // 附件上传前.。
+                case EventListFrm.AthUploadeBefore: // 附件上传前.。
                     return this.AthUploadeBefore();
-                case FrmEventList.AthUploadeAfter: // 附件上传后.。
+                case EventListFrm.AthUploadeAfter: // 附件上传后.。
                     return this.AthUploadeAfter();
 
-                case FrmEventList.DtlRowSaveBefore: // 从表-保存前.。
+                case EventListFrm.DtlRowSaveBefore: // 从表-保存前.。
                     return this.DtlRowSaveBefore();
-                case FrmEventList.DtlRowSaveAfter: // 从表-保存后.。
+                case EventListFrm.DtlRowSaveAfter: // 从表-保存后.。
                     return this.DtlRowSaveAfter();
                 default:
-                    throw new Exception("@没有判断的表单事件类型:" + eventType);
+                    throw new Exception("@没有判断的表单事件类型:" + EventSource);
                     break;
             }
             #endregion 执行事件.

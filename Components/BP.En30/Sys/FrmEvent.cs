@@ -200,6 +200,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 流程
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmEventAttr.FK_Flow);
+            }
+            set
+            {
+                this.SetValByKey(FrmEventAttr.FK_Flow, value);
+            }
+        }
+        /// <summary>
         /// 节点
         /// </summary>
         public string FK_MapData
@@ -644,15 +658,24 @@ namespace BP.Sys
         /// </summary>
         private void UpdataFrmEventsNum()
         {
-            FrmEvents ens = new FrmEvents(this.FK_MapData);
-            MapData md = new MapData(this.FK_MapData);
-            md.SetPara("FrmEventsNum", ens.Count);
-            md.Update();
+            //事件包含流程事件、节点事件、表单事件、从表事件
+            
+            //该位置处理表单，从表事件
+            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
+            {
+                FrmEvents ens = new FrmEvents(this.FK_MapData);
+                MapData md = new MapData(this.FK_MapData);
+                md.SetPara("FrmEventsNum", ens.Count);
+                md.Update();
+            }
+                
+            
+           
         }
-        protected override bool beforeUpdateInsertAction()
+        protected override void afterInsertUpdateAction()
         {
             UpdataFrmEventsNum();
-            return base.beforeUpdateInsertAction();
+             base.afterInsertUpdateAction();
         }
         protected override void afterDelete()
         {

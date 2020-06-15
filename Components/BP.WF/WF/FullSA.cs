@@ -257,7 +257,7 @@ namespace BP.WF
                 #region 2019-09-25 byzhoupeng, 仅按岗位计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
-                   string sql = "SELECT DISTINCT c.No,c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                   string sql = "SELECT DISTINCT c.No,c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C.No";
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;

@@ -113,6 +113,7 @@ namespace BP.WF
                 pms = toNode.HisPushMsgs;
             }
 
+
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)
             {

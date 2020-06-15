@@ -789,7 +789,6 @@ namespace BP.WF.Template
 
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
-
            
             string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DBAccess.GenerGUID();
             string openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
@@ -826,14 +825,14 @@ namespace BP.WF.Template
         /// <returns></returns>
         private string SendMessage(string title,Entity en,Node currNode,Int64 workid,string jumpToEmps,string openUrl, SendReturnObjs objs,Row r)
         {
-            //不启用消息
+            //不启用消息.
             if (this.SMSPushWay == 0)
                 return "";
 
             string atParas = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@NodeID=" + currNode.NodeID + "@FK_Node="+ currNode.NodeID;
             string generAlertMessage = ""; //定义要返回的提示消息.
-            string mailTitle = this.MailTitle;// 邮件标题
-            string smsDoc = this.SMSDoc;//消息模板
+            string mailTitle = this.MailTitle;// 邮件标题.
+            string smsDoc = this.SMSDoc;//消息模板.
 
             #region 邮件标题
             mailTitle = this.MailTitle;
@@ -870,8 +869,8 @@ namespace BP.WF.Template
             }
             #endregion 处理消息内容
 
-            #region 消息发送
             string toEmpIDs = "";
+
             #region 表单字段作为接受人
             if (this.SMSPushWay == 2)
             {
@@ -932,9 +931,8 @@ namespace BP.WF.Template
             {
                 string bySQL = this.BySQL;
                 if(DataType.IsNullOrEmpty(BySQL) == true)
-                {
                     return "按照指定的SQL发送消息，SQL数据不能为空";
-                }
+
                 bySQL = bySQL.Replace("~", "'");
                 //替换SQL中的参数
                 bySQL = bySQL.Replace("@WebUser.No", WebUser.No);
@@ -951,7 +949,6 @@ namespace BP.WF.Template
                     string empName = dr["Name"].ToString();
                     string empNo = dr["No"].ToString();
 
-
                     // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
                     string smsDocReal = smsDoc.Clone() as string;
                     smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
@@ -965,7 +962,6 @@ namespace BP.WF.Template
                     //处理短消息.
                     toEmpIDs += empName + ",";
                 }
-               
             }
             #endregion 按照SQL计算
 
@@ -973,9 +969,8 @@ namespace BP.WF.Template
             if (this.SMSPushWay == 5)
             {
                 if (DataType.IsNullOrEmpty(this.ByEmps) == true)
-                {
                     return "发送给指定的人员，则人员集合不能为空。";
-                }
+
                 //以逗号分割开
                 string[] toEmps = this.ByEmps.Split(',');
                 foreach(string empNo in toEmps)
@@ -1120,12 +1115,8 @@ namespace BP.WF.Template
             }
             #endregion 不同的消息事件，接收人不同的处理
 
-            #endregion  消息发送
-
             return "";
-
         }
-      
         /// <summary>
         /// 发送短信到其它节点的处理人.
         /// </summary>

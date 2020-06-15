@@ -2783,8 +2783,6 @@ namespace BP.WF.HttpHandler
                     GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                     BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID, gwf.PEmp, gwf.PNodeID);
                 }
-
-
                 return str;
             }
             catch (Exception ex)

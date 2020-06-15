@@ -42,6 +42,12 @@
             var ens = new Entities("BP.Sys.FrmEvents");
             ens.Retrieve("FK_Node", nodeID);
 
+            //修改节点事件数量
+            var node = new Entity("BP.WF.Node", nodeID)
+            node.SetPara("FrmEventsNum", ens.length);
+            node.Update();
+
+
             var html = "<table style='width:98%;'>";
             html += "<caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />节点事件 </caption>";
             html += "<tr>";

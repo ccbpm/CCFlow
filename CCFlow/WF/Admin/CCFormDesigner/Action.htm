@@ -31,6 +31,11 @@
             var ens = new Entities("BP.Sys.FrmEvents");
             ens.Retrieve("FK_MapData", frmID);
 
+            //修改表单事件数量
+            var mapData = new Entity("BP.Sys.MapData", frmID)
+            mapData.SetPara("FrmEventsNum", ens.length);
+            mapData.Update();
+
             var html = "<table style='width:98%;'>";
             html += "<caption><img src='../../Img/Event.png' />表单事件 </caption>";
             html += "<tr>";

@@ -76,6 +76,7 @@
             var en = new Entity("BP.Sys.FrmEvent");
             en.CopyForm();
             en.FK_MapData = GetQueryString("FK_MapData");
+            en.EventSource = 0;//表单事件
 
             //如果是业务单元.
             if (en.EventDoType == 7) {

@@ -90,6 +90,7 @@
             var en = new Entity("BP.Sys.FrmEvent");
             en.CopyForm();
             en.FK_Node = GetQueryString("FK_Node");
+            en.EventSource = 2;//节点事件
 
             //如果是业务单元.
             if (en.EventDoType == 7) {

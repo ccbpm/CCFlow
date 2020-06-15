@@ -47,6 +47,12 @@
             var ens = new Entities("BP.Sys.FrmEvents");
             ens.Retrieve("FK_Flow", flowNo);
 
+            //修改流程事件
+            var flow = new Entity("BP.WF.Flow", flowNo)
+            flow.SetPara("FrmEventsNum", ens.length);
+            flow.Update();
+
+
             var html = "<table class='table table-bordered table-striped table-hover table-condensed' style='width:100%;'>";
             html += "<caption><img src='../../Img/Event.png' />流程事件 </caption>";
             html += "<tr>";

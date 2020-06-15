@@ -1403,7 +1403,14 @@ namespace BP.WF.HttpHandler
                 gwf.HuiQianZhuChiRen = WebUser.No;
                 gwf.HuiQianZhuChiRenName = WebUser.Name;
             }
-             gwf.Update();
+            else
+            {
+                //多人的组长模式或者协作模式
+                if (DataType.IsNullOrEmpty(gwf.HuiQianZhuChiRen) == true)
+                    gwf.HuiQianZhuChiRen = gwf.TodoEmps;
+            }
+
+            gwf.Update();
             return "主持人增加成功";
 
         }
@@ -3852,7 +3859,7 @@ namespace BP.WF.HttpHandler
         /// 执行移交.
         /// </summary>
         /// <returns></returns>
-        public string Shift()
+        public string Shift_Save()
         {
             string msg = this.GetRequestVal("Message");
             string toEmp = this.GetRequestVal("ToEmp");

@@ -255,19 +255,7 @@ namespace BP.WF
             throw new Exception("@此部分代码已经移除了.");
         }
         #endregion GenerWorkerList 相关方法.
-
-        /// <summary>
-        /// 生成一个 word
-        /// </summary>
-        public void DoPrint()
-        {
-            string tempFile = SystemConfig.PathOfTemp + "\\" + this.WorkID + ".doc";
-            Work wk = this.HisNode.HisWork;
-            wk.OID = this.WorkID;
-            wk.Retrieve();
-            Glo.GenerWord(tempFile, wk);
-            //return tempFile;
-        }
+     
         string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = new Paras();
         /// <summary>
@@ -319,7 +307,7 @@ namespace BP.WF
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2 ) AND FK_Node=" + dbStr + "FK_Node",
                     "WorkID1", this.WorkID, "WorkID2", this.WorkID, "FK_Node", nd.NodeID);
 
-                if (nd.IsFL)
+                if (nd.IsFL==true)
                 {
                     /* 如果是分流 */
                     GenerWorkerLists wls = new GenerWorkerLists();
@@ -1575,14 +1563,14 @@ namespace BP.WF
                             mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
                     }
 
-
+                    string atParas = "@FK_Flow=" + node.FK_Flow + "@WorkID=" + this.WorkID + "@NodeID=" + node.NodeID + "@FK_Node=" + node.NodeID;
                     foreach (CCList cc in cclist)
                     {
                         ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
                         if (pushMsg != null)
                         {
 
-                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListOfNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel);
+                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListOfNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel,null, atParas);
 
                         }
                     }
@@ -4971,6 +4959,7 @@ namespace BP.WF
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    
                 }
                 else
                 {
@@ -4980,9 +4969,11 @@ namespace BP.WF
                     this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                    this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
 
 
                 }
+                
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
@@ -5146,6 +5137,7 @@ namespace BP.WF
 
                     }
 
+
                     /*只有一个待办,说明自己就是最后的一个人.*/
                     if (num == 1)
                     {
@@ -5171,37 +5163,38 @@ namespace BP.WF
                             }
                             return false;
                         }
-                        else
-                        {
-                            //把当前的待办设置已办，并且提示未处理的人当前节点是主持人。
-                            foreach (GenerWorkerList gwl in gwls)
-                            {
-                                if (gwl.FK_Emp != WebUser.No)
-                                    continue;
-
-                                //设置当前已经完成.
-                                gwl.IsPassInt = 1;
-                                gwl.Update();
-
-                                // 检查完成条件。
-                                if (this.HisNode.IsEndNode == false)
-                                    this.CheckCompleteCondition();
-                                //调用发送成功事件.
-                                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
-                                this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
-
-                                //执行时效考核.
-                                if (this.rptGe == null)
-                                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
-                                else
-                                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
-
-                                this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
-                            }
-                        }
-
                     }
+                    else
+                    {
+                        //把当前的待办设置已办，并且提示未处理的人当前节点是主持人。
+                        foreach (GenerWorkerList gwl in gwls)
+                        {
+                            if (gwl.FK_Emp != WebUser.No)
+                                continue;
+
+                            //设置当前已经完成.
+                            gwl.IsPassInt = 1;
+                            gwl.Update();
+
+                            // 检查完成条件。
+                            if (this.HisNode.IsEndNode == false)
+                                this.CheckCompleteCondition();
+                            //调用发送成功事件.
+                            string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                                this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                            this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+
+                            //执行时效考核.
+                            if (this.rptGe == null)
+                                Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
+                            else
+                                Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
+
+                            this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+                        }
+                    }
+
+                   
 
                     if (SystemConfig.CustomerNo == "LIMS")
                     {
@@ -6687,10 +6680,10 @@ namespace BP.WF
                     #endregion 当前节点是分流节点但是是子线程退回的节点
 
                     /* 检查该退回是否是原路返回 ? */
-                    Paras  ps1 = new Paras();
-                    ps1.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
-                    ps1.Add(ReturnWorkAttr.WorkID, this.WorkID);
-                    DataTable mydt = DBAccess.RunSQLReturnTable(ps1);
+                    ps = new Paras();
+                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
+                    DataTable mydt = DBAccess.RunSQLReturnTable(ps);
                     if (mydt.Rows.Count != 0)
                     {
                         //有可能查询出来多个，因为按时间排序了，只取出最后一次退回的，看看是否有退回并原路返回的信息。
@@ -7196,7 +7189,7 @@ namespace BP.WF
 
                 #region 处理流程数据与业务表的数据同步.
                 if (this.HisFlow.DTSWay != FlowDTSWay.None)
-                    this.HisFlow.DoBTableDTS(this.rptGe, this.HisNode, this.IsStopFlow);
+                    WorkNodePlus.DTSData(this.HisFlow, this.HisGenerWorkFlow,this.rptGe, this.HisNode, this.IsStopFlow);
 
                 #endregion 处理流程数据与业务表的数据同步.
 
@@ -9434,9 +9427,9 @@ namespace BP.WF
             get
             {
                 //如果当前的节点是按照ccbpm定义的方式运行的，就返回当前节点的多人待办模式，否则就返回自定义的模式。
-                if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
-                    return this.HisNode.TodolistModel;
-                return this.HisGenerWorkFlow.TodolistModel;
+                ///if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
+                 return this.HisNode.TodolistModel;
+                //return this.HisGenerWorkFlow.TodolistModel;
             }
         }
         #endregion

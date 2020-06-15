@@ -351,6 +351,11 @@ function CheckMinMaxLength() {
 
 //保存 0单保存 1发送的保存
 function Save(saveType) {
+    //正在保存弹出层
+    var index = layer.msg('正在保存，请稍后..', {
+        icon: 16
+        , shade: 0.01
+    });
     //保存从表数据
     $("[name=Dtl]").each(function (i, obj) {
         var contentWidow = obj.contentWindow;
@@ -441,7 +446,7 @@ function Save(saveType) {
         }
     });
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-
+    layer.close(index);//关闭正在保存
     setToobarEnable();
     //刷新 从表的IFRAME
     var dtls = $('.Fdtl');
@@ -468,7 +473,7 @@ function returnWorkWindowClose(data) {
 
     $('#returnWorkModal').modal('hide');
     //通过下发送按钮旁的下拉框选择下一个节点
-    if (data.indexOf('SaveOK@') == 0) {
+    if (data!=null && data!=undefined && data.indexOf('SaveOK@') == 0) {
         //说明保存人员成功,开始调用发送按钮.
         var toNode = 0;
         //含有发送节点 且接收
@@ -484,7 +489,7 @@ function returnWorkWindowClose(data) {
         winSelectAccepter = null;
     }
 
-    if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
+    if (data != null && data !=undefined && (data.indexOf('err@') == 0 || data == "取消")) {//发送时发生错误
         $('#Message').html(data);
         $('#MessageDiv').modal().show();
         return;
@@ -910,14 +915,27 @@ function ShowTextBoxNoticeInfo() {
 
 //检查附件数量.
 function checkAths() {
-
     // 不支持火狐浏览器。
-    var frm = document.getElementById('Ath1');
+    if ("undefined" != typeof AthParams &&  AthParams.AthInfo != undefined) {
+        var aths = document.getElementsByName("Ath");
+        for (var i = 0; i < aths.length; i++) {
+            var athment = aths[i].id.replace("Div_", "");
+            if (AthParams.AthInfo[athment] != undefined && AthParams.AthInfo[athment].length > 0) {
+                var athInfo = AthParams.AthInfo[athment][0];
+                var minNum = athInfo[0];
+                var maxNum = athInfo[1];
+                var athNum = $("#Div_" + athment + " table tbody .athInfo").length;
+                if(athNum.length == 0)
+                    athNum = $("#Div_" + athment + " .athInfo").length;
 
-    if (frm == null || frm == undefined) {
-        return "";
+                if (athNum < minNum)
+                    return athment + "上传附件数量不能小于" + minNum;;
+                if (athNum > maxNum)
+                    return athment + "您最多上传[" + maxNum + "]个附件";
+            }
+        }
     }
-    return frm.contentWindow.CheckAthNum();
+    return "";
 
 }
 
@@ -1033,11 +1051,9 @@ function GenerWorkNode() {
     handler.AddUrlData(urlParam);
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 
-    console.log(data);
-
-
     if (data.indexOf('err@') == 0) {
         alert(data);
+        console.log(data);
         return;
     }
 
@@ -1050,6 +1066,15 @@ function GenerWorkNode() {
         console.log(flowData);
         return;
     }
+
+    //处理附件的问题 
+    if (flowData.Sys_FrmAttachment.length != 0) {
+        Skip.addJs("./CCForm/Ath.js");
+        Skip.addJs("./CCForm/JS/FileUpload/fileUpload.js");
+        Skip.addJs("./Scripts/jquery-form.js");
+        $('head').append("<link href='./CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
+    }
+
 
 
     //获取没有解析的外部数据源
@@ -1115,15 +1140,15 @@ function GenerWorkNode() {
 
   
 
-    if (node.FormType == 11) {
-        //获得配置信息.
-        var frmNode = flowData["FrmNode"];
-        if (frmNode) {
-            frmNode = frmNode[0];
-            if (frmNode.FrmSln == 1)
-                pageData.IsReadonly = 1
-        }
-    }
+    //if (node.FormType == 11) {
+    //    //获得配置信息.
+    //    var frmNode = flowData["FrmNode"];
+    //    if (frmNode) {
+    //        frmNode = frmNode[0];
+    //        if (frmNode.FrmSln == 1)
+    //            pageData.IsReadonly = 1
+    //    }
+    //}
     //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
     if (node.FormType == 5) {
@@ -1177,6 +1202,8 @@ function GenerWorkNode() {
     }*/
 
     $.parser.parse("#CCForm");
+
+   
 
     //单表单加载后执行.
     CCFormLoaded();
@@ -1331,6 +1358,10 @@ function SetFrmReadonly() {
     $('#CCForm').find('input,textarea,select').attr('disabled', false);
     $('#CCForm').find('input,textarea,select').attr('readonly', true);
     $('#CCForm').find('input,textarea,select').attr('disabled', true);
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#WorkCheck_Doc").removeAttr("readonly");
+        $("#WorkCheck_Doc").removeAttr("disabled");
+    }
 
     $('#Btn_Save').attr('disabled', true);
 }

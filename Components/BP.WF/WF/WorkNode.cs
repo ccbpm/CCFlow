@@ -6857,16 +6857,6 @@ namespace BP.WF
                 }
                 #endregion 如果需要跳转.
 
-                #region 删除已经发送的消息，那些消息已经成为了垃圾信息.
-                if (Glo.IsEnableSysMessage == true)
-                {
-                    Paras ps = new Paras();
-                    ps.SQL = "DELETE FROM Sys_SMS WHERE MsgFlag=" + SystemConfig.AppCenterDBVarStr + "MsgFlag";
-                    ps.Add("MsgFlag", "WKAlt" + this.HisNode.NodeID + "_" + this.WorkID);
-                    BP.DA.DBAccess.RunSQL(ps);
-                }
-                #endregion
-
                 #region 设置流程的标记.
                 if (this.HisNode.IsStartNode)
                 {

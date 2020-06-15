@@ -547,9 +547,19 @@ function Send(isHuiQian, formType) {
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
+        var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+        
+        var isLastHuiQian = true;
+        //待办人数
+        var todoEmps = gwf.TodoEmps;
+        if (todoEmps != null && todoEmps != undefined) {
+            var huiqianSta = gwf.GetPara("HuiQianTaskSta") == 1 ? true : false;
+            if (wf_node.TodolistModel == 1 && huiqianSta == true && todoEmps.split(";").length > 1)
+                isLastHuiQian = false;
+        }
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         toNodeID = selectToNode.No;
-        if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
+        if (selectToNode.IsSelectEmps == "1" && isLastHuiQian==true) { //跳到选择接收人窗口
             Save(1); //执行保存.
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -725,7 +735,7 @@ function OptSuc(msg) {
     }
 
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
-        $('#returnWorkModal').modal().hide()
+        $('#returnWorkModal').modal('hide');
     }
 
     //增加msg的模态窗口
@@ -822,8 +832,9 @@ function closeWindow() {
 
     //提示消息有错误，页面不跳转
     var msg = $("#msgModalContent").html();
-    if (msg.indexOf("err@") == -1)
-        window.close();
+    if (msg.indexOf("err@") == -1) {
+       window.close();
+    }
     else {
         setToobarEnable();
         $("#msgModal").modal("hidden");
@@ -836,6 +847,7 @@ function closeWindow() {
     }
     if (window.parent != null && window.parent != undefined
         && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1) {
+       
         window.parent.close();
     }
 }

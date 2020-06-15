@@ -36,7 +36,7 @@ function InitBar(optionKey) {
     html += "</select >";
 
     html += "<input id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_Imp' type=button onclick='Imp()' value='表单导入' />";
+    //html += "<input  id='Btn_Imp' type=button onclick='Imp()' value='表单导入' />";
     //   html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
 
     //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";

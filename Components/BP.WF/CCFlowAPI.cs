@@ -537,7 +537,7 @@ namespace BP.WF
                 }
 
                 //执行表单事件
-                string msg = md.DoEvent(EventListFrm.FrmLoadBefore, wk);
+                string msg = ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, wk);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 

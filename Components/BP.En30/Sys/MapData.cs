@@ -1584,46 +1584,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 执行事件.
-        /// </summary>
-        /// <param name="eventType"></param>
-        /// <param name="en"></param>
-        /// <param name="atParas"></param>
-        /// <returns></returns>
-        public string DoEvent(string eventType, Entity en, string atParas = null)
-        {
-            #region 首先执行通用的事件重载方法.
-            if (EventListFrm.FrmLoadBefore.Equals(eventType) == true)
-                BP.En.OverrideFile.FrmEvent_LoadBefore(this.No, en);
-
-            //装载之后.
-            if (EventListFrm.FrmLoadAfter.Equals(eventType) == true)
-                BP.En.OverrideFile.FrmEvent_FrmLoadAfter(this.No, en);
-
-            ///保存之前.
-            if (EventListFrm.SaveBefore.Equals(eventType) == true)
-                BP.En.OverrideFile.FrmEvent_SaveBefore(this.No, en);
-
-            //保存之后.
-            if (EventListFrm.SaveAfter.Equals(eventType) == true)
-                BP.En.OverrideFile.FrmEvent_SaveAfter(this.No, en);
-            #endregion 首先执行通用的事件重载方法.
-
-            string str = this.FrmEvents.DoEventNode(eventType, en);
-
-            string mystrs = null;
-            if (this.HisFEB != null)
-                mystrs = this.HisFEB.DoIt(eventType, en, atParas);
-
-            if (str == null)
-                return mystrs;
-
-            if (mystrs == null)
-                return str;
-
-            return str + "@" + mystrs;
-        }
-        /// <summary>
         /// 升级逻辑.
         /// </summary>
         public void Upgrade()

@@ -18,13 +18,43 @@ namespace BP.WF
         /// <summary>
         /// 执行表单
         /// </summary>
-        /// <param name="doType">执行事件类型</param>
+        /// <param name="md"></param>
+        /// <param name="eventType"></param>
         /// <param name="en"></param>
+        /// <param name="atParas"></param>
         /// <returns></returns>
-        public static string DoFrm(string doType, Entity en)
+        public static string DoFrm(MapData md, string eventType, Entity en,string atParas = null)
         {
+            #region 首先执行通用的事件重载方法.
+            if (EventListFrm.FrmLoadBefore.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_LoadBefore(md.No, en);
 
-            return "";
+            //装载之后.
+            if (EventListFrm.FrmLoadAfter.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_FrmLoadAfter(md.No, en);
+
+            ///保存之前.
+            if (EventListFrm.SaveBefore.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_SaveBefore(md.No, en);
+
+            //保存之后.
+            if (EventListFrm.SaveAfter.Equals(eventType) == true)
+                BP.En.OverrideFile.FrmEvent_SaveAfter(md.No, en);
+            #endregion 首先执行通用的事件重载方法.
+
+            string str = md.FrmEvents.DoEventNode(eventType, en);
+
+            string mystrs = null;
+            if (md.HisFEB != null)
+                mystrs = md.HisFEB.DoIt(eventType, en, atParas);
+
+            if (str == null)
+                return mystrs;
+
+            if (mystrs == null)
+                return str;
+
+            return str + "@" + mystrs;
         }
         /// <summary>
         /// 执行节点事件

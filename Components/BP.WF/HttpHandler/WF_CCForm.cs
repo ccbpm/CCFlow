@@ -1088,7 +1088,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 // 执行表单事件. FrmLoadBefore .
-                string msg = md.DoEvent(EventListFrm.FrmLoadBefore, en);
+                string msg = ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, en);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@错误:" + msg;
 
@@ -1107,7 +1107,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //执行事件
-                md.DoEvent(EventListFrm.SaveBefore, en, null);
+                ExecEvent.DoFrm(md,EventListFrm.SaveBefore, en, null);
 
 
                 //增加主表数据.
@@ -1285,7 +1285,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 // 执行表单事件. FrmLoadBefore .
-                string msg = md.DoEvent(EventListFrm.FrmLoadBefore, en);
+                string msg = ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, en);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     return "err@错误:" + msg;
 
@@ -1323,7 +1323,7 @@ namespace BP.WF.HttpHandler
 
                 //执行事件, 不应该加.
                 if (1 == 2)
-                    md.DoEvent(EventListFrm.SaveBefore, en, null);
+                    ExecEvent.DoFrm(md,EventListFrm.SaveBefore, en, null);
                 #endregion 执行装载填充.与相关的事件.
 
                 #region 把外键表加入 DataSet.
@@ -1904,7 +1904,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    md.DoEvent(EventListFrm.SaveBefore, en);
+                    ExecEvent.DoFrm(md,EventListFrm.SaveBefore, en);
                 }
                 #endregion 调用事件.  @李国文.
 
@@ -1946,7 +1946,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    md.DoEvent(EventListFrm.SaveAfter, en);
+                    ExecEvent.DoFrm(md,EventListFrm.SaveAfter, en);
                 }
                 #endregion 调用事件.  @李国文.
 
@@ -3487,7 +3487,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
+                    msg = ExecEvent.DoFrm(mapData,EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
                     if (!DataType.IsNullOrEmpty(msg))
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -3560,7 +3560,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                    msg = ExecEvent.DoFrm(mapData,EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
                     if (!DataType.IsNullOrEmpty(msg))
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
@@ -3589,7 +3589,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
+                    msg = ExecEvent.DoFrm(mapData,EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
                     {
                         BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
@@ -3687,7 +3687,7 @@ namespace BP.WF.HttpHandler
                     uploadFileM += dbUpload.MyPK + ",";
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
-                    msg = mapData.DoEvent(EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
+                    msg = ExecEvent.DoFrm(mapData,EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
                         BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 

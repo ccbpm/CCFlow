@@ -8948,7 +8948,7 @@ namespace BP.WF
                 try
                 {
                     //处理表单保存后.
-                    string s = nd.MapData.DoEvent(EventListFrm.SaveAfter, wk);
+                    string s = ExecEvent.DoFrm(nd.MapData, EventListFrm.SaveAfter, wk);
 
                     //执行保存前事件.
                     s += ExecEvent.DoNode(EventListNode.NodeFrmSaveAfter, workNode, null);
@@ -9094,7 +9094,7 @@ namespace BP.WF
 
             en.SetValByKey("OID", workID);
 
-            md.DoEvent(EventListFrm.SaveBefore, en);
+            ExecEvent.DoFrm(md,EventListFrm.SaveBefore, en);
 
             if (i == 0)
             {
@@ -9105,7 +9105,7 @@ namespace BP.WF
                 en.Update();
             }
 
-            md.DoEvent(EventListFrm.SaveAfter, en);
+            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, en);
 
 
             if (workDtls != null)
@@ -9145,7 +9145,7 @@ namespace BP.WF
                 }
             }
 
-            md.DoEvent(EventListFrm.SaveAfter, en);
+            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, en);
         }
         /// <summary>
         /// 从任务池里取出来一个子任务

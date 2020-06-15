@@ -179,8 +179,10 @@ namespace BP.WF
                         obj.AddEntities(this.HisToNDs);
                     if (this.HisToNDNum > 1)
                     {
-
-                        obj.RetrieveInSQL("NodeID", "SELECT ToNode FROM WF_Direction WHERE Node=" + this.NodeID + " ORDER BY Idx ", "Step");
+                        string toNodes = this.HisToNDs.Replace("@", ",");
+                        if (toNodes.Length > 1)
+                            toNodes = toNodes.Substring(1);
+                        obj.RetrieveInOrderBy("NodeID", toNodes, "Step");
                     }
                     this.SetRefObject("HisToNodes", obj);
                 }

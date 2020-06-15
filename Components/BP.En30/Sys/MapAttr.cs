@@ -1617,7 +1617,18 @@ namespace BP.Sys
             }
             return "执行成功";
         }
-
+        //字段插队
+        public string DoInsertTo()
+        {
+            this.DoOrderInsertTo(MapAttrAttr.Idx,this.MyPK,MapAttrAttr.GroupID);
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_Title";
+            if (attr.RetrieveFromDBSources() == 1)
+            {
+                attr.Update("Idx", -1);
+            }
+            return "执行成功！";
+        }
         /// <summary>
         /// 生成他的外键字典数据,转化为json.
         /// </summary>

@@ -80,6 +80,8 @@ namespace BP.WF
         {
             if (wn.HisNode == null)
                 return null;
+            if (objs == null)
+                objs = wn.HisMsgObjs;
 
             int toNodeID = 0;
             if (wn.JumpToNode != null)

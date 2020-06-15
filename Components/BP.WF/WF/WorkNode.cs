@@ -1884,7 +1884,7 @@ namespace BP.WF
                 DataType.GeTimeLimits(rptGe.FlowStartRDT, DataType.CurrentDataTime));
 
             //如果两个物理表不想等.
-            if (this.HisWork.EnMap.PhysicsTable != this.rptGe.EnMap.PhysicsTable)
+            if (this.HisWork.EnMap.PhysicsTable.Equals(this.rptGe.EnMap.PhysicsTable)==false)
             {
                 // 更新状态。
                 this.HisWork.SetValByKey("CDT", DataType.CurrentDataTime);
@@ -2176,16 +2176,10 @@ namespace BP.WF
             #endregion
 
             #region  初始化发起的工作节点。
-            if (this.HisWork.EnMap.PhysicsTable == toWK.EnMap.PhysicsTable)
-            {
-                /*这是数据合并模式, 就不执行copy*/
-                this.CopyData(toWK, toND, true);
-            }
-            else
-            {
+            if (this.HisWork.EnMap.PhysicsTable.Equals(toWK.EnMap.PhysicsTable)== false)
                 /* 如果两个数据源不想等，就执行copy。 */
                 this.CopyData(toWK, toND, false);
-            }
+           
             #endregion 初始化发起的工作节点.
 
             #region 判断是否是质量评价。

@@ -1907,14 +1907,13 @@
 
         /**/</script>
     <style type="text/css">
-        .table thead {
-            display: block;
+        .table thead,.table tbody {
+            width:100%;
+            box-sizing:border-box;
         }
-
-        .table tbody {
-            display: block;
-            overflow-x: hidden;
-            overflow-y: auto;
+        input[type=text], input[type=password], select{
+            width:120px!important;
+            box-sizing:border-box;
         }
     </style>
 </head>
@@ -1923,9 +1922,9 @@
         <input type="hidden" id="formExt" />
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
         <div id="ContentDtlDiv">
-            <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
+            <div id="" class="portlet portlet-sortable light bg-inverse">
                 <div class="portlet-body " id="">
-                    <div class="tab-content" style="margin: 4px 0px;">
+                    <div class="tab-content">
                         <div class="tab-pane active portlet_tab flowLists" style="overflow-x: auto; overflow-y: hidden;" id="dtlDiv">
                             <div>
                                 <table class="table wupop" data-data="true">

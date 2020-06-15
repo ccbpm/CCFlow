@@ -8755,7 +8755,7 @@ namespace BP.WF
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    FrmNode frmNode = new FrmNode(fk_flow, nd.NodeID, nd.NodeFrmID);
+                    FrmNode frmNode = new FrmNode(nd.NodeID, nd.NodeFrmID);
                     switch (frmNode.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -10264,7 +10264,7 @@ namespace BP.WF
             if (nodeid != 0)
             {
                 //判断表单方案。
-                FrmNode fn = new FrmNode(flowid, nodeid, frmID);
+                FrmNode fn = new FrmNode(nodeid, frmID);
                 if (fn.FrmSln == FrmSln.Readonly)
                 {
                     return "err@不允许上传附件.";

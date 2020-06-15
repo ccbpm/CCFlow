@@ -617,32 +617,13 @@ namespace BP.Sys
         {
             get
             {
-                FrmImgAths obj = this.GetRefObject("FrmImgAths") as FrmImgAths;
-                if (obj == null)
-                {
-                    obj = new FrmImgAths(this.No);
-                    this.SetRefObject("FrmImgAths", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmImgAths(),
+             FrmImgAthAttr.FK_MapData, this.No);
+                return ens as FrmImgAths;
+                 
             }
         }
-
-        // <summary>
-        /// 图片附件记录
-        /// </summary>
-        public FrmImgAthDBs FrmImgAthDB
-        {
-            get
-            {
-                FrmImgAthDBs obj = this.GetRefObject("FrmImgAthDBs") as FrmImgAthDBs;
-                if (obj == null)
-                {
-                    obj = new FrmImgAthDBs(this.No);
-                    this.SetRefObject("FrmImgAthDBs", obj);
-                }
-                return obj;
-            }
-        }
+    
         /// <summary>
         /// 单选按钮
         /// </summary>
@@ -650,13 +631,9 @@ namespace BP.Sys
         {
             get
             {
-                FrmRBs obj = this.GetRefObject("FrmRBs") as FrmRBs;
-                if (obj == null)
-                {
-                    obj = new FrmRBs(this.No);
-                    this.SetRefObject("FrmRBs", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmRBs(),
+                 FrmRBAttr.FK_MapData, this.No);
+                return ens as FrmRBs;
             }
         }
         /// <summary>

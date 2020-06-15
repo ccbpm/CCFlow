@@ -470,18 +470,15 @@ namespace BP.WF.HttpHandler
                 return "err@当前流程还是草稿.";
 
             //是否可以处理当前工作？
-            bool isCanDoCurrWorker = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
+            bool isCanDoCurrWorker = false;
+
+            string toDoEmps = ";"+gwf.TodoEmps;
 
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
-            if (gwf.WFState != WFState.Complete && gwf.TodoEmps.Contains(WebUser.No) )
+            if (gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
             {
-                GenerWorkerLists gwls = new GenerWorkerLists();
-                int i = gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Emp, WebUser.No, GenerWorkerListAttr.IsPass, 0);
-                if (i >= 1)
-                {
-                    WF_MyFlow handler = new WF_MyFlow();
-                    return handler.MyFlow_Init();
-                }
+                WF_MyFlow handler = new WF_MyFlow();
+                return handler.MyFlow_Init();
             }
 
             //是否是工作参与人?
@@ -490,7 +487,6 @@ namespace BP.WF.HttpHandler
                 || WebUser.IsAdmin == true)
             {
                 //可以查看工作,就执行以后的.
-
             }
             else
             {
@@ -510,24 +506,10 @@ namespace BP.WF.HttpHandler
             if (IsCanView(gwf) == false)
                 return "err@您无权查看该工作.";
 
-            //当前工作.
-            Work currWK = this.currND.HisWork;
-
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
                  || this.currND.HisFormType == NodeFormType.SheetAutoTree)
             {
-
-                if (this.currND.IsStartNode)
-                {
-                    /*如果是开始节点, 先检查是否启用了流程限制。*/
-                    if (BP.WF.Glo.CheckIsCanStartFlow_InitStartFlow(this.currFlow) == false)
-                    {
-                        /* 如果启用了限制就把信息提示出来. */
-                        string msg = BP.WF.Glo.DealExp(this.currFlow.StartLimitAlert, currWK, null);
-                        return "err@" + msg;
-                    }
-                }
 
                 #region 开始组合url.
                 string toUrl = "";
@@ -571,37 +553,16 @@ namespace BP.WF.HttpHandler
                         continue;
                     toUrl += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
-
                 #endregion 开始组合url.
-
-
-                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
-                toUrl = toUrl.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
-
+                 
                 //增加fk_node
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
-
-                //如果是开始节点.
-                if (currND.IsStartNode == true)
-                {
-                    if (toUrl.Contains("PrjNo") == true && toUrl.Contains("PrjName") == true)
-                    {
-                        string sql = "UPDATE " + currWK.EnMap.PhysicsTable + " SET PrjNo='" + this.GetRequestVal("PrjNo") + "', PrjName='" + this.GetRequestVal("PrjName") + "' WHERE OID=" + this.WorkID;
-                        BP.DA.DBAccess.RunSQL(sql);
-                    }
-                }
                 return "url@" + toUrl;
             }
 
             if (this.currND.HisFormType == NodeFormType.SDKForm)
             {
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
-
                 string url = currND.FormUrl;
                 if (DataType.IsNullOrEmpty(url))
                 {
@@ -609,7 +570,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //处理连接.
-                url = this.MyView_Init_DealUrl(currND, currWK);
+                url = this.MyView_Init_DealUrl(currND, url);
 
                 //sdk表单就让其跳转.
                 return "url@" + url;
@@ -636,59 +597,33 @@ namespace BP.WF.HttpHandler
 
             #region 内置表单类型的判断.
             /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
-            if (this.WorkID == 0)
-            {
-                currWK = this.currFlow.NewWork();
-                this.WorkID = currWK.OID;
-            }
 
             if (frmtype == NodeFormType.FoolTruck)
             {
-                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
-
                 string url = "MyViewGener.htm";
 
                 //处理连接.
-                url = this.MyView_Init_DealUrl(currND, currWK, url);
+                url = this.MyView_Init_DealUrl(currND, url);
                 return "url@" + url;
             }
 
             if (frmtype == NodeFormType.WebOffice)
             {
-                /*如果是公文表单，就转到公文表单的解析执行器上，为软通动力改造。*/
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
-
                 string url = "MyViewWebOffice.htm";
 
                 //处理连接.
-                url = this.MyView_Init_DealUrl(currND, currWK, url);
+                url = this.MyView_Init_DealUrl(currND, url);
                 return "url@" + url;
             }
 
             if (frmtype == NodeFormType.FoolForm && this.IsMobile == false)
             {
-                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
-
                 string url = "MyViewGener.htm";
                 if (this.IsMobile)
                     url = "MyViewGener.htm";
 
                 //处理连接.
-                url = this.MyView_Init_DealUrl(currND, currWK, url);
+                url = this.MyView_Init_DealUrl(currND, url);
 
                 url = url.Replace("DoType=MyView_Init&", "");
                 url = url.Replace("&DoWhat=StartClassic", "");
@@ -698,16 +633,11 @@ namespace BP.WF.HttpHandler
             //自定义表单
             if (frmtype == NodeFormType.SelfForm && this.IsMobile == false)
             {
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
 
                 string url = "MyViewSelfForm.htm";
 
                 //处理连接.
-                url = this.MyView_Init_DealUrl(currND, currWK, url);
+                url = this.MyView_Init_DealUrl(currND, url);
 
                 url = url.Replace("DoType=MyView_Init&", "");
                 url = url.Replace("&DoWhat=StartClassic", "");
@@ -718,13 +648,13 @@ namespace BP.WF.HttpHandler
             string myurl = "MyViewGener.htm";
 
             //处理连接.
-            myurl = this.MyView_Init_DealUrl(currND, currWK, myurl);
+            myurl = this.MyView_Init_DealUrl(currND, myurl);
             myurl = myurl.Replace("DoType=MyView_Init&", "");
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
 
             return "url@" + myurl;
         }
-        private string MyView_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
+        private string MyView_Init_DealUrl(BP.WF.Node currND,   string url = null)
         {
             if (url == null)
                 url = currND.FormUrl;
@@ -751,7 +681,7 @@ namespace BP.WF.HttpHandler
             if (urlExt.Contains("FK_Node") == false)
                 urlExt += "&FK_Node=" + currND.NodeID;
 
-            if (urlExt.Contains("&FID") == false && currWK != null)
+            if (urlExt.Contains("&FID") == false )
             {
                 //urlExt += "&FID=" + currWK.FID;
                 urlExt += "&FID=" + this.FID;
@@ -1242,7 +1172,7 @@ namespace BP.WF.HttpHandler
                 if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
+                    FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
                     {
                         case WhoIsPK.FID:

@@ -620,7 +620,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="fk_node">节点</param>
         /// <param name="fk_frm">表单</param>
-        public FrmNode(string fk_flow, int fk_node, string fk_frm)
+        public FrmNode(int fk_node, string fk_frm)
         {
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
 

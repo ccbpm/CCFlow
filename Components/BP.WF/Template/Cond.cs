@@ -200,6 +200,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 隶属流程编号，用于备份删除.
+        /// </summary>
+        public string RefFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.RefFlowNo);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.RefFlowNo, value);
+            }
+        }
+        /// <summary>
         /// 备注
         /// </summary>
         public string Note
@@ -999,7 +1013,6 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
                 map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
 
@@ -1013,6 +1026,30 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+
+            if ( DataType.IsNullOrEmpty( this.RefFlowNo)==true)
+            {
+                if (this.CondType== CondType.Dir
+                    || this.CondType == CondType.Node 
+                    || this.CondType== CondType.SubFlow)
+                {
+                    Node nd = new Node(this.FK_Node);
+                    this.RefFlowNo = nd.FK_Flow;
+                }
+
+                if (this.CondType == CondType.Flow)
+                {
+                    this.RefFlowNo = this.FK_Flow;
+                    if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
+                        throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
+                }
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
     }
     /// <summary>
     /// 条件s

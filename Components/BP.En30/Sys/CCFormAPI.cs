@@ -1351,10 +1351,6 @@ namespace BP.Sys
             DataTable Sys_FrmImgAth = md.FrmImgAths.ToDataTableField("Sys_FrmImgAth");
             ds.Tables.Add(Sys_FrmImgAth);
 
-            //FrmImgAthDBs 上传图片信息
-            DataTable Sys_FrmImgAthDB = md.FrmImgAthDB.ToDataTableField("Sys_FrmImgAthDB");
-            ds.Tables.Add(Sys_FrmImgAthDB);
-
             //放入缓存.
             BP.DA.CashFrmTemplate.Put(frmID, ds);
 
@@ -1367,7 +1363,6 @@ namespace BP.Sys
         /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
         {
-
             MapData md = new MapData(fk_mapdata);
 
             //求出 frmIDs 

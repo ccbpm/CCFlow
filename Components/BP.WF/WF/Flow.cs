@@ -5814,7 +5814,7 @@ namespace BP.WF
             //sql = " DELETE FROM WF_chofflow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'";
-            sql += "@ DELETE FROM  WF_Cond WHERE FK_Flow='" + this.No + "'";
+            sql += "@ DELETE FROM  WF_Cond WHERE RefFlowNo='" + this.No + "'";
 
             //删除消息配置.
             sql += "@ DELETE FROM WF_PushMsg WHERE FK_Flow='" + this.No + "'";

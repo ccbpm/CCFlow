@@ -326,7 +326,7 @@ namespace BP.WF.HttpHandler
             if (nd != null)
             {
                 BP.WF.Template.FrmNode fn = new FrmNode();
-                fn = new FrmNode(nd.FK_Flow, nd.NodeID, formID);
+                fn = new FrmNode(nd.NodeID, formID);
                 //先判断解决方案
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {

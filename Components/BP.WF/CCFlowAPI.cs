@@ -19,6 +19,9 @@ using BP.Tools;
 
 namespace BP.WF
 {
+    /// <summary>
+    /// 流程的API.
+    /// </summary>
     public class CCFlowAPI
     {
         /// <summary>
@@ -33,7 +36,7 @@ namespace BP.WF
         public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0")
         {
             if (workID == 0)
-                workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, null, null, userNo, null);
+                throw new Exception("err@参数workid错误.");
 
             try
             {
@@ -44,8 +47,6 @@ namespace BP.WF
                 wk.RetrieveFromDBSources();
 
                 MapData md = new MapData(nd.NodeFrmID);
-
-                //wk.ResetDefaultVal(wk.EnMap.FK_MapData, fk_flow, fk_node);
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = ExecEvent.DoNode(EventListNode.FrmLoadBefore, nd,

@@ -290,6 +290,7 @@
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Admin2\OrgAdminer.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
+    <Compile Include="Template\CondEnum.cs" />
     <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\Admin2\Org.cs" />

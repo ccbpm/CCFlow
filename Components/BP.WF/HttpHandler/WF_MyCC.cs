@@ -1898,7 +1898,7 @@ namespace BP.WF.HttpHandler
                 if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Flow, this.FK_Node, this.currND.NodeFrmID);
+                    FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
                     {
                         case WhoIsPK.FID:

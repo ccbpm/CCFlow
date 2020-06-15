@@ -639,7 +639,7 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 BP.WF.Template.FrmNode fn = new FrmNode();
-                fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                fn = new FrmNode( this.FK_Node, this.FK_MapData);
 
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
@@ -983,7 +983,7 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    FrmNode fn = new FrmNode(  nd.NodeID, this.FK_MapData);
                     if (fn.FrmSln == FrmSln.Self)
                     {
                         string no = this.EnsName + "_" + nd.NodeID;
@@ -1215,7 +1215,7 @@ namespace BP.WF.HttpHandler
                 nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
                 //if (nd.HisFormType== NodeFormType.FoolTruck)
 
-                fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                fn = new FrmNode(  this.FK_Node, this.FK_MapData);
                 isLoadData = fn.IsEnableLoadData;
             }
             #endregion 定义流程信息的所用的 配置entity.
@@ -1761,7 +1761,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    FrmNode fn = new FrmNode(  this.FK_Node, this.FK_MapData);
                     switch (fn.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1823,7 +1823,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false)
                 {
                     /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    FrmNode fn = new FrmNode( this.FK_Node, this.FK_MapData);
                     switch (fn.WhoIsPK)
                     {
                         case WhoIsPK.FID:
@@ -1998,7 +1998,7 @@ namespace BP.WF.HttpHandler
                     /*如果
                      * 1,传来节点ID, 不等于0.
                      * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
-                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, frmID);
+                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode( nd.NodeID, frmID);
                     if (fn.FrmSln == FrmSln.Readonly)
                     {
                         mdtl.IsInsert = false;
@@ -2091,7 +2091,7 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    FrmNode fn = new FrmNode(  nd.NodeID, this.FK_MapData);
                     if (fn.FrmSln == FrmSln.Self)
                     {
                         string no = fk_mapDtl + "_" + nd.NodeID;
@@ -2354,7 +2354,7 @@ namespace BP.WF.HttpHandler
                     /*如果
                      * 1,传来节点ID, 不等于0.
                      * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
-                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode( nd.NodeID, this.FK_MapData);
                     ///自定义权限.
                     if (fn.FrmSln == FrmSln.Self)
                     {
@@ -3315,7 +3315,7 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0)
             {
                 //判断表单方案。
-                FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                FrmNode fn = new FrmNode( this.FK_Node, this.FK_MapData);
                 if (fn.FrmSln == FrmSln.Readonly)
                     return "err@不允许上传附件.";
 
@@ -3881,7 +3881,7 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(this.FK_Node);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, dtl.FK_MapData);
+                    FrmNode fn = new FrmNode(  nd.NodeID, dtl.FK_MapData);
                     if (fn.FrmSln == FrmSln.Self)
                     {
                         string no = this.FK_MapDtl + "_" + nd.NodeID;
@@ -4032,7 +4032,7 @@ namespace BP.WF.HttpHandler
                     Node nd = new Node(this.FK_Node);
                     if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                     {
-                        FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, this.FK_MapData);
+                        FrmNode fn = new FrmNode(  nd.NodeID, this.FK_MapData);
                         if (fn.FrmSln == FrmSln.Self)
                         {
                             string no = this.FK_MapDtl + "_" + nd.NodeID;
@@ -4746,7 +4746,7 @@ namespace BP.WF.HttpHandler
                     {
                         fk_mapdata = nd.NodeFrmID;
                     }
-                    FrmNode fn = new FrmNode(nd.FK_Flow, nd.NodeID, fk_mapdata);
+                    FrmNode fn = new FrmNode(  nd.NodeID, fk_mapdata);
                     /*if (fn.FrmSln == FrmSln.Default)
                     {
                         if (fn.WhoIsPK == WhoIsPK.FID)

@@ -761,17 +761,6 @@ namespace BP.Sys
             Attrs attrs = en.EnMap.Attrs;
             string MsgOK = "";
             string MsgErr = "";
-            foreach (Attr attr in attrs)
-            {
-                if (doc.Contains("@" + attr.Key) == false)
-                    continue ;
-                //if (attr.MyDataType == DataType.AppString
-                //    || attr.MyDataType == DataType.AppDateTime
-                //    || attr.MyDataType == DataType.AppDate)
-                //    doc = doc.Replace("@" + attr.Key, "'" + en.GetValStrByKey(attr.Key) + "'");
-                //else
-                doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
-            }
 
             doc = doc.Replace("~", "'");
             doc = doc.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -780,6 +769,19 @@ namespace BP.Sys
             doc = doc.Replace("@FK_Node", nev.FK_MapData.Replace("ND", ""));
             doc = doc.Replace("@FK_MapData", nev.FK_MapData);
             doc = doc.Replace("@WorkID", en.GetValStrByKey("OID", "@WorkID"));
+
+            if (doc.Contains("@") == true)
+            {
+                foreach (Attr attr in attrs)
+                {
+                    if (doc.Contains("@" + attr.Key) == false)
+                        continue;
+                    doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                }
+            }
+           
+
+            
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
             doc = doc.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
@@ -986,6 +988,9 @@ namespace BP.Sys
                     {
                         throw new Exception("@事件名称:" + evName + "拼写错误，或者系统不存在。说明：事件所在的类库必须是以BP.开头，并且类库的BP.xxx.dll。");
                     }
+
+                    if (ev == null)
+                        throw new Exception("@事件名称:" + evName + "拼写错误，或者系统不存在。说明：事件所在的类库必须是以BP.开头，并且类库的BP.xxx.dll。");
 
                     //开始执行.
                     try

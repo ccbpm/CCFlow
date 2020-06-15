@@ -1020,7 +1020,7 @@ namespace BP.WF.Template
                 #endregion 工作到达、退回、移交、撤销
 
                 #region 节点发送成功后
-                if (this.FK_Event == BP.Sys.EventListNode.SendSuccess && objs.VarAcceptersID != null)
+                if (this.FK_Event == BP.Sys.EventListNode.SendSuccess && objs!=null &&objs.VarAcceptersID != null)
                 {
                     /*如果向接受人发送消息.*/
                     toEmpIDs = objs.VarAcceptersID;

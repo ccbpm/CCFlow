@@ -739,9 +739,9 @@ namespace CCFlow.WF.CCForm
             #endregion 求主表的主键类型.
 
             //求出从表实体类.
-            BP.Sys.FormEventBase frmEvent = null;
-            if (md.FormEventEntity != "")
-                frmEvent = BP.Sys.Glo.GetFormEventBaseByEnName(md.No);
+            //BP.Sys.FormEventBase frmEvent = null;
+            //if (md.FormEventEntity != "")
+            //    frmEvent = BP.Sys.Glo.GetFormEventBaseByEnName(md.No);
 
 
             #region 处理EntityMyPK 类型的实体保存。
@@ -765,18 +765,18 @@ namespace CCFlow.WF.CCForm
                 wk.MyPK = pkValue;
 
                 //保存前执行事件.
-                md.DoEvent(EventListFrm.SaveBefore, wk);
+               BP.WF.ExecEvent.DoFrm(md,EventListFrm.SaveBefore, wk);
 
                 // 保存实体.
                 wk.Save();
 
                 //保存前执行事件.
-                md.DoEvent(EventListFrm.SaveAfter, wk);
+                BP.WF.ExecEvent.DoFrm(md,EventListFrm.SaveAfter, wk);
 
 
-                //保存前(执行类事件.)
-                if (frmEvent != null)
-                    frmEvent.DoIt(EventListFrm.SaveAfter, wk, null);
+                ////保存前(执行类事件.)
+                //if (frmEvent != null)
+                //    frmEvent.DoIt(EventListFrm.SaveAfter, wk, null);
             }
             #endregion 处理 EntityMyPK 类型的实体保存。
 
@@ -800,13 +800,13 @@ namespace CCFlow.WF.CCForm
                 wk.OID = Int64.Parse(pkValue);
 
                 //执行事件.
-                md.DoEvent(EventListFrm.SaveBefore, wk);
+                BP.WF.ExecEvent.DoFrm(md,EventListFrm.SaveBefore, wk);
 
                 //保存.
                 wk.Save();
 
                 //执行事件.
-                md.DoEvent(EventListFrm.SaveAfter, wk);
+                BP.WF.ExecEvent.DoFrm(md, EventListFrm.SaveAfter, wk);
 
 
             }

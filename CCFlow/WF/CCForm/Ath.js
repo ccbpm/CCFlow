@@ -225,7 +225,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         //增加操作列
         _html += "<th  nowrap=true  style='" + colstyle + "width:100px' >";
         if (athDesc.IsDownload == 1 && dbs.length > 0)
-            _html += "<a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" ><img src='" + currImgPath+"/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' />打包下载</a>";
+            _html += "<a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" >操作<img src='" + currImgPath+"/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' /></a>";
         else
             _html += "操作";
         _html += "</th>";

@@ -77,21 +77,21 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
     public void ND101()
     {
         #region 当表单保存前.
-        if (this.FK_Event == FrmEventList.FrmLoadBefore)
+        if (this.FK_Event == BP.Sys.EventListFrm.FrmLoadBefore)
         {
             /* 当表单装载前. */
         }
         #endregion 当表单保存前.
 
         #region 当表单装载后.
-        if (this.FK_Event == FrmEventList.FrmLoadAfter)
+        if (this.FK_Event == BP.Sys.EventListFrm.FrmLoadAfter)
         {
             /* 当表单装载后. */
         }
         #endregion 当表单装载后.
 
         #region 当表单保存前.
-        if (this.FK_Event == FrmEventList.SaveBefore)
+        if (this.FK_Event == BP.Sys.EventListFrm.SaveBefore)
         {
             /* 当表单保存前. */
 
@@ -99,7 +99,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
         #endregion 当表单保存前.
 
         #region 当表单保存后.
-        if (this.FK_Event == FrmEventList.SaveAfter)
+        if (this.FK_Event == BP.Sys.EventListFrm.SaveAfter)
         {
             throw new Exception("");
             /* 当表单保存后. */

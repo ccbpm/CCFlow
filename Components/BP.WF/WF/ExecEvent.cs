@@ -113,6 +113,9 @@ namespace BP.WF
                 pms = toNode.HisPushMsgs;
             }
 
+            //写入消息之前，删除所有的消息.
+            if (SystemConfig.IsEnableAthEncrypt)
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID="+wn.HisWork.OID );
 
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)

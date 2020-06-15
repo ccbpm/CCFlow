@@ -155,8 +155,10 @@ namespace BP.WF
         /// 接受消息的工具 丁丁、微信
         /// </summary>
         public const string PushModel = "PushModel";
-
-
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public const string WorkID = "WorkID";
     }
     /// <summary>
     /// 消息
@@ -174,7 +176,7 @@ namespace BP.WF
         /// <param name="msgType">类型</param>
         /// <param name="paras">扩展参数</param>
         public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-            string msgType, string paras,string pushModel= null,string openUrl= null)
+            string msgType, string paras,Int64 workid, string pushModel= null,string openUrl= null)
         {
 
             SMS sms = new SMS();
@@ -195,6 +197,8 @@ namespace BP.WF
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
+
+            sms.WorkID = workid;
 
             if(DataType.IsNullOrEmpty(openUrl) == false)
                 sms.SetPara("OpenUrl", openUrl);
@@ -358,6 +362,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 工作ID
+        /// </summary>
+        public Int64 WorkID
+        {
+            get
+            {
+                return this.GetValInt64ByKey(SMSAttr.WorkID);
+            }
+            set
+            {
+                SetValByKey(SMSAttr.WorkID, value);
+            }
+        }
+        /// <summary>
         /// 发送人
         /// </summary>
         public string Sender
@@ -510,6 +528,10 @@ namespace BP.WF
                 map.AddTBInt(SMSAttr.IsRead, 0, "是否读取?", true, true);
                 map.AddTBInt(SMSAttr.IsAlert, 0, "是否提示?", true, true);
 
+                //用于获得数据.
+                map.AddTBInt(SMSAttr.WorkID, 0, "WorkID", true, true);
+
+                //消息主键.
                 map.AddTBString(SMSAttr.MsgFlag, null, "消息标记(用于防止发送重复)", false, true, 0, 200, 20);
                 map.AddTBString(SMSAttr.MsgType, null, "消息类型(CC抄送,Todolist待办,Return退回,Etc其他消息...)", false, true, 0, 200, 20);
 

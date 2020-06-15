@@ -416,7 +416,7 @@ namespace BP.WF.DTS
                                 Emp myemp = new Emp(doOutTime);
 
                                 bool boo = BP.WF.Dev2Interface.WriteToSMS(myemp.No, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
-                                    "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息");
+                                    "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息",workid);
                                 if (boo)
                                     msg = "'" + title + "'逾期消息已经发送给:'" + myemp.Name + "'";
                                 else

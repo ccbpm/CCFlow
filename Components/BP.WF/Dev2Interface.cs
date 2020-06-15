@@ -40,9 +40,9 @@ namespace BP.WF
         /// <param name="doc">内容</param>
         /// <param name="msgFlag">消息标记</param>
         /// <returns>写入成功或者失败.</returns>
-        public static bool WriteToSMS(string sendToUserNo, string sendDT, string title, string doc, string msgFlag)
+        public static bool WriteToSMS(string sendToUserNo, string sendDT, string title, string doc, string msgFlag,Int64 workid)
         {
-            SMS.SendMsg(sendToUserNo, title, doc, msgFlag, "Info", "");
+            SMS.SendMsg(sendToUserNo, title, doc, msgFlag, "Info", "",workid);
             return true;
         }
         #endregion
@@ -3869,10 +3869,8 @@ namespace BP.WF
                 msgDoc += " <hr>打开工作: " + url;
             }
             string atParas = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@NodeID=" + nodeID + "@FK_Node=" + nodeID;
-            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, atParas, pushModel, url);
+            BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, atParas, workID, pushModel, url);
         }
-
-
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -3887,7 +3885,7 @@ namespace BP.WF
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="atParas">参数.</param>
         public static void Port_SendMessage(string sendToEmpNo, string smsDoc, string emailTitle, string msgType, string msgGroupFlag,
-            string sendEmpNo, string openUrl, string pushModel, string msgPK = null, string atParas = null)
+            string sendEmpNo, string openUrl, string pushModel, Int64 workid, string msgPK = null, string atParas = null)
         {
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sendToEmpNo);
             SMS sms = new SMS();
@@ -3895,10 +3893,7 @@ namespace BP.WF
             {
                 /*如果有唯一标志,就判断是否有该数据，没有该数据就允许插入.*/
                 if (sms.IsExit(SMSAttr.MyPK, msgPK) == true)
-                {
                     return;
-                }
-
                 sms.MyPK = msgPK;
             }
             else
@@ -3943,6 +3938,9 @@ namespace BP.WF
             sms.MsgFlag = msgGroupFlag; // 消息分组标志,用于批量删除.
 
             sms.AtPara = atParas;
+
+            sms.WorkID = workid;
+             
 
             sms.SetPara("OpenUrl", openUrl);
             sms.SetPara("PushModel", pushModel);

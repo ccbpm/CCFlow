@@ -6667,6 +6667,9 @@ namespace BP.WF
             // 配置的sql,执行后,返回结果是 <> 0 .
             if (role == StartLimitRole.ResultIsNotZero)
             {
+                if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
+                    return true;
+
                 sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
                 if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
                     return true;

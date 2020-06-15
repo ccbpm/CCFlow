@@ -6680,10 +6680,10 @@ namespace BP.WF
                     #endregion 当前节点是分流节点但是是子线程退回的节点
 
                     /* 检查该退回是否是原路返回 ? */
-                    ps = new Paras();
-                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
-                    ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
-                    DataTable mydt = DBAccess.RunSQLReturnTable(ps);
+                    Paras myps = new Paras();
+                    myps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    myps.Add(ReturnWorkAttr.WorkID, this.WorkID);
+                    DataTable mydt = DBAccess.RunSQLReturnTable(myps);
                     if (mydt.Rows.Count != 0)
                     {
                         //有可能查询出来多个，因为按时间排序了，只取出最后一次退回的，看看是否有退回并原路返回的信息。
@@ -7188,8 +7188,8 @@ namespace BP.WF
                 #endregion 执行启动子流程.
 
                 #region 处理流程数据与业务表的数据同步.
-                if (this.HisFlow.DTSWay != FlowDTSWay.None)
-                    WorkNodePlus.DTSData(this.HisFlow, this.HisGenerWorkFlow,this.rptGe, this.HisNode, this.IsStopFlow);
+                //if (this.HisFlow.DTSWay != FlowDTSWay.None)
+                  //  WorkNodePlus.DTSData(this.HisFlow, this.HisGenerWorkFlow,this.rptGe, this.HisNode, this.IsStopFlow);
 
                 #endregion 处理流程数据与业务表的数据同步.
 

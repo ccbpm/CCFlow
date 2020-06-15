@@ -116,7 +116,6 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
                 #region 通用的属性.
                 map.AddMyPK();
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
@@ -127,13 +126,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 #endregion 通用的属性.
 
-
                 #region 个性化属性.
                 map.AddTBString(MapAttrAttr.Name, "New Link", "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(MapAttrAttr.Tag1, "_blank", "连接目标(_blank,_parent,_self)", true, false, 0, 20, 20);
                 map.AddTBString(MapAttrAttr.Tag2, null, "URL", true, false, 0, 500, 20, true);
                 #endregion 个性化属性.
-
 
                 this._enMap = map;
                 return this._enMap;

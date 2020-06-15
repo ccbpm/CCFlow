@@ -13,19 +13,19 @@ namespace BP.Sys
         /// <summary>
         /// 不执行导入
         /// </summary>
-        None=0,
+        None = 0,
         /// <summary>
         /// 表格模式
         /// </summary>
-        Table=1,
+        Table = 1,
         /// <summary>
         /// 按照Excel文件模式
         /// </summary>
-        ExcelFile=2,
+        ExcelFile = 2,
         /// <summary>
         /// 单据模式
         /// </summary>
-        BillModel=3
+        BillModel = 3
     }
     /// <summary>
     /// 明细
@@ -931,7 +931,7 @@ namespace BP.Sys
                 _IsReadonly = this.GetValIntByKey(MapDtlAttr.IsReadonly);
 
                 return this.GetValBooleanByKey(MapDtlAttr.IsReadonly);
-               
+
             }
             set
             {
@@ -1308,7 +1308,7 @@ namespace BP.Sys
                 Map map = new Map("Sys_MapDtl", "明细");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
-                map.IndexField = MapDtlAttr.FK_MapData; 
+                map.IndexField = MapDtlAttr.FK_MapData;
 
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
@@ -1316,7 +1316,7 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
-               // map.AddTBInt(MapDtlAttr.PTableModel, 0, "物理表的保存方式", false, false);
+                // map.AddTBInt(MapDtlAttr.PTableModel, 0, "物理表的保存方式", false, false);
 
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
                 map.AddTBString(MapDtlAttr.RefPK, null, "关联的主键", true, false, 0, 100, 20);
@@ -1329,7 +1329,7 @@ namespace BP.Sys
                  MapDtlAttr.Model, "@0=普通@1=固定行");
 
                 map.AddTBInt(MapDtlAttr.DtlVer, 0, "使用版本", false, false);
-               // map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
+                // map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
 
 
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
@@ -1405,8 +1405,8 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);
                 map.AddTBInt(MapDtlAttr.ImpModel, 0, "导入规则", false, false);
 
-               // map.AddBoolean(MapDtlAttr.IsImp, true, "IsImp", false, false);
-               // map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
+                // map.AddBoolean(MapDtlAttr.IsImp, true, "IsImp", false, false);
+                // map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
                 map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);
@@ -1616,7 +1616,7 @@ namespace BP.Sys
         private void InitExtMembers()
         {
             /* 如果启用了多附件*/
-            if (this.IsEnableAthM==true )
+            if (this.IsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 athDesc.MyPK = this.No + "_AthMDtl";
@@ -1636,11 +1636,14 @@ namespace BP.Sys
                     group.Insert();
                 }
             }
-            
+
         }
         protected override bool beforeInsert()
         {
-           
+            //在属性实体集合插入前，clear父实体的缓存.
+            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+
+
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
             {
@@ -1657,7 +1660,7 @@ namespace BP.Sys
             {
                 if (this.No.Contains("01Dtl") == false)
                 {
-                    string ptable = this.No.Substring(0, this.No.IndexOf("01Dtl")) + this.No.Substring(this.No.IndexOf("01Dtl")) ;
+                    string ptable = this.No.Substring(0, this.No.IndexOf("01Dtl")) + this.No.Substring(this.No.IndexOf("01Dtl"));
                     this.PTable = ptable;
                 }
             }
@@ -1727,7 +1730,7 @@ namespace BP.Sys
                 //避免在表单库中显示
                 md.FK_FormTree = "";
                 md.FK_FrmSort = "";
-                md.DirectUpdate();
+                md.Update(); //需要更新到缓存.
             }
 
             return base.beforeUpdate();
@@ -1746,7 +1749,7 @@ namespace BP.Sys
 
 
             if (this.No.Contains("BP.") == false)
-            sql += "@DELETE FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'";
+                sql += "@DELETE FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'";
 
             sql += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapData WHERE No='" + this.No + "'";
@@ -1755,15 +1758,15 @@ namespace BP.Sys
             DBAccess.RunSQLs(sql);
 
 
-            if (DBAccess.IsExitsObject(this.PTable) && this.PTable.IndexOf("ND") == 0 )
+            if (DBAccess.IsExitsObject(this.PTable) && this.PTable.IndexOf("ND") == 0)
             {
                 //如果其他表单引用了该表，就不能删除它. 
                 sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapData WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
-                int i=DBAccess.RunSQLReturnValInt(sql, 0) ;
+                int i = DBAccess.RunSQLReturnValInt(sql, 0);
 
                 sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapDtl WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
                 i += DBAccess.RunSQLReturnValInt(sql, 0);
-                if (i>=1)
+                if (i >= 1)
                 {
                     /* 说明有多个表单在引用.就不删除物理*/
                 }
@@ -1774,6 +1777,12 @@ namespace BP.Sys
                         DBAccess.RunSQL("DROP TABLE " + this.PTable);
                 }
             }
+
+            //执行清空缓存到的AutoNum.
+            MapData md = new MapData(this.FK_MapData);
+            md.ClearAutoNumCash(true); //更新缓存.
+
+           
             return base.beforeDelete();
         }
     }
@@ -1799,7 +1808,7 @@ namespace BP.Sys
                 throw new Exception("fk_mapdata 传的值为空,不能查询.");
 
             //zhoupeng 注销掉，为了这样多的过滤条件？
-           // this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
+            // this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata, MapDtlAttr.FK_Node, 0, MapDtlAttr.No);
             this.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>

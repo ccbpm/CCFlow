@@ -134,11 +134,21 @@ namespace BP.WF
         }
         #endregion
 
+        public static void ClearNodeAutoNum(int nodeID)
+        {
+            Node nd = new Node(nodeID);
+            nd.ClearAutoNumCash(true);
+        }
+
         #region 外键属性.
+        /// <summary>
+        /// 它的抄送规则.
+        /// </summary>
         public CC HisCC
         {
             get
             {
+
                 CC obj = this.GetRefObject("HisCC") as CC;
                 if (obj == null)
                 {
@@ -222,8 +232,6 @@ namespace BP.WF
             get
             {
                 Work wk = null;
-                
-
                 if (this.FormType != NodeFormType.FoolTruck || this.WorkID == 0 || this.IsStartNode == true)
                 {
                     wk = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
@@ -309,12 +317,6 @@ namespace BP.WF
             {
                 Works obj = this.HisWork.GetNewEntities as Works;
                 return obj;
-                ////Works obj = this.GetRefObject("HisWorks") as Works;
-                ////if (obj == null)
-                ////{
-                //    this.SetRefObject("HisWorks",obj);
-                //}
-                //return obj;
             }
         }
         /// <summary>
@@ -359,7 +361,11 @@ namespace BP.WF
                 PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
                 if (obj == null)
                 {
-                    obj = new PushMsgs(this.NodeID);
+                    var ens = this.GetEntitiesAttrFromAutoNumCash(new PushMsgs(),
+                  PushMsgAttr.FK_Node, this.NodeID);
+
+
+                    obj = ens as PushMsgs;
 
                     //检查是否有默认的发送？如果没有就增加上他。
                     bool isHaveSend = false;
@@ -394,26 +400,6 @@ namespace BP.WF
                     this.SetRefObject("PushMsg", obj);
                 }
                 return obj;
-            }
-        }
-        /// <summary>
-        /// HisFrms
-        /// </summary>
-        public Frms HisFrms
-        {
-            get
-            {
-                Frms frms = new Frms();
-                FrmNodes fns = new FrmNodes(this.FK_Flow, this.NodeID);
-                foreach (FrmNode fn in fns)
-                {
-                    if (fn.FrmEnableRole == FrmEnableRole.Disable)
-                        continue;
-                    frms.AddEntity(fn.HisFrm);
-                }
-                return frms;
-
-               
             }
         }
         /// <summary>
@@ -524,7 +510,7 @@ namespace BP.WF
         {
             get
             {
-                var ens= this.GetEntitiesAttrFromAutoNumCash(new FrmEvents(), 
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmEvents(),
                     FrmEventAttr.FK_Node, this.NodeID);
                 return ens as FrmEvents;
             }
@@ -663,8 +649,9 @@ namespace BP.WF
 
         protected override bool beforeUpdate()
         {
-            //删除缓存数据.
-            this.ClearAutoNumCash(false); 
+            //删除自动数量的缓存数据.
+            this.ClearAutoNumCash(false);
+
 
             if (this.IsStartNode)
             {

@@ -9,82 +9,6 @@ using System.IO;
 namespace BP.Sys
 {
     /// <summary>
-    /// 按日期查询方式
-    /// </summary>
-    public enum DTSearchWay
-    {
-        /// <summary>
-        /// 不设置
-        /// </summary>
-        None,
-        /// <summary>
-        /// 按日期
-        /// </summary>
-        ByDate,
-        /// <summary>
-        /// 按日期时间
-        /// </summary>
-        ByDateTime
-    }
-    /// <summary>
-    /// 表单类型
-    /// </summary>
-    public enum AppType
-    {
-        /// <summary>
-        /// 独立表单
-        /// </summary>
-        Application = 0,
-        /// <summary>
-        /// 节点表单
-        /// </summary>
-        Node = 1
-    }
-    public enum FrmFrom
-    {
-        Flow,
-        Node,
-        Dtl
-    }
-    /// <summary>
-    /// 表单类型 @0=傻瓜表单@1=自由表单@3=嵌入式表单@4=Word表单@5=Excel表单@6=VSTOForExcel@7=Entity
-    /// </summary>
-    public enum FrmType
-    {
-        /// <summary>
-        /// 傻瓜表单
-        /// </summary>
-        FoolForm = 0,
-        /// <summary>
-        /// 自由表单
-        /// </summary>
-        FreeFrm = 1,
-        /// <summary>
-        /// URL表单(自定义)
-        /// </summary>
-        Url = 3,
-        /// <summary>
-        /// Word类型表单
-        /// </summary>
-        WordFrm = 4,
-        /// <summary>
-        /// Excel表单
-        /// </summary>
-        ExcelFrm = 5,
-        /// <summary>
-        /// VSTOExccel模式.
-        /// </summary>
-        VSTOForExcel = 6,
-        /// <summary>
-        /// 实体类
-        /// </summary>
-        Entity = 7,
-        /// <summary>
-        /// 开发者表单
-        /// </summary>
-        Develop = 8
-    }
-    /// <summary>
     /// 映射基础
     /// </summary>
     public class MapDataAttr : EntityNoNameAttr
@@ -109,14 +33,6 @@ namespace BP.Sys
         /// 表格列(对傻瓜表单有效)
         /// </summary>
         public const string TableCol = "TableCol";
-        ///// <summary>
-        ///// 表格宽度
-        ///// </summary>
-        //public const string TableWidth = "TableWidth";
-        ///// <summary>
-        ///// 表格高度
-        ///// </summary>
-        //public const string TableHeight = "TableHeight";
         /// <summary>
         /// 来源
         /// </summary>
@@ -205,7 +121,6 @@ namespace BP.Sys
         ///组织解构.
         /// </summary>
         public const string OrgNo = "OrgNo";
-
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -481,7 +396,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.Idx, value);
             }
         }
-         
+
         /// <summary>
         /// 框架
         /// </summary>
@@ -489,13 +404,10 @@ namespace BP.Sys
         {
             get
             {
-                MapFrames obj = this.GetRefObject("MapFrames") as MapFrames;
-                if (obj == null)
-                {
-                    obj = new MapFrames(this.No);
-                    this.SetRefObject("MapFrames", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new MapFrames(),
+               MapExtAttr.FK_MapData, this.No);
+                return ens as MapFrames;
+
             }
         }
         /// <summary>
@@ -521,13 +433,17 @@ namespace BP.Sys
         {
             get
             {
-                MapExts obj = this.GetRefObject("MapExts") as MapExts;
-                if (obj == null)
-                {
-                    obj = new MapExts(this.No);
-                    this.SetRefObject("MapExts", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new MapExts(),
+                 MapExtAttr.FK_MapData, this.No);
+                return ens as MapExts;
+
+                //MapExts obj = this.GetRefObject("MapExts") as MapExts;
+                //if (obj == null)
+                //{
+                //    obj = new MapExts(this.No);
+                //    this.SetRefObject("MapExts", obj);
+                //}
+                //return obj;
             }
         }
         /// <summary>
@@ -539,38 +455,9 @@ namespace BP.Sys
         {
             get
             {
-                //判断内存是否有？.
-                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (objs != null)
-                    return objs; //如果缓存有值，就直接返回.
-
-                int count = this.GetParaInt("FrmEventsNum", -1);
-                if (count == -1)
-                {
-                    objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
-
-                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
-                    this.DirectUpdate();
-                    this.SetRefObject("FrmEvents", objs);
-                    return objs;
-                }
-
-                if (count == 0)
-                {
-                    objs = new FrmEvents();
-                    this.SetRefObject("FrmEvents", objs);
-                    return objs;
-                }
-                else
-                {
-                    objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
-
-                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
-                    this.SetRefObject("FrmEvents", objs);
-                }
-                return objs;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmEvents(),
+                  FrmEventAttr.FK_MapData, this.No);
+                return ens as FrmEvents;
             }
         }
         /// <summary>
@@ -580,14 +467,9 @@ namespace BP.Sys
         {
             get
             {
-                MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
-                if (obj == null)
-                {
-                    obj = new MapDtls();
-                    obj.Retrieve(MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node, 0);
-                    this.SetRefObject("MapDtls", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new MapDtls(),
+           MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node,0);
+                return ens as MapDtls;
             }
         }
         /// <summary>
@@ -597,13 +479,17 @@ namespace BP.Sys
         {
             get
             {
-                MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
-                if (obj == null)
-                {
-                    obj = new MapDtls(this.No);
-                    this.SetRefObject("MapDtls", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new MapDtls(),
+         MapDtlAttr.FK_MapData, this.No);
+                return ens as MapDtls;
+
+                //MapDtls obj = this.GetRefObject("MapDtls") as MapDtls;
+                //if (obj == null)
+                //{
+                //    obj = new MapDtls(this.No);
+                //    this.SetRefObject("MapDtls", obj);
+                //}
+                //return obj;
             }
         }
         /// <summary>
@@ -633,8 +519,6 @@ namespace BP.Sys
                             strs += "'ssss'";
                             obj.RetrieveInOrderBy("EnumKey", strs, SysEnumAttr.IntKey);
                         }
-
-
                     }
                     else
                     {
@@ -646,7 +530,7 @@ namespace BP.Sys
                 return obj;
             }
         }
-         
+
         /// <summary>
         /// 超连接
         /// </summary>
@@ -670,17 +554,11 @@ namespace BP.Sys
         {
             get
             {
-                FrmBtns obj = this.GetRefObject("FrmBtns") as FrmBtns;
-                if (obj == null)
-                {
-                    obj = new FrmBtns(this.No);
-                    this.SetRefObject("FrmBtns", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmBtns(),
+         FrmBtnAttr.FK_MapData, this.No);
+                return ens as FrmBtns;
             }
         }
-
-        
         /// <summary>
         /// 线
         /// </summary>
@@ -688,13 +566,10 @@ namespace BP.Sys
         {
             get
             {
-                FrmLines obj = this.GetRefObject("FrmLines") as FrmLines;
-                if (obj == null)
-                {
-                    obj = new FrmLines(this.No);
-                    this.SetRefObject("FrmLines", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLines(),
+         FrmLineAttr.FK_MapData, this.No);
+                return ens as FrmLines;
+                 
             }
         }
         /// <summary>
@@ -704,13 +579,10 @@ namespace BP.Sys
         {
             get
             {
-                FrmLabs obj = this.GetRefObject("FrmLabs") as FrmLabs;
-                if (obj == null)
-                {
-                    obj = new FrmLabs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLabs(),
+         FrmLabAttr.FK_MapData, this.No);
+                return ens as FrmLabs;
+                 
             }
         }
         /// <summary>
@@ -720,13 +592,10 @@ namespace BP.Sys
         {
             get
             {
-                FrmImgs obj = this.GetRefObject("FrmImgs") as FrmImgs;
-                if (obj == null)
-                {
-                    obj = new FrmImgs(this.No);
-                    this.SetRefObject("FrmImgs", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmImgs(),
+       FrmImgAttr.FK_MapData, this.No);
+                return ens as FrmImgs;
+                 
             }
         }
         /// <summary>
@@ -736,13 +605,9 @@ namespace BP.Sys
         {
             get
             {
-                FrmAttachments obj = this.GetRefObject("FrmAttachments") as FrmAttachments;
-                if (obj == null)
-                {
-                    obj = new FrmAttachments(this.No);
-                    this.SetRefObject("FrmAttachments", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmAttachments(),
+       FrmAttachmentAttr.FK_MapData, this.No);
+                return ens as FrmAttachments;
             }
         }
         /// <summary>
@@ -1408,7 +1273,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单注册表");
-              //  map.Java_SetDepositaryOfEntity(Depositary.Application); // 会出错如果放入到内存.
+                //  map.Java_SetDepositaryOfEntity(Depositary.Application); // 会出错如果放入到内存.
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.Java_SetCodeStruct("4");
@@ -1595,7 +1460,7 @@ namespace BP.Sys
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
-                
+
             }
             if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
             {
@@ -1603,7 +1468,7 @@ namespace BP.Sys
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
 
-               
+
             }
             if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
             {
@@ -1824,7 +1689,7 @@ namespace BP.Sys
                             string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                if(dc.ColumnName == "HtmlTemplateFile")
+                                if (dc.ColumnName == "HtmlTemplateFile")
                                 {
                                     htmlCode = dr[dc.ColumnName] as string;
                                     continue;
@@ -1868,7 +1733,7 @@ namespace BP.Sys
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
                             if (frmType == FrmType.Develop)
                             {
-                               // string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
+                                // string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
                                 if (DataType.IsNullOrEmpty(htmlCode) == false)
                                 {
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);
@@ -2402,8 +2267,6 @@ namespace BP.Sys
             //求出最底部的明细表
             float endFrmDtl = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_MapDtl  WHERE FK_MapData='" + this.No + "'", 0);
 
-            //求出最底部的扩展控件
-            float endFrmEle = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmEle  WHERE FK_MapData='" + this.No + "'", 0);
             //求出最底部的textbox
             float endFrmAttr = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight)  FROM  Sys_MapAttr  WHERE FK_MapData='" + this.No + "' and UIVisible='1'", 0);
 
@@ -2411,6 +2274,8 @@ namespace BP.Sys
                 this.MaxEnd = i1;
             else
                 this.MaxEnd = i2;
+
+            float endFrmEle = 0;
 
             this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAtt;
             this.MaxEnd = this.MaxEnd > endFrmDtl ? this.MaxEnd : endFrmDtl;
@@ -2504,6 +2369,9 @@ namespace BP.Sys
         {
             if (this.HisFrmType == FrmType.Url || this.HisFrmType == FrmType.Entity)
                 return base.beforeUpdateInsertAction();
+
+            //clear外键实体数量的缓存.
+            this.ClearAutoNumCash(false);
 
             this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
             MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);

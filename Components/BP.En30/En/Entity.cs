@@ -25,12 +25,13 @@ namespace BP.En
         /// <param name="refKey">查询的外键</param>
         /// <param name="val">外键值</param>
         /// <returns>返回实体集合</returns>
-        public Entities GetEntitiesAttrFromAutoNumCash(Entities ens, string refKey, object refVal)
+        public Entities GetEntitiesAttrFromAutoNumCash(Entities ens,
+            string refKey, object refVal, string refKey2 = null, object refVal2 = null)
         {
             //获得段类名.
             string clsName = ens.ClassIDOfShort;
 
-            //判断内存是否有？.
+            //判断内存是否有？
             Entities objs = this.GetRefObject(clsName) as Entities;
             if (objs != null)
                 return objs; //如果缓存有值，就直接返回.
@@ -38,7 +39,11 @@ namespace BP.En
             int count = this.GetParaInt(clsName + "_AutoNum", -1);
             if (count == -1)
             {
-                ens.Retrieve(refKey, refVal);
+                if (refKey2 == null)
+                    ens.Retrieve(refKey, refVal);
+                else
+                    ens.Retrieve(refKey, refVal, refKey2, refVal2);
+
                 this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
                 this.DirectUpdate();
                 this.SetRefObject(clsName, ens);
@@ -52,8 +57,17 @@ namespace BP.En
                 return ens;
             }
 
-            ens.Retrieve(refKey, refVal);
-            this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
+            if (refKey2 == null)
+                ens.Retrieve(refKey, refVal);
+            else
+                ens.Retrieve(refKey, refVal, refKey2, refVal2);
+
+            if (ens.Count != count)
+            {
+                this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
+                this.DirectUpdate();
+            }
+
             this.SetRefObject(clsName, ens);
             return ens;
         }
@@ -61,7 +75,7 @@ namespace BP.En
         /// 清除缓存记录
         /// 把值设置为 -1,执行的时候，让其重新获取.
         /// </summary>
-        public void ClearAutoNumCash(bool isUpdata=true)
+        public void ClearAutoNumCash(bool isUpdata = true)
         {
             bool isHave = false;
             foreach (string key in this.atPara.HisHT.Keys)
@@ -78,17 +92,17 @@ namespace BP.En
                     }
                 }
             }
-            if (isHave == true && isUpdata==true)
+            if (isHave == true && isUpdata == true)
                 this.DirectUpdate();
         }
         #endregion 自动标记获取属性实体方法.
 
 
-            #region mapInfotoJson
+        #region mapInfotoJson
 
-            #endregion
+        #endregion
 
-            #region 与缓存有关的操作
+        #region 与缓存有关的操作
         private Entities _GetNewEntities = null;
         public virtual Entities GetNewEntities
         {

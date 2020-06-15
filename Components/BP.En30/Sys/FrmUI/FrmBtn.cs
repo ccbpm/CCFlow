@@ -83,6 +83,9 @@ namespace BP.Sys.FrmUI
 
         protected override void afterInsertUpdateAction()
         {
+            //在属性实体集合插入前，clear父实体的缓存.
+            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+
             BP.Sys.FrmBtn frmBtn = new BP.Sys.FrmBtn();
             frmBtn.MyPK = this.MyPK;
             frmBtn.RetrieveFromDBSources();

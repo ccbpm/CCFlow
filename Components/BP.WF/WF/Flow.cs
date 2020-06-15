@@ -188,17 +188,13 @@ namespace BP.WF
         /// <summary>
         /// 消息推送.
         /// </summary>
-        public PushMsgs HisPushMsgs
+        public PushMsgs PushMsgs
         {
             get
             {
-                PushMsgs obj = this.GetRefObject("PushMsg") as PushMsgs;
-                if (obj == null)
-                {
-                    obj = new PushMsgs(this.No);
-                    this.SetRefObject("PushMsg", obj);
-                }
-                return obj;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new PushMsgs(),
+                  PushMsgAttr.FK_Flow, this.No);
+                return ens as PushMsgs;
             }
         }
         /// <summary>
@@ -669,7 +665,7 @@ namespace BP.WF
             BP.WF.Node nd = new BP.WF.Node(this.StartNodeID);
 
             //从草稿里看看是否有新工作？
-            Work wk =nd.HisWork;
+            Work wk = nd.HisWork;
             try
             {
                 wk.ResetDefaultVal();
@@ -742,8 +738,8 @@ namespace BP.WF
                     wk.ResetDefaultVal();
                     wk.Rec = WebUser.No;
 
-                 //   wk.SetValByKey(GERptAttr.RecText, emp.Name);
-                  //  wk.SetValByKey(GERptAttr.Emps, emp.No);
+                    //   wk.SetValByKey(GERptAttr.RecText, emp.Name);
+                    //  wk.SetValByKey(GERptAttr.Emps, emp.No);
 
                     //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
                     // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
@@ -836,7 +832,7 @@ namespace BP.WF
                     }
 
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
-                    ExecEvent.DoFlow(EventListFlow.FlowOnCreateWorkID,  wk, nd, null);
+                    ExecEvent.DoFlow(EventListFlow.FlowOnCreateWorkID, wk, nd, null);
                 }
 
                 if (wk.OID != 0)
@@ -1878,7 +1874,6 @@ namespace BP.WF
                 }
                 #endregion
 
-
                 #region 检查延续流程,子流程发起。
                 SubFlowYanXus ygflows = new SubFlowYanXus();
                 ygflows.Retrieve(SubFlowYanXuAttr.SubFlowNo, this.No, SubFlowYanXuAttr.SubFlowType,
@@ -1923,7 +1918,6 @@ namespace BP.WF
                 {
                     rpt.SetValByKey(attr.Key, "0");
                 }
-
 
                 //处理焦点字段.
                 foreach (Node nd in nds)
@@ -3545,9 +3539,9 @@ namespace BP.WF
         {
             get
             {
-                if (_FDEventEntity == null 
-                    && DataType.IsNullOrEmpty(this.FlowMark)==false 
-                    && DataType.IsNullOrEmpty(this.FlowEventEntity) ==false)
+                if (_FDEventEntity == null
+                    && DataType.IsNullOrEmpty(this.FlowMark) == false
+                    && DataType.IsNullOrEmpty(this.FlowEventEntity) == false)
                     _FDEventEntity = BP.WF.Glo.GetFlowEventEntityByEnName(this.FlowEventEntity);
                 return _FDEventEntity;
             }
@@ -3952,44 +3946,14 @@ namespace BP.WF
         }
         /// <summary>
         /// 事件:
-        /// 1.该事件与Node,Flow,MapDtl,MapData一样的算法.
-        /// 2.如果一个业务逻辑有变化，其他的也要变化.
         /// </summary>
         public FrmEvents FrmEvents
         {
             get
             {
-                //判断内存是否有？.
-                FrmEvents objs = this.GetRefObject("FrmEvents") as FrmEvents;
-                if (objs != null)
-                    return objs; //如果缓存有值，就直接返回.
-
-                int count = this.GetParaInt("FrmEventsNum", -1);
-                if (count == -1)
-                {
-                    objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_Flow, this.No);
-
-                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
-                    this.DirectUpdate();
-                    this.SetRefObject("FrmEvents", objs);
-                    return objs;
-                }
-
-                if (count == 0)
-                {
-                    objs = new FrmEvents();
-                    this.SetRefObject("FrmEvents", objs);
-                    return objs;
-                }
-                else
-                {
-                    objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_Flow, this.No);
-                    this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
-                    this.SetRefObject("FrmEvents", objs);
-                }
-                return objs;
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmEvents(),
+                 FrmEventAttr.FK_Flow, this.No);
+                return ens as FrmEvents;
             }
         }
         /// <summary>

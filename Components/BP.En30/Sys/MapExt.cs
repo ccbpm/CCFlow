@@ -907,6 +907,8 @@ namespace BP.Sys
             if (this.MyPK == "")
                 this.MyPK = DBAccess.GenerGUID(); //@李国文
 
+            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+
             return base.beforeInsert();
         }
 

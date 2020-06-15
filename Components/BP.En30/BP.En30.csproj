@@ -235,6 +235,8 @@
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
     <Compile Include="Sys\DictDtl.cs" />
+    <Compile Include="Sys\EnumLab.cs" />
+    <Compile Include="Sys\EnumAth.cs" />
     <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />

@@ -15,6 +15,17 @@ namespace BP.Sys
     public class Glo
     {
         /// <summary>
+        /// 清楚设置的缓存.
+        /// </summary>
+        /// <param name="frmID"></param>
+        public static void ClearMapDataAutoNum(string frmID)
+        {
+            //执行清空缓存到的AutoNum.
+            MapData md = new MapData(frmID);
+            md.ClearAutoNumCash(true); //更新缓存.
+        }
+
+        /// <summary>
         /// 更新SID Or OrgNo 的SQL
         /// 用于集成所用
         /// 更新被集成的用户的user表

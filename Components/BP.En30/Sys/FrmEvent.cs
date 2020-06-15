@@ -38,6 +38,10 @@ namespace BP.Sys
         /// </summary>
         public const string EventSource = "EventSource";
         /// <summary>
+        /// 关联的流程编号
+        /// </summary>
+        public const string RefFlowNo = "RefFlowNo";
+        /// <summary>
         /// 执行类型
         /// </summary>
         public const string EventDoType = "EventDoType";
@@ -197,6 +201,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmEventAttr.FK_Node, value);
+            }
+        }
+        /// <summary>
+        /// 关联的流程编号
+        /// </summary>
+        public string RefFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmEventAttr.RefFlowNo);
+            }
+            set
+            {
+                this.SetValByKey(FrmEventAttr.RefFlowNo, value);
             }
         }
         /// <summary>
@@ -618,6 +636,7 @@ namespace BP.Sys
                 //0=表单事件,1=流程，2=节点事件.
                 map.AddTBInt(FrmEventAttr.EventSource, 0, "事件类型", true, true);
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件标记", true, true, 0, 400, 10);
+                map.AddTBString(FrmEventAttr.RefFlowNo, null, "关联的流程编号", true, true, 0, 10, 10);
 
                 //事件类型的主键.
                 map.AddTBString(FrmEventAttr.FK_MapData, null, "表单ID(包含Dtl表)", true, true, 0, 100, 10);
@@ -653,34 +672,40 @@ namespace BP.Sys
         }
         #endregion
 
-        /// <summary>
-        /// 这里更新事件的数量,做一个标记.
-        /// </summary>
-        private void UpdataFrmEventsNum()
+        protected override bool beforeUpdateInsertAction()
         {
-            //事件包含流程事件、节点事件、表单事件、从表事件.
-            
-            //该位置处理表单，从表事件.
-            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
+            //设置关联的FlowNo编号,以方便流程删除与模版导入导出.
+            if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
+                this.RefFlowNo = this.FK_Flow;
+
+            if (this.FK_Node != 0)
+                this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + this.FK_Node);
+
+            if (this.FK_MapData.StartsWith("ND")==true)
             {
-                MapData md = new MapData(this.FK_MapData);
-                md.ClearAutoNumCash();
+                int nodeid = int.Parse(this.FK_MapData.Replace("ND", ""));
+                this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + nodeid);
             }
 
-            //if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
-            //{
-            //     md = new MapData(this.FK_MapData);
-            //    md.ClearAutoNumCash();
-            //}
+            return base.beforeUpdateInsertAction();
         }
+
+        protected override bool beforeInsert()
+        {
+            //在属性实体集合插入前，clear父实体的缓存.
+            if (DataType.IsNullOrEmpty(this.FK_MapData)==false)
+               BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+             
+
+            return base.beforeInsert();
+        }
+
         protected override void afterInsertUpdateAction()
         {
-            UpdataFrmEventsNum();
              base.afterInsertUpdateAction();
         }
         protected override void afterDelete()
         {
-            UpdataFrmEventsNum();
             base.afterDelete();
         }
     }

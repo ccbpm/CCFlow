@@ -271,7 +271,6 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-
             gf.FrmID = this.FK_MapData;
             gf.CtrlID =  this.MyPK;
             gf.CtrlType = "Frame";
@@ -279,6 +278,7 @@ namespace BP.Sys
             gf.Idx = 0;
             gf.Insert(); //插入.
 
+             
             base.afterInsert();
         }
         /// <summary>
@@ -290,6 +290,13 @@ namespace BP.Sys
             gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             base.afterDelete();
+        }
+        protected override bool beforeInsert()
+        {
+            //在属性实体集合插入前，clear父实体的缓存.
+            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+             
+            return base.beforeInsert();
         }
         protected override bool beforeUpdate()
         {

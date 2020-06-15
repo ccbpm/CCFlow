@@ -292,6 +292,8 @@ namespace BP.Sys.FrmUI
 
         protected override void afterInsertUpdateAction()
         {
+            
+
             BP.Sys.FrmLink frmLink = new BP.Sys.FrmLink();
             frmLink.MyPK = this.MyPK;
             frmLink.RetrieveFromDBSources();

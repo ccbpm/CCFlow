@@ -754,6 +754,10 @@ namespace BP.Sys.FrmUI
         }
         protected override bool beforeInsert()
         {
+            //在属性实体集合插入前，clear父实体的缓存.
+            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+
+
             if (this.FK_Node == 0)
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             else

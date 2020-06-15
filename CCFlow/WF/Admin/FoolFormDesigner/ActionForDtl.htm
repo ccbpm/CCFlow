@@ -58,7 +58,7 @@
         });
 
 
-        function PushWayText(EventListOfNode, doType) {
+        function PushWayText(EventListNode, doType) {
 
             var ret = { "DtlSaveBefore": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
                 "DtlSaveEnd": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"],
@@ -68,7 +68,7 @@
                 "DtlItemDelAfter": ["禁用", "执行存储过程", "执行SQL语句", "执行URL","WebServices","执行ddl文件的类与方法","EventBase类","业务单元"]
             };
 
-            return ret[EventListOfNode][doType];
+            return ret[EventListNode][doType];
         }
 
         function Delete(myPK) {

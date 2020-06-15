@@ -665,7 +665,7 @@ namespace CCFlow.WF.CCForm
                                 #region 从表保存前处理事件.
                                 if (fes.Count > 0)
                                 {
-                                    string msg = fes.DoEventNode(FrmEventListDtl.RowSaveBefore, mainEn);
+                                    string msg = fes.DoEventNode(EventListFrm.DtlRowSaveBefore, mainEn);
                                     if (msg != null)
                                         throw new Exception(msg);
                                 }
@@ -674,7 +674,7 @@ namespace CCFlow.WF.CCForm
                                 {
                                     febd.HisEn = mainEn;
                                     febd.HisEnDtl = daDtl;
-                                    febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, daDtl, null);
+                                    febd.DoIt(EventListFrm.DtlRowSaveBefore, febd.HisEn, daDtl, null);
                                 }
 
                                 #endregion 从表保存前处理事件.
@@ -698,7 +698,7 @@ namespace CCFlow.WF.CCForm
 
                                 if (fes.Count > 0)
                                 {
-                                    string msg = fes.DoEventNode(FrmEventListDtl.RowSaveAfter, daDtl);
+                                    string msg = fes.DoEventNode(EventListFrm.DtlRowSaveAfter, daDtl);
                                     if (msg != null)
                                         throw new Exception(msg);
                                 }
@@ -708,7 +708,7 @@ namespace CCFlow.WF.CCForm
                                     febd.HisEn = mainEn;
                                     febd.HisEnDtl = daDtl;
 
-                                    febd.DoIt(FrmEventListDtl.RowSaveAfter, mainEn, daDtl, null);
+                                    febd.DoIt(EventListFrm.DtlRowSaveAfter, mainEn, daDtl, null);
                                 }
 
                                 #endregion 处理事件.
@@ -765,18 +765,18 @@ namespace CCFlow.WF.CCForm
                 wk.MyPK = pkValue;
 
                 //保存前执行事件.
-                md.DoEvent(FrmEventList.SaveBefore, wk);
+                md.DoEvent(EventListFrm.SaveBefore, wk);
 
                 // 保存实体.
                 wk.Save();
 
                 //保存前执行事件.
-                md.DoEvent(FrmEventList.SaveAfter, wk);
+                md.DoEvent(EventListFrm.SaveAfter, wk);
 
 
                 //保存前(执行类事件.)
                 if (frmEvent != null)
-                    frmEvent.DoIt(FrmEventList.SaveAfter, wk, null);
+                    frmEvent.DoIt(EventListFrm.SaveAfter, wk, null);
             }
             #endregion 处理 EntityMyPK 类型的实体保存。
 
@@ -800,13 +800,13 @@ namespace CCFlow.WF.CCForm
                 wk.OID = Int64.Parse(pkValue);
 
                 //执行事件.
-                md.DoEvent(FrmEventList.SaveBefore, wk);
+                md.DoEvent(EventListFrm.SaveBefore, wk);
 
                 //保存.
                 wk.Save();
 
                 //执行事件.
-                md.DoEvent(FrmEventList.SaveAfter, wk);
+                md.DoEvent(EventListFrm.SaveAfter, wk);
 
 
             }

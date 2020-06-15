@@ -111,7 +111,7 @@
         });
 
 
-        function PushWayText(EventListOfNode, PushWay) {
+        function PushWayText(EventListNode, PushWay) {
 
             var ret = {
                 "WorkArrive": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"],
@@ -127,7 +127,7 @@
                 "NodeOverDue": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人"]
             };
 
-            return ret[EventListOfNode][PushWay];
+            return ret[EventListNode][PushWay];
         }
 
         function Delete(myPK) {

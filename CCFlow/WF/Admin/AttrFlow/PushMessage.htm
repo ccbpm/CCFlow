@@ -77,7 +77,7 @@
         });
 
 
-        function PushWayText(EventListOfNode, PushWay) {
+        function PushWayText(EventListNode, PushWay) {
 
             var ret = {
                 "FlowWarning": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
@@ -85,7 +85,7 @@
                 "FlowDelete": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"]
             };
 
-            return ret[EventListOfNode][PushWay];
+            return ret[EventListNode][PushWay];
         }
 
         function Delete(myPK) {

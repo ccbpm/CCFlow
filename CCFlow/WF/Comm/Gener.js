@@ -1954,6 +1954,10 @@ function ToJson(data) {
         data = JSON.parse(data);
         return data;
     } catch (e) {
+
+        console.log(data);
+        console.log(e);
+
         return eval(data);
     }
 

@@ -64,7 +64,7 @@
         });
 
 
-        function PushWayText(EventListOfNode, PushWay) {
+        function PushWayText(EventListNode, PushWay) {
             var ret = { "onblur": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
                 "onchange": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人"],
                 "onclick": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
@@ -72,7 +72,7 @@
                 "onkeypress": ["不发送", "流程结束通知的所有流程的参与人", "向指定的字段发送", "其他节点的处理人"],
                 "onkeyup": ["不发送", "流程删除后通知所有流程的参与人", "向指定的字段发送", "其他节点的处理人"]
             };
-            return ret[EventListOfNode][PushWay];
+            return ret[EventListNode][PushWay];
         }
 
         function Delete(myPK) {

@@ -685,9 +685,7 @@ namespace BP.WF.Template
             string sql = null;
             DataTable dt = null;
             DataTable dtEmp = null;
-
             Node nd = new Node(nodeID);
-
             if (sm == SelectorModel.TeamDeptOnly)
                 sql = "SELECT  No,Name FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'";
             if (sm == SelectorModel.TeamOnly)

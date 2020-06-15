@@ -17,11 +17,78 @@ namespace BP.En
     [Serializable]
     abstract public class Entity : EnObj
     {
-        #region mapInfotoJson
+        #region 自动标记获取属性实体方法.
+        /// <summary>
+        /// 从AutoNum缓存中获取实体s
+        /// </summary>
+        /// <param name="ens">实体集合</param>
+        /// <param name="refKey">查询的外键</param>
+        /// <param name="val">外键值</param>
+        /// <returns>返回实体集合</returns>
+        public Entities GetEntitiesAttrFromAutoNumCash(Entities ens, string refKey, object refVal)
+        {
+            //获得段类名.
+            string clsName = ens.ClassIDOfShort;
 
-        #endregion
+            //判断内存是否有？.
+            Entities objs = this.GetRefObject(clsName) as Entities;
+            if (objs != null)
+                return objs; //如果缓存有值，就直接返回.
 
-        #region 与缓存有关的操作
+            int count = this.GetParaInt(clsName + "_AutoNum", -1);
+            if (count == -1)
+            {
+                ens.Retrieve(refKey, refVal);
+                this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
+                this.DirectUpdate();
+                this.SetRefObject(clsName, ens);
+                return ens;
+            }
+
+            if (count == 0)
+            {
+                ens.Clear();
+                this.SetRefObject(clsName, ens);
+                return ens;
+            }
+
+            ens.Retrieve(refKey, refVal);
+            this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
+            this.SetRefObject(clsName, ens);
+            return ens;
+        }
+        /// <summary>
+        /// 清除缓存记录
+        /// 把值设置为 -1,执行的时候，让其重新获取.
+        /// </summary>
+        public void ClearAutoNumCash(bool isUpdata=true)
+        {
+            bool isHave = false;
+            foreach (string key in this.atPara.HisHT.Keys)
+            {
+                if (DataType.IsNullOrEmpty(key) == true)
+                    continue;
+
+                if (key.EndsWith("_AutoNum") == true)
+                {
+                    if (this.GetParaInt(key) != -1)
+                    {
+                        this.SetPara(key, -1);
+                        isHave = true;
+                    }
+                }
+            }
+            if (isHave == true && isUpdata==true)
+                this.DirectUpdate();
+        }
+        #endregion 自动标记获取属性实体方法.
+
+
+            #region mapInfotoJson
+
+            #endregion
+
+            #region 与缓存有关的操作
         private Entities _GetNewEntities = null;
         public virtual Entities GetNewEntities
         {
@@ -48,6 +115,9 @@ namespace BP.En
                 return _GetNewEntities;
             }
         }
+        /// <summary>
+        /// 类名
+        /// </summary>
         public virtual string ClassID
         {
             get
@@ -55,6 +125,9 @@ namespace BP.En
                 return this.ToString();
             }
         }
+        /// <summary>
+        /// 短类名
+        /// </summary>
         public virtual string ClassIDOfShort
         {
             get
@@ -956,20 +1029,20 @@ namespace BP.En
         /// <param name="entityPKVal">要插入的指定实体主键值</param>
         /// <param name="groupKey">列名</param>
         /// <param name="groupVal">列值</param>
-        protected void DoOrderInsertTo(string idxAttr,object entityPKVal, string groupKey)
+        protected void DoOrderInsertTo(string idxAttr, object entityPKVal, string groupKey)
         {
             string ptable = this.EnMap.PhysicsTable; // Sys_MapAttr
             string pk = this.PK; //MyPK
             int idx = this.GetValIntByKey(idxAttr); // 当前实体的idx. 10 
-         //   string groupVal = this.GetValStringByKey(groupKey); //分组的val.   101
+                                                    //   string groupVal = this.GetValStringByKey(groupKey); //分组的val.   101
 
             //求出来要被插队的 idx.
             string sql = "SELECT " + idxAttr + "," + groupKey + " FROM " + ptable + " WHERE " + pk + "='" + entityPKVal + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idxFirst = int.Parse(dt.Rows[0].ToString());
-            string groupValFirst=  dt.Rows[1].ToString();
+            string groupValFirst = dt.Rows[1].ToString();
 
-            sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, "+ groupKey + "='"+ groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
+            sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, " + groupKey + "='" + groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
             DBAccess.RunSQL(sql);
         }
         /// <summary>

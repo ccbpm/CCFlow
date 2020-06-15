@@ -140,8 +140,6 @@ namespace BP.WF
                 //检查越轨流程,子流程发起.
                 CheckModel_SubFlowYanXus();
 
-
-
                 //检查报表.
                 this.DoCheck_CheckRpt(this.nds);
 
@@ -153,7 +151,6 @@ namespace BP.WF
 
                 //检查如果是合流节点必须不能是由上一个节点指定接受人员.
                 CheckMode_HeliuAccpterRole();
-
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.flow.No);

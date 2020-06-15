@@ -83,6 +83,9 @@ namespace BP.WF
             if (objs == null)
                 objs = wn.HisMsgObjs;
 
+            if (objs == null)
+                objs = wn.HisMsgObjs;
+
             int toNodeID = 0;
             if (wn.JumpToNode != null)
                 toNodeID = wn.JumpToNode.NodeID;
@@ -146,8 +149,26 @@ namespace BP.WF
             }
 
             //写入消息之前，删除所有的消息.
-            if (BP.WF.Glo.IsEnableSysMessage==true )
-                 BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
+            if (BP.WF.Glo.IsEnableSysMessage == true)
+            {
+                try
+                {
+                    switch (doType)
+                    {
+                        case EventListNode.SendSuccess:
+                        case EventListNode.ReturnAfter:
+                            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SMS sms = new SMS();
+                    sms.CheckPhysicsTable();
+                }
+            }
 
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)
@@ -225,6 +246,27 @@ namespace BP.WF
             PushMsgs pms = wn.HisFlow.HisPushMsgs;
             if (pms.Count == 0)
                 return msg;
+
+            //写入消息之前，删除所有的消息.
+            if (BP.WF.Glo.IsEnableSysMessage == true)
+            {
+                try
+                {
+                    switch (doType)
+                    {
+                        case EventListFlow.FlowOverAfter:
+                            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='SendSuccess' || MsgType='"+EventListNode.ReturnAfter+"'  ) AND WorkID=" + wn.HisWork.OID);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SMS sms = new SMS();
+                    sms.CheckPhysicsTable();
+                }
+            }
 
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)

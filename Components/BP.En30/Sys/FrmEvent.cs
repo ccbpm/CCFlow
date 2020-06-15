@@ -607,7 +607,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_FrmEvent", "外部自定义事件(表单，从表，流程，节点)");
+                Map map = new Map("Sys_FrmEvent", "外部自定义事件(表单,从表,流程,节点)");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
@@ -658,19 +658,20 @@ namespace BP.Sys
         /// </summary>
         private void UpdataFrmEventsNum()
         {
-            //事件包含流程事件、节点事件、表单事件、从表事件
+            //事件包含流程事件、节点事件、表单事件、从表事件.
             
-            //该位置处理表单，从表事件
+            //该位置处理表单，从表事件.
             if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
             {
-                FrmEvents ens = new FrmEvents(this.FK_MapData);
                 MapData md = new MapData(this.FK_MapData);
-                md.SetPara("FrmEventsNum", ens.Count);
-                md.Update();
+                md.ClearAutoNumCash();
             }
-                
-            
-           
+
+            //if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
+            //{
+            //     md = new MapData(this.FK_MapData);
+            //    md.ClearAutoNumCash();
+            //}
         }
         protected override void afterInsertUpdateAction()
         {

@@ -3885,7 +3885,7 @@ namespace BP.WF
         /// <param name="msgPK">唯一标志,防止发送重复.</param>
         /// <param name="atParas">参数.</param>
         public static void Port_SendMessage(string sendToEmpNo, string smsDoc, string emailTitle, string msgType, string msgGroupFlag,
-            string sendEmpNo, string openUrl, string pushModel, Int64 workid, string msgPK = null, string atParas = null)
+            string sendEmpNo, string openUrl, string pushModel, Int64 workID, string msgPK = null, string atParas = null)
         {
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sendToEmpNo);
             SMS sms = new SMS();
@@ -3939,7 +3939,7 @@ namespace BP.WF
 
             sms.AtPara = atParas;
 
-            sms.WorkID = workid;
+            sms.WorkID = workID;
              
 
             sms.SetPara("OpenUrl", openUrl);

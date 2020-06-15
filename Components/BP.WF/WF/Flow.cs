@@ -1623,6 +1623,9 @@ namespace BP.WF
         {
             BP.DA.Cash.ClearCash();
 
+            //删除缓存数据.
+            this.ClearAutoNumCash(false);
+
             Nodes nds = new Nodes(this.No);
 
             #region 检查独立表单
@@ -1641,7 +1644,6 @@ namespace BP.WF
                     err += "@节点" + item.FK_Node + "绑定的表单:" + item.FK_Frm + ",已经被删除了.";
             }
             #endregion
-
 
             try
             {
@@ -1681,7 +1683,6 @@ namespace BP.WF
                 //节点表单字段数据类型检查--begin---------
                 msg += CheckFormFields(nds);
                 //表单字段数据类型检查-------End-----
-
 
                 //获得字段用于校验sql.
                 MapAttrs mattrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
@@ -5801,6 +5802,9 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeUpdate()
         {
+            //删除缓存数据.
+            this.ClearAutoNumCash(false);
+
             this.Ver = BP.DA.DataType.CurrentDataTimess;
             return base.beforeUpdate();
         }

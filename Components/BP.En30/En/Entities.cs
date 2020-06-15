@@ -1904,5 +1904,30 @@ namespace BP.En
             return true;
         }
         #endregion
+
+        #region 类名属性.
+        /// <summary>
+        /// 类名
+        /// </summary>
+        public virtual string ClassID
+        {
+            get
+            {
+                return this.ToString();
+            }
+        }
+        /// <summary>
+        /// 短类名
+        /// </summary>
+        public virtual string ClassIDOfShort
+        {
+            get
+            {
+                string clsID = this.ClassID;
+                return clsID.Substring(clsID.LastIndexOf('.') + 1);
+            }
+        }
+        #endregion 类名属性.
+
     }
 }

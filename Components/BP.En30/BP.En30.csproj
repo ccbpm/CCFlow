@@ -198,6 +198,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EnObj.cs" />
+    <Compile Include="En\Entities.cs" />
     <Compile Include="En\Entity.cs" />
     <Compile Include="En\KeyVal.cs" />
     <Compile Include="En\UAC.cs" />

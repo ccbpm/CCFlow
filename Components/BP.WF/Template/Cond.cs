@@ -57,6 +57,10 @@ namespace BP.WF.Template
     public class CondAttr
     {
         /// <summary>
+        /// 关联的流程编号
+        /// </summary>
+        public const string RefFlowNo = "RefFlowNo";
+        /// <summary>
         /// 数据来源
         /// </summary>
         public const string DataFrom = "DataFrom";
@@ -345,20 +349,6 @@ namespace BP.WF.Template
             this.MyPK = DBAccess.GenerGUID();
 
             return base.beforeInsert();
-        }
-
-        /// <summary>
-        /// 在更新与插入之前要做得操作。
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeUpdateInsertAction()
-        {
-            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=0");
-            // this.RunSQL("UPDATE WF_Node SET IsCCNode=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Node + ")");
-
-            //@sly
-            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
-            return base.beforeUpdateInsertAction();
         }
 
         #region 实现基本的方方法
@@ -1069,6 +1059,11 @@ namespace BP.WF.Template
                 Map map = new Map("WF_Cond", "条件");
 
                 map.AddMyPK();
+
+
+                //用于整体流程的删除，导入，导出.
+                map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
+
 
                 //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);

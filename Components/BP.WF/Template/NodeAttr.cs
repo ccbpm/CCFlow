@@ -58,9 +58,6 @@ namespace BP.WF.Template
         /// 通过率
         /// </summary>
         public const string PassRate = "PassRate";
-      
-     //   public const string IsCCNode = "IsCCNode";
-        public const string IsCCFlow = "IsCCFlow";
         public const string HisStas = "HisStas";
         public const string HisToNDs = "HisToNDs";
         public const string HisBillIDs = "HisBillIDs";

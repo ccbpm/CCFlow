@@ -1016,22 +1016,6 @@ namespace BP.WF
                 return _HisNodeCompleteConditions;
             }
         }
-        private Conds _HisFlowCompleteConditions = null;
-        /// <summary>
-        /// 他的完成任务的条件,此节点是完成任务的条件集合
-        /// 条件与条件之间是or 的关系, 就是说,如果任何一个条件满足,这个任务就完成了.
-        /// </summary>
-        public Conds HisFlowCompleteConditions
-        {
-            get
-            {
-                if (this._HisFlowCompleteConditions == null)
-                {
-                    _HisFlowCompleteConditions = new Conds(CondType.Flow, this.HisNode.NodeID, this.WorkID, this.rptGe);
-                }
-                return _HisFlowCompleteConditions;
-            }
-        }
         #endregion
 
         #region 关于质量考核
@@ -1838,10 +1822,11 @@ namespace BP.WF
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe))
+                if (this.HisFlow.CondsOfFlowComplete.Count >=1 
+                    && this.HisFlow.CondsOfFlowComplete.GenerResult(this.rptGe))
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
-                    string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
+                    string stopMsg = this.HisFlow.CondsOfFlowComplete.ConditionDesc;
                     /* 如果流程完成 */
                     string overMsg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, matched_str + ":" + stopMsg, this.HisNode, this.rptGe);
                     this.IsStopFlow = true;
@@ -8321,9 +8306,10 @@ namespace BP.WF
                     return;
                 }
 
-                if (this.HisNode.IsCCFlow && this.HisFlowCompleteConditions.GenerResult(this.rptGe))
+                if (this.HisFlow.CondsOfFlowComplete.Count>=1
+                    && this.HisFlow.CondsOfFlowComplete.GenerResult(this.rptGe))
                 {
-                    string stopMsg = this.HisFlowCompleteConditions.ConditionDesc;
+                    string stopMsg = this.HisFlow.CondsOfFlowComplete.ConditionDesc;
                     /* 如果流程完成 */
                     string overMsg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, str + ": " + stopMsg, this.HisNode, this.rptGe);
                     this.IsStopFlow = true;

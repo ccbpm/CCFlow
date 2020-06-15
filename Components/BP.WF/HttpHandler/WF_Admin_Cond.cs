@@ -325,13 +325,6 @@ namespace BP.WF.HttpHandler
             int num = qo.DoQuery();
             #endregion
 
-            /* 执行同步*/
-            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-
-            //@sly
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond A WHERE  CondType=1 ) ";
-            BP.DA.DBAccess.RunSQLs(sqls);
-
             //string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.NodeForm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
             switch (condTypeEnum)
             {

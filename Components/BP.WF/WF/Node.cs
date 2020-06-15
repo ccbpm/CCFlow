@@ -515,6 +515,7 @@ namespace BP.WF
                 return ens as FrmEvents;
             }
         }
+        
         #endregion
 
         #region 初试化全局的 Node
@@ -713,13 +714,7 @@ namespace BP.WF
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
 
-            #region 更新流程判断条件的标记。
-            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=0  WHERE FK_Flow='" + this.FK_Flow + "'");
-            DBAccess.RunSQL("UPDATE WF_Node SET IsCCFlow=1  WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=1) AND FK_Flow='" + this.FK_Flow + "'");
-            #endregion
-
             Flow fl = new Flow(this.FK_Flow);
-
 
             this.FlowName = fl.Name;
 
@@ -1853,7 +1848,6 @@ namespace BP.WF
         #endregion
 
         #region 退回信息.
-
         public string ReturnField
         {
             get
@@ -1881,32 +1875,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 扩展属性
-        /// <summary>
-        /// 是不是多岗位工作节点.
-        /// </summary>
-        public bool IsMultiStations
-        {
-            get
-            {
-                if (this.NodeStations.Count > 1)
-                    return true;
-                return false;
-            }
-        }
-        public string HisStationsStr
-        {
-            get
-            {
-                string s = "";
-                foreach (NodeStation ns in this.NodeStations)
-                {
-                    s += ns.FK_StationT + ",";
-                }
-                return s;
-            }
-        }
-        #endregion
 
         #region 公共方法
         /// <summary>
@@ -2168,19 +2136,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 是否启用发送短信？
-        /// </summary>
-        public bool IsEnableSMSMessage
-        {
-            get
-            {
-                int i = BP.DA.DBAccess.RunSQLReturnValInt("SELECT SMSEnable FROM Sys_FrmEvent WHERE FK_MapData='ND" + this.NodeID + "' AND FK_Event='SendSuccess'", 0);
-                if (i == 0)
-                    return false;
-                return true;
-            }
-        }
-        /// <summary>
         /// 是否可以在退回后原路返回？
         /// </summary>
         public bool IsBackTracking
@@ -2346,7 +2301,6 @@ namespace BP.WF
                 return (ThreadKillRole)this.GetValIntByKey(NodeAttr.ThreadKillRole);
             }
         }
-
         /// <summary>
         /// 完成通过率
         /// </summary>
@@ -2388,9 +2342,6 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsBUnit, value);
             }
         }
-
-
-
         /// <summary>
         /// 是否可以移交
         /// </summary>
@@ -2549,20 +2500,7 @@ namespace BP.WF
                 }
             }
         }
-        /// <summary>
-        /// 是否有流程完成条件
-        /// </summary>
-        public bool IsCCFlow
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsCCFlow);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsCCFlow, value);
-            }
-        }
+        
         /// <summary>
         /// 接受人sql
         /// </summary>
@@ -2927,7 +2865,6 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.TurnToDeal, 0, "转向处理", false, false);
                 map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 200, 10, true);
                 map.AddTBInt(NodeAttr.NodePosType, 0, "位置", false, false);
-                map.AddTBInt(NodeAttr.IsCCFlow, 0, "是否有流程完成条件", false, false);
                 map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);

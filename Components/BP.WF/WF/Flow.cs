@@ -1822,19 +1822,11 @@ namespace BP.WF
                     #endregion
 
                     #region 检查节点完成条件，方向条件的定义.
-                    //设置它没有流程完成条件.
-                    nd.IsCCFlow = false;
-
                     if (conds.Count != 0)
                     {
                         msg += "@信息:开始检查(" + nd.Name + ")方向条件:";
                         foreach (Cond cond in conds)
                         {
-                            if (cond.FK_Node == nd.NodeID && cond.CondType == CondType.Flow)
-                            {
-                                nd.IsCCFlow = true;
-                                nd.DirectUpdate();
-                            }
                             msg += cond.AttrKey + cond.AttrName + cond.OperatorValue + "、";
                         }
                         msg += "@(" + nd.Name + ")方向条件检查完成.....";
@@ -3942,6 +3934,18 @@ namespace BP.WF
             set
             {
                 _HisNodes = value;
+            }
+        }
+        /// <summary>
+        /// 流程完成条件
+        /// </summary>
+        public Conds CondsOfFlowComplete
+        {
+            get
+            {
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new Conds(),
+                    CondAttr.FK_Flow, this.No, CondAttr.CondType, (int)CondType.Flow);
+                return ens as Conds;
             }
         }
         /// <summary>

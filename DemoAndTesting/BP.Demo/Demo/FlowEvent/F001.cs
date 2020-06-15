@@ -29,6 +29,13 @@ namespace BP.Demo.FlowEvent
         #endregion 属性.
 
         #region 构造.
+
+        public override string WorkArrive()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            return  "运行到此处"+this.WorkID+"_"+this.HisNode.NodeID;
+           
+        }
         public override string CreateWorkID()
         {
             return base.CreateWorkID();

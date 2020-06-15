@@ -1,14 +1,5 @@
 using System;
-using System.Threading;
-using System.Collections;
-using BP.Web.Controls;
-using System.Data;
-using BP.DA;
-using BP.DTS;
-using BP.En;
-using BP.Web;
-using BP.Sys;
-using BP.WF;
+
 
 namespace BP.Demo.FlowEvent
 {
@@ -43,14 +34,14 @@ namespace BP.Demo.FlowEvent
                 case 10401: //填写报销申请单节点.
                 case 10402: //填写报销申请单节点.
                 case 10403: //填写报销申请单节点.
-                    switch (this.EventType)
+                    switch (this.EventSource)
                     {
-                        case EventListOfNode.FrmLoadBefore: //表单保存后事件.
+                        case BP.Sys.EventListNode.FrmLoadBefore: //表单保存后事件.
                             break;
-                        case EventListOfNode.SaveBefore: //表单保存前事件.
+                        case BP.Sys.EventListFrm.SaveBefore: //表单保存前事件.
                             SendWhen10401();
                             break;
-                        case EventListOfNode.SendWhen: //发送前.
+                        case BP.Sys.EventListNode.SendWhen: //发送前.
                             SendWhen10401();
                             break;
                         default:

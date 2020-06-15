@@ -1,14 +1,7 @@
 using System;
-using System.Threading;
-using System.Collections;
-using BP.Web.Controls;
-using System.Data;
-using BP.DA;
-using BP.DTS;
-using BP.En;
-using BP.Web;
+
 using BP.Sys;
-using BP.WF;
+
 
 namespace BP.Demo.FlowEvent
 {
@@ -41,12 +34,12 @@ namespace BP.Demo.FlowEvent
             switch (this.FK_Node)
             {
                 case 2501: //填写报销申请单节点.
-                    switch (this.EventType)
+                    switch (this.EventSource)
                     {
-                        case EventListOfNode.FrmLoadBefore: //表单保存后事件.
+                        case EventListNode.FrmLoadBefore: //表单保存后事件.
                             this.ND2501_FrmLoadBefore();
                             break;
-                        case EventListOfNode.SendWhen: //发送前.
+                        case EventListNode.SendWhen: //发送前.
                             this.ND2501_SendWhen();
                             break;
                         default:

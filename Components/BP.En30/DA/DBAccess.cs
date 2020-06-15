@@ -3584,7 +3584,7 @@ namespace BP.DA
                         obj = obj.Split('.')[1];
 
                     // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
-                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
+                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE  table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
 
                 case DBType.Access:
                     //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");

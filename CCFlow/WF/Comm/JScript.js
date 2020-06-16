@@ -785,31 +785,31 @@ function valitationAfter(o, validateType) {
     idx = getCursortPosition(o);
     oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
     var value = o.value;
-    //    value =   value.replace(/[^\d.-]/g, "");
+    if (validateType == "int") {
+        value = value.replace(/[^\d,-]/g, "");
+        o.value = value;
+    } 
+        
 
-    if (isFF()) {
-        var flag = false;
-        switch (validateType) {
-            case "int":
-                flag = (!isNaN(value) && value % 1 === 0);
+    //if (isFF()) {
+    var flag = false;
+    switch (validateType) {
+        case "int":
+            flag = (!isNaN(value) && value % 1 === 0);
+            break;
+        case "float":
+        case "money":
+            if (value.indexOf("-") == 0 && value.length == 1)
                 break;
-            case "float":
-            case "money":
-                if (value.indexOf("-") == 0 && value.length == 1)
-                    break;
-                else {
-                    flag = !isNaN(value);
-                    break;
-                }
-        }
-        if (!flag) {
-            o.value = '';
-        }
+            else {
+                flag = !isNaN(value);
+                break;
+            }
     }
-    //    else {
-    //        if (isNaN(value)) execCommand('undo');
-    //       
-    //    }
+    if (!flag) {
+        o.value = '';
+    }
+  
 }
 
 

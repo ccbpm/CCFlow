@@ -265,22 +265,20 @@
                     });
                     var EnName = GetQueryString("FK_MapData");
                     var refKey;
+                    var insetToPK;
                     $("tr").mouseover(function () {
                         if (sta == 1) {
                             refKey = $(this).children('td').eq(1).html();
+                            insetToPK = $(this).next('tr').children('td').eq(1).html();
                             //获得主键值
                             var MyPK = EnName + '_' + refKey;
-                            alert(MyPK);
-
-                             var insetToPK = "ND101_QingJiaYuanYin";
-
+                            insetToPK=EnName + '_' + insetToPK;
                             var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
                             mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
-                            window.location.href = window.location.href;
-                            return;
-
-
                             sta = 0;//重置状态
+                            //window.location.href = window.location.href;
+                            
+                            
                         }
                     });
 

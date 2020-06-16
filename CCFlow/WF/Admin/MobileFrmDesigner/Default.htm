@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>手机表单设计器</title>
+    <title>手机屏幕显示字段排序 </title>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -233,9 +233,11 @@
             InitPage();
             $('#nodes').dialog('close');
             $('#btns').hide();
-            var stat = 0;
+            var sta = 0;
             //可拖动table
             var fixHelperModified = function (e, tr) {
+                //拖动时状态改变为1
+                sta = 1;
                 //children() 方法返回返回被选元素的所有直接子元素
                 var $originals = tr.children();
                 //clone() 方法生成被选元素的副本，包含子节点、文本和属性
@@ -257,26 +259,26 @@
                     });
                     var EnName = GetQueryString("FK_MapData");
                     var refKey;
-                    if (stat == 1) {
-                        $("tr").mouseleave(function () {
-                            stat = 0;//重置状态
+                    $("tr").mouseover(function () {
+                        if (sta == 1) {
                             refKey = $(this).children('td').eq(1).html();
                             //获得主键值
                             var MyPK = EnName + '_' + refKey;
-                       
+                            alert(MyPK);
                             var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
                             mapAttr.DoMethodReturnString("DoInsertTo");
-                        });
-                    }
+                            sta = 0;//重置状态
+                        }
+                    });
+
                 };
             $("#sort tbody").sortable({
                 //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
                 helper: fixHelperModified,
                 //当排序动作结束时触发此事件。
-                start: stat = 1,
                 stop: updateIndex
-                
-                }).disableSelection();
+
+            }).disableSelection();
         });
 
         function InitPage() {
@@ -315,7 +317,7 @@
                 var backHtml = "";
                 if (trdtl[0].tdDtl == "1") {
                     backHtml = "<tr style='border:none'><td style='border:none' colspan=6>";
-                    backHtml += "<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'><image src='../../Img/Btn/Bcak.png' width='14px' height='14px'>返回</span></span></a>";
+                    backHtml += "<a href='./Default.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + trdtl[0].FK_MapData + "& target='_self' class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\"margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-undo l-btn-icon-left'><image src='../../Img/Btn/Bcak.png' width='14px' height='14px'>返回</span></span></a>";
 
                     //新建分组
                     backHtml += "<a href='#' onclick=GroupFieldNew('" + trdtl[0].No + "') class='btn btn-primary' data-options=\"iconCls:'icon-back'\" style=\" margin:0.6em 0.2em 0.6em;border-radius:4px !important\"><span class='l-btn-left'><span class='l-btn-text icon-addfolder l-btn-icon-left'><image src='../../Img/Btn/New.png' width='14px' height='14px'>新建分组</span></span></a>";
@@ -401,7 +403,7 @@
                             table += "<td nowrap=''><a href=\"javascript:EditDtl('" + FK_MapData + "','" + item.No + "')\">" + item.No + "</a></td>";
                             table += "<td nowrap=''>" + item.Name + "</td>";
                             table += "<td nowrap=''>&nbsp;</td>";
-                            table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='./SortingMapAttrs.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
+                            table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='./Default.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + item.No + "&amp;t=20170825185859310892' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>字段排序</span></span></a>";
                             table += "</td>";
                             table += "</tr>";
                         });

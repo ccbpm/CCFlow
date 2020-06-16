@@ -9,18 +9,14 @@ function ReadAndClose()
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
         handler.AddUrlData();
         handler.AddPara("FlowBBS_Doc", doc);
-        var data = handler.DoMethodReturnString("FlowBBS_Save");
+        handler.DoMethodReturnString("FlowBBS_Save");
     }
-   
-   
-    
-    //抄送关闭前事件
-   // if (typeof beforeCCClose != 'undefined' && beforeCCClose instanceof Function)
-    //    if (beforeCCClose() == false)
-    //        return false;
     window.close();
 }
 
+function CloseWindow() {
+    window.close();
+}
 
 var pageData = {};
 var globalVarList = {};

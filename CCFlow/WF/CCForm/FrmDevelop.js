@@ -91,6 +91,44 @@ function GenerDevelopFrm(wn, fk_mapData) {
             continue;
         }
 
+        //数值型的字段
+        if (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1"
+            //浮点型，双精度，整型，金额类型
+            && (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || mapAttr.MyDataType == 2 || mapAttr.MyDataType == 8)) {
+            var obj = $("#TB_" + mapAttr.KeyOfEn);
+            if (mapAttr.IsSecret)
+                obj.attr("type", password);
+            var bit = 0;
+            var defVal = mapAttr.DefVal;
+            if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+                bit = defVal.substring(defVal.indexOf(".") + 1).length;
+            debugger
+           
+            obj.bind('focus', function () {
+                removeplaceholder(this, bit);
+            });
+
+            obj.bind('blur', function () {
+                addplaceholder(this, bit);
+                if (this.getAttribute("data-type") == "Money")
+                    numberFormat(this, bit);
+            });
+
+           
+            obj.bind('keyup', function () {
+                limitLength(this, bit);
+                if (this.getAttribute("data-type") == "Int")
+                    valitationAfter(this, 'int');
+
+                if (this.getAttribute("data-type") == "Float" || this.getAttribute("data-type") == "Money")
+                    valitationAfter(this, 'float');
+
+            });
+           
+               
+            continue;
+        }
+
         //外部数据源、外键的选择列表
         if ((mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)
             || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {

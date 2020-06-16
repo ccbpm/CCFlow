@@ -13,29 +13,6 @@
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <link rel="Stylesheet" href="../../DataUser/Style/ccbpm.css" />
-    <style type="text/css">
-        label {
-            display: inline-block;
-            max-width: 100%;
-            margin-bottom: 0px;
-            font-weight: normal;
-        }
-
-        button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ccc !important;
-            border-radius: 3px;
-            margin: 5px 3px 5px 3px;
-            padding: 4px 15px;
-        }
-
-            button:hover {
-                background: #f5f5f5 !important;
-                color: #000;
-                border: 1px solid #ccc !important;
-            }
-    </style>
     <script type="text/javascript">
         var WorkID;
         var FK_Flow;
@@ -123,7 +100,6 @@
                 } else {
                     if (node.NodeID == selectNodeID)
                         checked = "checked=checked";
-                    html += "<input type='radio' id='RB_" + node.NodeID + "' name='nodeSelect' value='RB_" + node.NodeID + "' " + checked + "  onclick='SetUnEable(this);'>";
                     html += "<input type='radio' id='RB_" + node.NodeID + "' name='nodeSelect' value='RB_" + node.NodeID + "' " + checked + "  onclick='SetUnEable(this);'>";
                     html += "<label for='RB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
@@ -336,10 +312,16 @@
     </script>
     <base target="_self" />
     <style>
+        label {
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 0px;
+            font-weight: normal;
+        }
         input {
             width:24px;
             height:24px;
-            margin-right:10px!important;
+            margin-right:6px!important;
             float:left;
         }
         .button-bar {
@@ -347,11 +329,14 @@
             left:0;
             right:0;
             bottom:0;
-            background:#e5e5e5;
-            border-top:solid 1px #ccc;
-            padding:6px 6px 0px 6px;
+            background:#f2f2f2;
+            border-top:solid 1px #e5e5e5;
+            padding:6px;
             text-align:center
         }
+        input[type="radio"], input[type="checkbox"]{
+            margin:0;
+        }  
     </style>
 </head>
 <body>
@@ -369,11 +354,11 @@
         <input type=button id="Btn_Cancel" onclick="Cancel();" value="取消/返回" />-->
 
         <div class="button-bar">
-            <button type=button onclick="Send();" id="Btn_Send">
+            <button type=button onclick="Send();" id="Btn_Send" class="btn btn-primary">
                发送
             </button>
 
-            <button type=button onclick="Cancel();" id="Btn_Cancel">
+            <button type=button onclick="Cancel();" id="Btn_Cancel" class="btn btn-default">
                 取消/返回
             </button>
         </div>

@@ -1321,7 +1321,7 @@
         }
 
         function MobileFrm() {
-            var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
+            var url = '../MobileFrmDesigner/Default.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
 
             OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -1631,9 +1631,9 @@
                     批量修改字段
                 </a>
                 <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent">节点表单组件</a>
-                <!--<a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
+                <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
                     手机表单
-                </a>-->
+                </a>
 
             </div>
         </div>

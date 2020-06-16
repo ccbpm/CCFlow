@@ -458,9 +458,23 @@ namespace BP.WF
         {
             if (wn.HisNode.IsSendBackNode == false)
                 return wn;  //如果不是断头路节点，就让其返回.
-
+            if (wn.HisGenerWorkFlow.WFState == WFState.ReturnSta)
+            {
+                //是退回状态且原路返回的情况
+                Paras ps = new Paras();
+                ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                ps.Add(ReturnWorkAttr.WorkID, wn.WorkID);
+                DataTable mydt = DBAccess.RunSQLReturnTable(ps);
+                if (mydt.Rows.Count != 0)
+                {
+                    wn.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
+                    wn.JumpToEmp = mydt.Rows[0]["Returner"].ToString();
+                    return wn;
+                }
+               
+            }
             if (wn.HisNode.HisToNDNum != 0)
-                throw new Exception("err@流程配置错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
+            throw new Exception("err@流程配置错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
 
             if (wn.HisNode.HisRunModel != RunModel.Ordinary)
                 throw new Exception("err@流程配置错误:只能是线性节点才能设置[发送并返回]属性,当前节点是[" + wn.HisNode.HisRunModel.ToString() + "]");
@@ -483,9 +497,9 @@ namespace BP.WF
 
                 var mysql = "";
                 if (wn.HisNode.HisRunModel == RunModel.SubThread)
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
                 else
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) ";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='"+ wn.HisFlow.No+"')";
 
                 //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);

@@ -1,116 +1,66 @@
-/*
-1. ¸ÃJSÎÄ¼ş±»Ç¶Èëµ½ÁËMyFlowGener.htm µÄ¹¤×÷´¦ÀíÆ÷ÖĞ. 
-2. ¿ª·¢Õß¿ÉÒÔÖØĞ´¸ÃÎÄ¼ş´¦ÀíÍ¨ÓÃµÄÓ¦ÓÃ,±ÈÈçÍ¨ÓÃµÄº¯Êı.
+ï»¿/*
+1. è¯¥JSæ–‡ä»¶è¢«åµŒå…¥åˆ°äº†MyFlowGener.htm çš„å·¥ä½œå¤„ç†å™¨ä¸­. 
+2. å¼€å‘è€…å¯ä»¥é‡å†™è¯¥æ–‡ä»¶å¤„ç†é€šç”¨çš„åº”ç”¨,æ¯”å¦‚é€šç”¨çš„å‡½æ•°.
 
 */
-//Îª¹ãÎ÷¼ÆËãÖĞĞÄÔö¼Ó³õÊ¼»¯ÒıÓÃjsÎÄ¼ş
-$(function () {
-  
-    
+ 
 
-    
-});
-//Íâ·¢¹«ÎÄ.
-function WaiFa() {
+//è½¬åŒ–æ‹¼éŸ³çš„æ–¹æ³•
+function StrToPinYin(str) {
 
-    var workid = GetQueryString('WorkID');
-    var flowNo = GetQueryString('FK_Flow');
-    var nodeid = GetQueryString('NodeID');
-
-
-    var url = "../App/WaiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&NodeID=" + nodeid;
-    WinOpen(url);
-    //window.open(url);
+ 
+	var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+	handler.AddPara("name", str);
+	handler.AddPara("flag", "false");
+	data = handler.DoMethodReturnString("ParseStringToPinyin");
+	return data;
 }
 
-//×ªÄÚ·¢¹«ÎÄ.
-function NeiFa()
-{
-    var workid = GetQueryString('WorkID');
-    var flowNo = GetQueryString('FK_Flow');
-    var mypk = GetQueryString('MyPK');
-    var pkVal = GetQueryString('PKVal');
-
-    var url = "../App/NeiFa.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&MyPK=" + pkVal;
-    WinOpen(url);
-}
-
-function DZ() {
-
-    alert('sss');
-    var url = 'pop.htm';
-    window.open(url);
-}
+       
 
 /*
 
-1. beforeSave¡¢beforeSend¡¢ beforeReturn¡¢ beforeDelete 
-2 .MyFlowGener¡¢MyFlowTreeµÄ¹Ì¶¨·½·¨£¬½ûÖ¹É¾³ı
-3.Ö÷ÒªĞ´±£´æÇ°¡¢·¢ËÍÇ°¡¢ÍË»ØÇ°¡¢É¾³ıÇ°ÊÂ¼ş
-4.·µ»ØÖµÎª true¡¢false
+1. beforeSaveã€beforeSendã€ beforeReturnã€ beforeDelete 
+2 .MyFlowGenerã€MyFlowTreeçš„å›ºå®šæ–¹æ³•ï¼Œç¦æ­¢åˆ é™¤
+3.ä¸»è¦å†™ä¿å­˜å‰ã€å‘é€å‰ã€é€€å›å‰ã€åˆ é™¤å‰äº‹ä»¶
+4.è¿”å›å€¼ä¸º trueã€false
 
 */
 
-//±£´æÇ°ÊÂ¼ş
-function beforeSave() {
-    return true;
+
+//ä¿å­˜å‰äº‹ä»¶
+function beforeSave(saveType) {
+ 
+	return true;
+
 }
 
-//·¢ÉúÇ°ÊÂ¼ş
+
+//å‘ç”Ÿå‰äº‹ä»¶
 function beforeSend() {
-    return true;
+ 
+	return true;
 }
 
-//ÍË»ØÇ°ÊÂ¼ş
+//é€€å›å‰äº‹ä»¶
 function beforeReturn() {
-    return true;
+	return true;
 }
 
-//É¾³ıÇ°ÊÂ¼ş
+//åˆ é™¤å‰äº‹ä»¶
 function beforeDelete() {
-    return true;
+	return true;
 }
 
 
-//³­ËÍÔÄ¶ÁÒ³ÃæÔö¼Ó¹Ø±ÕÇ°ÊÂ¼ş
+//æŠ„é€é˜…è¯»é¡µé¢å¢åŠ å…³é—­å‰äº‹ä»¶
 function beforeCCClose() {
-    return true;
+	return true;
 }
 
-/**
- * ¹Ø±Õµ¯³ö´°Ë¢ĞÂÒ³Ãæ
- * @param {msg} ÏÔÊ¾µ¯³ö´°µÄÏûÏ¢ÄÚÈİ£¬µãÈ·¶¨¹Ø±Õ
- */
+//å…³é—­å¼¹å‡ºçª—åˆ·æ–°é¡µé¢
 function WindowCloseReloadPage(msg) {
 
-}
-//¹ãÎ÷³­ËÍÔÄ¶ÁÒ³ÃæÔö¼Ó¹Ø±ÕÇ°ÊÂ¼ş½áÊø
-//¹ãÎ÷¼ÆËãÖĞĞÄ´ò¿ª¹«ÎÄµÄ·½Ê½
-function openhtml() {
-    var strUrl = "office.html";
-    var dataSendToChild = $("#param").val();
-    var ntkoed = ntkoBrowser.ExtensionInstalled();
-    if (ntkoed) {
-        ntkoBrowser.openWindow(strUrl, "", "", "", "", "", dataSendToChild);
-    } else {
-        //Ã»ÓĞ°²×°¿çä¯ÀÀÆ÷¿Ø¼şµÄ»°ÌáÊ¾ÏÂÔØ°²×°
-        var iTop = ntkoBrowser.NtkoiTop(); //»ñµÃ´°¿ÚµÄ´¹Ö±Î»ÖÃ;
-        var iLeft = ntkoBrowser.NtkoiLeft(); //»ñµÃ´°¿ÚµÄË®Æ½Î»ÖÃ;
-        window.open("downloadExe.html", "", "height=200px,width=500px,top=" + iTop + "px,left=" + iLeft +
-            "px,titlebar=no,toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no");
-    }
-}
+	//ReloadGxjtList(msg);
 
-//ÔÚ¸¸Ò³Ãæ¶¨ÒåµÄ¿çä¯ÀÀÆ÷²å¼şÓ¦ÓÃ³ÌĞò¹Ø±ÕÊÂ¼şÏìÓ¦·½·¨£¬ÇÒ·½·¨Ãû²»ÄÜ×Ô¶¨Òå£¬±ØĞëÊÇntkoCloseEvent
-function ntkoCloseEvent() {
-    console.log("¿çä¯ÀÀÆ÷²å¼şÓ¦ÓÃ³ÌĞò´°¿ÚÒÑ¹Ø±Õ!");
-}
-
-//ÔÚ¸¸Ò³Ãæ¶¨ÒåµÄÓÃÓÚ½ÓÊÕ×ÓÒ³Ãæ»Ø´«ÖµµÄ·½·¨£¬·½·¨Ãû¿ÉÒÔ×Ô¶¨Òå£¬
-//¶¨ÒåºóµÄ·½·¨ÃûĞèÒªÔÚ×ÓÒ³ÃæÖĞÍ¨¹ıwindow.external.SetReturnValueToParentPage½øĞĞ×¢²á
-function OnData(callData) {
-    var data = decodeURI(callData);
-    $("#callback").val(data);
-}
-
-//¹ãÎ÷¼ÆËãÖĞĞÄ´ò¿ª¹«ÎÄµÄ·½Ê½
+} 

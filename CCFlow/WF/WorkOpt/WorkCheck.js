@@ -136,7 +136,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //可编辑的审核意见
     if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false) && isShowCheck == true) {
 
-        _Html += "<td style='width:100%' class='only-print-hidden'>";
+        _Html += "<td style='width:100%;border-bottom-style:none;border-color:#ddd' class='only-print-hidden'>";
 
         //是否启用附件上传
         if (frmWorkCheck.FWCAth == 1) {
@@ -147,7 +147,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         _Html += "<div style='float:left;width:100%;'>";
         var msg = track.Msg;
         if (msg == null || msg == undefined || msg == "")
-            msg = "同意";
+            msg = "";
         else
             msg = msg.replace(/<BR>/g, '\t\n');
 
@@ -195,7 +195,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     }//只读的审核意见
     else {
 
-        _Html += '<td style="word-wrap: break-word;line-height:20px;padding:5px;font-color:green;border-bottom-color:white" >';
+        _Html += '<td style="word-wrap: break-word;line-height:20px;padding:5px;font-color:green;border-bottom-style:none;border-color:#ddd" >';
         //显示退回原因
         var returnMsg = track.ActionType == 2 ? "退回原因：" : "";
         if (pageData.FWCVer == 1) {
@@ -261,9 +261,9 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         //签名，日期.
         //_Html += "<tr>";
         if (track.RDT == "" )
-            _Html += "<td style='text-align:right;width:100%;' class='only-print-hidden'>" ;
+            _Html += "<td style='text-align:right;width:100%;border-style:none;border-color:#ddd' class='only-print-hidden'>" ;
         else
-            _Html += "<td style='text-align:right;'>" ;
+            _Html += "<td style='text-align:right;border-top-style:none;border-color:#ddd'>" ;
       
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;

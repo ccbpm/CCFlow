@@ -255,6 +255,7 @@
     <Compile Include="HttpHandler\WF_Admin_AttrNode_FrmSln.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode_AccepterRole.cs" />
     <Compile Include="HttpHandler\WF_Admin_Template.cs" />
+    <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Selecter.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />

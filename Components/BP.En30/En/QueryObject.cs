@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.Pub;
@@ -1503,15 +1504,33 @@ namespace BP.En
             {
                 Map enMap = ens.GetNewEntity.EnMap;
                 Attrs attrs = enMap.Attrs;
+
+                Row row = ens.GetNewEntity.Row;
+
+                //首先检查row的可以一定要包含 dataCols.
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    if (row.ContainsKey(dc.ColumnName) == false)
+                        row.Add(dc.ColumnName, "");
+                }
+
+                //装载数据.
                 foreach (DataRow dr in dt.Rows)
                 {
+                    //克隆一个新的Row.
+                    Hashtable ht = row.Clone() as Hashtable; 
+
+                    //给他赋值.
+                    foreach (DataColumn dc in dt.Columns)
+                        ht[dc.ColumnName] = dr[dc.ColumnName];
+
+
                     Entity en = ens.GetNewEntity;
-                    foreach (Attr attr in attrs)
-                    {
-                        if (dt.Columns.Contains(attr.Key) == false)
-                            continue;
-                        en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-                    }
+                    Row myRow = new Row();
+                    foreach (string key in ht.Keys)
+                        myRow.Add(key, ht[key]);
+                    en.Row = myRow;
+
                     ens.AddEntity(en);
                 }
             }

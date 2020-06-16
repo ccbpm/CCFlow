@@ -50,8 +50,6 @@ namespace BP.DA
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.DM)
             {
-
-
             }
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)

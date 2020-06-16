@@ -566,13 +566,6 @@ namespace BP.Sys
                         break;
                 }
 
-                //外部数据源
-                if (this.LGType == FieldTypeS.Normal && this.MyDataType == DataType.AppString && this.UIContralType == UIContralType.DDL)
-                    attr.UIDDLShowType = BP.Web.Controls.DDLShowType.BindSQL;
-                //attr.AutoFullWay = this.HisAutoFull;
-                //attr.AutoFullDoc = this.AutoFullDoc;
-                //attr.MyFieldType = FieldType
-                //attr.UIDDLShowType= BP.Web.Controls.DDLShowType.Self
 
                 return attr;
             }
@@ -839,23 +832,6 @@ namespace BP.Sys
             get
             {
                 return this.KeyOfEn;
-            }
-        }
-        public BP.Web.Controls.TBType HisTBType
-        {
-            get
-            {
-                switch (this.MyDataType)
-                {
-                    case BP.DA.DataType.AppMoney:
-                        return BP.Web.Controls.TBType.Moneny;
-                    case BP.DA.DataType.AppInt:
-                    case BP.DA.DataType.AppFloat:
-                    case BP.DA.DataType.AppDouble:
-                        return BP.Web.Controls.TBType.Num;
-                    default:
-                        return BP.Web.Controls.TBType.TB;
-                }
             }
         }
         public int MyDataType

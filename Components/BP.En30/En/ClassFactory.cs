@@ -11,7 +11,6 @@ using BP.En;
 using BP.Sys;
 using BP.Pub;
 using BP.Sys.XML;
-
  
 namespace BP.En
 { 
@@ -489,15 +488,7 @@ namespace BP.En
         #endregion 实例
 
         #region 其他
-        /// <summary>
-        /// 生成系统报表
-        /// </summary>
-        /// <returns></returns>
-        public static string SysReport()
-        {
-            return null;
-        }
-
+       
         #region 获取 en
         private static Hashtable Htable_En;
         /// <summary>
@@ -538,7 +529,6 @@ namespace BP.En
             return tmp;
         }
         #endregion
-
        
 
         #region 获取 GetMethod
@@ -684,7 +674,6 @@ namespace BP.En
         #endregion
 
         #endregion
-
 
         #region 获取 HandlerBase
         private static Hashtable Htable_HandlerPage;

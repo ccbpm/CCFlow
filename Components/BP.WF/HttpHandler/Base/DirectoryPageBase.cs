@@ -1274,8 +1274,8 @@ namespace BP.WF.HttpHandler
                             string text = "";
                             if (attr.IsFKorEnum || attr.IsFK)
                                 text = dr[attr.Key + "Text"].ToString();
-                            else if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
-                                text = dr[attr.Key + "T"].ToString();
+                            //else if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
+                            //    text = dr[attr.Key + "T"].ToString();
                             else
                                 text = dr[attr.Key].ToString();
 

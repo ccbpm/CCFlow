@@ -11,6 +11,11 @@ namespace BP.En
 	/// </summary>
 	public class Row : Hashtable
 	{
+        public override object Clone()
+        {
+            return base.Clone();
+        }
+
         public Row():base(System.StringComparer.Create(System.Globalization.CultureInfo.CurrentCulture, true))
         {
         }

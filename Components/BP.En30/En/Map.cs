@@ -3,7 +3,6 @@ using System.Collections;
 using System.Data;
 using BP.DA;
 using BP.Sys;
-using BP.Web.Controls;
 
 namespace BP.En
 {
@@ -256,24 +255,6 @@ namespace BP.En
             set
             {
                 _FK_MapData = value;
-            }
-        }
-        /// <summary>
-        /// 显示方式
-        /// </summary>
-        private FormShowType _FormShowType = FormShowType.NotSet;
-        /// <summary>
-        /// 存放位置OfEntity
-        /// </summary>
-        public FormShowType FormShowType
-        {
-            get
-            {
-                return _FormShowType;
-            }
-            set
-            {
-                _FormShowType = value;
             }
         }
         /// <summary>
@@ -1465,40 +1446,6 @@ namespace BP.En
 
         #region DDL
 
-        #region 于帮定 固定 枚举类型有关系的操作。
-        private void AddDDLFixEnum(string key, string field, int defaultVal, bool IsPK, string desc, DDLShowType showtype, bool isReadonly)
-        {
-            Attr attr = new Attr();
-            attr.Key = key;
-            attr.Field = field;
-            attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppInt;
-
-            if (IsPK)
-                attr.MyFieldType = FieldType.PK;
-            else
-                attr.MyFieldType = FieldType.Normal;
-
-            attr.Desc = desc;
-            attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = showtype;
-            attr.UIIsReadonly = isReadonly;
-            this.Attrs.Add(attr);
-        }
-        private void AddDDLFixEnumPK(string key, int defaultVal, string desc, DDLShowType showtype, bool isReadonly)
-        {
-            this.AddDDLFixEnum(key, key, defaultVal, true, desc, showtype, isReadonly);
-        }
-        private void AddDDLFixEnumPK(string key, string field, int defaultVal, string desc, DDLShowType showtype, bool isReadonly)
-        {
-            this.AddDDLFixEnumPK(key, field, defaultVal, desc, showtype, isReadonly);
-        }
-        private void AddDDLFixEnum(string key, int defaultVal, string desc, DDLShowType showtype, bool isReadonly)
-        {
-            this.AddDDLFixEnum(key, key, defaultVal, false, desc, showtype, isReadonly);
-        }
-        #endregion
-
         #region  与boolen 有关系的操作.
         public void AddBoolean(string key, bool defaultVal, string desc, bool isUIVisable, bool isUIEnable, bool isLine, string helpUrl)
         {
@@ -1581,7 +1528,6 @@ namespace BP.En
             attr.MyFieldType = FieldType.PKEnum;
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = DDLShowType.SysEnum;
             attr.UIBindKey = sysEnumKey;
             attr.UIVisible = isUIVisable;
             attr.UIIsReadonly = !isUIEnable;
@@ -1610,7 +1556,6 @@ namespace BP.En
             attr.MyFieldType = FieldType.Enum;
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = DDLShowType.SysEnum;
             attr.UIBindKey = sysEnumKey;
             attr.UITag = cfgVal;
             attr.UIVisible = isUIVisable;
@@ -1663,7 +1608,6 @@ namespace BP.En
             attr.MyFieldType = FieldType.Enum;
             attr.Desc = desc;
             attr.UIContralType = UIContralType.RadioBtn;
-            attr.UIDDLShowType = DDLShowType.Self;
             attr.UIBindKey = sysEnumKey;
             attr.UIVisible = isUIVisable;
             attr.UIIsReadonly = !isUIEnable;
@@ -1709,7 +1653,6 @@ namespace BP.En
 
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = DDLShowType.BindSQL;
             attr.UIBindKey = sql;
             attr.HisFKEns = null;
             attr.UIIsReadonly = !uiIsEnable;
@@ -1785,7 +1728,6 @@ namespace BP.En
 
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = DDLShowType.Ens;
             attr.UIBindKey = ens.ToString();
             // attr.UIBindKeyOfEn = ens.GetNewEntity.ToString();
 
@@ -1873,11 +1815,11 @@ namespace BP.En
         #region string 有关系的操作。
 
         #region 关于
-        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType, TBType tbType, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
+        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType,   string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
         {
-            AddTBString(key, field, defaultVal, _FieldType, tbType, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, null);
+            AddTBString(key, field, defaultVal, _FieldType,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, null);
         }
-        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType, TBType tbType, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
+        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType,   string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
         {
             Attr attr = new Attr();
             attr.Key = key;
@@ -1887,7 +1829,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppString;
             attr.Desc = desc;
-            attr.UITBShowType = tbType;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -1967,7 +1908,7 @@ namespace BP.En
             if (isPk)
                 AddTBStringPK(key, key, desc, true, false, 0, 1000, 100);
             else
-                AddTBString(key, key, defaultVal.ToString(), FieldType.Normal, TBType.TB, desc, true, false, 0, 1000, 100, false);
+                AddTBString(key, key, defaultVal.ToString(), FieldType.Normal,  desc, true, false, 0, 1000, 100, false);
         }
         /// <summary>
         /// 增加一个textbox 类型的属性。
@@ -1984,19 +1925,19 @@ namespace BP.En
         /// <param name="tbWith">宽度</param> 
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, key, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBString(string key, string field, object defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
-            AddTBString(key, field, defaultVal, FieldType.Normal, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, field, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine);
+            AddTBString(key, key, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine);
         }
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, helpUrl);
+            AddTBString(key, key, defaultVal, FieldType.Normal,  desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, helpUrl);
         }
         /// <summary>
         /// 附件集合
@@ -2090,7 +2031,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppString;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.TB;
             attr.UIVisible = uiVisable;
             attr.UIWidth = 300;
             attr.UIIsReadonly = isReadonly;
@@ -2107,12 +2047,12 @@ namespace BP.En
         public void AddTBStringPK(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
             this.PKs = key;
-            AddTBString(key, key, defaultVal, FieldType.PK, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, key, defaultVal, FieldType.PK,  desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBStringPK(string key, string field, object defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
             this.PKs = key;
-            AddTBString(key, field, defaultVal, FieldType.PK, TBType.TB, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, field, defaultVal, FieldType.PK,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         #endregion
 
@@ -2145,9 +2085,7 @@ namespace BP.En
             attr.UIBindKey = ens.ToString();
             attr.HisFKEns = ens;
             // attr.UIBindKeyOfEn = ens.GetNewEntity.ToString();
-
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Ens;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -2203,7 +2141,6 @@ namespace BP.En
             // attr.UIBindKeyOfEn = ens.GetNewEntity.ToString();
 
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Ens;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -2243,7 +2180,6 @@ namespace BP.En
             attr.HisFKEns = attr.HisFKEns;
             //attr.UIBindKeyOfEn = ens.GetNewEntity.ToString();
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Ens;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -2297,7 +2233,6 @@ namespace BP.En
             attr.MyDataType = DataType.AppString;
             attr.UIBindKey = DataHelpKey;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Self;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -2347,7 +2282,6 @@ namespace BP.En
             attr.MyDataType = DataType.AppString;
             attr.UIBindKey = DataHelpKey;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Self;
             attr.UIVisible = uiVisable;
             attr.UIWidth = tbWith;
             attr.UIIsReadonly = isReadonly;
@@ -2418,7 +2352,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppDate;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Date;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             attr.MaxLength = 50;
@@ -2466,7 +2399,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppDateTime;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.DateTime;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             attr.MaxLength = 50;
@@ -2492,7 +2424,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppMoney;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Moneny;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             this.Attrs.Add(attr);
@@ -2522,7 +2453,6 @@ namespace BP.En
             attr.MyDataType = DataType.AppInt;
             attr.MyFieldType = FieldType.Normal;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Int;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             this.Attrs.Add(attr);
@@ -2558,7 +2488,6 @@ namespace BP.En
             attr.MyDataType = DataType.AppInt;
             attr.MyFieldType = FieldType.PK;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Int;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             if (identityKey)
@@ -2622,7 +2551,6 @@ namespace BP.En
             attr.MyDataType = DataType.AppInt;
             attr.MyFieldType = FieldType.PK;
             attr.Desc = "AID";
-            attr.UITBShowType = TBType.TB;
             attr.UIVisible = false;
             attr.UIIsReadonly = true;
             this.Attrs.Add(attr);
@@ -2659,7 +2587,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppFloat;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Num;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             this.Attrs.Add(attr);
@@ -2679,7 +2606,6 @@ namespace BP.En
             attr.DefaultVal = defaultVal;
             attr.MyDataType = DataType.AppDouble;
             attr.Desc = desc;
-            attr.UITBShowType = TBType.Decimal;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;
             this.Attrs.Add(attr);

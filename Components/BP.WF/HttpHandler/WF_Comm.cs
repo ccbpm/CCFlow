@@ -1306,8 +1306,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL
-                    && DataType.IsNullOrEmpty(attr.UIBindKey) == false
+                if ( DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
                     //获取SQl
@@ -3945,8 +3944,7 @@ namespace BP.WF.HttpHandler
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL
-                    && DataType.IsNullOrEmpty(attr.UIBindKey) == false
+                if ( DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
                     string sql = attr.UIBindKey;
@@ -4703,7 +4701,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
                 /**外部数据源*/
-               if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL && DataType.IsNullOrEmpty(attr.UIBindKey) == false)
+               if ( DataType.IsNullOrEmpty(attr.UIBindKey) == false)
                 {
                     string sqlKey= attr.UIBindKey;
                     DataTable dtSQl = null;

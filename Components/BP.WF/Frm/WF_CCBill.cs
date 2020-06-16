@@ -442,9 +442,7 @@ namespace BP.Frm
                 dr["Width"] = mapattr.UIWidth;
                 dt.Rows.Add(dr);
 
-
                 Attr attr = mapattr.HisAttr;
-
                 if (mapattr == null)
                     continue;
 
@@ -469,8 +467,7 @@ namespace BP.Frm
                     ds.Tables.Add(dtEn);
                 }
                 //绑定SQL的外键
-                if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL
-                    && DataType.IsNullOrEmpty(attr.UIBindKey) == false
+                if (DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
                     DataTable dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);

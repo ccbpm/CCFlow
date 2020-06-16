@@ -396,7 +396,6 @@
     <Compile Include="En\AttrFile.cs" />
     <Compile Include="En\AttrOfOneVSM.cs" />
     <Compile Include="En\AttrSearch.cs" />
-    <Compile Include="En\ControlsEnum.cs" />
     <Compile Include="En\Map.cs" />
     <Compile Include="En\Row.cs" />
     <Compile Include="En\EntityTree.cs" />

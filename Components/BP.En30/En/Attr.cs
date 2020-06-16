@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using BP.Web.Controls ;
 using BP.DA;
 
 namespace BP.En
@@ -260,23 +259,6 @@ namespace BP.En
                 //attr.HisAutoFull = this.AutoFullWay;
                 //attr.AutoFullDoc = this.AutoFullDoc;
                 return attr;
-            }
-        }
-        public BP.Web.Controls.TBType HisTBType
-        {
-            get
-            {
-                switch (this.MyDataType)
-                {
-                    case BP.DA.DataType.AppMoney:
-                        return BP.Web.Controls.TBType.Moneny;
-                    case BP.DA.DataType.AppInt:
-                    case BP.DA.DataType.AppFloat:
-                    case BP.DA.DataType.AppDouble:
-                        return BP.Web.Controls.TBType.Num;
-                    default:
-                        return BP.Web.Controls.TBType.TB;
-                }
             }
         }
         public bool IsFK
@@ -988,53 +970,6 @@ namespace BP.En
 				_HisFKEns=value;
 			}
 		}
-		private  TBType _TBShowType =TBType.TB;
-		/// <summary>
-		/// 要现实的控件类型。
-		/// </summary>
-		public TBType UITBShowType
-		{
-			get
-			{
-				if (this.MyDataType==DataType.AppDate)
-					return TBType.Date ;
-				else if (this.MyDataType==DataType.AppFloat)
-					return TBType.Float ;
-				else if (this.MyDataType==DataType.AppBoolean)
-					return TBType.Date ; //throw new Exception("@属性配置错误。");
-				else if (this.MyDataType==DataType.AppDouble)
-					return TBType.Decimal ;
-				else if (this.MyDataType==DataType.AppInt)
-					return TBType.Num ;
-				else if (this.MyDataType==DataType.AppMoney)
-					return TBType.Moneny;
-				else
-					return _TBShowType; 
-			}
-			set
-			{
-				this._TBShowType=value;
-			}
-		}
-		private  DDLShowType _UIDDLShowType =DDLShowType.None;
-		/// <summary>
-		/// 要现实的控件类型。
-		/// </summary>
-		public DDLShowType UIDDLShowType
-		{
-			get
-			{
-				if (this.MyDataType == DataType.AppBoolean)
-					return DDLShowType.Boolean ;
-				else 
-				    return this._UIDDLShowType ;
-			}
-			set
-			{
-				this._UIDDLShowType=value;
-			}
-		}
-
 		private string _UIRefKey=null;
 		/// <summary>
 		/// 要Bind 的Key. 在TB 里面就是 DataHelpKey 
@@ -1077,7 +1012,7 @@ namespace BP.En
 	{
 		#region 关于属性的增加 String
 		protected void AddTBString(string key , string field,  object defaultVal, 
-            FieldType _FieldType, TBType tbType, string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith )
+            FieldType _FieldType, string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith )
 		{
 			Attr attr = new Attr();
 			attr.Key=key;
@@ -1085,7 +1020,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppString;
 			attr.Desc=desc;
-			attr.UITBShowType=tbType;
 			attr.UIVisible = uiVisable;
 			attr.UIWidth=tbWith;
 			attr.UIIsReadonly = isReadonly;
@@ -1096,11 +1030,11 @@ namespace BP.En
 		}
 		public void AddTBString(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith )
 		{
-			AddTBString(  key ,   key,    defaultVal,   FieldType.Normal,  TBType.TB,  desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
+			AddTBString(  key ,   key,    defaultVal,   FieldType.Normal,    desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
 		}
 		public void AddTBString(string key, string field , object defaultVal,   string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith )
 		{
-			AddTBString(  key ,   field,    defaultVal,   FieldType.Normal,  TBType.TB,  desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
+			AddTBString(  key ,   field,    defaultVal,   FieldType.Normal,     desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
 		}
 
 		public void AddTBStringDoc(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly)
@@ -1119,7 +1053,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppString;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.TB;
 			attr.UIVisible = uiVisable;
 			attr.UIWidth=300;
 			attr.UIIsReadonly = isReadonly;
@@ -1167,7 +1100,6 @@ namespace BP.En
 			attr.MyDataType=DataType.AppInt;
 			attr.MyFieldType = FieldType.Normal;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.Int;
 			attr.UIVisible = uiVisable;
 			attr.UIIsReadonly = isReadonly;
 			this.Add(attr);
@@ -1213,7 +1145,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppFloat;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.Num;
 			attr.UIVisible = uiVisable;
 			attr.UIIsReadonly = isReadonly;
 			this.Add(attr);
@@ -1233,7 +1164,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppDouble;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.Decimal;
 			attr.UIVisible = uiVisable;
 			attr.UIIsReadonly = isReadonly;
 			this.Add(attr);
@@ -1253,7 +1183,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppDate;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.Date;
 			attr.UIVisible = uiVisable;
 			attr.UIIsReadonly = isReadonly;
 			attr.MaxLength=20;
@@ -1295,7 +1224,6 @@ namespace BP.En
 			attr.DefaultVal = defaultVal;
 			attr.MyDataType=DataType.AppDateTime;
 			attr.Desc=desc;
-			attr.UITBShowType=TBType.DateTime ;
 			attr.UIVisible = uiVisable;			 
 			attr.UIIsReadonly = isReadonly;
 			attr.MaxLength=30;
@@ -1350,7 +1278,6 @@ namespace BP.En
             attr.MyFieldType = FieldType.Enum;
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-            attr.UIDDLShowType = DDLShowType.SysEnum;
             attr.UIBindKey = sysEnumKey;
             attr.UITag = cfgVal;
             attr.UIVisible = isUIVisable;
@@ -1397,7 +1324,6 @@ namespace BP.En
 			 
 			attr.Desc=desc;
 			attr.UIContralType=UIContralType.DDL ;
-			attr.UIDDLShowType=DDLShowType.Ens;
 			attr.UIBindKey=ens.ToString();
             //attr.UIBindKeyOfEn = ens.GetNewEntity.ToString();
             attr.HisFKEns = ens;
@@ -1435,8 +1361,6 @@ namespace BP.En
 
             attr.Desc = desc;
             attr.UIContralType = UIContralType.DDL;
-
-            attr.UIDDLShowType = DDLShowType.BindSQL;
 
             attr.UIBindKey = sql;
             attr.HisFKEns = null;

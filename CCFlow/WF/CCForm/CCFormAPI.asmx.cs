@@ -13,7 +13,7 @@ using BP.En;
 namespace CCFlow.WF.CCForm
 {
     /// <summary>
-    /// CCFormAPI 的摘要说明
+    /// CCFormAPI 的摘要说明   
     /// </summary>
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]

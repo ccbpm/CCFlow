@@ -235,7 +235,6 @@ namespace BP.WF
             if (wn.HisFlow.FEventEntity == null)
             {
             }
-
             if (wn.HisFlow.FEventEntity != null)
             {
                 wn.HisFlow.FEventEntity.SendReturnObjs = wn.HisMsgObjs;

@@ -136,12 +136,13 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //可编辑的审核意见
     if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false) && isShowCheck == true) {
 
-        _Html += "<td>";
+        _Html += "<td style='width:100%' class='only-print-hidden'>";
 
         //是否启用附件上传
         if (frmWorkCheck.FWCAth == 1) {
             _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel + "' onmouseover='UploadFileChange(this)'></div>";
         }
+        _Html += "<div style='float:right'><a onmouseover = 'AddCommUseWord(\"" + pageData.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
 
         _Html += "<div style='float:left;width:100%;'>";
         var msg = track.Msg;
@@ -156,41 +157,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         _Html += "<br>";
 
 
-        //1.获取自定义常用短语
-        //var en = new Entity("BP.Sys.GloVar");
-        //en.SetPKVal("ND" + pageData.FK_Node + "_WorkCheck");
-        //var DuanYu = "";
-        //if (en.RetrieveFromDBSources() == 0) {
-        //    DuanYu = en.Val;
-        //}
-        //if (DuanYu != null && DuanYu != undefined && DuanYu != "") {
-
-        //    var NewDuanYu = DuanYu.split("@");
-        //} else {
-        //    var NewDuanYu = "";
-        //}
-        ////2.加入常用短语.
-        //_Html += "<br>";
-        //_Html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
-        //_Html += "<option value=''>常用短语</option>";
-        //if (NewDuanYu.length > 0) {
-        //    for (var i = 0; i < NewDuanYu.length; i++) {
-        //        if (NewDuanYu[i] == "") {
-        //            continue;
-        //        }
-        //        _Html += "<option value='" + NewDuanYu[i] + "'>" + NewDuanYu[i] + "</option>";
-        //    }
-        //} else {
-
-        //    _Html += "<option value='同意'>同意</option>";
-        //    _Html += "<option value='同意办理'>同意办理</option>";
-        //    _Html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
-        //    _Html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
-        //    _Html += "<option value='不同意'>不同意</option>";
-        //}
-        //_Html += "</select>";
-        //_Html += "<input name='' type='button' value='编辑短语' onclick='AddDuanYu(\"" + pageData.FK_Node + "\");'>";
-        _Html += "<a  onmouseover='AddCommUseWord(\"" + pageData.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");'><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /> </a>"
 
         _Html += "</div>";
         _Html += "</td>";
@@ -290,28 +256,26 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //输出签名,没有签名的要求.
     if (SignType == null || SignType == undefined) {
 
-        var rdt = track.RDT.substring(0, 16);
-
-        if (rdt == "") {
-            var dt = new Date();
-            rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
-        }
+        
 
         //签名，日期.
         //_Html += "<tr>";
-        _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:";
-
+        if (track.RDT == "" )
+            _Html += "<td style='text-align:right;width:100%;' class='only-print-hidden'>" ;
+        else
+            _Html += "<td style='text-align:right;'>" ;
+      
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;
         else
             _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
-
-        _Html += "</div>";
-
-
-        //_Html += "<div style='float:right'> ";
-        _Html += "&nbsp;&nbsp;日期:" + rdt;
-        _Html += "</div>";
+       
+        var rdt = track.RDT.substring(0, 16);
+        if (rdt == "") {
+            var dt = new Date();
+            rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
+        }
+        _Html += "(" + rdt+")";
         _Html += "</td>";
 
         _Html += "</tr>";

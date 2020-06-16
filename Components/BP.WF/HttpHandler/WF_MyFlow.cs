@@ -2667,7 +2667,12 @@ namespace BP.WF.HttpHandler
                         }
                     }
                 }
-                return ex.Message;
+
+                //如果错误，就写标记.
+                string msg = ex.Message;
+                if (msg.IndexOf("err@") == -1)
+                    msg = "err@" + msg;
+                return msg;
             }
         }
         /// <summary>

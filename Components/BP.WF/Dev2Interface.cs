@@ -1359,7 +1359,7 @@ namespace BP.WF
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 " + wfStateSql + doMainSQL + "  ORDER BY  ADT DESC ";
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 " + wfStateSql + doMainSQL + "  ORDER BY ADT DESC ";
                         }
                         else
                         {

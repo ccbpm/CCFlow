@@ -7349,7 +7349,7 @@ namespace BP.WF
         {
             /*在提交错误的情况下，回滚数据。*/
 
-            #region 如果是分流点下同表单发送失败再次发送就出现错误
+            #region 如果是分流点下同表单发送失败再次发送就出现错误.
             if (this.town != null
                 && this.town.HisNode.HisNodeWorkType == NodeWorkType.SubThreadWork
                 && this.town.HisNode.HisSubThreadType == SubThreadType.SameSheet)
@@ -7360,15 +7360,19 @@ namespace BP.WF
                 if (BP.DA.DBAccess.IsExitsObject(this.town.HisWork.EnMap.PhysicsTable) == true)
                     DBAccess.RunSQL("DELETE FROM " + this.town.HisWork.EnMap.PhysicsTable + " WHERE FID=" + this.WorkID);
             }
-            #endregion 如果是分流点下同表单发送失败再次发送就出现错误
+            #endregion 如果是分流点下同表单发送失败再次发送就出现错误.
 
             try
             {
-                //删除发生的日志.
-#warning 有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间
-                DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID +
-                                " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward +
-                                " AND RDT=(Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID + ")");
+                //有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间.
+                string maxDT = DBAccess.RunSQLReturnStringIsNull("Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID,null);
+                if (maxDT != null)
+                {
+                    //删除发生的日志.
+                    DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID +
+                                    " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward +
+                                    " AND RDT='"+maxDT+"'");
+                }
 
                 // 删除考核信息。
                 this.DealEvalUn();

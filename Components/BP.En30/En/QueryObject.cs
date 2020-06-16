@@ -58,7 +58,7 @@ namespace BP.En
                 else
                 {
                     if (selecSQL.Contains(" WHERE "))
-                         sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
+                        sql = selecSQL + "  AND ( " + this._sql + " ) " + _groupBy + this._orderBy;
                     else
                         sql = selecSQL + " WHERE   ( " + this._sql + " ) " + _groupBy + this._orderBy;
                 }
@@ -72,7 +72,7 @@ namespace BP.En
 
 
 
-                 sql = sql.Replace("WHERE AND", "WHERE");
+                sql = sql.Replace("WHERE AND", "WHERE");
                 sql = sql.Replace("WHERE  AND", "WHERE");
 
                 sql = sql.Replace("WHERE ORDER", "ORDER");
@@ -538,7 +538,7 @@ namespace BP.En
         private string _orderBy = "";
         public void addOrderBy(string attr)
         {
-             
+
             if (this._orderBy.IndexOf("ORDER BY") != -1)
             {
                 this._orderBy += " , " + attr;
@@ -579,7 +579,7 @@ namespace BP.En
             {
                 this._orderBy = " ORDER BY " + attr2Field(attr) + " DESC ";
             }
-            
+
         }
         public void addOrderByDesc(string attr1, string attr2)
         {
@@ -971,7 +971,7 @@ namespace BP.En
                         pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
 
                     if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
-                    this.MyParasR.Add("R" + paraI, int.Parse( dr[0].ToString()));
+                        this.MyParasR.Add("R" + paraI, int.Parse(dr[0].ToString()));
                     else
                         this.MyParasR.Add("R" + paraI, dr[0].ToString());
 
@@ -1383,8 +1383,6 @@ namespace BP.En
                 throw ex;
             }
         }
-
-
         public DataTable GetSumOrAvg(string oper)
         {
             string sql = this.SQL;
@@ -1395,9 +1393,9 @@ namespace BP.En
             {
                 case DBType.Oracle:
                     if (this._sql == "" || this._sql == null)
-                        sql = "SELECT "+oper +" FROM " + ptable;
+                        sql = "SELECT " + oper + " FROM " + ptable;
                     else
-                        sql = "SELECT "+oper + sql.Substring(sql.IndexOf("FROM "));
+                        sql = "SELECT " + oper + sql.Substring(sql.IndexOf("FROM "));
                     break;
                 default:
                     if (this._sql == "" || this._sql == null)
@@ -1407,16 +1405,16 @@ namespace BP.En
                         sql = sql.Substring(sql.IndexOf("FROM "));
                         if (sql.IndexOf("ORDER BY") >= 0)
                             sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
-                        sql = "SELECT " +oper +" "+ sql;
+                        sql = "SELECT " + oper + " " + sql;
                     }
-                    
+
                     break;
             }
             try
             {
- 
+
                 return this.En.RunSQLReturnTable(sql, this.MyParas);
-                
+
             }
             catch (Exception ex)
             {
@@ -1449,8 +1447,6 @@ namespace BP.En
                             sql = sql.Substring(0, sql.IndexOf("ORDER BY") - 1);
                         sql = selectSQl + sql + groupBy + orderBy;
                     }
-
-
                     //sql="SELECT COUNT(*) as C "+this._endSql  +sql.Substring(  sql.IndexOf("FROM ") ) ;
                     //sql="SELECT COUNT(*) as C FROM "+ this._ens.GetNewEntity.EnMap.PhysicsTable+ "  " +sql.Substring(sql.IndexOf("WHERE") ) ;
                     //int i = sql.IndexOf("ORDER BY") ;
@@ -1507,36 +1503,20 @@ namespace BP.En
             {
                 Map enMap = ens.GetNewEntity.EnMap;
                 Attrs attrs = enMap.Attrs;
-                try
+                foreach (DataRow dr in dt.Rows)
                 {
-                    foreach (DataRow dr in dt.Rows)
+                    Entity en = ens.GetNewEntity;
+                    foreach (Attr attr in attrs)
                     {
-                        Entity en = ens.GetNewEntity;
-                        foreach (Attr attr in attrs)
-                        {
-                            //if (attr.IsRefAttr)
-                            //    continue;
-                            if (dt.Columns.Contains(attr.Key) == false)
-                                continue;
-                            en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-                        }
-                        ens.AddEntity(en);
+                        if (dt.Columns.Contains(attr.Key) == false)
+                            continue;
+                        en.Row.SetValByKey(attr.Key, dr[attr.Key]);
                     }
-                }
-                catch (Exception ex)
-                {
-#warning 不应该出现的错误. 2011-12-03 add
-                    string cols = "";
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        cols += " , " + dc.ColumnName;
-                    }
-                    throw new Exception("Columns=" + cols + "@Ens=" + ens.ToString() + " @异常信息:" + ex.Message);
+                    ens.AddEntity(en);
                 }
             }
             else
             {
-
                 foreach (DataRow dr in dt.Rows)
                 {
                     Entity en = ens.GetNewEntity;

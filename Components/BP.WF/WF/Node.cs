@@ -3610,34 +3610,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 查询方法
-        /// <summary>
-        /// RetrieveAll
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveAll()
-        {
-            Nodes nds = Cash.GetObj(this.ToString(), Depositary.Application) as Nodes;
-            if (nds == null)
-            {
-                nds = new Nodes();
-                QueryObject qo = new QueryObject(nds);
-                qo.AddWhereInSQL(NodeAttr.NodeID, " SELECT Node FROM WF_Direction ");
-                qo.addOr();
-                qo.AddWhereInSQL(NodeAttr.NodeID, " SELECT ToNode FROM WF_Direction ");
-                qo.DoQuery();
-
-                Cash.AddObj(this.ToString(), Depositary.Application, nds);
-                Cash.AddObj(this.GetNewEntity.ToString(), Depositary.Application, nds);
-            }
-
-            this.Clear();
-            this.AddEntities(nds);
-            return this.Count;
-        }
-
-        #endregion
-
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

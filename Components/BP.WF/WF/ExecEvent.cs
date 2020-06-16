@@ -93,8 +93,14 @@ namespace BP.WF
                 {
                     switch (doType)
                     {
-                        case EventListNode.SendSuccess:
+                        case EventListNode.SendWhen:
+                            if (wn.HisNode.TodolistModel == TodolistModel.QiangBan)
+                                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
+                            else
+                                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE SendTo='"+WebUser.No+"' AND WorkID=" + wn.HisWork.OID);
+                            break;
                         case EventListNode.ReturnAfter:
+                        case EventListNode.ShitAfter:
                             BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
                             break;
                         default:
@@ -208,18 +214,22 @@ namespace BP.WF
             if (wn.JumpToNode != null)
                 toNodeID = wn.JumpToNode.NodeID;
 
-            //写入消息之前，删除所有的消息.
+            #region 写入消息之前,删除消息,不让其在提醒.
             if (BP.WF.Glo.IsEnableSysMessage == true)
             {
                 switch (doType)
                 {
                     case EventListFlow.FlowOverAfter:
-                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='SendSuccess' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
+                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='"+ EventListNode.SendSuccess + "' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
+                        break;
+                    case EventListFlow.AfterFlowDel: //删除所有的消息，包括抄送.
+                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE AtPara LIKE '%="+wn.HisWork.OID+"@' OR WorkID=" + wn.HisWork.OID);
                         break;
                     default:
                         break;
                 }
             }
+            #endregion 写入消息之前,删除消息,不让其在提醒.
 
             string msg = null;
             if (wn.HisFlow.FEventEntity == null)

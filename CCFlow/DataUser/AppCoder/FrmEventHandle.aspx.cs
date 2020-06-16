@@ -83,7 +83,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
         }
         #endregion 当表单保存前.
 
-        #region 当表单装载后.
+        #region 当表单装载后.  
         if (this.FK_Event == BP.Sys.EventListFrm.FrmLoadAfter)
         {
             /* 当表单装载后. */

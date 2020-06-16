@@ -235,7 +235,7 @@ namespace BP.Demo.BPFramework
                 UAC uac = new UAC();
                 //  uac.LoadRightFromCCGPM(this); //从GPM里面装载.
                 // return uac;
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;

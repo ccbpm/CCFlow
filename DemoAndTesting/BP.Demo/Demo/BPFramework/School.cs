@@ -50,7 +50,7 @@ namespace BP.Demo.BPFramework
 			{
 				UAC uac = new UAC();
 
-                if (BP.Web.WebUser.No == "zhoupeng" || BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No == "zhoupeng" || BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;

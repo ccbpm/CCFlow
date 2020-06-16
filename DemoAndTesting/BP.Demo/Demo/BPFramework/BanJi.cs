@@ -15,12 +15,14 @@ namespace BP.Demo.BPFramework
         /// 班主任
         /// </summary>
         public const string BZR = "BZR";
+        /// <summary>
+        /// 电话
+        /// </summary>
         public const string Tel = "Tel";
         /// <summary>
         /// 位置
         /// </summary>
         public const string WZ = "WZ";
-
 
     }
     /// <summary>
@@ -55,7 +57,7 @@ namespace BP.Demo.BPFramework
 			{
 				UAC uac = new UAC();
 
-                if (BP.Web.WebUser.No == "zhoupeng" || BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No == "zhoupeng" || BP.Web.WebUser.No.Equals("admin")==true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;
@@ -90,7 +92,7 @@ namespace BP.Demo.BPFramework
 				Map map = new Map("Demo_BanJi","班级");
 
 				#region 基本属性 
-				map.DepositaryOfEntity=Depositary.None;  //实体村放位置.
+				map.DepositaryOfEntity=Depositary.None;  //实体存放位置.
                 map.IsAllowRepeatName = true;
 				map.EnType=EnType.App;
 				map.CodeStruct="3"; //让其编号为3位, 从001 到 999 .
@@ -102,8 +104,6 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(BanJiAttr.BZR, null, "班主任", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.Tel, null, "班主任电话", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.WZ, null, "位置", true, false, 0, 50, 200);
-
-
                 #endregion
 
                 this._enMap=map;

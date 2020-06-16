@@ -139,6 +139,7 @@ namespace BP.Demo
                 Map map = new Map("Demo_Resume", "简历");
 
                 map.AddTBIntPKOID();
+
                 map.AddTBString(ResumeAttr.RefPK, null, "学生编号", false, false, 0, 200, 10);
                 map.AddTBString(ResumeAttr.NianYue, null, "年月", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);

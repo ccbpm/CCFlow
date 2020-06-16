@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Collections;
-using BP.Web.Controls;
+
 using System.Data;
 using BP.DA;
 using BP.DTS;
@@ -13,7 +13,6 @@ using BP.WF;
 namespace BP.Demo.FlowEvent
 {
     /// <summary>
-    /// 报销流程001
     /// 此类库必须放入到 BP.*.dll 才能被解析发射出来。
     /// </summary>
     public class F001 : BP.WF.FlowEventBase
@@ -82,6 +81,19 @@ namespace BP.Demo.FlowEvent
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
             string nodeName = this.HisNode.Name; // 当前节点名称.
 
+
+            //改变方向或者到达人员.
+            if (1 == 2)
+            {
+                var qingjiaTianshu = this.GetValInt("QingJiaTianshu");
+                if (qingjiaTianshu == 1 && 1 == 1)
+                {
+                    this.JumpToNodeID = 109;
+                    this.JumpToEmps = "zhangsan";
+                }
+            }
+
+
             switch (nodeID)
             {
                 case 101:  //当是第1个节点的时候....
@@ -119,8 +131,11 @@ namespace BP.Demo.FlowEvent
         {
             //把数据写入到接口.
             //this.WorkID;
-
             //this.WorkID;
+
+            //string sql = "UPDATE SSS SET XX=1 WHERE OID=" + this.OID;
+            //DBAccess.RunSQL(sql);
+
 
             return base.FlowOverAfter();
         }

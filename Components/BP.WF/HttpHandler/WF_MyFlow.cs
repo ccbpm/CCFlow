@@ -360,7 +360,7 @@ namespace BP.WF.HttpHandler
                         }
 
                         BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);
-                        return "url@" + "./MyView.htm.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node+"&PWorkID="+gwf.PWorkID+"&FID="+gwf.FID;
+                        return "url@" + "./MyView.htm?WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node+"&PWorkID="+gwf.PWorkID+"&FID="+gwf.FID;
                     }
                 }
             }

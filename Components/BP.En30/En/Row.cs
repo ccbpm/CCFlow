@@ -11,11 +11,6 @@ namespace BP.En
 	/// </summary>
 	public class Row : Hashtable
 	{
-        public override object Clone()
-        {
-            return base.Clone();
-        }
-
         public Row():base(System.StringComparer.Create(System.Globalization.CultureInfo.CurrentCulture, true))
         {
         }
@@ -100,8 +95,6 @@ namespace BP.En
             else
                 this[key] = val;
         }
-
-
         public bool GetBoolenByKey(string key)
         {
             object obj = this[key];
@@ -117,23 +110,6 @@ namespace BP.En
         public object GetValByKey(string key)
         {
             return this[key];
-            /*
-            if (SystemConfig.IsDebug)
-            {
-                try
-                {
-                    return this[key];
-                }
-                catch(Exception ex)
-                {
-                    throw new Exception("@GetValByKey没有找到key="+key+"的属性Vale , 请确认Map 里面是否有此属性."+ex.Message);
-                }
-            }
-            else
-            {
-                return this[key];
-            }
-            */
         }
 
 	}

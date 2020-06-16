@@ -1500,49 +1500,44 @@ namespace BP.En
         /// <returns>初始化后的ens</returns>
         public static Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
-            if (fullAttrs == null)
-            {
-                Map enMap = ens.GetNewEntity.EnMap;
-                Attrs attrs = enMap.Attrs;
-
-                Row row = ens.GetNewEntity.Row;
-
-                //首先检查row的可以一定要包含 dataCols.
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    if (row.ContainsKey(dc.ColumnName) == false)
-                        row.Add(dc.ColumnName, "");
-                }
-
-                //装载数据.
-                foreach (DataRow dr in dt.Rows)
-                {
-                    //克隆一个新的Row.
-                    Hashtable ht = row.Clone() as Hashtable; 
-
-                    //给他赋值.
-                    foreach (DataColumn dc in dt.Columns)
-                        ht[dc.ColumnName] = dr[dc.ColumnName];
-
-
-                    Entity en = ens.GetNewEntity;
-                    Row myRow = new Row();
-                    foreach (string key in ht.Keys)
-                        myRow.Add(key, ht[key]);
-                    en.Row = myRow;
-
-                    ens.AddEntity(en);
-                }
-            }
-            else
+            if (fullAttrs != null)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
-                    Entity en = ens.GetNewEntity;
+                    Entity enF = ens.GetNewEntity;
                     foreach (string str in fullAttrs)
-                        en.Row.SetValByKey(str, dr[str]);
-                    ens.AddEntity(en);
+                        enF.Row.SetValByKey(str, dr[str]);
+                    ens.AddEntity(enF);
                 }
+                return ens;
+            }
+
+            Row row = ens.GetNewEntity.Row;
+
+            //首先检查row的可以一定要包含 dataCols.
+            foreach (DataColumn dc in dt.Columns)
+            {
+                if (row.ContainsKey(dc.ColumnName) == false)
+                    row.Add(dc.ColumnName, "");
+            }
+
+            //装载数据.
+            foreach (DataRow dr in dt.Rows)
+            {
+                //克隆一个新的Row.
+                Hashtable ht = row.Clone() as Hashtable;
+
+                //给他赋值.
+                foreach (DataColumn dc in dt.Columns)
+                    ht[dc.ColumnName] = dr[dc.ColumnName];
+
+                Entity enNew = ens.GetNewEntity;
+                Row myRow = new Row();
+                foreach (string key in ht.Keys)
+                    myRow.Add(key, ht[key]);
+
+                enNew.Row = myRow;
+                ens.AddEntity(enNew);
             }
             return ens;
         }

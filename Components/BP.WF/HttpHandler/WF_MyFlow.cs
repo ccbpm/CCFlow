@@ -2655,7 +2655,7 @@ namespace BP.WF.HttpHandler
 
                 //如果错误，就写标记.
                 string msg = ex.Message;
-                if (msg.IndexOf("err@") == -1)
+                if (msg.IndexOf("err@") == -1 && msg.IndexOf("url@")!=0)
                     msg = "err@" + msg;
                 return msg;
             }

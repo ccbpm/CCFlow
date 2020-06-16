@@ -233,9 +233,11 @@
             InitPage();
             $('#nodes').dialog('close');
             $('#btns').hide();
-            var stat = 0;
+            var sta = 0;
             //可拖动table
             var fixHelperModified = function (e, tr) {
+                //拖动时状态改变为1
+                sta = 1;
                 //children() 方法返回返回被选元素的所有直接子元素
                 var $originals = tr.children();
                 //clone() 方法生成被选元素的副本，包含子节点、文本和属性
@@ -257,26 +259,26 @@
                     });
                     var EnName = GetQueryString("FK_MapData");
                     var refKey;
-                    if (stat == 1) {
-                        $("tr").mouseleave(function () {
-                            stat = 0;//重置状态
+                    $("tr").mouseover(function () {
+                        if (sta == 1) {
                             refKey = $(this).children('td').eq(1).html();
                             //获得主键值
                             var MyPK = EnName + '_' + refKey;
-                       
-                            var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
+                            alert(MyPK);
+                            var mapAttr = new Entity("BP.Sys.MapAttr",MyPK);
                             mapAttr.DoMethodReturnString("DoInsertTo");
-                        });
-                    }
+                            sta = 0;//重置状态
+                        }
+                    });
+
                 };
             $("#sort tbody").sortable({
                 //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
                 helper: fixHelperModified,
                 //当排序动作结束时触发此事件。
-                start: stat = 1,
                 stop: updateIndex
-                
-                }).disableSelection();
+
+            }).disableSelection();
         });
 
         function InitPage() {

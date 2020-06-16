@@ -79,15 +79,13 @@ function OpenFoolFrm() {
 
 }
 
-
 //移动表单
 function FrmMobile() {
 
     var frmID = GetQueryString("FK_MapData");
     var flowNo = GetQueryString("FK_Flow");
     var nodeID = GetQueryString("FK_Node");
-
-    var url = "/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeid + "&FK_MapData=" + frmID;
+    var url = "../MobileFrmDesigner/Default.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeid + "&FK_MapData=" + frmID;
     window.open(url);
 }
 

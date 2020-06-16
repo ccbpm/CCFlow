@@ -69,14 +69,14 @@ UE.plugins['frmmobile'] = function () {
     var frmID = pageParam.fk_mapdata;
     var W = 600;
     var H = 600;
-    var url = '../AttrNode/SortingMapAttrs.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
+    var url = '../MobileFrmDesigner/Default.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
                 iframeUrl: url,
                 name: thePlugins,
                 editor: this,
-                title: '手机模板',
+                title: '手机表单',
                 cssRules: "width:" + W + "px;height:" + H + "px;",
 
             });

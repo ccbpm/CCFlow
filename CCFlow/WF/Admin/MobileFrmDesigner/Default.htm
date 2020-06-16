@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>手机屏幕显示字段排序 </title>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -228,7 +228,13 @@
 
     <script type="text/javascript">
 
+        var frmID = "";
+
         $(function () {
+
+            var frmID = GetQueryString("FK_MapData");
+            if (frmID == null || frmID == undefined)
+                frmID=GetQueryString("FrmID");
 
             InitPage();
             $('#nodes').dialog('close');
@@ -265,8 +271,15 @@
                             //获得主键值
                             var MyPK = EnName + '_' + refKey;
                             alert(MyPK);
+
+                             var insetToPK = "ND101_QingJiaYuanYin";
+
                             var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
-                            mapAttr.DoMethodReturnString("DoInsertTo");
+                            mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
+                            window.location.href = window.location.href;
+                            return;
+
+
                             sta = 0;//重置状态
                         }
                     });

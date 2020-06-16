@@ -263,9 +263,9 @@
                             refKey = $(this).children('td').eq(1).html();
                             //获得主键值
                             var MyPK = EnName + '_' + refKey;
-                            alert(MyPK)
+                       
                             var mapAttr = new Entity("BP.Sys.MapAttr", MyPK);
-                            alert(mapAttr.DoMethodReturnString("DoInsertTo"));
+                            mapAttr.DoMethodReturnString("DoInsertTo");
                         });
                     }
                 };

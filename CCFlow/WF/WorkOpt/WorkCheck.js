@@ -136,7 +136,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //可编辑的审核意见
     if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false) && isShowCheck == true) {
 
-        _Html += "<td style='width:100%;border-bottom-style:none;border-color:#ddd' class='only-print-hidden'>";
+        _Html += "<td style='width:100%;border-bottom-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
 
         //是否启用附件上传
         if (frmWorkCheck.FWCAth == 1) {
@@ -261,7 +261,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         //签名，日期.
         //_Html += "<tr>";
         if (track.RDT == "" )
-            _Html += "<td style='text-align:right;width:100%;border-style:none;border-color:#ddd' class='only-print-hidden'>" ;
+            _Html += "<td style='text-align:right;width:100%;border-top-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>" ;
         else
             _Html += "<td style='text-align:right;border-top-style:none;border-color:#ddd'>" ;
       

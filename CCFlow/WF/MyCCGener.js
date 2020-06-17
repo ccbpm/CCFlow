@@ -594,31 +594,8 @@ function GenerWorkNode() {
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
 
-    //循环之前的提示信息.
-    var info = "";
-    var title = ""
-    for (var i = 0; i < flowData.AlertMsg.length; i++) {
-        var alertMsg = flowData.AlertMsg[i];
-        var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-        title = alertMsg.Title;
-        if (title.indexOf("请求加签") > 0) {
-            $('#flowInfo').append(alertMsgEle);
-
-        } else {
-            $('#Message').append(alertMsgEle);
-            $('#Message').append($('<hr/>'));
-        }
-
-    }
-
-    if (flowData.AlertMsg.length != 0 && title.indexOf("请求加签") < 0) {
-        $('#MessageDiv').modal().show();
-    }
-
     //帮助提醒
     HelpAlter();
- 
-
 
     if (node.FormType == 11) {
         //获得配置信息.

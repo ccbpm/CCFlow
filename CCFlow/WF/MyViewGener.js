@@ -1,7 +1,6 @@
 ﻿
 //阅读并关闭.
-function Close()
-{
+function Close() {
     window.close();
 }
 
@@ -33,7 +32,7 @@ $(function () {
     $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
-   // initToolBar();//初始化按钮
+    // initToolBar();//初始化按钮
     initPageParam(); //初始化参数
 
     GenerWorkNode(); //表单数据.ajax
@@ -578,31 +577,12 @@ function GenerWorkNode() {
     var node = flowData.WF_Node[0];
     var gfs = flowData.Sys_MapAttr;
 
-  
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
 
-    //循环之前的提示信息.
-    var info = "";
-    var title = ""
-    for (var i = 0; i < flowData.AlertMsg.length; i++) {
-        var alertMsg = flowData.AlertMsg[i];
-        var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-        title = alertMsg.Title;
-        if (title.indexOf("请求加签") > 0) {
-            $('#flowInfo').append(alertMsgEle);
+    //帮助提醒
+    //   HelpAlter();
 
-        } else {
-            $('#Message').append(alertMsgEle);
-            $('#Message').append($('<hr/>'));
-        }
-
-    }
-
-    if (flowData.AlertMsg.length != 0 && title.indexOf("请求加签") < 0) {
-        $('#MessageDiv').modal().show();
-    }
- 
     //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
     if (node.FormType == 5) {
@@ -689,7 +669,7 @@ function GenerWorkNode() {
             autoTextarea(item);
         });
     }
-    
+
 
     //为 DISABLED 的 TEXTAREA 加TITLE 
     var disabledTextAreas = $('#divCCForm textarea:disabled');
@@ -821,7 +801,7 @@ document.BindEditorMapAttr = [];
 
 
 
-  
+
 function To(url) {
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }

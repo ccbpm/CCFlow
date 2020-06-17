@@ -1112,6 +1112,7 @@ function GenerWorkNode() {
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; 
 
+
     //循环之前的提示信息.
     var info = "";
     var title = ""
@@ -1126,7 +1127,6 @@ function GenerWorkNode() {
             $('#Message').append(alertMsgEle);
             $('#Message').append($('<hr/>'));
         }
-
     }
 
     if (flowData.AlertMsg.length != 0 && title.indexOf("请求加签") < 0) {

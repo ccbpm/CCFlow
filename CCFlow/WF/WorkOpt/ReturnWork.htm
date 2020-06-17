@@ -22,6 +22,7 @@
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script src="../InitMapAttr.js"></script>
+    <link href="../style/skin/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         body {
             background: transparent;
@@ -34,22 +35,6 @@
 
         #Message {
             width: 100%;
-        }
-         button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ccc !important;
-            border-radius: 3px;
-            margin: 5px 3px 5px 3px;
-            padding: 4px 15px;
-        }
-        button:hover {
-            background: #f5f5f5;
-            color: #000;
-            border: 1px solid #ccc !important;
-            border-radius: 3px;
-            margin: 5px 3px 5px 3px;
-            padding: 4px 15px;
         }
     </style>
     <script type="text/javascript">
@@ -277,13 +262,13 @@
     <!--<div> 上传附件：</div>
         <div style="height:100px;">上传附件预留：该功能正在建设中</div>
     -->
-    <div style="position: fixed;right: 10px;bottom: 40px;" class="foot">
-        <input type="checkbox" id="btnIsBackTracking" /><label for="btnIsBackTracking">退回后并发送给我</label>
-        <button type="button"  onclick="ReturnWork(0);" id="btnReturn">
-            <img src="../Img/Btn/Confirm.png" /> 确定退回
+    <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;" class="foot">
+        <div style="margin-top:6px;float:left;"><input type="checkbox" id="btnIsBackTracking" style="float:left;margin-top:3px;" /><label for="btnIsBackTracking" style="margin-left:6px;float:left;margin-right:20px;">退回后并发送给我</label></div>
+        <button type="button" onclick="Close();" id="btnClose" class="layui-btn layui-btn-primary">
+            <!--<img src="../Img/Btn/Close.png" />--> 关闭
         </button>
-        <button type="button"  onclick="Close();" id="btnClose">
-            <img src="../Img/Btn/Close.png" /> 关闭
+        <button type="button"  onclick="ReturnWork(0);" id="btnReturn" class="layui-btn layui-btn-normal">
+            <!--<img src="../Img/Btn/Confirm.png" />--> 确定退回
         </button>
     </div>
 

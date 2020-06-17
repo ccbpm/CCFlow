@@ -127,6 +127,11 @@
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;
             }
+            if (mapExt.Tag.indexOf('Starter') == -1)
+                err + "\t\n 查询语句必须包含Starter列，并且区分大小写.";
+
+            if (mapExt.Tag.indexOf('MainPK') == -1)
+                err + "\t\n 查询语句必须包含MainPK列，并且区分大小写.";
 
             mapExt.FK_MapData = frmID;
             mapExt.ExtType = "StartFlow";
@@ -140,7 +145,7 @@
 
                 if (val != null && val != "" && CheckIsSQL(val) == false) {
                     alert('请输入合法的查询SQL' + val);
-                    return;
+                    return;n
                 }
 
                 sqls += "*" + mapDtl.No + "=" + val;

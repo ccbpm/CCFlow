@@ -236,11 +236,13 @@ function GenerFrm() {
             Skip.addJs("../CCForm/Ath.js");
             Skip.addJs("../CCForm/JS/FileUpload/fileUpload.js");
             Skip.addJs("../Scripts/jquery-form.js");
+            Skip.addJs("../../DataUser/OverrideFiles/Ath.js");
             $('head').append("<link href='../CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
         } else {
             Skip.addJs("./Ath.js");
             Skip.addJs("./JS/FileUpload/fileUpload.js");
             Skip.addJs("../Scripts/jquery-form.js");
+            Skip.addJs("../../DataUser/OverrideFiles/Ath.js");
             $('head').append("<link href='./JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
         }
        

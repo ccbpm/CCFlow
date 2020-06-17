@@ -323,8 +323,8 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "节点");
                 //map 的基 础信息.
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfMap = Depositary.Application;
 
                 map.IndexField = NodeAttr.FK_Flow;
 

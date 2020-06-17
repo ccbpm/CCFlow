@@ -139,7 +139,7 @@ namespace BP.WF.Template
 				if (this._enMap != null)
 					return this._enMap;
 				Map map = new Map("Sys_MapData", "Excel表单属性");
-				map.Java_SetEnType(EnType.Sys);
+				
 
 				#region 基本属性.
                 map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, true, 1, 190, 20);

@@ -1430,9 +1430,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapAttr", "实体属性");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
 
@@ -1789,13 +1786,13 @@ namespace BP.Sys
             }
             else
             {
-                this.KeyOfEn = PubClass.DealToFieldOrTableNames(this.KeyOfEn);
+                this.KeyOfEn = BP.Pub.PubClass.DealToFieldOrTableNames(this.KeyOfEn);
             }
 
             string keyofenC = this.KeyOfEn.Clone() as string;
             keyofenC = keyofenC.ToLower();
 
-            if (PubClass.KeyFields.Contains("," + keyofenC + ",") == true)
+            if (BP.Pub.PubClass.KeyFields.Contains("," + keyofenC + ",") == true)
                 throw new Exception("@错误:[" + this.KeyOfEn + "]是字段关键字，您不能用它做字段。");
 
             if (this.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn,

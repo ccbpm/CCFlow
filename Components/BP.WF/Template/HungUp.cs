@@ -200,7 +200,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_HungUp", "挂起");
-                map.Java_SetEnType(EnType.Admin);
+                
                 map.IndexField = HungUpAttr.WorkID;
 
 

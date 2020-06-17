@@ -117,7 +117,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单库");
-                map.Java_SetCodeStruct("4");
+                map.CodeStruct = "4";
 
                 map.AddTBStringPK(FrmAttr.No, null, null, true, true, 1, 200, 4);
                 map.AddTBString(FrmAttr.Name, null, null, true, false, 0, 50, 10);

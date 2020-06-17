@@ -250,7 +250,7 @@ namespace BP.WF.HttpHandler
                 //用于扫描打印.
                 string qrUrl = SystemConfig.HostURL + "WF/WorkOpt/PrintDocQRGuide.htm?MyPK=" + bill.MyPK;
                 rtf.MakeDoc(tempFile,
-                    path, file, false, qrUrl);
+                    path, file, qrUrl);
                 #endregion
 
                 #region 转化成pdf.
@@ -464,8 +464,7 @@ namespace BP.WF.HttpHandler
 
                 //用于扫描打印.
                 string qrUrl = SystemConfig.HostURL + "WF/WorkOpt/PrintDocQRGuide.htm?MyPK=" + bill.MyPK;
-                rtf.MakeDoc(tempFile,
-                    path, file, false, qrUrl);
+                rtf.MakeDoc(tempFile, path, file, qrUrl);
                 #endregion
 
                 #region 转化成pdf.
@@ -1212,7 +1211,7 @@ namespace BP.WF.HttpHandler
                 ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 ps.Add("FK_Node", this.FK_Node);
                 ps.Add("WorkID", this.WorkID);
-                ps.AddFK_Emp();
+                ps.Add("FK_Emp", WebUser.No);
                 DBAccess.RunSQL(ps);
             }
 
@@ -1435,7 +1434,7 @@ namespace BP.WF.HttpHandler
                 ps.SQL = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND (IsPass=0 OR IsPass=-1) AND FK_Emp!=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 ps.Add("FK_Node", this.FK_Node);
                 ps.Add("WorkID", this.WorkID);
-                ps.AddFK_Emp();
+                ps.Add("FK_Emp", WebUser.No);
                 if (DBAccess.RunSQLReturnValInt(ps, 0) == 0)
                     return "close@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
             }

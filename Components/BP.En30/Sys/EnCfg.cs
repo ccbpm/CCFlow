@@ -376,9 +376,6 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_EnCfg", "实体配置");
-                map.Java_SetDepositaryOfEntity( Depositary.Application);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
 
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);

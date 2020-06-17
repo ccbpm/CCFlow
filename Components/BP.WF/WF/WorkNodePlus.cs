@@ -87,7 +87,7 @@ namespace BP.WF
                     if (System.IO.Directory.Exists(path) == false)
                         System.IO.Directory.CreateDirectory(path);
 
-                    rtf.MakeDoc(func.TempFilePath + ".rtf", path, file, false);
+                    rtf.MakeDoc(func.TempFilePath + ".rtf", path, file);
                     #endregion
 
                     #region 转化成pdf.

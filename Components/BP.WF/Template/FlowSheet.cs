@@ -276,7 +276,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Flow", "流程");
-                map.Java_SetCodeStruct("3");
+                map.CodeStruct = "3";
 
                 #region 基本属性。
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);

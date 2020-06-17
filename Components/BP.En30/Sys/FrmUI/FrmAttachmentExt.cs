@@ -521,10 +521,6 @@ namespace BP.Sys.FrmUI
                     return this._enMap;
 
                 Map map = new Map("Sys_FrmAttachment", "附件");
-
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
                 map.AddMyPK();

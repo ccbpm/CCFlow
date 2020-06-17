@@ -4100,9 +4100,9 @@ namespace BP.WF
                 Map map = new Map("WF_Flow", "流程");
 
                 //@sly 取消了缓存.
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                //map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetCodeStruct("3");
+                map.DepositaryOfEntity= Depositary.Application;
+                //map.DepositaryOfEntity= Depositary.Application;
+                map.CodeStruct = "3";
 
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 200, 10);

@@ -196,9 +196,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_Enum", "枚举数据");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 /*
                 * 为了能够支持 cloud 我们做了如下变更.

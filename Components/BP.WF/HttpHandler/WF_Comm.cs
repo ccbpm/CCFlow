@@ -2627,7 +2627,7 @@ namespace BP.WF.HttpHandler
                 string fk_mapData = dr["FK_MapData"].ToString();
                 if (ds.Tables.Contains(uiBindKey) == false)
                 {
-                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                    ds.Tables.Add(BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
 
             }
@@ -2792,7 +2792,7 @@ namespace BP.WF.HttpHandler
                 if (ds.Tables.Contains(uiBindKey) == true)
                     continue;
 
-                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                ds.Tables.Add(BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey));
             }
 
             string enumKeys = "";
@@ -3958,7 +3958,7 @@ namespace BP.WF.HttpHandler
                     }
                     else
                     {
-                        dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                        dtSQl = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
                     }
                     foreach (DataColumn col in dtSQl.Columns)
                     {
@@ -4713,7 +4713,7 @@ namespace BP.WF.HttpHandler
                     }
                     else
                     {
-                        dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                        dtSQl = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
                     }
                     foreach (DataColumn col in dtSQl.Columns)
                     {

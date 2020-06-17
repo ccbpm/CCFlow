@@ -183,17 +183,19 @@
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DA\EncodingBP.cs" />
     <Compile Include="DA\DTTemp.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DA\CashFrmTemplate.cs" />
     <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\Engine.cs">
+    <Compile Include="Pub\Current.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\TableFieldAddComment.cs" />
+    <Compile Include="Pub\Engine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Pub\TableFieldAddComment.cs" />
     <Compile Include="En\EnDtl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -212,9 +214,6 @@
     <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
     <Compile Include="NetPlatformImpl\Sys.cs" />
     <Compile Include="OverrideFile.cs" />
-    <Compile Include="Port\Current.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Pub\Rpt2Base.cs" />
     <Compile Include="References\IJsonWrapper.cs" />
@@ -284,7 +283,7 @@
     <Compile Include="Sys\GloVar.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\PubClass.cs">
+    <Compile Include="Pub\PubClass.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\SysFileManager.cs">

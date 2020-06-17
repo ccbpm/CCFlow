@@ -196,7 +196,7 @@ namespace BP.Frm
             //try
             //{
             //    //执行保存.
-            //    rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+            //    rpt = BP.Pub.PubClass.CopyFromRequest(rpt) as GEEntity;
             //}
             //catch (Exception ex)
             //{
@@ -233,7 +233,7 @@ namespace BP.Frm
         {
             //执行保存.
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            //rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+            //rpt = BP.Pub.PubClass.CopyFromRequest(rpt) as GEEntity;
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
             {
@@ -257,7 +257,7 @@ namespace BP.Frm
             //执行保存.
             MapData md = new MapData(this.FrmID);
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            //rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+            //rpt = BP.Pub.PubClass.CopyFromRequest(rpt) as GEEntity;
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
             {
@@ -288,7 +288,7 @@ namespace BP.Frm
             //执行保存.
             MapData md = new MapData(this.FrmID);
             GEEntity rpt = new GEEntity(this.FrmID, this.WorkID);
-            //rpt = BP.Sys.PubClass.CopyFromRequest(rpt) as GEEntity;
+            //rpt = BP.Pub.PubClass.CopyFromRequest(rpt) as GEEntity;
 
             Hashtable ht = GetMainTableHT();
             foreach (string item in ht.Keys)
@@ -470,7 +470,7 @@ namespace BP.Frm
                 if (DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
-                    DataTable dtSQl = BP.Sys.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                    DataTable dtSQl = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
                     foreach (DataColumn col in dtSQl.Columns)
                     {
                         string colName = col.ColumnName.ToLower();

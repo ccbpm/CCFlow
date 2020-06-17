@@ -271,7 +271,7 @@ namespace BP.WF.Template
                 #region 字段.
                 Map map = new Map("WF_Node", "选择器");
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
 
                 map.AddTBIntPK(SelectorAttr.NodeID, 0, "NodeID", true, true);
                 map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);

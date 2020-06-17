@@ -109,9 +109,6 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_UserRegedit","列选择");
 
-                map.Java_SetEnType(EnType.Sys);
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-
                 map.AddMyPK();
                 map.AddTBString(CFieldAttr.EnsName, null, "实体类名称", false, true, 0, 100, 10);
                 map.AddTBString(CFieldAttr.FK_Emp, null, "工作人员", false, true, 0, 100, 10);

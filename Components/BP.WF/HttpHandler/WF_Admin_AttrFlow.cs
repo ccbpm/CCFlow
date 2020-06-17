@@ -516,7 +516,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
                 en.Retrieve();
 
-                en = BP.Sys.PubClass.CopyFromRequestByPost(en) as BP.WF.Template.TruckViewPower;
+                en = BP.Pub.PubClass.CopyFromRequestByPost(en) as BP.WF.Template.TruckViewPower;
                 en.Save();  //执行保存.
                 return "保存成功";
             }

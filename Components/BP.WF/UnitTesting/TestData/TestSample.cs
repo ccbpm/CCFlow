@@ -146,10 +146,10 @@ namespace BP.WF.UnitTesting
                     return this._enMap;
                 Map map = new Map("WF_TestSample");
                 map.EnDesc = "测试明细";
-                map.Java_SetCodeStruct("2");
+                map.CodeStruct = "2";
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfMap = Depositary.Application;
 
                 map.AddMyPK();
 

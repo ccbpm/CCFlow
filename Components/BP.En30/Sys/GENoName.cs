@@ -57,10 +57,6 @@ namespace BP.En
 
                 Map map = new Map(this.PhysicsTable,this.Desc);
                 map.IsAutoGenerNo = true;
-
-                map.Java_SetDepositaryOfEntity( Depositary.Application);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.App);
                 map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(GENoNameAttr.No, null, "编号", true, true, 1, 30, 3);

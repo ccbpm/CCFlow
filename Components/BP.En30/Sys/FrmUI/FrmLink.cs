@@ -2,6 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Pub;
+
 namespace BP.Sys.FrmUI
 {
     /// <summary>
@@ -267,9 +269,6 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmLink", "超连接");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
 

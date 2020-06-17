@@ -116,10 +116,10 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_FormTree", "表单树");
-                map.Java_SetCodeStruct("2");
+                map.CodeStruct = "2";
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.DepositaryOfEntity= Depositary.None;
+                map.DepositaryOfMap = Depositary.Application;
 
                 map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);

@@ -1259,9 +1259,6 @@ namespace BP.Sys
 
             MapAttrs mapAttrs = this.MapAttrs;
             Map map = new Map(this.PTable, this.Name);
-            map.Java_SetEnType(EnType.App);
-            map.Java_SetDepositaryOfEntity(Depositary.None);
-            map.Java_SetDepositaryOfMap(Depositary.Application);
 
             Attrs attrs = new Attrs();
             foreach (MapAttr mapAttr in mapAttrs)
@@ -1306,10 +1303,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapDtl", "明细");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapDtlAttr.FK_MapData;
-
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "描述", true, false, 1, 200, 20);

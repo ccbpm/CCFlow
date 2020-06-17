@@ -223,7 +223,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                 if (mydt == null)
                 {
                     DataRow ddldr = ddlTable.NewRow();
@@ -663,7 +663,7 @@ namespace BP.WF.HttpHandler
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
             ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.AddFK_Emp();
+            ps.Add("FK_Emp", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
@@ -795,7 +795,8 @@ namespace BP.WF.HttpHandler
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
             ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.AddFK_Emp();
+            ps.Add("FK_Emp", WebUser.No);
+
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.

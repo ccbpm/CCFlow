@@ -276,22 +276,6 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 为java
-        /// </summary>
-        /// <param name="val"></param>
-        public void Java_SetDepositaryOfMap(Depositary val)
-        {
-            this.DepositaryOfMap = val;
-        }
-        /// <summary>
-        /// 为java
-        /// </summary>
-        /// <param name="val"></param>
-        public void Java_SetDepositaryOfEntity(Depositary val)
-        {
-            this.DepositaryOfEntity = val;
-        }
-        /// <summary>
         /// 
         /// </summary>		
         private Depositary _DepositaryOfMap = Depositary.Application;
@@ -972,7 +956,7 @@ namespace BP.En
         /// 为方便java转换设置
         /// </summary>
         /// <param name="val"></param>
-        public void Java_SetEnType(EnType val)
+        public void Java_SetEnType11(EnType val)
         {
             this._EnType = val;
         }

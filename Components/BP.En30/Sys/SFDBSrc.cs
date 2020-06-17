@@ -712,9 +712,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_SFDBSrc", "数据源");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(SFDBSrcAttr.No, null, "数据源编号(必须是英文)", true, false, 1, 20, 20);
                 map.AddTBString(SFDBSrcAttr.Name, null, "数据源名称", true, false, 0, 30, 20);

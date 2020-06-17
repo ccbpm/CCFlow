@@ -456,10 +456,6 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_FrmAttachmentDB", "附件数据存储");
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
-
                 map.IndexField = FrmAttachmentDBAttr.RefPKVal;
 
                 map.AddMyPK();

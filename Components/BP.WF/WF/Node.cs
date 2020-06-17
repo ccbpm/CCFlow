@@ -2713,8 +2713,8 @@ namespace BP.WF
                 Map map = new Map("WF_Node", "节点");
 
                 //出现 缓存问题.现在把缓存取消了. @sly
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfMap = Depositary.Application;
 
                 #region 基本属性.
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);

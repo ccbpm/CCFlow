@@ -405,7 +405,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_DocFile", "备注字段文件管理者");
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+
                 map.AddMyPK();
 
                 map.AddTBString(SysDocFileAttr.FileName, null, "名称", false, true, 0, 200, 30);

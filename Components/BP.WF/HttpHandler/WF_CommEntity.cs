@@ -236,7 +236,7 @@ namespace BP.WF.HttpHandler
                 if (ds.Tables.Contains(uiBindKey) == true)
                     continue;
 
-                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                ds.Tables.Add(BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey));
             }
 
             foreach (Attr attr in dtl.EnMap.Attrs)
@@ -570,7 +570,7 @@ namespace BP.WF.HttpHandler
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    DataTable dt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     dt.TableName = keyOfEn;
 
                     ds.Tables.Add(dt);

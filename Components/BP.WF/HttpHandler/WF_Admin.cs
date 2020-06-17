@@ -300,7 +300,7 @@ namespace BP.WF.HttpHandler
             BP.WF.Glo.UpdataCCFlowVer();
 
             //加注释.
-            BP.Sys.PubClass.AddComment();
+            BP.Pub.PubClass.AddComment();
 
             return "info@系统成功安装 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);

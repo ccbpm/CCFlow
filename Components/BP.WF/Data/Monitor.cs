@@ -672,7 +672,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_EmpWorks", "流程监控");
-                map.Java_SetEnType(EnType.View);
+                map.EnType = EnType.View;
 
                 map.AddTBIntPK(MonitorAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(MonitorAttr.FID, 0, "FID", false, false);

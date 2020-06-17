@@ -76,7 +76,7 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_SQLTemplate", "SQL模板");
                 
-                map.Java_SetCodeStruct("3");
+                map.CodeStruct = "3";
 
                 map.AddTBStringPK(SQLTemplateAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddDDLSysEnum(SQLTemplateAttr.SQLType, 0, "模版SQL类型", true, true, SQLTemplateAttr.SQLType,

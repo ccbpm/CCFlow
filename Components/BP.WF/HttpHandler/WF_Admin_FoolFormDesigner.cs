@@ -801,7 +801,7 @@ namespace BP.WF.HttpHandler
         public string MapFrame_Save()
         {
             MapFrame mf = new MapFrame();
-            mf = BP.Sys.PubClass.CopyFromRequestByPost(mf) as MapFrame;
+            mf = BP.Pub.PubClass.CopyFromRequestByPost(mf) as MapFrame;
             mf.FK_MapData = this.FK_MapData;
 
             mf.Save(); //执行保存.
@@ -1783,7 +1783,7 @@ namespace BP.WF.HttpHandler
                 MapDtl dtl = new MapDtl(this.FK_MapDtl);
 
                 //从request对象里复制数据,到entity.
-                BP.Sys.PubClass.CopyFromRequest(dtl);
+                BP.Pub.PubClass.CopyFromRequest(dtl);
 
                 dtl.Update();
 
@@ -1899,7 +1899,7 @@ namespace BP.WF.HttpHandler
             ath.MyPK = this.FK_MapData + "_" + this.Ath;
 
             int i = ath.RetrieveFromDBSources();
-            ath = BP.Sys.PubClass.CopyFromRequestByPost(ath) as FrmAttachment;
+            ath = BP.Pub.PubClass.CopyFromRequestByPost(ath) as FrmAttachment;
             if (i == 0)
                 ath.Save(); //执行保存.              
             else
@@ -2306,7 +2306,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                 if (mydt == null)
                 {
                     DataRow ddldr = ddlTable.NewRow();

@@ -801,9 +801,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapExt","业务逻辑");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 map.IndexField = MapDtlAttr.FK_MapData; 
 

@@ -201,9 +201,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_GloVar", "全局变量");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
+                
 
                 map.AddTBStringPK(GloVarAttr.No, null, "键", true, false, 1, 50, 20);
                 map.AddTBString(GloVarAttr.Name, null, "名称", true, false, 0, 120, 20);

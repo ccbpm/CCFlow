@@ -1169,7 +1169,7 @@ namespace BP.WF.HttpHandler
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
                     else
@@ -1397,7 +1397,7 @@ namespace BP.WF.HttpHandler
                     if (ds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    DataTable dataTable = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
 
                     if (dataTable != null)
                         ds.Tables.Add(dataTable);
@@ -1857,7 +1857,7 @@ namespace BP.WF.HttpHandler
 
                 try
                 {
-                    Hashtable ht = BP.Sys.PubClass.GetMainTableHT();
+                    Hashtable ht = BP.Pub.PubClass.GetMainTableHT();
                     foreach (string item in ht.Keys)
                     {
                         en.SetValByKey(item, ht[item]);
@@ -2546,7 +2546,7 @@ namespace BP.WF.HttpHandler
 
             //获得配置信息.
             Hashtable ht = me.PopValToHashtable();
-            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+            DataTable dtcfg = BP.Pub.PubClass.HashtableToDataTable(ht);
 
             string parentNo = this.GetRequestVal("ParentNo");
             if (parentNo == null)
@@ -2640,7 +2640,7 @@ namespace BP.WF.HttpHandler
 
             //获得配置信息.
             Hashtable ht = me.PopValToHashtable();
-            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+            DataTable dtcfg = BP.Pub.PubClass.HashtableToDataTable(ht);
 
             //增加到数据源.
             ds.Tables.Add(dtcfg);
@@ -2871,7 +2871,7 @@ namespace BP.WF.HttpHandler
 
             //获得配置信息.
             Hashtable ht = me.PopValToHashtable();
-            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+            DataTable dtcfg = BP.Pub.PubClass.HashtableToDataTable(ht);
 
             //增加到数据源.
             ds.Tables.Add(dtcfg);
@@ -3035,7 +3035,7 @@ namespace BP.WF.HttpHandler
 
             //获得配置信息.
             Hashtable ht = me.PopValToHashtable();
-            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+            DataTable dtcfg = BP.Pub.PubClass.HashtableToDataTable(ht);
 
             //增加到数据源.
             ds.Tables.Add(dtcfg);
@@ -4452,7 +4452,7 @@ namespace BP.WF.HttpHandler
                     engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
                 }
                 // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc");
             }
             else
             {
@@ -4477,7 +4477,7 @@ namespace BP.WF.HttpHandler
                 ps.Add(TrackAttr.WorkID, this.WorkID);
                 engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc", false);
+                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc");
             }
 
             #region 保存单据，以方便查询.

@@ -4,9 +4,11 @@ using System.Text;
 using BP.En;
 using BP.Pub;
 
-
 namespace BP.DA
 {
+    /// <summary>
+    /// 实体缓存
+    /// </summary>
     public class Cash2019
     {
         /// <summary>

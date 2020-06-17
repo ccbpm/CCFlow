@@ -267,7 +267,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_FrmSln", "表单字段方案");
-                map.Java_SetCodeStruct("4");
+                map.CodeStruct = "4";
 
                 map.AddMyPK();
 

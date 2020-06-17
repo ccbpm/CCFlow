@@ -7453,7 +7453,8 @@ namespace BP.WF
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr +
                              "WorkID AND FK_Node=" + dbStr + "FK_Node ";
-                    ps.AddFK_Emp();
+                    //ps.AddFK_Emp();
+                    ps.Add("FK_Emp",WebUser.No);
                     ps.Add("WorkID", this.WorkID);
                     ps.Add("FK_Node", this.HisNode.NodeID);
                     DBAccess.RunSQL(ps);

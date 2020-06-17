@@ -632,7 +632,7 @@ namespace BP.WF
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                     if (mydt == null)
                     {
                         DataRow ddldr = ddlTable.NewRow();

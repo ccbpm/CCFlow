@@ -45,37 +45,7 @@ namespace BP.DTS
 	abstract public class DataIOEn 
 	{
 		public bool Enable=true;
-		 
-		/// <summary>
-		/// 获取在 DTS 中的编号。
-		/// </summary>
-		/// <returns></returns>
-		public string GetNoInDTS()
-		{
-            //DTS.SysDTS dts =new SysDTS();
-            //QueryObject qo = new QueryObject(dts);
-            //qo.AddWhere(DTSAttr.RunText,this.ToString());
-            //if (qo.DoQuery()==0)
-            //    throw new Exception("没有取道调度的编号.");
-            //else
-            //    return dts.No;
-
-            return null;
-		}
-        /// <summary>
-        /// 执行它 在线程中。
-        /// </summary>
-        public void DoItInThread()
-        {
-            ThreadStart ts = new ThreadStart(this.Do);
-            Thread thread = new Thread(ts);
-            thread.Start();
-        }
-
-		#region Directly 
-		 
-		#endregion
-
+        
 		#region 基本属性.
 		/// <summary>
 		/// 选择sql .
@@ -134,14 +104,6 @@ namespace BP.DTS
 		/// 类别
 		/// </summary>
 		public string FK_Sort="0";
-
-
-//		/// <summary>
-//		/// 增量更新的数据源sql.
-//		/// 用这个sql，查询出来一个结果集合，这个集合用于更新的集合。
-//		/// 一般的来说，这个sql是根据当前的月份自动生成的。
-//		/// </summary>
-//		public string IncrementalDBSourceSQL;
 		#endregion
 
 		/*
@@ -166,6 +128,7 @@ namespace BP.DTS
 		/// 调度
 		/// </summary>
 		public  DataIOEn(){}
+
 		#region 公共方法．
 		 
 		public int ToDBUrlRunSQL(string sql)
@@ -185,8 +148,7 @@ namespace BP.DTS
 		}
 		#endregion
 
-		#region 方法， New   2005-01-29
-
+		#region 方法
 		/// <summary>
 		/// 执行，用于子类的重写。
 		/// </summary>

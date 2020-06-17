@@ -139,7 +139,7 @@ namespace BP.WF.Template
 				if (this._enMap != null)
 					return this._enMap;
 				Map map = new Map("Sys_MapData", "Word表单属性");
-				map.Java_SetEnType(EnType.Sys);
+				
 
 
 

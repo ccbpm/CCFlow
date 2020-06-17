@@ -97,9 +97,6 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_MapAttr", "评分控件");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
                 map.IndexField = MapAttrAttr.FK_MapData;
 
 

@@ -101,9 +101,7 @@ namespace BP.WF.Rpt
                     return this._enMap;
 
                 Map map = new Map("WF_Flow", "报表定义");
-
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetCodeStruct("4"); ;
+                map.CodeStruct = "4";
 
                 #region 基本属性.
                 map.AddTBStringPK(RptDfineAttr.No, null, "编号", true, false, 1, 200, 20);

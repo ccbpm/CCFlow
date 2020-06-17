@@ -272,10 +272,6 @@ namespace BP.Sys
 
                 Map map = new Map("Sys_FrmImgAthDB", "剪切图片附件数据存储");
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.EnDesc = "剪切图片附件数据存储";
-                map.Java_SetEnType(EnType.Sys);
 
                 map.IndexField = FrmImgAthDBAttr.RefPKVal; 
 

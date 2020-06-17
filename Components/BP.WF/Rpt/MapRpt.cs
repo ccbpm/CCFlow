@@ -383,8 +383,8 @@ namespace BP.WF.Rpt
 
                 Map map = new Map("Sys_MapData", "报表设计");
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetCodeStruct("4"); ;
+                map.DepositaryOfEntity= Depositary.Application;
+                map.CodeStruct = "4";
 
                 map.AddTBStringPK(MapRptAttr.No, null, "编号", true, false, 1, 200, 20);
                 map.AddTBString(MapRptAttr.Name, null, "描述", true, false, 0, 500, 20);

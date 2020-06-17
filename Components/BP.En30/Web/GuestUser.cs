@@ -83,13 +83,13 @@ namespace BP.Web
             }
             else
             {
-                if (BP.Port.Current.Session[key] == null || BP.Port.Current.Session[key].ToString() == "")
+                if (BP.Pub.Current.Session[key] == null || BP.Pub.Current.Session[key].ToString() == "")
                 {
-                    BP.Port.Current.Session[key] = isNullAsVal;
+                    BP.Pub.Current.Session[key] = isNullAsVal;
                     return isNullAsVal;
                 }
                 else
-                    return (string)BP.Port.Current.Session[key];
+                    return (string)BP.Pub.Current.Session[key];
             }
         }
         /* 2019-7-25 张磊注释，net core中需要知道object的具体类型才行（不能被序列化的对象，无法放入session中）
@@ -101,7 +101,7 @@ namespace BP.Web
             }
             else
             {
-                return BP.Port.Current.Session[key];
+                return BP.Pub.Current.Session[key];
             }
         }*/
         #endregion
@@ -133,10 +133,10 @@ namespace BP.Web
             }
             else
             {
-                if (BP.Port.Current.Session[key] == null)
+                if (BP.Pub.Current.Session[key] == null)
                     return defaultObjVal;
                 else
-                    return BP.Port.Current.Session[key];
+                    return BP.Pub.Current.Session[key];
             }
         }
 
@@ -152,7 +152,7 @@ namespace BP.Web
             if (IsBSMode)
                 HttpContextHelper.SessionSet(key, val);
             else
-                BP.Port.Current.SetSession(key, val);
+                BP.Pub.Current.SetSession(key, val);
         }
         /// <summary>
         /// 退回
@@ -169,7 +169,7 @@ namespace BP.Web
                         "GuestNo", "GuestName" },
                     "CCS");
 
-                    BP.Port.Current.Session.Clear();
+                    BP.Pub.Current.Session.Clear();
 
                     /* 2019-07-25 张磊 注释掉，CCSGuest 不再使用
                     // Guest  信息.
@@ -190,7 +190,7 @@ namespace BP.Web
             {
                 try
                 {
-                    BP.Port.Current.Session.Clear();
+                    BP.Pub.Current.Session.Clear();
                     HttpContextHelper.ResponseCookieDelete(new string[] {
                         "GuestNo", "GuestName"},
                        "CCS");

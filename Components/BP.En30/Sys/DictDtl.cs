@@ -149,9 +149,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_SFTableDtl", "系统字典表");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 //FK_SFTable+"_"+BH
                 map.AddMyPK();

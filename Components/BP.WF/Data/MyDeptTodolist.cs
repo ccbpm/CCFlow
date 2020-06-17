@@ -672,7 +672,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_EmpWorks", "我部门的待办");
-                map.Java_SetEnType(EnType.View);
+                map.EnType = EnType.View;
 
                 map.AddTBInt(MyDeptTodolistAttr.FID, 0, "FID", false, false);
                 map.AddTBString(MyDeptTodolistAttr.Title, null, "流程标题", true, false, 0, 300, 10, true);

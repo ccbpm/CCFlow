@@ -41,7 +41,7 @@ namespace BP.GPM
                 return "err@用户名已经存在.";
 
             //从Request对象中复制数据.
-            PubClass.CopyFromRequest(emp);
+            BP.Pub.PubClass.CopyFromRequest(emp);
 
             //emp.Name = this.GetRequestVal("TB_Name");
             //emp.FK_Dept = this.GetRequestVal("DDL_FK_Dept");

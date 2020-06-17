@@ -46,10 +46,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单模版表");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
-                map.Java_SetCodeStruct("4");
+                map.CodeStruct="4";
 
                 #region 基础信息.
                 map.AddTBStringPK(MapDataTemplateAttr.No, null, "编号", true, false, 1, 150, 100);

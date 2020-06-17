@@ -7,7 +7,7 @@ using BP.En;
 using BP.DA;
 using BP.Port;
 using BP.Sys;
-using BP.Pub;
+using BP.Web;
 
 namespace BP.Pub
 {
@@ -116,9 +116,9 @@ namespace BP.Pub
                                     return "是";
                             case "YesNo":
                                 if (val == "1")
-                                    return "[X]";
+                                    return "[√]";
                                 else
-                                    return "[X]";
+                                    return "[×]";
                             case "Year":
                                 return val.Substring(0, 4);
                             case "Month":
@@ -155,10 +155,10 @@ namespace BP.Pub
                 {
                     imgs.AppendLine();
                 }
-                else if ((i % 8) == 0)
-                {
-                    imgs.Append(" ");
-                }
+                //else if ((i % 8) == 0)
+                //{
+                //    imgs.Append(" ");
+                //}
                 byte num2 = buffer[i];
                 int num3 = (num2 & 240) >> 4;
                 int num4 = num2 & 15;
@@ -648,15 +648,59 @@ namespace BP.Pub
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);
 
+                if (strs[1].Trim() == "Editor")
+                {
+                    //获取富文本的内容
+                    string content = this.HisGEEntity.GetValStringByKey(strs[0]);
+                    content = content.Replace("img+", "img ");
+                    string contentHtml = "<html><head></head><body>" + content + "</body></html>";
+                    string StrNohtml = System.Text.RegularExpressions.Regex.Replace(contentHtml, "<[^>]+>", "");
+                    StrNohtml = System.Text.RegularExpressions.Regex.Replace(StrNohtml, "&[^;]+;", "");
+
+                    return this.GetCode(StrNohtml); 
+
+
+                    string htmlpath = BP.Sys.SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
+                    if (File.Exists(htmlpath) == false)
+                        File.Create(htmlpath);
+                    using (StreamWriter sw = new StreamWriter(htmlpath))
+                    {
+                        sw.Write(contentHtml);
+                    }
+
+                    //如何写入到word
+                    string html = File.ReadAllText(htmlpath, Encoding.UTF8);
+
+                    //byte[] array = Encoding.ASCII.GetBytes(content);
+                    //StringBuilder editors = new StringBuilder();
+                    //for (int i = 0; i < array.Length; i++)
+                    //{
+
+                    //    editors.Append(array[i]);
+
+                    //}
+                    //MemoryStream stream = new MemoryStream(array);             //convert stream 2 string      
+
+                    //System.IO.StreamReader readStream = new System.IO.StreamReader(contentHtml, Encoding.UTF8);
+                    return html;
+
+                }
+
                 if (strs[1].Trim() == "ImgAth")
                 {
                     string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
-                        FrmImgAthDB dbImgAth = new FrmImgAthDB(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
-                        path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
-                        if (!File.Exists(path1))
-                            return this.GetCode(key);
+                        FrmImgAthDB dbImgAth = new FrmImgAthDB();
+                        dbImgAth.MyPK = strs[0].Trim() + "_" + this.HisGEEntity.PKVal;
+                        int count = dbImgAth.RetrieveFromDBSources();
+                        if (count == 1)
+                        {
+                            path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                            if (!File.Exists(path1))
+                                return this.GetCode(key);
+                        }
+                        return "";
                     }
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();
@@ -721,9 +765,9 @@ namespace BP.Pub
                     if (checkVal.Length == 1)
                         return relVal;
                     if (relVal.Equals(checkVal[0]))
-                        return "[Y]";
+                        return "[√]";
                     else
-                        return "[X]";
+                        return "[×]";
                 }
 
                 if (strs.Length == 2)
@@ -785,26 +829,26 @@ namespace BP.Pub
                                 return "是";
                         case "Boolen":
                             if (val == "1")
-                                return "[Y]";
+                                return "[√]";
                             else
-                                return "[X]";
+                                return "[×]";
                             break;
                         case "YesNo":
                             if (val == "1")
-                                return "[Y]";
+                                return "[√]";
                             else
-                                return "[X]";
+                                return "[×]";
                             break;
                         case "Yes":
                             if (val == "1")
-                                return "[Y]";
+                                return "[√]";
                             else
-                                return "[X]";
+                                return "[×]";
                         case "No":
                             if (val == "0")
-                                return "[Y]";
+                                return "[√]";
                             else
-                                return "[X]";
+                                return "[×]";
                         default:
                             throw new Exception("参数设置错误，特殊方式取值错误：" + key);
                     }
@@ -937,7 +981,7 @@ namespace BP.Pub
         public void MakeDoc(string cfile)
         {
             string file = PubClass.GenerTempFileName("doc");
-            this.MakeDoc(cfile, SystemConfig.PathOfTemp, file, true);
+            this.MakeDoc(cfile, SystemConfig.PathOfTemp, file);
         }
         public string ensStrs = "";
         /// <summary>
@@ -950,9 +994,8 @@ namespace BP.Pub
         /// <param name="cfile">模板文件</param>
         /// <param name="path">生成路径</param>
         /// <param name="file">生成文件</param>
-        /// <param name="isOpen">是否用IE打开？</param>
         /// <param name="isOpen">要打开的url用于生成二维码</param>
-        public void MakeDoc(string templateRtfFile, string path, string file,bool isOpen, string billUrl=null)
+        public void MakeDoc(string templateRtfFile, string path, string file,  string billUrl=null)
         {
             templateRtfFile = templateRtfFile.Replace(".rtf.rtf", ".rtf");
             
@@ -996,7 +1039,9 @@ namespace BP.Pub
 
                     try
                     {
-                        if (para.Contains("ImgAth"))
+                        if(para.Contains("Editor"))
+                            str = str.Replace("<" + para + ">", this.GetValueByKey(para));
+                        else if (para.Contains("ImgAth"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains("Siganture"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
@@ -1072,6 +1117,7 @@ namespace BP.Pub
                     if (pos_rowKey != -1)
                     {
                         row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
+                       
                         row_end = str.Substring(pos_rowKey).IndexOf("\\row");
                     }
 
@@ -1175,6 +1221,25 @@ namespace BP.Pub
                 #endregion 从表合计
 
                 #region 审核组件组合信息，added by liuxc,2016-12-16
+
+                //节点单个审核人
+		       if (dtTrack != null && str.Contains("<WorkCheckBegin>")== false && str.Contains("<WorkCheckEnd>") ==false){
+                   foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+	                {
+                        int acType = int.Parse(row["ACTIONTYPE"].ToString());
+	                    if (acType != 22)
+	                        continue;
+	                    str = str.Replace(
+							    "<WorkCheck.Msg." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "Msg")));
+	                    str = str.Replace(
+							    "<WorkCheck.Rec." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT")));
+	                    str = str.Replace(
+							    "<WorkCheck.RDT." + row["NDFrom"] + ">",this.GetCode(this.GetValueCheckWorkByKey(row, "RDT")));
+	                
+	                
+	                }
+		       }
+
                 if (dtTrack != null && str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
                 {
                     int beginIdx = str.IndexOf("<WorkCheckBegin>"); //len:16
@@ -1277,8 +1342,7 @@ namespace BP.Pub
                     {
                         this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + templateRtfFile;
                         str = Cash.GetBillStr(templateRtfFile, false);
-                        string s = BP.DTS.RepBill.RepairBill(this.CyclostyleFilePath);
-                        msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题。@" + s;
+                        msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题";
                     }
                     catch (Exception ex1)
                     {
@@ -1287,11 +1351,8 @@ namespace BP.Pub
                 }
                 throw new Exception("生成文档失败：单据名称[" + this.CyclostyleFilePath + "] 异常信息：" + ex.Message + " @自动修复单据信息：" + msg);
             }
-            if (isOpen)
-                PubClass.Print(BP.Sys.Glo.Request.ApplicationPath + "Temp/" + file);
         }
         #endregion
-
 
         #region 生成单据
         #region 生成单据
@@ -1325,7 +1386,7 @@ namespace BP.Pub
                 }
             }
 
-            this.MakeDoc(templeteFile, saveToPath, saveToFileName,  false);
+            this.MakeDoc(templeteFile, saveToPath, saveToFileName);
         }
         #endregion
         #endregion
@@ -1351,6 +1412,4 @@ namespace BP.Pub
         }
         #endregion
     }
-
-
 }

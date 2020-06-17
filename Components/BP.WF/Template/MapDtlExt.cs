@@ -893,8 +893,8 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("Sys_MapDtl", "明细");
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetEnType(EnType.Sys);
+                map.DepositaryOfEntity= Depositary.Application;
+                
                 map.IndexField = MapDtlAttr.FK_MapData;
 
                 #region 基础信息.

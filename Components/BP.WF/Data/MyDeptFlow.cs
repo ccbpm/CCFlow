@@ -715,7 +715,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_GenerWorkFlow", "我部门的流程");
-                map.Java_SetEnType(EnType.View);
+                map.EnType = EnType.View;
 
                 map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 150, true);
                 map.AddDDLEntities(MyDeptFlowAttr.FK_Flow, null, "流程", new Flows(), false);

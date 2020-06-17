@@ -84,11 +84,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_FormTree", "表单树");
-
-                map.Java_SetCodeStruct("2");
-
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.CodeStruct = "2";
 
                 map.IndexField = FrmTreeAttr.ParentNo; 
 

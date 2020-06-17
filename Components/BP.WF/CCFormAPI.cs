@@ -40,7 +40,7 @@ namespace BP.WF
             foreach (var item in dtls)
                 rtf.EnsDataDtls.Add(item);
 
-            rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName, false);
+            rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName);
         }
 
         /// <summary>
@@ -468,7 +468,7 @@ namespace BP.WF
                         if (myds.Tables.Contains(uiBindKey) == true)
                             continue;
 
-                        myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                        myds.Tables.Add(BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey));
                     }
                     #endregion 外键字段
                 }
@@ -643,7 +643,7 @@ namespace BP.WF
                 }
                 #endregion 处理下拉框数据范围.
 
-                dt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                dt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
                 dt.TableName = uiBindKey;
                 myds.Tables.Add(dt);
             }
@@ -809,7 +809,7 @@ namespace BP.WF
                     continue;
 
                 // 获得数据.
-                DataTable mydt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey,en.Row);
+                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey,en.Row);
 
                 if (mydt == null)
                 {

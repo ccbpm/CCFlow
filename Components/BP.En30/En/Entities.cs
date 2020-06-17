@@ -8,6 +8,8 @@ using System.Data;
 using BP.Sys;
 using BP.Sys.XML;
 using System.Reflection;
+using BP.Pub;
+
 
 namespace BP.En
 {

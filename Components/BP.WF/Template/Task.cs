@@ -161,7 +161,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("WF_Task", "任务");
-                map.Java_SetEnType(EnType.Admin);
+                
 
                 map.AddMyPK(); //唯一的主键.
                 map.AddTBString(TaskAttr.FK_Flow, null, "流程编号", true, false, 0, 5, 10);

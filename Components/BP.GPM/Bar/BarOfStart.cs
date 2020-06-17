@@ -79,7 +79,8 @@ namespace BP.GPM
                 if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
                     ps.SQL = "SELECT top 9 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
 
-                ps.AddFK_Emp();
+                ps.Add("FK_Emp",BP.Web.WebUser.No);
+
 
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
 

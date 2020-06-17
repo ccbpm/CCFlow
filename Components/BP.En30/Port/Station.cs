@@ -86,12 +86,7 @@ namespace BP.Port
                     return this._enMap;
 
                 Map map = new Map("Port_Station","岗位");
-
-                map.Java_SetEnType(EnType.Admin);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetDepositaryOfEntity( Depositary.None);
-
-                map.Java_SetCodeStruct("3");
+                map.CodeStruct = "3";
                 map.IsAutoGenerNo = true;
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 1, 50, 200);

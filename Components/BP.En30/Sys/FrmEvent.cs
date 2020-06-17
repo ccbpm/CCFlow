@@ -627,10 +627,7 @@ namespace BP.Sys
 
                 Map map = new Map("Sys_FrmEvent", "外部自定义事件(表单,从表,流程,节点)");
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.IndexField = FrmEventAttr.FK_MapData;
-
                 map.AddMyPK();
 
                 //0=表单事件,1=流程，2=节点事件.

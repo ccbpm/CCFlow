@@ -976,10 +976,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_Node", "节点标签");
-
-
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                Map map = new Map("WF_Node", "节点按钮标签");
 
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);

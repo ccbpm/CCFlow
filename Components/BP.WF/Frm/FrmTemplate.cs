@@ -178,8 +178,8 @@ namespace BP.Frm
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_MapData", "单据模版");
-                map.Java_SetEnType(EnType.Sys);
-                map.Java_SetCodeStruct("4");
+                
+                map.CodeStruct = "4";
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);

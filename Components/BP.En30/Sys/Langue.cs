@@ -167,7 +167,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_Langue", "语言定义");
-                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.AddMyPK();
 
                 map.AddTBString(LangueAttr.Langue, null, "语言ID", true, true, 0, 20, 20);

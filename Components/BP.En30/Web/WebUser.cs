@@ -9,6 +9,7 @@ using BP.DA;
 using System.Configuration;
 using BP.Port;
 using BP.Sys;
+using BP.Pub;
 using System.Collections.Generic;
 
 namespace BP.Web
@@ -209,13 +210,13 @@ namespace BP.Web
             }
             else
             {
-                if (BP.Port.Current.Session[key] == null || BP.Port.Current.Session[key].ToString() == "")
+                if (BP.Pub.Current.Session[key] == null || BP.Pub.Current.Session[key].ToString() == "")
                 {
-                    BP.Port.Current.Session[key] = isNullAsVal;
+                    BP.Pub.Current.Session[key] = isNullAsVal;
                     return isNullAsVal;
                 }
                 else
-                    return (string)BP.Port.Current.Session[key];
+                    return (string)BP.Pub.Current.Session[key];
             }
         }
         #endregion
@@ -249,7 +250,7 @@ namespace BP.Web
                 && HttpContextHelper.Current.Session != null)
                 HttpContextHelper.SessionSet(key, val);
             else
-                BP.Port.Current.SetSession(key, val);
+                BP.Pub.Current.SetSession(key, val);
         }
         /// <summary>
         /// 退回
@@ -267,7 +268,7 @@ namespace BP.Web
 
             try
             {
-                BP.Port.Current.Session.Clear();
+                BP.Pub.Current.Session.Clear();
 
                 HttpContextHelper.ResponseCookieDelete(new string[] {
                         "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
@@ -519,7 +520,7 @@ namespace BP.Web
         public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)
         {
             if (IsBSMode == false)
-                return BP.Port.Current.GetSessionStr(valKey, isNullAsVal);
+                return BP.Pub.Current.GetSessionStr(valKey, isNullAsVal);
 
             try
             {

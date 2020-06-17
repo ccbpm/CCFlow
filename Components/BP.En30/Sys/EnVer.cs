@@ -160,15 +160,9 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map();
+                Map map = new Map("Sys_EnVer", "实体版本号");
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //连接到的那个数据库上. (默认的是: AppCenterDSN )
-                map.PhysicsTable = "Sys_EnVer";
-                map.Java_SetEnType(EnType.Admin);
-                map.EnDesc = "实体版本号"; //  实体的描述.
-                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体map的存放位置.
-                map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
                 map.IndexField = EnVerAttr.EVer;
-
 
                 map.AddMyPK();
                 map.AddTBString(EnVerAttr.No, null, "实体类", true, false, 1, 50, 20);

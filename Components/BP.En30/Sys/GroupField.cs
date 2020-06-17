@@ -199,9 +199,6 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_GroupField", "傻瓜表单分组");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBIntPKOID();
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20,true);

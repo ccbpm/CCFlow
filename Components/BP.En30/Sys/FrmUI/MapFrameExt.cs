@@ -83,10 +83,6 @@ namespace BP.Sys.FrmUI
                     return this._enMap;
 
                 Map map = new Map("Sys_MapFrame", "框架");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
-
 
                 map.AddMyPK();
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);

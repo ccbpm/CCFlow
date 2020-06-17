@@ -50,7 +50,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string rpt =PubClass.DBRpt(BP.DA.DBCheckLevel.High);
+            string rpt =BP.Pub.PubClass.DBRpt(BP.DA.DBCheckLevel.High);
 
             //// 手动升级. 2011-07-08 补充节点字段分组.
             //string sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeSheet'";

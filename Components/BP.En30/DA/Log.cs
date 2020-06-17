@@ -5,7 +5,6 @@ using BP.Sys;
 
 namespace BP.DA
 {
-    #region enum LogType
     /// <summary>
     /// 信息类型
     /// </summary>
@@ -24,9 +23,6 @@ namespace BP.DA
         /// </summary>
         Error = 3
     }
-    #endregion
-
-    #region class Log	
     /// <summary>
     /// 日志
     /// </summary>
@@ -50,43 +46,43 @@ namespace BP.DA
         }
         #endregion
 
+        /// <summary>
+        /// 写入异常
+        /// </summary>
+        /// <param name="ex">写入异常</param>
         public static void DefaultLogWriteLineError(Exception ex)
         {
-
             DefaultLogWriteLine(LogType.Error, ex.Message);
-
             DefaultLogWriteLine(LogType.Error, ex.StackTrace);
         }
-
-        public static void DefaultLogWriteLineError(string msg)
-        {
-            DefaultLogWriteLine(LogType.Error, msg);
-        }
-
-        public static void DefaultLogWriteLineError(string msg, bool isOutDos)
+        /// <summary>
+        /// 写入错误
+        /// </summary>
+        /// <param name="msg">错误消息</param>
+        /// <param name="isOutDos">是否输出到dos</param>
+        public static void DefaultLogWriteLineError(string msg, bool isOutDos=false)
         {
             DefaultLogWriteLine(LogType.Error, msg);
             if (isOutDos)
                 System.Console.WriteLine(msg);
         }
-
-        public static void DefaultLogWriteLineInfo(string msg)
-        {
-            DefaultLogWriteLine(LogType.Info, msg);
-        }
-
-        public static void DefaultLogWriteLineInfo(string msg, bool isoutDos)
+        /// <summary>
+        /// 写入信息
+        /// </summary>
+        /// <param name="msg">信息</param>
+        /// <param name="isoutDos">是否输出到dos</param>
+        public static void DefaultLogWriteLineInfo(string msg, bool isoutDos=false)
         {
             DefaultLogWriteLine(LogType.Info, msg);
             if (isoutDos)
                 System.Console.WriteLine(msg);
         }
-
-        public static void DefaultLogWriteLineWarning(string msg)
-        {
-            DefaultLogWriteLine(LogType.Warning, msg);
-        }
-        public static void DefaultLogWriteLineWarning(string msg, bool isOutdoc)
+        /// <summary>
+        /// 写入警告
+        /// </summary>
+        /// <param name="msg">信息</param>
+        /// <param name="isOutdoc">是否输出到dos</param>
+        public static void DefaultLogWriteLineWarning(string msg, bool isOutdoc=false)
         {
             DefaultLogWriteLine(LogType.Warning, msg);
             if (isOutdoc)
@@ -196,8 +192,6 @@ namespace BP.DA
                 Directory.CreateDirectory(filepath);
 
             return filepath + "\\" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
-
-            //return filepath + "\\"+ DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ".log";
         }
         /// <summary>
         /// 写一行日志
@@ -264,7 +258,5 @@ namespace BP.DA
                 throw new Exception("@打开日志文件出现错误。" + ex.Message);
             }
         }
-
     }
-    #endregion
 }

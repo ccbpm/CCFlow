@@ -147,12 +147,10 @@ namespace BP.Sys
         {
             get
             {
-                if (this._enMap != null) return this._enMap;
-                Map map = new Map("Sys_EnumMain", "枚举");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
+                if (this._enMap != null) 
+                    return this._enMap;
 
+                Map map = new Map("Sys_EnumMain", "枚举");
 
                 /*
                  * 为了能够支持cloud 我们做了如下变更.

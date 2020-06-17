@@ -94,15 +94,8 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map();
-                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //连接到的那个数据库上. (默认的是: AppCenterDSN )
-                map.PhysicsTable = "Port_Dept";
-                map.Java_SetEnType(EnType.Admin);
+                Map map = new Map("Port_Dept", "部门");
                 map.IsEnableVer = true;
-
-                map.EnDesc = "部门"; //  实体的描述.
-                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体map的存放位置.
-                map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);

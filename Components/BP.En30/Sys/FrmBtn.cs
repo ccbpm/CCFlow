@@ -2,6 +2,8 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Pub;
+
 namespace BP.Sys
 {
     /// <summary>
@@ -394,9 +396,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_FrmBtn", "按钮");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
                 map.IndexField = FrmBtnAttr.FK_MapData;
 
 

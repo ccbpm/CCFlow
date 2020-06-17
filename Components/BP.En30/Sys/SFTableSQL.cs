@@ -46,15 +46,11 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_SFTable", "字典表SQL");
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
+
 
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
-
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
-
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
                     "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=动态Json");
 
@@ -71,7 +67,7 @@ namespace BP.Sys
 
                 map.AddTBStringDoc(SFTableAttr.SelectStatement, null, "查询语句", true, false);
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
-                 
+
                 RefMethod rm = new RefMethod();
                 rm.Title = "查看数据";
                 rm.ClassMethodName = this.ToString() + ".DoEdit";

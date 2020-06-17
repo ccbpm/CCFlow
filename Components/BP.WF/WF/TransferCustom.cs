@@ -233,7 +233,7 @@ namespace BP.WF
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("WF_TransferCustom", "自定义运行路径");
-                map.Java_SetEnType(EnType.Admin);
+                
 
                 map.AddMyPK(); //唯一的主键.
 

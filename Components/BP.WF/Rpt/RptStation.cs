@@ -115,7 +115,7 @@ namespace BP.WF.Rpt
 
                 Map map = new Map("Sys_RptStation", "报表岗位对应信息");
 
-                map.Java_SetEnType(EnType.Dot2Dot);
+                map.EnType = EnType.Dot2Dot;
 
                 map.AddTBStringPK(RptStationAttr.FK_Rpt, null, "报表", false, false, 1, 15, 1);
                 map.AddDDLEntitiesPK(RptStationAttr.FK_Station, null, "岗位", new Stations(), true);

@@ -5,6 +5,7 @@ using BP.DA;
 using BP.En;
 using System.Collections.Generic;
 using System.IO;
+using BP.Pub;
 
 namespace BP.Sys
 {
@@ -1110,10 +1111,6 @@ namespace BP.Sys
             }
 
             Map map = new Map(this.PTable, this.Name);
-            map.EnDBUrl = new DBUrl(this.HisDBUrl);
-            map.Java_SetEnType(EnType.App);
-            map.Java_SetDepositaryOfEntity(Depositary.None);
-            map.Java_SetDepositaryOfMap(Depositary.Application);
 
             Attrs attrs = new Attrs();
             foreach (MapAttr mapAttr in mapAttrs)
@@ -1250,10 +1247,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单注册表");
-                //  map.Java_SetDepositaryOfEntity(Depositary.Application); // 会出错如果放入到内存.
-                map.Java_SetDepositaryOfMap(Depositary.Application);
-                map.Java_SetEnType(EnType.Sys);
-                map.Java_SetCodeStruct("4");
+                map.CodeStruct = "4";
 
                 #region 基础信息.
                 map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);
@@ -2187,7 +2181,7 @@ namespace BP.Sys
             }
             else
             {
-                this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
+                this.PTable =BP.Pub.PubClass.DealToFieldOrTableNames(this.PTable);
             }
             return base.beforeInsert();
         }

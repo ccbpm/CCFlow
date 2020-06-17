@@ -330,7 +330,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Flow", "流程模版主表");
 
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
 
 
                 map.AddTBStringPK(TruckViewPowerAttr.No, null, "编号", true, true, 1, 10, 3);

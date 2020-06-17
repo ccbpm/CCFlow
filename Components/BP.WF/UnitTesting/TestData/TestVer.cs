@@ -43,8 +43,8 @@ namespace BP.WF.UnitTesting
                 Map map = new Map("WF_TestVer");
                 map.EnDesc = "测试版本";
 
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfMap = Depositary.Application;
 
                 map.AddTBStringPK(TestVerAttr.No, null, "编号", true, false, 1, 92, 2);
                 map.AddTBString(TestVerAttr.Name, null, "名称", true, false, 1, 50, 20);

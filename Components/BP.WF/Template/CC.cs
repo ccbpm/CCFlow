@@ -465,7 +465,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "抄送规则");
 
-                map.Java_SetEnType(EnType.Admin);
+                
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);

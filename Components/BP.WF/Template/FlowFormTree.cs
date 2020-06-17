@@ -85,8 +85,8 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_FormTree", "独立表单树-用于数据解构构造");
-                map.Java_SetCodeStruct("2");;
-                map.Java_SetDepositaryOfEntity(Depositary.Application);
+                map.CodeStruct = "2";
+                map.DepositaryOfEntity= Depositary.Application;
 
 
                 map.AddTBStringPK(FlowFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);

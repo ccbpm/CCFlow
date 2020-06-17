@@ -5071,21 +5071,22 @@ namespace BP.WF
         {
             get
             {
-                Paras p = new Paras();
-                p.SQL = "SELECT Msg FROM WF_Emp where No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-                p.AddFK_Emp();
-                return DBAccess.RunSQLReturnString(p);
+                Paras ps = new Paras();
+                ps.SQL = "SELECT Msg FROM WF_Emp where No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.Add("FK_Emp", BP.Web.WebUser.No);
+
+                return DBAccess.RunSQLReturnString(ps);
             }
             set
             {
                 if (string.IsNullOrEmpty(value) == true)
                     return;
-                Paras p = new Paras();
-                p.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-                p.Add("v", value);
-                p.AddFK_Emp();
+                Paras ps = new Paras();
+                ps.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+                ps.Add("v", value);
+                ps.Add("FK_Emp", WebUser.No);
 
-                int i = DBAccess.RunSQL(p);
+                int i = DBAccess.RunSQL(ps);
                 if (i == 0)
                 {
                     /*如果没有更新到.*/
@@ -5095,7 +5096,7 @@ namespace BP.WF
                     emp.FK_Dept = BP.Web.WebUser.FK_Dept;
                     emp.Email = new BP.GPM.Emp(WebUser.No).Email;
                     emp.Insert();
-                    DBAccess.RunSQL(p);
+                    DBAccess.RunSQL(ps);
                 }
             }
         }
@@ -5330,7 +5331,8 @@ namespace BP.WF
         {
             Paras ps = new Paras();
             ps.SQL = "SELECT UseSta FROM WF_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.AddFK_Emp();
+            ps.Add("FK_Emp", WebUser.No);
+
             string s = DBAccess.RunSQLReturnStringIsNull(ps, "1");
             if (s == "1" || s == null)
                 return true;

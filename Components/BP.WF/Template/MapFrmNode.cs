@@ -158,7 +158,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "自由表单属性");
-                map.Java_SetEnType(EnType.Sys);
+                
 
                 #region 基本属性.
                 map.AddTBStringPK(MapFrmNodeAttr.No, null, "表单编号", true, true, 1, 190, 20);

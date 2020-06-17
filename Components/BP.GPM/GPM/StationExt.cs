@@ -60,11 +60,9 @@ namespace BP.GPM
                     return this._enMap;
 
                 Map map = new Map("Port_Station","岗位");
-
-                map.Java_SetEnType(EnType.Admin);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetDepositaryOfEntity( Depositary.Application);
-                map.Java_SetCodeStruct("4");
+                
+                map.DepositaryOfMap = Depositary.Application;
+                map.CodeStruct = "4";
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);

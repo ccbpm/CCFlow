@@ -59,10 +59,7 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Port_TeamType", "用户组类型");
-                map.Java_SetCodeStruct("2");
-
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap(Depositary.Application);
+                map.CodeStruct = "2";
 
                 map.AddTBStringPK(TeamTypeAttr.No, null, "编号", true, true, 1, 5, 5);
                 map.AddTBString(TeamTypeAttr.Name, null, "名称", true, false, 1, 50, 20);

@@ -41,7 +41,7 @@
   <Item No="001" GroupNo="System" Name="SQL配置模版设置" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
   <Item No="601" GroupNo="System" Name="系统枚举" For="admin" Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
   <Item No="602" GroupNo="System" Name="字典表" For="admin" Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddSFTable"  />
-
+ <!--
   <Group No="Demo" Name="BP框架演示" />
   <Item No="901" GroupNo="Demo" Name="班级" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.Demo.BPFramework.BanJis"  />
   <Item No="902" GroupNo="Demo" Name="科目"    For="admin" Url="../../Comm/Ens.htm?EnsName=BP.Demo.BPFramework.KeMus"  />
@@ -49,7 +49,7 @@
   <Item No="904" GroupNo="Demo" Name="学生分析" For="admin" Url="../../Comm/Group.htm?EnsName=BP.Demo.BPFramework.Students"  />
   <Item No="905" GroupNo="Demo" Name="学生批处理(BS)" For="admin" Url="../../Comm/BatchBS.htm?EnsName=BP.Demo.BPFramework.Students"  />
   <Item No="906" GroupNo="Demo" Name="学生批处理(EasyUI)" For="admin" Url="../../Comm/Batch.htm?EnsName=BP.Demo.BPFramework.Students"  />
-
+-->
   <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
   <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Stations"  />

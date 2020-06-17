@@ -788,8 +788,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
                   NodeWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
 
-                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCVer, 0, "审核意见版本号", true, true, NodeWorkCheckAttr.FWCVer,
-                "@0=2018@1=2019");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCVer, 1, "审核意见保存规则", true, true, NodeWorkCheckAttr.FWCVer,
+                "@0=1个节点1个人保留1个意见@1=保留节点历史意见(默认)");
 
                 string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='ND@NodeID'";
                 map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", sql, true);

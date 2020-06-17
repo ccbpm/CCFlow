@@ -2583,6 +2583,9 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                if (ex.Message.IndexOf("url@") == 0)
+                    return ex.Message;
+
                 //清楚上次选择的节点信息.
                 if (DataType.IsNullOrEmpty(this.HisGenerWorkFlow.Paras_ToNodes) == false)
                 {

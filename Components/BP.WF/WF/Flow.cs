@@ -5103,7 +5103,7 @@ namespace BP.WF
 
                                 //把抄送的信息也导入里面去.
                                 cc.DirectUpdate();
-                                fwc.FWCVer = 1;
+                                fwc.FWCVer = 1;  //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
                                 fwc.DirectUpdate();
                                 DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "'");
                             }

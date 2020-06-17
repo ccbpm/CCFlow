@@ -64,7 +64,7 @@ namespace BP.WF.Template
                 ndExt.NodeID = nodeID;
                 ndExt.DirectUpdate();
             }
-            nd.FWCVer = 1;
+            nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
             nd.NodeID = nodeID;
 
             nd.X = x;

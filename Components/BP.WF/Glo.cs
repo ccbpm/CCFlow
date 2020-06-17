@@ -6240,7 +6240,6 @@ namespace BP.WF
                 if (pworkid == 0)
                 {
                     pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerworkFlow WHERE WorkID=" + pkval, 0);
-                   
                     if (pworkid == 0)
                         pworkid = int.Parse(pkval);
                 }

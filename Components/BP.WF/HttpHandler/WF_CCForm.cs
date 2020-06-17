@@ -35,7 +35,9 @@ namespace BP.WF.HttpHandler
                 FrmAttachment athDesc = this.GenerAthDesc();
 
                 //查询出来数据实体.
-                string pkVal = this.PKVal;
+                string pkVal = this.OID.ToString();
+                if (pkVal.Equals("0") == true)
+                    pkVal = this.WorkID.ToString();
 
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
 

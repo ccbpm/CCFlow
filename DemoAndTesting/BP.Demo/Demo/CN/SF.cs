@@ -119,11 +119,11 @@ namespace BP.CN
                 #region »ù±¾ÊôÐÔ
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
                 map.AdjunctType = AdjunctType.AllType;
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetDepositaryOfEntity(Depositary.None);
+                map.DepositaryOfMap = Depositary.Application;
+                map.DepositaryOfEntity= Depositary.Application;
                 map.IsCheckNoLength = false;
-                map.Java_SetEnType(EnType.App);
-                map.Java_SetCodeStruct("4");
+                map.EnType = EnType.App;
+                map.CodeStruct = "4";
                 #endregion
 
                 #region ×Ö¶Î

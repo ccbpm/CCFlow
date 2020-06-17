@@ -1,5 +1,9 @@
-﻿
+﻿using System;
 using System.Data;
+using System.Collections;
+using BP.DA;
+using System.Reflection;
+using BP.Port;
 using BP.En;
 using BP.Sys;
 namespace BP.Demo
@@ -31,7 +35,7 @@ namespace BP.Demo
         {
             get
             {
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No.Equals("admin")==true)
                     return true;
                 return false;
             }

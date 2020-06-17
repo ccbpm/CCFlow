@@ -225,7 +225,7 @@ namespace BP.Demo.SDK
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("ND112Rpt", "编号发文");
-                map.Java_SetEnType(EnType.App);
+                map.EnType = EnType.App;
 
                 #region 流程的基本字段
 

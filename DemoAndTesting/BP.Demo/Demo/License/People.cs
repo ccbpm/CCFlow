@@ -167,14 +167,6 @@ namespace BP.Demo.License
 
                 Map map = new Map("Demo_People", "用户");
 
-                #region 基本属性
-                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
-                map.Java_SetDepositaryOfMap( Depositary.Application);    //实体map的存放位置.
-
-                map.Java_SetDepositaryOfEntity(Depositary.None); //实体存放位置
-                map.Java_SetEnType(EnType.App);   //实体类型。
-                #endregion
-
                 #region 字段
                 /*关于字段属性的增加 */
                 map.AddTBStringPK(PeopleAttr.No, null, "编号", true, false, 1, 60, 30);

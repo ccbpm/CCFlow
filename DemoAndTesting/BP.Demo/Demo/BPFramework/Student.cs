@@ -282,7 +282,7 @@ namespace BP.Demo.BPFramework
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.
-                map.Java_SetCodeStruct("4"); // 4位数的编号，从 0001 开始，到 9999.
+                map.CodeStruct = "4"; // 4位数的编号，从 0001 开始，到 9999.
 
                 #region 字段映射 - 普通字段.
                 map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 90); // 如果设置自动编号字段必须是只读的.
@@ -463,7 +463,7 @@ namespace BP.Demo.BPFramework
             string billFileName = this.No + "StuTest.doc";
 
             //要生成的数据.
-            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName, false);
+            en.MakeDoc(BP.Sys.SystemConfig.PathOfDataUser + "\\CyclostyleFile\\StudentDemo.rtf", saveTo, billFileName);
 
             string url = "/DataUser/Temp/" + billFileName;
 

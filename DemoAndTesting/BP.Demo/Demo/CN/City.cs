@@ -96,13 +96,7 @@ namespace BP.CN
                 Map map = new Map("CN_City","城市");
 
                 #region 基本属性
-                map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
-                map.AdjunctType = AdjunctType.AllType;
-                map.Java_SetDepositaryOfMap( Depositary.Application);
-                map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.IsCheckNoLength = false;
-                map.Java_SetEnType(EnType.App);
-                map.Java_SetCodeStruct("4");
+                map.CodeStruct = "4";
                 #endregion
 
                 #region 字段

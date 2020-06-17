@@ -348,7 +348,6 @@ var uploadTools = {
      */
     "uploadFile":function(opt){
         var uploadUrl = opt.uploadUrl;
-       debugger
         
         if (uploadUrl != "#" && uploadUrl != "") {
             uploadTools.disableFileUpload(opt);//禁用文件上传
@@ -389,7 +388,7 @@ var uploadTools = {
                     contentType: false,
                     success: function (data) {
                         if (typeof AfterAthUploadOver === 'function')
-                            AfterAthUploadOver(FK_MapData, PKVal, data);
+                            AfterAthUploadOver(AthParams.FK_MapData, AthParams.PKVal, data);
                         setTimeout(function () { opt.onUpload(opt, data) }, 500);
                     },
                     error: function (e) {

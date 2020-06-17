@@ -260,15 +260,17 @@
         }
 
         var global = window;
+        var atParas = "";
         $(function () {
             // global
             global.selectedNodes = [];
             global.selectedRows = [];
 
             var mypk = GetQueryString("MyPK");
-            var atParas = GetQueryString("AtParas");
+            atParas = GetQueryString("AtParas");
 
             mapExt = new Entity("BP.Sys.MapExt", mypk);
+            global.dbType = mapExt.DBType;
 
             var webUser = new WebUser();
             var tip = mapExt.GetPara("SearchTip");

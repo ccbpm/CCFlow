@@ -1045,18 +1045,38 @@ namespace BP.Sys
             }
         }
 
-        public string GetDataTableByField(string field,string paras)
+        /// <summary>
+        /// 根据字段，参数返回查询数据的DataTable
+        /// </summary>
+        /// <param name="field">字段名</param>
+        /// <param name="paras">参数</param>
+        /// <param name="sqlWhere">增加的查询条件的SQL</param>
+        /// <returns></returns>
+        public string GetDataTableByField(string field, string paras,string sqlWhere)
         {
             //执行SQL获取
-            if(this.DBType.Equals("0") == true && this.Row.ContainsKey(field) == true)
+            if (this.DBType.Equals("0") == true && this.Row.ContainsKey(field) == true)
             {
                 string sql = this.GetValStringByKey(field);
                 if (DataType.IsNullOrEmpty(sql) == true)
-                    return "err@字段" + field+"执行的SQL为空";
+                    return "err@字段" + field + "执行的SQL为空";
+                if(DataType.IsNullOrEmpty(sqlWhere) == false)
+                {
+                    if (sql.ToLower().IndexOf("where") == -1)
+                        sql += "WHERE 1=1";
+
+                    sql += sqlWhere;
+                }
+                
 
                 sql = sql.Replace("~", "'");
-                
-                if(DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
+                sql = sql.Replace("@WebUser.No", WebUser.No);
+                sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+                sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+                if (DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
                 {
                     string[] strs = paras.Split('@');
                     foreach (string key in strs)
@@ -1065,19 +1085,19 @@ namespace BP.Sys
                             continue;
                         var attrKeyOfEn = key.Split('=')[0];
                         var val = key.Split('=')[1];
-                        sql= sql.Replace("@" + attrKeyOfEn, val);
+                        sql = sql.Replace("@" + attrKeyOfEn, val);
                         if (sql.Contains("@") == false)
                             break;
-                           
+
                     }
                 }
                 else
                 {
                     sql = sql.Replace("@Key", paras);
                 }
-                    
-                
-                if(sql.Contains("@") == true)
+
+
+                if (sql.Contains("@") == true)
                     return "err@字段" + field + "执行的SQL中有@符号";
                 return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
 
@@ -1085,6 +1105,59 @@ namespace BP.Sys
             string msg = this.DBType.Equals("1") == true ? "执行url返回JSON" : "执行JS返回的JSON";
             return "err@执行有误，是根据" + msg;
         }
+
+
+
+        public string GetDataTableByTag1(string key,string paras)
+        {
+            string sql = "";
+           if(DataType.IsNullOrEmpty(this.Tag1) == false)
+            {
+                string[] condition = this.Tag1.Split('$');
+                foreach(string para in condition)
+                {
+                    if (para.Contains("Para=" + key + "#") == false)
+                        continue;
+                    if (para.Contains("ListSQL=") == false)
+                        continue;
+                    sql = para.Substring(para.IndexOf("ListSQL=") + 8);
+                    break;
+                }
+ 
+            }
+
+            if (DataType.IsNullOrEmpty(sql) == true)
+                return "err@TableSearch设置的查询条件字段"+ key+"的SQL查询语句为空";
+
+            sql = sql.Replace("~", "'");
+            sql = sql.Replace("@WebUser.No", WebUser.No);
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+            sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+            if (DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
+            {
+                string[] strs = paras.Split('@');
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+                    var attrKeyOfEn = str.Split('=')[0];
+                    var val = str.Split('=')[1];
+                    sql = sql.Replace("@" + attrKeyOfEn, val);
+                    if (sql.Contains("@") == false)
+                        break;
+
+                }
+            }
+
+            if (sql.Contains("@") == true)
+                return "err@执行的SQL中" + sql+" 有@符号没有被替换";
+            return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
+        }
+
+
     }
     /// <summary>
     /// 扩展s

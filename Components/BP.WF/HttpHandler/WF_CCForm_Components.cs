@@ -172,8 +172,9 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql); 
             if (dt.Rows.Count !=0 )
                 return "err@该文号["+lsh+"]已经存在.";
+         
+            string docword = wordname + "〔" + ny + "〕" + lsh+"号";
 
-            string docword = wordname + "["+ny + "]" + lsh+"号";
 
             //生成一个新的流水号.
             sql = "update " + ptable + " set DocWordKey='" + wordkey + "',DocWordName='" + wordname + "' ,DocWordYear='" + ny + "',DocWordLSH='" + lsh + "',DocWord='" + docword + "' WHERE OID=" + this.OID;

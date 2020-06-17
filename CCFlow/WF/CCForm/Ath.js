@@ -303,7 +303,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             _html += "<td>";
             if (athDesc.IsDownload == 1)
                 _html += "<a href=\"javascript:Down2018('" + athDesc.MyPK + "','" + db.MyPK + "')\">下载</a>";
-            if (pageData.IsReadonly != "1") {
+            if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
                     _html += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
                 var webuser = new WebUser();

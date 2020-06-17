@@ -1715,7 +1715,7 @@ namespace BP.WF.HttpHandler
                         lastNodeId = tk.NDFrom;
                     }
 
-                    tk.Row.Add("T_NodeIndex", idx);
+                    //tk.Row.Add("T_NodeIndex", idx);
 
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
                     if (nd == null)
@@ -1825,7 +1825,7 @@ namespace BP.WF.HttpHandler
 
                     row["ParentNode"] = 0;
                     row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
-                    row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
+                    //row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                     row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
                     if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
@@ -1959,7 +1959,7 @@ namespace BP.WF.HttpHandler
                                     row["RDT"] = mysubtk.RDT;
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
-                                    row["T_NodeIndex"] = idx++;
+                                    //row["T_NodeIndex"] = idx++;
                                     row["T_CheckIndex"] = noneEmpIdx++;
                                     row["ActionType"] = mysubtk.HisActionType;
                                     row["Tag"] = mysubtk.Tag;
@@ -2056,7 +2056,7 @@ namespace BP.WF.HttpHandler
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
                         row["DeptName"] = WebUser.FK_DeptName;
-                        row["T_NodeIndex"] = ++idx;
+                        //row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
                         row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
@@ -2076,8 +2076,8 @@ namespace BP.WF.HttpHandler
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
                     row["DeptName"] = WebUser.FK_DeptName;
-                    row["T_NodeIndex"] = ++idx;
-                    row["T_CheckIndex"] = ++noneEmpIdx;
+                    //row["T_NodeIndex"] = ++idx; zsy屏蔽2020.6.17
+                    //row["T_CheckIndex"] = ++noneEmpIdx; zsy屏蔽2020.6.17
                     row["ActionType"] = ActionType.Forward;
                     row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                     tkDt.Rows.Add(row);
@@ -2121,7 +2121,7 @@ namespace BP.WF.HttpHandler
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
                 row["DeptName"] = "";
-                row["T_NodeIndex"] = ++idx;
+                //row["T_NodeIndex"] = ++idx;
                 row["T_CheckIndex"] = ++noneEmpIdx;
 
                 tkDt.Rows.Add(row);

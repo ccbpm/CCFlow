@@ -525,7 +525,7 @@ namespace BP.WF
 
                 //map.AddTBInt(CCListAttr.IsRepaly, 0, "是否回复？", true, true);
 
-                map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 10, true);
+                map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 5, 10, true);
                 map.AddTBString(CCListAttr.FlowName, null, "名称", true, true, 0, 200, 10, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);
                 map.AddTBString(CCListAttr.NodeName, null, "节点名称", true, true, 0, 500, 10, true);

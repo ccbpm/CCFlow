@@ -651,7 +651,7 @@ namespace BP.WF
                 map.AddTBString(GenerWorkerListAttr.FK_EmpText, null, "人员名称", true, false, 0, 30, 100);
                 map.AddTBString(GenerWorkerListAttr.FK_NodeText, null, "节点名称", true, false, 0, 100, 100);
 
-                map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 4, 100);
+                map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 5, 100);
                 map.AddTBString(GenerWorkerListAttr.FK_Dept, null, "人员所在部门", true, false, 0, 100, 100);
 
                 //如果是流程属性来控制的就按流程属性来计算。

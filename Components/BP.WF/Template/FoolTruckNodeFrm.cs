@@ -118,7 +118,7 @@ namespace BP.WF.Template
                    "@0=默认方案@1=只读方案@2=自定义方案");
 
 
-                map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
+                map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 4, 20);
 
                 this._enMap = map;
                 return this._enMap;

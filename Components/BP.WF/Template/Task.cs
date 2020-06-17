@@ -164,7 +164,7 @@ namespace BP.WF.Template
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddMyPK(); //唯一的主键.
-                map.AddTBString(TaskAttr.FK_Flow, null, "流程编号", true, false, 0, 200, 10);
+                map.AddTBString(TaskAttr.FK_Flow, null, "流程编号", true, false, 0, 5, 10);
                 map.AddTBString(TaskAttr.Starter, null, "发起人", true, false, 0, 200, 10);
 
                 //为上海同事科技增加两个字段. 可以为空.

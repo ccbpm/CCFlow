@@ -564,7 +564,7 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
 
                 //增加如下字段是为了查询与排序的需要.
-                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 3, 10);
+                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 4, 10);
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", false, false);
 
 

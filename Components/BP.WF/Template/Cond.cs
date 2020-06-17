@@ -998,7 +998,7 @@ namespace BP.WF.Template
                 //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas岗位数据,3=Depts,4=按sql计算.
                 //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
-                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 5, 20);
+                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 4, 20);
 
                 //对于启动子流程规则有效.
                 map.AddTBString(CondAttr.SubFlowNo, null, "子流程编号", true, true, 0, 5, 20);

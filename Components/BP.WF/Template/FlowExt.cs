@@ -379,7 +379,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_Flow", "流程");
 
                 #region 基本属性。
-                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
+                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.SetHelperUrl(FlowAttr.No, "http://ccbpm.mydoc.io/?v=5404&t=17023"); //使用alert的方式显示帮助信息.
 
                // map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);

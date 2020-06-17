@@ -133,7 +133,7 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddTBString(NodeAttr.Name, null, null, true, false, 0, 3000, 10, true);
-                map.AddTBString(NodeAttr.FK_Flow, null, "流程", false, true, 0, 100, 10);
+                map.AddTBString(NodeAttr.FK_Flow, null, "流程", false, true, 0, 10, 10);
 
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);

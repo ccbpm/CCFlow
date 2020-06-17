@@ -623,7 +623,7 @@ namespace BP.WF.Data
                 map.AddTBInt(CHAttr.FID, 0, "FID", false, true);
                 map.AddTBString(CHAttr.Title, null, "标题", false, false, 0, 900, 5);
 
-                map.AddTBString(CHAttr.FK_Flow, null, "流程", false, false, 3, 3, 3);
+                map.AddTBString(CHAttr.FK_Flow, null, "流程", false, false, 0, 4, 3);
                 map.AddTBString(CHAttr.FK_FlowT, null, "流程名称", true, true, 0, 200, 5);
 
                 map.AddTBInt(CHAttr.FK_Node, 0, "节点", false, false);

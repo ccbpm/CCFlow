@@ -344,7 +344,7 @@ namespace BP.WF.Data
 
                 map.AddMyPK();
                 map.AddTBString(EvalAttr.Title, null, "标题", false, true, 0, 500, 10);
-                map.AddTBString(EvalAttr.FK_Flow, null, "流程编号", false, true, 0, 7, 10);
+                map.AddTBString(EvalAttr.FK_Flow, null, "流程编号", false, true, 0, 4, 10);
                 map.AddTBString(EvalAttr.FlowName, null, "流程名称", false, true, 0, 100, 10);
 
                 map.AddTBInt(EvalAttr.WorkID, 0, "工作ID", false, true);

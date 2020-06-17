@@ -312,7 +312,7 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(PartAttr.FK_Flow, null, "流程编号", false, true, 0, 100, 10);
+                map.AddTBString(PartAttr.FK_Flow, null, "流程编号", false, true, 0, 5, 10);
                 map.AddTBInt(PartAttr.FK_Node, 0, "节点ID", false, false);
                 map.AddTBString(PartAttr.PartType, null, "类型", false, true, 0, 100, 10);
 

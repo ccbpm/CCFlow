@@ -1298,7 +1298,7 @@ namespace BP.WF
                 //等于流程类别的Domain字段值.
                 map.AddTBString(GenerWorkFlowAttr.SysType, null, "系统类别", true, false, 0, 10, 10);
 
-                map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
+                map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 5, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 1000, 10);
 

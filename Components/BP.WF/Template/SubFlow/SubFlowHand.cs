@@ -209,7 +209,7 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 10, 100);
+                map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 5, 100);
 
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
                 map.AddDDLSysEnum(SubFlowHandAttr.SubFlowType, 0, "子流程类型",true, false, SubFlowHandAttr.SubFlowType,

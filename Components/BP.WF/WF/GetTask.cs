@@ -165,7 +165,7 @@ namespace BP.WF
                 map.AddTBIntPK(NodeAttr.NodeID, 0,"NodeID", true, true);
                 map.AddTBString(NodeAttr.Name, null,"节点名称", true, false, 0, 100, 10);
                 map.AddTBInt(NodeAttr.Step,0, "步骤", true, false);
-                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", true, false, 0, 10, 10);
+                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", true, false, 0, 5, 10);
                 map.AddTBString(GetTaskAttr.CheckNodes, null, "工作节点s", true, false, 0, 50, 100);
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "访问规则", true, true);

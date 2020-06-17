@@ -4104,7 +4104,7 @@ namespace BP.WF
                 //map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("3");
 
-                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 5, 3);
+                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 200, 10);
 
                 map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);

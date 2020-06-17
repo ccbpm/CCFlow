@@ -113,7 +113,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_TestCase", "自定义流程测试");
 
                 map.AddMyPK();
-                map.AddTBString(TestCaseDtlAttr.FK_Flow, null, "流程编号", true, false, 0, 100, 100, true);
+                map.AddTBString(TestCaseDtlAttr.FK_Flow, null, "流程编号", true, false, 0, 5, 100, true);
                 map.AddTBString(TestCaseDtlAttr.ParaType, null, "参数类型", true, false, 0, 100, 100, true);
                 map.AddTBString(TestCaseDtlAttr.Vals, null, "值s", true, false, 0, 500, 300, true);
                 this._enMap = map;

@@ -146,7 +146,7 @@ namespace BP.WF.Template
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);
                 map.AddTBString(DocTemplateAttr.FilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(DocTemplateAttr.FK_Node, 0, "节点ID", true, false);
-                map.AddTBString(DocTemplateAttr.FK_Flow, null, "流程编号", true, false, 0, 200, 20);
+                map.AddTBString(DocTemplateAttr.FK_Flow, null, "流程编号", true, false, 0, 4, 20);
                 this._enMap = map;
                 return this._enMap;
             }

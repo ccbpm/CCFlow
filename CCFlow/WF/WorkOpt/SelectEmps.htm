@@ -23,24 +23,12 @@
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <link href="../style/skin/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         #TB_Doc
         {
             height: 132px;
             width: 433px;
-        }
-        button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ccc !important;
-            border-radius: 3px;
-            margin: 5px 3px 5px 3px;
-            padding: 4px 15px;
-        }
-        button:hover {
-            background: #f5f5f5;
-            color: #000;
-            border: 1px solid #ccc !important;
         }
     </style>
     <script type="text/javascript">
@@ -327,23 +315,21 @@
     </script>
 </head>
 <body>
-    <div style="text-align:right">
-        <button type="button" id="toPrevDept">
-            <img src="../Img/Btn/JumpWay.png" /> 上一级
+    <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default" style="position:absolute;bottom:60px;left:0;right:0;top:0; overflow-y:auto;"></div>
+    <div style="position: fixed; bottom: 0; right: 0;">
+        <button type="button" id="toPrevDept" class="layui-btn">
+            <!--<img src="../Img/Btn/JumpWay.png" />--> 上一级
         </button>
-        <button type="button"  onclick="Close()">
-            <img src="../Img/Btn/Return.png" /> 取消
+        <button type="button"  onclick="Close()" class="layui-btn layui-btn-primary">
+            <!--<img src="../Img/Btn/Return.png" />--> 取消
         </button>
-        <button type="button" onclick="SelectEmps()">
-            <img src="../Img/Btn/Confirm.png" /> 确定
+        <button type="button" onclick="SelectEmps()" class="layui-btn layui-btn-normal">
+            <!--<img src="../Img/Btn/Confirm.png" />--> 确定
         </button>
 
         <!--<input type="button" value="上一级" id="toPrevDept" />
         <input type="button" onclick="Close()" value="取消" />
         <input type="button" onclick="SelectEmps()" value="确定" />-->
-    </div>
-   
-    <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
     <!--<input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
                                                                value="确定" />-->

@@ -35,21 +35,9 @@
         #Message {
             width: 100%;
         }
-
-        button {
-            background: #fff;
-            color: #000;
-            border: 1px solid #ccc !important;
-            border-radius: 3px;
-            margin: 5px 3px 5px 3px;
-            padding: 4px 15px;
+        .modal-backdrop {
+            bottom: 53px;
         }
-
-            button:hover {
-                background: #f5f5f5 !important;
-                color: #000;
-                border: 1px solid #ccc !important;
-            }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -64,15 +52,15 @@
             };
             $('#Message').val(param.Message);
             //初始化人员选择窗口
-            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 90%;margin: 10px auto;">' +
-                '<div class="modal-dialog" style="width:700px;">'
-                + '<div class="modal-content" style="">'
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width:60%;height:90%;margin:0 auto;">' +
+                '<div class="modal-dialog" style="width:80%;height:90%;">'
+                + '<div class="modal-content" style="width:100%;height:100%;">'
                 + '<div class="modal-header">'
-                + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<button type="button" class="close" style="opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                 + '<h4 class="modal-title">选择移交人</h4>'
                 + '</div>'
-                + '<div class="modal-body">'
-                + '<iframe style="width:100%;border:0px;height:600px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                + '<div class="modal-body" style="width:98%;height:88%;">'
+                + '<iframe style="width:100%;border:0px;height:100%;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
                 + '</div>'
                 + '</div><!-- /.modal-content -->'
                 + '</div><!-- /.modal-dialog -->'
@@ -163,51 +151,29 @@
 
         }
     </script>
+    <link href="../style/skin/layui/css/layui.css" rel="stylesheet" />
 
 </head>
 <body>
 
-    <div style="text-align:center;padding:10px">
-        <table style="width:100%;">
-            <tr>
-                <th> 请选择要转办的人: </th>
-            </tr>
-
-            <tr>
-                <td>
-                    <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 81%;" />
-                    <button id="BtnSelectEmps" type="button">
-                        <img src="../Img/Btn/AddLeader.png" /> 选人
-                    </button>
-                    <!--<input type="button" id="BtnSelectEmps" value='选择接受人' />-->
-                </td>
-            </tr>
-
-            <!--<tr>
-                <th>
-                    移交原因:
-                </th>
-            </tr>
-
-            <tr>
-                <td>
-                    <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
-                </td>
-            </tr>-->
-
-
-
-        </table>
-
-
+    <div style="padding:15px">
+        <p style="margin-bottom:10px;">请选择要转办的人：</p>
+        <div style="width:100%;float:left;">
+            <input type="text" id="ToEmp" name="ToEmp" value='' style="width:80%; margin-right:15px; float:left" class="layui-input" />
+            <button id="BtnSelectEmps" type="button" class="layui-btn layui-btn-normal" style="float:left">
+                <!--<img src="../Img/Btn/AddLeader.png" />--> 选人
+            </button>
+            <!--<input type="button" id="BtnSelectEmps" value='选择接受人' />
+            移交原因:
+            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>-->
+        </div>
     </div>
     <div style="position: fixed; bottom: 60px; right: 5px;">
-        <button type="button" onclick="Save();">
-            <img src="../Img/Btn/Send.png" /> 确定移交
+        <button type="button" onclick="Close();" class="layui-btn layui-btn-primary">
+            <!--<img src="../Img/Btn/Close.png" />--> 关闭
         </button>
-
-        <button type="button" onclick="Close();">
-            <img src="../Img/Btn/Close.png" /> 关闭
+        <button type="button" onclick="Save();" class="layui-btn layui-btn-normal">
+            <!--<img src="../Img/Btn/Send.png" />--> 确定移交
         </button>
         <!--<input type=button value="确定移交" onclick="ShiftWork();" /><input type="button" id="" value="关闭" onclick="Close();" />-->
 

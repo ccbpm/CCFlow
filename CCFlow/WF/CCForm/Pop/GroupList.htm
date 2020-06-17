@@ -71,8 +71,27 @@
             var srcOfEntitis = mapExt.Tag2; //实体.
             srcOfGroup = DealSQL(srcOfGroup);
             srcOfEntitis = DealSQL(srcOfEntitis);
-            var groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
-            var entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
+            var groups;
+            var entities;
+            if (mapExt.DBType == 0) {
+                groups = mapExt.DoMethodReturnString("GetDataTableByField", "Tag1","",null); //分组.
+                if (groups.indexOf("err@") != -1) {
+                    alert(groups);
+                    return;
+                }
+                groups = JSON.parse(groups);
+                entities = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2","",null);//数据源.
+                if (entities.indexOf("err@") != -1) {
+                    alert(entities);
+                    return;
+                }
+                entities = JSON.parse(entities);
+            } else {
+                groups = DBAccess.RunDBSrc(srcOfGroup, mapExt.DBType); //分组.
+                entities = DBAccess.RunDBSrc(srcOfEntitis, mapExt.DBType); //数据源.
+            }
+            
+            
 
             var html = "<table style='width:98%;' >";
 

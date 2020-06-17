@@ -65,7 +65,7 @@
             if(atParas != "")
                 paras = atParas + "@Key=" + paras;
             var en = new Entity("BP.Sys.MapExt", mapExt.MyPK);
-            var json = en.DoMethodReturnString("GetDataTableByField", field, paras);
+            var json = en.DoMethodReturnString("GetDataTableByField", field, paras,null);
             if (json.indexOf("err@") != -1) {
                 alert(json);
                 return "";

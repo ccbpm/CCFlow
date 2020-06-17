@@ -41,6 +41,7 @@
         //查询条件，按照条件字段长度排序后
         var condtionFieldsArry = [];
         var mapExt = null;
+        var atParas;
 
         //初始化页面
         $(function () {
@@ -72,7 +73,7 @@
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
 
-            var atParas = GetQueryString("AtParas");
+            atParas = GetQueryString("AtParas");
             //获取列表的数据源
             var tableUrl = mapExt.Tag2;
             if (atParas.indexOf('@') == 0) {
@@ -210,10 +211,20 @@
         });
 
         //查询列表、展示列表
-        function loadViewGrid(gridUrl) {
+        function loadViewGrid(gridUrl,paras,sqlWhere) {
             var global = window;
-
-            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            var json;
+            if (mapExt.DBType == 0) {
+                json = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", paras, sqlWhere);
+                if (json.indexOf("err@") != -1) {
+                    alert(json);
+                    return;
+                }
+                json = JSON.parse(json);
+            } else {
+                json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            }
+            
             if ($.isArray(json)) {
                 var selectedRows = window.selectedRows;
                 if ($.isArray(selectedRows)) {
@@ -366,12 +377,22 @@
                         select.attr("name", condtion.FieldKey);
                         searchPanel.append(select);
 
-                        var dbSrc = condtion.Val.replace(/~/g, "'");
-                        //                        var reg = new RegExp("@Key", "g");
-                        //                        dbSrc = dbSrc.replace(reg, keyWord);
-                        dbSrc = DealExp(dbSrc);
+                        var ifcData;
+                        if (mapExt.DBType == 0 && condtion.CtrlType=="ListSQL") {
+                            ifcData = mapExt.DoMethodReturnString("GetDataTableByTag1",  condtion.FieldKey,atParas);
+                            if (ifcData.indexOf("err@") != -1) {
+                                alert(ifcData);
+                                return;
+                            }
+                            ifcData = JSON.parse(ifcData);
+                        } else {
+                            var dbSrc = condtion.Val.replace(/~/g, "'");
+                            dbSrc = DealExp(dbSrc);
 
-                        var ifcData = DBAccess.RunDBSrc(dbSrc);
+                           ifcData = DBAccess.RunDBSrc(dbSrc);
+                        }
+
+                       
 
                         if (ifcData && ifcData.length > 0) {
                             var oKeys = [];
@@ -424,35 +445,33 @@
 
         //输入关键字进行查询
         function InputKeyWordData() {
-            var data = null;
-            var UserNo = GetQueryString("UserNo");
-            var RefPKVal = GetQueryString("RefPKVal");
-            //var keyWord = $("#TB_Key").val();
             var keyWord = replaceAll($("#TB_Key").val(), "'", "");//输入时有引号的去除掉
             var dbSrc = mapExt.Tag2;
             dbSrc = dbSrc.replace(/~/g, "'");
             var reg = new RegExp("@Key", "g");
             dbSrc = dbSrc.replace(reg, keyWord);
             dbSrc = DealExp(dbSrc);
-
+            var sqlWhere = "";
+            var paras = atParas;
+            paras += "@Key=" + keyWord;
             $.each(condtionFieldsArry, function (i, obj) {
                 var regC = new RegExp("@" + obj.FieldKey, "g");
                 var value = $("#" + obj.FieldKey).val();
                 if (value == null || value == "null") value = "";
                 dbSrc = dbSrc.replace(regC, value);
+                paras += "@" + obj.FieldKey + "=" + value;
                 if (mapExt.DBType == 0) {
-                    if (dbSrc.toLowerCase().indexOf("where") == -1)
-                        dbSrc = dbSrc + " WHERE 1=1";
+                    
                     if (value != "") {
                         if (obj.CtrlType.indexOf("Date") == -1) {
-                            dbSrc = dbSrc + " and " + obj.FieldKey + "='" + value + "'";
+                            sqlWhere += " AND " + obj.FieldKey + "='" + value + "'";
                         } else {
                             if (obj.CtrlType == "DateFrom")
-                                dbSrc = dbSrc + " and " + obj.FieldKey + ">='" + value + "'";
+                                sqlWhere += " AND " + obj.FieldKey + ">='" + value + "'";
                             if (obj.CtrlType == "DateTo") {
                                 var key = obj.FieldKey.replace("_DateTo", "");
                                 value = value + " 23:59";
-                                dbSrc = dbSrc + " and " + key + "<='" + value + "'";
+                                sqlWhere += " AND " + key + "<='" + value + "'";
                             }
                         }
                     }
@@ -460,7 +479,7 @@
             });
 
 
-            loadViewGrid(dbSrc);
+            loadViewGrid(dbSrc, paras,sqlWhere);
 
         }
 

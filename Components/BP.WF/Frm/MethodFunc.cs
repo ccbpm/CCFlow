@@ -321,6 +321,7 @@ namespace BP.Frm
         }
         #endregion
 
+        #region 执行方法.
         /// <summary>
         /// 方法参数
         /// </summary>
@@ -337,6 +338,8 @@ namespace BP.Frm
         {
             return "../../CCBill/Admin/MethodDoc.htm?MyPK=" + this.MyPK;
         }
+        #endregion 执行方法.
+
     }
     /// <summary>
     /// 功能执行

@@ -15,6 +15,7 @@ namespace BP.Frm
 	/// </summary>
     public class MethodAttr:EntityMyPKAttr
     {
+        #region 基本属性.
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -35,6 +36,10 @@ namespace BP.Frm
         /// 显示方式.
         /// </summary>
         public const string ShowModel = "ShowModel";
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public const string ExeType = "ExeType";
         /// <summary>
         /// 处理内容
         /// </summary>
@@ -63,6 +68,7 @@ namespace BP.Frm
         /// 执行完毕后干啥？
         /// </summary>
         public const string WhatAreYouTodo = "WhatAreYouTodo";
+        #endregion 基本属性.
 
         #region 外观.
         /// <summary>
@@ -74,8 +80,6 @@ namespace BP.Frm
         /// </summary>
         public const string PopHeight = "PopHeight";
         #endregion 外观.
-
-
 
         #region 显示位置
         /// <summary>
@@ -211,6 +215,7 @@ namespace BP.Frm
         }
         #endregion
 
+        #region 移动.
         public void DoUp()
         {
             this.DoOrderUp(MethodAttr.FrmID, this.FrmID, MethodAttr.Idx);
@@ -219,17 +224,13 @@ namespace BP.Frm
         {
             this.DoOrderDown(MethodAttr.FrmID, this.FrmID, MethodAttr.Idx);
         }
+        #endregion 移动.
 
-       
-        protected override bool beforeUpdateInsertAction()
-        {
-            return base.beforeUpdateInsertAction();
-        }
-         
+
     }
-	/// <summary>
-	/// 表单方法
-	/// </summary>
+    /// <summary>
+    /// 表单方法
+    /// </summary>
     public class Methods : EntitiesMyPK
     {
         /// <summary>

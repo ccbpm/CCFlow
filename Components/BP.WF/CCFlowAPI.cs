@@ -697,9 +697,6 @@ namespace BP.WF
                                 drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
                                 dtAlert.Rows.Add(drMsg);
 
-                                //提示信息.
-                                // this.FlowMsg.AlertMsg_Info(worker + "," + workerName + "请求加签:",
-                                //   DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + " --<a href='./WorkOpt/AskForRe.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "' >回复加签意见</a> --");
                             }
                             // isAskFor = true;
                             break;

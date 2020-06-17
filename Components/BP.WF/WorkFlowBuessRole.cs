@@ -1529,9 +1529,6 @@ namespace BP.WF
                     //     //写入消息提示.
                     //     ccMsg += list.CCTo + "(" + dr[1].ToString() + ");";
                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
-                    //     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
-                    //     string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
-                    //     string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
 
                     string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
                     string mytemp = pushMsg.SMSDoc;

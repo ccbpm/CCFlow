@@ -1296,15 +1296,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
-        /// <summary>
-        /// DXReport
-        /// </summary>
-        /// <returns></returns>
-        public string DXReport()
-        {
-            return "../../Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-        }
-
+        
         /// <summary>
         /// 流程完成条件
         /// </summary>

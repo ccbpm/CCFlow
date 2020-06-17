@@ -74,6 +74,7 @@
     <Compile Include="GPM\GroupDept.cs" />
     <Compile Include="GPM\GroupEmp.cs" />
     <Compile Include="GPM\GroupType.cs" />
+    <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="WeiXin\WXOrganization.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GPM\StationExt.cs" />
@@ -114,7 +115,6 @@
     <Compile Include="WeiXin\OrgInit_WeiXinUserIcon.cs" />
     <Compile Include="DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="UserData\EmpMenu.cs" />
-    <Compile Include="UserData\EmpApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPM\Menu.cs" />
     <Compile Include="GPM\App.cs" />

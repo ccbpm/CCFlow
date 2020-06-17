@@ -647,7 +647,7 @@ namespace BP.WF
                     sb.Append("<DIV id='DIVWC" + subFlow.No + "' style='position:absolute; left:" + x + "px; top:" + subFlow.SF_Y + "px; width:" + subFlow.SF_W + "px; height:" + subFlow.SF_H + "px;text-align: left;' >");
                     sb.Append("<span>");
 
-                    string src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
+                    string src = appPath + "WF/WorkOpt/SubFlow.htm?s=2";
                     string fwcOnload = "";
 
                     if (subFlow.HisFrmSubFlowSta == FrmSubFlowSta.Readonly)

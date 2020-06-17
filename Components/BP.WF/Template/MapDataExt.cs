@@ -760,15 +760,7 @@ namespace BP.WF.Template
                    this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
       
-        /// <summary>
-        /// 批量修改字段
-        /// </summary>
-        /// <returns></returns>
-        public string DoBatchEditAttr()
-        {
-            return "../../Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
-        }
+       
         /// <summary>
         /// 批量设置正则表达式规则.
         /// </summary>
@@ -827,11 +819,7 @@ namespace BP.WF.Template
         {
             return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
         }
-        public string DoWordFrm()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
-        }
-      
+       
         public string DoPageLoadFull()
         {
             return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";

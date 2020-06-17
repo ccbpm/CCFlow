@@ -300,11 +300,7 @@ namespace BP.WF.HttpHandler
 
                 //在线WebOffice打开
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
-                {
-                    return "err@【/WF/WebOffice/PrintOffice.aspx】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
-                    //  return "err@该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
-                    //return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
-                }
+                    return "err@【/WF/WebOffice/PrintOffice.htm】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
                 return billUrl;
             }
             catch (Exception ex)
@@ -522,11 +518,7 @@ namespace BP.WF.HttpHandler
 
                 //在线WebOffice打开
                 if (func.BillOpenModel == BillOpenModel.WebOffice)
-                {
-                    //return "err@该部分的代码还没有重构.";
                     return "err@【/WF/WebOffice/PrintOffice.htm】该文件没有重构好,您可以找到旧版本解决，或者自己开发。";
-                    //return "url@../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK;
-                }
                 return billUrl;
             }
             catch (Exception ex)
@@ -4074,11 +4066,7 @@ namespace BP.WF.HttpHandler
                 if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
                 {
                     if (currNode.CondModel == DirCondModel.ByLineCond)
-                    {
-                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
-                        //return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
-                        return "url@./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
-                    }
+                        return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
 
 
                     return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。" + ex.Message;

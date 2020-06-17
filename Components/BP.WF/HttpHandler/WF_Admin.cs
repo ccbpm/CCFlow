@@ -122,7 +122,7 @@ namespace BP.WF.HttpHandler
             {
                 /*如果是guest节点，就让其跳转到 guest登录界面，让其发起流程。*/
                 //这个地址需要配置.
-                return "url@/SDKFlowDemo/GuestApp/Login.aspx?FK_Flow=" + this.FK_Flow;
+                return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
             }
 
             try

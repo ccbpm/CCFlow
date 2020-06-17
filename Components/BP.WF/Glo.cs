@@ -2306,7 +2306,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
+                string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.htm' >点这里到系统升级界面。</a>";
                 BP.DA.Log.DebugWriteError("系统升级错误:" + err);
                 return err;
             }
@@ -5100,40 +5100,7 @@ namespace BP.WF
                 }
             }
         }
-
-        private static string _FromPageType = null;
-        public static string FromPageType
-        {
-            get
-            {
-                _FromPageType = null;
-                if (_FromPageType == null)
-                {
-                    try
-                    {
-                        string url = HttpContextHelper.RequestRawUrl;
-                        int i = url.LastIndexOf("/") + 1;
-                        int i2 = url.IndexOf(".aspx") - 6;
-
-                        url = url.Substring(i);
-                        url = url.Substring(0, url.IndexOf(".aspx"));
-                        _FromPageType = url;
-                        if (_FromPageType.Contains("SmallSingle"))
-                            _FromPageType = "SmallSingle";
-                        else if (_FromPageType.Contains("Small"))
-                            _FromPageType = "Small";
-                        else
-                            _FromPageType = "";
-                    }
-                    catch (Exception ex)
-                    {
-                        _FromPageType = "";
-                        //  throw new Exception(ex.Message + url + " i=" + i + " i2=" + i2);
-                    }
-                }
-                return _FromPageType;
-            }
-        }
+ 
         private static Hashtable _SendHTOfTemp = null;
         /// <summary>
         /// 临时的发送传输变量.
@@ -6445,28 +6412,6 @@ namespace BP.WF
                 strs += me.Doc;
             }
             return strs;
-        }
-        /// <summary>
-        /// 转到消息显示界面.
-        /// </summary>
-        /// <param name="info"></param>
-        public static void ToMsg(string info)
-        {
-            //string rowUrl = BP.Sys.Glo.Request.RawUrl;
-            //if (rowUrl.Contains("&IsClient=1"))
-            //{
-            //    /*说明这是vsto调用的.*/
-            //    return;
-            //}
-
-            HttpContextHelper.SessionSet("info", info);
-            HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
-        }
-        public static void ToMsgErr(string info)
-        {
-            info = "<font color=red>" + info + "</font>";
-            HttpContextHelper.SessionSet("info", info);
-            HttpContextHelper.Response.Redirect(Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?Msg=" + DataType.CurrentDataTimess, false);
         }
         /// <summary>
         /// 检查流程发起限制

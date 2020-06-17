@@ -380,10 +380,7 @@ namespace BP.WF.Template
         {
             return "../../Comm/Sys/SFDBSrcNewGuide.htm";
         }
-        public string DoBTable()
-        {
-            return "../../Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
-        }
+       
     
         public string DoBindFlowSheet()
         {
@@ -728,14 +725,7 @@ namespace BP.WF.Template
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
             return "../../Comm/Search.htm?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
-        /// <summary>
-        /// 绑定独立表单
-        /// </summary>
-        /// <returns></returns>
-        public string DoFlowFormTree()
-        {
-            return "../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
-        }
+        
         /// <summary>
         /// 定义报表
         /// </summary>
@@ -765,19 +755,8 @@ namespace BP.WF.Template
                 return "删除失败:"+ex.Message;
             }
         }
-        /// <summary>
-        /// 设置发起数据源
-        /// </summary>
-        /// <returns></returns>
-        public string DoSetStartFlowDataSources()
-        {
-            string flowID = int.Parse(this.No).ToString() + "01";
-            return "../../Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
-        }
-        public string DoCCNode()
-        {
-            return "../../Admin/CCNode.aspx?FK_Flow=" + this.No;
-        }
+        
+        
         /// <summary>
         /// 执行运行
         /// </summary>

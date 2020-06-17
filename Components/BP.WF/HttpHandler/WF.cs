@@ -509,27 +509,15 @@ namespace BP.WF.HttpHandler
                     case "SetBillState":
                         break;
                     case "WorkRpt":
-                        //  Bill bk1 = new Bill(this.OID);
-                        //  Node nd = new Node(bk1.FK_Node);
-                        // this.Response.Redirect("WFRpt.htm?WorkID=" + bk1.WorkID + "&FID=" + bk1.FID + "&FK_Flow=" + nd.FK_Flow + "&NodeId=" + bk1.FK_Node, false);
-                        //this.WinOpen();
-                        //this.WinClose();
                         break;
                     case "PrintBill":
-                        //Bill bk2 = new Bill(this.Request.QueryString["OID"]);
-                        //Node nd2 = new Node(bk2.FK_Node);
-                        //this.Response.Redirect("NodeRefFunc.aspx?NodeId=" + bk2.FK_Node + "&FlowNo=" + nd2.FK_Flow + "&NodeRefFuncOID=" + bk2.FK_NodeRefFunc + "&WorkFlowID=" + bk2.WorkID);
-                        ////this.WinClose();
                         break;
                     //删除流程中第一个节点的数据，包括待办工作
                     case "DeleteFlow":
                         //调用DoDeleteWorkFlowByReal方法
                         WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID);
                         wf.DoDeleteWorkFlowByReal(true);
-                        //Glo.ToMsg("流程删除成功");
                         return "流程删除成功";
-
-                        //this.ToWFMsgPage("流程删除成功");
                         break;
                     case "DownFlowSearchExcel":    //下载流程查询结果，转到下面的逻辑，不放在此try..catch..中
                         break;

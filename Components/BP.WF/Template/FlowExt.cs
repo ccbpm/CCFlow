@@ -1641,14 +1641,7 @@ namespace BP.WF.Template
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
 
-        /// <summary>
-        /// 绑定独立表单
-        /// </summary>
-        /// <returns></returns>
-        public string DoFlowFormTree()
-        {
-            return "../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
-        }
+        
         /// <summary>
         /// 定义报表
         /// </summary>
@@ -1761,10 +1754,7 @@ namespace BP.WF.Template
             string flowID = int.Parse(this.No).ToString() + "01";
             return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
-        public string DoCCNode()
-        {
-            return "../../Admin/CCNode.aspx?FK_Flow=" + this.No;
-        }
+        
         /// <summary>
         /// 执行运行
         /// </summary>
@@ -1810,14 +1800,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/StartGuide/Default.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-        /// <summary>
-        /// 执行数据同步
-        /// </summary>
-        /// <returns></returns>
-        public string DoDTS()
-        {
-            return "../../Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No + "&Lang=CH";
-        }
+         
         /// <summary>
         /// 导入
         /// </summary>

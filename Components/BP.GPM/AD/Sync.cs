@@ -155,6 +155,9 @@ namespace BP.GPM.AD
         string err = "";
         #endregion
 
+        /// <summary>
+        /// 同步人员
+        /// </summary>
         public void SyncEmps()
         {
             DBAccess.RunSQL("DELETE FROM Port_Emp");
@@ -297,7 +300,12 @@ namespace BP.GPM.AD
             }
 
         }
-
+        /// <summary>
+        /// 获得属性
+        /// </summary>
+        /// <param name="oDE"></param>
+        /// <param name="PropertyName"></param>
+        /// <returns></returns>
         public string GetProperty(DirectoryEntry oDE, string PropertyName)
         {
             try
@@ -316,7 +324,6 @@ namespace BP.GPM.AD
                 throw ee;
             }
         }
-
 
         public string GetValFromDirectoryEntryByKey(DirectoryEntry en, string key, string isNullAsVal = "")
         {

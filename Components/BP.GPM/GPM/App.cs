@@ -295,11 +295,10 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_App");
+                Map map = new Map("GPM_App", "系统");
+
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "系统";
-                map.EnType = EnType.Sys;
 
                 map.AddTBStringPK(AppAttr.No, null, "编号", true, false, 2, 30, 100);
                 map.AddDDLSysEnum(AppAttr.AppModel, 0, "应用类型", true, true, AppAttr.AppModel,
@@ -368,8 +367,8 @@ namespace BP.GPM
             EmpMenu em = new EmpMenu();
             em.Delete(MenuAttr.FK_App, this.No);
 
-            EmpApp ea = new EmpApp();
-            ea.Delete(MenuAttr.FK_App, this.No);
+            //EmpApp ea = new EmpApp();
+            //ea.Delete(MenuAttr.FK_App, this.No);
 
             return base.beforeDelete();
         }
@@ -533,25 +532,6 @@ namespace BP.GPM
             return null;
         }
         /// <summary>
-        /// 刷新设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoRef()
-        {
-            return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
-
-            // PubClass.WinOpen("/GPM/WhoCanUseApp.aspx?FK_App=" + this.No + "&IsRef=1", 500, 700);
-            //return null;
-        }
-        /// <summary>
-        /// 查看可以访问的人员
-        /// </summary>
-        /// <returns></returns>
-        public string DoWhoCanUseApp()
-        {
-            return "../../../GPM/WhoCanUseApp.aspx?FK_App=" + this.No;
-        }
-        /// <summary>
         /// 打开菜单
         /// </summary>
         /// <returns></returns>
@@ -583,7 +563,6 @@ namespace BP.GPM
             foreach (Emp emp in emps)
             {
                 #region 初始化系统访问权限.
-
                 EmpApp me = new EmpApp();
                 me.Copy(this);
                 me.FK_Emp = emp.No;

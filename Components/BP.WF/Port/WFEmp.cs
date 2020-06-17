@@ -201,26 +201,7 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.Idx, value);
             }
         }
-        public string TelHtml
-        {
-            get
-            {
-                if (this.Tel.Length == 0)
-                    return "未设置";
-                else
-                    return "<a href=\"javascript:WinOpen('./Msg/SMS.aspx?Tel=" + this.Tel + "');\"  ><img src='/WF/Img/SMS.gif' border=0/>" + this.Tel + "</a>";
-            }
-        }
-        public string EmailHtml
-        {
-            get
-            {
-                if (this.Email == null || this.Email.Length == 0)
-                    return "未设置";
-                else
-                    return "<a href='Mailto:" + this.Email + "' ><img src='/WF/Img/SMS.gif' border=0/>" + this.Email + "</a>";
-            }
-        }
+      
         public string Email
         {
             get

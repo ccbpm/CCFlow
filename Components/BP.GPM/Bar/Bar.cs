@@ -423,7 +423,6 @@ namespace BP.GPM
 
         public string GetDocument()
         {
-
             BarBase barBase = (BarBase)ClassFactory.GetObject_OK(this.No);
             if (barBase == null)
             {

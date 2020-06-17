@@ -10,7 +10,7 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_AttrFlow : BP.WF.HttpHandler.DirectoryPageBase
     {
-         /// <summary>
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_AttrFlow()
@@ -69,7 +69,6 @@ namespace BP.WF.HttpHandler
                                        };
 
 
-            //this.Pub1.AddLi(string.Format("<a href=\"APICodeFEE.aspx?FK_Flow={0}&Download=1\" target=\"_blank\" class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-save',plain:true\">下载代码</a><br />", FK_Flow));
 
             string msg = "<script type=\"text/javascript\">SyntaxHighlighter.highlight();</script>";
             msg += string.Format("<pre type=\"syntaxhighlighter\" class=\"brush: csharp; html-script: false; highlight: [{2}]\" title=\"{0}[编号：{1}] 流程自定义事件代码生成\">", flow.Name, flow.No, APICodeFEE_Init_GetImportantLinesNumbers(lineStrings, code));
@@ -224,7 +223,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtNode);
 
 
-            
+
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
@@ -254,33 +253,33 @@ namespace BP.WF.HttpHandler
 
 
             SFDBSrc s = new SFDBSrc("local");
-            
-                try
-                {
-                    s = new SFDBSrc("local");
-                    string str = flow.DTSFields;
 
-                    string[] arr = str.Split('@');
+            try
+            {
+                s = new SFDBSrc("local");
+                string str = flow.DTSFields;
+
+                string[] arr = str.Split('@');
 
 
-                    string sql = "SELECT " + arr[0] + " FROM " + flow.PTable;
+                string sql = "SELECT " + arr[0] + " FROM " + flow.PTable;
 
-                    s.RunSQL(sql);
+                s.RunSQL(sql);
 
-                    s = new SFDBSrc(flow.DTSDBSrc);
+                s = new SFDBSrc(flow.DTSDBSrc);
 
-                    sql = "SELECT " + arr[1] + ", " + flow.DTSBTablePK
-                        + " FROM " + flow.DTSBTable;
+                sql = "SELECT " + arr[1] + ", " + flow.DTSBTablePK
+                    + " FROM " + flow.DTSBTable;
 
-                    s.RunSQL(sql);
+                s.RunSQL(sql);
 
-                }
-                catch
-                {
-                    //PubClass.Alert(ex.Message);
-                    return "err@设置的字段有误.【" + flow.DTSFields + "】";
-                }
-             
+            }
+            catch
+            {
+                //PubClass.Alert(ex.Message);
+                return "err@设置的字段有误.【" + flow.DTSFields + "】";
+            }
+
             flow.Update();
             return "保存成功";
         }
@@ -361,7 +360,7 @@ namespace BP.WF.HttpHandler
                     err += "@配置【" + attr.KeyOfEn + " - " + attr.Name +
                         "】错误, 请确保选中业务字段的唯一性，该业务字段已经被其他字段所使用。";
                 }
-                lcStr += "" + attr.KeyOfEn + "="+ refField + "@";
+                lcStr += "" + attr.KeyOfEn + "=" + refField + "@";
                 ywStr += "@" + refField + "@,";
             }
 
@@ -377,7 +376,7 @@ namespace BP.WF.HttpHandler
                     err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
                         "】已经被其他字段所使用。";
                 }
-                lcStr = "OID="+ ddl_key + "@" + lcStr;
+                lcStr = "OID=" + ddl_key + "@" + lcStr;
                 ywStr = "@" + ddl_key + "@," + ywStr;
             }
             else
@@ -387,7 +386,7 @@ namespace BP.WF.HttpHandler
                     err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
                         "】已经被其他字段所使用。";
                 }
-                lcStr = "GUID="+ ddl_key + "@" + lcStr;
+                lcStr = "GUID=" + ddl_key + "@" + lcStr;
                 ywStr = "@" + ddl_key + "@," + ywStr;
             }
 
@@ -416,7 +415,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-       
+
 
         #region 前置导航save
         /// <summary>
@@ -459,7 +458,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
                     en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
-                    
+
                     //@李国文.
                     en.StartGuidePara3 = this.GetRequestVal("TB_BySQLOne3");  //单行赋值语句.
                     en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
@@ -502,7 +501,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        
+
 
         #region 流程轨迹查看权限
         /// <summary>
@@ -537,7 +536,7 @@ namespace BP.WF.HttpHandler
         {
             var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
             if (files.Count == 0)
-            return "err@请选择要上传的流程模版。";
+                return "err@请选择要上传的流程模版。";
 
             //设置文件名
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
@@ -623,7 +622,7 @@ namespace BP.WF.HttpHandler
 
             //流程上的字段
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
-            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow)+"rpt", "LGType", 0, "MyDataType", 1);
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow) + "rpt", "LGType", 0, "MyDataType", 1);
             ds.Tables.Add(attrs.ToDataTableField("FrmFields"));
 
             //节点 
@@ -738,14 +737,14 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             string fk_flow = GetRequestVal("FK_Flow");
             //所有的实例数量.
-            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '"+ fk_flow +"'")); //实例数.
+            ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "'")); //实例数.
 
             //所有的待办数量.
             ht.Add("TodolistNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=2 AND Fk_flow = '" + fk_flow + "'"));
-            
+
             //所有的运行中的数量.
             ht.Add("RunNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFSta!=1 AND WFState!=3 AND Fk_flow = '" + fk_flow + "'"));
-            
+
             //退回数.
             ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 AND Fk_flow = '" + fk_flow + "'"));
 

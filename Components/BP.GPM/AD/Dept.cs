@@ -99,7 +99,6 @@ namespace BP.GPM.AD
 
                 Map map = new Map("Port_Dept", "部门");
 
-
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, true, 1, 50, 20);
 
                 //比如xx分公司财务部
@@ -107,7 +106,6 @@ namespace BP.GPM.AD
 
                 //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
-
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
 
                 //顺序号.

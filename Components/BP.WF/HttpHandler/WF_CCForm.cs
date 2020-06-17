@@ -623,13 +623,13 @@ namespace BP.WF.HttpHandler
                     urlParas += "&" + kvs[0] + "=" + kvs[1];
                 }
                 if (md.Url.Contains("?") == true)
-                    return "url@FrmWord.aspx?1=2" + "&" + urlParas;
+                    return "url@FrmWord.htm?1=2" + "&" + urlParas;
                 else
-                    return "url@FrmWord.aspx" + "?" + urlParas;
+                    return "url@FrmWord.htm" + "?" + urlParas;
             }
 
             if (md.HisFrmType == FrmType.ExcelFrm)
-                return "url@FrmExcel.aspx?1=2" + this.RequestParasOfAll;
+                return "url@FrmExcel.htm?1=2" + this.RequestParasOfAll;
 
             #endregion 判断是否是返回的URL.
 

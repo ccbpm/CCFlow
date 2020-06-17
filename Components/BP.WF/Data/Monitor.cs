@@ -643,7 +643,7 @@ namespace BP.WF.Data
 
         #region 构造函数
         /// <summary>
-		/// 产生的工作流程
+		/// 工作实例
 		/// </summary>
 		public Monitor()
 		{
@@ -653,7 +653,7 @@ namespace BP.WF.Data
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(MonitorAttr.WorkID, workId);
             if (qo.DoQuery() == 0)
-                throw new Exception("工作 Monitor [" + workId + "]不存在。");
+                throw new Exception("工作 WF_GenerWorkFlow [" + workId + "]不存在。");
         }
         /// <summary>
         /// 执行修复
@@ -782,10 +782,7 @@ namespace BP.WF.Data
                 return "删除失败@" + ex.Message;
             }
         }
-        public string DoSkip()
-        {
-            return "../../Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
-        }
+      
         /// <summary>
         /// 回滚
         /// </summary>

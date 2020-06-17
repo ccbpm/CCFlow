@@ -449,7 +449,6 @@ namespace BP.WF
 
                 map.AddTBString(BillAttr.FK_NY, null, "隶属年月", true, true, 0, 50, 5);
 
-
                 map.AddTBString(BillAttr.Emps, null, "Emps", false, false, 0, 4000, 5);
 
                 map.AddTBString(BillAttr.FK_Node, null, "节点", false, false, 0, 30, 5);

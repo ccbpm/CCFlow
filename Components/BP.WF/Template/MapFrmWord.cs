@@ -508,10 +508,7 @@ namespace BP.WF.Template
 		{
 			return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
 		}
-		public string DoWordFrm()
-		{
-			return "../../Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
-		}
+	 
 		 
 		public string DoPageLoadFull()
 		{

@@ -698,12 +698,6 @@ namespace BP.WF.Data
             if (qo.DoQuery() == 0)
                 throw new Exception("工作 MyDeptFlow [" + workId + "]不存在。");
         }
-        /// <summary>
-        /// 执行修复
-        /// </summary>
-        public void DoRepair()
-        { 
-        }
 		/// <summary>
 		/// 重写基类方法
 		/// </summary>

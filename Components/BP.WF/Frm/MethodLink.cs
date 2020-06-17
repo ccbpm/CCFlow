@@ -124,11 +124,16 @@ namespace BP.Frm
 
                 map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
-                map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, true, "RefMethodTypeLink",
-                  "@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
 
                 map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", true, true, MethodAttr.ShowModel,
-                 "@0=按钮@1=超链接");
+            "@0=按钮@1=超链接");
+
+                map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "页面打开方式", true, true, "RefMethodTypeLink",
+                  "@0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面");
+           
+                map.AddTBInt(MethodAttr.PopWidth, 500, "宽度", true, false);
+                map.AddTBInt(MethodAttr.PopHeight, 700, "高度", true, false);
+
 
                 map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
                 map.AddTBStringDoc(MethodAttr.MethodDoc_Url, null, "连接URL", true, false);

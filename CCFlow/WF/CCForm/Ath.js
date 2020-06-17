@@ -306,7 +306,8 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             if (pageData.IsReadonly != "1") {
                 if (athDesc.DeleteWay == 1)//删除所有
                     _html += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
-                if (athDesc.DeleteWay == 2 && db.Rec == WebUser.No)//删除自己上传的
+                var webuser = new WebUser();
+                if (athDesc.DeleteWay == 2 && db.Rec == webuser.No)//删除自己上传的
                     _html += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
             }
             _html += "</td>";

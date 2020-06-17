@@ -137,9 +137,15 @@ namespace BP.WF.HttpHandler
             string word = this.GetRequestVal("DDL_WordKey"); //字号
             string ny = this.GetRequestVal("DDL_Year"); //年月. 
 
+            //判断这个字号和年月是否已经存在这个表中，存在不要生成
+            string sql = "SELECT DocWordLSH  FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny + "' AND OID=" + this.OID;
+            string lsh = DBAccess.RunSQLReturnStringIsNull(sql,"");
+            if (DataType.IsNullOrEmpty(lsh) == false)
+                return lsh;
+
             //生成一个新的流水号.
-            string sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
-            string lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
+            lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
                 lsh = "0";
 

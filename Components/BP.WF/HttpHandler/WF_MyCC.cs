@@ -583,15 +583,16 @@ namespace BP.WF.HttpHandler
                 DataRow dr = dt.NewRow();
                 if(isCheckOver == true)
                 {
-                    dr["No"] = "ReadAndClose";
-                    dr["Name"] = "阅件完毕";
-                    dr["Oper"] = "ReadAndClose();";
-                }
-                else
-                {
                     dr["No"] = "Close";
                     dr["Name"] = "关闭";
                     dr["Oper"] = "CloseWindow();";
+                }
+                else
+                {
+                    dr["No"] = "ReadAndClose";
+                    dr["Name"] = "阅件完毕";
+                    dr["Oper"] = "ReadAndClose();";
+                    
                 }
                 
                 dt.Rows.Add(dr);

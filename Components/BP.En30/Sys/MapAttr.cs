@@ -1594,9 +1594,10 @@ namespace BP.Sys
             return "执行成功";
         }
         //字段插队
-        public string DoInsertTo()
+        public string DoInsertTo(string entityPK)
         {
-            this.DoOrderInsertTo(MapAttrAttr.Idx,this.MyPK,MapAttrAttr.GroupID);
+            this.DoOrderInsertTo(MapAttrAttr.Idx, entityPK, MapAttrAttr.GroupID);
+
             MapAttr attr = new MapAttr();
             attr.MyPK = this.FK_MapData + "_Title";
             if (attr.RetrieveFromDBSources() == 1)

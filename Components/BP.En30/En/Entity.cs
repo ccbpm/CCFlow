@@ -1053,8 +1053,9 @@ namespace BP.En
             //求出来要被插队的 idx.
             string sql = "SELECT " + idxAttr + "," + groupKey + " FROM " + ptable + " WHERE " + pk + "='" + entityPKVal + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            int idxFirst = int.Parse(dt.Rows[0].ToString());
-            string groupValFirst = dt.Rows[1].ToString();
+
+            int idxFirst = int.Parse(dt.Rows[0][0].ToString());
+            string groupValFirst = dt.Rows[0][1].ToString();
 
             sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, " + groupKey + "='" + groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
             DBAccess.RunSQL(sql);

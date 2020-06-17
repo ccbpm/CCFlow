@@ -13,7 +13,7 @@ namespace BP.WF
         /// <summary>
         /// 工作ID
         /// </summary>
-        public Int64 WorkID=0;
+        public Int64 WorkID = 0;
         public Int64 FID = 0;
         /// <summary>
         /// 节点ID
@@ -23,7 +23,7 @@ namespace BP.WF
         /// 流程编号
         /// </summary>
         public string FlowNo = null;
-        public WorkCheck(string flowNo, int nodeID, Int64 workid,Int64 fid)
+        public WorkCheck(string flowNo, int nodeID, Int64 workid, Int64 fid)
         {
             this.FlowNo = flowNo;
             this.NodeID = nodeID;
@@ -81,7 +81,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                return 0;  
+                return 0;
             }
         }
         public Tracks HisWorkChecks
@@ -129,67 +129,12 @@ namespace BP.WF
 
                     dt.DefaultView.Sort = "RDT desc";
 
-                    BP.En.Attrs attrs = _HisWorkChecks.GetNewEntity.EnMap.Attrs;
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        Track en = new Track();
-                        foreach (BP.En.Attr attr in attrs)
-                            en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-
-                        _HisWorkChecks.AddEntity(en);
-                    }
+                    //放入到track里面.
+                    BP.En.QueryObject.InitEntitiesByDataTable(_HisWorkChecks, dt, null);
                 }
                 return _HisWorkChecks;
             }
         }
         private Tracks _HisWorkChecks = null;
-        public Tracks HisWorkChecks_New
-        {
-            get
-            {
-                if (_HisWorkChecks == null)
-                {
-                    _HisWorkChecks = new Tracks();
-
-                    BP.DA.Paras ps = new BP.DA.Paras();
-                    string sql = "SELECT * FROM ND" + int.Parse(this.FlowNo) + "Track WHERE ";
-                    string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                    if (this.FID == 0)
-                    {
-                        // 为了兼容多种数据库，所以使用了两个相同的参数.
-                        sql += " WorkID=" + dbstr + "WorkID OR FID=" + dbstr + "FID ORDER BY RDT DESC ";
-                        ps.Add("WorkID", this.WorkID);
-                        ps.Add("FID", this.WorkID);
-                    }
-                    else
-                    {
-                        //sql += " WorkID=" + dbstr + "WorkID OR WorkID=" + dbstr + "FID ORDER BY RDT DESC ";
-                        // ps.Add("WorkID", this.WorkID);
-                        // ps.Add("FID", this.FID);
-                     //   qo.AddWhereIn(TrackAttr.WorkID, "(" + this.WorkID + "," + this.FID + ")");
-
-                        sql += " WorkID=" + dbstr + "WorkID OR WorkID=" + dbstr + "FID ORDER BY RDT DESC ";
-                        ps.Add("WorkID", this.WorkID);
-                        ps.Add("FID", this.FID);
-                    }
-
-                    ps.SQL = sql;
-
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-
-                    //获得Attrs
-                    BP.En.Attrs attrs=_HisWorkChecks.GetNewEntity.EnMap.Attrs;
-                     foreach (DataRow dr in dt.Rows)
-                    {
-                        Track en = new Track();
-                        foreach (BP.En.Attr attr in attrs)
-                            en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-
-                        _HisWorkChecks.AddEntity(en);
-                    }
-                }
-                return _HisWorkChecks;
-            }
-        }
     }
 }

@@ -1617,8 +1617,8 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
-            tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
-            tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
+            //tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
+            //tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             tkDt.Columns.Add("ActionType", typeof(int));
             tkDt.Columns.Add("Tag", typeof(string));
             tkDt.Columns.Add("FWCView", typeof(string));
@@ -2209,8 +2209,8 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
-            tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
-            tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
+            //tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
+            //tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             tkDt.Columns.Add("ActionType", typeof(int));
             tkDt.Columns.Add("Tag", typeof(string));
             tkDt.Columns.Add("FWCView", typeof(string));
@@ -2298,71 +2298,18 @@ namespace BP.WF.HttpHandler
             {
                 tks = wc.HisWorkChecks;
 
-                //已走过节点
-                int empIdx = 0;
-                int lastNodeId = 0;
-                foreach (BP.WF.Track tk in tks)
-                {
-                    if (tk.HisActionType == ActionType.FlowBBS)
-                        continue;
-
-                    if (lastNodeId == 0)
-                        lastNodeId = tk.NDFrom;
-
-                    if (lastNodeId != tk.NDFrom)
-                    {
-                        idx++;
-                        lastNodeId = tk.NDFrom;
-                    }
-
-                    tk.Row.Add("T_NodeIndex", idx);
-
-                    nd = nds.GetEntityByKey(tk.NDFrom) as Node;
-                    if (nd == null)
-                        continue;
-
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
-                    //求出主键
-                    long pkVal = this.WorkID;
-                    if (nd.HisRunModel == RunModel.SubThread)
-                        pkVal = this.FID;
-
-                    //排序，结合人员表Idx进行排序
-                    if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
-                    {
-                        tk.Row["T_CheckIndex"] =
-                            DBAccess.RunSQLReturnValInt(
-                                string.Format("SELECT Idx FROM Port_Emp WHERE No='{0}'", tk.EmpFrom), 0);
-                        noneEmpIdx++;
-                    }
-                    else
-                    {
-                        tk.Row["T_CheckIndex"] = noneEmpIdx++;
-                    }
-                    switch (tk.HisActionType)
-                    {
-                        case ActionType.WorkCheck:
-                        case ActionType.StartChildenFlow:
-                            if (nodes.Contains(tk.NDFrom + ",") == false)
-                                nodes += tk.NDFrom + ",";
-                            break;
-                        case ActionType.Return:
-                            if (wcDesc.FWCIsShowReturnMsg == true && tk.NDTo == this.FK_Node)
-                            {
-                                if (nodes.Contains(tk.NDFrom + ",") == false)
-                                    nodes += tk.NDFrom + ",";
-                            }
-                            break;
-                        default:
-                            continue;
-                    }
-                }
 
                 foreach (Track tk in tks)
                 {
-                    if (nodes.Contains(tk.NDFrom + ",") == false)
-                        continue;
+                    if (tk.HisActionType == ActionType.ForwardHL)
+                    {
+                        var sss = "";
+                    }
 
+                    //if (nodes.Contains(tk.NDFrom + ",") == false)
+                     //   continue;
+
+                  
 
                     //退回
                     if (tk.HisActionType == ActionType.Return)
@@ -2373,7 +2320,10 @@ namespace BP.WF.HttpHandler
                     }
 
                     //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
-                    if (tk.NDFrom == this.FK_Node && isCanDo == true && tk.EmpFrom != WebUser.No && checkerPassed.Contains("," + tk.EmpFrom + ",") == false)
+                    if (tk.NDFrom == this.FK_Node
+                        && isCanDo == true 
+                        && tk.EmpFrom != WebUser.No 
+                        && checkerPassed.Contains("," + tk.EmpFrom + ",") == false)
                         continue;
 
                     if (tk.NDFrom == this.FK_Node && gwf.HuiQianTaskSta != HuiQianTaskSta.None)
@@ -2395,7 +2345,7 @@ namespace BP.WF.HttpHandler
                         case ActionType.ForwardAskfor:
                         case ActionType.Start:
                         case ActionType.UnSend:
-                        //case ActionType.ForwardFL:
+                       // case ActionType.ForwardFL:
                         case ActionType.ForwardHL:
                         case ActionType.SubThreadForward:
                         case ActionType.TeampUp:
@@ -2418,8 +2368,8 @@ namespace BP.WF.HttpHandler
 
                             row["ParentNode"] = 0;
                             row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
-                            row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
-                            row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
+                            //row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
+                            //row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
                             row["Msg"] = tk.MsgHtml;
  
@@ -2468,7 +2418,8 @@ namespace BP.WF.HttpHandler
                             #endregion
 
                             #region //子流程的审核组件数据
-                            if (tk.FID != 0 && tk.HisActionType == ActionType.StartChildenFlow && tkDt.Select("ParentNode=" + tk.NDFrom).Length == 0)
+                            if (tk.FID != 0 
+                                && tk.HisActionType == ActionType.StartChildenFlow && tkDt.Select("ParentNode=" + tk.NDFrom).Length == 0)
                             {
                                 string[] paras = tk.Tag.Split('@');
                                 string[] p1 = paras[1].Split('=');
@@ -2518,8 +2469,8 @@ namespace BP.WF.HttpHandler
                                             row["RDT"] = mysubtk.RDT;
                                             row["IsDoc"] = false;
                                             row["ParentNode"] = tk.NDFrom;
-                                            row["T_NodeIndex"] = idx++;
-                                            row["T_CheckIndex"] = noneEmpIdx++;
+                                           // row["T_NodeIndex"] = idx++;
+                                           // row["T_CheckIndex"] = noneEmpIdx++;
                                             row["ActionType"] = mysubtk.HisActionType;
                                             row["Tag"] = mysubtk.Tag;
                                             tkDt.Rows.Add(row);
@@ -2604,8 +2555,8 @@ namespace BP.WF.HttpHandler
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
                         row["DeptName"] = WebUser.FK_DeptName;
-                        row["T_NodeIndex"] = ++idx;
-                        row["T_CheckIndex"] = ++noneEmpIdx;
+                        //row["T_NodeIndex"] = ++idx;
+                        //row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
                         row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                         tkDt.Rows.Add(row);
@@ -2624,8 +2575,8 @@ namespace BP.WF.HttpHandler
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
                     row["DeptName"] = WebUser.FK_DeptName;
-                    row["T_NodeIndex"] = ++idx;
-                    row["T_CheckIndex"] = ++noneEmpIdx;
+                    //row["T_NodeIndex"] = ++idx;
+                    //row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
                     row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                     tkDt.Rows.Add(row);
@@ -2669,8 +2620,8 @@ namespace BP.WF.HttpHandler
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
                 row["DeptName"] = "";
-                row["T_NodeIndex"] = ++idx;
-                row["T_CheckIndex"] = ++noneEmpIdx;
+                //row["T_NodeIndex"] = ++idx;
+                //row["T_CheckIndex"] = ++noneEmpIdx;
 
                 tkDt.Rows.Add(row);
             }

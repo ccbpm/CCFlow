@@ -1104,11 +1104,10 @@ namespace BP.WF.HttpHandler
                         default:
                             break;
                     }
-
                 }
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
-                    this.FID, BP.Web.WebUser.No);
+                    this.FID, BP.Web.WebUser.No,"1", true);
 
                 //Node nd = new Node(this.FK_Node);
                 //if (nd.HisFormType == NodeFormType.SheetTree)

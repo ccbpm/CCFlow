@@ -33,10 +33,9 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
-        public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0")
+        public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0",
+            bool isView = false)
         {
-            if (workID == 0)
-                throw new Exception("err@参数workid错误.");
 
             try
             {
@@ -69,7 +68,7 @@ namespace BP.WF
                 #region 处理表单权限控制方案: 如果是绑定单个表单的时候. 
                 /*处理表单权限控制方案: 如果是绑定单个表单的时候. */
 
-                //这两个变量在累加表单用到. 
+                //这两个变量在累加表单用到.
                 FrmNode frmNode = new FrmNode();
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree
@@ -538,7 +537,7 @@ namespace BP.WF
                 }
 
                 //执行表单事件
-                string msg = ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, wk);
+                string msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, wk);
                 if (DataType.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
@@ -546,11 +545,11 @@ namespace BP.WF
                 MapExts mes = md.MapExts;
                 string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
                 MapExt me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
-                if (me!=null)
+                if (me != null)
                 {
                     //执行通用的装载方法.
-                    MapAttrs attrs = md.MapAttrs; 
-                    MapDtls dtls = md.MapDtls; 
+                    MapAttrs attrs = md.MapAttrs;
+                    MapDtls dtls = md.MapDtls;
                     wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
                 }
 
@@ -650,129 +649,137 @@ namespace BP.WF
                 #endregion End把外键表加入DataSet
 
                 #region 处理流程-消息提示.
-                DataTable dtAlert = new DataTable();
-                dtAlert.TableName = "AlertMsg";
-                dtAlert.Columns.Add("Title", typeof(string));
-                dtAlert.Columns.Add("Msg", typeof(string));
-                dtAlert.Columns.Add("URL", typeof(string));
-
-                //  string msg = "";
-                switch (gwf.WFState)
+                if (isView == true || fromWorkOpt.Equals("1"))
                 {
-                    case WFState.AskForReplay: // 返回加签的信息.
-                        string mysql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
+                    //如果是查看模式，或者是从WorkOpt打开模式,就不让其显示消息.
+                }
+                else
+                {
+                    DataTable dtAlert = new DataTable();
+                    dtAlert.TableName = "AlertMsg";
+                    dtAlert.Columns.Add("Title", typeof(string));
+                    dtAlert.Columns.Add("Msg", typeof(string));
+                    dtAlert.Columns.Add("URL", typeof(string));
 
-                        DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(mysql);
-                        foreach (DataRow dr in mydt.Rows)
-                        {
-                            string msgAskFor = dr[TrackAttr.Msg].ToString();
-                            string worker = dr[TrackAttr.EmpFrom].ToString();
-                            string workerName = dr[TrackAttr.EmpFromT].ToString();
-                            string rdt = dr[TrackAttr.RDT].ToString();
+                    //  string msg = "";
+                    switch (gwf.WFState)
+                    {
+                        case WFState.AskForReplay: // 返回加签的信息.
+                            string mysql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
 
-                            DataRow drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = worker + "," + workerName + "回复信息:";
-                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt;
-                            dtAlert.Rows.Add(drMsg);
-                        }
-                        break;
-                    case WFState.Askfor: //加签.
-
-                        sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            string msgAskFor = dr[TrackAttr.Msg].ToString();
-                            string worker = dr[TrackAttr.EmpFrom].ToString();
-                            string workerName = dr[TrackAttr.EmpFromT].ToString();
-                            string rdt = dr[TrackAttr.RDT].ToString();
-
-                            DataRow drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = worker + "," + workerName + "请求加签:";
-                            drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
-                            dtAlert.Rows.Add(drMsg);
-
-                            //提示信息.
-                            // this.FlowMsg.AlertMsg_Info(worker + "," + workerName + "请求加签:",
-                            //   DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + " --<a href='./WorkOpt/AskForRe.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "' >回复加签意见</a> --");
-                        }
-                        // isAskFor = true;
-                        break;
-                    case WFState.ReturnSta:
-                        /* 如果工作节点退回了*/
-                        ReturnWorks rws = new ReturnWorks();
-                        rws.Retrieve(ReturnWorkAttr.ReturnToNode, nd.NodeID,
-                            ReturnWorkAttr.WorkID, workID,
-                            ReturnWorkAttr.RDT);
-
-                        if (rws.Count != 0)
-                        {
-                            string msgInfo = "";
-                            foreach (BP.WF.ReturnWork rw in rws)
+                            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(mysql);
+                            foreach (DataRow dr in mydt.Rows)
                             {
-                                //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
-                                msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
-                                msgInfo += rw.BeiZhuHtml;
-                            }
-
-                            string str = nd.ReturnAlert;
-                            if (str != "")
-                            {
-                                str = str.Replace("~", "'");
-                                str = str.Replace("@PWorkID", workID.ToString());
-                                str = str.Replace("@PNodeID", nd.NodeID.ToString());
-                                str = str.Replace("@FK_Node", nd.NodeID.ToString());
-
-                                str = str.Replace("@PFlowNo", fk_flow);
-                                str = str.Replace("@FK_Flow", fk_flow);
-                                str = str.Replace("@PWorkID", workID.ToString());
-
-                                str = str.Replace("@WorkID", workID.ToString());
-                                str = str.Replace("@OID", workID.ToString());
+                                string msgAskFor = dr[TrackAttr.Msg].ToString();
+                                string worker = dr[TrackAttr.EmpFrom].ToString();
+                                string workerName = dr[TrackAttr.EmpFromT].ToString();
+                                string rdt = dr[TrackAttr.RDT].ToString();
 
                                 DataRow drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "退回信息";
-                                drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                drMsg["Title"] = worker + "," + workerName + "回复信息:";
+                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt;
                                 dtAlert.Rows.Add(drMsg);
                             }
-                            else
+                            break;
+                        case WFState.Askfor: //加签.
+
+                            sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
+                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                string msgAskFor = dr[TrackAttr.Msg].ToString();
+                                string worker = dr[TrackAttr.EmpFrom].ToString();
+                                string workerName = dr[TrackAttr.EmpFromT].ToString();
+                                string rdt = dr[TrackAttr.RDT].ToString();
+
+                                DataRow drMsg = dtAlert.NewRow();
+                                drMsg["Title"] = worker + "," + workerName + "请求加签:";
+                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
+                                dtAlert.Rows.Add(drMsg);
+
+                                //提示信息.
+                                // this.FlowMsg.AlertMsg_Info(worker + "," + workerName + "请求加签:",
+                                //   DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + " --<a href='./WorkOpt/AskForRe.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "' >回复加签意见</a> --");
+                            }
+                            // isAskFor = true;
+                            break;
+                        case WFState.ReturnSta:
+                            /* 如果工作节点退回了*/
+                            ReturnWorks rws = new ReturnWorks();
+                            rws.Retrieve(ReturnWorkAttr.ReturnToNode, nd.NodeID,
+                                ReturnWorkAttr.WorkID, workID,
+                                ReturnWorkAttr.RDT);
+
+                            if (rws.Count != 0)
+                            {
+                                string msgInfo = "";
+                                foreach (BP.WF.ReturnWork rw in rws)
+                                {
+                                    //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
+                                    msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
+                                    msgInfo += rw.BeiZhuHtml;
+                                }
+
+                                string str = nd.ReturnAlert;
+                                if (str != "")
+                                {
+                                    str = str.Replace("~", "'");
+                                    str = str.Replace("@PWorkID", workID.ToString());
+                                    str = str.Replace("@PNodeID", nd.NodeID.ToString());
+                                    str = str.Replace("@FK_Node", nd.NodeID.ToString());
+
+                                    str = str.Replace("@PFlowNo", fk_flow);
+                                    str = str.Replace("@FK_Flow", fk_flow);
+                                    str = str.Replace("@PWorkID", workID.ToString());
+
+                                    str = str.Replace("@WorkID", workID.ToString());
+                                    str = str.Replace("@OID", workID.ToString());
+
+                                    DataRow drMsg = dtAlert.NewRow();
+                                    drMsg["Title"] = "退回信息";
+                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                    dtAlert.Rows.Add(drMsg);
+                                }
+                                else
+                                {
+                                    DataRow drMsg = dtAlert.NewRow();
+                                    drMsg["Title"] = "退回信息";
+                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                    dtAlert.Rows.Add(drMsg);
+                                }
+                            }
+                            break;
+                        case WFState.Shift:
+                            /* 判断移交过来的。 */
+
+
+                            string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
+                            DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
+
+                            if (dtshift.Rows.Count >= 1)
                             {
                                 DataRow drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "退回信息";
-                                drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                drMsg["Title"] = "移交历史信息";
+                                msg = "";
+                                foreach (DataRow dr in dtshift.Rows)
+                                {
+                                    string empFromT = dr[TrackAttr.EmpFromT].ToString();
+                                    string empToT = dr[TrackAttr.EmpToT].ToString();
+                                    string msgShift = dr[TrackAttr.Msg].ToString();
+
+                                    string temp = "@移交人[" + empFromT + "]。@接受人：" + empToT + "。<br>移交原因：-------------" + msgShift;
+                                    temp = temp.Replace("@", "<br>@");
+                                    msg += temp + "<hr/>";
+                                }
+
+                                drMsg["Msg"] = msg;
                                 dtAlert.Rows.Add(drMsg);
                             }
-                        }
-                        break;
-                    case WFState.Shift:
-                        /* 判断移交过来的。 */
-                      
-
-                        string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
-                        DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
-
-                        if (dtshift.Rows.Count >= 1)
-                        {
-                            DataRow drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = "移交历史信息";
-                            msg = "";
-                            foreach (DataRow dr in dtshift.Rows)
-                            {
-                                string empFromT = dr[TrackAttr.EmpFromT].ToString();
-                                string empToT = dr[TrackAttr.EmpToT].ToString();
-                                string msgShift = dr[TrackAttr.Msg].ToString();
-
-                                string temp = "@移交人[" + empFromT + "]。@接受人：" + empToT  + "。<br>移交原因：-------------" + msgShift;
-                                temp = temp.Replace("@", "<br>@");
-                                msg += temp + "<hr/>";
-                            }
-
-                            drMsg["Msg"] = msg;
-                            dtAlert.Rows.Add(drMsg);
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
+                    myds.Tables.Add(dtAlert);
                 }
                 #endregion
 
@@ -788,8 +795,6 @@ namespace BP.WF
                     myds.Tables.Add(fn.ToDataTableField("FrmNode"));
                 }
                 #endregion 增加流程节点表单绑定信息.
-
-                myds.Tables.Add(dtAlert);
 
                 // myds.WriteXml("c:\\11.xml");
 

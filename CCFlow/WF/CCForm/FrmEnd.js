@@ -1098,7 +1098,7 @@ function calculator(o) {
     $.each(targets, function (i, o) {
         var target = o.replace("@", "");
         var element = "$(':input[name=TB_" + target + "]')";
-        expression.judgement.push(element + ".length == 0");
+        expression.judgement.push(element + ".length==0");
         expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val().replace(/,/g,'')))");
         expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val().replace(/,/g,''))");
     });
@@ -1109,24 +1109,23 @@ function calculator(o) {
 
             $(":input[name=TB_" + target + "]").bind("change", function () {
 
-                var evalExpression = " var result = ''; ";
+                var evalExpression = "var result = '';";
                 if (expression.judgement.length > 0) {
-                    evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
-                    evalExpression += " 	alert(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
-                    // evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+                    var str = "if(" + expression.judgement.join("||") + "){";
+                    evalExpression += str.replace(/\s|\xA0/g, "");
+                    evalExpression += "alert('MyPk:" + pk + ",表达式:[" + expDefined.replace(/\s|\xA0/g, "") + "]" + "中有对象在当前页面不存在');"
 
-                    evalExpression += " } ";
+                    evalExpression += "} ";
                 }
                 if (expression.execute_judgement.length > 0) {
-                    evalExpression += " else if ( " + expression.execute_judgement.join(" && ") + " ) { ";
+                    evalExpression += "else if(" + expression.execute_judgement.join("&&").replace(/\s|\xA0/g, "") + "){";;
                 }
                 if (expression.calculate.length > 0) {
-                    evalExpression += " 	result = " + expression.calculate + "; ";
+                    evalExpression += "result=" + expression.calculate.replace(/\s|\xA0/g, "") + "; ";
                 }
                 if (expression.execute_judgement.length > 0) {
-                    evalExpression += " } ";
+                    evalExpression += "} ";
                 }
-
                 eval(evalExpression);
 
                 if (typeof result != "undefined") {

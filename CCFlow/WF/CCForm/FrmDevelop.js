@@ -94,7 +94,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
         //数值型的字段
         if (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1"
             //浮点型，双精度，整型，金额类型
-            && (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || mapAttr.MyDataType == 2 || mapAttr.MyDataType == 8)) {
+            && (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || (mapAttr.MyDataType == 2 && mapAttr.LGType==0) || mapAttr.MyDataType == 8)) {
             var obj = $("#TB_" + mapAttr.KeyOfEn);
             if (mapAttr.IsSecret)
                 obj.attr("type", password);
@@ -124,7 +124,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
                     valitationAfter(this, 'float');
 
             });
-           
                
             continue;
         }
@@ -174,6 +173,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
             //枚举下拉框
             if (mapAttr.UIContralType == 1) {
                 //重新生成枚举下拉框的值
+
+                debugger
                 var _html = InitDDLOperation(frmData, mapAttr, null);
                 $("#DDL_" + mapAttr.KeyOfEn).empty();
                 $("#DDL_" + mapAttr.KeyOfEn).append(_html);

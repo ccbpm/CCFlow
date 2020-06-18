@@ -11,6 +11,7 @@ AthParams.AthInfo = {};
 * @param athDivID 生成的附件信息追加的位置
 */
 function AthTable_Init(athchment, athDivID) {
+    debugger;
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
     AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
@@ -111,6 +112,7 @@ function InitAthPage(athDivID, uploadUrl) {
     data = JSON.parse(data);
     athDesc = data["AthDesc"][0]; // 附件属性
     var dbs = data["DBAths"];  // 附件列表数据
+    console.log(dbs);
 
     //2.自定义表单模式.
     if (athDesc.AthRunModel == 2) {
@@ -200,7 +202,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             _html += "<th  style='" + colstyle + "width:200px'>文件名</th>";
         else
             _html += "<th  style='" + colstyle + "width:200px'>文件名<div style='float:right' id='fileUpload_" + athDesc.MyPK+"' class='fileUploadContent'></div> </th>";
-        _html += "<th  style='" + colstyle + "width:50px;'>大小KB</th>";
+        //_html += "<th  style='" + colstyle + "width:50px;'>大小KB</th>";
         _html += "<th  style='" + colstyle + "width:120px;'>上传时间</th>";
         _html += "<th  style='" + colstyle + "width:80px;'>上传人</th>";
         //增加了扩展列
@@ -276,7 +278,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             _html += "<td><a href=\"javascript:AthView('" + athDesc.MyPK + "','" + AthParams.PKVal + "','" + db.MyPK + "');\" ><img src='" + currImgPath + "/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='" + currImgPath+"/FileType/Undefined.gif'\" />" + db.FileName + "</td>";
 
             //③附件大小
-            _html += "<td>" + db.FileSize + "</td>";
+            //_html += "<td>" + db.FileSize + "</td>";
             //④上传时间
             _html += "<td>" + db.RDT + "</td>";
             //⑤上传人

@@ -464,7 +464,7 @@ namespace BP.GPM
                     BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FreeFrm);
 
                 //更改单据属性.
-                BP.Frm.FrmBill fb = new BP.Frm.FrmBill(no);
+                BP.CCBill.FrmBill fb = new BP.CCBill.FrmBill(no);
                 fb.No = no;
                 fb.Name = name;
                 fb.PTable = ptable;

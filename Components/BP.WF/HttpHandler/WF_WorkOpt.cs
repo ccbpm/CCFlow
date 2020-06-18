@@ -1826,7 +1826,7 @@ namespace BP.WF.HttpHandler
                     row["ParentNode"] = 0;
                     row["RDT"] = DataType.IsNullOrEmpty(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && DataType.IsNullOrEmpty(tk.Msg) ? "" : tk.RDT;
                     //row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
-                    row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
+                    //row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
                     if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                         wcDesc.HisFrmWorkCheckType == FWCType.Check || (

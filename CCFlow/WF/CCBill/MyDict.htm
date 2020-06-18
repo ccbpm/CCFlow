@@ -75,7 +75,7 @@
 
             if (workID == 0) {
 
-                var handler = new HttpHandler("BP.Frm.WF_CCBill");
+                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                 handler.AddUrlData();
                 var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
 
@@ -93,10 +93,10 @@
 
             //获得单据模版信息.
             var frmID = GetQueryString("FrmID");
-            var frmBill = new Entity("BP.Frm.FrmDict", frmID);
+            var frmBill = new Entity("BP.CCBill.FrmDict", frmID);
 
             //获取表单的操作权限
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
             handler.AddPara("FrmID", frmID);
             var power = handler.DoMethodReturnString("CCFrom_FrmPower");
             if (power.indexOf("err@") != -1) {
@@ -176,7 +176,7 @@
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
             //获得当前的集合.
-            var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
+            var fms = new Entities("BP.CCBill.Template.Methods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
 
@@ -194,7 +194,7 @@
         }
 
         function OpenSetting() {
-            var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + GetQueryString("FrmID");
             WinOpenFull(url);
         }
 
@@ -202,7 +202,7 @@
         function Done(msg, funMyPK, methodName, afterOper, w, h, methodType) {
             //打开链接
             if (methodType != 0) {
-                var mlink = new Entity("BP.Frm.MethodLink", funMyPK);
+                var mlink = new Entity("BP.CCBill.Template.MethodLink", funMyPK);
                 var linkUrl = mlink.MethodDoc_Url;
                 if (linkUrl != null && linkUrl != undefined && linkUrl != "") {
                     linkUrl = linkUrl.replace("@basePath", basePath);
@@ -334,7 +334,7 @@
                 return;
 
             //2 保存其他字段.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             //组织数据.
             var dataStrs = getFormData(true, true);
@@ -372,7 +372,7 @@
             if (beforeSaveOrSendDel() == false)
                 return;
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             //组织数据.
             var dataStrs = getFormData(true, true);
@@ -610,7 +610,7 @@
         function DeleteIt() {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyDict_Delete");
             alert(data);
@@ -633,7 +633,7 @@
 
         function NewIt() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
             if (data != null && data != undefined && data.indexOf('err@') > 0) {

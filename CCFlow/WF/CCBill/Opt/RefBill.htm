@@ -124,7 +124,7 @@
 
             pageIdx = GetQueryString("PageIdx");//当前页
 
-            frmBill = new Entity("BP.Frm.FrmBill", frmID);
+            frmBill = new Entity("BP.CCBill.FrmBill", frmID);
             document.title = frmBill.Name;
 
          
@@ -157,7 +157,7 @@
 
         function Init_ToolBar() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("Search_ToolBar");
             if (data.indexOf('err@') == 0) {
@@ -205,7 +205,7 @@
     
         function SearchData() {
             //创建处理器.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData()
             handler.AddPara("SearchKey",$("#TB_Key").val());
             handler.AddPara("DTFrom",$("#TB_DTFrom").val());
@@ -445,7 +445,7 @@
         return icon;
     }
     function RefBill_Done(PWorkID){
-        var handler = new HttpHandler("BP.Frm.WF_CCBill_Opt");
+        var handler = new HttpHandler("BP.CCBill.WF_CCBill_Opt");
         handler.AddPara("PWorkID",PWorkID);
         handler.AddPara("PFrmID",GetQueryString("PFrmID"));
         handler.AddPara("WorkID",GetQueryString("WorkID"));

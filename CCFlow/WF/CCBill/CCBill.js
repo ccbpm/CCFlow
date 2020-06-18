@@ -22,7 +22,7 @@ function Port_Login(userNo) {
  * 2. 我们提供了一个通用的百搭款的风格的页面. /WF/CCBill/Start.htm
  * */
 function CCFrom_GenerFrmListOfCanOption() {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     var data = handler.DoMethodReturnJSON("CCFrom_GenerFrmListOfCanOption");
     return data;
 }
@@ -32,7 +32,7 @@ function CCFrom_GenerFrmListOfCanOption() {
  * @param {执行的目录树下的单据} specTreeNo
  */
 function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("TreeNo", specTreeNo);
     var data = handler.DoMethodReturnJSON("CCFrom_GenerFrmListBySpecTreeNo");
     return data;
@@ -45,7 +45,7 @@ function CCFrom_GenerFrmListBySpecTreeNo(specTreeNo) {
  * @param {单据编号} billNo
  */
 function CCFrom_GenerBillsByBillNo(billNo) {
-    var ens = new Entities("BP.Frm.GenerBills");
+    var ens = new Entities("BP.CCBill.GenerBills");
     ens.Retrieve("BillNo", billNo);
     return ens;
 }
@@ -56,7 +56,7 @@ function CCFrom_GenerBillsByBillNo(billNo) {
  * 返回 IsView, IsNew, IsSubmit, IsUpdate IsDelete 的json.
  */
 function CCFrom_FrmPower(frmID) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     var data = handler.DoMethodReturnJSON("CCFrom_FrmPower");
     return data;
@@ -110,7 +110,7 @@ function CCFrom_FrmViewUrlByBillNo(frmID, billNo) {
  * @param {表单ID} frmID.
  */
 function CCForm_CreateBlankOID(frmID) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     var oid = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
     return oid;
@@ -122,7 +122,7 @@ function CCForm_CreateBlankOID(frmID) {
  * @param {主键} oid
  */
 function CCForm_SaveAsDraftByOID(frmID, oid) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
 
@@ -134,7 +134,7 @@ function CCForm_SaveAsDraftByOID(frmID, oid) {
  * @param {单据编号} BillNo
  */
 function CCForm_SaveAsDraftByBillNo(frmID, billNo) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("BillNo", billNo);
     // var billOID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
@@ -152,7 +152,7 @@ function CCForm_SaveAsDraftByBillNo(frmID, billNo) {
  */
 function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
 
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", specOID);
     handler.AddPara("Title", specTitle);
@@ -173,7 +173,7 @@ function CCFrom_NewFrmEntityAsSpecOID(frmID, specOID, specTitle, paras) {
  * @param {主表字段的参数，一个key val 的strs格式的数据,比如:@Name=zhangsan@Age=12@Add=山东济南} paras
  */
 function CCFrom_NewFrmEntityAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("BillNo", specBillNo);
     handler.AddPara("Title", specTitle);
@@ -197,7 +197,7 @@ function CCFrom_NewFrmEntityAsSpecBillNo(frmID, specBillNo, specTitle, paras) {
  */
 function CCFrom_NewFrmEntity(frmID, specTitle, paras) {
 
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("Title", specTitle);
     handler.AddJson(paras); //
@@ -219,7 +219,7 @@ function CCFrom_NewFrmEntity(frmID, specTitle, paras) {
  */
 function CCFrom_DeleteFrmEntityByOID(frmID, oid) {
 
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
     var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntityByOID");
@@ -239,7 +239,7 @@ function CCFrom_DeleteFrmEntityByOID(frmID, oid) {
  */
 function CCFrom_DeleteFrmEntityByBillNo(frmID, billNo) {
 
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("BillNo", billNo);
     var data = handler.DoMethodReturnJSON("CCFrom_DeleteFrmEntityByBillNo");

@@ -63,7 +63,7 @@
 
             pageIdx = GetQueryString("PageIdx");//当前页
 
-            frmDict = new Entity("BP.Frm.FrmDict", frmID);
+            frmDict = new Entity("BP.CCBill.FrmDict", frmID);
             document.title = frmDict.Name;
 
             //当前用户查询信息.
@@ -105,7 +105,7 @@
 
         function Init_ToolBar() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("Search_ToolBar");
             if (data.indexOf('err@') == 0) {
@@ -209,7 +209,7 @@
             html += '<td align="left" colspan=2 style="padding-top:4px"><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
 
             //获得配置的按钮.
-            var fb = new Entity("BP.Frm.FrmBill", frmID);
+            var fb = new Entity("BP.CCBill.FrmBill", frmID);
 
             if (fb.BtnNewLable == "") fb.BtnNewLable = "新建";
             if (fb.BtnDelLable == "") fb.BtnDelLable = "删除";
@@ -217,7 +217,7 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
             handler.AddPara("FrmID", frmID);
             var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
             if (powerData.indexOf("err@") != -1) {
@@ -246,7 +246,7 @@
 
             //增加方法.
             //获得当前的集合.
-            var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
+            var fms = new Entities("BP.CCBill.Template.Methods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
 
@@ -351,7 +351,7 @@
 
         function SearchData(orderBy, orderWay) {
             //创建处理器.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData()
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
@@ -713,7 +713,7 @@
 
             var frmID = GetQueryString("FrmID");
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
 
             var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
@@ -746,7 +746,7 @@
                 workid += "'" + selectRow[i]["OID"] + "',";
             }
             workid = workid.substring(0, workid.length - 1);
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkIDs", workid);
             var data = handler.DoMethodReturnString("MyBill_Deletes");
@@ -879,7 +879,7 @@
 
         //导出EXCEL表
         function ExpExcel() {
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             //查询集合
             var data = handler.DoMethodReturnString("Search_Exp");

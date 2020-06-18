@@ -87,7 +87,7 @@
             if (webUser.No == null)
                 return;
 
-            var ens = new Entities("BP.Frm.GenerBills");
+            var ens = new Entities("BP.CCBill.GenerBills");
             ens.Retrieve("Starter", webUser.No);
 
 
@@ -181,7 +181,7 @@
             if (confirm("您确定要撤销吗？") == false)
                 return;
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("MyBill_Delete");
@@ -330,7 +330,7 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("TB_KWds", val);
 
             var data = handler.DoMethodReturnString("SearchData_Init");

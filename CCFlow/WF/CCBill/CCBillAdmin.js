@@ -8,7 +8,7 @@
  * 获得创建的所有的 单据 
  */
 function Admin_GenerAllBills() {
-    var handler = new HttpHandler("BP.Frm.WF_CCBill_API");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     var data = handler.DoMethodReturnJSON("CCBillAdmin_Admin_GenerAllBills");
     return data;
 }
@@ -130,17 +130,17 @@ function Admin_Form_GenerDesignerUrl(frmID) {
  */
 function Admin_FromTemplateAttr(frmID) {
 
-    var en = new Entity("BP.Frm.FrmBill", frmID);
+    var en = new Entity("BP.CCBill.FrmBill", frmID);
 
     //流程单据.
     if (en.EntityType == 0)
         url = '../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + frmID;
 
     if (en.EntityType == 1)
-        url = '../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + frmID;
+        url = '../Comm/En.htm?EnName=BP.CCBill.FrmBill&PKVal=' + frmID;
 
     if (en.EntityType == 2 || en.EntityType == 3)
-        url = '../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + frmID;
+        url = '../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=' + frmID;
     return url;
 }
 

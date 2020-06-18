@@ -48,7 +48,7 @@
             //$.base64.utf8encode = true;
 
             var myPK = GetQueryString("MyPK");
-            en = new Entity("BP.Frm.MethodFunc", myPK);
+            en = new Entity("BP.CCBill.Template.MethodFunc", myPK);
 
             GenerBindEnumKey("DDL_WhatAreYouTodo", "WhatAreYouTodo", en.WhatAreYouTodo);
 
@@ -135,7 +135,7 @@
             currFuncType = funcType;
 
             //根据选择获取变化内容.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_Admin");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddPara("TypeOfFunc", funcType);
             handler.AddPara("MyPK", en.MyPK);
             var data = handler.DoMethodReturnString("MethodDoc_GetScript");
@@ -158,7 +158,7 @@
             //执行选择类型的保存.
             var selectFuncType = $('input[name="RB_MethodDocTypeOfFunc"]:checked').val();
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_Admin");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddUrlData();
             var doc = editor.getValue();
             doc = doc.replace(/-/g, "/$");

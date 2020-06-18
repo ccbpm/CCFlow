@@ -73,7 +73,7 @@
         //页面启动函数.
         $(function () {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Draft_Init");
 
@@ -140,7 +140,7 @@
             if (window.confirm('您确定要删除草稿吗？') == false)
                 return;
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("MyBill_Delete");

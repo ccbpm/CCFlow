@@ -18,7 +18,7 @@
         //页面启动函数.
         $(function () {
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.Frm.FrmBill", frmID);
+            var en = new Entity("BP.CCBill.FrmBill", frmID);
             GenerFullAllCtrlsVal(en);
             if (en.GetPara("SearchDataRole") == 3)
                 showStas();
@@ -28,7 +28,7 @@
         function Save() {
             //创建实体.
             var frmID = GetQueryString("FrmID");
-            var en = new Entity("BP.Frm.FrmBill", frmID);
+            var en = new Entity("BP.CCBill.FrmBill", frmID);
             en.SetPara("SearchDataRole", $("input[name='RBPara_SearchDataRole']:checked").val());
             en.SetPKVal(frmID);
             en.Update();
@@ -36,7 +36,7 @@
             if ($("input[name='RBPara_SearchDataRole']:checked").val() == "3") {
                 var a = $("input[name='RBPara_SearchDataRoleByDeptStation']:checked").val();
                 if (a != undefined) {
-                    en = new Entity("BP.Frm.FrmBill", frmID);
+                    en = new Entity("BP.CCBill.FrmBill", frmID);
                     en.SetPara("SearchDataRoleByDeptStation", $("input[name='RBPara_SearchDataRoleByDeptStation']:checked").val())
                     en.SetPKVal(frmID);
                     en.Update();
@@ -69,7 +69,7 @@
 
         function showStas() {
             //获取设置的岗位
-            var staDepts = new Entities("BP.Frm.FrmStationDepts");
+            var staDepts = new Entities("BP.CCBill.Template.FrmStationDepts");
             staDepts.Retrieve("FK_Frm", GetQueryString("FrmID"));
             var _Html = "";
             for (var i = 0; i < staDepts.length; i++) {

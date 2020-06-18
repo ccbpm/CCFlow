@@ -117,7 +117,7 @@
 
         //初始化函数
         $(function () {
-            var en = new Entity("BP.Frm.FrmDict", frmID);
+            var en = new Entity("BP.CCBill.FrmDict", frmID);
             FK_Field = en.FK_Field;
             if (FK_Field == null || FK_Field == undefined || FK_Field == "") {
                 alert("没有指定显示树状结构的外键字段，不能展示树状结构");
@@ -210,7 +210,7 @@
 
         //获取单据实体的所有数据
         function GetChildNodes(parentNo, keyOfEn) {
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("GetFrmEntitys");
             if (data.indexOf("err@") != -1) {
@@ -251,7 +251,7 @@
 
 
         function OpenSetting() {
-            var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + GetQueryString("FrmID");
             WinOpenFull(url);
         }
 
@@ -325,7 +325,7 @@
 
         function SaveIt() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             handler.AddPara("WorkID", $("#baseFrame")[0].contentWindow.$("#TB_OID").val());
             //组织数据.
@@ -523,7 +523,7 @@
         function DeleteIt() {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyDict_Delete");
             alert(data);
@@ -541,7 +541,7 @@
 
         function NewIt() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
             if (data.indexOf('err@') > 0) {
@@ -569,7 +569,7 @@
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var nodes = treeObj.getSelectedNodes();
             //新增时需要先生成WorkID
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
 
@@ -623,7 +623,7 @@
                     return;
             }
             var parentNode = nodes[0].getParentNode();
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("WorkID", nodes[0].myOID)
             handler.DoMethodReturnString("MyEntityTree_Delete");
@@ -682,7 +682,7 @@
             if (IsNewAdd == true) {
                 var win = $("#baseFrame")[0].contentWindow;
                 //删除当前的数据
-                var handler = new HttpHandler("BP.Frm.WF_CCBill");
+                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                 handler.AddPara("FrmID", frmID);
                 handler.AddPara("WorkID", win.$("#TB_OID").val())
                 handler.DoMethodReturnString("MyBill_Delete");

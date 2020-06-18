@@ -115,12 +115,12 @@ UPDATE Sys_SFTable SET  SrcType=0 WHERE SrcType IS NULL ;
 --UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
 
 -- 2019.03.10 ; 
-DELETE FROM Sys_EnCfg WHERE No='BP.Frm.FrmBill';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmBill','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
+DELETE FROM Sys_EnCfg WHERE No='BP.CCBill.FrmBill';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.CCBill.FrmBill','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
 
 -- 2019.05.15 ; 
-DELETE FROM Sys_EnCfg WHERE No='BP.Frm.FrmDict';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Frm.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
+DELETE FROM Sys_EnCfg WHERE No='BP.CCBill.FrmDict';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.CCBill.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
  
  ----2019.06.03;
  update Sys_MapAttr set ColSpan =0 ,TextColSpan = 2 where UIContralType=9 and ColSpan = 1;

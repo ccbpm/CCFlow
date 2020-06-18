@@ -50,7 +50,7 @@
         }
         //页面启动函数.
         $(function () {
-            var en = new Entity("BP.Frm.CtrlModel");
+            var en = new Entity("BP.CCBill.Template.CtrlModel");
             en.SetPKVal(frmID + "_" + CtrlObj);
             en.RetrieveFromDBSources();
             GenerFullAllCtrlsVal(en);
@@ -72,7 +72,7 @@
 
         function Save() {
             //创建实体.
-            var en = new Entity("BP.Frm.CtrlModel");
+            var en = new Entity("BP.CCBill.Template.CtrlModel");
             en.SetPKVal(frmID + "_" + CtrlObj);
             en.RetrieveFromDBSources();
             en.CopyForm();
@@ -86,7 +86,7 @@
         //设置岗位.
         function OpenDot2DotStations() {
 
-            var url = "../../Comm/RefFunc/Dot2DotSignle.htm?EnName=BP.Frm.CtrlModelDtl&Dot2DotEnsName=BP.Frm.CtrlModelDtls";
+            var url = "../../Comm/RefFunc/Dot2DotSignle.htm?EnName=BP.CCBill.Template.CtrlModelDtl&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls";
             url += "&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.WF.Port.Stations";
             url += "&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Station&SaveType=1";
             var W = document.body.clientWidth - 80;
@@ -98,7 +98,7 @@
 
             var refPK =frmID+"_"+CtrlObj;
 
-            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.Frm.CtrlModel&Dot2DotEnsName=BP.Frm.CtrlModelDtls&Dot2DotEnName=BP.Frm.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Station&SaveType=1";
+            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Station&SaveType=1";
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
             OpenEasyUiDialogExt(url, '设置岗位', W, H, true);
@@ -106,7 +106,7 @@
         //绑定人员
         function BindEmps() {
              var refPK =frmID+"_"+CtrlObj;
-            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.Frm.CtrlModel&Dot2DotEnsName=BP.Frm.CtrlModelDtls&Dot2DotEnName=BP.Frm.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=User&SaveType=1";
+            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=User&SaveType=1";
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
             OpenEasyUiDialogExt(url, '设置人员', W, H, true);
@@ -114,7 +114,7 @@
         }
         //弹出新页面
         function BindDepts() {
-            var url = "../../Comm/RefFunc/BranchesSignle.htm?EnName=BP.Frm.CtrlModel&Dot2DotEnsName=BP.Frm.CtrlModelDtls&Dot2DotEnName=BP.Frm.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&FrmID=" + frmID + "&PKVal=" + frmID+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Dept&SaveType=1";;
+            var url = "../../Comm/RefFunc/BranchesSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&FrmID=" + frmID + "&PKVal=" + frmID+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Dept&SaveType=1";;
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
             OpenEasyUiDialogExt(url, "绑定部门", W, H, true);

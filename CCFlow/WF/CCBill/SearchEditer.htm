@@ -121,7 +121,7 @@
 
             pageIdx = GetQueryString("PageIdx");//当前页
 
-            frmBill = new Entity("BP.Frm.FrmBill", frmID);
+            frmBill = new Entity("BP.CCBill.FrmBill", frmID);
             document.title = frmBill.Name;
 
             //当前用户查询信息.
@@ -158,7 +158,7 @@
 
         function Init_ToolBar() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("Search_ToolBar");
             if (data.indexOf('err@') == 0) {
@@ -231,7 +231,7 @@
             html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
 
             //获得配置的按钮.
-            var fb=new Entity("BP.Frm.FrmBill", frmID);
+            var fb=new Entity("BP.CCBill.FrmBill", frmID);
 
             if (fb.BtnNewLable=="") fb.BtnNewLable="新建";
             if (fb.BtnDelLable=="") fb.BtnDelLable="删除";
@@ -258,7 +258,7 @@
 
             //增加方法.
                //获得当前的集合.
-            var fms = new Entities("BP.Frm.Methods", "FrmID", frmID);
+            var fms = new Entities("BP.CCBill.Template.Methods", "FrmID", frmID);
             for (var i = 0; i < fms.length; i++) {
                 var fm = fms[i];
 
@@ -349,7 +349,7 @@
     
         function SearchData() {
             //创建处理器.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData()
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("PageSize", pageSize);
@@ -654,7 +654,7 @@
 
             var frmID = GetQueryString("FrmID");
            
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankDictID");
             OpenIt(workID,frmID);
@@ -680,7 +680,7 @@
                 workid +="'"+selectRow[i]["OID"]+"',";
             }
             workid = workid.substring(0,workid.length-1);
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("MyBill_DeleteDicts");
@@ -773,7 +773,7 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("TB_KWds", val);
 
             var data = handler.DoMethodReturnString("Search_Init");
@@ -852,7 +852,7 @@
 
        //导出EXCEL表
        function ExpExcel() {
-             var handler = new HttpHandler("BP.Frm.WF_CCBill");
+             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
             //查询集合
             var data = handler.DoMethodReturnString("Search_Exp");

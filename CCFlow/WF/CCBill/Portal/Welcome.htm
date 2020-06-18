@@ -25,7 +25,7 @@
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             //获得数数量，并把数量绑定.
-            var handler = new HttpHandler("BP.Frm.WF_CCBill_Portal");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Portal");
             var data = handler.DoMethodReturnJSON("Default_Init");
             GenerFullAllDivVal(data);
 

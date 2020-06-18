@@ -148,7 +148,7 @@
 
         //获取树形结构的数据
         function GetZtree() {
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             var data = handler.DoMethodReturnString("GetFrmEntitys");
             if (data.indexOf("err@") != -1) {
@@ -182,7 +182,7 @@
         }
 
         function OpenSetting() {
-            var url = "../Comm/RefFunc/En.htm?EnName=BP.Frm.FrmDict&PKVal=" + GetQueryString("FrmID");
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + GetQueryString("FrmID");
             WinOpenFull(url);
         }
 
@@ -256,7 +256,7 @@
 
         function SaveIt() {
 
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             handler.AddPara("WorkID", $("#baseFrame")[0].contentWindow.$("#TB_OID").val());
             //组织数据.
@@ -542,7 +542,7 @@
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var nodes = treeObj.getSelectedNodes();
             //新增时需要先生成WorkID
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
 
@@ -604,7 +604,7 @@
                     return;
             }
             var parentNode = nodes[0].getParentNode();
-            var handler = new HttpHandler("BP.Frm.WF_CCBill");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("BillNo", nodes[0].id)
             handler.DoMethodReturnString("MyEntityTree_Delete");
@@ -669,7 +669,7 @@
             if (IsNewAdd == true) {
                 var win = $("#baseFrame")[0].contentWindow;
                 //删除当前的数据
-                var handler = new HttpHandler("BP.Frm.WF_CCBill");
+                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                 handler.AddPara("FrmID", frmID);
                 handler.AddPara("WorkID", win.$("#TB_OID").val())
                 handler.DoMethodReturnString("MyBill_Delete");

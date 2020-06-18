@@ -10111,11 +10111,11 @@ namespace BP.WF
         public static void Track_WriteBBS(string frmID, string frmName, Int64 workID, string msg,
             Int64 fid = 0, string flowNo = "", string flowName = "", int nodeID = 0, string nodeName = "")
         {
-            BP.Frm.Track tk = new BP.Frm.Track();
+            BP.CCBill.Track tk = new BP.CCBill.Track();
             tk.WorkID = workID;
             tk.FrmID = frmID;
             tk.FrmName = frmName;
-            tk.FrmActionType = BP.Frm.FrmActionType.BBS;
+            tk.FrmActionType = BP.CCBill.FrmActionType.BBS;
             tk.ActionTypeText = "评论";
 
             tk.Rec = WebUser.No;
@@ -10123,7 +10123,7 @@ namespace BP.WF
             tk.DeptNo = WebUser.FK_Dept;
             tk.DeptName = WebUser.FK_DeptName;
 
-            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.Frm.FrmActionType.BBS;
+            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.CCBill.FrmActionType.BBS;
             tk.Msg = msg;
             tk.RDT = DataType.CurrentDataTime;
 

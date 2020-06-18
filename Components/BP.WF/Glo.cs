@@ -1208,7 +1208,7 @@ namespace BP.WF
             }
 
             //检查frmTrack.
-            BP.Frm.Track tk = new Frm.Track();
+            BP.CCBill.Track tk = new BP.CCBill.Track();
             tk.CheckPhysicsTable();
 
             BP.GPM.DeptEmpStation des = new BP.GPM.DeptEmpStation();

@@ -197,6 +197,7 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
         "onUnselect": function (record) {
             console.log("unselect: " + JSON.stringify(record));
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
+          
         }
     });
 
@@ -845,7 +846,7 @@ function Delete_FrmEleDB(keyOfEn, oid, No) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
     frmEleDB.Delete();
-    $("#TB_" + keyOfEn).val('');
+    //$("#TB_" + keyOfEn).val(target.getText);
 }
 //设置值.
 function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2, tag5) {

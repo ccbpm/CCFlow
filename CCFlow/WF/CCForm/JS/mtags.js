@@ -5,6 +5,7 @@
 	function onUnselect(target, record) {
 		var opts = getOptions(target);
 		opts.onUnselect.call("", record);
+		$("#TB_" + opts.KeyOfEn).val($(target).mtags("getText"));
 	}
 
 	function appendSignalNode(target, data) {
@@ -23,6 +24,7 @@
 				var record = $(this).parent().data();
 				$(this).parent().remove();
 				opts.onUnselect.call("", record);
+				$("#TB_" + opts.KeyOfEn).val($(target).mtags("getText"));
 			});			
 		}
     }
@@ -50,6 +52,7 @@
 					var record = $(this).parent().data();
 					$(this).parent().remove();
 					opts.onUnselect.call("", record);
+					$("#TB_" + opts.KeyOfEn).val($(target).mtags("getText"));
 				});
 			}
 		}
@@ -145,6 +148,7 @@
 				appendSignalNode(target, { "No": new Date().getTime(), "Name": $("#TB_InputAuto_" + opts.KeyOfEn).val() });
 				SaveVal_FrmEleDB(opts.FK_MapData, opts.KeyOfEn, opts.RefPKVal, new Date().getTime(), $("#TB_InputAuto_" + opts.KeyOfEn).val(), 1);
 				$("#TB_InputAuto_" + opts.KeyOfEn).val("");
+				$("#TB_" + opts.KeyOfEn).val($(target).mtags("getText"));
 			}
 		});
 		$("#TB_InputAuto_" + opts.KeyOfEn).blur(function () {
@@ -152,6 +156,7 @@
 				appendSignalNode(target, { "No": new Date().getTime(), "Name": $("#TB_InputAuto_" + opts.KeyOfEn).val() });
 				SaveVal_FrmEleDB(opts.FK_MapData, opts.KeyOfEn, opts.RefPKVal, new Date().getTime(), $("#TB_InputAuto_" + opts.KeyOfEn).val(), 1);
 				$("#TB_InputAuto_" + opts.KeyOfEn).val("");
+				$("#TB_" + opts.KeyOfEn).val($(target).mtags("getText"));
             }	
 		});
 	}

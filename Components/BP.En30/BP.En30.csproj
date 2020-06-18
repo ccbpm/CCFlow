@@ -195,6 +195,7 @@
     <Compile Include="Pub\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Pub\NY.cs" />
     <Compile Include="Pub\TableFieldAddComment.cs" />
     <Compile Include="En\EnDtl.cs">
       <SubType>Code</SubType>

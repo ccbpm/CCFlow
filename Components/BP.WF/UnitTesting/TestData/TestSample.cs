@@ -3,7 +3,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 
-namespace BP.WF.UnitTesting
+namespace BP.UnitTesting
 {
     /// <summary>
     /// 测试明细

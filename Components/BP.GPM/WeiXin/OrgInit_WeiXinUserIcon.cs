@@ -5,9 +5,8 @@ using BP.DA;
 using BP.Port;
 using BP.En;
 using BP.Sys;
-using BP.GPM.WeiXin;
 
-namespace BP.EAI.Plugins.DTS
+namespace BP.GPM.WeiXin
 {
     /// <summary>
     /// 微信人员头像同步

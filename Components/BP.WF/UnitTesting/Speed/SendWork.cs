@@ -38,12 +38,12 @@ namespace BP.UnitTesting
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
             BP.Web.WebUser.SignInOfGener(emp);
 
-            BP.WF.UnitTesting.TestAPI api = new BP.WF.UnitTesting.TestAPI();
+            BP.UnitTesting.TestAPI api = new BP.UnitTesting.TestAPI();
             api.No = "SendWork";
             api.Name = "标准的工作发送";
             api.Save();
 
-            BP.WF.UnitTesting.TestVer apiVer = new BP.WF.UnitTesting.TestVer();
+            BP.UnitTesting.TestVer apiVer = new BP.UnitTesting.TestVer();
             apiVer.No = "SendWork"+BP.DA.DataType.CurrentDataTime;
             apiVer.Name = "版本" + apiVer.No;             
 
@@ -62,7 +62,7 @@ namespace BP.UnitTesting
                     DateTime endTime = System.DateTime.Now;
                     TimeSpan ts = endTime - startTime;
 
-                    BP.WF.UnitTesting.TestSample dtl = new BP.WF.UnitTesting.TestSample();
+                    BP.UnitTesting.TestSample dtl = new BP.UnitTesting.TestSample();
                     dtl.MyPK = BP.DA.DBAccess.GenerGUID();
                     dtl.FK_API = api.No;
                     dtl.FK_Ver = apiVer.No;
@@ -79,8 +79,8 @@ namespace BP.UnitTesting
             }
             catch (Exception ex)
             {
-                BP.WF.UnitTesting.TestSample dtl = new BP.WF.UnitTesting.TestSample();
-                dtl.Delete(BP.WF.UnitTesting.TestSampleAttr.FK_Ver, apiVer.No);
+                BP.UnitTesting.TestSample dtl = new BP.UnitTesting.TestSample();
+                dtl.Delete(BP.UnitTesting.TestSampleAttr.FK_Ver, apiVer.No);
                 throw ex;
             }
 

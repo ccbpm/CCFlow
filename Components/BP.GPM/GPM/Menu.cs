@@ -473,7 +473,7 @@ namespace BP.GPM
                 //执行绑定.
                 fb.DoBindMenu(this.No, name);
 
-                return "<a href='../Comm/En.htm?EnName=BP.Frm.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
+                return "<a href='../Comm/En.htm?EnName=BP.CCBill.FrmBill&No=" + no + "' target=_blank>打开单据属性</a>.";
             }
             catch (Exception ex)
             {

@@ -61,40 +61,40 @@ namespace BP.WF.HttpHandler
             //部门名称.
             ht.Add("DeptName", emp.FK_DeptText);
 
-          
-                BP.GPM.DeptEmpStations des = new BP.GPM.DeptEmpStations();
-                des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
 
-                string depts = "";
-                string stas = "";
+            BP.GPM.DeptEmpStations des = new BP.GPM.DeptEmpStations();
+            des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
 
-                foreach (BP.GPM.DeptEmpStation item in des)
+            string depts = "";
+            string stas = "";
+
+            foreach (BP.GPM.DeptEmpStation item in des)
+            {
+                BP.Port.Dept dept = new Dept();
+                dept.No = item.FK_Dept;
+                int count = dept.RetrieveFromDBSources();
+                if (count != 0)
+                    depts += dept.Name + "、";
+
+
+                if (DataType.IsNullOrEmpty(item.FK_Station) == true)
+                    continue;
+
+                if (DataType.IsNullOrEmpty(item.FK_Dept) == true)
                 {
-                    BP.Port.Dept dept = new Dept();
-                    dept.No = item.FK_Dept;
-                    int count = dept.RetrieveFromDBSources();
-                    if (count != 0)
-                        depts += dept.Name + "、";
-
-
-                    if (DataType.IsNullOrEmpty(item.FK_Station) == true)
-                        continue;
-
-                    if (DataType.IsNullOrEmpty(item.FK_Dept) == true)
-                    {
-                        //   item.Delete();
-                        continue;
-                    }
-
-                    BP.Port.Station sta = new Station();
-                    sta.No = item.FK_Station;
-                    count = sta.RetrieveFromDBSources();
-                    if (count != 0)
-                        stas += sta.Name + "、";
+                    //   item.Delete();
+                    continue;
                 }
 
-                ht.Add("Depts", depts);
-                ht.Add("Stations", stas);
+                BP.Port.Station sta = new Station();
+                sta.No = item.FK_Station;
+                count = sta.RetrieveFromDBSources();
+                if (count != 0)
+                    stas += sta.Name + "、";
+            }
+
+            ht.Add("Depts", depts);
+            ht.Add("Stations", stas);
 
 
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
@@ -157,12 +157,17 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                string info = "\t\n 上传出现错误，有可能是文件的权限出现错误,请按照如下步骤解决.";
+                info += "\t\n  1. 有可能是\\DataUser\\Siganture文件夹是只读的, 右键文件夹属性取消只读.";
+                info += "\t\n  2. 当前的iis_user用户没有读写他的权限，请在文件夹属性设置.";
+                info += "\t\n  3. 不要设置everyone 权限会导致，不安全.";
+                info += "\t\n  4. 如果是.net用户,请尝试修改web.config (该步骤没有验证) identity impersonate=true userName=administrator password=bpm2017@123 ";
+
+                return "err@" + ex.Message + "" + info;
             }
 
             //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
             // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
-
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
             //f.Dispose();
@@ -321,7 +326,7 @@ namespace BP.WF.HttpHandler
             BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
             emp.SetPara("Theme", theme);
             emp.Update();
-            
+
             return "设置成功";
         }
 

@@ -10,7 +10,7 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
-using BP.Frm;
+using BP.CCBill;
 
 namespace BP.WF.HttpHandler
 {
@@ -225,12 +225,12 @@ namespace BP.WF.HttpHandler
                 //增加上OID字段.
                 BP.Sys.CCFormAPI.RepareCCForm(md.No);
 
-                BP.Frm.EntityType entityType = (EntityType)this.GetRequestValInt("EntityType");
+                BP.CCBill.EntityType entityType = (EntityType)this.GetRequestValInt("EntityType");
 
                 #region 如果是单据.
                 if (entityType == EntityType.FrmBill)
                 {
-                    BP.Frm.FrmBill bill = new FrmBill(md.No);
+                    BP.CCBill.FrmBill bill = new FrmBill(md.No);
                     bill.EntityType = EntityType.FrmBill;
                     bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
 
@@ -246,7 +246,7 @@ namespace BP.WF.HttpHandler
                 #region 如果是实体 EnityNoName .
                 if (entityType == EntityType.FrmDict)
                 {
-                    BP.Frm.FrmDict entityDict = new FrmDict(md.No);
+                    BP.CCBill.FrmDict entityDict = new FrmDict(md.No);
                     entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
                     entityDict.BtnNewModel = 0;
 

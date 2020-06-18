@@ -10,7 +10,7 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
-using BP.Frm;
+using BP.CCBill;
 using System.Text;
 
 namespace BP.WF.HttpHandler

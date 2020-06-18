@@ -1147,9 +1147,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowBBSList()
         {
-            BP.Frm.Tracks tracks = new BP.Frm.Tracks();
+            BP.CCBill.Tracks tracks = new BP.CCBill.Tracks();
             BP.En.QueryObject qo = new En.QueryObject(tracks);
-            qo.AddWhere(TrackAttr.ActionType, (int)BP.Frm.FrmActionType.BBS);
+            qo.AddWhere(TrackAttr.ActionType, (int)BP.CCBill.FrmActionType.BBS);
             qo.addAnd();
             qo.addLeftBracket();
 

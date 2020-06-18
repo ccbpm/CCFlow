@@ -1766,7 +1766,7 @@ namespace BP.WF
             string resultMsg = "";
 
             //  获取单据的属性信息
-            BP.Frm.FrmBill bill = new BP.Frm.FrmBill(frmId);
+            BP.CCBill.FrmBill bill = new BP.CCBill.FrmBill(frmId);
             string fileNameFormat = null;
 
             //存放信息地址

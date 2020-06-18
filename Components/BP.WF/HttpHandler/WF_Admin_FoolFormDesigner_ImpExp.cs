@@ -8,7 +8,7 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
-using BP.Frm;
+using BP.CCBill;
 
 namespace BP.WF.HttpHandler
 {
@@ -165,7 +165,7 @@ namespace BP.WF.HttpHandler
                 mymd.RepairMap();
                 if (mymd.HisEntityType == (int)EntityType.FrmBill)
                 {
-                    BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                    BP.CCBill.FrmBill bill = new FrmBill(mymd.No);
                     bill.EntityType = EntityType.FrmBill;
                     bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
 
@@ -180,7 +180,7 @@ namespace BP.WF.HttpHandler
                 #region 如果是实体 EnityNoName .
                 if (mymd.HisEntityType == (int)EntityType.FrmDict)
                 {
-                    BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                    BP.CCBill.FrmDict entityDict = new FrmDict(mymd.No);
                     entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
                     entityDict.BtnNewModel = 0;
 
@@ -222,7 +222,7 @@ namespace BP.WF.HttpHandler
                     mymd.RepairMap();
                     if (mymd.HisEntityType == (int)EntityType.FrmBill)
                     {
-                        BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                        BP.CCBill.FrmBill bill = new FrmBill(mymd.No);
                         bill.EntityType = EntityType.FrmBill;
                         bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
 
@@ -238,7 +238,7 @@ namespace BP.WF.HttpHandler
                     #region 如果是实体 EnityNoName .
                     if (mymd.HisEntityType == (int)EntityType.FrmDict)
                     {
-                        BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                        BP.CCBill.FrmDict entityDict = new FrmDict(mymd.No);
                         entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
                         entityDict.BtnNewModel = 0;
 
@@ -318,7 +318,7 @@ namespace BP.WF.HttpHandler
                 mymd.RepairMap();
                 if (mymd.HisEntityType == (int)EntityType.FrmBill)
                 {
-                    BP.Frm.FrmBill bill = new FrmBill(mymd.No);
+                    BP.CCBill.FrmBill bill = new FrmBill(mymd.No);
                     bill.EntityType = EntityType.FrmBill;
                     bill.BillNoFormat = "ccbpm{yyyy}-{MM}-{dd}-{LSH4}";
 
@@ -334,7 +334,7 @@ namespace BP.WF.HttpHandler
                 #region 如果是实体 EnityNoName .
                 if (mymd.HisEntityType == (int)EntityType.FrmDict)
                 {
-                    BP.Frm.FrmDict entityDict = new FrmDict(mymd.No);
+                    BP.CCBill.FrmDict entityDict = new FrmDict(mymd.No);
                     entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
                     entityDict.BtnNewModel = 0;
 

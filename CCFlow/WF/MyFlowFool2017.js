@@ -185,7 +185,7 @@ function GenerFoolFrm(wn) {
             if (gf.CtrlType == 'Dtl') {
 
                 html += "<tr>";
-                html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
+                html += "  <th id='THDtl_" + gf.CtrlID+"' colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
                 html += "</tr>";
 
                 var dtls = flowData.Sys_MapDtl;
@@ -197,7 +197,7 @@ function GenerFoolFrm(wn) {
                         continue;
 
                     html += "<tr>";
-                    html += "  <td colspan='" + tableCol + "' class='FDesc' >";
+                    html += "  <td id='Dtl_" + dtl.No +"' colspan='" + tableCol + "' class='FDesc' >";
 
                     html += Ele_Dtl(dtl);
 
@@ -224,10 +224,10 @@ function GenerFoolFrm(wn) {
                 if (ath!=null &&(ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck"))
                     continue;
                 html += "<tr>";
-                html += "  <th colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
+                html += "  <th id='THAth_" + ath.MyPK + "' colspan='" + tableCol + "' class='form-unit'>" + gf.Lab + "</th>";
                 html += "</tr>";
                 html += "<tr>";
-                html += "<td colspan='" + tableCol + "' class='FDesc'>";
+                html += "<td id='Ath_" + ath.MyPK + "' colspan='" + tableCol + "' class='FDesc'>";
                 html += athInfo;
                 html += "  </td>";
                 html += "</tr>";
@@ -1465,7 +1465,23 @@ function SetCtrlHidden(key) {
         ctrl.parent('tr').hide();
     }
 
+    //从表隐藏
+    var ctrl = $("#Dtl_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').hide();
 
+        var th = $("#THDtl_" + key);
+        th.parent('tr').hide();
+    }
+
+    //附件隐藏
+    var ctrl = $("#Ath_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').hide();
+
+        var th = $("#THAth_" + key);
+        th.parent('tr').hide();
+    }
 }
 //设置显示?
 function SetCtrlShow(key) {
@@ -1478,6 +1494,24 @@ function SetCtrlShow(key) {
     ctrl = $("#Lab_" + key);
     if (ctrl.length > 0)
         ctrl.parent('tr').show();
+
+    //从表隐藏
+    var ctrl = $("#Dtl_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').show();
+
+        var th = $("#THDtl_" + key);
+        th.parent('tr').show();
+    }
+
+    //附件隐藏
+    var ctrl = $("#Ath_" + key);
+    if (ctrl.length > 0) {
+        ctrl.parent('tr').show();
+
+        var th = $("#THAth_" + key);
+        th.parent('tr').show();
+    }
 
 }
 

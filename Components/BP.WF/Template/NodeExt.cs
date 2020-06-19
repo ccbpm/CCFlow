@@ -1161,7 +1161,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return "../../Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         #endregion 表单相关.

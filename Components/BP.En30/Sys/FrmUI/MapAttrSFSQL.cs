@@ -160,6 +160,13 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "高级JS设置";
+                rm.ClassMethodName = this.ToString() + ".DoRadioBtns()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "事件绑函数";
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -189,6 +196,14 @@ namespace BP.Sys.FrmUI
         public string DoSFTable()
         {
             return "../../Admin/FoolFormDesigner/GuideSFTableAttr.htm?FK_SFTable=" + this.UIBindKey;
+        }
+        /// <summary>
+        /// 高级设置
+        /// </summary>
+        /// <returns></returns>
+        public string DoRadioBtns()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置填充其他下拉框

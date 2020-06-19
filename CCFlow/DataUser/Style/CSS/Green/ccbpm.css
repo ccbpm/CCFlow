@@ -873,7 +873,7 @@ body table tr td {
 /**新增表格样式设置**/
 #divCCForm table td{
     padding:6px!important;
-    font-size:16px!important;
+    font-size:16px;
 }
 #ShowTable a{
     word-wrap: break-word;
@@ -1016,4 +1016,19 @@ body table tr td {
     width:180px;
     height:auto;
     margin-bottom:30px;
+}
+.annex-table th,
+.annex-table td{
+    font-size:14px!important;
+    text-align:center;
+    padding: 4px!important;
+}
+.annex-table th{
+    background:#f5f5f5!important;
+    vertical-align:middle;
+}
+.annex-table .operate a{
+    display:inline-block;
+    margin-left:5px;
+    margin-right:5px;
 }

@@ -172,7 +172,7 @@ function InitAthPage(athDivID, uploadUrl) {
 */
 var columnNum = 6;
 function FileShowWayTable(athDesc, dbs,uploadUrl) {
-    var _html = "<table class='table'>";
+    var _html = "<table class='table annex-table'>";
     //1.是否启用扩展列
     var mapAttrs = null;
     if (athDesc.IsExpCol != 0) { 
@@ -302,15 +302,15 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             }
 
             //⑦操作列的增加.
-            _html += "<td>";
+            _html += "<td class='operate'>";
             if (athDesc.IsDownload == 1)
                 _html += "<a href=\"javascript:Down2018('" + athDesc.MyPK + "','" + db.MyPK + "')\">下载</a>";
             if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
-                    _html += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
                 var webuser = new WebUser();
                 if (athDesc.DeleteWay == 2 && db.Rec == webuser.No)//删除自己上传的
-                    _html += "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
             }
             _html += "</td>";
             _html += "</tr>";

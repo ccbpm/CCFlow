@@ -108,7 +108,7 @@ namespace BP.Web
             WebUser.Name = em.Name;
 
             //增加他的orgNo
-            if (SystemConfig.CCBPMRunModel != 0)
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 WebUser.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
 
 
@@ -553,7 +553,6 @@ namespace BP.Web
             {
                 return isNullAsVal;
             }
-            throw new Exception("@err-001 (" + valKey + ")登录信息丢失。");
         }
         /// <summary>
         /// 设置信息.
@@ -592,7 +591,7 @@ namespace BP.Web
                 if (BP.Web.WebUser.No.Equals("admin") == true)
                     return true;
 
-                if (SystemConfig.CCBPMRunModel == 0)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     return false; //单机版.
 
                 //SAAS版本. 集团版 @hongyan 需要翻译.

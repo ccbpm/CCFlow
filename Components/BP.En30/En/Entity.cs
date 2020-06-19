@@ -1429,7 +1429,7 @@ namespace BP.En
                     SqlBuilder.GenerParasPK(this));
                 if (num >= 1)
                 {
-                    //@wangyanyan 放入缓存.
+                    //放入缓存.
                     if (this.EnMap.DepositaryOfEntity == Depositary.Application)
                     {
                         BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);

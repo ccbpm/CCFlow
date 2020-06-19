@@ -1431,9 +1431,7 @@ namespace BP.En
                 {
                     //放入缓存.
                     if (this.EnMap.DepositaryOfEntity == Depositary.Application)
-                    {
                         BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
-                    }
                     return num;
                 }
             }
@@ -1445,6 +1443,7 @@ namespace BP.En
                     || ex.Message.Contains("field list"))
                 {
                     this.CheckPhysicsTable();
+
                     if (this.EnMap.EnDBUrl.DBUrlType == DBUrlType.AppCenterDSN
                         && DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.

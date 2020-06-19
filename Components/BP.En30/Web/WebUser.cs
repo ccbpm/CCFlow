@@ -543,8 +543,6 @@ namespace BP.Web
                 if (isChinese)
                     val = HttpUtility.UrlDecode(val);
 
-
-
                 if (DataType.IsNullOrEmpty(val))
                     return isNullAsVal;
                 return val;
@@ -873,40 +871,5 @@ namespace BP.Web
                     SetSessionByKey("Theame", value);
             }
         }
-
-        #region 当前人员操作方法.
-        public static void DeleteTempFileOfMy()
-        {
-            string usr = HttpContextHelper.RequestCookieGet("No", "CCS"); //hc.Values["No"];
-            string[] strs = System.IO.Directory.GetFileSystemEntries(SystemConfig.PathOfTemp);
-            foreach (string str in strs)
-            {
-                if (str.IndexOf(usr) == -1)
-                    continue;
-
-                try
-                {
-                    System.IO.File.Delete(str);
-                }
-                catch
-                {
-                }
-            }
-        }
-        public static void DeleteTempFileOfAll()
-        {
-            string[] strs = System.IO.Directory.GetFileSystemEntries(SystemConfig.PathOfTemp);
-            foreach (string str in strs)
-            {
-                try
-                {
-                    System.IO.File.Delete(str);
-                }
-                catch
-                {
-                }
-            }
-        }
-        #endregion
     }
 }

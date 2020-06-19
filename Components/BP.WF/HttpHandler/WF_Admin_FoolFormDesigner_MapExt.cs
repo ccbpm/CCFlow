@@ -751,27 +751,69 @@ namespace BP.WF.HttpHandler
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             attr.Retrieve();
 
+            //加入从表组件
+            MapDtls mapDtls = new MapDtls(this.FK_MapData);
+            ds.Tables.Add(mapDtls.ToDataTableField("MapDtls"));
+
+            //加入多附件组件
+            FrmAttachments frmAttachments = new FrmAttachments(this.FK_MapData);
+            ds.Tables.Add(frmAttachments.ToDataTableField("FrmAttachments"));
+
             //把分组加入里面.
             GroupFields gfs = new GroupFields(this.FK_MapData);
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
+
+            //获取外键值
+            DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+            }
 
             //字段值.
             FrmRBs rbs = new FrmRBs();
             rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
             if (rbs.Count == 0)
             {
-                /*初始枚举值变化.
-                 */
-                SysEnums ses = new SysEnums(attr.UIBindKey);
-                foreach (SysEnum se in ses)
+                //如果是枚举类型
+                if (attr.LGType == FieldTypeS.Enum)
                 {
+                    /*初始枚举值变化.
+                     */
                     FrmRB rb = new FrmRB();
                     rb.FK_MapData = this.FK_MapData;
                     rb.KeyOfEn = this.KeyOfEn;
-                    rb.IntKey = se.IntKey;
-                    rb.Lab = se.Lab;
+                    rb.IntKey = "-1";
+                    rb.Lab = "--无(不选择)--";
                     rb.EnumKey = attr.UIBindKey;
                     rb.Insert(); //插入数据.
+
+                    SysEnums ses = new SysEnums(attr.UIBindKey);
+                    foreach (SysEnum se in ses)
+                    {
+                        rb = new FrmRB();
+                        rb.FK_MapData = this.FK_MapData;
+                        rb.KeyOfEn = this.KeyOfEn;
+                        rb.IntKey = se.IntKey.ToString();
+                        rb.Lab = se.Lab;
+                        rb.EnumKey = attr.UIBindKey;
+                        rb.Insert(); //插入数据.
+                    }
+                }
+                //如果是外键类型
+                if (attr.LGType == FieldTypeS.Normal)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        FrmRB rb = new FrmRB();
+                        rb.FK_MapData = this.FK_MapData;
+                        rb.KeyOfEn = this.KeyOfEn;
+                        rb.IntKey = row["No"].ToString();
+                        rb.Lab = row["Name"].ToString();
+                        rb.EnumKey = attr.UIBindKey;
+                        rb.Insert(); //插入数据.
+                    }
                 }
 
                 rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
@@ -834,7 +876,7 @@ namespace BP.WF.HttpHandler
 
                 rb.SetVal = dr["SetVal"].ToString(); //设置值.
 
-                rb.Update();
+                rb.DirectUpdate();
             }
 
             return "保存成功.";

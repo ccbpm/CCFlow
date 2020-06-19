@@ -215,35 +215,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmBtnAttr.EventContext, value);
             }
         }
-        public string IsViewHtml
-        {
-            get
-            {
-                return PubClass.ToHtmlColor(this.IsView);
-            }
-        }
-        /// <summary>
-        /// IsView
-        /// </summary>
-        public string IsView
-        {
-            get
-            {
-                return this.GetValStringByKey(FrmBtnAttr.IsView);
-            }
-            set
-            {
-                switch (value)
-                {
-                    case "#FF000000":
-                        this.SetValByKey(FrmBtnAttr.IsView, "Red");
-                        return;
-                    default:
-                        break;
-                }
-                this.SetValByKey(FrmBtnAttr.IsView, value);
-            }
-        }
+        
         public string UACContext
         {
             get
@@ -253,17 +225,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmBtnAttr.UACContext, value);
-            }
-        }
-        public bool UAC
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmBtnAttr.UAC);
-            }
-            set
-            {
-                this.SetValByKey(FrmBtnAttr.UAC, value);
             }
         }
         /// <summary>
@@ -397,7 +358,6 @@ namespace BP.Sys
 
                 Map map = new Map("Sys_FrmBtn", "按钮");
                 map.IndexField = FrmBtnAttr.FK_MapData;
-
 
                 map.AddMyPK();
                 map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);

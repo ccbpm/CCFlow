@@ -1264,7 +1264,7 @@ namespace BP.En
         {
             get
             {
-                if (this.GetType().BaseType.FullName.Equals("BP.En.EntityTree") == true)
+                if (this.GetType().BaseType.FullName.ToLower().Equals("bp.en.entitytree") == true)
                     return true;
                 return false;
             }

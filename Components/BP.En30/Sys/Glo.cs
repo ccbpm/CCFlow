@@ -15,6 +15,20 @@ namespace BP.Sys
     public class Glo
     {
         /// <summary>
+        /// 处理命名空间.
+        /// </summary>
+        /// <param name="name">类名</param>
+        /// <returns>返回处理后的名字</returns>
+        public static string DealClassEntityName(string name)
+        {
+            if (SystemConfig.Plant == Sys.Plant.CSharp)
+                return name;
+
+            int idx = name.LastIndexOf('.');
+            string str = name.Substring(0, idx).ToLower()+name.Substring(idx);
+            return str;
+        }
+        /// <summary>
         /// 清楚设置的缓存.
         /// </summary>
         /// <param name="frmID"></param>
@@ -427,39 +441,7 @@ namespace BP.Sys
             }
             en.Update();
         }
-
-        //public static System.Web.HttpRequest Request
-        //{
-        //    get
-        //    {
-        //        return System.Web.HttpContext.Current.Request;
-        //    }
-        //}
-
-
-        /// <summary>
-        /// 产生消息,senderEmpNo是为了保证写入消息的唯一性，receiveid才是真正的接收者.
-        /// 如果插入失败.
-        /// </summary>
-        /// <param name="fromEmpNo">发送人</param>
-        /// <param name="now">发送时间</param>
-        /// <param name="msg">消息内容</param>
-        /// <param name="sendToEmpNo">接受人</param>
-        public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
-        {
-            //暂停对ccim消息提醒的支持.
-            return;
-        }
-        /// <summary>
-        /// 处理生成提示信息,不友好的提示.
-        /// </summary>
-        /// <param name="alertInfo">从系统里抛出的错误信息.</param>
-        /// <returns>返回的友好提示信息.</returns>
-        public static string GenerFriendlyAlertHtmlInfo(string alertInfo)
-        {
-            // 格式为: err@错误中文提示信息. tech@info 数据库错误,查询sqL为.
-            return alertInfo;
-        }
+       
 
         #region 加密解密文件.
         public static void File_JiaMi(string fileFullPath)

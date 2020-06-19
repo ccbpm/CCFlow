@@ -25,46 +25,10 @@ namespace BP.Pub
     public class PubClass
     {
         /// <summary>
-        /// 发送邮件
+        /// 转颜色.
         /// </summary>
-        /// <param name="maillAddr">地址</param>
-        /// <param name="title">标题</param>
-        /// <param name="doc">内容</param>
-        public static void SendMail(string maillAddr, string title, string doc)
-        {
-            System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
-            myEmail.From = new System.Net.Mail.MailAddress("ccflow.cn@gmail.com", "ccflow", System.Text.Encoding.UTF8);
-
-            myEmail.To.Add(maillAddr);
-            myEmail.Subject = title;
-            myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
-
-            myEmail.Body = doc;
-            myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
-            myEmail.IsBodyHtml = true;//是否是HTML邮件
-
-            myEmail.Priority = MailPriority.High;//邮件优先级
-
-            SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential(SystemConfig.GetValByKey("SendEmailAddress", "ccflow.cn@gmail.com"),
-                SystemConfig.GetValByKey("SendEmailPass", "ccflow123"));
-
-            //上述写你的邮箱和密码
-            client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-            client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
-            client.EnableSsl = true; //经过ssl加密.
-            object userState = myEmail;
-            try
-            {
-                client.Send(myEmail);
-
-                //   client.SendAsync(myEmail, userState);
-            }
-            catch (System.Net.Mail.SmtpException ex)
-            {
-                throw ex;
-            }
-        }
+        /// <param name="colorName"></param>
+        /// <returns></returns>
         public static string ToHtmlColor(string colorName)
         {
             try
@@ -301,19 +265,6 @@ namespace BP.Pub
             lin.MyPK = "Lin" + keyID + "eRr4";
             lin.Insert();
         }
-        public static String ColorToStr(System.Drawing.Color color)
-        {
-            try
-            {
-                string color_s = System.Drawing.ColorTranslator.ToHtml(color);
-                color_s = color_s.Substring(1, color_s.Length - 1);
-                return "#" + Convert.ToString(Convert.ToInt32(color_s, 16) + 40000, 16);
-            }
-            catch
-            {
-                return "black";
-            }
-        }
         /// <summary>
         /// 处理字段
         /// </summary>
@@ -468,7 +419,8 @@ namespace BP.Pub
         /// </summary>
         public static void ReCreateIndex()
         {
-            ArrayList als = ClassFactory.GetObjects("BP.En.Entity");
+            string enName = "BP.En.Entity";
+            ArrayList als = ClassFactory.GetObjects(enName);
             string sql = "";
             foreach (object obj in als)
             {
@@ -479,12 +431,10 @@ namespace BP.Pub
                 sql += "CREATE TABLE " + en.EnMap.PhysicsTable + " ( <BR>";
                 sql += "";
             }
-
-
         }
       
         /// <summary>
-        /// 检查所有的物理表
+        /// 检查所有的物理表(java上不用了，不用翻译)
         /// </summary>
         public static void CheckAllPTable(string nameS=null)
         {
@@ -576,6 +526,7 @@ namespace BP.Pub
         #region 系统调度
         public static string GenerDBOfOreacle()
         {
+            //已经处理了java的命名空间问题.
             ArrayList als = ClassFactory.GetObjects("BP.En.Entity");
             string sql = "";
             foreach (object obj in als)
@@ -1115,10 +1066,6 @@ namespace BP.Pub
                         //int i =DBAccess.RunSQL(delsql);
                         enMsg += "<br>@" + en.EnDesc + ",物理表:" + en.EnMap.PhysicsTable + "出现" + attr.Key + "," + attr.Desc + "不正确,共有[" + num + "]行记录没有关联到数据，请检查物理表与外键表。" + sql + "如果您想删除这些对应不上的数据请运行如下SQL: " + delsql + " 请慎重执行.";
                     }
-                    #endregion
-
-                    #region 判断 主键
-                    //DBAccess.IsExits("");
                     #endregion
                 }
                 catch (Exception ex)

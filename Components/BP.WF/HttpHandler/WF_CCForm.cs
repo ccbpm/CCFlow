@@ -580,7 +580,7 @@ namespace BP.WF.HttpHandler
                     enOID = en as BP.En.EntityOID;
                     if (enOID == null)
                     {
-                        return "err@系统错误，无法将" + md.PTable + "转化成BP.En.EntityOID.";
+                        return "err@系统错误，无法将" + md.PTable + "转化成 BP.En.EntityOID.";
                     }
 
                     enOID.SetValByKey("OID", this.WorkID);

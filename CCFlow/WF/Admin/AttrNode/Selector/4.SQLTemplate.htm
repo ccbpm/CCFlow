@@ -23,7 +23,8 @@
             var node = new Entity("BP.WF.Template.Selector", nodeID);
             var paras = node.DeliveryParas;
 
-            var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates", "SQLType", 5)
+            var sqlTemplates = new Entities("BP.WF.Template.SQLTemplates");
+            sqlTemplates.RetrieveAll();
             var str = "";
             str += "&nbsp;<select id='RB_BySQLTemplate'>" + InitDDLOperation(sqlTemplates) + "</select>";
 

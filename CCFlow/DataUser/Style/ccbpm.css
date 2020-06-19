@@ -1020,3 +1020,11 @@ body table tr td {
     background:#f5f5f5!important;
     vertical-align:middle;
 }
+.annex-table .operate a{
+    display:inline-block;
+    margin-left:5px;
+    margin-right:5px;
+}
+#tracktable{
+    background:#fff!important;
+}

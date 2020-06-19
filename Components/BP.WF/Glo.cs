@@ -1182,7 +1182,8 @@ namespace BP.WF
                 return null; //不需要升级.
 
             //检查BPM.
-            CheckGPM();
+            if (!SystemConfig.OrganizationIsView)
+                CheckGPM();
 
             #region 升级优化集团版的应用. 2020.04.03
 

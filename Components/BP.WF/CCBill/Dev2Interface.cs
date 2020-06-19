@@ -44,7 +44,7 @@ namespace BP.CCBill
 
             FrmBill fb = new FrmBill(frmID);
 
-            gb.WorkID = BP.DA.DBAccess.GenerOID(frmID);
+            gb.WorkID = BP.DA.DBAccess.GenerOID("CCBill");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
@@ -127,7 +127,7 @@ namespace BP.CCBill
 
             //rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
-            rpt.OID = DBAccess.GenerOID(frmID);
+            rpt.OID = DBAccess.GenerOID("CCBill");
             rpt.InsertAsOID(rpt.OID);
             return rpt.OID;
         }

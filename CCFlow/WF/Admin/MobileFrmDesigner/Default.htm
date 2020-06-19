@@ -277,8 +277,6 @@
                             mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
                             sta = 0;//重置状态
                             //window.location.href = window.location.href;
-                            
-                            
                         }
                     });
 
@@ -287,6 +285,7 @@
                 //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
                 helper: fixHelperModified,
                 //当排序动作结束时触发此事件。
+                cancel: '.GroupTitle',//限制不能拖动分组
                 stop: updateIndex
 
             }).disableSelection();

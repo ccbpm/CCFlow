@@ -11,6 +11,10 @@ namespace BP.DA
     public enum LogType
     {
         /// <summary>
+        /// Bug.
+        /// </summary>
+        Debug=0,
+        /// <summary>
         /// 提示
         /// </summary>
         Info = 1,

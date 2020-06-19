@@ -11,6 +11,7 @@ namespace BP.DA
     /// </summary>
     public class Cash2019
     {
+        #region 缓存的操作.
         /// <summary>
         /// 清除所有的实体缓存.
         /// </summary>
@@ -30,6 +31,7 @@ namespace BP.DA
                 hts.Remove(enName);
             }
         }
+        #endregion 缓存的操作.
 
         #region 缓存ht
         private static Hashtable _hts;

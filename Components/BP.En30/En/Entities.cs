@@ -1360,60 +1360,6 @@ namespace BP.En
             }
             return dt;
         }
-
-        /// <summary>
-        /// 查询全部的结果放到RetrieveAllToDataSet。
-        /// 包含它们的关联的信息。
-        /// </summary>
-        /// <returns></returns>
-        public DataSet RetrieveAllToDataSet()
-        {
-            #region 形成dataset
-            Entity en = this.GetNewEntity;
-            DataSet ds = new DataSet(this.ToString());
-            QueryObject qo = new QueryObject(this);
-            DataTable dt = qo.DoQueryToTable();
-            dt.TableName = en.EnMap.PhysicsTable;
-            ds.Tables.Add(dt);
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
-                {
-                    Entities ens = attr.HisFKEns;
-                    QueryObject qo1 = new QueryObject(ens);
-                    DataTable dt1 = qo1.DoQueryToTable();
-                    dt1.TableName = ens.GetNewEntity.EnMap.PhysicsTable;
-                    ds.Tables.Add(dt1);
-
-                    /// 加入关系
-                    DataColumn parentCol;
-                    DataColumn childCol;
-                    parentCol = dt.Columns[attr.Key];
-                    childCol = dt1.Columns[attr.UIRefKeyValue];
-                    DataRelation relCustOrder = new DataRelation(attr.Key, parentCol, childCol);
-                    ds.Relations.Add(relCustOrder);
-                    continue;
-                }
-                else if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
-                {
-                    DataTable dt1 = DBAccess.RunSQLReturnTable("select * from sys_enum WHERE enumkey=" + en.HisDBVarStr + "k", "k", attr.UIBindKey);
-                    dt1.TableName = attr.UIBindKey;
-                    ds.Tables.Add(dt1);
-
-                    /// 加入关系
-                    DataColumn parentCol;
-                    DataColumn childCol;
-                    parentCol = dt.Columns[attr.Key];
-                    childCol = dt1.Columns["IntKey"];
-                    DataRelation relCustOrder = new DataRelation(attr.Key, childCol, parentCol);
-                    ds.Relations.Add(relCustOrder);
-
-                }
-            }
-            #endregion
-
-            return ds;
-        }
         /// <summary>
         /// ToJson.
         /// </summary>

@@ -189,6 +189,7 @@
     <Compile Include="DTS\DataIOEn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="En\GENoName.cs" />
     <Compile Include="Pub\Current.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -203,7 +204,7 @@
     <Compile Include="En\EnObj.cs" />
     <Compile Include="En\Entities.cs" />
     <Compile Include="En\Entity.cs" />
-    <Compile Include="En\KeyVal.cs" />
+    <Compile Include="DA\KeyVal.cs" />
     <Compile Include="En\UAC.cs" />
     <Compile Include="GPM\DeptStation.cs" />
     <Compile Include="GPM\Emp.cs" />
@@ -412,7 +413,7 @@
     </Compile>
     <Compile Include="Sys\FrmImgAthDB.cs" />
     <Compile Include="Sys\FrmEleDB.cs" />
-    <Compile Include="Sys\GETree.cs" />
+    <Compile Include="En\GETree.cs" />
     <Compile Include="Sys\RptTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -452,7 +453,6 @@
     <Compile Include="Web\WebUser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\GENoName.cs" />
     <Compile Include="Sys\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
     <Compile Include="Sys\MapExt.cs" />

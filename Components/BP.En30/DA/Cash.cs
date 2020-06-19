@@ -303,14 +303,6 @@ namespace BP.DA
                 throw new Exception("clName.  csh 参数有一个为空。");
             SQL_Cash[clName] = csh;
         }
-        public static void InitSQL()
-        {
-            ArrayList al = ClassFactory.GetObjects("BP.En.Entity");
-            foreach (BP.En.Entity en in al)
-            {
-                string sql = BP.En.SqlBuilder.Retrieve(en);
-            }
-        }
         #endregion
 
         #region EnsData cash

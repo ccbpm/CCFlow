@@ -301,7 +301,8 @@ namespace BP.En
         {
             get
             {
-                if (MyDataType == DataType.AppBoolean || MyDataType == DataType.AppDouble
+                if (MyDataType == DataType.AppBoolean
+                    || MyDataType == DataType.AppDouble
                     || MyDataType == DataType.AppFloat
                     || MyDataType == DataType.AppInt
                     || MyDataType == DataType.AppMoney

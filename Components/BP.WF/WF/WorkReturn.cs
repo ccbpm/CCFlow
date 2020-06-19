@@ -1006,7 +1006,6 @@ namespace BP.WF
             }
             rpt.Row.Add("ReturnMsg", Msg);
 
-            Flow fl = this.HisNode.HisFlow;
 
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
@@ -1059,45 +1058,28 @@ namespace BP.WF
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.HuiQianZhuChiRen = "";
             gwf.HuiQianZhuChiRenName = "";
+            gwf.Paras_ToNodes = "";
 
-            //如果已经计算出来要退回到的人了,就删除其他相关的人员.
-            if (DataType.IsNullOrEmpty(this.ReturnToEmp) == false)
-            {
-                string sql = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.ReturnToNode.NodeID + " AND WorkID=" + this.WorkID + " AND FK_Emp!='" + this.ReturnToEmp + "'";
-                DBAccess.RunSQL(sql);
-            }
-
-
+            //获得所有的人员集合.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID,
+                GenerWorkerListAttr.WorkID, this.WorkID);
 
-            //更新当前待办人员.
-            string toDoEmps = "";
-            string returnEmps = "";
-            foreach (GenerWorkerList item in gwls)
-            {
-                toDoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
-                returnEmps += item.FK_Emp + ",";
-            }
-
-            //增加参与的人员
-            string emps = gwf.Emps;
-            if (DataType.IsNullOrEmpty(emps) == true)
-                emps = "@";
-            if (emps.Contains("@" + WebUser.No) == false)
-            {
-                emps += WebUser.No + "," + WebUser.Name + "@";
-            }
-
-            gwf.TodoEmps = toDoEmps;
-            gwf.TodoEmpsNum = gwls.Count;
-            gwf.Emps = emps;
+            //退回到人.
+            Emp empReturn = new Emp(this.ReturnToEmp);
+            gwf.TodoEmps = empReturn.No+","+ empReturn.Name+";";
+            gwf.TodoEmpsNum = 1;
             gwf.Update();
-
 
             //更新待办状态.
             foreach (GenerWorkerList item in gwls)
             {
+                if (item.FK_Emp.Equals(this.ReturnToEmp) == false)
+                {
+                    item.Delete();
+                    continue;
+                }
+
                 item.IsPassInt = 0;
                 item.IsRead = false;
                 item.SDT = sdt;
@@ -1114,10 +1096,7 @@ namespace BP.WF
             ps.Add("FlowEndNode", ReturnToNode.NodeID);
             ps.Add("OID", this.WorkID);
             DBAccess.RunSQL(ps);
-
-            //从工作人员列表里找到被退回人的接受人.
-            GenerWorkerList gwl = gwls[0] as GenerWorkerList;
-
+             
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
@@ -1125,10 +1104,9 @@ namespace BP.WF
             rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
-            rw.ReturnToEmp = gwl.FK_Emp; //退回给。
+            rw.ReturnToEmp = this.ReturnToEmp; //退回给。
             rw.BeiZhu = Msg;
             //杨玉慧 
-            Emp emp = new Emp(rw.ReturnToEmp);
 
             if (this.HisNode.TodolistModel == TodolistModel.Order
                 || this.HisNode.TodolistModel == TodolistModel.Sharing
@@ -1166,20 +1144,20 @@ namespace BP.WF
                         rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
                 }
             }
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.MyPK = DBAccess.GenerGUID();
             rw.Insert();
 
             // 为电建增加一个退回并原路返回的日志类型.
             if (IsBackTrack == true)
             {
                 // 加入track.
-                this.AddToTrack(ActionType.ReturnAndBackWay, gwl.FK_Emp, gwl.FK_EmpText,
+                this.AddToTrack(ActionType.ReturnAndBackWay,empReturn.No, empReturn.Name,
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
             else
             {
                 // 加入track.
-                this.AddToTrack(ActionType.Return, gwl.FK_Emp, gwl.FK_EmpText,
+                this.AddToTrack(ActionType.Return, empReturn.No, empReturn.Name,
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
 
@@ -1198,7 +1176,7 @@ namespace BP.WF
             // string text = fl.DoFlowEventEntity(EventListNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
 
             // 把消息
-            atPara += "@SendToEmpIDs=" + gwl.FK_Emp;
+            atPara += "@SendToEmpIDs=" + this.ReturnToEmp;
 
             string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
             if (text == null)
@@ -1214,7 +1192,7 @@ namespace BP.WF
             }
             else
             {
-                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + gwl.FK_Emp + "," + gwl.FK_EmpText + ").\n\r" + text;
+                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + empReturn.No + "," + empReturn.Name + ").\n\r" + text;
             }
         }
         /// <summary>

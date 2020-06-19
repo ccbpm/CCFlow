@@ -5660,14 +5660,13 @@ namespace BP.WF
                 wls = new GenerWorkerLists(gwf.FID, gwf.FK_Node);
             }
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListNode.PressAfter);
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, 
+                PushMsgAttr.FK_Event, EventListNode.PressAfter);
 
             foreach (GenerWorkerList wl in wls)
             {
                 if (wl.IsEnable == false)
-                {
                     continue;
-                }
 
                 toEmp += wl.FK_Emp + ",";
                 toEmpName += wl.FK_EmpText + ",";
@@ -5678,11 +5677,8 @@ namespace BP.WF
                     BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, mailTitle, msg, null, BP.WF.SMSMsgType.DoPress, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, push.SMSPushModel);
                 }
 
-
                 wl.PressTimes = wl.PressTimes + 1;
                 wl.Update();
-
-                //wl.Update(GenerWorkerListAttr.PressTimes, wl.PressTimes + 1);
             }
 
             //写入日志.

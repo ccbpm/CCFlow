@@ -667,15 +667,8 @@ namespace BP.En
         /// <param name="val">val</param>
         public void SetValByKey(string attrKey, string val)
         {
-            switch (val)
-            {
-                case null:
-                case "&nbsp;":
-                    val = "";
-                    break;
-                default:
-                    break;
-            }
+            if (val == null)
+                val = "";
             this.Row.SetValByKey(attrKey, val);
         }
         public void SetValByKey(string attrKey, int val)
@@ -1072,25 +1065,6 @@ namespace BP.En
                 return 0;
             }
         }
-        public decimal GetValMoneyByKey(string key)
-        {
-            try
-            {
-                return decimal.Parse(this.GetValDecimalByKey(key).ToString("0.00"));
-            }
-            catch
-            {
-                if (this.GetValStringByKey(key) == "")
-                {
-                    Attr attr = this.EnMap.GetAttrByKey(key);
-                    if (attr.IsNull)
-                        return 567567567;
-                    else
-                        return decimal.Parse(attr.DefaultVal.ToString());
-                }
-                return 0;
-            }
-        }
         /// <summary>
         /// 根据key 得到flaot val
         /// </summary>
@@ -1100,12 +1074,11 @@ namespace BP.En
         {
             try
             {
-                string str = this.GetValStrByKey(key);
-                return string.IsNullOrWhiteSpace(str) ? 0 : decimal.Round(decimal.Parse(this.GetValStrByKey(key)), 4);
+                return decimal.Parse(this.Row[key].ToString());
             }
             catch (Exception ex)
             {
-                throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为float类型.错误信息：" + ex.Message);
+                throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为 decimal 类型.错误信息：" + ex.Message);
             }
         }
         public decimal GetValDecimalByKeyIsNullAsVal(string key, decimal val)
@@ -1119,18 +1092,6 @@ namespace BP.En
                 return val;
             }
         }
-        public decimal GetValDecimalByKey(string key, string items)
-        {
-            if (items == "" || items == null)
-                return 0;
-
-            if (items.IndexOf("@" + key) == -1)
-                return 0;
-
-            string str = items.Substring(items.IndexOf("@" + key));
-
-            return decimal.Round(decimal.Parse(this.GetValStringByKey(key)), 4);
-        }
         public double GetValDoubleByKey(string key)
         {
             try
@@ -1141,21 +1102,6 @@ namespace BP.En
             {
                 throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStringByKey(key) + "]转换为double类型.错误信息：" + ex.Message);
             }
-        }
-        public string GetValAppDateByKey(string key)
-        {
-            try
-            {
-                string str = this.GetValStringByKey(key);
-                if (str == null || str == "")
-                    return str;
-                return DataType.StringToDateStr(str);
-            }
-            catch (System.Exception ex)
-            {
-                throw new Exception("@实例：[" + this.EnMap.EnDesc + "]  属性[" + key + "]值[" + this.GetValStringByKey(key).ToString() + "]日期格式转换出现错误：" + ex.Message);
-            }
-            //return "2003-08-01";
         }
         #endregion
 
@@ -1179,73 +1125,31 @@ namespace BP.En
                     if (attr.UIIsReadonly && attr.IsFKorEnum == false)
                         continue;
 
-                    //日期类型.  @杜. 这里需要翻译.
+                    //日期类型.  这里需要翻译.
                     if (attr.Key.Equals("RDT") || attr.Key.Equals("Rec"))
                         continue;
 
                     if (attr.DefaultValOfReal != null && attr.DefaultValOfReal.Contains("@") == true)
                         continue;
 
-                    //if (attr.IsFK && DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
-                    //    continue; /*如果是外键,并且外键的默认值为null.*/
-
                     if (attr.IsFK)
                     {
-                        //如果打开下面的代码，就会出现 /RefFunc/dtl.aspx 连续增加的问题. 
                         if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key) == attr.DefaultValOfReal)
                             continue;
-
-                        //if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key)== attr.DefaultValOfReal)
-                        //    continue;
-
                         return false;
-                        //continue; /*如果是外键,并且外键的默认值为null.*/
                     }
 
                     string str = this.GetValStrByKey(attr.Key);
-                    if (str == attr.DefaultVal.ToString() || str == "0.00")
-                        continue;
-                    else
-                        return false;
 
-                    if (attr.MyDataType == DataType.AppDate && attr.DefaultVal == null)
-                    {
-                        if (str == DataType.CurrentData)
-                            continue;
-                    }
+                    //判断是否是数值类型.
+                    if (attr.IsNum ==true)
+                        if (this.GetValFloatByKey(attr.Key) != float.Parse(attr.DefaultValOfReal))
+                            return false;
 
-                    if (str == attr.DefaultVal.ToString() && attr.IsFK == false)
+                    if (DataType.IsNullOrEmpty(str) == true)
                         continue;
 
-                    if (attr.IsEnum)
-                    {
-                        if (attr.DefaultVal.ToString() == str)
-                            continue;
-                        else
-                            return false;
-                        continue;
-                    }
-
-                    if (attr.IsNum)
-                    {
-                        if (decimal.Parse(str) != decimal.Parse(attr.DefaultVal.ToString()))
-                            return false;
-                        else
-                            continue;
-                    }
-
-                    if (attr.IsFKorEnum)
-                    {
-                        //if (attr.DefaultVal == null || attr.DefaultVal == "")
-                        //    continue;
-
-                        if (attr.DefaultVal.ToString() != str)
-                            return false;
-                        else
-                            continue;
-                    }
-
-                    if (str != attr.DefaultVal.ToString())
+                    if (str.Equals(attr.DefaultVal) == false)
                         return false;
                 }
                 return true;

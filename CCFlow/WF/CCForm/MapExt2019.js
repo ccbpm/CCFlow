@@ -1003,13 +1003,16 @@ function FullDtl(selectVal, mapExt) {
             var fullDtl = dataObj.Head[i][k];
             //  alert('您确定要填充从表吗?，里面的数据将要被删除。' + key + ' ID= ' + fullDtl);
             var frm = document.getElementById('Dtl_' + fullDtl);
+
             var src = frm.src;
-            var idx = src.indexOf("&Key");
-            if (idx == -1)
-                src = src + '&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
-            else
-                src = src.substring(0, idx) + '&ss=d&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
-            frm.src = src;
+            if (src != undefined || src != null) {
+                var idx = src.indexOf("&Key");
+                if (idx == -1)
+                    src = src + '&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
+                else
+                    src = src.substring(0, idx) + '&ss=d&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
+                frm.src = src;
+            }
         }
     }
 }

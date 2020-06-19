@@ -2379,7 +2379,7 @@ namespace BP.WF.HttpHandler
                             row["DeptName"] = DeptName;
                             row["ActionType"] = tk.HisActionType;
                             row["Tag"] = tk.Tag;
-                            row["FWCView"] = fwc.FWCView;
+                           // row["FWCView"] = fwc.FWCView;
                             tkDt.Rows.Add(row);
 
                             #region 审核组件附件数据

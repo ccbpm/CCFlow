@@ -1106,7 +1106,7 @@ function Bill_Open() {
         return;
     }
 
-    var en = new Entity("BP.CCBill.FrmTemplate", node.id);
+    var en = new Entity("BP.CCBill.Template.FrmTemplate", node.id);
     if (en.EntityType == 0) {
         alert('独立表单暂不支持列表打开...');
         return;

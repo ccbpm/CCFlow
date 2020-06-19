@@ -1492,5 +1492,19 @@ namespace BP.Sys
             }
         }
         public static readonly Hashtable CS_DBConnctionDic;
+        /// <summary>
+        /// 组织结构集成模式
+        /// </summary>
+        public static Boolean OrganizationIsView
+        {
+            get
+            {
+                string val = AppSettings["OrganizationIsView"];
+                if (val == "0")
+                    return false;
+                else
+                    return true;
+            }
+        }
     }
 }

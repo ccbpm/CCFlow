@@ -3,6 +3,7 @@ using System.Collections;
 using BP.DA;
 using BP.Web;
 using BP.En;
+using System.Data;
 
 namespace BP.Sys
 {
@@ -1099,7 +1100,19 @@ namespace BP.Sys
 
                 if (sql.Contains("@") == true)
                     return "err@字段" + field + "执行的SQL中有@符号";
-                return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle || SystemConfig.AppCenterDBType == BP.DA.DBType.PostgreSQL)
+                {
+                    dt.Columns["NO"].ColumnName = "No";
+                    dt.Columns["NAME"].ColumnName = "Name";
+
+                    //判断是否存在PARENTNO列，避免转换失败
+                    bool b = dt.Columns.Contains("PARENTNO");
+                    if(b)
+                        dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                }
+                return BP.Tools.Json.ToJson(dt);
 
             }
             string msg = this.DBType.Equals("1") == true ? "执行url返回JSON" : "执行JS返回的JSON";

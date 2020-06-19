@@ -328,7 +328,7 @@ namespace BP.Sys
                     FrmRB rb = new FrmRB();
                     rb.FK_MapData = ma.FK_MapData;
                     rb.KeyOfEn = ma.KeyOfEn;
-                    rb.IntKey = item.IntKey;
+                    rb.IntKey = item.IntKey.ToString();
                     rb.MyPK = rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey;
                     rb.RetrieveFromDBSources();
 
@@ -433,7 +433,7 @@ namespace BP.Sys
                 rb.EnumKey = ma.UIBindKey;
 
                 rb.Lab = item.Lab;
-                rb.IntKey = item.IntKey;
+                rb.IntKey = item.IntKey.ToString();
                 rb.X = ma.X;
 
                 //让其变化y值.

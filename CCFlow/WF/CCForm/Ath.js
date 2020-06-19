@@ -227,7 +227,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         //增加操作列
         _html += "<th  nowrap=true  style='" + colstyle + "width:100px' >";
         if (athDesc.IsDownload == 1 && dbs.length > 0)
-            _html += "<a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" >操作<img src='" + currImgPath+"/FileType/zip.png' style='width:16px;height:16px;' alt='打包下载' /></a>";
+            _html += "操作" + "<a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" ><img src='" + currImgPath + "/FileType/zip.png' style='width:16px;height:16px;margin-left:5px;' alt='打包下载' /></a>";
         else
             _html += "操作";
         _html += "</th>";
@@ -275,7 +275,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             }
 
             //②附件名称 ，扩展了预览功能，先阶段需要用户自己在DataUser/OverrideFiles/Ath.js重写AthViewOverWrite_Del方法
-            _html += "<td style='text-align:left'><a href=\"javascript:AthView('" + athDesc.MyPK + "','" + AthParams.PKVal + "','" + db.MyPK + "');\" ><img src='" + currImgPath + "/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='" + currImgPath + "/FileType/Undefined.gif'\" />" + db.FileName + "</td>";
+            _html += "<td style='text-align:left'><a href=\"javascript:AthView('" + athDesc.MyPK + "','" + AthParams.PKVal + "','" + db.MyPK + "');\" ><img src='" + currImgPath + "/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='" + currImgPath + "/FileType/Undefined.gif'\" style='margin-right:5px;float:left;' />" + db.FileName + "</td>";
 
             //③附件大小
             //_html += "<td>" + db.FileSize + "</td>";

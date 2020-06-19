@@ -1108,8 +1108,8 @@ namespace BP.Sys
                     dt.Columns["NAME"].ColumnName = "Name";
 
                     //判断是否存在PARENTNO列，避免转换失败
-                    bool b = dt.Columns.Contains("PARENTNO");
-                    if(b)
+                    bool ishave = dt.Columns.Contains("PARENTNO");
+                    if(ishave)
                         dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                 }
                 return BP.Tools.Json.ToJson(dt);

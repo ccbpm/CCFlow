@@ -41,6 +41,7 @@
   <Item No="001" GroupNo="System" Name="SQL配置模版设置" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
   <Item No="601" GroupNo="System" Name="系统枚举" For="admin" Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
   <Item No="602" GroupNo="System" Name="字典表" For="admin" Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddSFTable"  />
+  <Item No="603" GroupNo="System" Name="数据源管理" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
  <!--
   <Group No="Demo" Name="BP框架演示" />
   <Item No="901" GroupNo="Demo" Name="班级" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.Demo.BPFramework.BanJis"  />

@@ -988,12 +988,12 @@ namespace BP.WF.HttpHandler
             /* if (WebUser.No != "admin")
              {*/
             DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-            DataRow newRootRow = dt.Rows[0];
+            //DataRow newRootRow = dt.Rows[0];
 
-            newRootRow["PARENTNO"] = "F0";
+            //newRootRow["PARENTNO"] = "F0";
             DataTable newDt = dt.Clone();
-            newDt.Rows.Add(newRootRow.ItemArray);
-            GenerChildRows(dt, newDt, newRootRow);
+            newDt.Rows.Add(rootRow.ItemArray);
+            GenerChildRows(dt, newDt, rootRow);
             dt = newDt;
 
             string str = BP.Tools.Json.ToJson(dt);

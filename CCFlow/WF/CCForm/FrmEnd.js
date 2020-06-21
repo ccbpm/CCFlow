@@ -582,6 +582,17 @@ function AfterBindEn_DealMapExt(frmData) {
                 }
                 MultipleChoiceSmall(mapExt, mapAttr, frmData); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
+            case "SingleChoiceSmall":
+                if (mapExt.DoWay == 0)
+                    break;
+                if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                    var val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
+                    $("#TB_" + mapAttr.KeyOfEn).val(val);
+                    break;
+                }
+                SingleChoiceSmall(mapExt, mapAttr, frmData); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                break;
+
             case "MultipleChoiceSearch":
                 if (mapAttr.UIIsEnable == 0)
                     break;

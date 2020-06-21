@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>小范围的多选</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            //组织主键.
+            var mypk = "SingleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            var i = en.RetrieveFromDBSources();
+
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            //设置默认值.
+            if (en.Tag == "" || en.Tag == null)
+                en.Tag = "";
+
+
+            //设置文本框选择的值.
+            $("#RB_" + en.DoWay).attr("checked", true);
+
+            //按照文本计算.
+            $("#TB_Doc").val(en.Tag1);
+
+            //绑定枚举.
+            var enums = new Entities("BP.Sys.SysEnumMains");
+            enums.RetrieveAll();
+
+            GenerBindDDL("DDL_Enums", enums, "No", "Name", en.Tag2);
+
+            //绑定外键.
+            var tables = new Entities("BP.Sys.SFTables");
+            tables.RetrieveAll();
+            GenerBindDDL("DDL_SFTables", tables, "No", "Name", en.Tag3);
+
+            //去掉 ' 号。
+            var tag = en.Tag4;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+            $("#DDL_Tag").val(en.Tag);
+
+            //绑定SQL
+            $("#TB_SQL").val(tag);
+
+        });
+
+        //执行保存
+        function Save() {
+
+            //组织主键.
+            var mypk = "SingleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "SingleChoiceSmall";
+            en.MyPK = mypk;
+
+            var checkVal = $("input[name='RB']:checked").val();
+            en.DoWay = checkVal;
+
+            en.Tag1 = $("#TB_Doc").val();
+
+            en.Tag2 = $("#DDL_Enums").val();
+
+            en.Tag3 = $("#DDL_SFTables").val();
+
+            en.Tag4 = $("#TB_SQL").val();
+
+            en.Tag = $("#DDL_Tag").val(); //工作方式.
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "SingleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+        }
+
+        //删除.
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var mypk = "SingleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+            en.Delete();
+
+            var url = "SingleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
+            <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
+
+        </div>
+        <table style=" width:99%;">
+            <caption>小范围单选<a href="javascript:ShowHidden('help')"><img src="../../../Img/Btn/Help.gif" />帮助:</a></caption>
+
+            <tr>
+                <td>
+
+
+                    <fieldset>
+                        <legend><input type="radio" value="0" id="RB_0" name="RB" /><label for="RB_0">无，不设置</label> </legend>
+                        不做任何设置.
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend><input type="radio" value="1" id="RB_1" name="RB" /><label for="RB_1">按文本输入的值</label> </legend>
+<textarea rows="3" id="TB_Doc" name="TB_Doc"></textarea>
+                        值用逗号分开,比如: 飞机,火车,轮船,火箭,其他
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend><input type="radio" value="2" id="RB_2" name="RB" /><label for="RB_2">按照枚举值</label> </legend>
+                        请选择一个枚举: <select id="DDL_Enums"></select>
+                        <br />
+                        系统用枚举值作为该字段的多选.
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend><input type="radio" value="3" id="RB_3" name="RB" /><label for="RB_3">按照系统外键表计算</label> </legend>
+                        请选择一个外键表: <select id="DDL_SFTables"></select>
+                        <br />
+                        系统用枚举值作为该字段的多选.
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend><input type="radio" value="4" id="RB_4" name="RB" /><label for="RB_4">按照SQL计算</label> </legend>
+<textarea rows="3" id="TB_SQL" name="TB_SQL"></textarea>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>高级设置 </legend>
+                        工作方式：
+                        <select id="DDL_Tag">
+                            <option value="0"> 下拉框 </option>
+                            <option value="1"> 单选按钮 横向</option>
+                            <option value="2"> 单选按钮 纵向</option>
+                        </select>
+
+                    </fieldset>
+
+                </td>
+            </tr>
+        </table>
+
+
+       
+        
+
+        <!--<div id="help" style="color:black; display:none">
+            <ul>
+                <li>小范围多选就是选择的范围是有限的,可以放在下拉框或者checkbox里面让其选择.</li>
+                <li>多选模式</li>
+                <li> <a href="javascript:WinOpen('MultipleChoiceSmall.png');"> <img src="MultipleChoiceSmall.png" /> </a></li>
+                <li>checkboxs横向模式</li>
+                <li> <a href="javascript:WinOpen('MultipleChoiceSmall-1.png');"> <img src="MultipleChoiceSmall-1.png" /> </a></li>
+
+                <li>checkboxs多选模式纵向模式</li>
+                <li> <a href="javascript:WinOpen('MultipleChoiceSmall-2.png');"> <img src="MultipleChoiceSmall-2.png" /> </a></li>
+
+            </ul>
+        </div>-->
+
+    </form>
+
+</body>
+</html>

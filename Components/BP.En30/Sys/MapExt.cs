@@ -941,7 +941,7 @@ namespace BP.Sys
 
         protected override void afterInsertUpdateAction()
         {
-            if (this.ExtType.Equals("MultipleChoiceSmall") == true)
+            if (this.ExtType.Equals("MultipleChoiceSmall") == true || this.ExtType.Equals("SingleChoiceSmall") == true)
             {
                 //给该字段增加一个KeyOfEnT
                 string mypk = this.FK_MapData + "_" + this.AttrOfOper + "T";

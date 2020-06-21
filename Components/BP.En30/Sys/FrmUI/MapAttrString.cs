@@ -304,6 +304,15 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.GroupName = "输入内容多选";
+                rm.Title = "小范围单选(select)";
+                rm.ClassMethodName = this.ToString() + ".DSingleChoiceSmall()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.GroupName = "输入内容多选";
                 rm.Title = "搜索多选";
@@ -554,6 +563,13 @@ namespace BP.Sys.FrmUI
         public string DoMultipleChoiceSmall()
         {
             return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+        }
+
+
+        public string DSingleChoiceSmall()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/SingleChoiceSmall.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+
         }
         /// <summary>
         /// 大范围多选

@@ -193,7 +193,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
                 var RBShowModel = 3;
                 if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
                     RBShowModel = 0;
-                $.each(flowData.Sys_Enum, function (i, obj) {
+                $.each(frmData.Sys_Enum, function (i, obj) {
                     if (obj.EnumKey == mapAttr.UIBindKey) {
                         var onclickEvent = "";
                         if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
@@ -224,7 +224,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
             if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)
                 RBShowModel = 0;
             var _html = "";
-            $.each(flowData.Sys_Enum, function (i, obj) {
+            $.each(frmData.Sys_Enum, function (i, obj) {
                 if (obj.EnumKey == mapAttr.UIBindKey) {
                     var br = "";
                     if (RBShowModel == 0)

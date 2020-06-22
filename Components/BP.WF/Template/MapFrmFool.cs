@@ -144,7 +144,7 @@ namespace BP.WF.Template
                 if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
                     map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
                 else
-                    map.AddTBString(MapDataAttr.PTable, null, "存储表", true, true, 0, 100, 20);
+                    map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
 
 
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);

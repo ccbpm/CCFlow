@@ -2095,7 +2095,7 @@ var DBAccess = (function () {
 
         sql = sql.replace(/~/g, "'");
         sql = sql.replace(/[+]/g, "/#");
-        sql = sql.replace(/-/g, '/$');
+        //sql = sql.replace(/-/g, '/$');
 
 
 

@@ -565,7 +565,6 @@ function Send(isHuiQian, formType) {
                 initModal("HuiQian", toNodeID);
                 $('#returnWorkModal').modal().show();
             } else {
-
                 initModal("sendAccepter", toNodeID);
                 $('#returnWorkModal').modal().show();
             }
@@ -880,6 +879,10 @@ function NodeFormSend() {
 
     //审核组件
     if ($("#WorkCheck_Doc").length == 1) {
+        if ($("#WorkCheck_Doc").val() == "") {
+            alert("请填写审核意见");
+            return false; 
+        }
         //保存审核信息
         SaveWorkCheck();
         if (isCanSend == false)

@@ -1332,7 +1332,7 @@ namespace BP.WF
                         this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(操作人已经完成)", "WorkNode", "system_error_jump_automatically_3", new string[0]), ndFrom);
                         ExecEvent.DoNode(EventListNode.SendWhen, nd, skipWork, null);
                         ndFrom = nd;
-                        ExecEvent.DoNode(EventListNode.SendSuccess, nd, skipWork, this.HisMsgObjs,null);
+                        ExecEvent.DoNode(EventListNode.SendSuccess, nd, skipWork, this.HisMsgObjs, null);
                         CC(nd);//执行抄送
                         continue;
                     }
@@ -1488,9 +1488,9 @@ namespace BP.WF
                         #endregion
 
                         this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(操作人与上一步相同)", "WorkNode", "system_error_jump_automatically_2", new string[0]), ndFrom);
-                        ExecEvent.DoNode(EventListNode.SendWhen, nd,wk , null);
+                        ExecEvent.DoNode(EventListNode.SendWhen, nd, wk, null);
                         ndFrom = nd;
-                        ExecEvent.DoNode(EventListNode.SendSuccess,nd,wk);
+                        ExecEvent.DoNode(EventListNode.SendSuccess, nd, wk);
                         CC(nd);//执行抄送
                         continue;
                     }
@@ -1557,7 +1557,7 @@ namespace BP.WF
                     {
                         ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
                         if (pushMsg != null) //抄送的WorkID=0,目的不让其删除.
-                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel,0, null, atParas);
+                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel, 0, null, atParas);
                     }
                 }
             }
@@ -1822,7 +1822,7 @@ namespace BP.WF
                     this.addMsg("OneNodeFlowOver", BP.WF.Glo.multilingual("@工作已经成功处理(一个流程的工作)。", "WorkNode", "node_completed_success", new string[0]));
                 }
 
-                if (this.HisFlow.CondsOfFlowComplete.Count >=1 
+                if (this.HisFlow.CondsOfFlowComplete.Count >= 1
                     && this.HisFlow.CondsOfFlowComplete.GenerResult(this.rptGe))
                 {
                     /*如果有流程完成条件，并且流程完成条件是通过的。*/
@@ -1869,7 +1869,7 @@ namespace BP.WF
                 DataType.GeTimeLimits(rptGe.FlowStartRDT, DataType.CurrentDataTime));
 
             //如果两个物理表不想等.
-            if (this.HisWork.EnMap.PhysicsTable.Equals(this.rptGe.EnMap.PhysicsTable)==false)
+            if (this.HisWork.EnMap.PhysicsTable.Equals(this.rptGe.EnMap.PhysicsTable) == false)
             {
                 // 更新状态。
                 this.HisWork.SetValByKey("CDT", DataType.CurrentDataTime);
@@ -2157,10 +2157,10 @@ namespace BP.WF
             #endregion
 
             #region  初始化发起的工作节点。
-            if (this.HisWork.EnMap.PhysicsTable.Equals(toWK.EnMap.PhysicsTable)== false)
+            if (this.HisWork.EnMap.PhysicsTable.Equals(toWK.EnMap.PhysicsTable) == false)
                 /* 如果两个数据源不想等，就执行copy。 */
                 this.CopyData(toWK, toND, false);
-           
+
             #endregion 初始化发起的工作节点.
 
             #region 判断是否是质量评价。
@@ -4306,7 +4306,10 @@ namespace BP.WF
                     throw new Exception("err@请填写审核意见." + sql);
 
                 if (DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
-                    throw new Exception("err@审核意见不能为空." + sql);
+                {
+                 //   throw new Exception("err@审核意见不能为空." + sql);
+                    throw new Exception("err@审核意见不能为空.");
+                }
             }
             return true;
         }
@@ -5028,7 +5031,7 @@ namespace BP.WF
                     gwl.Update();
 
                     //调用发送成功事件.
-                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess,this, this.HisMsgObjs,null );
+                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, this, this.HisMsgObjs, null);
                     this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                     //执行时效考核.
@@ -5141,7 +5144,7 @@ namespace BP.WF
                             if (this.HisNode.IsEndNode == false)
                                 this.CheckCompleteCondition();
                             //调用发送成功事件.
-                            string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess,this);
+                            string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, this);
                             this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                             //执行时效考核.
@@ -6222,7 +6225,7 @@ namespace BP.WF
                 if (this.DealOradeNode() == true)
                 {
                     //调用发送成功事件.
-                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess,this);
+                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, this);
 
                     this.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
@@ -7361,13 +7364,13 @@ namespace BP.WF
             try
             {
                 //有可能删除之前的日志，即退回又运行到该节点，处理的办法是求出轨迹运行的最后处理时间.
-                string maxDT = DBAccess.RunSQLReturnStringIsNull("Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID,null);
+                string maxDT = DBAccess.RunSQLReturnStringIsNull("Select Max(RDT) FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID, null);
                 if (maxDT != null)
                 {
                     //删除发生的日志.
                     DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisFlow.No) + "Track WHERE WorkID=" + this.WorkID +
                                     " AND NDFrom=" + this.HisNode.NodeID + " AND ActionType=" + (int)ActionType.Forward +
-                                    " AND RDT='"+maxDT+"'");
+                                    " AND RDT='" + maxDT + "'");
                 }
 
                 // 删除考核信息。
@@ -7450,7 +7453,7 @@ namespace BP.WF
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr +
                              "WorkID AND FK_Node=" + dbStr + "FK_Node ";
                     //ps.AddFK_Emp();
-                    ps.Add("FK_Emp",WebUser.No);
+                    ps.Add("FK_Emp", WebUser.No);
                     ps.Add("WorkID", this.WorkID);
                     ps.Add("FK_Node", this.HisNode.NodeID);
                     DBAccess.RunSQL(ps);
@@ -7578,8 +7581,6 @@ namespace BP.WF
             }
 
             /* 产生开始工作流程记录. */
-
-
             #region 设置流程标题.
             if (this.title == null)
             {
@@ -7604,6 +7605,28 @@ namespace BP.WF
             //流程标题.
             this.rptGe.Title = this.HisGenerWorkFlow.Title;
             #endregion 设置流程标题.
+
+            #region  补充gwl数据.让其出现在途.
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.FK_Dept = WebUser.FK_Dept;
+            gwl.FK_DeptT = WebUser.FK_DeptName;
+            gwl.FK_Emp = WebUser.No;
+            gwl.FK_EmpText = WebUser.Name;
+            gwl.FK_Flow = this.HisFlow.No;
+            gwl.WorkID = this.WorkID;
+            gwl.FK_Node = this.HisNode.NodeID;
+            gwl.FK_NodeText = this.HisNode.Name;
+            gwl.IsEnable = true;
+            gwl.IsPass = true;
+            gwl.IsRead = true;
+            gwl.CDT = DataType.CurrentDataTime;
+            gwl.RDT = gwl.CDT;
+            gwl.SDT = gwl.CDT;
+            gwl.Sender = WebUser.No;
+            gwl.Save();
+            #endregion  补充gwl数据.让其出现在途.
+
+
 
             if (DataType.IsNullOrEmpty(rptGe.BillNo))
             {
@@ -7721,17 +7744,6 @@ namespace BP.WF
                 note = BP.WF.Glo.DealExp(note, this.rptGe, null);
             this.rptGe.FlowNote = note;
             this.HisGenerWorkFlow.FlowNote = note;
-
-
-            #region 设置  HisGenerWorkFlow
-            //设置项目名称.
-            //if (this.rptGe.EnMap.Attrs.Contains("PrjNo") == true)
-            //{
-            //    this.HisGenerWorkFlow.PrjNo = this.rptGe.PrjNo;
-            //    if (this.rptGe.EnMap.Attrs.Contains("PrjName") == true)
-            //        this.HisGenerWorkFlow.PrjName = this.rptGe.PrjName;
-            //}
-            #endregion HisCHOfFlow
 
             this.rptGe.FlowStartRDT = DataType.CurrentDataTimess;
             this.rptGe.FlowEnderRDT = DataType.CurrentDataTimess;
@@ -8307,7 +8319,7 @@ namespace BP.WF
                     return;
                 }
 
-                if (this.HisFlow.CondsOfFlowComplete.Count>=1
+                if (this.HisFlow.CondsOfFlowComplete.Count >= 1
                     && this.HisFlow.CondsOfFlowComplete.GenerResult(this.rptGe))
                 {
                     string stopMsg = this.HisFlow.CondsOfFlowComplete.ConditionDesc;

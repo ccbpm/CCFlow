@@ -25,7 +25,7 @@ namespace BP.WF
     public class CCFlowAPI
     {
         /// <summary>
-        /// 产生一个WorkNode 
+        /// 产生一个 WorkNode
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
         /// <param name="Node">节点</param>

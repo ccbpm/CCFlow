@@ -1343,10 +1343,6 @@ namespace BP.WF
         /// </summary>
         SDKForm = 3,
         /// <summary>
-        /// SL表单
-        /// </summary>
-        SLForm=4,
-        /// <summary>
         /// 表单树
         /// </summary>
         SheetTree = 5,

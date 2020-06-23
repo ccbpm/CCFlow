@@ -117,7 +117,6 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_MapAttr", "日期字段");
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
                 #region 基本信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);

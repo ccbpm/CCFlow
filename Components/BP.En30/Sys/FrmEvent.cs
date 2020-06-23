@@ -11,7 +11,6 @@ using BP.Web;
 namespace BP.Sys
 {
    
-    
     /// <summary>
     /// 事件属性
     /// </summary>

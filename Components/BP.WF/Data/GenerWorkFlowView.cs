@@ -826,19 +826,43 @@ namespace BP.WF.Data
 
 
                 rm = new RefMethod();
-               // rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "修改轨迹";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "调整数据";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoEditFrm";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 修改表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoEditFrm()
+        {
+            Node nd = new Node(this.FK_Node);
+            if (nd.FormType == NodeFormType.SelfForm
+                || nd.FormType == NodeFormType.SDKForm
+                || nd.FormType == NodeFormType.SheetAutoTree
+                || nd.FormType == NodeFormType.SheetTree
+                || nd.FormType == NodeFormType.WebOffice
+                || nd.FormType == NodeFormType.WordForm)
+                return "err@当前节点表单类型不同.";
+
+            string frmID = nd.NodeFrmID;
+            return "url@../Admin/AttrFlow/AdminFrm.htm?FrmID="+frmID+"&OID="+this.WorkID;
+        }
 
         #region 执行功能.
         //,string isOK, int wfstate, string fk_emp

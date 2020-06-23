@@ -453,7 +453,6 @@ namespace BP.WF
 
                 map.AddTBString(BillAttr.FK_Node, null, "节点", false, false, 0, 30, 5);
                 map.AddTBString(BillAttr.FK_Bill, null, "FK_Bill", false, false, 0, 500, 5);
-                map.AddTBIntMyNum();
 
                 map.AddSearchAttr(BillAttr.FK_Dept);
                 map.AddSearchAttr(BillAttr.FK_Emp);

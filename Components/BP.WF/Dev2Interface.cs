@@ -1167,7 +1167,6 @@ namespace BP.WF
                 dt.Columns["fk_node"].ColumnName = "FK_Node";
                 dt.Columns["wfstate"].ColumnName = "WFState";
                 dt.Columns["fk_ny"].ColumnName = "FK_NY";
-                dt.Columns["mynum"].ColumnName = "MyNum";
                 dt.Columns["flowname"].ColumnName = "FlowName";
                 dt.Columns["starter"].ColumnName = "Starter";
                 dt.Columns["sender"].ColumnName = "Sender";
@@ -1254,7 +1253,6 @@ namespace BP.WF
                 dt.Columns["TASKSTA"].ColumnName = "TaskSta";
                 dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
-                dt.Columns["MYNUM"].ColumnName = "MyNum";
             }
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -1287,7 +1285,6 @@ namespace BP.WF
                 dt.Columns["tasksta"].ColumnName = "TaskSta";
                 dt.Columns["sender"].ColumnName = "Sender";
                 dt.Columns["atpara"].ColumnName = "AtPara";
-                dt.Columns["mynum"].ColumnName = "MyNum";
             }
 
             return dt;
@@ -1423,7 +1420,6 @@ namespace BP.WF
                     dt.Columns["LISTTYPE"].ColumnName = "ListType";
                     dt.Columns["SENDER"].ColumnName = "Sender";
                     dt.Columns["ATPARA"].ColumnName = "AtPara";
-                    //  dt.Columns["MYNUM"].ColumnName = "MyNum";
                 }
 
                 if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -1464,7 +1460,6 @@ namespace BP.WF
                     dt.Columns["listtype"].ColumnName = "ListType";
                     dt.Columns["sender"].ColumnName = "Sender";
                     dt.Columns["atpara"].ColumnName = "AtPara";
-                    //dt.Columns["mynum"].ColumnName = "MyNum";
                 }
                 return dt;
             }
@@ -1576,7 +1571,6 @@ namespace BP.WF
                 dt2.Columns["LISTTYPE"].ColumnName = "ListType";
                 dt2.Columns["SENDER"].ColumnName = "Sender";
                 dt2.Columns["ATPARA"].ColumnName = "AtPara";
-                // dt2.Columns["MYNUM"].ColumnName = "MyNum";
             }
 
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -1617,7 +1611,6 @@ namespace BP.WF
                 dt2.Columns["listtype"].ColumnName = "ListType";
                 dt2.Columns["sender"].ColumnName = "Sender";
                 dt2.Columns["atpara"].ColumnName = "AtPara";
-                //  dt2.Columns["mynum"].ColumnName = "MyNum";
             }
             return dt2;
         }
@@ -2386,7 +2379,6 @@ namespace BP.WF
                 dt.Columns["LISTTYPE"].ColumnName = "ListType";
                 dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
-                dt.Columns["MYNUM"].ColumnName = "MyNum";
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -2423,7 +2415,6 @@ namespace BP.WF
                 dt.Columns["listtype"].ColumnName = "ListType";
                 dt.Columns["sender"].ColumnName = "Sender";
                 dt.Columns["atpara"].ColumnName = "AtPara";
-                dt.Columns["mynum"].ColumnName = "MyNum";
             }
 
 
@@ -2512,7 +2503,6 @@ namespace BP.WF
                 dt.Columns["LISTTYPE"].ColumnName = "ListType";
                 dt.Columns["SENDER"].ColumnName = "Sender";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
-                dt.Columns["MYNUM"].ColumnName = "MyNum";
             }
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -2549,7 +2539,6 @@ namespace BP.WF
                 dt.Columns["listtype"].ColumnName = "ListType";
                 dt.Columns["sender"].ColumnName = "Sender";
                 dt.Columns["atpara"].ColumnName = "AtPara";
-                dt.Columns["mynum"].ColumnName = "MyNum";
             }
 
             return dt;
@@ -6757,7 +6746,6 @@ namespace BP.WF
             //    rpt.SetValByKey(GERptAttr.FID, 0);
             //    rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
             //    rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);
-            //    rpt.SetValByKey(GERptAttr.MyNum, 0);
             //    rpt.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
             //    rpt.SetValByKey(GERptAttr.FlowStarter, emp.No);
             //    rpt.SetValByKey(GERptAttr.FlowEnder, emp.No);

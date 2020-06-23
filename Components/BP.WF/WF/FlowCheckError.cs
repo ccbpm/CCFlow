@@ -949,7 +949,6 @@ namespace BP.WF
 
             if (attrs.Contains(md.No + "_" + GERptAttr.FlowStartRDT) == false)
             {
-                /* MyNum */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
@@ -987,7 +986,6 @@ namespace BP.WF
 
             if (attrs.Contains(md.No + "_" + GERptAttr.FlowEnderRDT) == false)
             {
-                /* MyNum */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
@@ -1141,28 +1139,7 @@ namespace BP.WF
                 attr.Idx = -100;
                 attr.Insert();
             }
-
-
-            if (attrs.Contains(md.No + "_MyNum") == false)
-            {
-                /* MyNum */
-                MapAttr attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "MyNum";
-                attr.Name = "条";
-                attr.MyDataType = DataType.AppInt;
-                attr.DefVal = "1";
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = false;
-                attr.HisEditType = EditType.UnDel;
-                attr.Idx = -101;
-                attr.Insert();
-            }
-
+            
             if (attrs.Contains(md.No + "_" + GERptAttr.AtPara) == false)
             {
                 /* 父流程 流程编号 */

@@ -1250,11 +1250,10 @@ namespace BP.WF.HttpHandler
                         if (attr.Key.Equals("OID"))
                             continue;
 
-                        if (attr.Key == "MyNum")
+                        if (attr.Key.Equals("MyNum"))
                             continue;
 
-                        if (attr.Key == "WorkID")
-
+                        if (attr.Key.Equals("WorkID")==true)
                             continue;
 
                         if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")

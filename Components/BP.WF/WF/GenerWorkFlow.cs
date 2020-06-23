@@ -288,11 +288,6 @@ namespace BP.WF
         /// </summary>
         public const string HuiQianTaskSta = "HuiQianTaskSta";
         /// <summary>
-        /// 数量
-        /// </summary>
-        public const string MyNum = "MyNum";
-
-        /// <summary>
         /// 域/系统编号
         /// </summary>
         public const string Domain = "Domain";

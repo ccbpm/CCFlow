@@ -90,10 +90,6 @@ namespace BP.WF
         /// </summary>
         public const string FK_Dept = "FK_Dept";
         /// <summary>
-        /// 数量
-        /// </summary>
-        public const string MyNum = "MyNum";
-        /// <summary>
         /// 结束人
         /// </summary>
         public const string FlowEnder = "FlowEnder";

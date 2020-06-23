@@ -661,7 +661,6 @@ namespace BP.WF.Data
                 map.AddTBInt(CHAttr.CHSta, 0, "状态", true, true);
                 map.AddTBInt(CHAttr.WeekNum, 0, "第几周", false, true);
                 map.AddTBFloat(CHAttr.Points, 0, "总扣分", true, true);
-                map.AddTBIntMyNum();
                 #endregion 计算属性.
 
                 this._enMap = map;

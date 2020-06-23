@@ -3191,7 +3191,6 @@ namespace BP.WF
 
             if (attrs.Contains(md.No + "_" + GERptAttr.FlowStartRDT) == false)
             {
-                /* MyNum */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
@@ -3229,7 +3228,6 @@ namespace BP.WF
 
             if (attrs.Contains(md.No + "_" + GERptAttr.FlowEnderRDT) == false)
             {
-                /* MyNum */
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;

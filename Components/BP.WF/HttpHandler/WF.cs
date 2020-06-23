@@ -1043,11 +1043,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["PFID"].ColumnName = "PFID";
                 dt.Columns["PEMP"].ColumnName = "PEmp";
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
-
-                //还有没有这列？
-                bool ishave = dt.Columns.Contains("MYNUM");
-                if(ishave)
-                    dt.Columns["MYNUM"].ColumnName = "MyNum";
+             
 
                 dt.Columns["GUID"].ColumnName = "Guid";
                 dt.Columns["GUESTNO"].ColumnName = "GuestNo";
@@ -1093,7 +1089,6 @@ namespace BP.WF.HttpHandler
                 dt.Columns["pfid"].ColumnName = "PFID";
                 dt.Columns["pemp"].ColumnName = "PEmp";
                 dt.Columns["nodename"].ColumnName = "NodeName";
-                dt.Columns["mynum"].ColumnName = "MyNum";
                 dt.Columns["guid"].ColumnName = "Guid";
                 dt.Columns["guestno"].ColumnName = "GuestNo";
                 dt.Columns["guestname"].ColumnName = "GuestName";

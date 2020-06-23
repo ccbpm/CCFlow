@@ -56,11 +56,6 @@ namespace BP.WF.Data
         /// 流程
         /// </summary>
         public const string WFSta = "WFSta";
-
-        /// <summary>
-        /// 数量
-        /// </summary>
-        public const string MyNum = "MyNum";
         /// <summary>
         /// 结束人
         /// </summary>

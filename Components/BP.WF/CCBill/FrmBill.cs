@@ -778,7 +778,6 @@ namespace BP.CCBill
 
             if (attrs.Contains(this.No + "_RDT") == false)
             {
-                /* MyNum */
                 MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;

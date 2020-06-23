@@ -18,6 +18,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string OrgNo = "OrgNo";
         /// <summary>
+        /// 简称
+        /// </summary>
+        public const string ShortName = "ShortName";
+        /// <summary>
         /// 域/系统编号
         /// </summary>
         public const string Domain = "Domain";
@@ -95,6 +99,7 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowSortAttr.No, null, "编号", true, true, 1, 100, 20);
                 map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", true, true, 0, 100, 30);
                 map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 200, 30, true);
+                map.AddTBString(FlowSortAttr.ShortName, null, "简称", true, false, 0, 200, 30, true);
                 map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", true, false, 0, 150, 30);
                 map.SetHelperAlert(FlowSortAttr.OrgNo, "用于区分不同组织的的流程,比如:一个集团有多个子公司,每个子公司都有自己的业务流程.");
 

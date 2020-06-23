@@ -1728,17 +1728,17 @@ namespace BP.WF.HttpHandler
                         pkVal = this.FID;
 
                     //排序，结合人员表Idx进行排序
-                    if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
-                    {
-                        tk.Row["T_CheckIndex"] =
-                            DBAccess.RunSQLReturnValInt(
-                                string.Format("SELECT Idx FROM Port_Emp WHERE No='{0}'", tk.EmpFrom), 0);
-                        noneEmpIdx++;
-                    }
-                    else
-                    {
-                        tk.Row["T_CheckIndex"] = noneEmpIdx++;
-                    }
+                    //if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
+                    //{
+                    //    tk.Row["T_CheckIndex"] =
+                    //        DBAccess.RunSQLReturnValInt(
+                    //            string.Format("SELECT Idx FROM Port_Emp WHERE No='{0}'", tk.EmpFrom), 0);
+                    //    noneEmpIdx++;
+                    //}
+                    //else
+                    //{
+                    //    tk.Row["T_CheckIndex"] = noneEmpIdx++;
+                    //}
                     switch (tk.HisActionType)
                     {
                         case ActionType.WorkCheck:
@@ -1960,7 +1960,7 @@ namespace BP.WF.HttpHandler
                                     row["IsDoc"] = false;
                                     row["ParentNode"] = tk.NDFrom;
                                     //row["T_NodeIndex"] = idx++;
-                                    row["T_CheckIndex"] = noneEmpIdx++;
+                                    //row["T_CheckIndex"] = noneEmpIdx++;
                                     row["ActionType"] = mysubtk.HisActionType;
                                     row["Tag"] = mysubtk.Tag;
                                     row["FWCView"] = subFrmCheck.FWCView;
@@ -2057,7 +2057,7 @@ namespace BP.WF.HttpHandler
                         row["EmpFromT"] = WebUser.Name;
                         row["DeptName"] = WebUser.FK_DeptName;
                         //row["T_NodeIndex"] = ++idx;
-                        row["T_CheckIndex"] = ++noneEmpIdx;
+                        //row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
                         row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
                         tkDt.Rows.Add(row);
@@ -2122,7 +2122,7 @@ namespace BP.WF.HttpHandler
                 row["EmpFromT"] = "";
                 row["DeptName"] = "";
                 //row["T_NodeIndex"] = ++idx;
-                row["T_CheckIndex"] = ++noneEmpIdx;
+                //row["T_CheckIndex"] = ++noneEmpIdx;
 
                 tkDt.Rows.Add(row);
             }
@@ -2289,7 +2289,41 @@ namespace BP.WF.HttpHandler
             {
                 tks = wc.HisWorkChecks;
 
+                foreach (BP.WF.Track tk in tks)
+                {
+                    if (tk.HisActionType == ActionType.FlowBBS)
+                        continue;
 
+                    nd = nds.GetEntityByKey(tk.NDFrom) as Node;
+                    if (nd == null)
+                        continue;
+
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
+                    //求出主键
+                    long pkVal = this.WorkID;
+                    if (nd.HisRunModel == RunModel.SubThread)
+                        pkVal = this.FID;
+
+                  
+                    switch (tk.HisActionType)
+                    {
+                        case ActionType.WorkCheck:
+                        case ActionType.StartChildenFlow:
+                        case ActionType.ForwardHL:
+                            if (nodes.Contains(tk.NDFrom + ",") == false)
+                                nodes += tk.NDFrom + ",";
+                            break;
+                        case ActionType.Return:
+                            if (wcDesc.FWCIsShowReturnMsg == true && tk.NDTo == this.FK_Node)
+                            {
+                                if (nodes.Contains(tk.NDFrom + ",") == false)
+                                    nodes += tk.NDFrom + ",";
+                            }
+                            break;
+                        default:
+                            continue;
+                    }
+                }
                 foreach (Track tk in tks)
                 {
                     if (tk.HisActionType == ActionType.ForwardHL)
@@ -2297,8 +2331,8 @@ namespace BP.WF.HttpHandler
                         var sss = "";
                     }
 
-                    //if (nodes.Contains(tk.NDFrom + ",") == false)
-                     //   continue;
+                    if (nodes.Contains(tk.NDFrom + ",") == false)
+                        continue;
 
                   
 

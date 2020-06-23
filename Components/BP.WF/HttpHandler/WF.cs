@@ -1112,44 +1112,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
-        //为北京农科院做的待办、在途、已完成的查询
-        public string SearchFlowStaData()
-        {
-            string sql = "SELECT * FROM WF_GenerWorkFlow WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%')";
-            //获取搜索框里的值
-            string DeptKey = GetRequestVal("TB_DeptKey");
-            string StarterKey = GetRequestVal("TB_StarterKey");
-            string DTKey = GetRequestVal("TB_DTKey");
-            string FlowKey = GetRequestVal("TB_FlowKey");
-            string FlowSta = GetRequestVal("FlowSta");
-            if (DeptKey!="null")
-            {
-                sql += " AND DeptName LIKE '%" + DeptKey + "%'";
-            }
-            if (StarterKey != "null")
-            {
-                sql += " AND StarterName = '" + StarterKey + "'";
-            }
-            if (DTKey != "null")
-            {
-                sql += " AND RDT LIKE '%" + DTKey + "%'";
-            }
-            if (FlowKey != "null")
-            {
-                sql += " AND FlowName LIKE '%" + FlowKey + "%'";
-            }
-            //根据url获取来的字段判断是否是已完成页面
-            if (FlowSta == "3")
-            {
-                sql += " AND WFState=3 ORDER BY RDT DESC";
-            }
-            else
-            {
-                sql += " AND WFState=2 ORDER BY RDT DESC";
-            }
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            return BP.Tools.Json.ToJson(dt);
-        }
+        
         /// <summary>
         /// 执行撤销
         /// </summary>

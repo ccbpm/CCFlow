@@ -910,6 +910,45 @@ namespace BP.WF.Template
             }
             #endregion 按照自定义的URL来计算
 
+            #region 按照设置的WebAPI接口获取的数据计算
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByAPIUrl)
+            {
+                //返回值
+                string postData = "";
+                //用户输入的webAPI地址
+                string apiUrl = town.HisNode.DeliveryParas;
+                //如果有参数
+                if (apiUrl.Contains("?"))
+                {
+                    //api接口地址
+                    string apiHost = apiUrl.Split(',')[0];
+                    //api参数
+                    string apiParams = apiUrl.Split(',')[1];
+                    //参数替换
+                    apiParams = BP.WF.Glo.DealExp(apiParams, town.HisWork);
+                    //执行POST
+                    postData = BP.WF.Glo.HttpPostConnect(apiHost, apiParams);
+
+                    if (postData == "[]" || postData == "" || postData == null)
+                        throw new Exception("节点" + town.HisNode.NodeID + "_" + town.HisNode.Name + "设置的WebAPI接口返回的数据出错，请检查接口返回值。");
+
+                    dt = BP.Tools.Json.ToDataTable(postData);
+                    return dt;
+                }
+                else{//如果没有参数，执行GET
+                    postData = BP.WF.Glo.HttpGet(apiUrl);
+                    if (postData == "[]" || postData == "" || postData == null)
+                        throw new Exception("节点" + town.HisNode.NodeID + "_" + town.HisNode.Name + "设置的WebAPI接口返回的数据出错，请检查接口返回值。");
+
+                    dt = BP.Tools.Json.ToDataTable(postData);
+                    return dt;
+                }
+
+
+
+            }
+            #endregion 按照设置的WebAPI接口获取的数据计算
+
             #region 按照组织模式人员选择器
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedEmpsOrgModel)
             {

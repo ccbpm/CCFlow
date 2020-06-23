@@ -2352,6 +2352,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Port_Init()
         {
+            if (this.DoWhat.Equals("Soap_Login") == true)
+            {
+                string oid=BP.WF.Glo.HttpPostConnect("http://140.143.236.168:8095/DataUser/LocalWS.asmx/CreateWorkID","flowNo=055&userNo=admin");
+                return oid;
+            }
             #region 安全性校验.
             //if (this.UserNo == null )
             //    return "err@必要的参数没有传入，请参考接口规则。UserNo";

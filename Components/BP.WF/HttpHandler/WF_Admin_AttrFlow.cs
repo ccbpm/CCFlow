@@ -280,7 +280,7 @@ namespace BP.WF.HttpHandler
                 return "err@设置的字段有误.【" + flow.DTSFields + "】";
             }
 
-            flow.Update();
+            flow.DirectUpdate();
             return "保存成功";
         }
 
@@ -409,7 +409,7 @@ namespace BP.WF.HttpHandler
             //数据存储格式   a,b,c@a_1,b_1,c_1
             fl.DTSFields = lcStr;
             fl.DTSBTablePK = pk;
-            fl.Update();
+            fl.DirectUpdate();
 
             return "设置成功.";
         }

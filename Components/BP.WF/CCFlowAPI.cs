@@ -448,7 +448,7 @@ namespace BP.WF
 
                     // 把扩展放入里面去.
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
-                    BP.Sys.MapExts exts = new MapExts();
+                    MapExts exts = new MapExts();
                     qo = new QueryObject(exts);
                     qo.AddWhere(MapExtAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
                     qo.DoQuery();
@@ -462,7 +462,7 @@ namespace BP.WF
 
                     //把从表放里面
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
-                    BP.Sys.MapDtls dtls = new MapDtls();
+                    MapDtls dtls = new MapDtls();
                     qo = new QueryObject(dtls);
                     qo.AddWhere(MapDtlAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
                     qo.addAnd();
@@ -479,7 +479,7 @@ namespace BP.WF
 
                     //把附件放里面
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
-                    BP.Sys.FrmAttachment frmAtchs = new FrmAttachment();
+                    FrmAttachment frmAtchs = new FrmAttachment();
                     qo = new QueryObject(frmAtchs);
                     qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
                     qo.addAnd();

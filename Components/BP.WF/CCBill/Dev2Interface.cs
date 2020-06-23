@@ -446,7 +446,7 @@ namespace BP.CCBill
             DataSet ds = new DataSet();
 
             //单据类别.
-            BP.Sys.FrmTrees ens = new BP.Sys.FrmTrees();
+            FrmTrees ens = new FrmTrees();
             ens.RetrieveAll();
 
             DataTable dtSort = ens.ToDataTableField("Sort");

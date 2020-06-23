@@ -508,7 +508,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_" + GERptAttr.OID) == false)
             {
                 /* WorkID */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.KeyOfEn = "OID";
                 attr.Name = "主键ID";
@@ -524,7 +524,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)
             {
                 /* 单据编号 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.BillNo;
@@ -544,7 +544,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_" + GERptAttr.Title) == false)
             {
                 /* 名称 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
@@ -563,7 +563,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_BillState") == false)
             {
                 /* 单据状态 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "BillState"; // "FlowEmps";
@@ -583,7 +583,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_Starter") == false)
             {
                 /* 发起人 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "Starter";
@@ -602,7 +602,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_StarterName") == false)
             {
                 /* 创建人名称 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "StarterName";
@@ -623,7 +623,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_" + GERptAttr.AtPara) == false)
             {
                 /* 参数 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.AtPara;
@@ -643,7 +643,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_RDT") == false)
             {
                 /* MyNum */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "RDT"; // "FlowStartRDT";
@@ -660,7 +660,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_FK_Dept") == false)
             {
                 /* 创建人部门 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "FK_Dept";
@@ -679,7 +679,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "OrgNo") == false)
             {
                 /* 创建人名称 */
-                MapAttr attr = new BP.Sys.MapAttr();
+                MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = "OrgNo";

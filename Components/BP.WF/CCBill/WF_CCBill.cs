@@ -646,7 +646,7 @@ namespace BP.CCBill
             MapData md = new MapData(this.FrmID);
 
             //取出来查询条件.
-            BP.Sys.UserRegedit ur = new UserRegedit();
+            UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + "_" + this.FrmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
@@ -1137,7 +1137,7 @@ namespace BP.CCBill
 
 
             //取出来查询条件.
-            BP.Sys.UserRegedit ur = new UserRegedit();
+            UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + "_" + this.FrmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
@@ -1432,7 +1432,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.

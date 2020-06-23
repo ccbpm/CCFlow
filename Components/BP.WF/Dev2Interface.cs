@@ -3222,8 +3222,10 @@ namespace BP.WF
                 }
             }
 
+            //获得sql.
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["STARTERNAME"].ColumnName = "StarterName";
@@ -3353,94 +3355,7 @@ namespace BP.WF
 
             return BP.DA.DBAccess.RunSQLReturnTable(sql);
         }
-        /// <summary>
-        /// 在途工作
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable DB_GenerRuningV2()
-        {
-            string userNo = WebUser.No;
-            string fk_flow = null;
-
-            string sql;
-            int state = (int)WFState.Runing;
-            if (WebUser.IsAuthorize)
-            {
-                WF.Port.WFEmp emp = new Port.WFEmp(userNo);
-                if (DataType.IsNullOrEmpty(fk_flow))
-                {
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
-                }
-                else
-                {
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1 AND A.FK_Flow IN " + emp.AuthorFlows;
-                }
-            }
-            else
-            {
-                if (DataType.IsNullOrEmpty(fk_flow))
-                {
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 ";
-                }
-                else
-                {
-                    sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + userNo + "' AND B.IsEnable=1 AND B.IsPass=1 ";
-                }
-            }
-            return DBAccess.RunSQLReturnTable(sql);
-        }
-        /// <summary>
-        /// 获取内部系统消息
-        /// </summary>
-        /// <param name="myPK"></param>
-        /// <returns></returns>
-        public static DataTable DB_GenerPopAlert(string type)
-        {
-            string sql = "";
-            if (type == "unRead")
-            {
-                sql = "SELECT LEFT(CONVERT(VARCHAR(20),RDT,120),10) AS SortRDT,Datepart(WEEKDAY, CONVERT(DATETIME,RDT)  + @@DateFirst - 1) AS WeekRDT,"
-                    + "* FROM Sys_SMS WHERE SendTo ='" + WebUser.No + "' AND (IsRead = 0 OR IsRead IS NULL)  ORDER BY RDT DESC";
-            }
-            else
-            {
-                sql = "SELECT LEFT(CONVERT(VARCHAR(20),RDT,120),10) AS SortRDT,Datepart(WEEKDAY, CONVERT(DATETIME,RDT)  + @@DateFirst - 1) AS WeekRDT,"
-                    + "* FROM Sys_SMS WHERE SendTo ='" + WebUser.No + "'  ORDER BY RDT DESC";
-            }
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
-        }
-
-        /// <summary>
-        /// 获取外部系统消息
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="No"></param>
-        /// <returns></returns>
-        public static DataTable DB_GenerPopAlert(string type, string No)
-        {
-            string sql = "";
-            if (type == "unRead")
-            {
-                sql = "SELECT LEFT(CONVERT(VARCHAR(20),RDT,120),10) AS SortRDT,Datepart(WEEKDAY, CONVERT(DATETIME,RDT)  + @@DateFirst - 1) AS WeekRDT,"
-                    + "* FROM Sys_SMS WHERE SendTo ='" + No + "' AND (IsRead = 0 OR IsRead IS NULL)  ORDER BY RDT DESC";
-            }
-            else
-            {
-                sql = "SELECT LEFT(CONVERT(VARCHAR(20),RDT,120),10) AS SortRDT,Datepart(WEEKDAY, CONVERT(DATETIME,RDT)  + @@DateFirst - 1) AS WeekRDT,"
-                    + "* FROM Sys_SMS WHERE SendTo ='" + No + "'  ORDER BY RDT DESC";
-            }
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
-        }
-        /// <summary>
-        /// 更新消息状态
-        /// </summary>
-        /// <param name="myPK"></param>
-        public static DataTable DB_GenerUpdateMsgSta(string myPK)
-        {
-            string sql = "";
-            sql = " UPDATE Sys_SMS SET IsRead=1 WHERE MyPK='" + myPK + "'";
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
-        }
+         
         /// <summary>
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
         /// </summary>

@@ -579,7 +579,7 @@ namespace BP.WF.HttpHandler
             {
                 CCList list = new CCList();
                 bool isCheckOver = list.IsExit(CCListAttr.WorkID, this.WorkID,
-                   CCListAttr.CCTo, WebUser.No,CCListAttr.Sta,CCSta.CheckOver);
+                   CCListAttr.CCTo, WebUser.No,CCListAttr.Sta,(int)CCSta.CheckOver);
                 DataRow dr = dt.NewRow();
                 if(isCheckOver == true)
                 {

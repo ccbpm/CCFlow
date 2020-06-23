@@ -77,8 +77,10 @@ function GenerFoolFrm(mapData, frmData) {
             var aths = $.grep(frmData.Sys_FrmAttachment, function (ath) { return ath.MyPK == gf.CtrlID });
             var ath = aths.length > 0 ? aths[0] : null;
             var athInfo = "";
-            if (ath == null)
+            if (ath == null) {
                 athInfo = "附件" + gf.CtrlID + "信息丢失";
+                continue;
+            }
             else
                 athInfo = "<div id='Div_" + ath.MyPK + "' name='Ath'></div>";
 

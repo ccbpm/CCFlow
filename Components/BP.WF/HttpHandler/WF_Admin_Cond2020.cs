@@ -83,11 +83,11 @@ namespace BP.WF.HttpHandler
                     sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + str;
                     break;
                 case DBType.MySQL:
-                    sql = " SELECT No FROM Port_Emp WHERE " + str + " and  limit 1 ";
+                    sql = " SELECT No FROM Port_Emp WHERE " + str + "   limit 1 ";
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
-                    sql = " SELECT No FROM Port_Emp WHERE " + str + " and rownum <=1 ";
+                    sql = " SELECT No FROM Port_Emp WHERE " + str + "  rownum <=1 ";
                     break;
                 default:
                     return "err@没有做的数据库类型判断.";

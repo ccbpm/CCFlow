@@ -45,14 +45,21 @@
 
             initData = JSON.parse(data);
 
+            //从表组件集合
+            var mapDtls = initData.MapDtls;
+            //附件组件集合
+            var frmAttachments = initData.FrmAttachments;
+
             //绑定左侧的列表值
             var ulListValuesLiHtml = '';
 
+            //显示枚举/外键值
             $.each(initData.Sys_FrmRB, function (i, rb) {
                 ulListValuesLiHtml += '<li style="list-style-type:none;float:left;" >' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
             })
             $('#ulListValues').html(ulListValuesLiHtml);
 
+            //绑定选择事件
             $('[name=' + pageData.KeyOfEn + ']').bind('change', function (obj) {
 
                 SaveCurrentConfig();
@@ -64,6 +71,8 @@
             var mapAttrHtml = '';
             var showMapAttr = [];
             var myIdx = 0;
+
+            //加载表单字段
             $.each(initData.Sys_MapAttr, function (i, attr) {
 
                 if (expStrs.indexOf(attr.KeyOfEn) != -1)
@@ -102,6 +111,45 @@
 
             })
             $('#Fields tbody').html(mapAttrHtml);
+
+            //加载从表组件
+            mapAttrHtml = '';
+            $.each(mapDtls, function (i, dtl) {
+
+                myIdx++;
+
+                mapAttrHtml += '<tr>';
+                mapAttrHtml += '<td>' + myIdx + '</td>';
+                mapAttrHtml += '<td>' + dtl.No + '</td>';
+                mapAttrHtml += '<td>' + dtl.Name + '</td>';
+                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '0" name="' + dtl.No + '" value="0"/><label for="' + dtl.No + '0" >不设置</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '1" name="' + dtl.No + '" value="1"/><label for="' + dtl.No + '1" >可用</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '2" name="' + dtl.No + '" value="2"/><label for="' + dtl.No + '2" >可见</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '3" name="' + dtl.No + '" value="3"/><label for="' + dtl.No + '3" >不可见</label></td>';
+
+                mapAttrHtml += '</tr>';
+            })
+            $('#mapDtls tbody').html(mapAttrHtml);
+
+            //加载附件组件
+            mapAttrHtml = '';
+            $.each(frmAttachments, function (i, ath) {
+
+                myIdx++;
+
+                mapAttrHtml += '<tr>';
+                mapAttrHtml += '<td>' + myIdx + '</td>';
+                mapAttrHtml += '<td>' + ath.MyPK + '</td>';
+                mapAttrHtml += '<td>' + ath.Name + '</td>';
+                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '0" name="' + ath.MyPK + '" value="0"/><label for="' + ath.MyPK + '0" >不设置</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '1" name="' + ath.MyPK + '" value="1"/><label for="' + ath.MyPK + '1" >可用</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '2" name="' + ath.MyPK + '" value="2"/><label for="' + ath.MyPK + '2" >可见</label></td>';
+                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '3" name="' + ath.MyPK + '" value="3"/><label for="' + ath.MyPK + '3" >不可见</label></td>';
+
+                mapAttrHtml += '</tr>';
+
+            })
+            $('#aths tbody').html(mapAttrHtml);
 
             //为表单字段绑定DATA
             $.each($('#Fields tbody tr'), function (i, tr) {
@@ -232,10 +280,43 @@
                         $('#' + keyOfEn + '0').attr('checked', true);
                     }
                 });
+
+                //为从表绑定DATA
+                $.each(initData.MapDtls, function (i, dtl) {
+                    var keyOfEn = dtl.No;
+                    if (viewStaObj[keyOfEn] != undefined) {
+                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
+                    } else {
+                        $('#' + keyOfEn + '0').attr('checked', true);
+                    }
+                });
+
+                 //为附件组件绑定DATA
+                $.each(initData.FrmAttachments, function (i, ath) {
+                    var keyOfEn = ath.MyPK;
+                    if (viewStaObj[keyOfEn] != undefined) {
+                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
+                    } else {
+                        $('#' + keyOfEn + '0').attr('checked', true);
+                    }
+                });
+
             } else {
                 //为表单字段绑定DATA
                 $.each($('#Fields tbody tr'), function (i, tr) {
                     var keyOfEn = $(tr).data().KeyOfEn;
+                    $('#' + keyOfEn + '0').attr('checked', true);
+                });
+
+                //为从表绑定DATA
+                $.each(initData.MapDtls, function (i, dtl) {
+                    var keyOfEn = dtl.No;
+                    $('#' + keyOfEn + '0').attr('checked', true);
+                });
+
+                 //为附件组件绑定DATA
+                $.each(initData.FrmAttachments, function (i, ath) {
+                    var keyOfEn = ath.MyPK;
                     $('#' + keyOfEn + '0').attr('checked', true);
                 });
             }
@@ -372,6 +453,72 @@
                                         </th>
                                         <th>
                                             设置值
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <legend>联动<font color=red>从表控件</font>使其属性该表(可见) </legend>
+                        <div id="mapDtls">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            从表ID
+                                        </th>
+                                        <th>
+                                            从表名
+                                        </th>
+                                        <th>
+                                            不设置
+                                        </th>
+                                        <th>
+                                            可以编辑
+                                        </th>
+                                        <th>
+                                            可见？
+                                        </th>
+                                        <th>
+                                            不可见
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <legend>联动<font color=red>附件控件</font>使其属性该表(可见) </legend>
+                        <div id="aths">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            附件组件ID
+                                        </th>
+                                        <th>
+                                            附件组件名
+                                        </th>
+                                        <th>
+                                            不设置
+                                        </th>
+                                        <th>
+                                            可以编辑
+                                        </th>
+                                        <th>
+                                            可见？
+                                        </th>
+                                        <th>
+                                            不可见
                                         </th>
                                     </tr>
                                 </thead>

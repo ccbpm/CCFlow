@@ -110,6 +110,8 @@
                         
                     }
                 }
+                else
+                     newRow += "<td><input  type='checkbox' name='CB_" + attr.KeyOfEn + "' />";
                 
                 newRow += '<label for="CB_' + attr.KeyOfEn + '\" >' + attr.KeyOfEn + ' - ' + attr.Name + '</label></td>';
                 newRow += "<td>" + GetDataTypeDesc(mapAttrs[i].MyDataType) + "</td>";

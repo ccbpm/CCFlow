@@ -3457,6 +3457,7 @@ namespace BP.WF
             attr.KeyOfEn = GERptAttr.RDT;
             attr.Name = "接受时间";  //"接受时间";
             attr.MyDataType = BP.DA.DataType.AppDateTime;
+            attr.IsSupperText = 1;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3474,6 +3475,7 @@ namespace BP.WF
                 attr.Name = "完成时间"; //"完成时间";
 
             attr.MyDataType = BP.DA.DataType.AppDateTime;
+            attr.IsSupperText = 1;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;

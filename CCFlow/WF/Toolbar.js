@@ -3,6 +3,8 @@ var wf_node = null;
 $(function () {
     var barHtml="";
     var data;
+    //广西计算中心特意加的一个url参数，用来控制toolbar隐藏
+    if (GetQueryString("hideAllBtn") === "1") return;
     //MyCC
     if ($("#JS_CC").length == 1) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");

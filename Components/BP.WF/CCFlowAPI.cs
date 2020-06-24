@@ -95,6 +95,12 @@ namespace BP.WF
                                 else
                                     dr["UIIsEnable"] = 0;
 
+                                if (item.IsNotNull == true)
+                                    dr["UIIsInput"] = 1;
+                                else
+                                    dr["UIIsInput"] = 0;
+
+
                                 if (item.UIVisible == true)
                                     dr["UIVisible"] = 1;
                                 else

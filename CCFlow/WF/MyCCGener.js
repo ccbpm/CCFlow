@@ -11,12 +11,21 @@ function ReadAndClose()
         handler.AddPara("FlowBBS_Doc", doc);
         handler.DoMethodReturnString("FlowBBS_Save");
     }
+
+    if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+        window.parent.WindowCloseReloadPage(msg);
+    } else {
+        if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+            WindowCloseReloadPage(msg);
+    }
+
     window.close();
 }
 
 function CloseWindow() {
     window.close();
 }
+
 
 var pageData = {};
 var globalVarList = {};

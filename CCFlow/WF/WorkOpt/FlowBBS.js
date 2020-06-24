@@ -115,7 +115,11 @@ function BBSSubmit() {
     if (data.indexOf('err@') == 0) {
         alert(data);
         console.log(data);
+        return;
     }
-    ShowFlowBBS(JSON.parse(data));
+
+    if ( typeof ReadAndClose === "function") {
+        ReadAndClose();
+    }
 
 }

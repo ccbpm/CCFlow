@@ -1524,6 +1524,8 @@ namespace BP.Sys
                 }
             }
 
+            this.DBSrcType = dbType;
+
             switch (dbType)
             {
                 case Sys.DBSrcType.SQLServer:

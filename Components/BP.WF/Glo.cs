@@ -15,6 +15,7 @@ using BP.WF.Template;
 using System.Net;
 using LitJson;
 using System.IO;
+using System.Collections.Generic;
 
 namespace BP.WF
 {
@@ -6844,9 +6845,10 @@ namespace BP.WF
             request.Method = "POST";
             request.ContentLength = dataArray.Length;
             //设置上传服务的数据格式  设置之后不好使
-            //request.ContentType = "application/json";
+            //request.ContentType = "application/x-www-form-urlencoded";
             //请求的身份验证信息为默认
             request.Credentials = CredentialCache.DefaultCredentials;
+            request.ContentType = "application/x-www-form-urlencoded";
             //请求超时时间
             request.Timeout = 10000;
             //创建输入流
@@ -6862,21 +6864,22 @@ namespace BP.WF
             //发送请求
             dataStream.Write(dataArray, 0, dataArray.Length);
             dataStream.Close();
-            //读取返回消息
-            string res;
+
+            HttpWebResponse res;
             try
             {
-                var response = (HttpWebResponse)request.GetResponse();
-                var reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-                res = reader.ReadToEnd();
-                reader.Close();
+                res = (HttpWebResponse)request.GetResponse();
             }
-            catch (Exception ex)
+            catch (WebException ex)
             {
-                throw new Exception("err@发送消息连接服务器失败.设置的url=[" + serverUrl + "]" + ex.Message);
+                res = (HttpWebResponse)ex.Response;
             }
-            return res;
+            StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
+            //读取返回消息
+            string data= sr.ReadToEnd();
+            sr.Close();
+            return data;
         }
-        #endregion http请求
     }
+    #endregion http请求
 }

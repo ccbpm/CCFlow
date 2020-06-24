@@ -285,7 +285,7 @@ namespace BP.WF
             if (isActiveSave == false)
                 return;
 
-            #region qinfaliang, 编写同步的业务逻辑,执行错误就抛出异常.
+            #region zqp, 编写同步的业务逻辑,执行错误就抛出异常.
 
             string[] dtsArray = fl.DTSFields.Split('@');
 
@@ -361,9 +361,10 @@ namespace BP.WF
                         throw new Exception("暂时不支您所使用的数据库类型!");
                 }
                 values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                upVal = upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
                 //获取除主键之外的其他值
-                if (i > 0)
-                    upVal = upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                //if (i > 0)
+                    
             }
 
             values = values.Substring(0, values.Length - 1);

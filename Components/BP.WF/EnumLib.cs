@@ -1043,7 +1043,7 @@ namespace BP.WF
         /// </summary>
         BySelfUrl = 44,
         /// <summary>
-        /// 按照自定义API/URL
+        /// 按照设置的WebAPI接口获取的数据计算
         /// </summary>
         ByAPIUrl = 45,
         /// <summary>

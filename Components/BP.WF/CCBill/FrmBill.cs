@@ -811,7 +811,7 @@ namespace BP.CCBill
                 attr.Idx = -1;
                 attr.Insert();
             }
-            if (attrs.Contains(this.No + "OrgNo") == false)
+            if (attrs.Contains(this.No + "_OrgNo") == false)
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
@@ -832,7 +832,6 @@ namespace BP.CCBill
             }
             #endregion 补充上流程字段。
         }
-
         /// <summary>
         /// 绑定菜单树
         /// </summary>
@@ -873,7 +872,6 @@ namespace BP.CCBill
               this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
         #endregion 方法操作.
-
     }
     /// <summary>
     /// 单据属性s

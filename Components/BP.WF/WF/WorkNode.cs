@@ -7627,7 +7627,6 @@ namespace BP.WF
             #endregion  补充gwl数据.让其出现在途.
 
 
-
             if (DataType.IsNullOrEmpty(rptGe.BillNo))
             {
                 //处理单据编号.

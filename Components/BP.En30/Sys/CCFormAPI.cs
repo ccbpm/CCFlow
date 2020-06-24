@@ -101,6 +101,9 @@ namespace BP.Sys
         /// <param name="y">位置y</param>
         public static void CreateOrSaveAthImg(string fk_mapdata, string no, string name, float x, float y)
         {
+            no = no.Trim();
+            name = name.Trim();
+
             FrmImgAth ath = new FrmImgAth();
             ath.FK_MapData = fk_mapdata;
             ath.CtrlID = no;

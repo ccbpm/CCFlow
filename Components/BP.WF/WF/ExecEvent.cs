@@ -95,13 +95,13 @@ namespace BP.WF
                     {
                         case EventListNode.SendWhen:
                             if (wn.HisNode.TodolistModel == TodolistModel.QiangBan)
-                                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
+                                DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
                             else
-                                BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE SendTo='"+WebUser.No+"' AND WorkID=" + wn.HisWork.OID);
+                                DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE SendTo='"+WebUser.No+"' AND WorkID=" + wn.HisWork.OID);
                             break;
                         case EventListNode.ReturnAfter:
                         case EventListNode.ShitAfter:
-                            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
+                            DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
                             break;
                         default:
                             break;
@@ -175,8 +175,6 @@ namespace BP.WF
                 Node toNode = new Node(toNodeID);
                 pms = toNode.HisPushMsgs;
             }
-
-           
 
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)

@@ -13,8 +13,6 @@ namespace BP.Sys
     /// </summary>
     public class CCFormParse
     {
-        
-
         /// <summary>
         /// 保存元素
         /// </summary>

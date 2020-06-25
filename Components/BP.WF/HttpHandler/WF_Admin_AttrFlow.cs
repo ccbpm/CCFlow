@@ -237,9 +237,13 @@ namespace BP.WF.HttpHandler
             //获取流程属性
             Flow flow = new Flow(this.FK_Flow);
             //获取主键方式
-            BP.WF.Template.DataDTSWay dtsWay = (BP.WF.Template.DataDTSWay)this.GetRequestValInt("RB_DTSWay");
+            DataDTSWay dtsWay = (DataDTSWay)this.GetRequestValInt("RB_DTSWay");
+
+            FlowDTSTime dtsTime = (FlowDTSTime)this.GetRequestValInt("RB_DTSTime");
 
             flow.DTSWay = dtsWay;
+            flow.DTSTime = dtsTime;
+
             if (flow.DTSWay == DataDTSWay.None)
             {
                 flow.Update();
@@ -249,36 +253,7 @@ namespace BP.WF.HttpHandler
             //保存配置信息
             flow.DTSDBSrc = this.GetRequestVal("DDL_DBSrc");
             flow.DTSBTable = this.GetRequestVal("DDL_Table");
-            flow.DTSSpecNodes = this.GetRequestVal("CheckBoxIDs");
-
-
-            SFDBSrc s = new SFDBSrc("local");
-
-            try
-            {
-                s = new SFDBSrc("local");
-                string str = flow.DTSFields;
-
-                string[] arr = str.Split('@');
-
-
-                string sql = "SELECT " + arr[0] + " FROM " + flow.PTable;
-
-                s.RunSQL(sql);
-
-                s = new SFDBSrc(flow.DTSDBSrc);
-
-                sql = "SELECT " + arr[1] + ", " + flow.DTSBTablePK
-                    + " FROM " + flow.DTSBTable;
-
-                s.RunSQL(sql);
-
-            }
-            catch
-            {
-                //PubClass.Alert(ex.Message);
-                return "err@设置的字段有误.【" + flow.DTSFields + "】";
-            }
+            flow.DTSSpecNodes = this.GetRequestVal("CheckBoxIDs").TrimEnd(',');
 
             flow.DirectUpdate();
             return "保存成功";

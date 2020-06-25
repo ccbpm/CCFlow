@@ -289,16 +289,25 @@ namespace BP.WF
 
             string[] dtsArray = fl.DTSFields.Split('@');
 
-            string[] lcArr = dtsArray[0].Split(',');//取出对应的主表字段
-            string[] ywArr = dtsArray[1].Split(',');//取出对应的业务表字段
+            string lcAttrs = "";
+            string ywAttrs = "";
 
-            string sql = "SELECT " + dtsArray[0] + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
+            for (int i = 0; i < dtsArray.Length; i++)
+            {
+                lcAttrs += dtsArray[i].Split('=')[0] + ",";
+                ywAttrs += dtsArray[i].Split('=')[1] + ",";
+            }
+
+            string[] lcArr = lcAttrs.TrimEnd(',').Split(',');//取出对应的主表字段
+            string[] ywArr = ywAttrs.TrimEnd(',').Split(',');//取出对应的业务表字段
+
+            string sql = "SELECT " + lcAttrs.TrimEnd(',') + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
             DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
             if (lcDt.Rows.Count == 0)
                 throw new Exception("没有找到业务表数据.");
 
             BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
-            sql = "SELECT " + dtsArray[1] + " FROM " + fl.DTSBTable.ToUpper();
+            sql = "SELECT " + ywAttrs.TrimEnd(',') + " FROM " + fl.DTSBTable.ToUpper();
 
             DataTable ywDt = src.RunSQLReturnTable(sql);
 
@@ -377,7 +386,7 @@ namespace BP.WF
             if (dt.Rows.Count > 0)
                 sql = "UPDATE " + fl.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
             else
-                sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + dtsArray[1] + ") VALUES(" + values + ")";
+                sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + ywAttrs.TrimEnd(',') + ") VALUES(" + values + ")";
 
             try
             {

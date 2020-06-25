@@ -27,7 +27,6 @@
         legend {
             border-bottom: none;
         }
-
         #Btn_Save {
             background-image: url(../../Img/Btn/Save.png) !important;
         }
@@ -39,6 +38,7 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
+            
 
             //初始化groupID.
             var fk_flow = GetQueryString("FK_Flow");
@@ -64,23 +64,59 @@
             $("#P2").val(flow.PTable);
             $("#P3").val(flow.PTable);
 
-            $("#RB_DTSWay_" + flow.FlowDTSWay).attr("Checked", true);
-            $("#RB_DTSField" + flow.DTSField).attr("Checked", true);
-
-            if (flow.DTSDBSrc == "")
-                flow.DTSDBSrc = "local";
+            $("#RB_DTSWay_" + flow.DTSWay).attr("Checked", true);
+            $("#RB_DTSField_" + flow.DTSField).attr("Checked", true);
+            $("#RB_DTSTime_" + flow.DTSTime).attr("Checked", true);
 
             //绑定数据源.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", flow.DTSDBSrc);
             //绑定表.
             GenerBindDDL("DDL_Table", tables, "No", "Name", flow.DTSBTable);
 
+            var newRow;
+            for (var i in nodes) {
+
+                var node = nodes[i];
+                newRow = "<tr >";
+                newRow += "<td class=Idx>" + i + "</td>";
+                if (flow.DTSSpecNodes.indexOf(node.NodeID) >= 0)
+                    newRow += "<td><input  type='checkbox' checked='checked' id='" + node.NodeID + "' name='CB_" + node.NodeID + "' />" + node.Name + "</td>";
+                else
+                    newRow += "<td><input  type='checkbox' id='" + node.NodeID + "' name='CB_" + node.NodeID + "' />" + node.Name + "</td>";
+                newRow += "<td>" + node.NodeID + "</td>";
+
+                newRow += "<td>" + node.Step + "</td>";
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
 
             $("#Msg").html("");
             //绑定select事件
             $("#DDL_DBSrc").change(function () {
                 DTSBTable_DBSrcChange();
-            });
+            });  
+             
+            //绑定同步时间事件
+            if (flow.DTSTime == 1)
+                document.getElementById("nodeSelect").style.display = "block";
+            else 
+                document.getElementById("nodeSelect").style.display = "none";
+
+            $("input:radio[name='RB_DTSTime']").bind("click",function(){ 
+				var val = $(this).val();
+				if(val=='1'){
+					DTSTimeChange(1);
+				}
+				if(val=='2'){
+					DTSTimeChange(2);
+                }
+                if(val=='0'){
+					DTSTimeChange(0);
+				}
+
+			});
+
         });
 
     //设置字段匹配
@@ -102,11 +138,11 @@
         }
     }
     function OpenDTSNodes() {
-        var toggleStyle = document.getElementById("dis").style.display;
+        var toggleStyle = document.getElementById("nodeSelect").style.display;
         if (toggleStyle == "none") {
-            document.getElementById("dis").style.display = "block";
+            document.getElementById("nodeSelect").style.display = "block";
         } else {
-            document.getElementById("dis").style.display = "none";
+            document.getElementById("nodeSelect").style.display = "none";
         }
     }
     function WinOpen(url, winName) {
@@ -129,7 +165,7 @@
                 }
             }
         }
-
+        return value;
         // document.all.<%= HiddenField.ClientID %>.value=value;
     }
     //保存
@@ -139,7 +175,7 @@
 
         var fk_flow = GetQueryString("FK_Flow");
 
-        var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+        var checkBoxIDs = checkNodes(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
 
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
         handler.AddUrlData();
@@ -154,8 +190,8 @@
         alert("保存成功")
         window.location.href = window.location.href;
         return;
-    }
-    //选择事件
+        }
+      //选择事件
     function DTSBTable_DBSrcChange() {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
         handler.AddFormData();
@@ -163,9 +199,17 @@
         data = JSON.parse(data);
 
         var dllSrc = $("#DDL_DBSrc").val();
-        //绑定表.
+            //绑定表.
         GenerBindDDL("DDL_Table", data, "No", "Name", dllSrc);
-    }
+        }
+        function DTSTimeChange(DTSTime) {
+            if (DTSTime == 1) {
+                document.getElementById("nodeSelect").style.display = "block";
+            }
+            else {
+                document.getElementById("nodeSelect").style.display = "none";
+            }
+        }
     </script>
 </head>
 <body>
@@ -179,7 +223,7 @@
 
         <fieldset>
             <legend>
-                <input type="radio" value="0" id="RB_DTSWay_0" name="RB_DTSWay" checked="checked" />
+                <input type="radio" value="0" id="RB_DTSWay_0" name="RB_DTSWay" />
                 <label for="RB_DTSWay_0">
                     不执行同步
                 </label>
@@ -222,16 +266,6 @@
                         同步的计算方式
                     </td>
                     <td>
-
-                        <label for="RB_DTSField0">
-                            <input type="radio" value="0" id="RB_DTSField0" name="DTSField" />
-                            字段名相同
-                        </label>
-
-                        <label for="RB_DTSField1">
-                            <input type="radio" value="1" id="RB_DTSField1" name="DTSField" />
-                            按设置字段
-                        </label>
                         &nbsp; <a class="btn btn-default btn-sm" href="javascript:OpenFields()">设置字段匹配</a>
                     </td>
                 </tr>
@@ -241,11 +275,11 @@
                         同步的时间
                     </td>
                     <td style="border-bottom: none;">
-                        <label for="RB_DTSTime_0"> <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="RB_DTSTime_0" checked="checked" />所有的节点发送后</label>
+                        <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="0" /><span for="RB_DTSTime_0">所有的节点发送后</span>
                         <br />
-                        <label for="RB_DTSTime_2">  <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="RB_DTSTime_2" />流程结束时</label>
+                        <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="2" /><span for="RB_DTSTime_2">流程结束时</span>
                         <br />
-                        <label for="RB_DTSTime_1"><input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="RB_DTSTime_1" />指定的节点发送后</label>
+                        <input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="1" /><span for="RB_DTSTime_1">指定的节点发送后</span>
                         [<a href="javascript:void(0)" onclick="OpenDTSNodes()">设置同步的节点</a>]
                         <div id="dis" style="display: none;">
                         </div>
@@ -253,6 +287,19 @@
 
                 </tr>
             </table>
+        </fieldset>
+        <fieldset id="nodeSelect" style="display:none;">
+            <div id="" style="margin-top:10px;margin-bottom:10px">
+                <table id="Table1" style='width:90%;'>
+                    <caption>设置同步的节点</caption>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>节点ID</th>
+                        <th>步骤</th>
+                    </tr>
+                </table>
+            </div>
         </fieldset>
         <fieldset>
             <legend>应用场景</legend>

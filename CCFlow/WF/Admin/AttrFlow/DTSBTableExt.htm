@@ -37,12 +37,18 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnJSON("DTSBTableExt_Init");
+            var data = handler.DoMethodReturnString("DTSBTableExt_Init");
+
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
 
             //属性.
             var mapAttrs = data["Sys_MapAttr"];
             var cols = data["Cols"]; //表的列名.
-
             var flow = data["Flow"][0];
 
             var DTSFields = flow.DTSFields;
@@ -72,7 +78,7 @@
                 newRow += "<td>" + rb + "</td>";
                 newRow += "<td>主键<img src='../../Img/PRI/2.png' /></td>";
 
-                if (DTSFields != "" || DTSFields != undefined) {
+                if (DTSFields != "" && DTSFields != undefined) {
                     Fields = DTSFields.split("OID=")[1];
                     field = Fields.split('@')[0];
                 }
@@ -100,7 +106,7 @@
                 newRow = "<tr><td class=Idx>" + i + "</td>";
 
                 if (DTSFields != "" || DTSFields != undefined) {
-                    if (DTSFields.indexOf(keyOfEn + "=") > 0) {
+                    if (DTSFields.indexOf(keyOfEn + "=") >= 0) {
                         newRow += "<td><input  type='checkbox' checked='checked' name='CB_" + attr.KeyOfEn + "' />";
                         Fields = DTSFields.split(keyOfEn + "=")[1];
                         field = Fields.split('@')[0];
@@ -110,8 +116,6 @@
                         
                     }
                 }
-                else
-                     newRow += "<td><input  type='checkbox' name='CB_" + attr.KeyOfEn + "' />";
                 
                 newRow += '<label for="CB_' + attr.KeyOfEn + '\" >' + attr.KeyOfEn + ' - ' + attr.Name + '</label></td>';
                 newRow += "<td>" + GetDataTypeDesc(mapAttrs[i].MyDataType) + "</td>";

@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>WebApi接口</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
+    <base target="_self" />
+    <style type="text/css">
+        .style1 {
+            width: 184px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        /**
+         * 数据格式切换
+         */
+        function loadStructSet(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                $("#rootTr").hide();
+            } else {
+                $("#rootTr").show();
+                // 根节点值
+                $("#TB_RootValue").val("0");
+            }
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            var mytb = document.getElementById("TB_Name");
+            mytb.focus();
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var tb = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (tb == "") {
+                    document.getElementById("TB_No").value = "";
+                    return;
+                }
+
+                if (val == "ziduanquanpin") {
+                    ParseStringToPinYin(tb, true, "WebApi");
+                }
+                else {
+                    ParseStringToPinYin(tb, false, "WebApi");
+                }
+
+            });
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, true, "WebApi");
+            });
+
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var TB_Name = document.getElementById("TB_Name").value;
+                ParseStringToPinYin(TB_Name, false, "WebApi");
+            });
+
+        });
+
+        // 保存
+        function Save() {
+
+            var no = $("#TB_No").val() || "";
+            var name = $("#TB_Name").val() || "";
+            if (no == "" || name == "") {
+                alert('请输入编号名称.');
+                return;
+            }
+
+            if (!$("#TB_SelectStatement").val() || $("#TB_SelectStatement").val().length == 0) {
+                alert("参数必须填写！");
+                $("#TB_SelectStatement").focus();
+                return;
+            }
+
+            var en = new Entity("BP.Sys.SFTable");
+            en.CopyForm();
+
+            if (en.IsExits() == true) {
+                alert("编号已经存在[" + en.No + "]请使用其他的编号.");
+                return;
+            }
+
+            en.SrcType = 5; //自定义数据表.
+            en.FK_Val = en.No;
+            en.Insert();
+
+            alert("保存成功.");
+            window.location.href = "Default.htm";
+        }
+
+
+    </script>
+</head>
+<body>
+    <form action="" id="cc">
+        <table style="width: 95%; margin: 5px; padding: 5px;">
+            <caption>
+                <a href="./Default.htm">返回</a> - WebApi接口
+            </caption>
+            <tr>
+                <th>项目</th>
+                <th>值</th>
+                <th>备注</th>
+            </tr>
+
+            <tr>
+                <td>字典名称</td>
+                <td><input type="text" id="TB_Name" name="TB_Name" /></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>字典编号</td>
+                <td><input type="text" id="TB_No" name="TB_No" /></td>
+                <td>
+                    <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" /> <label for="RB_QP">全拼</label>
+                    <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />  <label for="RB_JP">简拼</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td>WebApi接口</td>
+                <td><input type="text" id="TB_SelectStatement" name="TB_SelectStatement" /></td>
+                <td>WebAPI的输入格式：@WebApiHost/DataUser/GetEmps?id=51184 <br /> 此处只支持用户定义好的固定参数，比如：id=51184</td>
+            </tr>
+
+
+            <tr>
+                <td> 数据格式 </td>
+                <td>
+                    <select id="DDL_CodeStruct">
+                        <option value="0"> 编码表格式，具有No,Name两个列. </option>
+                        <option value="1"> 树形格式，具有No,Name,ParentNo三个列. </option>
+                    </select>
+                </td>
+                <td>  </td>
+            </tr>
+
+            <tr>
+                <td>根节点数据</td>
+                <td><input type="text" id="TB_RootVal" name="TB_RootVal" value="0" /></td>
+                <td> </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="3">
+                    <input type="button" id="Btn_Save" onclick="Save()" value="保存" />
+                </td>
+            </tr>
+        </table>
+
+
+        <font color=gray>
+            <fieldset>
+                <legend>帮助</legend>
+                <ul>
+                    <li>接口返回值类型为json类型,且必须有No,Name,具体返回值格式如下：</li>
+                    <li>[{"No","zhangsan","Name","张三"},{"No","lisi","Name","李四"}]</li>
+                    <li>如果是树类型的结构的话，必须有ParentNo</li>
+                    <li>接口返回值中，请注意<span style="color:red">Key的大小写区分</span></li>
+                </ul>
+            </fieldset>
+        </font>
+
+    </form>
+</body>
+</html>

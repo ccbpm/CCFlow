@@ -50,7 +50,11 @@ namespace BP.Sys
         /// <summary>
         /// 系统字典表
         /// </summary>
-        SysDict=7
+        SysDict=7,
+        /// <summary>
+        /// WebApi接口
+        /// </summary>
+        WebApi = 8
     }
     /// <summary>
     /// 编码表类型
@@ -305,6 +309,36 @@ namespace BP.Sys
                 }
             }
             #endregion
+
+            #region WebApi接口
+            if (this.SrcType == Sys.SrcType.WebApi)
+            {
+                //返回值
+                string postData = "";
+                //用户输入的webAPI地址
+                string apiUrl = this.SelectStatement;
+                if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                    apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+
+                //api接口地址
+                string apiHost = apiUrl.Split(',')[0];
+                //api参数
+                string apiParams = apiUrl.Split(',')[1];
+                //执行POST
+                postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
+
+                DataTable dt = null;
+                try
+                {
+                    dt = BP.Tools.Json.ToDataTable(postData);
+                    return dt;
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception("设置的WebAPI接口返回的数据出错，请检查接口返回值。");
+                }
+            }
+            #endregion WebApi接口
 
             #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
             if (this.SrcType == Sys.SrcType.TableOrView)
@@ -818,6 +852,8 @@ namespace BP.Sys
                         return "<img src='/WF/Img/SQL.png' width='16px' broder='0' />SQL表达式";
                     case Sys.SrcType.WebServices:
                         return "<img src='/WF/Img/WebServices.gif' width='16px' broder='0' />WebServices";
+                    case Sys.SrcType.WebApi:
+                        return "WebApi接口";
                     default:
                         return "";
                 }
@@ -992,7 +1028,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表");
+                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表@8=WebApi接口");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);

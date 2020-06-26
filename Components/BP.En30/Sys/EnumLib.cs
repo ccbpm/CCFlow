@@ -63,7 +63,11 @@ namespace BP.Sys
         /// <summary>
         /// 执行的业务单元
         /// </summary>
-        BuessUnit = 7
+        BuessUnit = 7,
+        /// <summary>
+        /// 自定义WebApi
+        /// </summary>
+        WebApi=8
     }
     /// <summary>
     /// 事件类型

@@ -1120,6 +1120,32 @@ namespace BP.Sys
                     return null;
                     //开始执行webserives.
                     break;
+                case EventDoType.WebApi:
+                    //接收返回值
+                    string postData = "";
+                    //获取webapi接口地址
+                    string apiUrl = doc.Clone() as string;
+                    if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                        apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+
+                    //如果有参数
+                    if (apiUrl.Contains("?"))
+                    {
+                        //api接口地址
+                        string apiHost = apiUrl.Split(',')[0];
+                        //api参数
+                        string apiParams = apiUrl.Split(',')[1];
+                        //参数替换
+                        apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
+                        //执行POST
+                        postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
+
+                    }
+                    else//如果没有参数，执行GET
+                        postData = BP.Tools.PubGlo.HttpGet(apiUrl);
+                    return postData;
+
+                    break;
                 case EventDoType.SpecClass:
                     #region //执行dll文件中指定类的指定方法，added by liuxc,2016-01-16
                     string evdll = nev.MonthedDLL;

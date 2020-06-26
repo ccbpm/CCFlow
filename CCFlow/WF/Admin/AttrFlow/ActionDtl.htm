@@ -113,13 +113,16 @@
         }
 
         function doChangeContent(o) {
-            if ($(o).val() == "7") {
-                //$("#TB_SQL").hide();
+            if ($(o).val() == "7") 
                 $("#DDL_Doc").show();
-            } else {
-                // $("#TB_SQL").show();
+            else 
                 $("#DDL_Doc").hide();
-            }
+            
+
+            if ($(o).val() == "8") 
+                $("#sp_webapi").show();
+            else 
+                $("#sp_webapi").hide();
         }
 
         function Back() {
@@ -163,6 +166,7 @@
 
                         <textarea id="TB_SQL" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
                         <select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
+                        <span id="sp_webapi" style="color:blue">调用事件时，无论成功与否，都不会影响流程正常运行，如果需要阻断流程执行，请自定义方法，比如抛出异常</span>
                     </td>
                 </tr>
 

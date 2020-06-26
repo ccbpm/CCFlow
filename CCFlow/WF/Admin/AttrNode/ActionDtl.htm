@@ -122,15 +122,11 @@
                 $("#TB_Doc").show();
                 $("#DDL_Doc").hide();
             }
-            //if ($(o).val() == 2) {
-            //    $("textarea").attr("id", "#TB_SQL");
-            //    $("textarea").attr("name", "#TB_SQL");
 
-            //}
-            //else {
-            //    $("textarea").attr("id", "#TB_Doc");
-            //    $("textarea").attr("name", "#TB_Doc");
-            //}
+            if ($(o).val() == "8") 
+                $("#sp_webapi").show();
+            else 
+                $("#sp_webapi").hide();
         }
 
         function Back() {
@@ -194,6 +190,7 @@
                         <select id="DDL_Doc" name="DDL_Doc" style="display: none;">
                         </select>
                         <!-- 业务单元 -->
+                        <span id="sp_webapi" style="color:blue">调用事件时，无论成功与否，都不会影响流程正常运行，如果需要阻断流程执行，请自定义方法，比如抛出异常</span>
                     </td>
                 </tr>
                 <tr>

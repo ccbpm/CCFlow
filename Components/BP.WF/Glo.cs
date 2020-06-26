@@ -4506,13 +4506,6 @@ namespace BP.WF
                         continue;
                     exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
                 }
-                /*如果是bs*/
-                //foreach (string key in System.Web.HttpContext.Current.Request.Form.AllKeys)
-                //{
-                //    if (string.IsNullOrEmpty(key))
-                //        continue;
-                //    exp = exp.Replace("@" + key, System.Web.HttpContext.Current.Request.Form[key]);
-                //}
 
             }
 
@@ -6815,12 +6808,6 @@ namespace BP.WF
                 string responseText = myreader.ReadToEnd();
                 myreader.Close();
                 response.Close();
-                //TestJson
-                // JsonData jd = new JsonData();
-                // jd["personalId"] = "341125197309155056";
-                // jd["uid_"] = "00000001";
-                // jd["userId"] = "00000062";
-                //responseText = JsonMapper.ToJson(jd).ToString() ;
                 return responseText;
             }
             catch (Exception ex)

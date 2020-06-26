@@ -47,6 +47,10 @@ namespace BP.WF.Template
         /// </summary>
         Url = 7,
         /// <summary>
+        /// 按WebApi返回值
+        /// </summary>
+        WebApi = 8,
+        /// <summary>
         /// 操作符
         /// </summary>
         CondOperator = 100

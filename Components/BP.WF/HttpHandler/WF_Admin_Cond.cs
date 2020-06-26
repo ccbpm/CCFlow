@@ -194,6 +194,80 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region WebApi
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.WebApi;
+
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            cond.FK_Flow = this.FK_Flow;
+            cond.CondType = condTypeEnum;
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion WebApi
+
         #region 方向条件 Frm 模版
         /// <summary>
         /// 初始化

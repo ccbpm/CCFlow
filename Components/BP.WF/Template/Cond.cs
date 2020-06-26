@@ -878,6 +878,43 @@ namespace BP.WF.Template
                     #endregion
                 }
 
+                if (this.HisDataFrom == ConnDataFrom.WebApi)
+                {
+                    #region WebApi接口
+                    //返回值
+                    string postData = "";
+                    string apiUrl = this.OperatorValueStr;
+                    if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                        apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+
+                    //如果有参数
+                    if (apiUrl.Contains("?"))
+                    {
+                        //api接口地址
+                        string apiHost = apiUrl.Split(',')[0];
+                        //api参数
+                        string apiParams = apiUrl.Split(',')[1];
+                        //参数替换
+                        apiParams = BP.WF.Glo.DealExp(apiParams, nd.HisWork);
+                        //执行POST
+                        postData = BP.WF.Glo.HttpPostConnect(apiHost, apiParams);
+
+                        if (postData == "true")
+                            return true;
+                        else
+                            return false;
+                    }
+                    else
+                    {//如果没有参数，执行GET
+                        postData = BP.WF.Glo.HttpGet(apiUrl);
+                        if (postData == "true")
+                            return true;
+                        else
+                            return false;
+                    }
+                    #endregion WebApi接口
+                }
+
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
                     Hashtable ht = en.Row;

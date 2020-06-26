@@ -917,6 +917,8 @@ namespace BP.WF.Template
                 string postData = "";
                 //用户输入的webAPI地址
                 string apiUrl = town.HisNode.DeliveryParas;
+                if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                    apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
                 //如果有参数
                 if (apiUrl.Contains("?"))
                 {
@@ -943,9 +945,6 @@ namespace BP.WF.Template
                     dt = BP.Tools.Json.ToDataTable(postData);
                     return dt;
                 }
-
-
-
             }
             #endregion 按照设置的WebAPI接口获取的数据计算
 

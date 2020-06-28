@@ -467,8 +467,12 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtMain);
 
                 #region 增加上分组信息.
-                EnCfg ec = new EnCfg(this.EnName);
-                string groupTitle = ec.GroupTitle;
+                string groupTitle = "";
+                EnCfg ec = new EnCfg();
+                ec.No = this.EnName;
+                if(ec.RetrieveFromDBSources() == 1)
+                    groupTitle = ec.GroupTitle;
+
                 if (DataType.IsNullOrEmpty(groupTitle) == true)
                     groupTitle = "@" + en.PK + ",基本信息," + map.EnDesc + "";
 

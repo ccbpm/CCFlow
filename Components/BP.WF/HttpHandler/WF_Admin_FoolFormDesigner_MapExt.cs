@@ -404,13 +404,20 @@ namespace BP.WF.HttpHandler
         }
         public string TBFullCtrlDDL_Save()
         {
-            MapExt myme = new MapExt(this.MyPK);
+            MapExt me = new MapExt();
+            me.MyPK = this.MyPK;
+            if(me.RetrieveFromDBSources() == 0)
+            {
+                me.MyPK = this.MyPK;
+                me.AttrOfOper = GetRequestVal("AttrOfOper");
+                me.FK_MapData = this.FK_MapData;
+                me.Insert();
+            }
+               
 
-            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
-            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+            MapAttrs attrs = new MapAttrs(me.FK_MapData);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, me.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
-
-            MapExt me = new MapExt(this.MyPK);
 
             string str = "";
             foreach (MapAttr attr in attrs)

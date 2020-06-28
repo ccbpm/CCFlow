@@ -187,7 +187,7 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
-                    "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开@4=实体集合的功能");
+                    "@0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@3=实体集合的功能@4=功能");
 
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);

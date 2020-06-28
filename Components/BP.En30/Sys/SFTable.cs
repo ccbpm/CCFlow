@@ -321,9 +321,9 @@ namespace BP.Sys
                     apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
 
                 //api接口地址
-                string apiHost = apiUrl.Split(',')[0];
+                string apiHost = apiUrl.Split('?')[0];
                 //api参数
-                string apiParams = apiUrl.Split(',')[1];
+                string apiParams = apiUrl.Split('?')[1];
                 //执行POST
                 postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
 

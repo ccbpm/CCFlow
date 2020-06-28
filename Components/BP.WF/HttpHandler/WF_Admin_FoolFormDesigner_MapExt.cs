@@ -411,6 +411,8 @@ namespace BP.WF.HttpHandler
                 me.MyPK = this.MyPK;
                 me.AttrOfOper = GetRequestVal("AttrOfOper");
                 me.FK_MapData = this.FK_MapData;
+                me.ExtType = MapExtXmlList.FullData;
+                //me.DoWay = this.GetRequestVal("DDL_" + attr.KeyOfEn);
                 me.Insert();
             }
                

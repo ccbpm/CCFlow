@@ -923,9 +923,9 @@ namespace BP.WF.Template
                 if (apiUrl.Contains("?"))
                 {
                     //api接口地址
-                    string apiHost = apiUrl.Split(',')[0];
+                    string apiHost = apiUrl.Split('?')[0];
                     //api参数
-                    string apiParams = apiUrl.Split(',')[1];
+                    string apiParams = apiUrl.Split('?')[1];
                     //参数替换
                     apiParams = BP.WF.Glo.DealExp(apiParams, town.HisWork);
                     //执行POST

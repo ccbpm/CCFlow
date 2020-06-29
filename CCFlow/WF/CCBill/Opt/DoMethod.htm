@@ -6,9 +6,9 @@
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-     <link href="../../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="../../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <!-- ���ļ����Ա����ɳ����Լ�������,�����Լ��޸�,�Դﵽ������������Լ���ϵͳ���ͳһ. -->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -21,64 +21,64 @@
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            $("#Msg").html("����ִ�з��������Ժ�......");
+            $("#Msg").html("正在执行方法，请稍后......");
             var myPK = GetQueryString("MyPK");
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
             var func = new Entity("BP.CCBill.Template.MethodFunc", myPK);
 
-            //Ҫִ��sql.
+            //要执行sql.
             if (func.MethodDocTypeOfFunc == 0) {
                 var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                 handler.AddUrlData();
-                var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //ִ��SQLs
+                var data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //执行SQLs
                 $("#Msg").html(data);
 
 
-               // $('#bootStrapdlg').modal('hide');
-               // $('#bootStrapdlg', parent.document).remove();
+                // $('#bootStrapdlg').modal('hide');
+                // $('#bootStrapdlg', parent.document).remove();
                 return;
             }
 
 
-            //Ҫִ��script.  wangyanyan���.
+            //要执行script.  wangyanyan完成.
             if (func.MethodDocTypeOfFunc == 1) {
                 var script = func.DoMethodReturnString("Gener_MethodDoc_JavaScript");
 
-                //��õ��ݵ�����.
+                //获得单据的数据.
                 // var geEn = new Entity(func.FrmID, workID);
-                //�滻script�ı���.
+                //替换script的变量.
                 //   alert(script);
-                //                //Opera��FF��Chrome�ȣ�
+                //                //Opera、FF、Chrome等：
                 //                var script = document.createElement("script");
                 //                script.setAttribute("type", "text/javascript");
                 //                script.onload = function () {
-                //                    alert("���سɹ�����");
+                //                    alert("加载成功啦！");
                 //                }
-                //                script.setAttribute("src", scripts[i]); 
+                //                script.setAttribute("src", scripts[i]);
                 // script = " var en =new Entity('Dict_XueShengJiBenXinXi',workID);  ";
                 //script += " alert(en.OID); en.Email='zzzz';en.Update();  ";
 
+              
 
 
-
-                //ִ�����script.
+                //执行这个script.
                 try {
 
                     eval(script);
 
                 } catch (e) {
                     $("#Msg").html(e);
-                   // $('#bootStrapdlg').modal('hide');
+                    // $('#bootStrapdlg').modal('hide');
                     //$/('#bootStrapdlg', parent.document).remove();
                     return;
                 }
 
-                //��ʾ��Ϣ.
+                //提示信息.
                 return;
             }
 
-            //Ҫִ��url.  wangyanyan���.
+            //要执行url.  wangyanyan完成.
             if (func.MethodDocTypeOfFunc == 2) {
 
                 var url = func.MethodDoc;
@@ -87,7 +87,7 @@
                 else
                     url += "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
 
-                //�����ϱ���Ĳ���.
+                //增加上表单的参数.
                 for (var i = 0; i < attrs.length; i++) {
                     var attr = attrs[i];
 
@@ -111,17 +111,17 @@
                     }
                 }
 
-                //ִ��url��������.
+                //执行url返回数据.
                 var data = DBAccess.RunUrlReturnString(url);
 
                 if (func.MsgSuccess == "")
-                    func.MsgSuccess = "ִ�гɹ�.";
+                    func.MsgSuccess = "执行成功.";
 
                 if (func.MsgErr == "")
-                    func.MsgErr = "ִ��ʧ��.";
+                    func.MsgErr = "执行失败.";
 
                 if (data.indexOf('err@') == -1) {
-                    
+
                     $("#Msg").html(func.MsgErr + "#" + data);
                     //$('#bootStrapdlg', parent.document).modal('hide');
                     //$('#bootStrapdlg', parent.document).remove();
@@ -139,6 +139,6 @@
     </script>
 </head>
 <body>
-<div id="Msg"></div>
+    <div id="Msg"></div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8" />
@@ -198,12 +198,14 @@
                     SearchData();
                     $('#page_info').html("").append("<li class='disabled controls'>" + selects + "当前第" + pageIdx + "页，总共" + pages +
                         "页,总共" + count + "条记录。</li>");
+                    $("#DDL_PageSize").val(pageSize);
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
             $('#page_info').html("").append("<li class='disabled controls'>" + selects + "当前第" + pageIdx + "页，总共" + pages +
                 "页,总共" + count + "条记录。</li>");
 
+            $("#DDL_PageSize").val(pageSize);
         }
 
         function changePageSie() {
@@ -551,16 +553,35 @@
             var val;
             var dtFrom = "";
             var dtTo = "";
-
-            if ($("#tb_key").length > 0) {
-                key = $("#tb_key").textbox("getText");
+            ur = new Entity("BP.Sys.UserRegedit", webUser.No + rptNo + "_SearchAttrs");
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length == 0) {
+                ur.SearchKey = $("#TB_Key").val();
+                key = $("#TB_Key").val();
             }
+            else
+                ur.SearchKey = "";
+            //增加字段查询
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var strs = $("input[name='TB_" + field + "']");
+                if (strs.length == 1) {
+                    ur.SetPara(field, $("#TB_" + field).val());
+                } else {
+                    if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
+                        ur.SetPara(field, "");
+                    else
+                        ur.SetPara(field, $("#TB_" + field + "_0").val() + "," + $("#TB_" + field + "_1").val());
+                }
+            }
+
 
             if ($("#TB_DTFrom").length > 0) {
                 dtFrom = $("#TB_DTFrom").val();
                 dtTo = $("#TB_DTTo").val();
+                ur.DTFrom = $("#TB_DTFrom").val();
+                ur.DTTo = $("#TB_DTTo").val();
             }
-
+            ur.Update();
             $.each(FilterCtrls, function () {
                 switch (this.type) {
                     case "date":
@@ -597,7 +618,6 @@
                         if (arry.length == 1) {
                             vals += "@" + this.id + "=" + arry[0];
                         }
-
                         break;
                     case "checkbox":
                         val = $("#" + this.id)[0].checked ? 1 : 0;
@@ -605,6 +625,7 @@
                         break;
                 }
             });
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             handler.AddPara("SearchType", GetQueryString("SearchType"));
             handler.AddPara("FK_Flow", fk_flow);
@@ -625,8 +646,94 @@
             return;
         }
         function SearchData(orderBy, orderWay) {
+            var key = "";
+            var mvals = "";
+            var vals = "";
+            var val;
+            var dtFrom = "";
+            var dtTo = "";
+            ur = new Entity("BP.Sys.UserRegedit", webUser.No + rptNo + "_SearchAttrs");
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length == 0) {
+                ur.SearchKey = $("#TB_Key").val();
+                key = $("#TB_Key").val();
+            }
+            else
+                ur.SearchKey = "";
+            //增加字段查询
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var strs = $("input[name='TB_" + field + "']");
+                if (strs.length == 1) {
+                    ur.SetPara(field, $("#TB_" + field).val());
+                } else {
+                    if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
+                        ur.SetPara(field, "");
+                    else
+                        ur.SetPara(field, $("#TB_" + field + "_0").val() + "," + $("#TB_" + field + "_1").val());
+                }
+            }
+
+
+            if ($("#TB_DTFrom").length > 0) {
+                dtFrom = $("#TB_DTFrom").val();
+                dtTo = $("#TB_DTTo").val();
+                ur.DTFrom = $("#TB_DTFrom").val();
+                ur.DTTo = $("#TB_DTTo").val();
+            }
+            ur.Update();
+            $.each(FilterCtrls, function () {
+                switch (this.type) {
+                    case "date":
+                        val = $("#" + this.id).val();
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "datetime":
+                        val = $("#" + this.id).val();
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "text":
+                        val = $("#" + this.id).val();
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "combo":
+                    case "combotree":
+                        val = $("#" + this.id).val();
+                        var arry = val.split(",");
+
+                        if (arry.length > 1) {
+                            mvals += "@" + this.id.substr("DDL_".length) + "=" + JoinMVals(arry);
+                            vals += "@" + this.id + "=mvals";
+                        }
+
+                        if (arry.length == 1) {
+                            vals += "@" + this.id + "=" + arry[0];
+                        }
+                        break;
+                    case "checkbox":
+                        val = $("#" + this.id)[0].checked ? 1 : 0;
+                        vals += "@" + this.id + "=" + val;
+                        break;
+                }
+            });
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
-            handler.AddUrlData();
+            handler.AddPara("SearchType", GetQueryString("SearchType"));
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("key", key);
+            handler.AddPara("dtFrom", dtFrom);
+            handler.AddPara("dtTo", dtTo);
+            handler.AddPara("mvals", mvals);
+            handler.AddPara("vals", vals);
+
             handler.AddPara("pageSize", param.pageSize);
             handler.AddPara("pageIdx", param.pageIdx);
             ur = new Entity("BP.Sys.UserRegedit");

@@ -289,11 +289,11 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_BillTemplate", "单据模板");
                 
-                map.Java_SetCodeStruct("6");
+                //map.Java_SetCodeStruct("6");
 
                 map.IndexField = BillTemplateAttr.FK_MapData;
 
-                map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, true, 6, 6, 20);
+                map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, true, 1, 6, 20);
                 map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
                 map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);

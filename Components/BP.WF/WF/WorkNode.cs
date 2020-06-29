@@ -7555,6 +7555,8 @@ namespace BP.WF
         public GERpt rptGe = null;
         private void InitStartWorkDataV2()
         {
+            this.rptGe.SetValByKey("RDT", DataType.CurrentDataTimess);
+
             /*如果是开始流程判断是不是被吊起的流程，如果是就要向父流程写日志。*/
             if (SystemConfig.IsBSsystem)
             {

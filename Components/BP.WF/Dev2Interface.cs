@@ -2756,15 +2756,18 @@ namespace BP.WF
                         continue;
                     }
 
+                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.IsPass=1 ORDER BY RDT DESC ";
+                    DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+                    if (mydt.Rows.Count == 0)
+                        continue;
+
                     DataRow dr = dt.NewRow();
                     dr["No"] = ndFrom.NodeID.ToString();
                     dr["Name"] = ndFrom.Name;
-
-                    dr["Rec"] = wk.Rec;
-
-                    Emp emp = new Emp(wk.Rec);
-                    dr["RecName"] = emp.Name;
-
+                    dr["Rec"] = mydt.Rows[0][0];
+                    dr["RecName"] = mydt.Rows[0][1];
+                    
+                    
                     if (ndFrom.IsBackTracking)
                     {
                         dr["IsBackTracking"] = "1";

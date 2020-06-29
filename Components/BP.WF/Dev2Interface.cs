@@ -2755,8 +2755,7 @@ namespace BP.WF
                     {
                         continue;
                     }
-
-                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.IsPass=1 ORDER BY RDT DESC ";
+                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  a.WorkID=" + wk.OID + " AND a.IsPass=1 ORDER BY RDT DESC ";
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                     if (mydt.Rows.Count == 0)
                         continue;

@@ -228,6 +228,7 @@
             var myNum = 0;
             var is1 = false;
             var listbox = '';
+            
             for (var i = 0; i < dtSort.length; i++) {
 
                 var sortNo = dtSort[i].No;
@@ -262,7 +263,7 @@
 
                 listbox += "<div class='itemt' data-order='" + myNum + "'><div class='ibox float-e-margins'><div class='ibox-title'><h5>" + sortName + "</h5><div class='ibox-tools'><a class='collapse-link' data-toggle='collapse'  href='#collapse" + myNum + "'><i class='fa fa-chevron-down' alert='Min' id='Img" + myNum + "' onclick=\"GroupBarClick('" + myNum + "')\"></i></a></div></div><div id='collapse" + myNum + "' class='ibox-contents collapse in'><table class='table table-striped notab'><tbody>";
 
-
+                var isShowFlows = "";
                 //增加处理.
                 for (var idx = 0; idx < dtStart.length; idx++) {
 
@@ -271,6 +272,9 @@
                     if (sortNo != flowSort)
                         continue;
 
+                    if (isShowFlows.indexOf(flow.No + ",") != -1)
+                        continue;
+                    isShowFlows += flow.No + ",";
                     listbox += "<tr><td><a href=\"javascript:WinOpenStartFlow('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" > &sdot; "+flow.No+"." + flow.Name + "</a></td><td class='chooser'><a class='dropdown-toggle' data-toggle='dropdown' href='#'><i class='icon iconfont icon-gongju1'></i></a><ul class='dropdown-menu dropdown-user'>"
 
                     listbox += "<li><a href=\"javascript:WinOpenList('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >列表发起</a></li>";

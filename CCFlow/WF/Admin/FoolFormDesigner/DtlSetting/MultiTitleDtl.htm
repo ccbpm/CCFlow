@@ -45,6 +45,8 @@
             var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
+
+            
             //检查设置的完整性.
             //求出来选择的字段.
             var filds = "";
@@ -70,12 +72,13 @@
                     }
                 }
             }
-           
             // 3. 选择的字段，在历史的选择中出现也是错误的.
-            for (var i = 0; i < fls.length; i++) {
-                if (multiTitle!="" && multiTitle.indexOf(fls[i]) > 0) {
-                    alert("错误:该列已经选择过.");
-                    return;
+            if (multiTitle != undefined) {
+                for (var i = 0; i < fls.length; i++) {
+                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                        alert("错误:该列已经选择过.");
+                        return;
+                    }
                 }
             }
             //获取分组名称；
@@ -83,13 +86,14 @@
             if (name == null)
                 return;
             //检查名称是否重复
-            if (multiTitle.indexOf(name) > 0) {
+            if (multiTitle!=undefined && multiTitle.indexOf(name) > 0) {
                 alert("错误:名称已经存在.");
                 return;
             }
             //拼接目标数据.
             multiTitle = name + "," + filds +";";
             //赋值
+            alert(multiTitle)
             mapDtl.SetPara("MultiTitle", multiTitle);
             mapDtl.Update();
             window.close();

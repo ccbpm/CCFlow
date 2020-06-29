@@ -689,12 +689,9 @@ namespace BP.WF
 
                     }
                 }
-
-                if (this.HisDeliveryWay != oldN.HisDeliveryWay)
-                {
-                    //清空WF_Emp中的StartFlow 
-                    DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-                }
+                //清空WF_Emp中的StartFlow 
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                
             }
 
             //给icon设置默认值.

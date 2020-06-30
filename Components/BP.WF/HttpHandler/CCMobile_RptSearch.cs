@@ -43,20 +43,10 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public CCMobile_RptSearch()
         {
-            BP.Web.WebUser.SheBei = "Mobile";
-
+            BP.Web.WebUser.SheBei = "Mobile"; 
         }
 
-        #region 关键字查询.
-        /// <summary>
-        /// 打开表单
-        /// </summary>
-        /// <returns></returns>
-        public string KeySearch_OpenFrm()
-        {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
-            return search.KeySearch_OpenFrm();
-        }
+        #region 关键字查询.       
         /// <summary>
         /// 执行查询
         /// </summary>

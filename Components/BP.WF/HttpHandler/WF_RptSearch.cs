@@ -189,12 +189,7 @@ namespace BP.WF.HttpHandler
             else
                 return "0";
         }
-        //打开表单.
-        public string KeySearch_OpenFrm()
-        {
-           BP.WF.HttpHandler.WF wf=new WF();
-            return wf.Runing_OpenFrm();
-        }
+       
         #endregion
 
     }

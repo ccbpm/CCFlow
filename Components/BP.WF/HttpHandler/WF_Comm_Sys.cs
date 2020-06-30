@@ -23,60 +23,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Comm_Sys : DirectoryPageBase
     {
-        /// <summary>
-        /// 单元测试
-        /// </summary>
-        /// <returns></returns>
-        public string UnitTesting_Init()
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("No");
-            dt.Columns.Add("Name");
-            dt.Columns.Add("Note");
-
-            ArrayList al = null;
-            al = BP.En.ClassFactory.GetObjects("BP.UnitTesting.TestBase");
-            foreach (Object obj in al)
-            {
-                BP.UnitTesting.TestBase en = null;
-                try
-                {
-                    en = obj as BP.UnitTesting.TestBase;
-                    if (en == null)
-                        continue;
-                    string s = en.Title;
-                    if (en == null)
-                        continue;
-                }
-                catch
-                {
-                    continue;
-                }
-
-                if (en.ToString() == null)
-                    continue;
-
-                DataRow dr = dt.NewRow();
-                dr["No"] = en.ToString();
-                dr["Name"] = en.Title;
-                dr["Note"] = en.Note;
-                dt.Rows.Add(dr);
-            }
-            return BP.Tools.Json.ToJson(dt);
-        }
-        public string UnitTesting_Done()
-        {
-            try
-            {
-                BP.UnitTesting.TestBase tc = BP.UnitTesting.Glo.GetTestEntity(this.EnName);
-                tc.Do();
-                return "执行成功.<hr>" + tc.Note.Replace("\t\n", "@<br>");
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
         public string ImpData_Init()
         {
             return "";
@@ -164,7 +110,6 @@ namespace BP.WF.HttpHandler
             string fileName = System.IO.Path.GetFileName(files[0].FileName);
             if (fileName.Contains(".xlsx"))
                 ext = ".xlsx";
-
 
             //设置文件名
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;

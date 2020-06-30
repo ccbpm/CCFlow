@@ -306,15 +306,7 @@ namespace BP.WF.HttpHandler
         }
 
         #region 关键字查询.
-        /// <summary>
-        /// 打开表单
-        /// </summary>
-        /// <returns></returns>
-        public string SearchKey_OpenFrm()
-        {
-            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch();
-            return search.KeySearch_OpenFrm();
-        }
+         
         /// <summary>
         /// 执行查询
         /// </summary>

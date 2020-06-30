@@ -1125,7 +1125,10 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
+        /// <summary>
+        /// 撤销发送
+        /// </summary>
+        /// <returns></returns>
         public string Runing_UnSendCC()
         {
             string checkboxs = GetRequestVal("CCPKs");
@@ -1133,8 +1136,6 @@ namespace BP.WF.HttpHandler
             ccs.RetrieveIn("MyPK", "'" + checkboxs.Replace(",", "','") + "'");
             ccs.Delete();
             return "撤销抄送成功";
-
-
         }
         /// <summary>
         /// 执行催办
@@ -1155,7 +1156,7 @@ namespace BP.WF.HttpHandler
         /// 打开表单
         /// </summary>
         /// <returns></returns>
-        public string Runing_OpenFrm()
+        public string Runing_OpenFrm_Del20200626()
         {
             int nodeID = this.FK_Node;
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);

@@ -136,22 +136,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
-        public string TimeBase_OpenFrm()
-        {
-            WF en = new WF();
-            return en.Runing_OpenFrm();
-        }
-        /// <summary>
-        /// 返回打开路径
-        /// </summary>
-        /// <returns></returns>
-        public string FrmGuide_Init()
-        {
-            WF en = new WF();
-            return en.Runing_OpenFrm();
-        }
-
-
         #region 执行父类的重写方法.
 
         #endregion 执行父类的重写方法.
@@ -1236,10 +1220,10 @@ namespace BP.WF.HttpHandler
             return count;
         }
 
-        public string Runing_OpenFrm()
+        public string Runing_OpenFrm_Del20200626()
         {
             BP.WF.HttpHandler.WF wf = new WF();
-            return wf.Runing_OpenFrm();
+            return wf.Runing_OpenFrm_Del20200626();
         }
     }
 }

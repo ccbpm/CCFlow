@@ -197,12 +197,13 @@
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
             var mapAtrrs = frmData.Sys_MapAttr;
+
+            var webUser = new WebUser();
             //用户设置
-            var mypk = new WebUser().No + "_Fields_HS_" + GetQueryString("EnName");
+            var mypk = webUser.No + "_Fields_HS_" + GetQueryString("EnName");
             var userRegedit = new Entity("BP.Sys.UserRegedit");
             userRegedit.SetPKVal(mypk);
             var count = userRegedit.RetrieveFromDBSources();
-
             var tabIndex = GetQueryString("tabIndex");
 
             var tableWidth = 800; //  w - 40;

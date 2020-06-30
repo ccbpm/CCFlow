@@ -156,29 +156,11 @@
 
         }
 
-
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo) {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
-            handler.AddPara("FK_Node", nodeID);
-            handler.AddPara("FK_Flow", flowNo);
-            handler.AddPara("WorkID", workid);
-
-            var data = handler.DoMethodReturnString("KeySearch_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '.');
-
-                window.open(data);
-                return;
-            }
-            alert(data);
+            var url = "../MyView.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + nodeID;
+            window.open(url);
+            return;
         }
     </script>
 </body>

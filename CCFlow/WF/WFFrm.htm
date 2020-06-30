@@ -24,45 +24,9 @@
 
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo, fid) {
-         
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            handler.AddPara("FromWorkOpt", "1");
-            handler.AddPara("WorkID", workid);
-            handler.AddPara("FK_Node", nodeID);
-            handler.AddPara("FK_Flow", flowNo);
-            handler.AddPara("FID", fid);
-            handler.AddPara("CCSta", "1");
-            var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //SDK表单或者是嵌入式表单
-            if (data.indexOf('urlForm@') == 0) {
-                data = data.replace('urlForm@', '');
-                if (data.indexOf("http") == -1)
-                    data = basePath + data;
-                if (data.indexOf('FromWorkOpt') == -1)
-                    data = data + "&FromWorkOpt=1";
-
-                window.open(data);
-                return;
-            }
-            //自由/傻瓜/树形表单
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-
-                if (data.indexOf('FromWorkOpt') == -1)
-                    data = data + "&FromWorkOpt=1";
-
-                return data;
-               
-            }
-
-            alert(data);
+            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+            window.open(url);
+            return;
         }
     </script>
 </head>

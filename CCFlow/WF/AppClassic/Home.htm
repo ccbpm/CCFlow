@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>驰骋BPM</title>
-    <!-- <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
-    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-    <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <!-- <link href="../../WF/../../WF/DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script src="../../WF/Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
    
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -46,10 +46,10 @@
                         </a>
                         <ul class="nav nav-second-level in">
                             <!-- 流程发起 -->
-                            <li><a href="../Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="lcfq">流程发起</span></a></li>
-                            <li><a href="../Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="daiban">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
-                            <li><a href="../RuningDataGrid.htm?IsContainFuture=1" class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i><span class="lang" data-key="zaitu">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
-                            <li><a href="../Complete.htm" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="ywc">已完成</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
+                            <li><a href="../../WF/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="lcfq">流程发起</span></a></li>
+                            <li><a href="../../WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="daiban">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
+                            <li><a href="../../WF/RuningDataGrid.htm?IsContainFuture=1" class="J_menuItem"><i class="icon iconfont icon-zaitu-"></i><span class="lang" data-key="zaitu">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
+                            <li><a href="../../WF/Complete.htm" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="ywc">已完成</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
                         </ul>
                     </li>
 
@@ -57,34 +57,32 @@
                     <li>
                         <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label lang" data-key="search">流程查询</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wfqd">我发起的</span></a></li>
-                            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="wspd">我审批的</span></a></li>
-                            <li><a href="../RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i><span class="lang" data-key="wdlcfb">我的流程分布</span></a></li>
-                            <li><a href="../SearchDataGrid.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i><span class="lang" data-key="wdlc">我的流程</span></a></li>
-                            <li><a href="../RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang" data-key="dlccx">单流程查询</span></a></li>
-                            <li><a href="../RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" data-key="zhcx">综合查询</span></a></li>
-                            <li><a href="../Watchdog.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang">流程监控</span></a></li>
-                            <li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.Delays" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="yqlc">逾期流程</span><label class="label label-warning pull-right" id="OutTime"><font color=red>0</font></label></a></li>
+                            <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wfqd">我发起的</span></a></li>
+                            <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="wspd">我审批的</span></a></li>
+                            <li><a href="../../WF/RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i><span class="lang" data-key="wdlcfb">我的流程分布</span></a></li>
+                            <li><a href="../../WF/SearchDataGrid.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i><span class="lang" data-key="wdlc">我的流程</span></a></li>
+                            <li><a href="../../WF/RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang" data-key="dlccx">单流程查询</span></a></li>
+                            <li><a href="../../WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" data-key="zhcx">综合查询</span></a></li>
+                            <li><a href="../../WF/Watchdog.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang">流程监控</span></a></li>
+                            <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Delays" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="yqlc">逾期流程</span><label class="label label-warning pull-right" id="OutTime"><font color=red>0</font></label></a></li>
                         </ul>
                     </li>
-
 
                     <li>
                         <a href="#"><i class="icon iconfont icon-a881"></i> <span class="nav-label lang" data-key="search">分类待办</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
 
-                            <li><a href="../HuiQianList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="huiqian11">会签主持人待办</span></a></li>
-                            <li><a href="../HuiQianAdderList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="huiqianAdd">加签人待办</span></a></li>
-                            <li><a href="../TeamupList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="xeizuo">协作待办</span></a></li>
-                            <li><a href="../AuthorList.htm" class="J_menuItem"><i class="icon iconfont icon-qy_bdfw_6"></i><span class="lang" data-key="sqdb">授权待办</span></a></li>
-                            <li><a href="../AuthorTodolist2019.htm" target="_self"><span class="lang" data-key="">工作委托2019</span></a></li>
-                            <li><a href="../CC.htm" class="J_menuItem"><i class="icon iconfont icon-guanjianzi"></i><span class="lang" data-key="chaosong">抄送</span></a></li>
-                            <li><a href="../TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i><span class="lang" data-key="gxrw">共享任务</span><label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
-                            <li><a href="../TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
-                            <li><a href="../FutureTodolist.htm" class="J_menuItem"><i class="icon iconfont icon-guanxidd-"></i><span class="lang" data-key="sq33rw">未来待办</span></a></li>
+                            <li><a href="../../WF/HuiQianList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="huiqian11">会签主持人待办</span></a></li>
+                            <li><a href="../../WF/HuiQianAdderList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="huiqianAdd">加签人待办</span></a></li>
+                            <li><a href="../../WF/TeamupList.htm" class="J_menuItem"><i class="icon iconfont icon-qianyue"></i><span class="lang" data-key="xeizuo">协作待办</span></a></li>
+                            <li><a href="../../WF/AuthorList.htm" class="J_menuItem"><i class="icon iconfont icon-qy_bdfw_6"></i><span class="lang" data-key="sqdb">授权待办</span></a></li>
+                            <li><a href="../../WF/AuthorTodolist2019.htm" target="_self"><span class="lang" data-key="">工作委托2019</span></a></li>
+                            <li><a href="../../WF/CC.htm" class="J_menuItem"><i class="icon iconfont icon-guanjianzi"></i><span class="lang" data-key="chaosong">抄送</span></a></li>
+                            <li><a href="../../WF/TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i><span class="lang" data-key="gxrw">共享任务</span><label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
+                            <li><a href="../../WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
+                            <li><a href="../../WF/FutureTodolist.htm" class="J_menuItem"><i class="icon iconfont icon-guanxidd-"></i><span class="lang" data-key="sq33rw">未来待办</span></a></li>
                         </ul>
                     </li>
-
 
                     <li>
                         <a href="#">
@@ -93,16 +91,14 @@
                         </a>
 
                         <ul class="nav nav-second-level">
-
-                            <li><a href="../TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i><span class="lang" data-key="gxrw">共享任务</span><label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
-                            <li><a href="../TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
-
-                            <li><a href="../Draft.htm" class="J_menuItem"><i class="icon iconfont icon-caogao"></i><span class="lang" data-key="wdcg">我的草稿</span></a></li>
-                            <li><a href="../Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i><span class="lang" data-key="wdgz">我的关注</span></a></li>
-                            <li><a href="../Batch.htm" class="J_menuItem"><i class="icon iconfont icon-piliangchuli"></i><span class="lang" data-key="pcl">批处理</span></a></li>
-                            <li><a href="../GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i><span class="lang" data-key="qhsp">取回审批</span></a></li>
-                            <li><a href="../HungUpList.htm" class="J_menuItem"><i class="icon iconfont icon-guaqi"></i><span class="lang" data-key="gqdgz">挂起的工作</span></a></li>
-                            <li><a href="../Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i><span class="lang" data-key="wdsz">我的设置</span></a></li>
+                            <li><a href="../../WF/TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i><span class="lang" data-key="gxrw">共享任务</span><label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
+                            <li><a href="../../WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>
+                            <li><a href="../../WF/Draft.htm" class="J_menuItem"><i class="icon iconfont icon-caogao"></i><span class="lang" data-key="wdcg">我的草稿</span></a></li>
+                            <li><a href="../../WF/Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i><span class="lang" data-key="wdgz">我的关注</span></a></li>
+                            <li><a href="../../WF/Batch.htm" class="J_menuItem"><i class="icon iconfont icon-piliangchuli"></i><span class="lang" data-key="pcl">批处理</span></a></li>
+                            <li><a href="../../WF/GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i><span class="lang" data-key="qhsp">取回审批</span></a></li>
+                            <li><a href="../../WF/HungUpList.htm" class="J_menuItem"><i class="icon iconfont icon-guaqi"></i><span class="lang" data-key="gqdgz">挂起的工作</span></a></li>
+                            <li><a href="../../WF/Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i><span class="lang" data-key="wdsz">我的设置</span></a></li>
                         </ul>
                     </li>
 
@@ -119,14 +115,13 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
 
-                        <li><a href="../Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="faqi">发起</span></a></li>
+                        <li><a href="../../WF/Start.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="faqi">发起</span></a></li>
+                        <li><a href="../../WF/Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="daiban">待办</span></a></li>
 
-                        <li><a href="../Todolist.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="daiban">待办</span></a></li>
-
-                        <!--<li id="LI_GenerBill"><a href="../CCBill/GenerBill.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="GenerBill">工作台</span></a></li>-->
-                        <li id="LI_Bill_Start"><a href="../Runing.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="danju1">在途</span></a></li>
-                        <!--<li><a href="../Setting/ChangePassword.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="UpdatePass">密码修改</span><label class="label label-warning pull-right"  id="Label2" ></label></a></li>-->
-                        <li><a href='../Setting/Default.htm' class="J_menuItem lang-setting"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
+                        <!--<li id="LI_GenerBill"><a href="../../WF/CCBill/GenerBill.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="GenerBill">工作台</span></a></li>-->
+                        <li id="LI_Bill_Start"><a href="../../WF/Runing.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="danju1">在途</span></a></li>
+                        <!--<li><a href="../../WF/Setting/ChangePassword.htm" class="J_menuItem"><i class="icon iconfont icon-daiban"></i><span class="lang" data-key="UpdatePass">密码修改</span><label class="label label-warning pull-right"  id="Label2" ></label></a></li>-->
+                        <li><a href='../../WF/Setting/Default.htm' class="J_menuItem lang-setting"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
                         <li>
                             <a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i><span class="lang" data-key="tuichu">退出</span></a>
                         </li>
@@ -134,7 +129,7 @@
                 </nav>
             </div>
             <div class="row J_mainContent" id="content-main">
-                <iframe id="J_iframe" width="100%" height="100%" src="../Start.htm" frameborder="0" data-id="../Start.htm" seamless></iframe>
+                <iframe id="J_iframe" width="100%" height="100%" src="../../WF/Start.htm" frameborder="0" data-id="../../WF/Start.htm" seamless></iframe>
             </div>
         </div>
         <!--右侧部分结束-->
@@ -142,23 +137,23 @@
 
 
 
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="../Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script type="text/javascript" src="../Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="../../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script type="text/javascript" src="../../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <script type="text/javascript" src="../Style/skin/js/appnew.js?v=4.1.0"></script>
-    <script type="text/javascript" src="../Style/skin/js/index.js"></script>
+    <script type="text/javascript" src="../../WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="../../WF/Style/skin/js/index.js"></script>
 
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../Scripts/config.js?v=1.0"></script>
-    <script type="text/javascript" src="../Comm/Gener.js?v=1.0"></script>
+    <script type="text/javascript" src="../../WF/Scripts/config.js?v=1.0"></script>
+    <script type="text/javascript" src="../../WF/Comm/Gener.js?v=1.0"></script>
     <!-- 处理多语言 -->
-    <script src="../Data/lang/load.js" type="text/javascript"></script>
-    <script src="../Data/lang/js/zh-cn.js" type="text/javascript"></script>
-    <script src="../Data/lang/lang.js" type="text/javascript"></script>
+    <script src="../../WF/Data/lang/load.js" type="text/javascript"></script>
+    <script src="../../WF/Data/lang/js/zh-cn.js" type="text/javascript"></script>
+    <script src="../../WF/Data/lang/lang.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -181,7 +176,7 @@
             var flowNo = GetQueryString("FK_Flow");
 
             if (flowNo != null) {
-                window.open('../MyFlow.htm?FK_Flow=' + flowNo);
+                window.open('../../WF/MyFlow.htm?FK_Flow=' + flowNo);
                 return;
             }
             return;

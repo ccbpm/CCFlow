@@ -351,72 +351,9 @@
 
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo, fid, currNodeId) {
-            //但前节点所处的位置
-            var nowNode = new Entity("BP.WF.Node", nodeID);
-
-            //如果是树形表单，则显示当前人所处节点的数据
-            if (nowNode.FormType == 5) {
-                //获取人员所处的流程节点
-
-                var currNode = new Entity("BP.WF.Node", currNodeId);
-                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    }
-                } else {
-                    //判断当前节点的运行模式
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    } else if (currNode.RunModel == RunModel.SubThread) {
-                        nodeID = currNodeId;
-                    }
-                }
-
-
-            }
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            handler.AddPara("FromWorkOpt", "1");
-            handler.AddPara("WorkID", workid);
-            handler.AddPara("FK_Node", nodeID);
-            handler.AddPara("FK_Flow", flowNo);
-            handler.AddPara("FID", fid);
-            var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            //SDK表单或者是嵌入式表单
-            if (data.indexOf('urlForm@') == 0) {
-                data = data.replace('urlForm@', '');
-                if (data.indexOf("http") == -1)
-                    data = basePath + data;
-                if (data.indexOf('FromWorkOpt') == -1)
-                    data = data + "&FromWorkOpt=1";
-
-                window.open(data);
-                return;
-            }
-            //自由/傻瓜/树形表单
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-
-                if (data.indexOf('FromWorkOpt') == -1)
-                    data = data + "&FromWorkOpt=1";
-
-                window.open(data);
-                return;
-            }
-
-            alert(data);
-
+            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + currNodeId;
+            window.open(url);
+            return;
         }
 
         var pageCount = 1;
@@ -630,9 +567,9 @@
         $(function () {
             $(".wrapper-dropdown-2").on("mousedown", function (e) {
                 var v_id = $(e.target).attr("id");
-                var dd = new DropDown($("#"+v_id+""));
+                var dd = new DropDown($("#" + v_id + ""));
             });
-            
+
             $(".wrapper-dropdown-2").click(function () {
                 // all dropdowns
                 $('.wrapper-dropdown-2').removeClass('active');

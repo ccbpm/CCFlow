@@ -38,9 +38,9 @@
             background: transparent;
         }
 
-        body div {
-            text-align: left;
-        }
+            body div {
+                text-align: left;
+            }
 
         #Message {
             width: 100%;
@@ -73,11 +73,12 @@
             margin: 5px 3px 5px 3px;
             padding: 4px 15px;
         }
-        button:hover {
-            background: #f5f5f5 !important;
-            color: #000;
-            border: 1px solid #ccc !important;
-        }
+
+            button:hover {
+                background: #f5f5f5 !important;
+                color: #000;
+                border: 1px solid #ccc !important;
+            }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -388,7 +389,7 @@
         }
         //var num = 30;
         function clock() {
-           
+
             if ($("#CloseBtn").length == 0)
                 return;
             WF_WorkOpt_LeftSecond >= 0 ? WF_WorkOpt_LeftSecond-- : clearInterval(int);
@@ -428,7 +429,7 @@
                 } else {
                     window.parent.returnWorkWindowClose();
                 }
-                
+
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();
@@ -529,9 +530,9 @@
 
         function Help() {
             var str = "输入要下一步接受人员可以使用人员名称拼音支持全拼简拼。";
-            str +="比如: 查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua;"
-            str +=" 支持单位名称,比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx";
-            layer.alert(str, {icon: 6});
+            str += "比如: 查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua;"
+            str += " 支持单位名称,比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx";
+            layer.alert(str, { icon: 6 });
         }
 
         //高级选择
@@ -552,20 +553,22 @@
 
     <div style="margin-left:20px">
         <div style="float:left;margin-top:4px">
+
             <input type="text" id="TB_Emps" name="TB_Emps"
-                   title="查张三,您可输入: zs或zhangs或zhangsan"
+                   title="输入: zs或zhangs或zhangsan"
                    placeholder="查张三,您可输入: zs或zhangs或zhangsan"
-                   value='' style=" width:300px; " />
+                   value='' style="width:500px;" />
 
             <div id="SelectEmp"></div>
+            <div style="float:left">
+                <button id="Btn_SelectEmps">
+                    <img src="../Img/Btn/AddLeader.png" /> 选人
+                </button>
+            </div>
+
         </div>
         <div id="next">
             <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
-
-            <button   id="Btn_SelectEmps" >
-                <img src="../Img/Btn/AddLeader.png" /> 选人
-            </button>
-
             <!--<input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='选Bate' />-->
 
 

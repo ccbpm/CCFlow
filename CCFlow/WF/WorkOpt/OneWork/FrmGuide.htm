@@ -16,36 +16,10 @@
     <script type="text/javascript">
 
         $(function () {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-
-            var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-
-                data = "../." + data;
-
-                window.location.href = data;
-                //WinOpen(data);
-                return;
-            }
-            if (data.indexOf("urlForm@") == 0) {
-                data = data.replace('urlForm@', '');
-                if (data.indexOf("http") == -1)
-                    data = basePath + data;
-                window.location.href = data;
-                return;
-            }
-
-            alert(data);
-
+            var url = "MyView.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            window.location.url = url;
+           // window.open(url);
+            return;
         });
 
     </script>

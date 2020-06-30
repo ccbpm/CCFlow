@@ -27,25 +27,8 @@
 
         /* 打开表单. */
         function OpenFrm(nodeID) {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
-            handler.AddUrlData();
-            if (nodeID != undefined)
-                handler.AddPara("FK_Node", nodeID);
-
-            var data = handler.DoMethodReturnString("Runing_OpenFrm");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                WinOpen(data);
-                return;
-            }
-            alert(data);
+             var url = "MyView.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            window.location.url = url;
         }
     </script>
 </head>

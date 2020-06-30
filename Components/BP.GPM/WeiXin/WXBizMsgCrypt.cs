@@ -7,6 +7,7 @@ using System.Collections;
 //using System.Web;
 using System.Security.Cryptography;
 using BP.Tools;
+
 //-40001 ： 签名验证错误
 //-40002 :  xml解析失败
 //-40003 :  sha加密生成签名失败

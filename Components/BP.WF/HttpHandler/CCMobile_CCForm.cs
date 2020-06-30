@@ -521,7 +521,6 @@ namespace BP.WF.HttpHandler
             
             //string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
 
-
             //HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
             //StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             //string str = reader.ReadToEnd();

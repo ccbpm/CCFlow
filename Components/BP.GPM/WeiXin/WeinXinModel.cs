@@ -22,7 +22,6 @@ namespace BP.GPM.WeiXin
         public string invalidparty { get; set; }
         public string invalidtag { get; set; }
     }
-
     /// <summary>
     /// 消息类型
     /// </summary>
@@ -66,7 +65,6 @@ namespace BP.GPM.WeiXin
         /// </summary>
         public string WorkID { get; set; }
     }
-
     /// <summary>
     /// 微信-文本消息
     /// </summary>
@@ -103,7 +101,6 @@ namespace BP.GPM.WeiXin
             }
         }
     }
-
     /// <summary>
     /// 微信-图片消息
     /// </summary>
@@ -140,7 +137,6 @@ namespace BP.GPM.WeiXin
             }
         }
     }
-
     /// <summary>
     /// 微信-voice消息
     /// </summary>

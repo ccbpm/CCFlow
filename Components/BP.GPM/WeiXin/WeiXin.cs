@@ -144,7 +144,6 @@ namespace BP.GPM.WeiXin
             }
             return null;
         }
-
         /// <summary>
         /// 获取部门集合
         /// </summary>
@@ -167,7 +166,6 @@ namespace BP.GPM.WeiXin
             }
             return null;
         }
-
         /// <summary>
         /// 获取指定部门下的人员
         /// </summary>

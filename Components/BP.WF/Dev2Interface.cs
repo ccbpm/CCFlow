@@ -8285,7 +8285,7 @@ namespace BP.WF
 
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
-            BP.WF.Dev2Interface.Flow_BBSAdd(gwf.FK_Flow, workid, gwf.FID, checkInfo, BP.Web.WebUser.No, BP.Web.WebUser.Name);
+            //BP.WF.Dev2Interface.Flow_BBSAdd(gwf.FK_Flow, workid, gwf.FID, checkInfo, BP.Web.WebUser.No, BP.Web.WebUser.Name);
             return "执行成功.";
         }
         /// <summary>

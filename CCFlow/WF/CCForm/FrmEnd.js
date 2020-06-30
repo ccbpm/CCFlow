@@ -142,6 +142,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
         if (mapAttr.UIContralType == 14) {//签批组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
+            if (window.document.location.href.indexOf("AdminFrm.htm") != -1)
+                continue;
             //获取审核组件信息
             var node = frmData.WF_Node == undefined ? null : frmData.WF_Node[0];
             if (node != null && (node.FWCVer == 0 || node.FWCVer == "" || node.FWCVer == undefined))

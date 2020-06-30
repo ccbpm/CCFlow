@@ -19,10 +19,14 @@ function GenerDevelopFrm(wn, fk_mapData) {
         alert("开发者设计的表单内容丢失，请联系管理员");
         return;
     }
-    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
+    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1) {
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../../");
-    else
+    } else if (currentURL.indexOf("AdminFrm.htm") != -1) {
+        //不做替换
+    } else {
         htmlContent = htmlContent.replace(new RegExp("../../../", 'gm'), "../");
+    }
+       
     $("#CCForm").html(htmlContent);
 
     //解析表单中的数据
@@ -255,6 +259,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
                 var eleHtml = "";
                 if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                else if (currentURL.indexOf("AdminFrm.htm") != -1)
+                    eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../../../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
                 else
                     eleHtml = "<img src='" + defValue + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
 
@@ -284,7 +290,9 @@ function GenerDevelopFrm(wn, fk_mapData) {
                     $.each($(this).children("Img"), function () {
                         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                             $(this).attr("src", $(this).attr("src").replace("../../", "../"));
-                        else
+                        else if (currentURL.indexOf("AdminFrm.htm") != -1) {
+                            //不做处理
+                        } else
                             $(this).attr("src", $(this).attr("src").replace("../../", "./"));
                     });
                 });
@@ -402,6 +410,8 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     if (frmDtl.ListShowModel == "0") {
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             src = "../CCForm/Dtl2017.htm"
+        else if (currentURL.indexOf("AdminFrm.htm") != -1)
+            src = "../../CCForm/Dtl2017.htm"
         else
             src = "./CCForm/Dtl2017.htm";
     }
@@ -410,7 +420,9 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
     if (frmDtl.ListShowModel == "1") {
         //卡片模式
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
-            src = "../CCForm/DtlCard.htm"
+            src = "../CCForm/DtlCard.htm";
+        else if (currentURL.indexOf("AdminFrm.htm") != -1)
+            src = "../../CCForm/DtlCard.htm";
         else
             src = "./CCForm/DtlCard.htm";
     }
@@ -432,6 +444,8 @@ function figure_Develop_Ath(element, ath) {
     var src = "";
     if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         src = "../CCForm/Ath.htm?PKVal=" + pageData.OID;
+    else if (currentURL.indexOf("AdminFrm.htm") != -1)
+        src = "../../CCForm/Ath.htm?PKVal=" + pageData.OID;
     else
         src = "./CCForm/Ath.htm?PKVal=" + pageData.WorkID;
     src = src + "&PWorkID=" + GetQueryString("PWorkID") + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=" + pageData.IsReadonly + "&FK_Node=" + pageData.FK_Node + "&FK_Flow=" + pageData.FK_Flow;
@@ -524,6 +538,8 @@ function figure_Develop_Image(element, frmImage) {
         var errorImg = "../DataUser/ICON/CCFlow/LogBig.png";
         if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
             errorImg = "../../DataUser/ICON/CCFlow/LogBig.png";
+        else if (currentURL.indexOf("AdminFrm.htm") != -1)
+            errorImg = "../../../DataUser/ICON/CCFlow/LogBig.png";
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
         if (imgSrc == "" || imgSrc == null)
             imgSrc = errorImg;
@@ -682,6 +698,8 @@ function figure_Develop_IFrame(element, frame) {
         if (urlType == 3) {//轨迹图
             if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
                 url = "../WorkOpt/OneWork/TimeBase.htm";
+            else if (currentURL.indexOf("AdminFrm.htm") != -1)
+                url = "../../WorkOpt/OneWork/TimeBase.htm";
             else
                 url = "./WorkOpt/OneWork/TimeBase.htm";
         }
@@ -715,7 +733,8 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
     var src = "./WorkOpt/SubFlow.htm?s=2";
     if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         src = "../WorkOpt/SubFlow.htm?s=2";
-
+    else if (currentURL.indexOf("AdminFrm.htm") != -1)
+        src = "../../WorkOpt/SubFlow.htm?s=2";
     var paras = '';
 
     paras += "&FID=" + pageData.FID;
@@ -748,8 +767,11 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
 
 //审核组件
 function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
-
-
+    //这个修改数据的位置
+    if (currentURL.indexOf("AdminFrm.htm") != -1) {
+        $(element).remove(); 
+        return;
+    }
 
     var sta = wf_node.FWCSta;
     if (sta == 0 || sta == undefined)
@@ -773,6 +795,8 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     var url = "./WorkOpt/";
     if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         url = '../WorkOpt/';
+    else if (currentURL.indexOf("AdminFrm.htm") != -1)
+        url = '../../WorkOpt/';
     if (wf_node.FWCSta != 0) {
         if (wf_node.FWCVer == 0 || wf_node.FWCVer == "" || wf_node.FWCVer == undefined)
             pageData.FWCVer = 0;

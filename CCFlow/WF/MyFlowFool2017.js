@@ -126,7 +126,8 @@ function GenerFoolFrm(wn) {
 
             //审核组件..
             if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
-              
+                if (window.document.location.href.indexOf("AdminFrm.htm") != -1)
+                    continue;
 
                 html += "<tr>";
                 html += "  <td colspan='" + tableCol + "'>";

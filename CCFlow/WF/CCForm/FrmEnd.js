@@ -510,7 +510,7 @@ function AfterBindEn_DealMapExt(frmData) {
         var PopModel = mapAttr.GetPara("PopModel");
 
         if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
-            if (mapAttr.UIVisible == 0 || $("#TB_" + mapAttr.KeyOfEn).length == 0)
+            if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable==0 || $("#TB_" + mapAttr.KeyOfEn).length == 0)
                 continue;
             PopMapExt(mapAttr, mapExt, frmData);
             continue;

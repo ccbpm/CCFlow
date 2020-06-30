@@ -694,6 +694,7 @@ Common.CustomPagePlug = function (operation) {
             Common.ConsoleLogError(data, _this.InitData.IsShowAll ? _this.InitData.listUrl : _this.InitData.listUrl + "&pageIndex=" + _this.InitData.PageIndex + "&pageSize=" + _this.InitData.PageSize + "&u=" + Math.random());
             var obj = JSON.parse(data).DTObjs;
             var html = "";
+            var operHtml = "";
             $.each(obj, function (k, obje) {
                 if (DivId == "sample_3Div" && window.document.URL.indexOf("portal.aspx") > 0) {
                     html += "<tr onclick='showUnReadMessages(this," + obje.MsgCategoryID + "," + obje.MsgID + ")'>";
@@ -705,7 +706,29 @@ Common.CustomPagePlug = function (operation) {
                     for (var ele in obje) {
                         obje[ele] = obje[ele];
                     }
+                    //判断是否是多表头
+                    var headTrs = $("#" + _this.InitData.DivId + " table thead tr");
+                    var isMultihead = false;
+                    if (headTrs.length > 1)
+                        isMultihead = true;
                     var headers = $("#" + _this.InitData.DivId + " table thead tr th");
+                    if (isMultihead == true) {
+                        //如果是多表头，需要整合整个th信息
+                        headers = [];
+                        var firstHeadTh = $(headTrs[0]).find("th");
+                        var secondHeadTh = $(headTrs[1]).find("th");
+                        for (var i = 0; i < firstHeadTh.length; i++) {
+                            var dataInfo = $(firstHeadTh[i]).attr("data-info");
+                            if (dataInfo != null && dataInfo != undefined && dataInfo.indexOf("Multi,") != -1) {
+                                $.each(secondHeadTh, function (idx, item) {
+                                    if (dataInfo.indexOf($(item).attr("data-info") + ",") != -1)
+                                        headers.push(item);
+                                });
+                            } else {
+                                headers.push(firstHeadTh[i]);
+                            }
+                        }
+                    }
                     for (var i = 0; i < headers.length; i++) {
                         var style = "";
                         if ($(headers[i]).css('display') == "none")
@@ -773,7 +796,10 @@ Common.CustomPagePlug = function (operation) {
                                 tmpC = tmpC.split('@');
                                 tmp += '<' + tmpC[0] + ' ' + tmpC[1] + '>' + tmpC[2] + '</' + tmpC[0] + '>';
                             }
-                            html += ('<td " + style+">' + tmp + '</td>');
+                           // if (isMultihead == false)
+                                html += ('<td " + style+">' + tmp + '</td>');
+                          //  else
+                           //     operHtml += ('<td " + style+">' + tmp + '</td>');
                         }
                         else {
                             html += "<td " + style +">" + "" + "</td>"

@@ -21,23 +21,59 @@
             var mapAttrs = new Entities("BP.Sys.MapAttrs")
             mapAttrs.Retrieve("FK_MapData", dtlID, "Idx");
 
+            var mapdtl = new Entity("BP.Sys.MapDtl", dtlID);
+            var multi = mapdtl.GetPara("MultiTitle");
+            var isMulti = false;
+            if (multi != null && multi != undefined && multi != "")
+                isMulti = true;
+
             var html = "<table style='width:100%;'>";
             html += "<caption><img style='margin-top:5px;'; src='../../../Img/Event.png' />创建表头</caption>";
 
+            html += "<tr>"; 
+            var secHtml = "";
+            var currentGroup = "";
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
-
                 if (attr.UIVisible == 0)
                     continue;
-                html += "<th>" + attr.Name + "</th>";
+                if (isMulti = true) {
+                    if (multi.indexOf(attr.KeyOfEn + ",") == -1)
+                        html += "<th rowspan=2>" + attr.Name + "</th>";
+                    else {
+                        var fields = getMutliFile(attr.KeyOfEn, multi);
+                        if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'>" + fields[0] + "</th>";
+                            currentGroup = fields[0];
+                        }
+                        secHtml += "<th>" + attr.Name + "</th>";
+                    }
+                } else {
+                    html += "<th>" + attr.Name + "</th>";
+                } 
 
             }
+            html += "</tr>";
+            if (isMulti = true)
+                html += "<tr>" + secHtml + "</tr>";
             html += "</table>";
             $("#Table").html(html);
             //形成标头.
 
         });
-
+        function getMutliFile(keyOfEn,multi) {
+            var fields = multi.split(";");
+            for (var i = 0; i < fields.length; i++) {
+                var str = fields[i];
+                if (str == "")
+                    continue;
+                if (str.indexOf(keyOfEn + ",") == -1)
+                    continue;
+                var strs = str.substring(0,str.length-1).split(",");
+                return strs;
+            }
+            return "";
+        }
         function AddGroup() {
 
             var url = "MultiTitleDtl.htm?DtlID=" + GetQueryString("DtlID");

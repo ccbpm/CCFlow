@@ -316,12 +316,15 @@
                 }
             }
             var insertTr = $('<tr></tr>');
-            var threadTh = $('#dtlDiv div table thead tr th');
+            var threadTr = $('#dtlDiv div table thead tr');
             var newRowIndex = $('#dtlDiv div table tbody tr').length;
             if (statisticsFlag && newRowIndex > 0) {	// 统计行不计
                 newRowIndex--;
             }
+            
+            var threadTh = getUseHeadTh();
             $.each(threadTh, function (k, threadThObj) {
+
                 if ($(threadThObj).data().colname != undefined) {
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
@@ -382,13 +385,13 @@
                         }
                     }
                     //枚举值单选按钮
-                   
+
                     var radioEles = $.grep(tmplate, function (obj) {
                         return $(obj).attr('name') == 'RB_' + o.data().KeyOfEn + '_' + newRowIndex;
                     })
-                   
 
-                 
+
+
 
                     //处理复选框  设置表格中数据的值
                     var textVal = workNodeData.Blank[0][o.data().KeyOfEn];
@@ -405,9 +408,9 @@
                             ckEle[0].checked = false;
                         }
                     } else if (ckEle.length > 1) {
-                        textVal = "," + textVal+",";
+                        textVal = "," + textVal + ",";
                         $.each(ckEle, function () {
-                            if (textVal.indexOf(","+$(this).val()+",")!=-1) 
+                            if (textVal.indexOf("," + $(this).val() + ",") != -1)
                                 $(this).attr("checked", true);
                             else
                                 $(this).attr("checked", false);
@@ -439,6 +442,8 @@
 
                 }
             });
+           
+           
 
              var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
@@ -457,7 +462,6 @@
 
             trData.data["OID"] = 0;
             insertTr.data(trData);
-
             insertTr.append($('<td> <a href="#" onclick="deleteRow(this)" >移除</a></td>'));
 
            
@@ -521,8 +525,49 @@
             $('#Msg').hide();
         }
 
+        //获取多表头字段
+        function getMutliField(keyOfEn, multi) {
+            var fields = multi.split(";");
+            for (var i = 0; i < fields.length; i++) {
+                var str = fields[i];
+                if (str == "")
+                    continue;
+                if (str.indexOf(keyOfEn + ",") == -1)
+                    continue;
+                var strs = str.substring(0, str.length - 1).split(",");
+                return strs;
+            }
+            return "";
+        }
+
+        //整合表头
+        function getUseHeadTh() {
+            var headTrs = $('#dtlDiv div table thead tr');
+            var threadTh = $('#dtlDiv div table thead tr th');
+            //如果是多表头，需要整合整个th信息
+            if (isMulti == true) {
+                threadTh = [];
+                var firstHeadTh = $(headTrs[0]).find("th");
+                var secondHeadTh = $(headTrs[1]).find("th");
+                for (var i = 0; i < firstHeadTh.length; i++) {
+                    var dataInfo = $(firstHeadTh[i]).attr("data-info");
+                    if (dataInfo != null && dataInfo != undefined && dataInfo.indexOf("Multi,") != -1) {
+                        $.each(secondHeadTh, function (idx, item) {
+                            if (dataInfo.indexOf($(item).attr("data-info") + ",") != -1)
+                                threadTh.push(item);
+                        });
+                    } else {
+                        threadTh.push(firstHeadTh[i]);
+                    }
+                }
+            }
+
+            return threadTh;
+           
+        }
         //初始化数据.
         var sys_MapDtl; //从表的属性
+        var isMulti = false;
         function InitPage() {
 
             var isReadonly = GetQueryString("IsReadonly");
@@ -606,7 +651,16 @@
 
             // 表头start --------------------
             if ($('#dtlDiv div table thead tr').length == 0) {
+                var multi = GetPara(sys_MapDtl.AtPara,"MultiTitle");
+                if (multi != null && multi != undefined && multi != "")
+                    isMulti = true;
+                var rowspan = "rowspan=1";
+                if (isMulti == true)
+                    rowspan = "rowspan=2";
+
                 var threadTr = $('<tr data-data="true"></tr>');
+                var secondTr = $('<tr data-data="true"></tr>');
+                var currentGroup = "";
                 //制造表头
                 //添加序号列
                 workNodeData = data;
@@ -616,7 +670,7 @@
                 var EditModel = sys_MapDtl.EditModel;
                 window.EditModel = EditModel;
 
-                var snTh = $('<th data-coltype="SN" style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
+                var snTh = $('<th data-coltype="SN" ' + rowspan+' style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
 
                 threadTr.append(snTh);
                 $.each(sys_mapAttr, function (i, mapAttrObj) {
@@ -624,24 +678,50 @@
                     var mustInput = "";
                     if (mapAttrObj.UIIsInput == 1)
                         mustInput = '<span style="color:red" class="mustInput" data-keyofen="' + mapAttrObj.KeyOfEn + '">*</span>';
-                    var th = $('<th class="thStyle"></th>');
-                    if (mapAttrObj.MyDataType == 8)
-                        th = $('<th data-coltype="Money"></th>');
+                    
+                    if (isMulti == false || multi.indexOf(mapAttrObj.KeyOfEn + ",") == -1) {
+                        var th = $('<th class="thStyle"'  + rowspan+'></th>');
+                        if (mapAttrObj.MyDataType == 8)
+                            th = $('<th data-coltype="Money"' + rowspan +'></th>');
 
-                    th.text(mapAttrObj.Name);
-                    th.data(mapAttrObj);
-                    th.css('width', mapAttrObj.UIWidth);
-                    if (mapAttrObj.UIVisible == 0)
-                        th.css("display", "none");
-                    th.data().colname = mapAttrObj.KeyOfEn;
-                    th.append(mustInput);
-                    //if (mapAttrObj.UIVisible == 1 || (mapAttrObj.UIVisible == 0 && mapAttrObj.EditType == 2)) {
-                       threadTr.append(th);
-                    //}
+                        th.text(mapAttrObj.Name);
+                        th.data(mapAttrObj);
+                        th.css('width', mapAttrObj.UIWidth);
+                        if (mapAttrObj.UIVisible == 0)
+                            th.css("display", "none");
+                        th.data().colname = mapAttrObj.KeyOfEn;
+                        th.append(mustInput);
+                       
+                        threadTr.append(th);
+                    } else {
+                        var fields = getMutliField(mapAttrObj.KeyOfEn, multi);
+                        if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+                            var info = fields.join(",");
+                            info = "Multi,"+info.substring(info.indexOf(",") + 1)+",";
+                            var th = $('<th class="thStyle" style="text-align:center" data-info="'+info+'" colspan=' + (fields.length-1)+'></th>');
+                            th.text(fields[0]);
+                            threadTr.append(th);
+                            currentGroup = fields[0];
+                        }
+                        var th = $('<th class="thStyle" data-info="' + mapAttrObj.KeyOfEn+'"></th>');
+                        if (mapAttrObj.MyDataType == 8)
+                            th = $('<th data-coltype="Money" data-info="' + mapAttrObj.KeyOfEn +'"></th>');
+
+                        th.text(mapAttrObj.Name);
+                        th.data(mapAttrObj);
+                        th.css('width', mapAttrObj.UIWidth);
+                        if (mapAttrObj.UIVisible == 0)
+                            th.css("display", "none");
+                        th.data().colname = mapAttrObj.KeyOfEn;
+                        th.append(mustInput);
+
+                        secondTr.append(th);
+                    }
+                   
                 });
 
                 //增加附件.
-                var athTh = $('<th style="width:50px;">附件</th>');
+                var athTh = $('<th style="width:50px;"'+rowspan+'>附件</th>');
                 var athThData;
                 athThData = {
                     custom: true,
@@ -659,7 +739,7 @@
 
                 //超链接
                 if (sys_MapDtl.IsEnableLink == 1) {
-                    var linkTh = $('<th style="width:50px;">链接</th>');
+                    var linkTh = $('<th style="width:50px;"' + rowspan +'>链接</th>');
                     var target = sys_MapDtl.LinkTarget;
                     var LinkLabel = sys_MapDtl.LinkLabel;
                     var linkThData;
@@ -680,11 +760,11 @@
                 var delTh = "";
                 var impModel = sys_MapDtl.ImpModel;
                 var IsExp = sys_MapDtl.IsImp;//导出
-                var th = "<th style='width:100px;'></th>";
+                var th = $("<th style='width:100px;'" + rowspan + "></th>");
                 var imgStr = '<img title="保存" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
                 if (IsExp==1 ) {
 
-                    imgStr += '<th style="width:60px;"><img title="导出" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
+                    imgStr += '<img title="导出" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
                 } 
                 if (impModel != 0) {
 
@@ -724,7 +804,7 @@
                 //添加删除列
                 //var delTh = $('<th></th>');
                 //添加保存列
-                delTh = $('<th style=""></th>');
+                delTh = $('<th style=""' + rowspan +'></th>');
                 delTh.text("操作");
                 var delThData = {
                     custom: true,
@@ -737,6 +817,8 @@
                 //threadTr.append(delTh);
 
                 $('#dtlDiv div table thead').append(threadTr);
+                if (isMulti == true)
+                    $('#dtlDiv div table thead').append(secondTr);
             }
             // 表头over --------------------
 
@@ -765,7 +847,7 @@
                     //循环TBODY
                     var tbodyTrs = $('#dtlDiv div table tbody tr');
                     $.each(tbodyTrs, function (m, tbodyTrObj) {
-                        var threadTh = $('#dtlDiv div table thead tr th');
+                        var threadTh = getUseHeadTh();
                         $.each(threadTh, function (k, threadThObj) {
                             if ($(threadThObj).data().colname != undefined) {
                                 var o = $(threadThObj);
@@ -1022,8 +1104,9 @@
 
         }
 
+       
         function triggerStatistics() {
-            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
+            $.each(getUseHeadTh(), function (i, th) {
                 var matchesColumn = [];
                 if (window.columnExp) {
                     matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
@@ -1044,7 +1127,7 @@
         }
 
         function bindStatistics() {
-            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
+            $.each(getUseHeadTh(), function (i, th) {
                 var matchesColumn = $.grep(window.columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
                     return val.KeyOfEn == $(th).data().colname;
                 });
@@ -1075,7 +1158,7 @@
             var statisticsRow = $("<tr></tr>");
             statisticsRow.data().customRowType = "statistics";
             // 遍历表头
-            $.each($("#dtlDiv div table thead tr th"), function (i, th) {
+            $.each(getUseHeadTh(), function (i, th) {
                 var coltype = $(th).data().coltype;
                 if (typeof coltype != "undefined" && coltype == "SN") {	// 统计行行号列
                     //statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
@@ -1105,8 +1188,8 @@
 
         function doAlignColumns() {
             // 对齐列单元格
-            var headerCount = $("#dtlDiv div table thead tr th").length;
-            $("#dtlDiv div table thead tr th").each(function (hi, th) {
+            var headerCount = getUseHeadTh().length;
+            $.each(getUseHeadTh(),function (hi, th) {
                 var realWidth = $(this).outerWidth(true);
                 var tpaddWidth = realWidth - $(this).width();
                 var definedWidth = $(this).data().UIWidth;
@@ -1263,7 +1346,7 @@
         function getColumnElementsName(KeyOfEn) {
             var name = undefined;
             if (KeyOfEn) {
-                $.each($("#dtlDiv div table thead tr th"), function (i, th) {
+                $.each(getUseHeadTh(), function (i, th) {
                     var data = $(th).data();
                     if (data.colname === KeyOfEn) {
                         var template = figure_MapAttr_Template(data);

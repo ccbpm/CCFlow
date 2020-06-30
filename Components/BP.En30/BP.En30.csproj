@@ -370,6 +370,7 @@
     <Compile Include="Tools\DealString.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\PubGlo.cs" />
     <Compile Include="Tools\SecurityDES.cs" />
     <Compile Include="Tools\StringExpressionCalculate.cs">
       <SubType>Code</SubType>

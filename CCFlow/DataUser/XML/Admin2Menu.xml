@@ -45,6 +45,7 @@
   <Item No="601" GroupNo="System" Name="系统枚举"  Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
   <Item No="602" GroupNo="System" Name="字典表"   Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddSFTable"  />
   <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+  <Item No="999" GroupNo="System" Name="配置字符串加密" For="" Url="../../Comm/Sys/JiaMi.htm"  />
 
   <Group No="DOC" Name="公文管理" For="admin" />
   <Item No="8012" GroupNo="DOC" Name="公文类型"   Url="../../Comm/Ens.htm?EnsName=BP.DOC.WD.DocTypes"  />

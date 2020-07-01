@@ -793,7 +793,7 @@ namespace BP.WF.HttpHandler
                     FrmRB rb = new FrmRB();
                     rb.FK_MapData = this.FK_MapData;
                     rb.KeyOfEn = this.KeyOfEn;
-                    rb.IntKey = "-1";
+                    rb.IntKey = -1;
                     rb.Lab = "--无(不选择)--";
                     rb.EnumKey = attr.UIBindKey;
                     rb.Insert(); //插入数据.
@@ -804,7 +804,7 @@ namespace BP.WF.HttpHandler
                         rb = new FrmRB();
                         rb.FK_MapData = this.FK_MapData;
                         rb.KeyOfEn = this.KeyOfEn;
-                        rb.IntKey = se.IntKey.ToString();
+                        rb.IntKey = se.IntKey;
                         rb.Lab = se.Lab;
                         rb.EnumKey = attr.UIBindKey;
                         rb.Insert(); //插入数据.
@@ -818,7 +818,7 @@ namespace BP.WF.HttpHandler
                         FrmRB rb = new FrmRB();
                         rb.FK_MapData = this.FK_MapData;
                         rb.KeyOfEn = this.KeyOfEn;
-                        rb.IntKey = row["No"].ToString();
+                        rb.IntKey = int.Parse( row["No"].ToString());
                         rb.Lab = row["Name"].ToString();
                         rb.EnumKey = attr.UIBindKey;
                         rb.Insert(); //插入数据.

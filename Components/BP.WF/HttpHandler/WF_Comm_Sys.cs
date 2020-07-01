@@ -23,6 +23,19 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Comm_Sys : DirectoryPageBase
     {
+        /// <summary>
+        /// 加密字符串
+        /// </summary>
+        /// <returns></returns>
+        public string JiaMi_Init()
+        {
+            string str = "ssss";
+            DecryptAndEncryptionHelper.DecryptAndEncryptionHelper en = new DecryptAndEncryptionHelper.DecryptAndEncryptionHelper();
+            return en.Encrypto(str);
+
+           // DecryptAndEncryptionHelper.Encrypto decode = new DecryptAndEncryptionHelper.decode();
+            //eturn decode.decode_exe(str);
+        }
         public string ImpData_Init()
         {
             return "";

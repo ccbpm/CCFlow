@@ -46,6 +46,29 @@ namespace BP.WF.HttpHandler
             return BP.Sys.SystemConfig.RunOnPlant;
         }
         /// <summary>
+        /// 加密工具.
+        /// </summary>
+        /// <returns></returns>
+        public string Encrypto_Exe()
+        {
+             DecryptAndEncryptionHelper.decode decode = new DecryptAndEncryptionHelper.decode();
+             string mstr = this.GetRequestVal("mstr").Trim();
+             string encryptoStr = decode.encrypto_exe(mstr);
+             return encryptoStr;
+        }
+
+        /// <summary>
+        /// 解密方法.
+        /// </summary>
+        /// <returns></returns>
+        public string Decode_Exe()
+        {
+            DecryptAndEncryptionHelper.decode decode = new DecryptAndEncryptionHelper.decode();
+            string sstr = this.GetRequestVal("sstr").Trim();
+            string encryptoStr = decode.decode_exe(sstr);
+            return encryptoStr;
+        }
+        /// <summary>
         /// 初始化界面.
         /// </summary>
         /// <returns></returns>

@@ -2563,7 +2563,7 @@ namespace BP.WF.HttpHandler
             }
            //访问Bill页面
             if (this.DoWhat.Equals(DoWhatList.Bill) == true)
-                return "url./CCBill/MyBill.htm?FrmID="+this.FrmID;
+                return "url@./CCBill/MyBill.htm?FrmID="+this.FrmID;
             return "err@没有约定的标记:DoWhat=" + this.DoWhat;
         }
         #endregion 处理page接口.

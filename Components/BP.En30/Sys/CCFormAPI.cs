@@ -331,7 +331,7 @@ namespace BP.Sys
                     FrmRB rb = new FrmRB();
                     rb.FK_MapData = ma.FK_MapData;
                     rb.KeyOfEn = ma.KeyOfEn;
-                    rb.IntKey = item.IntKey.ToString();
+                    rb.IntKey = item.IntKey;
                     rb.MyPK = rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey;
                     rb.RetrieveFromDBSources();
 
@@ -416,7 +416,6 @@ namespace BP.Sys
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
             ma.GroupID = groupField.OID;
-
             ma.Insert();
 
             if (ma.UIContralType != UIContralType.RadioBtn)
@@ -436,7 +435,7 @@ namespace BP.Sys
                 rb.EnumKey = ma.UIBindKey;
 
                 rb.Lab = item.Lab;
-                rb.IntKey = item.IntKey.ToString();
+                rb.IntKey = item.IntKey;
                 rb.X = ma.X;
 
                 //让其变化y值.

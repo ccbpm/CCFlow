@@ -277,7 +277,7 @@ namespace BP.Sys
                     frmrb.KeyOfEn = this.EnumKey;
                     frmrb.EnumKey = this.EnumKey;
                     frmrb.Lab = this.Lab;
-                    frmrb.IntKey = this.IntKey.ToString();
+                    frmrb.IntKey = this.IntKey;
                     if (RBShowModel == 0)
                     {
                         frmrb.X = frmrb1.X;

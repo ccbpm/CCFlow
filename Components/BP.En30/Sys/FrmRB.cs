@@ -148,11 +148,11 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.KeyOfEn, value);
             }
         }
-        public string IntKey
+        public int IntKey
         {
             get
             {
-                return this.GetValStringByKey(FrmRBAttr.IntKey);
+                return this.GetValIntByKey(FrmRBAttr.IntKey);
             }
             set
             {
@@ -250,7 +250,9 @@ namespace BP.Sys
                 map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 300, 20);
                 map.AddTBString(FrmRBAttr.EnumKey, null, "枚举值", true, false, 0, 30, 20);
                 map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 500, 20);
-                map.AddTBString(FrmRBAttr.IntKey, null, "IntKey", true, false, 0, 30, 20);
+                
+                map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
+
 
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 0, "是否启用", true, false);
 

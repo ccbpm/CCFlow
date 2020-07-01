@@ -364,7 +364,7 @@ namespace BP.WF
                 sb.Append("<DIV id='F" + rb.MyPK + "' style='position:absolute; left:" + x + "px; top:" + rb.Y + "px; height:16px;text-align: left;word-break: keep-all;' >");
                 sb.Append("<span style='word-break: keep-all;font-size:12px;'>");
 
-                if (rb.IntKey == en.GetValStrByKey(rb.KeyOfEn))
+                if (rb.IntKey == en.GetValIntByKey(rb.KeyOfEn))
                     sb.Append("<b>" + rb.Lab + "</b>");
                 else
                     sb.Append(rb.Lab);

@@ -861,7 +861,7 @@ namespace BP.WF.Data
                 return "err@当前节点表单类型不同.";
 
             string frmID = nd.NodeFrmID;
-            return "url@../Admin/AttrFlow/AdminFrm.htm?FrmID="+frmID+"&OID="+this.WorkID;
+            return "url@../Admin/AttrFlow/AdminFrmList.htm?FK_Flow="+this.FK_Flow+"&FrmID="+frmID+"&WorkID="+this.WorkID;
         }
 
         #region 执行功能.

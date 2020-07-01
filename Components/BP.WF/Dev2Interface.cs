@@ -8649,7 +8649,7 @@ namespace BP.WF
                 Node nd = new Node(fk_node);
                 if (nd.IsStartNode == false)
                 {
-                    if (nd.IsEndNode == false)
+                    if (nd.IsEndNode == false && WebUser.IsAdmin==false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
                             throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }

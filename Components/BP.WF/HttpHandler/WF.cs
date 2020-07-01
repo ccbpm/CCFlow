@@ -2561,7 +2561,9 @@ namespace BP.WF.HttpHandler
                         return "url@WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
                 }
             }
-
+           //访问Bill页面
+            if (this.DoWhat.Equals(DoWhatList.Bill) == true)
+                return "url./CCBill/MyBill.htm?FrmID="+this.FrmID;
             return "err@没有约定的标记:DoWhat=" + this.DoWhat;
         }
         #endregion 处理page接口.

@@ -13,7 +13,10 @@ namespace DecryptAndEncryptionHelper
         {
             return  helper.Decrypto(conString_b);
         }
-    
+        public string encrypto_exe(string conString_b)
+        {
+            return helper.Encrypto(conString_b);
+        }
 
 
     }

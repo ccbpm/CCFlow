@@ -25,6 +25,17 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
+        public int IsSigan
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.IsSigan);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.IsSigan, value);
+            }
+        }
         public bool IsRichText
         {
             get
@@ -715,6 +726,7 @@ namespace BP.Sys.FrmUI
 
             if (this.GetValStrByKey("GroupID") == "无")
                 this.SetValByKey("GroupID", "0");
+
 
             return base.beforeUpdateInsertAction();
         }

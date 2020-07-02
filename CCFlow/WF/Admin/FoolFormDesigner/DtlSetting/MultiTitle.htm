@@ -42,6 +42,7 @@
                         html += "<th rowspan=2>" + attr.Name + "</th>";
                     else {
                         var fields = getMutliFile(attr.KeyOfEn, multi);
+                        
                         if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
                             html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'>" + fields[0] + "</th>";
                             currentGroup = fields[0];
@@ -61,6 +62,15 @@
             //形成标头.
 
         });
+        function DeleteMutli() {
+            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("DtlID"));
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
+            multiTitle = "";
+            mapDtl.SetPara("MultiTitle", multiTitle);
+            mapDtl.Update();
+            window.location.href = window.location;
+        }
         function getMutliFile(keyOfEn,multi) {
             var fields = multi.split(";");
             for (var i = 0; i < fields.length; i++) {
@@ -84,7 +94,9 @@
 </head>
 <body>
     <div style="right:30px; position:absolute; z-index:100; ">
+
         <input id="Btn_New" type="button" value="增加标题分组" onclick="AddGroup()" />
+        <input id="Btn_Delete" type="button" value="删除标题分组" onclick="DeleteMutli()" />
     </div>
     <div style="position:relative;" id="Table">
     </div>

@@ -111,13 +111,14 @@
 			if ("undefined" == typeof Hide_IsOpenFrm) {
 				var Hide_IsOpenFrm = true;
 			};
-			if (GetQueryString("hidefrm") == "1") {
-				Hide_IsOpenFrm = false;
-			}
 			//Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
 			if ("undefined" == typeof Hide_IsRead) {
 				var Hide_IsRead = true;
-			}
+            }
+            //额外从url参数判断不显示表单
+            if (GetQueryString("hidefrm") == "1") {
+                Hide_IsOpenFrm = false;
+            }
 			$(function() {
 				InitPage();
 			});

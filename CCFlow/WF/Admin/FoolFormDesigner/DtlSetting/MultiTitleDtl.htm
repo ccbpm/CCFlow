@@ -45,7 +45,6 @@
             var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
-
             
             //检查设置的完整性.
             //求出来选择的字段.
@@ -90,10 +89,10 @@
                 alert("错误:名称已经存在.");
                 return;
             }
+            
             //拼接目标数据.
-            multiTitle = name + "," + filds +";";
+            multiTitle += name + "," + filds +";";
             //赋值
-            alert(multiTitle)
             mapDtl.SetPara("MultiTitle", multiTitle);
             mapDtl.Update();
             window.close();

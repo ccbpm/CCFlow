@@ -391,8 +391,7 @@ namespace BP.GPM
                 depts += "@" + dept.NameOfPath;
             }
 
-            if (SystemConfig.IsEnablePasswordEncryption == true)
-                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+          
 
             return base.beforeUpdateInsertAction();
         }
@@ -495,6 +494,9 @@ namespace BP.GPM
                 return "两次密码不一致";
 
             this.Pass = pass1;
+
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
 
             this.Update();
             return "密码设置成功";

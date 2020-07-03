@@ -198,7 +198,7 @@ function GenerFoolFrm(wn) {
                         continue;
 
                     html += "<tr>";
-                    html += "  <td id='Dtl_" + dtl.No +"' colspan='" + tableCol + "' class='FDesc' >";
+                    html += "  <td id='TdDtl_" + dtl.No +"' colspan='" + tableCol + "' class='FDesc' >";
 
                     html += Ele_Dtl(dtl);
 

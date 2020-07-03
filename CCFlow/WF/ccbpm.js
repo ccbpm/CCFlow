@@ -43,11 +43,11 @@ $(window).load(function () {
             var url = $('#ccbpmJS')[0].src;
             var type = getQueryStringByNameFromUrl(url, "type");
             if (type == "CC")
-                loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_CC");
+                loadScript(ccbpmPath + "/WF/Toolbar.js", function () { }, "JS_CC");
             if (type == "MyView")
-                loadScript(ccbpmPath + "/WF/ToolBar.js", function () { }, "JS_MyView");
+                loadScript(ccbpmPath + "/WF/Toolbar.js", function () { }, "JS_MyView");
         } else {
-            loadScript(ccbpmPath + "/WF/ToolBar.js");
+            loadScript(ccbpmPath + "/WF/Toolbar.js");
         }
 
     }

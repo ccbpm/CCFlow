@@ -5,6 +5,8 @@
 var pageData = {};
 var globalVarList = {};
 var flowData = {};
+document.BindEditorMapAttr = [];
+
 
 //处理，表单没有加载完，就可以点击发送按钮.
 var isLoadOk = false;
@@ -45,7 +47,6 @@ $(function () {
     });
     
 })
-
 
 
 //从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
@@ -1304,6 +1305,10 @@ function GenerWorkNode() {
 
     //给富文本创建编辑器
     if (document.BindEditorMapAttr) {
+        Skip.addJs("./Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random());
+        Skip.addJs("./Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random());
+        Skip.addJs("./Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random());
+        Skip.addJs("./Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
         var EditorDivs = $(".EditorClass");
         $.each(EditorDivs, function (i, EditorDiv) {
             var editorId = $(EditorDiv).attr("id");

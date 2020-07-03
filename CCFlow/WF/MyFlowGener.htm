@@ -101,14 +101,8 @@
 
     <script type="text/javascript">
         loadScript("./ccbpm.js?Version=" + Math.random(), function () {
+            
             loadScript("./MyFlowGener.js?Version=" + Math.random());
-            loadScript("./Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random(), function () {
-                loadScript("./Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random(), function () {
-                    loadScript("./Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random(), function () {
-                        loadScript("./Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
-                    });
-                });
-            });
         });
         window.onbeforeunload = function () {
             temp = 0;

@@ -1031,8 +1031,11 @@ namespace BP.WF.HttpHandler
             string key = this.GetRequestVal("Key"); //查询关键字.
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
 
-            //如果是部门人员信息，关联的有兼职部门
-            if ((ensOfM.Equals("BP.Port.Emps")== true ||ensOfM.Equals("BP.GPM.Emps")==true) && defaultGroupAttrKey.Equals("FK_Dept") == true)
+            //如果是部门人员信息，关联的有兼职部门.
+            string emp1s = BP.Sys.Glo.DealClassEntityName("BP.Port.Emps");
+            string emp2s = BP.Sys.Glo.DealClassEntityName("BP.GPM.Emps");
+
+            if ((ensOfM.Equals(emp1s) == true ||ensOfM.Equals(emp2s) ==true) && defaultGroupAttrKey.Equals("FK_Dept") == true)
             {
                 string sql = "Select  E.No , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='"+key+"'";
                 

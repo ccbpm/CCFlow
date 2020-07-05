@@ -152,8 +152,9 @@ namespace BP.GPM
 
                 //消息样式为图文连接
                 News_Articles newArticle = new News_Articles();
+
                 //设置消息标题
-                newArticle.title = "待办事项：" + gwf.Title;
+                newArticle.title = "待办：" + gwf.Title;
 
                 //设置消息内容主体
                 string msgConten = "业务名称：" + gwf.FlowName + "\n";
@@ -161,11 +162,13 @@ namespace BP.GPM
                 msgConten += "申请部门：" + gwf.DeptName + "\n";
                 msgConten += "当前步骤：" + gwf.NodeName + "\n";
                 msgConten += "上一步处理人：" + sender + "\n";
+
                 newArticle.description = msgConten;
 
                 //设置图片连接
                 string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
                     + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+
                 newArticle.url = New_Url;
 
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Text;
 using BP.Sys;
 using BP.DA;
 using BP.Web;
@@ -19,13 +18,16 @@ namespace BP.Sys
         /// </summary>
         /// <param name="name">类名</param>
         /// <returns>返回处理后的名字</returns>
-        public static string DealClassEntityName(string name)
+        public static string DealClassEntityName(string enName)
         {
-            if (SystemConfig.Plant == Sys.Plant.CSharp)
-                return name;
+            if (SystemConfig.Plant == BP.Sys.Plant.CSharp)
+                return enName;
 
-            int idx = name.LastIndexOf('.');
-            string str = name.Substring(0, idx).ToLower()+name.Substring(idx);
+            int idx = enName.LastIndexOf('.');
+            if (idx <= -1)
+                return enName;
+
+            string str = enName.Substring(0, idx).ToLower()+ enName.Substring(idx);
             return str;
         }
         /// <summary>

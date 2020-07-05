@@ -308,9 +308,9 @@ namespace BP.WF
             {
                 return this.GetValIntByKey(GenerWorkerListAttr.IsPass);
             }
-           set
+            set
             {
-                this.SetValByKey(GenerWorkerListAttr.IsPass, value);
+                this.SetValByKey(GenerWorkerListAttr.IsPass,value);
             }
         }
         public bool IsRead

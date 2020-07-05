@@ -1969,7 +1969,10 @@ namespace BP.WF.HttpHandler
 
                         qo.addLeftBracket();
 
-                        if (attr.UIBindKey == "BP.Port.Depts" || attr.UIBindKey == "BP.Port.Units")  //判断特殊情况。
+
+                        string deptName = BP.Sys.Glo.DealClassEntityName("BP.Port.Depts");
+
+                        if (attr.UIBindKey.Equals(deptName)==true)  //判断特殊情况。
                             qo.AddWhere(attr.Key, " LIKE ", selectVal + "%");
                         else
                             qo.AddWhere(attr.Key, selectVal);

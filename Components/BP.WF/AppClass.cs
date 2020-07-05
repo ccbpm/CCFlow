@@ -148,12 +148,10 @@ namespace BP.WF
                 }
             }
 
-            //两次去的不一致，就有分支，有分支就reutrn 0 .
+            //两次去的不一致，就有分支，有分支就 reutrn 0 .
             if (toNodeID2 == toNodeID)
                 return toNodeID;
-
-         
-
+    
             return 0;
         }
         #endregion 进度条.

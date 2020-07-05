@@ -155,14 +155,14 @@ namespace BP.WF.HttpHandler
                 attr.UIVisible = true;
 
                 #region 处理特殊字段.
-                if (attr.KeyOfEn == "FK_NY")
+                if (attr.KeyOfEn.Equals("FK_NY")==true)
                 {
                     attr.LGType = BP.En.FieldTypeS.FK;
                     attr.UIBindKey = "BP.Pub.NYs";
                     attr.UIContralType = BP.En.UIContralType.DDL;
                 }
 
-                if (attr.KeyOfEn == "FK_Dept")
+                if (attr.KeyOfEn.Equals("FK_Dept")==true)
                 {
                     attr.LGType = BP.En.FieldTypeS.FK;
                     attr.UIBindKey = "BP.Port.Depts";
@@ -171,7 +171,8 @@ namespace BP.WF.HttpHandler
                 #endregion 处理特殊字段.
 
                 //增加上必要的字段.
-                if (attr.KeyOfEn == "Title" || attr.KeyOfEn == "WorkID" || attr.KeyOfEn == "OID")
+                if (attr.KeyOfEn.Equals("Title") || attr.KeyOfEn.Equals("WorkID")
+                    || attr.KeyOfEn.Equals("OID") )
                 {
                     attr.FK_MapData = rptNo;
                     attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;

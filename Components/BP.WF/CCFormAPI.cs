@@ -275,7 +275,7 @@ namespace BP.WF
         public static DataSet GenerDBForVSTOExcelFrmModel(string frmID, object pkval, string atParas, string specDtlFrmID = null)
         {
             //如果是一个实体类.
-            if (frmID.Contains("BP."))
+            if (frmID.ToUpper().Contains("BP."))
             {
                 // 执行map同步.
                 Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");

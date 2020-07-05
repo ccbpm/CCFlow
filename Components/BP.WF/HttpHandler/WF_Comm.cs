@@ -744,7 +744,7 @@ namespace BP.WF.HttpHandler
         public string Entity_DoMethodReturnString()
         {
             //创建类实体.
-            BP.En.Entity en = ClassFactory.GetEn(this.EnName); // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
+            BP.En.Entity en = ClassFactory.GetEn(this.EnName);              
             en.PKVal = this.PKVal;
             en.RetrieveFromDBSources();
 
@@ -3316,10 +3316,12 @@ namespace BP.WF.HttpHandler
         public string Exec(string clsName, string methodName, string paras = null)
         {
             #region 处理 HttpHandler 类.
-            if (clsName.Contains(".HttpHandler.") == true)
+            if (clsName.ToUpper().Contains(".HttpHandler.") == true)
             {
                 //创建类实体.
-                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase")) as DirectoryPageBase;
+                string baseName = BP.Sys.Glo.DealClassEntityName("BP.WF.HttpHandler.DirectoryPageBase");
+
+                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType(baseName)) as DirectoryPageBase;
                 //ctrl.context = this.context;
 
                 try

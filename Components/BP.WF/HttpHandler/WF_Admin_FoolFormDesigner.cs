@@ -51,7 +51,7 @@ namespace BP.WF.HttpHandler
             if (this.IsFirst == true)
             {
                 #region  检查完整性.
-                if (this.FK_MapData.Contains("BP.") == true)
+                if (this.FK_MapData.ToUpper().Contains("BP.") == true)
                 {
                     /*如果是类的实体.*/
                     Entities ens = ClassFactory.GetEns(this.FK_MapData);
@@ -157,7 +157,7 @@ namespace BP.WF.HttpHandler
 
             if (this.FK_MapDtl.Contains("_Ath") == true)
                 return "info@附件扩展";
-            if (this.FK_MapDtl.Contains("BP.WF.ReturnWorks") == true)
+            if (this.FK_MapDtl.ToUpper().Contains("BP.WF.RETURNWORKS") == true)
                 return "info@退回字段扩展";
 
 

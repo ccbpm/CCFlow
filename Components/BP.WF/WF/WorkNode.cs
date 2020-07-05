@@ -5946,6 +5946,7 @@ namespace BP.WF
             subFlow.MyPK = this.HisNode.NodeID + "_" + node.FK_Flow + "_" + 2;
             if (subFlow.RetrieveFromDBSources() == 0)
                 throw new Exception(BP.WF.Glo.multilingual("@延续子流程配置信息丢失，请联系管理员.", "WorkNode", "not_found_receiver"));
+
             Int64 workid = 0;
             if (subFlow.HisSubFlowModel == SubFlowModel.SubLevel)//下级子流程
             {
@@ -8525,7 +8526,7 @@ namespace BP.WF
             }
             else
             {
-#warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
+                #warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
                 ps = new Paras();
                 ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
                 ps.Add("FK_Node", nd.NodeID);

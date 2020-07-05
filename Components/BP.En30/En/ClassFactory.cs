@@ -440,20 +440,8 @@ namespace BP.En
         /// <returns>ArrayList</returns>
         public static ArrayList GetObjects(string baseEnsName)
         {
-            if (SystemConfig.Plant == Plant.Java)
-            {
-                if (baseEnsName.Equals("BP.En.Entity"))
-                    baseEnsName = "bp.en.Entity";
-
-                if (baseEnsName.Equals("BP.En.Entities"))
-                    baseEnsName = "bp.en.Entities";
-
-                if (baseEnsName.Equals("BP.En.EntityNoName"))
-                    baseEnsName = "bp.en.EntityNoName";
-
-                if (baseEnsName.Equals("BP.En.EntitySimpleTree"))
-                    baseEnsName = "bp.en.EntitySimpleTree";
-            }
+            //处理类名.
+            baseEnsName = BP.Sys.Glo.DealClassEntityName(baseEnsName);
 
             ArrayList arr = new ArrayList();
             Type baseClass = null;

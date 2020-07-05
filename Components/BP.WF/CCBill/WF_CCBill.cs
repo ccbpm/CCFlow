@@ -165,6 +165,77 @@ namespace BP.CCBill
 
             return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
+        /// <summary>
+        /// 执行url.
+        /// </summary>
+        /// <returns></returns>
+        public string DoMethodPara_ExeUrl()
+        {
+            MethodFunc func = new MethodFunc(this.MyPK);
+            string doc = func.MethodDoc_Url;
+
+            GEEntity en = new GEEntity(func.FrmID, this.WorkID);
+
+            #region 替换参数变量.
+            if (doc.Contains("@") == true)
+            {
+                MapAttrs attrs = new MapAttrs();
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.MyPK);
+                foreach (MapAttr item in attrs)
+                {
+                    if (doc.Contains("@") == false)
+                        break;
+                    if (item.UIContralType == UIContralType.TB)
+                    {
+                        doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("TB_" + item.KeyOfEn));
+                        continue;
+                    }
+
+                    if (item.UIContralType == UIContralType.DDL)
+                    {
+                        doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("DDL_" + item.KeyOfEn));
+                        continue;
+                    }
+
+
+                    if (item.UIContralType == UIContralType.CheckBok)
+                    {
+                        doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("CB_" + item.KeyOfEn));
+                        continue;
+                    }
+
+                    if (item.UIContralType == UIContralType.RadioBtn)
+                    {
+                        doc = doc.Replace("@" + item.KeyOfEn, this.GetRequestVal("RB_" + item.KeyOfEn));
+                        continue;
+                    }
+                }
+            }
+            #endregion 替换参数变量.
+
+            doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
+
+            #region 开始执行SQLs.
+            try
+            {
+
+                DataType.ReadURLContext(doc,99999);
+                if (func.MsgSuccess.Equals(""))
+                    func.MsgSuccess = "执行成功.";
+
+                return func.MsgSuccess;
+            }
+            catch (Exception ex)
+            {
+                if (func.MsgErr.Equals(""))
+                    func.MsgErr = "执行失败.";
+
+                return "err@" + func.MsgErr + " @ " + ex.Message;
+            }
+            #endregion 开始执行SQLs.
+
+            return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
+        }
 
         #region 单据处理.
         /// <summary>

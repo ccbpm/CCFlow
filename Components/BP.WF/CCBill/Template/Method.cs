@@ -200,7 +200,6 @@ namespace BP.CCBill.Template
                 map.AddTBInt(MethodAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
 
-
                 //对功能有效.
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
                 map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
@@ -224,7 +223,6 @@ namespace BP.CCBill.Template
             this.DoOrderDown(MethodAttr.FrmID, this.FrmID, MethodAttr.Idx);
         }
         #endregion 移动.
-
 
     }
     /// <summary>

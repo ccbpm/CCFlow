@@ -1200,7 +1200,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmGener_Init()
         {
-            if (this.FK_MapData != null && this.FK_MapData.Contains("BP.") == true)
+            if (this.FK_MapData != null && this.FK_MapData.ToUpper().Contains("BP.") == true)
                 return FrmGener_Init_ForBPClass();
 
             #region 定义流程信息的所用的 配置entity.

@@ -1258,7 +1258,8 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapAttrAttr.UIBindKey, value);
+                string val = Glo.DealClassEntityName(value);
+                this.SetValByKey(MapAttrAttr.UIBindKey, val);
             }
         }
         /// <summary>

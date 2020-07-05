@@ -94,6 +94,11 @@ namespace BP.WF
         /// 工作处理器
         /// </summary>
         public const string OneWork = "OneWork";
+        /// <summary>
+        /// BIll
+        /// </summary>
+        public const string Bill = "Bill";
+        
     }
     public enum FlowShowType
     {

@@ -2564,6 +2564,7 @@ namespace BP.WF
             string info = "BP.En.Entity";
             al = BP.En.ClassFactory.GetObjects(info);
 
+
             #region 先创建表，否则列的顺序就会变化.
             FlowExt fe = new FlowExt();
             fe.CheckPhysicsTable();
@@ -2616,14 +2617,14 @@ namespace BP.WF
                     continue;
 
                 //抽象的类不允许创建表.
-                switch (clsName)
+                switch (clsName.ToUpper())
                 {
-                    case "BP.WF.StartWork":
-                    case "BP.WF.Work":
-                    case "BP.WF.GEStartWork":
-                    case "BP.En.GENoName":
-                    case "BP.En.GETree":
-                    case "BP.WF.Data.GERpt":
+                    case "BP.WF.STARTWORK":
+                    case "BP.WF.WORK":
+                    case "BP.WF.GESTARTWORK":
+                    case "BP.EN.GENONAME":
+                    case "BP.EN.GETREE":
+                    case "BP.WF.DATA.GERPT":
                         continue;
                     default:
                         break;
@@ -3552,7 +3553,10 @@ namespace BP.WF
             if (Htable_FlowFEE == null || Htable_FlowFEE.Count == 0)
             {
                 Htable_FlowFEE = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.FlowEventBase");
+
+                string name = "BP.WF.FlowEventBase";
+
+                ArrayList al = BP.En.ClassFactory.GetObjects(name);
                 foreach (FlowEventBase en in al)
                 {
                     Htable_FlowFEE.Add(en.ToString(), en);
@@ -3592,7 +3596,11 @@ namespace BP.WF
             if (Htable_FlowFEE == null || Htable_FlowFEE.Count == 0)
             {
                 Htable_FlowFEE = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.FlowEventBase");
+
+                string name = "";
+                name = "BP.WF.FlowEventBase";
+
+                ArrayList al = BP.En.ClassFactory.GetObjects(name);
                 Htable_FlowFEE.Clear();
                 foreach (FlowEventBase en in al)
                 {

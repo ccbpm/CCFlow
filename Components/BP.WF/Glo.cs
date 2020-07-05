@@ -4654,6 +4654,8 @@ namespace BP.WF
             }
 
             exp = exp.Replace("~", "'");
+            exp = exp.Replace("\r", "");
+            exp = exp.Replace("\n", "");
             return exp;
         }
         /// <summary>

@@ -662,6 +662,7 @@ namespace BP.WF
                 string messageUrl = BP.Sys.SystemConfig.AppSettings["HandlerOfMessage"];
                 if (DataType.IsNullOrEmpty(messageUrl) == true)
                     return;
+
                 string httpUrl = "";
 
                 string json = "{";
@@ -694,6 +695,7 @@ namespace BP.WF
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
+
                 //微信
                 if (this.PushModel.Contains("WeiXin") == true)
                 {

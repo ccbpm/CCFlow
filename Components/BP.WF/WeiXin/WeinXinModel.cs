@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BP.DA;
+using System.Runtime.Serialization.Json;
 
 namespace BP.GPM.WeiXin
 {
@@ -8,11 +10,6 @@ namespace BP.GPM.WeiXin
     {
         public string access_token { get; set; }
         public string expires_in { get; set; }
-    }
-    public class User
-    {
-        public string UserId { get; set; }
-        public string DeviceId { get; set; }
     }
     /// <summary>
     /// 获取企业的jsapi_ticket
@@ -74,6 +71,26 @@ namespace BP.GPM.WeiXin
         /// 必须：否- ccflow 业务ID
         /// </summary>
         public string WorkID { get; set; }
+
+        /// <summary>
+        /// 表示是否是保密消息
+        /// </summary>
+        private string _Safe = "0";
+        /// <summary>
+        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
+        /// </summary>
+        public string safe
+        {
+            get
+            {
+                return this._Safe;
+            }
+            set
+            {
+                this._Safe = value;
+            }
+        }
+
     }
     /// <summary>
     /// 微信-文本消息
@@ -92,24 +109,7 @@ namespace BP.GPM.WeiXin
         /// </summary>
         public string content { get; set; }
 
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
+       
     }
     /// <summary>
     /// 微信-图片消息
@@ -127,25 +127,6 @@ namespace BP.GPM.WeiXin
         /// 必须：是- 图片媒体文件id，可以调用上传临时素材或者永久素材接口获取,永久素材media_id必须由发消息的应用创建
         /// </summary>
         public string media_id { get; set; }
-
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
     }
     /// <summary>
     /// 微信-voice消息
@@ -163,27 +144,7 @@ namespace BP.GPM.WeiXin
         /// 必须：是- 语音文件id，可以调用上传临时素材或者永久素材接口获取
         /// </summary>
         public string media_id { get; set; }
-
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
     }
-
     /// <summary>
     /// 微信-video消息
     /// </summary>
@@ -208,25 +169,6 @@ namespace BP.GPM.WeiXin
         /// 必须：否- 视频消息的描述，不超过512个字节，超过会自动截断 
         /// </summary>
         public string description { get; set; }
-
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
     }
 
     /// <summary>
@@ -245,25 +187,6 @@ namespace BP.GPM.WeiXin
         /// 必须：是- 媒体文件id，可以调用上传临时素材或者永久素材接口获取
         /// </summary>
         public string media_id { get; set; }
-
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
     }
 
     #region news消息
@@ -319,7 +242,6 @@ namespace BP.GPM.WeiXin
     #endregion
 
     #region mpnews消息
-
     /// <summary>
     /// 微信-mpnews消息-mpnews消息与news消息类似，不同的是图文消息内容存储在微信后台，并且支持保密选项。每个应用每天最多可以发送100次
     /// </summary>
@@ -336,25 +258,6 @@ namespace BP.GPM.WeiXin
         /// 必须：是- 图文消息，一个图文消息支持1到8条图文
         /// </summary>
         public List<MpNews_Articles> articles { get; set; }
-
-        /// <summary>
-        /// 表示是否是保密消息
-        /// </summary>
-        private string _Safe = "0";
-        /// <summary>
-        /// 必须：否- 表示是否是保密消息，0表示否，1表示是，默认0
-        /// </summary>
-        public string safe
-        {
-            get
-            {
-                return this._Safe;
-            }
-            set
-            {
-                this._Safe = value;
-            }
-        }
     }
 
     /// <summary>
@@ -393,117 +296,4 @@ namespace BP.GPM.WeiXin
     }
     #endregion
 
-    #region 组织结构
-
-    /// <summary>
-    /// 部门列表
-    /// </summary>
-    public class DeptMent_GetList
-    {
-        /// <summary>
-        /// 返回码
-        /// </summary>
-        public string errcode { get; set; }
-        /// <summary>
-        /// 对返回码的文本描述内容
-        /// </summary>
-        public string errmsg { get; set; }
-        /// <summary>
-        /// 部门列表数据
-        /// </summary>
-        public List<DeptMentInfo> department { get; set; }
-    }
-
-    /// <summary>
-    /// 部门信息
-    /// </summary>
-    public class DeptMentInfo
-    {
-        /// <summary>
-        ///  部门id 
-        /// </summary>
-        public string id { get; set; }
-        /// <summary>
-        /// 部门名称 
-        /// </summary>
-        public string name { get; set; }
-        /// <summary>
-        ///  父亲部门id。根部门为1 
-        /// </summary>
-        public string parentid { get; set; }
-        /// <summary>
-        ///  在父部门中的次序值。order值小的排序靠前
-        /// </summary>
-        public string order { get; set; }
-    }
-
-    /// <summary>
-    /// 部门下的人员
-    /// </summary>
-    public class UsersBelongDept
-    {
-        /// <summary>
-        /// 返回码
-        /// </summary>
-        public string errcode { get; set; }
-        /// <summary>
-        /// 对返回码的文本描述内容
-        /// </summary>
-        public string errmsg { get; set; }
-        /// <summary>
-        /// 成员列表
-        /// </summary>
-        public List<UserInfoBelongDept> userlist { get; set; }
-    }
-    /// <summary>
-    /// 部门人员详情
-    /// </summary>
-    public class UserInfoBelongDept
-    {
-        /// <summary>
-        /// 成员UserID。对应管理端的帐号
-        /// </summary>
-        public string userid { get; set; }
-        /// <summary>
-        /// 成员名称
-        /// </summary>
-        public string name { get; set; }
-        /// <summary>
-        /// 成员所属部门
-        /// </summary>
-        public object department { get; set; }
-        /// <summary>
-        /// 职位信息
-        /// </summary>
-        public string position { get; set; }
-        /// <summary>
-        /// 手机号码
-        /// </summary>
-        public string mobile { get; set; }
-        /// <summary>
-        /// 性别。0表示未定义，1表示男性，2表示女性
-        /// </summary>
-        public string gender { get; set; }
-        /// <summary>
-        /// 邮箱
-        /// </summary>
-        public string email { get; set; }
-        /// <summary>
-        /// 微信号
-        /// </summary>
-        public string weixinid { get; set; }
-        /// <summary>
-        /// 头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
-        /// </summary>
-        public string avatar { get; set; }
-        /// <summary>
-        /// 关注状态: 1=已关注，2=已冻结，4=未关注 
-        /// </summary>
-        public string status { get; set; }
-        /// <summary>
-        /// 扩展属性
-        /// </summary>
-        public string extattr { get; set; }
-    }
-    #endregion
 }

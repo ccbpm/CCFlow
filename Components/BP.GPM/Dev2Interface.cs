@@ -181,7 +181,7 @@ namespace BP.GPM
                 wxMsg.touser = toUsers;
                 wxMsg.articles.Add(newArticle);
                 //执行发送
-                return WeiXinMessage.PostMsgOfNews(wxMsg);
+                return BP.GPM.WeiXin.Glo.PostMsgOfNews(wxMsg);
             }
             return null;
         }

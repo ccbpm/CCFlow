@@ -201,14 +201,12 @@ namespace BP.WF
           int? timeout, string userAgent, Encoding requestEncoding, CookieCollection cookies)
         {
             if (DataType.IsNullOrEmpty(url))
-            {
-                throw new ArgumentNullException("url");
-            }
+                throw new Exception("err@url不能为空");
             if (requestEncoding == null)
-            {
-                throw new ArgumentNullException("requestEncoding");
-            }
+                throw new Exception("err@requestEncoding，不能为空.");
+
             HttpWebRequest request = null;
+
             //如果是发送HTTPS请求  
             if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
             {
@@ -224,7 +222,7 @@ namespace BP.WF
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
 
-            if (!DataType.IsNullOrEmpty(userAgent))
+            if (DataType.IsNullOrEmpty(userAgent)==false)
             {
                 request.UserAgent = userAgent;
             }
@@ -242,6 +240,8 @@ namespace BP.WF
                 request.CookieContainer = new CookieContainer();
                 request.CookieContainer.Add(cookies);
             }
+
+            ///增加参数的地方.
             if (parameters != null)
             {
                 StringBuilder sb = parameters;
@@ -252,7 +252,6 @@ namespace BP.WF
                 requeStream.Close();
             }
             return request.GetResponse() as HttpWebResponse;
-
         }
 
         private bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)

@@ -606,9 +606,16 @@ namespace BP.DA
             responseStream.Close();
             return path;
         }
+        /// <summary>
+        /// 读取url获得数据.
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="timeOut">超时</param>
+        /// <param name="sb">参数集合</param>
+        /// <returns>返回执行的内容</returns>
         public static string ReadURLContext(string url, int timeOut)
         {
-            return ReadURLContext(url, timeOut, Encoding.UTF8);
+            return ReadURLContext(url, timeOut, Encoding.UTF8,null);
         }
         /// <summary>
         /// 读取URL内容
@@ -616,9 +623,12 @@ namespace BP.DA
         /// <param name="url">要读取的url</param>
         /// <param name="timeOut">超时时间</param>
         /// <param name="encode">text code.</param>
+        /// <param name="sb">参数类型</param>
         /// <returns>返回读取内容</returns>
-        public static string ReadURLContext(string url, int timeOut, Encoding encode)
+        public static string ReadURLContext(string url, int timeOut=9999, Encoding encode=null, StringBuilder sb=null)
         {
+            if (encode == null)
+                encode = Encoding.UTF8;
 
             HttpWebRequest webRequest = null;
             try

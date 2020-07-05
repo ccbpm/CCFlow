@@ -18,7 +18,7 @@ namespace BP.GPM.WeiXin
         /// </summary>
         /// <param name="msgText">消息实体类</param>
         /// <returns>发送消息结果</returns>
-        public static MessageErrorModel PostMsgOfText(WX_Msg_Text msgText)
+        public static MessageErrorModel PostMsgOfText(MsgText msgText)
         {
             return null;
 
@@ -57,7 +57,7 @@ namespace BP.GPM.WeiXin
         /// </summary>
         /// <param name="msgNews">消息实体类</param>
         /// <returns>发送消息结果</returns>
-        public static MessageErrorModel PostMsgOfNews(WX_Msg_News msgNews)
+        public static MessageErrorModel PostMsgOfNews(MsgNews msgNews)
         {
             string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + msgNews.Access_Token;
             try
@@ -76,7 +76,7 @@ namespace BP.GPM.WeiXin
                 append_Json.Append(",\"news\":{");
 
                 append_Json.Append("\"articles\":[");
-                foreach (News_Articles item in msgNews.articles)
+                foreach (NewsArticles item in msgNews.articles)
                 {
                     append_Json.Append("{");
                     append_Json.Append("\"title\":\"" + item.title + "\"");
@@ -136,7 +136,7 @@ namespace BP.GPM.WeiXin
                 if (toUsers.Length == 0)
                     return null;
 
-                News_Articles newArticle = new News_Articles();
+                NewsArticles newArticle = new NewsArticles();
                 newArticle.title = gwf.Title;
 
                 string msgConten = "流程名称：" + gwf.FlowName + "\n";
@@ -153,7 +153,7 @@ namespace BP.GPM.WeiXin
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
                 //newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
 
-                WX_Msg_News wxMsg = new WX_Msg_News();
+                MsgNews wxMsg = new MsgNews();
                 wxMsg.Access_Token = accessToken;
                 wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
                 wxMsg.touser = toUsers;

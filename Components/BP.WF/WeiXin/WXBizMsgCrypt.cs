@@ -67,9 +67,8 @@ namespace BP.GPM.WeiXin
             }
             ret = VerifySignature(m_sToken, sTimeStamp, sNonce, sEchoStr, sMsgSignature);
             if (0 != ret)
-            {
                 return ret;
-            }
+
             sReplyEchoStr = "";
             string cpid = "";
             try

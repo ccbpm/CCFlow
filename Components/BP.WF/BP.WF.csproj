@@ -383,8 +383,9 @@
     <Compile Include="WeiXin\DTS\DTSOrganization.cs" />
     <Compile Include="WeiXin\DTS\DTSUserIcon.cs" />
     <Compile Include="WeiXin\Glo.cs" />
+    <Compile Include="WeiXin\Msg\MsgBase.cs" />
     <Compile Include="WeiXin\User.cs" />
-    <Compile Include="WeiXin\WeinXinModel.cs" />
+    <Compile Include="WeiXin\Msg\WeinXinModel.cs" />
     <Compile Include="WeiXin\WeiXinEntity.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
@@ -588,6 +589,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

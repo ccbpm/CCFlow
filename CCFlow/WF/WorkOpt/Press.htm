@@ -62,14 +62,36 @@
 </head>
 <body>
 
-请输入催办消息:
-  <br />
- <textarea rows="4" cols="20" name="TB_Msg" id="TB_Msg" >此工作需要您请尽快处理....  </textarea>
- <br />
+    <table>
+        <tr>
+            <th>停留节点</th>
+            <td></td>
+            <th>节点处理人</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>接受工作日期</th>
+            <td></td>
+            <th>耗时</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th colspan="4">输入原因</th>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <textarea rows="4" cols="20" name="TB_Msg" id="TB_Msg">此工作需要您请尽快处理....  </textarea>
 
- <input type="button" value='催办'  onclick="Press();"  id="Btn_Press" name="Btn_Press" /> 
- <input type="button" value='取消'onclick="window.close();"   /> 
 
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <input type="button" value='催办' onclick="Press();" id="Btn_Press" name="Btn_Press" />
+                <input type="button" value='取消' onclick="window.close();" />
+            </td>
+        </tr>
+    </table>
 
 </body>
 </html>

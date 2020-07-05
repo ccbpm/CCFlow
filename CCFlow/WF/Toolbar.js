@@ -173,7 +173,13 @@ $(function () {
     if ($('[name=DocWord]').length > 0) {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
-   
+
+
+    if ($('[name=Press]').length > 0) {
+        $('[name=Press]').bind('click', function () { initModal("Press"); $('#returnWorkModal').modal().show(); });
+    }
+
+
 });
 //添加保存动态
 function SaveOnly() {
@@ -339,6 +345,10 @@ function initModal(modalType, toNode,url) {
                 $('#modalHeader').text("打包下载/打印");
 
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "Press":
+                $('#modalHeader').text("催办");
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Press.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");

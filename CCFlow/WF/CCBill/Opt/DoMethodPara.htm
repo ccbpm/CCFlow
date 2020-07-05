@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>ÓĞ²ÎÊıµÄ·½·¨</title>
+    <title>æœ‰å‚æ•°çš„æ–¹æ³•</title>
     <meta charset="utf-8" />
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -17,16 +17,22 @@
     <script src="DoMethodPara.js" type="text/javascript"></script>
     <script type="text/javascript">
 
-        var func = null;
-        var attrs = null;
+        var func = null; //æ–¹æ³•å®ä½“.
+        var attrs = null; //å‚æ•°çš„å±æ€§.
         var frmData = null;
         $(function () {
 
-            var myPK = GetQueryString("MyPK");
+            var myPK = GetQueryString("MyPK"); //æ–¹æ³•çš„ä¸»é”®.
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
+
+            //åˆå§‹åŒ–æ–¹æ³•å®ä½“.
             func = new Entity("BP.CCBill.Template.MethodFunc", myPK);
+
+            //è·å¾—è¯¥æ–¹æ³•çš„å‚æ•°.
             attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
+
+            //åˆå§‹åŒ–è¡¨å•çš„æ•°æ®. JSON.
             frmData = new Entity(func.FrmID, workID);
 
             document.title = func.MethodName;
@@ -37,113 +43,128 @@
             html += InitMapAttr(attrs, frmData);
 
             html += "</table>";
-            html += "<input type='button' value='Done' onclick=\"javascript:DoIt();\" />";
-            html += "<input type='button' value='Close' onclick=\"javascript:window.close();\" />";
+            html += "<input type='button' value='æ‰§è¡Œ' onclick=\"javascript:DoIt();\" />";
+            html += "<input type='button' value='å…³é—­' onclick=\"javascript:closeIt();\" />";
 
             $("#docs").html(html);
         });
 
-        //Ö´ĞĞ·½·¨.
-        function DoIt() {
+        function closeIt() {
+            window.close();
+        }
 
-            var myPK = GetQueryString("MyPK");
-            func = new Entity("BP.CCBill.Template.MethodFunc", myPK);
+        //æ‰§è¡Œæ–¹æ³•.
+        function DoIt() {
 
             if (func.WarningMsg != "") {
                 if (confirm(func.WarningMsg) == false)
                     return;
             }
-           
 
-            var doc = func.MethodDoc;
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            handler.AddFormData();
 
-            //Èç¹ûÊÇÖ´ĞĞµÄSQL . 
+            var data = ""; //æ‰§è¡Œç»“æœ.
+            //å¦‚æœæ˜¯æ‰§è¡Œçš„SQL .
             if (func.MethodDocTypeOfFunc == 0) {
-                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-                handler.AddUrlData();
-                handler.AddFormData();
-                var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
 
-                if (data.indexOf('err@') == -1) {
-
-                    $("#Msg").html(data);
-
-
-                } else {
-                    $("#Msg").html('ÏµÍ³´íÎó:'+data);
+                data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
+                if (data.indexOf('err@') >= 0) {
+                    $("#Msg").html('ç³»ç»Ÿé”™è¯¯:' + data);
+                    return;
                 }
-                return;
+
             }
 
-            //Ö´ĞĞScript.
+            //æ‰§è¡Œè„šæœ¬.
             if (func.MethodDocTypeOfFunc == 1) {
+                data = ExecScript(func);
+            }
 
-                var scriptFunc = func.DoMethodReturnString("Gener_MethodDoc_JavaScript_function");
-
-                //Éú³É²ÎÊı.
-                var paras = "";
-                for (var i = 0; i < attrs.length; i++) {
-                    var attr = attrs[i];
-
-                    var val = "";
-                    if (attr.UIContralType == 0)
-                        val = $("#TB_" + attr.KeyOfEn).val();
-
-                    if (attr.UIContralType == 1)
-                        val = $("#DDL_" + attr.KeyOfEn).val();
-
-                    if (attr.UIContralType == 2)
-                        val = $("#CB_" + attr.KeyOfEn).val();
-
-                    if (i == attrs.length - 1) {
-                        if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
-                            if (val == "" || val == undefined)
-                                val = 0;
-                            paras += val;
-                        }
-                        else
-                            paras += "'" + val + "'";
-                    }
-                    else {
-                        if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
-                            if (val == "" || val == undefined)
-                                val = 0;
-                            paras += val + ",";
-                        }
-                        else
-                            paras += "'" + val + "',";
-                    }
-                }
-
-                //Ö´ĞĞÕâ¸ö script.
-                try {
-
-                    addDynamicJS(scriptFunc);
-
-                  //  alert(paras);
-                    eval(func.MethodID + "(" + paras + ")");
-                    return;
-                } catch (e) {
-                    alert(e);
-
-                    $("#Msg").html(e);
+             //æ‰§è¡ŒURL.
+            if (func.MethodDocTypeOfFunc == 2) {
+                data = handler.DoMethodReturnString("DoMethodPara_ExeUrl");
+                if (data.indexOf('err@') >= 0) {
+                    $("#Msg").html('ç³»ç»Ÿé”™è¯¯:' + data);
                     return;
                 }
+            }
 
+            //æ‰§è¡Œçš„ç»“æœ. æ ¹æ®æ‰§è¡ŒæˆåŠŸåçš„é…ç½®ï¼Œæ¥å¤„ç†â€œ  æ‰§è¡Œå®Œæ¯•åå¹²å•¥ï¼Ÿâ€
 
-
-                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-                handler.AddUrlData();
-                handler.AddFormData();
-                var data = handler.DoMethodReturnString("DoMethodPara_ExeSQL");
+            //ç›´æ¥å…³é—­çª—å£.
+            if (func.WhatAreYouTodo == 0) {
                 $("#Msg").html(data);
-
                 return;
             }
 
+            //å…³é—­æç¤ºçª—å£å¹¶åˆ·æ–°.
+            if (func.WhatAreYouTodo == 1) {
+                $("#Msg").html(data);
+                window.location.href = window.location.href;
+                return;
+            }
 
+            //è½¬å…¥åˆ°Search.htmé¡µé¢ä¸Šå».
+            if (func.WhatAreYouTodo == 2)
+            {
+                window.location.href = "SearchBill.htm?FrmID=" + GetQueryString("FrmID");
+                return;
+            }
         }
 
+        //æ‰§è¡Œçš„SCRIPT.
+        function ExecScript(func) {
+
+            var scriptFunc = func.DoMethodReturnString("Gener_MethodDoc_JavaScript_function");
+
+            //ç”Ÿæˆå‚æ•°.
+            var paras = "";
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+
+                var val = "";
+                if (attr.UIContralType == 0)
+                    val = $("#TB_" + attr.KeyOfEn).val();
+
+                if (attr.UIContralType == 1)
+                    val = $("#DDL_" + attr.KeyOfEn).val();
+
+                if (attr.UIContralType == 2)
+                    val = $("#CB_" + attr.KeyOfEn).val();
+
+                if (i == attrs.length - 1) {
+                    if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
+                        if (val == "" || val == undefined)
+                            val = 0;
+                        paras += val;
+                    }
+                    else
+                        paras += "'" + val + "'";
+                }
+                else {
+                    if (attr.MyDataType == 2 || attr.MyDataType == 3 || attr.MyDataType == 4 || attr.MyDataType == 5 || attr.MyDataType == 8) {
+                        if (val == "" || val == undefined)
+                            val = 0;
+                        paras += val + ",";
+                    }
+                    else
+                        paras += "'" + val + "',";
+                }
+            }
+
+            //æ‰§è¡Œè¿™ä¸ª script.
+            try {
+                addDynamicJS(scriptFunc);
+                var data = eval(func.MethodID + "(" + paras + ")");
+                return data;
+            } catch (e) {
+                alert(e);
+                $("#Msg").html(e);
+                return;
+            }
+        }
 
         function addDynamicJS(src, callback) {
             var script = document.createElement("script");
@@ -159,7 +180,7 @@
 
         }
 
-        //½âÎö±íµ¥×Ö¶Î MapAttr.
+        //è§£æè¡¨å•å­—æ®µ MapAttr.
         function InitMapAttr(attrs, frmData) {
 
             var html = "";
@@ -185,7 +206,7 @@
                 if (attr.UIContralType == 3)
                     lab = "<label id=Lab_" + attr.KeyOfEn + "' for='RB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
-                //ÏßĞÔÕ¹Ê¾²¢ÇÒcolspan=3
+                //çº¿æ€§å±•ç¤ºå¹¶ä¸”colspan=3
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
                     isDropTR = true;
                     html += "<tr>";
@@ -197,7 +218,7 @@
                     continue;
                 }
 
-                //ÏßĞÔÕ¹Ê¾²¢ÇÒcolspan=4
+                //çº¿æ€§å±•ç¤ºå¹¶ä¸”colspan=4
                 if (attr.ColSpan == 4) {
                     isDropTR = true;
                     html += "<tr>";
@@ -240,16 +261,16 @@
 
 
 
-        //Ìî³äÄ¬ÈÏÊı¾İ
+        //å¡«å……é»˜è®¤æ•°æ®
         function ConvertDefVal(frmData, defVal, keyOfEn) {
 
             return defVal;
 
 
-            //¼ÆËãURL´«¹ıÀ´µÄ±íµ¥²ÎÊı@TXB_Title=ÊÂ¼ş²âÊÔ
+            //è®¡ç®—URLä¼ è¿‡æ¥çš„è¡¨å•å‚æ•°@TXB_Title=äº‹ä»¶æµ‹è¯•
             var result = defVal;
 
-            //            //Í¨¹ıMAINTABLE·µ»ØµÄ²ÎÊı
+            //            //é€šè¿‡MAINTABLEè¿”å›çš„å‚æ•°
             //            for (var ele in frmData.MainTable[0]) {
             //                if (keyOfEn == ele && frmData[0] != '') {
             //                    result = frmData[0][ele];
@@ -257,7 +278,7 @@
             //                }
             //            }
 
-            //Í¨¹ıURL²ÎÊı´«¹ıÀ´µÄ²ÎÊı ºóÌ¨´¦Àíµ½MainTable ÀïÃæ
+            //é€šè¿‡URLå‚æ•°ä¼ è¿‡æ¥çš„å‚æ•° åå°å¤„ç†åˆ°MainTable é‡Œé¢
             //for (var pageParam in pageParamObj) {
             //    if (pageParam == keyOfEn) {
             //        result = pageParamObj[pageParam];
@@ -266,7 +287,7 @@
             //}
 
             if (result != undefined && typeof (result) == 'string') {
-                //result = result.replace(/£û/g, "{").replace(/£ı/g, "}").replace(/£º/g, ":").replace(/£¬/g, ",").replace(/¡¾/g, "[").replace(/¡¿/g, "]").replace(/£»/g, ";").replace(/~/g, "'").replace(/¡®/g, "'").replace(/¡®/g, "'");
+                //result = result.replace(/ï½›/g, "{").replace(/ï½/g, "}").replace(/ï¼š/g, ":").replace(/ï¼Œ/g, ",").replace(/ã€/g, "[").replace(/ã€‘/g, "]").replace(/ï¼›/g, ";").replace(/~/g, "'").replace(/â€˜/g, "'").replace(/â€˜/g, "'");
             }
             return result = unescape(result);
         }
@@ -278,10 +299,10 @@
 </head>
 <body>
     <form name="cc" id="cc">
-    <div id="docs">
-    </div>
-    <div id="Msg">
-    </div>
+        <div id="docs">
+        </div>
+        <div id="Msg">
+        </div>
     </form>
 </body>
 </html>

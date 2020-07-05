@@ -7748,6 +7748,8 @@ namespace BP.WF
 
             this.rptGe.FlowStartRDT = DataType.CurrentDataTimess;
             this.rptGe.FlowEnderRDT = DataType.CurrentDataTimess;
+            //设置发起时间
+            this.rptGe.SetValByKey("RDT", DataType.CurrentDataTimess);
         }
         /// <summary>
         /// 执行将当前工作节点的数据copy到Rpt里面去.

@@ -14,6 +14,16 @@ namespace BP.GPM.WeiXin
         public string UserId { get; set; }
         public string DeviceId { get; set; }
     }
+    /// <summary>
+    /// 获取企业的jsapi_ticket
+    /// </summary>
+    public class Ticket
+    {
+        public string errcode { get; set; }
+        public string errmsg { get; set; }
+        public string ticket { get; set; }
+        public string expires_in { get; set; }
+    }
     public class MessageErrorModel
     {
         public string errcode { get; set; }

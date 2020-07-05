@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using BP.Tools;
 using BP.WF;
+using System.Collections;
 
 namespace BP.GPM.WeiXin
 {
@@ -38,6 +39,53 @@ namespace BP.GPM.WeiXin
             {
             }
             return accessToken;
+        }
+        /// <summary>
+        /// 调用企业号获取地理位置
+        /// </summary>
+        /// <returns></returns>
+        public string GetWXConfigSetting(string pageUrl)
+        {
+            //必须是当前页面，如果在CCMobile/Home.htm调用，则传入Home.htm
+            string htmlPage = pageUrl;
+            Hashtable ht = new Hashtable();
+
+            //生成签名的时间戳
+            string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
+            //生成签名的随机串
+            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            //企业号jsapi_ticket
+            string jsapi_ticket = "";
+            string url1 = htmlPage;
+            //获取 AccessToken
+            string accessToken = getAccessToken();
+
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+
+            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string str = reader.ReadToEnd();
+
+            //权限签名算法
+            Ticket ticket = new Ticket();
+            ticket = FormatToJson.ParseFromJson<Ticket>(str);
+
+            if (ticket.errcode == "0")
+                jsapi_ticket = ticket.ticket;
+            else
+                return "err:@获取jsapi_ticket失败+accessToken=" + accessToken;
+
+            ht.Add("timestamp", timestamp);
+            ht.Add("nonceStr", nonceStr);
+            //企业微信的corpID
+            ht.Add("AppID", BP.Sys.SystemConfig.WX_CorpID);
+
+            //生成签名算法
+            string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            string Signature = Sha1Signature(str1);
+            ht.Add("signature", Signature);
+
+            return BP.Tools.Json.ToJson(ht);
         }
 
         #region 发送微信信息
@@ -189,6 +237,16 @@ namespace BP.GPM.WeiXin
                 BP.DA.Log.DefaultLogWriteLineError(ex.Message);
             }
             return null;
+        }
+        /// <summary>
+        /// 算法加密
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Sha1Signature(string str)
+        {
+            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
+            return s.ToLower();
         }
     }
 }

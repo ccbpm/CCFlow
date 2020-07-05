@@ -1290,7 +1290,7 @@ namespace BP.Sys
                         throw new Exception("没有涉及到的连接测试类型...");
                 }
             }
-
+            this.DBSrcType= dbType;
             switch (dbType)
             {
                 case Sys.DBSrcType.SQLServer:

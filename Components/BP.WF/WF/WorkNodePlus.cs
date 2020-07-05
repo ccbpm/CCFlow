@@ -268,14 +268,14 @@ namespace BP.WF
             // 判断是否符合流程数据同步条件.
             switch (fl.DTSTime)
             {
-                case FlowDTSTime.AllNodeSend:
+                case FlowDTSTime.AllNodeSend://所有节点发送后
                     isActiveSave = true;
                     break;
-                case FlowDTSTime.SpecNodeSend:
+                case FlowDTSTime.SpecNodeSend://指定节点发送后
                     if (fl.DTSSpecNodes.Contains(currNode.NodeID.ToString()) == true)
                         isActiveSave = true;
                     break;
-                case FlowDTSTime.WhenFlowOver:
+                case FlowDTSTime.WhenFlowOver://流程结束时
                     if (isStopFlow)
                         isActiveSave = true;
                     break;
@@ -287,35 +287,45 @@ namespace BP.WF
 
             #region zqp, 编写同步的业务逻辑,执行错误就抛出异常.
 
+            //获取同步字段
             string[] dtsArray = fl.DTSFields.Split('@');
-
+            //本系统字段
             string lcAttrs = "";
+            //业务系统字段
             string ywAttrs = "";
 
             for (int i = 0; i < dtsArray.Length; i++)
             {
+                //获取本系统字段
                 lcAttrs += dtsArray[i].Split('=')[0] + ",";
+                //获取业务系统字段
                 ywAttrs += dtsArray[i].Split('=')[1] + ",";
             }
 
             string[] lcArr = lcAttrs.TrimEnd(',').Split(',');//取出对应的主表字段
             string[] ywArr = ywAttrs.TrimEnd(',').Split(',');//取出对应的业务表字段
 
+            //判断本系统表是否存在
             string sql = "SELECT " + lcAttrs.TrimEnd(',') + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
             DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
             if (lcDt.Rows.Count == 0)
                 throw new Exception("没有找到业务表数据.");
 
+            //获取配置的，要同步的业务表
             BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
             sql = "SELECT " + ywAttrs.TrimEnd(',') + " FROM " + fl.DTSBTable.ToUpper();
-
+            //获取业务表，是否有数据
             DataTable ywDt = src.RunSQLReturnTable(sql);
 
+            //插入字段字符串
             string values = "";
+            //更新字段字符串
             string upVal = "";
 
+            //循环本系统表，组织同步语句
             for (int i = 0; i < lcArr.Length; i++)
             {
+                //系统类别
                 switch (src.DBSrcType)
                 {
                     case Sys.DBSrcType.Localhost:
@@ -324,19 +334,17 @@ namespace BP.WF
                             case DBType.MSSQL:
                                 break;
                             case DBType.Oracle:
+                                //如果是时间类型，要进行转换
                                 if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                                 {
-                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
-                                    {
+                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString())&& lcDt.Rows[0][lcArr[i].ToString()]!="@RDT")
                                         values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
-                                    }
                                     else
-                                    {
                                         values += "'',";
-                                    }
                                     continue;
                                 }
                                 values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                                upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
                                 continue;
                                 break;
                             case DBType.MySQL:
@@ -352,28 +360,23 @@ namespace BP.WF
                     case Sys.DBSrcType.MySQL:
                         break;
                     case Sys.DBSrcType.Oracle:
+                        //如果是时间类型，要进行转换
                         if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                         {
-                            if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()))
-                            {
+                            if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
                                 values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
-                            }
                             else
-                            {
                                 values += "'',";
-                            }
                             continue;
                         }
                         values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                        upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
                         continue;
                     default:
                         throw new Exception("暂时不支您所使用的数据库类型!");
                 }
                 values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                upVal = upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                //获取除主键之外的其他值
-                //if (i > 0)
-                    
+                
             }
 
             values = values.Substring(0, values.Length - 1);

@@ -41,37 +41,6 @@ namespace BP.GPM
             }
         }
         /// <summary>
-        /// 钉钉是否启用
-        /// </summary>
-        public static bool IsEnable_DingDing
-        {
-            get
-            {
-                //如果两个参数都不为空说明启用
-                string corpid = BP.Sys.SystemConfig.Ding_CorpID;
-                string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
-                if (DataType.IsNullOrEmpty(corpid) || DataType.IsNullOrEmpty(corpsecret))
-                    return false;
-                return true;
-            }
-        }
-        /// <summary>
-        /// 微信是否启用
-        /// </summary>
-        public static bool IsEnable_WeiXin
-        {
-            get
-            {
-                //如果两个参数都不为空说明启用
-                string corpid = BP.Sys.SystemConfig.WX_CorpID;
-                string corpsecret = BP.Sys.SystemConfig.WX_AppSecret;
-                if (DataType.IsNullOrEmpty(corpid) || DataType.IsNullOrEmpty(corpsecret))
-                    return false;
-
-                return true;
-            }
-        }
-        /// <summary>
         /// 安装包
         /// </summary>
         public static void DoInstallDataBase()
@@ -189,40 +158,6 @@ namespace BP.GPM
                 dept.GenerNameOfPath();
 
         }
-        /// <summary>
-        /// 是否可以执行判断
-        /// </summary>
-        /// <param name="obj">判断对象</param>
-        /// <param name="cw">方式</param>
-        /// <returns>是否可以执行</returns>
-        public static bool IsCanDoIt(string ctrlObj, BP.GPM.CtrlWay cw, string empID)
-        {
-            int n = 0;
-            string sql = "";
-            switch (cw)
-            {
-                case CtrlWay.AnyOne:
-                    return true;
-                case CtrlWay.ByStation:
-                    sql = "SELECT count(*) FROM GPM_ByStation WHERE RefObj='" + ctrlObj + "'  AND FK_Station IN (select FK_Station from  Port_DeptEmpStation WHERE FK_Emp='" + empID + "')";
-                    n = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
-                    break;
-                case CtrlWay.ByDept:
-                    sql = "SELECT count(*) FROM GPM_ByDept WHERE RefObj='" + ctrlObj + "'  AND FK_Dept IN (SELECT FK_Dept FROM Port_Emp WHERE No='" + empID + "')";
-                    n = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
-                    break;
-                case CtrlWay.ByEmp:
-                    sql = "SELECT count(*) FROM GPM_ByEmp WHERE RefObj='" + ctrlObj + "'  AND  FK_Emp='" + empID + "'";
-                    n = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
-                    break;
-                default:
-                    break;
-            }
-
-            if (n == 0)
-                return false;
-            else
-                return true;
-        }
+        
     }
 }

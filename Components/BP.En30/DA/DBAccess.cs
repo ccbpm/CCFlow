@@ -1714,17 +1714,65 @@ namespace BP.DA
         }
         public static string DealSQL(string sql)
         {
-            return sql;
-            ////  return sql;
-            //= sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
-            //  String presult = p.matcher(sql).replaceAll("$1");
-            //  return presult;
+           return MidStrEx( sql, "/*", "*/");
+         
+         //sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+         //  String presult = p.matcher(sql).replaceAll("$1");
+         //  return presult;
         }
-        /// <summary>
-        /// 运行SQLs
-        /// </summary>
-        /// <param name="sql"></param>
-        public static void RunSQLs(string sql)
+        public static string MidStrEx(string sourse, string startstr, string endstr)
+        {
+            string result = string.Empty;
+            int startindex, endindex;
+            string tmpstr = string.Empty;
+            string tmpstr2 = string.Empty;
+            try
+            {
+                startindex = sourse.IndexOf(startstr);
+                if (startindex == -1)
+                    return result;
+                int i = 0;
+                while (startindex != -1)
+                {
+                    if (i==0)
+                    {
+                        endindex = sourse.IndexOf(endstr);
+                        if (startindex != 0)
+                        {
+                            endindex = endindex - startindex;
+                        }
+                        tmpstr = sourse.Remove(startindex, endindex + endstr.Length);
+                    }else
+                    {
+                        endindex = tmpstr.IndexOf(endstr);
+                        if (startindex != 0)
+                        {
+                            endindex = endindex - startindex;
+                        }
+                        tmpstr = tmpstr.Remove(startindex, endindex + endstr.Length);
+
+                    }
+
+                    if (endindex == -1)
+                        return result;
+                   // tmpstr = tmpstr.Substring(endindex + endstr.Length);
+                    startindex = tmpstr.IndexOf(startstr);
+                    i++;
+                }
+                //result = tmpstr.Remove(endindex);
+                
+            }
+            catch (Exception ex)
+            {
+                Log.DefaultLogWriteLineInfo("MidStrEx Err:" + ex.Message);
+            }
+            return tmpstr;
+        }    
+    /// <summary>
+    /// 运行SQLs
+    /// </summary>
+    /// <param name="sql"></param>
+    public static void RunSQLs(string sql)
         {
             if (DataType.IsNullOrEmpty(sql))
                 return;

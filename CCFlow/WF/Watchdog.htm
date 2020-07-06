@@ -39,7 +39,6 @@
         function InitPage() {
 
             $('#docs').html(window.lang.loading);
-            debugger;
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             var data = handler.DoMethodReturnString("Watchdog_Init");
             if (data.indexOf('err@') == 0) {

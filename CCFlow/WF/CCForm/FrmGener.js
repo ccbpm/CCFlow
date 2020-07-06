@@ -199,7 +199,6 @@ function isFileExist(url) {
 var frmData = null;
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单.
 function GenerFrm() {
-    debugger
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');

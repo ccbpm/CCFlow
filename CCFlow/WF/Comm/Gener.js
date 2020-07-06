@@ -855,8 +855,8 @@ var Entity = (function () {
 
     function getParams(self) {
         var params = {};
-        $.each(jsonString, function (n, o) {
-            if (typeof self[n] !== "function") {
+        $.each(self, function (n, o) {
+            if (typeof self[n] !== "function" && n != "enName" && n !="ensName") {
                 params[n] = self[n];
             }
         });

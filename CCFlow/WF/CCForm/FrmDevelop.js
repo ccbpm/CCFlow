@@ -106,7 +106,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
             var defVal = mapAttr.DefVal;
             if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
                 bit = defVal.substring(defVal.indexOf(".") + 1).length;
-            debugger
            
             obj.bind('focus', function () {
                 removeplaceholder(this, bit);
@@ -178,7 +177,6 @@ function GenerDevelopFrm(wn, fk_mapData) {
             if (mapAttr.UIContralType == 1) {
                 //重新生成枚举下拉框的值
 
-                debugger
                 var _html = InitDDLOperation(frmData, mapAttr, null);
                 $("#DDL_" + mapAttr.KeyOfEn).empty();
                 $("#DDL_" + mapAttr.KeyOfEn).append(_html);

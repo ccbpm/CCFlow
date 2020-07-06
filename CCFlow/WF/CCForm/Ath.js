@@ -11,7 +11,6 @@ AthParams.AthInfo = {};
 * @param athDivID 生成的附件信息追加的位置
 */
 function AthTable_Init(athchment, athDivID) {
-    debugger;
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
     AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
@@ -35,7 +34,6 @@ function AthTable_Init(athchment, athDivID) {
 
     //4.调用附件上传的功能
     
-    debugger
 
     $("#fileUpload_" + athchment.MyPK).initUpload({
         "uploadUrl": uploadUrl,//上传文件信息地址

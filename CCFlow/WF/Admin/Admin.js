@@ -317,7 +317,6 @@ function initToggle() {
 
     for (var i = 0, len = legends.length; i < len; i++) {
 
-        //  debugger
         var en = legends[i];
         if (en.id.indexOf('help') == -1)
             continue;

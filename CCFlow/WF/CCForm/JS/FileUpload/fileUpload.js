@@ -564,7 +564,6 @@ var uploadEvent = {
      * @param opt
      */
     "selectFileEvent": function (opt) {
-        debugger
         var uploadId = opt.uploadId;
         var ismultiple = opt.ismultiple;
         var inputObj=document.createElement('input');

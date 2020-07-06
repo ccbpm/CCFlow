@@ -64,7 +64,6 @@
             html += "</tr>";
 
             for (var i = 0; i < groups.length; i++) {
-                debugger;
 
                 var group = groups[i];
 
@@ -178,7 +177,6 @@
             var stas = new Entities("BP.Port.Stations");
             stas.Retrieve("OrgNo", orgNo);
      
-            debugger;
             //遍历checkbox控件，然后执行插入.
             for (var i = 0; i < stas.length; i++) {
                 var en = new Entity("BP.WF.Template.NodeStation");     

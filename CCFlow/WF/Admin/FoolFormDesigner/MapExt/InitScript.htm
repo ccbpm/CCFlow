@@ -41,7 +41,6 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("InitScript_Init"); //执行方法，返回执行结果.
 
-            debugger
 
             if (data.indexOf("err@") == 0) {
                 alert(data)
@@ -62,7 +61,6 @@
             handler.AddPara("JSDoc", jsDocVal);
             var data = handler.DoMethodReturnString("InitScript_Save"); //执行方法，返回执行结果.
 
-            debugger
 
             alert(data);
             return;
@@ -75,7 +73,6 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("InitScript_Delete"); //执行方法，返回执行结果.
 
-            debugger
 
             alert(data);
             return;

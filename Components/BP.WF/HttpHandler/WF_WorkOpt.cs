@@ -13,6 +13,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Data;
 using BP.WF.Template;
+using BP.Tools;
 
 namespace BP.WF.HttpHandler
 {
@@ -4585,6 +4586,65 @@ namespace BP.WF.HttpHandler
                 spanStr = "0分";
 
             return spanStr;
+        }
+
+        public string FastInput_Init()
+        {
+            string groupKey = this.GetRequestVal("GroupKey");
+            FastInputs ens = new FastInputs();
+            ens.Retrieve(FastInputAttr.ContrastKey, groupKey, FastInputAttr.FK_Emp, WebUser.No);
+            if (ens.Count > 0)
+                return ens.ToJson();
+           
+            if (groupKey.Equals("Comment"))
+            {
+                FastInput en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "已阅";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+            }
+            if (groupKey.Equals("CYY"))
+            {
+                FastInput en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "不同意";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意，请领导批示";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "同意办理";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+
+                en = new FastInput();
+                en.MyPK = DBAccess.GenerGUID();
+                en.ContrastKey = groupKey;
+                en.Vals = "情况属实报领导批准";
+                en.FK_Emp = WebUser.No;
+                en.Insert();
+            }
+            ens = new FastInputs();
+            ens.Retrieve(FastInputAttr.ContrastKey, groupKey);
+            return ens.ToJson();
         }
 
     }

@@ -769,7 +769,7 @@ namespace BP.WF
                         rpt.SetValByKey(k, paras[k]);
                     }
 
-                    if (this.PTable == wk.EnMap.PhysicsTable)
+                    if (this.PTable.Equals(wk.EnMap.PhysicsTable)==true)
                     {
                         /*如果开始节点表与流程报表相等.*/
                         rpt.OID = wk.OID;

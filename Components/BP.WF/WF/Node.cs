@@ -1132,7 +1132,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(NodeAttr.TimeLimit);
+                return (int)this.GetValFloatByKey(NodeAttr.TimeLimit);
             }
             set
             {

@@ -28,9 +28,9 @@ namespace BP.Demo.FormEvent
         public override string SaveBefore()
         {
             //取单价.
-            decimal dj = this.HisEn.GetValMoneyByKey("DJ");
+            decimal dj = this.HisEn.GetValDecimalByKey("DJ");
             //取数.
-            decimal sl = this.HisEn.GetValMoneyByKey("SL");
+            decimal sl = this.HisEn.GetValDecimalByKey("SL");
             //计算合计.
             this.HisEn.SetValByKey("JE", dj * sl);
 

@@ -1212,7 +1212,7 @@ var Entity = (function () {
         GetPKVal: function () {
 
             var val = null;
-
+            var self = this;
 
             if (jsonString != null) {
                 val = jsonString["MyPK"];

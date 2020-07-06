@@ -151,7 +151,7 @@ namespace BP.GPM
                     return null;
 
                 //消息样式为图文连接
-                News_Articles newArticle = new News_Articles();
+                NewsArticles newArticle = new NewsArticles();
 
                 //设置消息标题
                 newArticle.title = "待办：" + gwf.Title;
@@ -175,7 +175,7 @@ namespace BP.GPM
                 newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
 
                 //加入消息
-                WX_Msg_News wxMsg = new WX_Msg_News();
+                MsgNews wxMsg = new MsgNews();
                 wxMsg.Access_Token = accessToken;
                 wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
                 wxMsg.touser = toUsers;

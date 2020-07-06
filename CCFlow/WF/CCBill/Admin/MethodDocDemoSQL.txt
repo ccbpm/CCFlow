@@ -7,5 +7,5 @@
 /* 5.1 EXEC dbo.uspGetEmployeeManagers @BusinessEntityID = 50; */
 /* 5.2 EXEC AdventureWorks2012.dbo.uspGetEmployeeManagers 50; */
 
-UPATE @FrmID SET StudentState=0 WHERE OID=@OID ;
-UPATE @FrmID SET Title=@Title WHERE OID=@OID ;
+UPDATE @FrmID SET StudentState=0 WHERE OID=@OID ;
+UPDATE @FrmID SET Title='@Title' WHERE OID=@OID ;

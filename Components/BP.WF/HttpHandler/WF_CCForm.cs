@@ -575,9 +575,8 @@ namespace BP.WF.HttpHandler
 
                 if (en.IsOIDEntity == true)
                 {
-                    BP.En.EntityOID enOID = null;
+                    BP.En.EntityOID enOID = en as BP.En.EntityOID;
 
-                    enOID = en as BP.En.EntityOID;
                     if (enOID == null)
                     {
                         return "err@系统错误，无法将" + md.PTable + "转化成 BP.En.EntityOID.";

@@ -747,7 +747,7 @@ namespace BP.WF.Data
                 map.AddTBInt(GenerWorkFlowViewAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(GenerWorkFlowViewAttr.FK_Node, 0, "FK_Node", false, false);
 
-                map.AddDDLEntities(GenerWorkFlowViewAttr.FK_NY, null, "月份", new GenerWorkFlowViewNYs(), false);
+                map.AddTBString(GenerWorkFlowViewAttr.FK_NY, null, "月份", true, false, 0, 100, 10);
 
                 //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);

@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
 
             //表单ID.
             string frmID = "ND" + this.FK_Node;
-            sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' || Name IS Null) ";
+            sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' OR Name IS Null) ";
             DBAccess.RunSQL(sql);
 
            // BP.WF.Template.Cond

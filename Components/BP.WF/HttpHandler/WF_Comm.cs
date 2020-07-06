@@ -462,7 +462,7 @@ namespace BP.WF.HttpHandler
                 string pkval = this.PKVal;
                 Entity en = ClassFactory.GetEn(this.EnName);
 
-                if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
+                if (DataType.IsNullOrEmpty(pkval) == true || pkval.Equals("0")  || pkval.Equals("undefined"))
                 {
                     Map map = en.EnMap;
                     foreach (Attr attr in en.EnMap.Attrs)

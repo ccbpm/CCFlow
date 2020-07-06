@@ -1037,17 +1037,17 @@ function Bill_CCForm() {
 
     // alert('sss');
 
-    var en = new Entity("BP.Frm.FrmBill", node.id);
+    var en = new Entity("BP.CCBill.FrmBill", node.id);
 
     //流程单据.
     if (en.EntityType == 0)
         url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
 
     if (en.EntityType == 1)
-        url = '../../Comm/En.htm?EnName=BP.Frm.FrmBill&PKVal=' + node.id;
+        url = '../../Comm/En.htm?EnName=BP.CCBill.FrmBill&PKVal=' + node.id;
 
     if (en.EntityType == 2 || en.EntityType == 3)
-        url = '../../Comm/En.htm?EnName=BP.Frm.FrmDict&PKVal=' + node.id;
+        url = '../../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=' + node.id;
 
     //   alert(en.EntityType);
     // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
@@ -1068,7 +1068,7 @@ function Bill_Open() {
         return;
     }
 
-    var en = new Entity("BP.Frm.FrmTemplate", node.id);
+    var en = new Entity("BP.CCBill.Template.FrmTemplate", node.id);
     if (en.EntityType == 0) {
         alert('独立表单暂不支持列表打开...');
         return;

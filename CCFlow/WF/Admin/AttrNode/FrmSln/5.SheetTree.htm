@@ -68,6 +68,9 @@
             var W = document.body.clientWidth - 200;
             var H = document.body.clientHeight - 800;
             var url = "../../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + fk_flow;
+            window.location.href = url;
+            return;
+
             OpenEasyUiDialogExt(url, '绑定列表', W, H, false, true);
         }
 

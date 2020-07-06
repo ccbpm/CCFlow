@@ -823,7 +823,7 @@ namespace BP.WF
             gwf.NodeName = this.ReturnToNode.Name;
             gwf.Starter = toEmp;
             gwf.StarterName = toEmpName;
-            gwf.Sender = WebUser.No;
+            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
             //增加参与的人员
             string emps = gwf.Emps;
             if (DataType.IsNullOrEmpty(emps) == true)
@@ -925,7 +925,7 @@ namespace BP.WF
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
             gwf.WFState = WFState.ReturnSta;
-            gwf.Sender = WebUser.No;
+            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
             //增加参与的人员
             string emps = gwf.Emps;
             if (DataType.IsNullOrEmpty(emps) == true)
@@ -1054,7 +1054,7 @@ namespace BP.WF
             gwf.NodeName = this.ReturnToNode.Name;
             gwf.SDTOfNode = sdt;
 
-            gwf.Sender = WebUser.No + "," + WebUser.Name;
+            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.HuiQianZhuChiRen = "";
             gwf.HuiQianZhuChiRenName = "";

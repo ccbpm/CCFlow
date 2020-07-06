@@ -6336,7 +6336,10 @@ namespace BP.WF
                     InitStartWorkDataV2(); // 初始化开始节点数据, 如果当前节点是开始节点.
 
                 //处理发送人，把发送人的信息放入wf_generworkflow 2015-01-14. 原来放入WF_GenerWorkerList.
-                oldSender = this.HisGenerWorkFlow.Sender; //旧发送人,在回滚的时候把该发送人赋值给他.
+                if(this.HisGenerWorkFlow.Sender.Contains(",") == false)
+                    oldSender = this.HisGenerWorkFlow.Sender; //旧发送人,在回滚的时候把该发送人赋值给他.
+                else
+                    oldSender = this.HisGenerWorkFlow.Sender.Split(',')[0];
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
                 #region 处理退回的情况.
@@ -7467,7 +7470,8 @@ namespace BP.WF
                     gwf.FK_Node = this.HisNode.NodeID;
                     gwf.NodeName = this.HisNode.Name;
                     gwf.WFState = WFState.Runing;
-                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(oldSender, oldSender);
+                    Emp emp = new Emp(oldSender);
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(emp.No, emp.Name);
                     gwf.Update();
                 }
 
@@ -7625,7 +7629,7 @@ namespace BP.WF
             gwl.CDT = DataType.CurrentDataTime;
             gwl.RDT = gwl.CDT;
             gwl.SDT = gwl.CDT;
-            gwl.Sender = WebUser.No;
+            gwl.Sender = WebUser.No+","+WebUser.Name;
             gwl.Save();
             #endregion  补充gwl数据.让其出现在途.
 
@@ -8278,7 +8282,7 @@ namespace BP.WF
             this.CheckCompleteCondition_IntCompleteEmps();
 
             // 如果结束流程，就增加如下信息 翻译.
-            this.HisGenerWorkFlow.Sender = BP.Web.WebUser.No;
+            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
             this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
 
             this.rptGe.FlowEnder = BP.Web.WebUser.No;

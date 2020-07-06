@@ -719,7 +719,7 @@ namespace BP.WF
             DataTable dtPrevTrack = Dev2Interface.Flow_GetPreviousNodeTrack(this.WorkID,cancelToNode.NodeID);
             if(dtPrevTrack != null && dtPrevTrack.Rows.Count > 0)
             {
-                gwf.Sender = dtPrevTrack.Rows[0]["EmpFrom"].ToString();
+                gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(dtPrevTrack.Rows[0]["EmpFrom"].ToString(), dtPrevTrack.Rows[0]["EmpFromT"].ToString());
             }
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
@@ -956,7 +956,7 @@ namespace BP.WF
             gwf.FK_Node = this.UnSendToNode;
             Node nd = new Node(this.UnSendToNode);
             gwf.NodeName = nd.Name;
-            gwf.Sender = BP.Web.WebUser.No;
+            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
             gwf.SendDT = BP.DA.DataType.CurrentDataTimess;
             gwf.Update();
 

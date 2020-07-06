@@ -55,14 +55,9 @@
         });
 
         function GetSearchData() {
-            var ens = new Entities("BP.WF.Data.FastInputs");
-            ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
-            if (ens.length == 0) {
-                
-                var en = new Entity("BP.WF.Data.FastInput");
-                en.DoMethodReturnString("Add", groupKey); 
-                ens.Retrieve("ContrastKey", groupKey, "FK_Emp", webUser.No);
-            }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("GroupKey", groupKey)
+            var ens = handler.DoMethodReturnJSON("FastInput_Init");
             //ens.RetrieveAll();
             var dataInfo = {}
             var mainData = [];

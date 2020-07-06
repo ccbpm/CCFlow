@@ -24,7 +24,7 @@
             var mapdtl = new Entity("BP.Sys.MapDtl", dtlID);
             var multi = mapdtl.GetPara("MultiTitle");
             var isMulti = false;
-            if (multi != null && multi != undefined && multi != "")
+            if (multi != null && multi != undefined && multi != "" && multi != "undefined")
                 isMulti = true;
 
             var html = "<table style='width:100%;'>";

@@ -624,7 +624,7 @@
 
                     if (dtl.length == 1) {
                         var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageData.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
-                        var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                        var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                         return "<tr><td colspan=" + tableCol + " id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
                     } else {
                         html = "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";
@@ -1639,9 +1639,11 @@
         </div>
         <div class="panel layout-panel layout-panel-center cs-panel-center">
             <div data-options="region:'center'" title="" class="panel-body panel-body-noheader layout-body cs-panel-body">
+                <form id="divCCForm" enctype="multipart/form-data" method="post">
+                    <table id="contentTable" class="cs-table">
+                    </table>
 
-                <table id="contentTable" class="cs-table">
-                </table>
+                </form>
 
             </div>
         </div>

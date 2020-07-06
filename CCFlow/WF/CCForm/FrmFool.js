@@ -1823,7 +1823,7 @@ function Ele_Dtl(frmDtl) {
         src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&FK_MapData=" + frmDtl.FK_MapData + "&" + urlParam + "&Version=1";
     }
 
-    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' name='Dtl' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return "<iframe style='width:100%;' name='Dtl' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
 
 function InitRBShowContent(frmData, mapAttr, defValue, RBShowModel, enableAttr) {

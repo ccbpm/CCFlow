@@ -902,7 +902,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (ses == undefined) {
             //枚举类型的.
             if (mapAttr.LGType == 1) {
-                var ses = flowData.Sys_Enum;
+               ses = flowData.Sys_Enum;
                 ses = $.grep(ses, function (value) {
                     return value.EnumKey == mapAttr.UIBindKey;
                 });
@@ -1931,7 +1931,7 @@ function Ele_Dtl(frmDtl) {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     }
-    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' name='Dtl' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return "<iframe style='width:100%;' name='Dtl' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
 
 function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr) {

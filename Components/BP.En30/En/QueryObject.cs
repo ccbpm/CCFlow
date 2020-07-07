@@ -278,7 +278,7 @@ namespace BP.En
 
             string valStr = Convert.ToString(val);
 
-            if (valStr == "all")
+            if (valStr.Equals("all"))
             {
                 this.SQL = "( 1=1 )";
                 return;
@@ -292,7 +292,7 @@ namespace BP.En
 
             if (exp.ToLower().Contains("like"))
             {
-                if (attr == "FK_Dept")
+                if (attr.Equals("FK_Dept"))
                 {
                     valStr = valStr.Replace("'", "");
                     valStr = valStr.Replace("%", "");
@@ -326,7 +326,7 @@ namespace BP.En
                 }
                 return;
             }
-            if (this.HisVarStr == "?")
+            if (this.HisVarStr.Equals("?"))
             {
                 this.SQL = "( " + attr2Field(attr) + " " + exp + "?)";
                 this.MyParas.Add(attr, val);
@@ -365,7 +365,7 @@ namespace BP.En
         }
         public void AddWhereField(string attr, string exp, string val)
         {
-            if (val.ToString() == "all")
+            if (val.ToString().Equals("all"))
             {
                 this.SQL = "( 1=1 )";
                 return;
@@ -382,7 +382,7 @@ namespace BP.En
         }
         public void AddWhereField(string attr, string exp, int val)
         {
-            if (val.ToString() == "all")
+            if (val.ToString().Equals("all"))
             {
                 this.SQL = "( 1=1 )";
                 return;
@@ -394,13 +394,13 @@ namespace BP.En
                 return;
             }
 
-            if (attr == "RowNum")
+            if (attr.Equals("RowNum"))
             {
                 this.SQL = "( " + attr + " " + exp + "  " + val + " )";
                 return;
             }
 
-            if (this.HisVarStr == "?")
+            if (this.HisVarStr.Equals("?"))
                 this.SQL = "( " + attr + " " + exp + "?)";
             else
                 this.SQL = "( " + attr + " " + exp + "  " + this.HisVarStr + attr + " )";

@@ -1132,7 +1132,7 @@ namespace BP.WF.HttpHandler
         {
             string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
             string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
-
+            dot2DotEnsName = BP.Sys.Glo.DealClassEntityName(dot2DotEnsName);
             //string enName = this.GetRequestVal("EnName");
             Entity en = ClassFactory.GetEn(this.EnName);
             en.PKVal = this.PKVal;

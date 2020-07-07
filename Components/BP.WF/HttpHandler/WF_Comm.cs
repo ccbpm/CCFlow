@@ -1304,6 +1304,7 @@ namespace BP.WF.HttpHandler
                     DataTable dtEn = ensFK.ToDataTableField();
                     dtEn.TableName = item.Key;
                     ds.Tables.Add(dtEn);
+                    continue;
                 }
                 //绑定SQL的外键
                 if ( DataType.IsNullOrEmpty(attr.UIBindKey) == false

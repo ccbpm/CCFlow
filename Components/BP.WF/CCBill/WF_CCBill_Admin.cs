@@ -58,7 +58,7 @@ namespace BP.CCBill
 
             int type = this.GetRequestValInt("TypeOfFunc");
             string doc = this.GetRequestVal("doc");
-
+            string funcstr = this.GetRequestVal("funcstr");
             //sql模式.
             if (type == 0)
                 en.MethodDoc_SQL = doc;
@@ -66,14 +66,15 @@ namespace BP.CCBill
             //script.
             if (type == 1)
             {
+               
                 en.MethodDoc_JavaScript = doc;
 
-                //string path=SystemConfig.PathOfDataUser + "JSLibData\\Method\\" ;
-                //if (System.IO.Directory.Exists(path) == false)
-                //    System.IO.Directory.CreateDirectory(path);
-                ////写入文件.
-                //string file = path + en.MyPK + ".js";
-                //DataType.WriteFile(file, doc);
+                string path=SystemConfig.PathOfDataUser + "JSLibData\\Method\\" ;
+                if (System.IO.Directory.Exists(path) == false)
+                    System.IO.Directory.CreateDirectory(path);
+                //写入文件.
+                string file = path + en.MyPK + ".js";
+                DataType.WriteFile(file, funcstr);
             }
 
             //url.

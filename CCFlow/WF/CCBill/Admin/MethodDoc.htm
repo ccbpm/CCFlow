@@ -43,6 +43,7 @@
         var en = null;
         var docsLast = null; //最后的code内容，用于判断是否发生了变化？
         var currFuncType = 0;
+        var funcstr = "";
         $(function () {
 
             //$.base64.utf8encode = true;
@@ -72,15 +73,20 @@
             html += "</b></font>";
 
             html += "<br><font color=yellow ><b> function </b></font> <font color=red ><b>" + en.MethodID + "</b></font> <font color=yellow ><b>(</b></font>";
+            funcstr = "function " + en.MethodID + "(";
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
-                if (i == attrs.length - 1)
+                if (i == attrs.length - 1) {
                     html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font>";
-                else
+                    funcstr += attr.KeyOfEn;
+                }else{
                     html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font><font color=yellow ><b>,</b></font>";
+                    funcstr += attr.KeyOfEn+",";
+                    }
             }
 
             html += "<font color=yellow ><b>)</b></font>&nbsp;<font color=yellow font-size='12px'><b>{</b></font>";
+            funcstr += "){";
             $("#paras").html(html);
 
 
@@ -168,11 +174,13 @@
 
             handler.AddPara("doc", doc); //不知道是否可以存储.
             handler.AddPara("TypeOfFunc", selectFuncType);
+            handler.AddPara("funcstr", funcstr+doc+"}");//拼上function部分
 
             var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
 
             docsLast = editor.getValue(); //记录最后的值，用于判断是否更改.
             alert(data);
+            funcstr="";
         }
         function ToMethodParas() {
             window.location.href = "MethodParas.htm?MyPK=" + GetQueryString("MyPK");

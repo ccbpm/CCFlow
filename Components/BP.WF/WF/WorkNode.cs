@@ -2027,16 +2027,13 @@ namespace BP.WF
 
                 try
                 {
-                    if (this.IsSkip == true)
-                    {
-                        int count = toWK.RetrieveFromDBSources();
-                        if (count > 0)
-                            toWK.DirectUpdate(); // 如果执行了跳转.
-                        else
-                            toWK.DirectInsert();
-                    }
+                   
+                    int count = toWK.RetrieveFromDBSources();
+                    if (count > 0)
+                        toWK.DirectUpdate(); // 如果执行了跳转.
                     else
                         toWK.DirectInsert();
+                   
                 }
                 catch (Exception ex)
                 {

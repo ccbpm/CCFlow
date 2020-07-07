@@ -1078,7 +1078,6 @@ function GenerWorkNode() {
     }
 
 
-
     //获取没有解析的外部数据源
     var uiBindKeys = flowData["UIBindKey"];
     if (uiBindKeys.length != 0) {

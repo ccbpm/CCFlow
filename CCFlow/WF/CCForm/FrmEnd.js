@@ -218,7 +218,11 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
     //设置为只读的字段.
     for (var i = 0; i < mapAttrs.length; i++) {
+
         var mapAttr = mapAttrs[i];
+        //去掉左右空格.
+        mapAttr.KeyOfEn = mapAttr.KeyOfEn.replace(/(^\s*)|(\s*$)/g, "");
+
         //设置文本框只读.
         if (mapAttr.UIVisible != 0 && (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")) {
             $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);

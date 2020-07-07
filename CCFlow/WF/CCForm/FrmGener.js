@@ -28,7 +28,7 @@ $(function () {
     webUser = new WebUser();
 
     //初始化参数.
-    initPageParam(); 
+    initPageParam();
 
     //设置不可以用.
     if (pageData.IsReadonly != 1) {
@@ -40,7 +40,7 @@ $(function () {
         });
     }
 
-   
+
     //构造表单.
     GenerFrm(); //表单数据.
 
@@ -58,7 +58,7 @@ $(function () {
         $('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+            $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
         });
     }
 
@@ -78,7 +78,7 @@ $(function () {
 });
 //打印单据
 function printDoc() {
-    WinOpen("../WorkOpt/PrintDoc.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()+"', 'dsdd'");
+    WinOpen("../WorkOpt/PrintDoc.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random() + "', 'dsdd'");
 }
 
 function numonly(e) {
@@ -192,7 +192,7 @@ function isFileExist(url) {
             }
         }
     }
-} 
+}
 
 
 
@@ -244,7 +244,7 @@ function GenerFrm() {
             Skip.addJs("../../DataUser/OverrideFiles/Ath.js");
             $('head').append("<link href='./JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
         }
-       
+
     }
 
 
@@ -308,17 +308,17 @@ function GenerFrm() {
     // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = frmData.Sys_MapData[0].No;
 
-  
+
 
     try {
-        
+
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
-        
-       
+
+
     }
     catch (err) {
 
@@ -330,7 +330,7 @@ function GenerFrm() {
         s.src = "../../DataUser/JSLibData/" + enName + ".js";
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
-       
+
     }
     catch (err) {
 
@@ -358,7 +358,7 @@ function GenerFrm() {
             GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
             isFloolFrm = true;
         } else if (mapData.FrmType == 8) {
-            GenerDevelopFrm(frmData,mapData.No ); //开发者表单.
+            GenerDevelopFrm(frmData, mapData.No); //开发者表单.
         }
         else
             GenerFreeFrm(mapData, frmData); //自由表单.
@@ -369,7 +369,7 @@ function GenerFrm() {
 
     $('#CCForm').html($('#CCForm').html().replace(rel, ''));
     $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
- 
+
     $.parser.parse("#CCForm");
     var isReadonly = GetQueryString("IsReadonly");
 
@@ -404,7 +404,7 @@ function GenerFrm() {
             }
         })
     }
-   
+
     //装载表单数据与修改表单元素风格.
     LoadFrmDataAndChangeEleStyle(frmData);
 
@@ -412,12 +412,9 @@ function GenerFrm() {
     if (pageData.IsReadonly == null || pageData.IsReadonly == "0") {
         AfterBindEn_DealMapExt(frmData);
     }
-    
 
-    
     ////表单联动设置
     //Set_Frm_Enable(frmData);
-
 
     ShowTextBoxNoticeInfo();
 
@@ -453,7 +450,7 @@ function GenerFrm() {
                 $(editor.container).css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
             }
         })
-       
+
 
     }
     $(".pimg").on("dblclick", function () {
@@ -462,9 +459,7 @@ function GenerFrm() {
     });
     if (typeof setContentHeight == "function") {
         setContentHeight();
-     }
-
-
+    }
 }
 
 // V
@@ -768,7 +763,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                             formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
                             haseExistStr += name + ",";
                         }
-                       
+
                         break;
                     case "RADIO": //单选钮
                         name = $(disabledEle).attr('name');
@@ -1213,7 +1208,7 @@ function GetPageParas(sArgName) {
     var sHref = window.location.href;
     var args = sHref.split("?");
     var retval = "";
-    if (args[0] == sHref) /*参数为空*/{
+    if (args[0] == sHref) /*参数为空*/ {
         return retval; /*无需做任何处理*/
     }
     var str = args[1];
@@ -1305,7 +1300,7 @@ function figure_Template_Siganture(SigantureID, val, type) {
 
 //签字板
 function figure_Template_HandWrite(HandWriteID, val) {
-    var url = basePath+ "/WF/CCForm/HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
+    var url = basePath + "/WF/CCForm/HandWriting.htm?WorkID=" + pageData.OID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
     OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
 }
 //地图

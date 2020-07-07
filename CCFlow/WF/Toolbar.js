@@ -250,6 +250,8 @@ function initModal(modalType, toNode,url) {
 
         switch (modalType) {
             case "returnBack":
+                if (typeof Save != 'undefined' && Save instanceof Function)
+                    Save(0);
                 $('#modalHeader').text("退回");
                 //按百分比自适应
                 SetPageSize(50, 60);

@@ -202,6 +202,9 @@ namespace BP.WF.HttpHandler
         public string CondByWebApi_Init()
         {
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            if (DataType.IsNullOrEmpty(fk_mainNode)==true)
+                fk_mainNode = this.GetRequestVal("FK_Node");
+
             string toNodeID = this.GetRequestVal("ToNodeID");
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");

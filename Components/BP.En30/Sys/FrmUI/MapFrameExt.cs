@@ -154,7 +154,6 @@ namespace BP.Sys.FrmUI
             //在属性实体集合插入前，clear父实体的缓存.
             BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
-
             int val = this.GetValIntByKey(MapFrameAttr.UrlSrcType, 0);
             if (val == 1)
             {
@@ -175,7 +174,7 @@ namespace BP.Sys.FrmUI
             {
                 gf.Lab = this.Name;
                 gf.Update();
-            }
+            } 
 
             return base.beforeUpdateInsertAction();
         }

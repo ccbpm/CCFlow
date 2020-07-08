@@ -550,7 +550,7 @@ namespace BP.WF
             WorkNode wn = this.GetCurrentWorkNode();
 
             #region 求的撤销的节点.
-            int cancelToNodeID = 0;
+            int cancelToNodeID = 0; //计算要撤销到的节点.
             if (nd.HisCancelRole == CancelRole.SpecNodes)
             {
                 /*指定的节点可以撤销,首先判断当前人员是否有权限.*/
@@ -600,6 +600,10 @@ namespace BP.WF
 
             if (cancelToNodeID == 0)
                 throw new Exception("err@没有求出要撤销到的节点.");
+
+            //求出来要撤销到的节点. @hongyan
+            Node cancelToNode = new Node(cancelToNodeID);
+
             #endregion 求的撤销的节点.
 
             if (this.UnSendToNode != 0 && gwf.FK_Node != this.UnSendToNode )
@@ -626,8 +630,18 @@ namespace BP.WF
                 case NodeWorkType.WorkHL:
                     if (this.IsMainFlow)
                     {
-                        /* 首先找到与他最近的一个分流点，并且判断当前的操作员是不是分流点上的工作人员。*/
-                        return this.DoUnSendHeiLiu_Main(gwf);
+                        /* 首先找到与他最近的一个分流点，
+                         * 并且判断当前的操作员是不是分流点上的工作人员。*/
+
+                        //如果是断头路的节点. @hongyan
+                        if (cancelToNode.IsSendBackNode == true)
+                        {
+                            //不需要处理，按照正常的模式处理.
+                        }
+                        else
+                        {
+                            return this.DoUnSendHeiLiu_Main(gwf);
+                        }
                     }
                     else
                     {
@@ -642,7 +656,6 @@ namespace BP.WF
             #endregion 判断当前节点的模式.
 
             /********** 开始执行撤销. **********************/
-            Node cancelToNode = new Node(cancelToNodeID);
 
             #region 如果撤销到的节点是普通的节点，并且当前的节点是分流(分流)节点，并且分流(分流)节点已经发送下去了,就不允许撤销了.
             if (cancelToNode.HisRunModel == RunModel.Ordinary
@@ -1022,11 +1035,13 @@ namespace BP.WF
         public string DoUnSendHeiLiu_Main(GenerWorkFlow gwf)
         {
             Node currNode = new Node(gwf.FK_Node);
-            Node priFLNode = currNode.HisPriFLNode;
+
+            Node priFLNode = currNode.HisPriFLNode; //获得上一个节点.
             GenerWorkerList wl = new GenerWorkerList();
 
             //判断改操作人员是否是分流节点上的人员.
-            int i = wl.Retrieve(GenerWorkerListAttr.FK_Node, priFLNode.NodeID, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+            int i = wl.Retrieve(GenerWorkerListAttr.FK_Node, 
+                priFLNode.NodeID, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
             if (i == 0)
                 return "@不是您把工作发送到当前节点上，所以您不能撤消。";
 

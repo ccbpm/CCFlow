@@ -202,7 +202,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStrByKey(BillTemplateAttr.TempFilePath);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }

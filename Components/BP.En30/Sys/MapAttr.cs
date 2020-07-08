@@ -656,7 +656,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapAttrAttr.Name);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.KeyOfEn;
                 return s;
             }
@@ -1270,7 +1270,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapAttrAttr.UIRefKey);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s)==true)
                     s = "No";
                 return s;
             }
@@ -1287,7 +1287,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapAttrAttr.UIRefKeyText);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = "Name";
                 return s;
             }

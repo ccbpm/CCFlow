@@ -306,7 +306,7 @@ namespace BP.WF.HttpHandler
                                 string[] strs = me.Tag.Split('$');
                                 foreach (string str in strs)
                                 {
-                                    if (str == "" || str == null)
+                                    if (DataType.IsNullOrEmpty(str) == true)
                                         continue;
 
                                     string[] ss = str.Split(':');
@@ -326,7 +326,7 @@ namespace BP.WF.HttpHandler
                             string[] strs1 = me.Tag.Split('$');
                             foreach (string str in strs1)
                             {
-                                if (str == "" || str == null)
+                                if (DataType.IsNullOrEmpty(str) == true)
                                     continue;
 
                                 string[] ss = str.Split(':');
@@ -3812,7 +3812,7 @@ namespace BP.WF.HttpHandler
             int i = 0;
             foreach (string str in strs)
             {
-                if (str == "CheckAll" || str == null || str == "")
+                if (DataType.IsNullOrEmpty(str)==true || str.Equals("CheckAll") == true )
                     continue;
 
                 GEDtl gedtl = new BP.Sys.GEDtl(this.FK_MapDtl);
@@ -4150,10 +4150,10 @@ namespace BP.WF.HttpHandler
 
                         if (attr.MyDataType == BP.DA.DataType.AppBoolean)
                         {
-                            if (val.Trim() == "是" || val.Trim().ToLower() == "yes")
+                            if (val.Trim().Equals("是")==true || val.Trim().ToLower().Equals("yes")==true)
                                 val = "1";
 
-                            if (val.Trim() == "否" || val.Trim().ToLower() == "no")
+                            if (val.Trim().Equals("否")==true || val.Trim().ToLower().Equals("no")==true)
                                 val = "0";
                         }
 

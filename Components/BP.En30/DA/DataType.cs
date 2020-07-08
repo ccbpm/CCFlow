@@ -21,10 +21,9 @@ namespace BP.DA
     {
         public static bool IsNullOrEmpty(string s)
         {
-            if (s == "null")
+            if (s == null || s.Equals("") == true || s.Equals("null") == true)
                 return true;
-
-            return string.IsNullOrEmpty(s);
+            return false;
         }
 
         #region 与日期相关的操作.

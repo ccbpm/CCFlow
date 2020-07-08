@@ -820,7 +820,7 @@ namespace BP.WF.Template
             get
             {
                 string s = this.GetValStrByKey(MapDtlAttr.PTable);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                 {
                     s = this.No;
                     if (s.Substring(0, 1) == "0")

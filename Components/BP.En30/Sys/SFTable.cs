@@ -705,7 +705,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(SFTableAttr.SrcTable);
-                if (str == "" || str == null)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return this.No;
                 return str;
             }

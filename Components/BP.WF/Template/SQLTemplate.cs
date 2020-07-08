@@ -46,7 +46,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStrByKey(SQLTemplateAttr.Docs);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }

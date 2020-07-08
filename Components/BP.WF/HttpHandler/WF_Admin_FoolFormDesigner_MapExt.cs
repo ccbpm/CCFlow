@@ -362,7 +362,7 @@ namespace BP.WF.HttpHandler
             {
                 string sql =  this.GetRequestVal("TB_" + dtl.No);
                 sql = sql.Trim();
-                if (sql == "" || sql == null)
+                if (DataType.IsNullOrEmpty(sql) == true)
                     continue;
 
                 if (sql.Contains("@Key")==false)
@@ -426,7 +426,7 @@ namespace BP.WF.HttpHandler
             {
 
                 string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);
-                if (sql == "" || sql == null)
+                if (DataType.IsNullOrEmpty(sql) == true)
                     continue;
                 sql = sql.Trim();
 
@@ -1290,7 +1290,7 @@ namespace BP.WF.HttpHandler
             {
                 string sql = this.GetRequestVal("TB_" + dtl.No);
                 sql = sql.Trim();
-                if (sql == "" || sql == null)
+                if (DataType.IsNullOrEmpty(sql) == true)
                     continue;
 
                 if (sql.Contains("@Key") == false)
@@ -1344,7 +1344,7 @@ namespace BP.WF.HttpHandler
 
                 string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);
                 sql = sql.Trim();
-                if (sql == "" || sql == null)
+                if (DataType.IsNullOrEmpty(sql) == true)
                     continue;
 
                 if (sql.Contains("@Key") == false)

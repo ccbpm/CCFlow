@@ -158,7 +158,7 @@ namespace BP.WF.Template
             get
             {
                 string s= this.GetValStringByKey(SelectAccperAttr.EmpName);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = this.FK_Emp;
                 return s;
             }

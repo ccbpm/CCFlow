@@ -692,7 +692,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.WorkID, "流程成功结束");
-                if (str == "" || str == null)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return "流程成功结束";
                 return str;
             }
@@ -710,8 +710,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 string str = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.WorkID);
-                if (str == "" || str == null)
-                    return "流程成功结束";
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return "流程删除成功";
                 return str;
             }
             catch (Exception ex)

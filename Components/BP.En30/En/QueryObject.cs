@@ -1130,7 +1130,7 @@ namespace BP.En
                     {
                         case DBType.Oracle:
                             toIdx = top + pageSize;
-                            if (this._sql == "" || this._sql == null)
+                            if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
                                 if (top == 0)
                                     sql = "SELECT * FROM ( SELECT  " + pk + " FROM " + map.PhysicsTable + " " + this._orderBy + "   ) WHERE ROWNUM <=" + pageSize;
@@ -1163,7 +1163,7 @@ namespace BP.En
                             return this.doEntitiesQuery();
                         case DBType.Informix:
                             toIdx = top + pageSize;
-                            if (this._sql == "" || this._sql == null)
+                            if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
                                 if (top == 0)
                                     sql = " SELECT first " + pageSize + "  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
@@ -1195,7 +1195,7 @@ namespace BP.En
                             return this.doEntitiesQuery();
                         case DBType.MySQL:
                             toIdx = top + pageSize;
-                            if (this._sql == "" || this._sql == null)
+                            if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
                                 if (top == 0)
                                     sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
@@ -1228,7 +1228,7 @@ namespace BP.En
                             return this.doEntitiesQuery();
                         case DBType.PostgreSQL:
                             toIdx = top + pageSize;
-                            if (this._sql == "" || this._sql == null)
+                            if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
                                 if (top == 0)
                                     sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
@@ -1262,7 +1262,7 @@ namespace BP.En
                         case DBType.MSSQL:
                         default:
                             toIdx = top + pageSize;
-                            if (this._sql == "" || this._sql == null)
+                            if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
                                 //此处去掉原有的第1页时用top pagesize的写法，会导致第1页数据查询出来的不准确，统一都用下面的写法，edited by liuxc,2017-8-30
                                 //此处查询数据，除第1页外，有可能会造排序不正确，但每一页的数据是准确的，限于原有写法，没法改动此处逻辑解决这个问题
@@ -1344,13 +1344,13 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C FROM " + ptable;
                     else
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C " + sql.Substring(sql.IndexOf("FROM "));
                     break;
                 default:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C FROM " + ptable;
                     else
                     {
@@ -1393,13 +1393,13 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT " + oper + " FROM " + ptable;
                     else
                         sql = "SELECT " + oper + sql.Substring(sql.IndexOf("FROM "));
                     break;
                 default:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT  " + oper + "  FROM " + ptable;
                     else
                     {
@@ -1433,13 +1433,13 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
                     else
                         sql = selectSQl + sql.Substring(sql.IndexOf(" FROM ")) + groupBy + orderBy;
                     break;
                 default:
-                    if (this._sql == "" || this._sql == null)
+                    if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
                     else
                     {

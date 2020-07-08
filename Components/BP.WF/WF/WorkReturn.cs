@@ -1279,7 +1279,7 @@ namespace BP.WF
                     string inStr = "";
                     foreach (string s in ndsStrs)
                     {
-                        if (s == "" || s == null)
+                        if (DataType.IsNullOrEmpty(s) == true)
                             continue;
                         inStr += "'" + s + "',";
                     }
@@ -1388,7 +1388,7 @@ namespace BP.WF
                     string inStr = "";
                     foreach (string s in ndsStrs)
                     {
-                        if (s == "" || s == null)
+                        if (DataType.IsNullOrEmpty(s) == true)
                             continue;
                         inStr += "'" + s + "',";
                     }

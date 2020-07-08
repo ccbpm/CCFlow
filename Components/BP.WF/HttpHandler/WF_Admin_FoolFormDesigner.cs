@@ -1358,7 +1358,7 @@ namespace BP.WF.HttpHandler
 
             //枚举值.
             string enumKey = this.EnumKey;
-            if (enumKey == "" || enumKey == null || enumKey == "null")
+            if (DataType.IsNullOrEmpty(enumKey) == true || enumKey.Equals("null")==true)
             {
                 MapAttr ma = new MapAttr(this.MyPK);
                 enumKey = ma.UIBindKey;

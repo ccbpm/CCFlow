@@ -444,7 +444,7 @@ namespace BP.Sys
 
                 foreach (string s in strs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) ==true)
                         continue;
 
                     string[] vk = s.Split('=');

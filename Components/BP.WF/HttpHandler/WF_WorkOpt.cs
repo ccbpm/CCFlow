@@ -1010,7 +1010,7 @@ namespace BP.WF.HttpHandler
                         //    endSql = " AND B.No NOT LIKE '18099%' ";
 
                         string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
-                        if (specFlowNos == "" || specFlowNos == null)
+                        if (DataType.IsNullOrEmpty(specFlowNos) ==true)
                             specFlowNos = ",001,";
 
                         string specEmpNos = "";
@@ -1040,7 +1040,7 @@ namespace BP.WF.HttpHandler
                         //    endSql = " AND B.No NOT LIKE '18099%' ";
 
                         string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
-                        if (specFlowNos == "" || specFlowNos == null)
+                        if (DataType.IsNullOrEmpty(specFlowNos) == true)
                             specFlowNos = ",001,";
 
                         string specEmpNos = "";
@@ -3267,7 +3267,7 @@ namespace BP.WF.HttpHandler
             {
                 string msg = BP.WF.Dev2Interface.Flow_DeleteSubThread(this.WorkID, "手工删除");
                 //提示信息.
-                if (msg == "" || msg == null)
+                if (DataType.IsNullOrEmpty(msg) ==true)
                     msg = "该工作删除成功...";
                 return msg;
             }
@@ -3429,7 +3429,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
             {
                 string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
-                if (specFlowNos == "" || specFlowNos == null)
+                if (DataType.IsNullOrEmpty(specFlowNos) == true)
                     specFlowNos = ",,";
 
                 string specEmpNos = "";

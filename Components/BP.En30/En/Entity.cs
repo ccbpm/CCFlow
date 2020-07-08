@@ -3146,7 +3146,7 @@ namespace BP.En
                     ens.Delete(SysEnumAttr.EnumKey, attr.UIBindKey);
                     foreach (string s in strs)
                     {
-                        if (s == "" || s == null)
+                        if (DataType.IsNullOrEmpty(s) == true)
                             continue;
 
                         string[] vk = s.Split('=');
@@ -3452,7 +3452,7 @@ namespace BP.En
                     ens.Delete(SysEnumAttr.EnumKey, attr.UIBindKey);
                     foreach (string s in strs)
                     {
-                        if (s == "" || s == null)
+                        if (DataType.IsNullOrEmpty(s) == true)
                             continue;
 
                         string[] vk = s.Split('=');
@@ -3831,7 +3831,7 @@ namespace BP.En
                 ens.Delete(SysEnumAttr.EnumKey, attr.UIBindKey);
                 foreach (string s in strs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     string[] vk = s.Split('=');
@@ -3991,7 +3991,7 @@ namespace BP.En
                 ens.Delete(SysEnumAttr.EnumKey, attr.UIBindKey);
                 foreach (string s in strs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     string[] vk = s.Split('=');
@@ -4153,7 +4153,7 @@ namespace BP.En
                 ens.Delete(SysEnumAttr.EnumKey, attr.UIBindKey);
                 foreach (string s in strs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     string[] vk = s.Split('=');

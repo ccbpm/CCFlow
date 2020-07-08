@@ -275,7 +275,7 @@ namespace BP.WF.Rpt
             get
             {
                string str= this.GetValStrByKey(MapRptAttr.FK_Flow);
-               if (str == "" || str == null)
+               if (DataType.IsNullOrEmpty(str) == true)
                {
                    str = this.No.Replace("ND", "");
                    str = str.Replace("MyRpt", "");
@@ -300,7 +300,7 @@ namespace BP.WF.Rpt
             get
             {
                 string s = this.GetValStrByKey(MapRptAttr.PTable);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }

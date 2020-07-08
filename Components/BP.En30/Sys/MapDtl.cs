@@ -1163,7 +1163,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapDtlAttr.PTable);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                 {
 
                     s = this.No;

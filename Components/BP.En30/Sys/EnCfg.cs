@@ -268,7 +268,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJSavePath);
-                if (str == "" || str == null || str == string.Empty)
+                if (DataType.IsNullOrEmpty(str) == true)
                     return BP.Sys.SystemConfig.PathOfDataUser + this.No + "\\";
                 return str;
             }
@@ -285,7 +285,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJWebPath);
-                if (str == "" || str == null)
+                if (DataType.IsNullOrEmpty(str)==true)
                     str = Path.Combine(HttpContextHelper.RequestApplicationPath ,
                         "DataUser/" , this.No);
                 str = str.Replace("\\", "/");

@@ -219,7 +219,7 @@ namespace BP.WF.HttpHandler
                 string[] labs = this.GetRequestVal("Labs").Split('@');
                 foreach (string item in labs)
                 {
-                    if (item == "" || item == null)
+                    if (DataType.IsNullOrEmpty(item) == true)
                         continue;
                     string[] strs = item.Split(',');
 
@@ -258,7 +258,7 @@ namespace BP.WF.HttpHandler
                 string[] nodes = this.GetRequestVal("Nodes").Split('@');
                 foreach (string item in nodes)
                 {
-                    if (item == "" || item == null)
+                    if (DataType.IsNullOrEmpty(item) == true)
                         continue;
 
                     string[] strs = item.Split(',');

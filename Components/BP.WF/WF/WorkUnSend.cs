@@ -308,7 +308,7 @@ namespace BP.WF
                 string[] empStrs = rm.Objs.Split('@');
                 foreach (string s in empStrs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     if (s == wl.FK_Emp)
@@ -817,7 +817,7 @@ namespace BP.WF
                 string[] empStrs = rm.Objs.Split('@');
                 foreach (string s in empStrs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     if (s == wl.FK_Emp)
@@ -1110,7 +1110,7 @@ namespace BP.WF
                 string[] empStrs = rm.Objs.Split('@');
                 foreach (string s in empStrs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     if (s == wl.FK_Emp)

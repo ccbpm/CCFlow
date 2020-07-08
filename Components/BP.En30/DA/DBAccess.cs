@@ -1281,7 +1281,7 @@ namespace BP.DA
             DataTable dt = null;
             for (int i = 0; i < sqlArray.Length; i++)
             {
-                if (string.IsNullOrWhiteSpace(sqlArray[i]))
+                if (DataType.IsNullOrEmpty(sqlArray[i]) == true)
                     continue;
 
                 dt = DBAccess.RunSQLReturnTable(sqlArray[i]);

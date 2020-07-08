@@ -1419,7 +1419,7 @@ namespace BP.WF
                 string[] strs = cfgVal.Split('@');
                 foreach (string s in strs)
                 {
-                    if (s == "" || s == null)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     string[] vk = s.Split('=');
@@ -5306,7 +5306,7 @@ namespace BP.WF
             ps.Add("FK_Emp", WebUser.No);
 
             string s = DBAccess.RunSQLReturnStringIsNull(ps, "1");
-            if (s == "1" || s == null)
+            if (s == null || s.Equals("1")==true)
                 return true;
             return false;
         }

@@ -160,15 +160,17 @@
 </head>
 <body>
 
-    <input type="button" value="保存" onclick="SaveCols()" />
-    <input type="button" value="清空设置" onclick="Clear()" />
-    <input type="button" value="启动傻瓜表单设计器" onclick="FoolDesinger()" />
-    <input type="button" value="返回基本设置" onclick="Back()" />
 
     <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 96%;">
-        <caption>
-            设置显示的列
-        </caption>
+
+        <tr>
+            <th colspan="5"> 设置显示的列（说明：标题、时间、日期类型的字段长度固定:标题 230px;时间类型 145px;日期类型125px; ）</th>
+            <th colspan="1">
+                <button id="Btn_Save" onclick="SaveCols()"> 保存</button>
+                <button id="Btn_Clear" onclick="Clear()"> 清空设置</button>
+            </th>
+        </tr>
+
         <tr>
             <th> 序号 </th>
             <th>
@@ -183,15 +185,8 @@
             <th>
                 设置显示/隐藏
             </th>
-            <th>
-                顺序
-            </th>
+            <th>顺序 </th>
         </tr>
     </table>
-
-    <br />
-    <label style="color:red;">说明：标题、时间、日期类型的字段长度固定:标题 230px;时间类型 145px;日期类型125px; </label>
-
-
 </body>
 </html>

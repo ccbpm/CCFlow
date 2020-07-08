@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>字段颜色设置</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            //获得配置信息.
+            var ensName = GetQueryString("EnsName");
+
+             //全局配置.
+            var en = new Entity("BP.Sys.EnCfg", ensName);
+
+            var multi = en.GetPara("MultiTitle");
+            if (multi == null)
+                multi = "";
+
+
+            //生成属性集合.
+            var mapAttrs = en.DoMethodReturnJSON("GenerAttrs");
+             
+            var isMulti = false;
+            if (multi != null && multi != undefined && multi != ""  && multi != "undefined")
+                isMulti = true;
+
+            var html = "<table style='width:90%;'>";
+            html += "<caption><img style='margin-top:5px;'; src='../../Img/Event.png' />多表头</caption>";
+
+            html += "<tr>";
+            var secHtml = "";
+            var currentGroup = "";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                if (attr.UIVisible == 0)
+                    continue;
+                if (isMulti = true) {
+                    if (multi.indexOf(attr.KeyOfEn + ",") == -1)
+                        html += "<th rowspan=2>" + attr.Name + "</th>";
+                    else {
+                        var fields = getMutliFile(attr.KeyOfEn, multi);
+
+                        if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'>" + fields[0] + "</th>";
+                            currentGroup = fields[0];
+                        }
+                        secHtml += "<th>" + attr.Name + "</th>";
+                    }
+                } else {
+                    html += "<th>" + attr.Name + "</th>";
+                }
+
+            }
+            html += "</tr>";
+            if (isMulti = true)
+                html += "<tr>" + secHtml + "</tr>";
+            html += "</table>";
+            $("#Table").html(html);
+            //形成标头.
+
+        });
+
+        function DeleteSpecTitle(title) {
+
+            if (window.confirm('您确定要删除【' + title + '】吗?') == false)
+                return;
+
+            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("ensName"));
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
+
+            //按照;分开.
+            var strs = multiTitle.split(';');
+            var newTitle = ""; //创建新的strs.
+            for (var i = 0; i < strs.length; i++) {
+
+                var str = strs[i];
+                if (str.indexOf(title + ',') == 0)
+                    continue;
+                newTitle += str + ";"; //重新组合newtitle.
+            }
+
+            mapDtl.SetPara("MultiTitle", newTitle); 
+            mapDtl.Update();
+
+            window.location.href = window.location;
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗?') == false)
+                return;
+
+            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("ensName"));
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
+            multiTitle = "";
+            mapDtl.SetPara("MultiTitle", multiTitle);
+            mapDtl.Update();
+            window.location.href = window.location;
+        }
+        function getMutliFile(keyOfEn, multi) {
+            var fields = multi.split(";");
+            for (var i = 0; i < fields.length; i++) {
+                var str = fields[i];
+                if (str == "")
+                    continue;
+                if (str.indexOf(keyOfEn + ",") == -1)
+                    continue;
+                var strs = str.substring(0, str.length - 1).split(",");
+                return strs;
+            }
+            return "";
+        }
+
+        function AddGroup() {
+
+            var fields = "";
+
+            var url = "MultiTitleDtl.htm?ensName=" + GetQueryString("ensName");
+            window.location.href = url;
+            return;
+
+            WinOpenFull(url);
+            //window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+    <div style="position:relative;" id="Table">
+    </div>
+
+    <div style="right:30px; position:absolute; z-index:100; ">
+    </div>
+
+    <button id="Btn_New" onclick="AddGroup()"> 增加1级表头</button>
+    <button id="Btn_Delete" onclick="Delete()"> 删除</button>
+
+
+</body>
+</html>

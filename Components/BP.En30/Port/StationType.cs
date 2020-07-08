@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
 namespace BP.Port
 {
@@ -159,7 +160,19 @@ namespace BP.Port
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
+        public string GetStationTypes(string orgNo)
+        {
 
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || orgNo.Equals("0"))
+            {
+                this.RetrieveAll();
+                return this.ToJson();
+            }
+            this.Retrieve(StationTypeAttr.OrgNo, orgNo);
+                
+
+            return this.ToJson();
+        }
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

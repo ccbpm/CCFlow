@@ -32,7 +32,7 @@
 	        var stas = new Entities("BP.Port.Stations");
 	        stas.Retrieve("OrgNo", orgNo);
 
-            var stationTypes = new Entities("BP.WF.Port.StationTypes");
+            var stationTypes = new Entities("BP.Port.StationTypes");
 	        data = stationTypes.DoMethodReturnString("GetStationTypes", orgNo);
             data = JSON.parse(data);
 	       

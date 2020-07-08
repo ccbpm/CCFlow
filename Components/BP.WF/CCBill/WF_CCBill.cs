@@ -79,10 +79,10 @@ namespace BP.CCBill
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
             doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
-
+            string sql = MidStrEx(doc, "/*", "*/");
             try
             {
-                DBAccess.RunSQLs(doc);
+                DBAccess.RunSQLs(sql);
                 if (func.MsgSuccess.Equals(""))
                     func.MsgSuccess = "执行成功.";
 
@@ -144,11 +144,11 @@ namespace BP.CCBill
             #endregion 替换参数变量.
 
             doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
-
+            string sql = MidStrEx(doc, "/*", "*/");
             #region 开始执行SQLs.
             try
             {
-                DBAccess.RunSQLs(doc);
+                DBAccess.RunSQLs(sql);
                 if (func.MsgSuccess.Equals(""))
                     func.MsgSuccess = "执行成功.";
 
@@ -1765,5 +1765,57 @@ namespace BP.CCBill
         }
         #endregion 获得demo信息.
 
+        #region 处理SQL文中注释信息.
+     
+        public static string MidStrEx(string sourse, string startstr, string endstr)
+        {
+            string result = string.Empty;
+            int startindex, endindex;
+            string tmpstr = string.Empty;
+            string tmpstr2 = string.Empty;
+            try
+            {
+                startindex = sourse.IndexOf(startstr);
+                if (startindex == -1)
+                    return result;
+                int i = 0;
+                while (startindex != -1)
+                {
+                    if (i == 0)
+                    {
+                        endindex = sourse.IndexOf(endstr);
+                        if (startindex != 0)
+                        {
+                            endindex = endindex - startindex;
+                        }
+                        tmpstr = sourse.Remove(startindex, endindex + endstr.Length);
+                    }
+                    else
+                    {
+                        endindex = tmpstr.IndexOf(endstr);
+                        if (startindex != 0)
+                        {
+                            endindex = endindex - startindex;
+                        }
+                        tmpstr = tmpstr.Remove(startindex, endindex + endstr.Length);
+
+                    }
+
+                    if (endindex == -1)
+                        return result;
+                    // tmpstr = tmpstr.Substring(endindex + endstr.Length);
+                    startindex = tmpstr.IndexOf(startstr);
+                    i++;
+                }
+                //result = tmpstr.Remove(endindex);
+
+            }
+            catch (Exception ex)
+            {
+                Log.DefaultLogWriteLineInfo("MidStrEx Err:" + ex.Message);
+            }
+            return tmpstr;
+        }
+        #endregion 处理SQL文中注释信息..
     }
 }

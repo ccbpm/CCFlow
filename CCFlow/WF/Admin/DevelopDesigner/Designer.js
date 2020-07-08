@@ -2075,7 +2075,7 @@ function NewFrame() {
         return;
     }
 
-    var en = new Entity("BP.Sys.FrmUI.MapFrameExt");
+    var en = new Entity("BP.Sys.MapFrame");
     en.MyPK = pageParam.fk_mapdata + "_" + val;
     if (en.IsExits() == true) {
         alert("该编号[" + val + "]已经存在");
@@ -2494,7 +2494,8 @@ function Save() {
         var element = getElementByAttr(imgs, "data-type", "WorkCheck");
         if (element == null) {
             var node = new Entity("BP.WF.Node", fk_node);
-            if (node.FWCSta != 0) {
+            //并且签批字段为空时增加审核组件
+            if (node.FWCSta != 0 && (node.CheckField == null || node.CheckField == undefined|| node.CheckField == "" )) {
                 var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component' data-key='" + fk_node + "'  data-type='WorkCheck'/>"
                 leipiEditor.execCommand('insertHtml', _html);
             }

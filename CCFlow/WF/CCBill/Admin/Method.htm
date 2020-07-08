@@ -60,10 +60,11 @@
                 newRow += "<td>" + en.RefMethodTypeText + "</td>";
                 newRow += "<td><img src='../../Img/Btn/Up.gif' onclick=\"Up('" + en.MyPK + "')\" alt='上移' />&nbsp;-&nbsp;<img src='../../Img/Btn/Down.gif' onclick=\"Down('" + en.MyPK + "')\" alt='下移' /> </td>";
                 newRow += "<td>";
-
-                newRow += " <a href=\"javascript:Paras('" + en.MyPK + "')\">参数</a> - ";
+                if (en.RefMethodType != 2) {
+                    newRow += " <a href=\"javascript:Paras('" + en.MyPK + "')\">参数</a> - ";
                 newRow += " <a href=\"javascript:Docs('" + en.MyPK + "')\">执行内容</a> - ";
-
+                }
+                
                 newRow += " <a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
 
                 newRow += "</td>";

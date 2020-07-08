@@ -1149,7 +1149,11 @@
         }
 
         function Setting() {
-            var url = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+
+            var url1 = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+
+            var url = "./RefFunc/En.htm?EnName=BP.Sys.EnCfg&No=" + GetQueryString("EnsName") + "&m=" + Math.random();
+
             //获取屏幕的长宽
             var W = document.body.clientWidth - 340;
             var H = document.body.clientHeight - 40;

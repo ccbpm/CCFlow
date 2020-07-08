@@ -836,7 +836,8 @@ namespace BP.WF.Data
                 rm.Title = "调整数据";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditFrm";
-                rm.RefMethodType = RefMethodType.Func;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -861,7 +862,7 @@ namespace BP.WF.Data
                 return "err@当前节点表单类型不同.";
 
             string frmID = nd.NodeFrmID;
-            return "url@../Admin/AttrFlow/AdminFrmList.htm?FK_Flow="+this.FK_Flow+"&FrmID="+frmID+"&WorkID="+this.WorkID;
+            return "../../Admin/AttrFlow/AdminFrmList.htm?FK_Flow="+this.FK_Flow+"&FrmID="+frmID+"&WorkID="+this.WorkID;
         }
 
         #region 执行功能.

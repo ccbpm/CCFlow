@@ -1047,7 +1047,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoMultiTitle";
                // rm.Icon = "../Img/AttachmentM.png";
                 rm.Visable = true;
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 

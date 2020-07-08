@@ -347,7 +347,7 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
-                //sly 翻译过去。
+               
                 rm = new RefMethod();
                 rm.Title = "转化为签批组件";
                 rm.ClassMethodName = this.ToString() + ".DoSetCheck()";

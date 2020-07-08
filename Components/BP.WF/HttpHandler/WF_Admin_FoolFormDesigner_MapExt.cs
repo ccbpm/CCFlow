@@ -678,7 +678,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion ActiveDDL 功能界面.
 
-        #region 配置自动计算日期天数lz
+        #region 配置自动计算日期天数
         /// <summary>
         /// 初始化
         /// </summary>

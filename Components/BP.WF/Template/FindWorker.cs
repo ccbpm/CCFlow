@@ -687,7 +687,7 @@ namespace BP.WF.Template
             }
             #endregion 按照岗位计算，项目类.
 
-            #region 用户组 计算 @lizhen
+            #region 用户组 计算 
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
                 sql = "SELECT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";

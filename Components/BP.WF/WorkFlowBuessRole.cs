@@ -1030,7 +1030,7 @@ namespace BP.WF
             }
             #endregion 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
 
-            #region 仅按用户组计算 @lizhen
+            #region 仅按用户组计算 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
                 sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
@@ -1045,7 +1045,7 @@ namespace BP.WF
             }
             #endregion
 
-            #region 本集团组织 @lizhen
+            #region 本集团组织 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
             {
                 sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
@@ -1062,7 +1062,7 @@ namespace BP.WF
             }
             #endregion
 
-            #region 本部门 @lizhen
+            #region 本部门 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
             {
                 sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept  ORDER BY A.FK_Emp";

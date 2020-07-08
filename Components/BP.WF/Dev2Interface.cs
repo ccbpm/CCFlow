@@ -689,7 +689,7 @@ namespace BP.WF
         /// <returns>返回该人员的所有抄送列表,结构同表WF_CCList.</returns>
         public static DataTable DB_CCList(string domain = null)
         {
-            //@yuanlina 增加一个Sta列.
+            // 增加一个Sta列.
             Paras ps = new Paras();
             if (domain == null)
             {
@@ -718,7 +718,7 @@ namespace BP.WF
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
-                dt.Columns["STA"].ColumnName = "Sta"; //@yuanlina
+                dt.Columns["STA"].ColumnName = "Sta"; 
             }
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -734,7 +734,7 @@ namespace BP.WF
                 dt.Columns["rdt"].ColumnName = "RDT";
                 dt.Columns["fid"].ColumnName = "FID";
                 dt.Columns["wfsta"].ColumnName = "WFSta";
-                dt.Columns["sta"].ColumnName = "Sta"; //@yuanlina
+                dt.Columns["sta"].ColumnName = "Sta";
             }
             return dt;
         }
@@ -4075,7 +4075,7 @@ namespace BP.WF
                 return;
             }
 
-            //@sly
+           
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
                      "RDT,NodeData=" + dbStr + "NodeData WHERE ActionType="+(int)ActionType.WorkCheck+" AND  NDFrom=" + dbStr + "NDFrom AND  NDTo=" + dbStr + "NDTo AND WorkID=" + dbStr+"WorkID AND FID="+dbStr+"FID AND EmpFrom="+dbStr+"EmpFrom";
             ps.Add(TrackAttr.NDFromT, nodeName);
@@ -4085,7 +4085,7 @@ namespace BP.WF
             ps.Add(TrackAttr.WorkID, workid);
             ps.Add(TrackAttr.FID, fid);
             ps.Add(TrackAttr.EmpFrom, WebUser.No);
-            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess); //@sly
+            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess); 
             ps.Add(TrackAttr.NodeData, "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName);
 
             int num = DBAccess.RunSQL(ps);
@@ -9606,14 +9606,14 @@ namespace BP.WF
 
                 string info = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
 
-                //移交后事件 @yuanlina
+                //移交后事件
                 string atPara1 = "@SendToEmpIDs=" + emp.No;
 
                 info += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
 
                 info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.htm?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + gwf.FK_Node + "&FID=" + gwf.FID + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
 
-                //处理移交后发送的消息事件 @yuanlina
+                //处理移交后发送的消息事件 
                 PushMsgs pms1 = new PushMsgs();
                 pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
                 foreach (PushMsg pm in pms1)
@@ -9654,7 +9654,7 @@ namespace BP.WF
 
 
             string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
-            //移交后事件 @yuanlina
+            //移交后事件
             string atPara = "@SendToEmpIDs=" + emp.No;
             WorkNode wn = new WorkNode(work, nd);
             inf1o += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, wn,null,atPara);

@@ -4097,7 +4097,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Flow", "流程");
 
-                //@sly 取消了缓存.
+                //取消了缓存.
                 map.DepositaryOfEntity= Depositary.Application;
                 //map.DepositaryOfEntity= Depositary.Application;
                 map.CodeStruct = "3";
@@ -5031,7 +5031,7 @@ namespace BP.WF
                             }
                             try
                             {
-                                //如果部门不属于本组织的，就要删除.  @sly 
+                                //如果部门不属于本组织的，就要删除.  
                                 if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                                 {
                                     BP.WF.Port.Admin2.Dept dept = new Port.Admin2.Dept(dp.FK_Dept);
@@ -5715,7 +5715,7 @@ namespace BP.WF
 
             #region 处理数据完整性。
 
-            //@sly 删除.
+           
             //DBAccess.RunSQL("UPDATE WF_Cond SET FK_Node=NodeID WHERE FK_Node=0");
             //DBAccess.RunSQL("UPDATE WF_Cond SET ToNodeID=NodeID WHERE ToNodeID=0");
             // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE NodeID NOT IN (SELECT NodeID FROM WF_Node)");

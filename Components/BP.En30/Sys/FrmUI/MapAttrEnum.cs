@@ -253,7 +253,7 @@ namespace BP.Sys.FrmUI
             MapAttr mapAttr = new MapAttr();
             mapAttr.MyPK = this.MyPK;
             mapAttr.RetrieveFromDBSources();
-            //@sly
+           
             if (this.UIContralType == UIContralType.CheckBok)
             {
                 mapAttr.MyDataType = DataType.AppString;

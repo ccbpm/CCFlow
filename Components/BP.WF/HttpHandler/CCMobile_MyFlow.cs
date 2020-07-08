@@ -331,7 +331,7 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccfrm = new WF_CCForm();
             string str= ccfrm.FrmGener_Save();
 
-            // @sly  这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
+            // 这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
             string nodeIDStr = this.FK_Node.ToString();
             if (nodeIDStr.EndsWith("01")==true)
             {

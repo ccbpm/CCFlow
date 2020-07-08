@@ -30,7 +30,6 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 导入本机模版 
         /// 负责人：lizhen.
-        /// @sly
         /// </summary>
         /// <returns></returns>
         public string ImpFrmLocal_Done()

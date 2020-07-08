@@ -270,7 +270,7 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
                         sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                         break;
-                    case DeliveryWay.ByTeamOnly: //仅按用户组计算. @lizhen.
+                    case DeliveryWay.ByTeamOnly: //仅按用户组计算. 
 
                         sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
                         sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID;

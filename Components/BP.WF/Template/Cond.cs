@@ -273,7 +273,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            //@sly 设置他的主键。
+            //设置他的主键。
             this.MyPK = DBAccess.GenerGUID();
             return base.beforeInsert();
         }

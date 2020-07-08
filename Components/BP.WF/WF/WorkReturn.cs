@@ -416,7 +416,7 @@ namespace BP.WF
             //设置当前为未读的状态.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);
 
-            //退回后发送的消息事件 @yuanlina
+            //退回后发送的消息事件 
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisWork;
@@ -690,7 +690,7 @@ namespace BP.WF
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
 
-            //退回消息事件 @yuanlina
+            //退回消息事件 
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.UndoneAfter);
             foreach (PushMsg pm in pms)
@@ -848,7 +848,7 @@ namespace BP.WF
             currWorker.IsPassInt = (int)WFState.ReturnSta;
             currWorker.Update();
 
-            //退回消息事件 @yuanlina
+            //退回消息事件
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisNode.HisWork;
@@ -938,7 +938,7 @@ namespace BP.WF
 
             gwf.Update();
 
-            //退回消息事件 @yuanlina
+            //退回消息事件
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisNode.HisWork;

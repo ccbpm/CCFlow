@@ -143,7 +143,7 @@ namespace BP.Sys
             return en;
         }
         /// <summary>
-        /// 创建子目录 @lilzhen
+        /// 创建子目录 
         /// </summary>
         /// <param name="dirName">要创建的子目录名字</param>
         /// <returns>返回子目录编号</returns>
@@ -158,7 +158,7 @@ namespace BP.Sys
             return en.No;
         }
         /// <summary>
-        /// 上移 @lizhen
+        /// 上移
         /// </summary>
         /// <returns></returns>
         public string DoUp()
@@ -167,7 +167,7 @@ namespace BP.Sys
             return "移动成功";
         }
         /// <summary>
-        /// 下移@lizhen
+        /// 下移
         /// </summary>
         /// <returns></returns>
         public string DoDown()

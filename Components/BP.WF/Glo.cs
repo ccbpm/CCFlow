@@ -1983,7 +1983,7 @@ namespace BP.WF
 
                 #endregion 基础数据更新.
 
-                #region 把节点的toolbarExcel, word 信息放入mapdata @sly 删除他.
+                #region 把节点的toolbarExcel, word 信息放入mapdata 
                 //BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
                 //nss.RetrieveAll();
                 //foreach (BP.WF.Template.NodeSheet ns in nss)

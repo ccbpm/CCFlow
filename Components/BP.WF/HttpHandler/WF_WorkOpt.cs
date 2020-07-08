@@ -656,7 +656,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DocWord_OpenByHttp()
         {
-            string DocName = this.GetRequestVal("DocName");//获取上传的公文模板名称lz
+            string DocName = this.GetRequestVal("DocName");//获取上传的公文模板名称
             //生成文件.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Flow fl = new Flow(this.FK_Flow);
@@ -3554,7 +3554,7 @@ namespace BP.WF.HttpHandler
             dt.TableName = "Selected";
             if (select.IsAutoLoadEmps == true)
             {
-                //获取当前节点的SelectAccper的值 @sly
+                //获取当前节点的SelectAccper的值
                 SelectAccpers selectAccpers = new SelectAccpers();
                 selectAccpers.Retrieve(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, toNodeID);
                 if (selectAccpers.Count != 0)
@@ -3741,7 +3741,7 @@ namespace BP.WF.HttpHandler
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
 
-                //备注:启动子流程的或者平级子流程的节点也可以退回，退回后是否结束子流程需要在FEE事件中处理 - yln修改
+                //备注:启动子流程的或者平级子流程的节点也可以退回，退回后是否结束子流程需要在FEE事件中处理 
                 //根据WorkID查询是否有启动的子流程 
                 // GenerWorkFlows gwfs = new GenerWorkFlows();
                 //int count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);

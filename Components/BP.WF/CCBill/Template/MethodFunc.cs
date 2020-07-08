@@ -103,7 +103,7 @@ namespace BP.CCBill.Template
             get
             {
                 string strs = this.GetBigTextFromDB("SQLScript");
-                if (strs == null || strs.Equals("") == true)
+                if (DataType.IsNullOrEmpty(strs) == true)
                     return this.MethodDoc_SQL_Demo; //返回默认信息.
                 return strs;
             }
@@ -180,7 +180,7 @@ namespace BP.CCBill.Template
             get
             {
                 string strs = this.GetBigTextFromDB("JSScript");
-                if (strs == null || strs.Equals("") == true)
+                if (DataType.IsNullOrEmpty(strs) == true)
                     return this.MethodDoc_JavaScript_Demo;
 
                 strs = strs.Replace("/#", "+"); 

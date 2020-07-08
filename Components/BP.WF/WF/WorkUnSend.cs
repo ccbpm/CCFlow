@@ -406,7 +406,7 @@ namespace BP.WF
         private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            this.FlowNo = gwf.FK_Flow;  //@sly
+            this.FlowNo = gwf.FK_Flow;  
              
             if (gwf.WFState == WFState.Complete)
                 return "err@该流程已经完成，您不能撤销。";

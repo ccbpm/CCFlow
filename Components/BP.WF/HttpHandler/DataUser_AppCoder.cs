@@ -68,7 +68,7 @@ namespace BP.WF.HttpHandler
             }
             else if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                //@lizhen 这里有问题.
+                
                 string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_GenerWorkerList WHERE IsPass=0 AND   REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 ";
                 sql += "UNION SELECT * FROM WF_GenerWorkerList WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 )";
 

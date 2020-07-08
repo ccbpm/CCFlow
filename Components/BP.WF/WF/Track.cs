@@ -605,7 +605,7 @@ namespace BP.WF
             //删除主键.
             DBAccess.DropTablePK(ptable);
 
-            //创建主键. @yln 这里创建主键的时候提示错误。提示该主键应存在.
+            //创建主键.  这里创建主键的时候提示错误。提示该主键应存在.
             DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
         }
         /// <summary>

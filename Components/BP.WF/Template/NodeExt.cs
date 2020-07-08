@@ -283,7 +283,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
 
-                //@sly
+               
                 if (BP.Web.WebUser.IsAdmin == false)
                     throw new Exception("err@管理员登录用户信息丢失,当前会话[" + BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + "]");
 
@@ -1168,7 +1168,7 @@ namespace BP.WF.Template
 
         #region 实验中的功能.
         /// <summary>
-        /// 设置模版@sly
+        /// 设置模版
         /// </summary>
         /// <returns></returns>
         public string DoSetTemplate()

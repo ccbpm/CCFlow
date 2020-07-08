@@ -327,7 +327,7 @@ namespace BP.WF.HttpHandler
                     if (para == "1=1")
                         continue;
 
-                    // @lizhen 同步.
+                    
                     if (para.Contains("DoType=")
                        || para.Contains("DoMethod=")
                        || para.ToLower().Equals("t")
@@ -340,7 +340,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    // @lizhen 同步.
+                    
                     if (key.Equals("DoType")
                         || key.Equals("DoMethod")
                         || key.ToLower().Equals("t")

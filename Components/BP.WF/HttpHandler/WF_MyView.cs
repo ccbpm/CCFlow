@@ -912,7 +912,7 @@ namespace BP.WF.HttpHandler
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
-                    //@袁丽娜
+                  
                     case FrmEnableRole.ByStation:
                         string exp = frmNode.FrmEnableExp.Clone() as string;
                         string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
@@ -932,7 +932,7 @@ namespace BP.WF.HttpHandler
                         if (isExit == false)
                             continue;
                         break;
-                    //@袁丽娜
+                  
                     case FrmEnableRole.ByDept:
                         exp = frmNode.FrmEnableExp.Clone() as string;
                         Sql = "SELECT FK_Dept FROM Port_DeptEmp where FK_Emp='" + WebUser.No + "'";

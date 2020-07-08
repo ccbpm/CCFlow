@@ -162,7 +162,7 @@ namespace BP.WF.Template
                 //是否显示
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
-                #region 表单启用规则. @袁丽娜
+                #region 表单启用规则.
                 map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false, FrmNodeAttr.FrmEnableRole,
                     "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
 
@@ -190,7 +190,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //@sly
+               
                 rm = new RefMethod();
                 rm.Title = "组件权限";
                 rm.ClassMethodName = this.ToString() + ".DoComponents()";

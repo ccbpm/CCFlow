@@ -166,7 +166,7 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 重新设置默信息. @yuanlina 这里有问题，需要重构到jflow上去.
+        /// 重新设置默信息. 
         /// </summary>
         public void ResetDefaultVal(string fk_mapdata = null, string fk_flow = null, int fk_node = 0)
         {
@@ -363,7 +363,7 @@ namespace BP.En
                         int count = gloVar.RetrieveFromDBSources();
                         if (count == 1)
                         {
-                            //执行SQL获取默认值 @sly
+                            //执行SQL获取默认值
                             string sql = gloVar.Val;
                             if (DataType.IsNullOrEmpty(sql) == true)
                                 continue;

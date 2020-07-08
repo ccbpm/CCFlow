@@ -494,7 +494,7 @@ namespace BP.WF
                 default:
                     this.HisGenerWorkFlow.FK_Node = town.HisNode.NodeID;
                     this.HisGenerWorkFlow.SDTOfNode = dtOfShould.ToString(DataType.SysDataTimeFormat);
-                    //暂时注释掉，忘记使用情况yuanlina
+                    //暂时注释掉，忘记使用情况
                     //this.HisGenerWorkFlow.SetPara("CH" + this.town.HisNode.NodeID, this.HisGenerWorkFlow.SDTOfNode);
                     //this.HisGenerWorkFlow.SDTOfFlow = dtOfFlow.ToString(DataType.SysDataTimeFormat);
                     //this.HisGenerWorkFlow.SDTOfFlowWarning = dtOfFlowWarning.ToString(DataType.SysDataTimeFormat);
@@ -1189,7 +1189,7 @@ namespace BP.WF
 
                         //如果存在就修改
                         if (skipWork.IsExit(skipWork.PK, this.WorkID) == true)
-                        {//@袁丽娜
+                        {
                             int count = skipWork.RetrieveFromDBSources();
                             if (count == 1)
                                 skipWork.DirectUpdate();
@@ -1371,7 +1371,7 @@ namespace BP.WF
                         //记录最开始相同处理人的节点ID，用来上面查找SQL判断
                         if (beforeSkipNodeID == 0)
                             beforeSkipNodeID = prvNodeID;
-                        //@sly
+                        
                         Work wk = nd.HisWork;
                         wk.Copy(mywork);
                         //存储在相同的表中，不需要拷贝
@@ -2325,7 +2325,7 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarAcceptersName, empNames, empNames, SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarToNodeIDs, toNodeIDs, toNodeIDs, SendReturnMsgType.SystemMsg);
 
-            //写入日志. @yuanlina
+            //写入日志. 
             if (this.HisNode.IsStartNode == true)
                 this.AddToTrack(ActionType.Start, empIDs, empNames, this.HisNode.NodeID, this.HisNode.Name, msg);
             else
@@ -5852,7 +5852,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 仅按用户组计算 @lizhen
+                #region 仅按用户组计算 
                 if (node.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
                     sql = "SELECT A.FK_Emp No FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
@@ -5872,7 +5872,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 按用户组计算（本部门） @lizhen
+                #region 按用户组计算（本部门）
                 if (node.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
                 {
                     sql = "SELECT A.FK_Emp No FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept ORDER BY A.FK_Emp";
@@ -5894,7 +5894,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 按用户组计算(本组织) @lizhen
+                #region 按用户组计算(本组织) 
                 if (node.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
                     sql = "SELECT A.FK_Emp No FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo ORDER BY A.FK_Emp";

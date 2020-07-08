@@ -151,56 +151,7 @@ namespace BP.WF.Data
               FastInputAttr.FK_Emp, WebUser.No, "Idx");
             return "移动成功.";
         }
-        public void Add(string groupKey)
-        {
-            if (groupKey == "Comment")
-            {
-                FastInput en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "已阅";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-            }
-                if (groupKey == "CYY")
-            {
-                FastInput en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "同意";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-
-                en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "不同意";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-
-                en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "同意，请领导批示";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-
-                en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "同意办理";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-
-                en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
-                en.ContrastKey = groupKey;
-                en.Vals = "情况属实报领导批准";
-                en.FK_Emp = WebUser.No;
-                en.Insert();
-            }
-            
-        }
+       
 
     }
 	/// <summary>

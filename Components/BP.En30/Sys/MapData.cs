@@ -1929,7 +1929,7 @@ namespace BP.Sys
 
                             //执行保存，并统一生成PK的规则.
                             en.InitPK();
-                            en.DirectSave(); //@sly.
+                            en.DirectSave(); 
                         }
                         break;
                     case "Sys_MapAttr":

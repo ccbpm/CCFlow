@@ -220,7 +220,7 @@ namespace BP.WF.Template
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(DirectionAttr.Node, NodeID);
-            qo.addOrderBy(DirectionAttr.Idx);  //方向条件的优先级. @sly
+            qo.addOrderBy(DirectionAttr.Idx);  //方向条件的优先级.
             qo.DoQuery();
         }
         /// <summary>

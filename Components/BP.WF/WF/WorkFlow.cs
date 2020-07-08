@@ -462,7 +462,7 @@ namespace BP.WF
                 if (gwf.WFState != WFState.Complete)
                 {
                     WorkFlow wf = new WorkFlow(workid);
-                    //发送退回消息 @yuanlina
+                    //发送退回消息 
                     PushMsgs pms1 = new PushMsgs();
                     pms1.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListFlow.AfterFlowDel);
                     Node node = new Node(gwf.FK_Node);
@@ -518,7 +518,7 @@ namespace BP.WF
             // 删除退回.
             DBAccess.RunSQL("DELETE FROM WF_ReturnWork WHERE WorkID=" + workid);
 
-            //发送退回消息 @yuanlina
+            //发送退回消息 
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, PushMsgAttr.FK_Event, EventListFlow.AfterFlowDel);
             Node pnd = new Node(gwf.FK_Node);
@@ -1096,7 +1096,7 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             Node nd = new Node(gwf.FK_Node);
-            //@sly
+            
             //DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow   WHERE WorkID=" + this.WorkID);
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID);
 
@@ -1184,7 +1184,7 @@ namespace BP.WF
                 //让父流程的userNo登录.
                 BP.WF.Dev2Interface.Port_Login(emp.No);
 
-                //@袁丽娜.
+               
                 if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(pGWF.WorkID, WebUser.No) == false)
                 {
                     /*没有权限的情况下，就移交给当前人员，让其在发送. */

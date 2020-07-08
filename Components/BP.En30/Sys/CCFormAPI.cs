@@ -1619,7 +1619,7 @@ namespace BP.Sys
         }
         #endregion 模版操作.
 
-        #region 模版操作 2020. @sly
+        #region 模版操作 2020. 
         /// <summary>
         /// A:从一个表单导入另外一个表单模版:
         /// 1.向已经存在的表单上导入模版.

@@ -3365,7 +3365,7 @@ namespace BP.WF.HttpHandler
                 //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                    //@sly
+                   
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
                     myathDesc.MyPK = attachPk + "_" + this.FK_Node;
                     if (myathDesc.RetrieveFromDBSources() != 0)

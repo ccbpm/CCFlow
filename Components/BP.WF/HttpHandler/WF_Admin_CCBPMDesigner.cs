@@ -120,7 +120,7 @@ namespace BP.WF.HttpHandler
         {
         }
         /// <summary>
-        /// 保存节点名字. @sly
+        /// 保存节点名字.
         /// </summary>
         /// <returns>返回保存方法</returns>
         public string Designer_SaveNodeName()
@@ -184,7 +184,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_Save()
         {
-            //@sly. 
+            
             if (BP.Web.WebUser.IsAdmin == false)
                 return "err@当前您【"+WebUser.No+","+WebUser.Name+"】不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
 
@@ -209,7 +209,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
-                    //@sly 
+                    
                     sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "');");
                 }
                 DBAccess.RunSQLs(sBuilder.ToString());
@@ -264,7 +264,7 @@ namespace BP.WF.HttpHandler
                     string[] strs = item.Split(',');
                     string nodeID = strs[0]; //获得nodeID.
 
-                    //@sly 
+                    
                     sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "' WHERE NodeID=" + strs[0] + ";");
                 }
 

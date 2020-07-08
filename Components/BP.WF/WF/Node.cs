@@ -805,7 +805,7 @@ namespace BP.WF
                 mapData.Update();
             }
 
-            //@sly
+           
             if (this.FormType == NodeFormType.RefOneFrmTree)
             {
                 GEEntity en = new GEEntity(this.NodeFrmID);
@@ -2709,7 +2709,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Node", "节点");
 
-                //出现 缓存问题.现在把缓存取消了. @sly
+                //出现 缓存问题.现在把缓存取消了.
                 map.DepositaryOfEntity= Depositary.Application;
                 map.DepositaryOfMap = Depositary.Application;
 

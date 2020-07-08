@@ -214,7 +214,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public  String DoCheckboxs() 
         {
-			//@sly
+			
 		    return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
     #endregion

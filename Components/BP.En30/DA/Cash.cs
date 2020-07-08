@@ -37,7 +37,7 @@ namespace BP.DA
             if (_Bill_Cash != null)
                 _Bill_Cash.Clear();
 
-            //清除 @sly
+            //清除
             Cash2019.ClearCash();
         }
         static Cash()
@@ -490,7 +490,7 @@ namespace BP.DA
                 string[] strs = willDelKeys.Split('@');
                 foreach (string s in strs)
                 {
-                    if (s == null || s == "")
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
                     BS_Cash.Remove(s);
                     i++;
@@ -509,7 +509,7 @@ namespace BP.DA
                 string[] strs = willDelKeys.Split('@');
                 foreach (string s in strs)
                 {
-                    if (s == null || s == "")
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
                     CS_Cash.Remove(s);
                     i++;

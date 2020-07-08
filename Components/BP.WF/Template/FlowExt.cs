@@ -331,7 +331,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                //@sly
+                
                 if (WebUser.IsAdmin == false)
                     throw new Exception("err@管理员登录用户信息丢失,当前会话[" + WebUser.No + "," + WebUser.Name + "]");
                 uac.IsUpdate = true;

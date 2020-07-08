@@ -53,7 +53,7 @@ namespace BP.DA
 			string[] strs = para.Split('@');
 			foreach (string str in strs)
 			{
-				if (str == null || str == "")
+				if (DataType.IsNullOrEmpty(str) == true)
 					continue;
 				string[] mystr = str.Split('=');
 				if (mystr.Length == 2)

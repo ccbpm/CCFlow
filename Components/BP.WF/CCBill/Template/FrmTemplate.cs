@@ -51,7 +51,7 @@ namespace BP.CCBill.Template
             get
             {
                 string s = this.GetValStrByKey(MapDataAttr.PTable);
-                if (s == "" || s == null)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }

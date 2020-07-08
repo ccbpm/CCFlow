@@ -99,7 +99,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
-			//@sly
+			
             MapAttr mapAttr = new MapAttr();
             mapAttr.MyPK = this.MyPK;
             if (mapAttr.RetrieveFromDBSources() != 0)

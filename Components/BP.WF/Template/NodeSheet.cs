@@ -75,7 +75,7 @@ namespace BP.WF.Template
                     BP.WF.Template.NodeTeamAttr.FK_Node,
                     BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组");
 
-                //deptAndEmp列表模式. @sly 
+                //deptAndEmp列表模式.
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeTeams(), new BP.Port.Teams(),
                   BP.WF.Template.NodeTeamAttr.FK_Node,
                   BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组AddTeamListModel", TeamAttr.FK_TeamType);

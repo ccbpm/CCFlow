@@ -151,7 +151,7 @@ namespace BP.WF
                     continue;
                 }
 
-                #region 仅按组织计算  @lizhen
+                #region 仅按组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
                     string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
@@ -184,7 +184,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 本组织计算  @lizhen
+                #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
                     string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
@@ -219,7 +219,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 本组织计算  @lizhen
+                #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
                 {
                     string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";

@@ -283,7 +283,7 @@ namespace BP.CCBill
 
         #region 后台操作api.
         /// <summary>
-        /// 获得所有的单据、表单 @lizhen 转移代码.
+        /// 获得所有的单据、表单
         /// </summary>
         /// <returns></returns>
         public string CCBillAdmin_Admin_GenerAllBills()

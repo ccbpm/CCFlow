@@ -232,7 +232,7 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
-                //@sly.
+               
                 if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
                     throw new Exception("err@错误:请首先给FK_MapData赋值..");
 

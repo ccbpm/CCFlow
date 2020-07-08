@@ -2032,6 +2032,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = "SELECT * FROM WF_EMP WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+
             WFEmp em = new WFEmp();
             em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
 

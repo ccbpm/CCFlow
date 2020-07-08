@@ -203,7 +203,7 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "高级JS设置";
+             //   rm.Title = "高级JS设置";
                 rm.ClassMethodName = this.ToString() + ".DoRadioBtns()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级设置";

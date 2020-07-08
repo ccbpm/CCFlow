@@ -805,7 +805,6 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "修复该流程数据实例";
@@ -820,10 +819,8 @@ namespace BP.WF.Data
                 //rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
                 rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
                     "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
-
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "修改轨迹";
@@ -837,7 +834,6 @@ namespace BP.WF.Data
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditFrm";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

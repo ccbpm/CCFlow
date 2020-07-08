@@ -1777,7 +1777,7 @@ namespace BP.DA
             if (DataType.IsNullOrEmpty(sql))
                 return;
 
-            sql = DealSQL(sql);//去掉注释.
+            //sql = DealSQL(sql);//去掉注释.
 
             sql = sql.Replace("@GO", "~");
             sql = sql.Replace("@", "~");

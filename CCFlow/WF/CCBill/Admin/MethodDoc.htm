@@ -174,12 +174,13 @@
 
             handler.AddPara("doc", doc); //不知道是否可以存储.
             handler.AddPara("TypeOfFunc", selectFuncType);
-            handler.AddPara("funcstr", funcstr+doc+"}");//拼上function部分
+            handler.AddPara("funcstr", funcstr+doc+"\r\n}");//拼上function部分
 
             var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
 
             docsLast = editor.getValue(); //记录最后的值，用于判断是否更改.
             alert(data);
+            reload();
             funcstr="";
         }
         function ToMethodParas() {

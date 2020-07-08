@@ -44,7 +44,7 @@ namespace BP.CCBill
 
             FrmBill fb = new FrmBill(frmID);
 
-            gb.WorkID = BP.DA.DBAccess.GenerOID("CCBill");
+            gb.WorkID = DBAccess.GenerOID("CCBill");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
@@ -55,7 +55,7 @@ namespace BP.CCBill
                 gb.BillNo = billNo ; //BillNo
 
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
-            gb.RDT = BP.DA.DataType.CurrentDataTime;
+            gb.RDT = DataType.CurrentDataTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
 
@@ -332,7 +332,7 @@ namespace BP.CCBill
             FrmBill fb = new FrmBill(frmID);
 
             GenerBill gb = new GenerBill();
-            gb.WorkID = BP.DA.DBAccess.GenerOID("WorkID");
+            gb.WorkID = DBAccess.GenerOID("WorkID");
             gb.BillState = BillState.Editing; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
@@ -340,7 +340,7 @@ namespace BP.CCBill
             gb.FrmID = fb.No; //单据ID
 
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
-            gb.RDT = BP.DA.DataType.CurrentDataTime;
+            gb.RDT = DataType.CurrentDataTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
 
@@ -401,7 +401,7 @@ namespace BP.CCBill
                                 newDB.Copy(db);
                                 newDB.RefPKVal = dtlData.OID.ToString();
                                 newDB.FID = dtlData.OID;
-                                newDB.MyPK = BP.DA.DBAccess.GenerGUID();
+                                newDB.MyPK = DBAccess.GenerGUID();
                                 newDB.Insert();
                             }
                         }
@@ -425,7 +425,7 @@ namespace BP.CCBill
                         FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                         athDB_N.Copy(athDB);
                         athDB_N.RefPKVal = rpt.OID.ToString();
-                        athDB_N.MyPK= BP.DA.DBAccess.GenerGUID();
+                        athDB_N.MyPK= DBAccess.GenerGUID();
                         athDB_N.Insert();
                     }
                 }

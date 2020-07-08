@@ -1094,7 +1094,7 @@ namespace BP.CCBill
 
             sql = "SELECT TSpan as No, COUNT(WorkID) as Num FROM Frm_GenerBill WHERE FrmID='" + this.FrmID + "'  AND Starter='" + WebUser.No + "' AND BillState >= 1 GROUP BY TSpan";
 
-            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtTSpanNum = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
             {
                 string no = drEnum["IntKey"].ToString();
@@ -1117,7 +1117,7 @@ namespace BP.CCBill
 
             sql += "  GROUP BY A.BillState, B.Lab  ";
 
-            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtFlows.Columns[0].ColumnName = "No";
@@ -1155,7 +1155,7 @@ namespace BP.CCBill
             else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
 
-            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
@@ -1193,7 +1193,7 @@ namespace BP.CCBill
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
             string name = "数据导出";
-            string filename = frmBill.Name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + ".xls";
+            string filename = frmBill.Name + "_" + DataType.CurrentDataTimeCNOfLong + ".xls";
             string filePath = ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
             return filePath;
         }
@@ -1507,7 +1507,7 @@ namespace BP.CCBill
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
-            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
+            DataTable dt = DBLoad.ReadExcelFileToDataTable(filePath);
 
             //删除临时文件
             System.IO.File.Delete(filePath);
@@ -1711,7 +1711,7 @@ namespace BP.CCBill
                 if (en.Row.ContainsKey("BillNo") == true)
                     gb.BillNo = en.GetValStringByKey("BillNo");
                 gb.FK_FrmTree = fbill.FK_FormTree; //单据类别.
-                gb.RDT = BP.DA.DataType.CurrentDataTime;
+                gb.RDT = DataType.CurrentDataTime;
                 gb.NDStep = 1;
                 gb.NDStepName = "启动";
                 gb.Insert();

@@ -626,7 +626,7 @@ namespace BP.En
             /* 把查询个数加入内存 */
             Entity en = this.GetNewEntity;
             CashEntity.PubEns(en.ToString(), this, en.PK);
-            BP.DA.Log.DefaultLogWriteLineInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
+            Log.DefaultLogWriteLineInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
             return num;
         }
         /// <summary>

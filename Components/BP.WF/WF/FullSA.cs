@@ -77,7 +77,7 @@ namespace BP.WF
                     string sql = "SELECT DISTINCT a.No, a.Name FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C "; // WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
                     sql += " WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node="+item.NodeID;
 
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count ==0)
                         continue;
                     foreach(DataRow dr in dt.Rows){

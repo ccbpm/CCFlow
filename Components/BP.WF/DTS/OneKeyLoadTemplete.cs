@@ -191,7 +191,7 @@ namespace BP.WF.DTS
 
                     string sql = "SELECT * FROM " + item.No;
                     ds = new DataSet();
-                    ds.Tables.Add(BP.DA.DBAccess.RunSQLReturnTable(sql));
+                    ds.Tables.Add(DBAccess.RunSQLReturnTable(sql));
                     ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
                 }
             }
@@ -309,7 +309,7 @@ namespace BP.WF.DTS
             }
             #endregion 6.恢复流程数据.
 
-            BP.DA.Log.DefaultLogWriteLineInfo(msg);
+            Log.DefaultLogWriteLineInfo(msg);
 
             //删除多余的空格.
             BP.WF.DTS.DeleteBlankGroupField dts = new DeleteBlankGroupField();

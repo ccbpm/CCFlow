@@ -160,11 +160,11 @@ namespace BP.En
             {
                 if (_SQLCash == null)
                 {
-                    _SQLCash = BP.DA.Cash.GetSQL(this.ToString());
+                    _SQLCash = Cash.GetSQL(this.ToString());
                     if (_SQLCash == null)
                     {
                         _SQLCash = new SQLCash(this);
-                        BP.DA.Cash.SetSQL(this.ToString(), _SQLCash);
+                        Cash.SetSQL(this.ToString(), _SQLCash);
                     }
                 }
                 return _SQLCash;
@@ -187,7 +187,7 @@ namespace BP.En
             }
             return str;
         }
-        public BP.DA.KeyVals ToKeyVals()
+        public KeyVals ToKeyVals()
         {
             KeyVals kvs = new KeyVals();
             foreach (Attr attr in this.EnMap.Attrs)
@@ -917,7 +917,7 @@ namespace BP.En
             string table = this.EnMap.PhysicsTable;
 
             string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + "  ORDER BY " + idxAttr;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string beforeNo = "";
             string myNo = "";
@@ -945,7 +945,7 @@ namespace BP.En
             string table = this.EnMap.PhysicsTable;
 
             string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE " + groupKeyAttr + "='" + groupKeyVal + "' ORDER BY " + idxAttr;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string beforeNo = "";
             string myNo = "";
@@ -973,7 +973,7 @@ namespace BP.En
             string table = this.EnMap.PhysicsTable;
 
             string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + gVal1 + "' AND " + gKey2 + "='" + gVal2 + "') ORDER BY " + idxAttr;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string beforeNo = "";
             string myNo = "";
@@ -1014,7 +1014,7 @@ namespace BP.En
             string table = this.EnMap.PhysicsTable;
 
             string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + gVal1 + "' AND " + gKey2 + "='" + gVal2 + "' AND " + gKey3 + "='" + gVal3 + "') ORDER BY " + idxAttr;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 0;
             string beforeNo = "";
             string myNo = "";
@@ -1097,7 +1097,7 @@ namespace BP.En
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
 
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
         }
         protected void DoOrderDown(string groupKeyAttr, string groupKeyVal, string idxAttr)
         {
@@ -1132,7 +1132,7 @@ namespace BP.En
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
 
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
         }
         /// <summary>
         /// 下移
@@ -1176,7 +1176,7 @@ namespace BP.En
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' )";
 
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
         }
         /// <summary>
         /// 下移
@@ -1223,7 +1223,7 @@ namespace BP.En
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "'  AND " + gKeyAttr3 + "='" + gKeyVal3 + "' )";
             sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "'  AND " + gKeyAttr3 + "='" + gKeyVal3 + "' )";
 
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
         }
         #endregion 排序操作
 
@@ -1415,7 +1415,7 @@ namespace BP.En
             /*如果是没有放入缓存的实体. @wangyanyan */
             if (this.EnMap.DepositaryOfEntity == Depositary.Application)
             {
-                var row = BP.DA.Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
+                var row = Cash2019.GetRow(this.ToString(), this.PKVal.ToString());
                 if (row != null && row.Count > 2)
                 {
                     this.Row = row;
@@ -1431,7 +1431,7 @@ namespace BP.En
                 {
                     //放入缓存.
                     if (this.EnMap.DepositaryOfEntity == Depositary.Application)
-                        BP.DA.Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
+                        Cash2019.PutRow(this.ToString(), this.PKVal.ToString(), this.Row);
                     return num;
                 }
             }
@@ -1863,7 +1863,7 @@ namespace BP.En
             if (this.EnMap.DepositaryOfEntity != Depositary.Application)
                 return;
             ///删除缓存。
-            BP.DA.CashEntity.Delete(this.ToString(), this.PKVal.ToString());
+            CashEntity.Delete(this.ToString(), this.PKVal.ToString());
             return;
         }
         #endregion
@@ -2097,7 +2097,7 @@ namespace BP.En
             {
                 //增加版本为1的版本历史记录
                 string enName = this.ToString();
-                string rdt = BP.DA.DataType.CurrentDataTime;
+                string rdt = DataType.CurrentDataTime;
 
                 //edited by liuxc,2017-03-24,增加判断，如果相同主键的数据曾被删除掉，再次被增加时，会延续被删除时的版本，原有逻辑报错
                 EnVer ver = new EnVer();
@@ -2332,14 +2332,14 @@ namespace BP.En
                 //{
                 //    if (this.GetValStringByKey(attr.Key).Trim().Length != 16)
                 //    {
-                //        //str+="@["+ attr.Desc +"]输入日期时间格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+BP.DA.DataType.SysDataTimeFormat+"要求。";
+                //        //str+="@["+ attr.Desc +"]输入日期时间格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+DataType.SysDataTimeFormat+"要求。";
                 //    }
                 //}
                 //else if (attr.MyDataType == DataType.AppDate)
                 //{
                 //    if (this.GetValStringByKey(attr.Key).Trim().Length != 10)
                 //    {
-                //        //str+="@["+ attr.Desc +"]输入日期格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+BP.DA.DataType.SysDataFormat+"要求。";
+                //        //str+="@["+ attr.Desc +"]输入日期格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+DataType.SysDataFormat+"要求。";
                 //    }
                 //}
             }
@@ -2518,7 +2518,7 @@ namespace BP.En
                     //string errs = "";
                     //foreach (Attr attr in this.EnMap.Attrs)
                     //{
-                    //    if (attr.MyDataType != BP.DA.DataType.AppString)
+                    //    if (attr.MyDataType != DataType.AppString)
                     //        continue;
 
                     //    if (attr.MaxLength < this.GetValStrByKey(attr.Key).Length)
@@ -2583,7 +2583,7 @@ namespace BP.En
                 // 取出来原来最后的版本数据.
 
                 string enName = this.ToString();
-                string rdt = BP.DA.DataType.CurrentDataTime;
+                string rdt = DataType.CurrentDataTime;
 
                 EnVer ver = new EnVer();
                 ver.Retrieve(EnVerAttr.MyPK, enName + "_" + this.PKVal);
@@ -2680,22 +2680,22 @@ namespace BP.En
         {
             try
             {
-                BP.DA.DBAccess.SaveBytesToDB(bytesOfFile, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+                DBAccess.SaveBytesToDB(bytesOfFile, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
             }
             catch (Exception ex)
             {
                 /* 为了防止任何可能出现的数据丢失问题，您应该先仔细检查此脚本，然后再在数据库设计器的上下文之外运行此脚本。*/
                 string sql = "";
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.MSSQL)
+                if (DBAccess.AppCenterDBType == DBType.MSSQL)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
 
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.Oracle)
+                if (DBAccess.AppCenterDBType == DBType.Oracle)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
 
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.MySQL)
+                if (DBAccess.AppCenterDBType == DBType.MySQL)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
 
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
 
                 throw new Exception("@保存文件期间出现错误，有可能该字段没有被自动创建，现在已经执行创建修复数据表，请重新执行一次." + ex.Message);
             }
@@ -2710,22 +2710,22 @@ namespace BP.En
         {
             try
             {
-                BP.DA.DBAccess.SaveFileToDB(fileFullName, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+                DBAccess.SaveFileToDB(fileFullName, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
             }
             catch (Exception ex)
             {
                 /* 为了防止任何可能出现的数据丢失问题，您应该先仔细检查此脚本，然后再在数据库设计器的上下文之外运行此脚本。*/
                 string sql = "";
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.MSSQL)
+                if (DBAccess.AppCenterDBType == DBType.MSSQL)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
 
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.Oracle)
+                if (DBAccess.AppCenterDBType == DBType.Oracle)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Blob NULL ";
 
-                if (BP.DA.DBAccess.AppCenterDBType == DBType.MySQL)
+                if (DBAccess.AppCenterDBType == DBType.MySQL)
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " MediumBlob NULL ";
 
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
 
                 throw new Exception("@保存文件期间出现错误，有可能该字段没有被自动创建，现在已经执行创建修复数据表，请重新执行一次." + ex.Message);
             }
@@ -2738,7 +2738,7 @@ namespace BP.En
         /// <returns>返回文件流</returns>
         public byte[] GetFileFromDB(string saveToField, string filefullName)
         {
-            return BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
+            return DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
         }
         /// <summary>
         /// 从表的字段里读取string
@@ -2747,7 +2747,7 @@ namespace BP.En
         /// <returns>大文本数据</returns>
         public string GetBigTextFromDB(string imgFieldName)
         {
-            return BP.DA.DBAccess.GetBigTextFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName);
+            return DBAccess.GetBigTextFromDB(this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), imgFieldName);
         }
         #endregion 对文件的处理.
 
@@ -3060,7 +3060,7 @@ namespace BP.En
                         else
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                            Log.DebugWriteWarning(err);
 
                             // throw new Exception();
 
@@ -3081,7 +3081,7 @@ namespace BP.En
                         if (FType.Contains("int") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                            Log.DebugWriteWarning(err);
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
                             //{
@@ -3099,7 +3099,7 @@ namespace BP.En
                         if (FType.Contains("float") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                            Log.DebugWriteWarning(err);
 
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
@@ -3366,7 +3366,7 @@ namespace BP.En
                         else
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            BP.DA.Log.DebugWriteWarning(err);
+                            Log.DebugWriteWarning(err);
 
                             // throw new Exception();
 
@@ -3387,7 +3387,7 @@ namespace BP.En
                         if (FType.Contains("int") == false)
                         {
                             //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            //    BP.DA.Log.DebugWriteWarning(err);
+                            //    Log.DebugWriteWarning(err);
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
                             //{
@@ -3405,7 +3405,7 @@ namespace BP.En
                         if (FType != "float")
                         {
                             //  string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            //  BP.DA.Log.DebugWriteWarning(err);
+                            //  Log.DebugWriteWarning(err);
 
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
@@ -3693,7 +3693,7 @@ namespace BP.En
         {
             #region 检查字段是否存在
             string sql = "SELECT *  FROM " + this.EnMap.PhysicsTable + " WHERE 1=2";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //如果不存在.
             foreach (Attr attr in this.EnMap.Attrs)
@@ -3773,7 +3773,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        BP.DA.Log.DebugWriteWarning(ex.Message);
+                        Log.DebugWriteWarning(ex.Message);
                     }
                 }
             }
@@ -3850,7 +3850,7 @@ namespace BP.En
         {
             #region 检查字段是否存在
             string sql = "SELECT *  FROM " + this._enMap.PhysicsTable + " WHERE 1=2";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //如果不存在.
             foreach (Attr attr in this._enMap.Attrs)
@@ -3935,7 +3935,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        BP.DA.Log.DebugWriteWarning(ex.Message);
+                        Log.DebugWriteWarning(ex.Message);
                     }
                 }
             }
@@ -4011,7 +4011,7 @@ namespace BP.En
             #region 检查字段是否存在
             //string sql = "SELECT * FROM " + this.EnMap.PhysicsTable + " WHERE 1=2 ";
             string sql = "SELECT WMSYS.WM_CONCAT(DISTINCT(column_name)) AS Column_Name  FROM all_tab_cols WHERE table_name = '" + this.EnMap.PhysicsTable.ToUpper() + "' AND owner='" + SystemConfig.AppCenterDBDatabase.ToUpper() + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 return;
 

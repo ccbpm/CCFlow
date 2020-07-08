@@ -1132,7 +1132,7 @@ namespace BP.WF.Template
             else
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "' ";
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             string msg = "如下流程ID被删除:";
             foreach (DataRow dr in dt.Rows)
@@ -1482,7 +1482,7 @@ namespace BP.WF.Template
                 rw.BeiZhu = note;
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
-                rw.MyPK = BP.DA.DBAccess.GenerGUID();
+                rw.MyPK = DBAccess.GenerGUID();
                 rw.Insert();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 
@@ -1532,7 +1532,7 @@ namespace BP.WF.Template
                 string emps = "@";
                 string sql = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(this.No) + "Track  WHERE WorkID=" + gwf.WorkID;
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
                     if (emps.Contains("@" + dr[0].ToString() + "@") || emps.Contains("@" + dr[0].ToString() + "," + dr[1].ToString() + "@"))
@@ -1931,7 +1931,7 @@ namespace BP.WF.Template
                         if (DataType.IsNullOrEmpty(str) == true)
                             continue;
 
-                        if (BP.DA.DataType.IsNumStr(str) == false)
+                        if (DataType.IsNumStr(str) == false)
                             throw new Exception("@业务数据同步数据配置错误，您设置了按照指定的节点配置，但是节点格式错误[" + nodes + "]。正确的格式如下：101,102,103");
 
                         Node nd = new Node();

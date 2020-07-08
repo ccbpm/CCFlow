@@ -707,7 +707,7 @@ namespace BP.WF.HttpHandler
                     se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
                     if (se.Count > 0)
                     {
-                        ma.MyDataType = BP.DA.DataType.AppInt;
+                        ma.MyDataType = DataType.AppInt;
                         ma.LGType = BP.En.FieldTypeS.Enum;
                         ma.UIContralType = BP.En.UIContralType.DDL;
                     }
@@ -715,13 +715,13 @@ namespace BP.WF.HttpHandler
                     tb.No = ma.UIBindKey;
                     if (tb.IsExits == true)
                     {
-                        ma.MyDataType = BP.DA.DataType.AppString;
+                        ma.MyDataType = DataType.AppString;
                         ma.LGType = BP.En.FieldTypeS.FK;
                         ma.UIContralType = BP.En.UIContralType.DDL;
                     }
                 }
 
-                if (ma.MyDataType == BP.DA.DataType.AppBoolean)
+                if (ma.MyDataType == DataType.AppBoolean)
                     ma.UIContralType = BP.En.UIContralType.CheckBok;
 
                 ma.Insert();
@@ -735,7 +735,7 @@ namespace BP.WF.HttpHandler
                     maxEnd = maxEnd + 40;
                     /* 是否是左边 */
                     lab = new FrmLab();
-                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
                     lab.Text = ma.Name;
                     lab.X = 40;
@@ -749,7 +749,7 @@ namespace BP.WF.HttpHandler
                 else
                 {
                     lab = new FrmLab();
-                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
                     lab.Text = ma.Name;
                     lab.X = 350;
@@ -785,7 +785,7 @@ namespace BP.WF.HttpHandler
                 mf.H = 300;
                 mf.Name = "我的框架.";
                 mf.FK_MapData = this.FK_MapData;
-                mf.MyPK = BP.DA.DBAccess.GenerGUID();
+                mf.MyPK = DBAccess.GenerGUID();
             }
             else
             {
@@ -958,10 +958,10 @@ namespace BP.WF.HttpHandler
             }
 
             //获得原始数据.
-            DataTable dt = BP.DA.DBAccess.GetTableSchema(ptable, false);
+            DataTable dt = DBAccess.GetTableSchema(ptable, false);
 
             //创建样本.
-            DataTable mydt = BP.DA.DBAccess.GetTableSchema(ptable, false);
+            DataTable mydt = DBAccess.GetTableSchema(ptable, false);
             mydt.Rows.Clear();
 
             //获得现有的列..
@@ -1007,7 +1007,7 @@ namespace BP.WF.HttpHandler
             attr.Name = name;
             attr.MyDataType = dataType;
 
-            if (BP.DA.DataType.AppBoolean == dataType)
+            if (DataType.AppBoolean == dataType)
                 attr.UIContralType = UIContralType.CheckBok;
             else
                 attr.UIContralType = UIContralType.TB;
@@ -1369,7 +1369,7 @@ namespace BP.WF.HttpHandler
 
             //转化成json输出.
             string json = BP.Tools.Json.ToJson(ds);
-            // BP.DA.DataType.WriteFile("c:\\FieldInitGroupAndSysEnum.json", json);
+            // DataType.WriteFile("c:\\FieldInitGroupAndSysEnum.json", json);
             return json;
         }
 
@@ -1638,7 +1638,7 @@ namespace BP.WF.HttpHandler
                 //把必填项拿出来，所有字段都可以设置成必填项 杨玉慧
                 attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
 
-                if (attr.MyDataType == BP.DA.DataType.AppString && lgType == FieldTypeS.Normal)
+                if (attr.MyDataType == DataType.AppString && lgType == FieldTypeS.Normal)
                 {
                     attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
                     attr.IsSupperText = this.GetValIntFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
@@ -2205,7 +2205,7 @@ namespace BP.WF.HttpHandler
                     Paras ps = new Paras();
                     ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add("WorkID", this.WorkID);
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                    string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                     if (pWorkID == null || pWorkID == "0")
                     {
                         pWorkID = this.WorkID.ToString();

@@ -101,7 +101,7 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
             string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sort";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -112,7 +112,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow WHERE IsCanStart=1 ORDER BY FK_FlowSort, Idx";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -1090,7 +1090,7 @@ namespace BP.WF.HttpHandler
 
             /* 如果包含累计数据，那它一定需要一个月份字段。业务逻辑错误。*/
             groupKey = groupKey.Substring(0, groupKey.Length - 1);
-            BP.DA.Paras ps = new Paras();
+            Paras ps = new Paras();
             // 生成 sql.
             string selectSQL = "SELECT ";
             string groupBy = " GROUP BY ";

@@ -108,7 +108,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No and Tel=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "Tel";
             ps.Add("No", userNo);
             ps.Add("Tel", tel);
-            string No = BP.DA.DBAccess.RunSQLReturnString(ps);
+            string No = DBAccess.RunSQLReturnString(ps);
             if (DataType.IsNullOrEmpty(No))
                 return "err@用户信息不正确，请联系管理员";
 
@@ -309,8 +309,8 @@ namespace BP.WF.HttpHandler
 
                 if (DBAccess.IsView("Port_Emp") == false)
                 {
-                    string sid = BP.DA.DBAccess.GenerGUID();
-                    BP.DA.DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
+                    string sid = DBAccess.GenerGUID();
+                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
                     WebUser.SID = sid;
                     emp.SID = sid;
                 }

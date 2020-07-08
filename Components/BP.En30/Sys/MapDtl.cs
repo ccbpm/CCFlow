@@ -1252,7 +1252,7 @@ namespace BP.Sys
 
             if (isdebug == false)
             {
-                Map m = BP.DA.Cash.GetMap(this.No);
+                Map m = Cash.GetMap(this.No);
                 if (m != null)
                     return m;
             }
@@ -1264,7 +1264,7 @@ namespace BP.Sys
             foreach (MapAttr mapAttr in mapAttrs)
                 map.AddAttr(mapAttr.HisAttr);
 
-            BP.DA.Cash.SetMap(this.No, map);
+            Cash.SetMap(this.No, map);
             return map;
         }
         public GEDtl HisGEDtl
@@ -1491,19 +1491,19 @@ namespace BP.Sys
         /// <returns></returns>
         public int GetCountByFK(int workID)
         {
-            return BP.DA.DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE WorkID=" + workID);
+            return DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE WorkID=" + workID);
         }
         public int GetCountByFK(string field, string val)
         {
-            return BP.DA.DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE " + field + "='" + val + "'");
+            return DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE " + field + "='" + val + "'");
         }
         public int GetCountByFK(string field, Int64 val)
         {
-            return BP.DA.DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE " + field + "=" + val);
+            return DBAccess.RunSQLReturnValInt("select COUNT(OID) from " + this.PTable + " WHERE " + field + "=" + val);
         }
         public int GetCountByFK(string f1, Int64 val1, string f2, string val2)
         {
-            return BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(OID) from " + this.PTable + " WHERE " + f1 + "=" + val1 + " AND " + f2 + "='" + val2 + "'");
+            return DBAccess.RunSQLReturnValInt("SELECT COUNT(OID) from " + this.PTable + " WHERE " + f1 + "=" + val1 + " AND " + f2 + "='" + val2 + "'");
         }
         #endregion
 
@@ -1527,7 +1527,7 @@ namespace BP.Sys
 
                 attr.KeyOfEn = "OID";
                 attr.Name = "主键";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -1544,7 +1544,7 @@ namespace BP.Sys
 
                 attr.KeyOfEn = "RefPK";
                 attr.Name = "关联ID";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -1561,7 +1561,7 @@ namespace BP.Sys
 
                 attr.KeyOfEn = "FID";
                 attr.Name = "FID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -1578,7 +1578,7 @@ namespace BP.Sys
 
                 attr.KeyOfEn = "RDT";
                 attr.Name = "记录时间";
-                attr.MyDataType = BP.DA.DataType.AppDateTime;
+                attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -1595,7 +1595,7 @@ namespace BP.Sys
 
                 attr.KeyOfEn = "Rec";
                 attr.Name = "记录人";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;

@@ -466,7 +466,7 @@ namespace BP.WF.Port
         public static void DTSData()
         {
             string sql = "select No from Port_Emp where No not in (select No from WF_Emp)";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
                 BP.Port.Emp emp1 = new BP.Port.Emp(dr["No"].ToString());

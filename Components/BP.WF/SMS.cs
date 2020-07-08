@@ -191,7 +191,7 @@ namespace BP.WF
             sms.MobileInfo = msgDoc;
 
             sms.Sender = BP.Web.WebUser.No;
-            sms.RDT = BP.DA.DataType.CurrentDataTime;
+            sms.RDT = DataType.CurrentDataTime;
 
             sms.MsgFlag = msgFlag; // 消息标志.
             sms.MsgType = msgType; // 消息类型.'
@@ -581,7 +581,7 @@ namespace BP.WF
 
                 myEmail.IsBodyHtml = true;
 
-                mailDoc = BP.DA.DataType.ParseText2Html(mailDoc);
+                mailDoc = DataType.ParseText2Html(mailDoc);
 
                 myEmail.Body = mailDoc;
                 myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
@@ -715,7 +715,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
+                Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
             base.afterInsert();
         }

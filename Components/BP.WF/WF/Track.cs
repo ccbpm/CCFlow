@@ -570,7 +570,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
+                Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
             }
 
             // 删除主键.
@@ -719,7 +719,7 @@ namespace BP.WF
 
             //把frm日志写入到数据里.
             if (this.FrmDB != null)
-                BP.DA.DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+                DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
 
             #endregion 执行保存
 
@@ -759,7 +759,7 @@ namespace BP.WF
 
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
-                this.RDT = BP.DA.DataType.CurrentDataTimess;
+                this.RDT = DataType.CurrentDataTimess;
 
 
 

@@ -185,6 +185,7 @@ namespace BP.WF.Template
                 if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                     flow.OrgNo = WebUser.OrgNo; //隶属组织 
                 flow.Insert();
+               
 
                 BP.WF.Node nd = new BP.WF.Node();
                 nd.NodeID = int.Parse(flow.No + "01");
@@ -225,7 +226,7 @@ namespace BP.WF.Template
 
                 //为开始节点增加一个删除按钮. @李国文.
                 string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
 
                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
                 CreatePushMsg(nd);

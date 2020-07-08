@@ -419,13 +419,13 @@ namespace BP.WF.Template
 
             //部门
             string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
             sql = "SELECT distinct No, Name, FK_Dept FROM Port_Emp ";
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
 
@@ -463,7 +463,7 @@ namespace BP.WF.Template
             if (DataType.IsNullOrEmpty(sqlGroup) == false && sqlGroup.Length > 6 )
             {
                 sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);  //@祝梦娟
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlGroup);
+                DataTable dt = DBAccess.RunSQLReturnTable(sqlGroup);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
             }
@@ -472,7 +472,7 @@ namespace BP.WF.Template
             string sqlDB = this.SelectorP2;
             sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);  //@祝梦娟
 
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+            DataTable dtEmp = DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
 
@@ -482,7 +482,7 @@ namespace BP.WF.Template
                 sqlDB = this.SelectorP3;
                 sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);  //@祝梦娟
 
-                DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+                DataTable dtDef = DBAccess.RunSQLReturnTable(sqlDB);
                 dtDef.TableName = "DefaultSelected";
 
                 ds.Tables.Add(dtDef);
@@ -504,7 +504,7 @@ namespace BP.WF.Template
                 if (sqlDB.Contains("@"))
                     sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
 
-                DataTable dtForce = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+                DataTable dtForce = DBAccess.RunSQLReturnTable(sqlDB);
                 dtForce.TableName = "ForceSelected";
                 ds.Tables.Add(dtForce);
             }
@@ -533,13 +533,13 @@ namespace BP.WF.Template
                 sql += "  AND C.FK_Emp=D.FK_Emp ";
 
 
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
 
                 //人员.
                 sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b, WF_PrjEmp C WHERE a.FK_Dept=b.FK_Dept  AND A.No=C.FK_Emp  AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ";
-                dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtEmp = DBAccess.RunSQLReturnTable(sql);
                 ds.Tables.Add(dtEmp);
                 dtEmp.TableName = "Emps";
                 return ds;
@@ -548,13 +548,13 @@ namespace BP.WF.Template
 
             //部门.
             sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID + " ";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
             sql = "SELECT distinct a.No, a.Name, d.FK_Dept FROM Port_Emp a, WF_NodeDept b,Port_DeptEmp d WHERE d.FK_Dept=b.FK_Dept AND a.No=d.FK_Emp AND B.FK_Node=" + nodeID + " ";
-            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp = DBAccess.RunSQLReturnTable(sql);
             ds.Tables.Add(dtEmp);
             dtEmp.TableName = "Emps";
             return ds;
@@ -572,14 +572,14 @@ namespace BP.WF.Template
 
             //部门.
             string sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a, WF_NodeEmp b, Port_Emp c WHERE b.FK_Emp=c.No AND a.No=c.FK_Dept AND B.FK_Node=" + nodeID + " ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
             sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeEmp b WHERE a.No=b.FK_Emp AND b.FK_Node=" + nodeID;
 
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
             return ds;
@@ -596,7 +596,7 @@ namespace BP.WF.Template
             string sql = "";
             sql = "SELECT d.No,d.Name,d.ParentNo  FROM  Port_DeptEmp  de,port_dept as d where de.FK_Dept = d.No and de.FK_Emp = '" + BP.Web.WebUser.No + "'";
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //人员.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -604,7 +604,7 @@ namespace BP.WF.Template
             else
                 sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND C.FK_Dept='" + WebUser.FK_Dept + "' AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
 
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             if (dtEmp.Rows.Count > 0)
             {
                 dt.TableName = "Depts";
@@ -621,7 +621,7 @@ namespace BP.WF.Template
 
                 sql = " select No,Name, ParentNo from port_dept where no  in (  select  ParentNo from port_dept where no  in"
                 + "( SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID ='" + workID + "' ))";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
 
@@ -652,7 +652,7 @@ namespace BP.WF.Template
             else
                 sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ";
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
@@ -666,7 +666,7 @@ namespace BP.WF.Template
                 sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx ";
 
 
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
             return ds;
@@ -693,7 +693,7 @@ namespace BP.WF.Template
             if (sm == SelectorModel.TeamOrgOnly)
                 sql = "SELECT DISTINCT a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Team=c.FK_Team AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " AND D.OrgNo='" + WebUser.OrgNo + "' ORDER BY A.No,A.Idx";
 
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
@@ -718,7 +718,7 @@ namespace BP.WF.Template
                     sql = "SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + "  ORDER BY A.Idx";
             }
 
-            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
             return ds;
@@ -735,7 +735,7 @@ namespace BP.WF.Template
 
             //部门.
             sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Group=c.FK_Group AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ORDER BY A.No,A.Idx";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
@@ -752,7 +752,7 @@ namespace BP.WF.Template
                 sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
             }
 
-            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
             return ds;
@@ -776,7 +776,7 @@ namespace BP.WF.Template
             {
                 //部门.
                 sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d, WF_PrjEmp E WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND d.No=e.FK_Emp And C.FK_Emp=E.FK_Emp  AND B.FK_Node=" + nodeID + " AND E.FK_Prj='" + en.GetValStrByKey("PrjNo") + "' ORDER BY A.No,A.Idx";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);
 
@@ -793,7 +793,7 @@ namespace BP.WF.Template
                     sql = "SELECT distinct a.No,a.Name, a.FK_Dept,A.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c, WF_PrjEmp d WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station And a.No=d.FK_Emp And C.FK_Emp=d.FK_Emp AND b.FK_Node=" + nodeID + " AND D.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ORDER BY A.Idx ";
                 }
 
-                dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtEmp = DBAccess.RunSQLReturnTable(sql);
                 ds.Tables.Add(dtEmp);
                 dtEmp.TableName = "Emps";
                 return ds;
@@ -802,7 +802,7 @@ namespace BP.WF.Template
 
             //部门.
             sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + " ORDER BY A.No,A.Idx";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
@@ -819,7 +819,7 @@ namespace BP.WF.Template
                 sql = "SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
             }
 
-            dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
 

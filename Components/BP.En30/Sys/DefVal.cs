@@ -217,7 +217,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //设置主键.
-            this.MyPK = BP.DA.DBAccess.GenerGUID();
+            this.MyPK = DBAccess.GenerGUID();
             return base.beforeInsert();
         }
     }

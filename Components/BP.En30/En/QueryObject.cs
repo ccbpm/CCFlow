@@ -168,8 +168,8 @@ namespace BP.En
             this.HisDBType = en.EnMap.EnDBUrl.DBType;
             this.HisDBUrlType = en.EnMap.EnDBUrl.DBUrlType;
         }
-        public BP.DA.DBType HisDBType = DBType.MSSQL;
-        public BP.DA.DBUrlType HisDBUrlType = DBUrlType.AppCenterDSN;
+        public DBType HisDBType = DBType.MSSQL;
+        public DBUrlType HisDBUrlType = DBUrlType.AppCenterDSN;
 
         public string HisVarStr
         {
@@ -194,7 +194,7 @@ namespace BP.En
         /// <param name="attr">属性</param>
         /// <param name="exp">表达格式 大于，等于，小于</param>
         /// <param name="len">长度</param>
-        public void AddWhereLen(string attr, string exp, int len, BP.DA.DBType dbtype)
+        public void AddWhereLen(string attr, string exp, int len,DBType dbtype)
         {
             this.SQL = "( " + BP.Sys.SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
         }

@@ -260,8 +260,8 @@ namespace BP.GPM
         public static GPMEmp GenerData(GPMEmp en)
         {
             //增加拼音，以方便查找.
-            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(en.Name).ToLower();
-            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(en.Name).ToLower();
+            string pinyinQP = DataType.ParseStringToPinyin(en.Name).ToLower();
+            string pinyinJX = DataType.ParseStringToPinyinJianXie(en.Name).ToLower();
             en.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
 
             //处理岗位信息.
@@ -282,7 +282,7 @@ namespace BP.GPM
                 }
 
                 //给拼音重新定义值,让其加上部门的信息.
-                en.PinYin = en.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+                en.PinYin = en.PinYin + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new BP.Port.Station();
                 sta.No = item.FK_Station;

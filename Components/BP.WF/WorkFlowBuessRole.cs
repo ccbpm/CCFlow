@@ -384,7 +384,7 @@ namespace BP.WF
                         continue;
 
                     sql = "SELECT COUNT(OID) FROM " + flowPTable + " WHERE PWorkID =" + pWorkID + " AND WFState >1 ";
-                    num = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+                    num = DBAccess.RunSQLReturnValInt(sql, 0);
                     billNo = billNo + num.ToString().PadLeft(i, '0');
                     billNo = billNo.Replace("{LSH" + i + "}", "");
                     break;
@@ -909,7 +909,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(s))
                         continue;
 
-                    //if (BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
+                    //if (DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
                     //    continue;
 
                     DataRow dr = dt.NewRow();
@@ -1590,7 +1590,7 @@ namespace BP.WF
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
-            string mailTemp = BP.DA.DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
+            string mailTemp = DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
             {
                 ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());

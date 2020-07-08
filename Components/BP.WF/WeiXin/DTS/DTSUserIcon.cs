@@ -75,7 +75,7 @@ namespace BP.GPM.WeiXin
                     //大图标
                     string headimgurl = userInfo.avatar;
                     string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
-                    BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
+                    DataType.HttpDownloadFile(headimgurl, UserIcon);
 
                     //小图标
                     string iconSize = userInfo.avatar.Substring(headimgurl.LastIndexOf('/'));
@@ -84,7 +84,7 @@ namespace BP.GPM.WeiXin
                     else
                         headimgurl = userInfo.avatar.Substring(0, headimgurl.LastIndexOf('/')) + "64";
                     UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
-                    BP.DA.DataType.HttpDownloadFile(headimgurl, UserIcon);
+                    DataType.HttpDownloadFile(headimgurl, UserIcon);
                 }
             }
             return "执行成功.";

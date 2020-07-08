@@ -221,12 +221,12 @@ namespace BP.WF.Port
             int i = 0;
             //更新待办.
             string sql = "update wf_generworkerlist set fk_emp='"+userNo+"' where fk_emp='"+this.No+"'";
-            i= BP.DA.DBAccess.RunSQL(sql);
+            i= DBAccess.RunSQL(sql);
             if (i != 0)
                 msg += "@待办更新[" + i + "]个。";
 
             sql = "UPDATE WF_GENERWORKFLOW  SET STARTER='"+userNo+"'  WHERE STARTER='"+this.No+"'";
-            i = BP.DA.DBAccess.RunSQL(sql);
+            i = DBAccess.RunSQL(sql);
             if (i != 0)
                 msg += "@流程注册更新[" + i + "]个。";
 

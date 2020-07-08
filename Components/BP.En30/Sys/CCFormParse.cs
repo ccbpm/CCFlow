@@ -178,12 +178,12 @@ namespace BP.Sys
                     attr.UIContralType = En.UIContralType.TB;
                     break;
                 case "DropDownListEnum": //枚举类型.
-                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
                     attr.LGType = En.FieldTypeS.Enum;
                     attr.UIContralType = En.UIContralType.DDL;
                     break;
                 case "DropDownListTable": //外键类型.
-                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.MyDataType = DataType.AppString;
                     if (pks.Contains("@" + attr.KeyOfEn + "@") == false)
                         attr.LGType = En.FieldTypeS.FK;
                     attr.UIContralType = En.UIContralType.DDL;
@@ -338,7 +338,7 @@ namespace BP.Sys
                 sqls += "@DELETE FROM Sys_FrmLine WHERE MyPK='" + str + "'";
             }
             if (sqls != "")
-                BP.DA.DBAccess.RunSQLs(sqls);
+                DBAccess.RunSQLs(sqls);
         }
         public static void SaveLabel(string fk_mapdata, JsonData control, JsonData properties, string pks, string ctrlID)
         {

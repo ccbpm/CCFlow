@@ -122,7 +122,7 @@ namespace BP.WF.HttpHandler
                     Paras ps = new Paras();
                     ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add("WorkID", this.WorkID);
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                    string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                     if (pWorkID == null || pWorkID == "0")
                     {
                         pWorkID = this.WorkID.ToString();
@@ -488,7 +488,7 @@ namespace BP.WF.HttpHandler
                         return "info@Close";
                     case "TakeBack": // 取消授权。
                         BP.WF.Port.WFEmp myau = new BP.WF.Port.WFEmp(WebUser.No);
-                        BP.DA.Log.DefaultLogWriteLineInfo("取消授权:" + WebUser.No + "取消了对(" + myau.Author + ")的授权。");
+                        Log.DefaultLogWriteLineInfo("取消授权:" + WebUser.No + "取消了对(" + myau.Author + ")的授权。");
                         myau.Author = "";
                         myau.AuthorWay = 0;
                         myau.Update();
@@ -497,11 +497,11 @@ namespace BP.WF.HttpHandler
                         BP.WF.Port.WFEmp au = new BP.WF.Port.WFEmp();
                         au.No = WebUser.No;
                         au.RetrieveFromDBSources();
-                        au.AuthorDate = BP.DA.DataType.CurrentData;
+                        au.AuthorDate = DataType.CurrentData;
                         au.Author = this.FK_Emp;
                         au.AuthorWay = 1;
                         au.Save();
-                        BP.DA.Log.DefaultLogWriteLineInfo("执行授权:" + WebUser.No + "执行了对(" + au.Author + ")的授权。");
+                        Log.DefaultLogWriteLineInfo("执行授权:" + WebUser.No + "执行了对(" + au.Author + ")的授权。");
                         return "info@Close";
                     case "UnSend": //执行撤消发送。
                         string url = "./WorkOpt/UnSend.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
@@ -901,7 +901,7 @@ namespace BP.WF.HttpHandler
                 em.Insert();
             }
 
-            json = BP.DA.DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
+            json = DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
 
@@ -947,7 +947,7 @@ namespace BP.WF.HttpHandler
 
             //把json存入数据表，避免下一次再取.
             if (dtStart.Rows.Count > 0)
-                BP.DA.DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
+                DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
 
             //测试: 写入到本机.
            // DataType.WriteFile("c:\\start.txt", json);
@@ -1013,7 +1013,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1702,7 +1702,7 @@ namespace BP.WF.HttpHandler
             }
 
             //获取待审批的流程信息集合
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Batch_List";
             ds.Tables.Add(dt);
 
@@ -1766,7 +1766,7 @@ namespace BP.WF.HttpHandler
             //获取数据
             string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = -1;
             string msg = "";
             foreach (DataRow dr in dt.Rows)
@@ -1885,7 +1885,7 @@ namespace BP.WF.HttpHandler
             //获取数据
             string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = -1;
             string msg = "";
             foreach (DataRow dr in dt.Rows)
@@ -1946,7 +1946,7 @@ namespace BP.WF.HttpHandler
             //获取数据
             string sql = string.Format("SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = -1;
             string msg = "";
             foreach (DataRow dr in dt.Rows)
@@ -2012,7 +2012,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -2031,7 +2031,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM WF_EMP WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             WFEmp em = new WFEmp();
             em.Retrieve(WFEmpAttr.Author, BP.Web.WebUser.No);
@@ -2135,7 +2135,7 @@ namespace BP.WF.HttpHandler
             else
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND FID = 0  AND WFState > 1 GROUP BY TSpan";
 
-            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtTSpanNum = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
             {
                 string no = drEnum["IntKey"].ToString();
@@ -2156,7 +2156,7 @@ namespace BP.WF.HttpHandler
             else
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
 
-            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtFlows.Columns[0].ColumnName = "No";
@@ -2201,7 +2201,7 @@ namespace BP.WF.HttpHandler
 
             //获取总条数
             string totalNumSql = "SELECT count(*) from WF_GenerWorkFlow where " + sqlWhere;
-            int totalNum = BP.DA.DBAccess.RunSQLReturnValInt(totalNumSql);
+            int totalNum = DBAccess.RunSQLReturnValInt(totalNumSql);
             int totalPage = 0;
             //当前页开始索引
             int startIndex = (pageIdx - 1) * pageSize;
@@ -2244,7 +2244,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT " + startIndex + "," + pageSize;
             else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT " + pageSize + "offset " + startIndex;
-            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
@@ -2544,7 +2544,7 @@ namespace BP.WF.HttpHandler
                     BP.WF.Dev2Interface.Port_Login(sms.SendToEmpNo);
                 }
 
-                BP.DA.AtPara ap = new AtPara(sms.AtPara);
+                AtPara ap = new AtPara(sms.AtPara);
                 switch (sms.MsgType)
                 {
                     case SMSMsgType.SendSuccess: // 发送成功的提示.

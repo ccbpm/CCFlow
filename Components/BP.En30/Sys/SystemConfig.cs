@@ -566,13 +566,13 @@ namespace BP.Sys
         public static void DoClearCash()
         {
             // HttpRuntime.UnloadAppDomain();
-            BP.DA.Cash.Map_Cash.Clear();
-            BP.DA.Cash.SQL_Cash.Clear();
-            BP.DA.Cash.EnsData_Cash.Clear();
-            BP.DA.Cash.EnsData_Cash_Ext.Clear();
-            BP.DA.Cash.BS_Cash.Clear();
-            BP.DA.Cash.Bill_Cash.Clear();
-            BP.DA.CashEntity.DCash.Clear();
+            Cash.Map_Cash.Clear();
+            Cash.SQL_Cash.Clear();
+            Cash.EnsData_Cash.Clear();
+            Cash.EnsData_Cash_Ext.Clear();
+            Cash.BS_Cash.Clear();
+            Cash.Bill_Cash.Clear();
+            CashEntity.DCash.Clear();
         }
         /// <summary>
         /// 系统编号
@@ -1167,13 +1167,13 @@ namespace BP.Sys
         {
             try
             {
-                DataTable dt = BP.DA.Cash.GetObj("TConfigEns", BP.DA.Depositary.Application) as DataTable;
+                DataTable dt = Cash.GetObj("TConfigEns", Depositary.Application) as DataTable;
                 if (dt == null)
                 {
                     DataSet ds = new DataSet("dss");
                     ds.ReadXml(BP.Sys.SystemConfig.PathOfXML + "\\Ens\\ConfigEns.xml");
                     dt = ds.Tables[0];
-                    BP.DA.Cash.AddObj("TConfigEns", BP.DA.Depositary.Application, dt);
+                    Cash.AddObj("TConfigEns", Depositary.Application, dt);
                 }
 
                 foreach (DataRow dr in dt.Rows)
@@ -1315,23 +1315,23 @@ namespace BP.Sys
         /// <summary>
         /// 获取主应用程序的数据库部署方式．
         /// </summary>
-        public static BP.DA.DBModel AppCenterDBModel
+        public static DBModel AppCenterDBModel
         {
             get
             {
                 switch (AppSettings["AppCenterDBModel"])
                 {
                     case "Domain":
-                        return BP.DA.DBModel.Domain;
+                        return DBModel.Domain;
                     default:
-                        return BP.DA.DBModel.Single;
+                        return DBModel.Single;
                 }
             }
         }
         /// <summary>
         /// 获取主应用程序的数据库类型．
         /// </summary>
-        public static BP.DA.DBType AppCenterDBType
+        public static DBType AppCenterDBType
         {
             get
             {
@@ -1339,21 +1339,21 @@ namespace BP.Sys
                 {
                     case "MSMSSQL":
                     case "MSSQL":
-                        return BP.DA.DBType.MSSQL;
+                        return DBType.MSSQL;
                     case "Oracle":
-                        return BP.DA.DBType.Oracle;
+                        return DBType.Oracle;
                     case "MySQL":
-                        return BP.DA.DBType.MySQL;
+                        return DBType.MySQL;
                     case "PostgreSQL":
-                        return BP.DA.DBType.PostgreSQL;
+                        return DBType.PostgreSQL;
                     case "DM":
-                        return BP.DA.DBType.DM;
+                        return DBType.DM;
                     case "Access":
-                        return BP.DA.DBType.Access;
+                        return DBType.Access;
                     case "Informix":
-                        return BP.DA.DBType.Informix;
+                        return DBType.Informix;
                     default:
-                        return BP.DA.DBType.Oracle;
+                        return DBType.Oracle;
                 }
             }
         }
@@ -1366,7 +1366,7 @@ namespace BP.Sys
             get
             {
 
-                switch (BP.DA.DBAccess.AppCenterDBType)
+                switch (DBAccess.AppCenterDBType)
                 {
                     case DA.DBType.MSSQL:
                         SqlConnection connMSSQL = new SqlConnection(SystemConfig.AppCenterDSN);
@@ -1422,12 +1422,12 @@ namespace BP.Sys
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
-                    case BP.DA.DBType.Oracle:
-                    case BP.DA.DBType.PostgreSQL:
-                    case BP.DA.DBType.DM:
+                    case DBType.Oracle:
+                    case DBType.PostgreSQL:
+                    case DBType.DM:
                         return ":";
-                    case BP.DA.DBType.MySQL:
-                    case BP.DA.DBType.Informix:
+                    case DBType.MySQL:
+                    case DBType.Informix:
                         return "?";
                     default:
                         return "@";
@@ -1441,13 +1441,13 @@ namespace BP.Sys
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
-                    case BP.DA.DBType.Oracle:
+                    case DBType.Oracle:
                         return "Length";
-                    case BP.DA.DBType.MSSQL:
+                    case DBType.MSSQL:
                         return "LEN";
-                    case BP.DA.DBType.Informix:
+                    case DBType.Informix:
                         return "Length";
-                    case BP.DA.DBType.Access:
+                    case DBType.Access:
                         return "Length";
                     default:
                         return "Length";
@@ -1463,13 +1463,13 @@ namespace BP.Sys
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
-                    case BP.DA.DBType.Oracle:
+                    case DBType.Oracle:
                         return "substr";
-                    case BP.DA.DBType.MSSQL:
+                    case DBType.MSSQL:
                         return "substring";
-                    case BP.DA.DBType.Informix:
+                    case DBType.Informix:
                         return "MySubString";
-                    case BP.DA.DBType.Access:
+                    case DBType.Access:
                         return "Mid";
                     default:
                         return "substring";
@@ -1482,9 +1482,9 @@ namespace BP.Sys
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
-                    case BP.DA.DBType.Oracle:
-                    case BP.DA.DBType.MySQL:
-                    case BP.DA.DBType.Informix:
+                    case DBType.Oracle:
+                    case DBType.MySQL:
+                    case DBType.Informix:
                         return "||";
                     default:
                         return "+";

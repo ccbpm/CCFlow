@@ -782,10 +782,10 @@ namespace BP.WF.Template
             {
                 title = en.GetValStringByKey("Title"); // 获得工作标题.
                 if (DataType.IsNullOrEmpty(title))
-                    title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
+                    title = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
             }
             else
-                title = BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
+                title = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + en.PKVal, "标题");
 
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
@@ -1129,7 +1129,7 @@ namespace BP.WF.Template
 
            
           //  string sql = "UPDATE WF_PushMsg SET FK_Flow=(SELECT FK_Flow FROM WF_Node WHERE NodeID= WF_PushMsg.FK_Node)";
-           // BP.DA.DBAccess.RunSQL(sql);
+           // DBAccess.RunSQL(sql);
 
             return base.beforeUpdateInsertAction();
         }

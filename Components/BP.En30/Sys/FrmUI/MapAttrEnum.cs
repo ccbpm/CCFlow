@@ -324,7 +324,7 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //删除可能存在的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'");
             //删除相对应的rpt表中的字段
             if (this.FK_MapData.Contains("ND") == true)
             {

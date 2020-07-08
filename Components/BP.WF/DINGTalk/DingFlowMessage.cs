@@ -5,6 +5,7 @@ using System.Text;
 using BP.Sys;
 using System.Collections;
 using BP.En;
+using BP.DA;
 
 namespace BP.GPM.DTalk.DINGTalk
 {
@@ -14,7 +15,7 @@ namespace BP.GPM.DTalk.DINGTalk
         {
 
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID);
+            DataTable dt = DBAccess.RunSQLReturnTable("SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID);
             if (dt.Rows.Count == 0)
                 return null;
 
@@ -36,7 +37,7 @@ namespace BP.GPM.DTalk.DINGTalk
 
 
             //判断节点类型，分合流等.
-            dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EmpWorks WHERE WorkID=" + WorkID+" OR FID="+WorkID);
+            dt = DBAccess.RunSQLReturnTable("SELECT * FROM WF_EmpWorks WHERE WorkID=" + WorkID+" OR FID="+WorkID);
             if (dt.Rows.Count == 0)
                 return null;
 
@@ -57,7 +58,7 @@ namespace BP.GPM.DTalk.DINGTalk
                     msgText.Access_Token = DingDing.getAccessToken();
                     msgText.agentid = SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
-                    msgText.content = title + "\n发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    msgText.content = title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
                 case DingMsgType.link:
                     Ding_Msg_Link msgLink = new Ding_Msg_Link();
@@ -67,7 +68,7 @@ namespace BP.GPM.DTalk.DINGTalk
                     msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
                     msgLink.title = title;
-                    msgLink.text = "发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentLink_Send(msgLink);
                 case DingMsgType.OA:
                     string[] users = toUsers.Split('|');

@@ -444,7 +444,7 @@ namespace BP.WF.Template
                 return i; /*如果没有就找最大的workid.*/
 
             //找出最近的工作ID
-            int maxWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT Max(WorkID) FROM WF_SelectAccper WHERE Rec='" + rec + "' AND FK_Node=" + fk_node, 0);
+            int maxWorkID = DBAccess.RunSQLReturnValInt("SELECT Max(WorkID) FROM WF_SelectAccper WHERE Rec='" + rec + "' AND FK_Node=" + fk_node, 0);
             if (maxWorkID == 0)
                 return 0;
 
@@ -465,7 +465,7 @@ namespace BP.WF.Template
         public int QueryAccepterPriSetting(int fk_node)
         {
             //找出最近的工作ID.
-            int maxWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT Max(WorkID) FROM WF_SelectAccper WHERE " + SelectAccperAttr.IsRemember + "=1 AND Rec='" + BP.Web.WebUser.No + "' AND FK_Node=" + fk_node, 0);
+            int maxWorkID = DBAccess.RunSQLReturnValInt("SELECT Max(WorkID) FROM WF_SelectAccper WHERE " + SelectAccperAttr.IsRemember + "=1 AND Rec='" + BP.Web.WebUser.No + "' AND FK_Node=" + fk_node, 0);
             if (maxWorkID == 0)
                 return 0;
 

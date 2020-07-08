@@ -561,7 +561,7 @@ namespace BP.WF.Template
                             break;
                         case FindLeaderType.SpecNodeSubmiter: // 指定节点提交人的直线领导.
                             sql = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.TagVal1;
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
                             if (dt.Rows.Count == 0)
                                 throw new Exception("@没有找到指定节点数据，请反馈给系统管理员，技术信息:" + sql);
                             empNo = dt.Rows[0][0] as string;
@@ -569,7 +569,7 @@ namespace BP.WF.Template
                             break;
                         case FindLeaderType.BySpecField: //指定节点字段人员的直接领导..
                             sql = " SELECT " + this.TagVal1 + " FROM " + this.HisNode.HisFlow.PTable + " WHERE OID=" + this.WorkID;
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
                             empNo = dt.Rows[0][0] as string;
                             if (DataType.IsNullOrEmpty(empNo))
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值为空.");
@@ -645,7 +645,7 @@ namespace BP.WF.Template
             {
                 case FindColleague.All: // 所有该部门性质下的人员.
                     sql = "SELECT Leader FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "' AND FK_Dept='" + empDept + "'";
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dt = DBAccess.RunSQLReturnTable(sql);
                     leader = dt.Rows[0][0] as string;
                     if (DataType.IsNullOrEmpty(leader))
                         throw new Exception("@系统管理员没有给(" + empNo + ")在部门(" + empDept + ")中设置直接领导.");
@@ -715,7 +715,7 @@ namespace BP.WF.Template
             {
                 case FindLeaderModel.DirLeader: // 直接领导.
                     sql = "SELECT Leader FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "' AND FK_Dept='" + empDept + "'";
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dt = DBAccess.RunSQLReturnTable(sql);
                     leader = dt.Rows[0][0] as string;
                     if (DataType.IsNullOrEmpty(leader))
                         throw new Exception("@系统管理员没有给(" + empNo + ")在部门(" + empDept + ")中设置直接领导.");

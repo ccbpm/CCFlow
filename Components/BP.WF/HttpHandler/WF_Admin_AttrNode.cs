@@ -86,11 +86,11 @@ namespace BP.WF.HttpHandler
                 return "err@选择的模版文件不存在.";
 
             //获得模版的流.
-            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
+            var bytes = DataType.ConvertFileToByte(docTemplate.FilePath);
 
             //保存到数据库里.
             Flow fl = new Flow(this.FK_Flow);
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID,
+            DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID,
                 "WordFile");
 
             ////模板与业务的绑定.
@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
                 string tableName = "ND" + int.Parse(flowNo) + "Rpt";
 
                 string str = "WordFile";
-                if (BP.DA.DBAccess.IsExitsTableCol(tableName, str) == false)
+                if (DBAccess.IsExitsTableCol(tableName, str) == false)
                 {
                     /*如果没有此列，就自动创建此列.*/
                     string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
@@ -132,10 +132,10 @@ namespace BP.WF.HttpHandler
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                         sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
 
-                    BP.DA.DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
                 }
 
-                byte[] bytes = BP.DA.DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
+                byte[] bytes = DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
                 Node node = new Node(nodeId);
 
                 if (!node.IsStartNode)
@@ -404,7 +404,7 @@ namespace BP.WF.HttpHandler
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
-                msg.MyPK = BP.DA.DBAccess.GenerGUID();
+                msg.MyPK = DBAccess.GenerGUID();
                 msg.Insert();
             }
             else

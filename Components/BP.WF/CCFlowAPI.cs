@@ -673,7 +673,7 @@ namespace BP.WF
                         case WFState.AskForReplay: // 返回加签的信息.
                             string mysql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
 
-                            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(mysql);
+                            DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                             foreach (DataRow dr in mydt.Rows)
                             {
                                 string msgAskFor = dr[TrackAttr.Msg].ToString();
@@ -690,7 +690,7 @@ namespace BP.WF
                         case WFState.Askfor: //加签.
 
                             sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
                             foreach (DataRow dr in dt.Rows)
                             {
                                 string msgAskFor = dr[TrackAttr.Msg].ToString();

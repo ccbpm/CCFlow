@@ -221,7 +221,7 @@ namespace BP.Sys
             switch (this.DBSrcType)
             {
                 case Sys.DBSrcType.Localhost:
-                    return BP.DA.DBAccess.RunSQL(sql);
+                    return DBAccess.RunSQL(sql);
                 case Sys.DBSrcType.SQLServer:
                     SqlConnection conn = new SqlConnection(this.ConnString);
                     SqlCommand cmd = null;
@@ -334,7 +334,7 @@ namespace BP.Sys
             switch (this.DBSrcType)
             {
                 case DBSrcType.Localhost: //如果是本机，直接在本机上执行.
-                    return BP.DA.DBAccess.RunSQLReturnTable(runObj, ps);
+                    return DBAccess.RunSQLReturnTable(runObj, ps);
                 case DBSrcType.SQLServer: //如果是SQLServer.
                     SqlConnection connSQL = new SqlConnection(this.ConnString);
                     SqlDataAdapter ada = null;
@@ -492,7 +492,7 @@ namespace BP.Sys
             switch (this.DBSrcType)
             {
                 case DBSrcType.Localhost: //如果是本机，直接在本机上执行.
-                    return BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    return DBAccess.RunSQLReturnTable(sql);
                 case DBSrcType.SQLServer: //如果是SQLServer.
                     SqlConnection connSQL = new SqlConnection(this.ConnString);
                     SqlDataAdapter ada = null;
@@ -794,8 +794,8 @@ namespace BP.Sys
                     //删除应用.
                     try
                     {
-                        BP.DA.DBAccess.RunSQL("Exec sp_droplinkedsrvlogin " + this.No + ",Null ");
-                        BP.DA.DBAccess.RunSQL("Exec sp_dropserver " + this.No);
+                        DBAccess.RunSQL("Exec sp_droplinkedsrvlogin " + this.No + ",Null ");
+                        DBAccess.RunSQL("Exec sp_dropserver " + this.No);
                     }
                     catch
                     {
@@ -804,12 +804,12 @@ namespace BP.Sys
                     //创建应用.
                     string sql = "";
                     sql += "sp_addlinkedserver @server='" + this.No + "', @srvproduct='', @provider='SQLOLEDB', @datasrc='" + this.IP + "'";
-                    BP.DA.DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
 
                     //执行登录.
                     sql = "";
                     sql += " EXEC sp_addlinkedsrvlogin '" + this.No + "','false', NULL, '" + this.UserID + "', '" + this.Password + "'";
-                    BP.DA.DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
 
                     return "恭喜您，该(" + this.Name + ")连接配置成功。";
                 }
@@ -1315,12 +1315,12 @@ namespace BP.Sys
         private DataTable RunSQLReturnTable(string sql, System.Data.Common.DbConnection conn, string dsn, CommandType cmdType)
         {
             if (conn is System.Data.SqlClient.SqlConnection)
-                return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType,null);
+                return DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType,null);
              
             //if (conn is System.Data.OracleClient.OracleConnection)
-            //    return BP.DA.DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
+            //    return DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
             if (conn is OracleConnection)
-                return BP.DA.DBAccess.RunSQLReturnTable(sql, (OracleConnection)conn, cmdType, dsn);
+                return DBAccess.RunSQLReturnTable(sql, (OracleConnection)conn, cmdType, dsn);
 
             if (conn is MySqlConnection)
             {

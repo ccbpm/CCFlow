@@ -321,7 +321,7 @@ namespace BP.WF.HttpHandler
                         break;
                 }
 
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
 

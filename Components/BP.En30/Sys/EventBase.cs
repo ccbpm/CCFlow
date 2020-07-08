@@ -217,7 +217,7 @@ namespace BP.Sys
         {
             string sql = "SELECT  MyPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + this.FK_Node + " ORDER BY RDT ";
 
-            DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt=DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 return null;
             return dt.Rows[0][0].ToString();

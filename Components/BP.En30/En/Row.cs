@@ -25,25 +25,25 @@ namespace BP.En
             {
                 switch (attr.MyDataType)
                 {
-                    case BP.DA.DataType.AppInt:
+                    case DataType.AppInt:
                         if (attr.IsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, int.Parse(attr.DefaultVal.ToString()));
                         break;
-                    case BP.DA.DataType.AppFloat:
+                    case DataType.AppFloat:
                         if (attr.IsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, float.Parse(attr.DefaultVal.ToString()));
                         break;
-                    case BP.DA.DataType.AppMoney:
+                    case DataType.AppMoney:
                         if (attr.IsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, decimal.Parse(attr.DefaultVal.ToString()));
                         break;
-                    case BP.DA.DataType.AppDouble:
+                    case DataType.AppDouble:
                         if (attr.IsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else

@@ -671,10 +671,10 @@ namespace BP.Sys
             {
                 switch (this.MyDataType)
                 {
-                    case BP.DA.DataType.AppString:
-                    case BP.DA.DataType.AppDate:
-                    case BP.DA.DataType.AppDateTime:
-                    case BP.DA.DataType.AppBoolean:
+                    case DataType.AppString:
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                    case DataType.AppBoolean:
                         return false;
                     default:
                         return true;
@@ -746,13 +746,13 @@ namespace BP.Sys
 
                 switch (this.MyDataType)
                 {
-                    case BP.DA.DataType.AppDate:
+                    case DataType.AppDate:
                         if (this.Tag == "1" || s == "@RDT")
                             return DataType.CurrentData;
                         else
                             return "          ";
                         break;
-                    case BP.DA.DataType.AppDateTime:
+                    case DataType.AppDateTime:
                         if (this.Tag == "1" || s == "@RDT")
                             return DataType.CurrentDataTime;
                         else
@@ -1534,7 +1534,7 @@ namespace BP.Sys
             if (System.IO.Directory.Exists(folder) == false)
                 System.IO.Directory.CreateDirectory(folder);
 
-            BP.DA.DataType.WriteFile(file, text);
+            DataType.WriteFile(file, text);
             return "保存成功！";
         }
         //删除大块文本信息
@@ -1563,7 +1563,7 @@ namespace BP.Sys
             {
                 if (File.Exists(file))
                 {
-                    doc = BP.DA.DataType.ReadTextFile(file);
+                    doc = DataType.ReadTextFile(file);
 
                 }
             }
@@ -1637,7 +1637,7 @@ namespace BP.Sys
             //规整groupID.
             GroupField gf = new GroupField();
             gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
-            BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
 
             this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
@@ -1658,7 +1658,7 @@ namespace BP.Sys
             //规整groupID.
             GroupField gf = new GroupField();
             gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
-            BP.DA.DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
 
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
@@ -1804,7 +1804,7 @@ namespace BP.Sys
             }
 
             if (this.Idx == 0)
-                this.Idx = BP.DA.DBAccess.RunSQLReturnValInt(string.Format("SELECT {0} FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", SqlBuilder.GetIsNullInSQL("MAX(Idx)", "0"))) + 1;
+                this.Idx = DBAccess.RunSQLReturnValInt(string.Format("SELECT {0} FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", SqlBuilder.GetIsNullInSQL("MAX(Idx)", "0"))) + 1;
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             return base.beforeInsert();
         }
@@ -1822,7 +1822,7 @@ namespace BP.Sys
             if (this.UIContralType == En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
 
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
             return base.beforeDelete();
         }
         protected override void afterDelete()

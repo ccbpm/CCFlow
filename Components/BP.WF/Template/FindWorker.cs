@@ -503,7 +503,7 @@ namespace BP.WF.Template
                     if (DataType.IsNullOrEmpty(s))
                         continue;
 
-                    //if (BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
+                    //if (DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
                     //    continue;
 
                     DataRow dr = dt.NewRow();

@@ -83,7 +83,7 @@ namespace BP.WF
 
             #region 主表 Sys_MapData
             string sql = "SELECT * FROM Sys_MapData WHERE 1=2 ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
 
             Map map = en.EnMapInTime;
@@ -97,7 +97,7 @@ namespace BP.WF
 
             #region 主表 Sys_MapAttr
             sql = "SELECT * FROM Sys_MapAttr WHERE 1=2 ";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapAttr";
             foreach (Attr attr in map.Attrs)
             {
@@ -156,7 +156,7 @@ namespace BP.WF
             #region //主表 Sys_MapExt 扩展属性
             ////主表的配置信息.
             //sql = "SELECT * FROM Sys_MapExt WHERE 1=2";
-            //dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //dt = DBAccess.RunSQLReturnTable(sql);
             //dt.TableName = "Sys_MapExt";
             //myds.Tables.Add(dt);
             #endregion //主表 Sys_MapExt 扩展属性
@@ -190,7 +190,7 @@ namespace BP.WF
 
                 //明细表的 描述 . 
                 sql = "SELECT * FROM Sys_MapDtl WHERE 1=2";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Sys_MapDtl_For_" + item.EnsName;
 
                 dr = dt.NewRow();
@@ -204,7 +204,7 @@ namespace BP.WF
 
                 #region 明细表 Sys_MapAttr
                 sql = "SELECT * FROM Sys_MapAttr WHERE 1=2";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Sys_MapAttr_For_" + item.EnsName;
                 foreach (Attr attr in map.Attrs)
                 {
@@ -357,26 +357,26 @@ namespace BP.WF
             #region 表单模版信息.（含主、从表的，以及从表的枚举/外键相关数据）.
             //增加表单字段描述.
             string sql = "SELECT * FROM Sys_MapData WHERE No='" + frmID + "' ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             myds.Tables.Add(dt);
 
             //增加表单字段描述.
             sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' ";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapAttr";
             myds.Tables.Add(dt);
 
             //增加从表信息.
             sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData='" + frmID + "' ";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapDtl";
             myds.Tables.Add(dt);
 
 
             //主表的配置信息.
             sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + frmID + "'";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapExt";
             myds.Tables.Add(dt);
 
@@ -396,19 +396,19 @@ namespace BP.WF
 
                 //明细表的主表描述
                 sql = "SELECT * FROM Sys_MapDtl WHERE No='" + item.No + "'";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Sys_MapDtl_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dt);
 
                 //明细表的表单描述
                 sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + item.No + "'";
-                dtMapAttr = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtMapAttr = DBAccess.RunSQLReturnTable(sql);
                 dtMapAttr.TableName = "Sys_MapAttr_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dtMapAttr);
 
                 //明细表的配置信息.
                 sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + item.No + "'";
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Sys_MapExt_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dt);
 
@@ -849,7 +849,7 @@ namespace BP.WF
             foreach (MapAttr attr in dtlAttrs)
             {
                 #region 修改区分大小写. Oracle
-                if (BP.DA.DBType.Oracle == SystemConfig.AppCenterDBType)
+                if (DBType.Oracle == SystemConfig.AppCenterDBType)
                 {
                     foreach (DataColumn dr in dtDtl.Columns)
                     {
@@ -882,7 +882,7 @@ namespace BP.WF
                 #endregion 修改区分大小写.
 
                 #region 修改区分大小写. PostgreSQL
-                if (BP.DA.DBType.PostgreSQL == SystemConfig.AppCenterDBType)
+                if (DBType.PostgreSQL == SystemConfig.AppCenterDBType)
                 {
                     foreach (DataColumn dr in dtDtl.Columns)
                     {

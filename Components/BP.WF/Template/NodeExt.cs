@@ -1393,7 +1393,7 @@ namespace BP.WF.Template
             if (System.IO.Directory.Exists(folder) == false)
                 System.IO.Directory.CreateDirectory(folder);
 
-            BP.DA.DataType.WriteFile(file, text);
+            DataType.WriteFile(file, text);
             return "保存成功！";
         }
         /// <summary>
@@ -1409,7 +1409,7 @@ namespace BP.WF.Template
             {
                 if (File.Exists(file))
                 {
-                    doc = BP.DA.DataType.ReadTextFile(file);
+                    doc = DataType.ReadTextFile(file);
 
                 }
             }
@@ -1584,7 +1584,7 @@ namespace BP.WF.Template
             btnLab.RetrieveFromDBSources();
 
             //清除所有的缓存.
-            BP.DA.CashEntity.DCash.Clear();
+            CashEntity.DCash.Clear();
 
             return base.beforeUpdate();
         }

@@ -263,7 +263,7 @@ namespace BP.WF
         /// <returns>返回一个No,Name数据源，用于生成一个列表.</returns>
         public static DataTable DB_GenerCanStartFlowsOfDataTable()
         {
-            return BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Flow as No, FlowName AS Name  FROM WF_Node  WHERE IsGuestNode=1 AND NodePosType=0");
+            return DBAccess.RunSQLReturnTable("SELECT FK_Flow as No, FlowName AS Name  FROM WF_Node  WHERE IsGuestNode=1 AND NodePosType=0");
         }
         /// <summary>
         /// 获取Guest的待办
@@ -291,7 +291,7 @@ namespace BP.WF
                 ps.Add("FK_Flow", fk_flow);
                 ps.Add("GuestNo", guestNo);
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
@@ -311,7 +311,7 @@ namespace BP.WF
             else
                 sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1  AND A.GuestNo='" + guestNo + "'";
 
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return DBAccess.RunSQLReturnTable(sql);
 
             //GenerWorkFlows gwfs = new GenerWorkFlows();
             //gwfs.RetrieveInSQL(GenerWorkFlowAttr.WorkID, "(" + sql + ")");
@@ -335,7 +335,7 @@ namespace BP.WF
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("WorkID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             Flow fl = new Flow(flowNo);
             ps = new Paras();
@@ -343,7 +343,7 @@ namespace BP.WF
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("OID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
         /// <summary>
         /// 设置当前用户的待办
@@ -364,7 +364,7 @@ namespace BP.WF
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("WorkID", workID);
-            int i = BP.DA.DBAccess.RunSQL(ps);
+            int i = DBAccess.RunSQL(ps);
             if (i == 0)
                 throw new Exception("@设置外部用户待办信息失败:参数workID不能为空.");
 
@@ -373,7 +373,7 @@ namespace BP.WF
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("WorkID", workID);
-            i = BP.DA.DBAccess.RunSQL(ps);
+            i = DBAccess.RunSQL(ps);
             if (i == 0)
                 throw new Exception("@WF_GenerWorkFlow - 设置外部用户待办信息失败:参数WorkID不能为空.");
         }

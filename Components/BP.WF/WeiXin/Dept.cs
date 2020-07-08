@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.DA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,7 @@ namespace BP.GPM.WeiXin
             string url = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=" + access_token;
 
             //读取数据.
-            string str = BP.DA.DataType.ReadURLContext(url, 9999, null);
+            string str = DataType.ReadURLContext(url, 9999, null);
             DeptList departMentList = BP.Tools.FormatToJson.ParseFromJson<DeptList>(str);
 
             if (departMentList.errcode != 0)

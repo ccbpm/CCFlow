@@ -36,12 +36,12 @@ namespace BP.WF.HttpHandler
             string sql = "";
             sql = "SELECT 'F' + No as No,Name, 'F' + ParentNo as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
 
-            DataTable dtFlowSorts = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
             //if (dtFlowSort.Rows.Count == 0)
             //{
             //    fk_dept = BP.Web.WebUser.FK_Dept;
             //    sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx ";
-            //    dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //    dtDept = DBAccess.RunSQLReturnTable(sql);
             //}
 
             dtFlowSorts.TableName = "FlowSorts";
@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
             sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
             sql += " ORDER BY Idx ";
 
-            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -168,12 +168,12 @@ namespace BP.WF.HttpHandler
             }
 
             //清除指定的名字.
-            // BP.DA.Cash2019.ClearCashSpecEnName("BP.WF.Template.NodeExt");
-            // BP.DA.Cash2019.ClearCashSpecEnName("BP.WF.Node");
-            // BP.DA.Cash2019.ClearCashSpecEnName("BP.Sys.GroupField");
+            // Cash2019.ClearCashSpecEnName("BP.WF.Template.NodeExt");
+            // Cash2019.ClearCashSpecEnName("BP.WF.Node");
+            // Cash2019.ClearCashSpecEnName("BP.Sys.GroupField");
 
             //清楚缓存.
-            BP.DA.Cash.ClearCash();
+            Cash.ClearCash();
 
             return "更新成功.";
         }
@@ -271,7 +271,7 @@ namespace BP.WF.HttpHandler
                 DBAccess.RunSQLs(sBuilder.ToString());
 
                 //清楚缓存.
-                BP.DA.Cash.ClearCash();
+                Cash.ClearCash();
                 // Node nd = new Node(102);
                 // throw new Exception(nd.Name);
 
@@ -507,7 +507,7 @@ namespace BP.WF.HttpHandler
                     return "url@Login.htm?DoType=Logout&Err=NoAdminUsers";
 
                 //如果没有流程表，就执行安装.
-                if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
+                if (DBAccess.IsExitsObject("WF_Flow") == false)
                     return "url@../DBInstall.htm";
 
                 Hashtable ht = new Hashtable();
@@ -581,7 +581,7 @@ namespace BP.WF.HttpHandler
             //    return "url@Login.htm?DoType=Logout";
 
             //如果没有流程表，就执行安装.
-            if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
+            if (DBAccess.IsExitsObject("WF_Flow") == false)
                 return "url@../DBInstall.htm";
 
             //是否需要自动登录
@@ -659,9 +659,9 @@ namespace BP.WF.HttpHandler
                 //只有一个组织的情况.
                 if (DBAccess.IsView("Port_Emp") == false)
                 {
-                    string sid = BP.DA.DBAccess.GenerGUID();
+                    string sid = DBAccess.GenerGUID();
                     string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'";
-                    BP.DA.DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
                     emp.SID = sid;
                 }
 

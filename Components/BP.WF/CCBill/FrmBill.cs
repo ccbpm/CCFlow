@@ -667,13 +667,13 @@ namespace BP.CCBill
                 attr.FK_MapData = this.No;
                 attr.KeyOfEn = "OID";
                 attr.Name = "主键ID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.DefVal = "0";
-                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.HisEditType = EditType.Readonly;
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)

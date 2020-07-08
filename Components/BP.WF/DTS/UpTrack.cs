@@ -58,7 +58,7 @@ namespace BP.WF.DTS
 
                 // 查询.
                 string sql = "SELECT * FROM WF_Track WHERE FK_Flow='" + fl.No + "'";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     Track tk = new Track();

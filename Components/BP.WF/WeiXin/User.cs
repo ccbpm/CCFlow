@@ -117,7 +117,7 @@ namespace BP.GPM.WeiXin
             string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token= " + access_token + "&department_id=" + deptID + "&status=0";
 
             //读取数据.
-            string str = BP.DA.DataType.ReadURLContext(url);
+            string str = DataType.ReadURLContext(url);
             //获得用户列表.
             UserList users = FormatToJson.ParseFromJson<UserList>(str);
 

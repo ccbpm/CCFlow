@@ -117,7 +117,7 @@ namespace BP.Pub
                 if (title.Contains("@") == false)
                     return title;
 
-                BP.DA.AtPara ap = new AtPara(this.DefaultParas);
+                AtPara ap = new AtPara(this.DefaultParas);
                 foreach (string key in ap.HisHT.Keys)
                     title = title.Replace("@" + key, ap.GetValStrByKey(key));
 
@@ -280,14 +280,14 @@ namespace BP.Pub
                         sql = sql.Replace("@" + k, HttpContextHelper.RequestParams(k));
                     if (sql.Contains("@") == true)
                     {
-                        BP.DA.AtPara ap = new BP.DA.AtPara(this.DefaultParas);
+                        AtPara ap = new AtPara(this.DefaultParas);
                         foreach (string k in ap.HisHT.Keys)
                         {
                             sql = sql.Replace("@" + k, ap.HisHT[k].ToString());
                         }
                     }
 
-                    _DBDataTable = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    _DBDataTable = DBAccess.RunSQLReturnTable(sql);
                 }
                 return _DBDataTable;
             }
@@ -361,7 +361,7 @@ namespace BP.Pub
             str += "  ] ";
             str += "}; ";
 
-           // BP.DA.DataType.WriteFile("c:\\111.txt", str);
+           // DataType.WriteFile("c:\\111.txt", str);
             return str;
         }
     }

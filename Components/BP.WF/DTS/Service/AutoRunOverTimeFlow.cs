@@ -126,7 +126,7 @@ namespace BP.WF.DTS
 
 
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                Log.DefaultLogWriteLine(LogType.Info, msg);
 
                             }
                             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace BP.WF.DTS
                                 msg = "流程 '" + node.FlowName + "',WorkID=" + workid + ",标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动跳转',跳转异常:" + ex.Message;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                                Log.DefaultLogWriteLine(LogType.Error, msg);
                             }
                             break;
                         case OutTimeDeal.AutoShiftToSpecUser: //走动移交给.
@@ -148,14 +148,14 @@ namespace BP.WF.DTS
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'移交到指定的人',已经自动移交给'" + empShift.Name + ".";
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                Log.DefaultLogWriteLine(LogType.Info, msg);
                             }
                             catch (Exception ex)
                             {
                                 msg = "流程 '" + node.FlowName + "' ,标题:'" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'移交到指定的人',移交异常：" + ex.Message;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                                Log.DefaultLogWriteLine(LogType.Error, msg);
                             }
                             break;
                         case OutTimeDeal.AutoTurntoNextStep:
@@ -172,14 +172,14 @@ namespace BP.WF.DTS
                                 msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动发送到下一节点',发送消息为:" + sendIfo;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                Log.DefaultLogWriteLine(LogType.Info, msg);
                             }
                             catch (Exception ex)
                             {
                                 msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动发送到下一节点',发送异常:" + ex.Message;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                                Log.DefaultLogWriteLine(LogType.Error, msg);
                             }
                             break;
                         case OutTimeDeal.DeleteFlow:
@@ -187,7 +187,7 @@ namespace BP.WF.DTS
                             msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                   "'超时处理规则为'删除流程'," + info;
                             SetText(msg);
-                            BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                            Log.DefaultLogWriteLine(LogType.Info, msg);
                             break;
                         case OutTimeDeal.RunSQL:
                             try
@@ -208,7 +208,7 @@ namespace BP.WF.DTS
                                     msg = "流程 '" + node.FlowName + "',标题:  '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                           "'超时处理规则为'执行SQL'.有未替换的SQL变量.";
                                     SetText(msg);
-                                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                    Log.DefaultLogWriteLine(LogType.Info, msg);
                                     break;
                                 }
 
@@ -220,7 +220,7 @@ namespace BP.WF.DTS
                                 msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'执行SQL'.运行SQL出现异常:" + ex.Message;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                                Log.DefaultLogWriteLine(LogType.Error, msg);
                             }
                             break;
                         case OutTimeDeal.SendMsgToSpecUser:
@@ -235,28 +235,28 @@ namespace BP.WF.DTS
                                 else
                                     msg = "'" + title + "'逾期消息发送未成功,发送人为:'" + myemp.Name + "'";
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                Log.DefaultLogWriteLine(LogType.Info, msg);
                             }
                             catch (Exception ex)
                             {
                                 msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'执行SQL'.运行SQL出现异常:" + ex.Message;
                                 SetText(msg);
-                                BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                                Log.DefaultLogWriteLine(LogType.Error, msg);
                             }
                             break;
                         default:
                             msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                   "'没有找到相应的超时处理规则.";
                             SetText(msg);
-                            BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);
+                            Log.DefaultLogWriteLine(LogType.Error, msg);
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
                     SetText("流程逾期出现异常:" + ex.Message);
-                    BP.DA.Log.DefaultLogWriteLine(LogType.Error, ex.ToString());
+                    Log.DefaultLogWriteLine(LogType.Error, ex.ToString());
 
                 }
             }

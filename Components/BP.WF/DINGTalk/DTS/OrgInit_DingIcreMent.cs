@@ -63,7 +63,7 @@ namespace BP.GPM.DTalk.DTS
                 string webPath = "Log/Ding_GPM" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
                 string savePath = BP.Sys.SystemConfig.PathOfDataUser + webPath;
 
-                BP.DA.Log log = new Log(savePath);
+                Log log = new Log(savePath);
                 log.WriteLine(result);
                 return "执行成功<a href=\"/DataUser/" + webPath + "\" target='_blank'>下载日志</a>";
             }

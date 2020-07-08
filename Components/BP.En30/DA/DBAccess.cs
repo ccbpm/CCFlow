@@ -166,7 +166,7 @@ namespace BP.DA
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
-                SqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as SqlConnection;
+                SqlConnection cn = DBAccess.GetAppCenterDBConn as SqlConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -191,7 +191,7 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
@@ -199,7 +199,7 @@ namespace BP.DA
                         if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                             sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " Image ";
 
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
 
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
@@ -217,7 +217,7 @@ namespace BP.DA
             //错误的引用oracle的关键字file
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;
+                OracleConnection cn = DBAccess.GetAppCenterDBConn as OracleConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -242,12 +242,12 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         //修改数据类型   oracle 不存在image类型   edited by qin 16.7.1
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " blob ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
@@ -265,7 +265,7 @@ namespace BP.DA
             //add by zhoupeng
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                Npgsql.NpgsqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as Npgsql.NpgsqlConnection;
+                Npgsql.NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as Npgsql.NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -300,11 +300,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " bytea NULL ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
@@ -320,7 +320,7 @@ namespace BP.DA
             //added by liuxc,2016-12-7，增加对mysql大数据longblob字段存储逻辑
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                MySqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as MySqlConnection;
+                MySqlConnection cn = DBAccess.GetAppCenterDBConn as MySqlConnection;
 
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
@@ -344,11 +344,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " BLOB NULL ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                         SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
                         return;
                     }
@@ -402,7 +402,7 @@ namespace BP.DA
                 if (DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                 {
                     string sql = "ALTER TABLE " + tableName + " ADD " + saveToFileField + " text ";
-                    BP.DA.DBAccess.RunSQL(sql);
+                    DBAccess.RunSQL(sql);
 
                     //在执行一遍.
                     DBAccess.RunSQL(ps);
@@ -513,7 +513,7 @@ namespace BP.DA
         {
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
-                SqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as SqlConnection;
+                SqlConnection cn = DBAccess.GetAppCenterDBConn as SqlConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -542,11 +542,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列. */
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " Image ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                         return null;
                         // return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
                     }
@@ -566,7 +566,7 @@ namespace BP.DA
             //增加对oracle数据库的逻辑 qin
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                OracleConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as OracleConnection;
+                OracleConnection cn = DBAccess.GetAppCenterDBConn as OracleConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -596,11 +596,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
@@ -615,7 +615,7 @@ namespace BP.DA
             //added by liuxc,2016-12-7,增加对mysql数据库的逻辑
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                MySqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as MySqlConnection;
+                MySqlConnection cn = DBAccess.GetAppCenterDBConn as MySqlConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -646,11 +646,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
@@ -664,7 +664,7 @@ namespace BP.DA
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
-                NpgsqlConnection cn = BP.DA.DBAccess.GetAppCenterDBConn as NpgsqlConnection;
+                NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
                     cn.Open();
 
@@ -695,11 +695,11 @@ namespace BP.DA
                 }
                 catch (Exception ex)
                 {
-                    if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
                 }
@@ -730,7 +730,7 @@ namespace BP.DA
             //if (BP.Web.WebUser.No == null)
             //    return;
             //SqlConnection conn = new SqlConnection(SystemConfig.AppCenterDSN);
-            //BP.DA.Cash.SetConn(BP.Web.WebUser.No, conn);
+            //Cash.SetConn(BP.Web.WebUser.No, conn);
             //DBAccess.RunSQL("BEGIN TRANSACTION");
         }
         /// <summary>
@@ -747,7 +747,7 @@ namespace BP.DA
             //    return;
 
             //DBAccess.RunSQL("Rollback TRANSACTION");
-            //SqlConnection conn = BP.DA.Cash.GetConn(BP.Web.WebUser.No) as SqlConnection;
+            //SqlConnection conn = Cash.GetConn(BP.Web.WebUser.No) as SqlConnection;
             //conn.Close();
             //conn.Dispose();
         }
@@ -788,7 +788,7 @@ namespace BP.DA
         /// <returns></returns>i
         public static string GenerWhereInPKsString(string sql)
         {
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return GenerWhereInPKsString(dt);
         }
         /// <summary>
@@ -819,14 +819,14 @@ namespace BP.DA
                 {
                     case DBType.MSSQL:
                     case DBType.PostgreSQL:
-                        BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 ");
+                        DBAccess.RunSQLReturnString("SELECT 1+2 ");
                         break;
                     case DBType.Oracle:
                     case DBType.MySQL:
-                        BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
+                        DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
                         break;
                     //case DBType.Informix:
-                    //    BP.DA.DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
+                    //    DBAccess.RunSQLReturnString("SELECT 1+2 FROM DUAL ");
                     //    break;
                     default:
                         break;
@@ -1361,7 +1361,7 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                BP.DA.Log.DebugWriteInfo(ex.Message);
+                Log.DebugWriteInfo(ex.Message);
                 throw new Exception("RunSQL2 step=" + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
             }
             finally
@@ -1400,7 +1400,7 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                BP.DA.Log.DebugWriteInfo(ex.Message);
+                Log.DebugWriteInfo(ex.Message);
                 throw new Exception("RunSQL2" + ex.Message);
             }
             finally
@@ -1459,7 +1459,7 @@ namespace BP.DA
                     throw new Exception("err@DropTablePK不支持的数据库类型." + SystemConfig.AppCenterDBType);
                     //break;
             }
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
         }
 
         #region pk
@@ -1552,7 +1552,7 @@ namespace BP.DA
         public static void CreatIndex(string table, string fields)
         {
             string idxName = table + "_" + fields;
-            if (BP.DA.DBAccess.IsExitsObject(idxName) == true)
+            if (DBAccess.IsExitsObject(idxName) == true)
                 return;
 
             string sql = "";
@@ -1661,17 +1661,17 @@ namespace BP.DA
             }
             try
             {
-                return BP.DA.DBAccess.RunSQLReturnTable(sql);
+                return DBAccess.RunSQLReturnTable(sql);
             }
             catch
             {
                 sql = "select * from Port_Emp WHERE 1=2";
-                return BP.DA.DBAccess.RunSQLReturnTable(sql);
+                return DBAccess.RunSQLReturnTable(sql);
             }
         }
         public static void RunSQLScript(string sqlOfScriptFilePath)
         {
-            string str = BP.DA.DataType.ReadTextFile(sqlOfScriptFilePath);
+            string str = DataType.ReadTextFile(sqlOfScriptFilePath);
             string[] strs = str.Split(';');
             foreach (string s in strs)
             {
@@ -1684,7 +1684,7 @@ namespace BP.DA
                 if (s.Contains("/*"))
                     continue;
 
-                BP.DA.DBAccess.RunSQL(s);
+                DBAccess.RunSQL(s);
             }
         }
         /// <summary>
@@ -1693,7 +1693,7 @@ namespace BP.DA
         /// <param name="sqlOfScriptFilePath"></param>
         public static void RunSQLScriptGo(string sqlOfScriptFilePath)
         {
-            string str = BP.DA.DataType.ReadTextFile(sqlOfScriptFilePath);
+            string str = DataType.ReadTextFile(sqlOfScriptFilePath);
             string[] strs = str.Split(new String[] { "--GO--" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in strs)
             {
@@ -1709,7 +1709,7 @@ namespace BP.DA
                 if (s.Contains("--"))
                     continue;
 
-                BP.DA.DBAccess.RunSQL(mysql);
+                DBAccess.RunSQL(mysql);
             }
         }
         public static string DealSQL(string sql)
@@ -2414,7 +2414,7 @@ namespace BP.DA
             catch (System.Exception ex)
             {
                 lock_msSQL_ReturnTable = false;
-                BP.DA.Log.DebugWriteError(ex.Message);
+                Log.DebugWriteError(ex.Message);
                 throw new Exception("[RunSQLReturnTable on SqlConnection 1]" + "<BR>" + ex.Message + " sql=" + msSQL);
             }
             finally
@@ -3433,7 +3433,7 @@ namespace BP.DA
         /// <returns>主键名称、没有返回为空.</returns>
         public static string GetTablePKName(string table)
         {
-            BP.DA.Paras ps = new Paras();
+            Paras ps = new Paras();
             string sql = "";
             switch (AppCenterDBType)
             {
@@ -3719,7 +3719,7 @@ namespace BP.DA
                     break;
             }
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (isUpper == false)
             {
                 dt.Columns["FNAME"].ColumnName = "FName";

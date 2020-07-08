@@ -206,7 +206,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public byte[] GenerTemplateFile()
         {
-            byte[] bytes = BP.DA.DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
+            byte[] bytes = DBAccess.GetByteFromDB(this.EnMap.PhysicsTable, "No", this.No, "DBFile");
             if (bytes != null)
                 return bytes;
 
@@ -215,7 +215,7 @@ namespace BP.WF.Template
             if (System.IO.File.Exists(tempExcel) == false)
                 tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "CyclostyleFile\\Word单据模版定义演示.docx";
 
-            bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+            bytes = DataType.ConvertFileToByte(tempExcel);
             return bytes;
         }
 		/// <summary>

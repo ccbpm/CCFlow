@@ -72,7 +72,7 @@ namespace BP.WF.HttpHandler
                         if (System.IO.Directory.Exists(athDesc.SaveTo) == false)
                             System.IO.Directory.CreateDirectory(athDesc.SaveTo);
 
-                        int oid = BP.DA.DBAccess.GenerOID();
+                        int oid = DBAccess.GenerOID();
                         string saveTo = athDesc.SaveTo + "\\" + oid + "." + fl.Name.Substring(fl.Name.LastIndexOf('.') + 1);
                         if (saveTo.Contains("@") == true || saveTo.Contains("*") == true)
                         {
@@ -114,7 +114,7 @@ namespace BP.WF.HttpHandler
                             Paras ps = new Paras();
                             ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                             ps.Add("WorkID", this.PKVal);
-                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                            string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                             if (pWorkID == null || pWorkID == "0")
                                 pWorkID = this.PKVal;
                             dbUpload.RefPKVal = pWorkID;
@@ -227,7 +227,7 @@ namespace BP.WF.HttpHandler
                             sql = sql.Replace("@" + strKey, HttpContextHelper.RequestParams(strKey));
                         }
                     }
-                    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dt = DBAccess.RunSQLReturnTable(sql);
                     return JSONTODT(dt);
                 case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
                 case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。
@@ -240,7 +240,7 @@ namespace BP.WF.HttpHandler
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
                             //System.Web.HttpContext.Current.Session["DtlKey"] = key;
                             HttpContextHelper.SessionSet("DtlKey", key);
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
 
                             return JSONTODT(dt);
                             break;
@@ -268,7 +268,7 @@ namespace BP.WF.HttpHandler
                                 MapDtl dtl = new MapDtl(fk_dtl);
 
                                 DataTable dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
-                                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
+                                DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
                                 foreach (DataRow dr in dtDtlFull.Rows)
                                 {
                                     BP.Sys.GEDtl mydtl = new GEDtl(fk_dtl);
@@ -337,7 +337,7 @@ namespace BP.WF.HttpHandler
                                     break;
                                 }
                             }
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
                             return JSONTODT(dt);
                             break;
                         default:
@@ -345,7 +345,7 @@ namespace BP.WF.HttpHandler
 
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
 
-                            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                            dt = DBAccess.RunSQLReturnTable(sql);
                             return JSONTODT(dt);
                             break;
                     }
@@ -1728,7 +1728,7 @@ namespace BP.WF.HttpHandler
 
                 string json = BP.Tools.Json.DataSetToJson(ds, false);
 
-                //BP.DA.DataType.WriteFile("c:\\aaa.txt", json);
+                //DataType.WriteFile("c:\\aaa.txt", json);
                 return json;
             }
             catch (Exception ex)
@@ -2328,7 +2328,7 @@ namespace BP.WF.HttpHandler
         public string Dtl_ReloadDdl()
         {
             string Doc = this.GetRequestVal("Doc");
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(Doc);
+            DataTable dt = DBAccess.RunSQLReturnTable(Doc);
             dt.TableName = "ReloadDdl";
             return BP.Tools.Json.ToJson(dt);
         }
@@ -2559,7 +2559,7 @@ namespace BP.WF.HttpHandler
             sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
             sqlObjs = this.DealExpByFromVals(sqlObjs);
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+            DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
             dt.TableName = "DTObjs";
 
             //判断是否是oracle.
@@ -2581,7 +2581,7 @@ namespace BP.WF.HttpHandler
                 sqlObjs = sqlObjs.Replace("@ParentNo", parentNo);
                 sqlObjs = this.DealExpByFromVals(sqlObjs);
 
-                DataTable entityDt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                DataTable entityDt = DBAccess.RunSQLReturnTable(sqlObjs);
                 entityDt.TableName = "DTEntitys";
                 resultDs.Tables.Add(entityDt);
 
@@ -2657,7 +2657,7 @@ namespace BP.WF.HttpHandler
                 sqlObjs = this.DealExpByFromVals(sqlObjs);
 
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
                 DoCheckTableColumnNameCase(dt);
                 ds.Tables.Add(dt);
@@ -2679,7 +2679,7 @@ namespace BP.WF.HttpHandler
                     sqlObjs = this.DealExpByFromVals(sqlObjs);
 
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTGroup";
                     DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dt);
@@ -2694,7 +2694,7 @@ namespace BP.WF.HttpHandler
                     sqlObjs = this.DealExpByFromVals(sqlObjs);
 
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTEntity";
                     DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dt);
@@ -2784,7 +2784,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
                 DoCheckTableColumnNameCase(dt);
                 ds.Tables.Add(dt);
@@ -2841,7 +2841,7 @@ namespace BP.WF.HttpHandler
                         throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
 
                     //查询出来数据，就把他放入到dataset里面.
-                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dtPara = DBAccess.RunSQLReturnTable(sql);
                     dtPara.TableName = para;
                     DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dtPara); //加入到参数集合.
@@ -2946,7 +2946,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
+                string count = DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
                 DataTable dtCount = new DataTable("DTCout");
                 dtCount.TableName = "DTCout";
                 dtCount.Columns.Add("Count", typeof(int));
@@ -3006,7 +3006,7 @@ namespace BP.WF.HttpHandler
                         throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
 
                     //查询出来数据，就把他放入到dataset里面.
-                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dtPara = DBAccess.RunSQLReturnTable(sql);
                     dtPara.TableName = para;
                     ds.Tables.Add(dtPara); //加入到参数集合.
                 }
@@ -3122,7 +3122,7 @@ namespace BP.WF.HttpHandler
                 }
 
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                DataTable dt = DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
                 ds.Tables.Add(dt);
 
@@ -3178,7 +3178,7 @@ namespace BP.WF.HttpHandler
                         throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
 
                     //查询出来数据，就把他放入到dataset里面.
-                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dtPara = DBAccess.RunSQLReturnTable(sql);
                     dtPara.TableName = para;
                     ds.Tables.Add(dtPara); //加入到参数集合.
                 }
@@ -3263,7 +3263,7 @@ namespace BP.WF.HttpHandler
             dbUpload.RecName = WebUser.Name;
             dbUpload.FK_Dept = WebUser.FK_Dept;
             dbUpload.FK_DeptName = WebUser.FK_DeptName;
-            dbUpload.RDT = BP.DA.DataType.CurrentDataTime;
+            dbUpload.RDT = DataType.CurrentDataTime;
 
             dbUpload.NodeID = fk_node;
             dbUpload.Save();
@@ -3271,7 +3271,7 @@ namespace BP.WF.HttpHandler
             if (frmAth.AthSaveWay == AthSaveWay.DB)
             {
                 //执行文件保存.
-                BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
             }
         }
 
@@ -3348,14 +3348,14 @@ namespace BP.WF.HttpHandler
                             if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                             {
                                 //根据流程的PWorkID获取他的P2流程
-                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                                string pWorkID = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
                                 pkVal = pWorkID;
                             }
                             if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
                             {
                                 string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                                 //根据流程的PWorkID获取他的P2流程
-                                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                                string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
                                 pkVal = pWorkID;
                             }
                         }
@@ -3381,14 +3381,14 @@ namespace BP.WF.HttpHandler
                         if (myathDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
                         {
                             //根据流程的PWorkID获取他的爷爷流程
-                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
+                            string pWorkID = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
                             pkVal = pWorkID;
                         }
                         if (myathDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
                         {
                             string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                             //根据流程的PWorkID获取他的P2流程
-                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0).ToString();
+                            string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
                             pkVal = pWorkID;
                         }
                     }
@@ -3462,7 +3462,7 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(exts))
                         return "err@上传的文件" + file.FileName + "没有扩展名";
 
-                    string guid = BP.DA.DBAccess.GenerGUID();
+                    string guid = DBAccess.GenerGUID();
 
 
 
@@ -3557,7 +3557,7 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthSaveWay == AthSaveWay.DB)
                     {
                         //执行文件保存.
-                        BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                        DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
@@ -3608,7 +3608,7 @@ namespace BP.WF.HttpHandler
 
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                    dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
+                    dbUpload.MyPK = DBAccess.GenerGUID();
                     dbUpload.Sort = sort;
                     dbUpload.NodeID = FK_Node;
                     dbUpload.FK_MapData = athDesc.FK_MapData;
@@ -3856,7 +3856,7 @@ namespace BP.WF.HttpHandler
         public string DtlImpBySQL_Delete()
         {
             MapDtl dtl = new MapDtl(this.EnsName);
-            BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.RefPKVal + "'");
+            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.RefPKVal + "'");
             return "";
         }
         /// <summary>
@@ -3969,7 +3969,7 @@ namespace BP.WF.HttpHandler
                         dtlEn.SetValByKey("FID", fid);
                         break;
                 }
-                dtlEn.SetValByKey("RDT", BP.DA.DataType.CurrentData);
+                dtlEn.SetValByKey("RDT", DataType.CurrentData);
                 dtlEn.SetValByKey("Rec", this.GetRequestVal("UserNo"));
                 //dtlEn.OID = (int)DBAccess.GenerOID(ensName);
 
@@ -4018,7 +4018,7 @@ namespace BP.WF.HttpHandler
                 //files[0].SaveAs(file);
                 HttpContextHelper.UploadFile(files[0], file);
 
-                System.Data.DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(file);
+                System.Data.DataTable dt = DBLoad.ReadExcelFileToDataTable(file);
 
                 string FK_MapDtl = this.FK_MapDtl;
                 if (FK_MapDtl.Contains("BP") == true)
@@ -4081,11 +4081,11 @@ namespace BP.WF.HttpHandler
                 #region 执行导入数据.
 
                 if (this.GetRequestValInt("DDL_ImpWay") == 0)
-                    BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'");
+                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'");
 
                 int i = 0;
-                Int64 oid = BP.DA.DBAccess.GenerOID("Dtl", dt.Rows.Count);
-                string rdt = BP.DA.DataType.CurrentData;
+                Int64 oid = DBAccess.GenerOID("Dtl", dt.Rows.Count);
+                string rdt = DataType.CurrentData;
 
                 string errMsg = "";
                 foreach (DataRow dr in dt.Rows)
@@ -4148,7 +4148,7 @@ namespace BP.WF.HttpHandler
                                 break;
                         }
 
-                        if (attr.MyDataType == BP.DA.DataType.AppBoolean)
+                        if (attr.MyDataType == DataType.AppBoolean)
                         {
                             if (val.Trim().Equals("是")==true || val.Trim().ToLower().Equals("yes")==true)
                                 val = "1";
@@ -4239,11 +4239,11 @@ namespace BP.WF.HttpHandler
                 #region 执行导入数据.
 
                 if (this.GetRequestValInt("DDL_ImpWay") == 0)
-                    BP.DA.DBAccess.RunSQL("DELETE FROM " + dtlEn.EnMap.PhysicsTable + " WHERE RefPK='" + this.GetRequestVal("RefPKVal") + "'");
+                    DBAccess.RunSQL("DELETE FROM " + dtlEn.EnMap.PhysicsTable + " WHERE RefPK='" + this.GetRequestVal("RefPKVal") + "'");
 
                 int i = 0;
-                Int64 oid = BP.DA.DBAccess.GenerOID(dtlEn.EnMap.PhysicsTable, dt.Rows.Count);
-                string rdt = BP.DA.DataType.CurrentData;
+                Int64 oid = DBAccess.GenerOID(dtlEn.EnMap.PhysicsTable, dt.Rows.Count);
+                string rdt = DataType.CurrentData;
 
                 string errMsg = "";
                 foreach (DataRow dr in dt.Rows)
@@ -4306,7 +4306,7 @@ namespace BP.WF.HttpHandler
                                 break;
                         }
 
-                        if (attr.MyDataType == BP.DA.DataType.AppBoolean)
+                        if (attr.MyDataType == DataType.AppBoolean)
                         {
                             if (val.Trim() == "是" || val.Trim().ToLower() == "yes")
                                 val = "1";
@@ -4470,11 +4470,11 @@ namespace BP.WF.HttpHandler
                 }
 
                 //增加轨迹表.
-                Paras ps = new BP.DA.Paras();
+                Paras ps = new Paras();
                 ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                 ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
                 ps.Add(TrackAttr.WorkID, this.WorkID);
-                engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                engine.dtTrack = DBAccess.RunSQLReturnTable(ps);
 
                 engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc");
             }

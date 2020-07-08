@@ -54,7 +54,7 @@ namespace BP.WF.DTS
             {
                 sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' AND  x1=" + item.X1 + " and x2=" + item.X2 + " and y1=" + item.Y1 + " and y2=" + item.Y2;
                 DBAccess.RunSQL(sql);
-                item.MyPK = BP.DA.DBAccess.GenerOIDByGUID().ToString();
+                item.MyPK = DBAccess.GenerOIDByGUID().ToString();
                 item.Insert();
             }
 
@@ -64,7 +64,7 @@ namespace BP.WF.DTS
             {
                 sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' and x=" + item.X + " and y=" + item.Y + " and Text='" + item.Text + "'";
                 DBAccess.RunSQL(sql);
-                item.MyPK = BP.DA.DBAccess.GenerOIDByGUID().ToString();
+                item.MyPK = DBAccess.GenerOIDByGUID().ToString();
                 item.Insert();
             }
             return "删除成功";

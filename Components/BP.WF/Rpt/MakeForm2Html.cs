@@ -222,7 +222,7 @@ namespace BP.WF
                                 if (sealType == "1")
                                 {
                                     sql = "SELECT FK_Dept FROM WF_GenerWorkFlow WHERE WorkID=" + en.GetValStrByKey("OID");
-                                    fk_dept = BP.DA.DBAccess.RunSQLReturnString(sql);
+                                    fk_dept = DBAccess.RunSQLReturnString(sql);
                                 }
                                 //表单字段
                                 if (sealType == "2" && !DataType.IsNullOrEmpty(sealField))
@@ -242,7 +242,7 @@ namespace BP.WF
                         //判断本部门下是否有此人
                         //sql = "SELECT fk_station from port_deptEmpStation where fk_dept='" + fk_dept + "' and fk_emp='" + WebUser.No + "'";
                         sql = string.Format(" select FK_Station from Port_DeptStation where FK_Dept ='{0}' and FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " where FK_Emp='{1}')", fk_dept, WebUser.No);
-                        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         foreach (DataRow dr in dt.Rows)
                         {
                             if (fk_station.Contains(dr[0].ToString() + ","))
@@ -1603,7 +1603,7 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(fileNameFormat) == true)
                 fileNameFormat = workid.ToString();
 
-            fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+            fileNameFormat = DataType.PraseStringToFileName(fileNameFormat);
 
             Hashtable ht = new Hashtable();
 
@@ -1780,7 +1780,7 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(fileNameFormat) == true)
                 fileNameFormat = workid.ToString();
 
-            fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+            fileNameFormat = DataType.PraseStringToFileName(fileNameFormat);
 
             Hashtable ht = new Hashtable();
 
@@ -1872,7 +1872,7 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(fileNameFormat) == true)
                 fileNameFormat = workid.ToString();
 
-            fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+            fileNameFormat = DataType.PraseStringToFileName(fileNameFormat);
 
             Hashtable ht = new Hashtable();
 
@@ -2143,7 +2143,7 @@ namespace BP.WF
 
 
                     string str = "<iframe style='width:100%;height:auto;' ID='" + mapData.No + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe></div>";
-                    string docs1 = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexUrl.htm");
+                    string docs1 = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexUrl.htm");
                     //docs1 = docs1.Replace("@Docs", DownLoadFielToMemoryStream(url));
 
                     string url1 = "http://www.baidu.com";
@@ -2162,11 +2162,11 @@ namespace BP.WF
                     docs1 = docs1.Replace("@Height", mapData.FrmH.ToString() + "px");
                     if (gwf != null)
                         docs1 = docs1.Replace("@Title", gwf.Title);
-                    BP.DA.DataType.WriteFile(indexFile, pageHtml);
+                    DataType.WriteFile(indexFile, pageHtml);
                     return indexFile;
                 }else if(mapData.HisFrmType == FrmType.Develop)
                 {
-                    string ddocs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
+                    string ddocs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
 
                     //获取附件
 
@@ -2195,7 +2195,7 @@ namespace BP.WF
                     ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");
                     ddocs = ddocs.Replace("@Title", mapData.Name);
                    
-                    BP.DA.DataType.WriteFile(indexFile, ddocs);
+                    DataType.WriteFile(indexFile, ddocs);
                     return indexFile;
                 }
                 GEEntity en = new GEEntity(frmID, workid);
@@ -2253,13 +2253,13 @@ namespace BP.WF
 
                     if (mapData.HisFrmType == FrmType.FoolForm)
                     {
-                        docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFool.htm");
+                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFool.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo, nodeID, basePath, nd.HisFormType);
                         docs = docs.Replace("@Width", mapData.FrmW.ToString() + "px");
                     }
                     else if (mapData.HisFrmType == FrmType.FreeFrm)
                     {
-                        docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFree.htm");
+                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFree.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo, nodeID, basePath);
                         docs = docs.Replace("@Width", (mapData.FrmW * 1.5).ToString() + "px");
                     }
@@ -2305,7 +2305,7 @@ namespace BP.WF
                 }
 
                 //indexFile = SystemConfig.getPathOfDataUser() + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";
-                BP.DA.DataType.WriteFile(indexFile, docs);
+                DataType.WriteFile(indexFile, docs);
 
                 return indexFile;
             }
@@ -2317,7 +2317,7 @@ namespace BP.WF
 
         public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
-            BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
+            Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
             try
             {
 
@@ -2327,7 +2327,7 @@ namespace BP.WF
                 Process process = new Process();
                 ProcessStartInfo startInfo = new ProcessStartInfo();
 
-                BP.DA.Log.DebugWriteInfo("@ProcessStartInfo");
+                Log.DebugWriteInfo("@ProcessStartInfo");
 
                 startInfo.FileName = pdfFileExe;//设定需要执行的命令  
                 startInfo.Arguments = " --disable-external-links " + htmFile + " " + pdf;//“/C”表示执行完命令后马上退出  
@@ -2336,17 +2336,17 @@ namespace BP.WF
                 startInfo.RedirectStandardOutput = true; //重定向输出  
                 startInfo.CreateNoWindow = true;//不创建窗口  
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                BP.DA.Log.DebugWriteInfo("@ProcessWindowStyle");
+                Log.DebugWriteInfo("@ProcessWindowStyle");
 
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
 
-                BP.DA.Log.DebugWriteInfo("@Close");
+                Log.DebugWriteInfo("@Close");
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
+                Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
                 throw ex;
             }
         }

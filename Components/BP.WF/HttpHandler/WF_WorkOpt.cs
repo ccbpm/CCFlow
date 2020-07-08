@@ -221,12 +221,12 @@ namespace BP.WF.HttpHandler
                     }
 
                     //把审核日志表加入里面去.
-                    Paras ps = new BP.DA.Paras();
+                    Paras ps = new Paras();
                     ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
                     ps.Add(TrackAttr.WorkID, newWorkID);
 
-                    rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                    rtf.dtTrack = DBAccess.RunSQLReturnTable(ps);
                 }
 
                 paths = file.Split('_');
@@ -430,12 +430,12 @@ namespace BP.WF.HttpHandler
                     if (nd != null)
                     {
                         //把审核日志表加入里面去.
-                        Paras ps = new BP.DA.Paras();
+                        Paras ps = new Paras();
                         ps.SQL = "SELECT * FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                         ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
                         ps.Add(TrackAttr.WorkID, newWorkID);
 
-                        rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                        rtf.dtTrack = DBAccess.RunSQLReturnTable(ps);
                     }
                 }
 
@@ -709,7 +709,7 @@ namespace BP.WF.HttpHandler
 
 #warning 替换变量. todo.
 
-            BP.DA.DBAccess.SaveBytesToDB(en.FileBytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
+            DBAccess.SaveBytesToDB(en.FileBytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
             return "info@OfficeBtnEnable=" + lab.OfficeBtnEnableInt.ToString() + ";请下载文件"; //如果已经有这个模版了.
         }
         /// <summary>
@@ -748,9 +748,9 @@ namespace BP.WF.HttpHandler
             if (File.Exists(docTemplate.FilePath) == false)
                 return "err@选择的模版文件不存在,请联系管理员.";
 
-            var bytes = BP.DA.DataType.ConvertFileToByte(docTemplate.FilePath);
+            var bytes = DataType.ConvertFileToByte(docTemplate.FilePath);
             Flow fl = new Flow(this.FK_Flow);
-            BP.DA.DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
+            DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID, FixFieldNames.DocWordFile);
             return "模板导入成功.";
         }
         #endregion
@@ -1081,7 +1081,7 @@ namespace BP.WF.HttpHandler
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
-            //  BP.DA.Log.DebugWriteError(sql);
+            //  Log.DebugWriteError(sql);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -3024,7 +3024,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CCTo", toAllEmps);
 
             // 根据他判断是否显示权限组。
-            if (BP.DA.DBAccess.IsExitsObject("GPM_Group") == true)
+            if (DBAccess.IsExitsObject("GPM_Group") == true)
                 ht.Add("IsGroup", "1");
             else
                 ht.Add("IsGroup", "0");
@@ -3051,13 +3051,13 @@ namespace BP.WF.HttpHandler
             //岗位类型.
             string sql = "SELECT NO,NAME FROM Port_StationType ORDER BY NO";
             DataSet ds = new DataSet();
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Port_StationType";
             ds.Tables.Add(dt);
 
             //岗位.
             string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station ORDER BY FK_STATIONTYPE,NO";
-            DataTable dtSta = BP.DA.DBAccess.RunSQLReturnTable(sqlStas);
+            DataTable dtSta = DBAccess.RunSQLReturnTable(sqlStas);
             dtSta.TableName = "Port_Station";
             ds.Tables.Add(dtSta);
             return BP.Tools.Json.ToJson(ds);
@@ -3408,12 +3408,12 @@ namespace BP.WF.HttpHandler
             //    sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE  No='" + fk_dept + "'  OR (ParentNo='" + fk_dept + "' AND No!='18099') ORDER BY Idx ";
 
 
-            DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtDept = DBAccess.RunSQLReturnTable(sql);
             if (dtDept.Rows.Count == 0)
             {
                 fk_dept = BP.Web.WebUser.FK_Dept;
                 sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ORDER BY Idx ";
-                dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtDept = DBAccess.RunSQLReturnTable(sql);
             }
 
             dtDept.TableName = "Depts";
@@ -3450,7 +3450,7 @@ namespace BP.WF.HttpHandler
                 sql += " ORDER BY A.Idx ";
             }
 
-            DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtEmps = DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
             ds.Tables.Add(dtEmps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -3886,7 +3886,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow dr in dtTemplate.Rows)
             {
                 string str = dr[2].ToString();
-                BP.DA.AtPara ap = new AtPara(str);
+                AtPara ap = new AtPara(str);
                 dr["Title"] = ap.GetValStrByKey("DBTemplateName");
             }
 
@@ -4522,7 +4522,7 @@ namespace BP.WF.HttpHandler
             ps.Add("WorkID", this.WorkID);
 
             //转化成json
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
+            return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(ps));
         }
 
         /// <summary>

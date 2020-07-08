@@ -170,7 +170,7 @@ namespace BP.WF.Template
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID().ToString();
             en.Name = name;
             en.Insert();
             return en.No;
@@ -179,7 +179,7 @@ namespace BP.WF.Template
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID().ToString();
             en.ParentNo = this.No;
             en.Name = name;
             en.Insert();

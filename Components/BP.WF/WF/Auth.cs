@@ -151,12 +151,12 @@ namespace BP.WF
 
         protected override bool beforeInsert()
         {
-            this.MyPK = BP.DA.DBAccess.GenerGUID();
+            this.MyPK = DBAccess.GenerGUID();
             return base.beforeInsert();
         }
         public void doDel(string Auther, string EmpNo, string TakeBackDT)
         {
-            this.MyPK = BP.DA.DBAccess.GenerGUID();
+            this.MyPK = DBAccess.GenerGUID();
             var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
             DBAccess.RunSQL(sql);
         }

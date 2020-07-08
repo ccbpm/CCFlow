@@ -559,7 +559,7 @@ namespace BP.WF.Template
                 rw.BeiZhu = note;
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
-                rw.MyPK = BP.DA.DBAccess.GenerGUID();
+                rw.MyPK = DBAccess.GenerGUID();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 
                 //更新流程表的状态.
@@ -608,7 +608,7 @@ namespace BP.WF.Template
                 string emps = "";
                 string sql = "SELECT EmpFrom FROM ND" + int.Parse(this.No) + "Track  WHERE WorkID=" + gwf.WorkID;
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
                     if (emps.Contains("," + dr[0].ToString()+","))

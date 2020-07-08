@@ -303,7 +303,7 @@ namespace BP.WF
             }
             #endregion 删除该流程下面的子流程.
 
-            BP.DA.Log.DefaultLogWriteLineInfo("@[" + fl.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + workID + "]。");
+            Log.DefaultLogWriteLineInfo("@[" + fl.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + workID + "]。");
             return "已经完成的流程被您删除成功.";
         }
         /// <summary>
@@ -508,7 +508,7 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_CHEval WHERE  WorkID=" + workid); // 删除质量考核数据。
 
             #region 正常的删除信息.
-            BP.DA.Log.DefaultLogWriteLineInfo("@[" + fl.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + workid + "]。");
+            Log.DefaultLogWriteLineInfo("@[" + fl.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + workid + "]。");
             string msg = "";
 
             // 删除单据信息.
@@ -708,7 +708,7 @@ namespace BP.WF
              */
             //  string sql = "SELECT COUNT(*) FROM WF_GenerWorkerList WHERE FK_Node=";
             string mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FID=" + this.FID;
-            int num = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+            int num = DBAccess.RunSQLReturnValInt(mysql);
             if (num == 0)
             {
                 /* 说明当前主流程上是分流节点，但是已经没有子线程的待办了。
@@ -728,7 +728,7 @@ namespace BP.WF
                          * 就要检查他是否有代办.
                          */
                         mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + gwfMain.FK_Node;
-                        num = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+                        num = DBAccess.RunSQLReturnValInt(mysql);
                         if (num == 0)
                         {
                             /*如果没有待办，就说明，当前节点已经运行到合流节点，但是不符合合流节点的完成率，导致合流节点上的人员看不到待办. 
@@ -736,7 +736,7 @@ namespace BP.WF
                              */
 
                             mysql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FID=0 AND WorkID=" + gwfMain.WorkID + " ORDER BY RDT DESC ";
-                            int fenLiuNodeID = BP.DA.DBAccess.RunSQLReturnValInt(mysql);
+                            int fenLiuNodeID = DBAccess.RunSQLReturnValInt(mysql);
 
                             Node nd = new Node(fenLiuNodeID);
                             if (nd.IsFL == false)
@@ -748,7 +748,7 @@ namespace BP.WF
                             {
                                 item.IsRead = false;
                                 item.IsPassInt = 0;
-                                item.SDT = BP.DA.DataType.CurrentDataTimess;
+                                item.SDT = DataType.CurrentDataTimess;
                                 item.Update();
                             }
                         }
@@ -758,7 +758,7 @@ namespace BP.WF
                 {
                     gwl.IsRead = false;
                     gwl.IsPassInt = 0;
-                    gwl.SDT = BP.DA.DataType.CurrentDataTimess;
+                    gwl.SDT = DataType.CurrentDataTimess;
                     gwl.Update();
                     return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.htm?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
 
@@ -815,7 +815,7 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_CHEval WHERE  WorkID=" + this.WorkID); // 删除质量考核数据。
 
             #region 正常的删除信息.
-            BP.DA.Log.DefaultLogWriteLineInfo("@[" + this.HisFlow.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + this.WorkID + "]。");
+            Log.DefaultLogWriteLineInfo("@[" + this.HisFlow.Name + "]流程被[" + BP.Web.WebUser.No + BP.Web.WebUser.Name + "]删除，WorkID[" + this.WorkID + "]。");
             string msg = "";
             try
             {
@@ -1068,14 +1068,14 @@ namespace BP.WF
         public string DoFlowOverFeiLiu(GenerWorkFlow gwf)
         {
             // 查询出来有少没有完成的流程。
-            int i = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkFlow WHERE FID=" + gwf.FID + " AND WFState!=1");
+            int i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkFlow WHERE FID=" + gwf.FID + " AND WFState!=1");
             switch (i)
             {
                 case 0:
                     throw new Exception("@不应该的错误。");
                 case 1:
-                    BP.DA.DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow  WHERE FID=" + gwf.FID + " OR WorkID=" + gwf.FID);
-                    BP.DA.DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + gwf.FID + " OR WorkID=" + gwf.FID);
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow  WHERE FID=" + gwf.FID + " OR WorkID=" + gwf.FID);
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + gwf.FID + " OR WorkID=" + gwf.FID);
 
                     Work wk = this.HisFlow.HisStartNode.HisWork;
                     wk.OID = gwf.FID;
@@ -1083,8 +1083,8 @@ namespace BP.WF
 
                     return "@当前的工作已经完成，该流程上所有的工作都已经完成。";
                 default:
-                    BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkFlow SET WFState=1 WHERE WorkID=" + this.WorkID);
-                    BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + this.WorkID);
+                    DBAccess.RunSQL("UPDATE WF_GenerWorkFlow SET WFState=1 WHERE WorkID=" + this.WorkID);
+                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + this.WorkID);
                     return "@当前的工作已经完成。";
             }
         }
@@ -1125,7 +1125,7 @@ namespace BP.WF
             if (this.HisFlow.SubFlowOver == SubFlowOver.None)
             {
                 /*让父流程显示待办.*/
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND WorkID=" + this.HisGenerWorkFlow.PWorkID);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND WorkID=" + this.HisGenerWorkFlow.PWorkID);
                 return "";
                 //return "父流程已经显示待办.";
             }
@@ -1345,7 +1345,7 @@ namespace BP.WF
             ps.Add(TrackAttr.NDFrom, currNode.NodeID);
             ps.Add(TrackAttr.EmpFrom, WebUser.No);
             ps.Add(TrackAttr.WorkID, this.WorkID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
             #endregion 处理审核问题.
 
             return stopMsg;
@@ -1946,7 +1946,7 @@ namespace BP.WF
             //更新他的主键。
             ps = new Paras();
             ps.SQL = "UPDATE WF_HungUp SET MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK WHERE MyPK=" + dbstr + "MyPK1";
-            ps.Add("MyPK", BP.DA.DBAccess.GenerGUID());
+            ps.Add("MyPK", DBAccess.GenerGUID());
             ps.Add("MyPK1", hu.MyPK);
             DBAccess.RunSQL(ps);
 
@@ -2000,7 +2000,7 @@ namespace BP.WF
             wn.AddToTrack(ActionType.UnShift, WebUser.No, WebUser.Name, nd.NodeID, nd.Name, "撤消移交");
 
             //删除撤销信息.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+            DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
 
             //更新流程主表字段信息
             gwf.WFState = WFState.Runing;

@@ -256,7 +256,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     string exts = System.IO.Path.GetExtension(file.FileName).ToLower().Replace(".", "");
-                    string guid = BP.DA.DBAccess.GenerGUID();
+                    string guid = DBAccess.GenerGUID();
 
                     string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
                     if (fileName.LastIndexOf("\\") > 0)
@@ -334,7 +334,7 @@ namespace BP.WF.HttpHandler
                     if (athDesc.AthSaveWay == AthSaveWay.DB)
                     {
                         //执行文件保存.
-                        BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                        DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
                     }
 
                     //执行附件上传后事件，added by liuxc,2017-7-15
@@ -382,7 +382,7 @@ namespace BP.WF.HttpHandler
 
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                    dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
+                    dbUpload.MyPK = DBAccess.GenerGUID();
                     dbUpload.NodeID = FK_Node;
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
@@ -398,7 +398,7 @@ namespace BP.WF.HttpHandler
                         Paras ps = new Paras();
                         ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                         ps.Add("WorkID", PKVal);
-                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                        string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                         if (pWorkID == null || pWorkID == "0")
                             pWorkID = PKVal;
                         dbUpload.RefPKVal = pWorkID;

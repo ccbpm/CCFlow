@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
             //throw new Exception("err@全局变量:TokenHost，没有获取到.");
 
             string url = host + token;
-            string data = BP.DA.DataType.ReadURLContext(url, 5000);
+            string data = DataType.ReadURLContext(url, 5000);
 
             if (DataType.IsNullOrEmpty(data) == true)
                 throw new Exception("err@token失效，请重新登录。" + url + "");
@@ -1138,7 +1138,7 @@ namespace BP.WF.HttpHandler
         protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title, Attrs mapAttrs = null, string filename = null)
         {
             if (filename == null)
-                filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
+                filename = title + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
             bool flag = true;
             string filepath = BP.Sys.SystemConfig.PathOfTemp;

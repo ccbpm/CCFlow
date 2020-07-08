@@ -43,7 +43,7 @@ namespace BP.WF.Template
             {
                 //转化为字节.
                 byte[] bytes = null;
-                bytes = BP.DA.DataType.ConvertFileToByte(this.FilePath);
+                bytes = DataType.ConvertFileToByte(this.FilePath);
                 return bytes;
             }
         }

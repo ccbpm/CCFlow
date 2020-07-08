@@ -117,7 +117,7 @@ namespace BP.WF.DTS
                 sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
                 sql += " AND WF_GenerWorkFlow.WFState!=3 ";
                 sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
-                int i = BP.DA.DBAccess.RunSQL(sql);
+                int i = DBAccess.RunSQL(sql);
             }
 
             //更新逾期期状态.
@@ -125,7 +125,7 @@ namespace BP.WF.DTS
             sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
             sql += " AND WF_GenerWorkFlow.WFState!=3 ";
             sql += " AND WF_GenerWorkFlow.TodoSta=1 ";
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             return "时间戳修改成功";
         }

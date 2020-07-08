@@ -127,7 +127,7 @@ namespace BP.Sys
         {
             FrmTree en = new FrmTree();
             en.Copy(this);
-            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID().ToString();
             en.Name = "新建节点";
             en.Insert();
             return en;
@@ -136,7 +136,7 @@ namespace BP.Sys
         {
             FrmTree en = new FrmTree();
             en.Copy(this);
-            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID().ToString();
             en.ParentNo = this.No;
             en.Name = "新建节点";
             en.Insert();
@@ -151,7 +151,7 @@ namespace BP.Sys
         {
             FrmTree en = new FrmTree();
             en.Copy(this);
-            en.No = BP.DA.DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID().ToString();
             en.ParentNo = this.No;
             en.Name = dirName;
             en.Insert();

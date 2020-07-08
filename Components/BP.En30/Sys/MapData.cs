@@ -681,10 +681,10 @@ namespace BP.Sys
         /// </summary>
         public void ClearCash()
         {
-            BP.DA.CashFrmTemplate.Remove(this.No);
-            BP.DA.Cash.SetMap(this.No, null);
+            CashFrmTemplate.Remove(this.No);
+            Cash.SetMap(this.No, null);
             CleanObject();
-            BP.DA.Cash.SQL_Cash.Remove(this.No);
+            Cash.SQL_Cash.Remove(this.No);
         }
 
         #region 基本属性.
@@ -747,13 +747,13 @@ namespace BP.Sys
         /// <returns></returns>
         public string GenerHisFrm()
         {
-            string body = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
+            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
 
             //替换高度宽度.
             body = body.Replace("@FrmH", this.FrmH.ToString());
             body = body.Replace("@FrmW", this.FrmW.ToString());
 
-            string labTemplate = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
+            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
             string myLabs = "";
             FrmLabs labs = new FrmLabs(this.No);
             foreach (FrmLab lab in labs)
@@ -1209,14 +1209,14 @@ namespace BP.Sys
             }
             else
             {
-                Map map = BP.DA.Cash.GetMap(no);
+                Map map = Cash.GetMap(no);
                 if (map == null)
                 {
                     MapData md = new MapData();
                     md.No = no;
                     md.Retrieve();
                     map = md.GenerHisMap();
-                    BP.DA.Cash.SetMap(no, map);
+                    Cash.SetMap(no, map);
                 }
                 return map;
             }
@@ -1370,10 +1370,10 @@ namespace BP.Sys
             }
 
             //获得原始数据.
-            DataTable dt = BP.DA.DBAccess.GetTableSchema(pTable, false);
+            DataTable dt = DBAccess.GetTableSchema(pTable, false);
 
             //创建样本表结构.
-            DataTable mydt = BP.DA.DBAccess.GetTableSchema(pTable, false);
+            DataTable mydt = DBAccess.GetTableSchema(pTable, false);
             mydt.Rows.Clear();
 
             //获得现有的列..
@@ -1426,14 +1426,14 @@ namespace BP.Sys
         {
             string sql = "";
             #region 升级ccform控件.
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLine") == true)
+            if (DBAccess.IsExitsObject("Sys_FrmLine") == true)
             {
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
                 dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
 
             }
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
+            if (DBAccess.IsExitsObject("Sys_FrmLab") == true)
             {
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
@@ -1441,7 +1441,7 @@ namespace BP.Sys
 
 
             }
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
+            if (DBAccess.IsExitsObject("Sys_FrmBtn") == true)
             {
                 //重命名.
                 BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
@@ -1704,7 +1704,7 @@ namespace BP.Sys
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
                             if (frmType == FrmType.Develop)
                             {
-                                // string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
+                                // string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", oldMapID, "HtmlTemplateFile");
                                 if (DataType.IsNullOrEmpty(htmlCode) == false)
                                 {
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);
@@ -1715,9 +1715,9 @@ namespace BP.Sys
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
                                     //写入到html 中
-                                    BP.DA.DataType.WriteFile(filePath, htmlCode);
+                                    DataType.WriteFile(filePath, htmlCode);
                                     // HtmlTemplateFile 保存到数据库中
-                                    BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                    DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
                                 }
                                 else
                                 {
@@ -1725,7 +1725,7 @@ namespace BP.Sys
                                     string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
-                                    BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                    DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
                                 }
                             }
                         }
@@ -2110,7 +2110,7 @@ namespace BP.Sys
                     attr.FK_MapData = this.No;
                     attr.KeyOfEn = "OID";
                     attr.Name = "OID";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;
@@ -2127,7 +2127,7 @@ namespace BP.Sys
                     attr.FK_MapData = this.No;
                     attr.KeyOfEn = this.EnPK;
                     attr.Name = this.EnPK;
-                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;
@@ -2146,7 +2146,7 @@ namespace BP.Sys
                 attr.KeyOfEn = "RDT";
                 attr.Name = "更新时间";
                 attr.GroupID = 0;
-                attr.MyDataType = BP.DA.DataType.AppDateTime;
+                attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -2364,8 +2364,8 @@ namespace BP.Sys
         /// </summary>
         public void UpdateVer()
         {
-            string sql = "UPDATE Sys_MapData SET VER='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + this.No + "'";
-            BP.DA.DBAccess.RunSQL(sql);
+            string sql = "UPDATE Sys_MapData SET VER='" + DataType.CurrentDataTimess + "' WHERE No='" + this.No + "'";
+            DBAccess.RunSQL(sql);
         }
         protected override bool beforeDelete()
         {
@@ -2459,7 +2459,7 @@ namespace BP.Sys
         {
             try
             {
-                byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+                byte[] by = DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
                 if (by != null)
                 {
                     bytes = by;
@@ -2470,7 +2470,7 @@ namespace BP.Sys
                     string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
                     if (System.IO.File.Exists(tempExcel) == true)
                     {
-                        bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                        bytes = DataType.ConvertFileToByte(tempExcel);
                         return false;
                     }
                     else //模板文件也不存在时
@@ -2492,7 +2492,7 @@ namespace BP.Sys
         /// <param name="bty"></param>
         public void ExcelSaveFile(string pkValue, byte[] bty, string saveTo)
         {
-            BP.DA.DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
+            DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
         }
         #endregion 与Excel相关的操作 .
 
@@ -2504,7 +2504,7 @@ namespace BP.Sys
         /// <returns></returns>
         public void WordGenerFile(string pkValue, ref byte[] bytes, string saveTo)
         {
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+            byte[] by = DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
             if (by != null)
             {
                 bytes = by;
@@ -2517,7 +2517,7 @@ namespace BP.Sys
                 if (System.IO.File.Exists(tempExcel) == false)
                     tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
 
-                bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+                bytes = DataType.ConvertFileToByte(tempExcel);
                 return;
             }
         }
@@ -2528,7 +2528,7 @@ namespace BP.Sys
         /// <param name="bty"></param>
         public void WordSaveFile(string pkValue, byte[] bty, string saveTo)
         {
-            BP.DA.DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
+            DBAccess.SaveBytesToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
         }
         #endregion 与Excel相关的操作 .
 

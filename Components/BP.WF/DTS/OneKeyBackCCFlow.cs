@@ -128,7 +128,7 @@ namespace BP.WF.DTS
                 {
                     string sql = "SELECT * FROM " + item.No + " ";
                     DataSet ds = new DataSet();
-                    ds.Tables.Add(BP.DA.DBAccess.RunSQLReturnTable(sql));
+                    ds.Tables.Add(DBAccess.RunSQLReturnTable(sql));
                     ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
                 }
                 catch

@@ -119,7 +119,7 @@ namespace BP.WF
         /// <returns></returns>
         public void DoCheck()
         {
-            BP.DA.Cash.ClearCash();
+            Cash.ClearCash();
             try
             {
                 //设置自动计算.
@@ -837,7 +837,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "OID";
                 attr.Name = "WorkID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -855,7 +855,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "FID";
                 attr.Name = "FID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;

@@ -527,7 +527,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow dr in dt.Rows)
             {
                 //求引用数量.
-                int refNum = BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + dr["No"] + "'", 0);
+                int refNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(KeyOfEn) FROM Sys_MapAttr WHERE UIBindKey='" + dr["No"] + "'", 0);
                 dr["RefNum"] = refNum;
             }
             return BP.Tools.Json.ToJson(dt);

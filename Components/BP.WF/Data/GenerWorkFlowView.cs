@@ -888,7 +888,7 @@ namespace BP.WF.Data
             string file = "c:\\temp\\" + this.WorkID + ".txt";
             try
             {
-                BP.DA.DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
+                DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
             }
             catch (Exception ex)
             {
@@ -953,7 +953,7 @@ namespace BP.WF.Data
                     string file = "c:\\temp\\" + mypk + ".txt";
                     try
                     {
-                        BP.DA.DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
+                        DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
                     }
                     catch (Exception ex)
                     {

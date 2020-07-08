@@ -163,7 +163,7 @@ namespace BP.WF.HttpHandler
             ps.Add("Emps", WebUser.No);
             //string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             DataSet ds = new DataSet();
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             ds.Tables.Add(dt);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -172,7 +172,7 @@ namespace BP.WF.HttpHandler
             }
 
             string sql = "SELECT IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='TSpan'";
-            DataTable dt1 = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt1 = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
                 foreach (DataRow mydr in dt1.Rows)
@@ -343,7 +343,7 @@ namespace BP.WF.HttpHandler
             else
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY TSpan";
 
-            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtTSpanNum = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
             {
                 string no = drEnum["IntKey"].ToString();
@@ -364,7 +364,7 @@ namespace BP.WF.HttpHandler
             else
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
 
-            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtFlows.Columns[0].ColumnName = "No";
@@ -402,7 +402,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
             else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
-            DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 mydt.Columns[0].ColumnName = "WorkID";

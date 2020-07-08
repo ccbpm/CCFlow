@@ -125,14 +125,14 @@ namespace BP.GPM
 
             #region 3, 执行基本的 sql
             string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
-            BP.DA.DBAccess.RunSQLScript(sqlscript);
+            DBAccess.RunSQLScript(sqlscript);
             #endregion 修复
 
             #region 5, 初始化数据。
-            if (BP.DA.DBAccess.IsExitsObject("GPM_AppSort") == true)
+            if (DBAccess.IsExitsObject("GPM_AppSort") == true)
             {
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\InitPublicData.sql";
-                BP.DA.DBAccess.RunSQLScript(sqlscript);
+                DBAccess.RunSQLScript(sqlscript);
             }
             #endregion 初始化数据
 
@@ -147,7 +147,7 @@ namespace BP.GPM
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
 
-            BP.DA.DBAccess.RunSQLScriptGo(sqlscript);
+            DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 创建视图
 
           

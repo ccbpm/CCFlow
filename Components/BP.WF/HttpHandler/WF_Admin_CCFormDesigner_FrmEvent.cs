@@ -54,7 +54,7 @@ namespace BP.WF.HttpHandler
 
             //事件实体.
             FrmEvents ndevs = new FrmEvents();
-            if (BP.DA.DataType.IsNullOrEmpty(this.FK_MapData) == false)
+            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
                 ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
 
             ////已经配置的事件类实体.

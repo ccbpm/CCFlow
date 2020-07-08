@@ -266,18 +266,18 @@ namespace BP.WF
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
             {
                 //设置全部的人员不可用。
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
 
                 //设置当前人员可用。
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=1  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=1  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
             }
             else
             {
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
             }
 
             //更新当前节点，到rpt里面。
-            BP.DA.DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
+            DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
 
             // 记录日志..
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
@@ -301,7 +301,7 @@ namespace BP.WF
                 WorkNode ppPri = wnOfCancelTo.GetPreviousWorkNode();
                 GenerWorkerList wl = new GenerWorkerList();
                 wl.Retrieve(GenerWorkerListAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
-                // BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
+                // DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
@@ -673,7 +673,7 @@ namespace BP.WF
             {
                 /* 检查一下是否还有没有完成的子线程，如果有就抛出不允许撤销的异常。 */
                   sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerList WHERE FID="+this.WorkID+" AND IsPass=0";
-                  if (BP.DA.DBAccess.RunSQLReturnValInt(sql) != 0)
+                  if (DBAccess.RunSQLReturnValInt(sql) != 0)
                       return "err@不允许撤销，因为有未完成的子线程.";
 
                 //  return this.DoUnSendHeiLiu_Main(gwf);
@@ -754,18 +754,18 @@ namespace BP.WF
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
             {
                 //设置全部的人员不可用。
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
 
                 //设置当前人员可用。
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=1  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0,  IsEnable=1  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
             }
             else
             {
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
             }
 
             //更新当前节点，到rpt里面。
-            BP.DA.DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
+            DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
 
             // 记录日志..
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
@@ -774,7 +774,7 @@ namespace BP.WF
             NodeWorkCheck fwc = new NodeWorkCheck(nd.NodeID);
             if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
             {
-                BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
                                       " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + nd.NodeID +
                                       " AND NDTo = " + nd.NodeID + " AND (Msg = '' OR Msg IS NULL)");
             }
@@ -810,7 +810,7 @@ namespace BP.WF
                 WorkNode ppPri = wnOfCancelTo.GetPreviousWorkNode();
                 GenerWorkerList wl = new GenerWorkerList();
                 wl.Retrieve(GenerWorkerListAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
-                // BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
+                // DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
@@ -939,7 +939,7 @@ namespace BP.WF
             }
 
             //设置当前节点。
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=1");
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=1");
 
             // 设置当前节点的状态.
             Node cNode = new Node(gwf.FK_Node);
@@ -970,7 +970,7 @@ namespace BP.WF
             // 更新分流节点，让其出现待办.
             gwl.IsPassInt = 0;
             gwl.IsRead = false;
-            gwl.SDT = BP.DA.DataType.CurrentDataTimess;  //这里计算时间有问题.
+            gwl.SDT = DataType.CurrentDataTimess;  //这里计算时间有问题.
             gwl.Update();
 
             // 把设置当前流程运行到分流流程上.
@@ -978,7 +978,7 @@ namespace BP.WF
             Node nd = new Node(this.UnSendToNode);
             gwf.NodeName = nd.Name;
             gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
-            gwf.SendDT = BP.DA.DataType.CurrentDataTimess;
+            gwf.SendDT = DataType.CurrentDataTimess;
             gwf.Update();
 
 
@@ -1072,7 +1072,7 @@ namespace BP.WF
             gwf.NodeName = wnPri.HisNode.Name;
             gwf.Update();
 
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
 
             //删除子线程的功能
             foreach (Node ndNext in wnPri.HisNode.HisToNodes)
@@ -1170,15 +1170,15 @@ namespace BP.WF
             gwf.NodeName = wnPri.HisNode.Name;
             gwf.Update();
 
-            BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
             //ShiftWorks fws = new ShiftWorks();
             //fws.Delete(ShiftWorkAttr.FK_Node, wn.HisNode.NodeID.ToString(), ShiftWorkAttr.WorkID, this.WorkID.ToString());
 
             #region 判断撤消的百分比条件的临界点条件
             if (wn.HisNode.PassRate != 0)
             {
-                decimal all = (decimal)BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND FK_Node=" + wnPri.HisNode.NodeID);
-                decimal ok = (decimal)BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND IsPass=1 AND FK_Node=" + wnPri.HisNode.NodeID);
+                decimal all = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND FK_Node=" + wnPri.HisNode.NodeID);
+                decimal ok = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND IsPass=1 AND FK_Node=" + wnPri.HisNode.NodeID);
                 decimal rate = ok / all * 100;
                 if (wn.HisNode.PassRate <= rate)
                     DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.FID);
@@ -1239,7 +1239,7 @@ namespace BP.WF
             ps.SQL = "SELECT RDT,ActionType,NDFrom FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.Forward + " ORDER BY RDT desc ";
             ps.Add("NDFrom", unSendNode.NodeID);
             ps.Add("WorkID", this.WorkID);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (dt.Rows.Count >= 1)
             {
                 string rdt = dt.Rows[0][0].ToString();
@@ -1248,7 +1248,7 @@ namespace BP.WF
                 ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
-                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                dt = DBAccess.RunSQLReturnTable(ps);
 
                 foreach (DataRow dr in dt.Rows)
                 {

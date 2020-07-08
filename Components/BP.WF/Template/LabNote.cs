@@ -146,7 +146,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            this.MyPK = BP.DA.DBAccess.GenerOID().ToString();
+            this.MyPK = DBAccess.GenerOID().ToString();
             return base.beforeInsert();
         }
     }

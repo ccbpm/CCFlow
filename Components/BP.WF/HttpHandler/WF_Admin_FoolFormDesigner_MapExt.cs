@@ -635,7 +635,7 @@ namespace BP.WF.HttpHandler
             ps.Add("FK_MapData", this.FK_MapData);
             ps.Add("KeyOfEn",this.KeyOfEn);
             //var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
-            DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt=DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapAttr";
 
             dt.Columns[0].ColumnName = "No";
@@ -905,7 +905,7 @@ namespace BP.WF.HttpHandler
             ps.SQL="SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
             ps.Add("AttrOfOper",this.KeyOfEn);
             ps.Add("FK_MapData",this.FK_MapData);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
 
@@ -933,7 +933,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
             ps.Add("AttrOfOper", this.KeyOfEn);
             ps.Add("FK_MapData", this.FK_MapData);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
 

@@ -1168,7 +1168,7 @@ namespace BP.WF.HttpHandler
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             pss.Add("WorkID", this.WorkID);
 
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
+            return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(pss));
         }
         /// <summary>
         /// 提交评论.
@@ -1216,7 +1216,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             ps.Add("WorkID", this.WorkID);
-            string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
+            string count = DBAccess.RunSQLReturnValInt(ps).ToString();
             return count;
         }
 

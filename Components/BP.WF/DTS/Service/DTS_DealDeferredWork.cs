@@ -130,7 +130,7 @@ namespace BP.WF.DTS
                         msg += BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
                         break;
                     case OutTimeDeal.RunSQL:
-                        msg += BP.DA.DBAccess.RunSQL(nd.DoOutTime);
+                        msg += DBAccess.RunSQL(nd.DoOutTime);
                         break;
                     default:
                         throw new Exception("@错误没有判断的超时处理方式." + nd.HisOutTimeDeal);

@@ -84,7 +84,7 @@ namespace BP.WF.Template
 
                     AtPara ap = new AtPara(lab);
                     LabNote ln = new LabNote();
-                    ln.MyPK = BP.DA.DBAccess.GenerGUID();  // ap.GetValStrByKey("MyPK");
+                    ln.MyPK = DBAccess.GenerGUID();  // ap.GetValStrByKey("MyPK");
                     ln.FK_Flow = fk_flow;
                     ln.Name = ap.GetValStrByKey("Label");
                     ln.X = ap.GetValIntByKey("X");
@@ -139,7 +139,7 @@ namespace BP.WF.Template
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DefaultLogWriteLineError("Do Method DelFlow Branch has a error , para:\t" + flowNo + ex.Message);
+                Log.DefaultLogWriteLineError("Do Method DelFlow Branch has a error , para:\t" + flowNo + ex.Message);
                 return "err@" + ex.Message;
             }
         }

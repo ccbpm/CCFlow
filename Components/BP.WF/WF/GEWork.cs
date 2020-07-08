@@ -25,11 +25,11 @@ namespace BP.WF
             {
                 if (_SQLCash == null)
                 {
-                    _SQLCash = BP.DA.Cash.GetSQL(this.NodeFrmID.ToString());
+                    _SQLCash = Cash.GetSQL(this.NodeFrmID.ToString());
                     if (_SQLCash == null)
                     {
                         _SQLCash = new SQLCash(this);
-                        BP.DA.Cash.SetSQL(this.NodeFrmID.ToString(), _SQLCash);
+                        Cash.SetSQL(this.NodeFrmID.ToString(), _SQLCash);
                     }
                 }
                 return _SQLCash;

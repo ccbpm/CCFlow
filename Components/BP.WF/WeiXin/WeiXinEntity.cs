@@ -50,7 +50,7 @@ namespace BP.GPM.WeiXin
             string accessToken = string.Empty;
             string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + appid + "&corpsecret=" + appsecret;
 
-            return BP.DA.DataType.ReadURLContext(url, 9999);
+            return DataType.ReadURLContext(url, 9999);
         }
         #endregion 基本配置.
 
@@ -68,7 +68,7 @@ namespace BP.GPM.WeiXin
             //生成签名的时间戳
             string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
             //生成签名的随机串
-            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            string nonceStr = DBAccess.GenerGUID();
             //企业号jsapi_ticket
             string jsapi_ticket = "";
             string url1 = htmlPage;
@@ -76,7 +76,7 @@ namespace BP.GPM.WeiXin
             string accessToken = getAccessToken();
 
             string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
-            string str = BP.DA.DataType.ReadURLContext(url, 9999, null);
+            string str = DataType.ReadURLContext(url, 9999, null);
 
             //权限签名算法
             Ticket ticket = new Ticket();
@@ -124,14 +124,14 @@ namespace BP.GPM.WeiXin
             string url = URL + "access_token=" + access_token;
 
             //todo:zqp.该方法没有完善.
-            string str = BP.DA.DataType.ReadURLContext(url, 9999, null, parameters);
+            string str = DataType.ReadURLContext(url, 9999, null, parameters);
 
             //HttpWebResponse response = new HttpWebResponseUtility().WXCreateGetHttpResponse(url, parameters,
             //    10000, null, Encoding.UTF8, null);
             //StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             //string str = reader.ReadToEnd();
 
-            BP.DA.Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
+            Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
             return str;
         }
         #endregion

@@ -52,7 +52,7 @@ namespace BP.WF.HttpHandler
                 Paras ps = new Paras();
                 ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
                 ps.Add("FK_Flow", this.FK_Flow);
-                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                dt = DBAccess.RunSQLReturnTable(ps);
 
                 dt.TableName = "WF_Node";
 
@@ -71,7 +71,7 @@ namespace BP.WF.HttpHandler
             else
                 sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -83,7 +83,7 @@ namespace BP.WF.HttpHandler
 
             //加入表单
             sql = "SELECT A.No, A.Name, A.FK_FormTree  FROM Sys_MapData A, Sys_FormTree B WHERE A.FK_FormTree=B.No";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
             #region 加入流程树目录.
             sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY  PARENTNO, IDX ";
 
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_FlowSort";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
 
             //加入表单
             sql = "SELECT No, Name, FK_FlowSort  FROM WF_Flow ";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
             ds.Tables.Add(dt);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -456,7 +456,7 @@ namespace BP.WF.HttpHandler
                     se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
                     if (se.Count > 0)
                     {
-                        ma.MyDataType = BP.DA.DataType.AppInt;
+                        ma.MyDataType = DataType.AppInt;
                         ma.LGType = BP.En.FieldTypeS.Enum;
                         ma.UIContralType = BP.En.UIContralType.DDL;
                     }
@@ -465,13 +465,13 @@ namespace BP.WF.HttpHandler
                     tb.No = ma.UIBindKey;
                     if (tb.IsExits == true)
                     {
-                        ma.MyDataType = BP.DA.DataType.AppString;
+                        ma.MyDataType = DataType.AppString;
                         ma.LGType = BP.En.FieldTypeS.FK;
                         ma.UIContralType = BP.En.UIContralType.DDL;
                     }
                 }
 
-                if (ma.MyDataType == BP.DA.DataType.AppBoolean)
+                if (ma.MyDataType == DataType.AppBoolean)
                     ma.UIContralType = BP.En.UIContralType.CheckBok;
                 if (ma.IsExits)
                     continue;
@@ -484,7 +484,7 @@ namespace BP.WF.HttpHandler
                     maxEnd = maxEnd + 40;
                     /* 是否是左边 */
                     lab = new FrmLab();
-                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
                     lab.Text = ma.Name;
                     lab.X = 40;
@@ -498,7 +498,7 @@ namespace BP.WF.HttpHandler
                 else
                 {
                     lab = new FrmLab();
-                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
                     lab.Text = ma.Name;
                     lab.X = 350;

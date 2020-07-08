@@ -30,7 +30,7 @@ namespace BP.GPM
         public static void Port_Login(string userNo, string sid)
         {
             string sql = "SELECT SID FROM Port_Emp WHERE No='" + userNo + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 throw new Exception("用户不存在或者SID错误。");
 
@@ -229,7 +229,7 @@ namespace BP.GPM
                     msgText.Access_Token = DingDing.getAccessToken();
                     msgText.agentid = SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
-                    msgText.content = gwf.Title + "\n发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    msgText.content = gwf.Title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
                 //连接类型
                 case DingMsgType.link:
@@ -240,7 +240,7 @@ namespace BP.GPM
                     msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
                     msgLink.title = gwf.Title;
-                    msgLink.text = "发送人：" + sender + "\n时间：" + BP.DA.DataType.CurrentDataTimeCNOfShort;
+                    msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentLink_Send(msgLink);
                 //工作消息类型
                 case DingMsgType.OA:

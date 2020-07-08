@@ -956,7 +956,7 @@ namespace BP.Sys
                     attrH.UIContralType = BP.En.UIContralType.TB;
                     attrH.MinLen = 0;
                     attrH.MaxLen = 500;
-                    attrH.MyDataType = BP.DA.DataType.AppString;
+                    attrH.MyDataType = DataType.AppString;
                     attrH.UIVisible = false;
                     attrH.UIIsEnable = true;
                     attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;

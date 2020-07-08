@@ -65,7 +65,7 @@ namespace BP.WF.DTS
                 if (fl.RunObj == null || fl.RunObj == "")
                 {
                     string msg = "您设置自动运行流程错误，没有设置流程内容，流程编号：" + fl.No + ",流程名称:" + fl.Name;
-                    BP.DA.Log.DebugWriteError(msg);
+                    Log.DebugWriteError(msg);
                     continue;
                 }
 
@@ -99,7 +99,7 @@ namespace BP.WF.DTS
                         emp.No = fk_emp;
                         if (emp.RetrieveFromDBSources() == 0)
                         {
-                            BP.DA.Log.DebugWriteError("启动自动启动流程错误：发起人(" + fk_emp + ")不存在。");
+                            Log.DebugWriteError("启动自动启动流程错误：发起人(" + fk_emp + ")不存在。");
                             continue;
                         }
 
@@ -115,12 +115,12 @@ namespace BP.WF.DTS
                             SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
 
                             //string info_send= BP.WF.Dev2Interface.Node_StartWork(fl.No,);
-                            BP.DA.Log.DefaultLogWriteLineInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n" + objs.ToMsgOfText());
+                            Log.DefaultLogWriteLineInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n" + objs.ToMsgOfText());
 
                         }
                         catch (Exception ex)
                         {
-                            BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
+                            Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
                         }
                         continue;
                     case BP.WF.FlowRunWay.SelectSQLModel: //按数据集合驱动的模式执行。
@@ -161,7 +161,7 @@ namespace BP.WF.DTS
 
             if (string.IsNullOrEmpty(me.Tag))
             {
-                BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
+                Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return;
             }
 
@@ -175,7 +175,7 @@ namespace BP.WF.DTS
 
                 string[] tempStrs = sql.Split('=');
                 string dtlName = tempStrs[0];
-                DataTable dtlTable = BP.DA.DBAccess.RunSQLReturnTable(sql.Replace(dtlName + "=", ""));
+                DataTable dtlTable = DBAccess.RunSQLReturnTable(sql.Replace(dtlName + "=", ""));
                 dtlTable.TableName = dtlName;
                 ds.Tables.Add(dtlTable);
             }
@@ -184,10 +184,10 @@ namespace BP.WF.DTS
             #region 检查数据源是否正确.
             string errMsg = "";
             // 获取主表数据.
-            DataTable dtMain = BP.DA.DBAccess.RunSQLReturnTable(me.Tag);
+            DataTable dtMain = DBAccess.RunSQLReturnTable(me.Tag);
             if (dtMain.Rows.Count == 0)
             {
-                BP.DA.Log.DefaultLogWriteLineError("流程(" + fl.Name + ")此时无任务.");
+                Log.DefaultLogWriteLineError("流程(" + fl.Name + ")此时无任务.");
                 return;
             }
 
@@ -199,7 +199,7 @@ namespace BP.WF.DTS
 
             if (errMsg.Length > 2)
             {
-                BP.DA.Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
+                Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
                 return;
             }
             #endregion 检查数据源是否正确.
@@ -226,7 +226,7 @@ namespace BP.WF.DTS
                     emp.No = starter;
                     if (emp.RetrieveFromDBSources() == 0)
                     {
-                        BP.DA.Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + emp.No + "不存在。");
+                        Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + emp.No + "不存在。");
                         continue;
                     }
                     WebUser.SignInOfGener(emp);
@@ -341,11 +341,11 @@ namespace BP.WF.DTS
                         msg = "已经为(" + WebUser.No + ") 创建了开始工作节点. ";
                     }
 
-                    BP.DA.Log.DefaultLogWriteLineInfo(msg);
+                    Log.DefaultLogWriteLineInfo(msg);
                 }
                 catch (Exception ex)
                 {
-                    BP.DA.Log.DefaultLogWriteLineWarning("@" + fl.Name + ",第" + idx + "条,发起人员:" + WebUser.No + "-" + WebUser.Name + "发起时出现错误.\r\n" + ex.Message);
+                    Log.DefaultLogWriteLineWarning("@" + fl.Name + ",第" + idx + "条,发起人员:" + WebUser.No + "-" + WebUser.Name + "发起时出现错误.\r\n" + ex.Message);
                 }
             }
             #endregion 处理流程发起.

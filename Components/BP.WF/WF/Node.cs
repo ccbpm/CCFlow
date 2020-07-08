@@ -304,7 +304,7 @@ namespace BP.WF
                 wk.NodeID = this.NodeID;
                 wk.SQLCash = null;
 
-                BP.DA.Cash.SQL_Cash.Remove("ND" + this.NodeID);
+                Cash.SQL_Cash.Remove("ND" + this.NodeID);
                 return wk;
                 //this.SetRefObject("HisWork", obj);
 
@@ -627,7 +627,7 @@ namespace BP.WF
 
             // 处理岗位分组.
             sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + flowNo + "' GROUP BY HisStas";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
                 string stas = dr[0].ToString();
@@ -673,7 +673,7 @@ namespace BP.WF
                     catch (Exception e)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        if (BP.DA.DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
+                        if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == false)
                         {
                             string sql = "";
                             sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
@@ -684,7 +684,7 @@ namespace BP.WF
                             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                                 sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
 
-                            BP.DA.DBAccess.RunSQL(sql);
+                            DBAccess.RunSQL(sql);
                         }
 
                     }
@@ -815,7 +815,7 @@ namespace BP.WF
                     attr.FK_MapData = this.NodeFrmID;
                     attr.KeyOfEn = "FID";
                     attr.Name = "干流程ID";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;
@@ -830,7 +830,7 @@ namespace BP.WF
                     attr.FK_MapData = this.NodeFrmID;
                     attr.KeyOfEn = "Rec";
                     attr.Name = "记录人";
-                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.MyDataType = DataType.AppString;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;
@@ -2984,15 +2984,15 @@ namespace BP.WF
             exts.Delete();
 
             //删除节点与岗位的对应.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_NodeStation WHERE FK_Node=" + this.NodeID);
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_NodeEmp  WHERE FK_Node=" + this.NodeID);
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_NodeDept WHERE FK_Node=" + this.NodeID);
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_FrmNode  WHERE FK_Node=" + this.NodeID);
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_CCEmp  WHERE FK_Node=" + this.NodeID);
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_CH  WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_NodeStation WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp  WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_NodeDept WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_FrmNode  WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_CCEmp  WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_CH  WHERE FK_Node=" + this.NodeID);
 
             //删除附件.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.NodeID + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.NodeID + "'");
             return base.beforeDelete();
         }
         /// <summary>
@@ -3009,7 +3009,7 @@ namespace BP.WF
             //attr.HisEditType = BP.En.EditType.UnDel;
             //attr.KeyOfEn = "Title";
             //attr.Name = "标题";
-            //attr.MyDataType = BP.DA.DataType.AppString;
+            //attr.MyDataType = DataType.AppString;
             //attr.UIContralType = UIContralType.TB;
             //attr.LGType = FieldTypeS.Normal;
             //attr.UIVisible = true;
@@ -3025,7 +3025,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "KeyWord";
             attr.Name = "主题词";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3042,7 +3042,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "FZ";
             attr.Name = "附注";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3061,7 +3061,7 @@ namespace BP.WF
             attr.HisEditType = BP.En.EditType.UnDel;
             attr.KeyOfEn = "DW_SW";
             attr.Name = "收文单位";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3076,7 +3076,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "DW_FW";
             attr.Name = "发文单位";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3092,7 +3092,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "DW_BS";
             attr.Name = "主报(送)单位";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3109,7 +3109,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "DW_CS";
             attr.Name = "抄报(送)单位";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3125,7 +3125,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "NumPrint";
             attr.Name = "印制份数";
-            attr.MyDataType = BP.DA.DataType.AppInt;
+            attr.MyDataType = DataType.AppInt;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3141,7 +3141,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "JMCD";
             attr.Name = "机密程度";
-            attr.MyDataType = BP.DA.DataType.AppInt;
+            attr.MyDataType = DataType.AppInt;
             attr.UIContralType = UIContralType.DDL;
             attr.LGType = FieldTypeS.Enum;
             attr.UIVisible = true;
@@ -3159,7 +3159,7 @@ namespace BP.WF
             attr.HisEditType = BP.En.EditType.UnDel;
             attr.KeyOfEn = "PRI";
             attr.Name = "紧急程度";
-            attr.MyDataType = BP.DA.DataType.AppInt;
+            attr.MyDataType = DataType.AppInt;
             attr.UIContralType = UIContralType.DDL;
             attr.LGType = FieldTypeS.Enum;
             attr.UIVisible = true;
@@ -3175,7 +3175,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "GWWH";
             attr.Name = "公文文号";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = true;
@@ -3210,7 +3210,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "OID";
                 attr.Name = "WorkID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3230,7 +3230,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "FID";
                 attr.Name = "FID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3247,7 +3247,7 @@ namespace BP.WF
                 attr.HisEditType = BP.En.EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.RDT;
                 attr.Name = "接受时间";  //"接受时间";
-                attr.MyDataType = BP.DA.DataType.AppDateTime;
+                attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3267,7 +3267,7 @@ namespace BP.WF
                 else
                     attr.Name = "完成时间"; //"完成时间";
 
-                attr.MyDataType = BP.DA.DataType.AppDateTime;
+                attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3288,7 +3288,7 @@ namespace BP.WF
                 else
                     attr.Name = "发起人"; //"发起人";
 
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3306,7 +3306,7 @@ namespace BP.WF
                 attr.HisEditType = BP.En.EditType.UnDel;
                 attr.KeyOfEn = WorkAttr.Emps;
                 attr.Name = WorkAttr.Emps;
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3323,7 +3323,7 @@ namespace BP.WF
                 attr.HisEditType = BP.En.EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.FK_Dept;
                 attr.Name = "操作员部门"; //"操作员部门";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.DDL;
                 attr.LGType = FieldTypeS.FK;
                 attr.UIBindKey = "BP.Port.Depts";
@@ -3344,7 +3344,7 @@ namespace BP.WF
                 attr.KeyOfEn = WorkAttr.MD5;
                 attr.UIBindKey = attr.KeyOfEn;
                 attr.Name = "MD5";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIIsEnable = false;
@@ -3366,7 +3366,7 @@ namespace BP.WF
                     attr.HisEditType = BP.En.EditType.UnDel;
                     attr.KeyOfEn = GERptAttr.Title;
                     attr.Name = "标题"; // "流程标题";
-                    attr.MyDataType = BP.DA.DataType.AppString;
+                    attr.MyDataType = DataType.AppString;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;
@@ -3421,7 +3421,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "OID";
             attr.Name = "WorkID";
-            attr.MyDataType = BP.DA.DataType.AppInt;
+            attr.MyDataType = DataType.AppInt;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3439,7 +3439,7 @@ namespace BP.WF
             attr.FK_MapData = md.No;
             attr.KeyOfEn = "FID";
             attr.Name = "FID";
-            attr.MyDataType = BP.DA.DataType.AppInt;
+            attr.MyDataType = DataType.AppInt;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3453,7 +3453,7 @@ namespace BP.WF
             attr.HisEditType = BP.En.EditType.UnDel;
             attr.KeyOfEn = GERptAttr.RDT;
             attr.Name = "接受时间";  //"接受时间";
-            attr.MyDataType = BP.DA.DataType.AppDateTime;
+            attr.MyDataType = DataType.AppDateTime;
             attr.IsSupperText = 1;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
@@ -3471,7 +3471,7 @@ namespace BP.WF
             else
                 attr.Name = "完成时间"; //"完成时间";
 
-            attr.MyDataType = BP.DA.DataType.AppDateTime;
+            attr.MyDataType = DataType.AppDateTime;
             attr.IsSupperText = 1;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
@@ -3490,7 +3490,7 @@ namespace BP.WF
             else
                 attr.Name = "发起人"; //"发起人";
 
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3505,7 +3505,7 @@ namespace BP.WF
             attr.HisEditType = BP.En.EditType.UnDel;
             attr.KeyOfEn = WorkAttr.Emps;
             attr.Name = "Emps";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3519,7 +3519,7 @@ namespace BP.WF
             attr.HisEditType = BP.En.EditType.UnDel;
             attr.KeyOfEn = GERptAttr.FK_Dept;
             attr.Name = "操作员部门"; //"操作员部门";
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
             attr.UIContralType = UIContralType.TB;
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
@@ -3537,7 +3537,7 @@ namespace BP.WF
                 //   attr.edit
                 attr.KeyOfEn = "Title";
                 attr.Name = "标题"; // "流程标题";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3556,7 +3556,7 @@ namespace BP.WF
                 attr.HisEditType = BP.En.EditType.UnDel;
                 attr.KeyOfEn = "FK_NY";
                 attr.Name = "年月"; //"年月";
-                attr.MyDataType = BP.DA.DataType.AppString;
+                attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;

@@ -32,14 +32,14 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_Init()
         {
-            string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+            string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
             string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
             filePath = filePath + this.FK_MapData + ".htm";
             //写入到html 中
-            BP.DA.DataType.WriteFile(filePath, htmlCode);
+            DataType.WriteFile(filePath, htmlCode);
             return htmlCode;
 
         }
@@ -61,7 +61,7 @@ namespace BP.WF.HttpHandler
 
                 filePath = filePath + this.FK_MapData + ".htm";
                 //写入到html 中
-                BP.DA.DataType.WriteFile(filePath, htmlCode);
+                DataType.WriteFile(filePath, htmlCode);
 
                 //保存类型。
                 MapData md = new MapData(this.FK_MapData);
@@ -71,7 +71,7 @@ namespace BP.WF.HttpHandler
                     md.Update();
                 }
                 // HtmlTemplateFile 保存到数据库中
-                BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+                DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
 
                 //检查数据完整性
                 GEEntity en = new GEEntity(this.FK_MapData);
@@ -84,7 +84,7 @@ namespace BP.WF.HttpHandler
 
         public string Fields_Init()
         {
-            string html = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", 
+            string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No", 
                 this.FrmID, "HtmlTemplateFile");
             return html;
         }
@@ -95,7 +95,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_FormatHtml()
         {
-            string html = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No",
+            string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No",
                 this.FrmID, "HtmlTemplateFile");
 
 

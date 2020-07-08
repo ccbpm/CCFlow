@@ -213,7 +213,7 @@ namespace BP.En
             if (this.IsInnKey)
                 this.OID = -1;
             else
-                this.OID = BP.DA.DBAccess.GenerOID();
+                this.OID = DBAccess.GenerOID();
 
             return base.beforeInsert();
          

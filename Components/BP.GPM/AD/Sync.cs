@@ -120,7 +120,7 @@ namespace BP.GPM.AD
         public void SyncDeptRoot()
         {
             //删除现有的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
+            DBAccess.RunSQL("DELETE FROM Port_Dept");
 
             DirectoryEntry rootDE = Glo.DirectoryEntryAppRoot;
 
@@ -136,7 +136,7 @@ namespace BP.GPM.AD
         public void SyncDeptRoot_del()
         {
             //删除现有的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Port_Dept");
+            DBAccess.RunSQL("DELETE FROM Port_Dept");
 
             //DirectorySearcher search = new DirectorySearcher(Glo.RootDirectoryEntry); //查询组织单位.
             //search.Filter = "(OU=" + Glo.ADRoot + ")";

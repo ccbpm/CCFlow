@@ -577,7 +577,7 @@ namespace BP.Pub
                             return dr["RDT"].ToString(); //审核日期.
                         case "RDT-NYR":
                             string rdt = dr["RDT"].ToString(); //审核日期.
-                            return BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt);
+                            return DataType.ParseSysDate2DateTimeFriendly(rdt);
                         case "Rec":
                             return dr["EmpFrom"].ToString(); //记录人.
                         case "RecName":
@@ -613,7 +613,7 @@ namespace BP.Pub
                     return row["RDT"].ToString(); //审核日期.
                 case "RDT-NYR":
                     string rdt = row["RDT"].ToString(); //审核日期.
-                    return BP.DA.DataType.ParseSysDate2DateTimeFriendly(rdt);
+                    return DataType.ParseSysDate2DateTimeFriendly(rdt);
                 case "Rec":
                     return row["EmpFrom"].ToString(); //记录人.
                 case "RecName":

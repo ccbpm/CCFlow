@@ -114,7 +114,7 @@ namespace BP.Sys
             if (myen == null)
             {
                 //throw new Exception("@根据类名称获取业务单元实例出现错误:" + enName + ",没有找到该类的实体.");
-                BP.DA.Log.DefaultLogWriteLineError("@根据类名称获取业务单元实例出现错误:" + enName + ",没有找到该类的实体.");
+                Log.DefaultLogWriteLineError("@根据类名称获取业务单元实例出现错误:" + enName + ",没有找到该类的实体.");
                 return null;
             }
             return myen;
@@ -247,7 +247,7 @@ namespace BP.Sys
                 if (en.RetrieveFromDBSources() == 0)
                 {
                     en.Name = "部门版本号";
-                    en.Val = BP.DA.DataType.CurrentDataTime;
+                    en.Val = DataType.CurrentDataTime;
                     en.GroupKey = "Glo";
                     en.Insert();
                 }
@@ -261,7 +261,7 @@ namespace BP.Sys
         {
             get
             {
-                return BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(No) as Num FROM Port_Dept");
+                return DBAccess.RunSQLReturnValInt("SELECT COUNT(No) as Num FROM Port_Dept");
             }
         }
         /// <summary>
@@ -271,7 +271,7 @@ namespace BP.Sys
         {
             get
             {
-                return BP.DA.DBAccess.RunSQLReturnValInt("SELECT COUNT(a.No) as Num FROM Port_Emp a, Port_Dept b WHERE A.FK_Dept=B.No AND A.No NOT IN ('admin','Guest')");
+                return DBAccess.RunSQLReturnValInt("SELECT COUNT(a.No) as Num FROM Port_Emp a, Port_Dept b WHERE A.FK_Dept=B.No AND A.No NOT IN ('admin','Guest')");
             }
         }
         /// <summary>
@@ -286,7 +286,7 @@ namespace BP.Sys
                 if (en.RetrieveFromDBSources() == 0)
                 {
                     en.Name = "人员版本号";
-                    en.Val = BP.DA.DataType.CurrentDataTime;
+                    en.Val = DataType.CurrentDataTime;
                     en.GroupKey = "Glo";
                     en.Insert();
                 }
@@ -302,7 +302,7 @@ namespace BP.Sys
         /// <param name="msg">消息</param>
         public static void WriteLineInfo(string msg)
         {
-            BP.DA.Log.DefaultLogWriteLineInfo(msg);
+            Log.DefaultLogWriteLineInfo(msg);
         }
         /// <summary>
         /// 写入一条警告
@@ -310,7 +310,7 @@ namespace BP.Sys
         /// <param name="msg">消息</param>
         public static void WriteLineWarning(string msg)
         {
-            BP.DA.Log.DefaultLogWriteLineWarning(msg);
+            Log.DefaultLogWriteLineWarning(msg);
         }
         /// <summary>
         /// 写入一条错误
@@ -318,7 +318,7 @@ namespace BP.Sys
         /// <param name="msg">消息</param>
         public static void WriteLineError(string msg)
         {
-            BP.DA.Log.DefaultLogWriteLineError(msg);
+            Log.DefaultLogWriteLineError(msg);
         }
         #endregion 写入系统日志
 
@@ -433,7 +433,7 @@ namespace BP.Sys
             string fullFile = path + @"\" + en.PKVal + "." + ext;
 
             System.IO.FileInfo info = new System.IO.FileInfo(fullFile);
-            en.SetValByKey("MyFileSize", BP.DA.DataType.PraseToMB(info.Length));
+            en.SetValByKey("MyFileSize", DataType.PraseToMB(info.Length));
             if (DataType.IsImgExt(ext))
             {
                 System.Drawing.Image img = System.Drawing.Image.FromFile(fullFile);

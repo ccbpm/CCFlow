@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
             //从excel里面获得数据表.
-            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath);
+            DataTable dt = DBLoad.ReadExcelFileToDataTable(filePath);
 
             //删除临时文件
             System.IO.File.Delete(filePath);

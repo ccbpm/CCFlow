@@ -218,10 +218,10 @@ namespace BP.WF
                 switch (doType)
                 {
                     case EventListFlow.FlowOverAfter:
-                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='"+ EventListNode.SendSuccess + "' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
+                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='"+ EventListNode.SendSuccess + "' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
                         break;
                     case EventListFlow.AfterFlowDel: //删除所有的消息，包括抄送.
-                        BP.DA.DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE AtPara LIKE '%="+wn.HisWork.OID+"@' OR WorkID=" + wn.HisWork.OID);
+                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE AtPara LIKE '%="+wn.HisWork.OID+"@' OR WorkID=" + wn.HisWork.OID);
                         break;
                     default:
                         break;

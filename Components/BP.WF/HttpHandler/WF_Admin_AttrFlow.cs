@@ -40,7 +40,7 @@ namespace BP.WF.HttpHandler
                 return string.Format(@"未找到事件编写模板文件“{0}”，请联系管理员！", tmpPath);
 
             string Title = flow.Name + "[" + flow.No + "]";
-            string code = BP.DA.DataType.ReadTextFile(tmpPath); //, System.Text.Encoding.UTF8).Replace("F001Templepte", string.Format("FEE{0}", flow.No)).Replace("@FlowName", flow.Name).Replace("@FlowNo", flow.No);
+            string code = DataType.ReadTextFile(tmpPath); //, System.Text.Encoding.UTF8).Replace("F001Templepte", string.Format("FEE{0}", flow.No)).Replace("@FlowName", flow.Name).Replace("@FlowNo", flow.No);
             code = code.Replace("F001Templepte", string.Format("FEE{0}", flow.No)).Replace("@FlowName", flow.Name).Replace("@FlowNo", flow.No);
 
 
@@ -692,7 +692,7 @@ namespace BP.WF.HttpHandler
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
-                msg.MyPK = BP.DA.DBAccess.GenerGUID();
+                msg.MyPK = DBAccess.GenerGUID();
                 msg.Insert();
             }
             else

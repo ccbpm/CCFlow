@@ -71,8 +71,8 @@ namespace BP.WF
 
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
 
-                    //  BP.DA.Log.DebugWriteInfo(ps.SQL);
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                    //  Log.DebugWriteInfo(ps.SQL);
+                    return DBAccess.RunSQLReturnValInt(ps);
                 }
 
                 /*如果是授权状态, 获取当前委托人的信息. */
@@ -115,11 +115,11 @@ namespace BP.WF
                         }
 
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
-                        return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                        return DBAccess.RunSQLReturnValInt(ps);
                     default:
                         throw new Exception("no such way...");
                 }
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                return DBAccess.RunSQLReturnValInt(ps);
             }
         }
 
@@ -144,7 +144,7 @@ namespace BP.WF
             get
             {
                 string sql = "SELECT  COUNT(WorkID) AS Num from WF_GenerWorkFlow where WFState=4 and  WorkID in (SELECT distinct WorkID FROM WF_HungUp WHERE Rec='" + BP.Web.WebUser.No + "')";
-                return BP.DA.DBAccess.RunSQLReturnValInt(sql);
+                return DBAccess.RunSQLReturnValInt(sql);
             }
         }
         /// <summary>
@@ -161,14 +161,14 @@ namespace BP.WF
                     /*如果是授权状态.*/
                     WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
                     sql = "SELECT count( distinct A.WorkID ) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND (B.IsPass=1 OR B.IsPass<-1) AND A.FK_Flow IN " + emp.AuthorFlows;
-                    return BP.DA.DBAccess.RunSQLReturnValInt(sql);
+                    return DBAccess.RunSQLReturnValInt(sql);
                 }
                 else
                 {
                     Paras ps = new Paras();
                     ps.SQL = "SELECT count( distinct A.WorkID ) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 OR B.IsPass<-1) ";
                     ps.Add("FK_Emp", WebUser.No);
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                    return DBAccess.RunSQLReturnValInt(ps);
                 }
             }
         }
@@ -182,10 +182,10 @@ namespace BP.WF
             {
                 /*获取数据.*/
                 string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                BP.DA.Paras ps = new BP.DA.Paras();
+                Paras ps = new Paras();
                 ps.SQL = "SELECT count(a.WorkID ) as Num FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter";
                 ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                return DBAccess.RunSQLReturnValInt(ps);
             }
         }
         /// <summary>
@@ -197,7 +197,7 @@ namespace BP.WF
             {
                 /*获取数据.*/
                 string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                BP.DA.Paras ps = new BP.DA.Paras();
+                Paras ps = new Paras();
                 string sql = "SELECT count(*)";
                 sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
                 sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node ";
@@ -206,7 +206,7 @@ namespace BP.WF
                 //ps.SQL = "SELECT COUNT(workid) as Num FROM WF_GenerWorkerlist WHERE FK_Emp=" + dbStr + "FK_Emp AND IsPass=90";
                 ps.SQL = sql;
                 ps.Add(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                return DBAccess.RunSQLReturnValInt(ps);
             }
         }
         /// <summary>
@@ -222,7 +222,7 @@ namespace BP.WF
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%') AND WFState=" + (int)WFState.Complete;
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
+                return DBAccess.RunSQLReturnValInt(ps, 0);
 
             }
         }
@@ -243,7 +243,7 @@ namespace BP.WF
                     /*不是授权状态*/
                     ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                    return DBAccess.RunSQLReturnValInt(ps);
                 }
 
                 /*如果是授权状态, 获取当前委托人的信息. */
@@ -263,12 +263,12 @@ namespace BP.WF
                         /*不是授权状态*/
                         ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
-                        return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                        return DBAccess.RunSQLReturnValInt(ps);
                     //throw new Exception("对方(" + WebUser.No + ")已经取消了授权.");
                     default:
                         throw new Exception("no such way...");
                 }
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                return DBAccess.RunSQLReturnValInt(ps);
             }
         }
         /// <summary>
@@ -294,7 +294,7 @@ namespace BP.WF
                     ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp";
 
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                    return DBAccess.RunSQLReturnValInt(ps);
                 }
 
                 /*如果是授权状态, 获取当前委托人的信息. */
@@ -314,7 +314,7 @@ namespace BP.WF
                     default:
                         throw new Exception("no such way...");
                 }
-                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                return DBAccess.RunSQLReturnValInt(ps);
             }
         }
 
@@ -346,7 +346,7 @@ namespace BP.WF
                 MapExtAttr.ExtType, "PageLoadFull");
             if (i == 0)
             {
-                BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
+                Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return;
             }
 
@@ -362,7 +362,7 @@ namespace BP.WF
 
                 string[] tempStrs = sql.Split('=');
                 string dtlName = tempStrs[0];
-                DataTable dtlTable = BP.DA.DBAccess.RunSQLReturnTable(sql.Replace(dtlName + "=", ""));
+                DataTable dtlTable = DBAccess.RunSQLReturnTable(sql.Replace(dtlName + "=", ""));
                 dtlTable.TableName = dtlName;
                 ds.Tables.Add(dtlTable);
             }
@@ -371,7 +371,7 @@ namespace BP.WF
             #region 检查数据源是否正确.
             string errMsg = "";
             // 获取主表数据.
-            DataTable dtMain = BP.DA.DBAccess.RunSQLReturnTable(me.Tag);
+            DataTable dtMain = DBAccess.RunSQLReturnTable(me.Tag);
             if (dtMain.Columns.Contains("Starter") == false)
             {
                 errMsg += "@配值的主表中没有Starter列.";
@@ -384,7 +384,7 @@ namespace BP.WF
 
             if (errMsg.Length > 2)
             {
-                BP.DA.Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
+                Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
                 return;
             }
             #endregion 检查数据源是否正确.
@@ -411,7 +411,7 @@ namespace BP.WF
                     emp.No = starter;
                     if (emp.RetrieveFromDBSources() == 0)
                     {
-                        BP.DA.Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + emp.No + "不存在。");
+                        Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + emp.No + "不存在。");
                         continue;
                     }
 
@@ -471,11 +471,11 @@ namespace BP.WF
                 {
                     WorkNode wn = new WorkNode(wk, nd);
                     string msg = wn.NodeSend().ToMsgOfHtml();
-                    //BP.DA.Log.DefaultLogWriteLineInfo(msg);
+                    //Log.DefaultLogWriteLineInfo(msg);
                 }
                 catch (Exception ex)
                 {
-                    BP.DA.Log.DefaultLogWriteLineWarning(ex.Message);
+                    Log.DefaultLogWriteLineWarning(ex.Message);
                 }
             }
             #endregion 处理流程发起.
@@ -1010,7 +1010,7 @@ namespace BP.WF
         {
             /*获取数据.*/
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            BP.DA.Paras ps = new BP.DA.Paras();
+            Paras ps = new Paras();
             if (DataType.IsNullOrEmpty(domain) == true)
             {
                 if (flowNo == null)
@@ -1043,7 +1043,7 @@ namespace BP.WF
                 }
             }
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
@@ -1102,7 +1102,7 @@ namespace BP.WF
                 ps.Add("Domain", domain);
             }
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1220,7 +1220,7 @@ namespace BP.WF
             sql += "  ORDER BY  B.Idx, C.Idx, A.RDT DESC ";
 
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1380,7 +1380,7 @@ namespace BP.WF
                     ps.Add("FK_Node", fk_node);
                     ps.Add("FK_Emp", userNo);
                 }
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 //添加oracle的处理
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
@@ -1531,7 +1531,7 @@ namespace BP.WF
                 default:
                     throw new Exception("no such way...");
             }
-            DataTable dt2 = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt2 = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -1656,7 +1656,7 @@ namespace BP.WF
                     ps.Add("FK_Flow", fk_flow);
                     ps.Add("FK_Emp", userNo);
                 }
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                return DBAccess.RunSQLReturnTable(ps);
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -1726,7 +1726,7 @@ namespace BP.WF
                 default:
                     throw new Exception("no such way...");
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 根据状态获取当前操作员的共享工作
@@ -1772,7 +1772,7 @@ namespace BP.WF
                     ps.Add("FK_Flow", fk_flow);
                     ps.Add("FK_Emp", userNo);
                 }
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                return DBAccess.RunSQLReturnTable(ps);
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -1846,7 +1846,7 @@ namespace BP.WF
                 default:
                     throw new Exception("no such way...");
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获得待办(包括被授权的待办)
@@ -1914,7 +1914,7 @@ namespace BP.WF
                         throw new Exception("no such way...");
                 }
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获取当前操作人员的待办信息
@@ -1933,7 +1933,7 @@ namespace BP.WF
                 /*不是授权状态*/
                 ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC";
                 ps.Add("FK_Emp", BP.Web.WebUser.No);
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                return DBAccess.RunSQLReturnTable(ps);
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -1976,13 +1976,13 @@ namespace BP.WF
                     }
 
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
-                    return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                    return DBAccess.RunSQLReturnTable(ps);
 
                     WebUser.Auth = null; //对方已经取消了授权.
                 default:
                     throw new Exception("no such way...");
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获得已完成数据统计列表
@@ -1995,7 +1995,7 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获取指定页面已经完成流程
@@ -2089,7 +2089,7 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + WebUser.No + "@%' OR  T.Emps LIKE '%@" + WebUser.No + ",%') AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            dt = DBAccess.RunSQLReturnTable(ps);
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -2118,7 +2118,7 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + WebUser.No + "@%' OR T.Emps LIKE '%@" + WebUser.No + ",%') AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
             //需要翻译.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -2176,7 +2176,7 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
 
         }
         /// <summary>
@@ -2191,7 +2191,7 @@ namespace BP.WF
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 获取已经完成
@@ -2262,7 +2262,7 @@ namespace BP.WF
                     ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
                 }
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
 
         }
 
@@ -2323,7 +2323,7 @@ namespace BP.WF
                 /*不是授权状态*/
                 ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
                 ps.Add("FK_Emp", BP.Web.WebUser.No);
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                return DBAccess.RunSQLReturnTable(ps);
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -2344,7 +2344,7 @@ namespace BP.WF
                     throw new Exception("no such way...");
             }
             //@杜. 这里需要翻译.
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
@@ -2446,7 +2446,7 @@ namespace BP.WF
                 // ps.SQL = "select v1.*,v2.name,v3.name as ParentName from (" + realSql + ") as v1 left join JXW_Inc v2 on v1.WorkID=v2.OID left join Jxw_Inc V3 on v1.PWorkID = v3.OID ORDER BY v1.ADT DESC";
 
                 ps.Add("FK_Emp", BP.Web.WebUser.No);
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                return DBAccess.RunSQLReturnTable(ps);
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -2468,7 +2468,7 @@ namespace BP.WF
             }
 
             //@杜. 这里需要翻译.
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
@@ -2658,7 +2658,7 @@ namespace BP.WF
             Flow fl = new Flow(fk_flow);
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string sql = "SELECT OID,Title,RDT,FID FROM " + fl.PTable + " WHERE WFState=" + (int)sta + " AND Rec=" + dbstr + "Rec";
-            BP.DA.Paras ps = new BP.DA.Paras();
+            Paras ps = new Paras();
             ps.SQL = sql;
             ps.Add("Rec", BP.Web.WebUser.No);
             return DBAccess.RunSQLReturnTable(ps);
@@ -2832,7 +2832,7 @@ namespace BP.WF
                     }
                     //                    sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
 
-                    // BP.DA.Log.DebugWriteWarning(sql);
+                    // Log.DebugWriteWarning(sql);
 
                     dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -3214,7 +3214,7 @@ namespace BP.WF
             }
 
             //获得sql.
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -3287,7 +3287,7 @@ namespace BP.WF
                 ps.Add("FK_Emp", WebUser.No);
             }
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
@@ -3315,7 +3315,7 @@ namespace BP.WF
                 ps.SQL = "SELECT a.FK_Flow,a.FlowName, Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)  GROUP BY A.FK_Flow, A.FlowName";
                 ps.Add("FK_Emp", WebUser.No);
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         public static DataTable DB_GenerRuning2(string userNo, string fk_flow, string titleKey)
         {
@@ -3344,7 +3344,7 @@ namespace BP.WF
                 }
             }
 
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return DBAccess.RunSQLReturnTable(sql);
         }
          
         /// <summary>
@@ -3509,7 +3509,7 @@ namespace BP.WF
                         + " a , WF_EmpWorks b WHERE a.OID=B.WorkID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
                         + " AND b.FK_Emp='" + WebUser.No + "'";
             // string sql = "SELECT Title,RDT,ADT,SDT,FID,WorkID,Starter FROM WF_EmpWorks WHERE FK_Emp='" + WebUser.No + "'";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return dt;
         }
 
@@ -3715,7 +3715,7 @@ namespace BP.WF
             if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
             {
                 //判断是否视图，如果为视图则不进行修改 需要翻译
-                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+                if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                 {
                     return false;
                 }
@@ -3728,7 +3728,7 @@ namespace BP.WF
                 ps.SQL = Glo.UpdataSID;
                 ps.Add("SID", sid);
                 ps.Add("No", userNo);
-                if (BP.DA.DBAccess.RunSQL(ps) == 1)
+                if (DBAccess.RunSQL(ps) == 1)
                 {
                     return true;
                 }
@@ -3739,7 +3739,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+                if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                 {
                     throw new Exception("@执行更新SID失败,您在组织结构集成的时候需要配置一个更新SID的SQL, 比如: update MyUserTable SET SID=@SID WHERE BH='@No'");
                 }
@@ -3837,7 +3837,7 @@ namespace BP.WF
             #endregion 短消息信息
 
             // 其他属性.
-            sms.RDT = BP.DA.DataType.CurrentDataTime;
+            sms.RDT = DataType.CurrentDataTime;
 
             sms.MsgType = msgType; // 消息类型.
 
@@ -3868,7 +3868,7 @@ namespace BP.WF
             ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SendTo AND RDT >" + BP.Sys.SystemConfig.AppCenterDBVarStr + "RDT Group By MsgType";
             ps.Add(BP.WF.SMSAttr.SendTo, userNo);
             ps.Add(BP.WF.SMSAttr.RDT, dateLastTime);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return dt;
         }
         /// <summary>
@@ -3881,7 +3881,7 @@ namespace BP.WF
             Paras ps = new Paras();
             ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SendTo  Group By MsgType";
             ps.Add(BP.WF.SMSAttr.SendTo, userNo);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return dt;
         }
         #endregion 登陆接口
@@ -4173,7 +4173,7 @@ namespace BP.WF
         public static void WriteTrackDailyLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            string today = BP.DA.DataType.CurrentData;
+            string today = DataType.CurrentData;
 
             Paras ps = new Paras();
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET Msg=" + dbStr + "Msg WHERE  RDT LIKE '" + today + "%' AND WorkID=" + dbStr + "WorkID  AND NDFrom=" + dbStr + "NDFrom AND EmpFrom=" + dbStr + "EmpFrom AND ActionType=" + (int)ActionType.WorkCheck;
@@ -4258,7 +4258,7 @@ namespace BP.WF
         public static void WriteTrackMonthLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            string today = BP.DA.DataType.CurrentData;
+            string today = DataType.CurrentData;
 
             DateTime dTime = DateTime.Now;
             DateTime startDay = dTime.AddDays(1 - dTime.Day);   //本月第一天 
@@ -4320,7 +4320,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT MyPK FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND WorkID=" + workid + " And NDTo='0' ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 return false;
@@ -4328,7 +4328,7 @@ namespace BP.WF
 
             string pk = dt.Rows[0][0].ToString();
             sql = "UPDATE " + table + " SET " + TrackAttr.ActionTypeText + "='" + label + "' WHERE MyPK=" + pk;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
             return true;
         }
 
@@ -4345,7 +4345,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT MyPK FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND WorkID=" + workid + "  ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 return false;
@@ -4353,7 +4353,7 @@ namespace BP.WF
 
             string pk = dt.Rows[0][0].ToString();
             sql = "UPDATE " + table + " SET " + TrackAttr.ActionTypeText + "='" + label + "' WHERE MyPK=" + pk;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
             return true;
         }
         /// <summary>
@@ -4367,7 +4367,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 if (isNullAsVal == null)
@@ -4391,7 +4391,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Tag FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + empFrom + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 return "";
@@ -4416,7 +4416,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND WorkID=" + workId + " ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 //BP.Sys.FrmWorkCheck fwc = new FrmWorkCheck(nodeFrom);
@@ -4437,13 +4437,13 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "DELETE FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
         }
         public static string GetAskForHelpReInfo(string flowNo, Int64 workId, int nodeFrom)
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.AskforHelp + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 return "";
@@ -4474,7 +4474,7 @@ namespace BP.WF
             ps.Add("ActionType", actionType);
             ps.Add("WorkID", workId);
             ps.Add("NDFrom", nodeFrom);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
 
         /// <summary>
@@ -4490,14 +4490,14 @@ namespace BP.WF
             ps.SQL = "UPDATE WF_GenerWorkFlow SET BillNo=" + dbstr + "BillNo  WHERE WorkID=" + dbstr + "WorkID";
             ps.Add("BillNo", newBillNo);
             ps.Add("WorkID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             Flow fl = new Flow(flowNo);
             ps = new Paras();
             ps.SQL = "UPDATE " + fl.PTable + " SET BillNo=" + dbstr + "BillNo WHERE OID=" + dbstr + "OID";
             ps.Add("BillNo", newBillNo);
             ps.Add("OID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
 
         /// <summary>
@@ -4527,7 +4527,7 @@ namespace BP.WF
             ps.Add(GenerWorkFlowAttr.PEmp, parentEmpNo);
             ps.Add(GenerWorkFlowAttr.WorkID, subFlowWorkID);
 
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
 
             Flow fl = new Flow(subFlowNo);
@@ -4539,7 +4539,7 @@ namespace BP.WF
             ps.Add(NDXRptBaseAttr.PEmp, parentEmpNo);
             ps.Add(NDXRptBaseAttr.OID, subFlowWorkID);
 
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
 
         public static GERpt Flow_GenerGERpt(string flowNo, Int64 workID)
@@ -4627,7 +4627,7 @@ namespace BP.WF
             ps = new Paras();
             ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID";
             ps.Add("OID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             //删除开始节点数据.
             Node nd = fl.HisStartNode;
@@ -4635,9 +4635,9 @@ namespace BP.WF
             ps = new Paras();
             ps.SQL = "DELETE FROM " + wk.EnMap.PhysicsTable + " WHERE OID=" + dbstr + "OID";
             ps.Add("OID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
-            BP.DA.Log.DefaultLogWriteLineInfo(WebUser.Name + "删除了FlowNo 为'" + flowNo + "',workID为'" + workID + "'的数据");
+            Log.DefaultLogWriteLineInfo(WebUser.Name + "删除了FlowNo 为'" + flowNo + "',workID为'" + workID + "'的数据");
 
             return "草稿删除成功";
         }
@@ -4767,7 +4767,7 @@ namespace BP.WF
             }
             pas.Add("WorkID", WorkID);
             pas.Add("NDTo", FK_Node);
-            return BP.DA.DBAccess.RunSQLReturnTable(pas);
+            return DBAccess.RunSQLReturnTable(pas);
         }
 
         /// <summary>
@@ -4984,7 +4984,7 @@ namespace BP.WF
             Paras ps = new Paras();
             ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("WorkID", workID);
-            return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+            return DBAccess.RunSQLReturnValInt(ps);
         }
         /// <summary>
         /// 获取指定节点的Work
@@ -5024,7 +5024,7 @@ namespace BP.WF
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM WF_GenerWorkerList WHERE IsEnable=1 AND IsPass=0 AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("WorkID", workID);
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            return DBAccess.RunSQLReturnTable(ps);
         }
         /// <summary>
         /// 根据流程标记获得流程编号
@@ -5293,7 +5293,7 @@ namespace BP.WF
             ps.Add(GenerWorkFlowAttr.PWorkID, workID);
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
 
-            if (BP.DA.DBAccess.RunSQLReturnValInt(ps) == 0)
+            if (DBAccess.RunSQLReturnValInt(ps) == 0)
             {
                 return true;
             }
@@ -5349,7 +5349,7 @@ namespace BP.WF
             ps.SQL = "SELECT c.RunModel,c.IsGuestNode, a.GuestNo, a.TaskSta, a.WFState, IsPass FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b, WF_Node c WHERE  b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.FK_Emp=" + dbstr + "FK_Emp AND (b.IsEnable=1 OR b.IsPass>=70 OR IsPass=0)   AND a.WorkID=" + dbstr + "WorkID ";
             ps.Add("FK_Emp", userNo);
             ps.Add("WorkID", workID);
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (dt.Rows.Count == 0)
                 return false;
 
@@ -5436,7 +5436,7 @@ namespace BP.WF
             //ps.Add("WorkID", workID);
             string sql = "SELECT c.RunModel, a.TaskSta FROM WF_GenerWorkFlow a , WF_GenerWorkerlist b, WF_Node c WHERE a.FK_Node='" + nodeID + "'  AND b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.GuestNo='" + userNo + "' AND b.IsEnable=1 AND a.WorkID=" + workID;
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 return false;
@@ -5498,7 +5498,7 @@ namespace BP.WF
             ps.Add("Emp1", WebUser.No);
             ps.Add("Emp2", WebUser.No);
 
-            if (BP.DA.DBAccess.RunSQLReturnValInt(ps) > 1)
+            if (DBAccess.RunSQLReturnValInt(ps) > 1)
                 return true;
 
             //在查看该流程的发起者，与当前人是否在同一个部门，如果是也返回true.
@@ -5507,12 +5507,12 @@ namespace BP.WF
             ps.Add(BP.WF.TrackAttr.WorkID, workid);
             ps.Add(BP.WF.TrackAttr.FID, workid);
 
-            string fk_dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
+            string fk_dept = DBAccess.RunSQLReturnStringIsNull(ps, null);
             if (fk_dept == null)
             {
                 BP.WF.Flow fl = new Flow(flowNo);
                 ps.SQL = "SELECT FK_Dept FROM " + fl.PTable + " WHERE OID=" + dbStr + "WorkID OR OID=" + dbStr + "FID";
-                fk_dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
+                fk_dept = DBAccess.RunSQLReturnStringIsNull(ps, null);
                 if (fk_dept == null)
                 {
                     throw new Exception("@流程引擎数据被删除.");
@@ -5742,7 +5742,7 @@ namespace BP.WF
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1 WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WorkID, workid);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             // 更新流程数据信息。
             Flow fl = new Flow(gwf.FK_Flow);
@@ -5751,7 +5751,7 @@ namespace BP.WF
             ps.Add(NDXRptBaseAttr.FlowEnder, toEmper);
             ps.Add(NDXRptBaseAttr.FlowEndNode, toNodeID);
             ps.Add(NDXRptBaseAttr.OID, workid);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             // 执行更新.
             GenerWorkerLists gwls = new GenerWorkerLists(workid);
@@ -5777,7 +5777,7 @@ namespace BP.WF
             }
 
             string sql = "SELECT COUNT(*) FROM WF_EmpWorks where WorkID=" + workid + " and fk_emp='" + toEmper + "'";
-            int i = BP.DA.DBAccess.RunSQLReturnValInt(sql);
+            int i = DBAccess.RunSQLReturnValInt(sql);
             if (i == 0)
             {
                 throw new Exception("@调度错误");
@@ -5798,7 +5798,7 @@ namespace BP.WF
         public static void Flow_SetFlowTransferCustom(string flowNo, Int64 workid, TransferCustomType runType, string paras)
         {
             //删除以前存储的参数.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
+            DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
 
             //保存参数.
             // 参数格式为  @104`SubFlow002`1`zhangsan,lisi`wangwu,chenba`王五,陈八@......
@@ -5931,7 +5931,7 @@ namespace BP.WF
             #endregion
 
             //删除以前存储的参数.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
+            DBAccess.RunSQL("DELETE FROM WF_TransferCustom WHERE WorkID=" + workid);
 
             //保存参数.
             // 参数格式为 格式为:@节点编号1;处理人员1,处理人员2,处理人员n;应处理时间(可选)
@@ -6035,7 +6035,7 @@ namespace BP.WF
                 ps.SQL = "SELECT WorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter";
                 ps.Add("WorkID", workid);
                 ps.Add("Starter", userNo);
-                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
+                string user = DBAccess.RunSQLReturnStringIsNull(ps, null);
                 if (user == null)
                 {
                     return false;
@@ -6051,7 +6051,7 @@ namespace BP.WF
                 ps.SQL = "SELECT WorkID FROM WF_GenerWorkerlist A, WF_Node B  WHERE A.FK_Node=B.NodeID  AND B.DelEnable=1  AND A.WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND A.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 ps.Add("WorkID", workid);
                 ps.Add("FK_Emp", userNo);
-                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
+                string user = DBAccess.RunSQLReturnStringIsNull(ps, null);
                 if (user == null)
                 {
                     return false;
@@ -6088,13 +6088,13 @@ namespace BP.WF
             Paras pss = new Paras();
             pss.SQL = "SELECT EMPFROM FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
             pss.Add("MyPK", mypk);
-            string str = BP.DA.DBAccess.RunSQLReturnString(pss);
+            string str = DBAccess.RunSQLReturnString(pss);
             if (str.Equals(username) || str == username)
             {
                 Paras ps = new Paras();
                 ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
                 ps.Add("MyPK", mypk);
-                BP.DA.DBAccess.RunSQL(ps);
+                DBAccess.RunSQL(ps);
                 return "删除成功.";
             }
             else
@@ -6302,7 +6302,7 @@ namespace BP.WF
             sql += " WHERE (A.WorkID=" + workID + " OR A.FID=" + workID + ") AND (A.ActionType=1 OR A.ActionType=0  OR A.ActionType=6  OR A.ActionType=7) AND (A.EmpFrom=B.No) AND (B.FK_Dept=C.No) ";
             sql += " ORDER BY A.RDT ";
 
-            DataTable dtTrack = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dtTrack = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dtTrack.Columns["NDFROM"].ColumnName = "NDFrom";
@@ -6405,7 +6405,7 @@ namespace BP.WF
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.Author = Author;
             emp.AuthorWay = AuthorWay;
-            emp.AuthorDate = BP.DA.DataType.CurrentData;
+            emp.AuthorDate = DataType.CurrentData;
 
             if (!DataType.IsNullOrEmpty(AuthorFlows))
             {
@@ -6438,7 +6438,7 @@ namespace BP.WF
             }
 
             BP.WF.Port.WFEmp myau = new BP.WF.Port.WFEmp(WebUser.No);
-            BP.DA.Log.DefaultLogWriteLineInfo("取消授权:" + WebUser.No + "取消了对(" + myau.Author + ")的授权。");
+            Log.DefaultLogWriteLineInfo("取消授权:" + WebUser.No + "取消了对(" + myau.Author + ")的授权。");
             myau.Author = "";
             myau.AuthorWay = 0;
             myau.AuthorDate = "";
@@ -6457,7 +6457,7 @@ namespace BP.WF
                 throw new Exception("@ 非法用户，请执行登录后再试。");
             }
 
-            return BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + WebUser.No + "'");
+            return DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + WebUser.No + "'");
         }
         /// <summary>
         /// 获取委托给当前登录人的流程待办信息
@@ -6501,7 +6501,7 @@ namespace BP.WF
 
                         break;
                 }
-                return BP.DA.DBAccess.RunSQLReturnTable(sql);
+                return DBAccess.RunSQLReturnTable(sql);
             }
             return null;
         }
@@ -6746,8 +6746,8 @@ namespace BP.WF
             //    }
 
             //    rpt.SetValByKey(GERptAttr.FID, 0);
-            //    rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
-            //    rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);
+            //    rpt.SetValByKey(GERptAttr.FlowStartRDT, DataType.CurrentDataTime);
+            //    rpt.SetValByKey(GERptAttr.FlowEnderRDT, DataType.CurrentDataTime);
             //    rpt.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
             //    rpt.SetValByKey(GERptAttr.FlowStarter, emp.No);
             //    rpt.SetValByKey(GERptAttr.FlowEnder, emp.No);
@@ -7621,14 +7621,14 @@ namespace BP.WF
 
             //开始更新他们的顺序, 首先从数据库里获取他们的顺序.     lxl职位由小到大
             string sql = "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + workid + " AND FK_Node=" + nodeID + " AND IsPass >=100 ) ORDER BY IDX desc";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = 100;
             foreach (DataRow dr in dt.Rows)
             {
                 idx++;
                 string myEmpNo = dr[0].ToString();
                 sql = "UPDATE WF_GenerWorkerList SET IsPass=" + idx + " WHERE FK_Emp='" + myEmpNo + "' AND WorkID=" + workid + " AND FK_Node=" + nodeID;
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
             }
         }
         /// <summary>
@@ -7971,7 +7971,7 @@ namespace BP.WF
                     }
 
                     sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + deptNo + "'";
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string empNo = dr[0].ToString();
@@ -8055,7 +8055,7 @@ namespace BP.WF
 
                     sql = "SELECT No,Name, a.FK_Dept FROM Port_Emp a, " + Glo.EmpStation + " B  WHERE a.No=B.FK_Emp AND B.FK_Station='" + staNo + "'";
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string empNo = dr[0].ToString();
@@ -8143,7 +8143,7 @@ namespace BP.WF
                     sql += " UNION ";
                     sql += "SELECT A.No, A.Name, A.FK_Dept FROM Port_Emp A, Port_TeamEmp B  WHERE A.No=B.FK_Emp AND B.FK_Group='" + group + "'";
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string empNo = dr[0].ToString();
@@ -8228,7 +8228,7 @@ namespace BP.WF
             Paras ps = new Paras();
             ps.SQL = "DELETE FROM WF_CCList WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK";
             ps.Add(CCListAttr.MyPK, mypk);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
         /// <summary>
         /// 设置抄送状态
@@ -8247,7 +8247,7 @@ namespace BP.WF
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.FK_Node, nodeID);
             ps.Add(CCListAttr.CCTo, empNo);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
         /// <summary>
         /// 执行读取
@@ -8263,7 +8263,7 @@ namespace BP.WF
             ps.Add(CCListAttr.Sta, (int)CCSta.UnRead);
             ps.Add(CCListAttr.ReadDT, DataType.CurrentDataTime); //设置读取日期.
             ps.Add(CCListAttr.MyPK, mypk);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
         }
 
         /// <summary>
@@ -8279,7 +8279,7 @@ namespace BP.WF
             ps.Add(CCListAttr.CDT, DataType.CurrentDataTime); //设置完成日期.
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.CCTo, WebUser.No);
-            int val = BP.DA.DBAccess.RunSQL(ps);
+            int val = DBAccess.RunSQL(ps);
             if (val == 0)
                 return "err@执行失败,没有更新到workid=" + workid + ",CCTo=" + WebUser.No + ", 的抄送数据.";
 
@@ -8301,7 +8301,7 @@ namespace BP.WF
             ps.Add(CCListAttr.CDT, DataType.CurrentDataTime); //设置完成日期.
             ps.Add(CCListAttr.WorkID, workid);
             ps.Add(CCListAttr.CCTo, WebUser.No);
-            int val = BP.DA.DBAccess.RunSQL(ps);
+            int val = DBAccess.RunSQL(ps);
             if (val == 0)
                 return "err@执行失败,没有更新到workid=" + workid + ",CCTo=" + WebUser.No + ", 的抄送数据.";
 
@@ -8536,13 +8536,13 @@ namespace BP.WF
             ps.SQL = "UPDATE WF_GenerWorkerlist SET SDT=" + SystemConfig.AppCenterDBVarStr + "SDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=0";
             ps.Add("SDT", sdt);
             ps.Add("WorkID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
             ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET SDTOfNode=" + SystemConfig.AppCenterDBVarStr + "SDTOfNode WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
             ps.Add("SDTOfNode", sdt);
             ps.Add("WorkID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            DBAccess.RunSQL(ps);
 
         }
         /// <summary>
@@ -8671,7 +8671,7 @@ namespace BP.WF
                             break;
                         case WhoIsPK.P3WorkID:
                             string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
-                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+                            workID = DBAccess.RunSQLReturnValInt(sql, 0);
                             break;
                         default:
                             break;
@@ -9094,8 +9094,8 @@ namespace BP.WF
                 string toDoEmps = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name;
                 ps1.Add(GenerWorkFlowAttr.TodoEmps, toDoEmps);
                 ps1.Add(GenerWorkerListAttr.WorkID, workid);
-                BP.DA.Log.DefaultLogWriteLineInfo(toDoEmps);
-                BP.DA.Log.DefaultLogWriteLineInfo(ps1.SQL);
+                Log.DefaultLogWriteLineInfo(toDoEmps);
+                Log.DefaultLogWriteLineInfo(ps1.SQL);
                 DBAccess.RunSQL(ps1);
             }
 
@@ -9174,8 +9174,8 @@ namespace BP.WF
                 ps2.Add(GenerWorkFlowAttr.TodoEmps, toDoEmps);
                 ps2.Add(GenerWorkFlowAttr.TodoEmpsNum, toDoEmpsNum);
                 ps2.Add(GenerWorkerListAttr.WorkID, workid);
-                BP.DA.Log.DefaultLogWriteLineInfo(toDoEmps);
-                BP.DA.Log.DefaultLogWriteLineInfo(ps2.SQL);
+                Log.DefaultLogWriteLineInfo(toDoEmps);
+                Log.DefaultLogWriteLineInfo(ps2.SQL);
                 DBAccess.RunSQL(ps2);
             }
 
@@ -9593,7 +9593,7 @@ namespace BP.WF
                 try
                 {
                     string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
-                    i = BP.DA.DBAccess.RunSQL(sql);
+                    i = DBAccess.RunSQL(sql);
                 }
                 catch
                 {
@@ -9727,7 +9727,7 @@ namespace BP.WF
         /// <returns>指定工作的NodeID.</returns>
         public static int Node_GetCurrentNodeID(string fk_flow, Int64 workid)
         {
-            int nodeID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + workid + " AND FK_Flow='" + fk_flow + "'", 0);
+            int nodeID = DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + workid + " AND FK_Flow='" + fk_flow + "'", 0);
             if (nodeID == 0)
             {
                 return int.Parse(fk_flow + "01");
@@ -10260,7 +10260,7 @@ namespace BP.WF
                     throw new Exception("err@创建路径出现错误，可能是没有权限或者路径配置有问题:" + savePath + "@异常信息:" + ex.Message);
                 }
 
-                string guid = BP.DA.DBAccess.GenerGUID();
+                string guid = DBAccess.GenerGUID();
                 string ext = fileName.Substring(fileName.LastIndexOf("."));
                 string realSaveTo = savePath + "\\" + guid + "." + fileName;
                 realSaveTo = realSaveTo.Replace("~", "-");
@@ -10337,7 +10337,7 @@ namespace BP.WF
                 if (athDesc.AthSaveWay == AthSaveWay.DB)
                 {
                     //执行文件保存.
-                    BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
+                    DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
                 }
             }
             #endregion 文件上传的iis服务器上 or db数据库里.
@@ -10382,7 +10382,7 @@ namespace BP.WF
 
                 FileInfo info = new FileInfo(temp);
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
+                dbUpload.MyPK = DBAccess.GenerGUID();
                 dbUpload.Sort = sort;
                 dbUpload.NodeID = nodeid;
                 dbUpload.FK_MapData = athDesc.FK_MapData;
@@ -10407,7 +10407,7 @@ namespace BP.WF
                     Paras ps = new Paras();
                     ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add("WorkID", pkVal);
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt(ps, 0).ToString();
+                    string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                     if (pWorkID == null || pWorkID == "0")
                     {
                         pWorkID = pkVal;
@@ -10651,7 +10651,7 @@ namespace BP.WF
                 default:
                     throw new Exception("@没有实现该类型的数据库支持.");
             }
-            return BP.DA.DBAccess.RunSQLReturnValInt(sql, 0);
+            return DBAccess.RunSQLReturnValInt(sql, 0);
         }
         /// <summary>
         /// 发送到节点
@@ -10743,7 +10743,7 @@ namespace BP.WF
             sql += " ORDER BY B.Idx,B.No,A.Idx,A.No ";
 
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count != 0)
             {
                 return dt;
@@ -10754,7 +10754,7 @@ namespace BP.WF
             sql += "SELECT FK_EMP FROM " + BP.WF.Glo.EmpStation + " WHERE FK_STATION ";
             sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
             sql += ") ORDER BY A.FK_DEPT,A.No ";
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return DBAccess.RunSQLReturnTable(sql);
         }
         /// <summary>
         /// 按sql方式
@@ -10840,7 +10840,7 @@ namespace BP.WF
 
             //下次是否记忆选择，清空掉。
             string sql = "UPDATE WF_SelectAccper SET " + SelectAccperAttr.IsRemember + " = 0 WHERE Rec='" + WebUser.No + "' AND IsRemember=1 AND FK_Node=" + nodeID;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             //开始执行保存.
             string[] strs = emps.Split(',');

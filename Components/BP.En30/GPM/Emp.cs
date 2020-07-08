@@ -355,8 +355,8 @@ namespace BP.GPM
             if (DataType.IsNullOrEmpty(this.Name) == true)
                 throw new Exception("err@名称不能为空.");
 
-            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name).ToLower();
-            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
+            string pinyinQP = DataType.ParseStringToPinyin(this.Name).ToLower();
+            string pinyinJX = DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
 
             //处理岗位信息.
@@ -377,7 +377,7 @@ namespace BP.GPM
                 }
 
                 //给拼音重新定义值,让其加上部门的信息.
-                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+                this.PinYin = this.PinYin + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new Port.Station();
                 sta.No = item.FK_Station;
@@ -434,8 +434,8 @@ namespace BP.GPM
         public static string GenerPinYin(string no, string name)
         {
             //增加拼音，以方便查找.
-            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(name).ToLower();
-            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(name).ToLower();
+            string pinyinQP = DataType.ParseStringToPinyin(name).ToLower();
+            string pinyinJX = DataType.ParseStringToPinyinJianXie(name).ToLower();
             string py = "," + pinyinQP + "," + pinyinJX + ",";
 
             //处理岗位信息.
@@ -456,7 +456,7 @@ namespace BP.GPM
                 }
 
                 //给拼音重新定义值,让其加上部门的信息.
-                py = py + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+                py = py + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new Port.Station();
                 sta.No = item.FK_Station;

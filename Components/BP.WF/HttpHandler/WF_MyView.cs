@@ -388,7 +388,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DefaultLogWriteLineError(ex);
+                Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
             return BP.Tools.Json.ToJson(dt);
@@ -1187,7 +1187,7 @@ namespace BP.WF.HttpHandler
                             break;
                         case WhoIsPK.P3WorkID:
                             string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
+                            workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
                             break;
                         default:
                             break;
@@ -1247,7 +1247,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DefaultLogWriteLineError(ex);
+                Log.DefaultLogWriteLineError(ex);
                 return "err@" + ex.Message;
             }
         }

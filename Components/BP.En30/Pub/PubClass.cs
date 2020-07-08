@@ -297,7 +297,7 @@ namespace BP.Pub
             get
             {
                 if (_KeyFields == null)
-                    _KeyFields = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "WF\\Data\\Sys\\FieldKeys.txt");
+                    _KeyFields = DataType.ReadTextFile(SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "WF\\Data\\Sys\\FieldKeys.txt");
                 return _KeyFields;
             }
         }

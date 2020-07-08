@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.DA;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -41,7 +42,7 @@ namespace BP.WF
                 int newPK = int.Parse(this.WorkID.ToString()) + this.NodeID + int.Parse(this.FlowNo);
                 string myPk = "";
                 string sql = "SELECT TOP 1 RDT FROM WF_GenerWorkerlist WHERE WorkID={0} AND FK_Node={1} AND FK_Flow='{2}' ORDER BY RDT DESC";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(string.Format(sql, this.WorkID, this.NodeID, this.FlowNo));
+                DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql, this.WorkID, this.NodeID, this.FlowNo));
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     myPk = dt.Rows[0]["RDT"].ToString();
@@ -69,7 +70,7 @@ namespace BP.WF
                 string sql = "SELECT TOP 1 RDT FROM WF_GenerWorkerlist WHERE WorkID={0} AND FK_Node={1} AND FK_Flow='{2}' ORDER BY RDT DESC";
 
 
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(string.Format(sql, this.WorkID, this.NodeID, this.FlowNo));
+                DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql, this.WorkID, this.NodeID, this.FlowNo));
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     myPk = dt.Rows[0]["RDT"].ToString();
@@ -119,12 +120,12 @@ namespace BP.WF
                     //修复track 表.
                     try
                     {
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql, qo.MyParas);
+                        dt = DBAccess.RunSQLReturnTable(sql, qo.MyParas);
                     }
                     catch (Exception ex)
                     {
                         Track.CreateOrRepairTrackTable(this.FlowNo);
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql, qo.MyParas);
+                        dt = DBAccess.RunSQLReturnTable(sql, qo.MyParas);
                     }
 
                     dt.DefaultView.Sort = "RDT desc";

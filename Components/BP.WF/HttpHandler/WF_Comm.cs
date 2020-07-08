@@ -1089,27 +1089,27 @@ namespace BP.WF.HttpHandler
                         case UIContralType.TB:
                             switch (attr.MyDataType)
                             {
-                                case BP.DA.DataType.AppString:
-                                case BP.DA.DataType.AppDate:
-                                case BP.DA.DataType.AppDateTime:
+                                case DataType.AppString:
+                                case DataType.AppDate:
+                                case DataType.AppDateTime:
                                     string str1 = this.GetValFromFrmByKey(attr.Key);
                                     rm.SetValByKey(attr.Key, str1);
                                     break;
-                                case BP.DA.DataType.AppInt:
+                                case DataType.AppInt:
                                     int myInt = this.GetValIntFromFrmByKey(attr.Key);  //int.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.Row[idx] = myInt;
                                     rm.SetValByKey(attr.Key, myInt);
                                     break;
-                                case BP.DA.DataType.AppFloat:
+                                case DataType.AppFloat:
                                     float myFloat = this.GetValFloatFromFrmByKey(attr.Key); // float.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.SetValByKey(attr.Key, myFloat);
                                     break;
-                                case BP.DA.DataType.AppDouble:
-                                case BP.DA.DataType.AppMoney:
+                                case DataType.AppDouble:
+                                case DataType.AppMoney:
                                     decimal myDoub = this.GetValDecimalFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.SetValByKey(attr.Key, myDoub);
                                     break;
-                                case BP.DA.DataType.AppBoolean:
+                                case DataType.AppBoolean:
                                     bool myBool = this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
                                     rm.SetValByKey(attr.Key, myBool);
                                     break;
@@ -2443,7 +2443,7 @@ namespace BP.WF.HttpHandler
                 
             }
 
-            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filename = name + "_" + DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
             string filePath = ExportDGToExcel(Search_Data(ens, en), en, name,attrs);
             //DataTableToExcel(Search_Data(ens, en),en, filename, name,
             //                                                  BP.Web.WebUser.Name, true, true, true);
@@ -2462,7 +2462,7 @@ namespace BP.WF.HttpHandler
             string workId = this.GetRequestVal("WorkId");
             string fid = this.GetRequestVal("FID");
             string name = "从表数据导出";
-            string filename = name + "_" + BP.DA.DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filename = name + "_" + DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
             string filePath = ExportDGToExcel(SearchDtl_Data(ens, en, workId, fid), en, name);
 
             return filePath;
@@ -3156,30 +3156,30 @@ namespace BP.WF.HttpHandler
                     case UIContralType.TB:
                         switch (attr.MyDataType)
                         {
-                            case BP.DA.DataType.AppString:
-                            case BP.DA.DataType.AppDate:
-                            case BP.DA.DataType.AppDateTime:
+                            case DataType.AppString:
+                            case DataType.AppDate:
+                            case DataType.AppDateTime:
                                 string str1 = this.GetValFromFrmByKey(attr.Key);
                                 objs[idx] = str1;
                                 //attr.DefaultVal=str1;
                                 break;
-                            case BP.DA.DataType.AppInt:
+                            case DataType.AppInt:
                                 int myInt = this.GetValIntFromFrmByKey(attr.Key);
                                 objs[idx] = myInt;
                                 //attr.DefaultVal=myInt;
                                 break;
-                            case BP.DA.DataType.AppFloat:
+                            case DataType.AppFloat:
                                 float myFloat = this.GetValFloatFromFrmByKey(attr.Key);
                                 objs[idx] = myFloat;
                                 //attr.DefaultVal=myFloat;
                                 break;
-                            case BP.DA.DataType.AppDouble:
-                            case BP.DA.DataType.AppMoney:
+                            case DataType.AppDouble:
+                            case DataType.AppMoney:
                                 decimal myDoub = this.GetValDecimalFromFrmByKey(attr.Key);
                                 objs[idx] = myDoub;
                                 //attr.DefaultVal=myDoub;
                                 break;
-                            case BP.DA.DataType.AppBoolean:
+                            case DataType.AppBoolean:
                                 objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key);
                                 attr.DefaultVal = false;
                                 break;
@@ -4316,7 +4316,7 @@ namespace BP.WF.HttpHandler
 
             /* 如果包含累计数据，那它一定需要一个月份字段。业务逻辑错误。*/
             groupKey = groupKey.Substring(0, groupKey.Length - 1);
-            BP.DA.Paras ps = new Paras();
+            Paras ps = new Paras();
             // 生成 sql.
             string selectSQL = "SELECT ";
             string groupBy = " GROUP BY ";
@@ -4918,7 +4918,7 @@ namespace BP.WF.HttpHandler
 
             }
 
-            return BP.DA.DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
+            return DataTableConvertJson.DataTable2Json(ds.Tables["MainTable"], int.Parse(ds.Tables["DataCount"].Rows[0][0].ToString()));
             //return BP.Tools.Json.ToJson(ds);
         }
 
@@ -4960,7 +4960,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add("", "", "");
                     if (count >= index && count < iPageSize * iPageNumber)
                     {
-                        dt.Rows[count]["MyPk"] = BP.DA.DBAccess.GenerGUID();
+                        dt.Rows[count]["MyPk"] = DBAccess.GenerGUID();
 
                         strArray = folder.Split('\\');
                         fileName = strArray[strArray.Length - 1].Replace("\"", "").Replace("'", "");

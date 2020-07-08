@@ -21,7 +21,7 @@ namespace BP.Sys
         /// <returns>附件信息.</returns>
         public static string GetAthInfos(string fk_mapdata, string pk)
         {
-            int num = BP.DA.DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + fk_mapdata + "' AND RefPKVal=" + pk);
+            int num = DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + fk_mapdata + "' AND RefPKVal=" + pk);
             return "附件(" + num + ")";
         }
 
@@ -235,7 +235,7 @@ namespace BP.Sys
             attr.FK_MapData = fk_mapdata;
             attr.KeyOfEn = fieldName;
             attr.Name = fieldDesc;
-            attr.MyDataType = BP.DA.DataType.AppString;
+            attr.MyDataType = DataType.AppString;
 
             attr.UIContralType = BP.En.UIContralType.DDL;
             attr.UIBindKey = fk_SFTable; //绑定信息.
@@ -280,7 +280,7 @@ namespace BP.Sys
                 attrH.UIContralType = BP.En.UIContralType.TB;
                 attrH.MinLen = 0;
                 attrH.MaxLen = 500;
-                attrH.MyDataType = BP.DA.DataType.AppString;
+                attrH.MyDataType = DataType.AppString;
                 attrH.UIVisible = false;
                 attrH.UIIsEnable = false;
                 attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
@@ -422,7 +422,7 @@ namespace BP.Sys
                 return;
 
             //删除可能存在的数据.
-            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + ma.KeyOfEn + "' AND FK_MapData='" + ma.FK_MapData + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + ma.KeyOfEn + "' AND FK_MapData='" + ma.FK_MapData + "'");
 
             SysEnums ses = new SysEnums(ma.UIBindKey);
             int idx = 0;
@@ -671,7 +671,7 @@ namespace BP.Sys
                 attr.FK_MapData = frmID;
                 attr.KeyOfEn = "OID";
                 attr.Name = "主键";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -689,7 +689,7 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-            // BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
+            // DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
             //return;
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
@@ -826,7 +826,7 @@ namespace BP.Sys
                 delSqls += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
                 delSqls += "@DELETE FROM Sys_MapFrame WHERE FK_MapData='" + fk_mapdata + "'";
 
-                BP.DA.DBAccess.RunSQLs(delSqls);
+                DBAccess.RunSQLs(delSqls);
                 return;
             }
 
@@ -835,7 +835,7 @@ namespace BP.Sys
 
             string nodeIDStr = fk_mapdata.Replace("ND", "");
             int nodeID = 0;
-            if (BP.DA.DataType.IsNumStr(nodeIDStr) == true)
+            if (DataType.IsNumStr(nodeIDStr) == true)
                 nodeID = int.Parse(nodeIDStr);
 
             //流程控件.
@@ -1087,7 +1087,7 @@ namespace BP.Sys
             //执行要更新的sql.
             if (sqls != "")
             {
-                BP.DA.DBAccess.RunSQLs(sqls);
+                DBAccess.RunSQLs(sqls);
                 sqls = "";
             }
 
@@ -1179,7 +1179,7 @@ namespace BP.Sys
             }
 
             //删除这些，没有替换下来的数据.
-            BP.DA.DBAccess.RunSQLs(sqls);
+            DBAccess.RunSQLs(sqls);
             #endregion 删除没有替换下来的 PKs, 说明这些都已经被删除了.
 
             //清空缓存
@@ -1257,8 +1257,8 @@ namespace BP.Sys
         public static void AfterFrmEditAction(string frmID)
         {
             //清除缓存.
-            BP.DA.CashFrmTemplate.Remove(frmID);
-            BP.DA.Cash.SetMap(frmID, null);
+            CashFrmTemplate.Remove(frmID);
+            Cash.SetMap(frmID, null);
 
             MapData mapdata = new MapData();
             mapdata.No = frmID;
@@ -1275,7 +1275,7 @@ namespace BP.Sys
         public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null, MapData md = null)
         {
             //首先从缓存获取数据.
-            DataSet dsFrm = BP.DA.CashFrmTemplate.GetFrmDataSetModel(frmID);
+            DataSet dsFrm = CashFrmTemplate.GetFrmDataSetModel(frmID);
             if (dsFrm != null)
                 return dsFrm;
 
@@ -1354,7 +1354,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_FrmImgAth);
 
             //放入缓存.
-            BP.DA.CashFrmTemplate.Put(frmID, ds);
+            CashFrmTemplate.Put(frmID, ds);
 
             return ds;
         }
@@ -1382,7 +1382,7 @@ namespace BP.Sys
             if (md.HisFrmType == FrmType.Develop)
             {
                 Sys_MapData.Columns.Add("HtmlTemplateFile", typeof(string));
-                string text = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                string text = DBAccess.GetBigTextFromDB("Sys_MapData", "No", md.No, "HtmlTemplateFile");
                 Sys_MapData.Rows[0]["HtmlTemplateFile"] = text;
             }
 
@@ -1602,7 +1602,7 @@ namespace BP.Sys
                     string s = strs[i];
                     if (DataType.IsNullOrEmpty(s))
                         continue;
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(s);
+                    DataTable dt = DBAccess.RunSQLReturnTable(s);
                     dt.TableName = listNames[i];
                     ds.Tables.Add(dt);
                 }
@@ -1735,7 +1735,7 @@ namespace BP.Sys
         /// <returns>转化后的拼音，不成功则抛出异常.</returns>
         public static string ParseStringToPinyinField(string name, bool isQuanPin)
         {
-            if (BP.DA.DataType.IsNullOrEmpty(name) == true)
+            if (DataType.IsNullOrEmpty(name) == true)
                 return "";
 
             string s = string.Empty;
@@ -1743,13 +1743,13 @@ namespace BP.Sys
             {
                 if (isQuanPin == true)
                 {
-                    s = BP.DA.DataType.ParseStringToPinyin(name);
+                    s = DataType.ParseStringToPinyin(name);
                     if (s.Length > 15)
-                        s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+                        s = DataType.ParseStringToPinyinJianXie(name);
                 }
                 else
                 {
-                    s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+                    s = DataType.ParseStringToPinyinJianXie(name);
                 }
 
                 s = s.Trim().Replace(" ", "");
@@ -1787,7 +1787,7 @@ namespace BP.Sys
         /// <returns>转化后的拼音，不成功则抛出异常.</returns>
         public static string ParseStringToPinyinField(string name, bool isQuanPin, bool removeSpecialSymbols, int maxLen)
         {
-            if (BP.DA.DataType.IsNullOrEmpty(name) == true)
+            if (DataType.IsNullOrEmpty(name) == true)
                 return "";
 
             string s = string.Empty;
@@ -1799,9 +1799,9 @@ namespace BP.Sys
             try
             {
                 if (isQuanPin == true)
-                    s = BP.DA.DataType.ParseStringToPinyin(name);
+                    s = DataType.ParseStringToPinyin(name);
                 else
-                    s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+                    s = DataType.ParseStringToPinyinJianXie(name);
 
                 //如果全拼长度超过maxLen，则取前maxLen长度的字符
                 if (maxLen > 0 && s.Length > maxLen)

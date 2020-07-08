@@ -253,7 +253,7 @@ namespace BP.Sys
         public string DoDelAllField()
         {
             string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "' AND GroupID=" + this.OID + " AND KeyOfEn NOT IN ('OID','RDT','REC','RefPK','FID')";
-            int i= BP.DA.DBAccess.RunSQL(sql);
+            int i= DBAccess.RunSQL(sql);
             return "删除字段{"+i+"}个，被删除成功.";
         }
         /// <summary>
@@ -267,7 +267,7 @@ namespace BP.Sys
         protected override bool beforeUpdate()
         {
             string sql = "UPDATE Sys_GroupField SET LAB='" + this.Lab + "' WHERE OID=" + this.OID;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
             return base.beforeUpdate(); 
         }
         public string DoDown()

@@ -185,16 +185,16 @@ namespace BP.WF.HttpHandler
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
                         sql = "SELECT No as FK_Emp FROM Port_Emp ";
-                        dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 300)
                         {
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.MSSQL)
+                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                                 sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
 
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle)
+                            if (SystemConfig.AppCenterDBType == DBType.Oracle)
                                 sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
 
-                            if (SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
+                            if (SystemConfig.AppCenterDBType == DBType.MySQL)
                                 sql = "SELECT  No as FK_Emp FROM Port_Emp   limit 0,300 ";
                         }
                         break;
@@ -206,7 +206,7 @@ namespace BP.WF.HttpHandler
                         break;
                 }
 
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
 
@@ -292,7 +292,7 @@ namespace BP.WF.HttpHandler
                 BP.WF.Glo.IsCanInstall();
 
                 //判断是不是有.
-                if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == true)
+                if (DBAccess.IsExitsObject("WF_Flow") == true)
                     return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
 
 

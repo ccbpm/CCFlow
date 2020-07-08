@@ -69,22 +69,22 @@ namespace BP.WF.DTS
 
             //默认都设置为本周
             string sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.ThisWeek;
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             //设置为上周.
             sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.NextWeek + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00'";
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             dtBegin = dtBegin.AddDays(-7);
             dtEnd = dtEnd.AddDays(-7);
 
             //把上周的，设置为两个周以前.
             sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.TowWeekAgo + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00' ";
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             //把上周的，设置为更早.
             sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.More + " WHERE RDT <= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' ";
-            BP.DA.DBAccess.RunSQL(sql);
+            DBAccess.RunSQL(sql);
 
             return "执行成功...";
         }

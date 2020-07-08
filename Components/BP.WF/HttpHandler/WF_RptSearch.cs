@@ -38,7 +38,7 @@ namespace BP.WF.HttpHandler
             
             //string sql = "";
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            System.Data.DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Start";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -53,7 +53,7 @@ namespace BP.WF.HttpHandler
             ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dtTodolist = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            System.Data.DataTable dtTodolist = DBAccess.RunSQLReturnTable(ps);
             dtTodolist.TableName = "Todolist";
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {

@@ -170,7 +170,7 @@ namespace BP.WF.HttpHandler
             ht.Add("CCTo", toAllEmps);
 
             // 根据他判断是否显示权限组。
-            if (BP.DA.DBAccess.IsExitsObject("GPM_Group") == true)
+            if (DBAccess.IsExitsObject("GPM_Group") == true)
                 ht.Add("IsGroup", "1");
             else
                 ht.Add("IsGroup", "0");
@@ -197,13 +197,13 @@ namespace BP.WF.HttpHandler
             //岗位类型.
             string sql = "SELECT NO,NAME FROM Port_StationType ORDER BY NO";
             DataSet ds = new DataSet();
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Port_StationType";
             ds.Tables.Add(dt);
 
             //岗位.
             string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station ORDER BY FK_STATIONTYPE,NO";
-            DataTable dtSta = BP.DA.DBAccess.RunSQLReturnTable(sqlStas);
+            DataTable dtSta = DBAccess.RunSQLReturnTable(sqlStas);
             dtSta.TableName = "Port_Station";
             ds.Tables.Add(dtSta);
             return BP.Tools.Json.ToJson(ds);

@@ -575,7 +575,7 @@ namespace BP.WF
                     if (item.MsgOfText.Contains("<"))
                     {
 #warning 不应该出现.
-                      //  BP.DA.Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
+                      //  Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
                         continue;
                     }
                     msg += "@" + item.MsgOfText;
@@ -610,7 +610,7 @@ namespace BP.WF
                     if (item.MsgOfText.Contains("<"))
                     {
 #warning 不应该出现.
-                        //  BP.DA.Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
+                        //  Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
                         continue;
                     }
                     msg += "@" + item.MsgOfText;

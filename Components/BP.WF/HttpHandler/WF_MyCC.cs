@@ -238,7 +238,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //获取数据
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                 //判断前置导航的类型
                 switch (fl.StartGuideWay)
@@ -366,7 +366,7 @@ namespace BP.WF.HttpHandler
                     if (toUrl.Contains("PrjNo") == true && toUrl.Contains("PrjName") == true)
                     {
                         string sql = "UPDATE " + currWK.EnMap.PhysicsTable + " SET PrjNo='" + this.GetRequestVal("PrjNo") + "', PrjName='" + this.GetRequestVal("PrjName") + "' WHERE OID=" + this.WorkID;
-                        BP.DA.DBAccess.RunSQL(sql);
+                        DBAccess.RunSQL(sql);
                     }
                 }
                 return "url@" + toUrl;
@@ -668,7 +668,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DefaultLogWriteLineError(ex);
+                Log.DefaultLogWriteLineError(ex);
                 toolbar = "err@" + ex.Message;
             }
             return BP.Tools.Json.ToJson(dt);
@@ -1100,7 +1100,7 @@ namespace BP.WF.HttpHandler
                             break;
                         case WhoIsPK.P3WorkID:
                             string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                            workID = BP.DA.DBAccess.RunSQLReturnValInt(sqlId, 0);
+                            workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
                             break;
                         default:
                             break;
@@ -1157,7 +1157,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                BP.DA.Log.DefaultLogWriteLineError(ex);
+                Log.DefaultLogWriteLineError(ex);
                 return "err@" + ex.Message;
             }
         }

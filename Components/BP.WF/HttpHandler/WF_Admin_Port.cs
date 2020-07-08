@@ -53,7 +53,7 @@ namespace BP.WF.HttpHandler
         public string OrderOfDept_Init()
         {
             string sql = "SELECT No,Name,ParentNo,Idx FROM Port_Dept";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return "";
         }
         #endregion xxx 界面方法.

@@ -211,7 +211,7 @@ namespace BP.En
         public EntityTree DoCreateSameLevelNode()
         {
             EntityTree en = this.CreateInstance() as EntityTree;
-            en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            en.No =DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.ParentNo;
            // en.MenuType = this.MenuType;
@@ -227,7 +227,7 @@ namespace BP.En
         public EntityTree DoCreateSubNode()
         {
             EntityTree en = this.CreateInstance() as EntityTree;
-            en.No = BP.DA.DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             en.Name = "新建节点" + en.No;
             en.ParentNo = this.No;
           //  en.MenuType = this.MenuType + 1;

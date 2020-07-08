@@ -50,14 +50,14 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string rpt =BP.Pub.PubClass.DBRpt(BP.DA.DBCheckLevel.High);
+            string rpt =BP.Pub.PubClass.DBRpt(DBCheckLevel.High);
 
             //// 手动升级. 2011-07-08 补充节点字段分组.
             //string sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeSheet'";
-            //BP.DA.DBAccess.RunSQL(sql);
+            //DBAccess.RunSQL(sql);
 
             //sql = "INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeSheet','NodeID=基本配置@WarningHour=考核属性@SendLab=功能按钮标签与状态')";
-            //BP.DA.DBAccess.RunSQL(sql);
+            //DBAccess.RunSQL(sql);
 
             // 修复因bug丢失的字段.
             MapDatas mds = new MapDatas();
@@ -82,7 +82,7 @@ namespace BP.WF.DTS
                     attr.FK_MapData = md.No;
                     attr.KeyOfEn = "OID";
                     attr.Name = "OID";
-                    attr.MyDataType = BP.DA.DataType.AppInt;
+                    attr.MyDataType = DataType.AppInt;
                     attr.UIContralType = UIContralType.TB;
                     attr.LGType = FieldTypeS.Normal;
                     attr.UIVisible = false;

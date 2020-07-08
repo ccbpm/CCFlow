@@ -52,7 +52,7 @@ namespace BP.WF.DTS
             try
             {
                 //删除现有的数据。
-                BP.DA.DBAccess.RunSQL("DELETE FROM WF_CH");
+                DBAccess.RunSQL("DELETE FROM WF_CH");
 
                 //查询全部的数据.
                 BP.WF.Nodes nds = new Nodes();
@@ -99,7 +99,7 @@ namespace BP.WF.DTS
                         }
 
                         //标题.
-                        string title = BP.DA.DBAccess.RunSQLReturnStringIsNull("select title from wf_generworkflow where workid=" + workid, "");
+                        string title = DBAccess.RunSQLReturnStringIsNull("select title from wf_generworkflow where workid=" + workid, "");
 
                         ////调用他.
                         //Glo.InitCH2017(nd.HisFlow, nd, workid, fid, title, priRDT, sdt,

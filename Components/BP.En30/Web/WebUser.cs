@@ -76,9 +76,9 @@ namespace BP.Web
             try
             {
                 if (sql.Contains("UPDATE Port_Emp SET FK_Dept=") == true)
-                    if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+                    if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                         return;
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
             }
             catch (Exception ex)
             {
@@ -130,11 +130,11 @@ namespace BP.Web
 
                 sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
 
-                string deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                string deptNo = DBAccess.RunSQLReturnString(sql);
                 if (DataType.IsNullOrEmpty(deptNo) == true)
                 {
                     sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
-                    deptNo = BP.DA.DBAccess.RunSQLReturnString(sql);
+                    deptNo = DBAccess.RunSQLReturnString(sql);
                     if (DataType.IsNullOrEmpty(deptNo) == true)
                         throw new Exception("@登录人员(" + em.No + "," + em.Name + ")没有维护部门...");
                 }
@@ -416,11 +416,11 @@ namespace BP.Web
                         throw new Exception("@登录信息丢失，请你确认是否启用了cookie? ");
 
                     string sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
-                    string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    string dept = DBAccess.RunSQLReturnStringIsNull(sql, null);
                     if (dept == null)
                     {
                         sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
-                        dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+                        dept = DBAccess.RunSQLReturnStringIsNull(sql, null);
                     }
 
                     if (dept == null)
@@ -453,7 +453,7 @@ namespace BP.Web
                         throw new Exception("@登录信息丢失，请你确认是否启用了cookie? ");
 
                     string sql = "SELECT GroupNo FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'";
-                    string groupNo = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    string groupNo = DBAccess.RunSQLReturnStringIsNull(sql, null);
 
                     if (groupNo == null)
                         throw new Exception("@err-003 FK_Dept，当前登录人员(" + WebUser.No + ")，没有设置部门。");
@@ -664,7 +664,7 @@ namespace BP.Web
             if (DBAccess.IsView("Port_Emp") == false)
             {
                 string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.FK_Dept + "' WHERE No='" + WebUser.No + "'";
-                BP.DA.DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(sql);
             }
             else
             {
@@ -746,7 +746,7 @@ namespace BP.Web
                         throw new Exception("@登录信息丢失，请你确认是否启用了cookie? ");
 
                     string sql = "SELECT Tel FROM Port_Emp WHERE No='" + WebUser.No + "'";
-                    string tel = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    string tel = DBAccess.RunSQLReturnStringIsNull(sql, null);
 
                     SetSessionByKey("Tel", tel);
                     return tel;
@@ -812,13 +812,13 @@ namespace BP.Web
         public static void SetSID(string sid)
         {
             //判断是否视图，如果为视图则不进行修改
-            if (BP.DA.DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
+            if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == false)
             {
                 Paras ps = new Paras();
                 ps.SQL = "UPDATE Port_Emp SET SID=" + SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
                 ps.Add("SID", sid);
                 ps.Add("No", WebUser.No);
-                BP.DA.DBAccess.RunSQL(ps);
+                DBAccess.RunSQL(ps);
             }
             WebUser.SID = sid;
         }

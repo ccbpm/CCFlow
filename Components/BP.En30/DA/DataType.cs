@@ -71,7 +71,7 @@ namespace BP.DA
         /// <returns></returns>
         public static DateTime AddDays(string dt, int days, TWay tway)
         {
-            return AddDays(BP.DA.DataType.ParseSysDate2DateTime(dt), days, tway);
+            return AddDays(DataType.ParseSysDate2DateTime(dt), days, tway);
         }
         /// <summary>
         /// 增加日期去掉周末
@@ -642,7 +642,7 @@ namespace BP.DA
             {
                 try
                 {
-                    BP.DA.Log.DefaultLogWriteLineWarning("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
+                    Log.DefaultLogWriteLineWarning("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
                     return null;
                 }
                 catch
@@ -662,7 +662,7 @@ namespace BP.DA
                 try
                 {
                     // 如果出现死连接。
-                    BP.DA.Log.DefaultLogWriteLineWarning("@获取url=" + url + "失败。异常信息:" + ex.Message, true);
+                    Log.DefaultLogWriteLineWarning("@获取url=" + url + "失败。异常信息:" + ex.Message, true);
                     return null;
                 }
                 catch
@@ -1252,7 +1252,7 @@ namespace BP.DA
                 String _Temp = "";
                 for (int i = 0; i < str.Length; i++)
                 {
-                    _Temp = _Temp + BP.DA.DataType.ParseStringToPinyin(str.Substring(i, 1));
+                    _Temp = _Temp + DataType.ParseStringToPinyin(str.Substring(i, 1));
                 }
                 return _Temp;
             }
@@ -1274,7 +1274,7 @@ namespace BP.DA
                 var re = string.Empty;
                 for (int i = 0; i < str.Length; i++)
                 {
-                    re = BP.DA.DataType.ParseStringToPinyin(str.Substring(i, 1));
+                    re = DataType.ParseStringToPinyin(str.Substring(i, 1));
                     _Temp += re.Length == 0 ? "" : re.Substring(0, 1);
                 }
                 return _Temp;
@@ -1769,7 +1769,7 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseSysDate2DateTimeFriendly(string sysDateformat)
         {
-            BP.DA.DTTemp dt = new DTTemp();
+            DTTemp dt = new DTTemp();
             return dt.DateStringFromNow(sysDateformat);
         }
         /// <summary>

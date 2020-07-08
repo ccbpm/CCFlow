@@ -153,7 +153,7 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
+                DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
 
                 //求对应的Idx的，从表配置.
                 MapDtl dtlFrom = dtlsFrom[i] as MapDtl;
@@ -190,7 +190,7 @@ namespace BP.Sys
                     athDBsFrom.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athFrom.MyPK, FrmAttachmentDBAttr.RefPKVal, en.MyPK.ToString());
                     foreach (FrmAttachmentDB athDBFrom in athDBsFrom)
                     {
-                        athDBFrom.MyPK = BP.DA.DBAccess.GenerGUID();
+                        athDBFrom.MyPK = DBAccess.GenerGUID();
                         athDBFrom.FK_MapData = this.FK_MapData; 
                         athDBFrom.FK_FrmAttachment = ath.MyPK;
                         athDBFrom.RefPKVal = this.MyPK.ToString();
@@ -216,7 +216,7 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
+                DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
 
                 GEDtls ensDtl = new GEDtls(dtl.No);
                 ensDtl.Retrieve(GEDtlAttr.RefPK, oidOID);

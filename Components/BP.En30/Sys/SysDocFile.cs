@@ -453,7 +453,7 @@ namespace BP.Sys
         {
             try
             {
-                return BP.DA.DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfFDB + enName + "\\" + pkVal + ".fdb");
+                return DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfFDB + enName + "\\" + pkVal + ".fdb");
             }
             catch
             {
@@ -464,7 +464,7 @@ namespace BP.Sys
         {
               try
             {
-            return BP.DA.DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfFDB   + enName + "\\" + pkVal + ".fdb");
+            return DataType.ReadTextFile(BP.Sys.SystemConfig.PathOfFDB   + enName + "\\" + pkVal + ".fdb");
             }
               catch
               {

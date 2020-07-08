@@ -344,6 +344,24 @@ namespace BP.Sys
         #endregion 参数属性.
 
         #region 构造方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                if (WebUser.IsAdmin == true)
+                {
+                    uac.IsInsert = false;
+                    uac.IsDelete = false;
+                    uac.IsUpdate = true;
+                }else
+                {
+                    uac.Readonly();
+                    uac.IsView = false;
+                }
+                return uac;
+            }
+        }
         /// <summary>
         /// 系统实体
         /// </summary>
@@ -377,7 +395,6 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_EnCfg", "实体配置");
 
-
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
                 map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);
                 map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60);
@@ -391,14 +408,111 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
                 //对字段求总和平均
                 map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, false, 0, 500, 60);
-
-
                 map.AddTBAtParas(3000);  //参数属性.
+                #region 执行的方法.
+
+                RefMethod rm = new RefMethod();
+                rm = new RefMethod();
+                rm.Title = "基本信息";
+                rm.ClassMethodName = this.ToString() + ".SearchSetting()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置显示的列";
+                rm.ClassMethodName = this.ToString() + ".SearchSettingCols()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "多表头设置";
+                rm.ClassMethodName = this.ToString() + ".MultiTitle()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "启用傻瓜表单设计器";
+                rm.ClassMethodName = this.ToString() + ".DesignerFool()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "导入数据";
+                rm.ClassMethodName = this.ToString() + ".ImpData()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "清除设计内容";
+                rm.ClassMethodName = this.ToString() + ".ClearData()";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
+
+                #endregion 执行的方法.
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 清除数据.
+        /// </summary>
+        /// <returns></returns>
+        public string ClearData()
+        {
+            MapData md = new MapData(this.No);
+            md.No = this.No;
+            if (md.RetrieveFromDBSources() == 0)
+                return "err@没有设计的数据要清除.";
+            md.Delete();
+
+
+            return "清除成功.";
+        }
+        public string ImpData()
+        {
+            return "../../Comm/Sys/ImpData.htm?EnsName=" + this.No;
+        }
+        public string DesignerFool()
+        {
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No;
+        }
+
+        public string SearchSettingCols()
+        {
+            return "../../Comm/Sys/SearchSettingCols.htm?EnsName=" + this.No;
+        }
+        
+        public string SearchSetting()
+        {
+            return "../../Comm/Sys/SearchSetting.htm?EnsName=" + this.No;
+        }
+
+        /// <summary>
+        /// 多表头
+        /// </summary>
+        /// <returns></returns>
+        public string MultiTitle()
+        {
+            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No;
+        }
+        /// <summary>
+        /// 生成他的Attrs
+        /// </summary>
+        /// <returns></returns>
+        public string GenerAttrs()
+        {
+            Entities ens = ClassFactory.GetEns(this.No);
+            if (ens == null)
+                return "err@" + this.No + ",类名错误.";
+            
+            MapAttrs attrs = ens.GetNewEntity.EnMap.Attrs.ToMapAttrs;
+            return attrs.ToJson();
+        }
     }
     /// <summary>
     /// 实体集合

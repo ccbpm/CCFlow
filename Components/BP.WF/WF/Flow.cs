@@ -741,15 +741,15 @@ namespace BP.WF
                     //   wk.SetValByKey(GERptAttr.RecText, emp.Name);
                     //  wk.SetValByKey(GERptAttr.Emps, emp.No);
 
-                    //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-                    // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+                    //  wk.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTime);
+                    // wk.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTime);
 
                     wk.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
 
                     wk.OID = DBAccess.GenerOID("WorkID"); /*这里产生WorkID ,这是唯一产生WorkID的地方.*/
 
                     //把尽量可能的流程字段放入，否则会出现冲掉流程字段属性.
-                    wk.SetValByKey(GERptAttr.FK_NY, BP.DA.DataType.CurrentYearMonth);
+                    wk.SetValByKey(GERptAttr.FK_NY, DataType.CurrentYearMonth);
                     wk.SetValByKey(GERptAttr.FK_Dept, emp.FK_Dept);
                     wk.FID = 0;
 
@@ -775,7 +775,7 @@ namespace BP.WF
                         rpt.OID = wk.OID;
                         rpt.RetrieveFromDBSources();
                         rpt.FID = 0;
-                        rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
+                        rpt.FlowStartRDT = DataType.CurrentDataTime;
                         rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         //WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
                         rpt.WFState = WFState.Blank;
@@ -790,8 +790,8 @@ namespace BP.WF
                         if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
                             rpt.FlowEmps = "@" + emp.No + "," + emp.Name + "@";
 
-                        rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
-                        rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
+                        rpt.FlowEnderRDT = DataType.CurrentDataTime;
+                        rpt.FlowStartRDT = DataType.CurrentDataTime;
 
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
@@ -805,8 +805,8 @@ namespace BP.WF
                     {
                         rpt.OID = wk.OID;
                         rpt.FID = 0;
-                        rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
-                        rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
+                        rpt.FlowStartRDT = DataType.CurrentDataTime;
+                        rpt.FlowEnderRDT = DataType.CurrentDataTime;
 
                         rpt.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, wk);
                         // rpt.Title = WebUser.No + "," + BP.Web.WebUser.Name + "在" + DataType.CurrentDataCNOfShort + "发起.";
@@ -841,8 +841,8 @@ namespace BP.WF
                     rpt.RetrieveFromDBSources();
 
                     rpt.FID = 0;
-                    rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
-                    rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
+                    rpt.FlowStartRDT = DataType.CurrentDataTime;
+                    rpt.FlowEnderRDT = DataType.CurrentDataTime;
 
                     //在发送的时候有更新.
                     //   rpt.DirectUpdate();
@@ -901,7 +901,7 @@ namespace BP.WF
                 catch (Exception ex)
                 {
                     wk.Update();
-                    BP.DA.Log.DebugWriteError("创建新工作错误，但是屏蔽了异常,请检查默认值的问题：" + ex.Message);
+                    Log.DebugWriteError("创建新工作错误，但是屏蔽了异常,请检查默认值的问题：" + ex.Message);
                 }
 
                 MapDtls dtls = wk.HisMapDtls;
@@ -1081,8 +1081,8 @@ namespace BP.WF
                     }
 
                     rpt.SetValByKey(GERptAttr.FID, 0);
-                    rpt.SetValByKey(GERptAttr.FlowStartRDT, BP.DA.DataType.CurrentDataTime);
-                    rpt.SetValByKey(GERptAttr.FlowEnderRDT, BP.DA.DataType.CurrentDataTime);
+                    rpt.SetValByKey(GERptAttr.FlowStartRDT, DataType.CurrentDataTime);
+                    rpt.SetValByKey(GERptAttr.FlowEnderRDT, DataType.CurrentDataTime);
                     rpt.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
                     rpt.SetValByKey(GERptAttr.FlowStarter, emp.No);
                     rpt.SetValByKey(GERptAttr.FlowEnder, emp.No);
@@ -1170,7 +1170,7 @@ namespace BP.WF
                                             newDB.Copy(db);
                                             newDB.RefPKVal = dtlData.OID.ToString();
                                             newDB.FID = dtlData.OID;
-                                            newDB.MyPK = BP.DA.DBAccess.GenerGUID();
+                                            newDB.MyPK = DBAccess.GenerGUID();
                                             newDB.Insert();
                                         }
                                     }
@@ -1306,8 +1306,8 @@ namespace BP.WF
 
             #region 最后整理wk数据.
             wk.Rec = emp.No;
-            //  wk.SetValByKey(WorkAttr.RDT, BP.DA.DataType.CurrentDataTime);
-            // wk.SetValByKey(WorkAttr.CDT, BP.DA.DataType.CurrentDataTime);
+            //  wk.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTime);
+            // wk.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTime);
             wk.SetValByKey("FK_NY", DataType.CurrentYearMonth);
             wk.SetValByKey("FK_Dept", emp.FK_Dept);
             wk.SetValByKey("FK_DeptName", emp.FK_DeptText);
@@ -1341,7 +1341,7 @@ namespace BP.WF
             mygwf.StarterName = WebUser.Name;
             mygwf.FK_Dept = BP.Web.WebUser.FK_Dept;
             mygwf.DeptName = BP.Web.WebUser.FK_DeptName;
-            mygwf.RDT = BP.DA.DataType.CurrentDataTime;
+            mygwf.RDT = DataType.CurrentDataTime;
             mygwf.Title = rpt.Title;
             mygwf.BillNo = rpt.BillNo;
             if (mygwf.Title.Contains("@") == true)
@@ -1359,7 +1359,7 @@ namespace BP.WF
             #endregion 给 generworkflow 初始化数据.
 
             //更新domian.
-            BP.DA.DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
+            DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
 
 
             return wk;
@@ -1429,12 +1429,12 @@ namespace BP.WF
             int i = me.RetrieveFromDBSources();
             if (i == 0)
             {
-                BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
+                Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return "没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.";
             }
             if (DataType.IsNullOrEmpty(me.Tag))
             {
-                BP.DA.Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
+                Log.DefaultLogWriteLineError("没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return "没有为流程(" + this.Name + ")的开始节点设置发起数据,请参考说明书解决.";
             }
 
@@ -1554,7 +1554,7 @@ namespace BP.WF
                 {
                     WorkNode wn = new WorkNode(wk, nd);
                     string infoSend = wn.NodeSend().ToMsgOfHtml();
-                    BP.DA.Log.DefaultLogWriteLineInfo(msg);
+                    Log.DefaultLogWriteLineInfo(msg);
                     msg += "@" + this.Name + ",第" + idx + "条,发起人员:" + WebUser.No + "-" + WebUser.Name + "已完成.\r\n" + infoSend;
                     //this.SetText("@第（" + idx + "）条任务，" + WebUser.No + " - " + WebUser.Name + "已经完成。\r\n" + msg);
                 }
@@ -1584,7 +1584,7 @@ namespace BP.WF
 
         public string ClearCash()
         {
-            BP.DA.Cash.ClearCash();
+            Cash.ClearCash();
             //清空流程中的缓存
             //获取改流程中的节点数据
             Nodes nds = new Nodes(this.No);
@@ -1617,7 +1617,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoCheck()
         {
-            BP.DA.Cash.ClearCash();
+            Cash.ClearCash();
 
             //删除缓存数据.
             this.ClearAutoNumCash(false);
@@ -2217,7 +2217,7 @@ namespace BP.WF
             catch (Exception e)
             {
                 isXmlLocked = false;
-                BP.DA.Log.DefaultLogWriteLineError("流程模板文件备份错误:" + e.Message);
+                Log.DefaultLogWriteLineError("流程模板文件备份错误:" + e.Message);
             }
         }
         public DataSet GetFlow(string path)
@@ -3079,7 +3079,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "OID";
                 attr.Name = "WorkID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -3097,7 +3097,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "FID";
                 attr.Name = "FID";
-                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.MyDataType = DataType.AppInt;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
@@ -5356,7 +5356,7 @@ namespace BP.WF
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
                             if (md.HisFrmType == FrmType.Develop)
                             {
-                                //string htmlCode = BP.DA.DBAccess.GetBigTextFromDB("Sys_MapData", "No", "ND" + oldFlowID, "HtmlTemplateFile");
+                                //string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", "ND" + oldFlowID, "HtmlTemplateFile");
                                 if (DataType.IsNullOrEmpty(htmlCode) == false)
                                 {
                                     htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
@@ -5367,9 +5367,9 @@ namespace BP.WF
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
                                     //写入到html 中
-                                    BP.DA.DataType.WriteFile(filePath, htmlCode);
+                                    DataType.WriteFile(filePath, htmlCode);
                                     // HtmlTemplateFile 保存到数据库中
-                                    BP.DA.DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                    DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", md.No, "HtmlTemplateFile");
                                 }
                                 else
                                 {
@@ -5377,7 +5377,7 @@ namespace BP.WF
                                     string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
-                                    BP.DA.DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
+                                    DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
                                 }
                             }
                         }
@@ -5478,7 +5478,7 @@ namespace BP.WF
                                 en.SetValByKey(dc.ColumnName, val);
                             }
 
-                            en.MyPK = BP.DA.DBAccess.GenerGUID(); // "Lab" + timeKey + "_" + idx;
+                            en.MyPK = DBAccess.GenerGUID(); // "Lab" + timeKey + "_" + idx;
                             en.Insert();
                         }
                         break;
@@ -5758,6 +5758,8 @@ namespace BP.WF
         }
         protected override bool beforeInsert()
         {
+            //删除数据库中的垃圾数据
+            DoDelData();
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = WebUser.OrgNo;
 
@@ -5772,7 +5774,7 @@ namespace BP.WF
             //删除缓存数据.
             this.ClearAutoNumCash(false);
 
-            this.Ver = BP.DA.DataType.CurrentDataTimess;
+            this.Ver = DataType.CurrentDataTimess;
             return base.beforeUpdate();
         }
         /// <summary>
@@ -5780,7 +5782,7 @@ namespace BP.WF
         /// </summary>
         public static void UpdateVer(string flowNo)
         {
-            string sql = "UPDATE WF_Flow SET Ver='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
+            string sql = "UPDATE WF_Flow SET Ver='" + DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
             DBAccess.RunSQL(sql);
         }
         /// <summary>
@@ -5969,8 +5971,8 @@ namespace BP.WF
             DBAccess.RunSQL(sql);
 
             //清缓存
-            BP.DA.Cash2019.DeleteRow("BP.WF.Flow", oldFlowNo);
-            BP.DA.Cash2019.DeleteRow("BP.WF.Flow", this.No);
+            Cash2019.DeleteRow("BP.WF.Flow", oldFlowNo);
+            Cash2019.DeleteRow("BP.WF.Flow", this.No);
             Flow flow = new Flow(oldFlowNo);
             flow = new Flow(this.No);
 

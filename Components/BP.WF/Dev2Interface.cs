@@ -137,6 +137,16 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 根据workid返回抄送数据
+        /// </summary>
+        public static string  Node_CCWorks(int WorkID)
+        {
+            string sql = "select  * from wf_cclist where workid=" + WorkID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+             
+        }
+        /// <summary>
         /// 返回挂起流程数量
         /// </summary>
         public static int Todolist_HungUpNum
@@ -4734,6 +4744,7 @@ namespace BP.WF
 
             return unSend.DoUnSend();
         }
+     
         /// <summary>
         /// 获得当前节点上一步发送日志记录
         /// </summary>
@@ -8230,6 +8241,7 @@ namespace BP.WF
             ps.Add(CCListAttr.MyPK, mypk);
             DBAccess.RunSQL(ps);
         }
+    
         /// <summary>
         /// 设置抄送状态
         /// </summary>

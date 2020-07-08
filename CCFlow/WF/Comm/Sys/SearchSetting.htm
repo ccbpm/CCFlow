@@ -71,7 +71,7 @@
                 en.SetPara("IsRefreshParentPage", 1);
                 en.Update();
             }
-                
+
 
             //给页面的控件赋值.
             GenerFullAllCtrlsVal(en);
@@ -83,7 +83,7 @@
             var ensName = GetQueryString("EnsName");
             //全局配置.
             var en = new Entity("BP.Sys.EnCfg", ensName);
-            en.CopyForm(); //从from里面copy数据.
+            en.CopyForm(); //从 from 里面 copy 数据.
             en.No = ensName;
             en.Update();
 
@@ -115,6 +115,12 @@
             window.location.href = url;
         }
 
+        //多表头设置.
+        function MTitle() {
+            var url = "MultiTitle.htm?EnsName=" + GetQueryString("EnsName");
+            window.location.href = url;
+        }
+
         //清除傻瓜表达设计内容
         function ClearMapData() {
             var alt = "如果您确定要删除吗？";
@@ -135,22 +141,15 @@
     </script>
 </head>
 <body>
-
-
-    <div style="width:95%;border-top: 0px solid #C0C0C0;">
-        <input type="button" value="保存" onclick="Save()" />
-        <input type="button" value="设置显示的列" onclick="ShowCols()" />
-        <input type="button" value="启动傻瓜表单设计器" onclick="StartFoolFormDesigner()" />
-        <input type="button" value="清除表单设计内容" onclick="ClearMapData()" />
-        <input type="button" value="导入数据" onclick="Imp()" />
-    </div>
-
-
     <div style="overflow:auto;" id="tableDiv">
         <table style="">
 
             <tr>
-                <th colspan=4>基本配置</th>
+                <th colspan=3>基本配置</th>
+
+                <th colspan=1>
+                    <button id="Btn_Save" onclick="Save()">保存</button>
+                </th>
             </tr>
 
             <tr bgcolor='white'>
@@ -295,8 +294,8 @@
                 <td>Url/Javasccript</td>
                 <td><input name="TBPara_BtnJS2" type="text" value="" id="TBPara_BtnJS2" style="width:100%;" /></td>
             </tr>
-
         </table>
+
     </div>
 
 </body>

@@ -39,13 +39,11 @@
 
             //alert("请启动傻瓜表单设计器");
 
-
             for (var i = 0; i < mapAttrs.length; i++) {
 
                 var mapAttr = mapAttrs[i];
-                if (mapAttr.KeyOfEn == 'OID') {
+                if (mapAttr.KeyOfEn == 'OID') 
                     continue;
-                }
 
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
 
@@ -166,15 +164,15 @@
     <input type="button" value="清空设置" onclick="Clear()" />
     <input type="button" value="启动傻瓜表单设计器" onclick="FoolDesinger()" />
     <input type="button" value="返回基本设置" onclick="Back()" />
-    <br/>
-    <label style="color:red">说明：标题、时间、日期类型的字段长度固定:标题 230px;时间类型 145px;日期类型125px; </label>
 
     <table class="table table-bordered table-striped table-hover table-condensed" id="Table1" style="width: 96%;">
         <caption>
-            设置显示的列</caption>
+            设置显示的列
+        </caption>
         <tr>
             <th> 序号 </th>
-            <th> 字段
+            <th>
+                字段
             </th>
             <th>
                 中文名
@@ -190,6 +188,10 @@
             </th>
         </tr>
     </table>
-   
+
+    <br />
+    <label style="color:red;">说明：标题、时间、日期类型的字段长度固定:标题 230px;时间类型 145px;日期类型125px; </label>
+
+
 </body>
 </html>

@@ -349,6 +349,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
+                uac.IsDelete = false;
                 if (WebUser.IsAdmin == true)
                 {
                     uac.IsInsert = false;
@@ -396,18 +397,18 @@ namespace BP.Sys
                 Map map = new Map("Sys_EnCfg", "实体配置");
 
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
-                map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);
-                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, true, 0, 2000, 60);
+                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, true, 0, 500, 60);
 
-                map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, false, 0, 100, 60);
-                map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
-                map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
-                map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
+                map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, true, 0, 100, 60);
+                map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, true, 0, 100, 60);
+                map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, true, 0, 200, 60);
+                map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, true, 0, 2000, 60);
 
                 //字段颜色设置
-                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, true, 0, 500, 60);
                 //对字段求总和平均
-                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, true, 0, 500, 60);
                 map.AddTBAtParas(3000);  //参数属性.
                 #region 执行的方法.
 
@@ -433,7 +434,7 @@ namespace BP.Sys
                 rm = new RefMethod();
                 rm.Title = "启用傻瓜表单设计器";
                 rm.ClassMethodName = this.ToString() + ".DesignerFool()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -444,11 +445,27 @@ namespace BP.Sys
 
 
                 rm = new RefMethod();
+                rm.Title = "字段颜色范围设置";
+                rm.ClassMethodName = this.ToString() + ".FieldColors()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "字段求和/平均设置";
+                rm.ClassMethodName = this.ToString() + ".FieldAvgSum()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                
+
+                rm = new RefMethod();
                 rm.Title = "清除设计内容";
                 rm.ClassMethodName = this.ToString() + ".ClearData()";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+
+                
 
                 #endregion 执行的方法.
 
@@ -458,6 +475,22 @@ namespace BP.Sys
         }
         #endregion
 
+        /// <summary>
+        /// 字段颜色设置
+        /// </summary>
+        /// <returns></returns>
+        public string FieldColors()
+        {
+            return "../../Comm/Sys/FieldColors.htm?EnsName=" + this.No;
+        }
+        /// <summary>
+        /// 字段求和/平均设置
+        /// </summary>
+        /// <returns></returns>
+        public string FieldAvgSum()
+        {
+            return "../../Comm/Sys/FieldAvgSum.htm?EnsName=" + this.No;
+        }
         /// <summary>
         /// 清除数据.
         /// </summary>

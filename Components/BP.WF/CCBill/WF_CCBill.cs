@@ -1769,7 +1769,6 @@ namespace BP.CCBill
      
         public static string MidStrEx(string sourse, string startstr, string endstr)
         {
-            string result = string.Empty;
             int startindex, endindex;
             string tmpstr = string.Empty;
             string tmpstr2 = string.Empty;
@@ -1777,7 +1776,7 @@ namespace BP.CCBill
             {
                 startindex = sourse.IndexOf(startstr);
                 if (startindex == -1)
-                    return result;
+                    return sourse;
                 int i = 0;
                 while (startindex != -1)
                 {
@@ -1802,7 +1801,7 @@ namespace BP.CCBill
                     }
 
                     if (endindex == -1)
-                        return result;
+                        return tmpstr;
                     // tmpstr = tmpstr.Substring(endindex + endstr.Length);
                     startindex = tmpstr.IndexOf(startstr);
                     i++;

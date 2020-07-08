@@ -623,7 +623,15 @@ namespace BP.WF
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.WorkFHL:
-                    return this.DoUnSendFeiLiu(gwf);
+                    //如果是撤销的节点是断头路的节点. @hongyan
+                    if (cancelToNode.IsSendBackNode == true)
+                    {
+                        //不需要处理，按照正常的模式处理.
+                    }else
+                    {
+                        return this.DoUnSendFeiLiu(gwf);
+                    }
+                    break;
                 case NodeWorkType.WorkFL:
                 case NodeWorkType.StartWorkFL:
                     break;
@@ -633,7 +641,7 @@ namespace BP.WF
                         /* 首先找到与他最近的一个分流点，
                          * 并且判断当前的操作员是不是分流点上的工作人员。*/
 
-                        //如果是断头路的节点. @hongyan
+                        //如果是撤销的节点是断头路的节点. @hongyan
                         if (cancelToNode.IsSendBackNode == true)
                         {
                             //不需要处理，按照正常的模式处理.

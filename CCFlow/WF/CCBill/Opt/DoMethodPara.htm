@@ -20,15 +20,19 @@
         var func = null; //方法实体.
         var attrs = null; //参数的属性.
         var frmData = null;
+
         $(function () {
 
             var myPK = GetQueryString("MyPK"); //方法的主键.
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
+           
+            //加载执行方法的js
+            loadJs('../../../DataUser/JSLibData/Method/' + myPK + '.js', function () { });
 
             //初始化方法实体.
             func = new Entity("BP.CCBill.Template.MethodFunc", myPK);
-
+            var methodID = func.MethodID;
             //获得该方法的参数.
             attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
 
@@ -48,6 +52,26 @@
 
             $("#docs").html(html);
         });
+        function loadJs(url,callback){
+            var script=document.createElement('script');
+            script.type="text/javascript";
+            if(typeof(callback)!="undefined"){
+                if(script.readyState){
+                script.onreadystatechange=function(){
+                    if(script.readyState == "loaded" || script.readyState == "complete"){
+                    script.onreadystatechange=null;
+                    callback();
+                    }
+                }
+                  }else{
+                     script.onload=function(){
+                      callback();
+                 }
+            }
+         }
+            script.src=url;
+            document.body.appendChild(script);
+        }
 
         function closeIt() {
             window.close();
@@ -156,8 +180,9 @@
 
             //执行这个 script.
             try {
-                addDynamicJS(scriptFunc);
+                //addDynamicJS(scriptFunc);
                 var data = eval(func.MethodID + "(" + paras + ")");
+                //func.MethodID + "(" + paras + ")";
                 return data;
             } catch (e) {
                 alert(e);

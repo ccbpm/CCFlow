@@ -297,7 +297,7 @@ function InitFoolLink(mapAttr, frmType) {
                 }
 
                 var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                if (nowKey == null || nowKey == undefined || nowKey == "")
+                if (nowKey == null || nowKey == undefined || nowKey == "" || nowKey == -1)
                     return;
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 
@@ -345,7 +345,7 @@ function InitDevelopLink(mapAttr, frmType) {
                 }
 
                 var nowKey = $('input[name="RB_' + mapAttr.KeyOfEn + '"]:checked').val();
-                if (nowKey == null || nowKey == undefined || nowKey == "")
+                if (nowKey == null || nowKey == undefined || nowKey == "" || nowKey == -1)
                     return;
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);
 

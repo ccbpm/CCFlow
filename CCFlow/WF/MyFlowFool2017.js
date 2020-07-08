@@ -1086,7 +1086,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             if (mapAttr.IsSigan == "1") {
                 var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type=hidden />";
                 var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                return "<img alt='" + val + "' src='../DataUser/Siganture/" + val + ".jpg'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                return "<img alt='" + val + "' src='../DataUser/Siganture/" + val+ UserIConExt +"'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
             }
             if (mapAttr.IsSecret)
                 return "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='password' placeholder='" + (mapAttr.Tip || '') + "'/>";

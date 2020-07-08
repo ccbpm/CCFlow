@@ -69,7 +69,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
     if (projectName == "WF") {
         projectName = "";
     }
-    //@yuanlina
+    
     if (plant == "JFlow")
         projectName = basePath;
     var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;

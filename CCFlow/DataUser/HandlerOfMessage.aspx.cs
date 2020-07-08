@@ -46,7 +46,7 @@ namespace CCFlow.DataUser
                         {
                             string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
-                            News_Articles newArticle = new News_Articles();
+                            NewsArticles newArticle = new NewsArticles();
                             newArticle.description = this.Request.QueryString["msgConten"];
 
                             newArticle.title = "您有一条待办消息";
@@ -59,13 +59,13 @@ namespace CCFlow.DataUser
 
                             BP.GPM.Emp emp = new BP.GPM.Emp(this.Request.QueryString["sendTo"]);
 
-                            WX_Msg_News wxMsg = new WX_Msg_News();
+                            MsgNews wxMsg = new MsgNews();
                             wxMsg.Access_Token = accessToken;
                             wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
                             wxMsg.touser = emp.Tel;
                             wxMsg.articles.Add(newArticle);
                             //执行发送
-                            WeiXinMessage.PostMsgOfNews(wxMsg);
+                            BP.GPM.WeiXin.Glo.PostMsgOfNews(wxMsg);
                         }
                     }
                     catch (Exception ex)

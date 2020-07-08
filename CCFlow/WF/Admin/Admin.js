@@ -22,10 +22,10 @@
  */
 
 $(document).ready(function () {
-    //动态添加新风格  @lz
+    //动态添加新风格 
     SetNewCSS();
     
-    //设置帮助页面内容 @lz
+    //设置帮助页面内容 
    // SetHelpPage();
 
     HelpDiv();
@@ -35,7 +35,7 @@ $(document).ready(function () {
 
     //设置  class="Help" 的图片 点击直接可以全屏放大打开.  @lz
     SetHelpImg();
-    //设置放大的img容器   @lz
+    //设置放大的img容器   
     SetBigImgDiv();
     //设置SQL脚本编辑器.
     CheckSQLTextArea();
@@ -96,7 +96,7 @@ function AddBtnIcon()
 }
 
 style = ''
-//动态添加新风格  @lz
+//动态添加新风格  
 function SetNewCSS() {
     //body下添加一个父Div
     var div = document.createElement('div');
@@ -128,7 +128,7 @@ function SetNewCSS() {
             leg.eq(i).remove();
     }
 }
-//设置帮助页面内容 @lz
+//设置帮助页面内容 
 function SetHelpPage() {
 
     var legends = $("legend#help");
@@ -168,7 +168,7 @@ function HelpDiv() {
     });
 }
 
-//设置  class="HelpImg" 的图片 点击直接可以全屏放大打开.  @lz
+//设置  class="HelpImg" 的图片 点击直接可以全屏放大打开.  
 function SetHelpImg() {
     $(function () {
         $(".HelpImg").click(function () {
@@ -217,7 +217,7 @@ function SetHelpImg() {
     }
     
 }
-//加载放大的img容器  @lz
+//加载放大的img容器 
 function SetBigImgDiv() {
     var divs = "<div id='outerdiv' style='position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;'><div id='innerdiv' style='position:absolute;'><img id='bigimg' style='border:5px solid #fff;' src=''/></div ></div >";
     $(".cs-content-box").append(divs);

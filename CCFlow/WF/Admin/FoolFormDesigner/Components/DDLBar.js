@@ -1016,7 +1016,7 @@ function CreateFrame() {
         return;
     }
 
-    var en = new Entity("BP.Sys.FrmUI.MapFrameExt");
+    var en = new Entity("BP.Sys.MapFrame");
     en.MyPK = fk_mapData + "_" + val;
     if (en.IsExits() == true) {
         alert("该编号[" + val + "]已经存在");

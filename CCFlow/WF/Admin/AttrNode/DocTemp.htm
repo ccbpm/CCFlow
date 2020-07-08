@@ -103,7 +103,7 @@
         }
         function GetDocName() {
             var DocName = "公文模板";
-            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
+            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称
             var ens = new Entities("BP.WF.Template.DocTemplates");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
             if (GetQueryString("DocName") == null)

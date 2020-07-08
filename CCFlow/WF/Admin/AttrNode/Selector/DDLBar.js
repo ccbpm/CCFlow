@@ -107,7 +107,7 @@ function getDepts(orgNo) {
 
 }
 /*
-* 获取节点绑定的用户组@lz
+* 获取节点绑定的用户组
 */
 function getGroups() {
 

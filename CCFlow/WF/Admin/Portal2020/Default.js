@@ -462,7 +462,7 @@ function newFlow() {
             }
         }
 
-        //判断流程标记是否存在  19.10.22 by sly
+        //判断流程标记是否存在  19.10.22 
         if (newFlowInfo.FlowMark != "") {
             var flows = new Entities("BP.WF.Flows");
             flows.Retrieve("FlowMark", newFlowInfo.FlowMark);

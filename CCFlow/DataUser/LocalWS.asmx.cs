@@ -7,6 +7,7 @@ using System.Web.Services;
 using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.DA;
 
 namespace CCFlow.DataUser
 {
@@ -45,7 +46,7 @@ namespace CCFlow.DataUser
             else
                 sql = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt =DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -84,7 +85,7 @@ namespace CCFlow.DataUser
             else
                 sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + domain + "' AND Starter='" + userNo + "'";
 
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            DataTable dt =DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -98,7 +99,7 @@ namespace CCFlow.DataUser
         {
             // if ( password.Equals("xxxxxx") == false)
             //  return "err@密码错误";
-            // DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlOfSelect);
+            // DataTable dt =DBAccess.RunSQLReturnTable(sqlOfSelect);
             // return BP.Tools.Json.ToJson(dt);
             throw new Exception("err@请实现该方法,密码部分是双方约定的,不对外公开的.");
         }
@@ -125,7 +126,7 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
         {
-            BP.DA.AtPara ap = new BP.DA.AtPara(atParas);
+           AtPara ap = new AtPara(atParas);
 
             BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, toNodeID, toEmps);
 

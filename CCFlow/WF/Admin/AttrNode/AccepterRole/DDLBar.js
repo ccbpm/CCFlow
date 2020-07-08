@@ -326,7 +326,7 @@ function getDepts() {
 
 }
 /*
- * 获取节点绑定的用户组@lz
+ * 获取节点绑定的用户组
  */
 function getGroups() {
 
@@ -341,7 +341,7 @@ function getGroups() {
 
 }
 /*
- * 获取节点绑定部门的负责人@lz
+ * 获取节点绑定部门的负责人
  */
 function getDeptLeader() {
     var ens = getDepts();
@@ -355,7 +355,7 @@ function getDeptLeader() {
 }
 
 /*
- * 获取节点绑定的组织@lz
+ * 获取节点绑定的组织
  */
 function getOrgs() {
 

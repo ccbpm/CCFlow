@@ -802,6 +802,11 @@ body table tr td {
     margin-right: 10px !important;
 }
 
+.SignCheck {
+    border: thin solid #CCCCCC;
+    width: 98%;
+    height: 28px;
+}
 
 
 .only-print-show {

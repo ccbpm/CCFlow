@@ -2605,7 +2605,7 @@ function ThrowMakeErrInfo(funcName, obj, url) {
 //替换全部.
 function replaceAll(str, oldKey, newKey) {
 
-    if (str == undefined || str == null) {
+    if (str == null || str == undefined) {
         alert("要替换的原始字符串为空.");
         return str;
     }

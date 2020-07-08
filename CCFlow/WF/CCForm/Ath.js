@@ -331,7 +331,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                 _html += "<td style='width:100px;color:red'></td>";
 
             //③附件大小
-            _html += "<td>&nbsp&nbsp</td>";
+           // _html += "<td>&nbsp&nbsp</td>";
             //④上传时间
             _html += "<td>&nbsp&nbsp</td>";
             //⑤上传人

@@ -24,9 +24,9 @@
 $(document).ready(function () {
     //动态添加新风格 
     SetNewCSS();
-    
+
     //设置帮助页面内容 
-   // SetHelpPage();
+    // SetHelpPage();
 
     HelpDiv();
 
@@ -44,8 +44,7 @@ $(document).ready(function () {
     AddBtnIcon();
 })
 
-function AddBtnIcon()
-{
+function AddBtnIcon() {
     //保存按钮icon
     if ($("#Btn_Save").height() > 25)
         $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
@@ -89,10 +88,15 @@ function AddBtnIcon()
 
     //批处理按钮
     $("#Btn_Batch").attr('style', 'background-image: url(../../../Img/Btn/Batch.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
-    if ($("#Btn_New").height() > 25)
+
+    if ($("#Btn_New").height() > 25) {
         $("#Btn_New").attr('style', 'background-image: url(../../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
-    else
+        $("#Btn_New").attr('height', 50);
+    }
+    else {
         $("#Btn_New").attr('style', 'background-image: url(../../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+        $("#Btn_New").attr('height', 50);
+    }
 }
 
 style = ''
@@ -107,18 +111,18 @@ function SetNewCSS() {
     div = document.createElement('div');
     $(div).attr('class', 'cs-help');
     $('ul').wrap(div);
-   
-    $.each($("legend"), function (i,obj) {
+
+    $.each($("legend"), function (i, obj) {
 
         var _html = $(obj).html();
         if (obj.id.indexOf("help") != -1) {
             $(obj).html("");
             var div2 = "<div id='help1' class='help-title'> <img src='../Img/ico-help.png' alt='帮助' class='ico-help' />" + _html + " </div>";
             $($(obj).parent().find("ul").parent()[0]).append(div2)
-        } 
+        }
     })
-    
-   
+
+
     //bar风格
     $('#bar').attr('class', 'cs-tr cs-bar');
     //删除重复的说明标题
@@ -142,7 +146,7 @@ function SetHelpPage() {
     $("font").on("click", function () {
         alert("1234");
         legends.siblings().show();
-        
+
     });
 }
 function showPage() {
@@ -215,7 +219,7 @@ function SetHelpImg() {
             $(this).fadeOut("fast");
         });
     }
-    
+
 }
 //加载放大的img容器 
 function SetBigImgDiv() {

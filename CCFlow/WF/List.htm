@@ -17,6 +17,9 @@
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         function WinOpenIt(url) {
+            window.open(url);
+            return;
+
             layer.open({
                 skin: 'layer-class',
                 type: 2,
@@ -39,11 +42,12 @@
         //页面启动函数.
         $(function () {
             flowNo = GetQueryString("FK_Flow");
-            var flow = new Entity("BP.WF.Flow", flowNo);
-            $("#SearchLab").html(flow.Name);
+          //  var flow = new Entity("BP.WF.Flow", flowNo);
+           // $("#SearchLab").html(flow.Name);
             InitPage();
         });
         function InitPage() {
+
             var searchKey = $("#TB_Key").val();
 
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
@@ -55,7 +59,7 @@
             gwfs = JSON.parse(data);
 
             var timeKey = "";
-            
+
 
             var html = '';
             $('#Table1').html("");
@@ -63,7 +67,7 @@
             var idx = 0;
             for (var i = 0; i < gwfs.length; i++) {
 
-               
+
                 var gwf = gwfs[i];
 
                 if (gwf.Emps.indexOf(webUser.No) == -1)
@@ -84,8 +88,7 @@
 
                 html = "<tr ><td class=Idx >" + idx + "</td>";
 
-                var urlOpen = "WFRpt.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + gwf.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey;
-
+                var urlOpen = "MyView.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + gwf.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey;
                 if (gwf.WFState != 3 && gwf.TodoEmps.indexOf(webUser.No) >= 0) {
                     urlOpen = "MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + gwf.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey;
                 }
@@ -100,7 +103,7 @@
                 html += "<td>" + gwf.WFStateText + "</td>";
 
                 html += "<td>";
-                html += "<a href=\"javascript:Delete('" + flowNo + "'," +gwf.FK_Node+",'"+ gwf.WorkID + "')\">删除</a>";
+                html += "<a href=\"javascript:Delete('" + flowNo + "'," + gwf.FK_Node + ",'" + gwf.WorkID + "')\">删除</a>";
                 html += "</td>";
                 html += "</tr>";
 
@@ -117,8 +120,9 @@
             var url = "MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow");
             window.open(url);
         }
-         //物理删除流程
-        function Delete(flowNo,fkNode,workid) {
+        //物理删除流程
+        function Delete(flowNo, fkNode, workid) {
+
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
@@ -128,12 +132,9 @@
             handler.AddPara("WorkID", workid);
             handler.DoMethodReturnString("DeleteFlow");
             window.location.href = window.location.href;
-           
-        
         }
 
-
-/**/</script>
+        /**/</script>
 
 </head>
 <body>
@@ -141,7 +142,7 @@
         <caption>
             <div id="SearchLab"></div>
             <label>
-                <input type="text" id="TB_Key" name="TB_Key" class="form-control" style="width:200px"/>
+                <input type="text" id="TB_Key" name="TB_Key" class="form-control" style="width:200px" />
                 <a href="#" class="btn btn-default btn-sm" id="Btn_Search" name="Btn_Search" onclick="Search()">查询</a>
                 <a href="#" class="btn btn-default btn-sm" id="Btn_Start" name="Btn_Start" onclick="Start()">发起</a>
             </label>

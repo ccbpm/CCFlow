@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8" />
     <title>多表头</title>
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -17,6 +16,7 @@
 
             //获得配置信息.
             var dtlID = GetQueryString("DtlID");
+
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs")
             mapAttrs.Retrieve("FK_MapData", dtlID, "Idx");
@@ -27,10 +27,10 @@
             if (multi != null && multi != undefined && multi != "" && multi != "undefined")
                 isMulti = true;
 
-            var html = "<table style='width:100%;'>";
-            html += "<caption><img style='margin-top:5px;'; src='../../../Img/Event.png' />创建表头</caption>";
+            var html = "<table style='width:90%;'>";
+            html += "<caption><img style='margin-top:5px;'; src='../../../Img/Event.png' />多表头</caption>";
 
-            html += "<tr>"; 
+            html += "<tr>";
             var secHtml = "";
             var currentGroup = "";
             for (var i = 0; i < mapAttrs.length; i++) {
@@ -42,7 +42,7 @@
                         html += "<th rowspan=2>" + attr.Name + "</th>";
                     else {
                         var fields = getMutliFile(attr.KeyOfEn, multi);
-                        
+
                         if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
                             html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'>" + fields[0] + "</th>";
                             currentGroup = fields[0];
@@ -51,7 +51,7 @@
                     }
                 } else {
                     html += "<th>" + attr.Name + "</th>";
-                } 
+                }
 
             }
             html += "</tr>";
@@ -62,7 +62,38 @@
             //形成标头.
 
         });
-        function DeleteMutli() {
+
+        function DeleteSpecTitle(title) {
+
+            if (window.confirm('您确定要删除【' + title + '】吗?') == false)
+                return;
+
+            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("DtlID"));
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
+
+            //按照;分开.
+            var strs = multiTitle.split(';');
+            var newTitle = ""; //创建新的strs.
+            for (var i = 0; i < strs.length; i++) {
+
+                var str = strs[i];
+                if (str.indexOf(title + ',') == 0)
+                    continue;
+                newTitle += str + ";"; //重新组合newtitle.
+            }
+
+            mapDtl.SetPara("MultiTitle", newTitle); 
+            mapDtl.Update();
+
+            window.location.href = window.location;
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗?') == false)
+                return;
+
             var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("DtlID"));
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
@@ -71,7 +102,7 @@
             mapDtl.Update();
             window.location.href = window.location;
         }
-        function getMutliFile(keyOfEn,multi) {
+        function getMutliFile(keyOfEn, multi) {
             var fields = multi.split(";");
             for (var i = 0; i < fields.length; i++) {
                 var str = fields[i];
@@ -79,27 +110,36 @@
                     continue;
                 if (str.indexOf(keyOfEn + ",") == -1)
                     continue;
-                var strs = str.substring(0,str.length-1).split(",");
+                var strs = str.substring(0, str.length - 1).split(",");
                 return strs;
             }
             return "";
         }
+
         function AddGroup() {
 
+            var fields = "";
+
             var url = "MultiTitleDtl.htm?DtlID=" + GetQueryString("DtlID");
+            window.location.href = url;
+            return;
+
             WinOpenFull(url);
             //window.location.href = window.location.href;
         }
     </script>
 </head>
 <body>
-    <div style="right:30px; position:absolute; z-index:100; ">
 
-        <input id="Btn_New" type="button" value="增加标题分组" onclick="AddGroup()" />
-        <input id="Btn_Delete" type="button" value="删除标题分组" onclick="DeleteMutli()" />
-    </div>
     <div style="position:relative;" id="Table">
     </div>
+
+    <div style="right:30px; position:absolute; z-index:100; ">
+    </div>
+
+    <button id="Btn_New" onclick="AddGroup()"> 增加1级表头</button>
+    <button id="Btn_Delete" onclick="Delete()"> 删除</button>
+
 
 </body>
 </html>

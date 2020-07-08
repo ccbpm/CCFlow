@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8" />
     <title>多表头</title>
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -38,6 +37,7 @@
 
         });
 
+        ///保存.
         function Save() {
 
             //获得配置信息.
@@ -45,7 +45,7 @@
             var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
-            
+
             //检查设置的完整性.
             //求出来选择的字段.
             var filds = "";
@@ -85,25 +85,32 @@
             if (name == null)
                 return;
             //检查名称是否重复
-            if (multiTitle!=undefined && multiTitle.indexOf(name) > 0) {
+            if (multiTitle != undefined && multiTitle.indexOf(name) > 0) {
                 alert("错误:名称已经存在.");
                 return;
             }
-            
+
             //拼接目标数据.
-            multiTitle += name + "," + filds +";";
+            multiTitle += name + "," + filds + ";";
             //赋值
             mapDtl.SetPara("MultiTitle", multiTitle);
             mapDtl.Update();
-            window.close();
+            Back();
+        }
+
+        function Back() {
+            window.location.href = 'MultiTitle.htm?DtlID=' + GetQueryString("DtlID");
         }
     </script>
 </head>
 <body>
-    <div style="right:10px; position:absolute; z-index:100; ">
-        <input id="Btn_New" type="button" onclick="Save()" value="增加" />
-    </div>
+
     <div style="position:relative;" id="Table">
     </div>
+
+    <button id="Btn_New" onclick="Save()">&nbsp;增加</button>
+    <button id="Btn_Back" onclick="Back()">&nbsp;返回</button>
+
+
 </body>
 </html>

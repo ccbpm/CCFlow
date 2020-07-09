@@ -260,11 +260,19 @@ function figure_Template_Map(MapID, UIIsEnable) {
 
     });
 }
-function setHandWriteSrc(HandWriteID, imagePath) {
-    imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
-    document.getElementById("Img" + HandWriteID).src = "";
-    $("#Img" + HandWriteID).attr("src", imagePath);
-    $("#TB_" + HandWriteID).val(imagePath);
+function setHandWriteSrc(HandWriteID, imagePath, type) {
+    if (type == 0) {
+        imagePath = "../" + imagePath.substring(imagePath.indexOf("DataUser"));
+        document.getElementById("Img" + HandWriteID).src = "";
+        $("#Img" + HandWriteID).attr("src", imagePath);
+        $("#TB_" + HandWriteID).val(imagePath);
+    }
+    if (type == 1) {
+        $("#Img_" + HandWriteID).attr("src", imagePath);
+        if ("undefined" != typeof writeImg)
+            writeImg = imagePath;
+    }
+    
     $('#eudlg').dialog('close');
 }
 //然浏览器最大化.

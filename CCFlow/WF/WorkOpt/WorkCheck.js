@@ -5,6 +5,7 @@
 */
 var isCanSend = true; //是否可以发送？
 var isChange = false;
+var frmWorkCheck;
 
 //审核组件页面初始化
 $(function () {
@@ -12,7 +13,7 @@ $(function () {
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
-    var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
+   frmWorkCheck = checkData.WF_FrmWorkCheck[0];
 
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
@@ -131,10 +132,12 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         _Html += "</td>";
     }
 
-
+    var isEditWorkCheck = false;
+    if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false) && isShowCheck == true)
+        isEditWorkCheck = true;
 
     //可编辑的审核意见
-    if (track.IsDoc == "1" && (pageData.IsReadonly == null || pageData.IsReadonly == false) && isShowCheck == true) {
+    if (isEditWorkCheck == true) {
 
         _Html += "<td style='width:100%;border-bottom-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
 
@@ -267,9 +270,11 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
       
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;
-        else
+        else if (frmWorkCheck.SigantureEnabel == "1")
             _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
-       
+        else if (frmWorkCheck.SigantureEnabel == "2") 
+            _Html += GetUserHandWriting(track, isEditWorkCheck,track.EmpFromT);
+
         var rdt = track.RDT.substring(0, 16);
         if (rdt == "") {
             var dt = new Date();
@@ -300,8 +305,17 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 _Html += "</tr>";
                 break;
             }
-
+            //图片签名
             if (st.SignType == 1) {
+                _Html += "<tr>";
+                _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:"
+                    + GetUserSiganture(track.EmpFrom, track.EmpFromT)
+                    + "日期:" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                _Html += "</tr>";
+                break;
+            }
+            //写字板
+            if (st.SignType == 2) {
                 _Html += "<tr>";
                 _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:"
                     + GetUserSiganture(track.EmpFrom, track.EmpFromT)
@@ -314,7 +328,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
                 _Html += "<tr>";
                 _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:"
-                    + GetUserSiganture(track.EmpFrom, track.EmpFromT)
+                    + GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT);
                     + "日期:" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 //  alert('电子签名的逻辑尚未编写.');
@@ -360,7 +374,16 @@ function SaveWorkCheck() {
     if ($("#WorkCheck_Doc").length == 0)//审核组件只读
         return;
 
+    if (frmWorkCheck.SigantureEnabel == "2" && writeImg == "") {
+        alert("请点击签字版签名");
+        return;
+    }
+
     var doc = $("#WorkCheck_Doc").val();
+    if (doc == "") {
+        alert("请填写审核意见");
+        return;
+    }
     doc = doc.replace(/'/g, '');
 
     if (pageData.IsReadonly == true)
@@ -379,6 +402,7 @@ function SaveWorkCheck() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddJson(param);
+    handler.AddPara("WriteImg", writeImg.replace(/[+]/g,"~"));
     var data = handler.DoMethodReturnString("WorkCheck_Save");
 
     if (data.indexOf('err@') != -1) {
@@ -442,7 +466,22 @@ function GetUserSiganture(userNo, userName) {
     return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo+"' />";
 }
 
+var writeImg="";
+//签字版
+function GetUserHandWriting(track,isEditWorkCheck,userName) {
+    if (isEditWorkCheck == false) {
+        if (track.WritImg == null || track.WritImg == "")
+            return userName;
+        return "<img src='" + track.WritImg.replace(/' '/,'')+ "'  style='height:40px;' border=0  />";
+    }
+    writeImg = track.WritImg;
+    return "<img id='Img_WorkCheck' src='" + track.WritImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:40px;'  />";    
+}
 
+function openHandWriting() {
+    var url = "CCForm/HandWriting.htm?WorkID=" + pageData.WorkID+"&FK_Flow="+pageData.FK_Flow+"&FK_Node="+pageData.FK_Node+"&WritType=WorkCheck";
+    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
+}
 
 /**
  * 获取该节点上传的附件

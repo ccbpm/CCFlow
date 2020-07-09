@@ -58,16 +58,19 @@
         function saveSignature() {
 
             var pic = $('.js-signature').eq(0).jqSignature('getDataURL');
-            pic = pic.replace(/^data:image\/(png|jpg);base64,/, "");
-            //            var form = new FormData();
-            //            form.append("imageData", pic);
-
-            // Sending the image data to Server
+            var writType = GetQueryString("WritType");
+            if (writType != null && writType != undefined && writType == "WorkCheck") {
+                parent.setHandWriteSrc("WorkCheck", pic, 1);
+                return;
+            }
+            var newpic = pic.replace(/^data:image\/(png|jpg);base64,/, "");
+         
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-            handler.AddPara("imageData", pic);
+            handler.AddPara("imageData", newpic);
             var data = handler.DoMethodReturnString("HandWriting_Save");
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -76,8 +79,9 @@
             }
             if (data.indexOf('info@') == 0) {
                 imagePath = data.replace('info@', '');
-                parent.setHandWriteSrc(GetQueryString("KeyOfEn"), imagePath);
-            }
+                parent.setHandWriteSrc(GetQueryString("KeyOfEn"), imagePath,0);
+            } 
+
             alert("图片上传成功.");
         }
 

@@ -1563,7 +1563,7 @@ namespace BP.Sys
 
                     break;
                 case Sys.DBSrcType.MySQL:
-
+                    //分别代表字段名,类型，描述，类型加长度（char（11））
                   string  sql2= "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS colid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
                     sql.Append(sql2);
                     //sql.AppendLine("SELECT ");

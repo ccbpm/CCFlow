@@ -21,7 +21,14 @@ namespace BP.WF.Template
             {
 
                 UAC uac = new UAC();
-                uac.OpenForAppAdmin();
+                /* uac.OpenForAppAdmin();
+                 uac.IsInsert = false;*/
+
+                if (BP.Web.WebUser.IsAdmin == false)
+                    throw new Exception("err@管理员登录用户信息丢失,当前会话[" + BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + "]");
+
+                uac.IsUpdate = true;
+                uac.IsDelete = false;
                 uac.IsInsert = false;
                 return uac;
             }

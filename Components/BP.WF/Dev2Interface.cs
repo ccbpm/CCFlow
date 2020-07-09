@@ -40,9 +40,9 @@ namespace BP.WF
         /// <param name="doc">内容</param>
         /// <param name="msgFlag">消息标记</param>
         /// <returns>写入成功或者失败.</returns>
-        public static bool WriteToSMS(string sendToUserNo, string sendDT, string title, string doc, string msgFlag,Int64 workid)
+        public static bool WriteToSMS(string sendToUserNo, string sendDT, string title, string doc, string msgFlag, Int64 workid)
         {
-            SMS.SendMsg(sendToUserNo, title, doc, msgFlag, "Info", "",workid);
+            SMS.SendMsg(sendToUserNo, title, doc, msgFlag, "Info", "", workid);
             return true;
         }
         #endregion
@@ -139,12 +139,20 @@ namespace BP.WF
         /// <summary>
         /// 根据workid返回抄送数据
         /// </summary>
-        public static string  Node_CCWorks(int WorkID)
+        public static string Node_CCWorks(int WorkID, int CCType = -1, string keyword = "")
         {
             string sql = "select  * from wf_cclist where workid=" + WorkID;
+            if (CCType >= 0)
+            {
+                sql += " and CCType=" + CCType;
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                sql += " and (CCToName LIKE '%@" + keyword + "@%' OR CCToDeptName LIKE '%@" + keyword + "%' OR CCToOrgName LIKE '%@" + keyword + "%')";
+            }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
-             
+
         }
         /// <summary>
         /// 返回挂起流程数量
@@ -728,7 +736,7 @@ namespace BP.WF
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
-                dt.Columns["STA"].ColumnName = "Sta"; 
+                dt.Columns["STA"].ColumnName = "Sta";
             }
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -2775,8 +2783,8 @@ namespace BP.WF
                     dr["Name"] = ndFrom.Name;
                     dr["Rec"] = mydt.Rows[0][0];
                     dr["RecName"] = mydt.Rows[0][1];
-                    
-                    
+
+
                     if (ndFrom.IsBackTracking)
                     {
                         dr["IsBackTracking"] = "1";
@@ -3356,7 +3364,7 @@ namespace BP.WF
 
             return DBAccess.RunSQLReturnTable(sql);
         }
-         
+
         /// <summary>
         /// 获取未完成的流程(也称为在途流程:我参与的但是此流程未完成)
         /// </summary>
@@ -3856,7 +3864,7 @@ namespace BP.WF
             sms.AtPara = atParas;
 
             sms.WorkID = workID;
-             
+
 
             sms.SetPara("OpenUrl", openUrl);
             sms.SetPara("PushModel", pushModel);
@@ -4085,9 +4093,9 @@ namespace BP.WF
                 return;
             }
 
-           
+
             ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
-                     "RDT,NodeData=" + dbStr + "NodeData WHERE ActionType="+(int)ActionType.WorkCheck+" AND  NDFrom=" + dbStr + "NDFrom AND  NDTo=" + dbStr + "NDTo AND WorkID=" + dbStr+"WorkID AND FID="+dbStr+"FID AND EmpFrom="+dbStr+"EmpFrom";
+                     "RDT,NodeData=" + dbStr + "NodeData WHERE ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + dbStr + "NDFrom AND  NDTo=" + dbStr + "NDTo AND WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND EmpFrom=" + dbStr + "EmpFrom";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
             ps.Add(TrackAttr.NDFrom, currNodeID);
@@ -4095,7 +4103,7 @@ namespace BP.WF
             ps.Add(TrackAttr.WorkID, workid);
             ps.Add(TrackAttr.FID, fid);
             ps.Add(TrackAttr.EmpFrom, WebUser.No);
-            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess); 
+            ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
             ps.Add(TrackAttr.NodeData, "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName);
 
             int num = DBAccess.RunSQL(ps);
@@ -4373,7 +4381,7 @@ namespace BP.WF
         /// <param name="workId"></param>
         /// <param name="nodeFrom"></param>
         /// <returns></returns>
-        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom,string isNullAsVal = null)
+        public static string GetCheckInfo(string flowNo, Int64 workId, int nodeFrom, string isNullAsVal = null)
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
             string sql = "SELECT Msg FROM " + table + " WHERE NDFrom=" + nodeFrom + " AND ActionType=" + (int)ActionType.WorkCheck + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + workId + " ORDER BY RDT DESC ";
@@ -4744,7 +4752,7 @@ namespace BP.WF
 
             return unSend.DoUnSend();
         }
-     
+
         /// <summary>
         /// 获得当前节点上一步发送日志记录
         /// </summary>
@@ -5577,7 +5585,7 @@ namespace BP.WF
                 wls = new GenerWorkerLists(gwf.FID, gwf.FK_Node);
             }
             PushMsgs pms = new PushMsgs();
-            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node, 
+            pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node,
                 PushMsgAttr.FK_Event, EventListNode.PressAfter);
 
             foreach (GenerWorkerList wl in wls)
@@ -7682,7 +7690,7 @@ namespace BP.WF
                 names += emp.Name + "、";
 
                 //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
-                list.MyPK =  gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No;
+                list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No;
                 if (list.IsExits == true)
                     continue; //判断是否存在?
 
@@ -8241,7 +8249,7 @@ namespace BP.WF
             ps.Add(CCListAttr.MyPK, mypk);
             DBAccess.RunSQL(ps);
         }
-    
+
         /// <summary>
         /// 设置抄送状态
         /// </summary>
@@ -8661,7 +8669,7 @@ namespace BP.WF
                 Node nd = new Node(fk_node);
                 if (nd.IsStartNode == false)
                 {
-                    if (nd.IsEndNode == false && WebUser.IsAdmin==false)
+                    if (nd.IsEndNode == false && WebUser.IsAdmin == false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
                             throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }
@@ -9007,7 +9015,7 @@ namespace BP.WF
 
             en.SetValByKey("OID", workID);
 
-            ExecEvent.DoFrm(md,EventListFrm.SaveBefore, en);
+            ExecEvent.DoFrm(md, EventListFrm.SaveBefore, en);
 
             if (i == 0)
             {
@@ -9018,7 +9026,7 @@ namespace BP.WF
                 en.Update();
             }
 
-            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, en);
+            ExecEvent.DoFrm(md, EventListFrm.SaveAfter, en);
 
 
             if (workDtls != null)
@@ -9058,7 +9066,7 @@ namespace BP.WF
                 }
             }
 
-            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, en);
+            ExecEvent.DoFrm(md, EventListFrm.SaveAfter, en);
         }
         /// <summary>
         /// 从任务池里取出来一个子任务
@@ -9503,7 +9511,7 @@ namespace BP.WF
 
             //恢复加签后执行事件.
             WorkNode wn = new WorkNode(wk, node);
-            info +=  ExecEvent.DoNode(EventListNode.AskerReAfter, wn, null);
+            info += ExecEvent.DoNode(EventListNode.AskerReAfter, wn, null);
             return info;
         }
         /// <summary>
@@ -9669,7 +9677,7 @@ namespace BP.WF
             //移交后事件
             string atPara = "@SendToEmpIDs=" + emp.No;
             WorkNode wn = new WorkNode(work, nd);
-            inf1o += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, wn,null,atPara);
+            inf1o += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, wn, null, atPara);
 
 
             return inf1o;
@@ -9976,9 +9984,9 @@ namespace BP.WF
 
 
             WorkNode wn = new WorkNode(wk, nd);
-            
+
             //执行事件.
-            ExecEvent.DoNode(EventListNode.WhenReadWork, wn,null,null);
+            ExecEvent.DoNode(EventListNode.WhenReadWork, wn, null, null);
             ///nd.HisFlow.DoFlowEventEntity(EventListNode.WhenReadWork, nd, wk, null);
 
         }

@@ -77,7 +77,7 @@
             if (window.confirm('您确定要删除【' + title + '】吗?') == false)
                 return;
 
-            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("ensName"));
+            var mapDtl = new Entity("BP.Sys.EnCfg", GetQueryString("ensName"));
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
 
@@ -115,8 +115,8 @@
         function AddGroup() {
 
             //获得配置信息.
-            var dtlID = GetQueryString("DtlID");
-            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
+            var dtlID = GetQueryString("EnsName");
+            var mapDtl = new Entity("BP.Sys.EnCfg", dtlID);
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle");
 
@@ -173,8 +173,8 @@
         }
          function AddGroup2() {
             //获得配置信息.
-            var dtlID = GetQueryString("DtlID");
-            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
+            var dtlID = GetQueryString("EnsName");
+            var mapDtl = new Entity("BP.Sys.EnCfg", dtlID);
             //获取表头的参数信息
             var multiTitle = mapDtl.GetPara("MultiTitle1");
 

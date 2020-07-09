@@ -722,8 +722,21 @@ namespace BP.WF
             if (this.FrmDB != null)
                 DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
 
-            if (DataType.IsNullOrEmpty(this.WriteDB ) == false)
-                DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
+            if (DataType.IsNullOrEmpty(this.WriteDB ) == false && DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
+            {
+                if(this.WriteDB.Contains("data:image/png;base64,")==true)
+                    DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
+                else
+                {
+
+                    sql = "SELECT WriteDB From " + ptable + " WHERE MyPK='" + this.WriteDB + "'";
+                    DBAccess.SaveBigTextToDB(DBAccess.RunSQLReturnStringIsNull(sql,""), ptable, "MyPK", this.MyPK, "WriteDB");
+                }
+               
+                //DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
+
+            }
+                
 
             #endregion 执行保存
 

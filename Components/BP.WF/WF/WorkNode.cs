@@ -7928,12 +7928,12 @@ namespace BP.WF
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
                         //获取审核组件信息
-                        string sql = "SELECT Msg,WriteDB From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 0)
                         {
                             t.Msg += "WorkCheck@" + dt.Rows[0][0].ToString();
-                            t.WriteDB = dt.Rows[0][1]==null?null: dt.Rows[0][1].ToString();
+                            t.WriteDB = dt.Rows[0][1].ToString();
                         }
                            
                        
@@ -8073,12 +8073,12 @@ namespace BP.WF
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
                         //获取审核组件信息 @yln
-                        string sql = "SELECT Msg,WriteDB From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 0)
                         {
                             t.Msg += "WorkCheck@" + dt.Rows[0][0].ToString();
-                            t.WriteDB = dt.Rows[0][1] == null ? null : dt.Rows[0][1].ToString();
+                            t.WriteDB = dt.Rows[0][1].ToString();
                         }
 
                         //string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
@@ -8124,6 +8124,7 @@ namespace BP.WF
             catch
             {
                 t.CheckPhysicsTable();
+              
             }
 
             if (at == ActionType.SubThreadForward

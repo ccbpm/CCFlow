@@ -38,25 +38,29 @@
             html += "<tr>";
             var secHtml = "";
             var currentGroup = "";
+             var idx = 0;
+             var idx1 = 0;
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
                 if (attr.UIVisible == 0)
                     continue;
                 if (isMulti = true) {
                     if (multi.indexOf(attr.KeyOfEn + ",") == -1)
-                        html += "<th rowspan=2>" + attr.Name + "</th>";
+                        html += "<th rowspan=2><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</th>";
                     else {
                         var fields = getMutliFile(attr.KeyOfEn, multi);
-
+                        
                         if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
-                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'>" + fields[0] + "</th>";
+                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" +  fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('"+fields[0]+"')> 删除</button></th>";
                             currentGroup = fields[0];
+                            idx1++;
                         }
                         secHtml += "<th>" + attr.Name + "</th>";
                     }
                 } else {
                     html += "<th>" + attr.Name + "</th>";
                 }
+                idx++;
 
             }
             html += "</tr>";
@@ -94,19 +98,6 @@
             window.location.href = window.location;
         }
 
-        function Delete() {
-
-            if (window.confirm('您确定要删除吗?') == false)
-                return;
-
-            var mapDtl = new Entity("BP.Sys.MapDtl", GetQueryString("ensName"));
-            //获取表头的参数信息
-            var multiTitle = mapDtl.GetPara("MultiTitle");
-            multiTitle = "";
-            mapDtl.SetPara("MultiTitle", multiTitle);
-            mapDtl.Update();
-            window.location.href = window.location;
-        }
         function getMutliFile(keyOfEn, multi) {
             var fields = multi.split(";");
             for (var i = 0; i < fields.length; i++) {
@@ -123,14 +114,120 @@
 
         function AddGroup() {
 
-            var fields = "";
+            //获得配置信息.
+            var dtlID = GetQueryString("DtlID");
+            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle");
 
-            var url = "MultiTitleDtl.htm?ensName=" + GetQueryString("ensName");
-            window.location.href = url;
-            return;
+            //检查设置的完整性.
+            //求出来选择的字段.
+            var filds = "";
+            var inputArray = $("input[name='oneclo']:checked"); //取到所有的input 并且放到一个数组中
+            for (var i = 0; i < inputArray.length; i++) {
+                var input = inputArray[i];
+                filds += input.id + ",";//获得选中的input的id拼接成字符串
+            }
+            // 1. 选择的数量小于等于1 是错误的.
+            var fls = filds.split(',');
+            if (fls.length - 1 <= 1) {
+                alert("所选的分组不可少于一列");
+                return;
+            }
+            // 2. 选择的没有按照连续选择，也是错误的.
+            for (var i = 0; i < inputArray.length; i++) {
+                //比较次数在inputArray.length之内
+                if (i + 1 < inputArray.length) {
+                    //根据value的值判断是否是连续的列
+                    if (parseInt(inputArray[i].value) + 1 != inputArray[i + 1].value) {
+                        alert("所选的列不连续！");
+                        return;
+                    }
+                }
+            }
+            // 3. 选择的字段，在历史的选择中出现也是错误的.
+            if (multiTitle != undefined) {
+                for (var i = 0; i < fls.length; i++) {
+                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                        alert("错误:该列已经选择过.");
+                        return;
+                    }
+                }
+            }
+            //获取分组名称；
+            var name = prompt("输入一级表头名称", null);
+            if (name == null)
+                return;
+            //检查名称是否重复
+            if (multiTitle != undefined && multiTitle.indexOf(name) > 0) {
+                alert("错误:名称已经存在.");
+                return;
+            }
 
-            WinOpenFull(url);
-            //window.location.href = window.location.href;
+            //拼接目标数据.
+            multiTitle += name + "," + filds + ";";
+            //赋值
+            mapDtl.SetPara("MultiTitle", multiTitle);
+            mapDtl.Update();
+            window.location.href = window.location.href;
+        }
+         function AddGroup2() {
+            //获得配置信息.
+            var dtlID = GetQueryString("DtlID");
+            var mapDtl = new Entity("BP.Sys.MapDtl", dtlID);
+            //获取表头的参数信息
+            var multiTitle = mapDtl.GetPara("MultiTitle1");
+
+            //检查设置的完整性.
+            //求出来选择的字段.
+            var filds = "";
+            var inputArray = $("input[name='twoclo']:checked"); //取到所有的input 并且放到一个数组中
+            for (var i = 0; i < inputArray.length; i++) {
+                var input = inputArray[i];
+                filds += input.id + ",";//获得选中的input的id拼接成字符串
+            }
+            // 1. 选择的数量小于等于1 是错误的.
+            var fls = filds.split(',');
+            if (fls.length - 1 <= 1) {
+                alert("所选的分组不可少于一列");
+                return;
+            }
+            // 2. 选择的没有按照连续选择，也是错误的.
+            for (var i = 0; i < inputArray.length; i++) {
+                //比较次数在inputArray.length之内
+                if (i + 1 < inputArray.length) {
+                    //根据value的值判断是否是连续的列
+                    if (parseInt(inputArray[i].value) + 1 != inputArray[i + 1].value) {
+                        alert("所选的列不连续！");
+                        return;
+                    }
+                }
+            }
+            // 3. 选择的字段，在历史的选择中出现也是错误的.
+            if (multiTitle != undefined) {
+                for (var i = 0; i < fls.length; i++) {
+                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                        alert("错误:该列已经选择过.");
+                        return;
+                    }
+                }
+            }
+            //获取分组名称；
+            var name = prompt("输入二级表头名称", null);
+            if (name == null)
+                return;
+            //检查名称是否重复
+            if (multiTitle != undefined && multiTitle.indexOf(name) > 0) {
+                alert("错误:名称已经存在.");
+                return;
+            }
+
+            //拼接目标数据.
+            multiTitle += name + "," + filds + ";";
+            //赋值
+            mapDtl.SetPara("MultiTitle1", multiTitle);
+            mapDtl.Update();
+            window.location.href = window.location.href;
         }
     </script>
 </head>
@@ -142,8 +239,9 @@
     <div style="right:30px; position:absolute; z-index:100; ">
     </div>
 
-    <button id="Btn_New" onclick="AddGroup()"> 增加1级表头</button>
-    <button id="Btn_Delete" onclick="Delete()"> 删除</button>
+    <button id="Btn_New" onclick="AddGroup()"> 增加一级表头</button>
+    <button id="Btn_New" onclick="AddGroup2()"> 增加二级表头</button>
+
 
 
 </body>

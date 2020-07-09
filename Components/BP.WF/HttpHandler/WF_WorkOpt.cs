@@ -2811,7 +2811,8 @@ namespace BP.WF.HttpHandler
             // 审核信息.
             string msg = "";
             string writeImg = GetRequestVal("WriteImg");
-            writeImg = writeImg.Replace('~','+');
+            if(DataType.IsNullOrEmpty(writeImg) == false)
+                writeImg = writeImg.Replace('~','+');
             string dotype = GetRequestVal("ShowType");
             string doc = GetRequestVal("Doc");
             bool isCC = GetRequestVal("IsCC") == "1";

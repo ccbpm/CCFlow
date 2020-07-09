@@ -3917,7 +3917,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFromID, string nodeFromName, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null, string fwcView = null)
+            string cFlowInfo, string writeImg, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null, string fwcView = null)
         {
             if (at == ActionType.CallChildenFlow)
             {
@@ -3988,7 +3988,7 @@ namespace BP.WF
                 t.EmpToT = empNameTo;
             }
 
-
+            t.WriteDB = writeImg;
             t.Msg = msg;
             t.NodeData = "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName;
 
@@ -4004,6 +4004,7 @@ namespace BP.WF
             try
             {
                 t.Insert();
+
             }
             catch
             {
@@ -4056,7 +4057,7 @@ namespace BP.WF
         /// <param name="FID">FID</param>
         /// <param name="msg">审核信息</param>
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
-        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName, string fwcView = null)
+        public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName, string writeImg, string fwcView = null)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
@@ -4089,7 +4090,7 @@ namespace BP.WF
                 DBAccess.RunSQL(ps);
 
                 //写入日志.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null, null, null, null, fwcView);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, writeImg, optionName, null, null, null, null, null, fwcView);
                 return;
             }
 
@@ -7656,7 +7657,7 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="toEmps">抄送给: zhangsan,lisi,wangwu </param>
         /// <returns>执行结果</returns>
-        public static string Node_CCTo(Int64 workid, string toEmps)
+        public static string Node_CCTo(Int64 workid, string toEmps, int cctype = 0)
         {
             if (DataType.IsNullOrEmpty(toEmps) == true)
                 return "没有指定人";
@@ -7690,7 +7691,10 @@ namespace BP.WF
                 names += emp.Name + "、";
 
                 //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
-                list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No;
+                if (SystemConfig.CustomerNo.Equals("GXJSZX") == true)
+                    list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No + "_" + cctype;
+                else
+                    list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + emp.No;
                 if (list.IsExits == true)
                     continue; //判断是否存在?
 
@@ -9824,7 +9828,7 @@ namespace BP.WF
             NodeWorkCheck fwc = new NodeWorkCheck(fk_node);
 
             BP.WF.Dev2Interface.WriteTrackWorkCheck(fk_flow, fk_node, workid,
-                fid, checkNote, fwc.FWCOpLabel);
+                fid, checkNote, fwc.FWCOpLabel, null);
 
             //设置审核完成.
             BP.WF.Dev2Interface.Node_CC_SetSta(fk_node, workid, BP.Web.WebUser.No, BP.WF.CCSta.CheckOver);

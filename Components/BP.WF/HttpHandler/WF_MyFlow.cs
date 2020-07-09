@@ -416,7 +416,7 @@ namespace BP.WF.HttpHandler
                         string msg = BP.WF.Glo.DefVal_WF_Node_FWCDefInfo; // 设置默认值;
                         if (workCheck.FWCIsFullInfo == true)
                             msg = workCheck.FWCDefInfo;
-                        BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, this.currND.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel);
+                        BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, this.currND.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel,null);
                     }
 
                     BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);

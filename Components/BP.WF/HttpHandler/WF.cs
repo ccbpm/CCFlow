@@ -1854,7 +1854,7 @@ namespace BP.WF.HttpHandler
                 string checkNote = this.GetValFromFrmByKey("TB_" + workid + "_WorkCheck_Doc", null);
                 if (DataType.IsNullOrEmpty(checkNote) == false)
                 {
-                    BP.WF.Dev2Interface.WriteTrackWorkCheck(nd.FK_Flow, nd.NodeID, workid, Int64.Parse(dr["FID"].ToString()), checkNote, null);
+                    BP.WF.Dev2Interface.WriteTrackWorkCheck(nd.FK_Flow, nd.NodeID, workid, Int64.Parse(dr["FID"].ToString()), checkNote,null, null);
                 }
 
                 msg += "@对工作(" + dr["Title"] + ")处理情况如下";

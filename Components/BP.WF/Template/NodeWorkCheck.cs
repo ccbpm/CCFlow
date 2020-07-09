@@ -574,11 +574,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示数字签名？
         /// </summary>
-        public bool SigantureEnabel
+        public int SigantureEnabel
         {
             get
             {
-                return this.GetValBooleanByKey(NodeWorkCheckAttr.SigantureEnabel);
+                return this.GetValIntByKey(NodeWorkCheckAttr.SigantureEnabel);
             }
             set
             {
@@ -759,7 +759,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(NodeWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
                 map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "", "默认审核信息", true, false, 0, 50, 10);
-                map.AddBoolean(NodeWorkCheckAttr.SigantureEnabel, false, "操作人是否显示为图片签名？", true, true);
+                map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "操作人显示方式", true, true, NodeWorkCheckAttr.SigantureEnabel,"@0=不签名@1=图片签名@2=写字板");
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
 

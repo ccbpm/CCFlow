@@ -115,6 +115,7 @@ namespace BP.WF
         /// 表单数据
         /// </summary>
         public string FrmDB = null;
+        public string WriteDB = null;
         /// <summary>
         /// 主键值
         /// </summary>
@@ -720,6 +721,9 @@ namespace BP.WF
             //把frm日志写入到数据里.
             if (this.FrmDB != null)
                 DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+
+            if (DataType.IsNullOrEmpty(this.WriteDB ) == false)
+                DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
 
             #endregion 执行保存
 

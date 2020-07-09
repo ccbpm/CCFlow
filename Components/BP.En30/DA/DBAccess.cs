@@ -469,6 +469,8 @@ namespace BP.DA
         public static string GetBigTextFromDB(string tableName, string tablePK, string pkVal,
             string fileSaveField)
         {
+            if (DataType.IsNullOrEmpty(pkVal) == true)
+                return "";
             //对于特殊的数据库进行判断.
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.PostgreSQL

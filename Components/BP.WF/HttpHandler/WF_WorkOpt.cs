@@ -1491,7 +1491,7 @@ namespace BP.WF.HttpHandler
 
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian,
-                ActionType.HuiQian, "执行会签", null);
+                ActionType.HuiQian, "执行会签", null,null);
 
             string str = "";
             if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)
@@ -1598,7 +1598,7 @@ namespace BP.WF.HttpHandler
 
             fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
             ds.Tables.Add(wcDesc.ToDataTableField("WF_FrmWorkCheck")); //当前的节点审核组件定义，放入ds.
-
+            string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
             DataTable tkDt = new DataTable("Tracks");
             tkDt.Columns.Add("NodeID", typeof(int));
             tkDt.Columns.Add("NodeName", typeof(string));
@@ -1614,6 +1614,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("ActionType", typeof(int));
             tkDt.Columns.Add("Tag", typeof(string));
             tkDt.Columns.Add("FWCView", typeof(string));
+            tkDt.Columns.Add("WritImg", typeof(string));
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -1883,6 +1884,10 @@ namespace BP.WF.HttpHandler
                     row["ActionType"] = tk.HisActionType;
                     row["Tag"] = tk.Tag;
                     row["FWCView"] = fwc.FWCView;
+                    if(wcDesc.SigantureEnabel!=2)
+                        row["WritImg"] = "";
+                    else
+                        row["WritImg"] = DBAccess.GetBigTextFromDB(trackTable, "MyPK",tk.MyPK, "WriteDB");
                     tkDt.Rows.Add(row);
 
                     #region //审核组件附件数据
@@ -1922,7 +1927,7 @@ namespace BP.WF.HttpHandler
                         int biaoji = 0;
 
                         WorkCheck subwc = new WorkCheck(fk_flow, int.Parse(fk_flow + "01"), Int64.Parse(workId), 0);
-
+                        string subtrackTable = "ND" + int.Parse(fk_flow) + "Track";
                         Tracks subtks = subwc.HisWorkChecks;
                         //取出来子流程的所有的节点。
                         Nodes subNds = new Nodes(fk_flow);
@@ -1965,6 +1970,11 @@ namespace BP.WF.HttpHandler
                                     row["ActionType"] = mysubtk.HisActionType;
                                     row["Tag"] = mysubtk.Tag;
                                     row["FWCView"] = subFrmCheck.FWCView;
+                                    if (wcDesc.SigantureEnabel != 2)
+                                        row["WritImg"] = "";
+                                    else
+                                        row["WritImg"] = DBAccess.GetBigTextFromDB(subtrackTable, "MyPK", mysubtk.MyPK, "WriteDB");
+                                    tkDt.Rows.Add(row);
                                     tkDt.Rows.Add(row);
 
                                     if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -2081,6 +2091,14 @@ namespace BP.WF.HttpHandler
                     //row["T_CheckIndex"] = ++noneEmpIdx; zsy屏蔽2020.6.17
                     row["ActionType"] = ActionType.Forward;
                     row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                    if (wcDesc.SigantureEnabel != 2)
+                        row["WritImg"] = "";
+                    else
+                    {
+                        string sql = "Select MyPK From " + trackTable + "  WHERE ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + this.FK_Node + " AND  NDTo=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND EmpFrom = '" + WebUser.No + "'";
+                        row["WritImg"] = DBAccess.GetBigTextFromDB(trackTable, "MyPK", DBAccess.RunSQLReturnVal(sql)==null? null: DBAccess.RunSQLReturnVal(sql).ToString(), "WriteDB");
+                    }
+                       
                     tkDt.Rows.Add(row);
                 }
             }
@@ -2162,6 +2180,7 @@ namespace BP.WF.HttpHandler
                 return "err@登录信息丢失,请重新登录.";
 
             #region 定义变量.
+            string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
             NodeWorkCheck wcDesc = new NodeWorkCheck(this.FK_Node); // 当前节点的审核组件
             NodeWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;    //附件数据
@@ -2206,6 +2225,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("ActionType", typeof(int));
             tkDt.Columns.Add("Tag", typeof(string));
             tkDt.Columns.Add("FWCView", typeof(string));
+            tkDt.Columns.Add("WritImg", typeof(string));
 
             //流程附件.
             DataTable athDt = new DataTable("Aths");
@@ -2414,7 +2434,10 @@ namespace BP.WF.HttpHandler
                             row["DeptName"] = DeptName;
                             row["ActionType"] = tk.HisActionType;
                             row["Tag"] = tk.Tag;
-                           // row["FWCView"] = fwc.FWCView;
+                            if (wcDesc.SigantureEnabel != 2)
+                                row["WritImg"] = "";
+                            else
+                                row["WritImg"] = DBAccess.GetBigTextFromDB(trackTable, "MyPK", tk.MyPK, "WriteDB");
                             tkDt.Rows.Add(row);
 
                             #region 审核组件附件数据
@@ -2456,7 +2479,7 @@ namespace BP.WF.HttpHandler
                                 int biaoji = 0;
 
                                 WorkCheck subwc = new WorkCheck(fk_flow, int.Parse(fk_flow + "01"), Int64.Parse(workId), 0);
-
+                                string subtrackTable = "ND" + int.Parse(fk_flow) + "Track";
                                 Tracks subtks = subwc.HisWorkChecks;
                                 //取出来子流程的所有的节点。
                                 Nodes subNds = new Nodes(fk_flow);
@@ -2499,6 +2522,11 @@ namespace BP.WF.HttpHandler
                                            // row["T_CheckIndex"] = noneEmpIdx++;
                                             row["ActionType"] = mysubtk.HisActionType;
                                             row["Tag"] = mysubtk.Tag;
+                                            if (wcDesc.SigantureEnabel != 2)
+                                                row["WritImg"] = "";
+                                            else
+                                                row["WritImg"] = DBAccess.GetBigTextFromDB(subtrackTable, "MyPK", mysubtk.MyPK, "WriteDB");
+
                                             tkDt.Rows.Add(row);
 
                                             if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -2585,6 +2613,13 @@ namespace BP.WF.HttpHandler
                         //row["T_CheckIndex"] = ++noneEmpIdx;
                         row["ActionType"] = ActionType.Forward;
                         row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                        if (wcDesc.SigantureEnabel != 2)
+                            row["WritImg"] = "";
+                        else
+                        {
+                            string sql = "Select MyPK From " + trackTable + "  WHERE ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + this.FK_Node + " AND  NDTo=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND EmpFrom = '" + WebUser.No + "'";
+                            row["WritImg"] = DBAccess.GetBigTextFromDB(trackTable, "MyPK", DBAccess.RunSQLReturnVal(sql) == null ? null : DBAccess.RunSQLReturnVal(sql).ToString(), "WriteDB");
+                        }
                         tkDt.Rows.Add(row);
                     }
                 }
@@ -2605,6 +2640,13 @@ namespace BP.WF.HttpHandler
                     //row["T_CheckIndex"] = ++noneEmpIdx;
                     row["ActionType"] = ActionType.Forward;
                     row["Tag"] = Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                    if (wcDesc.SigantureEnabel != 2)
+                        row["WritImg"] = "";
+                    else
+                    {
+                        string sql = "Select MyPK From " + trackTable + "  WHERE ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + this.FK_Node + " AND  NDTo=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND EmpFrom = '" + WebUser.No + "'";
+                        row["WritImg"] = DBAccess.GetBigTextFromDB(trackTable, "MyPK", DBAccess.RunSQLReturnVal(sql) == null ? null : DBAccess.RunSQLReturnVal(sql).ToString(), "WriteDB");
+                    }
                     tkDt.Rows.Add(row);
                 }
             }
@@ -2768,6 +2810,8 @@ namespace BP.WF.HttpHandler
 
             // 审核信息.
             string msg = "";
+            string writeImg = GetRequestVal("WriteImg");
+            writeImg = writeImg.Replace('~','+');
             string dotype = GetRequestVal("ShowType");
             string doc = GetRequestVal("Doc");
             bool isCC = GetRequestVal("IsCC") == "1";
@@ -2829,7 +2873,7 @@ namespace BP.WF.HttpHandler
             if (isCC)
             {
                 // 写入审核信息，有可能是update数据。
-                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel,wcDesc.SigantureEnabel==2? writeImg:"");
 
                 //设置抄送状态 - 已经审核完毕.
                 Dev2Interface.Node_CC_SetSta(this.FK_Node, this.WorkID, WebUser.No, CCSta.CheckOver);
@@ -2848,7 +2892,7 @@ namespace BP.WF.HttpHandler
                     DBAccess.RunSQL(sql);
                 }
 
-                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel, fwcView);
+                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel, wcDesc.SigantureEnabel == 2 ? writeImg : "", fwcView);
             }
 
             if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件

@@ -1564,7 +1564,7 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.MySQL:
 
-                  string  sql2= "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS coid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
+                  string  sql2= "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS colid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
                     sql.Append(sql2);
                     //sql.AppendLine("SELECT ");
                     //sql.AppendLine("    column_name AS 'No',");

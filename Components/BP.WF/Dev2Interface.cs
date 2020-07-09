@@ -148,7 +148,7 @@ namespace BP.WF
             }
             if (!string.IsNullOrEmpty(keyword))
             {
-                sql += " and (CCToName LIKE '%@" + keyword + "@%' OR CCToDeptName LIKE '%@" + keyword + "%' OR CCToOrgName LIKE '%@" + keyword + "%')";
+                sql += " and (CCToName LIKE '%" + keyword + "%' OR CCToDeptName LIKE '%" + keyword + "%' OR CCToOrgName LIKE '%" + keyword + "%')";
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);

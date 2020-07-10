@@ -440,6 +440,14 @@ namespace BP.CCBill
 
                 rm = new RefMethod();
                 rm.GroupName = "报表定义";
+                rm.Title = "设置多表头"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
                 rm.Title = "列的顺序"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -581,6 +589,14 @@ namespace BP.CCBill
         public string DoRpt_ColsChose()
         {
             return "../../CCBill/Admin/ColsChose.htm?FrmID=" + this.No;
+        }
+        /// <summary>
+        /// 设置多表头
+        /// </summary>
+        /// <returns></returns>
+        public string DoRptMTitle()
+        {
+            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No + "&DoType=Bill";
         }
         /// <summary>
         /// 列的顺序

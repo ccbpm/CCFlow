@@ -524,14 +524,13 @@ namespace BP.Sys
         {
             return "../../Comm/Sys/SearchSetting.htm?EnsName=" + this.No;
         }
-
         /// <summary>
         /// 多表头
         /// </summary>
         /// <returns></returns>
         public string MultiTitle()
         {
-            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No;
+            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No+"&DoType=Search";
         }
         /// <summary>
         /// 生成他的Attrs

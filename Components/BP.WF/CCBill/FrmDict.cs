@@ -30,7 +30,7 @@ namespace BP.CCBill
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                 {
                     uac.IsDelete = false;
                     uac.IsUpdate = true;
@@ -51,7 +51,7 @@ namespace BP.CCBill
             get
             {
                 string s = this.GetValStrByKey(MapDataAttr.PTable);
-                if(DataType.IsNullOrEmpty(s) == true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }
@@ -116,7 +116,7 @@ namespace BP.CCBill
                 this.SetValByKey(FrmDictAttr.BtnNewModel, value);
             }
         }
-        
+
         /// <summary>
         /// 单据格式
         /// </summary>
@@ -178,7 +178,7 @@ namespace BP.CCBill
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_MapData", "实体表单");
-                
+
                 map.CodeStruct = "4";
 
                 #region 基本属性.
@@ -203,7 +203,7 @@ namespace BP.CCBill
                   "@0=4列@1=6列@2=上下模式3列");
 
                 map.AddDDLSysEnum(FrmAttr.EntityEditModel, 0, "编辑模式", true, true, FrmAttr.EntityEditModel, "@0=表格@1=行编辑");
-                map.SetHelperAlert(FrmAttr.EntityEditModel,"用什么方式打开实体列表进行编辑0=只读查询模式SearchDict.htm,1=行编辑模式SearchEditer.htm");
+                map.SetHelperAlert(FrmAttr.EntityEditModel, "用什么方式打开实体列表进行编辑0=只读查询模式SearchDict.htm,1=行编辑模式SearchEditer.htm");
                 #endregion 外观.
 
                 #region 实体表单.
@@ -222,7 +222,7 @@ namespace BP.CCBill
                 #region MyBill - 按钮权限.
                 map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
-                   "@0=表格模式@1=卡片模式@2=不可用",true);
+                   "@0=表格模式@1=卡片模式@2=不可用", true);
 
 
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
@@ -232,7 +232,7 @@ namespace BP.CCBill
                 //map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
-               // map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
+                // map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
@@ -294,7 +294,7 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
-              //  map.AddRefMethod(rm);
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "单据url的API"; // "设计表单";
@@ -349,7 +349,7 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-                map.AddRefMethod(rm);             
+                map.AddRefMethod(rm);
                 #endregion 基本功能.
 
                 #region 权限规则.
@@ -420,6 +420,15 @@ namespace BP.CCBill
 
                 rm = new RefMethod();
                 rm.GroupName = "报表定义";
+                rm.Title = "设置多表头"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
                 rm.Title = "列的顺序"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -441,7 +450,7 @@ namespace BP.CCBill
         }
         #endregion
 
-        protected  void InsertCtrlModel()
+        protected void InsertCtrlModel()
         {
             //保存权限表
             CtrlModel ctrl = new CtrlModel();
@@ -451,8 +460,6 @@ namespace BP.CCBill
             ctrl.IsEnableAll = true;
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
-            
-            
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
@@ -485,7 +492,7 @@ namespace BP.CCBill
             ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
-           
+
         }
 
         protected override void afterInsertUpdateAction()
@@ -721,6 +728,14 @@ namespace BP.CCBill
         public string DoRpt_ColsChose()
         {
             return "../../CCBill/Admin/ColsChose.htm?FrmID=" + this.No;
+        }
+        /// <summary>
+        /// 设置多表头
+        /// </summary>
+        /// <returns></returns>
+        public string DoRptMTitle()
+        {
+            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No + "&DoType=Bill";
         }
         /// <summary>
         /// 列的顺序

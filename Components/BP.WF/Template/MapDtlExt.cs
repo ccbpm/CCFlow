@@ -1257,7 +1257,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMultiTitle()
         {
-            return "../../Admin/FoolFormDesigner/DtlSetting/MultiTitle.htm?DtlID=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No + "&DoType=Dtl";
         }
         /// <summary>
         /// 设计自由表单

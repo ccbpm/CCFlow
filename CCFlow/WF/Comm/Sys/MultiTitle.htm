@@ -149,10 +149,12 @@
             var _secHtml = "";
             var currentGroup = "";
             var idx1 = 0;
-            for (var idx = 0; idx < mapAttrs.length; idx++) {
-                var attr = mapAttrs[idx];
+            var idx = 0;
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
                 if (attr.UIVisible == 0)
                     continue;
+                idx++;
                 //判断该字段是否隶属于二级表头的分组
                 if (multiTitle.indexOf("," + attr.KeyOfEn + ",") == -1)
                     _html += "<th rowspan=2><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";

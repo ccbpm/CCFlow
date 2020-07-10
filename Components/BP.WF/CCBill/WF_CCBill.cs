@@ -981,8 +981,8 @@ namespace BP.CCBill
                 if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
                     || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
                 {
-                    qo.addAnd();
-                    qo.AddWhere("Starter", "=", WebUser.No);
+                    //qo.addAnd();
+                    //qo.AddWhere("Starter", "=", WebUser.No);
                 }
             }
            

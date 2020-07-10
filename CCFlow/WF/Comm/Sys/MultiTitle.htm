@@ -161,7 +161,7 @@
                 else {
                     var fields = getMutliFile(attr.KeyOfEn, multiTitle);
                     if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
-                        _html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',0)> 删除</button></th>";
+                        _html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><label><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "</label>&nbsp;<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',0)> 删除</button></th>";
                         currentGroup = fields[0];
                         idx1++;
                     }
@@ -207,7 +207,7 @@
                         thrcolspan = 0;
                     }
             
-                    _html += "<th rowspan=3><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</th>";
+                    _html += "<th rowspan=3><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</label></th>";
                 }
                    
                 //属于三级分组下面的字段
@@ -217,7 +217,7 @@
                         thrcolspan += 1;
                         curThrGroup = fields[0];
                         if (curThrGroup != "" && curThrGroup != fields[0]) {
-                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',1)> 删除</button></th>";
+                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + fields[0] + "&nbsp;<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',1)> 删除</button></th>";
                             thrcolspan = 0;
                         }
                     } else {

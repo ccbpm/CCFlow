@@ -293,6 +293,7 @@
                     continue;
                 newTitle += str + ";"; //重新组合newtitle.
             }
+            newTitle = newTitle.substr(0, newTitle.length - 1);
             if (multiType == 0)
                 enEntity.SetPara("MultiTitle", newTitle);
             else

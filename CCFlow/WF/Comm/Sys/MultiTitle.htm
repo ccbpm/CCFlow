@@ -130,11 +130,14 @@
          */
         function showTable(mapAttrs) {
             var _html = "<tr>";
+            var idx1 = 0;
             for (var idx = 0; idx < mapAttrs.length; idx++) {
                 var attr = mapAttrs[idx];
                 if (attr.UIVisible == 0)
                     continue;
-                _html += "<th><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
+                idx1++;
+
+                _html += "<th><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</label></th>";
             }
             _html += "</tr>";
             return _html;

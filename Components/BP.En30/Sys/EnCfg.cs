@@ -541,8 +541,15 @@ namespace BP.Sys
             Entities ens = ClassFactory.GetEns(this.No);
             if (ens == null)
                 return "err@" + this.No + ",类名错误.";
-            
-            MapAttrs attrs = ens.GetNewEntity.EnMap.Attrs.ToMapAttrs;
+            MapAttrs attrs = new MapAttrs(); 
+            MapData md = new MapData();
+            md.No = this.No;
+            int count = md.RetrieveFromDBSources();
+            if (count == 0)
+                attrs = ens.GetNewEntity.EnMap.Attrs.ToMapAttrs;
+            else
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.No, MapAttrAttr.Idx);
+
             return attrs.ToJson();
         }
     }

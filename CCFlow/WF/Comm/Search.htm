@@ -1119,6 +1119,10 @@
             }
             //三级表头
             if (secRowSpan == 2) {
+                if (thrcolspan.title != undefined) {
+                    threeColumns.push(thrcolspan);
+                    thrcolspan = {};
+                }
                 if (curTreGroup == "" || curTreGroup != secfilds[0]) {
                     curTreGroup = secfilds[0];
                     threeColumns.push({
@@ -1132,7 +1136,7 @@
             }
 
             if (secRowSpan == 0) {
-                filds = getMutliFile(filds[0], secMultiTitle);
+                filds = getMutliFile(keyOfEn, thrMultiTitle);
                 if (curTreGroup == "" || curTreGroup != filds[0]) {
                     //增加三级表头
                     if (curTreGroup != "" && curTreGroup != filds[0]) {

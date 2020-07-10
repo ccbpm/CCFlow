@@ -8415,8 +8415,9 @@ namespace BP.WF
         /// <param name="msgDoc">消息内容</param>
         /// <param name="pFlowNo">父流程编号(可以为null)</param>
         /// <param name="pWorkID">父流程WorkID(可以为0)</param>
+        /// <param name="FID">FID(可以为0)</param>
         /// <returns></returns>
-        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc, string pFlowNo = null, Int64 pWorkID = 0)
+        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc, string pFlowNo = null, Int64 pWorkID = 0,int FID=0)
         {
             Flow fl = new Flow(fk_flow);
             Node nd = new Node(fk_node);
@@ -8426,7 +8427,7 @@ namespace BP.WF
             CCList list = new CCList();
             //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
             list.MyPK = workID + "_" + fk_node + "_" + toEmpNo;
-
+            list.FID = FID;
             list.FK_Flow = fk_flow;
             list.FlowName = fl.Name;
             list.FK_Node = fk_node;

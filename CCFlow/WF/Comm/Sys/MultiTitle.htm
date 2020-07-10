@@ -11,25 +11,55 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../../Admin.js"></script>
     <script type="text/javascript" language="javascript">
+
+        //执行类型.
+        var doType = GetQueryString("DoType"); //执行类型.
+        var multiTitle = null;  //表头
+        var multiTitle1 = null; //表头1
+        var mapAttrs = null;
+        var enEntity = null; //存储数据的实体。
+        var ensName = GetQueryString("EnsName");
+
         //页面启动函数.
         $(function () {
-
             //获得配置信息.
             var ensName = GetQueryString("EnsName");
 
-             //全局配置.
-            var en = new Entity("BP.Sys.EnCfg", ensName);
+            //执行类型.
+            doType = GetQueryString("DoType");
+            if (doType == null)  doType = "Search";
 
-            var multi = en.GetPara("MultiTitle");
-            if (multi == null)
-                multi = "";
+            //根据不同的类型获取-全局配置.
+            if (doType == "Search") {
+                enEntity = new Entity("BP.Sys.EnCfg", ensName);
 
+                //生成属性集合.
+                mapAttrs = en.DoMethodReturnJSON("GenerAttrs");
+            }
 
-            //生成属性集合.
-            var mapAttrs = en.DoMethodReturnJSON("GenerAttrs");
-             
+            if (doType == "Dtl") {
+                enEntity = new Entity("BP.Sys.MapDtl", ensName);
+
+                //获得字段集合.
+                mapAttrs = new Entities("BP.Sys.MapAttrs")
+                mapAttrs.Retrieve("FK_MapData", ensName, "Idx");
+            }
+
+            if (doType == "Bill") {
+                enEntity = new Entity("BP.Sys.MapData", ensName);
+
+                //获得字段集合.
+                mapAttrs = new Entities("BP.Sys.MapAttrs")
+                mapAttrs.Retrieve("FK_MapData", ensName, "Idx");
+            }
+
+            //获得表头.
+            multiTitle = enEntity.GetPara("MultiTitle");
+            multiTitle1 = enEntity.GetPara("MultiTitle1");
+
             var isMulti = false;
-            if (multi != null && multi != undefined && multi != ""  && multi != "undefined")
+            if (MultiTitle != null && MultiTitle != undefined
+                && MultiTitle != "" && MultiTitle != "undefined")
                 isMulti = true;
 
             var html = "<table style='width:90%;'>";
@@ -38,20 +68,21 @@
             html += "<tr>";
             var secHtml = "";
             var currentGroup = "";
-             var idx = 0;
-             var idx1 = 0;
+            var idx = 0;
+            var idx1 = 0;
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
                 if (attr.UIVisible == 0)
                     continue;
                 if (isMulti = true) {
-                    if (multi.indexOf(attr.KeyOfEn + ",") == -1)
-                        html += "<th rowspan=2><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</th>";
+                    if (MultiTitle.indexOf(attr.KeyOfEn + ",") == -1) {
+                        html += "<th rowspan=2><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
+                    }
                     else {
-                        var fields = getMutliFile(attr.KeyOfEn, multi);
-                        
+                        var fields = getMutliFile(attr.KeyOfEn, MultiTitle);
+
                         if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
-                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" +  fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('"+fields[0]+"')> 删除</button></th>";
+                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "')> 删除</button></th>";
                             currentGroup = fields[0];
                             idx1++;
                         }
@@ -69,17 +100,12 @@
             html += "</table>";
             $("#Table").html(html);
             //形成标头.
-
         });
 
         function DeleteSpecTitle(title) {
 
             if (window.confirm('您确定要删除【' + title + '】吗?') == false)
                 return;
-
-            var mapDtl = new Entity("BP.Sys.EnCfg", GetQueryString("ensName"));
-            //获取表头的参数信息
-            var multiTitle = mapDtl.GetPara("MultiTitle");
 
             //按照;分开.
             var strs = multiTitle.split(';');
@@ -92,14 +118,15 @@
                 newTitle += str + ";"; //重新组合newtitle.
             }
 
-            mapDtl.SetPara("MultiTitle", newTitle); 
-            mapDtl.Update();
+            enEntity.SetPara("MultiTitle", newTitle);
+            enEntity.Update();
 
             window.location.href = window.location;
         }
 
         function getMutliFile(keyOfEn, multi) {
-            var fields = multi.split(";");
+
+            var fields = multiTitle.split(";");
             for (var i = 0; i < fields.length; i++) {
                 var str = fields[i];
                 if (str == "")
@@ -113,12 +140,6 @@
         }
 
         function AddGroup() {
-
-            //获得配置信息.
-            var dtlID = GetQueryString("EnsName");
-            var mapDtl = new Entity("BP.Sys.EnCfg", dtlID);
-            //获取表头的参数信息
-            var multiTitle = mapDtl.GetPara("MultiTitle");
 
             //检查设置的完整性.
             //求出来选择的字段.
@@ -148,7 +169,7 @@
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle != undefined) {
                 for (var i = 0; i < fls.length; i++) {
-                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                    if (MultiTitle != "" && MultiTitle.indexOf(fls[i]) > 0) {
                         alert("错误:该列已经选择过.");
                         return;
                     }
@@ -167,16 +188,11 @@
             //拼接目标数据.
             multiTitle += name + "," + filds + ";";
             //赋值
-            mapDtl.SetPara("MultiTitle", multiTitle);
-            mapDtl.Update();
+            enEntity.SetPara("MultiTitle", multiTitle);
+            enEntity.Update();
             window.location.href = window.location.href;
         }
-         function AddGroup2() {
-            //获得配置信息.
-            var dtlID = GetQueryString("EnsName");
-            var mapDtl = new Entity("BP.Sys.EnCfg", dtlID);
-            //获取表头的参数信息
-            var multiTitle = mapDtl.GetPara("MultiTitle1");
+        function AddGroup2() {
 
             //检查设置的完整性.
             //求出来选择的字段.
@@ -204,9 +220,9 @@
                 }
             }
             // 3. 选择的字段，在历史的选择中出现也是错误的.
-            if (multiTitle != undefined) {
+            if (multiTitle1 != undefined) {
                 for (var i = 0; i < fls.length; i++) {
-                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                    if (multiTitle1 != "" && multiTitle1.indexOf(fls[i]) > 0) {
                         alert("错误:该列已经选择过.");
                         return;
                     }
@@ -217,16 +233,17 @@
             if (name == null)
                 return;
             //检查名称是否重复
-            if (multiTitle != undefined && multiTitle.indexOf(name) > 0) {
+            if (multiTitle1 != undefined && multiTitle1.indexOf(name) > 0) {
                 alert("错误:名称已经存在.");
                 return;
             }
 
             //拼接目标数据.
-            multiTitle += name + "," + filds + ";";
+            multiTitle1 += name + "," + filds + ";";
+
             //赋值
-            mapDtl.SetPara("MultiTitle1", multiTitle);
-            mapDtl.Update();
+            enEntity.SetPara("MultiTitle1", multiTitle1);
+            enEntity.Update();
             window.location.href = window.location.href;
         }
     </script>

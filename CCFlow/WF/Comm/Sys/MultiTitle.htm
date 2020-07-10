@@ -27,7 +27,7 @@
 
             //执行类型.
             doType = GetQueryString("DoType");
-            if (doType == null)  doType = "Search";
+            if (doType == null) doType = "Search";
 
             //根据不同的类型获取-全局配置.
             if (doType == "Search") {
@@ -57,9 +57,9 @@
             multiTitle = enEntity.GetPara("MultiTitle");
             multiTitle1 = enEntity.GetPara("MultiTitle1");
 
-           //是否是三级表头
+            //是否是三级表头
             var isThrMulti = false;
-            if (multiTitle1 == null ||  multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
+            if (multiTitle1 == null || multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
                 multiTitle1 = "";
             if (multiTitle1 != "")
                 isThrMulti = true;
@@ -68,19 +68,19 @@
             var isSecMulti = false;
             if (multiTitle == null || multiTitle == undefined || multiTitle == "" || multiTitle == "undefined")
                 multiTitle = "";
-            if (isThrMulti==false && multiTitle != "")
+            if (isThrMulti == false && multiTitle != "")
                 isSecMulti = true;
 
             var _html = "<table style='width:90%;'>";
             _html += "<caption><img style='margin-top:5px;'; src='../../Img/Event.png' />多表头</caption>";
 
-           
+
             //一级表头
             if (isThrMulti == false && isSecMulti == false)
                 _html = showTable(mapAttrs);
-           //二级表头
+            //二级表头
             if (isSecMulti == true)
-                _html = showSecTable(mapAttrs,multiTitle);
+                _html = showSecTable(mapAttrs, multiTitle);
             //三级表头
             if (isThrMulti == true)
                 _html = showThrTable(mapAttrs, multiTitle, multiTitle1);
@@ -121,7 +121,7 @@
             //    _html += "<tr>" + secHtml + "</tr>";
             //_html += "</table>";
             //$("#Table").html(_html);
-           
+
         });
 
         /**
@@ -209,10 +209,10 @@
                         _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
                         thrcolspan = 0;
                     }
-            
+
                     _html += "<th rowspan=3><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</label></th>";
                 }
-                   
+
                 //属于三级分组下面的字段
                 if (keyIdx == 2) {
                     var fields = getMutliFile(attr.KeyOfEn, multiTitle1);
@@ -250,12 +250,12 @@
                             curThrGroup = thrfields[0];
                             if (curThrGroup != "" && curThrGroup != thrfields[0]) {
                                 _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + thrfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + thrfields[0] + "',1)> 删除</button></th>";
-                               
+
                                 thrcolspan = 0;
                             }
                         } else {
                             if (isSecChange == true)
-                            thrcolspan += secfields.length - 1;
+                                thrcolspan += secfields.length - 1;
                         }
 
                     } else {
@@ -279,8 +279,8 @@
             return _html;
         }
 
-        function DeleteSpecTitle(title,multiType) {
-            
+        function DeleteSpecTitle(title, multiType) {
+
             if (window.confirm('您确定要删除【' + title + '】吗?') == false)
                 return;
 
@@ -418,17 +418,17 @@
                             curIdx = idx;
                         }
                     }
-                    
+
                 }
-                
-                
 
 
 
 
-                   
+
+
+
             }
-            
+
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle1 != undefined) {
                 for (var i = 0; i < fls.length; i++) {

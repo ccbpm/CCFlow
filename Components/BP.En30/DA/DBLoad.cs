@@ -148,24 +148,51 @@ namespace BP.DA
             }
             return count;
         }
-
+        /// <summary>
+        /// 获得第一个名字
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static string GenerFirstTableName(string fileName)
         {
             return DA_DbLoad.GenerTableNameByIndex(fileName, 0);
         }
+        /// <summary>
+        /// 按照顺序获得名字
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static string GenerTableNameByIndex(string fileName, int index)
         {
             return DA_DbLoad.GenerTableNameByIndex(fileName, index);
         }
+        /// <summary>
+        /// 获得名字集合
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static string[] GenerTableNames(string fileName)
         {
             return DA_DbLoad.GenerTableNames(fileName);
         }
+        /// <summary>
+        /// 获得excel文件中的数据，按照指定顺序号的idx.
+        /// </summary>
+        /// <param name="fileFullName">绝对文件路径</param>
+        /// <param name="sheetIdx">顺序号</param>
+        /// <returns>返回数据</returns>
         public static DataTable ReadExcelFileToDataTable(string fileFullName, int sheetIdx = 0)
         {
             string tableName = GenerTableNameByIndex(fileFullName, sheetIdx);
             return ReadExcelFileToDataTableBySQL(fileFullName, tableName);
         }
+        /// <summary>
+        /// 获得excel文件中的数据，按照指定tableName.
+        /// </summary>
+        /// <param name="fileFullName">绝对文件路径</param>
+        /// <param name="tableName">顺序号</param>
+        /// <returns>返回数据</returns>
         public static DataTable ReadExcelFileToDataTable(string fileFullName, string tableName)
         {
             return ReadExcelFileToDataTableBySQL(fileFullName, tableName);

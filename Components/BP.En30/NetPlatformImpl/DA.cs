@@ -69,34 +69,26 @@ namespace BP.NetPlatformImpl
         public static string[] GenerTableNames(string fileName)
         {
             string strConn = "Provider=Microsoft.Jet.Oledb.4.0;Data Source=" + fileName + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1;'";
-            try
+            if (fileName.ToLower().Contains(".xlsx"))
+                strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1\"";
+
+            OleDbConnection con = new OleDbConnection(strConn);
+            con.Open();
+
+            //计算出有多少个工作表sheet   
+            DataTable dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            if (dt == null)
+                return null;
+
+            String[] excelSheets = new String[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                if (fileName.ToLower().Contains(".xlsx"))
-                {
-                    strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1\"";
-                }
-
-                OleDbConnection con = new OleDbConnection(strConn);
-                con.Open();
-                //计算出有多少个工作表sheet   
-                DataTable dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                if (dt == null)
-                    return null;
-
-                String[] excelSheets = new String[dt.Rows.Count];
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    excelSheets[i] = dt.Rows[i]["TABLE_NAME"].ToString();
-                }
-
-                con.Close();
-                con.Dispose();
-                return excelSheets;
+                excelSheets[i] = dt.Rows[i]["TABLE_NAME"].ToString();
             }
-            catch (Exception ex)
-            {
-                throw new Exception("@获取table出错误：" + ex.Message + strConn);
-            }
+
+            con.Close();
+            con.Dispose();
+            return excelSheets;
         }
 
         public static DataTable ReadExcelFileToDataTableBySQL(string filePath, string tableName)

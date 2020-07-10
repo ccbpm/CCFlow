@@ -3464,7 +3464,8 @@ namespace BP.WF.HttpHandler
             dtDept.TableName = "Depts";
             ds.Tables.Add(dtDept);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle 
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dtDept.Columns[0].ColumnName = "No";
                 dtDept.Columns[1].ColumnName = "Name";

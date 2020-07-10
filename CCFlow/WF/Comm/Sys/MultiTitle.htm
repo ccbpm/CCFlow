@@ -191,6 +191,7 @@
                 var attr = mapAttrs[idx];
                 if (attr.UIVisible == 0)
                     continue;
+                idx1++;
                 //判断这个字段是隶属于那个什么
                 var keyIdx = 1;
                 if (multiTitle.indexOf("," + attr.KeyOfEn + ",") != -1)
@@ -206,7 +207,7 @@
                         thrcolspan = 0;
                     }
             
-                    _html += "<th rowspan=3>" + attr.Name + "</th>";
+                    _html += "<th rowspan=3><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</th>";
                 }
                    
                 //属于三级分组下面的字段

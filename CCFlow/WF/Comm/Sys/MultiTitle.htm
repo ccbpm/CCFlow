@@ -392,6 +392,11 @@
             // 2. 选择的没有按照连续选择，也是错误的.
             var curIdx = 0;
             for (var idx = 0; idx < mapAttrs.length; idx++) {
+                var attr = mapAttrs[idx];
+                if (attr.UIVisible == 0) {
+                    if (curIdx != 0) curIdx++;
+                    continue;
+                }
                 if (filds.indexOf(mapAttrs[idx].KeyOfEn + ",") != -1) {
                     if (curIdx != 0 && (curIdx + 1) != idx) {
                         alert("所选的列不连续！");

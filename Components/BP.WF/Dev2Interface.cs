@@ -8464,8 +8464,7 @@ namespace BP.WF
 
             list.RDT = DataType.CurrentDataTime; //抄送日期.
             list.Rec = WebUser.No;
-            list.WorkID = workID;
-            list.FID = 0;
+            list.WorkID = workID;          
             list.PFlowNo = pFlowNo;
             list.PWorkID = pWorkID;
 

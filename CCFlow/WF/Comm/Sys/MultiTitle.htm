@@ -34,7 +34,7 @@
                 enEntity = new Entity("BP.Sys.EnCfg", ensName);
 
                 //生成属性集合.
-                mapAttrs = en.DoMethodReturnJSON("GenerAttrs");
+                mapAttrs = enEntity.DoMethodReturnJSON("GenerAttrs");
             }
 
             if (doType == "Dtl") {
@@ -57,58 +57,234 @@
             multiTitle = enEntity.GetPara("MultiTitle");
             multiTitle1 = enEntity.GetPara("MultiTitle1");
 
-            var isMulti = false;
-            if (MultiTitle != null && MultiTitle != undefined
-                && MultiTitle != "" && MultiTitle != "undefined")
-                isMulti = true;
+           //是否是三级表头
+            var isThrMulti = false;
+            if (multiTitle1 == null ||  multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
+                multiTitle1 = "";
+            if (multiTitle1 != "")
+                isThrMulti = true;
 
-            var html = "<table style='width:90%;'>";
-            html += "<caption><img style='margin-top:5px;'; src='../../Img/Event.png' />多表头</caption>";
+            //是否是二级表头
+            var isSecMulti = false;
+            if (multiTitle == null || multiTitle == undefined || multiTitle == "" || multiTitle == "undefined")
+                multiTitle = "";
+            if (isThrMulti==false && multiTitle != "")
+                isSecMulti = true;
 
-            html += "<tr>";
-            var secHtml = "";
-            var currentGroup = "";
-            var idx = 0;
-            var idx1 = 0;
-            for (var i = 0; i < mapAttrs.length; i++) {
-                var attr = mapAttrs[i];
-                if (attr.UIVisible == 0)
-                    continue;
-                if (isMulti = true) {
-                    if (MultiTitle.indexOf(attr.KeyOfEn + ",") == -1) {
-                        html += "<th rowspan=2><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
-                    }
-                    else {
-                        var fields = getMutliFile(attr.KeyOfEn, MultiTitle);
+            var _html = "<table style='width:90%;'>";
+            _html += "<caption><img style='margin-top:5px;'; src='../../Img/Event.png' />多表头</caption>";
 
-                        if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
-                            html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "')> 删除</button></th>";
-                            currentGroup = fields[0];
-                            idx1++;
-                        }
-                        secHtml += "<th>" + attr.Name + "</th>";
-                    }
-                } else {
-                    html += "<th>" + attr.Name + "</th>";
-                }
-                idx++;
+           
+            //一级表头
+            if (isThrMulti == false && isSecMulti == false)
+                _html = showTable(mapAttrs);
+           //二级表头
+            if (isSecMulti == true)
+                _html = showSecTable(mapAttrs,multiTitle);
+            //三级表头
+            if (isThrMulti == true)
+                _html = showThrTable(mapAttrs, multiTitle, multiTitle1);
 
-            }
-            html += "</tr>";
-            if (isMulti = true)
-                html += "<tr>" + secHtml + "</tr>";
-            html += "</table>";
-            $("#Table").html(html);
-            //形成标头.
+            _html += "</table>";
+            $("#Table").html(_html);
+
+            //var secHtml = "";
+            //var currentGroup = "";
+            //var idx = 0;
+            //var idx1 = 0;
+            //for (var i = 0; i < mapAttrs.length; i++) {
+            //    var attr = mapAttrs[i];
+            //    if (attr.UIVisible == 0)
+            //        continue;
+            //    if (isSecMulti == true) {
+            //        if (multiTitle.indexOf(attr.KeyOfEn + ",") == -1) {
+            //            _html += "<th rowspan=2><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
+            //        }
+            //        else {
+            //            var fields = getMutliFile(attr.KeyOfEn, multiTitle);
+
+            //            if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+            //                _html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "')> 删除</button></th>";
+            //                currentGroup = fields[0];
+            //                idx1++;
+            //            }
+            //            secHtml += "<th>" + attr.Name + "</th>";
+            //        }
+            //    } else {
+            //        _html += "<th>" + attr.Name + "</th>";
+            //    }
+            //    idx++;
+
+            //}
+            //_html += "</tr>";
+            //if (isMulti = true)
+            //    _html += "<tr>" + secHtml + "</tr>";
+            //_html += "</table>";
+            //$("#Table").html(_html);
+           
         });
 
-        function DeleteSpecTitle(title) {
+        /**
+         * 只有一级表头的解析
+         * @param mapAttrs
+         */
+        function showTable(mapAttrs) {
+            var _html = "<tr>";
+            for (var idx = 0; idx < mapAttrs.length; idx++) {
+                var attr = mapAttrs[idx];
+                if (attr.UIVisible == 0)
+                    continue;
+                _html += "<th><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
+            }
+            _html += "</tr>";
+            return _html;
+        }
+        /**
+         * 二级表头的解析
+         * @param mapAttrs
+         * @param multiTitle
+         */
+        function showSecTable(mapAttrs, multiTitle) {
+            var _html = "<tr>";
+            var _secHtml = "";
+            var currentGroup = "";
+            var idx1 = 0;
+            for (var idx = 0; idx < mapAttrs.length; idx++) {
+                var attr = mapAttrs[idx];
+                if (attr.UIVisible == 0)
+                    continue;
+                //判断该字段是否隶属于二级表头的分组
+                if (multiTitle.indexOf("," + attr.KeyOfEn + ",") == -1)
+                    _html += "<th rowspan=2><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx + "' type='checkbox'/>" + attr.Name + "</label></th>";
+                else {
+                    var fields = getMutliFile(attr.KeyOfEn, multiTitle);
+                    if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+                        _html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><input name='twoclo' id='" + fields[0] + "' value='" + idx1 + "' type='checkbox'/>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',0)> 删除</button></th>";
+                        currentGroup = fields[0];
+                        idx1++;
+                    }
+                    _secHtml += "<th>" + attr.Name + "</th>";
+                }
+            }
+            _html += "</tr>";
+            _html += "<tr>" + _secHtml + "</tr>";
+            return _html;
+        }
+        /**
+         * 三级表头的解析
+         * @param mapAttrs
+         * @param multiTitle
+         * @param multiTitle1
+         */
+        function showThrTable(mapAttrs, multiTitle, multiTitle1) {
+            var _html = "<tr>";
+            var _secHtml = "";
+            var _thrHtml = "";
+            var curSecGroup = "";
+            var curThrGroup = "";
+            var idx1 = 0;
+            var thrcolspan = 0;
+            var isSecChange = false;
+            for (var idx = 0; idx < mapAttrs.length; idx++) {
+                var attr = mapAttrs[idx];
+                if (attr.UIVisible == 0)
+                    continue;
+                //判断这个字段是隶属于那个什么
+                var keyIdx = 1;
+                if (multiTitle.indexOf("," + attr.KeyOfEn + ",") != -1)
+                    keyIdx = 1;
+                else if (multiTitle1.indexOf("," + attr.KeyOfEn + ",") != -1)
+                    keyIdx = 2;
+                else
+                    keyIdx = 3;
 
+                if (keyIdx == 3) {
+                    if (thrcolspan != 0) {
+                        _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
+                        thrcolspan = 0;
+                    }
+            
+                    _html += "<th rowspan=3>" + attr.Name + "</th>";
+                }
+                   
+                //属于三级分组下面的字段
+                if (keyIdx == 2) {
+                    var fields = getMutliFile(attr.KeyOfEn, multiTitle1);
+                    if (fields != "" && (curThrGroup == "" || curThrGroup != fields[0])) {
+                        thrcolspan += 1;
+                        curThrGroup = fields[0];
+                        if (curThrGroup != "" && curThrGroup != fields[0]) {
+                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + fields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',1)> 删除</button></th>";
+                            thrcolspan = 0;
+                        }
+                    } else {
+                        thrcolspan += 1;
+                    }
+                    _secHtml += "<th rowspan=2>" + attr.Name + "</th>";
+                }
+                //属于二级分组下的字段
+                if (keyIdx == 1) {
+                    //增加字段
+                    _thrHtml += "<th><label>" + attr.Name + "</label></th>";
+                    var secfields = getMutliFile(attr.KeyOfEn, multiTitle);
+
+                    //判断是否在三级分组列表下
+                    if (multiTitle1.indexOf("," + secfields[0] + ",") != -1) {
+                        if (secfields != "" && (curSecGroup == "" || curSecGroup != secfields[0])) {
+                            _secHtml += "<th rowspan=1 colspan=" + (secfields.length - 1) + " style='text-align:center' >" + secfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + secfields[0] + "',0)> 删除</button></th>";
+                            curSecGroup = secfields[0];
+                            isSecChange = true;
+                            idx1++;
+                        } else {
+                            isSecChange = false;
+                        }
+                        var thrfields = getMutliFile(secfields[0], multiTitle1);
+                        if (thrfields != "" && (curThrGroup == "" || curThrGroup != thrfields[0])) {
+                            thrcolspan += secfields.length - 1;
+                            curThrGroup = thrfields[0];
+                            if (curThrGroup != "" && curThrGroup != thrfields[0]) {
+                                _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + thrfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + thrfields[0] + "',1)> 删除</button></th>";
+                               
+                                thrcolspan = 0;
+                            }
+                        } else {
+                            if (isSecChange == true)
+                            thrcolspan += secfields.length - 1;
+                        }
+
+                    } else {
+                        if (thrcolspan != 0) {
+                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
+                            thrcolspan = 0;
+                        }
+
+                        if (secfields != "" && (curSecGroup == "" || curSecGroup != secfields[0])) {
+                            _html += "<th rowspan=2 colspan=" + (secfields.length - 1) + " style='text-align:center' >" + secfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + secfields[0] + "',0)> 删除</button></th>";
+                            curSecGroup = secfields[0];
+                            idx1++;
+                        }
+                    }
+
+                }
+            }
+            _html += "</tr>";
+            _html += "<tr>" + _secHtml + "</tr>";
+            _html += "<tr>" + _thrHtml + "</tr>";
+            return _html;
+        }
+
+        function DeleteSpecTitle(title,multiType) {
+            
             if (window.confirm('您确定要删除【' + title + '】吗?') == false)
                 return;
 
             //按照;分开.
-            var strs = multiTitle.split(';');
+            var strs = [];
+            if (multiType == 0)
+                strs = multiTitle.split(';');
+            else
+                strs = multiTitle1.split(';');
+
             var newTitle = ""; //创建新的strs.
             for (var i = 0; i < strs.length; i++) {
 
@@ -117,8 +293,10 @@
                     continue;
                 newTitle += str + ";"; //重新组合newtitle.
             }
-
-            enEntity.SetPara("MultiTitle", newTitle);
+            if (multiType == 0)
+                enEntity.SetPara("MultiTitle", newTitle);
+            else
+                enEntity.SetPara("MultiTitle1", newTitle);
             enEntity.Update();
 
             window.location.href = window.location;
@@ -126,7 +304,7 @@
 
         function getMutliFile(keyOfEn, multi) {
 
-            var fields = multiTitle.split(";");
+            var fields = multi.split(";");
             for (var i = 0; i < fields.length; i++) {
                 var str = fields[i];
                 if (str == "")
@@ -169,7 +347,7 @@
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle != undefined) {
                 for (var i = 0; i < fls.length; i++) {
-                    if (MultiTitle != "" && MultiTitle.indexOf(fls[i]) > 0) {
+                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
                         alert("错误:该列已经选择过.");
                         return;
                     }
@@ -197,7 +375,7 @@
             //检查设置的完整性.
             //求出来选择的字段.
             var filds = "";
-            var inputArray = $("input[name='twoclo']:checked"); //取到所有的input 并且放到一个数组中
+            var inputArray = $("input[type='checkbox']:checked"); //取到所有的input 并且放到一个数组中
             for (var i = 0; i < inputArray.length; i++) {
                 var input = inputArray[i];
                 filds += input.id + ",";//获得选中的input的id拼接成字符串
@@ -209,16 +387,36 @@
                 return;
             }
             // 2. 选择的没有按照连续选择，也是错误的.
-            for (var i = 0; i < inputArray.length; i++) {
-                //比较次数在inputArray.length之内
-                if (i + 1 < inputArray.length) {
-                    //根据value的值判断是否是连续的列
-                    if (parseInt(inputArray[i].value) + 1 != inputArray[i + 1].value) {
+            var curIdx = 0;
+            for (var idx = 0; idx < mapAttrs.length; idx++) {
+                if (filds.indexOf(mapAttrs[idx].KeyOfEn + ",") != -1) {
+                    if (curIdx != 0 && (curIdx + 1) != idx) {
                         alert("所选的列不连续！");
                         return;
                     }
+                    curIdx = idx;
+                } else {
+                    var secFile = getMutliFile(mapAttrs[idx].KeyOfEn, multiTitle)
+                    if (secFile != "" && filds.indexOf(secFile[0] + ",") != -1) {
+                        if (multiTitle.indexOf(mapAttrs[idx].KeyOfEn + ",") != -1) {
+                            if (curIdx != 0 && (curIdx + 1) != idx) {
+                                alert("所选的列不连续！");
+                                return;
+                            }
+                            curIdx = idx;
+                        }
+                    }
+                    
                 }
+                
+                
+
+
+
+
+                   
             }
+            
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle1 != undefined) {
                 for (var i = 0; i < fls.length; i++) {

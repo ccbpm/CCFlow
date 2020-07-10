@@ -8417,7 +8417,7 @@ namespace BP.WF
         /// <param name="pWorkID">父流程WorkID(可以为0)</param>
         /// <param name="FID">FID(可以为0)</param>
         /// <returns></returns>
-        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc, string pFlowNo = null, Int64 pWorkID = 0,int FID=0)
+        public static string Node_CC(string fk_flow, int fk_node, Int64 workID, string toEmpNo, string toEmpName, string msgTitle, string msgDoc,int FID = 0, string pFlowNo = null, Int64 pWorkID = 0)
         {
             Flow fl = new Flow(fk_flow);
             Node nd = new Node(fk_node);

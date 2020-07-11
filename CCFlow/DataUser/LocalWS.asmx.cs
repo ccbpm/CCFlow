@@ -227,7 +227,7 @@ namespace CCFlow.DataUser
         public void Node_WriteWorkCheck(Int64 workid, string msg)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
-              BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg,"审核");
+              BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg,"审核",null);
         }
         /// <summary>
         /// 是否可以查看该工作

@@ -41,7 +41,7 @@ namespace CCFlow.DataUser
                 case "SendToWeiXin":
                     try
                     {
-                        string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+                        string agentId = SystemConfig.WX_AgentID ?? null;
                         if (agentId != null)
                         {
                             string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
@@ -50,18 +50,18 @@ namespace CCFlow.DataUser
                             newArticle.description = this.Request.QueryString["msgConten"];
 
                             newArticle.title = "您有一条待办消息";
-                            string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                                + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                            string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
+                                + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
                             newArticle.url = New_Url;
 
                             //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                            newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/ccicon.png";
+                            newArticle.picurl = SystemConfig.WX_MessageUrl + "/DataUser/ICON/ccicon.png";
 
                             BP.GPM.Emp emp = new BP.GPM.Emp(this.Request.QueryString["sendTo"]);
 
                             MsgNews wxMsg = new MsgNews();
                             wxMsg.Access_Token = accessToken;
-                            wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                            wxMsg.agentid = SystemConfig.WX_AgentID;
                             wxMsg.touser = emp.Tel;
                             wxMsg.articles.Add(newArticle);
                             //执行发送
@@ -73,7 +73,7 @@ namespace CCFlow.DataUser
                     break;
                 case "SendToDingDing":
                     //企业应用必须存在
-                    string dId = BP.Sys.SystemConfig.Ding_AgentID ?? null;
+                    string dId = SystemConfig.Ding_AgentID ?? null;
                     Ding_Post_ReturnVal postVal = null;
                     if (dId != null)
                     {

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Web.Services;
 using BP.DA;
+using BP.Sys;
 
 namespace ccbpm
 {
@@ -39,7 +40,7 @@ namespace ccbpm
         public bool SendWhen(string flowNo, int nodeID, Int64 workid, string userNo, string userName)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
-            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            // if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
             //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
             return true;
         }
@@ -47,7 +48,7 @@ namespace ccbpm
         public bool FlowOverBefore(string flowNo, int nodeID, Int64 workid, string userNo, string userName)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
-            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            // if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
             //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
             return true;
         }
@@ -65,7 +66,7 @@ namespace ccbpm
         {
             //  Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
 
-            //if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
             //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
             return true;
         }
@@ -82,7 +83,7 @@ namespace ccbpm
         public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
             return true;
         }
@@ -101,7 +102,7 @@ namespace ccbpm
         public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc)
         {
             //Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc,DataType.CurrentDataTime);
             return true;
         }
@@ -118,7 +119,7 @@ namespace ccbpm
         {
             //  Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
+            if (SystemConfig.IsEnableCCIM && userNo != null)
                 BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg,DataType.CurrentDataTime);
             //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
@@ -156,7 +157,7 @@ namespace ccbpm
                 if (userNo.Contains(" ") == true)
                     return false;
 
-                if (BP.DA.DBAccess.IsView("Port_Emp", BP.Sys.SystemConfig.AppCenterDBType) == true)
+                if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
                     return false;
 
                 string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + userNo + "'";

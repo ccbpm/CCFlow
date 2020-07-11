@@ -33,14 +33,14 @@ namespace CCFlow.SDKFlowDemo
                 if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
                 {
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
-                    if (BP.DA.DataType.IsNullOrEmpty(rootNo) == false)
+                    if (DataType.IsNullOrEmpty(rootNo) == false)
                         sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='"+ rootNo + "' ";
                 }
 
                 if (BP.WF.Glo.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
                 {
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept ";
-                    if (BP.DA.DataType.IsNullOrEmpty(rootNo) == false)
+                    if (DataType.IsNullOrEmpty(rootNo) == false)
                         sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='" + rootNo + "' ";
                 }
 

@@ -230,7 +230,7 @@ namespace BP.WF.HttpHandler
             //插入模版.
             DocTemplate dt = new DocTemplate();
             dt.FK_Node = FK_Node;
-            dt.No = DA.DBAccess.GenerGUID();
+            dt.No = DBAccess.GenerGUID();
             dt.Name = fileName;
             dt.FilePath = fileFullPath; //路径
             dt.FK_Node = this.FK_Node;
@@ -271,7 +271,7 @@ namespace BP.WF.HttpHandler
             bt.No = this.GetRequestVal("TB_No");
 
             if (DataType.IsNullOrEmpty(bt.No))
-                bt.No = DA.DBAccess.GenerOID("Template").ToString();
+                bt.No = DBAccess.GenerOID("Template").ToString();
 
             bt.Name = this.GetRequestVal("TB_Name");
             bt.TempFilePath = fileName; //文件.

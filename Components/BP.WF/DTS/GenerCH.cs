@@ -61,7 +61,7 @@ namespace BP.WF.DTS
                 foreach (Node nd in nds)
                 {
                     string sql = "SELECT * FROM ND" + int.Parse(nd.FK_Flow) + "TRACK WHERE NDFrom=" + nd.NodeID + " ORDER BY WorkID, RDT ";
-                    System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    System.Data.DataTable dt =DBAccess.RunSQLReturnTable(sql);
                     string priRDT = null;
                     string sdt = null;
                     foreach (DataRow dr in dt.Rows)

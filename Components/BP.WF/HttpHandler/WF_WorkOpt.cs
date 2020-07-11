@@ -2812,7 +2812,7 @@ namespace BP.WF.HttpHandler
             string msg = "";
             string writeImg = GetRequestVal("WriteImg");
             if(DataType.IsNullOrEmpty(writeImg) == false)
-                writeImg = writeImg.Replace('~','+');
+                 writeImg = writeImg.Replace('~','+');
             string dotype = GetRequestVal("ShowType");
             string doc = GetRequestVal("Doc");
             bool isCC = GetRequestVal("IsCC") == "1";

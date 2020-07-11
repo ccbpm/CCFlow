@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.Sys;
+using System;
 using System.Data.SqlClient;
 
 namespace BP.DA
@@ -68,10 +69,10 @@ namespace BP.DA
         public DBUrl(string dbSrc)
         {
             //数据库类型.
-            this.DBUrlType =  DA.DBUrlType.DBSrc;
+            this.DBUrlType =  DBUrlType.DBSrc;
 
             //数据库连接.
-            this.HisDBSrc = new BP.Sys.SFDBSrc(dbSrc);
+            this.HisDBSrc = new SFDBSrc(dbSrc);
         }
 
         #region 其他数据源.

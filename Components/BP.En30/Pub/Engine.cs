@@ -126,11 +126,11 @@ namespace BP.Pub
                             case "Day":
                                 return val.Substring(8, 2);
                             case "NYR":
-                                return DA.DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
+                                return DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                             case "RMB":
                                 return float.Parse(val).ToString("0.00");
                             case "RMBDX":
-                                return DA.DataType.ParseFloatToCash(float.Parse(val));
+                                return DataType.ParseFloatToCash(float.Parse(val));
                             default:
                                 throw new Exception("step2参数设置错误" + strs);
                         }
@@ -408,13 +408,13 @@ namespace BP.Pub
                         case "Day":
                             return val.Substring(8, 2);
                         case "NYR":
-                            return DA.DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
+                            return DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                         case "RMB":
                             return float.Parse(val).ToString("0.00");
                         case "RMBDX":
-                            return DA.DataType.ParseFloatToCash(float.Parse(val));
+                            return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
-                            string path1 = BP.Sys.SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                            string path1 =SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
@@ -788,12 +788,12 @@ namespace BP.Pub
                         case "Day":
                             return val.Substring(8, 2);
                         case "NYR":
-                            return DA.DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
+                            return DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                         case "RMB":
                             decimal md= Math.Round( decimal.Parse(val) ,2);
                             return md.ToString();
                         case "RMBDX":
-                            return this.GetCode(DA.DataType.ParseFloatToCash(float.Parse(val)));
+                            return this.GetCode(DataType.ParseFloatToCash(float.Parse(val)));
                         case "Siganture":
                             string path = BP.Sys.SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //获取要插入的图片
@@ -915,11 +915,11 @@ namespace BP.Pub
                         case "Day":
                             return val.Substring(8, 2);
                         case "NYR":
-                            return DA.DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
+                            return DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                         case "RMB":
                             return float.Parse(val).ToString("0.00");
                         case "RMBDX":
-                            return DA.DataType.ParseFloatToCash(float.Parse(val));
+                            return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
                             string path1 = SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
@@ -1206,7 +1206,7 @@ namespace BP.Pub
                                 key = "<" + shortName + "." + attr.Key + ".SUM.RMBDX>";
                                 if (str.IndexOf(key) != -1)
                                     str = str.Replace(key,
-                                        GetCode(DA.DataType.ParseFloatToCash(dtls.GetSumFloatByKey(attr.Key))));
+                                        GetCode(DataType.ParseFloatToCash(dtls.GetSumFloatByKey(attr.Key))));
                                 break;
                             case DataType.AppInt:
                                 key = "<" + shortName + "." + attr.Key + ".SUM>";

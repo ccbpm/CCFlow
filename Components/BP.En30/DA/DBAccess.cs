@@ -3069,7 +3069,7 @@ namespace BP.DA
         public static float RunSQLReturnValFloat(string sql, Paras ps, float val)
         {
             ps.SQL = sql;
-            object obj = DA.DBAccess.RunSQLReturnVal(ps);
+            object obj = DBAccess.RunSQLReturnVal(ps);
 
             try
             {
@@ -3102,7 +3102,7 @@ namespace BP.DA
         {
             try
             {
-                return float.Parse(DA.DBAccess.RunSQLReturnVal(sql).ToString());
+                return float.Parse(DBAccess.RunSQLReturnVal(sql).ToString());
             }
             catch (Exception ex)
             {
@@ -3122,7 +3122,7 @@ namespace BP.DA
         public static int RunSQLReturnValInt(string sql, int IsNullReturnVal)
         {
             object obj = "";
-            obj = DA.DBAccess.RunSQLReturnVal(sql);
+            obj = DBAccess.RunSQLReturnVal(sql);
             if (obj == null || obj.ToString() == "" || obj == DBNull.Value)
                 return IsNullReturnVal;
             else
@@ -3132,7 +3132,7 @@ namespace BP.DA
         {
             object obj = "";
 
-            obj = DA.DBAccess.RunSQLReturnVal(sql, paras);
+            obj = DBAccess.RunSQLReturnVal(sql, paras);
             if (obj == null || obj.ToString() == "")
                 return IsNullReturnVal;
             else
@@ -3148,7 +3148,7 @@ namespace BP.DA
         {
             try
             {
-                object obj = DA.DBAccess.RunSQLReturnVal(ps);
+                object obj = DBAccess.RunSQLReturnVal(ps);
                 if (obj == null || obj.ToString() == "")
                     return IsNullReturnVal;
                 else
@@ -3189,13 +3189,13 @@ namespace BP.DA
         }
         public static int RunSQLReturnValInt(string sql, Paras paras)
         {
-            return Convert.ToInt32(DA.DBAccess.RunSQLReturnVal(sql, paras));
+            return Convert.ToInt32(DBAccess.RunSQLReturnVal(sql, paras));
         }
         public static int RunSQLReturnValInt(string sql, Paras paras, int isNullAsVal)
         {
             try
             {
-                return Convert.ToInt32(DA.DBAccess.RunSQLReturnVal(sql, paras));
+                return Convert.ToInt32(DBAccess.RunSQLReturnVal(sql, paras));
             }
             catch
             {

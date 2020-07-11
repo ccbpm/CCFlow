@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.DA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace BP.WF
                 string sql = "";
                 switch(BP.Sys.SystemConfig.AppCenterDBType)
                 {
-                    case DA.DBType.MSSQL:
+                    case DBType.MSSQL:
                         return sql;
                     default:
                         throw new Exception("err@没有判断的类型.");

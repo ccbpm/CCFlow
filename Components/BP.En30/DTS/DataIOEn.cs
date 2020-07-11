@@ -356,7 +356,7 @@ namespace BP.DTS
 			#region 删除表内容
 			switch(this.ToDBUrl)
 			{
-				case DA.DBUrlType.AppCenterDSN:
+				case DBUrlType.AppCenterDSN:
                     DBAccess.RunSQL("DELETE FROM  " + this.ToTable);
 					break;
                 //case DA.DBUrlType.DBAccessOfMSSQL1:
@@ -762,7 +762,7 @@ namespace BP.DTS
 			{
 				switch(this.ToDBUrl)
 				{
-					case DA.DBUrlType.AppCenterDSN:
+					case DBUrlType.AppCenterDSN:
 						DBAccess.RunSQL(UPDATEsql);
 						break;				 
 					default:

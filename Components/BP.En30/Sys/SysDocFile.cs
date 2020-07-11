@@ -479,7 +479,7 @@ namespace BP.Sys
                 if (System.IO.Directory.Exists(dir) == false)
                     System.IO.Directory.CreateDirectory(dir);
 
-                BP.DA.DataType.SaveAsFile(dir + "\\" + pkVal + ".fdb", val);
+                DataType.SaveAsFile(dir + "\\" + pkVal + ".fdb", val);
             }
             catch (Exception ex)
             {

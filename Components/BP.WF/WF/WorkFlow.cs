@@ -1266,7 +1266,7 @@ namespace BP.WF
 
             #region 处理后续的业务.
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (1 == 2)
             {
@@ -1332,7 +1332,7 @@ namespace BP.WF
             //执行最后一个子流程发送后的检查，不管是否成功，都要结束该流程。
             stopMsg += this.LetParentFlowAutoSendNextSetp();
 
-            //string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            //string dbstr = SystemConfig.AppCenterDBVarStr;
 
             #region 处理审核问题,更新审核组件插入的审核意见中的 到节点，到人员。
             ps = new Paras();
@@ -1409,7 +1409,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Fix;
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1469,7 +1469,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Runing;
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1785,7 +1785,7 @@ namespace BP.WF
             {
                 if (_AppType == null)
                 {
-                    if (BP.Sys.SystemConfig.IsBSsystem == false)
+                    if (SystemConfig.IsBSsystem == false)
                     {
                         _AppType = "WF";
                     }
@@ -1810,7 +1810,7 @@ namespace BP.WF
             {
                 if (_VirPath == null)
                 {
-                    if (BP.Sys.SystemConfig.IsBSsystem)
+                    if (SystemConfig.IsBSsystem)
                         _VirPath = HttpContextHelper.RequestApplicationPath; // _VirPath = BP.Sys.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
@@ -1870,7 +1870,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 挂起. */
             int hungSta = (int)WFState.HungUp;
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, hungSta);
@@ -1910,7 +1910,7 @@ namespace BP.WF
 
             /* 执行解除挂起. */
             int sta = (int)WFState.Runing;
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);

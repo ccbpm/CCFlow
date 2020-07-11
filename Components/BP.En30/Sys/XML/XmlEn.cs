@@ -134,7 +134,7 @@ namespace BP.Sys.XML
 
             if (i > 1)
             {
-               // BP.Sys.SystemConfig.DoClearCash();
+               // SystemConfig.DoClearCash();
                 throw new Exception("@XML=[" + this.ToString() + "]中PK=" + val + "不唯一...");
             }
             return 0;

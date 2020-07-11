@@ -517,7 +517,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
-            string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
 

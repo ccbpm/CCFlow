@@ -12,7 +12,7 @@ namespace BP.Port
     /// <summary>
     /// 操作员属性
     /// </summary>
-    public class EmpAttr : BP.En.EntityNoNameAttr
+    public class EmpAttr : EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>

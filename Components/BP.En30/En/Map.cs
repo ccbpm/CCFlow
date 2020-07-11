@@ -1030,31 +1030,31 @@ namespace BP.En
                         switch (val)
                         {
                             case "Admin":
-                                this.EnType = BP.En.EnType.Admin;
+                                this.EnType = EnType.Admin;
                                 break;
                             case "App":
-                                this.EnType = BP.En.EnType.App;
+                                this.EnType = EnType.App;
                                 break;
                             case "Dot2Dot":
-                                this.EnType = BP.En.EnType.Dot2Dot;
+                                this.EnType = EnType.Dot2Dot;
                                 break;
                             case "Dtl":
-                                this.EnType = BP.En.EnType.Dtl;
+                                this.EnType = EnType.Dtl;
                                 break;
                             case "Etc":
-                                this.EnType = BP.En.EnType.Etc;
+                                this.EnType = EnType.Etc;
                                 break;
                             case "PowerAble":
-                                this.EnType = BP.En.EnType.PowerAble;
+                                this.EnType = EnType.PowerAble;
                                 break;
                             case "Sys":
-                                this.EnType = BP.En.EnType.Sys;
+                                this.EnType = EnType.Sys;
                                 break;
                             case "View":
-                                this.EnType = BP.En.EnType.View;
+                                this.EnType = EnType.View;
                                 break;
                             case "XML":
-                                this.EnType = BP.En.EnType.XML;
+                                this.EnType = EnType.XML;
                                 break;
                             default:
                                 throw new Exception("没有约定的标记:EnType =  " + val);

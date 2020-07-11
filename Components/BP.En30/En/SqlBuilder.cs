@@ -2,7 +2,7 @@
 using BP.DA;
 using BP.Sys;
 
-//using BP.En.MBase;
+
 namespace BP.En
 {
     public class SqlBuilder
@@ -2397,7 +2397,7 @@ namespace BP.En
         }
         public static Paras GenerParas(Entity en, string[] keys)
         {
-            bool IsEnableNull = BP.Sys.SystemConfig.IsEnableNull;
+            bool IsEnableNull = SystemConfig.IsEnableNull;
             string mykeys = "@";
             if (keys != null)
                 foreach (string key in keys)

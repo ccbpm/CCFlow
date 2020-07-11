@@ -678,10 +678,10 @@ namespace BP.WF
                             string sql = "";
                             sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
-                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                            if (SystemConfig.AppCenterDBType == DBType.Oracle)
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
 
-                            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                                 sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
 
                             DBAccess.RunSQL(sql);
@@ -1088,7 +1088,7 @@ namespace BP.WF
             {
                 string str = this.GetValStrByKey(NodeAttr.FormUrl);
                 str = str.Replace("@SDKFromServHost",
-                    BP.Sys.SystemConfig.AppSettings["SDKFromServHost"]);
+                    SystemConfig.AppSettings["SDKFromServHost"]);
                 return str;
             }
             set
@@ -1707,7 +1707,7 @@ namespace BP.WF
                 string str = this.GetValStringByKey(NodeAttr.BatchParas);
 
                 //替换约定的URL.
-                str = str.Replace("@SDKFromServHost", BP.Sys.SystemConfig.AppSettings["SDKFromServHost"]);
+                str = str.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
                 //if (str.Length <=3)
                 //    str="Title,RDT"
                 return str;

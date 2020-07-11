@@ -626,7 +626,7 @@ namespace BP.WF.HttpHandler
 
             //清空缓存
             toMapData.RepairMap();
-            BP.Sys.SystemConfig.DoClearCash();
+            SystemConfig.DoClearCash();
 
 
         }

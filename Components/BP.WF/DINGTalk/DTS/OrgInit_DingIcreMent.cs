@@ -61,7 +61,7 @@ namespace BP.GPM.DTalk.DTS
             else if (result.Length > 0)
             {
                 string webPath = "Log/Ding_GPM" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + webPath;
+                string savePath = SystemConfig.PathOfDataUser + webPath;
 
                 Log log = new Log(savePath);
                 log.WriteLine(result);

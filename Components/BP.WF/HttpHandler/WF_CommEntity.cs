@@ -319,13 +319,13 @@ namespace BP.WF.HttpHandler
             string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentData+ "_" + name  +".xls";
             string filePath = ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
 
-            filePath = BP.Sys.SystemConfig.PathOfTemp + filename;
+            filePath = SystemConfig.PathOfTemp + filename;
 
-            string tempPath = BP.Sys.SystemConfig.PathOfTemp + refPKVal+"\\";
+            string tempPath = SystemConfig.PathOfTemp + refPKVal+"\\";
             if (System.IO.Directory.Exists(tempPath) == false)
                 System.IO.Directory.CreateDirectory(tempPath);
 
-            string myFilePath = BP.Sys.SystemConfig.PathOfDataUser + this.EnsName.Substring(0, this.EnsName.Length - 1);
+            string myFilePath = SystemConfig.PathOfDataUser + this.EnsName.Substring(0, this.EnsName.Length - 1);
 
             foreach (Entity dt in dtls)
             {
@@ -340,7 +340,7 @@ namespace BP.WF.HttpHandler
             System.IO.File.Copy(filePath, tempPath + filename, true);
 
             //生成压缩文件
-            string zipFile = BP.Sys.SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
+            string zipFile = SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
 
             System.IO.FileInfo finfo = new System.IO.FileInfo(zipFile);
 

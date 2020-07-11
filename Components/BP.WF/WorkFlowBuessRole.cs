@@ -541,7 +541,7 @@ namespace BP.WF
             string FK_Emp;
 
             //变量.
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
 
             Paras ps = new Paras();
             // 按上一节点发送人处理。
@@ -1384,7 +1384,7 @@ namespace BP.WF
         private static DataTable RequetNextNodeWorkers_DiGui(string deptNo, string empNo, Node toNode)
         {
             string sql;
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
 
             sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
             Paras ps = new Paras();
@@ -1590,7 +1590,7 @@ namespace BP.WF
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
-            string mailTemp = DataType.ReadTextFile2Html(BP.Sys.SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
+            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
             {
                 ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());

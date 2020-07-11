@@ -196,7 +196,7 @@ namespace BP.En
         /// <param name="len">长度</param>
         public void AddWhereLen(string attr, string exp, int len,DBType dbtype)
         {
-            this.SQL = "( " + BP.Sys.SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
+            this.SQL = "( " + SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
         }
         /// <summary>
         /// 增加查询条件，条件用 IN 表示．sql必须是一个列的集合．

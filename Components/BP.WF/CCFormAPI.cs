@@ -66,7 +66,7 @@ namespace BP.WF
 
 
             //设置外部传入的默认值.
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 //2019-07-25 zyt改造
@@ -480,7 +480,7 @@ namespace BP.WF
             #endregion 表单模版信息.（含主、从表的，以及从表的枚举/外键相关数据）.
 
             #region 主表数据
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -696,7 +696,7 @@ namespace BP.WF
                     }
                 }
             }
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)

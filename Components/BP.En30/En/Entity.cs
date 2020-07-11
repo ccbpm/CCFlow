@@ -111,7 +111,7 @@ namespace BP.En
                 if (_GetNewEntities == null)
                 {
                     string str = this.ToString();
-                    ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
+                    ArrayList al = ClassFactory.GetObjects("BP.En.Entities");
                     foreach (Object o in al)
                     {
                         Entities ens = o as Entities;
@@ -1666,7 +1666,7 @@ namespace BP.En
             #endregion
 
             #region 判断是否有明细
-            foreach (BP.En.EnDtl dtl in this.EnMap.Dtls)
+            foreach (EnDtl dtl in this.EnMap.Dtls)
             {
                 string sql = "DELETE  FROM  " + dtl.Ens.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.RefKey + " ='" + this.PKVal.ToString() + "' ";
                 //DBAccess.RunSQL(sql);
@@ -1707,7 +1707,7 @@ namespace BP.En
             #endregion
 
             #region 判断是否有明细
-            foreach (BP.En.EnDtl dtl in this.EnMap.Dtls)
+            foreach (EnDtl dtl in this.EnMap.Dtls)
             {
                 string sql = "DELETE FROM " + dtl.Ens.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.RefKey + " ='" + this.PKVal.ToString() + "' ";
                 DBAccess.RunSQL(sql);
@@ -1715,7 +1715,7 @@ namespace BP.En
             #endregion
 
             #region 判断是否有一对对的关系.
-            foreach (BP.En.AttrOfOneVSM dtl in this.EnMap.AttrsOfOneVSM)
+            foreach (AttrOfOneVSM dtl in this.EnMap.AttrsOfOneVSM)
             {
                 string sql = "DELETE  FROM " + dtl.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.AttrOfOneInMM + " ='" + this.PKVal.ToString() + "' ";
                 DBAccess.RunSQL(sql);
@@ -3549,7 +3549,7 @@ namespace BP.En
                 case DBType.DM:
                     break;
                 case DBType.MySQL:
-                    // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                    // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
                     //return CheckPhysicsTableAutoExtFieldLength_MySQL(sql);
                     break;
                 case DBType.Informix:
@@ -3920,7 +3920,7 @@ namespace BP.En
 
                 int maxLen = attr.MaxLength;
                 dt = new DataTable();
-                sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
                 dt = this.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     continue;

@@ -295,7 +295,7 @@ namespace BP.WF.Template
                 md.Save();
 
                 // 装载模版.
-                string file = BP.Sys.SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
+                string file = SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
                 if (System.IO.File.Exists(file) == false)
                     throw new Exception("@开始节点表单模版丢失" + file);
 

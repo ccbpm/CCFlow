@@ -473,7 +473,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoDFrom()
 		{
-			return  "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+			return  "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
 		}
 		/// <summary>
 		/// 设计傻瓜表单
@@ -481,7 +481,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoDFromCol4()
 		{
-            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&IsFirst=1&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&IsFirst=1&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
 		}
 		/// <summary>

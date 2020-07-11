@@ -223,8 +223,8 @@ namespace BP.Sys
             if (BP.En.ClassFactory.Htable_XmlEns != null)
                 BP.En.ClassFactory.Htable_XmlEns.Clear();
 
-            if (BP.Sys.SystemConfig.CS_AppSettings != null)
-                BP.Sys.SystemConfig.CS_AppSettings.Clear();
+            if (SystemConfig.CS_AppSettings != null)
+                SystemConfig.CS_AppSettings.Clear();
             #endregion 清除缓存
 
             #region 加载 Web.Config 文件配置
@@ -252,11 +252,11 @@ namespace BP.Sys
             DataSet dscfg = new DataSet("cfg");
             dscfg.ReadXml(tempFile);
 
-            //    BP.Sys.SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
-            BP.Sys.SystemConfig.CS_DBConnctionDic.Clear();
+            //    SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
+            SystemConfig.CS_DBConnctionDic.Clear();
             foreach (DataRow row in dscfg.Tables["add"].Rows)
             {
-                BP.Sys.SystemConfig.CS_AppSettings.Add(row["key"].ToString().Trim(), row["value"].ToString().Trim());
+                SystemConfig.CS_AppSettings.Add(row["key"].ToString().Trim(), row["value"].ToString().Trim());
             }
             #endregion
         }
@@ -365,7 +365,7 @@ namespace BP.Sys
         {
             get
             {
-                if (BP.Sys.SystemConfig.IsBSsystem)
+                if (SystemConfig.IsBSsystem)
                 {
                     string path1 = HttpContextHelper.PhysicalApplicationPath + "\\..\\";
                     System.IO.DirectoryInfo info1 = new DirectoryInfo(path1);
@@ -1107,7 +1107,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(BP.Sys.SystemConfig.PathOfXML + "\\KeyVal.xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "\\KeyVal.xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1125,7 +1125,7 @@ namespace BP.Sys
         {
             try
             {
-                string file = BP.Sys.SystemConfig.PathOfXML + "\\Node\\" + fk_Breed + ".xml";
+                string file = SystemConfig.PathOfXML + "\\Node\\" + fk_Breed + ".xml";
                 DataSet ds = new DataSet("dss");
                 try
                 {
@@ -1171,7 +1171,7 @@ namespace BP.Sys
                 if (dt == null)
                 {
                     DataSet ds = new DataSet("dss");
-                    ds.ReadXml(BP.Sys.SystemConfig.PathOfXML + "\\Ens\\ConfigEns.xml");
+                    ds.ReadXml(SystemConfig.PathOfXML + "\\Ens\\ConfigEns.xml");
                     dt = ds.Tables[0];
                     Cash.AddObj("TConfigEns", Depositary.Application, dt);
                 }
@@ -1193,7 +1193,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(BP.Sys.SystemConfig.PathOfXML + "\\SQL\\" + BP.Sys.SystemConfig.ThirdPartySoftWareKey + ".xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "\\SQL\\" + SystemConfig.ThirdPartySoftWareKey + ".xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1212,7 +1212,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(BP.Sys.SystemConfig.PathOfXML + "\\SQL\\App.xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "\\SQL\\App.xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {

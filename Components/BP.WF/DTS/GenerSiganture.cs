@@ -22,7 +22,7 @@ namespace BP.WF.DTS
         public GenerSiganture()
         {
             this.Title = "为没有设置数字签名的用户设置默认的数字签名";
-            this.Help = "此功能需要用户对 "+ BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\ 有读写权限，否则会执行失败。";
+            this.Help = "此功能需要用户对 "+ SystemConfig.PathOfDataUser + "\\Siganture\\ 有读写权限，否则会执行失败。";
         }
         /// <summary>
         /// 设置执行变量
@@ -55,17 +55,17 @@ namespace BP.WF.DTS
             {
                 BP.Port.Emps emps = new Emps();
                 emps.RetrieveAllFromDBSource();
-                string path = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\T.JPG";
+                string path = SystemConfig.PathOfDataUser + "\\Siganture\\T.JPG";
                 string fontName = "宋体";
                 string empOKs = "";
                 string empErrs = "";
                 foreach (Emp emp in emps)
                 {
-                    string pathMe = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.No + ".JPG";
+                    string pathMe = SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.No + ".JPG";
                     if (System.IO.File.Exists(pathMe))
                         continue;
 
-                    File.Copy(BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\Templete.JPG",
+                    File.Copy(SystemConfig.PathOfDataUser + "\\Siganture\\Templete.JPG",
                         path, true);
 
                     System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -79,13 +79,13 @@ namespace BP.WF.DTS
                     g.Dispose();
 
                     File.Copy(pathMe,
-                    BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.Name + ".JPG", true);
+                    SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.Name + ".JPG", true);
                 }
                 return "执行成功...";
             }
             catch(Exception ex)
             {
-                return "执行失败，请确认对 " + BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\ 目录有访问权限？异常信息:"+ex.Message;
+                return "执行失败，请确认对 " + SystemConfig.PathOfDataUser + "\\Siganture\\ 目录有访问权限？异常信息:"+ex.Message;
             }
         }
     }

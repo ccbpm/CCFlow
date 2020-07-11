@@ -360,7 +360,7 @@ namespace BP.Sys
             ul.RDT = DataType.CurrentDataTime;
             try
             {
-                if (BP.Sys.SystemConfig.IsBSsystem)
+                if (SystemConfig.IsBSsystem)
                     ul.IP = HttpContextHelper.Request.UserHostAddress;
             }
             catch
@@ -381,7 +381,7 @@ namespace BP.Sys
             //求出保存路径.
             string path = en.EnMap.FJSavePath;
             if (path == "" || path == null || path == string.Empty)
-                path = BP.Sys.SystemConfig.PathOfDataUser + en.ToString() + "\\";
+                path = SystemConfig.PathOfDataUser + en.ToString() + "\\";
 
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);

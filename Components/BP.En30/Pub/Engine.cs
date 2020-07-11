@@ -372,7 +372,7 @@ namespace BP.Pub
                 {
                     if (strs[1].Trim() == "ImgAth")
                     {
-                        string path1 = BP.Sys.SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + en.PKVal + ".png";
+                        string path1 = SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
                         StringBuilder mypict = new StringBuilder();
                         //获取要插入的图片
@@ -435,7 +435,7 @@ namespace BP.Pub
                             mypict.AppendLine();
                             return mypict.ToString();
                         case "Siganture":
-                            string path = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + val + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder pict = new StringBuilder();
                             //获取要插入的图片
@@ -660,7 +660,7 @@ namespace BP.Pub
                     return this.GetCode(StrNohtml); 
 
 
-                    string htmlpath = BP.Sys.SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
+                    string htmlpath = SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
                     if (File.Exists(htmlpath) == false)
                         File.Create(htmlpath);
                     using (StreamWriter sw = new StreamWriter(htmlpath))
@@ -688,7 +688,7 @@ namespace BP.Pub
 
                 if (strs[1].Trim() == "ImgAth")
                 {
-                    string path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                    string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
                         FrmImgAthDB dbImgAth = new FrmImgAthDB();
@@ -696,7 +696,7 @@ namespace BP.Pub
                         int count = dbImgAth.RetrieveFromDBSources();
                         if (count == 1)
                         {
-                            path1 = BP.Sys.SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                            path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
                             if (!File.Exists(path1))
                                 return this.GetCode(key);
                         }
@@ -736,7 +736,7 @@ namespace BP.Pub
                 if (strs[1].Trim() == "BPPaint")
                 {
                     string path1 = DBAccess.RunSQLReturnString("SELECT  Tag2 FROM Sys_FrmEleDB WHERE REFPKVAL=" + this.HisGEEntity.PKVal + " AND EleID='" + strs[0].Trim() + "'");
-                    //  string path1 = BP.Sys.SystemConfig.PathOfDataUser + "\\BPPaint\\" + this.HisGEEntity.ToString().Trim() + "\\" + this.HisGEEntity.PKVal + ".png";
+                    //  string path1 = SystemConfig.PathOfDataUser + "\\BPPaint\\" + this.HisGEEntity.ToString().Trim() + "\\" + this.HisGEEntity.PKVal + ".png";
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();
                     //获取要插入的图片
@@ -795,7 +795,7 @@ namespace BP.Pub
                         case "RMBDX":
                             return this.GetCode(DataType.ParseFloatToCash(float.Parse(val)));
                         case "Siganture":
-                            string path = BP.Sys.SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //获取要插入的图片
                             if (File.Exists(path) == true)
                             {

@@ -1146,7 +1146,7 @@ namespace BP.Sys
                 //dict.TableName = this.Name;
                 //dict.OrgNo = WebUser.OrgNo;
                 //dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
-                //if (SystemConfig.CCBPMRunModel == 0)
+                //if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 //{
                 //    dict.MyPK = this.No;
                 //}
@@ -1277,7 +1277,7 @@ namespace BP.Sys
                     sql += " AS ";
                     sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 
-                    if (Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sql = sql.Replace("[", "`").Replace("]", "`");
                     }

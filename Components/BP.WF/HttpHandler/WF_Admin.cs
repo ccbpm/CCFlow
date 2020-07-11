@@ -43,7 +43,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow_GetRunOnPlant()
         {
-            return BP.Sys.SystemConfig.RunOnPlant;
+            return SystemConfig.RunOnPlant;
         }
         /// <summary>
         /// 加密工具.
@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
         public string TestFlow_Init()
         {
             //清除缓存.
-            BP.Sys.SystemConfig.DoClearCash();
+            SystemConfig.DoClearCash();
 
             if (1 == 2 && BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";

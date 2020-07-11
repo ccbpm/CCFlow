@@ -110,7 +110,7 @@ namespace BP.GPM.WeiXin
             return null;
             /*
             //企业应用必须存在
-            string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+            string agentId = SystemConfig.WX_AgentID ?? null;
             if (agentId != null)
             {
                 string accessToken = new BP.EAI.Plugins.WXin.WeiXin().getAccessToken();//获取 AccessToken
@@ -146,16 +146,16 @@ namespace BP.GPM.WeiXin
                 msgConten += "发 送 人：" + sender + "\n";
                 newArticle.description = msgConten;
 
-                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                    + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_" + WorkID + "#wechat_redirect";
+                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
+                    + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=empwork_" + WorkID + "#wechat_redirect";
                 newArticle.url = New_Url;
 
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                //newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + BP.Sys.SystemConfig.SysNo + "/LogBig.png";
+                //newArticle.picurl = SystemConfig.WX_MessageUrl + "/DataUser/ICON/" + SystemConfig.SysNo + "/LogBig.png";
 
                 MsgNews wxMsg = new MsgNews();
                 wxMsg.Access_Token = accessToken;
-                wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                wxMsg.agentid = SystemConfig.WX_AgentID;
                 wxMsg.touser = toUsers;
                 wxMsg.articles.Add(newArticle);
                 //执行发送

@@ -1577,7 +1577,7 @@ namespace BP.En
                             ap.GetValIntByKey("DefVal"), ap.GetValStrByKey("Name"), true, true, ap.GetValStrByKey("Key"), "@"+ap.GetValStrByKey("BindKey").Replace(",","@"));
                         break;
                     case FieldTypeS.FK:
-                        EntitiesNoName ens = (EntitiesNoName)BP.En.ClassFactory.GetEns(ap.GetValStrByKey("BindKey"));
+                        EntitiesNoName ens = (EntitiesNoName)ClassFactory.GetEns(ap.GetValStrByKey("BindKey"));
                         this.AddDDLEntities(ap.GetValStrByKey("Key"), ap.GetValStrByKey("DefVal"), ap.GetValStrByKey("Name"), ens,true);
                         break;
                     default:

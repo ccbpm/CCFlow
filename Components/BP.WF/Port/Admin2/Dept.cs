@@ -206,7 +206,7 @@ namespace BP.WF.Port.Admin2
                     {
                         try
                         {
-                            string fileName = BP.Sys.SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
+                            string fileName = SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
                             DataSet ds = fl.GetFlow(fileName);
                             ds.WriteXml(fileName);
 

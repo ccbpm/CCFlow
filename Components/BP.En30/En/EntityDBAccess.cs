@@ -110,7 +110,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (BP.Sys.SystemConfig.IsDebug)
+                if (SystemConfig.IsDebug)
                     en.CheckPhysicsTable();
                 throw ex;
             }

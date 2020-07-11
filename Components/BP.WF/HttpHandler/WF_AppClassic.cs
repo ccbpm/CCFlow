@@ -105,7 +105,7 @@ namespace BP.WF.HttpHandler
 
             /**单点登陆*/
             Paras ps = new Paras();
-            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No and Tel=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "Tel";
+            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No and Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
             ps.Add("No", userNo);
             ps.Add("Tel", tel);
             string No = DBAccess.RunSQLReturnString(ps);
@@ -179,8 +179,8 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", BP.Web.WebUser.Name);
 
             //系统名称.
-            ht.Add("SysName", BP.Sys.SystemConfig.SysName);
-            ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);

@@ -21,8 +21,8 @@ namespace BP.GPM.DTalk
     /// </summary>
     public class DingDing
     {
-        private string corpid = BP.Sys.SystemConfig.Ding_CorpID;
-        private string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
+        private string corpid = SystemConfig.Ding_CorpID;
+        private string corpsecret = SystemConfig.Ding_CorpSecret;
 
         public static string getAccessToken()
         {
@@ -113,8 +113,8 @@ namespace BP.GPM.DTalk
 
             var signPackage = new SignPackage()
             {
-                agentId = BP.Sys.SystemConfig.Ding_AgentID,
-                corpId = BP.Sys.SystemConfig.Ding_CorpID,
+                agentId = SystemConfig.Ding_AgentID,
+                corpId = SystemConfig.Ding_CorpID,
                 timeStamp = timestamp,
                 nonceStr = nonceStr,
                 signature = signature,
@@ -136,8 +136,8 @@ namespace BP.GPM.DTalk
                 //没有强制更新，并且没有超过缓存时间  
                 return;
             }
-            string CorpID = BP.Sys.SystemConfig.Ding_CorpID;
-            string CorpSecret = BP.Sys.SystemConfig.Ding_CorpSecret;
+            string CorpID = SystemConfig.Ding_CorpID;
+            string CorpSecret = SystemConfig.Ding_CorpSecret;
             string TokenUrl = Urls.gettoken;
             string apiurl = TokenUrl + "?" + Keys.corpid + "=" + CorpID + "&" + Keys.corpsecret + "=" + CorpSecret;
             TokenResult tokenResult = Analyze.Get<TokenResult>(apiurl);

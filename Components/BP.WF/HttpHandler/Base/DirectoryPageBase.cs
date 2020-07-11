@@ -72,7 +72,7 @@ namespace BP.WF.HttpHandler
 
 
             //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
-            string host = BP.Sys.SystemConfig.GetValByKey("TokenHost", null);
+            string host = SystemConfig.GetValByKey("TokenHost", null);
             if (DataType.IsNullOrEmpty(host) == true)
                 return null;
 
@@ -1020,7 +1020,7 @@ namespace BP.WF.HttpHandler
             string filename = title + "Ep" + title + ".xls";
             string file = filename;
             bool flag = true;
-            string filepath = BP.Sys.SystemConfig.PathOfTemp;
+            string filepath = SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
 
@@ -1141,7 +1141,7 @@ namespace BP.WF.HttpHandler
                 filename = title + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
             bool flag = true;
-            string filepath = BP.Sys.SystemConfig.PathOfTemp;
+            string filepath = SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
 
@@ -1329,7 +1329,7 @@ namespace BP.WF.HttpHandler
             string creator = null, bool date = false, bool index = true, bool download = false)
         {
 
-            string file = BP.Sys.SystemConfig.PathOfTemp + filename;
+            string file = SystemConfig.PathOfTemp + filename;
             bool flag = true;
 
             string dir = Path.GetDirectoryName(file);

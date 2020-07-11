@@ -1185,7 +1185,7 @@ namespace BP.Sys
             //清空缓存
             MapData mymd = new MapData(fk_mapdata);
             mymd.RepairMap();
-            BP.Sys.SystemConfig.DoClearCash();
+            SystemConfig.DoClearCash();
         }
 
         /// <summary>

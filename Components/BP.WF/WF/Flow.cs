@@ -647,7 +647,7 @@ namespace BP.WF
             //如果是bs系统.
             if (paras == null)
                 paras = new Hashtable();
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
@@ -4744,7 +4744,7 @@ namespace BP.WF
 
                             try
                             {
-                                File.Copy(info.DirectoryName + "\\" + no + ".rtf", BP.Sys.SystemConfig.PathOfWebApp + @"\DataUser\CyclostyleFile\" + bt.No + ".rtf", true);
+                                File.Copy(info.DirectoryName + "\\" + no + ".rtf", SystemConfig.PathOfWebApp + @"\DataUser\CyclostyleFile\" + bt.No + ".rtf", true);
                             }
                             catch (Exception ex)
                             {
@@ -5362,7 +5362,7 @@ namespace BP.WF
                                     htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -5374,7 +5374,7 @@ namespace BP.WF
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");

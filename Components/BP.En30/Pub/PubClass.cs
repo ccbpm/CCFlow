@@ -782,7 +782,7 @@ namespace BP.Pub
         private static void AddCommentForTable_MySql(Entity en)
         {
             MySql.Data.MySqlClient.MySqlConnection conn =
-                new MySql.Data.MySqlClient.MySqlConnection(BP.Sys.SystemConfig.AppCenterDSN);
+                new MySql.Data.MySqlClient.MySqlConnection(SystemConfig.AppCenterDSN);
             en.RunSQL("alter table " + conn.Database + "." + en.EnMap.PhysicsTable + " comment = '" + en.EnDesc + "'");
 
 

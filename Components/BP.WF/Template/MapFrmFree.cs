@@ -693,7 +693,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrom()
         {
-            return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
 
         }
         /// <summary>
@@ -702,7 +702,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&IsFirst=1&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&IsFirst=1&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
         }
         /// <summary>
         /// 查询

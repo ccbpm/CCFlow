@@ -132,7 +132,7 @@ namespace BP.DA
         {
             get
             {
-                return BP.Sys.SystemConfig.AppCenterDBVarStr;
+                return SystemConfig.AppCenterDBVarStr;
             }
         }
         /// <summary>

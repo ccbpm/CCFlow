@@ -48,7 +48,7 @@ namespace BP.GPM.WeiXin
         public override object Do()
         {
             BP.GPM.WeiXin.WeiXinEntity weixin = new BP.GPM.WeiXin.WeiXinEntity();
-            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "UserIcon";
+            string savePath = SystemConfig.PathOfDataUser + "UserIcon";
 
             //检查目录.
             if (Directory.Exists(savePath) == false)

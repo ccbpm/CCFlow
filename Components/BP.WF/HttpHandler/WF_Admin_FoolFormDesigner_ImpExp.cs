@@ -193,7 +193,7 @@ namespace BP.WF.HttpHandler
                     entityDict.Update();
                     entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                 }
-                BP.Sys.SystemConfig.DoClearCash();
+                SystemConfig.DoClearCash();
                 return "执行成功.";
             }
             catch (Exception ex)
@@ -251,7 +251,7 @@ namespace BP.WF.HttpHandler
                         entityDict.Update();
                         entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                     }
-                    BP.Sys.SystemConfig.DoClearCash();
+                    SystemConfig.DoClearCash();
                     return "执行成功.";
                 }
                 catch (Exception newex)
@@ -347,7 +347,7 @@ namespace BP.WF.HttpHandler
                     entityDict.Update();
                     entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                 }
-                BP.Sys.SystemConfig.DoClearCash();
+                SystemConfig.DoClearCash();
                 return "执行成功.";
                 #endregion
 

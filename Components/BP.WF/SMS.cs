@@ -659,7 +659,7 @@ namespace BP.WF
                 //    return;
                 //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
 
-                string messageUrl = BP.Sys.SystemConfig.AppSettings["HandlerOfMessage"];
+                string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
                 if (DataType.IsNullOrEmpty(messageUrl) == true)
                     return;
 

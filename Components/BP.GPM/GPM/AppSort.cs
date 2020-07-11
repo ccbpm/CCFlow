@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
 namespace BP.GPM
 {
@@ -141,8 +142,8 @@ namespace BP.GPM
             {
                 /*如果没有root.*/
                 root.ParentNo = "0";
-                root.Name = BP.Sys.SystemConfig.SysName;
-                root.FK_App = BP.Sys.SystemConfig.SysNo;
+                root.Name = SystemConfig.SysName;
+                root.FK_App = SystemConfig.SysNo;
                 root.HisMenuType = MenuType.Root;
                 root.Idx = 0;
                 root.Insert();

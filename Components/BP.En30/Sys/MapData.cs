@@ -1710,7 +1710,7 @@ namespace BP.Sys
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1722,7 +1722,7 @@ namespace BP.Sys
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -2351,7 +2351,7 @@ namespace BP.Sys
             this.Ver = DataType.CurrentDataTimess;
 
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
-            if (SystemConfig.CCBPMRunModel != 0)
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             //清除缓存.
@@ -2467,7 +2467,7 @@ namespace BP.Sys
                 }
                 else //说明当前excel文件没有生成.
                 {
-                    string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+                    string tempExcel = SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
                     if (System.IO.File.Exists(tempExcel) == true)
                     {
                         bytes = DataType.ConvertFileToByte(tempExcel);
@@ -2512,10 +2512,10 @@ namespace BP.Sys
             }
             else //说明当前excel文件没有生成.
             {
-                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.No + ".docx";
+                string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.No + ".docx";
 
                 if (System.IO.File.Exists(tempExcel) == false)
-                    tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
+                    tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
 
                 bytes = DataType.ConvertFileToByte(tempExcel);
                 return;

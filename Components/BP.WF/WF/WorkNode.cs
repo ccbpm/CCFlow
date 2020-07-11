@@ -145,7 +145,7 @@ namespace BP.WF
         {
             get
             {
-                if (_VirPath == null && BP.Sys.SystemConfig.IsBSsystem)
+                if (_VirPath == null && SystemConfig.IsBSsystem)
                     _VirPath = Glo.CCFlowAppPath;//BP.Sys.Glo.Request.ApplicationPath;
                 return _VirPath;
             }
@@ -158,12 +158,12 @@ namespace BP.WF
         {
             get
             {
-                if (BP.Sys.SystemConfig.IsBSsystem == false)
+                if (SystemConfig.IsBSsystem == false)
                 {
                     return "CCFlow";
                 }
 
-                if (_AppType == null && BP.Sys.SystemConfig.IsBSsystem)
+                if (_AppType == null && SystemConfig.IsBSsystem)
                 {
                     _AppType = "WF";
                 }
@@ -3194,7 +3194,7 @@ namespace BP.WF
         private void NodeSend_Send_5_5()
         {
             //执行设置当前人员的完成时间. for: anhua 2013-12-18.
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerlist SET CDT=" + dbstr + "CDT WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp=" + dbstr + "FK_Emp";
             ps.Add(GenerWorkerListAttr.CDT, DataType.CurrentDataTimess);

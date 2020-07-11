@@ -797,7 +797,7 @@ namespace BP.WF.Template
                 //rm.Target = "_blank";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //map.AddRefMethod(rm);
-                //if (BP.Sys.SystemConfig.CustomerNo == "HCBD")
+                //if (SystemConfig.CustomerNo == "HCBD")
                 //{
                 //    /* 为海成邦达设置的个性化需求. */
                 //    rm = new RefMethod();

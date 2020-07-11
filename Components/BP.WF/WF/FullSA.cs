@@ -52,7 +52,7 @@ namespace BP.WF
             sa.Delete(SelectAccperAttr.WorkID, workid);
 
             //求出已经路过的节点.
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
+            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
             string passedNodeIDs = "";
             foreach (DataRow item in dt.Rows)
             {
@@ -106,7 +106,7 @@ namespace BP.WF
                 //按照绑定的部门计算
                 if (item.HisDeliveryWay == DeliveryWay.ByDept)
                 {
-                    string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                    string dbStr = SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("WorkID", currWorkNode.HisWork.OID);
@@ -342,7 +342,7 @@ namespace BP.WF
                 #region 按部门与岗位的交集计算.
                 if (item.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
-                    string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                    string dbStr = SystemConfig.AppCenterDBVarStr;
                     string sql = string.Empty;
 
                     //added by liuxc,2015.6.30.
@@ -396,13 +396,13 @@ namespace BP.WF
                 {
                     /*如果按照岗位访问*/
                     #region 最后判断 - 按照岗位来执行。
-                    string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                    string dbStr = SystemConfig.AppCenterDBVarStr;
                     string sql = "";
                     Paras ps = new Paras();
                     /* 如果执行节点 与 接受节点岗位集合不一致 */
                     /* 没有查询到的情况下, 先按照本部门计算。*/
 
-                    switch (BP.Sys.SystemConfig.AppCenterDBType)
+                    switch (SystemConfig.AppCenterDBType)
                     {
                         case DBType.MySQL: 
                         case DBType.MSSQL:

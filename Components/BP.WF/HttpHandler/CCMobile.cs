@@ -137,8 +137,8 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", BP.Web.WebUser.Name);
 
             //系统名称.
-            ht.Add("SysName", BP.Sys.SystemConfig.SysName);
-            ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
@@ -443,7 +443,7 @@ namespace BP.WF.HttpHandler
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {

@@ -150,7 +150,7 @@ namespace BP.DA
         {
             try
             {
-                File.Delete(BP.Sys.SystemConfig.PathOfLog + DateTime.Now.ToString("\\yyyy_MM_dd.log"));
+                File.Delete(SystemConfig.PathOfLog + DateTime.Now.ToString("\\yyyy_MM_dd.log"));
             }
             catch
             {
@@ -237,7 +237,7 @@ namespace BP.DA
         /// </summary>
         public static void OpenLogDir()
         {
-            string file = BP.Sys.SystemConfig.PathOfLog;
+            string file = SystemConfig.PathOfLog;
             try
             {
                 System.Diagnostics.Process.Start(file);
@@ -252,7 +252,7 @@ namespace BP.DA
         /// </summary>
         public static void OpeLogToday()
         {
-            string file = BP.Sys.SystemConfig.PathOfLog + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
+            string file = SystemConfig.PathOfLog + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
             try
             {
                 System.Diagnostics.Process.Start(file);

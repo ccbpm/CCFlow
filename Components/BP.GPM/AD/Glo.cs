@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BP.Sys;
+using System;
 using System.DirectoryServices;
 using System.Runtime.InteropServices;   //必要引用
 using System.Security.Principal;    //必要引用
@@ -13,28 +14,28 @@ namespace BP.GPM.AD
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADBasePath"];
+                return SystemConfig.AppSettings["ADBasePath"];
             }
         }
         public static string ADUser
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADUser"];
+                return SystemConfig.AppSettings["ADUser"];
             }
         }
         public static string ADPassword
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADPassword"];
+                return SystemConfig.AppSettings["ADPassword"];
             }
         }
         public static string ADPath
         {
             get
             {
-                return Sys.SystemConfig.AppSettings["ADPath"];
+                return SystemConfig.AppSettings["ADPath"];
             }
         }
         /// <summary>

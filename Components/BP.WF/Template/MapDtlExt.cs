@@ -1198,7 +1198,7 @@ namespace BP.WF.Template
         public string OpenAthAttr()
         {
             string url = "../../Comm/RefFunc/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=" + this.No + "_AthMDtl";
-            // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
         }
 
@@ -1208,7 +1208,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DtlImp()
         {
-            string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
            // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
             return url;
         }
@@ -1218,7 +1218,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DtlImpV2019()
         {
-            //string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            //string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
             return url;
         }
@@ -1239,7 +1239,7 @@ namespace BP.WF.Template
         {
 
             //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
-            string url = "../../Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
         }
         /// <summary>
@@ -1248,7 +1248,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DFoolFrm()
         {
-            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
         }
         /// <summary>
@@ -1344,7 +1344,7 @@ namespace BP.WF.Template
 
                 md.ResetMaxMinXY();
             }
-            string url = "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&FromDtl=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&FromDtl=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
         }
 

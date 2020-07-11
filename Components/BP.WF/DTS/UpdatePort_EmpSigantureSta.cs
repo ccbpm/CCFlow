@@ -6,6 +6,8 @@ using BP.DA;
 using System.Reflection;
 using BP.Port;
 using BP.En;
+using BP.Sys;
+
 namespace BP.WF.DTS
 {
     /// <summary>
@@ -47,7 +49,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string path = BP.Sys.SystemConfig.PathOfDataUser + "Siganture";
+            string path = SystemConfig.PathOfDataUser + "Siganture";
             string[] files = System.IO.Directory.GetFiles(path);
 
             //清空设置为图片签名的记录.

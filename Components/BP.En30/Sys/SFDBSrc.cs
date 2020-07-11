@@ -752,7 +752,7 @@ namespace BP.Sys
                 switch (this.DBSrcType)
                 {
                     case Sys.DBSrcType.Localhost:
-                        return BP.Sys.SystemConfig.AppCenterDSN;
+                        return SystemConfig.AppCenterDSN;
                     case Sys.DBSrcType.SQLServer:
                         return "password=" + this.Password + ";persist security info=true;user id=" + this.UserID + ";initial catalog=" + this.DBName + ";data source=" + this.IP + ";timeout=999;multipleactiveresultsets=true";
                     case Sys.DBSrcType.Oracle:

@@ -55,7 +55,7 @@ namespace BP.WF
             get
             {
                 Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbstr = SystemConfig.AppCenterDBVarStr;
 
                 if (WebUser.IsAuthorize == false)
                 {
@@ -199,7 +199,7 @@ namespace BP.WF
             get
             {
                 /*获取数据.*/
-                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbStr = SystemConfig.AppCenterDBVarStr;
                 Paras ps = new Paras();
                 ps.SQL = "SELECT count(a.WorkID ) as Num FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter";
                 ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
@@ -214,7 +214,7 @@ namespace BP.WF
             get
             {
                 /*获取数据.*/
-                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbStr = SystemConfig.AppCenterDBVarStr;
                 Paras ps = new Paras();
                 string sql = "SELECT count(*)";
                 sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
@@ -238,7 +238,7 @@ namespace BP.WF
 
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbstr = SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%') AND WFState=" + (int)WFState.Complete;
                 return DBAccess.RunSQLReturnValInt(ps, 0);
 
@@ -252,7 +252,7 @@ namespace BP.WF
             get
             {
                 Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbstr = SystemConfig.AppCenterDBVarStr;
                 string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Sharing;
                 string sql;
                 string realSql = null;
@@ -302,7 +302,7 @@ namespace BP.WF
                 }
 
                 Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbstr = SystemConfig.AppCenterDBVarStr;
                 string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Takeback;
                 string sql;
                 string realSql;
@@ -573,7 +573,7 @@ namespace BP.WF
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {
@@ -1027,7 +1027,7 @@ namespace BP.WF
         public static DataTable DB_GenerDraftDataTable(string flowNo = null, string domain = null)
         {
             /*获取数据.*/
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (DataType.IsNullOrEmpty(domain) == true)
             {
@@ -1350,14 +1350,14 @@ namespace BP.WF
                 wfStateSql = " AND  A.WFState=" + showWhat;
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string sql;
             if (WebUser.IsAuthorize == false)
             {
                 /*不是授权状态*/
                 if (fk_node == 0)
                 {
-                    if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
+                    if (SystemConfig.CustomerNo == "TianYe")
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
@@ -1642,7 +1642,7 @@ namespace BP.WF
         {
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string sql;
             if (WebUser.IsAuthorize == false)
             {
@@ -1756,7 +1756,7 @@ namespace BP.WF
         {
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string sql;
             if (WebUser.IsAuthorize == false)
             {
@@ -1883,7 +1883,7 @@ namespace BP.WF
             }
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
             /*不是授权状态*/
             if (BP.WF.Glo.IsEnableTaskPool == true)
@@ -1942,7 +1942,7 @@ namespace BP.WF
         public static DataTable DB_GenerEmpWorksOfDataTable()
         {
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
             string sql;
 
@@ -2011,7 +2011,7 @@ namespace BP.WF
         {
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
             return DBAccess.RunSQLReturnTable(ps);
         }
@@ -2105,7 +2105,7 @@ namespace BP.WF
 
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + WebUser.No + "@%' OR  T.Emps LIKE '%@" + WebUser.No + ",%') AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
             dt = DBAccess.RunSQLReturnTable(ps);
 
@@ -2134,7 +2134,7 @@ namespace BP.WF
         {
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + WebUser.No + "@%' OR T.Emps LIKE '%@" + WebUser.No + ",%') AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
@@ -2192,7 +2192,7 @@ namespace BP.WF
 
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             return DBAccess.RunSQLReturnTable(ps);
 
@@ -2207,7 +2207,7 @@ namespace BP.WF
 
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE (T.Emps LIKE '%@" + userNo + "@%' OR  T.Emps LIKE '%@" + userNo + ",%') AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             return DBAccess.RunSQLReturnTable(ps);
         }
@@ -2257,7 +2257,7 @@ namespace BP.WF
 
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             if (DataType.IsNullOrEmpty(fk_flow))
             {
                 if (DataType.IsNullOrEmpty(title))
@@ -2332,7 +2332,7 @@ namespace BP.WF
             }
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Sharing;
             string sql;
             string realSql = null;
@@ -2363,7 +2363,7 @@ namespace BP.WF
             }
             //@杜. 这里需要翻译.
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["ISREAD"].ColumnName = "IsRead";
@@ -2399,7 +2399,7 @@ namespace BP.WF
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["workid"].ColumnName = "WorkID";
                 dt.Columns["isread"].ColumnName = "IsRead";
@@ -2450,7 +2450,7 @@ namespace BP.WF
             }
 
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Takeback;
             string sql;
             string realSql;
@@ -2487,7 +2487,7 @@ namespace BP.WF
 
             //@杜. 这里需要翻译.
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["ISREAD"].ColumnName = "IsRead";
@@ -2523,7 +2523,7 @@ namespace BP.WF
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["workid"].ColumnName = "WorkID";
                 dt.Columns["isread"].ColumnName = "IsRead";
@@ -2674,7 +2674,7 @@ namespace BP.WF
         public static DataTable DB_NDxxRpt(string fk_flow, WFState sta)
         {
             Flow fl = new Flow(fk_flow);
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             string sql = "SELECT OID,Title,RDT,FID FROM " + fl.PTable + " WHERE WFState=" + (int)sta + " AND Rec=" + dbstr + "Rec";
             Paras ps = new Paras();
             ps.SQL = sql;
@@ -3883,7 +3883,7 @@ namespace BP.WF
         public static DataTable Port_GetNewMsg(string userNo, string dateLastTime)
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SendTo AND RDT >" + BP.Sys.SystemConfig.AppCenterDBVarStr + "RDT Group By MsgType";
+            ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + SystemConfig.AppCenterDBVarStr + "SendTo AND RDT >" + SystemConfig.AppCenterDBVarStr + "RDT Group By MsgType";
             ps.Add(BP.WF.SMSAttr.SendTo, userNo);
             ps.Add(BP.WF.SMSAttr.RDT, dateLastTime);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -3897,7 +3897,7 @@ namespace BP.WF
         public static DataTable Port_GetNewMsg(string userNo)
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SendTo  Group By MsgType";
+            ps.SQL = "SELECT MsgType , Count(*) as Num FROM Sys_SMS WHERE SendTo=" + SystemConfig.AppCenterDBVarStr + "SendTo  Group By MsgType";
             ps.Add(BP.WF.SMSAttr.SendTo, userNo);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return dt;
@@ -4059,7 +4059,7 @@ namespace BP.WF
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
         public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName, string writeImg, string fwcView = null)
         {
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
 
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
@@ -4131,7 +4131,7 @@ namespace BP.WF
 
         public static void WriteTrackWorkCheckForTangRenYiYao(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
         {
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
 
             //WorkNode wn = new WorkNode(workid, currNodeID);
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -4191,7 +4191,7 @@ namespace BP.WF
         /// <param name="optionName"></param>
         public static void WriteTrackDailyLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             string today = DataType.CurrentData;
 
             Paras ps = new Paras();
@@ -4217,7 +4217,7 @@ namespace BP.WF
         /// <param name="optionName"></param>
         public static void WriteTrackWeekLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
 
             DateTime dTime = DateTime.Now;
             DateTime startWeek = dTime.AddDays(1 - Convert.ToInt32(dTime.DayOfWeek.ToString("d"))); //本周第一天
@@ -4276,7 +4276,7 @@ namespace BP.WF
         /// <param name="optionName"></param>
         public static void WriteTrackMonthLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             string today = DataType.CurrentData;
 
             DateTime dTime = DateTime.Now;
@@ -4485,7 +4485,7 @@ namespace BP.WF
         {
             string table = "ND" + int.Parse(flowNo) + "Track";
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE " + table + " SET Msg=" + dbstr + "Msg  WHERE ActionType=" + dbstr +
                 "ActionType and WorkID=" + dbstr + "WorkID and NDFrom=" + dbstr + "NDFrom";
@@ -4504,7 +4504,7 @@ namespace BP.WF
         /// <param name="newBillNo"></param>
         public static void SetBillNo(string flowNo, Int64 workID, string newBillNo)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET BillNo=" + dbstr + "BillNo  WHERE WorkID=" + dbstr + "WorkID";
             ps.Add("BillNo", newBillNo);
@@ -4537,7 +4537,7 @@ namespace BP.WF
             if (parentEmpNo == null)
                 parentEmpNo = WebUser.No;
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET PFlowNo=" + dbstr + "PFlowNo, PWorkID=" + dbstr + "PWorkID,PNodeID=" + dbstr + "PNodeID,PEmp=" + dbstr + "PEmp WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.PFlowNo, pgwf.FK_Flow);
@@ -4638,7 +4638,7 @@ namespace BP.WF
             //删除流程。
             gwf.Delete();
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
 
             Paras ps = new Paras();
 
@@ -5306,7 +5306,7 @@ namespace BP.WF
         /// <returns>返回该节点上的子流程是否完成？</returns>
         public static bool Flow_CheckAllSubFlowIsOver(int nodeID, Int64 workID)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE  PNodeID=" + dbstr + "PNodeID AND PWorkID=" + dbstr + "PWorkID AND WFState!=" + dbstr + "WFState ";
             ps.Add(GenerWorkFlowAttr.PNodeID, nodeID);
@@ -5510,7 +5510,7 @@ namespace BP.WF
                 return true;
 
             //先从轨迹里判断.
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "SELECT count(MyPK) as Num FROM ND" + int.Parse(flowNo) + "Track WHERE (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND (EmpFrom=" + dbStr + "Emp1 OR EmpTo=" + dbStr + "Emp2)";
             ps.Add(BP.WF.TrackAttr.WorkID, workid);
@@ -5743,7 +5743,7 @@ namespace BP.WF
         /// <param name="toEmper">调度到人员</param>
         public static string Flow_Schedule(Int64 workid, int toNodeID, string toEmper)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
 
             Node nd = new Node(toNodeID);
             Emp emp = new Emp(toEmper);
@@ -6539,7 +6539,7 @@ namespace BP.WF
         /// <returns>如果没有就返回null,有就返回@参数名0=参数值0@参数名1=参数值1</returns>
         public static string GetFlowParas(int nodeID, Int64 workid)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "SELECT Paras FROM WF_GenerWorkerlist WHERE FK_Node=" + dbstr + "FK_Node AND WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkerListAttr.FK_Node, nodeID);
@@ -8517,7 +8517,7 @@ namespace BP.WF
             }
 
             //删除流程.
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Flow fl = new Flow(gwf.FK_Flow);
             Paras ps = new Paras();
             ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID ";
@@ -9100,7 +9100,7 @@ namespace BP.WF
             gwf.TaskSta = TaskSta.Takeback;
             gwf.Update();
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             //设置已经被取走的状态。
             ps.SQL = "UPDATE WF_GenerWorkerlist SET IsEnable=-1 WHERE IsEnable=1 AND WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp!=" + dbstr + "FK_Emp ";
@@ -9160,7 +9160,7 @@ namespace BP.WF
             gwf.TaskSta = TaskSta.Sharing;
             gwf.Update();
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             //设置已经被取走的状态。
             ps.SQL = "UPDATE WF_GenerWorkerlist SET IsEnable=1 WHERE IsEnable=-1 AND WorkID=" + dbstr + "WorkID ";
@@ -9314,7 +9314,7 @@ namespace BP.WF
         /// <returns>返回时间串，如果没有挂起的动作就抛出异常.</returns>
         public static TimeSpan Node_GetHungUpTimeSpan(string flowNo, int nodeID, Int64 workid)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
 
             string instr = (int)ActionType.HungUp + "," + (int)ActionType.UnHungUp;
             Paras ps = new Paras();
@@ -9852,7 +9852,7 @@ namespace BP.WF
         {
             Node nd = new Node(nodeID);
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=1 WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp=" + dbstr + "FK_Emp";
             ps.Add("WorkID", workid);
@@ -10002,7 +10002,7 @@ namespace BP.WF
         /// <param name="userNo">要设置的人</param>
         public static void Node_SetWorkUnRead(Int64 workid, string userNo)
         {
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=0 WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp";
             ps.Add("WorkID", workid);

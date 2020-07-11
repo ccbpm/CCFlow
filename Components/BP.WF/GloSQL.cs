@@ -1,4 +1,5 @@
 ﻿using BP.DA;
+using BP.Sys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace BP.WF
             get
             {
                 string sql = "";
-                switch(BP.Sys.SystemConfig.AppCenterDBType)
+                switch(SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         return sql;

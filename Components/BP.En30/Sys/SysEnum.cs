@@ -226,7 +226,7 @@ namespace BP.Sys
 
             this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
 
-            if (SystemConfig.CCBPMRunModel != 0)
+            if (SystemConfig.CCBPMRunModel !=CCBPMRunModel.Single)
                 this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
                                                               //  else
                                                               //    this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.

@@ -164,7 +164,7 @@ namespace BP.DA
         /// <param name="saveFileField">保存到字段</param>
         public static void SaveBytesToDB(byte[] bytes, string tableName, string tablePK, object pkVal, string saveToFileField)
         {
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
                 SqlConnection cn = DBAccess.GetAppCenterDBConn as SqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -215,7 +215,7 @@ namespace BP.DA
 
             //修复for：jlow  oracle 异常： ORA-01745: 无效的主机/绑定变量名 edited by qin 16.7.1
             //错误的引用oracle的关键字file
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 OracleConnection cn = DBAccess.GetAppCenterDBConn as OracleConnection;
                 if (cn.State != ConnectionState.Open)
@@ -263,7 +263,7 @@ namespace BP.DA
             }
 
             //add by zhoupeng
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 Npgsql.NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as Npgsql.NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -318,7 +318,7 @@ namespace BP.DA
             }
 
             //added by liuxc,2016-12-7，增加对mysql大数据longblob字段存储逻辑
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 MySqlConnection cn = DBAccess.GetAppCenterDBConn as MySqlConnection;
 
@@ -513,7 +513,7 @@ namespace BP.DA
         /// <param name="fileSaveField">字段</param>
         public static byte[] GetByteFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
         {
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
                 SqlConnection cn = DBAccess.GetAppCenterDBConn as SqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -566,7 +566,7 @@ namespace BP.DA
             }
 
             //增加对oracle数据库的逻辑 qin
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 OracleConnection cn = DBAccess.GetAppCenterDBConn as OracleConnection;
                 if (cn.State != ConnectionState.Open)
@@ -615,7 +615,7 @@ namespace BP.DA
             }
 
             //added by liuxc,2016-12-7,增加对mysql数据库的逻辑
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 MySqlConnection cn = DBAccess.GetAppCenterDBConn as MySqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -664,7 +664,7 @@ namespace BP.DA
                 }
             }
 
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -817,7 +817,7 @@ namespace BP.DA
         {
             try
             {
-                switch (BP.Sys.SystemConfig.AppCenterDBType)
+                switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                     case DBType.PostgreSQL:
@@ -1182,7 +1182,7 @@ namespace BP.DA
             {
                 if (_connectionUserID == null)
                 {
-                    string[] strs = BP.Sys.SystemConfig.AppCenterDSN.Split(';');
+                    string[] strs = SystemConfig.AppCenterDSN.Split(';');
                     foreach (string str in strs)
                     {
                         if (str.ToLower().Contains("user ") == true)
@@ -1199,7 +1199,7 @@ namespace BP.DA
         {
             get
             {
-                string connstr = BP.Sys.SystemConfig.AppCenterDSN;
+                string connstr = SystemConfig.AppCenterDSN;
                 switch (AppCenterDBType)
                 {
                     case DBType.MSSQL:
@@ -1651,7 +1651,7 @@ namespace BP.DA
         public static DataTable ReadProText(string proName)
         {
             string sql = "";
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
+            switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
                 case DBType.DM:
@@ -1904,7 +1904,7 @@ namespace BP.DA
                 string msg = "";
                 string mysql = sql.Clone() as string;
 
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbstr = SystemConfig.AppCenterDBVarStr;
                 foreach (Para p in paras)
                 {
                     msg += "@" + p.ParaName + "=" + p.val + "," + p.DAType.ToString();
@@ -2245,7 +2245,7 @@ namespace BP.DA
                     }
                 }
 
-                if (BP.Sys.SystemConfig.IsDebug)
+                if (SystemConfig.IsDebug)
                 {
                     string msg = "RunSQL2   SQL=" + sql + ex.Message;
                     //Log.DebugWriteError(msg);
@@ -3047,7 +3047,7 @@ namespace BP.DA
 
         public static DataTable ToUpper(DataTable dt)
         {
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 return dt;
 
             foreach (DataColumn dc in dt.Columns)
@@ -3638,7 +3638,7 @@ namespace BP.DA
                         obj = obj.Split('.')[1];
 
                     // *** 屏蔽到下面的代码, 不需要从那个数据库里取，jflow 发现的bug  edit by :zhoupeng   2016.01.26 for fuzhou.
-                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE  table_name = '" + obj + "' AND TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' ");
+                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE  table_name = '" + obj + "' AND TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' ");
 
                 case DBType.Access:
                     //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
@@ -3667,7 +3667,7 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM information_schema.COLUMNS  WHERE TABLE_NAME='" + table + "' AND COLUMN_NAME='" + col + "'", 0);
                     break;
                 case DBType.MySQL:
-                    string sql = "select count(*) FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Sys.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + table + "' and column_Name='" + col + "'";
+                    string sql = "select count(*) FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + table + "' and column_Name='" + col + "'";
                     i = DBAccess.RunSQLReturnValInt(sql);
                     break;
                 case DBType.PostgreSQL:
@@ -3775,15 +3775,15 @@ namespace BP.DA
                 throw ex;
             }
 
-            //  BP.Sys.SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
-            BP.Sys.SystemConfig.CS_DBConnctionDic.Clear();
+            //  SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
+            SystemConfig.CS_DBConnctionDic.Clear();
             foreach (DataRow row in dscfg.Tables["add"].Rows)
             {
-                BP.Sys.SystemConfig.CS_AppSettings.Add(row["key"].ToString().Trim(), row["value"].ToString().Trim());
+                SystemConfig.CS_AppSettings.Add(row["key"].ToString().Trim(), row["value"].ToString().Trim());
             }
             dscfg.Dispose();
 
-            BP.Sys.SystemConfig.IsBSsystem = false;
+            SystemConfig.IsBSsystem = false;
         }
 
 

@@ -57,7 +57,7 @@ namespace BP.WF.HttpHandler
                 if (dbs.Count == 0 && 1 == 2)
                 {
                     /*如果数量为0,就检查一下是否有模版如果有就加载模版文件.*/
-                    string templetePath = BP.Sys.SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();
+                    string templetePath = SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();
                     if (Directory.Exists(templetePath) == false)
                         Directory.CreateDirectory(templetePath);
 
@@ -420,8 +420,8 @@ namespace BP.WF.HttpHandler
         {
             //  return BP.Tools.Json.ToJson(dt);
 
-            if ((BP.Sys.SystemConfig.AppCenterDBType == DBType.Informix
-                     || BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL != null)
+            if ((SystemConfig.AppCenterDBType == DBType.Informix
+                     || SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL != null)
             {
                 /*如果数据库不区分大小写, 就要按用户输入的sql进行二次处理。*/
                 string mysql = dealSQL.Trim();
@@ -543,7 +543,7 @@ namespace BP.WF.HttpHandler
             {
                 MapData mymd = new MapData(this.EnsName);
                 mymd.RepairMap();
-                BP.Sys.SystemConfig.DoClearCash();
+                SystemConfig.DoClearCash();
             }
 
             MapData md = new MapData(this.EnsName);
@@ -965,7 +965,7 @@ namespace BP.WF.HttpHandler
             MapDtl dtl = new MapDtl(this.EnsName);
 
             GEEntity en = new GEEntity(this.EnsName);
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -1079,7 +1079,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                if (SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -1276,7 +1276,7 @@ namespace BP.WF.HttpHandler
                 #endregion 根据who is pk 获取数据.
 
                 #region 附加参数数据.
-                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                if (SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -3991,7 +3991,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string tempPath = BP.Sys.SystemConfig.PathOfTemp;
+                string tempPath = SystemConfig.PathOfTemp;
 
                 //HttpFileCollection files = context.Request.Files;
                 var files = HttpContextHelper.RequestFiles();

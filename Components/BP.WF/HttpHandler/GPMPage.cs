@@ -64,7 +64,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg";
+                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
 
-            HttpContextHelper.UploadFile(f, BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg");
+            HttpContextHelper.UploadFile(f, SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg");
             return "上传成功！";
         }
         #endregion

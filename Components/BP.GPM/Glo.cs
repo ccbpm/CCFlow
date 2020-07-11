@@ -18,7 +18,7 @@ namespace BP.GPM
         {
             get
             {
-                string str= BP.Sys.SystemConfig.AppSettings["IsEnableRegUser"];
+                string str= SystemConfig.AppSettings["IsEnableRegUser"];
                 if (DataType.IsNullOrEmpty(str)==true)
                     return false;
 
@@ -36,7 +36,7 @@ namespace BP.GPM
             get
             {
                 return OSModel.OneMore;
-                //OSModel os = (OSModel)BP.Sys.SystemConfig.GetValByKeyInt("OSModel", 1);
+                //OSModel os = (OSModel)SystemConfig.GetValByKeyInt("OSModel", 1);
                 //return os;  
             }
         }
@@ -140,11 +140,11 @@ namespace BP.GPM
             sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
 
             //Oracle 语法有所区别
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
 
             DBAccess.RunSQLScriptGo(sqlscript);

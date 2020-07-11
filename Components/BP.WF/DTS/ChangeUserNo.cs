@@ -19,7 +19,7 @@ namespace BP.WF.DTS
         public ChangeUserNo()
         {
             this.Title = "修改人员编号（原来一个操作中编号叫A,现在修改成B）";
-            this.Help = "请慎重执行，执行前请先备份数据库，系统会把生成的SQL放在日志里，打开日志文件(" + BP.Sys.SystemConfig.PathOfDataUser + "\\Log)，然后找到这些sql.";
+            this.Help = "请慎重执行，执行前请先备份数据库，系统会把生成的SQL放在日志里，打开日志文件(" + SystemConfig.PathOfDataUser + "\\Log)，然后找到这些sql.";
             this.GroupName = "系统维护";
 
         }

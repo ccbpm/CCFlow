@@ -751,7 +751,7 @@ namespace BP.WF.Template
                     if (url.Contains("?") == false)
                         url = url + "?1=2";
 
-                    url = url.Replace("@SDKFromServHost", BP.Sys.SystemConfig.AppSettings["SDKFromServHost"]);
+                    url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
                     url = BP.WF.Glo.DealExp(url, this.en, "");
 
                     #region 加入必要的参数.

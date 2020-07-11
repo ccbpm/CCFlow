@@ -155,7 +155,7 @@ namespace BP.Port
     /// <summary>
     ///部门s
     /// </summary>
-    public class Depts : BP.En.EntitiesNoName
+    public class Depts : EntitiesNoName
     {
         #region 初始化实体.
         /// <summary>
@@ -193,7 +193,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel == 0 || WebUser.No=="admin")
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || WebUser.No=="admin")
                 return base.RetrieveAll();
 
             //按照orgNo查询.
@@ -206,7 +206,7 @@ namespace BP.Port
         public override int RetrieveAllFromDBSource()
         {
 
-            if (SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAllFromDBSource();
 
             //按照orgNo查询.

@@ -34,7 +34,7 @@ namespace BP.WF.HttpHandler
         {
             string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
-            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
             filePath = filePath + this.FK_MapData + ".htm";
@@ -55,7 +55,7 @@ namespace BP.WF.HttpHandler
             {
                 htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
                 //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
                 if (Directory.Exists(filePath) == false)
                     Directory.CreateDirectory(filePath);
 
@@ -112,7 +112,7 @@ namespace BP.WF.HttpHandler
         public string ResetFrm_Init()
         {
             //删除html
-            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + this.FK_MapData + ".htm";
+            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + this.FK_MapData + ".htm";
             if (File.Exists(filePath) == true)
                 File.Delete(filePath);
 
@@ -183,7 +183,7 @@ namespace BP.WF.HttpHandler
 
             //清空缓存
             toMapData.RepairMap();
-            BP.Sys.SystemConfig.DoClearCash();
+            SystemConfig.DoClearCash();
 
 
         }

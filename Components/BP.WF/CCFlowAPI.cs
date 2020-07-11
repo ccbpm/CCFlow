@@ -262,26 +262,26 @@ namespace BP.WF
                     //按照时间的顺序查找出来 ids .
                     string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
                     myFrmIDs = myFrmIDs.Replace("'", "");
-                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
                         sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "',FrmID) , Idx";
                     }
 
-                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     {
                         sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
                     }
 
-                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
                     }
-                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
                     }
 
-                    if (BP.Sys.SystemConfig.AppCenterDBType == DBType.DM)
+                    if (SystemConfig.AppCenterDBType == DBType.DM)
                     {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
                     }
@@ -519,7 +519,7 @@ namespace BP.WF
                 wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
                 //URL参数替换
-                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                if (SystemConfig.IsBSsystem == true)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestQueryStringKeys)

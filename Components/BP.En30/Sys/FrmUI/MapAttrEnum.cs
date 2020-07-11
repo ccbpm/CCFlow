@@ -132,7 +132,7 @@ namespace BP.Sys.FrmUI
                 }
                 sql += " union ";
 
-                if (SystemConfig.CCBPMRunModel == 0)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
                 else
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' ";

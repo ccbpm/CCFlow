@@ -238,7 +238,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(src))
                 {
                     string appPath = HttpContextHelper.RequestApplicationPath;
-                    src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
+                    src = appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
             }
@@ -255,7 +255,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(src) || src.Contains("component/Img"))
                 {
                     string appPath = HttpContextHelper.RequestApplicationPath;
-                    src = appPath + "DataUser/ICON/" + BP.Sys.SystemConfig.CustomerNo + "/LogBiger.png";
+                    src = appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
             }

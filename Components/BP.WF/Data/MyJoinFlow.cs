@@ -799,7 +799,7 @@ namespace BP.WF.Data
         {
 
             Paras pss = new Paras();
-            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
             pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
             pss.Add("WorkID", this.WorkID);
             DataTable dt = DBAccess.RunSQLReturnTable(pss);

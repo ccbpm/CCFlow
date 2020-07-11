@@ -63,7 +63,7 @@ namespace BP.Web
         {
             //这里要考虑集成的模式下，更新会出现是.
 
-            string sql = BP.Sys.SystemConfig.GetValByKey("UpdataMainDeptSQL", "");
+            string sql = SystemConfig.GetValByKey("UpdataMainDeptSQL", "");
             if (sql == "")
             {
                 /*如果没有配置, 就取默认的配置.*/
@@ -156,7 +156,7 @@ namespace BP.Web
             WebUser.FK_DeptName = em.FK_DeptText;
 
             WebUser.SysLang = lang;
-            if (BP.Sys.SystemConfig.IsBSsystem)
+            if (SystemConfig.IsBSsystem)
             {
                 // cookie操作，为适应不同平台，统一使用HttpContextHelper
                 Dictionary<string, string> cookieValues = new Dictionary<string, string>();
@@ -558,7 +558,7 @@ namespace BP.Web
         /// <param name="keyVals"></param>
         public static void SetValToCookie(string keyVals)
         {
-            if (BP.Sys.SystemConfig.IsBSsystem == false)
+            if (SystemConfig.IsBSsystem == false)
                 return;
 
             /* 2019-7-25 张磊 如下代码没有作用，删除

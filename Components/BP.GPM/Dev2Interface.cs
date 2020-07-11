@@ -119,7 +119,7 @@ namespace BP.GPM
         public static MessageErrorModel PushMessageToTelByWeiXin(long WorkID, string sender)
         {
             //企业应用必须存在
-            string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+            string agentId = SystemConfig.WX_AgentID ?? null;
             if (agentId != null)
             {
                 //获取 AccessToken
@@ -166,18 +166,18 @@ namespace BP.GPM
                 newArticle.description = msgConten;
 
                 //设置图片连接
-                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Sys.SystemConfig.WX_CorpID
-                    + "&redirect_uri=" + BP.Sys.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
+                    + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
 
                 newArticle.url = New_Url;
 
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                newArticle.picurl = BP.Sys.SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
+                newArticle.picurl = SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
 
                 //加入消息
                 MsgNews wxMsg = new MsgNews();
                 wxMsg.Access_Token = accessToken;
-                wxMsg.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                wxMsg.agentid = SystemConfig.WX_AgentID;
                 wxMsg.touser = toUsers;
                 wxMsg.articles.Add(newArticle);
                 //执行发送

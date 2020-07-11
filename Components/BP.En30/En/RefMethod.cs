@@ -170,7 +170,7 @@ namespace BP.En
             string meth = str.Substring(pos, str.Length - pos).Trim('.', ' ', '(', ')');
             if (this.HisEn == null)
             {
-                this.HisEn = BP.En.ClassFactory.GetEn(clas);
+                this.HisEn = ClassFactory.GetEn(clas);
                 Attrs attrs = this.HisEn.EnMap.Attrs;
             }
 

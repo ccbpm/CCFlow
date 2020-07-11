@@ -884,7 +884,7 @@ namespace BP.WF.HttpHandler
         public string Start_Init()
         {
             //为天业集团特殊处理.
-            if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
+            if (SystemConfig.CustomerNo == "TianYe")
                 return Start_InitTianYe();
 
             string json = "";
@@ -1011,7 +1011,7 @@ namespace BP.WF.HttpHandler
         {
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
@@ -2285,7 +2285,7 @@ namespace BP.WF.HttpHandler
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {

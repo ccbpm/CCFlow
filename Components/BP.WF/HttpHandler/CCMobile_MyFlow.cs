@@ -50,7 +50,7 @@ namespace BP.WF.HttpHandler
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
             wk.ResetDefaultVal();
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            if (SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestQueryStringKeys)

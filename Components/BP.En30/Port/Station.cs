@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 
 namespace BP.Port
 {
@@ -95,7 +96,7 @@ namespace BP.Port
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
 
-                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
 
                 }
@@ -136,7 +137,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll(string orderBy)
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
             //按照orgNo查询.
@@ -148,7 +149,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll();
 
             //按照orgNo查询.

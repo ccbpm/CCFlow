@@ -293,7 +293,7 @@ namespace BP.DA
                 return _SQL_Cash;
             }
         }
-        public static BP.En.SQLCash GetSQL(string clName)
+        public static SQLCash GetSQL(string clName)
         {
             return SQL_Cash[clName] as BP.En.SQLCash;
         }

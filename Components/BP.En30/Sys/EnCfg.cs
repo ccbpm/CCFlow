@@ -269,7 +269,7 @@ namespace BP.Sys
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJSavePath);
                 if (DataType.IsNullOrEmpty(str) == true)
-                    return BP.Sys.SystemConfig.PathOfDataUser + this.No + "\\";
+                    return SystemConfig.PathOfDataUser + this.No + "\\";
                 return str;
             }
             set

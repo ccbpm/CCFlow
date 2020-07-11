@@ -480,8 +480,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string getAccessToken()
         {
-            string ak = Sys.SystemConfig.APIKey;
-            string sk = Sys.SystemConfig.SecretKey;
+            string ak = SystemConfig.APIKey;
+            string sk = SystemConfig.SecretKey;
 
             //百度云应用获取token
             String authHost = "https://aip.baidubce.com/oauth/2.0/token";

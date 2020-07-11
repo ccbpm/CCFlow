@@ -186,7 +186,7 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_Init()
         {
             //清除缓存.
-            BP.Sys.SystemConfig.DoClearCash();
+            SystemConfig.DoClearCash();
 
             if (BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";

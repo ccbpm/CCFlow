@@ -146,7 +146,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + empNo + ".jpg";
+                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -166,8 +166,8 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message + "" + info;
             }
 
-            //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
-            // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
+            //f.SaveAs(SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
+            // f.SaveAs(SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
             //f.Dispose();
@@ -187,7 +187,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/UserIcon/" + empNo + ".png";
+                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/UserIcon/" + empNo + ".png";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -310,7 +310,7 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(oldPass) == false)
                 return "err@旧密码错误.";
 
-            if (BP.Sys.SystemConfig.IsEnablePasswordEncryption == true)
+            if (SystemConfig.IsEnablePasswordEncryption == true)
                 pass = BP.Tools.Cryptography.EncryptString(pass);
             emp.Pass = pass;
             emp.Update();

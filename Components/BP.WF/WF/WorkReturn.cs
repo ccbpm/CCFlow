@@ -49,7 +49,7 @@ namespace BP.WF
         /// 退回到节点
         /// </summary>
         private Work ReurnToWork = null;
-        private string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+        private string dbStr = SystemConfig.AppCenterDBVarStr;
         private Paras ps;
         public string ReturnToEmp = null;
         /// <summary>
@@ -1238,7 +1238,7 @@ namespace BP.WF
         private string infoLog = "";
         private void ReorderLog(Node fromND, Node toND, ReturnWork rw)
         {
-            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "\\ReturnLog\\" + this.HisNode.FK_Flow + "\\";
+            string filePath = SystemConfig.PathOfDataUser + "\\ReturnLog\\" + this.HisNode.FK_Flow + "\\";
             if (System.IO.Directory.Exists(filePath) == false)
                 System.IO.Directory.CreateDirectory(filePath);
 

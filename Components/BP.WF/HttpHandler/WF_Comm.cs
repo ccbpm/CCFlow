@@ -2892,7 +2892,7 @@ namespace BP.WF.HttpHandler
                 Entities dtls = BP.En.ClassFactory.GetEns(this.EnsName);
                 Entity en = dtls.GetNewEntity;
                 QueryObject qo = new QueryObject(dtls);
-                //qo.DoQuery(en.PK, BP.Sys.SystemConfig.PageSize, this.PageIdx, false);
+                //qo.DoQuery(en.PK, SystemConfig.PageSize, this.PageIdx, false);
                 qo.DoQuery();
                 Map map = en.EnMap;
                 foreach (Entity item in dtls)
@@ -3508,8 +3508,8 @@ namespace BP.WF.HttpHandler
                 ht.Add("FK_DeptNameOfFull", "");
                 ht.Add("Tel","");
 
-                ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
-                ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+                ht.Add("CustomerNo", SystemConfig.CustomerNo);
+                ht.Add("CustomerName", SystemConfig.CustomerName);
                 ht.Add("IsAdmin", 0);
                 ht.Add("OrgNo", "");
                 ht.Add("OrgName","");
@@ -3521,8 +3521,8 @@ namespace BP.WF.HttpHandler
             ht.Add("FK_Dept", WebUser.FK_Dept);
             ht.Add("FK_DeptName", WebUser.FK_DeptName);
             ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            ht.Add("CustomerNo", BP.Sys.SystemConfig.CustomerNo);
-            ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
+            ht.Add("CustomerNo", SystemConfig.CustomerNo);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
             ht.Add("IsAdmin", WebUser.IsAdmin == true ? 1 : 0);
             ht.Add("SID", WebUser.SID);
             ht.Add("Tel",WebUser.Tel);
@@ -3546,7 +3546,7 @@ namespace BP.WF.HttpHandler
             ht.Add("Theme", emp.GetParaString("Theme"));
 
             //增加运行模式. add by zhoupeng 2020.03.10 适应saas模式.
-            ht.Add("CCBPMRunModel", BP.Sys.SystemConfig.GetValByKey("CCBPMRunModel", "0"));
+            ht.Add("CCBPMRunModel", SystemConfig.GetValByKey("CCBPMRunModel", "0"));
 
             return BP.Tools.Json.ToJson(ht);
         }
@@ -3658,7 +3658,7 @@ namespace BP.WF.HttpHandler
                 string fileSavePath = en.EnMap.FJSavePath;
 
                 if (DataType.IsNullOrEmpty(fileSavePath) == true)
-                    fileSavePath = BP.Sys.SystemConfig.PathOfDataUser + enName;
+                    fileSavePath = SystemConfig.PathOfDataUser + enName;
 
                 if (System.IO.Directory.Exists(fileSavePath) == false)
                     System.IO.Directory.CreateDirectory(fileSavePath);
@@ -3779,7 +3779,7 @@ namespace BP.WF.HttpHandler
             else
             {
 
-                string savePath = BP.Sys.SystemConfig.PathOfDataUser + enName + this.PKVal;
+                string savePath = SystemConfig.PathOfDataUser + enName + this.PKVal;
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
@@ -4930,7 +4930,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string path = BP.Sys.SystemConfig.PathOfDataUser + "Fastenter\\" + FK_MapData + "\\" + GetRequestVal("AttrKey"); ;
+                string path = SystemConfig.PathOfDataUser + "Fastenter\\" + FK_MapData + "\\" + GetRequestVal("AttrKey"); ;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 

@@ -452,7 +452,7 @@ namespace BP.WF.Template
         public WorkNode town = null;
         public WorkNode currWn = null;
         public Flow fl = null;
-        string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+        string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = null;
         public Int64 WorkID = 0;
         public Node HisNode = null;

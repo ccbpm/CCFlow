@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Web;
 using BP.Port;
+using BP.Sys;
 
 namespace BP.GPM
 {
@@ -325,7 +326,7 @@ namespace BP.GPM
                 return qo.DoQuery();
             }
 
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 QueryObject qo = new QueryObject(this);
                 qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);

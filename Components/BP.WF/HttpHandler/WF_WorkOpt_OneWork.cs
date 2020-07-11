@@ -1164,7 +1164,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Check()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
+            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             pss.Add("WorkID", this.WorkID);
 
@@ -1213,7 +1213,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Count()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
+            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             ps.Add("WorkID", this.WorkID);
             string count = DBAccess.RunSQLReturnValInt(ps).ToString();

@@ -27,7 +27,7 @@ namespace BP.WF
             {
                 if (_AppType == null)
                 {
-                    if (BP.Sys.SystemConfig.IsBSsystem == false)
+                    if (SystemConfig.IsBSsystem == false)
                     {
                         _AppType = "WF";
                     }
@@ -55,7 +55,7 @@ namespace BP.WF
             {
                 if (_VirPath == null)
                 {
-                    if (BP.Sys.SystemConfig.IsBSsystem)
+                    if (SystemConfig.IsBSsystem)
                         _VirPath = Glo.CCFlowAppPath;//BP.Sys.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";

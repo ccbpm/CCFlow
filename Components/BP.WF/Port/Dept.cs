@@ -2,6 +2,7 @@
 using System.Data;
 using BP.DA;
 using BP.En;
+using BP.Sys;
 using BP.Web;
 
 namespace BP.WF.Port
@@ -109,7 +110,7 @@ namespace BP.WF.Port
             if (BP.Web.WebUser.No.Equals("admin")==true)
                 return base.RetrieveAll();
 
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 QueryObject qo = new QueryObject(this);
                 qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);

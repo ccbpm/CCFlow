@@ -1,6 +1,7 @@
 ﻿using BP.En;
 using BP.GPM.DTalk;
 using BP.GPM.WeiXin;
+using BP.Sys;
 using BP.Tools;
 using System;
 using System.IO;
@@ -36,7 +37,7 @@ namespace BP.GPM.WeiXin
         {
             #region 读取数据.
             //判断是否配置了企业号
-            if (string.IsNullOrWhiteSpace(BP.Sys.SystemConfig.WX_CorpID))
+            if (string.IsNullOrWhiteSpace(SystemConfig.WX_CorpID))
                 return "err@没有配置企业号相关信息";
             //获取部门列表
             DeptList DeptMentList = new DeptList();

@@ -824,7 +824,7 @@ namespace BP.WF
 
             if (_Multilingual_Cache.ContainsKey(className) == false)
             {
-                DataSet ds = DataType.CXmlFileToDataSet(BP.Sys.SystemConfig.PathOfData + "\\lang\\xml\\" + className + ".xml");
+                DataSet ds = DataType.CXmlFileToDataSet(SystemConfig.PathOfData + "\\lang\\xml\\" + className + ".xml");
                 DataTable dt = ds.Tables[0];
 
                 _Multilingual_Cache.Add(className, dt);
@@ -928,7 +928,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["PrintBackgroundWord"];
+                string s = SystemConfig.AppSettings["PrintBackgroundWord"];
                 if (string.IsNullOrEmpty(s))
                     s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
                 return s;
@@ -952,7 +952,7 @@ namespace BP.WF
         {
             get
             {
-                return (ShortMessageWriteTo)BP.Sys.SystemConfig.GetValByKeyInt("ShortMessageWriteTo", 0);
+                return (ShortMessageWriteTo)SystemConfig.GetValByKeyInt("ShortMessageWriteTo", 0);
             }
         }
         /// <summary>
@@ -1117,21 +1117,21 @@ namespace BP.WF
             #region 6, 创建视图。
             string sqlscript = "";
             //MSSQL_GPM_VIEW 语法有所区别
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
 
             //Oracle 语法有所区别
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
-                throw new Exception("err@没有判断的数据库类型:" + BP.Sys.SystemConfig.AppCenterDBType.ToString());
+                throw new Exception("err@没有判断的数据库类型:" + SystemConfig.AppCenterDBType.ToString());
 
             DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 创建视图
@@ -1709,7 +1709,7 @@ namespace BP.WF
                 wfemp.CheckPhysicsTable();
 
                 #region 更新wf_emp. 的字段类型. 2019.06.19
-                DBType dbtype = BP.Sys.SystemConfig.AppCenterDBType;
+                DBType dbtype = SystemConfig.AppCenterDBType;
 
                 //if (DBAccess.IsExitsTableCol("WF_Emp", "StartFlows") == true)
                 //    DBAccess.RunSQL("ALTER TABLE WF_Emp DROP Column StartFlows");
@@ -2083,20 +2083,20 @@ namespace BP.WF
 
                 string sqlscript = "";
                 //执行必须的sql.
-                switch (BP.Sys.SystemConfig.AppCenterDBType)
+                switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_Ora.sql";
+                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_Ora.sql";
                         break;
                     case DBType.MSSQL:
                     case DBType.Informix:
-                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_SQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_SQL.sql";
                         break;
                     case DBType.MySQL:
-                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_MySQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_MySQL.sql";
                         break;
                     case DBType.PostgreSQL:
-                        sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_PostgreSQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_PostgreSQL.sql";
                         break;
                     default:
                         break;
@@ -2119,7 +2119,7 @@ namespace BP.WF
                 #endregion
 
                 #region 修复 mapattr UIHeight, UIWidth 类型错误.
-                switch (BP.Sys.SystemConfig.AppCenterDBType)
+                switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
                         msg = "@Sys_MapAttr 修改字段";
@@ -2135,7 +2135,7 @@ namespace BP.WF
                 #endregion
 
                 #region 升级常用词汇
-                switch (BP.Sys.SystemConfig.AppCenterDBType)
+                switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
                         int i = DBAccess.RunSQLReturnCOUNT("SELECT * FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'SYS_DEFVAL' AND COLUMN_NAME = 'PARENTNO'");
@@ -2233,7 +2233,7 @@ namespace BP.WF
                 #endregion 执行admin登陆.
 
                 #region 修复 Sys_FrmImg 表字段 ImgAppType Tag0
-                switch (BP.Sys.SystemConfig.AppCenterDBType)
+                switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
                         int i = DBAccess.RunSQLReturnCOUNT("SELECT * FROM USER_TAB_COLUMNS WHERE TABLE_NAME = 'SYS_FRMIMG' AND COLUMN_NAME = 'TAG0'");
@@ -2347,7 +2347,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("CCFlowAppPath", "/");
+                return SystemConfig.GetValByKey("CCFlowAppPath", "/");
             }
         }
         /// <summary>
@@ -2360,7 +2360,7 @@ namespace BP.WF
                 if (SystemConfig.CustomerNo == "TianYe")
                     return true;
 
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableHuiQianList", false);
+                return SystemConfig.GetValByKeyBoolen("IsEnableHuiQianList", false);
             }
         }
         /// <summary>
@@ -2553,7 +2553,7 @@ namespace BP.WF
             BP.GPM.Emp empGPM = new BP.GPM.Emp();
             empGPM.CheckPhysicsTable();
 
-            sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
+            sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
             DBAccess.RunSQLScript(sqlscript);
 
             BP.Port.Emp empAdmin = new Emp("admin");
@@ -2716,20 +2716,20 @@ namespace BP.WF
 
             sqlscript = "";
             //执行必须的sql.
-            switch (BP.Sys.SystemConfig.AppCenterDBType)
+            switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
                     break;
                 case DBType.MSSQL:
                 case DBType.Informix:
-                    sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
                     break;
                 case DBType.MySQL:
-                    sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
                     break;
                 case DBType.PostgreSQL:
-                    sqlscript = BP.Sys.SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
                     break;
                 default:
                     break;
@@ -3349,7 +3349,7 @@ namespace BP.WF
             //                            newTable.Cell(groupIdx, 1).Range.Text = attr.Name;
             //                            if (attr.IsSigan)
             //                            {
-            //                                string path = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
+            //                                string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
             //                                if (System.IO.File.Exists(path))
             //                                {
             //                                    System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -3387,7 +3387,7 @@ namespace BP.WF
             //                            newTable.Cell(groupIdx, 3).Range.Text = attr.Name;
             //                            if (attr.IsSigan)
             //                            {
-            //                                string path = BP.Sys.SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
+            //                                string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
             //                                if (System.IO.File.Exists(path))
             //                                {
             //                                    System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -3708,7 +3708,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["adminers"];
+                string s = SystemConfig.AppSettings["adminers"];
                 if (string.IsNullOrEmpty(s))
                     s = "admin,";
                 return s.Contains(BP.Web.WebUser.No);
@@ -3718,7 +3718,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["IsEnableTrackRec"];
+                string s = SystemConfig.AppSettings["IsEnableTrackRec"];
                 if (string.IsNullOrEmpty(s))
                     return false;
                 if (s == "0")
@@ -3735,7 +3735,7 @@ namespace BP.WF
         public static string MapDataLikeKeyV1(string flowNo, string colName)
         {
             flowNo = int.Parse(flowNo).ToString();
-            string len = BP.Sys.SystemConfig.AppCenterDBLengthStr;
+            string len = SystemConfig.AppCenterDBLengthStr;
             if (flowNo.Length == 1)
                 return " " + colName + " LIKE 'ND" + flowNo + "%' AND " + len + "(" + colName + ")=5";
             if (flowNo.Length == 2)
@@ -3748,7 +3748,7 @@ namespace BP.WF
         public static string MapDataLikeKey(string flowNo, string colName)
         {
             flowNo = int.Parse(flowNo).ToString();
-            string len = BP.Sys.SystemConfig.AppCenterDBLengthStr;
+            string len = SystemConfig.AppCenterDBLengthStr;
 
             //edited by liuxc,2016-02-22,合并逻辑，原来分流程编号的位数，现在统一处理
             return " (" + colName + " LIKE 'ND" + flowNo + "%' AND " + len + "(" + colName + ")=" +
@@ -3766,7 +3766,7 @@ namespace BP.WF
             {
                 try
                 {
-                    return int.Parse(BP.Sys.SystemConfig.AppSettings["SMSSendTimeFromHour"]);
+                    return int.Parse(SystemConfig.AppSettings["SMSSendTimeFromHour"]);
                 }
                 catch
                 {
@@ -3786,7 +3786,7 @@ namespace BP.WF
             {
                 try
                 {
-                    return int.Parse(BP.Sys.SystemConfig.AppSettings["SMSSendTimeToHour"]);
+                    return int.Parse(SystemConfig.AppSettings["SMSSendTimeToHour"]);
                 }
                 catch
                 {
@@ -5260,7 +5260,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["GloSID"] as string;
+                string s = SystemConfig.AppSettings["GloSID"] as string;
                 if (DataType.IsNullOrEmpty(s))
                     s = "sdfq2erre-2342-234sdf23423-323";
                 return s;
@@ -5276,7 +5276,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["IsEnableCheckUseSta"] as string;
+                string s = SystemConfig.AppSettings["IsEnableCheckUseSta"] as string;
                 if (s == null || s == "0")
                     return false;
                 return true;
@@ -5289,7 +5289,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["IsEnableMyNodeName"] as string;
+                string s = SystemConfig.AppSettings["IsEnableMyNodeName"] as string;
                 if (s == null || s == "0")
                     return false;
                 return true;
@@ -5318,7 +5318,7 @@ namespace BP.WF
         {
             get
             {
-                string s = BP.Sys.SystemConfig.AppSettings["IsQL"];
+                string s = SystemConfig.AppSettings["IsQL"];
                 if (s == null || s == "0")
                     return false;
                 return true;
@@ -5331,7 +5331,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableTaskPool", false);
+                return SystemConfig.GetValByKeyBoolen("IsEnableTaskPool", false);
             }
         }
         /// <summary>
@@ -5341,7 +5341,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsShowTitle", false);
+                return SystemConfig.GetValByKeyBoolen("IsShowTitle", false);
             }
         }
 
@@ -5352,7 +5352,7 @@ namespace BP.WF
         {
             get
             {
-                return (UserInfoShowModel)BP.Sys.SystemConfig.GetValByKeyInt("UserInfoShowModel", 0);
+                return (UserInfoShowModel)SystemConfig.GetValByKeyInt("UserInfoShowModel", 0);
             }
         }
         /// <summary>
@@ -5386,7 +5386,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("UpdataMainDeptSQL", "UPDATE Port_Emp SET FK_Dept=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FK_Dept WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No");
+                return SystemConfig.GetValByKey("UpdataMainDeptSQL", "UPDATE Port_Emp SET FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept WHERE No=" + SystemConfig.AppCenterDBVarStr + "No");
             }
         }
         /// <summary>
@@ -5396,7 +5396,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("UpdataSID", "UPDATE Port_Emp SET SID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No");
+                return SystemConfig.GetValByKey("UpdataSID", "UPDATE Port_Emp SET SID=" + SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + SystemConfig.AppCenterDBVarStr + "No");
             }
         }
         /// <summary>
@@ -5486,8 +5486,8 @@ namespace BP.WF
             get
             {
                 //如果两个参数都不为空说明启用
-                string corpid = BP.Sys.SystemConfig.Ding_CorpID;
-                string corpsecret = BP.Sys.SystemConfig.Ding_CorpSecret;
+                string corpid = SystemConfig.Ding_CorpID;
+                string corpsecret = SystemConfig.Ding_CorpSecret;
                 if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
                     return false;
 
@@ -5502,8 +5502,8 @@ namespace BP.WF
             get
             {
                 //如果两个参数都不为空说明启用
-                string corpid = BP.Sys.SystemConfig.WX_CorpID;
-                string corpsecret = BP.Sys.SystemConfig.WX_AppSecret;
+                string corpid = SystemConfig.WX_CorpID;
+                string corpsecret = SystemConfig.WX_AppSecret;
                 if (string.IsNullOrEmpty(corpid) || string.IsNullOrEmpty(corpsecret))
                     return false;
 
@@ -5517,7 +5517,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableCheckFrmTreeIsNull", true);
+                return SystemConfig.GetValByKeyBoolen("IsEnableCheckFrmTreeIsNull", true);
             }
         }
         /// <summary>
@@ -5527,7 +5527,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableSysMessage", true);
+                return SystemConfig.GetValByKeyBoolen("IsEnableSysMessage", true);
             }
         }
         /// <summary>
@@ -5537,7 +5537,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyInt("AutoNodeDTSTimeSpanMinutes", 60);
+                return SystemConfig.GetValByKeyInt("AutoNodeDTSTimeSpanMinutes", 60);
             }
         }
         /// <summary>
@@ -5548,7 +5548,7 @@ namespace BP.WF
         {
             get
             {
-                string baseUrl = BP.Sys.SystemConfig.AppSettings["CCIMDBName"];
+                string baseUrl = SystemConfig.AppSettings["CCIMDBName"];
                 if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "ccPort.dbo";
                 return baseUrl;
@@ -5561,12 +5561,12 @@ namespace BP.WF
         {
             get
             {
-                if (BP.Sys.SystemConfig.IsBSsystem)
+                if (SystemConfig.IsBSsystem)
                 {
                     /* 如果是BS 就要求 路径.*/
                 }
 
-                string baseUrl = BP.Sys.SystemConfig.AppSettings["HostURL"];
+                string baseUrl = SystemConfig.AppSettings["HostURL"];
                 if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "http://127.0.0.1/";
 
@@ -5582,12 +5582,12 @@ namespace BP.WF
         {
             get
             {
-                if (BP.Sys.SystemConfig.IsBSsystem)
+                if (SystemConfig.IsBSsystem)
                 {
                     /* 如果是BS 就要求 路径.*/
                 }
 
-                string baseUrl = BP.Sys.SystemConfig.AppSettings["BpmMobileAddress"];
+                string baseUrl = SystemConfig.AppSettings["BpmMobileAddress"];
                 if (string.IsNullOrEmpty(baseUrl) == true)
                     baseUrl = "http://127.0.0.1/";
 
@@ -6059,7 +6059,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("AMFrom", "08:30");
+                return SystemConfig.GetValByKey("AMFrom", "08:30");
             }
         }
         /// <summary>
@@ -6080,7 +6080,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyFloat("AMPMHours", 8);
+                return SystemConfig.GetValByKeyFloat("AMPMHours", 8);
             }
         }
         /// <summary>
@@ -6090,7 +6090,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyFloat("AMPMTimeSpan", 1);
+                return SystemConfig.GetValByKeyFloat("AMPMTimeSpan", 1);
             }
         }
         /// <summary>
@@ -6100,7 +6100,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("AMTo", "11:30");
+                return SystemConfig.GetValByKey("AMTo", "11:30");
             }
         }
         /// <summary>
@@ -6120,7 +6120,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("PMFrom", "13:30");
+                return SystemConfig.GetValByKey("PMFrom", "13:30");
             }
         }
         /// <summary>
@@ -6140,7 +6140,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKey("PMTo", "17:30");
+                return SystemConfig.GetValByKey("PMTo", "17:30");
             }
         }
         /// <summary>
@@ -6165,14 +6165,14 @@ namespace BP.WF
             try
             {
                 //删除目录.
-                string temp = BP.Sys.SystemConfig.PathOfTemp;
+                string temp = SystemConfig.PathOfTemp;
                 System.IO.Directory.Delete(temp, true);
 
                 //创建目录.
                 System.IO.Directory.CreateDirectory(temp);
 
                 //删除pdf 目录.
-                temp = BP.Sys.SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
+                temp = SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
                 System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(temp);
                 System.IO.DirectoryInfo[] dirs = info.GetDirectories();
                 foreach (System.IO.DirectoryInfo dir in dirs)
@@ -6585,7 +6585,7 @@ namespace BP.WF
             if (role == StartLimitRole.OnlyOneSubFlow)
             {
 
-                if (BP.Sys.SystemConfig.IsBSsystem == true)
+                if (SystemConfig.IsBSsystem == true)
                 {
 
                     string pflowNo = HttpContextHelper.RequestParams("PFlowNo");

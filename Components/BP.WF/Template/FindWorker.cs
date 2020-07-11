@@ -21,7 +21,7 @@ namespace BP.WF.Template
         public WorkNode town = null;
         public WorkNode currWn = null;
         public Flow fl = null;
-        string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+        string dbStr = SystemConfig.AppCenterDBVarStr;
         public Paras ps = null;
         string JumpToEmp = null;
         int JumpToNode = 0;

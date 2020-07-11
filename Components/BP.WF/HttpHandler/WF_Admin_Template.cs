@@ -301,7 +301,7 @@ namespace BP.WF.HttpHandler
 
                 #region 下载文件.
                 //设置要到的路径.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + str;
+                string tempfile = SystemConfig.PathOfTemp + "\\" + str;
                 FtpStatus fs;
                 try
                 {
@@ -391,7 +391,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //设置要到的路径.
-                string tempfile = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileName;
+                string tempfile = SystemConfig.PathOfTemp + "\\" + fileName;
 
                 //下载目录下
                 FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + fileName, FtpLocalExists.Overwrite);

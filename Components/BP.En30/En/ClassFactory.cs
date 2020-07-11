@@ -32,7 +32,7 @@ namespace BP.En
         {
             try
             {
-                BP.Sys.SystemConfig.CS_AppSettings.Clear();
+                SystemConfig.CS_AppSettings.Clear();
             }
             catch
             {
@@ -42,15 +42,15 @@ namespace BP.En
             ds.ReadXml(path);
 
             DataTable dt = ds.Tables[tableName];
-          //  BP.Sys.SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
-            BP.Sys.SystemConfig.CS_DBConnctionDic.Clear();
+          //  SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
+            SystemConfig.CS_DBConnctionDic.Clear();
             foreach (DataRow row in dt.Rows)
             {
-                BP.Sys.SystemConfig.CS_AppSettings.Add(row[key].ToString().Trim(), row[val].ToString().Trim());
+                SystemConfig.CS_AppSettings.Add(row[key].ToString().Trim(), row[val].ToString().Trim());
             }
             ds.Dispose();
-            BP.Sys.SystemConfig.IsBSsystem_Test = false;
-            BP.Sys.SystemConfig.IsBSsystem = false;
+            SystemConfig.IsBSsystem_Test = false;
+            SystemConfig.IsBSsystem = false;
             return true;
         }
         /// <summary>
@@ -62,7 +62,7 @@ namespace BP.En
         {
             try
             {
-                BP.Sys.SystemConfig.CS_AppSettings.Clear();
+                SystemConfig.CS_AppSettings.Clear();
             }
             catch
             {
@@ -104,9 +104,9 @@ namespace BP.En
                 throw new Exception("加载配置文件[" + cfgFile + "]失败！\n" + ex.Message + "启动失败！");
             }
 
-            //   BP.Sys.SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
+            //   SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
 
-            BP.Sys.SystemConfig.CS_DBConnctionDic.Clear();
+            SystemConfig.CS_DBConnctionDic.Clear();
             DataTable dt = dscfg.Tables["add"];
             foreach (DataRow dr in dt.Rows)
             {
@@ -118,7 +118,7 @@ namespace BP.En
                 if (value == null || value == "")
                     continue;
 
-                BP.Sys.SystemConfig.CS_AppSettings.Add(key, value);
+                SystemConfig.CS_AppSettings.Add(key, value);
             }
             dscfg.Dispose();
 
@@ -541,18 +541,18 @@ namespace BP.En
         /// </summary>
         /// <param name="className">类名称</param>
         /// <returns>En</returns>
-        public static BP.En.Method GetMethod(string className)
+        public static Method GetMethod(string className)
         {
             if (Htable_Method == null)
             {
                 Htable_Method = new Hashtable();
                 string cl = "BP.En.Method";
                 ArrayList al = ClassFactory.GetObjects(cl);
-                foreach (BP.En.Method en in al)
+                foreach (Method en in al)
                     Htable_Method.Add(en.ToString(), en);
             }
             object tmp = Htable_Method[className];
-            return (tmp as BP.En.Method);
+            return (tmp as Method);
         }
         #endregion
 

@@ -108,7 +108,7 @@ namespace BP.Port
                 map.AddTBString(StationTypeAttr.OrgNo, null, "组织机构编号", true, false, 0, 50, 20);
 
                 
-                if (BP.Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
 
                 this._enMap = map;
@@ -142,7 +142,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll(string orderBy)
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
             //按照orgNo查询.
@@ -154,7 +154,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == 0)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll();
 
             //按照orgNo查询.

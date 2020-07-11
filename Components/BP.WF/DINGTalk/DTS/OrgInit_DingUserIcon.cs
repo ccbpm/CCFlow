@@ -47,7 +47,7 @@ namespace BP.GPM.DTalk.DTS
         public override object Do()
         {
             DingDing ding = new DingDing();
-            string savePath = BP.Sys.SystemConfig.PathOfDataUser + "UserIcon";
+            string savePath = SystemConfig.PathOfDataUser + "UserIcon";
             bool result = ding.DownLoadUserIcon(savePath);
             if (result == true)
                 return "执行成功...";

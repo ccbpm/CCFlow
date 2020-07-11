@@ -10,7 +10,7 @@ namespace BP.GPM
     /// <summary>
     /// 操作员属性
     /// </summary>
-    public class EmpAttr : BP.En.EntityNoNameAttr
+    public class EmpAttr : EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -328,19 +328,19 @@ namespace BP.GPM
 
         public string DoEditMainDept()
         {
-            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
 
 
         public string DoEmpDepts()
         {
-            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
             //路径
-            return BP.Sys.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
+            return SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
         }
         protected override bool beforeInsert()
         {

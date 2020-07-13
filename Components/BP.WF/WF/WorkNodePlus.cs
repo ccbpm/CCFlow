@@ -508,11 +508,11 @@ namespace BP.WF
             {
                 string ptable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
 
-                var mysql = "";
+                var mysql = "";//@yln
                 if (wn.HisNode.HisRunModel == RunModel.SubThread)
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
                 else
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + ") AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='"+ wn.HisFlow.No+"')";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= "+(int)ActionType.UnSend+" AND NDTo = " + wn.HisNode.NodeID+" AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='"+ wn.HisFlow.No+"')";
 
                 //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);

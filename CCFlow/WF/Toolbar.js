@@ -1054,6 +1054,10 @@ function DoStop(msg, flowNo, workid) {
 
     if (confirm('您确定要执行 [' + msg + '] ?') == false)
         return;
+    //流程结束前
+    if (typeof beforeStopFow != 'undefined' && beforeStopFow instanceof Function)
+        if (beforeStopFow() == false)
+            return false;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("FK_Flow", flowNo);
@@ -1063,6 +1067,11 @@ function DoStop(msg, flowNo, workid) {
 
     if (msg.indexOf('err@') == 0)
         return;
+
+    //流程结束后
+    if (typeof afterStopFow != 'undefined' && afterStopFow instanceof Function)
+        if (afterStopFow() == false)
+            return false;
 
     if (window.parent != null) {
 

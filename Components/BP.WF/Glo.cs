@@ -16,6 +16,7 @@ using System.Net;
 using LitJson;
 using System.IO;
 using System.Collections.Generic;
+using BP.Sys.FrmUI;
 
 namespace BP.WF
 {
@@ -1016,7 +1017,7 @@ namespace BP.WF
             if (DBAccess.IsExitsTableCol("Sys_SFTable", "OrgNo") == false)
             {
                 //检查数据表.
-                SFTable se = new SFTable();
+                BP.Sys.FrmUI.SFTable se = new BP.Sys.FrmUI.SFTable();
                 se.CheckPhysicsTable();
 
                 //更新值.
@@ -1249,7 +1250,7 @@ namespace BP.WF
             BP.Sys.FrmTree frmTree = new BP.Sys.FrmTree();
             frmTree.CheckPhysicsTable();
 
-            BP.Sys.SFTable sf = new SFTable();
+            BP.Sys.SFTable sf = new BP.Sys.SFTable();
             sf.CheckPhysicsTable();
 
             BP.WF.Template.FrmSubFlow sb = new FrmSubFlow();
@@ -1967,7 +1968,7 @@ namespace BP.WF
 
                 #region 升级sys_sftable
                 //升级
-                BP.Sys.SFTable tab = new SFTable();
+                BP.Sys.SFTable tab = new BP.Sys.SFTable();
                 tab.CheckPhysicsTable();
                 #endregion
 
@@ -2109,7 +2110,7 @@ namespace BP.WF
                 FrmImg img = new FrmImg();
                 img.CheckPhysicsTable();
 
-                BP.Sys.FrmUI.ExtImg myimg = new BP.Sys.FrmUI.ExtImg();
+                ExtImg myimg = new ExtImg();
                 myimg.CheckPhysicsTable();
                 if (DBAccess.IsExitsTableCol("Sys_FrmImg", "SrcType") == true)
                 {
@@ -2259,7 +2260,7 @@ namespace BP.WF
 
                 #region 20161101.升级表单，增加图片附件必填验证 by:liuxianchen
 
-                FrmImgAth imgAth = new FrmImgAth();
+                BP.Sys.FrmImgAth imgAth = new BP.Sys.FrmImgAth();
                 imgAth.CheckPhysicsTable();
 
                 sql = "UPDATE Sys_FrmImgAth SET IsRequired = 0 WHERE IsRequired IS NULL";

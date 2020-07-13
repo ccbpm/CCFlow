@@ -11,7 +11,6 @@ using BP.DA;
 using BP.En;
 using BP.WF.Template;
 using BP.CCBill;
-
 namespace BP.WF.HttpHandler
 {
     public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.DirectoryPageBase

@@ -58,6 +58,15 @@ function beforeCCClose() {
 	return true;
 }
 
+//流程结束前
+function beforeStopFow() {
+	return;
+}
+//流程结束后
+function afterStopFow() {
+	return;
+}
+
 //关闭弹出窗刷新页面
 function WindowCloseReloadPage(msg) {
 

@@ -848,6 +848,7 @@
                     var tbodyTrs = $('#dtlDiv div table tbody tr');
                     $.each(tbodyTrs, function (m, tbodyTrObj) {
                         var threadTh = getUseHeadTh();
+                        var index = m;
                         $.each(threadTh, function (k, threadThObj) {
                             if ($(threadThObj).data().colname != undefined) {
                                 var o = $(threadThObj);
@@ -947,7 +948,7 @@
                                         if (o.data().LGType == 2 || o.data().UIContralType == "1") {
                                             if ($("option[value='" + textVal + "']", tmplate).length == 0) {
                                                 try {
-                                                    var c = workNodeData.DBDtl[k];
+                                                    var c = workNodeData.DBDtl[index];
                                                     if (c) {
                                                         var text = c[o.data().KeyOfEn + "Text"];
                                                         if (text == "" || text == undefined)

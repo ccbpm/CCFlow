@@ -120,7 +120,7 @@
             var str = '<table>';
             var long = 0;
             var enumCount = cfgVals.length + 10;
-            enumCount = enumCount < 31 ? 31 : enumCount;
+            enumCount = enumCount < 51 ? 51 : enumCount;
             for (var i = 0; i < enumCount; i++) {
                 var keyValue = [];
                 keyValue = $.grep(cfgVals, function (value) {
@@ -183,7 +183,7 @@
             se.Delete("EnumKey", keyofEn);
 
             var strs = '';
-            for (var i = 0; i < 30; i++) {
+            for (var i = 0; i < 50; i++) {
                 var v = $("#TB" + i).val();
                 if (v == '' || v == null)
                     continue;
@@ -249,7 +249,7 @@
             $(".easyui-textbox").attr("disabled", "true");//所有文本框变为不可用
             $("#TB_EnumKey").removeAttr("disabled");
             var j = 0;
-            for (var i = 0; i < 30;i++) {
+            for (var i = 0; i < 50;i++) {
                 if ($("#TB" + i + "").val().length > 0)
                     j++;
             }

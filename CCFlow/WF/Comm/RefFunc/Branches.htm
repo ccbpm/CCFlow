@@ -180,11 +180,11 @@
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, node) {
-                    var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
-                    if (selectNodes.length > 0) { //子节点不为空，则选中所有子节点
-                        $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
-                        saveCheckNodes(selectNodes, 1);
-                    }
+                    //var selectNodes = getChildNodeIdArr(node, true); //获取所有子节点
+                    //if (selectNodes.length > 0) { //子节点不为空，则选中所有子节点
+                    //    $('#tree').treeview('checkNode', [selectNodes, { silent: true }]);
+                    //    saveCheckNodes(selectNodes, 1);
+                    //}
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
                     en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
                     en[GetQueryString("AttrOfMInMM")] = node.id;

@@ -1175,6 +1175,10 @@ namespace BP.WF
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
 
+            FlowExt fe = new FlowExt();
+            fe.CheckPhysicsTable();
+
+
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
 
@@ -1473,8 +1477,6 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
             }
             #endregion 升级视图.
-
-
 
             //升级从表的 fk_node .
             //获取需要修改的从表

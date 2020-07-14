@@ -1660,8 +1660,8 @@ namespace BP.WF
                 #region 升级事件.
                 if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "DoType") == true)
                 {
-                    BP.Sys.FrmEvent fe = new FrmEvent();
-                    fe.CheckPhysicsTable();
+                    BP.Sys.FrmEvent frmevent = new FrmEvent();
+                    frmevent.CheckPhysicsTable();
 
                     DBAccess.RunSQL("UPDATE Sys_FrmEvent SET EventDoType=DoType  ");
                     DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent   DROP COLUMN	DoType  ");
@@ -3939,7 +3939,7 @@ namespace BP.WF
 
             t.NDTo = toNodeID;
             t.NDToT = toNodeName;
-
+            //@yln
             string[] empNos = toEmpID.Split(',');
             if (empNos.Length <= 100)
             {

@@ -2564,7 +2564,8 @@ namespace BP.WF.HttpHandler
                         return "url@WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
                 }
             }
-           
+
+            return "err@没有判断的标记.";
             return "err@没有约定的标记:DoWhat=" + this.DoWhat;
         }
         #endregion 处理page接口.

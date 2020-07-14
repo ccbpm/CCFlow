@@ -1253,7 +1253,7 @@ namespace BP.WF
                             foreach (Attr attr in attrs)
                             {
                                 if (attr.UIIsReadonly && attr.UIVisible == true
-                                    )
+                                    && DataType.IsNullOrEmpty(attr.DefaultValOfReal) == false)
                                 {
                                     if (attr.DefaultValOfReal == "@WebUser.No")
                                     {

@@ -17,6 +17,7 @@ using LitJson;
 using System.IO;
 using System.Collections.Generic;
 using BP.Sys.FrmUI;
+using System.Linq;
 
 namespace BP.WF
 {
@@ -3937,8 +3938,20 @@ namespace BP.WF
             t.NDTo = toNodeID;
             t.NDToT = toNodeName;
 
-            t.EmpTo = toEmpID;
-            t.EmpToT = toEmpName;
+            string[] empNos = toEmpID.Split(',');
+            if (empNos.Length <= 100)
+            {
+                t.EmpTo = toEmpID;
+                t.EmpToT = toEmpName;
+            }
+            else
+            {
+                string[] empNames = toEmpName.Split('、');
+                //获取
+                t.EmpTo = string.Join(",", empNos.Take(100))+"..."+ empNos[empNos.Length-1];
+                t.EmpToT = string.Join("'、", empNames.Take(100))+"..." + empNames[empNames.Length - 1];
+            }
+           
             t.Msg = note;
 
             //参数.

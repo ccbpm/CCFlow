@@ -287,7 +287,7 @@
             //待办-按部门.
             var TodolistByDepts = data.TodolistByDept;
             $.each(TodolistByDepts,function(i,TodolistByDept) {
-                TodolistByDept_X[i]=TodolistByDept.DeptName;
+                TodolistByDept_X[i]=TodolistByDept.Name;
                 TodolistByDept_Y[i]=TodolistByDept.Num;
             })
             queryChart_TodolistByDept(TodolistByDept_X, TodolistByDept_Y);

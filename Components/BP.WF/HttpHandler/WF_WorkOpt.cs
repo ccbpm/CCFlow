@@ -1590,6 +1590,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(wcDesc.ToDataTableField("WF_FrmWorkCheck")); //当前的节点审核组件定义，放入ds.
             string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
             DataTable tkDt = new DataTable("Tracks");
+            tkDt.Columns.Add("MyPk", typeof(string));
             tkDt.Columns.Add("NodeID", typeof(int));
             tkDt.Columns.Add("NodeName", typeof(string));
             tkDt.Columns.Add("Msg", typeof(string));
@@ -1800,6 +1801,7 @@ namespace BP.WF.HttpHandler
 
 
                     row = tkDt.NewRow();
+                    row["MyPk"] = tk.MyPK;
                     row["NodeID"] = tk.NDFrom;
 
                     row["NodeName"] = tk.NDFromT;
@@ -2201,6 +2203,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(wcDesc.ToDataTableField("WF_FrmWorkCheck")); //当前的节点审核组件定义，放入ds.
 
             DataTable tkDt = new DataTable("Tracks");
+            tkDt.Columns.Add("MyPk", typeof(string));
             tkDt.Columns.Add("NodeID", typeof(int));
             tkDt.Columns.Add("NodeName", typeof(string));
             tkDt.Columns.Add("Msg", typeof(string));
@@ -2389,6 +2392,7 @@ namespace BP.WF.HttpHandler
                         case ActionType.StartChildenFlow:
                         case ActionType.FlowOver:
                             row = tkDt.NewRow();
+                            row["MyPk"] = tk.MyPK;
                             row["NodeID"] = tk.NDFrom;
                             row["NodeName"] = tk.NDFromT;
 

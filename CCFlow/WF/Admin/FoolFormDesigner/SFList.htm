@@ -19,6 +19,7 @@
 
         /* ESC Key Down */
         function Esc() {
+            var event = window.event || arguments.callee.caller.arguments[0];
             if (event.keyCode == 27)
                 window.close();
             return true;
@@ -40,8 +41,9 @@
             var fk_mapData = GetQueryString("FK_MapData");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-
+            var key = $("#TB_Key").val();
             handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("Key", key);
             handler.AddPara("PTableModel", GetQueryString("PTableModel"));
             var data = handler.DoMethodReturnString("SFList_Init");
 
@@ -185,7 +187,7 @@
         }
 
         //删除.
-        function Del(no,name, SrcType) {
+        function Del(no, name, SrcType) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
@@ -199,12 +201,12 @@
             }
             //删除系统字典表
             if (SrcType == 7) {
-                
+
                 var ens = new Entities("BP.Sys.DictDtls");
-                ens.Delete("FK_SFTable",no);
+                ens.Delete("FK_SFTable", no);
 
             }
-            
+
             alert(data);
             window.location.href = window.location.href; //刷新页面.
         }
@@ -230,7 +232,7 @@
 
             //获取页面的大小
             var W = document.body.clientWidth - 120;
-            var H = document.documentElement.clientHeight-10;
+            var H = document.documentElement.clientHeight - 10;
             //var H = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight-10 : document.documentElement.clientHeight-10;
             //var H = parent.document.body.clientHeight -200;
             OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, W, H, 'icon-edit');
@@ -255,12 +257,17 @@
                     }
             }
         });
+        //关键字查询
+        function Search() {
+            InitPage();
+        }
     </script>
 </head>
 <body onkeypress="Esc()">
     <table id="Table1" style="width: 98%;">
-        <caption>
+        <caption style="margin-bottom:5px">
             字典列表 - <a href="javascript:New()">创建字典表</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="请输入编号或名称" style="height:27px" id="TB_Key" /> <input type="button" id="btn_search" onclick="Search()" value="查询" />
         </caption>
         <tr>
             <th>

@@ -172,15 +172,18 @@
                         if (!options.event) {
                             alert('请传入鼠标事件');
                         }
+
                         var height = options.event.clientY;
                         var height1 = $(document.body).height();
                         var DValue = height1 - height;
                         if (DValue<230) {
-                            height = options.event.clientY - 230;
+                            height = options.event.clientY - 30;
                         }
+                        height = height - 70;
+                        var left = options.event.clientX + 10;
                         $currMenu.css({
                             top: height + "px",
-                            left: options.event.clientX + "px",
+                            left: left + "px",
                             display: "block"
                         });
                     },

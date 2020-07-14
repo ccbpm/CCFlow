@@ -179,8 +179,8 @@
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
 
             //是初始化状态.
-            if (generBill.BillState == 0 && power.IsSave == 1)
-                toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
+            //if (generBill.BillState == 0 && power.IsSave == 1)
+            //    toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
 
             if (generBill.BillState == 1 || generBill.BillState == 2)
                 toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
@@ -1058,14 +1058,14 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     <script type="text/javascript">
 
         function setContentHeight() {
-            //            $("body").css("overflow", "hidden");
-            //            $("#divCurrentForm").css("overflow", "hidden");
-            //            $("#topContentDiv").css("overflow", "hidden");
-            //            $("#contentDiv").css("overflow", "hidden");
-            //            $("#divCCForm").css("overflow", "auto");
-            //            $("#CCForm").css("overflow", "hidden");
-            //            $("#CCForm").css("overflow-y", "hidden");
-            //            $("#CCForm").css("height", "auto");
+            $("body").css("overflow", "hidden");
+            $("#divCurrentForm").css("overflow", "hidden");
+            $("#topContentDiv").css("overflow", "hidden");
+            $("#contentDiv").css("overflow", "hidden");
+            $("#divCCForm").css("overflow", "auto");
+            $("#CCForm").css("overflow", "hidden");
+            $("#CCForm").css("overflow-y", "hidden");
+            $("#CCForm").css("height", "auto");
             var bodyHeight = $("body").height();
             var bottomHeight = $("#bottomToolBar").height(); // save button
             if (($("#Btn").css("display") || "") != "block") {

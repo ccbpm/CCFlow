@@ -718,7 +718,8 @@ namespace BP.WF
 
             // 调用撤消发送前事件。
             string msg = ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wn.HisWork, null);
-
+            if (msg == null)
+                msg = "";
             #region 删除当前节点数据。
             // 删除产生的工作列表。
             //DeleteSpanNodesGenerWorkerListData();
@@ -854,8 +855,9 @@ namespace BP.WF
             #endregion
             string atPara = "@ToNode=" + cancelToNodeID+ "@SendToEmpIDs="+ todoEmps;
             //调用撤消发送后事件。
-            msg += ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork,null, atPara);
-
+            string nodeMsg = ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork,null, atPara);
+            if(DataType.IsNullOrEmpty(nodeMsg) == false)
+                msg += nodeMsg;
             if (wnOfCancelTo.HisNode.IsStartNode)
             {
                 

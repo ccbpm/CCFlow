@@ -183,6 +183,7 @@
     <Compile Include="DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
+    <Compile Include="DTS\Service\GenerAllEmpsStartFlows.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="DTS\Tool_RepairTodoList.cs" />
     <Compile Include="DTS\Tool_RepairCHAtPara.cs" />

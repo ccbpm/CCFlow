@@ -598,7 +598,7 @@ namespace BP.WF.HttpHandler
                 {
                     en = obj as Entity;
                     string s = en.EnDesc;
-                    if (en == null)
+                    if (en == null )
                         continue;
                 }
                 catch
@@ -606,7 +606,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                if (en.ToString() == null)
+                if (en.ToString() == null || en.ToString().Equals(""))
                     continue;
 
 

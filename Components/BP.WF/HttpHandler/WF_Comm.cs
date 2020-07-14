@@ -1052,7 +1052,7 @@ namespace BP.WF.HttpHandler
                 ht.Add("No", ensName);
                 ht.Add("Title", rm.Title);
                 ht.Add("Help", rm.Help);
-                ht.Add("Warning", rm.Warning);
+                ht.Add("Warning", rm.Warning==null?"": rm.Warning);
                 return BP.Tools.Json.ToJson(ht);
             }
 

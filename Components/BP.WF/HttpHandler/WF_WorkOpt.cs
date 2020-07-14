@@ -23,16 +23,6 @@ namespace BP.WF.HttpHandler
     public class WF_WorkOpt : DirectoryPageBase
     {
         /// <summary>
-        /// 过程执行.
-        /// </summary>
-        /// <returns></returns>
-        public string ccbpmServices()
-        {
-            BP.WF.DTS.ccbpmServices en = new DTS.ccbpmServices();
-            en.Do();
-            return "执行成功，请检查:\\DataUser\\Log\\下面的执行信息。 ";
-        }
-        /// <summary>
         /// 删除子线程
         /// </summary>
         /// <returns></returns>
@@ -3169,20 +3159,7 @@ namespace BP.WF.HttpHandler
 
             return "";
         }
-        /// <summary>
-        /// 执行发送.
-        /// </summary>
-        /// <returns></returns>
-        public string CC_Send2020()
-        {
-            //人员信息. 格式 zhangsan,张三;lisi,李四;
-            string emps = this.GetRequestVal("Emps");
-
-            //调用抄送接口执行抄送.
-            string ccRec = BP.WF.Dev2Interface.Node_CCTo(this.WorkID, emps);
-            return ccRec;
-        }
-
+      
         /// <summary>
         /// 抄送发送.
         /// </summary>

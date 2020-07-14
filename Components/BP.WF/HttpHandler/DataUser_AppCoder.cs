@@ -20,13 +20,22 @@ namespace BP.WF.HttpHandler
     public class DataUser_AppCoder : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
+        /// 自动执行定时任务.
+        /// </summary>
+        /// <returns></returns>
+        public string AutoTask_Init()
+        {
+            BP.WF.DTS.ccbpmServices dts = new DTS.ccbpmServices();
+            dts.Do();
+
+            return "执行成功:"+DataType.CurrentDataCNOfLong;
+        }
+        /// <summary>
         /// 构造函数
         /// </summary>
         public DataUser_AppCoder()
         {
         }
-
-
 
         #region 欢迎页面初始化.
         /// <summary>

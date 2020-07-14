@@ -36,6 +36,112 @@ namespace BP.WF.HttpHandler
         public WF_WorkOpt_OneWork()
         {
         }
+
+        /// <summary>
+        /// 时间轴
+        /// </summary>
+        /// <returns></returns>
+        public string TimeSubThread_Init()
+        {
+            DataSet ds = new DataSet();
+            string mypks = GetRequestVal("MyPKs");
+            mypks = "('" + mypks.Replace(",", "','") + "')";
+            string sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(this.FK_Flow) + "Track Where MyPK IN"+ mypks + " ORDER BY RDT ASC ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Track";
+            //把列名转化成区分大小写.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                dt.Columns["MYPK"].ColumnName = "MyPK";
+                dt.Columns["ACTIONTYPE"].ColumnName = "ActionType";
+                dt.Columns["ACTIONTYPETEXT"].ColumnName = "ActionTypeText";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["NDFROM"].ColumnName = "NDFrom";
+                dt.Columns["NDFROMT"].ColumnName = "NDFromT";
+                dt.Columns["NDTO"].ColumnName = "NDTo";
+                dt.Columns["NDTOT"].ColumnName = "NDToT";
+                dt.Columns["EMPFROM"].ColumnName = "EmpFrom";
+                dt.Columns["EMPFROMT"].ColumnName = "EmpFromT";
+                dt.Columns["EMPTO"].ColumnName = "EmpTo";
+                dt.Columns["EMPTOT"].ColumnName = "EmpToT";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["WORKTIMESPAN"].ColumnName = "WorkTimeSpan";
+                dt.Columns["MSG"].ColumnName = "Msg";
+                dt.Columns["NODEDATA"].ColumnName = "NodeData";
+                dt.Columns["EXER"].ColumnName = "Exer";
+                dt.Columns["TAG"].ColumnName = "Tag";
+            }
+
+            //获取track.
+            ds.Tables.Add(dt);
+
+
+            #region  父子流程数据存储到这里.
+            Hashtable ht = new Hashtable();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ActionType at = (ActionType)int.Parse(dr[TrackAttr.ActionType].ToString());
+
+                string tag = dr[TrackAttr.Tag].ToString(); //标识.
+                string mypk = dr[TrackAttr.MyPK].ToString(); //主键.
+
+                string msg = "";
+                if (at == ActionType.CallChildenFlow)
+                {
+                    //被调用父流程吊起。
+                    if (DataType.IsNullOrEmpty(tag) == false)
+                    {
+                        AtPara ap = new AtPara(tag);
+                        GenerWorkFlow mygwf = new GenerWorkFlow();
+                        mygwf.WorkID = ap.GetValInt64ByKey("PWorkID");
+                        if (mygwf.RetrieveFromDBSources() == 1)
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上，被父流程{" + mygwf.FlowName + "},<a target=b" + ap.GetValStrByKey("PWorkID") + " href='Track.htm?WorkID=" + ap.GetValStrByKey("PWorkID") + "&FK_Flow=" + ap.GetValStrByKey("PFlowNo") + "' >" + msg + "</a></p>";
+                        else
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上，被父流程调用{" + mygwf.FlowName + "}，但是该流程被删除了.</p>" + tag;
+
+                        msg = "<a target=b" + ap.GetValStrByKey("PWorkID") + " href='Track.htm?WorkID=" + ap.GetValStrByKey("PWorkID") + "&FK_Flow=" + ap.GetValStrByKey("PFlowNo") + "' >" + msg + "</a>";
+                    }
+
+                    //放入到ht里面.
+                    ht.Add(mypk, msg);
+                }
+
+                if (at == ActionType.StartChildenFlow)
+                {
+                    if (DataType.IsNullOrEmpty(tag) == false)
+                    {
+                        if (tag.Contains("Sub"))
+                            tag = tag.Replace("Sub", "C");
+
+                        AtPara ap = new AtPara(tag);
+                        GenerWorkFlow mygwf = new GenerWorkFlow();
+                        mygwf.WorkID = ap.GetValInt64ByKey("CWorkID");
+                        if (mygwf.RetrieveFromDBSources() == 1)
+                        {
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上调用了子流程{" + mygwf.FlowName + "}, <a target=b" + ap.GetValStrByKey("CWorkID") + " href='Track.htm?WorkID=" + ap.GetValStrByKey("CWorkID") + "&FK_Flow=" + ap.GetValStrByKey("CFlowNo") + "' >" + msg + "</a></p>";
+                            msg += "<p>当前子流程状态：{" + mygwf.WFStateText + "}，运转到:{" + mygwf.NodeName + "}，最后处理人{" + mygwf.TodoEmps + "}，最后处理时间{" + mygwf.RDT + "}。</p>";
+                        }
+                        else
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上调用了子流程{" + mygwf.FlowName + "}，但是该流程被删除了.</p>" + tag;
+
+                    }
+
+                    //放入到ht里面.
+                    ht.Add(mypk, msg);
+                }
+            }
+            #endregion
+
+
+            //把节点审核配置信息.
+            NodeWorkCheck fwc = new NodeWorkCheck(this.FK_Node);
+            ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
+
+            //返回结果.
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+
         /// <summary>
         /// 时间轴
         /// </summary>

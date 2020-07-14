@@ -7783,7 +7783,7 @@ namespace BP.WF
             string[] depts = deptIDs.Split(',');
             foreach (string deptID in depts)
             {
-                Node_CCToDept(workid, deptID,0,false,false);
+                Node_CCToDept(workid, deptID, cctype, false,false);
             }
             return "成功执行.";
         }

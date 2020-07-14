@@ -3179,7 +3179,7 @@ namespace BP.WF.HttpHandler
             string emps = this.GetRequestVal("Emps");
 
             //调用抄送接口执行抄送.
-            string ccRec = BP.WF.Dev2Interface.Node_CCTo( this.WorkID, emps);
+            string ccRec = BP.WF.Dev2Interface.Node_CCTo(this.WorkID, emps);
             return ccRec;
         }
 

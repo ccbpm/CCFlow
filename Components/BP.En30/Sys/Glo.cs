@@ -72,6 +72,8 @@ namespace BP.Sys
                     break;
                 case DataType.AppInt:
                 case DataType.AppBoolean:
+                    if ( val==null || DataType.IsNullOrEmpty(val.ToString()))
+                        return 0;
                     val = int.Parse(val.ToString());
                     break;
                 case DataType.AppFloat:

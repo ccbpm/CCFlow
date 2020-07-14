@@ -7652,6 +7652,142 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 抄送到部门
+        /// </summary>
+        /// <param name="workid"></param>
+        /// <param name="deptIDs"></param>
+        /// <param name="cctype">可选</param>
+        /// <returns>返回执行结果.</returns>
+        public static string Node_CCToDept(Int64 workid, string deptID, int cctype = 0, bool isWriteTolog=false, bool isSendMsg=false)
+        {
+            if (DataType.IsNullOrEmpty(deptID) == true)
+                return "没有指定人";
+
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            Node fromNode = new Node(gwf.FK_Node);
+             
+            Emp emp = new Emp(); //构造实体类
+            Dept dept = new Dept(deptID);
+
+            string sql = "SELECT No,Name FROM Port_Emp A WHERE A.FK_Dept='"+deptID+"'";
+            sql += " UNION ";
+            sql += " SELECT No,Name FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='"+deptID+"'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            CCList list = new CCList();
+
+            string names = "";
+            string empNos = ","; //人员编号s 防止重复.
+            foreach (DataRow dr in dt.Rows)
+            {
+                string empNo = dr[0].ToString();
+                string empName = dr[1].ToString();
+                if (DataType.IsNullOrEmpty(empNo) == true)
+                    continue;
+
+                //如果已经包含了.
+                if (empNos.Contains("," + empNo + ",") == true)
+                    continue;
+
+                empNos += empNo + ",";
+
+                names += empName + "、";
+
+                //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
+                if (SystemConfig.CustomerNo.Equals("GXJSZX") == true)
+                    list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + empNo + "_" + cctype;
+                else
+                    list.MyPK = gwf.WorkID + "_" + gwf.FK_Node + "_" + empNo;
+                if (list.IsExits == true)
+                    continue; //判断是否存在?
+
+                list.FK_Flow = gwf.FK_Flow;
+                list.FlowName = gwf.FlowName;
+                list.FK_Node = fromNode.NodeID;
+                list.NodeName = gwf.NodeName;
+                list.Title = gwf.Title;
+                list.Doc = gwf.Title;
+                list.CCTo = empNo;
+                list.CCToName =empName;
+
+                //增加抄送人部门.
+                list.CCToDept = dept.No;
+                list.CCToDeptName = dept.Name;
+                list.RDT = DataType.CurrentDataTime;
+                list.Rec = WebUser.No;
+                list.WorkID = gwf.WorkID;
+                list.FID = gwf.FID;
+                list.PFlowNo = gwf.PFlowNo;
+                list.PWorkID = gwf.PWorkID;
+
+                //是否要写入待办.
+                if (fromNode.CCWriteTo == CCWriteTo.CCList)
+                {
+                    list.InEmpWorks = false;    //added by liuxc,2015.7.6
+                }
+                else
+                {
+                    list.InEmpWorks = true;    //added by liuxc,2015.7.6
+                }
+
+                //写入待办和写入待办与抄送列表,状态不同
+                if (fromNode.CCWriteTo == CCWriteTo.All
+                    || fromNode.CCWriteTo == CCWriteTo.Todolist)
+                {
+                    list.HisSta = fromNode.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                }
+
+                if (fromNode.IsEndNode == true)//结束节点只写入抄送列表
+                {
+                    list.HisSta = CCSta.UnRead;
+                    list.InEmpWorks = false;
+                }
+
+                try
+                {
+                    list.Insert();
+                }
+                catch
+                {
+                    list.CheckPhysicsTable();
+                    list.Update();
+                }
+
+                //如果需要发送消息.
+                if (isSendMsg == true)
+                {
+                    //发送消息给他们.
+                    BP.WF.Dev2Interface.Port_SendMsg(emp.No, gwf.Title,
+                        "抄送消息:" + gwf.Title, "CC" + gwf.FK_Node + "_" + gwf.WorkID + "_" + emp.No, SMSMsgType.CC, gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+                }
+            }
+
+            if (isWriteTolog == true)
+            {
+                //记录日志.
+                Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+                   WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, empNos, names, gwf.Title, null);
+            }
+
+            return "已经成功的把工作抄送给:" + names;
+        }
+        /// <summary>
+        /// 抄送部门
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="deptIDs">部门IDs</param>
+        /// <param name="cctype">抄送类型</param>
+        /// <returns>返回执行的结果</returns>
+        public static string Node_CCToDepts(Int64 workid, string deptIDs, int cctype = 0)
+        {
+            string[] depts = deptIDs.Split(',');
+            foreach (string deptID in depts)
+            {
+                Node_CCToDept(workid, deptID,0,false,false);
+            }
+            return "成功执行.";
+        }
+        /// <summary>
         /// 写入抄送
         /// </summary>
         /// <param name="workid">工作ID</param>
@@ -7661,10 +7797,8 @@ namespace BP.WF
         {
             if (DataType.IsNullOrEmpty(toEmps) == true)
                 return "没有指定人";
-            GenerWorkFlow gwf = new GenerWorkFlow(workid);
-            //if (gwf.WFState == WFState.Complete)
-            //  throw new Exception("err@");
 
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
             Node fromNode = new Node(gwf.FK_Node);
 
             toEmps = toEmps.Replace(";", ",");
@@ -8464,7 +8598,7 @@ namespace BP.WF
 
             list.RDT = DataType.CurrentDataTime; //抄送日期.
             list.Rec = WebUser.No;
-            list.WorkID = workID;          
+            list.WorkID = workID;
             list.PFlowNo = pFlowNo;
             list.PWorkID = pWorkID;
 

@@ -2689,7 +2689,7 @@ namespace BP.WF
             }
             #endregion 注册枚举类型
 
-            //删除视图.
+            #region 2.1 重新构建视图. //删除视图.
             if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
                 DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
 
@@ -2705,12 +2705,13 @@ namespace BP.WF
             if (DBAccess.IsExitsObject("V_TOTALCH") == true)
                 DBAccess.RunSQL("DROP VIEW V_TOTALCH");
 
-
             if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
                 DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
 
             if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
                 DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
+            #endregion 重新构建视图. //删除视图.
+
 
             #region 4, 创建视图与数据.
             //执行必须的sql.
@@ -2945,10 +2946,9 @@ namespace BP.WF
             }
             #endregion 如果是第一次运行，就执行检查。
 
-
-
-
-
+            #region 增加大文本字段列.
+            DBAccess.GetBigTextFromDB("Sys_MapData", "No", "111", "HtmlTemplateFile");
+            #endregion 增加大文本字段列.
         }
         /// <summary>
         /// 检查树结构是否符合需求
@@ -2992,7 +2992,6 @@ namespace BP.WF
                 }
                 throw new Exception("@没有找到部门树为0个根节点, 有可能是因为您在集成cc的时候，没有遵守cc的规则，部门树的根节点必须是ParentNo=0。");
             }
-
             return true;
         }
 

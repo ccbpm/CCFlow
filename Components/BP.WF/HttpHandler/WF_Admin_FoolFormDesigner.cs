@@ -833,12 +833,31 @@ namespace BP.WF.HttpHandler
         public string SFList_Init()
         {
             DataSet ds = new DataSet();
-
+            DataTable dt = null;
             SFTables ens = new SFTables();
-            ens.RetrieveAll();
-
-            DataTable dt = ens.ToDataTableField("SFTables");
-            ds.Tables.Add(dt);
+            //获取关键字
+            string Key = this.GetRequestVal("Key");
+            //如果关键之不为空，直接查询
+            if (string.IsNullOrWhiteSpace(Key))
+            {
+                ens.RetrieveAll();
+                dt = ens.ToDataTableField("SFTables");
+                ds.Tables.Add(dt);
+            }//如果关键字为空，按条件查询
+            else
+            {
+                QueryObject ob = new QueryObject(ens);
+                // 查询条件示例：where No like '%Key%' or Name like '%Key%'
+                ob.AddWhere(SFTableAttr.No, "like", "%" + Key + "%");
+                ob.addOr();
+                ob.AddWhere(SFTableAttr.Name, "like", "%" + Key + "%");
+                //根据No 排序
+                ob.addOrderBy(SFTableAttr.No);
+                //返回对象为dt
+                dt=ob.DoQueryToTable();
+                dt.TableName = "SFTables";
+                ds.Tables.Add(dt);
+            }
 
             int pTableModel = 0;
             if (this.GetRequestVal("PTableModel").Equals("2"))

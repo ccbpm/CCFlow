@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!-- 于庆海  -->
     <meta charset="UTF-8" />
     <title>流程轨迹查看权限</title>
     <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
@@ -11,7 +10,6 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <base target="_self" />
-
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
@@ -29,31 +27,22 @@
         }
         function WinOpen(url, name) {
             window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
-            //window.open(url, 'xx');
-        }
-        function TROver(ctrl) {
-            ctrl.style.backgroundColor = 'LightSteelBlue';
-        }
-
-        function TROut(ctrl) {
-            ctrl.style.backgroundColor = 'white';
-        }
-        function ShowHidden(ctrlID) {
-
-            var ctrl = document.getElementById(ctrlID);
-            if (ctrl.style.display == "block") {
-                ctrl.style.display = 'none';
-            } else {
-                ctrl.style.display = 'block';
-            }
         }
         //页面启动函数.
         $(function () {
+
+            // var fk_flow = GetQueryString("FK_Flow");
+            // var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.TruckViewPower&No=" + fk_flow;
+            // window.location.href = url;
+            // return;
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var fk_flow = GetQueryString("FK_Flow");
             var en = new Entity("BP.WF.Template.TruckViewPower", fk_flow);
+
+            en.PAnyOne = 1;
+            alert(en.PAnyOne);
 
             //给页面元素赋值.
             GenerFullAllCtrlsVal(en);
@@ -62,26 +51,43 @@
         });
 
 
+        function Edit() {
+            var fk_flow = GetQueryString("FK_Flow");
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.TruckViewPower&No=" + fk_flow;
+            WinOpen(url, 100, 300);
+            return;
+        }
+
         function Save() {
 
             var fk_flow = GetQueryString("FK_Flow");
-
             var en = new Entity("BP.WF.Template.TruckViewPower", fk_flow);
             en.CopyForm();
             en.SetPKVal(fk_flow);
             en.Update();
 
-            window.location.href = window.location.href;
+            window.location.href = "?FK_Flow=" + GetQueryString("FK_Flow");
         }
     </script>
 </head>
 <body onkeypress="Esc()">
     <form id="cc">
-        <div style="right:10px; position:absolute; z-index:100; ">
-            <input type="button" style="float:right" ID="Btn_Save" value="保存" onclick="Save()" />
-        </div>
         <table style=" width:100%; padding-left:19px;">
-            <caption style="width:100%;"> <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />流程轨迹查看权限  </caption>
+            <caption>
+                <img style="margin-bottom:8px;" align="middle"
+                     src='../../Img/Event.png' />流程轨迹查看权限
+
+                <div style=" float:right;padding-right:20px;">
+                    <button id="Btn_Save" onclick="Edit()"> 设置模式</button>
+                    <button id="Btn_Save" onclick="Save()"> 保存</button>
+
+                </div>
+            </caption>
+
+            <tr>
+                <th colspan="4"> 基本权限控制 </th>
+            </tr>
+
             <tr>
                 <td>
                     <input type="checkbox" ID="CB_PStarter" name="CB_PStarter" /><label for="CB_PStarter">发起人可见</label>
@@ -93,6 +99,7 @@
                     <input type="checkbox" ID="CB_PCCer" name="CB_PCCer" /><label for="CB_PCCer">被抄送人可见</label>
                 </td>
                 <td>
+                    <input type="checkbox" ID="CB_PAnyOne" name="CB_PAnyOne" /><label for="CB_PAnyOne">任何人可见</label>
                 </td>
             </tr>
 
@@ -157,16 +164,7 @@
                 <li>该控制在工作流程查看器里校验，就是说在操作员要打开工作查看器的时候检查当前的人员是否有权限查看该流程。</li>
                 <li>与流程相关的人员是必选项，也就是说，流程相关的人员是可以查看轨迹图的，</li>
             </ol>
-
         </fieldset>
-
     </form>
 </body>
-<script type="text/javascript">
-    //动态修改参数
-//    $("#dtsbt a").click(function () {
-//        $(this).attr("href", $(this).attr('href').replace('flowNo', GetQueryString("FK_Flow")));
-//        $(this).attr("href", $(this).attr('href').replace('userId', userId));
-//    });
-</script>
 </html>

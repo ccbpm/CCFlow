@@ -799,7 +799,7 @@ namespace BP.WF
                         rpt.FlowStarter = emp.No;
                         rpt.WFState = WFState.Blank;
                         rpt.FID = 0;
-                        rpt.DirectUpdate();
+                        rpt.Update();
                     }
                     else
                     {

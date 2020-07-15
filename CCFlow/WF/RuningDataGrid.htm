@@ -185,13 +185,13 @@
                 <thead>
                     <tr>
                         <th width="40">序</th>
-                        <th>标题</th>
+                        <th style="width:35%;">标题</th>
                         <th width="60">发起人</th>
                         <th width="120">发起部门</th>
                         <th>当前节点</th>
                         <th width="120">到达时间</th>
                         <th width="150">当前处理人</th>
-                        <th width="120">操作</th>
+                        <!--<th width="120">操作</th>-->
                     </tr>
                 </thead>
                 <tbody id="Table1"></tbody>
@@ -305,6 +305,7 @@
         }
 
         function WinOpenIt(workid, nodeID, flowNo, fid, currNodeId) {
+
             //但前节点所处的位置
             var nowNode = new Entity("BP.WF.Node", nodeID);
 
@@ -522,6 +523,8 @@
                         todoEmps = todoEmps.substring(todoEmps.indexOf(',') + 1);
 
                     listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
+
+                    /*
                     listbox += "<td>";
                     //listbox += " <div class='wrapper-demo'>"
                     //listbox += "<div id='dd"+i+"' class='wrapper-dropdown-2' tabindex='" + i + "'>操作";
@@ -536,10 +539,10 @@
                         listbox += "</ul>";
                         //listbox += "</div>";
                         //listbox += "</div>";
-
                     }
+                    listbox += "</td>"; */
 
-                    listbox += "</td>";
+
                     listbox += "</tr>";
                 }
                 if (showRealCount != 0)

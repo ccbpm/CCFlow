@@ -433,8 +433,9 @@ function GenerChangeParentValue(data) {
 
 /*为页面的所有字段属性赋值. */
 function GenerFullAllCtrlsVal(data) {
-    if (data == null)
-        return;
+
+    if (data == null) return;
+
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
     if ($.isArray(data) && data.length > 0)
@@ -444,11 +445,20 @@ function GenerFullAllCtrlsVal(data) {
     for (var attr in json) {
 
         var val = json[attr]; //值
+        if (attr == 'enName' || attr == 'pkval' || attr == "" || attr == null)
+            continue;
+        if (val == null || val == '')
+            continue;
 
         var div = document.getElementById(attr);
         if (div != null) {
             div.innerHTML = val;
             continue;
+        }
+
+        if (attr == 'PAnyOne')
+        {
+            var aa = 1;
         }
 
         // textbox
@@ -464,14 +474,13 @@ function GenerFullAllCtrlsVal(data) {
             else {
                 tb.value = val;
             }
-
             continue;
         }
 
         //checkbox.
         var cb = document.getElementById('CB_' + attr);
         if (cb != null) {
-            if (val == "1")
+            if (val == "1" || val == 1)
                 cb.checked = true;
             else
                 cb.checked = false;
@@ -488,6 +497,8 @@ function GenerFullAllCtrlsVal(data) {
             $("#DDL_" + attr).val(val); // 操作权限.
             continue;
         }
+
+
 
         // RadioButton. 单选按钮.
         var rb = document.getElementById('RB_' + attr + "_" + val);
@@ -527,7 +538,6 @@ function GenerFullAllCtrlsVal(data) {
                             return true;
 
                         // console.log(suffix + "_before_" + val);
-
                         //$("#DDLPara_" + suffix).val(""); // 操作权限.
 
                         $("#DDLPara_" + suffix).val(val); // 操作权限.
@@ -535,7 +545,6 @@ function GenerFullAllCtrlsVal(data) {
                         //   window.setTimeout(function () { $("#DDLPara_" + suffix).val(row.districtCode); }, 1200); 
                         //  json[kv[0]] = kv[1];
                         //   $("#DDLPara_" + suffix).val("2"); // 操作权限.
-
                         //console.log(suffix + "_" + val);
 
                         return true;
@@ -544,7 +553,7 @@ function GenerFullAllCtrlsVal(data) {
                     //checkbox.
                     cb = document.getElementById('CBPara_' + suffix);
                     if (cb != null) {
-                        if (val == "1")
+                        if (val == "1" || val == 1)
                             cb.checked = true;
                         else
                             cb.checked = false;
@@ -856,7 +865,7 @@ var Entity = (function () {
     function getParams(self) {
         var params = {};
         $.each(self, function (n, o) {
-            if (typeof self[n] !== "function" && n != "enName" && n !="ensName") {
+            if (typeof self[n] !== "function" && n != "enName" && n != "ensName") {
                 params[n] = self[n];
             }
         });

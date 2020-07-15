@@ -29,17 +29,32 @@
             }
 
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
-            mapAttrs.Retrieve("FK_MapData", frmID);
+            mapAttrs.Retrieve("FK_MapData", frmID,"Idx");
 
             var cols = "<table>";
             cols += "<tr>";
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
-                if (attr.KeyOfEn == "OID")
+                if (attr.UIIsVisable == false)
                     continue;
-                cols += "<td>"+ attr.Name + "</td>";
+
+                cols += "<th>"+ attr.Name + "</th>";
             }
             cols += "</tr>";
+
+            for (var idx = 0; idx < 3; idx++) {
+
+                cols += "<tr>";
+
+                for (var i = 0; i < mapAttrs.length; i++) {
+                    var attr = mapAttrs[i];
+                    if (attr.UIIsVisable == false)
+                        continue;
+                    cols += "<td></td>";
+                }
+                cols += "</tr>";
+            }
+
             $("#cols").html(cols);
 
         });
@@ -178,7 +193,7 @@
                             <li>在excel的工具栏中，找到文件另存为命令，选择 (excel97-2003工作簿)格式. </li>
                             <li>在第一行数据填入如下列 </li>
                             <li> <div id="cols"></div></li>
-                            <li>测试该模版是否可用,如果可用就把该文件放到 \DatUser\</li>
+                            <li>测试该模版是否可用,如果可用就把该文件放到 \DatUser\\TempleteOfImp\\</li>
                             <li> 如果不可用：请尝试下载一个AccessDatabaseEngine.exe 文件安装到服务器上试试.</li>
 
                         </ul>

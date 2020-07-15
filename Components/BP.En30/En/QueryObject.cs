@@ -194,7 +194,7 @@ namespace BP.En
         /// <param name="attr">属性</param>
         /// <param name="exp">表达格式 大于，等于，小于</param>
         /// <param name="len">长度</param>
-        public void AddWhereLen(string attr, string exp, int len,DBType dbtype)
+        public void AddWhereLen(string attr, string exp, int len, DBType dbtype)
         {
             this.SQL = "( " + SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
         }
@@ -628,12 +628,12 @@ namespace BP.En
                 //  Entity en = attr.HisFKEn;
                 if (this.HisDBType == DBType.Oracle)
                     return "T" + attr.Key.Replace("Text", "") + ".Name";
-                else
-                {
-                    Entity en = attr.HisFKEn;
-                    return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
-                }
 
+                if (attr.IsFK==false)
+                    return  attr.Key.Replace("Text", "") + ".Name";
+
+                Entity en = attr.HisFKEn;
+                return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
             }
 
             return this.HisMap.PhysicsTable + "." + attr.Field;

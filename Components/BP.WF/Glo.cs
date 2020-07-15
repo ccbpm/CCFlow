@@ -1664,7 +1664,7 @@ namespace BP.WF
                     frmevent.CheckPhysicsTable();
 
                     DBAccess.RunSQL("UPDATE Sys_FrmEvent SET EventDoType=DoType  ");
-                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent   DROP COLUMN	DoType  ");
+                    DBAccess.RunSQL("ALTER TABLE Sys_FrmEvent  DROP COLUMN	DoType  ");
                 }
                 #endregion
 

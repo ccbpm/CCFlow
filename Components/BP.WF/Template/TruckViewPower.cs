@@ -26,6 +26,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string PCCer = "PCCer";
         /// <summary>
+        /// 任何人可见
+        /// </summary>
+        public const string PAnyOne = "PAnyOne";
+        /// <summary>
         /// 本部门人可看
         /// </summary>
         public const string PMyDept = "PMyDept";
@@ -122,6 +126,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(TruckViewPowerAttr.PCCer, value);
+            }
+        }
+        /// <summary>
+        /// 任何人都可见
+        /// </summary>
+        public bool PAnyOne
+        {
+            get
+            {
+                return this.GetValBooleanByKey(TruckViewPowerAttr.PAnyOne);
+            }
+            set
+            {
+                this.SetValByKey(TruckViewPowerAttr.PAnyOne, value);
             }
         }
         /// <summary>
@@ -305,7 +323,20 @@ namespace BP.WF.Template
 
         #endregion
 
+
         #region 构造方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.OpenForAppAdmin();
+                uac.IsDelete = false;
+                uac.IsInsert = false;
+                return uac;
+            }
+        }
+
         /// <summary>
         /// 流程轨迹权限
         /// </summary>
@@ -329,29 +360,30 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Flow", "流程模版主表");
-
                 map.DepositaryOfEntity= Depositary.Application;
-
 
                 map.AddTBStringPK(TruckViewPowerAttr.No, null, "编号", true, true, 1, 10, 3);
                 map.AddTBString(TruckViewPowerAttr.Name, null, "名称", true, false, 0, 50, 10, true);
 
+                #region 基本控制.
+                map.AddBoolean(TruckViewPowerAttr.PStarter, true, "发起人可看(必选)", true, false, false);
+                map.AddBoolean(TruckViewPowerAttr.PWorker, true, "参与人可看(必选)", true, false, false);
+                map.AddBoolean(TruckViewPowerAttr.PCCer, true, "被抄送人可看(必选)", true, false, false);
+                map.AddBoolean(TruckViewPowerAttr.PAnyOne, false, "任何人可见", true, false, true);
+                #endregion 基本控制.
 
-                #region 权限控制. 此部分与流程属性同步.
-                map.AddBoolean(TruckViewPowerAttr.PStarter, true, "发起人可看(必选)", true, false, true);
-                map.AddBoolean(TruckViewPowerAttr.PWorker, true, "参与人可看(必选)", true, false, true);
-                map.AddBoolean(TruckViewPowerAttr.PCCer, true, "被抄送人可看(必选)", true, false, true);
+                #region 按部门控制.
+                map.AddBoolean(TruckViewPowerAttr.PMyDept, true, "本部门人可看", true, true, false);
+                map.AddBoolean(TruckViewPowerAttr.PPMyDept, true, "直属上级部门可看", true, true, false);
 
-                map.AddBoolean(TruckViewPowerAttr.PMyDept, true, "本部门人可看", true, true, true);
-                map.AddBoolean(TruckViewPowerAttr.PPMyDept, true, "直属上级部门可看(比如:我是)", true, true, true);
-
-                map.AddBoolean(TruckViewPowerAttr.PPDept, true, "上级部门可看", true, true, true);
-                map.AddBoolean(TruckViewPowerAttr.PSameDept, true, "平级部门可看", true, true, true);
+                map.AddBoolean(TruckViewPowerAttr.PPDept, true, "上级部门可看", true, true, false);
+                map.AddBoolean(TruckViewPowerAttr.PSameDept, true, "平级部门可看", true, true, false);
 
                 map.AddBoolean(TruckViewPowerAttr.PSpecDept, true, "指定部门可看", true, true, false);
                 map.AddTBString(TruckViewPowerAttr.PSpecDeptExt, null, "部门编号", true, false, 0, 200, 100, false);
+                #endregion 按部门控制.
 
-
+                #region 其他权限控制.
                 map.AddBoolean(TruckViewPowerAttr.PSpecSta, true, "指定的岗位可看", true, true, false);
                 map.AddTBString(TruckViewPowerAttr.PSpecStaExt, null, "岗位编号", true, false, 0, 200, 100, false);
 
@@ -360,7 +392,7 @@ namespace BP.WF.Template
 
                 map.AddBoolean(TruckViewPowerAttr.PSpecEmp, true, "指定的人员可看", true, true, false);
                 map.AddTBString(TruckViewPowerAttr.PSpecEmpExt, null, "指定的人员编号", true, false, 0, 200, 100, false);
-                #endregion 权限控制.
+                #endregion 其他权限控制.
 
 
                 this._enMap = map;

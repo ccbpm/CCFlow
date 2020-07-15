@@ -427,12 +427,24 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
+        /// <summary>
+        /// 是否可以查看工作.
+        /// </summary>
+        /// <param name="gwf"></param>
+        /// <returns></returns>
         public bool IsCanView(GenerWorkFlow gwf)
         {
             //是否可以处理当前工作？
             bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
             if (isCanDoCurrWorker)
+                return true;
+
+            //如果是发起人.
+            if (gwf.Starter.Equals(WebUser.No))
+                return true;
+
+            //如果是本部门发起的
+            if (gwf.FK_Dept.Equals(WebUser.FK_Dept))
                 return true;
 
             //是否是工作参与人?
@@ -447,6 +459,54 @@ namespace BP.WF.HttpHandler
                 return true;
 
             //处理流程控制权限.
+            TruckViewPower viewEn = new TruckViewPower(gwf.FK_Flow);
+
+            #region 基本权限控制.
+            //如果任何人可见.
+            if (viewEn.PAnyOne == true)
+                return true;
+
+            #endregion 基本权限控制.
+
+            #region 按照部门控制.
+            //本部门可见.
+            if (viewEn.PMyDept==true)
+            {
+                if (gwf.FK_Dept.Equals(WebUser.FK_Dept) == true)
+                    return true;
+            }
+
+            //直属上级部门可看(比如:我是).
+            if (viewEn.PPMyDept == true)
+            {
+                //上级部门可见.
+                Dept dept = new Dept(gwf.FK_Dept);
+                if (dept.ParentNo.Equals(WebUser.FK_Dept) == true)
+                    return true;
+            }
+
+            //上级部门可看
+            if (viewEn.PPMyDept == true)
+            {
+                //上级部门可见.
+                Dept dept = new Dept(gwf.FK_Dept);
+                if (dept.ParentNo.Equals(WebUser.FK_Dept) == true)
+                    return true;
+            }
+
+            //同级部门可见.
+            if (viewEn.PSameDept==true)
+            {
+                //如果发起人的部门，与当前人员的部门是同一级部门.
+                Dept dept = new Dept(gwf.FK_Dept);
+                Dept mydept = new Dept(WebUser.FK_Dept);
+                if (mydept.ParentNo.Equals(dept.ParentNo) == true)
+                    return true;
+            }
+
+          
+            #endregion 按照部门控制.
+
 
             return false;
         }
@@ -503,8 +563,20 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            // 
+
             if (IsCanView(gwf) == false)
-                return "err@您无权查看该工作.";
+            {
+                string msg = "err@您无权查看该工作,";
+                msg += "如下情况可以查看该工作.";
+                msg += "1. 该流程发起人, 审批人，抄送人，可以查看.";
+                msg += "2. 默认与发起人是同一个部门的人可以查看.";
+                msg += "3. 二级管理员可以查看本组织的工作.";
+                msg += "4. 超级管理员可以查看.";
+                msg += "5. 流程属性的权限控制设置权限的人可以查看.";
+
+                return msg;
+            }
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree

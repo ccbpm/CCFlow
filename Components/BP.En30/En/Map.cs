@@ -2556,10 +2556,6 @@ namespace BP.En
         {
             this.AddTBIntPK(key, key, defaultVal, desc, uiVisable, isReadonly, identityKey);
         }
-        public void AddTBIntMyNum()
-        {
-            this.AddTBInt("MyNum", "MyNum", 1, "个数", true, true);
-        }
         #endregion
 
         #region Float类型

@@ -334,16 +334,22 @@ namespace BP.Web
                 {
                     try
                     {
-                        val = DBAccess.RunSQLReturnStringIsNull("SELECT NameOfPath FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", null);
+
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT NameOfPath FROM Port_Dept WHERE No ="+ps.DBStr+"No";
+                        ps.Add("No", WebUser.FK_Dept);
+                        val = DBAccess.RunSQLReturnStringIsNull(ps, null);
+
+                        if (DataType.IsNullOrEmpty(val))
+                            val = WebUser.FK_DeptName;
+
+                        WebUser.FK_DeptNameOfFull = val;
                         return val;
                     }
                     catch
                     {
                         val = WebUser.FK_DeptName;
                     }
-
-                    //给它赋值.
-                    FK_DeptNameOfFull = val;
                 }
                 return val;
             }

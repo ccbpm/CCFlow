@@ -508,8 +508,11 @@ namespace BP.Sys
                     {
                         string strs = "";
 
-                        DataTable dt = DBAccess.RunSQLReturnTable("SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1  ");
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData="+ps.DBStr+ "FK_MapData AND LGType=1";
+                        ps.Add("FK_MapData", this.No);
 
+                        DataTable dt = DBAccess.RunSQLReturnTable(ps);
                         foreach (DataRow dr in dt.Rows)
                         {
                             strs += "'" + dr[0].ToString() + "',";

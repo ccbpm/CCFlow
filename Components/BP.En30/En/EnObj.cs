@@ -127,7 +127,8 @@ namespace BP.En
                     this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
                     continue;
                 }
-                else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
+                else if (v.Equals("@WebUser.FK_DeptNameOfFull")
+                    || v.Equals("@WebUser.FK_DeptFullName"))
                 {
                     this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
                     continue;
@@ -176,8 +177,13 @@ namespace BP.En
             DataTable dt = null;
             if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
             {
-                string sql2 = "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData = '" + fk_mapdata + "' and FK_Flow = '" + fk_flow + "' AND FK_Node = " + fk_node;
-                dt = DBAccess.RunSQLReturnTable(sql2);
+                Paras ps = new Paras();
+                ps.SQL= "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData =" + ps.DBStr + "FK_MapData AND FK_Flow=" + ps.DBStr + "FK_Flow AND FK_Node =" + ps.DBStr + "FK_Node";
+                ps.Add("FK_MapData",fk_mapdata);
+                ps.Add("FK_Flow", fk_flow);
+                ps.Add("FK_Node", fk_node);
+
+                dt = DBAccess.RunSQLReturnTable(ps);
             }
 
             Attrs attrs = this.EnMap.Attrs;
@@ -191,7 +197,6 @@ namespace BP.En
                 //先判断是否设置了字段权限
                 if (dt != null)
                 {
-
                     string mypk = fk_mapdata + "_" + fk_node + "_" + attr.Key;
                     foreach (DataRow dr in dt.Rows)
                     {

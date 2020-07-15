@@ -154,9 +154,10 @@ namespace BP.WF
                 string rdt = dt.Rows[0][0].ToString();
 
                 ps.Clear();
-                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID ORDER BY RDT ";
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID OR FID="+dbStr+"FID ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
+                ps.Add("FID", this.WorkID);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
                 foreach (DataRow dr in dt.Rows)

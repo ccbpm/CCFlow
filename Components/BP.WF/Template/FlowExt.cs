@@ -1602,7 +1602,7 @@ namespace BP.WF.Template
             Node nd = fl.HisStartNode;
             Works wks = nd.HisWorks;
             wks.RetrieveAllFromDBSource(WorkAttr.Rec);
-            //string table = nd.HisWork.EnMap.PhysicsTable;
+            string table = nd.HisWork.EnMap.PhysicsTable;
             string tableRpt = "ND" + int.Parse(this.No) + "Rpt";
             MapData md = new MapData(tableRpt);
             foreach (Work wk in wks)
@@ -1625,11 +1625,17 @@ namespace BP.WF.Template
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                //ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                //DBAccess.RunSQL(ps);
-
-                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                DBAccess.RunSQL(ps);
+                if(DBAccess.IsExitsTableCol(md.PTable,"Title") == true)
+                {
+                    ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                    DBAccess.RunSQL(ps);
+                }
+               
+                if(table.Equals(md.PTable)==false && DBAccess.IsExitsTableCol(table, "Title") == true)
+                {
+                    ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                    DBAccess.RunSQL(ps);
+                }
 
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);

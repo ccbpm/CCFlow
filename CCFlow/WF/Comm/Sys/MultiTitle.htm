@@ -430,11 +430,12 @@
             window.location.href = window.location.href;
         }
 
-        function Help() {
-            var url = "./img/MultiTitle.gif";
+        /*
+            function Help() {
+            var url = "../Sys/Img/MuLtiTitLe.gif";
             window.open(url);
         }
-
+        */
         function ClearAll() {
             enEntity.SetPara("MultiTitle", "");
             enEntity.SetPara("MultiTitle1", "");
@@ -456,20 +457,18 @@
     <button id="Btn_Add" onclick="AddGroup()"> 增加一级表头</button>
     <button id="Btn_Add" onclick="AddGroup2()"> 增加二级表头</button>
     <button id="Btn_Clear" onclick="ClearAll()"> 清除全部设置</button>
-    <button id="Btn_Help" onclick="Help()"> 动画演示</button>
+    <!--<button id="Btn_Help" onclick="Help()"> 动画演示</button>-->
 
     <br />
     <fieldset>
         <legend>设置帮助 </legend>
         <ul>
             <li> 请按照动画的步骤去操作。</li>
-            <li> 我们最高支持2级表头。</li>
-            <li> 1级表头</li>
-            <li> <img src="../Img/MultiTitle1.png" alt="" /></li>
-            <li> 2级表头</li>
-            <li> <img src="../Img/MultiTitle2.png" alt="" /></li>
+            <li> 多个列合并为一级表头，多个一级表头合并为二级表头，最高支持二级表头</li>
+            <li> 示例</li>
+            <li> <img src="../Sys/Img/MuLtiTitLe1.png" style="width:100%" /></li>
             <li> 我们没有解决不按照操作步骤带来的错误。</li>
-            <li> 如果设置的格式混乱，请使用【清楚全部设置】重新设置。</li>
+            <li> 如果设置的格式混乱，请使用【清除全部设置】重新设置。</li>
         </ul>
     </fieldset>
 

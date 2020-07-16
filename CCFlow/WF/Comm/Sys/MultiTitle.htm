@@ -22,12 +22,13 @@
 
         //页面启动函数.
         $(function () {
+
             //获得配置信息.
             var ensName = GetQueryString("EnsName");
 
             //执行类型.
             doType = GetQueryString("DoType");
-            if (doType == null)  doType = "Search";
+            if (doType == null) doType = "Search";
 
             //根据不同的类型获取-全局配置.
             if (doType == "Search") {
@@ -57,9 +58,9 @@
             multiTitle = enEntity.GetPara("MultiTitle");
             multiTitle1 = enEntity.GetPara("MultiTitle1");
 
-           //是否是三级表头
+            //是否是三级表头
             var isThrMulti = false;
-            if (multiTitle1 == null ||  multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
+            if (multiTitle1 == null || multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
                 multiTitle1 = "";
             if (multiTitle1 != "")
                 isThrMulti = true;
@@ -68,34 +69,34 @@
             var isSecMulti = false;
             if (multiTitle == null || multiTitle == undefined || multiTitle == "" || multiTitle == "undefined")
                 multiTitle = "";
-            if (isThrMulti==false && multiTitle != "")
+            if (isThrMulti == false && multiTitle != "")
                 isSecMulti = true;
 
             var _html = "<table style='width:90%;'>";
             _html += "<caption><img style='margin-top:5px;'; src='../../Img/Event.png' />多表头</caption>";
 
-           
+
             //一级表头
             if (isThrMulti == false && isSecMulti == false)
                 _html = showTable(mapAttrs);
-           //二级表头
+            //二级表头
             if (isSecMulti == true)
-                _html = showSecTable(mapAttrs,multiTitle);
+                _html = showSecTable(mapAttrs, multiTitle);
             //三级表头
             if (isThrMulti == true)
                 _html = showThrTable(mapAttrs, multiTitle, multiTitle1);
 
-            for (var idx = 0; idx < 4; idx++) {
+            for (var idx = 0; idx < 3; idx++) {
                 _html += "<tr>";
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var attr = mapAttrs[i];
                     if (attr.UIVisible == 0)
                         continue;
-                    _html += "<td></td>";
+                    _html += "<td> &nbsp;&nbsp;</td>";
                 }
                 _html += "</tr>";
             }
-           
+
 
             _html += "</table>";
             $("#Table").html(_html);
@@ -187,10 +188,10 @@
                         _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
                         thrcolspan = 0;
                     }
-            
+
                     _html += "<th rowspan=3><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</label></th>";
                 }
-                   
+
                 //属于三级分组下面的字段
                 if (keyIdx == 2) {
                     var fields = getMutliFile(attr.KeyOfEn, multiTitle1);
@@ -228,12 +229,12 @@
                             curThrGroup = thrfields[0];
                             if (curThrGroup != "" && curThrGroup != thrfields[0]) {
                                 _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + thrfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + thrfields[0] + "',1)> 删除</button></th>";
-                               
+
                                 thrcolspan = 0;
                             }
                         } else {
                             if (isSecChange == true)
-                            thrcolspan += secfields.length - 1;
+                                thrcolspan += secfields.length - 1;
                         }
 
                     } else {
@@ -257,8 +258,8 @@
             return _html;
         }
 
-        function DeleteSpecTitle(title,multiType) {
-            
+        function DeleteSpecTitle(title, multiType) {
+
             if (window.confirm('您确定要删除【' + title + '】吗?') == false)
                 return;
 
@@ -396,11 +397,11 @@
                             curIdx = idx;
                         }
                     }
-                    
+
                 }
-                     
+
             }
-            
+
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle1 != undefined) {
                 for (var i = 0; i < fls.length; i++) {
@@ -429,6 +430,10 @@
             window.location.href = window.location.href;
         }
 
+        function Help() {
+            var url = "./img/MultiTitle.gif";
+            window.open(url);
+        }
 
         function ClearAll() {
             enEntity.SetPara("MultiTitle", "");
@@ -440,17 +445,33 @@
 </head>
 <body>
 
-    <div style="position:relative;" id="Table">
-    </div>
+    <h5>多表头设置</h5>
+
+    <table style="position:relative;width:100%;" id="Table">
+    </table>
 
     <div style="right:30px; position:absolute; z-index:100; ">
     </div>
 
-    <button id="Btn_New" onclick="AddGroup()"> 增加一级表头</button>
-    <button id="Btn_New" onclick="AddGroup2()"> 增加二级表头</button>
-    <button id="Btn_New" onclick="ClearAll()"> 清除全部设置</button>
+    <button id="Btn_Add" onclick="AddGroup()"> 增加一级表头</button>
+    <button id="Btn_Add" onclick="AddGroup2()"> 增加二级表头</button>
+    <button id="Btn_Clear" onclick="ClearAll()"> 清除全部设置</button>
+    <button id="Btn_Help" onclick="Help()"> 动画演示</button>
 
-
+    <br />
+    <fieldset>
+        <legend>设置帮助 </legend>
+        <ul>
+            <li> 请按照动画的步骤去操作。</li>
+            <li> 我们最高支持2级表头。</li>
+            <li> 1级表头</li>
+            <li> <img src="../Img/MultiTitle1.png" alt="" /></li>
+            <li> 2级表头</li>
+            <li> <img src="../Img/MultiTitle2.png" alt="" /></li>
+            <li> 我们没有解决不按照操作步骤带来的错误。</li>
+            <li> 如果设置的格式混乱，请使用【清楚全部设置】重新设置。</li>
+        </ul>
+    </fieldset>
 
 </body>
 </html>

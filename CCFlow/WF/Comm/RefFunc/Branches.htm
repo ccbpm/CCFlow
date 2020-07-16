@@ -428,9 +428,15 @@
 </head>
 <body>
     <input class="form-control" style="display:inline;width:auto" type="text" placeholder="" id="TB_Key">
-    <input type="button" value="查询" id="Cancel" onclick="Search()" />
+
+    <button id="" onclick="Search()">查询</button>
+    <button id="" onclick="CheckAll()">全选</button>
+    <button id="" onclick="UnCheckAll()">全不选</button>
+
+    <!--<input type="button" value="查询" id="Cancel" onclick="Search()" />
     <input type="button" value="全选" id="Cancel" onclick="CheckAll()" />
-    <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()" />
+    <input type="button" value="全不选" id="Button1" onclick="UnCheckAll()" />-->
+
     <div class="row row-margin-top" style="width:96%;margin-left:10px">
         <div id="tree" style="overflow-y:auto; overflow-x:auto; width:auto; height:480px;"></div>
         <table id="viewGrid"></table>

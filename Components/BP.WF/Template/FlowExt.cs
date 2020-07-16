@@ -1595,38 +1595,38 @@ namespace BP.WF.Template
         /// </summary>
         public string DoGenerTitle()
         {
-            if (WebUser.No != "admin")
-                return "非admin用户不能执行。";
+            if (WebUser.IsAdmin == false)
+                return "非管理员用户不能执行。";
+            string adminNo = WebUser.No;
             Flow fl = new Flow(this.No);
             Node nd = fl.HisStartNode;
             Works wks = nd.HisWorks;
             wks.RetrieveAllFromDBSource(WorkAttr.Rec);
-            string table = nd.HisWork.EnMap.PhysicsTable;
+            //string table = nd.HisWork.EnMap.PhysicsTable;
             string tableRpt = "ND" + int.Parse(this.No) + "Rpt";
-            Sys.MapData md = new Sys.MapData(tableRpt);
+            MapData md = new MapData(tableRpt);
             foreach (Work wk in wks)
             {
 
                 if (wk.Rec != WebUser.No)
                 {
-                    BP.Web.WebUser.Exit();
+                    WebUser.Exit();
                     try
                     {
                         Emp emp = new Emp(wk.Rec);
-                        BP.Web.WebUser.SignInOfGener(emp);
+                        WebUser.SignInOfGener(emp);
                     }
                     catch
                     {
                         continue;
                     }
                 }
-                string sql = "";
-                string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
+                string title = WorkFlowBuessRole.GenerTitle(fl, wk);
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
-                DBAccess.RunSQL(ps);
+                //ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                //DBAccess.RunSQL(ps);
 
                 ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
@@ -1635,8 +1635,8 @@ namespace BP.WF.Template
                 DBAccess.RunSQL(ps);
 
             }
-            Emp emp1 = new Emp("admin");
-            BP.Web.WebUser.SignInOfGener(emp1);
+            Emp emp1 = new Emp(adminNo);
+            WebUser.SignInOfGener(emp1);
 
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }

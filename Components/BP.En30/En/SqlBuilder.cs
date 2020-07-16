@@ -549,8 +549,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.IsPK)
                             sql += "[" + attr.Field + "]  NVARCHAR (" + attr.MaxLength + ") NOT NULL,";
                         else
@@ -560,6 +558,15 @@ namespace BP.En
                             else
                                 sql += "[" + attr.Field + "]  NVARCHAR (" + attr.MaxLength + ") NULL,";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+
+                        if (attr.MaxLength >= 4000)
+                            sql += "[" + attr.Field + "]  NVARCHAR (MAX) NULL,";
+                        else
+                            sql += "[" + attr.Field + "]  NVARCHAR (" + attr.MaxLength + ") NULL,";
+
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
@@ -618,8 +625,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.IsPK)
                             sql += attr.Field + "  VARCHAR (" + attr.MaxLength + ") NOT NULL,";
                         else
@@ -629,6 +634,10 @@ namespace BP.En
                             else
                                 sql += attr.Field + " VARCHAR (" + attr.MaxLength + ") NULL,";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                        sql += attr.Field + " VARCHAR (" + attr.MaxLength + ") NULL,";
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
@@ -672,8 +681,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.MaxLength <= 254)
                         {
                             if (attr.IsPK)
@@ -688,6 +695,10 @@ namespace BP.En
                             else
                                 sql += "[" + attr.Field + "] text,";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                        sql += "[" + attr.Field + "]  varchar (" + attr.MaxLength + ") NULL,";
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
@@ -751,8 +762,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.IsPK)
                             sql += attr.Field + " varchar (" + attr.MaxLength + ") NOT NULL,";
                         else
@@ -762,6 +771,10 @@ namespace BP.En
                             else
                                 sql += attr.Field + " varchar (" + attr.MaxLength + ") NULL,";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                        sql += attr.Field + " varchar (" + attr.MaxLength + ") NULL,";
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
@@ -809,8 +822,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.MaxLength >= 255)
                         {
                             if (attr.IsPK)
@@ -825,6 +836,10 @@ namespace BP.En
                             else
                                 sql += attr.Field + " varchar (" + attr.MaxLength + "),";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                        sql += attr.Field + " varchar (" + attr.MaxLength + "),";
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
@@ -878,8 +893,6 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
                         if (attr.IsPK)
                             sql += attr.Field + " NVARCHAR (" + attr.MaxLength + ") NOT NULL COMMENT '" + attr.Desc + "',";
                         else
@@ -889,6 +902,10 @@ namespace BP.En
                             else
                                 sql += attr.Field + " NVARCHAR (" + attr.MaxLength + ") NULL COMMENT '" + attr.Desc + "',";
                         }
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                        sql += attr.Field + " NVARCHAR (" + attr.MaxLength + ") NULL COMMENT '" + attr.Desc + "',";
                         break;
                     case DataType.AppFloat:
                         sql += attr.Field + " float  NULL COMMENT '" + attr.Desc + "',";
@@ -910,7 +927,7 @@ namespace BP.En
                         }
                         else
                         {
-                            if (attr.DefValType == 0 && attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal)==true)
+                            if (attr.DefValType == 0 && attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
                                 sql += attr.Field + " INT  NULL COMMENT '" + attr.Desc + "',";
                             else
                                 sql += attr.Field + " INT DEFAULT " + attr.DefaultVal + " COMMENT '" + attr.Desc + "',";
@@ -1129,10 +1146,10 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if(attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
-                            val = val + ", "+ attr.Key;
+                        if (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
+                            val = val + ", " + attr.Key;
                         else
-                            val = val + ",NVL(" + mainTable + attr.Field + "," +attr.DefaultVal + ")   " + attr.Key + "";
+                            val = val + ",NVL(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
@@ -1541,7 +1558,7 @@ namespace BP.En
                         }
                         else
                         {
-                         //   val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
+                            //   val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
                             val = val + ",COALESCE(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') AS " + attr.Key;
 
                         }
@@ -1652,12 +1669,12 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if(attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
-                            val = val + ", " +attr.Key;
+                        if (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
+                            val = val + ", " + attr.Key;
                         else
                             val = val + ",IFNULL(" + mainTable + attr.Field + "," +
                                 attr.DefaultVal + ")   " + attr.Key + "";
-                        
+
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
                             if (DataType.IsNullOrEmpty(attr.UIBindKey))
@@ -2459,12 +2476,12 @@ namespace BP.En
                                     if (attr.DefValType == 0
                                         && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
                                         && en.GetValIntByKey(attr.Key) == Int32.Parse(MapAttrAttr.DefaultVal))
-                                        ps.Add(attr.Key, null);
-                                    else
-                                         ps.Add(attr.Key, int.Parse(strInt));
+                                    ps.Add(attr.Key, null);
+                                else
+                                    ps.Add(attr.Key, int.Parse(strInt));
                             }
                             break;
-                       
+
                         case DataType.AppFloat:
                         case DataType.AppDouble:
                             //ps.Add(attr.Key, en.GetValFloatByKey(attr.Key, 0));

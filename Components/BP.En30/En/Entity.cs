@@ -2813,7 +2813,8 @@ namespace BP.En
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
-                if (attr.MyDataType == DataType.AppDate || attr.MyDataType == DataType.AppDateTime)
+                if (attr.MyDataType == DataType.AppDate 
+                    || attr.MyDataType == DataType.AppDateTime)
                 {
                     DateTime dt = this.GetValDateTime(attr.Key);
                 }

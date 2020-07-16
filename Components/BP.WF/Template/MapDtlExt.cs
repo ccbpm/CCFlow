@@ -901,7 +901,6 @@ namespace BP.WF.Template
                 Map map = new Map("Sys_MapDtl", "明细");
 
                 map.DepositaryOfEntity= Depositary.Application;
-                
                 map.IndexField = MapDtlAttr.FK_MapData;
 
                 #region 基础信息.
@@ -980,22 +979,21 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 #endregion 基础信息.
 
-                #region 导入导出填充.
+                #region 导入导出填充. 此部分的功能 
                 // 2014-07-17 for xinchang bank.
-                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导入？", true, true);
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导入？", false, true);
 
                 //导入模式.
-                map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
+                map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", false, false, MapDtlAttr.ImpModel,
                     "@0=不导入@1=按配置模式导入@2=按照xls文件模版导入");
+                //string strs = "如果是按照xls导入,请做一个从表ID.xls的模版文件放在:/DataUser/DtlTemplate/ 下面. 目前仅仅支持xls文件.";
+               // map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
 
-                string strs = "如果是按照xls导入,请做一个从表ID.xls的模版文件放在:/DataUser/DtlTemplate/ 下面. 目前仅仅支持xls文件.";
-                map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
-
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false, true);
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false, true);
-                map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
-                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", false, false, true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", false, false, true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", false, false, true);
+                map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", false, false, 0, 900, 20, true);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", false, true);
                 #endregion 导入导出填充.
 
                 #region 超链接.
@@ -1025,13 +1023,6 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "生成英文字段"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".GenerAttrs";
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1083,6 +1074,13 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "生成英文字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".GenerAttrs";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "生成英文字段列，方便字段数据copy使用.";
                 map.AddRefMethod(rm);
                 #endregion 相关方法.
 

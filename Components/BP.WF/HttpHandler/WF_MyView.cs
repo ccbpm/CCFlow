@@ -24,7 +24,6 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_MyView()
         {
-
         }
 
         #region  运行变量
@@ -184,7 +183,6 @@ namespace BP.WF.HttpHandler
 
         #endregion
 
-
         public string InitToolBar()
         {
             DataTable dt = new DataTable("ToolBar");
@@ -202,7 +200,6 @@ namespace BP.WF.HttpHandler
                 dr["Name"] = "关闭";
                 dr["Oper"] = "Close();";
                 dt.Rows.Add(dr);
-
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
@@ -315,7 +312,6 @@ namespace BP.WF.HttpHandler
                 dr["Oper"] = "";
                 dt.Rows.Add(dr);
                 #endregion 根据流程权限控制规则获取可以操作的按钮功能
-
 
                 #region 加载流程查看器 - 按钮
 
@@ -443,7 +439,7 @@ namespace BP.WF.HttpHandler
             if (gwf.Starter.Equals(WebUser.No))
                 return true;
 
-            //如果是本部门发起的
+            //如果是本部门发起的.
             if (gwf.FK_Dept.Equals(WebUser.FK_Dept))
                 return true;
 
@@ -465,6 +461,12 @@ namespace BP.WF.HttpHandler
             //如果任何人可见.
             if (viewEn.PAnyOne == true)
                 return true;
+
+            if (viewEn.PSpecDept == true || DataType.IsNullOrEmpty(viewEn.PSpecDeptExt))
+            {
+                if (viewEn.PSpecDeptExt.Equals(WebUser.FK_Dept + ",") == true)
+                    return true;
+            }
 
             #endregion 基本权限控制.
 

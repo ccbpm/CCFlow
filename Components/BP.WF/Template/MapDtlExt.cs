@@ -28,7 +28,7 @@ namespace BP.WF.Template
                     throw new Exception("err@管理员登录用户信息丢失,当前会话[" + BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + "]");
 
                 uac.IsUpdate = true;
-                uac.IsDelete = false;
+                uac.IsDelete = true;
                 uac.IsInsert = false;
                 return uac;
             }

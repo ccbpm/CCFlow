@@ -444,8 +444,11 @@ namespace BP.WF.HttpHandler
                 return true;
 
             //是否是工作参与人?
+            string emps = gwf.Emps;
+            if (DataType.IsNullOrEmpty(emps) == false)
+                emps += "@";
             bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
-            if (isWorker == true)
+            if (isWorker == true || emps.Contains("@" + WebUser.No+"@") == true)
                 return true;
 
             if (WebUser.No.Equals("admin") == true)

@@ -27,7 +27,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 18)
             continue;
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (val == "10002" || val == "10002.0000"))
+        if (mapAttr.DefValType == 0 &&  (val == "0" || val == "0.0000"))
             val = "";
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
@@ -282,7 +282,7 @@ function InitFoolLink(mapAttr, frmType) {
 
                 //初始化页面的值
                 var nowKey = ddl.val();
-                if (nowKey == null || nowKey == undefined || nowKey == "")
+                if (nowKey == null || nowKey == undefined || nowKey == "" || nowKey==-1)
                     return;
 
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey, frmType);

@@ -1411,6 +1411,8 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
     if (!$.isArray(mapAttrs[KeyOfEn])) {
         mapAttrs[KeyOfEn] = [];
     }
+    mapAttrs[KeyOfEn] = [];
+
     if (NDMapAttrs.length > 0) {
         mapAttrs[KeyOfEn].push(NDMapAttrs);
     }

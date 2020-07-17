@@ -2,6 +2,7 @@
 //阅读并关闭.
 function ReadAndClose()
 {
+    var msg = "";
     if ($("#FlowBBS_Doc").length == 1) {
         var doc = $("#FlowBBS_Doc").val();
         if ($("#FlowBBS_Doc").val() == null || $("#FlowBBS_Doc").val() == "" || $("#FlowBBS_Doc").val().trim().length == 0)
@@ -9,7 +10,11 @@ function ReadAndClose()
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
         handler.AddUrlData();
         handler.AddPara("FlowBBS_Doc", doc);
-        handler.DoMethodReturnString("FlowBBS_Save");
+        msg = handler.DoMethodReturnString("FlowBBS_Save");
+        if (msg.indexOf("err@") != -1) {
+            alert(msg);
+            return;
+        }
     }
 
     if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {

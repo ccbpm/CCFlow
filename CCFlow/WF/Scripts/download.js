@@ -5,12 +5,9 @@
 
 // data can be a string, Blob, File, or dataURL
 
-
-
-
 function download(data, strFileName, strMimeType) {
 
-    var self = window, // this script is only for browsers anyway...
+     var self = window, // this script is only for browsers anyway...
 		u = "application/octet-stream", // this default mime also triggers iframe downloads
 		m = strMimeType || u,
 		x = data,

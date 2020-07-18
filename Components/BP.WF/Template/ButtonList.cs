@@ -332,6 +332,14 @@ namespace BP.WF.Template
         /// 提示方式.
         /// </summary>
         public const string HelpRole = "HelpRole";
+        /// <summary>
+        /// 下一条
+        /// </summary>
+        public const string NextLab = "NextLab";
+        /// <summary>
+        /// 获得规则
+        /// </summary>
+        public const string NextRole = "NextRole";
 
 
         #region 公文2019

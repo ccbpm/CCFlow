@@ -728,7 +728,7 @@ namespace BP.WF.Data
 
                 map.AddDDLSysEnum(MyStartFlowAttr.WFSta, 0, "状态", true, true, MyStartFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddTBString(MyStartFlowAttr.Starter, null, "发起人", false, false, 0, 100, 100);
-                map.AddTBDateTime(MyStartFlowAttr.RDT, "发起日期", true, true);
+                map.AddTBDate(MyStartFlowAttr.RDT, "发起日期", true, true);
 
                 map.AddTBString(MyStartFlowAttr.NodeName, null, "停留节点", true, true, 0, 100, 100, false);
                 map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, false);
@@ -746,8 +746,14 @@ namespace BP.WF.Data
 
                 //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
-                map.AddSearchAttr(MyStartFlowAttr.TSpan,4000);
+
+                //map.AddSearchAttr(MyStartFlowAttr.TSpan,4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
+
+                map.DTSearchWay = DTSearchWay.ByDate;
+                map.DTSearchLable = "发起日期";
+                map.DTSearchKey = MyStartFlowAttr.RDT; 
+
 
                 //我发起的流程.
                 AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",

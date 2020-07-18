@@ -496,18 +496,20 @@ namespace BP.WF
                     myds.Tables.Add(frmAtchs.ToDataTableField("Sys_FrmAttachment"));
                     #endregion  FrmAttachment .
 
-
                 }
                 #endregion 增加 groupfields
 
                 #region 流程设置信息.
-                BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, workID);
-                if (nd.IsStartNode == false)
+                if (isView == false)
                 {
-                    if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                    BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, workID);
+                    if (nd.IsStartNode == false)
                     {
-                        gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
-                        gwf.Update();
+                        if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                        {
+                            gwf.TodoEmps += BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
+                            gwf.Update();
+                        }
                     }
                 }
                 #endregion 流程设置信息.
@@ -516,10 +518,11 @@ namespace BP.WF
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
 
                 //重设默认值.
-                wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
+                if (isView == false)
+                    wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
                 //URL参数替换
-                if (SystemConfig.IsBSsystem == true)
+                if (SystemConfig.IsBSsystem == true && isView == false)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestQueryStringKeys)
@@ -543,20 +546,25 @@ namespace BP.WF
                 }
 
                 //执行表单事件
-                string msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, wk);
-                if (DataType.IsNullOrEmpty(msg) == false)
-                    throw new Exception("err@错误:" + msg);
-
-                //执行装载填充.
                 MapExts mes = md.MapExts;
-                string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
-                MapExt me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
-                if (me != null)
+                MapExt me = null;
+                string msg = null;
+                if (isView == false)
                 {
-                    //执行通用的装载方法.
-                    MapAttrs attrs = md.MapAttrs;
-                    MapDtls dtls = md.MapDtls;
-                    wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
+                    msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, wk);
+                    if (DataType.IsNullOrEmpty(msg) == false)
+                        throw new Exception("err@错误:" + msg);
+
+                    //执行装载填充.
+                    string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
+                    me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
+                    if (me != null)
+                    {
+                        //执行通用的装载方法.
+                        MapAttrs attrs = md.MapAttrs;
+                        MapDtls dtls = md.MapDtls;
+                        wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
+                    }
                 }
 
                 //如果是累加表单，就把整个rpt数据都放入里面去.
@@ -754,8 +762,6 @@ namespace BP.WF
                             break;
                         case WFState.Shift:
                             /* 判断移交过来的。 */
-
-
                             string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
                             DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
 

@@ -673,6 +673,11 @@ namespace BP.WF.Template
                 //for 周大福.
                 map.AddTBString(BtnAttr.HelpLab, "帮助", "帮助标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HelpRole, 0, "帮助显示规则", true, true, BtnAttr.HelpRole, @"0=禁用@1=启用@2=强制提示@3=选择性提示");
+
+                //for ctrl.cn
+                map.AddTBString(BtnAttr.NextLab, "下一条", "下一条", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.NextRole, 0, "获得规则", true, true, BtnAttr.NextRole, @"0=禁用@1=相同节点@2=相同流程@3=相同的人@4=不限流程");
+
                 #endregion  功能按钮状态
 
                 //节点工具栏,主从表映射.

@@ -870,7 +870,7 @@ function InitAthMapAttrOfCtrlFool(db, mapAttr) {
             var RBShowModel = 3;
             if (mapAttr.AtPara.indexOf("@RBShowModel=3") == -1)
                 RBShowModel = 0;
-            return InitRBShowContent(mapAttr, defValue, RBShowModel, enableAttr);
+            return InitRBShowContentAth(mapAttr, defValue, RBShowModel, enableAttr);
 
         }
     }
@@ -994,7 +994,7 @@ function InitAthDDLOperation(mapAttr, defVal) {
     alert(mapAttr.LGType + "没有判断.");
 }
 
-function InitRBShowContent(mapAttr, defValue, RBShowModel, enableAttr) {
+function InitRBShowContentAth(mapAttr, defValue, RBShowModel, enableAttr) {
     var rbHtml = "";
     var enums = new Entities("BP.Sys.SysEnums");
     enums.Retrieve("EnumKey", mapAttr.UIBindKey);

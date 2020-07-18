@@ -412,6 +412,8 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
                 map.SetHelperUrl(FlowAttr.TitleRole, "http://ccbpm.mydoc.io/?v=5404&t=17040");
 
+                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, true);
+                map.SetHelperAlert(FlowAttr.TitleRoleNodes, "1.空表示只在开始节点生成标题 \t\n 2.*表示在任意节点可生成标题 \t\n 3.指定节点用逗号分割可以生成标题");
 
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");

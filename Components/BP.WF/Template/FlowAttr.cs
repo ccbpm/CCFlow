@@ -60,6 +60,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string TitleRole = "TitleRole";
         /// <summary>
+        /// 生成标题的节点
+        /// </summary>
+        public const string TitleRoleNodes = "TitleRoleNodes";
+        /// <summary>
         /// 流程类型
         /// </summary>
         public const string FlowType = "FlowType";

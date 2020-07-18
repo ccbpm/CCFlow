@@ -9024,12 +9024,32 @@ namespace BP.WF
                     return "err@在执行保存后的事件期间出现错误:" + ex.Message;
                 }
                 #endregion
+                Flow fl = new Flow(fk_flow);
+                //不是开始节点
+                string titleRoleNodes = fl.TitleRoleNodes;
+                if (nd.IsStartNode == false && DataType.IsNullOrEmpty(titleRoleNodes) == false)
+                {
+                    if((titleRoleNodes + ",").Contains(nd.NodeID+",") == true || titleRoleNodes.Equals("*") == true)
+                    {
+                        //设置标题.
+                        string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
+                        //修改RPT表的标题
+                        wk.SetValByKey(GERptAttr.Title, title);
+                        wk.Update();
+                        GenerWorkFlow gwf = new GenerWorkFlow(workID);
+                        gwf.Title = title; //标题.
+                        gwf.Update();
+                    }
+                    
+                }
+                
                 #region 为开始工作创建待办.
+                
                 if (nd.IsStartNode == true)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow();
-                    Flow fl = new Flow(fk_flow);
+                    
                     if (fl.DraftRole == DraftRole.None)
                     {
                         return "保存成功";

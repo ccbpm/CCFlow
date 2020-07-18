@@ -3581,6 +3581,18 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.TitleRole, value);
             }
         }
+
+        public string TitleRoleNodes
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.TitleRoleNodes);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.TitleRoleNodes, value);
+            }
+        }
         /// <summary>
         /// 明细表
         /// </summary>
@@ -4160,7 +4172,7 @@ namespace BP.WF
 
                 // add 2013-02-05.
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 90, 10, true);
-
+                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, true);
                 // add 2013-02-14 
                 map.AddTBString(FlowAttr.FlowMark, null, "流程标记", true, false, 0, 50, 10);
                 map.AddTBString(FlowAttr.FlowEventEntity, null, "FlowEventEntity", true, false, 0, 100, 10, true);

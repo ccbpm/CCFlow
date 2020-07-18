@@ -402,7 +402,11 @@ function SaveWorkCheck() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddJson(param);
-    handler.AddPara("WriteImg", writeImg.replace(/[+]/g,"~"));
+    if (writeImg == null && writeImg == undefined)
+        writeImg = "";
+    else
+        writeImg = writeImg.replace(/[+]/g, "~");
+    handler.AddPara("WriteImg", writeImg);
     var data = handler.DoMethodReturnString("WorkCheck_Save");
 
     if (data.indexOf('err@') != -1) {

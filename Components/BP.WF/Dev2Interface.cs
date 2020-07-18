@@ -10881,9 +10881,7 @@ namespace BP.WF
         private static DataTable WorkOpt_Accepter_ByStation(int nodeID)
         {
             if (nodeID == 0)
-            {
                 throw new Exception("@流程设计错误，没有转向的节点。举例说明: 当前是A节点。如果您在A点的属性里启用了[接受人]按钮，那么他的转向节点集合中(就是A可以转到的节点集合比如:A到B，A到C, 那么B,C节点就是转向节点集合)，必须有一个节点是的节点属性的[访问规则]设置为[由上一步发送人员选择]");
-            }
 
             NodeStations stas = new NodeStations(nodeID);
             if (stas.Count == 0)

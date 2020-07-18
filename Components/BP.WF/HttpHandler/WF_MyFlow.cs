@@ -310,7 +310,6 @@ namespace BP.WF.HttpHandler
             #endregion 判断是否可以否发起流程
 
             #region 判断前置导航.
-
             //生成workid.
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null,
                 WebUser.No, null, this.PWorkID, this.PFID, this.PFlowNo, this.PNodeID, null, 0, null, null, isStartSameLevelFlow);
@@ -331,7 +330,7 @@ namespace BP.WF.HttpHandler
                 case StartGuideWay.ByHistoryUrl: // 历史数据.
                     if (this.currFlow.IsLoadPriData == true)
                     {
-                        return "err@流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。";
+                        return "err@流程设计错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。";
                     }
                     return "url@" + hostRun + "StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                 case StartGuideWay.BySystemUrlOneEntity:

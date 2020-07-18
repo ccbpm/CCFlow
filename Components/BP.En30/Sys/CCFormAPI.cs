@@ -1187,7 +1187,30 @@ namespace BP.Sys
             mymd.RepairMap();
             SystemConfig.DoClearCash();
         }
+        /// <summary>
+        /// 同步时间的影子字段
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="pkval">主键值</param>
+        public static void DTS_DateTimeFieds(string frmID, object pkval)
+        {
+        }
+        /// <summary>
+        /// 同步时间的影子字段
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="specPKVals">多个用逗号分开</param>
+        public static void DTS_DateTimeFieds(string frmID, string specPKVals)
+        {
+        }
+        /// <summary>
+        /// 同步时间的影子字段（所有的影子字段）
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        public static void DTS_DateTimeFieds(string frmID)
+        {
 
+        }
         /// <summary>
         /// 复制表单
         /// </summary>

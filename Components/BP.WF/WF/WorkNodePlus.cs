@@ -442,7 +442,7 @@ namespace BP.WF
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
                 if (nss.Count == 0)
-                    throw new Exception("err@流程配置错误，您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
+                    throw new Exception("err@流程设计错误: 您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
                 //定义岗位人员
                 string station = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'";
                 station = DBAccess.RunSQLReturnVal(station).ToString();
@@ -487,10 +487,10 @@ namespace BP.WF
                
             }
             if (wn.HisNode.HisToNDNum != 0)
-            throw new Exception("err@流程配置错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
+            throw new Exception("err@流程设计错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
 
             if (wn.HisNode.HisRunModel != RunModel.Ordinary)
-                throw new Exception("err@流程配置错误:只能是线性节点才能设置[发送并返回]属性,当前节点是[" + wn.HisNode.HisRunModel.ToString() + "]");
+                throw new Exception("err@流程设计错误:只能是线性节点才能设置[发送并返回]属性,当前节点是[" + wn.HisNode.HisRunModel.ToString() + "]");
 
             //判断是否是最后一个人？
             bool isLastOne = false;

@@ -1074,6 +1074,9 @@ namespace BP.En
         /// <returns>查询结果</returns>
         public int DoQuery(string pk, int pageSize, int pageIdx, string orderBy, bool isDesc)
         {
+            if (DataType.IsNullOrEmpty(orderBy) == false && orderBy.EndsWith("Text"))
+                orderBy = orderBy.Replace("Text", "");
+
             int pageNum = 0;
 
             //如果没有加入排序字段，使用主键
@@ -1086,7 +1089,7 @@ namespace BP.En
                 if (DataType.IsNullOrEmpty(orderBy))
                     orderBy = pk;
 
-                this._orderBy = attr2Field(orderBy) + isDescStr;
+                this._orderBy = orderBy  + isDescStr;
             }
 
             if (this._orderBy.Contains("ORDER BY") == false)

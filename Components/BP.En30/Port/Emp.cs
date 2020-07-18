@@ -159,16 +159,22 @@ namespace BP.Port
             //if (gePass == pass && DataType.IsNullOrEmpty(gePass) == false)
             //    return true;
 
-          
-                //启用加密
-                if (SystemConfig.IsEnablePasswordEncryption == true)
-                    pass = BP.Tools.Cryptography.EncryptString(pass);
-
+            //启用加密
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+            {
+                pass = BP.Tools.Cryptography.EncryptString(pass);
                 /*使用数据库校验.*/
                 if (this.Pass == pass)
                     return true;
 
-             
+                pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
+                /*使用数据库校验.*/
+                if (this.Pass == pass)
+                    return true;
+            }
+
+            if (this.Pass.Equals(pass) == true)
+                return true;
             return false;
         }
 

@@ -712,13 +712,13 @@ namespace BP.WF.HttpHandler
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
-            
+
             //执行更新到用户表信息.
             // WebUser.UpdateSIDAndOrgNoSQL();
 
             //判断是否是多个组织的情况.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single || adminers.Count == 1)
-                return "url@Default.htm?SID=" + emp.SID+ "&UserNo=" + emp.No;
+                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
 
             return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
 
@@ -1001,7 +1001,6 @@ namespace BP.WF.HttpHandler
         }
         public string GetFlowTreeTable_GroupInc()
         {
-            string orgno = WebUser.No;
             string sql = "SELECT * FROM ( ";
 
             sql += "  SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo ='" + WebUser.OrgNo + "' OR No=1 ";

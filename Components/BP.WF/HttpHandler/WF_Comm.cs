@@ -1511,6 +1511,7 @@ namespace BP.WF.HttpHandler
                                 enumKey = "," + attr.Key + "Text,";
                                 break;
                             case FieldType.FK:
+                                enumKey = "," + attr.Key + "Text,";
                                 // case FieldType.PKFK:
                                 continue;
                             default:

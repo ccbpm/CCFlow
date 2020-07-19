@@ -2870,7 +2870,7 @@ namespace BP.WF
                     gwf.StarterName = this.ExecerName;
                     gwf.FK_Flow = toNode.FK_Flow;
                     gwf.FlowName = toNode.FlowName;
-
+                   
                     //干流、子线程关联字段
                     gwf.FID = this.WorkID;
 
@@ -2960,7 +2960,8 @@ namespace BP.WF
                 #endregion 产生工作的信息.
             }
             #endregion 复制数据.
-
+           //把domain跟新到子线程产生的workid中去
+            DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + mywk.OID);
             #region 处理消息提示
             string info = BP.WF.Glo.multilingual("@分流节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", toNode.Name, this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.EmpsExt);
 

@@ -7788,6 +7788,28 @@ namespace BP.WF
             return "成功执行.";
         }
         /// <summary>
+        /// 抄送部门和用户
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="deptIDs">部门IDs</param>
+        /// <param name="toEmps">用户账号</param>
+        /// <param name="cctype">抄送类型</param>
+        /// <returns>返回执行的结果</returns>
+        public static string Node_CCToDepts(Int64 workid, string deptIDs, string toEmps, int cctype = 0)
+        {
+            string[] depts = deptIDs.Split(',');
+            foreach (string deptID in depts)
+            {
+                Node_CCToDept(workid, deptID, cctype, false, false);
+            }
+            if (DataType.IsNullOrEmpty(toEmps) == true)
+            {
+                return "成功执行.";
+            }
+            return Node_CCTo(workid, toEmps, cctype);
+
+        }
+        /// <summary>
         /// 写入抄送
         /// </summary>
         /// <param name="workid">工作ID</param>

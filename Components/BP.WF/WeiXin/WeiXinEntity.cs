@@ -91,7 +91,7 @@ namespace BP.GPM.WeiXin
             if (ticket.errcode == "0")
                 jsapi_ticket = ticket.ticket;
             else
-                return "err:@获取jsapi_ticket失败+accessToken=" + accessToken;
+                return "err:@获取jsapi_ticket失败+accessToken=" + str;
 
             ht.Add("timestamp", timestamp);
             ht.Add("nonceStr", nonceStr);

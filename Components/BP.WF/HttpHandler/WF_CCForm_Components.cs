@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + key + "' AND DocWordYear='" + year + "' AND OID!=" + this.OID;
                 lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 if (DataType.IsNullOrEmpty(lsh) == true)
-                    lsh = "1";
+                    lsh = "";
 
                 dt.Rows[0]["DocWordYear"] = year;
                 dt.Rows[0]["DocWordLSH"] = lsh;
@@ -147,9 +147,10 @@ namespace BP.WF.HttpHandler
             sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
             lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
-                lsh = "1";
+                return lsh = "1";
 
-            string str =lsh;//将返回的数字加+1并格式化为000三位数;请严格按照000格式不够位数补0不然会影响其他地方
+          int   a = int.Parse(lsh) + 1;
+           string   str= a.ToString();
             return str;
         }
 

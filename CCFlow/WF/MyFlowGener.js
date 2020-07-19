@@ -447,14 +447,19 @@ function Save(saveType) {
         }
     });
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
+
+    alert(data);
+
     layer.close(index);//关闭正在保存
     setToobarEnable();
+
     //刷新 从表的IFRAME
     var dtls = $('.Fdtl');
     $.each(dtls, function (i, dtl) {
         $(dtl).attr('src', $(dtl).attr('src'));
     });
 
+    //提示信息.
     if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
         $('#Message').html(data.substring(4, data.length));
         $('#MessageDiv').modal().show();

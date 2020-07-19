@@ -11,7 +11,7 @@ function DealErrMsg(msg) {
         msgTech = msg;
     }
 
-    if (msg.indexOf('err@流程设计错误') == 0 || msg.indexOf('流程设计错误') == 0) {
+    if (msg.indexOf('err@流程设计错误') == 0 || msg.indexOf('流程设计错误') >= 0) {
         msgFieldly ="<img src='../../WF/img/info.png' height='20' width='20'/>抱歉,流程设计出现错误,请您把错误信息反馈给管理员.";
         msgTech = msg;
     }

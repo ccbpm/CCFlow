@@ -51,7 +51,12 @@ namespace BP.GPM.WeiXin
             string accessToken = string.Empty;
             string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + appid + "&corpsecret=" + appsecret;
 
-            return DataType.ReadURLContext(url, 9999);
+            AccessToken AT = new AccessToken();
+            string str = BP.DA.DataType.ReadURLContext(url, 5000, Encoding.UTF8);
+            AT = FormatToJson.ParseFromJson<AccessToken>(str);
+            accessToken = AT.access_token;
+
+            return accessToken;
         }
         #endregion 基本配置.
 
@@ -76,7 +81,7 @@ namespace BP.GPM.WeiXin
             //获取 AccessToken
             string accessToken = getAccessToken();
 
-            string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/ticket/get?access_token="+ accessToken + "&type=wx_card";
             string str = DataType.ReadURLContext(url, 9999, null);
 
             //权限签名算法

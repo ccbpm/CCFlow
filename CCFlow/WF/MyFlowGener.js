@@ -448,7 +448,7 @@ function Save(saveType) {
     });
     var data = handler.DoMethodReturnString("Save"); //执行保存方法.
 
-    alert(data);
+   // alert(data);
 
     layer.close(index);//关闭正在保存
     setToobarEnable();
@@ -460,10 +460,24 @@ function Save(saveType) {
     });
 
     //提示信息.
-    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-        $('#Message').html(data.substring(4, data.length));
+    DealErrMsg(data);
+    if (msgFieldly != "") {
+        //友好提示.
+        $("#divFieldly").html(msgFieldly);
+        $("#divFieldly").css("color", "red");
+        $("#divFieldly").show();
         $('#MessageDiv').modal().show();
     }
+    if (msgTech != "") {
+        var tech = "<a href='javascript: void(0)' onclick='msgTchClick()' ><img src='../../WF/img/Message24.png' height='20' width='20'/>技术信息</a>";
+        $("#divTech").html(tech); //技术要显示的信息
+        $("#divTech").show();
+    }
+    
+   /* if (data.indexOf('保存成功') != 0) {
+        $('#Message').html(data.substring(4, data.length));
+        $('#MessageDiv').modal().show();
+    }*/
 
 
 }

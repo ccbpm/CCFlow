@@ -37,7 +37,9 @@
                 <legend>设置（组织管理员）</legend>
                 <ul>
                     <li><a href="#" @click="BindDeptTreeGroup()">设置集团部门</a> </li>
+                    <li><a href="#" @click="BindDeptTreeGroupLazy()">设置集团部门(懒加载)</a> </li>
                     <li><a href="#" @click="BindDeptTree()">设置本组织部门</a> </li>
+                    <li><a href="#" @click="BindDeptTreeLazy()">设置本组织部门(懒加载)</a> </li>
                 </ul>
             </fieldset>
         </div>
@@ -116,6 +118,30 @@
                     var rootNo = "14819";
 
                     var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+                 BindDeptTreeLazy: function () {
+                    var nodeID = GetQueryString("FK_Node");
+                    var rootNo = 0;
+                    var webUser = new WebUser();
+                    if (webUser.CCBPMRunModel != 0)
+                        rootNo = webUser.OrgNo;
+
+                    var url = "../../../Comm/RefFunc/BranchesLazy.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+
+                },
+                BindDeptTreeGroupLazy: function () {
+                    var nodeID = GetQueryString("FK_Node");
+                    var rootNo = "14819";
+
+                    var url = "../../../Comm/RefFunc/BranchesLazy.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
                     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
                         Baseinfo.depts = getDepts();

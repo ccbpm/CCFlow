@@ -503,22 +503,56 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetWXConfigSetting()
         {
-            //当前页面，如果在CCMobile/Home.htm调用，则传入Home.htm
             string htmlPage = this.GetRequestVal("htmlPage");
-            //用户登陆信息
-            UserLog ul = new UserLog();
-            ul.MyPK = DBAccess.GenerGUID();
-            ul.FK_Emp = WebUser.No;
-            ul.LogFlag = "系统定位";
-            ul.Docs = htmlPage;
-            ul.RDT = DataType.CurrentDataTime;
-            ul.Insert();
+            Hashtable ht = new Hashtable();
 
-            //生成签名
-            return BP.GPM.WeiXin.WeiXinEntity.GetWXConfigSetting(htmlPage);
+            //生成签名的时间戳
+            string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
+            //生成签名的随机串
+            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            //企业号jsapi_ticket
+            string jsapi_ticket = "";
+            string url1 = htmlPage;
+            //获取 AccessToken
+            string accessToken =  BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
+
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
+
+
+            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string str = reader.ReadToEnd();
+
+            //权限签名算法
+            BP.GPM.WeiXin.Ticket ticket = new BP.GPM.WeiXin.Ticket();
+            ticket = FormatToJson.ParseFromJson<BP.GPM.WeiXin.Ticket>(str);
+
+            if (ticket.errcode == "0")
+                jsapi_ticket = ticket.ticket;
+            else
+                return "err:@获取jsapi_ticket失败+accessToken=" + accessToken;
+
+            ht.Add("timestamp", timestamp);
+            ht.Add("nonceStr", nonceStr);
+            //企业微信的corpID
+            ht.Add("AppID", BP.Sys.SystemConfig.WX_CorpID);
+
+            //生成签名算法
+            string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            string Signature = Sha1Signature(str1);
+            ht.Add("signature", Signature);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        public static string Sha1Signature(string str)
+        {
+            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
+            return s.ToLower();
         }
 
-        public string GetIDCardInfo()
+    
+
+    public string GetIDCardInfo()
         {
             string token = getAccessToken();
             JsonData jd = JsonMapper.ToObject(token);

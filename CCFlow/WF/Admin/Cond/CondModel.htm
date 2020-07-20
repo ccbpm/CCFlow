@@ -13,8 +13,8 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
     <style>
-        #Btn_Save{
-            background-image: url(../../Img/Btn/Save.png)!important;
+        #Btn_Save {
+            background-image: url(../../Img/Btn/Save.png) !important;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -23,23 +23,18 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-            InitPage();
-
-            $("#Msg").html("");
-        });
-        //初始化数据.
-        function InitPage() {
-
             var fk_node = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", fk_node);
 
-            //调用公共类库的方法:执行批量主表赋值
-            GenerFullAllCtrlsVal(node);
+            if (node.CondModel == 0)
+                $('#RB_CondModel_0').attr('checked', 'true');
+            if (node.CondModel == 1)
+                $('#RB_CondModel_1').attr('checked', 'true');
+            if (node.CondModel == 2)
+                $('#RB_CondModel_2').attr('checked', 'true');
 
-            rb_onchange(node.CondModel);
-            return;
-        }
-
+            $("#Msg").html("");
+        });
 
         function Save() {
 
@@ -47,8 +42,8 @@
 
             var fk_node = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", fk_node);
-            var CondModel = $("input[name='CondModel']:checked").val();
-            node.CondModel = CondModel;
+            var val = $("input[name='CondModel']:checked").val();
+            node.CondModel = val;
             node.Update();
 
             window.location.href = window.location.href;
@@ -63,8 +58,7 @@
 
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_CondModel_2" name="CondModel" runat="server" value="2"
-                       onClick="rb_onchange(2)" /><label for="RB_CondModel_2"> 发送按钮旁下拉框选择-(默认模式) </label>
+                <input type="radio" ID="RB_CondModel_2" name="CondModel" runat="server" value="2" /><label for="RB_CondModel_2"> 发送按钮旁下拉框选择-(默认模式) </label>
             </legend>
             <ul>
                 <li>用户发送的时候，在发送按钮旁边有一个下拉框，该下拉框是ccbpm为您计算出来的可以发送到的节点。 </li>
@@ -76,14 +70,14 @@
 
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_CondModel_0" name="CondModel" runat="server" value="0"
-                       onclick="rb_onchange(0)" /><label for="RB_CondModel_0"> 由连接线条件控制</label>
+                <input type="radio" ID="RB_CondModel_0" name="CondModel" value="0" /><label for="RB_CondModel_0"> 由连接线条件控制</label>
             </legend>
 
             <ul>
                 <li>该模式需要为每一跟连接线设置方向条件.</li>
                 <li>ccbpm在发送的时候会检查这些条件，如果条件成立就转向这个节点. </li>
                 <li>该模式是让ccbpm自动为您计算要发送到的节点. </li>
+                <li> <img calss="HelpImg" src="CondModel0.png" onclick="WinOpen('CondModel0.png')" style="width:100%;" /> </li>
             </ul>
 
         </fieldset>
@@ -92,8 +86,7 @@
 
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_CondModel_1" name="CondModel" value="1"
-                       onClick="rb_onchange(1)" /><label for="RB_CondModel_1">发送后手工选择到达节点与接受人.</label>
+                <input type="radio" ID="RB_CondModel_1" name="CondModel" value="1" /><label for="RB_CondModel_1">发送后手工选择到达节点与接受人.</label>
             </legend>
             <ul>
                 <li>该模式多用于分合流节点. </li>
@@ -106,18 +99,18 @@
 
 
         <!--<fieldset>
-        <legend>
-            <input type="radio" ID="RB_CondModel_3" name="CondModel" value="3"
-                   onClick="rb_onchange(3)" /><label for="RB_CondModel_3">弹窗选择到达节点(与上一个模式相同).</label>
-        </legend>
-        <ul>
-            <li>该模式多用于分合流节点. </li>
-            <li>在异表单的合流节点上配置该模式，合流节点的操作员发送后，就转到该页面上，选择到达的节点。 </li>
-            <li>也可以用于协作模式下的节点,到达的节点是需要最后一个人审核,由最后一个人选择到达的节点与接受人.</li>
-            <li>此模式与｛发送按钮旁下拉框选择-(默认模式)｝ 相同，只是不显示在下拉框里，而是显示到一个新的弹窗里面.</li>
-        </ul>
+            <legend>
+                <input type="radio" ID="RB_CondModel_3" name="CondModel" value="3"
+                       onClick="rb_onchange(3)" /><label for="RB_CondModel_3">弹窗选择到达节点(与上一个模式相同).</label>
+            </legend>
+            <ul>
+                <li>该模式多用于分合流节点. </li>
+                <li>在异表单的合流节点上配置该模式，合流节点的操作员发送后，就转到该页面上，选择到达的节点。 </li>
+                <li>也可以用于协作模式下的节点,到达的节点是需要最后一个人审核,由最后一个人选择到达的节点与接受人.</li>
+                <li>此模式与｛发送按钮旁下拉框选择-(默认模式)｝ 相同，只是不显示在下拉框里，而是显示到一个新的弹窗里面.</li>
+            </ul>
 
-    </fieldset>-->
+        </fieldset>-->
 
 
     </form>

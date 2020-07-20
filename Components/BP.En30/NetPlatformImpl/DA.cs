@@ -19,7 +19,7 @@ namespace BP.NetPlatformImpl
         public static PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
         {
 #if DEBUG
-             TimeSpan ts = new TimeSpan(0, 10, 0);
+            TimeSpan ts = new TimeSpan(0, 10, 0);
 #else
             TimeSpan ts = new TimeSpan(0, 1, 0);
 #endif
@@ -90,7 +90,38 @@ namespace BP.NetPlatformImpl
             con.Dispose();
             return excelSheets;
         }
+        /// <summary>
+        /// 删除表中的空数据行
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DataTable DeleteEmptyRows(DataTable dt)
+        {
+            List<DataRow> removelist = new List<DataRow>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                bool rowdataisnull = true;
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    if (!string.IsNullOrEmpty(dt.Rows[i][j].ToString().Trim()))
+                    {
 
+                        rowdataisnull = false;
+                    }
+                }
+                if (rowdataisnull)
+                {
+                    removelist.Add(dt.Rows[i]);
+                }
+
+            }
+            for (int i = 0; i < removelist.Count; i++)
+            {
+                dt.Rows.Remove(removelist[i]);
+            }
+
+            return dt;
+        }
         public static DataTable ReadExcelFileToDataTableBySQL(string filePath, string tableName)
         {
             string sql = "SELECT * FROM [" + tableName + "]";
@@ -121,7 +152,7 @@ namespace BP.NetPlatformImpl
                         throw ex;//(ex.Message);
                     }
                     conn.Close();
-                    return dt;
+                    break;
                 case ".xlsx":
                     if (sql == null)
                         sql = "SELECT * FROM [" + GenerFirstTableName(filePath) + "]";
@@ -154,7 +185,7 @@ namespace BP.NetPlatformImpl
                         }
                         throw ex1;//(ex.Message);
                     }
-                    return dt;
+                    break;
                 case ".dbf":
                     strConn = "Driver={Microsoft dBASE Driver (*.DBF)};DBQ=" + System.IO.Path.GetDirectoryName(filePath) + "\\"; //+FilePath;//
                     OdbcConnection conn1 = new OdbcConnection(strConn);
@@ -182,11 +213,11 @@ namespace BP.NetPlatformImpl
                         }
                     }
                     conn1.Close();
-                    return dt;
+                    break;
                 default:
                     break;
             }
-            return dt;
+            return DeleteEmptyRows(dt);
         }
     }
 

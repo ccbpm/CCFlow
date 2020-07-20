@@ -616,14 +616,11 @@ namespace BP.WF
         public GenerWorkerList()
         {
         }
-        public GenerWorkerList(Int64 workid, int FK_Node, string FK_Emp)
+        public GenerWorkerList(Int64 workid, int nodeID, string empNo)
         {
-            if (this.WorkID == 0)
-                return;
-
             this.WorkID = workid;
-            this.FK_Node = FK_Node;
-            this.FK_Emp = FK_Emp;
+            this.FK_Node = nodeID;
+            this.FK_Emp = empNo;
             this.Retrieve();
         }
         /// <summary>

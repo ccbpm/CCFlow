@@ -10,7 +10,6 @@ $(function () {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
         handler.AddUrlData();
         data = handler.DoMethodReturnString("InitToolBar");
-        $('#ToolBar').html(barHtml);
     //MyView
     } else if ($("#JS_MyView").length == 1){
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
@@ -886,10 +885,19 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
+    //保存从表信息
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            IsSaveTrue = contentWidow.SaveAll();
+        }
+    });
+
     //发送前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
             return false;
+   
 
     //审核组件
     if ($("#WorkCheck_Doc").length == 1) {

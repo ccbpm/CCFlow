@@ -74,7 +74,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
         }
 
         var tb = $("#" + tbID);
-        var w = tb.outerWidth();
+        var w = "100%"; //tb.outerWidth();
         var h = tb.outerHeight();
         tb.hide();
 

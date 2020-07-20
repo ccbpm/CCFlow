@@ -280,10 +280,9 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
 
-            Node nd = new Node(int.Parse(fk_mainNode));
+            Node nd = new Node( this.FK_Node);
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
@@ -291,7 +290,7 @@ namespace BP.WF.HttpHandler
 
             //增加条件集合.
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode),
+            conds.Retrieve(CondAttr.FK_Node, this.FK_Node,
                 CondAttr.ToNodeID, int.Parse(toNodeID), CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
 
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));

@@ -413,7 +413,13 @@ namespace BP.WF.Template
                 map.SetHelperUrl(FlowAttr.TitleRole, "http://ccbpm.mydoc.io/?v=5404&t=17040");
 
                 map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, true);
-                map.SetHelperAlert(FlowAttr.TitleRoleNodes, "1.空表示只在开始节点生成标题 \t\n 2.*表示在任意节点可生成标题 \t\n 3.指定节点用逗号分割可以生成标题");
+
+                string msg = "设置帮助";
+                msg += "\r\n 1. 如果为空表示只在开始节点生成标题.";
+                msg += "\r\n 2. * 表示在任意节点可生成标题.";
+                msg += "\r\n 3. 要在指定的节点重新生成标题用逗号分开,比如: 102,105,109";
+
+                map.SetHelperAlert(FlowAttr.TitleRoleNodes, msg);
 
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
@@ -505,7 +511,7 @@ namespace BP.WF.Template
 
                 // add 2019-09-25 by zhoupeng
                 map.AddTBString(FlowAttr.BuessFields, null, "关键业务字段", true, false, 0, 100, 10, false);
-                string msg = "用于显示在待办上的业务字段信息.";
+                msg = "用于显示在待办上的业务字段信息.";
                 msg += "\t\n 1. 用户在看到待办的时候，就可以看到流程的实例的关键信息。";
                 msg += "\t\n 2. 用于待办的列表信息显示.";
                 msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";

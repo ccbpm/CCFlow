@@ -20,6 +20,11 @@ namespace BP.WF.HttpHandler
 {
     public class WF : DirectoryPageBase
     {
+        public string DealErrInfo_Save()
+        {
+            return "";
+        }
+
         #region 单表单查看.
         /// <summary>
         /// 流程单表单查看
@@ -37,11 +42,8 @@ namespace BP.WF.HttpHandler
                 throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
             }
 
-
-
             //获得表单模版.
             DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-
 
             #region 把主从表数据放入里面.
             //.工作数据放里面去, 放进去前执行一次装载前填充事件.
@@ -57,11 +59,9 @@ namespace BP.WF.HttpHandler
             myds.Tables.Add(mainTable);
             #endregion
 
-
             //加入WF_Node.
             DataTable WF_Node = nd.ToDataTableField("WF_Node").Copy();
             myds.Tables.Add(WF_Node);
-
 
             #region 加入组件的状态信息, 在解析表单的时候使用.
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
@@ -248,7 +248,6 @@ namespace BP.WF.HttpHandler
                 myds.Tables.Add(dt_ImgAth);
             }
             #endregion
-
 
             return BP.Tools.Json.ToJson(myds);
         }

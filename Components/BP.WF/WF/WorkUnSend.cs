@@ -414,10 +414,9 @@ namespace BP.WF
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
 
-            /*该节点不允许退回.*/
+            /*该节点不允许撤销.*/
             if (nd.HisCancelRole == CancelRole.None)
                 throw new Exception("当前节点，不允许撤销。");
-
 
             if (nd.IsStartNode && nd.HisNodeWorkType != NodeWorkType.StartWorkFL)
                 throw new Exception("当前节点是开始节点，所以您不能撤销。");

@@ -452,13 +452,12 @@ function GenerFullAllCtrlsVal(data) {
             continue;
 
         //if (attr == 'TodolistModel') {
-        // alert(attr);
-        //alert(val);
-        //debugger;
+        //    alert(attr);
+        //    alert(val);
+        //    debugger;
         //}
-
-        if (val == null || val == '')
-            continue;
+       // if (val == null || val === '')
+         //   continue; //一定加三个等号是强制等于.
 
         var div = document.getElementById(attr);
         if (div != null) {

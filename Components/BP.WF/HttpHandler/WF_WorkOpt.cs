@@ -2323,7 +2323,7 @@ namespace BP.WF.HttpHandler
                     {
                         case ActionType.WorkCheck:
                         case ActionType.StartChildenFlow:
-                        //case ActionType.ForwardHL:
+                        case ActionType.ForwardHL:
                             if (nodes.Contains(tk.NDFrom + ",") == false)
                                 nodes += tk.NDFrom + ",";
                             break;

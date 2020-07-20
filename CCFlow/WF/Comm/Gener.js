@@ -448,7 +448,7 @@ function GenerFullAllCtrlsVal(data) {
     for (var attr in json) {
 
         var val = json[attr]; //值
-        if (attr == 'enName' || attr == 'pkval' || attr == "" || attr == null)
+        if (attr == 'enName' || attr == 'pkval' || attr === "" || attr == null)
             continue;
 
         //if (attr == 'TodolistModel') {

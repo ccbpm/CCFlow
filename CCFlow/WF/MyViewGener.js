@@ -124,7 +124,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
     if (projectName == "WF") {
         projectName = "";
     }
-   
+
     if (plant == "JFlow")
         projectName = basePath;
     var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
@@ -471,23 +471,22 @@ function isExistArray(arrys, no) {
  * 撤销
  */
 function UnSend() {
+
     if (window.confirm('您确定要撤销本次发送吗？') == false)
         return;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("MyView_UnSend");
-
     if (data.indexOf('err@') == 0) {
+        data = data.replace('err@', '');
+        data = data.replace('err@', '');
         alert(data);
         return;
     }
 
-    $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
-    alert(data);
-    var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid + '&FID=' + fid;
-    window.open(url);
-    window.location.href = window.location.href;
+    var url = 'MyFlow.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&WorkID=' + GetQueryString("WorkID") + '&FID=' + GetQueryString("FID");
+    window.location.href = url;
     return;
 }
 

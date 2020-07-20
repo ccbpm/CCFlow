@@ -434,7 +434,10 @@ function GenerChangeParentValue(data) {
 /*为页面的所有字段属性赋值. */
 function GenerFullAllCtrlsVal(data) {
 
-    if (data == null) return;
+    //  console.log(data);
+
+    if (data == null)
+        return;
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
@@ -447,6 +450,13 @@ function GenerFullAllCtrlsVal(data) {
         var val = json[attr]; //值
         if (attr == 'enName' || attr == 'pkval' || attr == "" || attr == null)
             continue;
+
+        //if (attr == 'TodolistModel') {
+        // alert(attr);
+        //alert(val);
+        //debugger;
+        //}
+
         if (val == null || val == '')
             continue;
 
@@ -456,8 +466,7 @@ function GenerFullAllCtrlsVal(data) {
             continue;
         }
 
-        if (attr == 'PAnyOne')
-        {
+        if (attr == 'PAnyOne') {
             var aa = 1;
         }
 
@@ -498,10 +507,9 @@ function GenerFullAllCtrlsVal(data) {
             continue;
         }
 
-
-
         // RadioButton. 单选按钮.
         var rb = document.getElementById('RB_' + attr + "_" + val);
+        // alert('RB_' + attr + "_" + val);
         if (rb != null) {
             rb.checked = true;
             continue;

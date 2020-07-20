@@ -363,6 +363,8 @@ function GenerFoolFrm(wn) {
         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 1) {
             if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
                 var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+                if (selecedval == null || selecedval == undefined || selecedval == "" || selecedval == -1)
+                    return;
                 cleanAll(mapAttr.KeyOfEn);
                 setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
             }

@@ -505,6 +505,15 @@ namespace BP.WF.HttpHandler
         {
             //当前页面，如果在CCMobile/Home.htm调用，则传入Home.htm
             string htmlPage = this.GetRequestVal("htmlPage");
+            //用户登陆信息
+            UserLog ul = new UserLog();
+            ul.MyPK = DBAccess.GenerGUID();
+            ul.FK_Emp = WebUser.No;
+            ul.LogFlag = "系统定位";
+            ul.Docs = htmlPage;
+            ul.RDT = DataType.CurrentDataTime;
+            ul.Insert();
+
             //生成签名
             return BP.GPM.WeiXin.WeiXinEntity.GetWXConfigSetting(htmlPage);
         }

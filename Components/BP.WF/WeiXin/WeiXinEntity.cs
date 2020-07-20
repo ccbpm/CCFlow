@@ -100,8 +100,22 @@ namespace BP.GPM.WeiXin
 
             //生成签名算法
             string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            UserLog userLog = new UserLog();
+            userLog.MyPK = DBAccess.GenerGUID();
+
+            userLog.LogFlag = "系统定位1";
+            userLog.Docs = str1;
+            userLog.RDT = DataType.CurrentDataTime;
+            userLog.Insert();
             string Signature = Sha1Signature(str1);
             ht.Add("signature", Signature);
+
+            userLog.MyPK = DBAccess.GenerGUID();
+
+            userLog.LogFlag = "生成签名";
+            userLog.Docs = Signature;
+            userLog.RDT = DataType.CurrentDataTime;
+            userLog.Insert();
 
             return BP.Tools.Json.ToJson(ht);
         }

@@ -1520,9 +1520,10 @@ namespace BP.CCBill
             GEEntitys rpts = new GEEntitys(this.FrmID);
             GEEntity en = new GEEntity(this.FrmID);
 
+           
 
-            string noColName = ""; //实体列的编号名称.
-            string nameColName = ""; //实体列的名字名称.
+            string noColName = ""; //编号(针对实体表单).
+            string nameColName = ""; //名称(针对实体表单).
 
             BP.En.Map map = en.EnMap;
             Attr attr = map.GetAttrByKey("BillNo");
@@ -1548,23 +1549,31 @@ namespace BP.CCBill
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string no = dr[noColName].ToString();
+                    //如果是实体单据,导入的excel必须包含BillNo
+                    if (bill.EntityType == EntityType.FrmDict && dt.Columns.Contains(noColName) == false)
+                        return "err@导入的excel不包含编号列";
+                    string no = "";
+                    if (dt.Columns.Contains(noColName) == true)
+                        no= dr[noColName].ToString();
                     string name = "";
                     if(dt.Columns.Contains(nameColName) == true)
                         name = dr[nameColName].ToString();
                     myen.OID = 0;
 
                     //判断是否是自增序列，序列的格式
-                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    if (DataType.IsNullOrEmpty(codeStruct)==false && DataType.IsNullOrEmpty(no)==false)
                         no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
 
-
                     myen.SetValByKey("BillNo", no);
-                    if (myen.Retrieve("BillNo", no) == 1)
+                    if (bill.EntityType == EntityType.FrmDict)
                     {
-                        errInfo += "err@编号[" + no + "][" + name + "]重复.";
-                        continue;
+                        if (myen.Retrieve("BillNo", no) == 1)
+                        {
+                            errInfo += "err@编号[" + no + "][" + name + "]重复.";
+                            continue;
+                        }
                     }
+                    
 
                     //给实体赋值
                     errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0, bill);
@@ -1580,16 +1589,22 @@ namespace BP.CCBill
             {
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string no = dr[noColName].ToString();
+                    //如果是实体单据,导入的excel必须包含BillNo
+                    if (bill.EntityType == EntityType.FrmDict && dt.Columns.Contains(noColName) == false)
+                        return "err@导入的excel不包含编号列";
+                    string no = "";
+                    if (dt.Columns.Contains(noColName) == true)
+                        no = dr[noColName].ToString();
+
                     string name = dr[nameColName].ToString();
                     //判断是否是自增序列，序列的格式
-                    if (!DataType.IsNullOrEmpty(codeStruct))
+                    if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
                     {
                         no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
                     }
                     GEEntity myen = rpts.GetNewEntity as GEEntity;
                     myen.SetValByKey("BillNo", no);
-                    if (myen.Retrieve("BillNo", no) == 1)
+                    if (myen.Retrieve("BillNo", no) == 1 && bill.EntityType == EntityType.FrmDict)
                     {
                         //给实体赋值
                         errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 1, bill);
@@ -1693,6 +1708,11 @@ namespace BP.CCBill
                 string myval = dr[item.Desc].ToString();
                 en.SetValByKey(item.Key, myval);
             }
+            if (DataType.IsNullOrEmpty(en.GetValStrByKey("BillNo")) == true && DataType.IsNullOrEmpty(fbill.BillNoFormat) == false)
+                en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat,en.OID,en,fbill.No));
+
+            if (DataType.IsNullOrEmpty(en.GetValStrByKey("Title")) == true && DataType.IsNullOrEmpty(fbill.TitleRole) == false)
+                en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole,en));
 
             en.SetValByKey("BillState", (int)BillState.Editing);
             en.Update();

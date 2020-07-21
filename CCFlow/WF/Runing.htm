@@ -109,93 +109,6 @@
             }
         }
 
-        // 撤销。
-        function UnSend(fk_flow, workid, fid, unSendToNode) {
-
-            if (window.confirm('您确定要撤销本次发送吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("WorkID", workid);
-            handler.AddPara("FID", fid);
-            handler.AddPara("UnSendToNode", unSendToNode);
-            var data = handler.DoMethodReturnString("Runing_UnSend");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
-            alert(data);
-            var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid + '&FID=' + fid;
-            window.open(url);
-            window.location.href = window.location.href;
-            return;
-        }
-
-        //催办.
-        function Press(fk_flow, workid, fid) {
-
-            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
-            if (msg == null)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("WorkID", workid);
-            handler.AddPara("FID", fid);
-            handler.AddPara("Msg", msg);
-            var data = handler.DoMethodReturnString("Runing_Press");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            alert(data);
-            return;
-        }
-
-        function WinOpenIt(workid, nodeID, flowNo, fid, currNodeId) {
-            //但前节点所处的位置
-            var nowNode = new Entity("BP.WF.Node", nodeID);
-
-            //如果是树形表单，则显示当前人所处节点的数据
-            if (nowNode.FormType == 5) {
-                //获取人员所处的流程节点
-
-                var currNode = new Entity("BP.WF.Node", currNodeId);
-                if (currNode.HisToNDs.indexOf(nodeID) == -1) {
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && (fid != 0)) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    }
-                } else {
-                    //判断当前节点的运行模式
-                    if ((currNode.RunModel == RunModel.HL || currNode.RunModel == RunModel.FHL || currNode.RunModel == RunModel.FL) && nowNode.RunModel == RunModel.SubThread) {
-                        workID = fid;
-                        fid = 0;
-                        nodeID = currNodeId;
-                    } else if (currNode.RunModel == RunModel.SubThread) {
-                        nodeID = currNodeId;
-                    }
-                }
-
-
-            }
-            var url = "WFRpt.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + nodeID + "&FID=" + fid + "&IsRead=0";
-            layer.open({
-                skin: 'layer-class',
-                type: 2,
-                title: '在途',
-                area: ['96%', '90%'],
-                content: url
-            });
-        }
-
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -261,7 +174,6 @@
                     if (work.FlowName != groupName)
                         continue;
 
-
                     num++;
 
                     if (is1 == true) {
@@ -304,7 +216,6 @@
                         }
                     }
                     emp = emp.substring(0, emp.lastIndexOf("、"));
-
                     listbox += "<td>" + emp + "</td>";
 
                     //listbox += "<td>";

@@ -166,9 +166,9 @@
                             </li>
 
                             <!--<li> 请下载模版<a href=""> </a></li>-->
-                            <li>第2步:选择在模版里组织好要导入的数据. <font color="red">警告:如果要擅自修改表格里列名或修改excel的版本存储格式，就会导致导入错误.</font></li>
-
-                            <li>第2步:从本机导入，请您选择Excel文件 点击导入按钮完成导入。</li>
+                            <li>第2步:选择在模版里组织好要导入的数据. <font color="red">警告:如果要擅自修改表格里列名或修改excel的版本存储格式，就会导致导入错误。</font></li>
+                            
+                            <li>第3步:从本机导入，请您选择Excel文件 点击导入按钮完成导入。</li>
                             <li> 请选择文件:  <input type="file" id="File_Upload" name="File_Upload" /></li>
 
                             <li>
@@ -184,6 +184,9 @@
                             <input type="button" id="Button1" value="执行导入" onclick="Imp_Done();" />
                             <input type="button" id="Button2" value="返回列表" onclick="Back();" />
                         </div>
+                        <ul>
+                            <li>如果导入失败：也许是服务器的环境问题，请在服务器上安装 <font color="red">AccessDatabaseEngine.exe</font>试试看。</li>
+                        </ul>
                     </fieldset>
 
                     <fieldset>

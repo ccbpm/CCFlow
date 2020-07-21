@@ -501,6 +501,7 @@ function Press() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF");
     handler.AddUrlData();
+    handler.AddPara("Msg", msg);
     var data = handler.DoMethodReturnString("Runing_Press");
 
     if (data.indexOf('err@') == 0) {

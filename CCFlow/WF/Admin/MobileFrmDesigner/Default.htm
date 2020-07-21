@@ -96,10 +96,8 @@
         }
         //预览手机端
         function Form_View(FK_MapData, FK_Flow) {
-
-            var url = "../FoolFormDesigner/MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + FK_MapData;
+            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + FK_MapData;
             OpenBootStrapModal(url, "EditFrame", "预览手机端表单", 300, 430, "icon-edit");
-
         }
         //复制顺序到节点
         function Form_Copy(FK_MapData, FK_Flow) {

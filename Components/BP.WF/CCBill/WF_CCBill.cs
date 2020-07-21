@@ -1629,11 +1629,14 @@ namespace BP.CCBill
 
         private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType,FrmBill fbill)
         {
-            //单据数据不存在
             if (saveType == 0)
             {
-                string OID = MyDict_CreateBlankDictID();
-                en.OID = long.Parse(OID);
+                Int64 oid = 0;
+                if (fbill.EntityType == EntityType.FrmDict)
+                    oid = BP.CCBill.Dev2Interface.CreateBlankDictID(fbill.No, WebUser.No, null);
+                if (fbill.EntityType == EntityType.FrmBill)
+                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No, WebUser.No, null);
+                en.OID = oid;
                 en.RetrieveFromDBSources();
             }
 

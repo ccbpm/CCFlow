@@ -1052,8 +1052,8 @@ namespace BP.WF.HttpHandler
                 no = "No1";
 
             string name = this.GetRequestVal("name");
-            string newNo = DataType.ParseStringForNo(no, 20);
-            string newName = DataType.ParseStringForName(name, 20);
+            string newNo = DataType.ParseStringForNo(no, 0);
+            string newName = DataType.ParseStringForName(name, 0);
             int fType = int.Parse(this.GetRequestVal("FType"));
             bool isSupperText = this.GetRequestValBoolen("IsSupperText");
 

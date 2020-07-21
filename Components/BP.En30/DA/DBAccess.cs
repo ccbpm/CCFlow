@@ -3602,6 +3602,11 @@ namespace BP.DA
         /// <returns></returns>
         public static bool IsExitsObject(string obj)
         {
+            if (DataType.IsNullOrEmpty(obj) == true)
+                return false;
+
+            obj = obj.Trim();
+
             return IsExitsObject(new DBUrl(DBUrlType.AppCenterDSN), obj);
         }
         /// <summary>
@@ -3613,6 +3618,7 @@ namespace BP.DA
         {
             //有的同事写的表名包含dbo.导致创建失败.
             obj = obj.Replace("dbo.", "");
+            obj = obj.Trim();
 
             // 增加参数.
             Paras ps = new Paras();

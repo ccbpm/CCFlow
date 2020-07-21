@@ -8623,12 +8623,8 @@ namespace BP.WF
             list.WorkID = workID;
             list.PFlowNo = pFlowNo;
             list.PWorkID = pWorkID;
-
-
             list.Domain = gwf.Domain;
             list.OrgNo = gwf.OrgNo; //设置组织编号.
-
-
 
             try
             {

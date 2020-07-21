@@ -1570,6 +1570,7 @@ namespace BP.WF
             qo.DoQuery();
             return BP.Tools.Json.ToJson(this.ToDataTableField("WF_GenerWorkFlow"));
         }
+
 		#region 方法
 		/// <summary>
 		/// 得到它的 Entity 

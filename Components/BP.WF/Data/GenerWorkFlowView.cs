@@ -760,13 +760,7 @@ namespace BP.WF.Data
 
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "轨迹";
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = "../../WF/Img/Track.png";
-                rm.IsForEns = true;
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+                
 
                 rm = new RefMethod();
                 rm.Title = "删除";
@@ -820,6 +814,15 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
                     "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
                 rm.ClassMethodName = this.ToString() + ".DoTest";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "轨迹";
+                rm.ClassMethodName = this.ToString() + ".DoTrack";
+                rm.Icon = "../../WF/Img/Track.png";
+                rm.IsForEns = true;
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1020,7 +1023,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoTrack()
         {
-            return "../../WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 执行移交

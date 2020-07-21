@@ -8653,6 +8653,34 @@ namespace BP.WF
 
         }
         /// <summary>
+        /// 删除空白
+        /// </summary>
+        /// <param name="workID">要删除的ID</param>
+        public static void Node_DeleteBlank(Int64 workID)
+        {
+            //设置引擎表.
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workID;
+            if (gwf.RetrieveFromDBSources() == 1)
+            {
+                if (gwf.FK_Node != int.Parse(gwf.FK_Flow + "01"))
+                    throw new Exception("@该流程非Blank流程不能删除:" + gwf.Title);
+
+                if (gwf.WFState != WFState.Blank)
+                    throw new Exception("@非Blank状态不能删除");
+
+                gwf.Delete();
+            }
+
+            //删除流程.
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            Flow fl = new Flow(gwf.FK_Flow);
+            Paras ps = new Paras();
+            ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID ";
+            ps.Add(GERptAttr.OID, workID);
+            DBAccess.RunSQL(ps);
+        }
+        /// <summary>
         /// 删除草稿
         /// </summary>
         /// <param name="workID">工作ID</param>
@@ -9159,7 +9187,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception("err@Node_SaveWork保存错误:" + ex.Message + ", 技术信息：" + ex.StackTrace);
+                throw new Exception("err@保存错误:" + ex.Message + ", 技术信息：" + ex.StackTrace);
             }
         }
         /// <summary>

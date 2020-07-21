@@ -1596,7 +1596,9 @@ namespace BP.CCBill
                     if (dt.Columns.Contains(noColName) == true)
                         no = dr[noColName].ToString();
 
-                    string name = dr[nameColName].ToString();
+                    string name = "";
+                    if (dt.Columns.Contains(nameColName) == true)
+                        name = dr[nameColName].ToString();
                     //判断是否是自增序列，序列的格式
                     if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
                     {

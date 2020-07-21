@@ -111,8 +111,8 @@
             var toolBar = "";
             var generBill = new Entity("BP.CCBill.GenerBill");
             generBill.SetPKVal(workID);
-            if (generBill.RetrieveFromDBSources() == 0)
-                return;
+            //if (generBill.RetrieveFromDBSources() == 0)
+            //    var a = 1;
 
             
 
@@ -1088,7 +1088,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             //            $("#CCForm").css("overflow-y", "hidden");
             $("#CCForm").css("height", "auto");
             $(window).bind("resize", function () {
-                setTimeout(setContentHeight, 100);
+                //setTimeout(setContentHeight, 100);
             });
 
 
@@ -1097,17 +1097,19 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         /**/</script>
 </head>
 <body onclick="hiddenDiv()">
-    <div id="toolbar" style="margin-left: 10px;">
-      
-    </div>
+   
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+        <!--底部功能按钮 发送、移交-->
+        <div class="CurrentForm-buttom-bar" style="background-color:white">
+            <div id="toolbar" style="margin-left: 10px;"> </div>
+        </div>
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 5px 2px; margin: 0px auto;">
             <!-- <div id="Title">
-            <div style=" float:right ">
-             <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" />
-            </div>
-             </div>-->
+        <div style=" float:right ">
+         <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" />
+        </div>
+         </div>-->
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">

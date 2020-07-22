@@ -3952,9 +3952,12 @@ namespace BP.En
                 sql = "SELECT DATA_TYPE FROM information_schema.columns WHERE table_name='" + this._enMap.PhysicsTable + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
+                {
                     Log.DefaultLogWriteLineError("@没有检测到字段eunm" + attr.Key);
+                    continue;
+                }
 
-                if (val.IndexOf("CHAR") != -1)
+                if (val.ToUpper().IndexOf("CHAR") != -1)
                 {
                     /*如果它是 varchar 字段*/
                     sql = "SELECT table_schema as OWNER FROM information_schema.columns WHERE  table_name='" + this._enMap.PhysicsTableExt + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";

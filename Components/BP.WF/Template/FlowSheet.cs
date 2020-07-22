@@ -441,8 +441,8 @@ namespace BP.WF.Template
                 {
                     isHaveGener = true;
                     //判断状态
-                    if (gwf.WFState != WFState.Complete)
-                        throw new Exception("@当前工作ID为:" + workid + "的流程没有结束,不能采用此方法恢复。");
+                    //  if (gwf.WFState != WFState.Complete)
+                    //  throw new Exception("@当前工作ID为:" + workid + "的流程没有结束,不能采用此方法恢复。");
                 }
 
                 gwf.FK_Flow = this.No;

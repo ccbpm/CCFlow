@@ -9,8 +9,6 @@
           type="text/css" />
     <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
           media="all" />
-
-
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/layer/layer.js" type="text/javascript"></script>
@@ -27,11 +25,6 @@
     <script src="../CCForm/MapExt2016.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <!--<link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>-->
 
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -40,7 +33,7 @@
     <!--<script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>-->
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <link href="../Comm/Style/Search.css" rel="stylesheet" />
-   
+
     <script type="text/javascript">
         var sinfo;
         var FilterCtrls = new Array();
@@ -49,7 +42,6 @@
         var fields = []; //字符型字段查询的集合
         var md;
         var refidx = 0;
-
 
         var rptNo = GetQueryString("RptNo");
 
@@ -78,6 +70,7 @@
         };
         var firstLoadTable = false;
         $(function () {
+
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
             $("#Msg").show();
             //$("#Msg").css("line-height", $("body").height() / 1.5 + "px");
@@ -101,9 +94,6 @@
                 param.pageSize = "10";
             else
                 param.pageSize = pageSize;
-
-
-           
 
             //调用查询返回数据.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
@@ -144,7 +134,6 @@
                 var val1 = val.split("=");
                 $("#" + val1[0]).val(val1[1]);
             });
-
 
             BindTable(d)//绑定数据
             $("#Msg").html("");
@@ -358,7 +347,7 @@
 
                 onDblClickRow: function (row, $element) {
 
-                    var url = '../WorkOpt/OneWork/OneWork.htm?currTab=Frm&WorkID=' + row.OID + '&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + row.FlowEndNode + '&FID=' + (row.FID ? row.FID : 0) + '&t=' + Math.random();
+                    var url = '../MyView.htm?WorkID=' + row.OID + '&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + row.FlowEndNode + '&FID=' + (row.FID ? row.FID : 0) + '&t=' + Math.random();
                     WinOpen(url);
                 }
 
@@ -400,15 +389,18 @@
 
             html += "<tr>";
 
+            //解析按照关键字查询.
             var rptStringSearchKeys = mapBase.RptStringSearchKeys;
             if (rptStringSearchKeys == null || rptStringSearchKeys == undefined || rptStringSearchKeys == "") {
                 if (mapBase.RptIsSearchKey == "1") {
 
                     html += "<td ><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>关键字:</label></td>";
-                    html += "<td ><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+                    html += "<td ><input style='width:150px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
                     FilterCtrls.push({ type: "text", id: "TB_Key" });
                 }
             } else {
+
+                //按照指定的string字段查询.
                 var strs = rptStringSearchKeys.split("*");
                 var fieldV = ""
                 $.each(strs, function (i, str) {
@@ -430,8 +422,8 @@
                 });
             }
 
+            //解析按照日期查询.
             if (mapBase.RptDTSearchWay && mapBase.RptDTSearchWay != 0) {
-
 
                 if (mapBase.RptDTSearchWay == 1) {
                     html += "<td ><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.T_DateLabel + ":&nbsp;&nbsp</label></td >";
@@ -444,11 +436,11 @@
                 }
             }
 
-
-
+            //按照外键，枚举查询.
             $.each(d.FilterCtrls, function (idx, c) {
 
                 ctrl = '&nbsp;' + c.Name + ':';
+
                 //ctrl = '<span class="con-span">' + c.Name + ':</span>';
                 switch (c.Type) {
                     case "date":
@@ -480,12 +472,11 @@
 
                         html += '</select></td>';
 
-
                         FilterCtrls.push({ type: c.Type, id: fcId });
                         break;
                     case "combotree":
                         fcId = "DDL_" + c.Id;
-                        ctrl += '<select id="' + fcId + '" style="width:150px;"></select>';
+                        ctrl += '<select id="' + fcId + '" style="width:120px;"></select>';
                         $("#filters").prepend(ctrl);
                         $("#" + fcId).combotree({
                             checkbox: true,
@@ -522,9 +513,9 @@
                         break;
                 }
             });
+
             //增加按钮.
             html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
-
 
             //html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="Start()">新建</a>';
 
@@ -947,23 +938,20 @@
         }
 
         function ViewFlow(rowIndex, rowData) {
-
             if (!rowData && typeof rowIndex != 'undefined') {
                 $('#dg').datagrid('selectRow', rowIndex);
                 rowData = $('#dg').datagrid('getSelected');
                 if (!rowData) return;
             }
-
-            var url = '../WorkOpt/OneWork/OneWork.htm?currTab=Frm&WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FK_Node=' + rowData.FlowEndNode + '&FID=' + (rowData.FID ? rowData.FID : 0) + '&t=' + Math.random();
+            var url = '../MyView.htm?WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FK_Node=' + rowData.FlowEndNode + '&FID=' + (rowData.FID ? rowData.FID : 0) + '&t=' + Math.random();
             WinOpen(url);
         }
-
 
         function closeDlg() {
             $("#eudlg").dialog("close");
         }
     </script>
-   
+
 </head>
 <body id="SearchHtml" class="cs-search-html">
     <div class="wrapper wrapper-content animated fadeInRight  cs-table" style="padding: 0px 10px 0px 10px">
@@ -990,9 +978,9 @@
             </div>
         </div>
         <div id="Msg">
-            
+
         </div>
-        
+
     </div>
 </body>
 <!--<body class="easyui-layout">
@@ -1005,10 +993,10 @@
                id="btn_search" style="display:none; margin-left:5px;">查询</a>
                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-excel" id="btn_export" style="display:none;">导出</a>
         </div>
-		<div class="conditions" id="filters"></div>
+        <div class="conditions" id="filters"></div>
     </div>
-	<div id="Msg" style="width: 100%; height: 100%; position: absolute; z-index: 999; text-align: center; text-align: center; vertical-align: middle; display: block;">
-		<h1><img src='../Img/loading.gif' /> 正在加载请稍候. </h1>
-	</div>
+    <div id="Msg" style="width: 100%; height: 100%; position: absolute; z-index: 999; text-align: center; text-align: center; vertical-align: middle; display: block;">
+        <h1><img src='../Img/loading.gif' /> 正在加载请稍候. </h1>
+    </div>
 </body>-->
 </html>

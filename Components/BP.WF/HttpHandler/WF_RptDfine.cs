@@ -211,7 +211,8 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region MyStartFlow.htm 我发起的流程
+        #region MyStartFlow.htm 我发起的流程.
+
         public string FlowSearch_Init()
         {
             if (string.IsNullOrWhiteSpace(this.FK_Flow))

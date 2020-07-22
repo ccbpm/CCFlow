@@ -404,7 +404,6 @@ namespace BP.WF.HttpHandler
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
             md.RptDTSearchKey = DTSearchKey;
 
-
             //是否查询自己部门发起
             md.SetPara("IsSearchNextLeavel", this.GetRequestValBoolen("IsSearchNextLeavel"));
             md.Save();

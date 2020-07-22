@@ -156,6 +156,7 @@ namespace BP.WF.Rpt
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -334,6 +335,7 @@ namespace BP.WF.Rpt
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级查询";
+                rm.Visable=false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

@@ -584,10 +584,10 @@ namespace BP.WF.HttpHandler
 
             #region 设置复制后表单信息
             //表单信息
-            MapData fromMap = new MapData(fromFrmID);
-            fromMap.No = toFrmID;
-            fromMap.Name = toFrmName;
-            fromMap.Insert();
+            MapData toMapData = new MapData(fromFrmID);
+            toMapData.No = toFrmID;
+            toMapData.Name = toFrmName;
+            toMapData.Insert();
 
 
             #endregion 设置复制后表单信息
@@ -595,7 +595,7 @@ namespace BP.WF.HttpHandler
             MapData.ImpMapData(toFrmID,BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
 
             //清空缓存
-            fromMap.RepairMap();
+            toMapData.RepairMap();
             SystemConfig.DoClearCash();
 
 

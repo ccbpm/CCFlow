@@ -1793,12 +1793,10 @@ namespace BP.CCBill
 
                 if (dt.Columns.Contains(item.Desc) == false)
                     continue;
-
+                string val = dr[item.Desc].ToString();
                 //枚举处理.
                 if (item.MyFieldType == FieldType.Enum)
                 {
-                    string val = dr[item.Desc].ToString();
-
                     SysEnum se = new SysEnum();
                     int i = se.Retrieve(SysEnumAttr.EnumKey, item.UIBindKey, SysEnumAttr.Lab, val);
 
@@ -1813,10 +1811,10 @@ namespace BP.CCBill
                     continue;
                 }
 
+               
                 //外键处理.
                 if (item.MyFieldType == FieldType.FK)
                 {
-                    string val = dr[item.Desc].ToString();
                     Entity attrEn = item.HisFKEn;
                     int i = attrEn.Retrieve("Name", val);
                     if (i == 0)
@@ -1842,7 +1840,6 @@ namespace BP.CCBill
                 //外部数据源
                 if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString && item.UIContralType == UIContralType.DDL)
                 {
-                    string val = dr[item.Desc].ToString();
                     string uiBindKey = item.UIBindKey;
                     if(DataType.IsNullOrEmpty(uiBindKey) == true)
                         errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
@@ -1876,7 +1873,6 @@ namespace BP.CCBill
                     //boolen类型的处理..
                 if (item.MyDataType == DataType.AppBoolean)
                 {
-                    string val = dr[item.Desc].ToString();
                     if (val == "是" || val == "有")
                         en.SetValByKey(item.Key, 1);
                     else
@@ -1885,15 +1881,27 @@ namespace BP.CCBill
                 }
                 if(item.MyDataType== DataType.AppDate)
                 {
-                    string val = dr[item.Desc].ToString();
                     if(DataType.IsNullOrEmpty(val) == false)
                     {
 
                     }
 
                 }
-                string myval = dr[item.Desc].ToString();
-                en.SetValByKey(item.Key, myval);
+
+                if (item.Key.EndsWith("BaseCode") == true)
+                {
+                    Depts depts = new Depts();
+                    depts.Retrieve(DeptAttr.Name, val);
+                    if(depts.Count !=0)
+                        en.SetValByKey(item.Key, (depts[0] as Dept).No );
+                    en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                }
+                else
+                {
+                    en.SetValByKey(item.Key, val);
+                }
+                   
+                
             }
             if (DataType.IsNullOrEmpty(en.GetValStrByKey("BillNo")) == true && DataType.IsNullOrEmpty(fbill.BillNoFormat) == false)
                 en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat, en.OID, en, fbill.No));

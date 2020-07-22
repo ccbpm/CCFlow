@@ -74,13 +74,13 @@
             var groups;
             var entities;
             if (mapExt.DBType == 0) {
-                groups = mapExt.DoMethodReturnString("GetDataTableByField", "Tag1","",null); //分组.
+                groups = mapExt.DoMethodReturnString("GetDataTableByField", "Tag1","",null,GetQueryString("OID")); //分组.
                 if (groups.indexOf("err@") != -1) {
                     alert(groups);
                     return;
                 }
                 groups = JSON.parse(groups);
-                entities = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2","",null);//数据源.
+                entities = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", "",  GetQueryString("OID"));//数据源.
                 if (entities.indexOf("err@") != -1) {
                     alert(entities);
                     return;

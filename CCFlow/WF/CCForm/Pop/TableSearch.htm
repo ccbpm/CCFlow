@@ -215,7 +215,7 @@
             var global = window;
             var json;
             if (mapExt.DBType == 0) {
-                json = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", paras, sqlWhere);
+                json = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", paras, sqlWhere, GetQueryString("OID"));
                 if (json.indexOf("err@") != -1) {
                     alert(json);
                     return;
@@ -379,7 +379,7 @@
 
                         var ifcData;
                         if (mapExt.DBType == 0 && condtion.CtrlType=="ListSQL") {
-                            ifcData = mapExt.DoMethodReturnString("GetDataTableByTag1",  condtion.FieldKey,atParas);
+                            ifcData = mapExt.DoMethodReturnString("GetDataTableByTag1", condtion.FieldKey, atParas, GetQueryString("OID"));
                             if (ifcData.indexOf("err@") != -1) {
                                 alert(ifcData);
                                 return;

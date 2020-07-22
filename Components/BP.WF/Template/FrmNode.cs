@@ -631,10 +631,7 @@ namespace BP.WF.Template
                 this.FrmSln = Template.FrmSln.Default;
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
-                {
                     this.IsEnableFWC = node.FrmWorkCheckSta;
-
-                }
                 return;
             }
         }

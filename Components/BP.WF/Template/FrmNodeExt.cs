@@ -146,8 +146,13 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
 
 
-                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", Glo.SQLOfCheckField, true);
+                //签批字段
+                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
+                    Glo.SQLOfCheckField, true);
 
+                //单据编号对应字段
+                map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",
+                    Glo.SQLOfBillNo, true);
 
                 //map.AddDDLSysEnum(BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 

@@ -213,11 +213,14 @@ namespace BP.WF.Template
         /// 审核意见版本号控制
         /// </summary>
         public const string FWCVer = "FWCVer";
-
         /// <summary>
         /// 签批字段
         /// </summary>
         public const string CheckField = "CheckField";
+        /// <summary>
+        /// 编号对应的字段
+        /// </summary>
+        public const string BillNoField = "BillNoField";
         /// <summary>
         /// 审核意见立场 不同意、不通过、同意、赞成
         /// </summary>

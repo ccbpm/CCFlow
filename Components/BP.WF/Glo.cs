@@ -52,7 +52,33 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_Direction WHERE Node  NOT IN (SELECT NODEID FROM WF_Node )");
             DBAccess.RunSQL("DELETE FROM WF_Direction WHERE ToNode  NOT IN (SELECT NODEID FROM WF_Node) ");
         }
-
+        /// <summary>
+        /// 签批组件SQL
+        /// </summary>
+        public static string SQLOfBillNo
+        {
+            get
+            {
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    case DBType.MySQL:
+                        sql = "SELECT '' AS No, '-请选择-' as Name ";
+                        break;
+                    case DBType.Oracle:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
+                        break;
+                    case DBType.PostgreSQL:
+                    default:
+                        sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
+                        break;
+                }
+                sql += " union ";
+                sql += " SELECT KeyOfEn AS No,Name From Sys_MapAttr WHERE UIContralType=0 AND UIVisible=1 AND UIIsEnable=1 AND FK_MapData='@FK_Frm'";
+                return sql;
+            }
+        }
         /// <summary>
         /// 签批组件SQL
         /// </summary>

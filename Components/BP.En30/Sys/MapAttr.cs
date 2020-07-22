@@ -4,6 +4,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using System.IO;
+using BP.Pub;
 
 namespace BP.Sys
 {
@@ -271,7 +272,7 @@ namespace BP.Sys
         /// </summary>
         public const string DefValType = "DefValType";
 
-        public const string DefaultVal = "10002";
+        public const string DefaultVal = "";
     }
     /// <summary>
     /// 实体属性
@@ -1792,8 +1793,8 @@ namespace BP.Sys
 
             string keyofenC = this.KeyOfEn.Clone() as string;
             keyofenC = keyofenC.ToLower();
-
-            if (BP.Pub.PubClass.KeyFields.Contains("," + keyofenC + ",") == true)
+            string keyFields = PubClass.KeyFields;
+            if (keyFields!=null && keyFields.Contains("," + keyofenC + ",") == true)
                 throw new Exception("@错误:[" + this.KeyOfEn + "]是字段关键字，您不能用它做字段。");
 
             if (this.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn,

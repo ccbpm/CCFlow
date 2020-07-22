@@ -1053,7 +1053,7 @@ namespace BP.Sys
         /// <param name="paras">参数</param>
         /// <param name="sqlWhere">增加的查询条件的SQL</param>
         /// <returns></returns>
-        public string GetDataTableByField(string field, string paras,string sqlWhere)
+        public string GetDataTableByField(string field, string paras,string sqlWhere,string oid)
         {
             //执行SQL获取
             if (this.DBType.Equals("0") == true && this.Row.ContainsKey(field) == true)
@@ -1068,37 +1068,12 @@ namespace BP.Sys
 
                     sql += sqlWhere;
                 }
-                
-
-                sql = sql.Replace("~", "'");
-                sql = sql.Replace("@WebUser.No", WebUser.No);
-                sql = sql.Replace("@WebUser.Name", WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-                sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-                sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-
-                if (DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
-                {
-                    string[] strs = paras.Split('@');
-                    foreach (string key in strs)
-                    {
-                        if (DataType.IsNullOrEmpty(key) == true)
-                            continue;
-                        var attrKeyOfEn = key.Split('=')[0];
-                        var val = key.Split('=')[1];
-                        sql = sql.Replace("@" + attrKeyOfEn, val);
-                        if (sql.Contains("@") == false)
-                            break;
-
-                    }
-                }
-                else
-                {
-                    sql = sql.Replace("@Key", paras);
-                }
-
-
-                if (sql.Contains("@") == true)
+                GEEntity en = null;
+                if(DataType.IsNullOrEmpty(oid) == false)
+                    en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+                sql = DealExp(sql,paras, en);
+               
+               if (sql.Contains("@") == true)
                     return "err@字段" + field + "执行的SQL中有@符号";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -1121,7 +1096,7 @@ namespace BP.Sys
 
 
 
-        public string GetDataTableByTag1(string key,string paras)
+        public string GetDataTableByTag1(string key,string paras,string oid)
         {
             string sql = "";
            if(DataType.IsNullOrEmpty(this.Tag1) == false)
@@ -1142,35 +1117,116 @@ namespace BP.Sys
             if (DataType.IsNullOrEmpty(sql) == true)
                 return "err@TableSearch设置的查询条件字段"+ key+"的SQL查询语句为空";
 
-            sql = sql.Replace("~", "'");
-            sql = sql.Replace("@WebUser.No", WebUser.No);
-            sql = sql.Replace("@WebUser.Name", WebUser.Name);
-            sql = sql.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-
-            if (DataType.IsNullOrEmpty(paras) == false && paras.Contains("@") == true && sql.Contains("@") == true)
-            {
-                string[] strs = paras.Split('@');
-                foreach (string str in strs)
-                {
-                    if (DataType.IsNullOrEmpty(str) == true)
-                        continue;
-                    var attrKeyOfEn = str.Split('=')[0];
-                    var val = str.Split('=')[1];
-                    sql = sql.Replace("@" + attrKeyOfEn, val);
-                    if (sql.Contains("@") == false)
-                        break;
-
-                }
-            }
+            GEEntity en = null;
+            if (DataType.IsNullOrEmpty(oid) == false)
+                en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+            sql = DealExp(sql, paras, en);
 
             if (sql.Contains("@") == true)
                 return "err@执行的SQL中" + sql+" 有@符号没有被替换";
             return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
         }
 
+        private  string DealExp(string exp,string paras, Entity en)
+        {
+            //替换字符
+            exp = exp.Replace("~", "'");
 
+            if (exp.Contains("@") == false)
+                return exp;
+
+            //首先替换加; 的。
+            exp = exp.Replace("@WebUser.No;", WebUser.No);
+            exp = exp.Replace("@WebUser.Name;", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull;", WebUser.FK_DeptNameOfFull);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.OrgNo;", WebUser.OrgNo);
+            exp = exp.Replace("@WebUser.OrgName;", WebUser.OrgName);
+
+
+            // 替换没有 ; 的 .
+            exp = exp.Replace("@WebUser.No", WebUser.No);
+            exp = exp.Replace("@WebUser.Name", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
+            exp = exp.Replace("@WebUser.OrgName", WebUser.OrgName);
+
+            if (exp.Contains("@") == false)
+                return exp;
+
+            if (DataType.IsNullOrEmpty(paras) == false && paras.Equals("undefined")==false )
+            {
+                if(paras.Contains("@") == true)
+                {
+                    string[] strs = paras.Split('@');
+                    foreach (string key in strs)
+                    {
+                        if (DataType.IsNullOrEmpty(key) == true)
+                            continue;
+                        var attrKeyOfEn = key.Split('=')[0];
+                        var val = key.Split('=')[1];
+                        exp = exp.Replace("@" + attrKeyOfEn, val);
+                        if (exp.Contains("@") == false)
+                            break;
+
+                    }
+                }
+                else
+                {
+                    exp = exp.Replace("@Key", paras);
+                }
+
+
+            }
+
+            if (exp.Contains("@") == false)
+                return exp;
+
+            //增加对新规则的支持. @MyField; 格式.
+            if (en != null)
+            {
+                Attrs attrs = en.EnMap.Attrs;
+                Row row = en.Row;
+                //特殊判断.
+                if (row.ContainsKey("OID") == true)
+                    exp = exp.Replace("@WorkID", row["OID"].ToString());
+
+                if (exp.Contains("@") == false)
+                    return exp;
+
+                foreach (string key in row.Keys)
+                {
+                    //值为空或者null不替换
+                    if (row[key] == null || row[key].Equals("") == true)
+                        exp = exp.Replace("@" + key, "");
+                    if (exp.Contains("@" + key))
+                        exp = exp.Replace("@" + key, row[key].ToString());
+
+                    //不包含@则返回SQL语句
+                    if (exp.Contains("@") == false)
+                        return exp;
+                }
+
+            }
+
+            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            {
+                /*如果是bs*/
+                foreach (string key in HttpContextHelper.RequestParamKeys)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        continue;
+                    exp = exp.Replace("@" + key, HttpContextHelper.RequestParams(key));
+                }
+
+            }
+
+            exp = exp.Replace("~", "'");
+            return exp;
+        }
     }
     /// <summary>
     /// 扩展s

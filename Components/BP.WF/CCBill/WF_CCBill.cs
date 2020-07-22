@@ -1629,13 +1629,17 @@ namespace BP.CCBill
 
         private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType,FrmBill fbill)
         {
+            if (SystemConfig.CustomerNo.Equals("ASSET") == true)
+                return SetEntityAttrValForASSET(no, dr, attrs, en, dt, saveType, fbill);
+
+            //单据数据不存在
             if (saveType == 0)
             {
                 Int64 oid = 0;
-                if (fbill.EntityType == EntityType.FrmDict)
+                if(fbill.EntityType == EntityType.FrmDict)
                     oid = BP.CCBill.Dev2Interface.CreateBlankDictID(fbill.No, WebUser.No, null);
                 if (fbill.EntityType == EntityType.FrmBill)
-                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No, WebUser.No, null);
+                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No,WebUser.No,null);
                 en.OID = oid;
                 en.RetrieveFromDBSources();
             }
@@ -1756,6 +1760,182 @@ namespace BP.CCBill
         }
 
         #endregion
+
+        private string SetEntityAttrValForASSET(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType, FrmBill fbill)
+        {
+            
+            //单据数据不存在
+            if (saveType == 0)
+            {
+                Int64 oid = 0;
+                if (fbill.EntityType == EntityType.FrmDict)
+                    oid = BP.CCBill.Dev2Interface.CreateBlankDictID(fbill.No, WebUser.No, null);
+                if (fbill.EntityType == EntityType.FrmBill)
+                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No, WebUser.No, null);
+                en.OID = oid;
+                en.RetrieveFromDBSources();
+            }
+
+            string errInfo = "";
+            //按照属性赋值.
+            foreach (Attr item in attrs)
+            {
+                if (item.Key.Equals("BillNo") && dt.Columns.Contains(item.Desc) == true)
+                {
+                    en.SetValByKey(item.Key, no);
+                    continue;
+                }
+                if (item.Key.Equals("Title") && dt.Columns.Contains(item.Desc) == true)
+                {
+                    en.SetValByKey(item.Key, dr[item.Desc].ToString());
+                    continue;
+                }
+
+                if (dt.Columns.Contains(item.Desc) == false)
+                    continue;
+
+                //枚举处理.
+                if (item.MyFieldType == FieldType.Enum)
+                {
+                    string val = dr[item.Desc].ToString();
+
+                    SysEnum se = new SysEnum();
+                    int i = se.Retrieve(SysEnumAttr.EnumKey, item.UIBindKey, SysEnumAttr.Lab, val);
+
+                    if (i == 0)
+                    {
+                        errInfo += "err@枚举[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    en.SetValByKey(item.Key, se.IntKey);
+                    //en.SetValByKey(item.Key.Replace("Code",""), val);
+                    continue;
+                }
+
+                //外键处理.
+                if (item.MyFieldType == FieldType.FK)
+                {
+                    string val = dr[item.Desc].ToString();
+                    Entity attrEn = item.HisFKEn;
+                    int i = attrEn.Retrieve("Name", val);
+                    if (i == 0)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        continue;
+                    }
+
+                    if (i != 1)
+                    {
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
+                        continue;
+                    }
+
+                    //把编号值给他.
+                    en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                    if(item.Key.EndsWith("BaseCode") == true)
+                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                    else
+                        en.SetValByKey(item.Key.Replace("Code", ""), val);
+                    continue;
+                }
+                //外部数据源
+                if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString && item.UIContralType == UIContralType.DDL)
+                {
+                    string val = dr[item.Desc].ToString();
+                    string uiBindKey = item.UIBindKey;
+                    if(DataType.IsNullOrEmpty(uiBindKey) == true)
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
+                    DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    if(mydt.Rows.Count == 0 )
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],对应的外键没有获取到外键列表";
+                    bool isHave = false;
+
+                    //给赋值名称
+                    if (item.Key.EndsWith("BaseCode") == true)
+                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                    else
+                        en.SetValByKey(item.Key.Replace("Code", ""), val);
+                    foreach (DataRow mydr in mydt.Rows)
+                    {
+                        if (mydr["Name"].ToString().Equals(val)== true)
+                        {
+                            en.SetValByKey(item.Key, mydr["No"].ToString());
+                            isHave = true;
+                            break;
+                        }
+                    }
+                    
+                    if(isHave == false)
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],没有获取到"+val+"对应的Code值";
+                 
+                       
+                    continue;
+                }
+
+                    //boolen类型的处理..
+                if (item.MyDataType == DataType.AppBoolean)
+                {
+                    string val = dr[item.Desc].ToString();
+                    if (val == "是" || val == "有")
+                        en.SetValByKey(item.Key, 1);
+                    else
+                        en.SetValByKey(item.Key, 0);
+                    continue;
+                }
+                if(item.MyDataType== DataType.AppDate)
+                {
+                    string val = dr[item.Desc].ToString();
+                    if(DataType.IsNullOrEmpty(val) == false)
+                    {
+
+                    }
+
+                }
+                string myval = dr[item.Desc].ToString();
+                en.SetValByKey(item.Key, myval);
+            }
+            if (DataType.IsNullOrEmpty(en.GetValStrByKey("BillNo")) == true && DataType.IsNullOrEmpty(fbill.BillNoFormat) == false)
+                en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat, en.OID, en, fbill.No));
+
+            if (DataType.IsNullOrEmpty(en.GetValStrByKey("Title")) == true && DataType.IsNullOrEmpty(fbill.TitleRole) == false)
+                en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
+
+            en.SetValByKey("BillState", (int)BillState.Editing);
+            en.Update();
+
+            GenerBill gb = new GenerBill();
+            gb.WorkID = en.OID;
+            if (gb.RetrieveFromDBSources() == 0)
+            {
+                gb.BillState = BillState.Over; //初始化状态.
+                gb.Starter = BP.Web.WebUser.No;
+                gb.StarterName = BP.Web.WebUser.Name;
+                gb.FrmName = fbill.Name; //单据名称.
+                gb.FrmID = fbill.No; //单据ID
+                if (en.Row.ContainsKey("Title") == true)
+                    gb.Title = en.GetValStringByKey("Title");
+                if (en.Row.ContainsKey("BillNo") == true)
+                    gb.BillNo = en.GetValStringByKey("BillNo");
+                gb.FK_FrmTree = fbill.FK_FormTree; //单据类别.
+                gb.RDT = DataType.CurrentDataTime;
+                gb.NDStep = 1;
+                gb.NDStepName = "启动";
+                gb.Insert();
+
+            }
+            else
+            {
+                gb.BillState = BillState.Editing;
+                if (en.Row.ContainsKey("Title") == true)
+                    gb.Title = en.GetValStringByKey("Title");
+                if (en.Row.ContainsKey("BillNo") == true)
+                    gb.BillNo = en.GetValStringByKey("BillNo");
+                gb.Update();
+            }
+
+            return errInfo;
+        }
 
         #region 执行父类的重写方法.
         /// <summary>

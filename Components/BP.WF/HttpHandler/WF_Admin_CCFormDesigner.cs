@@ -581,20 +581,30 @@ namespace BP.WF.HttpHandler
             string fromFrmID = GetRequestVal("FromFrmID");
             string toFrmID = GetRequestVal("ToFrmID");
             string toFrmName = GetRequestVal("ToFrmName");
-
-            #region 设置复制后表单信息
-            //表单信息
             MapData toMapData = new MapData(fromFrmID);
             toMapData.No = toFrmID;
             toMapData.Name = toFrmName;
             toMapData.Insert();
-
-
-            #endregion 设置复制后表单信息
-
+            //导入表单信息
             MapData.ImpMapData(toFrmID,BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
 
+            if (toMapData.HisEntityType == (int)EntityType.FrmBill)
+            {
+                FrmBill frmBill = new FrmBill(fromFrmID);
+                frmBill.No = toFrmID;
+                frmBill.Name = toFrmName;
+                frmBill.Update();
+            }
+            if (toMapData.HisEntityType == (int)EntityType.FrmDict)
+            {
+                FrmDict frmDict = new FrmDict(fromFrmID);
+                frmDict.No = toFrmID;
+                frmDict.Name = toFrmName;
+                frmDict.Update();
+            }
+
             //清空缓存
+            
             toMapData.RepairMap();
             SystemConfig.DoClearCash();
 

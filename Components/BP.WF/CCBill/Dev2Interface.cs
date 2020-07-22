@@ -561,12 +561,6 @@ namespace BP.CCBill
             if (DataType.IsNullOrEmpty(billNo))
                 billNo = "3";
 
-            //if (DataType.IsNumStr(billNo) == true)
-            //{
-            //    return  en.GenerNewNoByKey("BillNo");
-            //}
-
-
             if (billNo.Contains("@"))
                 billNo = BP.WF.Glo.DealExp(billNo, en, null);
 

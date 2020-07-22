@@ -47,6 +47,11 @@ namespace BP.WF
 
                 MapData md = new MapData(nd.NodeFrmID);
 
+                //定义变量，为绑定独立表单设置单据编号.
+                string billNo = null; //定义单据编号.
+                string billNoField = null; //定义单据编号字段.
+
+
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = ExecEvent.DoNode(EventListNode.FrmLoadBefore, nd,
                     wk, null);
@@ -76,6 +81,7 @@ namespace BP.WF
                 {
                     frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,
                     FrmNodeAttr.FK_Node, nd.NodeID);
+
                     if (DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.FrmSln != 0)
                     {
                         FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.FK_Node);
@@ -99,7 +105,6 @@ namespace BP.WF
                                     dr["UIIsInput"] = 1;
                                 else
                                     dr["UIIsInput"] = 0;
-
 
                                 if (item.UIVisible == true)
                                     dr["UIVisible"] = 1;
@@ -797,11 +802,23 @@ namespace BP.WF
                 {
                     /* 独立流程节点表单. */
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
+                   
+                    myds.Tables.Add(frmNode.ToDataTableField("FrmNode"));
 
-                    FrmNode fn = new FrmNode();
-                    fn.MyPK = nd.NodeFrmID + "_" + nd.NodeID + "_" + nd.FK_Flow;
-                    fn.Retrieve();
-                    myds.Tables.Add(fn.ToDataTableField("FrmNode"));
+                    //其他的数据也要加里面去. @yln
+                    FrmNodes fns = new FrmNodes();
+                    fns.Retrieve(FrmNodeAttr.FK_Flow,nd.FK_Flow);
+                    myds.Tables.Add(fns.ToDataTableField("FrmNodes"));
+
+                    //设置单据编号,对于绑定的表单. @yln.
+                    if (nd.IsStartNode==true && DataType.IsNullOrEmpty(frmNode.BillNoField)==false)
+                    {
+                        DataTable dtMain = myds.Tables["MainTable"];
+                        if (dtMain.Columns.Contains(frmNode.BillNoField)==true)
+                        {
+                            dtMain.Rows[0][frmNode.BillNoField] = wk.GetValStringByKey("BillNo");
+                        }
+                    }
                 }
                 #endregion 增加流程节点表单绑定信息.
 

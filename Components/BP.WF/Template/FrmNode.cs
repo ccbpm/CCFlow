@@ -600,6 +600,20 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
             }
         }
+        /// <summary>
+        /// 单据编号字段
+        /// </summary>
+        public string BillNoField
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeWorkCheckAttr.BillNoField);
+            }
+            set
+            {
+                this.SetValByKey(NodeWorkCheckAttr.BillNoField, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -688,6 +702,7 @@ namespace BP.WF.Template
                 //  map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
                 //签批字段不可见
                 map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", false, false, 0, 50, 10, false);
+                map.AddTBString(NodeWorkCheckAttr.BillNoField, null, "单据编号字段", false, false, 0, 50, 10, false);
 
                 this._enMap = map;
                 return this._enMap;

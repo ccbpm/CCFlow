@@ -582,49 +582,20 @@ namespace BP.WF.HttpHandler
             string toFrmID = GetRequestVal("ToFrmID");
             string toFrmName = GetRequestVal("ToFrmName");
 
-            #region 原表单信息
+            #region 设置复制后表单信息
             //表单信息
             MapData fromMap = new MapData(fromFrmID);
-            //单据信息
-            FrmBill fromBill = new FrmBill();
-            fromBill.No = fromFrmID;
-            int billCount = fromBill.RetrieveFromDBSources();
-            //实体单据
-            FrmDict fromDict = new FrmDict();
-            fromDict.No = fromFrmID;
-            int DictCount = fromDict.RetrieveFromDBSources();
-            #endregion 原表单信息
+            fromMap.No = toFrmID;
+            fromMap.Name = toFrmName;
+            fromMap.Insert();
 
-            #region 复制表单
-            MapData toMapData = new MapData();
-            toMapData = fromMap;
-            toMapData.No = toFrmID;
-            toMapData.Name = toFrmName;
-            toMapData.Insert();
-            if (billCount != 0)
-            {
-                FrmBill toBill = new FrmBill();
-                toBill = fromBill;
-                toBill.No = toFrmID;
-                toBill.Name = toFrmName;
-                toBill.EntityType = EntityType.FrmBill;
-                toBill.Update();
-            }
-            if (DictCount != 0)
-            {
-                FrmDict toDict = new FrmDict();
-                toDict = fromDict;
-                toDict.No = toFrmID;
-                toDict.Name = toFrmName;
-                toDict.EntityType = EntityType.FrmDict;
-                toDict.Update();
-            }
-            #endregion 复制表单
 
-            MapData.ImpMapData(BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
+            #endregion 设置复制后表单信息
+
+            MapData.ImpMapData(toFrmID,BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(fromFrmID));
 
             //清空缓存
-            toMapData.RepairMap();
+            fromMap.RepairMap();
             SystemConfig.DoClearCash();
 
 

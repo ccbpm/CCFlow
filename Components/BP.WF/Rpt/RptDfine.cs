@@ -276,6 +276,7 @@ namespace BP.WF.Rpt
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "本部门发起的流程";
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

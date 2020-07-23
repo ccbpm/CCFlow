@@ -328,48 +328,48 @@ function GenerFoolFrm(wn) {
         var keyOfEn = name.replace("athModel_", "");
         $("#Lab_" + keyOfEn).html("<div style='text-align:left'>" + $("#Lab_" + keyOfEn).text() + "</div>");
     });
-    //初始化高级JS设置的交互---------还需要优化只读时候的情况
-    $.each(flowData.Sys_MapAttr, function (idx, mapAttr) {
-        //获取字段的atpara
-        var AtPara = mapAttr.AtPara;
-        if (AtPara == "" || AtPara == null || AtPara == undefined)
-            return;
+    ////初始化高级JS设置的交互---------还需要优化只读时候的情况
+    //$.each(flowData.Sys_MapAttr, function (idx, mapAttr) {
+    //    //获取字段的atpara
+    //    var AtPara = mapAttr.AtPara;
+    //    if (AtPara == "" || AtPara == null || AtPara == undefined)
+    //        return;
 
-        //判断是否存在
-        var obj = "";
-        var ctrl = $("#DDL_" + mapAttr.KeyOfEn);
-        if (ctrl.length > 0)
-            obj = ctrl;
-        else
-            return;
+    //    //判断是否存在
+    //    var obj = "";
+    //    var ctrl = $("#DDL_" + mapAttr.KeyOfEn);
+    //    if (ctrl.length > 0)
+    //        obj = ctrl;
+    //    else
+    //        return;
 
-        //外部数据源类型.
-        if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1 && mapAttr.UIIsEnable != 0) {
-            if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-                cleanAll(mapAttr.KeyOfEn);
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
-            }
-        }
-        //外键类型.
-        if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
-            if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-                cleanAll(mapAttr.KeyOfEn);
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
-            }
-        }
-        //枚举类型.
-        if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 1) {
-            if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
-                var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-                if (selecedval == null || selecedval == undefined || selecedval == "" || selecedval == -1)
-                    return;
-                cleanAll(mapAttr.KeyOfEn);
-                setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
-            }
-        }
-    });
+    //    //外部数据源类型.
+    //    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1 && mapAttr.UIIsEnable != 0) {
+    //        if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+    //            var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+    //            cleanAll(mapAttr.KeyOfEn);
+    //            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
+    //        }
+    //    }
+    //    //外键类型.
+    //    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    //        if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+    //            var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+    //            cleanAll(mapAttr.KeyOfEn);
+    //            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
+    //        }
+    //    }
+    //    //枚举类型.
+    //    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 1) {
+    //        if (AtPara.indexOf('@IsEnableJS=1') >= 0) {
+    //            var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+    //            if (selecedval == null || selecedval == undefined || selecedval == "" || selecedval == -1)
+    //                return;
+    //            cleanAll(mapAttr.KeyOfEn);
+    //            setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
+    //        }
+    //    }
+    //});
 
 }
 
@@ -1683,7 +1683,7 @@ function CleanCtrlVal(key) {
     }
 }
 
-var flowData = {};
+
 
 //初始化 IMAGE附件
 function Ele_ImgAth(frmImageAth) {

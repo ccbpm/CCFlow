@@ -112,6 +112,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
 
         cbx.combobox("loadData", data);
         $(".textbox-text").css("width", w);
+        $(".easyui-fluid").css("width", w);
 
         if (mapAttr != null && mapAttr.UIIsEnable != 1) {
             cbx.combobox('disable');

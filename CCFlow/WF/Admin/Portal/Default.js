@@ -1267,7 +1267,7 @@ function CopyFrm() {
     handler.AddPara("FromFrmID", node.id);
     handler.AddPara("ToFrmID", frmID)
     handler.AddPara("ToFrmName", frmName)
-    var data = handler.DoMethodReturnString("DoCopyFrm", frmID, frmName);
+    var data = handler.DoMethodReturnString("DoCopyFrm");
     $(".mymask").hide();
     if (data.indexOf('err@') != -1) {
         alert(data);

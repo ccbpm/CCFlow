@@ -268,6 +268,24 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
 //傻瓜表单/累加表单初始化联动
 function InitFoolLink(mapAttr, frmType) {
+    var AtPara = mapAttr.AtPara;
+    if (AtPara == "" || AtPara == null || AtPara == undefined || AtPara.indexOf('@IsEnableJS=1') ==-1)
+        return;
+
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1 && mapAttr.UIIsEnable != 0) {
+        var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+        cleanAll(mapAttr.KeyOfEn);
+        setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
+        
+    }
+    //外键类型.
+    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+        var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
+        cleanAll(mapAttr.KeyOfEn);
+        setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, selecedval, "");
+      
+    }
+
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) {  // AppInt Enum
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
             if (mapAttr.UIContralType == 1) {

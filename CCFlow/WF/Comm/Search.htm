@@ -1249,13 +1249,13 @@
             if (urlOpenType == 3)
                 url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk + currUrl;
 
-            if (urlOpenType == 9) {
-                if (url.indexOf('?') == -1)
-                    url = url + "?1=1";
-                if (url.indexOf('FrmID') != -1)
-                    url = url + "&WorkID=" + pk + "&OID=" + pk ;
+            //if (urlOpenType == 9) {
+            //    if (url.indexOf('?') == -1)
+            //        url = url + "?1=1";
+            //    if (url.indexOf('FrmID') != -1)
+            //        url = url + "&WorkID=" + pk + "&OID=" + pk ;
                
-            }
+            //}
             //url中包含@符号需要进行替换
             if (url.indexOf("@") != -1) {
                 url = DealJsonExp(row, url);

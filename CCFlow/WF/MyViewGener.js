@@ -8,6 +8,7 @@ function Close() {
 var pageData = {};
 var globalVarList = {};
 var flowData = {};
+document.BindEditorMapAttr = [];
 
 //处理，表单没有加载完，就可以点击发送按钮.
 var isLoadOk = false;

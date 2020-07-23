@@ -14,11 +14,12 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
     <style>
-        #Btn_Save{
-            background-image: url(../../Img/Btn/Save.png)!important;
+        #Btn_Save {
+            background-image: url(../../Img/Btn/Save.png) !important;
         }
-        #Btn_Help{
-            background-image: url(../../Img/Btn/Help.png)!important;
+
+        #Btn_Help {
+            background-image: url(../../Img/Btn/Help.png) !important;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -47,6 +48,24 @@
 
         });
 
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+
+            node.TodolistModel = $('input:radio[name="RB_TodolistModel"]:checked').val();
+            node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole").val();
+            node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
+
+            //抢办发送后处理模式.
+            node.SetPara("QiangBanSendAfterRole", $("#DDLPara_QiangBanSendAfterRole").val());
+
+            node.Update();
+
+            window.location.href = window.location.href;
+            return;
+        }
         function Help() {
             var url = "http://ccbpm.mydoc.io";
             window.open(url);
@@ -59,8 +78,8 @@
         </div>
         <div id="bar" class="cs-tr cs-bar">
             <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">多人处理规则</label>
-            <input  type="button" id="Btn_Save" value="保存" onclick="Save()" />
-            <input  id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
+            <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+            <input id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
         </div>
         <fieldset>
             <legend>
@@ -74,6 +93,17 @@
                 <li style="color: Gray">这样的工作模式属于抢办，这n个人可以同时打开，当一个人发送后，其他人都不能在发送了。</li>
                 <li style="color: Gray">通俗的说，也就是谁抢到了这件工作，就是谁处理的。</li>
                 <li style="color: Gray">抢办模式是一个默认的处理模式。</li>
+
+                <li>
+                    发送后处理规则：
+                    <select id="DDLPara_QiangBanSendAfterRole" name="QiangBanSendAfterRole">
+                        <option value="0">不处理（默认）</option>
+                        <option value="1">抄送给未处理的人</option>
+                        <option value="2">发消息给未处理的人</option>
+                    </select>
+                    <!--<input type="checkbox" id="CB_IsQiangBanCCToEmps" /><font color="green"> <b> 当一个人抢走后，是否给同节点的人抄送？</b></font> </label>-->
+                </li>
+
             </ul>
         </fieldset>
         <fieldset>
@@ -145,25 +175,7 @@
         </fieldset>
 
 
-        <script type="text/javascript">
 
-            function Save() {
-
-                var nodeID = GetQueryString("FK_Node");
-
-                var node = new Entity("BP.WF.Node");
-                node.SetPKVal(nodeID);
-                node.Retrieve();
-
-                node.TodolistModel = $('input:radio[name="RB_TodolistModel"]:checked').val();
-                node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole").val();
-                node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
-                node.Update();
-
-                window.location.href = window.location.href;
-                return;
-            }
-        </script>
     </form>
 </body>
 </html>

@@ -431,7 +431,10 @@ function GenerChangeParentValue(data) {
     }
 }
 
-/*为页面的所有字段属性赋值. */
+/* 为页面的所有字段属性赋值.
+ * 1. 列的字段控件使用 TB_,CB_,DDL,RB_
+ * 2. 参数字段控件使用 TBPara_,CBPara_,DDLPara,RBPara_
+ * */
 function GenerFullAllCtrlsVal(data) {
 
     //  console.log(data);
@@ -516,6 +519,8 @@ function GenerFullAllCtrlsVal(data) {
 
         // 处理参数字段.....................
         if (attr == "AtPara") {
+
+            debugger;
             //val=@Title=1@SelectType=0@SearchTip=2@RootTreeNo=0
             $.each(val.split("@"), function (i, o) {
                 if (o == "") {

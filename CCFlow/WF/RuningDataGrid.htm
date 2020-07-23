@@ -509,7 +509,7 @@
                     }
 
                     listbox += "<td>" + num + "</td>";
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.CurrNode + "','" + work.FK_Flow + "','" + work.FID + "')\" >" + work.Title + "</a></td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";
                     listbox += "<td>" + work.NodeName + "</td>";
@@ -522,24 +522,7 @@
 
                     listbox += "<td class='tdHidden'>" + todoEmps + "</td>";
 
-                    /*
-                    listbox += "<td>";
-                    //listbox += " <div class='wrapper-demo'>"
-                    //listbox += "<div id='dd"+i+"' class='wrapper-dropdown-2' tabindex='" + i + "'>操作";
-                    listbox += "<ul class='dropdown' style='list-style:none;'>";
-                    //listbox += "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&FID=" + work.FID + "&IsRead=0&T=" + timeKey + "');\" >轨迹</a>&nbsp &nbsp &nbsp<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销</a>";
-                    listbox += "<li style='list-style:none;'><a href=\"javascript:WinOpenIt('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + currNodeId + "');\" >轨迹</a></li>";
-                    if (work.RunType == 0) {
-
-                        listbox += "<li style='list-style:none;'><a href =\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销发送</a></li>";
-                        listbox += "<li style='list-style:none;'><a href =\"javascript:UnSendCC('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "','" + currNodeId + "')\">撤销抄送</a></li>";
-                        listbox += "<li style='list-style:none;'><a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a></li>";
-                        listbox += "</ul>";
-                        //listbox += "</div>";
-                        //listbox += "</div>";
-                    }
-                    listbox += "</td>"; */
-
+                  
 
                     listbox += "</tr>";
                 }

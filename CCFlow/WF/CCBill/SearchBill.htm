@@ -48,6 +48,12 @@
         var pageSize = 10;//一页10条
         var pages = 1; //总页数
 
+        //判断是否是多级表头
+        var isThrHeader = false; //是否是三级表头
+        var isSecHeader = false;//是否是二级表头
+        var thrMultiTitle = ""; //三级表头的内容
+        var secMultiTitle = "";//二级表头的内容
+
         var firstLoadTable = false;
 
         //初始化页面
@@ -66,6 +72,20 @@
             frmBill = new Entity("BP.CCBill.FrmBill", frmID);
             document.title = frmBill.Name;
 
+            //处理多级表头的判断
+            thrMultiTitle = frmBill.GetPara("MultiTitle1"); //三级表头的内容
+            secMultiTitle = frmBill.GetPara("MultiTitle");//二级表头的内容
+            if (thrMultiTitle == null || thrMultiTitle == undefined)
+                thrMultiTitle = "";
+            if (thrMultiTitle != "")
+                isThrHeader = true;
+
+            if (secMultiTitle == null || secMultiTitle == undefined)
+                secMultiTitle = "";
+            if (isThrHeader == false && secMultiTitle != "")
+                isSecHeader = true;
+
+
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
             ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
@@ -82,7 +102,7 @@
             if (pageSize == "" || pageSize == undefined)
                 pageSize = "10";
 
-
+            
             //显示查询数据
             BindTable();
 
@@ -456,18 +476,24 @@
             }
 
             var keyOfEn = "";
+           
+            var firstColumns = new Array();
+            var secondColumns = new Array();
+            var threeColumns = new Array();
+
             var sortColumns = frmBill.SortColumns; //排序字段
-            var columns = new Array();;
-            columns.push({
+            var fieldColumns={
                 title: '序',
                 field: '',
                 align: 'center',
                 width: 25,
-
+                rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
-            });
+            };
+
+            AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
 
             //颜色设置
             var colorSet = frmBill.ColorSet;
@@ -485,6 +511,16 @@
                     continue;
                 }
 
+                var keyRowSpan = GetAttrKeyRowSpan(attr.KeyOfEn);
+                if (keyRowSpan == 3 && thrcolspan.field != undefined) {
+                    threeColumns.push(thrcolspan);
+                    thrcolspan = {};
+                }
+
+                //是否增加二级或者三级分组
+                if ((isSecHeader == true && keyRowSpan == 1)
+                    || isThrHeader == true && keyRowSpan != 3)
+                    AddSecOrThrColumn(attr.KeyOfEn, keyRowSpan, secondColumns, threeColumns);
 
                 var field = attr.KeyOfEn;
                 var title = attr.Name;
@@ -494,31 +530,35 @@
                     sortable = sortColumns.indexOf(field) != -1 ? true : false;
 
                 if (field == "BillState") {
-                    columns.push({
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
                         fixed: false,
                         sortable: sortable,
+                        rowspan: keyRowSpan,
                         formatter: function (value, row, index) {
                             return GetBillState(value);
                         }
-                    });
+                    };
+                    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
                     continue;
                 }
 
                 if (field == "Title") {
-                    columns.push({
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
                         fixed: false,
                         sortable: sortable,
+                        rowspan: keyRowSpan,
                         formatter: function (value, row, index) {
                             var icon = GenerICON(false, row.BillState);
                             return "<a href=\"javascript:OpenIt('" + row.OID + "','" + frmID + "','" + 0 + "',' ','" + webUser.No + "','" + row.BillState + "',)\"><img src=" + icon + " border=0 width='14px;' />" + value + "</a>";
                         }
-                    });
+                    };
+                    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
                     continue;
                 }
 
@@ -530,11 +570,12 @@
                     //else
                     //    field = field + "Text";
 
-                    columns.push({
+                    fieldColumns = {
                         field: field,
                         title: title,
                         fixed: false,
                         width: width,
+                        rowspan: keyRowSpan,
                         sortable: sortable,
                         cellStyle: {
                             css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
@@ -549,21 +590,24 @@
                             else
                                 return val;
                         }
-                    });
+                    };
+                    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
                     continue;
                 }
                 if (attr.UIContralType == 2) {
-                    columns.push({
+                    fieldColumns ={
                         field: field,
                         title: title,
                         width: attr.Width,
                         fixed: false,
                         sortable: sortable,
+                        rowspan: keyRowSpan,
                         formatter: function (value, row, index) {
                             if (value == "0") return "否";
                             if (value == "1") return "是";
                         }
-                    });
+                    };
+                    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
                     continue;
                 }
 
@@ -571,12 +615,13 @@
                 if (width == null || width == "" || width == undefined)
                     width = 100;
 
-                columns.push({
+                fieldColumns ={
                     field: field,
                     title: title,
                     width: attr.Width,
                     fixed: false,
                     sortable: sortable,
+                    rowspan: keyRowSpan,
                     formatter: function (value, row, index) {
                         var fieldColor = [];
                         if (colorSet.indexOf("@" + this.field + ":") != -1) {
@@ -591,14 +636,18 @@
                         }
                     }
 
-                });
+                };
+                AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
             }
+            if (thrcolspan.field != undefined)
+                threeColumns.push(thrcolspan);
             //加入操作下载文件
-            columns.push({
+            fieldColumns = {
                 field: 'oper',
                 title: '操作',
                 width: 80,
                 align: 'center',
+                rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
                 formatter: function (value, row, index) {
                     var _Html = "";
                     //删除规则
@@ -620,12 +669,28 @@
                     _Html += '<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
                     return _Html;
                 }
-            });
+            };
+            AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
+
+            var columns = new Array();
+            if (isThrHeader == false && isSecHeader == false)
+                columns[0] = firstColumns;
+            if (isSecHeader == true) {
+                columns[0] = secondColumns;
+                columns[1] = firstColumns;
+            }
+
+            if (isThrHeader == true) {
+                columns[0] = threeColumns;
+                columns[1] = secondColumns;
+                columns[2] = firstColumns;
+            }
+
             //var url = "../";
             $('#dg').html("");
             $('#dg').bootstrapTable({
                 data: mapdata["DT"],
-                columns: [columns],
+                columns: columns,
                 cache: false,
                 striped: true,
                 height: tableH,
@@ -684,7 +749,160 @@
 
         }
 
+        /**
+        * 把列增加到对应的数组中
+        * @param column 列信息
+        * @param firstColumns 一级表头数组
+        * @param secondColumns 二级表头数组
+        * @param threeColumns 三级表头数组
+        * @param columnIdx 隶属那个表头
+        */
+        function AddColumn(column, firstColumns, secondColumns, threeColumns, columnIdx) {
+            if (columnIdx == 1)
+                firstColumns.push(column);
+            if (columnIdx == 2)
+                secondColumns.push(column);
+            if (columnIdx == 3)
+                threeColumns.push(column);
 
+        }
+
+        /**
+         * 获取数据字段跨的行数
+         * @param keyOfEn
+         */
+        function GetAttrKeyRowSpan(keyOfEn) {
+            //一级表头
+            if (isThrHeader == false && isSecHeader == false)
+                return 1;
+            //先判断是否是隶属于二级表头下的字段
+            if (secMultiTitle.indexOf("," + keyOfEn + ",") != -1)
+                return 1;
+            //是否是隶属于三级表头下的字段
+            if (thrMultiTitle.indexOf("," + keyOfEn + ",") != -1)
+                return 2;
+            return isThrHeader == true ? 3 : 2;
+
+        }
+        /**
+         * 增加二级或三级表头的分组
+         * @param keyOfEn
+         * @param keyRowSpan
+         * @param secondColumns
+         * @param threeColumns
+         */
+        var curSecGroup = "";
+        var curTreGroup = "";
+        var thrcolspan = {};
+        var isSecChange = false;
+        function AddSecOrThrColumn(keyOfEn, keyRowSpan, secondColumns, threeColumns) {
+            //计算二级表头分组
+            var secfilds = getMutliFile(keyOfEn, secMultiTitle);
+            var secRowSpan = 1;
+            if (isSecHeader == true && keyRowSpan == 1)
+                secRowSpan = 1;
+            if (isThrHeader == true && keyRowSpan == 1) {
+                if (thrMultiTitle.indexOf("," + secfilds[0] + ",") == -1)
+                    secRowSpan = 2;
+                else
+                    secRowSpan = 1;
+            }
+            if (isThrHeader == true && keyRowSpan == 2)
+                secRowSpan = 0;
+            //增加二级表头
+            if (secRowSpan == 1) {
+                var colspan = secfilds.length - 1;
+                if (curSecGroup == "" || curSecGroup != secfilds[0]) {
+                    curSecGroup = secfilds[0];
+                    isSecChange = true;
+                    secondColumns.push({
+                        title: secfilds[0],
+                        field: '',
+                        align: 'center',
+                        colspan: colspan,
+                        rowspan: secRowSpan
+                    });
+                } else {
+                    isSecChange = false;
+                }
+                //增加三级表头
+                if (isThrHeader == true && secRowSpan == 1) {
+                    var filds = getMutliFile(secfilds[0], thrMultiTitle);
+                    if (curTreGroup == "" || curTreGroup != filds[0]) {
+                        //增加三级表头
+                        if (curTreGroup != "" && curTreGroup != filds[0]) {
+                            threeColumns.push(thrcolspan);
+                            thrcolspan = {};
+                        }
+                        thrcolspan = {
+                            title: filds[0],
+                            field: '',
+                            align: 'center',
+                            colspan: colspan,
+                        }
+
+                        curTreGroup = filds[0];
+                    } else {
+                        if (isSecChange == true)
+                            thrcolspan.colspan = thrcolspan.colspan + colspan;
+                    }
+
+
+                }
+            }
+            //三级表头
+            if (secRowSpan == 2) {
+                if (thrcolspan.title != undefined) {
+                    threeColumns.push(thrcolspan);
+                    thrcolspan = {};
+                }
+                if (curTreGroup == "" || curTreGroup != secfilds[0]) {
+                    curTreGroup = secfilds[0];
+                    threeColumns.push({
+                        title: secfilds[0],
+                        field: '',
+                        align: 'center',
+                        colspan: secfilds.length - 1,
+                        rowspan: secRowSpan
+                    });
+                }
+            }
+
+            if (secRowSpan == 0) {
+                filds = getMutliFile(keyOfEn, thrMultiTitle);
+                if (curTreGroup == "" || curTreGroup != filds[0]) {
+                    //增加三级表头
+                    if (curTreGroup != "" && curTreGroup != filds[0]) {
+                        threeColumns.push(thrcolspan);
+                    }
+                    thrcolspan = {
+                        title: filds[0],
+                        field: '',
+                        align: 'center',
+                        colspan: 1,
+                    };
+                    curTreGroup = filds[0];
+                } else {
+                    thrcolspan.colspan = thrcolspan.colspan + 1;
+                }
+
+
+            }
+
+        }
+        function getMutliFile(keyOfEn, multi) {
+            var fields = multi.split(";");
+            for (var i = 0; i < fields.length; i++) {
+                var str = fields[i];
+                if (str == "")
+                    continue;
+                if (str.indexOf("," + keyOfEn + ",") == -1)
+                    continue;
+                var strs = str.substring(0, str.length - 1).split(",");
+                return strs;
+            }
+            return "";
+        }
         function customSort(sortName, sortOrder, data) {
             var order = sortOrder === 'desc' ? -1 : 1
             data.sort(function (a, b) {

@@ -745,7 +745,9 @@ function AfterBindEn_DealMapExt(frmData) {
                 var tbFastInput = $("#TB_" + mapExt.AttrOfOper);
 
                 //获取大文本的长度
-                var left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
+                var left = 0;
+                if (tbFastInput.parent().length!=0)
+                    left = tbFastInput.parent().css('left') == "auto" ? 0 : parseInt(tbFastInput.parent().css('left').replace("px", ""));
                 var width = tbFastInput.width() + left;
                 width = tbFastInput.parent().css('left') == "auto" ? width - 180 : width - 70;
 

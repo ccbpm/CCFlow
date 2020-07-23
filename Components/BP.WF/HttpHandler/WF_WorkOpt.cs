@@ -2249,9 +2249,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(athDt);
 
             if (this.FID != 0)
-                wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.FID, 0);
-            else
                 wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+            else
+                wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, 0);
 
             //是否只读？
             if (isReadonly == true)
@@ -2308,20 +2308,10 @@ namespace BP.WF.HttpHandler
                     if (tk.HisActionType == ActionType.FlowBBS)
                         continue;
 
-                    nd = nds.GetEntityByKey(tk.NDFrom) as Node;
-                    if (nd == null)
-                        continue;
-
-                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
-                    //求出主键
-                    long pkVal = this.WorkID;
-                    if (nd.HisRunModel == RunModel.SubThread)
-                        pkVal = this.FID;
-
-                  
                     switch (tk.HisActionType)
                     {
                         case ActionType.WorkCheck:
+                        case ActionType.Forward:
                         case ActionType.StartChildenFlow:
                         case ActionType.ForwardHL:
                             if (nodes.Contains(tk.NDFrom + ",") == false)
@@ -2340,15 +2330,9 @@ namespace BP.WF.HttpHandler
                 }
                 foreach (Track tk in tks)
                 {
-                    if (tk.HisActionType == ActionType.ForwardHL)
-                    {
-                        var sss = "";
-                    }
-
+                    
                     if (nodes.Contains(tk.NDFrom + ",") == false)
                         continue;
-
-                  
 
                     //退回
                     if (tk.HisActionType == ActionType.Return)

@@ -317,6 +317,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string CondModel = "CondModel";
         /// <summary>
+        /// 抢办发送后处理规则
+        /// </summary>
+        public const string QiangBanSendAfterRole = "QiangBanSendAfterRole";
+        /// <summary>
         /// 子流程启动方式
         /// </summary>
         public const string SubFlowStartWay = "SubFlowStartWay";

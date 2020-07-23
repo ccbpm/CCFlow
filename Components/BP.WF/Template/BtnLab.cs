@@ -1082,7 +1082,7 @@ namespace BP.WF.Template
                 // map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
                 //  map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
 
-                // add by stone 2014-11-21. 让用户可以自己定义流转.
+                // add by zhoupeng 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TCEnable, false, "是否启用", true, true);
 

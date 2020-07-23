@@ -3759,7 +3759,7 @@ namespace BP.En
 
                 int maxLen = attr.MaxLength;
                 dt = new DataTable();
-                sql = "select c.*  from syscolumns c inner join systables t on c.tabid = t.tabid where t.tabname = lower('" + this.EnMap.PhysicsTable.ToLower() + "') and c.colname = lower('" + attr.Key + "') and c.collength < " + attr.MaxLength;
+                sql = "select c.*  from syscolumns c inner join systables t on c.tabid = t.tabid where t.tabname = lower('" + this.EnMap.PhysicsTable.ToLower() + "') and c.colname = lower('" + attr.Key.ToLower() + "') and c.collength < " + attr.MaxLength;
                 dt = this.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     continue;

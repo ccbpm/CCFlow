@@ -1371,7 +1371,7 @@ namespace BP.WF
                         //记录最开始相同处理人的节点ID，用来上面查找SQL判断
                         if (beforeSkipNodeID == 0)
                             beforeSkipNodeID = prvNodeID;
-                        
+
                         Work wk = nd.HisWork;
                         wk.Copy(mywork);
                         //存储在相同的表中，不需要拷贝
@@ -2027,13 +2027,13 @@ namespace BP.WF
 
                 try
                 {
-                   
+
                     int count = toWK.RetrieveFromDBSources();
                     if (count > 0)
                         toWK.DirectUpdate(); // 如果执行了跳转.
                     else
                         toWK.DirectInsert();
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -2870,7 +2870,7 @@ namespace BP.WF
                     gwf.StarterName = this.ExecerName;
                     gwf.FK_Flow = toNode.FK_Flow;
                     gwf.FlowName = toNode.FlowName;
-                   
+
                     //干流、子线程关联字段
                     gwf.FID = this.WorkID;
 
@@ -2960,7 +2960,7 @@ namespace BP.WF
                 #endregion 产生工作的信息.
             }
             #endregion 复制数据.
-           //把domain跟新到子线程产生的workid中去 zsy 2020.7.19
+            //把domain跟新到子线程产生的workid中去 zsy 2020.7.19
             DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + this.WorkID);
             #region 处理消息提示
             string info = BP.WF.Glo.multilingual("@分流节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", toNode.Name, this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.EmpsExt);
@@ -4305,7 +4305,7 @@ namespace BP.WF
 
                 if (DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
                 {
-                 //   throw new Exception("err@审核意见不能为空." + sql);
+                    //   throw new Exception("err@审核意见不能为空." + sql);
                     throw new Exception("err@审核意见不能为空.");
                 }
             }
@@ -6326,6 +6326,35 @@ namespace BP.WF
                     throw new Exception(BP.WF.Glo.multilingual("err@发送错误:当前流程已经被退回，您不能执行发送操作。技术信息:当前工作节点是子线程状态，主线程是退回状态。", "WorkNode", "send_error_1"));
             }
 
+            //为台州处理 抢办模式下发送后提示给其他人信息.
+            if (this.HisNode.TodolistModel == TodolistModel.QiangBan
+                && this.HisNode.QiangBanSendAfterRole != QiangBanSendAfterRole.None
+                && this.HisGenerWorkFlow.TodoEmpsNum > 1)
+            {
+                //查询出来当前节点的人员.
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
+                    GenerWorkerListAttr.FK_Node, this.HisNode.NodeID);
+
+                string emps = "";
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.FK_Emp.Equals(WebUser.No) == true)
+                        continue; //如果当前人员，就排除掉.
+
+                    //要抄送给其他人.
+                    if (this.HisNode.QiangBanSendAfterRole == QiangBanSendAfterRole.CCToEtcEmps)
+                        emps += item.FK_Emp + ",";
+
+                    //要发送消息给其他人.
+                    if (this.HisNode.QiangBanSendAfterRole == QiangBanSendAfterRole.SendMsgToEtcEmps)
+                        Dev2Interface.Port_SendMsg(item.FK_Emp, this.HisGenerWorkFlow.Title + "(被[" + WebUser.Name + "]抢办)", "", "QiangBan");
+                }
+
+                if (this.HisNode.QiangBanSendAfterRole == QiangBanSendAfterRole.CCToEtcEmps)
+                    Dev2Interface.Node_CCTo(this.WorkID, emps);
+            }
+
             // 启动事务,这里没有实现,在后面做的代码补偿.
             DBAccess.DoTransactionBegin();
             try
@@ -6334,7 +6363,7 @@ namespace BP.WF
                     InitStartWorkDataV2(); // 初始化开始节点数据, 如果当前节点是开始节点.
 
                 //处理发送人，把发送人的信息放入wf_generworkflow 2015-01-14. 原来放入WF_GenerWorkerList.
-                if(this.HisGenerWorkFlow.Sender.Contains(",") == false)
+                if (this.HisGenerWorkFlow.Sender.Contains(",") == false)
                     oldSender = this.HisGenerWorkFlow.Sender; //旧发送人,在回滚的时候把该发送人赋值给他.
                 else
                     oldSender = this.HisGenerWorkFlow.Sender.Split(',')[0];
@@ -6343,7 +6372,6 @@ namespace BP.WF
                 #region 处理退回的情况.
                 if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
                 {
-
                     #region 当前节点是分流节点但是是子线程退回的节点,需要直接发送给子线程
                     if ((this.HisNode.HisRunModel == RunModel.FL || this.HisNode.HisRunModel == RunModel.FHL) && this.HisGenerWorkFlow.FID != 0)
                     {
@@ -6527,7 +6555,7 @@ namespace BP.WF
                     this.CheckCompleteCondition();
                 }
 
-                #region  处理自由流程. add by stone. 2014-11-23.
+                #region  处理自由流程. add by zhoupeng. 2014-11-23.
                 if (jumpToNode == null && this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByWorkerSet)
                 {
                     if (this.HisNode.GetParaBoolen(NodeAttr.IsYouLiTai) == true)
@@ -6599,7 +6627,7 @@ namespace BP.WF
                         }
                     }
                 }
-                #endregion  处理自由流程. add by stone. 2014-11-23.
+                #endregion  处理自由流程. add by zhoupeng. 2014-11-23.
 
                 // 处理质量考核，在发送前。
                 this.DealEval();
@@ -6642,7 +6670,6 @@ namespace BP.WF
                 }
                 #endregion 计算未来处理人.
 
-
                 #region 2019-09-25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
                 if (this.HisNode.IsStartNode && DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                 {
@@ -6663,7 +6690,6 @@ namespace BP.WF
                     this.HisGenerWorkFlow.BuessFields = exp;
                 }
                 #endregion 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
-
 
                 #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
                 // 执行节点向下发送的25种情况的判断.
@@ -6714,7 +6740,6 @@ namespace BP.WF
                 Int64 fid = this.rptGe.FID;
                 this.rptGe.Update();
                 #endregion 第二步: 5*5 的方式处理不同的发送情况.
-
 
                 #region 第三步: 处理发送之后的业务逻辑.
                 //把当前节点表单数据copy的流程数据表里.
@@ -7627,7 +7652,7 @@ namespace BP.WF
             gwl.CDT = DataType.CurrentDataTime;
             gwl.RDT = gwl.CDT;
             gwl.SDT = gwl.CDT;
-            gwl.Sender = WebUser.No+","+WebUser.Name;
+            gwl.Sender = WebUser.No + "," + WebUser.Name;
             gwl.Save();
             #endregion  补充gwl数据.让其出现在途.
 
@@ -7936,8 +7961,8 @@ namespace BP.WF
                             t.Msg += "WorkCheck@" + dt.Rows[0][0].ToString();
                             t.WriteDB = dt.Rows[0][1].ToString();
                         }
-                           
-                       
+
+
 
                         //把审核组件的立场信息保存在track表中
                         string checkTag = Dev2Interface.GetCheckTag(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID, WebUser.No);
@@ -8125,7 +8150,7 @@ namespace BP.WF
             catch
             {
                 t.CheckPhysicsTable();
-              
+
             }
 
             if (at == ActionType.SubThreadForward
@@ -8296,7 +8321,7 @@ namespace BP.WF
             this.CheckCompleteCondition_IntCompleteEmps();
 
             // 如果结束流程，就增加如下信息 翻译.
-            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
+            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
             this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
 
             this.rptGe.FlowEnder = BP.Web.WebUser.No;
@@ -8544,7 +8569,7 @@ namespace BP.WF
             }
             else
             {
-                #warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
+#warning 为了不让其显示在途的工作需要， =3 不是正常的处理模式。
                 ps = new Paras();
                 ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3,FID=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
                 ps.Add("FK_Node", nd.NodeID);

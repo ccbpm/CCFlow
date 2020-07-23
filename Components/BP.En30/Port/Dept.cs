@@ -186,7 +186,7 @@ namespace BP.Port
         }
         #endregion 初始化实体.
 
-        #region 重写查询,add by stone 2015.09.30 为了适应能够从webservice数据源查询数据.
+        #region 重写查询,add by zhoupeng 2015.09.30 为了适应能够从webservice数据源查询数据.
         /// <summary>
         /// 重写查询全部适应从WS取数据需要
         /// </summary>

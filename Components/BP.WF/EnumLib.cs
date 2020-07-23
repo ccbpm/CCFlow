@@ -103,7 +103,6 @@ namespace BP.WF
         /// 任意组长为主
         /// </summary>
         EveryOneMain = 2
-
     }
     /// <summary>
     /// 方向条件控制规则
@@ -123,7 +122,24 @@ namespace BP.WF
         /// </summary>
         SendButtonSileSelect=2
     }
-     
+    /// <summary>
+    /// 抢办发送后执行规则
+    /// </summary>
+    public enum QiangBanSendAfterRole
+    {
+        /// <summary>
+        /// 不处理
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 抄送给其他人
+        /// </summary>
+        CCToEtcEmps = 1,
+        /// <summary>
+        /// 发送消息给其他人
+        /// </summary>
+        SendMsgToEtcEmps = 2
+    }
     /// <summary>
     /// 待办工作超时处理方式
     /// </summary>

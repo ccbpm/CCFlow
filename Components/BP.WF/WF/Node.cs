@@ -33,6 +33,16 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 抢办发送后处理规则
+        /// </summary>
+        public QiangBanSendAfterRole QiangBanSendAfterRole
+        {
+            get
+            {
+                return (QiangBanSendAfterRole)this.GetValIntByKey(NodeAttr.QiangBanSendAfterRole);
+            }
+        }
+        /// <summary>
         /// 超时处理方式
         /// </summary>
         public OutTimeDeal HisOutTimeDeal

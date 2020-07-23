@@ -5477,7 +5477,7 @@ namespace BP.WF
         /// <summary>
         /// 是否可以查看流程数据
         /// 用于判断是否可以查看流程轨迹图.
-        /// edit: stone 2015-03-25
+        /// edit: zhoupeng 2015-03-25
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">工作ID</param>

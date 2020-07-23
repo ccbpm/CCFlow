@@ -833,7 +833,7 @@ namespace BP.Sys
                 map.AddTBInt(MapExtAttr.DBType, 0, "数据类型", true, false);
                 map.AddTBString(MapExtAttr.FK_DBSrc, null, "数据源", true, false, 0, 100, 20);
 
-                // add by stone 2013-12-21 计算的优先级,用于js的计算. 
+                // add by zhoupeng 2013-12-21 计算的优先级,用于js的计算. 
                 // 也可以用于 字段之间的计算 优先级.
                 map.AddTBInt(MapExtAttr.PRI, 0, "PRI/顺序号", false, false);
                 map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 3999, 20);

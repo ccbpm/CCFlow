@@ -13,7 +13,7 @@ $(function () {
     var checkData = WorkCheck_Init();
 
     //当前节点审核组件信息
-    frmWorkCheck = checkData.WF_FrmWorkCheck[0];
+   frmWorkCheck = checkData.WF_FrmWorkCheck[0];
 
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
@@ -96,32 +96,10 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField) {
         return "";
     var _Html = '<table style="width:100%">';
 
-    //查询出来被谁引用了? 涉及到一个签批组件，在多个节点上被引用的情况.
-    var frmNodes = frmData.FrmNodes;
-    // var frmNodes = new Entities("BP.WF.Template.FrmNodes");
-    //frmNodes.Retrieve("CheckField", keyOfEn);
-    var nodes = "";
-    for (var i = 0; i < length; i++) {
-        var frmNode = frmNodes[i];
-        if (frmNode.CheckField != keyOfEn)
-            continue;
-        nodes += "," + frmNode.FK_Node;
-    }
-
-    //, "CheckField",
-    //var currNode = $("#TB_" + keyOfEn).val();
-    //var nodeIDs="".
-
     for (var i = 0; i < tracks.length; i++) {
-
         var track = tracks[i];
-
-        //if ($("#TB_" + keyOfEn).length != 0
-        //    && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
-        //    continue;
-        if (nodes.indexOf("," + track.NodeID) == -1)
+        if ($("#TB_" + keyOfEn).length != 0 && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
             continue;
-
         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck);
     }
     _Html += "</table>";
@@ -281,28 +259,28 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //输出签名,没有签名的要求.
     if (SignType == null || SignType == undefined) {
 
-
+        
 
         //签名，日期.
         //_Html += "<tr>";
-        if (track.RDT == "")
-            _Html += "<td style='text-align:right;width:100%;border-top-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
+        if (track.RDT == "" )
+            _Html += "<td style='text-align:right;width:100%;border-top-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>" ;
         else
-            _Html += "<td style='text-align:right;border-top-style:none;border-color:#ddd'>";
-
+            _Html += "<td style='text-align:right;border-top-style:none;border-color:#ddd'>" ;
+      
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;
         else if (frmWorkCheck.SigantureEnabel == "1")
             _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
-        else if (frmWorkCheck.SigantureEnabel == "2")
-            _Html += GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT);
+        else if (frmWorkCheck.SigantureEnabel == "2") 
+            _Html += GetUserHandWriting(track, isEditWorkCheck,track.EmpFromT);
 
         var rdt = track.RDT.substring(0, 16);
         if (rdt == "") {
             var dt = new Date();
             rdt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
         }
-        _Html += "(" + rdt + ")";
+        _Html += "(" + rdt+")";
         _Html += "</td>";
 
         _Html += "</tr>";
@@ -351,7 +329,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 _Html += "<tr>";
                 _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:"
                     + GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT);
-                + "日期:" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
+                    + "日期:" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 //  alert('电子签名的逻辑尚未编写.');
                 break;
@@ -489,23 +467,23 @@ function GetUserSiganture(userNo, userName) {
     if (data.length > 0)
         return userName;
 
-    return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo + "' />";
+    return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo+"' />";
 }
 
-var writeImg = "";
+var writeImg="";
 //签字版
-function GetUserHandWriting(track, isEditWorkCheck, userName) {
+function GetUserHandWriting(track,isEditWorkCheck,userName) {
     if (isEditWorkCheck == false) {
         if (track.WritImg == null || track.WritImg == "")
             return userName;
-        return "<img src='" + track.WritImg.replace(/' '/, '') + "'  style='height:40px;' border=0  />";
+        return "<img src='" + track.WritImg.replace(/' '/,'')+ "'  style='height:40px;' border=0  />";
     }
     writeImg = track.WritImg;
-    return "<img id='Img_WorkCheck' src='" + track.WritImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:40px;'  />";
+    return "<img id='Img_WorkCheck' src='" + track.WritImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:40px;'  />";    
 }
 
 function openHandWriting() {
-    var url = "CCForm/HandWriting.htm?WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + pageData.FK_Node + "&WritType=WorkCheck";
+    var url = "CCForm/HandWriting.htm?WorkID=" + pageData.WorkID+"&FK_Flow="+pageData.FK_Flow+"&FK_Node="+pageData.FK_Node+"&WritType=WorkCheck";
     OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
 }
 

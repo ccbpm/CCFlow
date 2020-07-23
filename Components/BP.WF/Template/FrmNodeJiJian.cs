@@ -144,7 +144,7 @@ namespace BP.WF.Template
 
 
                 RefMethod rm = new RefMethod();
-                
+
                 //rm.Title = "启用规则";
                 //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;

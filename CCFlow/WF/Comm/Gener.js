@@ -2742,7 +2742,8 @@ function DealExp(expStr, webUser) {
         } else if (obj == "select") {
             NodeValue = decodeURI(objs[i].value);
         }
-        expStr = expStr.replace("@" + NodeID.substring(NodeID.indexOf("_") + 1), NodeValue);
+        var key = "@"+NodeID.substring(NodeID.indexOf("_") + 1);
+        expStr = expStr.replace(new RegExp(key, 'g'), NodeValue);
     }
 
     return expStr;

@@ -105,7 +105,7 @@ namespace BP.Sys.FrmUI
 
                 //map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
 
-                //map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "可见", true, false);

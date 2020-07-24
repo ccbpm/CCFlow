@@ -1069,8 +1069,9 @@ namespace BP.Sys
                     sql += sqlWhere;
                 }
                 GEEntity en = null;
-                if(DataType.IsNullOrEmpty(oid) == false)
+                if(DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
                     en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+                    
                 sql = DealExp(sql,paras, en);
                
                if (sql.Contains("@") == true)

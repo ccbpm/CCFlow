@@ -1590,7 +1590,7 @@ namespace BP.WF
             gwl.FK_Node = this.JumpToNode.NodeID;
             gwl.WorkID = this.WorkID;
             if (gwl.RetrieveFromDBSources() == 0)
-                throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人期望的数据.", "WorkNode", "not_found_receiver_expected_data", new string[0]));
+                throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人期望的数据，在协作模式的按照顺序退回的时候.", "WorkNode", "not_found_receiver_expected_data", new string[0]));
 
             #region 要计算当前人员的应完成日期
             // 计算出来 退回到节点的应完成时间. 
@@ -6392,15 +6392,16 @@ namespace BP.WF
                         myGwl.FK_Node = this.HisNode.NodeID;
                         myGwl.WorkID = this.WorkID;
                         if (myGwl.RetrieveFromDBSources() == 0)
-                            throw new Exception(BP.WF.Glo.multilingual("@没有找到自己期望的数据.", "WorkNode", "not_found_my_expected_data", new string[0]));
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到自己期望的数据，再退回并发送的时候.", "WorkNode", "not_found_my_expected_data", new string[0]));
                         myGwl.IsPass = false;
                         myGwl.IsPassInt = -2;
                         myGwl.Update();
 
                         GenerWorkerLists gwls = new GenerWorkerLists();
-                        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisGenerWorkFlow.WorkID, GenerWorkerListAttr.FK_Node, this.JumpToNode.NodeID, GenerWorkerListAttr.IsPass, 5);
+                        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisGenerWorkFlow.WorkID,
+                            GenerWorkerListAttr.FK_Node, this.JumpToNode.NodeID, GenerWorkerListAttr.IsPass, 5);
                         if (gwls.Count == 0)
-                            throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人期望的数据.", "WorkNode", "not_found_receiver_expected_data", new string[0]));
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到退回节点的工作人员列表数据.[WorkID="+this.HisGenerWorkFlow.WorkID+"]", "WorkNode", "not_found_receiver_expected_data", new string[0]));
 
                         GenerWorkerList gwl = gwls[0] as GenerWorkerList;
 

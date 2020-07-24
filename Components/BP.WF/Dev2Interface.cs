@@ -6181,7 +6181,10 @@ namespace BP.WF
             GenerWorkerList gwl = new GenerWorkerList();
             int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
             if (i == 0)
-                return "err@没有找到当前的待办人员.";
+            {
+                //不做判断了，有时候退回数据异常没有待办.
+              //  return "err@没有找到当前的待办人员.";
+            }
 
             //删除当前节点人员信息.
             gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);

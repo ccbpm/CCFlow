@@ -415,7 +415,7 @@ namespace BP.WF.HttpHandler
                         string msg = BP.WF.Glo.DefVal_WF_Node_FWCDefInfo; // 设置默认值;
                         if (workCheck.FWCIsFullInfo == true)
                             msg = workCheck.FWCDefInfo;
-                        BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, this.currND.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel,null);
+                        BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, this.currND.NodeID, gwf.WorkID, gwf.FID, msg, workCheck.FWCOpLabel, null);
                     }
 
                     BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, gwf.WorkID);
@@ -568,6 +568,7 @@ namespace BP.WF.HttpHandler
                     frmtype = nd.HisFormType;
                 }
             }
+
             #region 内置表单类型的判断.
 
             if (frmtype == NodeFormType.FoolTruck)
@@ -2657,7 +2658,7 @@ namespace BP.WF.HttpHandler
 
                 //如果错误，就写标记.
                 string msg = ex.Message;
-                if (msg.IndexOf("err@") == -1 && msg.IndexOf("url@")!=0)
+                if (msg.IndexOf("err@") == -1 && msg.IndexOf("url@") != 0)
                     msg = "err@" + msg;
                 return msg;
             }
@@ -3025,7 +3026,7 @@ namespace BP.WF.HttpHandler
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
-                    
+
                     case FrmEnableRole.ByStation:
                         string exp = frmNode.FrmEnableExp.Clone() as string;
                         string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
@@ -3045,7 +3046,7 @@ namespace BP.WF.HttpHandler
                         if (isExit == false)
                             continue;
                         break;
-                    
+
                     case FrmEnableRole.ByDept:
                         exp = frmNode.FrmEnableExp.Clone() as string;
                         Sql = "SELECT FK_Dept FROM Port_DeptEmp where FK_Emp='" + WebUser.No + "'";
@@ -3342,8 +3343,12 @@ namespace BP.WF.HttpHandler
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No);
 
+                json = BP.Tools.Json.ToJson(ds);
+
+                //ds.WriteXml("c:generWorkNodeJS.xml");
+                //BP.DA.DataType.WriteFile("c:\\generWorkNodeJS.txt", json);
+
                 // ds.Tables.Add(wf_generWorkFlowDt);
-                // ds.WriteXml("c:\\xx.xml");
 
                 if (WebUser.SysLang.Equals("CH") == true)
                     return BP.Tools.Json.ToJson(ds);
@@ -3357,7 +3362,7 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 处理多语言.
 
-                return BP.Tools.Json.ToJson(ds);
+                return json;
             }
             catch (Exception ex)
             {

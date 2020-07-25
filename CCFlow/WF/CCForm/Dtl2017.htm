@@ -734,10 +734,11 @@
                 if (sys_MapDtl.IsEnableAthM == 1) {
 
                     //引入js
-                    Skip.addJs("./Ath.js", parent.document.getElementsByTagName('script')[0]);
-                    Skip.addJs("./JS/FileUpload/fileUpload.js", parent.document.getElementsByTagName('script')[0]);
-                    Skip.addJs("../Scripts/jquery-form.js", parent.document.getElementsByTagName('script')[0]);
-                    Skip.addJs("../../DataUser/OverrideFiles/Ath.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs(basePath+"/WF/CCForm/Ath.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs(basePath +"/WF/CCForm/JS/FileUpload/fileUpload.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs(basePath +"/WF/Scripts/jquery-form.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs(basePath +"/DataUser/OverrideFiles/Ath.js", parent.document.getElementsByTagName('script')[0]);
+                    parent.$('head').append("<link href='" + basePath +"/WF/CCForm/JS/FileUpload/css/fileUpload.css' rel='stylesheet' type='text/css' />");
                     athTh.data(athThData);
                     threadTr.append(athTh);
 
@@ -2851,6 +2852,8 @@
                 return $(tr).find("[name=DDL_" + ctrlID + ']').val(val);
             }
         }
+
+     
     </script>
     <!--DIVINFO-->
     <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; text-align: left; border-color:Black'></div>

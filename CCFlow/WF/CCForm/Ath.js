@@ -2,7 +2,7 @@
 
 //1.初始化附件全局使用的参数
 var AthParams = {};
-
+var athRefPKVal = 0;
 AthParams.AthInfo = {};
 
 /**
@@ -13,19 +13,19 @@ AthParams.AthInfo = {};
 function AthTable_Init(athchment, athDivID, refPKVal) {
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
-    if (refPKVal == null || refPKVal == undefined)
-        AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
+    if (refPKVal == null || refPKVal == undefined || refPKVal == 0)
+        athRefPKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
     else
-        AthParams.PKVal = refPKVal
-    
+        athRefPKVal = refPKVal;
+
     AthParams.FK_MapData = athchment.FK_MapData;
 
     //2.上传的URL的设置
     var uploadUrl = "";
     if (plant == 'CCFlow')
-        uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + athchment.MyPK + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + AthParams.PKVal;
+        uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + athchment.MyPK + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
     else {
-        uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + athchment.MyPK + '&FK_Flow=' + pageData.FK_Flow + "&PKVal=" + AthParams.PKVal;
+        uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + athchment.MyPK + '&FK_Flow=' + pageData.FK_Flow + "&PKVal=" + athRefPKVal;
     }
     uploadUrl += "&WorkID=" + pageData.WorkID;
     uploadUrl += "&FID=" + pageData.FID;
@@ -37,7 +37,6 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
     InitAthPage(athDivID, uploadUrl);
 
     //4.调用附件上传的功能
-    
 
     $("#fileUpload_" + athchment.MyPK).initUpload({
         "uploadUrl": uploadUrl,//上传文件信息地址
@@ -91,11 +90,15 @@ function beforeUploadFun(opt) {
 * @param athDivID 生成的附件信息追加的位置
 */
 function InitAthPage(athDivID, uploadUrl) {
+    AthParams.PKVal = athRefPKVal;
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddUrlData();
-    handler.AddPara("RefOID", AthParams.PKVal);
-    handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_",""))
+    if (athDivID.indexOf("_AthMDtl")!=-1)
+        handler.AddPara("RefOID", AthParams.PKVal == undefined ? pageData.WorkID : AthParams.PKVal);
+    //alert("RefOID=" + AthParams.PKVal);
+    handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_", ""));
+    handler.AddPara("FK_MapData", AthParams.FK_MapData);
     var data = handler.DoMethodReturnString("Ath_Init");
 
     if (data.indexOf('err@') == 0) {

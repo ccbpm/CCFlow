@@ -10,10 +10,14 @@ AthParams.AthInfo = {};
 * @param athchment 附件属性
 * @param athDivID 生成的附件信息追加的位置
 */
-function AthTable_Init(athchment, athDivID) {
+function AthTable_Init(athchment, athDivID, refPKVal) {
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
-    AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
+    if (refPKVal == null || refPKVal == undefined)
+        AthParams.PKVal = pageData.WorkID == 0 ? pageData.OID : pageData.WorkID;
+    else
+        AthParams.PKVal = refPKVal
+    
     AthParams.FK_MapData = athchment.FK_MapData;
 
     //2.上传的URL的设置
@@ -90,7 +94,7 @@ function InitAthPage(athDivID, uploadUrl) {
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddUrlData();
-    handler.AddPara("PKVal", AthParams.PKVal);
+    handler.AddPara("RefOID", AthParams.PKVal);
     handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_",""))
     var data = handler.DoMethodReturnString("Ath_Init");
 

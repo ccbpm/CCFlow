@@ -255,7 +255,7 @@
         }
 
         //打开附件.
-        function Ath(index) {
+        function OpenDtlAth(index) {
             var dtlOID = $(index).parent().parent().data().data.OID;
             var workID = $(index).parent().parent().data().data.RefPK;
             var IsCloseDialog = false;
@@ -267,25 +267,25 @@
             var IsReadonly = GetQueryString("IsReadonly");
 
             var parentUrl = parent.location.href;
-            var url = "CCForm/Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData + "&IsReadonly=" + IsReadonly;
+            var url = "CCForm/Ath.js?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData + "&IsReadonly=" + IsReadonly;
             var AthNum = 0;
+            var content = parent.document.getElementById("Dtl_" + dtlName).contentWindow;
             if (parentUrl.indexOf("CCForm") != -1) {
                 url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData + "&IsReadonly=" + IsReadonly;
                 WinOpen(url);
             } else {
-                parent.OpenEasyUiDialog(url, 'DtlAthIFrame', '附件上传', 800, 500, "icon-property", false, null, null, null, function () {
+                parent.OpenBootStrapModalByContent(url, "AthTable_Init('" + dtlName + "_AthMDtl','Div_" + dtlName + "_AthMDtl'," + dtlOID+")", 'Div_' + dtlName + '_AthMDtl', "从表多附件", 800, 500, "icon-property", null, null, null, function () {
                     //关闭窗口事件
                     var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-                    var content = parent.document.getElementById("Fd" + dtlName).contentWindow;
                     content.$("#Ath_" + rowCurrentIndex).html(AthNum);
                     content.$("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
-                    alert($("#Ath_0").text());
-
-                }, function () {
-                    //获取DtlAthIFrame的numOfAths值
-                    AthNum = parent.document.getElementById("DtlAthIFrame").contentWindow.numOfAths;
 
                 });
+                //, function () {
+                //   //获取DtlAthIFrame的numOfAths值
+                //   AthNum = parent.document.getElementById("DtlAthIFrame").contentWindow.numOfAths;
+
+                //});
 
                 if (IsCloseDialog) {
 
@@ -321,7 +321,7 @@
             if (statisticsFlag && newRowIndex > 0) {	// 统计行不计
                 newRowIndex--;
             }
-            
+
             var threadTh = getUseHeadTh();
             $.each(threadTh, function (k, threadThObj) {
 
@@ -442,10 +442,10 @@
 
                 }
             });
-           
-           
 
-             var trData = { data: {} };
+
+
+            var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
                 var defVal = undefined;
                 //设置新增时的默认值
@@ -455,16 +455,16 @@
                     defVal = workNodeData.Blank[0][mapAttr.KeyOfEn];
                 }
 
-               if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (defVal == "10002" || defVal == "10002.0000"))
+                if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (defVal == "10002" || defVal == "10002.0000"))
                     defVal = "";
-               trData.data[mapAttr.KeyOfEn] = defVal;
+                trData.data[mapAttr.KeyOfEn] = defVal;
             })
 
             trData.data["OID"] = 0;
             insertTr.data(trData);
             insertTr.append($('<td> <a href="#" onclick="deleteRow(this)" >移除</a></td>'));
 
-           
+
 
             // 生成统计行
             if (window.columnExp && !statisticsFlag) {
@@ -493,7 +493,7 @@
 
             } catch (e) {
             }
-            
+
 
             setTdDataByTrData(newRowIndex);
 
@@ -506,7 +506,7 @@
         }
 
         function findElementTags(elements, tag) {
-            return 
+            return
         }
         function setIframeHeight() {
             var h = $("body").height();
@@ -563,7 +563,7 @@
             }
 
             return threadTh;
-           
+
         }
         //初始化数据.
         var sys_MapDtl; //从表的属性
@@ -651,7 +651,7 @@
 
             // 表头start --------------------
             if ($('#dtlDiv div table thead tr').length == 0) {
-                var multi = GetPara(sys_MapDtl.AtPara,"MultiTitle");
+                var multi = GetPara(sys_MapDtl.AtPara, "MultiTitle");
                 if (multi != null && multi != undefined && multi != "")
                     isMulti = true;
                 var rowspan = "rowspan=1";
@@ -670,7 +670,7 @@
                 var EditModel = sys_MapDtl.EditModel;
                 window.EditModel = EditModel;
 
-                var snTh = $('<th data-coltype="SN" ' + rowspan+' style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
+                var snTh = $('<th data-coltype="SN" ' + rowspan + ' style=\'width:20px;\' ><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow(' + EditModel + ')" /></th>');
 
                 threadTr.append(snTh);
                 $.each(sys_mapAttr, function (i, mapAttrObj) {
@@ -678,11 +678,11 @@
                     var mustInput = "";
                     if (mapAttrObj.UIIsInput == 1)
                         mustInput = '<span style="color:red" class="mustInput" data-keyofen="' + mapAttrObj.KeyOfEn + '">*</span>';
-                    
+
                     if (isMulti == false || multi.indexOf(mapAttrObj.KeyOfEn + ",") == -1) {
-                        var th = $('<th class="thStyle"'  + rowspan+'></th>');
+                        var th = $('<th class="thStyle"' + rowspan + '></th>');
                         if (mapAttrObj.MyDataType == 8)
-                            th = $('<th data-coltype="Money"' + rowspan +'></th>');
+                            th = $('<th data-coltype="Money"' + rowspan + '></th>');
 
                         th.text(mapAttrObj.Name);
                         th.data(mapAttrObj);
@@ -691,21 +691,21 @@
                             th.css("display", "none");
                         th.data().colname = mapAttrObj.KeyOfEn;
                         th.append(mustInput);
-                       
+
                         threadTr.append(th);
                     } else {
                         var fields = getMutliField(mapAttrObj.KeyOfEn, multi);
                         if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
                             var info = fields.join(",");
-                            info = "Multi,"+info.substring(info.indexOf(",") + 1)+",";
-                            var th = $('<th class="thStyle" style="text-align:center" data-info="'+info+'" colspan=' + (fields.length-1)+'></th>');
+                            info = "Multi," + info.substring(info.indexOf(",") + 1) + ",";
+                            var th = $('<th class="thStyle" style="text-align:center" data-info="' + info + '" colspan=' + (fields.length - 1) + '></th>');
                             th.text(fields[0]);
                             threadTr.append(th);
                             currentGroup = fields[0];
                         }
-                        var th = $('<th class="thStyle" data-info="' + mapAttrObj.KeyOfEn+'"></th>');
+                        var th = $('<th class="thStyle" data-info="' + mapAttrObj.KeyOfEn + '"></th>');
                         if (mapAttrObj.MyDataType == 8)
-                            th = $('<th data-coltype="Money" data-info="' + mapAttrObj.KeyOfEn +'"></th>');
+                            th = $('<th data-coltype="Money" data-info="' + mapAttrObj.KeyOfEn + '"></th>');
 
                         th.text(mapAttrObj.Name);
                         th.data(mapAttrObj);
@@ -717,21 +717,27 @@
 
                         secondTr.append(th);
                     }
-                   
+
                 });
 
                 //增加附件.
-                var athTh = $('<th style="width:50px;"'+rowspan+'>附件</th>');
+                var athTh = $('<th style="width:50px;"' + rowspan + '>附件</th>');
                 var athThData;
                 athThData = {
                     custom: true,
                     customcontent: 1,
-                    customcontent1: "a@href='javaScript:void(0);' onclick='Ath(this)' style='margin-left:20px' titile=附件 @<i class='fa fa-upload' aria-hidden='true'></i>",
+                    customcontent1: "a@href='javaScript:void(0);' onclick='OpenDtlAth(this)' style='margin-left:20px' titile=附件 @<i class='fa fa-upload' aria-hidden='true'></i>",
                     coltype: 'Operation1'
 
                 };
 
                 if (sys_MapDtl.IsEnableAthM == 1) {
+
+                    //引入js
+                    Skip.addJs("./Ath.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs("./JS/FileUpload/fileUpload.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs("../Scripts/jquery-form.js", parent.document.getElementsByTagName('script')[0]);
+                    Skip.addJs("../../DataUser/OverrideFiles/Ath.js", parent.document.getElementsByTagName('script')[0]);
                     athTh.data(athThData);
                     threadTr.append(athTh);
 
@@ -739,7 +745,7 @@
 
                 //超链接
                 if (sys_MapDtl.IsEnableLink == 1) {
-                    var linkTh = $('<th style="width:50px;"' + rowspan +'>链接</th>');
+                    var linkTh = $('<th style="width:50px;"' + rowspan + '>链接</th>');
                     var target = sys_MapDtl.LinkTarget;
                     var LinkLabel = sys_MapDtl.LinkLabel;
                     var linkThData;
@@ -762,10 +768,10 @@
                 var IsExp = sys_MapDtl.IsImp;//导出
                 var th = $("<th style='width:100px;'" + rowspan + "></th>");
                 var imgStr = '<img title="保存" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
-                if (IsExp==1 ) {
+                if (IsExp == 1) {
 
                     imgStr += '<img title="导出" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
-                } 
+                }
                 if (impModel != 0) {
 
                     imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
@@ -804,7 +810,7 @@
                 //添加删除列
                 //var delTh = $('<th></th>');
                 //添加保存列
-                delTh = $('<th style=""' + rowspan +'></th>');
+                delTh = $('<th style=""' + rowspan + '></th>');
                 delTh.text("操作");
                 var delThData = {
                     custom: true,
@@ -858,9 +864,9 @@
                                     tmplate.attr("disabled", "disabled");
                                 }
                                 var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
-                                var mapAttr = o.data();                              
-                                    //枚举复选框
-                                if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2" && mapAttr.LGType == 1){
+                                var mapAttr = o.data();
+                                //枚举复选框
+                                if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2" && mapAttr.LGType == 1) {
                                     $.each(tmplate, function (idx, obj) {
                                         if (obj.nodeName != "LABEL") {
                                             $(obj).attr('name', $(obj).attr('name') + '_' + rowIndex);
@@ -882,26 +888,26 @@
                                     $($(tbodyTrObj).children('td')[k]).text('');
                                     $($(tbodyTrObj).children('td')[k]).append(tmplate);
                                     //枚举单选按钮
-                                }else if(mapAttr.MyDataType == "2" && mapAttr.UIContralType == "3") {
-                                        $.each(tmplate, function (idx, obj) {
-                                            if (obj.nodeName != "LABEL") {
-                                                $(obj).attr('name', $(obj).attr('name') + '_' + rowIndex);
-                                                $(obj).attr('id', $(obj).attr('id') + '_' + rowIndex);
-                                                $(obj).data({ KeyOfEn: o.data().KeyOfEn });
-                                            }
-                                        });
-                                                                             
-                                        var radioEles = $.grep(tmplate, function (obj) {
-                                            return $(obj).attr('name') == 'RB_' + o.data().KeyOfEn;
-                                        });
+                                } else if (mapAttr.MyDataType == "2" && mapAttr.UIContralType == "3") {
+                                    $.each(tmplate, function (idx, obj) {
+                                        if (obj.nodeName != "LABEL") {
+                                            $(obj).attr('name', $(obj).attr('name') + '_' + rowIndex);
+                                            $(obj).attr('id', $(obj).attr('id') + '_' + rowIndex);
+                                            $(obj).data({ KeyOfEn: o.data().KeyOfEn });
+                                        }
+                                    });
 
-                                        var textVal = $($(tbodyTrObj).children('td')[k]).text();
-                                        $.each(radioEles, function () {
-                                            if (textVal == $(this).val())
-                                                $(this).attr("checked", true);
-                                            else
-                                                $(this).attr("checked", false);
-                                        });
+                                    var radioEles = $.grep(tmplate, function (obj) {
+                                        return $(obj).attr('name') == 'RB_' + o.data().KeyOfEn;
+                                    });
+
+                                    var textVal = $($(tbodyTrObj).children('td')[k]).text();
+                                    $.each(radioEles, function () {
+                                        if (textVal == $(this).val())
+                                            $(this).attr("checked", true);
+                                        else
+                                            $(this).attr("checked", false);
+                                    });
                                     $($(tbodyTrObj).children('td')[k]).text('');
                                     $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
@@ -968,8 +974,8 @@
                                     $($(tbodyTrObj).children('td')[k]).text('');
                                     $($(tbodyTrObj).children('td')[k]).append(tmplate);
                                 }
-                                
-                                
+
+
 
                                 if (tmplate.attr('name') != undefined && tmplate.length == 1 && tmplate.attr('name').indexOf('TB_') == 0) {
                                     $(tmplate).bind('blur', function (obj) {
@@ -977,30 +983,30 @@
                                     });
                                 } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0 || (tmplate.length > 1 && $(tmplate[1]).attr('name') != undefined && $(tmplate[1]).attr('name').indexOf('DDL_') == 0)) {
                                     //对于只读的下拉框做如下处理  为只读的下拉框赋值.
-                                    
 
-                                        if (o.data().UIIsEnable == "0") {
-                                            if ($(tbodyTrObj).data().hasOwnProperty('data')) {//没有数据时会报错,导致发送失败
-                                                var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
-                                                var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
-                                                if (tmplate.length > 1)
-                                                    ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"];
-                                                var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
-                                                if (tmplate.length > 1) {
-                                                    $(tmplate[1]).children().remove();
-                                                    $(tmplate[1]).append(option);
-                                                } else {
-                                                    $(tmplate).children().remove();
-                                                    $(tmplate).append(option);
-                                                }
+
+                                    if (o.data().UIIsEnable == "0") {
+                                        if ($(tbodyTrObj).data().hasOwnProperty('data')) {//没有数据时会报错,导致发送失败
+                                            var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
+                                            var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                            if (tmplate.length > 1)
+                                                ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "T"];
+                                            var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
+                                            if (tmplate.length > 1) {
+                                                $(tmplate[1]).children().remove();
+                                                $(tmplate[1]).append(option);
+                                            } else {
+                                                $(tmplate).children().remove();
+                                                $(tmplate).append(option);
                                             }
-                                        } else {
-                                            $(tmplate).bind('change', function (obj) {
-                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
-
-                                            });
                                         }
-                                    
+                                    } else {
+                                        $(tmplate).bind('change', function (obj) {
+                                            $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
+
+                                        });
+                                    }
+
                                 } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
                                     $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
                                         $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] = $(tmplate).find('[name^=CB_]')[0].checked == true ? 1 : 0;
@@ -1105,7 +1111,7 @@
 
         }
 
-       
+
         function triggerStatistics() {
             $.each(getUseHeadTh(), function (i, th) {
                 var matchesColumn = [];
@@ -1190,7 +1196,7 @@
         function doAlignColumns() {
             // 对齐列单元格
             var headerCount = getUseHeadTh().length;
-            $.each(getUseHeadTh(),function (hi, th) {
+            $.each(getUseHeadTh(), function (hi, th) {
                 var realWidth = $(this).outerWidth(true);
                 var tpaddWidth = realWidth - $(this).width();
                 var definedWidth = $(this).data().UIWidth;
@@ -1225,7 +1231,7 @@
                             td.width(width - 1);
                         } else {
                             td.width(width - 3);
-                            if (children.length==1)
+                            if (children.length == 1)
                                 children.width(width - paddWidth - 5);
                         }
                     });
@@ -1283,7 +1289,7 @@
                 }
                 expVal = sum;
 
-                
+
                 //sum = formatNumber(sum, 2, ',');
 
                 template.val(sum);
@@ -1417,7 +1423,7 @@
 
             window.location.href = url;
         }
-         //选项 导出功能.
+        //选项 导出功能.
         function ExpOption() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
@@ -1497,17 +1503,17 @@
                         var name = $(obj).attr('name').replace("_" + rowIndex, "");
                         if (name.indexOf('CB_') == 0) {
                             keyOfEn = name.substring(3);
-                            if(obj.checked == true)
-                                value += obj.value +',';
+                            if (obj.checked == true)
+                                value += obj.value + ',';
                         }
                     });
-                   
+
                 }
                 if (radio.length != 0) {
                     var name = $(radio[0]).attr('name');
-                    keyOfEn = name.substring(3).replace("_" + rowIndex,"");
+                    keyOfEn = name.substring(3).replace("_" + rowIndex, "");
                     value = tdObj.find('input[type=radio]:checked ').val();
-                   
+
                 }
                 if (keyOfEn != "" && tr.data().customRowType != "statistics" && trData[keyOfEn] != undefined) {
                     trData[keyOfEn] = value;
@@ -1627,16 +1633,16 @@
                                     br = "<br>";
 
                                 var checked = "";
-                                if(("," + defValue + ",").indexOf("," + se.No + ",") != -1)
+                                if (("," + defValue + ",").indexOf("," + se.No + ",") != -1)
                                     checked = " checked=true";
 
                                 eleHtml += "<input type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.No + "' value='" + se.No + "' " + checked + enableAttr + "/><label>" + se.Name + "&nbsp;</label>" + br;
                             }
-                            
+
                         }
                         //添加文本框 ，日期控件等
                         //AppString
-                       else  if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
+                        else if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
 
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + " onChange='ChangeValue(this)'>" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
@@ -1778,7 +1784,7 @@
                 eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
             }
             eleHtml = $(eleHtml);
-           
+
             if ((mapAttr.MyDataType == "1" && mapAttr.UIContralType == "2"
                 || (mapAttr.MyDataType == "2" && mapAttr.UIContralType == "3")) && mapAttr.LGType == 1) {
                 defValue = "," + defValue + ",";
@@ -1789,14 +1795,14 @@
                         else
                             $(this).attr("checked", false);
                     }
-                    
+
                 });
             } else {
                 eleHtml.css('width', mapAttr.UIWidth);
                 eleHtml.val(defValue);
             }
-            
-                
+
+
 
             eleHtml.bind('focus', blurEvent);
             if (eleHtml.find('[name^=CB_]').length == 1) { //CHECKBOX 处理
@@ -1991,13 +1997,14 @@
 
         /**/</script>
     <style type="text/css">
-        .table thead,.table tbody {
-            width:100%;
-            box-sizing:border-box;
+        .table thead, .table tbody {
+            width: 100%;
+            box-sizing: border-box;
         }
-        input[type=text], input[type=password], select{
-            width:120px!important;
-            box-sizing:border-box;
+
+        input[type=text], input[type=password], select {
+            width: 120px !important;
+            box-sizing: border-box;
         }
     </style>
 </head>

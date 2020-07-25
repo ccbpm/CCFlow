@@ -134,7 +134,7 @@ Skip.includeJsSrc = function (rootObject, fileUrl) {
     }
 },
 //同步加载
-Skip.addJs = function (url) {
+Skip.addJs = function (url,rootObject) {
     var oXmlHttp = Skip.getXmlHttpRequest();
     oXmlHttp.onreadystatechange = function () {//其实当在第二次调用导入js时,因为在浏览器当中存在这个*.js文件了,它就不在访问服务器,也就不在执行这个方法了,这个方法也只有设置成异步时才用到
         if (oXmlHttp.readyState == 4) { //当执行完成以后(返回了响应)所要执行的
@@ -149,7 +149,8 @@ Skip.addJs = function (url) {
     //2.同步执行oXmlHttp.send()方法后oXmlHttp.responseText有返回对应的内容,而异步还是为空,只有在oXmlHttp.readyState == 4时才有内容,反正同步的在oXmlHttp.send()后的操作就相当于oXmlHttp.readyState == 4下的操作,它相当于只有了这一种状态.
     oXmlHttp.open('GET', url, false); //url为js文件时,ie会自动生成 '<script src="*.js" type="text/javascript"> </scr ipt>',ff不会  
     oXmlHttp.send(null);
-    var rootObject = document.getElementsByTagName('script')[0];
+    if (rootObject == null || rootObject==undefined)
+        rootObject = document.getElementsByTagName('script')[0];
     Skip.includeJsText(rootObject, oXmlHttp.responseText);
     }
 

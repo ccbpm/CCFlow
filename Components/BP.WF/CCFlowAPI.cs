@@ -773,18 +773,23 @@ namespace BP.WF
                             if (dtshift.Rows.Count >= 1)
                             {
                                 DataRow drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "移交历史信息";
-                                msg = "";
+                                drMsg["Title"] = "移交信息";
+                              //  msg = "<h3>移交信息 </h3><hr/>";
                                 foreach (DataRow dr in dtshift.Rows)
                                 {
                                     string empFromT = dr[TrackAttr.EmpFromT].ToString();
                                     string empToT = dr[TrackAttr.EmpToT].ToString();
                                     string msgShift = dr[TrackAttr.Msg].ToString();
+                                    string rdt = dr[TrackAttr.RDT].ToString();
+                                    if (msgShift == "undefined")
+                                        msgShift = "无";
 
-                                    string temp = "@移交人[" + empFromT + "]。@接受人：" + empToT + "。<br>移交原因：-------------" + msgShift;
-                                    temp = temp.Replace("@", "<br>@");
-                                    msg += temp + "<hr/>";
+                                    msg += "@移交人[" + empFromT + "]。@接受人：" + empToT + "@移交日期:" + rdt;
+                                    msg += "@移交原因：-------------<br>" + msgShift;
+                                    msg += "<hr/>";
                                 }
+
+                                msg = msg.Replace("@", "<br>@");
 
                                 drMsg["Msg"] = msg;
                                 dtAlert.Rows.Add(drMsg);
@@ -807,10 +812,10 @@ namespace BP.WF
 
 
                     //设置单据编号,对于绑定的表单. @yln.
-                    if (nd.IsStartNode==true && DataType.IsNullOrEmpty(frmNode.BillNoField)==false)
+                    if (nd.IsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)
                     {
                         DataTable dtMain = myds.Tables["MainTable"];
-                        if (dtMain.Columns.Contains(frmNode.BillNoField)==true)
+                        if (dtMain.Columns.Contains(frmNode.BillNoField) == true)
                         {
                             dtMain.Rows[0][frmNode.BillNoField] = wk.GetValStringByKey("BillNo");
                         }

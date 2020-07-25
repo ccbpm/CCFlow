@@ -8461,7 +8461,6 @@ namespace BP.WF
             gwf.Update();
             if (gwls.Count == 0)
             {
-
                 // 说明第一次到达河流节点。
                 current_gwls = this.Func_GenerWorkerLists(this.town);
                 gwls = current_gwls;

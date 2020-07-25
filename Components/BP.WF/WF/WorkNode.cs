@@ -8470,7 +8470,6 @@ namespace BP.WF
                 gwf.NodeName = nd.Name;
                 gwf.TodoEmpsNum = gwls.Count;
 
-
                 string todoEmps = "";
                 foreach (GenerWorkerList item in gwls)
                     todoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";

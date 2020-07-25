@@ -1483,7 +1483,6 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.Tag2, null, "标识2", true, false, 0, 100, 20);
                 map.AddTBString(MapAttrAttr.Tag3, null, "标识3", true, false, 0, 100, 20);
 
-
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", false, true, 0, 200, 20);
 
                 //单元格数量。2013-07-24 增加。
@@ -1495,7 +1494,6 @@ namespace BP.Sys
 
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
-
 
                 //显示的分组.
                 map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);

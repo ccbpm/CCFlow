@@ -1671,7 +1671,12 @@ namespace BP.DA
                 return DBAccess.RunSQLReturnTable(sql);
             }
         }
-        public static void RunSQLScript(string sqlOfScriptFilePath)
+        /// <summary>
+        /// 是否去掉 -- 
+        /// </summary>
+        /// <param name="sqlOfScriptFilePath">文件路径</param>
+        /// <param name="isCutDoubleJianHao"> 是否排除双减号 </param>
+        public static void RunSQLScript(string sqlOfScriptFilePath, bool isCutDoubleJianHao=true)
         {
             string str = DataType.ReadTextFile(sqlOfScriptFilePath);
             string[] strs = str.Split(';');
@@ -1680,7 +1685,7 @@ namespace BP.DA
                 if (DataType.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
                     continue;
 
-                if (s.Contains("--"))
+                if (isCutDoubleJianHao == true && s.Contains("--"))
                     continue;
 
                 if (s.Contains("/*"))

@@ -469,7 +469,7 @@ namespace BP.Sys
             get
             {
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new MapDtls(),
-           MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node,0);
+           MapDtlAttr.FK_MapData, this.No, MapDtlAttr.FK_Node, 0);
                 return ens as MapDtls;
             }
         }
@@ -509,7 +509,7 @@ namespace BP.Sys
                         string strs = "";
 
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData="+ps.DBStr+ "FK_MapData AND LGType=1";
+                        ps.SQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData=" + ps.DBStr + "FK_MapData AND LGType=1";
                         ps.Add("FK_MapData", this.No);
 
                         DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -573,7 +573,7 @@ namespace BP.Sys
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLines(),
          FrmLineAttr.FK_MapData, this.No);
                 return ens as FrmLines;
-                 
+
             }
         }
         /// <summary>
@@ -586,7 +586,7 @@ namespace BP.Sys
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLabs(),
          FrmLabAttr.FK_MapData, this.No);
                 return ens as FrmLabs;
-                 
+
             }
         }
         /// <summary>
@@ -599,7 +599,7 @@ namespace BP.Sys
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmImgs(),
        FrmImgAttr.FK_MapData, this.No);
                 return ens as FrmImgs;
-                 
+
             }
         }
         /// <summary>
@@ -624,10 +624,10 @@ namespace BP.Sys
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmImgAths(),
              FrmImgAthAttr.FK_MapData, this.No);
                 return ens as FrmImgAths;
-                 
+
             }
         }
-    
+
         /// <summary>
         /// 单选按钮
         /// </summary>
@@ -796,7 +796,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapDataAttr.PTable);
-                if (DataType.IsNullOrEmpty(s)==true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
                 return s;
             }
@@ -1932,7 +1932,7 @@ namespace BP.Sys
 
                             //执行保存，并统一生成PK的规则.
                             en.InitPK();
-                            en.DirectSave(); 
+                            en.DirectSave();
                         }
                         break;
                     case "Sys_MapAttr":
@@ -2184,7 +2184,7 @@ namespace BP.Sys
             }
             else
             {
-                this.PTable =BP.Pub.PubClass.DealToFieldOrTableNames(this.PTable);
+                this.PTable = BP.Pub.PubClass.DealToFieldOrTableNames(this.PTable);
             }
             return base.beforeInsert();
         }

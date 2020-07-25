@@ -2765,8 +2765,7 @@ namespace BP.WF
                 default:
                     break;
             }
-
-            DBAccess.RunSQLScript(sqlscript);
+            DBAccess.RunSQLScript(sqlscript,false);
             #endregion 创建视图与数据
 
             #region 5, 初始化数据.
@@ -2976,7 +2975,7 @@ namespace BP.WF
             #endregion 如果是第一次运行，就执行检查。
 
             #region 增加大文本字段列.
-            DBAccess.GetBigTextFromDB("Sys_MapData", "No", "111", "HtmlTemplateFile");
+            DBAccess.GetBigTextFromDB("Sys_MapData", "No", "001", "HtmlTemplateFile");
             #endregion 增加大文本字段列.
         }
         /// <summary>

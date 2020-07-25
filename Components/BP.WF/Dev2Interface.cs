@@ -6177,21 +6177,34 @@ namespace BP.WF
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.WFState = WFState.Runing;
 
+
+
             //给当前人员产生待办.
             GenerWorkerList gwl = new GenerWorkerList();
-            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
-            if (i == 0)
-            {
-                //不做判断了，有时候退回数据异常没有待办.
-              //  return "err@没有找到当前的待办人员.";
-            }
 
-            //删除当前节点人员信息.
+            //先查询数据
+            gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+            //删除他.
             gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
+            //int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
+            //if (i == 0)
+            //{
+            //    //不做判断了，有时候退回数据异常没有待办.
+            //  //  return "err@没有找到当前的待办人员.";
+            //}
+            ////删除当前节点人员信息.
+            //gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+
+            //删除当前节点.
+            gwl.Delete(GenerWorkerListAttr.WorkID, workid,
+                GenerWorkerListAttr.FK_Node, toNodeID);
+
+            string todoEmpsExts = "";
             foreach (Emp item in emps)
             {
                 //插入一条信息，让调整的人员显示待办.
+                gwl.WorkID = workid;
                 gwl.FK_Emp = item.No;
                 gwl.FK_EmpText = item.Name;
                 gwl.FK_Node = toNodeID;
@@ -6200,23 +6213,30 @@ namespace BP.WF
                 gwl.WhoExeIt = 0;
                 gwl.FK_Dept = item.FK_Dept;
                 gwl.FK_DeptT = item.FK_DeptText;
-                try
-                {
-                    gwl.Insert();
-                }
-                catch
-                {
-                    gwl.Update();
-                }
+                gwl.FK_NodeText = nd.Name;
+                gwl.FK_Flow = nd.FK_Flow;
+                gwl.IsEnable = true;
+                gwl.Insert();
+
+                todoEmpsExts += item.No + "," + item.Name + ";";
             }
 
             //更新当前节点状态.
             gwf.FK_Node = toNodeID;
             gwf.NodeName = nd.Name;
+
+            //设置当前的处理人.
+            gwf.TodoEmpsNum = emps.Count;
+            gwf.TodoEmps = todoEmpsExts;
+
+            //发送人.
+            gwf.Sender = WebUser.No + "," + WebUser.Name;
+            gwf.SendDT = DataType.CurrentDataTime;
+
             gwf.Paras_ToNodes = "";
             gwf.Update();
 
-            return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" + todoEmps;
+            return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" + todoEmpsExts;
         }
         /// <summary>
         /// 取消、确认.
@@ -7642,20 +7662,20 @@ namespace BP.WF
         /// <param name="deptIDs"></param>
         /// <param name="cctype">可选</param>
         /// <returns>返回执行结果.</returns>
-        public static string Node_CCToDept(Int64 workid, string deptID, int cctype = 0, bool isWriteTolog=false, bool isSendMsg=false)
+        public static string Node_CCToDept(Int64 workid, string deptID, int cctype = 0, bool isWriteTolog = false, bool isSendMsg = false)
         {
             if (DataType.IsNullOrEmpty(deptID) == true)
                 return "没有指定人";
 
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             Node fromNode = new Node(gwf.FK_Node);
-             
+
             Emp emp = new Emp(); //构造实体类
             Dept dept = new Dept(deptID);
 
-            string sql = "SELECT No,Name FROM Port_Emp A WHERE A.FK_Dept='"+deptID+"'";
+            string sql = "SELECT No,Name FROM Port_Emp A WHERE A.FK_Dept='" + deptID + "'";
             sql += " UNION ";
-            sql += " SELECT No,Name FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='"+deptID+"'";
+            sql += " SELECT No,Name FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='" + deptID + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             CCList list = new CCList();
@@ -7692,7 +7712,7 @@ namespace BP.WF
                 list.Title = gwf.Title;
                 list.Doc = gwf.Title;
                 list.CCTo = empNo;
-                list.CCToName =empName;
+                list.CCToName = empName;
 
                 //增加抄送人部门.
                 list.CCToDept = dept.No;
@@ -7767,7 +7787,7 @@ namespace BP.WF
             string[] depts = deptIDs.Split(',');
             foreach (string deptID in depts)
             {
-                Node_CCToDept(workid, deptID, cctype, false,false);
+                Node_CCToDept(workid, deptID, cctype, false, false);
             }
             return "成功执行.";
         }
@@ -9059,7 +9079,7 @@ namespace BP.WF
                 string titleRoleNodes = fl.TitleRoleNodes;
                 if (nd.IsStartNode == false && DataType.IsNullOrEmpty(titleRoleNodes) == false)
                 {
-                    if((titleRoleNodes + ",").Contains(nd.NodeID+",") == true || titleRoleNodes.Equals("*") == true)
+                    if ((titleRoleNodes + ",").Contains(nd.NodeID + ",") == true || titleRoleNodes.Equals("*") == true)
                     {
                         //设置标题.
                         string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
@@ -9071,15 +9091,15 @@ namespace BP.WF
                         gwf.Title = title; //标题.
                         gwf.Update();
                     }
-                    
+
                 }
-                
+
                 #region 为开始工作创建待办.
-                
+
                 if (nd.IsStartNode == true)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow();
-                    
+
                     if (fl.DraftRole == DraftRole.None)
                     {
                         return "保存成功";

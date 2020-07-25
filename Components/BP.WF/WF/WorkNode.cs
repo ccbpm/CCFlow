@@ -7494,8 +7494,13 @@ namespace BP.WF
                     gwf.FK_Node = this.HisNode.NodeID;
                     gwf.NodeName = this.HisNode.Name;
                     gwf.WFState = WFState.Runing;
-                    Emp emp = new Emp(oldSender);
-                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(emp.No, emp.Name);
+
+                    //设置他的旧发送人.
+                    if (DataType.IsNullOrEmpty(oldSender) == false)
+                    {
+                        Emp emp = new Emp(oldSender);
+                        this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(emp.No, emp.Name);
+                    }
                     gwf.Update();
                 }
 

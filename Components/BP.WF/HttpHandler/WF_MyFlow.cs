@@ -3345,10 +3345,9 @@ namespace BP.WF.HttpHandler
 
                 json = BP.Tools.Json.ToJson(ds);
 
-                //ds.WriteXml("c:generWorkNodeJS.xml");
+                //ds.WriteXml("c:\\generWorkNodeJS.xml");
                 //BP.DA.DataType.WriteFile("c:\\generWorkNodeJS.txt", json);
-
-                // ds.Tables.Add(wf_generWorkFlowDt);
+                //ds.Tables.Add(wf_generWorkFlowDt);
 
                 if (WebUser.SysLang.Equals("CH") == true)
                     return BP.Tools.Json.ToJson(ds);

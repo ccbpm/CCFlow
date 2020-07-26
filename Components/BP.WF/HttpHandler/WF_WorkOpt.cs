@@ -2284,11 +2284,13 @@ namespace BP.WF.HttpHandler
             string checkerPassed = ",";
             if (gwf.WFState != WFState.Complete && (int)gwf.WFState != 12)
             {
-                Paras ps = new Paras();
-                ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node  Order By RDT,CDT";
-                ps.Add("WorkID", this.WorkID);
-                ps.Add("FK_Node", this.FK_Node);
-                DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(ps);
+                //Paras ps = new Paras();
+                //ps.SQL = "SELECT FK_Emp FROM WF_Generworkerlist WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsPass=1 AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node  Order By RDT,CDT";
+                //ps.Add("WorkID", this.WorkID);
+                //ps.Add("FK_Node", this.FK_Node);
+
+                string sql = "SELECT EmpFrom as FK_Emp  FROM ND"+int.Parse(gwf.FK_Flow)+"Track WHERE WorkID =" + this.WorkID+"  AND NDFrom = "+this.FK_Node;
+                DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in checkerPassedDt.Rows)
                 {
                     checkerPassed += dr["FK_Emp"] + ",";
@@ -2342,10 +2344,11 @@ namespace BP.WF.HttpHandler
                             continue;
                     }
 
-                    //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
+                  //  此部分被zhoupeng注释, 在会签的时候显示不到意见。
+                   // 如果是当前的节点.当前人员可以处理, 已经审批通过的人员.
                     if (tk.NDFrom == this.FK_Node
-                        && isCanDo == true 
-                        && tk.EmpFrom != WebUser.No 
+                        && isCanDo == true
+                        && tk.EmpFrom.Equals(WebUser.No)==false
                         && checkerPassed.Contains("," + tk.EmpFrom + ",") == false)
                         continue;
 
@@ -3653,7 +3656,7 @@ namespace BP.WF.HttpHandler
                 selectEmps = selectEmps.Replace(";", ",");
 
                 //保存接受人.
-                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, selectEmps);
+                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, selectEmps,true);
                 return "SaveOK@" + selectEmps;
             }
             catch (Exception ex)

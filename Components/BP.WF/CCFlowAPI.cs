@@ -784,7 +784,7 @@ namespace BP.WF
                                     if (msgShift == "undefined")
                                         msgShift = "无";
 
-                                    msg += "@移交人：" + empFromT + "@接受人：" + empToT + "@移交日期:" + rdt;
+                                    msg += "移交人：" + empFromT + "@接受人：" + empToT + "@移交日期：" + rdt;
                                     msg += "@移交原因：" + msgShift;
                                     msg += "<hr/>";
                                 }

@@ -35,6 +35,7 @@
         #Message {
             width: 100%;
         }
+
         .modal-backdrop {
             bottom: 53px;
         }
@@ -159,7 +160,9 @@
     <div style="padding:15px">
         <p style="margin-bottom:10px;">请选择要转办的人：</p>
         <div style="width:100%;float:left;">
-            <input type="text" id="ToEmp" name="ToEmp" value='' style="width:80%; margin-right:15px; float:left" class="layui-input" />
+            <input type="text" id="ToEmp" name="ToEmp" value=''
+                   placeholder="请输入人员编号、名称、简拼、全拼."
+                   style="width:80%; margin-right:15px; float:left" class="layui-input" />
             <button id="BtnSelectEmps" type="button" class="layui-btn layui-btn-normal" style="float:left">
                 <!--<img src="../Img/Btn/AddLeader.png" />--> 选人
             </button>

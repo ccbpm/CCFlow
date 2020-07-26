@@ -7959,7 +7959,7 @@ namespace BP.WF
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
                         //获取审核组件信息
-                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "' ORDER BY RDT";
+                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "' ORDER BY RDT DESC";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 0)
                         {
@@ -8104,7 +8104,7 @@ namespace BP.WF
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
                         //获取审核组件信息 @yln
-                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "' ORDER BY RDT";
+                        string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "' ORDER BY RDT DESC";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 0)
                         {

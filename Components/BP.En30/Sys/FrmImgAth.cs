@@ -238,9 +238,15 @@ namespace BP.Sys
         protected override bool beforeUpdateInsertAction()
         {
             this.MyPK = this.FK_MapData +"_"+ this.CtrlID;
-            MapAttr attr = new MapAttr(this.MyPK);
-            attr.Name = this.Name;
-            attr.Update();
+
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.MyPK;
+            if (attr.RetrieveFromDBSources() == 1)
+            {
+                attr.Name = this.Name;
+                attr.Update();
+            }
+
             return base.beforeUpdateInsertAction();
         }
     }

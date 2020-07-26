@@ -774,7 +774,7 @@ namespace BP.WF
                             {
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "移交信息";
-                              //  msg = "<h3>移交信息 </h3><hr/>";
+                                //  msg = "<h3>移交信息 </h3><hr/>";
                                 foreach (DataRow dr in dtshift.Rows)
                                 {
                                     string empFromT = dr[TrackAttr.EmpFromT].ToString();

@@ -769,7 +769,7 @@ namespace BP.WF
                         rpt.SetValByKey(k, paras[k]);
                     }
 
-                    if (this.PTable.Equals(wk.EnMap.PhysicsTable)==true)
+                    if (this.PTable.Equals(wk.EnMap.PhysicsTable) == true)
                     {
                         /*如果开始节点表与流程报表相等.*/
                         rpt.OID = wk.OID;
@@ -4110,7 +4110,7 @@ namespace BP.WF
                 Map map = new Map("WF_Flow", "流程");
 
                 //取消了缓存.
-                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfEntity = Depositary.Application;
                 //map.DepositaryOfEntity= Depositary.Application;
                 map.CodeStruct = "3";
 
@@ -4399,8 +4399,8 @@ namespace BP.WF
             {
                 case ImpFlowTempleteModel.AsNewFlow: /*做为一个新流程. */
                     fl.No = fl.GenerNewNo;
-                    //  fl.DoDelData();
-                    //    fl.DoDelete(); /*删除可能存在的垃圾.*/
+                    fl.DoDelData();
+                    fl.DoDelete(); /*删除可能存在的垃圾.*/
                     fl.Insert();
                     break;
                 case ImpFlowTempleteModel.AsTempleteFlowNo: /*用流程模版中的编号*/
@@ -5013,7 +5013,7 @@ namespace BP.WF
                             }
                             idx++;
                             ln.FK_Flow = fl.No;
-                            ln.MyPK = ln.FK_Flow + "_" + ln.X + "_" + ln.Y + "_" + idx;
+                            ln.MyPK = DBAccess.GenerGUID();
                             ln.DirectInsert();
                         }
                         break;
@@ -5061,15 +5061,13 @@ namespace BP.WF
                         foreach (DataRow dr in dt.Rows)
                         {
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
-                            BP.WF.Template.CC cc = new CC(); // 抄送相关的信息.
-                            //cc.CheckPhysicsTable();
+                            BP.WF.Template.CC cc = new CC(); //抄送相关的信息.
                             BP.WF.Template.NodeWorkCheck fwc = new NodeWorkCheck();
 
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
+                                if (val == null) continue;
 
                                 switch (dc.ColumnName.ToLower())
                                 {
@@ -5096,7 +5094,6 @@ namespace BP.WF
                                 nd.SetValByKey(dc.ColumnName, val);
                                 cc.SetValByKey(dc.ColumnName, val);
                                 fwc.SetValByKey(dc.ColumnName, val);
-
                             }
 
                             nd.FK_Flow = fl.No;
@@ -5110,7 +5107,14 @@ namespace BP.WF
                                         nd.SetValByKey("OfficePrintEnable", 0);
                                 }
 
-                                nd.DirectInsert();
+                                try
+                                {
+                                    nd.DirectInsert();
+                                }
+                                catch (Exception ex)
+                                {
+                                    // var i2 = 11; 
+                                }
 
                                 //把抄送的信息也导入里面去.
                                 cc.DirectUpdate();
@@ -5125,7 +5129,7 @@ namespace BP.WF
 
                                 throw new Exception("@导入节点:FlowName:" + nd.FlowName + " nodeID: " + nd.NodeID + " , " + nd.Name + " 错误:" + ex.Message);
                             }
-                            //删除mapdata.
+
                         }
 
                         // 执行update 触发其他的业务逻辑。
@@ -5727,7 +5731,7 @@ namespace BP.WF
 
             #region 处理数据完整性。
 
-           
+
             //DBAccess.RunSQL("UPDATE WF_Cond SET FK_Node=NodeID WHERE FK_Node=0");
             //DBAccess.RunSQL("UPDATE WF_Cond SET ToNodeID=NodeID WHERE ToNodeID=0");
             // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE NodeID NOT IN (SELECT NodeID FROM WF_Node)");

@@ -3048,13 +3048,7 @@ namespace BP.WF
 
             if (current_gwls.Count == 0)
                 current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
-            else
-            {
-                //	新增加轨迹
-                GenerWorkerList gwl = new GenerWorkerList(this.HisWork.FID, toNode.NodeID, WebUser.No);
-                ActionType at = ActionType.SubThreadForward;
-                this.AddToTrack(at, gwl, BP.WF.Glo.multilingual("子线程", "WorkNode", "sub_thread"), this.town.HisWork.OID);
-            }
+ 
 
             string toEmpsStr = "";
             string emps = "";
@@ -3067,6 +3061,11 @@ namespace BP.WF
                 else
                     emps += "@" + wl.FK_Emp;
             }
+
+            //写入日志, 2020.07.26 by zhoupeng.
+            ActionType at = ActionType.SubThreadForward;
+            this.AddToTrack(at, emps, toEmpsStr,toNode.NodeID,toNode.Name, BP.WF.Glo.multilingual("子线程", "WorkNode", "sub_thread"),this.HisNode);
+
             //增加变量.
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, emps.Replace("@", ","), SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarAcceptersName, toEmpsStr, SendReturnMsgType.SystemMsg);

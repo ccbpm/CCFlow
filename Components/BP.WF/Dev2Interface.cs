@@ -6131,7 +6131,6 @@ namespace BP.WF
 
             gwf.DirectUpdate();
         }
-
         /// <summary>
         /// 调整
         /// </summary>
@@ -6144,9 +6143,7 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             if (gwf.WFState == WFState.Complete)
-            {
                 return "err@该流程已经运行完成您不能执行调整,可以执行回滚.";
-            }
 
             Node nd = new Node(toNodeID);
 
@@ -6159,14 +6156,10 @@ namespace BP.WF
             foreach (string empID in strs)
             {
                 if (DataType.IsNullOrEmpty(empID) == true)
-                {
                     continue;
-                }
-
                 BP.Port.Emp emp = new Emp(empID);
                 todoEmps += emp.No + "," + emp.Name + ";";
                 num++;
-
                 emps.AddEntity(emp);
             }
 
@@ -9796,7 +9789,6 @@ namespace BP.WF
         {
             if (toEmp.Equals(WebUser.No)==true)
                 throw new Exception("err@您不能移交给您自己。");
-
 
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
             if (gwf.WFSta == WFSta.Complete)

@@ -1480,6 +1480,9 @@ namespace BP.Sys
             if (md.IsExits)
                 throw new Exception("err@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
+            //执行删除操作.
+            md.Delete();
+
             //导入.
             return ImpMapData(fk_mapData, ds);
         }

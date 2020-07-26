@@ -211,10 +211,8 @@ namespace BP.WF
             if (msg != null)
                 return msg;
 
-
             //执行退回的考核.
             Glo.InitCH(this.HisNode.HisFlow, this.HisNode, this.WorkID, this.FID, this.HisNode.Name + ":退回考核.");
-
 
             if (this.HisNode.FocusField != "")
             {
@@ -506,7 +504,6 @@ namespace BP.WF
                 sql = "DELETE FROM WF_SelectAccper WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID;
                 DBAccess.RunSQL(sql);
             }
-
 
             //删除.
             Template.NodeWorkCheck fwc = new Template.NodeWorkCheck(this.HisNode.NodeID);

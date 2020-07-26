@@ -1452,13 +1452,17 @@ namespace BP.WF.HttpHandler
                 if (gwf.WFState == WFState.ReturnSta)
                 {
                     //当前节点是退回状态，是否原路返回
-                    Paras ps = new Paras();
-                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    Paras ps = new Paras(); //@yln
+                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
                     DataTable mydt = DBAccess.RunSQLReturnTable(ps);
+
                     //说明退回并原路返回
-                    if (mydt.Rows.Count > 0)
-                        dt.Rows[0]["IsBackTrack"] = 1;
+                    if (mydt.Rows.Count == 0)
+                        throw new Exception("err@没有找到退回信息..");
+
+                    //设置当前是否是退回并原路返回? IsBackTracking
+                    dt.Rows[0]["IsBackTrack"] = mydt.Rows[0][3];
                 }
                 ds.Tables.Add(dt);
                 #endregion 

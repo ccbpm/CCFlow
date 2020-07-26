@@ -3287,9 +3287,25 @@ namespace BP.WF
                             // throw new Exception("@流程设计错误:请检查流程获取详细信息, 分流点(" + this.HisNode.Name + ")下面不能连接合流节点(" + toND2.Name + ").");
                             case RunModel.SubThread: /* 2.4 分流点to子线程点   */
                                 if (toND2.HisSubThreadType == SubThreadType.SameSheet)
+                                {
                                     NodeSend_24_SameSheet(toND2);
+                                    // 为广西计算中心.
+                                    this.HisGenerWorkFlow.NodeName += "," + toND2.Name;
+                                    this.HisGenerWorkFlow.DirectUpdate();
+                                }
                                 else
+                                {
                                     NodeSend_24_UnSameSheet(toNDs); /*可能是只发送1个异表单*/
+
+                                    //为计算中心：执行更新.
+                                    string names = "";
+                                    foreach (Node mynd in toNDs)
+                                    {
+                                        names += "," + mynd.Name;
+                                    }
+                                    this.HisGenerWorkFlow.NodeName += names;
+                                    this.HisGenerWorkFlow.DirectUpdate();
+                                }
                                 break;
                             default:
                                 throw new Exception(BP.WF.Glo.multilingual("@没有判断的节点类型({0}).", "WorkNode", "node_type_does_not_exist", toND2.Name));
@@ -3331,6 +3347,16 @@ namespace BP.WF
 
                         //启动多个异表单子线程节点.
                         this.NodeSend_24_UnSameSheet(toNDs);
+
+                        //为计算中心：执行更新.
+                        string names = "";
+                        foreach (Node mynd in toNDs)
+                        {
+                            names += "," + mynd.Name;
+                        }
+                        this.HisGenerWorkFlow.NodeName += names;
+                        this.HisGenerWorkFlow.DirectUpdate();
+
                     }
                     break;
                 case RunModel.HL:  /* 3: 合流节点向下发送 */
@@ -3384,12 +3410,26 @@ namespace BP.WF
                         case RunModel.SubThread:/*4.5 子线程*/
                             if (toND4.HisSubThreadType == SubThreadType.SameSheet)
                             {
+                               
                                 NodeSend_24_SameSheet(toND4);
+
+                                // 为广西计算中心.
+                                this.HisGenerWorkFlow.NodeName += "," + toND4.Name;
+                                this.HisGenerWorkFlow.DirectUpdate();
                             }
                             else
                             {
                                 Nodes toNDs4 = this.Func_GenerNextStepNodes();
                                 NodeSend_24_UnSameSheet(toNDs4); /*可能是只发送1个异表单*/
+                                
+                                //为计算中心：执行更新.
+                                string names = "";
+                                foreach (Node mynd in toNDs4)
+                                {
+                                    names += ","+mynd.Name;
+                                }
+                                this.HisGenerWorkFlow.NodeName += names;
+                                this.HisGenerWorkFlow.DirectUpdate();
                             }
                             break;
                         default:
@@ -3427,6 +3467,18 @@ namespace BP.WF
                             DBAccess.RunSQL(ps);
                             break;
                         case RunModel.SubThread: /*5.5 子线程*/
+
+                            //为计算中心增加,子线程停留节点.
+                            GenerWorkFlow gwfZhuGan = new GenerWorkFlow(this.HisGenerWorkFlow.FID);
+                            if (gwfZhuGan.NodeName.Contains("," + toND5.Name) == false)
+                            {
+                                gwfZhuGan.NodeName = gwfZhuGan.NodeName.Replace("," + this.HisNode.Name, "," + toND5.Name);
+                                if (gwfZhuGan.NodeName.Contains("," + toND5.Name) == false)
+                                    gwfZhuGan.NodeName += "," + toND5.Name;
+                                gwfZhuGan.DirectUpdate(); //执行更新.
+                            }
+
+
                             if (toND5.HisSubThreadType == this.HisNode.HisSubThreadType)
                             {
                                 #region 删除到达节点的子线程如果有，防止退回信息垃圾数据问题,如果退回处理了这个部分就不需要处理了.

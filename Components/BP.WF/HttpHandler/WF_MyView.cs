@@ -1273,7 +1273,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
-                    this.FID, BP.Web.WebUser.No,"1", true);
+                    this.FID, BP.Web.WebUser.No,this.WorkID, "1", true);
 
                 //Node nd = new Node(this.FK_Node);
                 //if (nd.HisFormType == NodeFormType.SheetTree)

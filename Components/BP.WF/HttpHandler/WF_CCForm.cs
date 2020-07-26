@@ -1232,7 +1232,7 @@ namespace BP.WF.HttpHandler
                     {
                         DataSet myds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow,
                             nd, this.WorkID,
-                  this.FID, BP.Web.WebUser.No, this.GetRequestVal("FromWorkOpt"));
+                  this.FID, BP.Web.WebUser.No, this.WorkID, this.GetRequestVal("FromWorkOpt"));
 
                         return BP.Tools.Json.ToJson(myds);
                     }

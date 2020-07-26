@@ -33,10 +33,9 @@ namespace BP.WF
         /// <param name="fid">FID</param>
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
-        public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, string fromWorkOpt = "0",
+        public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, Int64 realWorkID, string fromWorkOpt = "0",
             bool isView = false)
         {
-
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
@@ -125,7 +124,7 @@ namespace BP.WF
 
                 //把流程信息表发送过去.
                 GenerWorkFlow gwf = new GenerWorkFlow();
-                gwf.WorkID = workID;
+                gwf.WorkID = realWorkID;
                 gwf.RetrieveFromDBSources();
                 myds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
@@ -507,7 +506,7 @@ namespace BP.WF
                 #region 流程设置信息.
                 if (isView == false)
                 {
-                    BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, workID);
+                    BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, realWorkID);
                     if (nd.IsStartNode == false)
                     {
                         if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
@@ -684,15 +683,15 @@ namespace BP.WF
                     switch (gwf.WFState)
                     {
                         case WFState.AskForReplay: // 返回加签的信息.
-                            string mysql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
-
+                            string mysql = "SELECT Msg,EmpFrom,EmpFromT,RDT FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + realWorkID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
                             DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+
                             foreach (DataRow dr in mydt.Rows)
                             {
-                                string msgAskFor = dr[TrackAttr.Msg].ToString();
-                                string worker = dr[TrackAttr.EmpFrom].ToString();
-                                string workerName = dr[TrackAttr.EmpFromT].ToString();
-                                string rdt = dr[TrackAttr.RDT].ToString();
+                                string msgAskFor = dr[0].ToString();
+                                string worker = dr[1].ToString();
+                                string workerName = dr[2].ToString();
+                                string rdt = dr[3].ToString();
 
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = worker + "," + workerName + "回复信息:";
@@ -702,7 +701,7 @@ namespace BP.WF
                             break;
                         case WFState.Askfor: //加签.
 
-                            sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
+                            sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + realWorkID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
                             dt = DBAccess.RunSQLReturnTable(sql);
                             foreach (DataRow dr in dt.Rows)
                             {
@@ -713,7 +712,7 @@ namespace BP.WF
 
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = worker + "," + workerName + "请求加签:";
-                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
+                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + realWorkID + "&FID=" + fid + "' >回复加签意见</a> --";
                                 dtAlert.Rows.Add(drMsg);
 
                             }
@@ -723,7 +722,7 @@ namespace BP.WF
                             /* 如果工作节点退回了*/
                             ReturnWorks rws = new ReturnWorks();
                             rws.Retrieve(ReturnWorkAttr.ReturnToNode, nd.NodeID,
-                                ReturnWorkAttr.WorkID, workID,
+                                ReturnWorkAttr.WorkID, realWorkID,
                                 ReturnWorkAttr.RDT);
 
                             if (rws.Count != 0)
@@ -740,7 +739,7 @@ namespace BP.WF
                                 if (str != "")
                                 {
                                     str = str.Replace("~", "'");
-                                    str = str.Replace("@PWorkID", workID.ToString());
+                                    str = str.Replace("@PWorkID", realWorkID.ToString());
                                     str = str.Replace("@PNodeID", nd.NodeID.ToString());
                                     str = str.Replace("@FK_Node", nd.NodeID.ToString());
 
@@ -767,7 +766,7 @@ namespace BP.WF
                             break;
                         case WFState.Shift:
                             /* 判断移交过来的。 */
-                            string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
+                            string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + realWorkID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
                             DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
 
                             if (dtshift.Rows.Count >= 1)
@@ -807,9 +806,7 @@ namespace BP.WF
                 {
                     /* 独立流程节点表单. */
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
-
                     myds.Tables.Add(frmNode.ToDataTableField("FrmNode"));
-
 
                     //设置单据编号,对于绑定的表单. @yln.
                     if (nd.IsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)

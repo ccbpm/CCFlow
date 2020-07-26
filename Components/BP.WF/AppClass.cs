@@ -178,7 +178,7 @@ namespace BP.WF
                 //加载接口.
                 DataSet ds = new DataSet();
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(gwf.FK_Flow, nd, gwf.WorkID,
-                    gwf.FID, BP.Web.WebUser.No);
+                    gwf.FID, BP.Web.WebUser.No,gwf.WorkID);
 
                 //要保留的tables.
                // string tables = ",WF_GenerWorkFlow,WF_Node,AlertMsg,Track,";

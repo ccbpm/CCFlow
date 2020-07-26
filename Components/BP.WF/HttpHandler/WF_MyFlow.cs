@@ -3341,7 +3341,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
-                    this.FID, BP.Web.WebUser.No);
+                    this.FID, BP.Web.WebUser.No, this.WorkID);
 
                 json = BP.Tools.Json.ToJson(ds);
 

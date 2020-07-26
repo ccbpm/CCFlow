@@ -2614,7 +2614,7 @@ function ThrowMakeErrInfo(funcName, obj, url) {
     // msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
 
     if (url.indexOf('WF/WF/') != -1)
-        msg = "您没有配置项目名称,请仔细阅读配置连接";
+        msg += "您没有配置项目名称,请仔细阅读配置连接";
 
     if (url != null) {
         if (window.confirm(msg) == true) {

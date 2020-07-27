@@ -1223,7 +1223,7 @@ namespace BP.WF
                     if (nd.HisWhenNoWorker == true)
                     {
                         this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName,
-                            nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(当没有找到处理人时)", "WorkNode", "system_error_jump_automatically_1", new string[0]), ndFrom);
+                            nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(启用跳转规则,当没有找到处理人时)", "WorkNode", "system_error_jump_automatically_1", new string[0]), ndFrom);
                         ndFrom = nd;
                         continue;
                     }
@@ -1292,7 +1292,7 @@ namespace BP.WF
                     if (isHave == true)
                     {
                         /*如果发现了，当前人员包含处理人集合. */
-                        this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(当没有找到处理人时)", "WorkNode", "system_error_jump_automatically_2", new string[0]), ndFrom);
+                        this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, BP.WF.Glo.multilingual("自动跳转(处理人就是发起人)", "WorkNode", "system_error_jump_automatically_2", new string[0]), ndFrom);
 
                         ExecEvent.DoNode(EventListNode.SendWhen, nd, skipWork, null);
 
@@ -1655,6 +1655,10 @@ namespace BP.WF
 
             //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
             Directions dirs = new Directions(currNode.NodeID);
+
+            if(dirs.Count == 1)
+                return new Node(dirs[0].GetValIntByKey(DirectionAttr.ToNode));
+           
 
             //定义没有条件的节点集合.
             Directions dirs0Cond = new Directions();
@@ -8007,7 +8011,7 @@ namespace BP.WF
 
                     }
 
-                    //判断是否有审核组件，把审核信息存储在Msg中 @yln
+                    //判断是否有审核组件，把审核信息存储在Msg中 
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
                         //获取审核组件信息
@@ -8152,10 +8156,10 @@ namespace BP.WF
                             Log.DebugWriteError(BP.WF.Glo.multilingual("@在节点({0}, {1})焦点字段被删除了,表达式为:{2}替换的结果为:{3}.", "WorkNode", "delete_focus_field", para));
                         }
                     }
-                    //判断是否有审核组件，把审核信息存储在Msg中 @yuan
+                    //判断是否有审核组件，把审核信息存储在Msg中 
                     if (this.HisNode.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                     {
-                        //获取审核组件信息 @yln
+                        //获取审核组件信息 
                         string sql = "SELECT Msg,MyPK From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "' ORDER BY RDT DESC";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count > 0)

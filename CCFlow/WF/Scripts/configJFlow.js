@@ -33,7 +33,11 @@ var plant = "JFlow";
 var url = window.location.href;
 var Handler =  url.substring(0,url.lastIndexOf('/')+1)+"ProcessRequest.do";
 var MyFlow = url.substring(0,url.lastIndexOf('/')+1)+"MyFlow/ProcessRequest.do";
-/*var Handler ;*/
+var webUser = null; //定义通用变量用户信息
+var IsIELower10 = false;
+var ver = IEVersion();
+if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
+    IsIELower10 = true;
 
 //公共方法
 function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {

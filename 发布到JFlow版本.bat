@@ -20,18 +20,18 @@ xcopy  /e /k /y D:\ccflow\CCFlow\WF  D:\JFlow\jflow-web\src\main\webapp\WF
 
 -- É¾³ýccflowµÄÎÄ¼þ.
 
-del D:\JFlow\jflow-web\src\main\webapp\WF\CCForm\*.asmx;
-del D:\JFlow\jflow-web\src\main\webapp\WF\CCForm\*.cs;
-del D:\JFlow\jflow-web\src\main\webapp\WF\CCForm\*.aspx;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\CCForm\*.asmx;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\CCForm\*.cs;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\CCForm\*.aspx;
 
-del D:\JFlow\jflow-web\src\main\webapp\WF\Comm\*.aspx;
-del D:\JFlow\jflow-web\src\main\webapp\WF\Comm\*.cs;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\Comm\*.aspx;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\Comm\*.cs;
 
 
-del D:\JFlow\jflow-web\src\main\webapp\WF\WorkOpt\*.aspx;
-del D:\JFlow\jflow-web\src\main\webapp\WF\WorkOpt\*.cs;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\WorkOpt\*.aspx;
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\WorkOpt\*.cs;
 
-del D:\JFlow\jflow-web\src\main\webapp\WF\Scripts\config.js
-ren D:\JFlow\jflow-web\src\main\webapp\WF\Scripts\configJFlow.js  config.js
+del D:\JFlow2020\jflow-web\src\main\webapp\WF\Scripts\config.js
+ren D:\JFlow2020\jflow-web\src\main\webapp\WF\Scripts\configJFlow.js  config.js
 
 pause;

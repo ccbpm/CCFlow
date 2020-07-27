@@ -127,11 +127,19 @@
 
             var mapdata = new Entity("BP.Sys.MapData", fk_mapData);
             var url = "";
+
+            //自由表单.
             if (mapdata.FrmType == 1) {
-                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData+"&FK_Node="+GetQueryString("FK_Node")+"&IsFirst=1";
-            } else {
-                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node") + "&IsFirst=1";
+                url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node") + "&IsFirst=1";
             }
+
+            //开发者表单.
+            if (mapdata.FrmType == 8) {
+                url = "../DevelopDesigner/Designer.htm?FrmID="+fk_mapData+"&FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node") + "&IsFirst=1";
+            }
+
+            if (url == "")
+                url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + fk_mapData + "&FK_Node=" + GetQueryString("FK_Node") + "&IsFirst=1";
 
             WinOpen(url);
             //alert(fk_mapData);
@@ -159,7 +167,7 @@
         <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
             <tr class="GroupTitle">
                 <td colspan="10">
-                    绑定的表单列表 - <a href="javascript:void(0)" onclick="ToBindFrms()">绑定表单</a> 
+                    绑定的表单列表 - <a href="javascript:void(0)" onclick="ToBindFrms()">绑定表单</a>
                 </td>
             </tr>
             <tr>

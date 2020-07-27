@@ -490,7 +490,7 @@ $(function () {
             var baocunbut = $("#alertModal1 div:eq(2) button:eq(0)").attr("class", "btn btn-primary savetext" + activeId);
             $("#alertModal1 div:eq(2) button:eq(0)").attr("onclick", "SaveNodeName(\"" + activeId + "\")");
             var baocunbut = $("#alertModal1 div:eq(2) button:eq(1)").attr("class", "btn btn-primary savetext" + activeId);
-             $("#alertModal1 div:eq(2) button:eq(1)").attr("onclick", "SaveAndUpdateNodeName(\"" + activeId + "\")");
+            $("#alertModal1 div:eq(2) button:eq(1)").attr("onclick", "SaveAndUpdateNodeName(\"" + activeId + "\")");
             windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, "");
 
 
@@ -1102,13 +1102,19 @@ function CondDir(fromNodeID) {
 function NodeFrmD(nodeID) {
 
     var node = new Entity("BP.WF.Node", nodeID);
-    if (node.FormType == 1) {//自由表单
+    if (node.FormType == 1) { //自由表单
         NodeFrmFree(nodeID);
         return;
     }
 
-    if (node.FormType == 12) {//开发者表单
+    if (node.FormType == 12) { //开发者表单
         NodeFrmDeveloper(nodeID);
+        return;
+    }
+
+
+    if (node.FormType == 11) { //RefOneFrmTree, 绑定表单库的单表单.
+        NodeFrmRefOneFrmTree(nodeID);
         return;
     }
 
@@ -1140,6 +1146,24 @@ function NodeFrmFool(nodeID) {
     var url = basepath + "FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     //WinOpen(url);
     window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+}
+
+//绑定表单库的表单.
+function NodeFrmRefOneFrmTree(nodeID) {
+    var node = new Entity("BP.WF.Node", nodeID);
+    var frmID = node.NodeFrmID;
+
+    var myPK = frmID + "_" + nodeID + "_" + node.FK_Flow;
+    //Frm_WoDeShaGuaBiaoShan_501_005
+    var baseurl = "";
+    if (ccbpmRunModel == 2) {
+        baseurl = "../../WF/";
+    } else {
+        baseurl = "../../";
+    }
+    var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + myPK + "&Lang=CH";
+    //WinOpen(url);
+    window.parent.addTab(nodeID + "_Fool", "绑定表单属性:" + nodeID, url);
 }
 
 function NodeFrmFree(nodeID) {

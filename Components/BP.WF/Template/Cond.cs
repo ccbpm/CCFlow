@@ -935,6 +935,10 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.StandAloneFrm)
                 {
                     MapAttr attr = new MapAttr(this.FK_Attr);
+                    attr.MyPK = this.FK_Attr;
+                    if (attr.RetrieveFromDBSources() == 0)
+                        throw new Exception("err@到达【"+this.ToNodeID+"】方向条件设置错误,原来做方向条件的字段:"+this.FK_Attr+",已经不存在了.");
+
                     GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
                     return CheckIsPass(myen);
                 }

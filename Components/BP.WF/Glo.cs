@@ -1166,6 +1166,25 @@ namespace BP.WF
 
         }
 
+        /// <summary>
+        /// 检查流程
+        /// </summary>
+        /// <returns></returns>
+        public static string CheckFlows()
+        {
+            string err = "";
+            string sql = "";
+            sql += "SELECT a.FK_Attr, a.AttrKey, a.AttrName, a.FK_Flow, B.Name as FlowName, b.OrgNo as OrgNo";
+            sql += " FROM wf_cond a,wf_flow b WHERE a.FK_Flow=b.no  ";
+            sql += " AND  FK_Attr NOT IN (SELECT MYPK FROM sys_mapattr ) AND LENGTH(FK_Attr) >0";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count>=1)
+                err += "err@在配置如下流程的条件的时候，字段被删除，会导致流程运行错误:" + BP.Tools.Json.ToJson(dt);
+
+            return err;
+        }
+
         #region 执行安装/升级.
         /// <summary>
         /// 当前版本号-为了升级使用.
@@ -1178,6 +1197,10 @@ namespace BP.WF
         /// <returns></returns>
         public static string UpdataCCFlowVer()
         {
+            //string checkErr = CheckFlows();
+            //if (DataType.IsNullOrEmpty(checkErr) == false)
+            //    return checkErr;
+
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
             /*
@@ -2066,8 +2089,6 @@ namespace BP.WF
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=CONCAT(FK_Frm,'_',FK_Node,'_',FK_Flow)");
 
                 #endregion
-
-
 
                 #region 执行更新.wf_node
                 sql = "UPDATE WF_Node SET FWCType=0 WHERE FWCType IS NULL";

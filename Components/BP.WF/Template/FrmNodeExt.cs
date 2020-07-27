@@ -183,7 +183,12 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
                 RefMethod rm = new RefMethod();
+                rm.Title = "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDFrm()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
+                rm = new RefMethod();
                 rm.Title = "启用规则";
                 rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -200,6 +205,7 @@ namespace BP.WF.Template
                 rm.Title = "组件权限";
                 rm.ClassMethodName = this.ToString() + ".DoComponents()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -246,12 +252,36 @@ namespace BP.WF.Template
                 rm.GroupName = "表单组件";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "表单列表";
+                rm.ClassMethodName = this.ToString() + ".DoBindFrms()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 设计表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoDFrm()
+        {
+            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+        }
+        /// <summary>
+        /// 打开绑定表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoBindFrms()
+        {
+            return "../../Admin/Sln/BindFrms.htm?FK_Node="+this.FK_Node+"&FK_Flow="+this.FK_Flow;
+        }
+
         /// <summary>
         /// 审核组件
         /// </summary>

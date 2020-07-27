@@ -952,7 +952,7 @@ namespace BP.WF
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowStartRDT; // "FlowStartRDT";
+                attr.KeyOfEn = GERptAttr.FlowStartRDT;  
                 attr.Name = "发起时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
@@ -989,7 +989,7 @@ namespace BP.WF
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowEnderRDT; // "FlowStartRDT";
+                attr.KeyOfEn = GERptAttr.FlowEnderRDT;  
                 attr.Name = "结束时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
@@ -1027,7 +1027,7 @@ namespace BP.WF
                 MapAttr attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FlowDaySpan; // "FlowStartRDT";
+                attr.KeyOfEn = GERptAttr.FlowDaySpan; 
                 attr.Name = "跨度(天)";
                 attr.MyDataType = DataType.AppFloat;
                 attr.UIContralType = UIContralType.TB;

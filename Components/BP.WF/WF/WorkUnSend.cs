@@ -465,12 +465,12 @@ namespace BP.WF
                 //撤销到的节点是干流程节点/子线程撤销到子线程
                 int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
-                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
+                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能撤销.";
 
                 //干流节点撤销到子线程
                 i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
-                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能执行撤销.";
+                    return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能撤销.";
             }
 
 

@@ -13,8 +13,6 @@ using BP.DTS;
 
 namespace BP.WF.DTS
 {
-    
-
     public class UserPort : DataIOEn
     {
         /// <summary>

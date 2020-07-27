@@ -2936,7 +2936,6 @@ namespace BP.WF
             string fk_mapData = "ND" + int.Parse(this.No) + "Rpt";
             string flowId = int.Parse(this.No).ToString();
 
-
             //生成该节点的 nds 比如  "'ND101','ND102','ND103'"
             string ndsstrs = "";
             foreach (BP.WF.Node nd in nds)
@@ -2998,11 +2997,9 @@ namespace BP.WF
                 //如果包含他,就说已经存在.
                 if (attrs.Contains("MyPK", ma.MyPK) == true)
                     continue;
-
                 // 如果不存在.
                 ma.Insert();
             }
-
 
             // 创建mapData.
             BP.Sys.MapData md = new BP.Sys.MapData();

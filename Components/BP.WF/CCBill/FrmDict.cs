@@ -652,7 +652,7 @@ namespace BP.CCBill
                 MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "RDT"; // "FlowStartRDT";
+                attr.KeyOfEn = "RDT";  
                 attr.Name = "创建时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;

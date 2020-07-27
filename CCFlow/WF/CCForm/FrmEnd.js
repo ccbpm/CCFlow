@@ -162,8 +162,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             }
             if (checkData != null && checkData != undefined) {
                 var checkField = ""
-                if (frmData.FrmNode != null && frmData.FrmNode != undefined) {
-                    checkField = frmData.FrmNode[0].CheckField;
+                if (frmData.WF_FrmNode != null && frmData.WF_FrmNode != undefined) {
+                    checkField = frmData.WF_FrmNode[0].CheckField;
                 } else {
                     checkField = checkData.WF_FrmWorkCheck[0].CheckField;
                 }

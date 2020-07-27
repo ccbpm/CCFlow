@@ -2289,7 +2289,7 @@ namespace BP.WF.HttpHandler
                 //ps.Add("WorkID", this.WorkID);
                 //ps.Add("FK_Node", this.FK_Node);
 
-                string sql = "SELECT EmpFrom as FK_Emp  FROM ND"+int.Parse(gwf.FK_Flow)+"Track WHERE WorkID =" + this.WorkID+"  AND NDFrom = "+this.FK_Node;
+                string sql = "SELECT EmpFrom as FK_Emp  FROM ND"+int.Parse(this.FK_Flow) +"Track WHERE WorkID =" + this.WorkID+"  AND NDFrom = "+this.FK_Node;
                 DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in checkerPassedDt.Rows)
                 {

@@ -1869,8 +1869,12 @@ namespace BP.WF
                     this.rptGe.SetValByKey(GERptAttr.FlowEndNode, this.town.HisNode.NodeID);
             }
 
-            this.rptGe.SetValByKey(GERptAttr.FlowDaySpan,
-                DataType.GeTimeLimits(rptGe.FlowStartRDT, DataType.CurrentDataTime));
+            //有可能日期是空的。
+            if (rptGe.FlowStartRDT.Length >= 8)
+            {
+                this.rptGe.SetValByKey(GERptAttr.FlowDaySpan,
+                    DataType.GeTimeLimits(rptGe.FlowStartRDT, DataType.CurrentDataTime));
+            }
 
             //如果两个物理表不想等.
             if (this.HisWork.EnMap.PhysicsTable.Equals(this.rptGe.EnMap.PhysicsTable) == false)

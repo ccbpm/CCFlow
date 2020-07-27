@@ -1594,22 +1594,7 @@ namespace BP.WF
                 if (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.FreeForm)
                     BP.Sys.CCFormAPI.AfterFrmEditAction("ND" + nd.NodeID);
             }
-
             return "清除成功.";
-        }
-
-
-        /// <summary>
-        /// 执行检查2018
-        /// </summary>
-        /// <returns></returns>
-        public string DoCheck2018()
-        {
-            FlowCheckError check = new FlowCheckError(this);
-            check.DoCheck();
-
-            return BP.Tools.Json.ToJson(check.dt);
-            //return "../../Admin/Testing/FlowCheckError.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 校验流程
@@ -1671,9 +1656,6 @@ namespace BP.WF
                 string msg = "@  =======  关于《" + this.Name + " 》流程检查报告  ============";
                 msg += "@信息输出分为三种: 信息  警告  错误. 如果遇到输出的错误，则必须要去修改或者设置.";
                 msg += "@流程检查目前还不能覆盖100%的错误,需要手工的运行一次才能确保流程设计的正确性.";
-
-                ////条件集合.
-                //Conds conds = new Conds(this.No);
 
                 #region 对节点进行检查
                 //节点表单字段数据类型检查--begin---------
@@ -1893,7 +1875,6 @@ namespace BP.WF
                     }
                 }
                 #endregion 检查越轨流程,子流程发起。
-
 
                 msg += "@流程的基础信息: ------ ";
                 msg += "@编号:  " + this.No + " 名称:" + this.Name + " , 存储表:" + this.PTable;

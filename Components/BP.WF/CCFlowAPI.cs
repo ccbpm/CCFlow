@@ -806,9 +806,9 @@ namespace BP.WF
                 {
                     /* 独立流程节点表单. */
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
-                    myds.Tables.Add(frmNode.ToDataTableField("FrmNode"));
+                    myds.Tables.Add(frmNode.ToDataTableField("WF_FrmNode"));
 
-                    //设置单据编号,对于绑定的表单. @yln.
+                    //设置单据编号,对于绑定的表单.
                     if (nd.IsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)
                     {
                         DataTable dtMain = myds.Tables["MainTable"];

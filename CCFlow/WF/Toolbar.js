@@ -204,7 +204,7 @@ function setModalMax() {
 function initModal(modalType, toNode, url) {
     if ("undefined" != typeof flowData && flowData != null && flowData != undefined) {
         var node = flowData.WF_Node[0];
-        if (node.FormType == 12 || (node.FormType == 11 && flowData.FrmNode[0] != null && flowData.FrmNode[0].FrmType == 8)) {
+        if (node.FormType == 12 || (node.FormType == 11 && flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0].FrmType == 8)) {
             if (modalType == "PackUp_pdf" || modalType == "PackUp_html" || modalType == "PackUp_zip") {
                 PrintPDF(modalType.replace("PackUp_", ""));
                 return;

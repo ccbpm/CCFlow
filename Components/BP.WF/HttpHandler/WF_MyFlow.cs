@@ -729,6 +729,47 @@ namespace BP.WF.HttpHandler
             return "保存成功";
         }
         /// <summary>
+        /// 子线程退回到分流的时候工具栏.
+        /// </summary>
+        /// <param name="gwf"></param>
+        /// <param name="dt"></param>
+        /// <param name="nd"></param>
+        /// <returns></returns>
+        public string InitToolBar_ForFenLiu(GenerWorkFlow gwf, DataTable dt,
+            Node nd)
+        {
+            DataRow dr = null;
+
+            dr = dt.NewRow();
+            dr["No"] = "ReSend";
+            dr["Name"] = "驳回";
+            dr["Oper"] = "ReSend";
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr["No"] = "KillThread";
+            dr["Name"] = "取消子线程";
+            dr["Oper"] = "KillThread";
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr["No"] = "UnSendAllThread";
+            dr["Name"] = "撤销整体发送";
+            dr["Oper"] = "UnSendAllThread";
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr["No"] = "Track";
+            dr["Name"] = "轨迹";
+            dr["Oper"] = "";
+            dt.Rows.Add(dr);
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
         /// 初始化toolbar.
         /// </summary>
         /// <returns></returns>
@@ -748,6 +789,12 @@ namespace BP.WF.HttpHandler
             BtnLab btnLab = new BtnLab(this.FK_Node);
             Node nd = new Node(this.FK_Node);
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.WFState == WFState.ReturnSta && gwf.FID != 0
+                && nd.HisRunModel == RunModel.FL)
+            {
+                return InitToolBar_ForFenLiu(gwf, dt, nd);
+            }
+
             if (this.FK_Node.ToString().EndsWith("01") == false)
             {
                 if (gwf.WFState == WFState.Askfor)

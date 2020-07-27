@@ -1656,9 +1656,9 @@ namespace BP.WF
             //获得所有的方向,按照优先级, 按照条件处理方向，如果成立就返回.
             Directions dirs = new Directions(currNode.NodeID);
 
-            if(dirs.Count == 1)
+            if (dirs.Count == 1)
                 return new Node(dirs[0].GetValIntByKey(DirectionAttr.ToNode));
-           
+
 
             //定义没有条件的节点集合.
             Directions dirs0Cond = new Directions();
@@ -2260,6 +2260,7 @@ namespace BP.WF
                         gwf.FK_Dept = wl.FK_Dept;
                         gwf.DeptName = wl.FK_DeptT;
                         gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
+                        gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
 
                         if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                         {
@@ -2368,7 +2369,6 @@ namespace BP.WF
             ps.Add("FID", this.HisWork.OID);
             ps.Add("FK_Node", toNode.NodeID);
             #endregion 删除到达节点的子线程如果有，防止退回信息垃圾数据问题，如果退回处理了这个部分就不需要处理了.
-
 
             #region 产生下一步骤的工作人员
             // 发起.
@@ -2887,6 +2887,10 @@ namespace BP.WF
                     gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
                     gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
 
+                    //域.
+                    gwf.Domain = this.HisGenerWorkFlow.Domain;
+
+
                     //工程类项目关联字段
                     gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
                     gwf.PrjName = this.HisGenerWorkFlow.PrjName;
@@ -2968,8 +2972,7 @@ namespace BP.WF
                 #endregion 产生工作的信息.
             }
             #endregion 复制数据.
-            //把domain跟新到子线程产生的workid中去 zsy 2020.7.19
-            DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + this.WorkID);
+
             #region 处理消息提示
             string info = BP.WF.Glo.multilingual("@分流节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", toNode.Name, this.HisRememberMe.NumOfObjs.ToString(), this.HisRememberMe.EmpsExt);
 
@@ -3056,7 +3059,7 @@ namespace BP.WF
 
             if (current_gwls.Count == 0)
                 current_gwls = this.Func_GenerWorkerLists(this.town);// 初试化他们的工作人员．
- 
+
 
             string toEmpsStr = "";
             string emps = "";
@@ -3072,7 +3075,7 @@ namespace BP.WF
 
             //写入日志, 2020.07.26 by zhoupeng.
             ActionType at = ActionType.SubThreadForward;
-            this.AddToTrack(at, emps, toEmpsStr,toNode.NodeID,toNode.Name, BP.WF.Glo.multilingual("子线程", "WorkNode", "sub_thread"),this.HisNode);
+            this.AddToTrack(at, emps, toEmpsStr, toNode.NodeID, toNode.Name, BP.WF.Glo.multilingual("子线程", "WorkNode", "sub_thread"), this.HisNode);
 
             //增加变量.
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, emps.Replace("@", ","), SendReturnMsgType.SystemMsg);
@@ -3192,10 +3195,7 @@ namespace BP.WF
             #endregion 处理国机的需求, 把最后一个子线程的主表数据同步到合流节点的Rpt里面去.
 
         }
-        private string NodeSend_55(Node toNode)
-        {
-            return null;
-        }
+
         /// <summary>
         /// 节点向下运动
         /// </summary>
@@ -3211,27 +3211,7 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.FK_Emp, this.Execer);
             DBAccess.RunSQL(ps);
 
-            #region 检查当前的状态是是否是退回,如果是退回的状态，就给他赋值.
-            // 检查当前的状态是是否是退回，.
-            if (this.SendNodeWFState == WFState.ReturnSta)
-            {
-                /*检查该退回是否是原路返回?*/
-                ps = new Paras();
-                ps.SQL = "SELECT ReturnNode,Returner,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
-                ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
-                DataTable dt = DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count != 0)
-                {
-                    //有可能查询出来多个，因为按时间排序了，只取出最后一次退回的，看看是否有退回并原路返回的信息。
-
-                    /*确认这次退回，是退回并原路返回 ,  在这里初始化它的工作人员, 与将要发送的节点. */
-                    this.JumpToNode = new Node(int.Parse(dt.Rows[0]["ReturnNode"].ToString()));
-                    this.JumpToEmp = dt.Rows[0]["Returner"].ToString();
-                    this.IsSkip = true; //如果不设置为true, 将会删除目标数据.
-                    //  this.NodeSend_11(this.JumpToNode);
-                }
-            }
-            #endregion.
+           
 
             switch (this.HisNode.HisRunModel)
             {
@@ -3418,7 +3398,7 @@ namespace BP.WF
                         case RunModel.SubThread:/*4.5 子线程*/
                             if (toND4.HisSubThreadType == SubThreadType.SameSheet)
                             {
-                               
+
                                 NodeSend_24_SameSheet(toND4);
 
                                 // 为广西计算中心.
@@ -3429,12 +3409,12 @@ namespace BP.WF
                             {
                                 Nodes toNDs4 = this.Func_GenerNextStepNodes();
                                 NodeSend_24_UnSameSheet(toNDs4); /*可能是只发送1个异表单*/
-                                
+
                                 //为计算中心：执行更新.
                                 string names = "";
                                 foreach (Node mynd in toNDs4)
                                 {
-                                    names += ","+mynd.Name;
+                                    names += "," + mynd.Name;
                                 }
                                 this.HisGenerWorkFlow.NodeName += names;
                                 this.HisGenerWorkFlow.DirectUpdate();
@@ -6214,9 +6194,12 @@ namespace BP.WF
             this.JumpToEmp = jumpToEmp;
 
             // 为广西计算中心增加自动返回的节点, 发送之后，让其自动返回给发送人.
-            WorkNode wn = WorkNodePlus.IsSendBackNode(this);
-            this.JumpToEmp = wn.JumpToEmp;
-            this.JumpToNode = wn.JumpToNode;
+            if (this.HisNode.IsSendBackNode == true)
+            {
+                WorkNode wn = WorkNodePlus.IsSendBackNode(this);
+                this.JumpToEmp = wn.JumpToEmp;
+                this.JumpToNode = wn.JumpToNode; //计算要到达的人.
+            }
 
             //定义变量.
             string sql = null;
@@ -6236,8 +6219,8 @@ namespace BP.WF
             }
 
             // 第1.3: 判断当前流程状态,如果是加签状态, 处理.
-            if (wn.HisNode.IsStartNode == false
-            && wn.HisGenerWorkFlow.WFState == WFState.Askfor)
+            if (this.HisNode.IsStartNode == false
+            && this.HisGenerWorkFlow.WFState == WFState.Askfor)
             {
                 SendReturnObjs objs = WorkNodePlus.DealAskForState(this);
                 if (objs != null)
@@ -6335,7 +6318,7 @@ namespace BP.WF
                     }
 
                     //调用发送成功事件.
-                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, wn, this.HisMsgObjs, null);
+                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, this, this.HisMsgObjs, null);
                     this.HisMsgObjs.AddMsg("info1", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                     //执行时效考核.
@@ -6429,7 +6412,7 @@ namespace BP.WF
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
                 #region 处理退回的情况.
-                if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta)
+                if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta && this.JumpToNode ==null )
                 {
                     #region 当前节点是分流节点但是是子线程退回的节点,需要直接发送给子线程
                     if ((this.HisNode.HisRunModel == RunModel.FL || this.HisNode.HisRunModel == RunModel.FHL) && this.HisGenerWorkFlow.FID != 0)
@@ -6460,7 +6443,7 @@ namespace BP.WF
                         gwls.Retrieve(GenerWorkerListAttr.WorkID, this.HisGenerWorkFlow.WorkID,
                             GenerWorkerListAttr.FK_Node, this.JumpToNode.NodeID, GenerWorkerListAttr.IsPass, 5);
                         if (gwls.Count == 0)
-                            throw new Exception(BP.WF.Glo.multilingual("@没有找到退回节点的工作人员列表数据.[WorkID="+this.HisGenerWorkFlow.WorkID+"]", "WorkNode", "not_found_receiver_expected_data", new string[0]));
+                            throw new Exception(BP.WF.Glo.multilingual("@没有找到退回节点的工作人员列表数据.[WorkID=" + this.HisGenerWorkFlow.WorkID + "]", "WorkNode", "not_found_receiver_expected_data", new string[0]));
 
                         GenerWorkerList gwl = gwls[0] as GenerWorkerList;
 
@@ -6524,17 +6507,17 @@ namespace BP.WF
 
                     /* 检查该退回是否是原路返回 ? */
                     ps = new Paras();
-                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
+                    ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + dbStr + "WorkID  AND ReturnToNode=" + this.HisGenerWorkFlow.FK_Node + "  ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
                     DataTable mydt = DBAccess.RunSQLReturnTable(ps);
-                    if (mydt.Rows.Count != 0)
+                    if (mydt.Rows.Count != 0 && mydt.Rows[0]["IsBackTracking"].ToString().Equals("1") == true)
                     {
                         //有可能查询出来多个，因为按时间排序了，只取出最后一次退回的，看看是否有退回并原路返回的信息。
 
                         /*确认这次退回，是退回并原路返回 ,  在这里初始化它的工作人员, 与将要发送的节点. */
                         this.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
                         this.JumpToEmp = mydt.Rows[0]["Returner"].ToString();
-                        string toEmpName = mydt.Rows[0]["ReturnerName"].ToString();
+                         string toEmpName = mydt.Rows[0]["ReturnerName"].ToString();
 
                         #region 如果当前是退回, 并且当前的运行模式是按照流程图运行.
                         if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
@@ -8537,8 +8520,8 @@ namespace BP.WF
                 //第一次到达设计Gen
                 gwf.Update();
             }
-            
-               
+
+
 
             string FK_Emp = "";
             string toEmpsStr = "";
@@ -8555,7 +8538,7 @@ namespace BP.WF
             }
 
             ActionType at = ActionType.SubThreadForward;
-            this.AddToTrack(at, empNos, emps.Replace("@",","),nd.NodeID,nd.Name, BP.WF.Glo.multilingual("子线程向合流节点发送", "WorkNode", "sub_thread"), this.HisNode);
+            this.AddToTrack(at, empNos, emps.Replace("@", ","), nd.NodeID, nd.Name, BP.WF.Glo.multilingual("子线程向合流节点发送", "WorkNode", "sub_thread"), this.HisNode);
 
             /* 
             * 更新它的节点 worklist 信息, 说明当前节点已经完成了.

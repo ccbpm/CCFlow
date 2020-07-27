@@ -614,7 +614,7 @@ namespace BP.DA
         /// <returns>返回执行的内容</returns>
         public static string ReadURLContext(string url, int timeOut)
         {
-            return ReadURLContext(url, timeOut, Encoding.UTF8,null);
+            return ReadURLContext(url, timeOut, Encoding.UTF8, null);
         }
         /// <summary>
         /// 读取URL内容
@@ -624,7 +624,7 @@ namespace BP.DA
         /// <param name="encode">text code.</param>
         /// <param name="sb">参数类型</param>
         /// <returns>返回读取内容</returns>
-        public static string ReadURLContext(string url, int timeOut=9999, Encoding encode=null, StringBuilder sb=null)
+        public static string ReadURLContext(string url, int timeOut = 9999, Encoding encode = null, StringBuilder sb = null)
         {
             if (encode == null)
                 encode = Encoding.UTF8;
@@ -1872,6 +1872,12 @@ namespace BP.DA
         /// <returns></returns>
         public static float GeTimeLimits(string dtoffrom, string dtofto)
         {
+            if (dtoffrom == null || dtoffrom.Length <= 7)
+                return 0;
+
+            if (dtofto == null || dtofto.Length <= 7)
+                return 0;
+
             DateTime dtfrom = DataType.ParseSysDate2DateTime(dtoffrom);
             DateTime dtto = DataType.ParseSysDate2DateTime(dtofto);
 

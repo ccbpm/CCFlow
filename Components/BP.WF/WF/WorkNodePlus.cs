@@ -337,7 +337,7 @@ namespace BP.WF
                                 //如果是时间类型，要进行转换
                                 if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                                 {
-                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString())&& lcDt.Rows[0][lcArr[i].ToString()]!="@RDT")
+                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
                                         values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
                                     else
                                         values += "'',";
@@ -376,7 +376,7 @@ namespace BP.WF
                         throw new Exception("暂时不支您所使用的数据库类型!");
                 }
                 values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                
+
             }
 
             values = values.Substring(0, values.Length - 1);
@@ -474,20 +474,20 @@ namespace BP.WF
             if (wn.HisGenerWorkFlow.WFState == WFState.ReturnSta)
             {
                 //是退回状态且原路返回的情况
-                Paras ps = new Paras();
-                ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND IsBackTracking=1 ORDER BY RDT DESC";
-                ps.Add(ReturnWorkAttr.WorkID, wn.WorkID);
-                DataTable mydt = DBAccess.RunSQLReturnTable(ps);
-                if (mydt.Rows.Count != 0)
+                string sql = "SELECT ReturnNode, Returner, ReturnerName, IsBackTracking ";
+                sql += " FROM WF_ReturnWork  ";
+                sql += " WHERE WorkID=" + wn.WorkID + " ORDER BY RDT DESC";
+                DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+                if (mydt.Rows.Count != 0 && mydt.Rows[0][3].ToString().Equals("1")==true)
                 {
                     wn.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
                     wn.JumpToEmp = mydt.Rows[0]["Returner"].ToString();
                     return wn;
                 }
-               
+
             }
             if (wn.HisNode.HisToNDNum != 0)
-            throw new Exception("err@流程设计错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
+                throw new Exception("err@流程设计错误:当前节点是发送自动返回节点，但是当前节点不能有到达的节点.");
 
             if (wn.HisNode.HisRunModel != RunModel.Ordinary)
                 throw new Exception("err@流程设计错误:只能是线性节点才能设置[发送并返回]属性,当前节点是[" + wn.HisNode.HisRunModel.ToString() + "]");
@@ -512,7 +512,7 @@ namespace BP.WF
                 if (wn.HisNode.HisRunModel == RunModel.SubThread)
                     mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
                 else
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= "+(int)ActionType.UnSend+" AND NDTo = " + wn.HisNode.NodeID+" AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='"+ wn.HisFlow.No+"')";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
 
                 //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
@@ -612,7 +612,7 @@ namespace BP.WF
                         GenerWorkerListAttr.WorkID, wn.WorkID, GenerWorkerListAttr.FK_Emp, wn.Execer);
 
                     //调用发送成功事件.
-                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess,wn);
+                    string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, wn);
                     wn.HisMsgObjs.AddMsg("info21", sendSuccess, sendSuccess, SendReturnMsgType.Info);
 
                     //执行时效考核.

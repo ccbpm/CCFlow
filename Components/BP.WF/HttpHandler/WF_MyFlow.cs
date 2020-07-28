@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.CCBill;
 
 namespace BP.WF.HttpHandler
 {
@@ -743,19 +744,19 @@ namespace BP.WF.HttpHandler
             dr = dt.NewRow();
             dr["No"] = "ReSend";
             dr["Name"] = "驳回";
-            dr["Oper"] = "ReSend";
+            dr["Oper"] = "ReSend()";
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr["No"] = "KillThread";
             dr["Name"] = "取消子线程";
-            dr["Oper"] = "KillThread";
+            dr["Oper"] = "KillThread()";
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr["No"] = "UnSendAllThread";
             dr["Name"] = "撤销整体发送";
-            dr["Oper"] = "UnSendAllThread";
+            dr["Oper"] = "UnSendAllThread()";
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -1499,7 +1500,7 @@ namespace BP.WF.HttpHandler
                 if (gwf.WFState == WFState.ReturnSta)
                 {
                     //当前节点是退回状态，是否原路返回
-                    Paras ps = new Paras(); //@yln
+                    Paras ps = new Paras();
                     ps.SQL = "SELECT ReturnNode,Returner,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
                     ps.Add(ReturnWorkAttr.WorkID, this.WorkID);
                     DataTable mydt = DBAccess.RunSQLReturnTable(ps);
@@ -3419,6 +3420,124 @@ namespace BP.WF.HttpHandler
                 Log.DefaultLogWriteLineError(ex);
                 return "err@" + ex.Message;
             }
+        }
+
+        /**
+         * 驳回给子线程
+         */
+        public string ReSend()
+        {
+            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+            return objs.ToMsgOfHtml();
+        }
+        /**
+         * 删除指定ID的子线程
+         */
+        public string KillThread()
+        {
+            Node nd = new Node(this.FK_Node);
+            if (nd.HisRunModel != RunModel.FL || this.FID == 0)
+                return "err@该节点不是子线程返回的分流节点，不能删除子线程";
+            //首先要检查，当前的处理人是否是分流节点的处理人？如果是，就要把，未走完的所有子线程都删除掉。
+            GenerWorkerList gwl = new GenerWorkerList();
+
+            //查询已经走得分流节点待办.
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.FID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            if (i == 0)
+                return "err@您不能执行子线程的操作，因为当前分流工作不是您发送的。";
+            gwl.IsPassInt = 1;
+            gwl.IsRead = true;
+            gwl.SDT = DataType.CurrentDataTimess;  
+            gwl.Update();
+
+           
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = this.WorkID;
+            i = gwf.RetrieveFromDBSources();
+            if (i== 0)
+                return "err@没有获取到子线程操作的流程数据GenerWorkFlow[" + this.WorkID + "]";
+
+            Node thredNode = new Node(gwf.FK_Node);
+            //删除子线程的操作
+            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.WorkID, "分流节点删除子线程.");
+
+            //删除子线程的数据
+            Works wks = thredNode.HisWorks;
+            if (new Flow(this.FK_Flow).HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+                wks.Delete(GenerWorkerListAttr.WorkID, this.WorkID);
+
+            return "";
+        }
+
+        /**
+         * 删除所有的子线程
+        **/
+        public string UnSendAllTread()
+        {
+            Node nd = new Node(this.FK_Node);
+            if (nd.HisRunModel != RunModel.FL || this.FID == 0)
+                return "err@该节点不是子线程返回的分流节点，不能删除子线程";
+
+            GenerWorkFlow gwf = new GenerWorkFlow(this.FID);
+            //首先要检查，当前的处理人是否是分流节点的处理人？如果是，就要把，未走完的所有子线程都删除掉。
+            GenerWorkerList gwl = new GenerWorkerList();
+
+            //查询已经走得分流节点待办.
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.FID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            if (i == 0)
+                return "err@您不能执行删除子线程的操作，因为当前分流工作不是您发送的。";
+
+            // 更新分流节点，让其出现待办.
+            gwl.IsPassInt = 0;
+            gwl.IsRead = false;
+            gwl.SDT = DataType.CurrentDataTimess;  //这里计算时间有问题.
+            gwl.Update();
+
+            // 把设置当前流程运行到分流流程上.
+            gwf.FK_Node = this.FK_Node;
+            
+            gwf.NodeName = nd.Name;
+            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
+            gwf.SendDT = DataType.CurrentDataTimess;
+            gwf.Update();
+
+
+            Work wk = nd.HisWork;
+            wk.OID = gwf.WorkID;
+            wk.RetrieveFromDBSources();
+
+            // 记录日志..
+            WorkNode wn = new WorkNode(wk, nd);
+            wn.AddToTrack(ActionType.DeleteSubThread, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "删除分流节点"+nd.Name+"["+nd.NodeID+"],发起的所有子线程");
+
+
+            //删除上一个节点的数据。
+            foreach (Node ndNext in nd.HisToNodes)
+            {
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND FK_Node=" + ndNext.NodeID);
+                if (i == 0)
+                    continue;
+
+                if (ndNext.HisRunModel == RunModel.SubThread)
+                {
+                    /*如果到达的节点是子线程,就查询出来发起的子线程。*/
+                    GenerWorkFlows gwfs = new GenerWorkFlows();
+                    gwfs.Retrieve(GenerWorkFlowAttr.FID, this.FID);
+                    foreach (GenerWorkFlow en in gwfs)
+                        BP.WF.Dev2Interface.Flow_DeleteSubThread(en.WorkID, "分流节点删除子线程.");
+
+                    continue;
+                }
+
+                // 删除工作记录。
+                Works wks = ndNext.HisWorks;
+                if (new Flow(this.FK_Flow).HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
+                    wks.Delete(GenerWorkerListAttr.FID, this.FID);
+
+
+            }
+
+            return "url@MyFlow.htm?FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node+"&WorkID="+this.FID;
         }
     }
 }

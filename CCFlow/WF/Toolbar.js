@@ -1200,3 +1200,47 @@ function Rollback() {
     window.close();
 }
 
+/**------------------------子线程退回分流节点的工作处理器按钮操作-------------------------------**/
+
+/**
+ * 驳回子线程
+ */
+function ReSend() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("ReSend");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    OptSuc(data);
+}
+/**
+ * 取消子线程
+ */
+function KillThread() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("KillThread");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    window.close();
+}
+/**
+ * 撤销整体发送
+ */
+function UnSendAllThread() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("UnSendAllTread");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        return;
+    }
+    if (data.indexOf("url@") != -1) {
+        var url = data.replace("url@", "");
+        window.location.href = url;
+    }
+}

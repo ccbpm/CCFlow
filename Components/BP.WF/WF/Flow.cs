@@ -644,6 +644,9 @@ namespace BP.WF
             if (Glo.CheckIsCanStartFlow_InitStartFlow(this) == false)
                 throw new Exception("err@您违反了该流程的【" + this.StartLimitRole + "】限制规则。" + this.StartLimitAlert);
 
+            GenerWorkFlow gwf = new GenerWorkFlow();
+
+            #region 组织参数.
             //如果是bs系统.
             if (paras == null)
                 paras = new Hashtable();
@@ -660,6 +663,11 @@ namespace BP.WF
                         paras.Add(k, HttpContextHelper.RequestParams(k));
                 }
             }
+            #endregion 组织参数.
+
+            bool isDelDraft = false;
+            if (paras.ContainsKey(StartFlowParaNameList.IsDeleteDraft) && paras[StartFlowParaNameList.IsDeleteDraft].ToString().Equals("1"))
+                isDelDraft = true;
 
             //开始节点.
             BP.WF.Node nd = new BP.WF.Node(this.StartNodeID);
@@ -683,7 +691,7 @@ namespace BP.WF
             //是否新创建的WorkID
             bool IsNewWorkID = false;
             /*如果要启用草稿,就创建一个新的WorkID .*/
-            if (this.DraftRole != Template.DraftRole.None && nd.IsStartNode)
+            if (this.DraftRole != Template.DraftRole.None)
                 IsNewWorkID = true;
 
             string errInfo = "";
@@ -693,26 +701,30 @@ namespace BP.WF
                 if (this.IsGuestFlow == true && DataType.IsNullOrEmpty(GuestUser.No) == false)
                 {
                     /*是客户参与的流程，并且具有客户登陆的信息。*/
-                    ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState ";
+                    ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState AND FK_Flow='"+this.No+"' ";
                     ps.Add(GERptAttr.GuestNo, GuestUser.No);
                     ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count > 0 && IsNewWorkID == false)
                     {
                         wk.OID = Int64.Parse(dt.Rows[0][0].ToString());
-                        int nodeID = int.Parse(dt.Rows[0][1].ToString());
-                        if (nodeID != this.StartNodeID)
-                        {
-                            string error = "@这里出现了blank的状态下流程运行到其它的节点上去了的情况。";
-                            Log.DefaultLogWriteLineError(error);
-                            throw new Exception(error);
-                        }
+
+                        //查询出来当前gwf.
+                        gwf.WorkID = wk.OID;
+                        gwf.Retrieve();
+
+                        //int nodeID = int.Parse(dt.Rows[0][1].ToString());
+                        //if (nodeID != this.StartNodeID)
+                        //{
+                        //    string error = "@这里出现了blank的状态下流程运行到其它的节点上去了的情况。";
+                        //    Log.DefaultLogWriteLineError(error);
+                        //    throw new Exception(error);
+                        //}
                     }
                 }
                 else
                 {
-
-                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE WFState=0 AND Starter=" + dbstr + "FlowStarter AND FK_Flow=" + dbstr + "FK_Flow ";
+                    ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE WFState=0 AND Starter=" + dbstr + "FlowStarter AND FK_Flow=" + dbstr + "FK_Flow  ";
                     ps.Add(GERptAttr.FlowStarter, emp.No);
                     ps.Add(GenerWorkFlowAttr.FK_Flow, this.No);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -722,12 +734,16 @@ namespace BP.WF
                     {
                         wk.OID = Int64.Parse(dt.Rows[0][0].ToString());
                         wk.RetrieveFromDBSources();
-                        int nodeID = int.Parse(dt.Rows[0][1].ToString());
-                        if (nodeID != this.StartNodeID)
+
+                        //查询出来当前gwf.
+                        gwf.WorkID = wk.OID;
+                        if (gwf.WorkID == 0)
                         {
-                            string error = "err@这里出现了blank的状态下流程运行到其它的节点上去了的情况，当前停留节点:" + nodeID;
-                            Log.DefaultLogWriteLineError(error);
+                            gwf.Delete();
+                            return NewWork(emp,paras);
                         }
+
+                        gwf.Retrieve();
                     }
                 }
 
@@ -737,12 +753,6 @@ namespace BP.WF
                     /* 说明没有空白,就创建一个空白..*/
                     wk.ResetDefaultVal();
                     wk.Rec = WebUser.No;
-
-                    //   wk.SetValByKey(GERptAttr.RecText, emp.Name);
-                    //  wk.SetValByKey(GERptAttr.Emps, emp.No);
-
-                    //  wk.SetValByKey(WorkAttr.RDT, DataType.CurrentDataTime);
-                    // wk.SetValByKey(WorkAttr.CDT, DataType.CurrentDataTime);
 
                     wk.SetValByKey(GERptAttr.WFState, (int)WFState.Blank);
 
@@ -760,7 +770,6 @@ namespace BP.WF
                     catch (Exception ex)
                     {
                         wk.CheckPhysicsTable();
-                        //wk.DirectInsert();
                     }
 
                     //设置参数.
@@ -843,9 +852,6 @@ namespace BP.WF
                     rpt.FID = 0;
                     rpt.FlowStartRDT = DataType.CurrentDataTime;
                     rpt.FlowEnderRDT = DataType.CurrentDataTime;
-
-                    //在发送的时候有更新.
-                    //   rpt.DirectUpdate();
                 }
             }
             catch (Exception ex)
@@ -862,12 +868,10 @@ namespace BP.WF
 
             #region copy数据.
             // 记录这个id ,不让其它在复制时间被修改。
-            Int64 newOID = wk.OID;
             if (IsNewWorkID == true)
             {
                 // 处理传递过来的参数。
                 int i = 0;
-
                 string expKeys = "OID,DoType,HttpHandlerName,DoMethod,t,";
                 foreach (string k in paras.Keys)
                 {
@@ -880,37 +884,21 @@ namespace BP.WF
                     i++;
                     wk.SetValByKey(k, str);
                 }
-
-                if (i >= 3)
-                {
-                    wk.DirectUpdate();
-                }
             }
             #endregion copy数据.
 
             #region 处理删除草稿的需求。
-            if (paras.ContainsKey(StartFlowParaNameList.IsDeleteDraft) && paras[StartFlowParaNameList.IsDeleteDraft].ToString() == "1")
+            if ( isDelDraft==true)
             {
-                /*是否要删除Draft */
-                Int64 oid = wk.OID;
-                try
-                {
-                    //wk.ResetDefaultValAllAttr();
-                    wk.DirectUpdate();
-                }
-                catch (Exception ex)
-                {
-                    wk.Update();
-                    Log.DebugWriteError("创建新工作错误，但是屏蔽了异常,请检查默认值的问题：" + ex.Message);
-                }
+                //重新设置默认值.
+                wk.ResetDefaultValAllAttr();
 
                 MapDtls dtls = wk.HisMapDtls;
                 foreach (MapDtl dtl in dtls)
-                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + oid + "'");
+                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + wk.OID + "'");
 
                 //删除附件数据。
                 DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + wk.NodeID + "' AND RefPKVal='" + wk.OID + "'");
-                wk.OID = newOID;
             }
             #endregion 处理删除草稿的需求。
 
@@ -1052,8 +1040,7 @@ namespace BP.WF
                 #endregion 获取web变量.
 
                 #region 特殊赋值.
-                wk.OID = newOID;
-                rpt.OID = newOID;
+              
 
                 // 在执行copy后，有可能这两个字段会被冲掉。
                 if (CopyFormWorkID != null)
@@ -1249,8 +1236,6 @@ namespace BP.WF
                 #endregion 复制独立表单数据.
 
             }
-
-
             #endregion 处理流程之间的数据传递1。
 
             #region 处理单据编号.
@@ -1296,7 +1281,7 @@ namespace BP.WF
 
                 WorkFlow wf = new WorkFlow(this, wk.OID, wk.FID);
 
-                BP.WF.GenerWorkFlow gwf = new GenerWorkFlow(rpt.OID);
+                gwf = new GenerWorkFlow(rpt.OID);
                 rpt.WFState = WFState.Runing;
                 rpt.Update();
 
@@ -1317,50 +1302,52 @@ namespace BP.WF
                 wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
 
             wk.FID = 0;
-            if (wk.IsExits == false)
-                wk.DirectInsert();
-            else
-                wk.Update();
+            wk.Update();
+
             #endregion 最后整理参数.
 
-            #region 给generworkflow初始化数据. add 2015-08-06
-            GenerWorkFlow mygwf = new GenerWorkFlow();
-            mygwf.WorkID = wk.OID;
-            if (mygwf.RetrieveFromDBSources() == 0)
-            {
-                mygwf.FK_Flow = this.No;
-                mygwf.FK_FlowSort = this.FK_FlowSort;
-                mygwf.SysType = this.SysType;
-                mygwf.FK_Node = nd.NodeID;
-                mygwf.WorkID = wk.OID;
-                mygwf.WFState = WFState.Blank;
-                mygwf.FlowName = this.Name;
-                mygwf.Insert();
-            }
-            mygwf.Starter = WebUser.No;
-            mygwf.StarterName = WebUser.Name;
-            mygwf.FK_Dept = BP.Web.WebUser.FK_Dept;
-            mygwf.DeptName = BP.Web.WebUser.FK_DeptName;
-            mygwf.RDT = DataType.CurrentDataTime;
-            mygwf.Title = rpt.Title;
-            mygwf.BillNo = rpt.BillNo;
-            if (mygwf.Title.Contains("@") == true)
-                mygwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
+            #region 给 generworkflow 初始化数据. add 2015-08-06
+
+            gwf.FK_Flow = this.No;
+            gwf.FK_FlowSort = this.FK_FlowSort;
+            gwf.SysType = this.SysType;
+            gwf.FK_Node = nd.NodeID;
+            gwf.WorkID = wk.OID;
+            gwf.WFState = WFState.Blank;
+            gwf.FlowName = this.Name;
+
+            gwf.FK_Node = nd.NodeID;
+            gwf.NodeName = nd.Name;
+            gwf.Starter = WebUser.No;
+            gwf.StarterName = WebUser.Name;
+            gwf.FK_Dept = BP.Web.WebUser.FK_Dept;
+            gwf.DeptName = BP.Web.WebUser.FK_DeptName;
+            gwf.RDT = DataType.CurrentDataTime;
+            gwf.Title = rpt.Title;
+            gwf.BillNo = rpt.BillNo;
+            if (gwf.Title.Contains("@") == true)
+                gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
             if (DataType.IsNullOrEmpty(PNodeIDStr) == false && DataType.IsNullOrEmpty(PWorkIDStr) == false)
             {
                 if (DataType.IsNullOrEmpty(PFIDStr) == false)
-                    mygwf.PFID = Int64.Parse(PFIDStr);
-                mygwf.PEmp = rpt.PEmp;
-                mygwf.PFlowNo = rpt.PFlowNo;
-                mygwf.PNodeID = rpt.PNodeID;
-                mygwf.PWorkID = rpt.PWorkID;
+                    gwf.PFID = Int64.Parse(PFIDStr);
+                gwf.PEmp = rpt.PEmp;
+                gwf.PFlowNo = rpt.PFlowNo;
+                gwf.PNodeID = rpt.PNodeID;
+                gwf.PWorkID = rpt.PWorkID;
             }
-            mygwf.DirectUpdate();
+            gwf.OrgNo = WebUser.OrgNo;
+            if (gwf.WorkID == 0)
+            {
+                gwf.WorkID = wk.OID;
+                gwf.DirectInsert();
+            }
+            else
+                gwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
             //更新domian.
-            DBAccess.RunSQL("UPDATE wf_generworkflow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
-
+            DBAccess.RunSQL("UPDATE WF_GenerWorkFlow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
 
             return wk;
         }
@@ -4198,6 +4185,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
                 map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10);
+              //  map.AddTBString(FlowAttr.Domain, null, "Domain", true, true, 0, 50, 10);
 
                 //参数.
                 map.AddTBAtParas(1000);

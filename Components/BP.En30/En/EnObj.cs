@@ -178,8 +178,8 @@ namespace BP.En
             if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
             {
                 Paras ps = new Paras();
-                ps.SQL= "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData =" + ps.DBStr + "FK_MapData AND FK_Flow=" + ps.DBStr + "FK_Flow AND FK_Node =" + ps.DBStr + "FK_Node";
-                ps.Add("FK_MapData",fk_mapdata);
+                ps.SQL = "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData =" + ps.DBStr + "FK_MapData AND FK_Flow=" + ps.DBStr + "FK_Flow AND FK_Node =" + ps.DBStr + "FK_Node";
+                ps.Add("FK_MapData", fk_mapdata);
                 ps.Add("FK_Flow", fk_flow);
                 ps.Add("FK_Node", fk_node);
 
@@ -822,24 +822,22 @@ namespace BP.En
         /// <returns></returns>
         public string GetValStringByKey(string attrKey)
         {
-            if (1 == 2 && attrKey.Equals("Doc") == true)
-            {
-                //string s = this.Row.GetValByKey(attrKey).ToString();
-                //if (s == "")
-                //    s = this.GetValDocText();
-                //return s;
-            }
-
             if (this.Row == null)
                 throw new Exception("@没有初始化Row.");
 
             try
             {
-                return this.Row.GetValByKey(attrKey).ToString();
+                return this.Row[attrKey].ToString();
             }
             catch (Exception ex)
             {
-                throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类增加这个属性，EnsName=" + this.ToString());
+                if (this.Row.ContainsKey(attrKey) == false)
+                    throw new Exception("@获取值期间出现如下异常：" + ex.Message + "  " + attrKey + " 您没有在类【" + this.ToString() + "】增加这个属性.");
+
+                string val = this.Row[attrKey] as string;
+                if (val == null)
+                    return "";
+                return val;
             }
         }
         public string GetValStringByKey(string attrKey, string defVal)
@@ -1148,7 +1146,7 @@ namespace BP.En
                     string str = this.GetValStrByKey(attr.Key);
 
                     //判断是否是数值类型.
-                    if (attr.IsNum ==true)
+                    if (attr.IsNum == true)
                         if (this.GetValFloatByKey(attr.Key) != float.Parse(attr.DefaultValOfReal))
                             return false;
 

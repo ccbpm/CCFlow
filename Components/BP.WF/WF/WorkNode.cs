@@ -3211,7 +3211,7 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.FK_Emp, this.Execer);
             DBAccess.RunSQL(ps);
 
-           
+
 
             switch (this.HisNode.HisRunModel)
             {
@@ -6412,7 +6412,7 @@ namespace BP.WF
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
                 #region 处理退回的情况.
-                if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta && this.JumpToNode ==null )
+                if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta && this.JumpToNode == null)
                 {
                     #region 当前节点是分流节点但是是子线程退回的节点,需要直接发送给子线程
                     if ((this.HisNode.HisRunModel == RunModel.FL || this.HisNode.HisRunModel == RunModel.FHL) && this.HisGenerWorkFlow.FID != 0)
@@ -6517,7 +6517,7 @@ namespace BP.WF
                         /*确认这次退回，是退回并原路返回 ,  在这里初始化它的工作人员, 与将要发送的节点. */
                         this.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
                         this.JumpToEmp = mydt.Rows[0]["Returner"].ToString();
-                         string toEmpName = mydt.Rows[0]["ReturnerName"].ToString();
+                        string toEmpName = mydt.Rows[0]["ReturnerName"].ToString();
 
                         #region 如果当前是退回, 并且当前的运行模式是按照流程图运行.
                         if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)

@@ -7526,7 +7526,11 @@ namespace BP.WF
                 string paras = "";
                 foreach (string key in htWork.Keys)
                 {
-                    paras += "@" + key + "=" + htWork[key].ToString();
+                    if (htWork[key] == null)
+                        paras += "@" + key + "=''";
+                    else
+                        paras += "@" + key + "=" + htWork[key].ToString();
+
                     switch (key)
                     {
                         case WorkSysFieldAttr.SysSDTOfFlow:
@@ -8914,19 +8918,6 @@ namespace BP.WF
 
                     if (wk.Row.ContainsKey(str))
                     {
-                        //if (nd.IsStartNode == true)
-                        //{
-                        //    Attr attr = attrs.GetAttrByKey(str);
-                        //    string defVal = attrs.GetAttrByKey(str).DefaultValOfReal;
-                        //    if (attr.UIIsReadonly == true && defVal != null && defVal.Equals("@RDT") == true)
-                        //    {
-                        //        if (attr.MyDataType == DataType.AppDate)
-                        //            wk.SetValByKey(attr.Key, DataType.CurrentData);
-                        //        if (attr.MyDataType == DataType.AppDateTime)
-                        //            wk.SetValByKey(attr.Key, DataType.CurrentDataTime);
-                        //        continue;
-                        //    }
-                        //}
                         wk.SetValByKey(str, htWork[str]);
                     }
                     else
@@ -8950,9 +8941,8 @@ namespace BP.WF
                         foreach (MapDtl dtl in wk.HisMapDtls)
                         {
                             if (dt.TableName != dtl.No)
-                            {
                                 continue;
-                            }
+
                             //获取dtls
                             GEDtls daDtls = new GEDtls(dtl.No);
                             daDtls.Delete(GEDtlAttr.RefPK, workID); // 清除现有的数据.
@@ -8988,7 +8978,10 @@ namespace BP.WF
                     string paras = "";
                     foreach (string key in htWork.Keys)
                     {
-                        paras += "@" + key + "=" + htWork[key].ToString();
+                        var val = htWork[key];
+                        if (val == null)
+                            val = "";
+                        paras += "@" + key + "=" + val.ToString();
                     }
 
                     if (DataType.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
@@ -9806,7 +9799,7 @@ namespace BP.WF
         /// <returns>执行结果</returns>
         public static string Node_Shift(Int64 workID, string toEmp, string msg)
         {
-            if (toEmp.Equals(WebUser.No)==true)
+            if (toEmp.Equals(WebUser.No) == true)
                 throw new Exception("err@您不能移交给您自己。");
 
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
@@ -9827,12 +9820,12 @@ namespace BP.WF
 
                 //检查被移交人是否在当前的待办列表里否？
                 GenerWorkerList gwl = new GenerWorkerList();
-                i= gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
+                i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
                     GenerWorkerListAttr.FK_Node, nd.NodeID,
                     GenerWorkerListAttr.WorkID, workID);
-                if (i==1)
+                if (i == 1)
                     return "err@移交失败，您所移交的人员(" + emp.No + " " + emp.Name + ")已经在代办列表里.";
-                
+
                 //把自己的待办更新到被移交人身上.
                 string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
                 DBAccess.RunSQL(sql);
@@ -9844,7 +9837,7 @@ namespace BP.WF
                 //移交后事件
                 string atPara1 = "@SendToEmpIDs=" + emp.No;
                 string info = "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
-                 
+
                 //处理移交后发送的消息事件,发送消息.
                 PushMsgs pms1 = new PushMsgs();
                 pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
@@ -9855,7 +9848,7 @@ namespace BP.WF
                 gwf.TodoEmpsNum = 1;
                 gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
                 gwf.Update();
-                return "移交成功."+ info;
+                return "移交成功." + info;
             }
 
             //非协作模式.

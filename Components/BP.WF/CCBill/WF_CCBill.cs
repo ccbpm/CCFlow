@@ -1487,6 +1487,8 @@ namespace BP.CCBill
         #region 单据导入
         public string ImpData_Done()
         {
+            if (SystemConfig.CustomerNo.Equals("ASSET") == true)
+                return ImpData_ASSETDone();
             var files = HttpContextHelper.RequestFiles();
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要导入的数据信息。";
@@ -1629,9 +1631,7 @@ namespace BP.CCBill
 
         private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType,FrmBill fbill)
         {
-            if (SystemConfig.CustomerNo.Equals("ASSET") == true)
-                return SetEntityAttrValForASSET(no, dr, attrs, en, dt, saveType, fbill);
-
+          
             //单据数据不存在
             if (saveType == 0)
             {
@@ -1760,7 +1760,193 @@ namespace BP.CCBill
         }
 
         #endregion
+        /**
+         * 针对于北京农芯科技的单据导入的处理
+         */
+        public string ImpData_ASSETDone()
+        {
+            var files = HttpContextHelper.RequestFiles();
+            if (HttpContextHelper.RequestFilesCount == 0)
+                return "err@请选择要导入的数据信息。";
 
+            string errInfo = "";
+
+            string ext = ".xls";
+            string fileName = System.IO.Path.GetFileName(HttpContextHelper.RequestFiles(0).FileName);
+            if (fileName.Contains(".xlsx"))
+                ext = ".xlsx";
+
+
+            //设置文件名
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
+
+            //文件存放路径
+            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
+
+            //从excel里面获得数据表.
+            DataTable dt = DBLoad.ReadExcelFileToDataTable(filePath);
+
+            //删除临时文件
+            System.IO.File.Delete(filePath);
+
+            if (dt.Rows.Count == 0)
+                return "err@无导入的数据";
+
+            //获得entity.
+            FrmBill bill = new FrmBill(this.FrmID);
+            GEEntitys rpts = new GEEntitys(this.FrmID);
+            GEEntity en = new GEEntity(this.FrmID);
+
+            string noColName = ""; //编号(唯一值)
+            string nameColName = ""; //名称
+            BP.En.Map map = en.EnMap;
+            //获取表单的主键，合同类的(合同编号),人员信息类的(身份证号),其他(BillNo)
+            bool isContractBill = false;
+            bool isPersonBill = false;
+
+            if (dt.Columns.Contains("合同编号") == true)
+            {
+                noColName = "合同编号";
+                isContractBill = true;
+            }
+                
+            else if (dt.Columns.Contains("身份证号") == true)
+            {
+                noColName = "身份证号";
+                isPersonBill = true;
+            }
+                
+            else
+            {
+                
+                Attr attr = map.GetAttrByKey("BillNo");
+                noColName = attr.Desc;
+                attr = map.GetAttrByKey("Title");
+                nameColName = attr.Desc;
+            }
+
+           
+           string codeStruct = bill.EnMap.CodeStruct;
+          
+
+            //定义属性.
+            Attrs attrs = map.Attrs;
+
+            int impWay = this.GetRequestValInt("ImpWay");
+
+            #region 清空方式导入.
+            //清空方式导入.
+            int count = 0;//导入的行数
+            int changeCount = 0;//更新的行数
+            String successInfo = "";
+            if (impWay == 0)
+            {
+                rpts.ClearTable();
+                GEEntity myen = new GEEntity(this.FrmID);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    //如果是实体单据,导入的excel必须包含BillNo
+                    if (bill.EntityType == EntityType.FrmDict && dt.Columns.Contains(noColName) == false)
+                        return "err@导入的excel不包含编号列";
+                    string no = "";
+                    if (dt.Columns.Contains(noColName) == true)
+                        no = dr[noColName].ToString();
+                    string name = "";
+                    if (dt.Columns.Contains(nameColName) == true)
+                        name = dr[nameColName].ToString();
+                    myen.OID = 0;
+                    
+                    if(isContractBill == false && isPersonBill == false)
+                    {
+                        //判断是否是自增序列，序列的格式
+                        if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
+                            no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+
+                        myen.SetValByKey("BillNo", no);
+                        if (bill.EntityType == EntityType.FrmDict)
+                        {
+                            if (myen.Retrieve("BillNo", no) == 1)
+                            {
+                                errInfo += "err@编号[" + no + "][" + name + "]重复.";
+                                continue;
+                            }
+                        }
+                    }
+                    
+
+
+                    //给实体赋值
+                    errInfo += SetEntityAttrValForASSET(no, dr, attrs, myen, dt, 0, bill);
+                    count++;
+                    successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
+                }
+            }
+
+            #endregion 清空方式导入.
+
+            #region 更新方式导入
+            if (impWay == 1 || impWay == 2)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    //如果是实体单据,导入的excel必须包含BillNo
+                    if (bill.EntityType == EntityType.FrmDict && dt.Columns.Contains(noColName) == false)
+                        return "err@导入的excel不包含编号列";
+                    string no = "";
+                    if (dt.Columns.Contains(noColName) == true)
+                        no = dr[noColName].ToString();
+
+                    string name = "";
+                    if (dt.Columns.Contains(nameColName) == true)
+                        name = dr[nameColName].ToString();
+
+                    GEEntity myen = rpts.GetNewEntity as GEEntity;
+                    //合同类
+                    if (isContractBill == true || isPersonBill == true)
+                    {
+                        Attr attr = map.GetAttrByDesc(noColName);
+                        myen.SetValByKey(attr.Key, no);
+                        //存在就编辑修改数据
+                        if (myen.Retrieve(attr.Key, no) == 1)
+                        {
+                            //给实体赋值
+                            errInfo += SetEntityAttrValForASSET(no, dr, attrs, myen, dt, 1, bill);
+                            changeCount++;
+                            successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
+                            continue;
+                        }
+
+                    }
+                    else
+                    {
+                        //判断是否是自增序列，序列的格式
+                        if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
+                        {
+                            no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
+                        }
+                        myen.SetValByKey("BillNo", no);
+                        if (myen.Retrieve("BillNo", no) == 1 && bill.EntityType == EntityType.FrmDict)
+                        {
+                            //给实体赋值
+                            errInfo += SetEntityAttrValForASSET(no, dr, attrs, myen, dt, 1, bill);
+                            changeCount++;
+                            successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
+                            continue;
+                        }
+                    }
+
+                    //给实体赋值
+                    errInfo += SetEntityAttrValForASSET(no, dr, attrs, myen, dt, 0, bill);
+                    count++;
+                    successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
+                }
+            }
+            #endregion
+
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
+        }
         private string SetEntityAttrValForASSET(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType, FrmBill fbill)
         {
             

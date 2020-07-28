@@ -7385,9 +7385,9 @@ namespace BP.WF
                     foreach (string key in this.SendHTOfTemp.Keys)
                     {
                         if (rptGe.Row.ContainsKey(key) == true)
-                            this.rptGe.Row[key] = this.SendHTOfTemp[key].ToString();
+                            this.rptGe.Row[key] = this.SendHTOfTemp[key] as string;
                         else
-                            this.rptGe.Row.Add(key, this.SendHTOfTemp[key].ToString());
+                            this.rptGe.Row.Add(key, this.SendHTOfTemp[key] as string);
                     }
                 }
 

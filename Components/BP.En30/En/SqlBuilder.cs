@@ -2469,16 +2469,16 @@ namespace BP.En
                                     continue;
                                 }
 
-                                string strInt = en.Row[attr.Key].ToString();
-                                if (strInt == null || strInt == "" || strInt == "null")
-                                    ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
+                                Object strInt = en.Row[attr.Key];
+                                if (strInt == null || strInt.ToString() == "" || strInt.ToString() == "null")
+                                {
+                                    if (DataType.IsNullOrEmpty(attr.DefaultValOfReal) == true)
+                                        ps.Add(attr.Key, 0);
+                                    else
+                                        ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
+                                }                               
                                 else
-                                    if (attr.DefValType == 0
-                                        && attr.DefaultVal.Equals(MapAttrAttr.DefaultVal) == true
-                                        && en.GetValIntByKey(attr.Key) == Int32.Parse(MapAttrAttr.DefaultVal))
-                                    ps.Add(attr.Key, null);
-                                else
-                                    ps.Add(attr.Key, int.Parse(strInt));
+                                    ps.Add(attr.Key, int.Parse(strInt.ToString()));
                             }
                             break;
 
@@ -2525,7 +2525,8 @@ namespace BP.En
                             break;
                         case DataType.AppDate: // 如果是日期类型。
                         case DataType.AppDateTime:
-                            string da = en.GetValStringByKey(attr.Key);
+                            string da = en.GetValStrByKey(attr.Key);
+                            
                             ps.Add(attr.Key, da);
                             break;
                         default:

@@ -2074,13 +2074,13 @@ namespace BP.CCBill
 
                 }
 
-                if (item.Key.EndsWith("BaseCode") == true)
+                if (item.Key.EndsWith("BaseName") == true)
                 {
                     Depts depts = new Depts();
                     depts.Retrieve(DeptAttr.Name, val);
                     if(depts.Count !=0)
-                        en.SetValByKey(item.Key, (depts[0] as Dept).No );
-                    en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                        en.SetValByKey(item.Key.Replace("BaseName", "BaseCode"), (depts[0] as Dept).No);
+                    en.SetValByKey(item.Key, val);
                 }
                 else
                 {

@@ -2476,47 +2476,22 @@ namespace BP.WF.HttpHandler
             Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null)
+                if (key == null) 
                     continue;
 
-                if (key.Contains("TB_"))
-                {
+                string myKey = key;
+                myKey = myKey.Replace("TB_", "");
+                myKey = myKey.Replace("DDL_", "");
+                myKey = myKey.Replace("CB_", "");
+                myKey = myKey.Replace("RB_", "");
 
-                    string val = HttpContextHelper.RequestParams(key);
+                string val = HttpContextHelper.RequestParams(myKey);
+                val = HttpUtility.UrlDecode(val, Encoding.UTF8);
 
-                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                    {
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-
-                    }
-                    else
-                    {
-                        htMain.Remove(key.Replace("TB_", ""));
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-
-                    }
-                    continue;
-                }
-
-                if (key.Contains("DDL_"))
-                {
-                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("CB_"))
-                {
-                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("RB_"))
-                {
-                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
+                if (htMain.ContainsKey(myKey) == true)
+                    htMain[myKey] = val;
+                else
+                    htMain.Add(myKey, val);
             }
             return htMain;
         }
@@ -3447,14 +3422,14 @@ namespace BP.WF.HttpHandler
                 return "err@您不能执行子线程的操作，因为当前分流工作不是您发送的。";
             gwl.IsPassInt = 1;
             gwl.IsRead = true;
-            gwl.SDT = DataType.CurrentDataTimess;  
+            gwl.SDT = DataType.CurrentDataTimess;
             gwl.Update();
 
-           
+
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = this.WorkID;
             i = gwf.RetrieveFromDBSources();
-            if (i== 0)
+            if (i == 0)
                 return "err@没有获取到子线程操作的流程数据GenerWorkFlow[" + this.WorkID + "]";
 
             Node thredNode = new Node(gwf.FK_Node);
@@ -3495,7 +3470,7 @@ namespace BP.WF.HttpHandler
 
             // 把设置当前流程运行到分流流程上.
             gwf.FK_Node = this.FK_Node;
-            
+
             gwf.NodeName = nd.Name;
             gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
             gwf.SendDT = DataType.CurrentDataTimess;
@@ -3508,7 +3483,7 @@ namespace BP.WF.HttpHandler
 
             // 记录日志..
             WorkNode wn = new WorkNode(wk, nd);
-            wn.AddToTrack(ActionType.DeleteSubThread, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "删除分流节点"+nd.Name+"["+nd.NodeID+"],发起的所有子线程");
+            wn.AddToTrack(ActionType.DeleteSubThread, WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, "删除分流节点" + nd.Name + "[" + nd.NodeID + "],发起的所有子线程");
 
 
             //删除上一个节点的数据。
@@ -3537,7 +3512,7 @@ namespace BP.WF.HttpHandler
 
             }
 
-            return "url@MyFlow.htm?FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node+"&WorkID="+this.FID;
+            return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.FID;
         }
     }
 }

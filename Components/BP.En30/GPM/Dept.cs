@@ -164,6 +164,22 @@ namespace BP.GPM
         }
         #endregion
 
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.No)==true)
+            {
+                try
+                {
+                    this.No = this.GenerNewNoByKey("No");
+
+                }catch(Exception ex)
+                {
+                    this.No = DBAccess.GenerGUID();
+                }
+            }
+            return base.beforeInsert();
+        }
+
         /// <summary>
         /// 创建下级节点.
         /// </summary>

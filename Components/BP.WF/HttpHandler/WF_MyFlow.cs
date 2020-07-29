@@ -3469,7 +3469,7 @@ namespace BP.WF.HttpHandler
             gwf.FK_Node = this.FK_Node;
 
             gwf.NodeName = nd.Name;
-            gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
+            gwf.Sender =  WebUser.No+","+ WebUser.Name+";";
             gwf.SendDT = DataType.CurrentDataTimess;
             gwf.Update();
 

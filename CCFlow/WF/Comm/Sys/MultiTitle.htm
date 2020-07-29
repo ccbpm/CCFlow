@@ -303,7 +303,7 @@
                 var str = fields[i];
                 if (str == "")
                     continue;
-                if (str.indexOf(keyOfEn + ",") == -1)
+                if (str.indexOf("," + keyOfEn + ",") == -1)
                     continue;
                 var strs = str.substring(0, str.length - 1).split(",");
                 return strs;
@@ -405,6 +405,7 @@
                             curIdx = idx;
                         }
                     }
+
 
                 }
 

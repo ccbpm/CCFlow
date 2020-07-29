@@ -187,28 +187,35 @@
                     if (thrcolspan != 0) {
                         _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
                         thrcolspan = 0;
+                        curThrGroup = "";
+
                     }
 
                     _html += "<th rowspan=3><label><input name='oneclo' id='" + attr.KeyOfEn + "' value='" + idx1 + "' type='checkbox'/>" + attr.Name + "</label></th>";
+                    continue;
                 }
 
                 //属于三级分组下面的字段
                 if (keyIdx == 2) {
+
                     var fields = getMutliFile(attr.KeyOfEn, multiTitle1);
                     if (fields != "" && (curThrGroup == "" || curThrGroup != fields[0])) {
-                        thrcolspan += 1;
-                        curThrGroup = fields[0];
                         if (curThrGroup != "" && curThrGroup != fields[0]) {
-                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + fields[0] + "&nbsp;<button id='Btn_Delete' onclick=DeleteSpecTitle('" + fields[0] + "',1)> 删除</button></th>";
+                            _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp;<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
                             thrcolspan = 0;
                         }
+                        thrcolspan += 1;
+                        curThrGroup = fields[0];
+
                     } else {
                         thrcolspan += 1;
                     }
                     _secHtml += "<th rowspan=2>" + attr.Name + "</th>";
+                    continue;
                 }
                 //属于二级分组下的字段
                 if (keyIdx == 1) {
+
                     //增加字段
                     _thrHtml += "<th><label>" + attr.Name + "</label></th>";
                     var secfields = getMutliFile(attr.KeyOfEn, multiTitle);
@@ -234,17 +241,18 @@
                             }
                         } else {
                             if (isSecChange == true)
-                                thrcolspan += secfields.length - 1;
+                                thrcolspan += parseInt(secfields.length - 1);
                         }
-
+                        //一级标题占两行
                     } else {
                         if (thrcolspan != 0) {
                             _html += "<th colspan=" + thrcolspan + " style='text-align:center'>" + curThrGroup + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + curThrGroup + "',1)> 删除</button></th>";
                             thrcolspan = 0;
                         }
-
+                        curThrGroup = "";
+                        thrIdx = 0;
                         if (secfields != "" && (curSecGroup == "" || curSecGroup != secfields[0])) {
-                            _html += "<th rowspan=2 colspan=" + (secfields.length - 1) + " style='text-align:center' >" + secfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + secfields[0] + "',0)> 删除</button></th>";
+                            _html += "<th rowspan=2 colspan=" + (secfields.length - 1) + " style='text-align:center' ><input  id='" + secfields[0] + "' value='" + secfields[0] + "' type='checkbox'/> " + secfields[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id='Btn_Delete' onclick=DeleteSpecTitle('" + secfields[0] + "',0)> 删除</button></th>";
                             curSecGroup = secfields[0];
                             idx1++;
                         }
@@ -464,10 +472,10 @@
         <legend>设置帮助 </legend>
         <ul>
             <li> 规则：多个列合并为一级表头，多个一级表头合并为二级表头，最高支持二级表头</li>
-            <li >
+            <li>
                 <fieldset>
-                <legend>示例</legend>
-                <img alt="" src="../Sys/Img/MuLtiTitLe1.png" onclick="WinOpen('../Sys/Img/MuLtiTitLe1.png')" style="width: 500px;" />
+                    <legend>示例</legend>
+                    <img alt="" src="../Sys/Img/MuLtiTitLe1.png" onclick="WinOpen('../Sys/Img/MuLtiTitLe1.png')" style="width: 500px;" />
                 </fieldset>
             </li>
             <li> 我们没有解决不按照规则操作带来的错误。</li>

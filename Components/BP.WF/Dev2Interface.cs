@@ -4741,6 +4741,28 @@ namespace BP.WF
         /// <returns>返回成功执行信息</returns>
         public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode = 0, Int64 fid = 0)
         {
+            if (unSendToNode==0)
+            {
+                //获取用户当前所在的节点
+                String currNode = "";
+                switch (DBAccess.AppCenterDBType)
+                {
+                    case DBType.Oracle:
+                        currNode = "SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1";
+                        break;
+                    case DBType.MySQL:
+                    case DBType.PostgreSQL:
+                        currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1";
+                        break;
+                    case DBType.MSSQL:
+                        currNode = "SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
+                        break;
+                    default:
+                        currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
+                        break;
+                }
+                unSendToNode = DBAccess.RunSQLReturnValInt(currNode,0);
+            }
 
             WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode, fid);
             unSend.UnSendToNode = unSendToNode;

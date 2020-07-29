@@ -6080,10 +6080,6 @@ namespace BP.WF
                 if (this.Execer != "Guest")
                     throw new Exception(BP.WF.Glo.multilingual("@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}.", "WorkNode", "should_gust", this.HisNode.Name, this.Execer));
 
-            //int toNodeID = 0;
-            //if (jumpToNode != null)
-            //    toNodeID = jumpToNode.NodeID;
-
             #region 第1: 安全性检查.
             //   第1: 检查是否可以处理当前的工作.
             if (this.HisNode.IsStartNode == false &&

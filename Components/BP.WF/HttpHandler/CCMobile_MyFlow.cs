@@ -149,7 +149,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(bars.ToDataTableField("WF_NodeToolbar"));
             #endregion  //加载自定义的button.
 
-
             #region 处理是否是加签，或者是否是会签模式.
             bool isAskForOrHuiQian = false;
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -182,7 +181,6 @@ namespace BP.WF.HttpHandler
                         if (gwf.HuiQianZhuChiRen.Contains(WebUser.No + ",") == false && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                             isAskForOrHuiQian = true;
                     }
-
                 }
                 DataTable dt = new DataTable();
                 dt.TableName = "HuiQian";
@@ -197,10 +195,11 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
+
             #region 按钮旁的下拉框
             if (nd.CondModel == DirCondModel.SendButtonSileSelect)
             {
-                if (nd.IsStartNode == true || (gwf.TodoEmps.Contains(WebUser.No + ",") == true))
+                if (nd.IsStartNode == true || gwf.TodoEmps.Contains(WebUser.No + ",") == true)
                 {
                     /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 
@@ -294,6 +293,7 @@ namespace BP.WF.HttpHandler
                 }
             }
             #endregion 按钮旁的下拉框
+
             return BP.Tools.Json.ToJson(ds);
         }
         public string MyFlow_Init()

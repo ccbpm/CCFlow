@@ -3104,13 +3104,13 @@ namespace BP.WF
                 switch (DBAccess.AppCenterDBType)
                 {
                     case DBType.MySQL:
-                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps,"+ currNode+" AS CurrNode ,1 AS RunType,A.WFState FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
+                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps," + currNode + " AS CurrNode ,1 AS RunType,A.WFState FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT GROUP_CONCAT(B.EmpName SEPARATOR ';') AS EmpName, B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node) C,WF_Node D"
                                 + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
                         break;
                     case DBType.MSSQL:
-                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ,"+ currNode+" AS CurrNode ,1 AS RunType,A.WFState FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
+                        futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ," + currNode + " AS CurrNode ,1 AS RunType,A.WFState FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT EmpName=STUFF((Select ';'+FK_Emp+','+EmpName From WF_SelectAccper t Where t.FK_Node=B.FK_Node FOR xml path('')) , 1 , 1 , '') , B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node,B.WorkID) C,WF_Node D"
                                 + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
@@ -5064,6 +5064,9 @@ namespace BP.WF
         /// <returns>是否可以发起当前流程</returns>
         public static bool Flow_IsCanStartThisFlow(string flowNo, string userNo, string pFlowNo = null, int pNodeID = 0, Int64 pworkID = 0)
         {
+            if (DataType.IsNullOrEmpty(WebUser.No))
+                throw new Exception("err@没有获取到用户的登录信息，请重新登录。");
+
             #region 判断开始节点是否可以发起.
             Node nd = new Node(int.Parse(flowNo + "01"));
             if (nd.IsGuestNode == true)
@@ -7068,10 +7071,15 @@ namespace BP.WF
             gwf.PFID = parentFID;
             gwf.PFlowNo = parentFlowNo;
             gwf.PNodeID = parentNodeID;
+
             if (i == 0)
                 gwf.Insert();
             else
                 gwf.Update();
+
+            //更新 domian.
+            DBAccess.RunSQL("UPDATE WF_GenerWorkFlow  SET Domain=(SELECT Domain FROM WF_FlowSort WHERE WF_FlowSort.No=WF_GenerWorkFlow.FK_FlowSort) WHERE WorkID=" + wk.OID);
+
 
             if (parentWorkID != 0)
                 BP.WF.Dev2Interface.SetParentInfo(flowNo, wk.OID, parentWorkID);//设置父流程信息

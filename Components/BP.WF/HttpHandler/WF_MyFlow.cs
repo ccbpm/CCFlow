@@ -286,7 +286,6 @@ namespace BP.WF.HttpHandler
         {
             string isStartSameLevelFlow = this.GetRequestVal("IsStartSameLevelFlow");
 
-
             #region 判断是否可以否发起流程. 
             try
             {
@@ -1398,7 +1397,6 @@ namespace BP.WF.HttpHandler
 
                         BP.WF.Template.NodeSimples nds = nd.HisToNodeSimples;
 
-
                         DataTable dtToNDs = new DataTable("ToNodes");
                         dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
                         dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
@@ -2476,7 +2474,7 @@ namespace BP.WF.HttpHandler
             Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null) 
+                if (key == null)
                     continue;
 
                 string myKey = key;

@@ -2931,16 +2931,7 @@ namespace BP.WF
                 return this._enMap;
             }
         }
-        /// <summary>
-        /// 我能处理当前的节点吗？
-        /// </summary>
-        /// <returns></returns>
-        public bool CanIdoIt()
-        {
-            return false;
-        }
         #endregion
-
 
         /// <summary>
         /// 删除前的逻辑处理.

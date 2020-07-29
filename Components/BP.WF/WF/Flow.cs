@@ -1346,9 +1346,7 @@ namespace BP.WF
                 gwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
-            //更新domian.
-            DBAccess.RunSQL("UPDATE WF_GenerWorkFlow  SET domain=(SELECT domain FROM wf_flowsort WHERE wf_flowsort.NO=wf_generworkflow.FK_FlowSort) where workid=" + wk.OID);
-
+         
             return wk;
         }
         #endregion 创建新工作.
@@ -5783,7 +5781,10 @@ namespace BP.WF
 
             //如果是广西计算中心，不知道为什么删除了.
             if (SystemConfig.CustomerNo.Equals("GXJSZX") == true)
-                throw new Exception("err@目前暂时不支持[DoDelete - " + this.No + "]请立即联系管理员.");
+            {
+                return "不让其删除";
+                //throw new Exception("err@目前暂时不支持[DoDelete - " + this.No + "]请立即联系管理员.");
+            }
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)

@@ -891,15 +891,15 @@ namespace BP.WF.HttpHandler
                 #endregion 是否是抄送.
 
                 #region 如果当前节点启用了协作会签.
-                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
-                {
-                    dr = dt.NewRow();
-                    dr["No"] = "SendHuiQian";
-                    dr["Name"] = "会签发送";
-                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(true, " + (int)nd.FormType + ");";
-                    dt.Rows.Add(dr);
+                //if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                //{
+                //    dr = dt.NewRow();
+                //    dr["No"] = "SendHuiQian";
+                //    dr["Name"] = "会签发送";
+                //    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(true, " + (int)nd.FormType + ");";
+                //    dt.Rows.Add(dr);
 
-                }
+                //}
                 #endregion 如果当前节点启用了协作会签
 
                 #region 加载流程控制器 - 按钮
@@ -1169,7 +1169,7 @@ namespace BP.WF.HttpHandler
 
                 }
 
-                if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
+                if (btnLab.HuiQianRole != HuiQianRole.None)
                 {
                     /*会签 */
                     dr = dt.NewRow();
@@ -1632,15 +1632,15 @@ namespace BP.WF.HttpHandler
                 #endregion 是否是抄送.
 
                 #region 如果当前节点启用了协作会签.
-                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
-                {
-                    dr = dt.NewRow();
-                    dr["No"] = "SendHuiQian";
-                    dr["Name"] = "会签发送";
-                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(true);";
-                    dt.Rows.Add(dr);
+                //if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                //{
+                //    dr = dt.NewRow();
+                //    dr["No"] = "SendHuiQian";
+                //    dr["Name"] = "会签发送";
+                //    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(true);";
+                //    dt.Rows.Add(dr);
 
-                }
+                //}
                 #endregion 如果当前节点启用了协作会签
 
                 #region 加载流程控制器 - 按钮

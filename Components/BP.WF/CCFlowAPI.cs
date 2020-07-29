@@ -730,9 +730,14 @@ namespace BP.WF
                                 string msgInfo = "";
                                 foreach (BP.WF.ReturnWork rw in rws)
                                 {
-                                    //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
-                                    msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
-                                    msgInfo += rw.BeiZhuHtml;
+
+                                    msgInfo += "来自节点：" + rw.ReturnNodeName + "@退回人：" + rw.ReturnerName + "@退回日期：" + rw.RDT;
+                                    msgInfo += "@退回原因：" + rw.BeiZhuHtml;
+                                    msgInfo += "<hr/>";
+
+                                    ////drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
+                                    //msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
+                                    //msgInfo += rw.BeiZhuHtml;
                                 }
 
                                 string str = nd.ReturnAlert;

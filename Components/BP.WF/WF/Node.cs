@@ -25,11 +25,19 @@ namespace BP.WF
         {
             get
             {
-                return (DirCondModel)this.GetValIntByKey(NodeAttr.CondModel);
+                var model= (DirCondModel)this.GetValIntByKey(NodeAttr.CondModel);
+                if (this.TodolistModel == TodolistModel.Teamup 
+                    && model == DirCondModel.SendButtonSileSelect)
+                    return DirCondModel.ByUserSelected;
+                return model;
             }
             set
             {
-                this.SetValByKey(NodeAttr.CondModel, (int)value);
+                var model = (DirCondModel)value;
+                if (this.TodolistModel == TodolistModel.Teamup
+                  && model == DirCondModel.SendButtonSileSelect)
+                    model=  DirCondModel.ByUserSelected;
+                this.SetValByKey(NodeAttr.CondModel, (int)model);
             }
         }
         /// <summary>

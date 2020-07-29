@@ -159,3 +159,7 @@ td {
     -moz-text-overflow: ellipsis;
     -webkit-text-overflow: ellipsis;
 }
+
+.table {
+    width: auto !important;
+}

@@ -2480,12 +2480,11 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 string myKey = key;
+                string val = HttpContextHelper.RequestParams(key);
                 myKey = myKey.Replace("TB_", "");
                 myKey = myKey.Replace("DDL_", "");
                 myKey = myKey.Replace("CB_", "");
                 myKey = myKey.Replace("RB_", "");
-
-                string val = HttpContextHelper.RequestParams(myKey);
                 val = HttpUtility.UrlDecode(val, Encoding.UTF8);
 
                 if (htMain.ContainsKey(myKey) == true)

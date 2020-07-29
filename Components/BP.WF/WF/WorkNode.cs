@@ -2261,7 +2261,7 @@ namespace BP.WF
                         gwf.DeptName = wl.FK_DeptT;
                         gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
                         gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
-
+                        gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
                         if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                         {
                             //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;

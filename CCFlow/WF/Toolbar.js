@@ -543,13 +543,25 @@ function Send(isHuiQian, formType) {
             return;
 
     /**发送前处理的信息 End**/
+    var isShowToNode = true;
     if (wf_node != null && wf_node.CondModel == 1 && wf_node.IsBackTrack == 0) {
-        Save(1); //执行保存.
-        var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&IsSend=0" + "&s=" + Math.random();
+        //协作模式
+        if (wf_node.TodolistModel == 1) {
+            var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+            var huiqianSta = gwf.GetPara("HuiQianTaskSta");
+            var todoEmps = gwf.TodoEmps.split(";");
+            if (todoEmps.length > 1)
+                isShowToNode = false;
+        }
+        if (isShowToNode == true) {
+            Save(1); //执行保存.
+            var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&IsSend=0" + "&s=" + Math.random();
 
-        initModal("SelectNodeUrl", null, url);
-        $('#returnWorkModal').modal().show();
-        return;
+            initModal("SelectNodeUrl", null, url);
+            $('#returnWorkModal').modal().show();
+            return;
+        } 
+        
     }
 
     window.hasClickSend = true; //标志用来刷新待办.

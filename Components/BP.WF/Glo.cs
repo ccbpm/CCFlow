@@ -5471,7 +5471,7 @@ namespace BP.WF
             switch (BP.WF.Glo.UserInfoShowModel)
             {
                 case UserInfoShowModel.UserIDOnly:                  
-                    return " + no + ";
+                    return  no ;
                 case UserInfoShowModel.UserIDUserName:
                    // return "(" + no + "," + name + ")";
                     return no + ","+name;

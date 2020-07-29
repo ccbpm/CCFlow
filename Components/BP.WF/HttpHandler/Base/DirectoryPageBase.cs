@@ -66,10 +66,6 @@ namespace BP.WF.HttpHandler
             string token = page.GetRequestVal("Token");
             if (DataType.IsNullOrEmpty(token) == true)
                 return null;
-            
-
-             
-
 
             //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
             string host = SystemConfig.GetValByKey("TokenHost", null);
@@ -110,11 +106,12 @@ namespace BP.WF.HttpHandler
 
                 if (myEn.DoType.Contains("Login") == true)
                     isCanDealToken = false;
+
                 if (myEn.ToString().Contains("Admin") == true)
                     isCanDealToken = false;
 
-                if (methodName.Contains("WebUser") == true)
-                    isCanDealToken = false;
+                //if (methodName.Contains("WebUser") == true)
+                //    isCanDealToken = false;
 
                 if (isCanDealToken == true)
                     this.DealToken(myEn, myEn.DoType);

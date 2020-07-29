@@ -740,6 +740,8 @@ namespace BP.WF
                                     //msgInfo += rw.BeiZhuHtml;
                                 }
 
+                                msgInfo = msgInfo.Replace("@", "<br>");
+
                                 string str = nd.ReturnAlert;
                                 if (str != "")
                                 {

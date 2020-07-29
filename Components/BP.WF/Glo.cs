@@ -5470,12 +5470,14 @@ namespace BP.WF
         {
             switch (BP.WF.Glo.UserInfoShowModel)
             {
-                case UserInfoShowModel.UserIDOnly:
+                case UserInfoShowModel.UserIDOnly:                  
                     return " + no + ";
                 case UserInfoShowModel.UserIDUserName:
-                    return" + no + , + name + ";
+                   // return "(" + no + "," + name + ")";
+                    return no + ","+name;
                 case UserInfoShowModel.UserNameOnly:
-                    return " + name + ";
+                    //return "(" + name + ")";
+                    return  name;
                 default:
                     throw new Exception("@没有判断的格式类型.");
                     break;

@@ -2789,9 +2789,10 @@ namespace BP.WF
                     {
                         dr["IsBackTracking"] = "0";
                     }
-
                     dt.Rows.Add(dr);
-                }
+
+                } //结束循环.
+
                 if (dt.Rows.Count == 0)
                     throw new Exception("err@没有获取到应该退回的节点列表.");
                 return dt;

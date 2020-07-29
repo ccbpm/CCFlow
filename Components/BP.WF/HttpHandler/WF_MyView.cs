@@ -411,6 +411,7 @@ namespace BP.WF.HttpHandler
                     currNode = "SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
                     break;
                 default:
+                    currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
                     break;
             }
             String unSendToNode = DBAccess.RunSQLReturnString(currNode);

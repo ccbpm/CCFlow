@@ -2751,19 +2751,13 @@ namespace BP.WF
                             wk = ndFrom.HisWork;
                             wk.OID = fid;
                             if (wk.RetrieveFromDBSources() == 0)
-                            {
                                 continue;
-                            }
-
                             break;
                         case RunModel.SubThread:
                             wk = ndFrom.HisWork;
                             wk.OID = workid;
                             if (wk.RetrieveFromDBSources() == 0)
-                            {
                                 continue;
-                            }
-
                             break;
                         case RunModel.Ordinary:
                         default:
@@ -2773,7 +2767,9 @@ namespace BP.WF
                     {
                         continue;
                     }
-                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  a.WorkID=" + wk.OID + " AND a.IsPass=1 ORDER BY RDT DESC ";
+
+                    // @yln.
+                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  (a.WorkID=" + workid + " AND a.FID="+fid+" )  ORDER BY RDT DESC ";
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                     if (mydt.Rows.Count == 0)
                         continue;
@@ -2797,10 +2793,7 @@ namespace BP.WF
                     dt.Rows.Add(dr);
                 }
                 if (dt.Rows.Count == 0)
-                {
                     throw new Exception("err@没有获取到应该退回的节点列表.");
-                }
-
                 return dt;
             }
 

@@ -187,6 +187,7 @@ namespace BP.En
 
             if (DataType.IsNullOrEmpty(this.No))
                 this.No = this.GenerNewNoByKey("No");
+
             return base.beforeInsert();
         }
         protected override bool beforeUpdate()

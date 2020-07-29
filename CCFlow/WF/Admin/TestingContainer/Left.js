@@ -37,7 +37,6 @@ function InitPageUserInfo() {
 
     $("#userInfo").html(html);
 
-
     var html = "<ul class='nav' id='side-menu'>";
     html += "<li>"
     html = "<ul style='border:solid 1px #C2D5E3;'>";
@@ -46,12 +45,22 @@ function InitPageUserInfo() {
     html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2" + urlEnd + "' class='J_menuItem' >轨迹图</a></li>";
     html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
     html += "<li style='padding:5px;'><a href='javascript:LetAdminerLoginLeft();' >安全退出 </a></li>";
+    html += "<li style='padding:5px;'><a href='javascript:ToLogin();' >登录到前台</a></li>";
     html += "</ul>";
     html += "</li>";
     html += "</ul>";
 
     $("#Info").html(html);
 
+}
+function ToLogin() {
+
+    if (window.confirm('您确定要退出吗？') == false)
+        return;
+
+    var url = "../../AppClassic/Login.htm";
+    window.open(url);
+    window.location.href = url; //可以关闭窗口.
 }
 function chageFramPage(obj) {
     var url = $(obj).attr('data-info');

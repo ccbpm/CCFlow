@@ -1530,7 +1530,7 @@ namespace BP.WF
                     ps.Add(CCListAttr.FK_Node, node.NodeID);
                     DBAccess.RunSQL(ps);
 
-                    ccMsg1 = "@消息自动抄送给";
+                    ccMsg1 = "@消息手动抄送给";
                     PushMsgs pms = new PushMsgs();
                     pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
                     PushMsg pushMsg = null;
@@ -2261,7 +2261,7 @@ namespace BP.WF
                         gwf.DeptName = wl.FK_DeptT;
                         gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
                         gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
-                        gwf.Sender = WebUser.No+","+WebUser.Name+";";
+                        gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
                         if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                         {
                             //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
@@ -2903,7 +2903,7 @@ namespace BP.WF
                     if (wl.GroupMark != "")
                         gwf.Paras_GroupMark = wl.GroupMark;
 
-                    gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+                    gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
                     if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                     {
@@ -2931,7 +2931,7 @@ namespace BP.WF
                     if (wl.GroupMark != "")
                         gwf.Paras_GroupMark = wl.GroupMark;
 
-                    gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+                    gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
                     gwf.FK_Node = toNode.NodeID;
                     gwf.NodeName = toNode.Name;
                     gwf.Update();
@@ -4959,7 +4959,7 @@ namespace BP.WF
             {
                 if (this.HisGenerWorkFlow.HuiQianTaskSta == HuiQianTaskSta.None)
                 {
-                    this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
 
@@ -4969,7 +4969,7 @@ namespace BP.WF
                     string huiqianNo = this.HisGenerWorkFlow.HuiQianZhuChiRen;
                     string huiqianName = this.HisGenerWorkFlow.HuiQianZhuChiRenName;
 
-                    this.HisGenerWorkFlow.Sender =  huiqianNo+","+ huiqianName+";";
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
                     this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
@@ -5144,14 +5144,14 @@ namespace BP.WF
                     {
                         if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
                         {
-                            this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                             this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
                             return false;
                         }
                         //说明是原始主持人
                         if (this.HisGenerWorkFlow.GetParaString("AddLeader").Contains(BP.Web.WebUser.No + ",") == false && leaderNum == 0)
                         {
-                            this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                             this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
 
                             //如果是任意组长可以发送,则需要设置所有的GenerWorkerList待办结束
@@ -5196,7 +5196,7 @@ namespace BP.WF
 
                     if (SystemConfig.CustomerNo == "LIMS")
                     {
-                        this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                        this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                         this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
                         return false; /*不处理，未完成的会签人，没有执行会签的人，忽略.*/
                     }
@@ -5226,7 +5226,7 @@ namespace BP.WF
 
                 if (mynum == 1)
                 {
-                    this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                     this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
                     return false; /*只有一个待办,说明自己就是最后的一个人.*/
                 }
@@ -6080,6 +6080,10 @@ namespace BP.WF
                 if (this.Execer != "Guest")
                     throw new Exception(BP.WF.Glo.multilingual("@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}.", "WorkNode", "should_gust", this.HisNode.Name, this.Execer));
 
+            //int toNodeID = 0;
+            //if (jumpToNode != null)
+            //    toNodeID = jumpToNode.NodeID;
+
             #region 第1: 安全性检查.
             //   第1: 检查是否可以处理当前的工作.
             if (this.HisNode.IsStartNode == false &&
@@ -6405,7 +6409,7 @@ namespace BP.WF
                     oldSender = this.HisGenerWorkFlow.Sender; //旧发送人,在回滚的时候把该发送人赋值给他.
                 else
                     oldSender = this.HisGenerWorkFlow.Sender.Split(',')[0];
-                this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
 
                 #region 处理退回的情况.
                 if (this.HisGenerWorkFlow.WFState == WFState.ReturnSta && this.JumpToNode == null)
@@ -7537,7 +7541,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(oldSender) == false)
                     {
                         Emp emp = new Emp(oldSender);
-                        this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
+                        this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(emp.No, emp.Name);
                     }
                     gwf.Update();
                 }
@@ -8365,8 +8369,8 @@ namespace BP.WF
             this.CheckCompleteCondition_IntCompleteEmps();
 
             // 如果结束流程，就增加如下信息 翻译.
-            this.HisGenerWorkFlow.Sender = WebUser.No + "," + WebUser.Name + ";";
-             
+            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
+            this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
 
             this.rptGe.FlowEnder = BP.Web.WebUser.No;
             this.rptGe.FlowEnderRDT = DataType.CurrentDataTime;

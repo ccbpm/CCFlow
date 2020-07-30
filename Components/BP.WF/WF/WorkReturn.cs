@@ -1295,7 +1295,7 @@ namespace BP.WF
 
                         infoLog += "\r\n*****************************************************************************************";
                         infoLog += "\r\n节点ID:" + subNd.NodeID + "  工作名称:" + subWK.EnDesc;
-                        infoLog += "\r\n处理人:" + subWK.Rec + " , " + wk.RecOfEmp.Name;
+                      //  infoLog += "\r\n处理人:" + subWK.Rec + " , " + wk.RecOfEmp.Name;
                         infoLog += "\r\n ------------------------------------------------- ";
 
                         foreach (Attr attr in wk.EnMap.Attrs)
@@ -1313,7 +1313,7 @@ namespace BP.WF
                 {
                     infoLog += "\r\n*****************************************************************************************";
                     infoLog += "\r\n节点ID:" + wk.NodeID + "  工作名称:" + wk.EnDesc;
-                    infoLog += "\r\n处理人:" + wk.Rec + " , " + wk.RecOfEmp.Name;
+                   // infoLog += "\r\n处理人:" + wk.Rec + " , " + wk.RecOfEmp.Name;
                     infoLog += "\r\n ------------------------------------------------- ";
 
                     foreach (Attr attr in wk.EnMap.Attrs)

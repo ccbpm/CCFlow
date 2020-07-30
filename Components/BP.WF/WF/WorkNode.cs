@@ -7731,8 +7731,8 @@ namespace BP.WF
             this.HisGenerWorkFlow.SysType = this.HisNode.HisFlow.SysType;
             this.HisGenerWorkFlow.FK_Node = this.HisNode.NodeID;
             this.HisGenerWorkFlow.NodeName = this.HisNode.Name;
-            this.HisGenerWorkFlow.FK_Dept = this.HisWork.RecOfEmp.FK_Dept;
-            this.HisGenerWorkFlow.DeptName = this.HisWork.RecOfEmp.FK_DeptText;
+            this.HisGenerWorkFlow.FK_Dept = WebUser.FK_Dept; 
+            this.HisGenerWorkFlow.DeptName = WebUser.FK_DeptName; 
 
             //按照指定的字段计算
             if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.BySpecDateField)

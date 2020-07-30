@@ -126,8 +126,9 @@ namespace BP.WF
             titleRole = titleRole.Replace("@WebUser.No", WebUser.No);
             titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
             titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", wk.RecOfEmp.FK_DeptText);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", wk.RecOfEmp.FK_Dept);
+
+            titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             titleRole = titleRole.Replace("@RDT", DataType.CurrentDataTime);
 
 

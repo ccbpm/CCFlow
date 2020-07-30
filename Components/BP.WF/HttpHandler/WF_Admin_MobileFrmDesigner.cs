@@ -20,39 +20,59 @@ namespace BP.WF.HttpHandler
     {
         public string Default_Init()
         {
-            MapDatas mapdatas;
-            MapAttrs attrs;
-            GroupFields groups;
-            MapDtls dtls;
-            FrmAttachments athMents;
-            FrmBtns btns;
+            //分组.
+            GroupFields gfs = new GroupFields();
+            gfs.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.Idx);
 
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, GroupFieldAttr.Idx);
+
+            MapDtls mapDtls = new MapDtls();
+            mapDtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData);
+
+            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+
+            DataSet ds = new DataSet();
+
+            //分组.
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupFields"));
+
+            //字段.
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttrs"));
+
+            //从表.
+            ds.Tables.Add(mapDtls.ToDataTableField("Sys_MapDtls"));
+
+            //附件.
+            ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachments"));
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string Default_Init_bak()
+        {
             Nodes nodes = null;
 
             #region 获取数据
-            mapdatas = new MapDatas();
+            MapDatas mapdatas = new MapDatas();
             QueryObject qo = new QueryObject(mapdatas);
             qo.AddWhere(MapDataAttr.No, "Like", FK_MapData + "%");
             qo.addOrderBy(MapDataAttr.Idx);
             qo.DoQuery();
 
-            attrs = new MapAttrs();
-            qo = new QueryObject(attrs);
-            qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
-            qo.addAnd();
-            qo.AddWhere(MapAttrAttr.EditType, 0);
-            qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
-            qo.DoQuery();
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapDtlAttr.FK_MapData, FK_MapData, MapAttrAttr.EditType, 0,
+                GroupFieldAttr.Idx);
 
-            btns = new FrmBtns(this.FK_MapData);
-            athMents = new FrmAttachments(this.FK_MapData);
-            dtls = new MapDtls(this.FK_MapData);
+            FrmBtns btns = new FrmBtns(this.FK_MapData);
 
-            groups = new GroupFields();
-            qo = new QueryObject(groups);
-            qo.AddWhere(GroupFieldAttr.FrmID, FK_MapData);
-            qo.addOrderBy(GroupFieldAttr.Idx);
-            qo.DoQuery();
+            FrmAttachments athMents = new FrmAttachments(this.FK_MapData);
+
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, FK_MapData, GroupFieldAttr.Idx);
+
+            GroupFields groups = new GroupFields();
+            groups.Retrieve(GroupFieldAttr.FrmID, FK_MapData, GroupFieldAttr.Idx);
             #endregion
 
             DataSet ds = new DataSet();
@@ -196,8 +216,6 @@ namespace BP.WF.HttpHandler
                     tddr["FK_MapData"] = FK_MapData;
                     tddr["No"] = tdtl.No;
                 }
-
-
                 isDtl.Rows.Add(tddr.ItemArray);
                 #endregion
 
@@ -284,9 +302,7 @@ namespace BP.WF.HttpHandler
                 {
                     att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
                     if (atts.Contains("," + attr.KeyOfEn + ","))
-                    {
                         att.IsEnableInAPP = true;
-                    }
                     else
                         att.IsEnableInAPP = false;
                     att.Update();

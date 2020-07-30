@@ -2163,6 +2163,16 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 是否杀掉全部的子线程
+        /// </summary>
+        public bool IsKillEtcThread
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsKillEtcThread);
+            }
+        }
+        /// <summary>
         /// 是否启用自动记忆功能
         /// </summary>
         public bool IsRememberMe
@@ -2840,6 +2850,8 @@ namespace BP.WF
 
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
+                map.AddTBInt(NodeAttr.IsKillEtcThread, 1, "是否允许删除所有的子线程(对于子线程向分流节点退回有效)", true, true);
+
                 map.AddTBInt(NodeAttr.IsRM, 1, "是否启用投递路径自动记忆功能?", true, true);
                 map.AddTBInt(NodeAttr.IsOpenOver, 0, "是否打开即审批?", true, true);
                 map.AddBoolean(NodeAttr.IsHandOver, false, "是否可以移交", true, true);

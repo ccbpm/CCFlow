@@ -241,17 +241,6 @@ namespace BP.WF
                 this.SetValByKey(WorkAttr.Rec, value);
             }
         }
-        /// <summary>
-        /// 工作人员
-        /// </summary>
-        public Emp RecOfEmp
-        {
-            get
-            {
-                return new Emp(this.Rec);
-            }
-        }
-   
         private Node _HisNode = null;
         /// <summary>
         /// 工作的节点.

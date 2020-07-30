@@ -72,6 +72,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsBackTracking = "IsBackTracking";
         /// <summary>
+        /// 是否删除其他的子线程?
+        /// </summary>
+        public const string IsKillEtcThread = "IsKillEtcThread";
+        /// <summary>
         /// 是否启用退回考核规则
         /// </summary>
         public const string ReturnCHEnable = "ReturnCHEnable";

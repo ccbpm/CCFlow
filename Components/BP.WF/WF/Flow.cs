@@ -1829,6 +1829,10 @@ namespace BP.WF
                             md.PTable = "ND" + nd.NodeID;
                             md.Update();
                         }
+
+                        //检查数据表.
+                        GEEntity geEn = new GEEntity(md.No);
+                        geEn.CheckPhysicsTable();
                     }
                 }
                 #endregion
@@ -1952,6 +1956,11 @@ namespace BP.WF
                     }
                 }
                 #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
+
+                //如果协作模式的节点，方向条件规则是下拉框的，修改为按线的.
+                sql="UPDATE WF_Node SET CondModel = 2 WHERE CondModel = 1 AND TodolistModel = 1";
+                DBAccess.RunSQL(sql);
+
 
                 msg += "@流程报表检查完成...";
 
@@ -2732,37 +2741,7 @@ namespace BP.WF
                         rpt.Copy(wk);
                         if (nd.NodeID == int.Parse(this.No + "01"))
                             startWork = wk;
-
-                        try
-                        {
-                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDUserName)
-                            {
-                                if (flowEmps.Contains("@" + wk.RecOfEmp.Name + "@"))
-                                    continue;
-                                flowEmps += wk.RecOfEmp.Name + "@";
-                            }
-
-                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserIDOnly)
-                            {
-                                if (flowEmps.Contains("@" + wk.Rec + "@"))
-                                    continue;
-                                flowEmps += wk.Rec + "@";
-                            }
-
-                            if (Glo.UserInfoShowModel == UserInfoShowModel.UserNameOnly)
-                            {
-                                if (flowEmps.Contains("@" + wk.Rec + ","))
-                                    continue;
-                                flowEmps += wk.Rec + "," + wk.RecOfEmp.Name;
-                            }
-
-
-
-
-                        }
-                        catch
-                        {
-                        }
+                        
                         endWK = wk;
                     }
                     catch (Exception ex)

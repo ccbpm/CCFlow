@@ -313,7 +313,7 @@ namespace BP.WF
         private string DoDeleteSubThread()
         {
             WorkNode wn = this.GetCurrentWorkNode();
-            Emp empOfWorker = wn.HisWork.RecOfEmp;
+            Emp empOfWorker = new Emp(WebUser.No); 
 
             #region 正常的删除信息.
             string msg = "";

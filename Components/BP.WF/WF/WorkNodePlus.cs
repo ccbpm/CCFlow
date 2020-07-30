@@ -419,7 +419,7 @@ namespace BP.WF
                 string sqlUnion = "";
                 sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
                 sqlUnion += " UNION ";
-                sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "''";
+                sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
 
                 //获得要删除的人员.
                 string sql = " SELECT FK_Emp FROM WF_GenerWorkerlist WHERE ";

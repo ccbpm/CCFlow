@@ -1051,7 +1051,8 @@ namespace BP.En
                                                     //   string groupVal = this.GetValStringByKey(groupKey); //分组的val.   101
 
             //求出来要被插队的 idx.
-            string sql = "SELECT " + idxAttr + "," + groupKey + " FROM " + ptable + " WHERE " + pk + "='" + entityPKVal + "'";
+            string sql = "";
+            sql = "SELECT " + idxAttr + "," + groupKey + " FROM " + ptable + " WHERE " + pk + "='" + entityPKVal + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             int idxFirst = int.Parse(dt.Rows[0][0].ToString());
@@ -1059,6 +1060,10 @@ namespace BP.En
 
             sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, " + groupKey + "='" + groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
             DBAccess.RunSQL(sql);
+
+         //   sql = "SELECT "+ pk + " FROM "+ptable+ " WHERE "+ groupKey+"='"++"'  ORDER BY Idx ";
+
+
         }
         /// <summary>
         /// 排序

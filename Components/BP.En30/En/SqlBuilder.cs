@@ -1678,7 +1678,7 @@ namespace BP.En
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
                             if (DataType.IsNullOrEmpty(attr.UIBindKey))
-                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
+                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + "绑定的枚举 UIBindKey为空");
 
 #warning 2011-12-03 不应出现异常。
                             if (attr.UIBindKey.Contains("."))

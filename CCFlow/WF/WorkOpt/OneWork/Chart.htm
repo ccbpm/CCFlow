@@ -105,11 +105,14 @@
                 return;
 
             }
-
+            var Token=uh["Token"];
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddPara("FK_Flow", fk_Flow);
             handler.AddPara("WorkID", work_ID);
             handler.AddPara("FID", fid);
+            if(Token!=null&&Token!=undefined&&Token!=""){
+                handler.AddPara("Token", Token);
+            }
             var data = handler.DoMethodReturnString("Chart_Init");
 
             if (data.indexOf('err@') == 0) {

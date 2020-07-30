@@ -1530,7 +1530,7 @@ namespace BP.WF
                     ps.Add(CCListAttr.FK_Node, node.NodeID);
                     DBAccess.RunSQL(ps);
 
-                    ccMsg1 = "@消息自动抄送给";
+                    ccMsg1 = "@消息手动抄送给";
                     PushMsgs pms = new PushMsgs();
                     pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
                     PushMsg pushMsg = null;

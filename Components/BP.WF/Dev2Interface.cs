@@ -7945,8 +7945,8 @@ namespace BP.WF
             }
 
             //记录日志.
-            Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
-                WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmps, names, gwf.Title, null);
+           // Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+            ///    WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmps, names, gwf.Title, null);
 
             return "已经成功的把工作抄送给:" + names;
         }

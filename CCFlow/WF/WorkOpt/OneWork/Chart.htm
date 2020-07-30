@@ -114,13 +114,14 @@
                 handler.AddPara("Token", Token);
             }
             var data = handler.DoMethodReturnString("Chart_Init");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            jdata = $.parseJSON(data);
+            if (typeof(data) === "string") {
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+				jdata = JSON.parse(data);
+			}
+            
 
             DrawStart(jdata); //执行绘制信息.
         });

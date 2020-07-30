@@ -2699,6 +2699,7 @@ namespace BP.WF
             dt.Columns.Add("Rec", typeof(string)); // 被退回节点上的操作员编号.
             dt.Columns.Add("RecName", typeof(string)); // 被退回节点上的操作员名称.
             dt.Columns.Add("IsBackTracking", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
+            dt.Columns.Add("IsKillEtcThread", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
             dt.Columns.Add("AtPara", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
 
             Node nd = new Node(fk_node);
@@ -2722,9 +2723,7 @@ namespace BP.WF
                     dr["No"] = gwl.FK_Node.ToString();
 
                     if (nodes.Contains(gwl.FK_Node.ToString() + ",") == true)
-                    {
                         continue;
-                    }
 
                     nodes += gwl.FK_Node.ToString() + ",";
 
@@ -2732,6 +2731,7 @@ namespace BP.WF
                     dr["Rec"] = gwl.FK_Emp;
                     dr["RecName"] = gwl.FK_EmpText;
                     dr["IsBackTracking"] = "0";
+                    dr["IsKillEtcThread"] = "0";
                     dt.Rows.Add(dr);
                 }
                 return dt;
@@ -2763,13 +2763,12 @@ namespace BP.WF
                         default:
                             throw new Exception("流程设计异常，子线程的上一个节点不能是普通节点。");
                     }
+
                     if (ndFrom.NodeID == fk_node)
-                    {
                         continue;
-                    }
 
                     // @yln.
-                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  (a.WorkID=" + workid + " AND a.FID="+fid+" )  ORDER BY RDT DESC ";
+                    string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  (a.WorkID=" + workid + " AND a.FID=" + fid + " )  ORDER BY RDT DESC ";
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                     if (mydt.Rows.Count == 0)
                         continue;
@@ -2780,17 +2779,17 @@ namespace BP.WF
                     dr["Rec"] = mydt.Rows[0][0];
                     dr["RecName"] = mydt.Rows[0][1];
 
-
                     if (ndFrom.IsBackTracking)
-                    {
                         dr["IsBackTracking"] = "1";
-                    }
                     else
-                    {
                         dr["IsBackTracking"] = "0";
-                    }
-                    dt.Rows.Add(dr);
 
+                    if (ndFrom.IsKillEtcThread)
+                        dr["IsKillEtcThread"] = "1";
+                    else
+                        dr["IsKillEtcThread"] = "0";
+
+                    dt.Rows.Add(dr);
                 } //结束循环.
 
                 if (dt.Rows.Count == 0)
@@ -2827,23 +2826,17 @@ namespace BP.WF
                             dt.Columns["rec"].ColumnName = "Rec";
                             dt.Columns["recname"].ColumnName = "RecName";
                             dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
+                            dt.Columns["iskilletcthread"].ColumnName = NodeAttr.IsKillEtcThread;
                         }
-
                         return dt;
                     }
 
                     if (nd.TodolistModel == TodolistModel.Order)
-                    {
                         sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                    }
                     else
-                    {
                         sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" + (int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
 
-                        //sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND ( A.AtPara NOT LIKE '%@IsHuiQian=1%' OR a.AtPara IS NULL) ORDER BY a.RDT DESC";
-                    }
-                    //                    sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
-
+                    //sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
                     // Log.DebugWriteWarning(sql);
 
                     dt = DBAccess.RunSQLReturnTable(sql);
@@ -2855,6 +2848,7 @@ namespace BP.WF
                         dt.Columns["REC"].ColumnName = "Rec";
                         dt.Columns["RECNAME"].ColumnName = "RecName";
                         dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                        dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                         dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
                     }
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -2864,6 +2858,8 @@ namespace BP.WF
                         dt.Columns["rec"].ColumnName = "Rec";
                         dt.Columns["recname"].ColumnName = "RecName";
                         dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
+                        dt.Columns["iskilletcthread"].ColumnName = NodeAttr.IsKillEtcThread;
+
                         dt.Columns["atpara"].ColumnName = "AtPara"; //参数.
                     }
                     return dt;
@@ -2883,6 +2879,7 @@ namespace BP.WF
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
                             dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
+                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                         }
                         return dt;
                     }
@@ -2904,6 +2901,7 @@ namespace BP.WF
                             dt.Columns["REC"].ColumnName = "Rec";
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                             dt.Columns["ATPARA"].ColumnName = "AtPara";
                         }
 
@@ -2943,6 +2941,7 @@ namespace BP.WF
                             dt.Columns["REC"].ColumnName = "Rec";
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                             dt.Columns["ATPARA"].ColumnName = "AtPara";
                         }
                         return dt;
@@ -2980,13 +2979,14 @@ namespace BP.WF
                             dr["RecName"] = gwl.FK_EmpText;
                             Node mynd = new Node(item.FK_Node);
                             if (mynd.IsBackTracking) //是否可以原路返回.
-                            {
                                 dr["IsBackTracking"] = "1";
-                            }
                             else
-                            {
                                 dr["IsBackTracking"] = "0";
-                            }
+
+                            if (mynd.IsKillEtcThread) //是否可以原路返回.
+                                dr["IsKillEtcThread"] = "1";
+                            else
+                                dr["IsKillEtcThread"] = "0";
 
                             dt.Rows.Add(dr);
                         }
@@ -3016,13 +3016,14 @@ namespace BP.WF
                         dr["Rec"] = dt1.Rows[0][0];
                         dr["RecName"] = dt1.Rows[0][1];
                         if (toNode.IsBackTracking == true)
-                        {
                             dr["IsBackTracking"] = "1";
-                        }
                         else
-                        {
                             dr["IsBackTracking"] = "0";
-                        }
+
+                        if (toNode.IsKillEtcThread == true)
+                            dr["IsKillEtcThread"] = "1";
+                        else
+                            dr["IsKillEtcThread"] = "0";
 
                         dt.Rows.Add(dr);
                     }
@@ -3038,14 +3039,12 @@ namespace BP.WF
                 dt.Columns["REC"].ColumnName = "Rec";
                 dt.Columns["RECNAME"].ColumnName = "RecName";
                 dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
 
             if (dt.Rows.Count == 0)
-            {
                 throw new Exception("@没有计算出来要退回的节点，请管理员确认节点退回规则是否合理？当前节点名称:" + nd.Name + ",退回规则:" + nd.HisReturnRole.ToString());
-            }
-
             return dt;
         }
         #endregion 工作部件的数据源获取
@@ -4741,7 +4740,7 @@ namespace BP.WF
         /// <returns>返回成功执行信息</returns>
         public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode = 0, Int64 fid = 0)
         {
-            if (unSendToNode==0)
+            if (unSendToNode == 0)
             {
                 //获取用户当前所在的节点
                 String currNode = "";
@@ -4761,7 +4760,7 @@ namespace BP.WF
                         currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC";
                         break;
                 }
-                unSendToNode = DBAccess.RunSQLReturnValInt(currNode,0);
+                unSendToNode = DBAccess.RunSQLReturnValInt(currNode, 0);
             }
 
             WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode, fid);
@@ -7945,7 +7944,7 @@ namespace BP.WF
             }
 
             //记录日志.
-           // Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
+            // Glo.AddToTrack(ActionType.CC, gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, gwf.NodeName,
             ///    WebUser.No, WebUser.Name, gwf.FK_Node, gwf.NodeName, toEmps, names, gwf.Title, null);
 
             return "已经成功的把工作抄送给:" + names;

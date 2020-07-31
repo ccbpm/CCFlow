@@ -3808,7 +3808,7 @@ namespace BP.WF.HttpHandler
             if (this.GetRequestVal("IsBack").Equals("1")==true)
                 isBackBoolen = true;
 
-            bool isKill = false;
+            bool isKill = false; //是否全部退回.
             if (this.GetRequestVal("IsKillEtcThread").Equals("1")==true)
                 isKill = true;
 

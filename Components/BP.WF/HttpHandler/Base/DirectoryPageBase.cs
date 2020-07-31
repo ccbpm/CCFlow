@@ -73,7 +73,7 @@ namespace BP.WF.HttpHandler
                 return null;
 
             //throw new Exception("err@全局变量:TokenHost，没有获取到.");
-
+            token = token.Split(',')[0];
             string url = host + token;
             string data = DataType.ReadURLContext(url, 5000);
 

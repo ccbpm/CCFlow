@@ -188,8 +188,10 @@ namespace BP.WF
 
                 //设置产生的工作流程为.
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                gwf.WFState = BP.WF.WFState.Runing;
-                gwf.Update();
+
+                //回复数据.
+                BP.WF.Dev2Interface.Flow_DoRebackWorkFlow(gwf.FK_Flow, gwf.WorkID, gwf.FK_Node, msg);
+                
 
                 WorkNode wn = new WorkNode(WorkID, gwf.FK_Node);
                 wn.AddToTrack(ActionType.UnDeleteFlowByFlag, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,

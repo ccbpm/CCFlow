@@ -8759,7 +8759,7 @@ namespace BP.WF
                 gwf.Update();
 
                 GenerWorkerList gwl = new GenerWorkerList();
-               int i= gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
+                int i = gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
                 if (i == 0)
                 {
                     gwl.WorkID = gwf.WorkID;
@@ -8775,7 +8775,8 @@ namespace BP.WF
                     gwl.CDT = DataType.CurrentDataTime;
                     gwl.DTOfWarning = DataType.CurrentDataTime;
                     gwl.Insert();
-                }else
+                }
+                else
                 {
                     gwl.FK_Emp = WebUser.No;
                     gwl.FK_EmpText = WebUser.Name;
@@ -9960,11 +9961,29 @@ namespace BP.WF
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
             string returnToEmp, string msg = "无", bool isBackToThisNode = false, string pageData = null, bool isKillEtcThread = false)
         {
+            //补偿处理退回错误. @yln
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
+            string info = "";
             WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg, pageData);
-            if (isKillEtcThread == true)
-                return wr.DoItOfKillEtcThread();
+            if (isKillEtcThread == true && fid != 0)
+                info = wr.DoItOfKillEtcThread();
             else
-                return wr.DoIt();
+                info = wr.DoIt();
+
+            //检查退回的数据是否正确？ @yln
+
+            string sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND IsPass=0";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+            {
+                /*说明数据错误了,回滚回来.*/
+                BP.WF.Dev2Interface.Flow_ReSend(gwf.WorkID, gwf.FK_Node,
+                    WebUser.No, "退回错误的回滚.");
+                throw new Exception("err@退回错误，请联系管理员或者在执行一次退回.WorkID="+workID);
+            }
+
+            return info;
         }
         /// <summary>
         /// 退回

@@ -3813,7 +3813,8 @@ namespace BP.WF.HttpHandler
                 isBackBoolen = true;
 
             bool isKill = false; //是否全部退回.
-            if (this.GetRequestVal("IsKillEtcThread").Equals("1")==true)
+            string isKillEtcThread = this.GetRequestVal("IsKillEtcThread");
+            if (DataType.IsNullOrEmpty(isKillEtcThread) == false && isKillEtcThread.Equals("1")==true)
                 isKill = true;
 
             string pageData = this.GetRequestVal("PageData");

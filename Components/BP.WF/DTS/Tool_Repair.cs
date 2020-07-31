@@ -46,7 +46,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string sql = "SELECT * FROM WF_GENERWORKFLOW WHERE WFState=2 ";
+            string sql = "SELECT WorkID,TODOEMPS,FK_NODE FROM WF_GENERWORKFLOW WHERE (WFState=2 OR  WFState=5) ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             string msg = "";
@@ -68,9 +68,8 @@ namespace BP.WF.DTS
                         GenerWorkFlow gwf = new GenerWorkFlow(workid);
                         msg += "<br>@流程:" + gwf.FlowName + "节点:" + gwf.FK_Node + "," + gwf.NodeName + " workid: " + workid + "title:" + gwf.Title + " todoEmps:" + gwf.TodoEmps;
                         msg += "不包含:" + gwl.FK_Emp + "," + gwl.FK_EmpText;
-
                         gwf.TodoEmps += gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
-                        gwf.Update();
+                       // gwf.Update();
                     }
                 }
             }

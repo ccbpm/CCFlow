@@ -8746,21 +8746,46 @@ namespace BP.WF
         public static void Node_SetDraft2Todolist(string fk_flow, Int64 workID)
         {
             //设置引擎表.
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            gwf.WorkID = workID;
-            if (gwf.RetrieveFromDBSources() == 1 && (gwf.WFState == WFState.Draft || gwf.WFState == WFState.Blank || gwf.WFState == WFState.Runing))
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
+            if (gwf.WFState == WFState.Draft || gwf.WFState == WFState.Blank)
             {
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
-                {
                     throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);
-                }
 
                 gwf.TodoEmps = BP.Web.WebUser.No + "," + WebUser.Name + ";";
                 gwf.TodoEmpsNum = 1;
                 gwf.WFState = WFState.Runing;
                 gwf.Update();
+
+                GenerWorkerList gwl = new GenerWorkerList();
+               int i= gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
+                if (i == 0)
+                {
+                    gwl.WorkID = gwf.WorkID;
+                    gwl.FK_Node = gwf.FK_Node;
+                    gwl.FK_NodeText = gwf.NodeName;
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+                    gwl.FK_Flow = gwf.FK_Flow;
+                    gwl.IsPassInt = 0;
+                    gwl.IsEnable = true;
+                    gwl.IsRead = false;
+                    gwl.RDT = DataType.CurrentDataTime;
+                    gwl.CDT = DataType.CurrentDataTime;
+                    gwl.DTOfWarning = DataType.CurrentDataTime;
+                    gwl.Insert();
+                }else
+                {
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+                    gwl.IsPassInt = 0;
+                    gwl.Update();
+                }
+
                 //重置标题
                 Flow_ReSetFlowTitle(fk_flow, gwf.FK_Node, gwf.WorkID);
+                return;
             }
         }
         /// <summary>

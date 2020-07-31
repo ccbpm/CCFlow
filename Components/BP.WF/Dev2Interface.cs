@@ -9916,18 +9916,6 @@ namespace BP.WF
             WorkFlow mwf = new WorkFlow(workID);
             return mwf.DoUnShift();
         }
-
-        /// <summary>
-        /// 退回到分流
-        /// </summary>
-        /// <param name="workID">工作ID</param>
-        /// <param name="nodeID">退回到节点ID</param>
-        /// <param name="msg">消息</param>
-        /// <returns></returns>
-        public static string Node_ReturnWorkToFenLiu(Int64 workID, int nodeID,string msg,bool isK)
-        {
-
-        }
         /// <summary>
         /// 执行工作退回(退回指定的点)
         /// </summary>

@@ -182,11 +182,12 @@
     <Compile Include="DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
     <Compile Include="DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
+    <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\Service\GenerAllEmpsStartFlows.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
-    <Compile Include="DTS\Tool_RepairTodoList.cs" />
-    <Compile Include="DTS\Tool_RepairCHAtPara.cs" />
+    <Compile Include="DTS\CheckErr\Tool_RepairTodoList.cs" />
+    <Compile Include="DTS\CheckErr\Tool_RepairCHAtPara.cs" />
     <Compile Include="FixFieldNames.cs" />
     <Compile Include="CCBill\Template\CtrlModelDtl.cs" />
     <Compile Include="CCBill\Dev2Interface.cs" />
@@ -242,7 +243,7 @@
     <Compile Include="DTS\Service\DTS_GenerWorkFlowTodoSta.cs" />
     <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
     <Compile Include="DTS\DeletTempFiles.cs" />
-    <Compile Include="DTS\Tool_Repair.cs" />
+    <Compile Include="DTS\CheckErr\Tool_Repair.cs" />
     <Compile Include="DTS\ReadEmailSendWork.cs" />
     <Compile Include="DTS\OrgInit_NameOfPath.cs" />
     <Compile Include="DTS\Service\ccbpmServices.cs" />

@@ -9980,9 +9980,8 @@ namespace BP.WF
                 /*说明数据错误了,回滚回来.*/
                 BP.WF.Dev2Interface.Flow_ReSend(gwf.WorkID, gwf.FK_Node,
                     WebUser.No, "退回错误的回滚.");
-                throw new Exception("err@退回错误，请联系管理员或者在执行一次退回.WorkID="+workID);
+                throw new Exception("err@退回出现系统错误，请联系管理员或者在执行一次退回.WorkID="+workID);
             }
-
             return info;
         }
         /// <summary>

@@ -892,25 +892,28 @@ namespace BP.WF.HttpHandler
             try
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
-                Node nd = new Node(toNodeID);
-                if (nd.HisDeliveryWay == DeliveryWay.BySelected)
+                if (toNodeID != 0) //排除协作模式下的会签
                 {
-                    /* 仅仅设置一个,检查压入的人员个数.*/
-                    Paras ps = new Paras();
-                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND AccType=0";
-                    ps.Add("FK_Node", toNodeID);
-                    ps.Add("WorkID", this.WorkID);
-                    int num = DBAccess.RunSQLReturnValInt(ps, 0);
-                    if (num == 0)
-                        return "err@请指定下一步工作的处理人.";
-                    Selector sr = new Selector(toNodeID);
-                    if (sr.IsSimpleSelector == true)
+                    Node nd = new Node(toNodeID);
+                    if (nd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
-                        if (num != 1)
-                            return "err@您只能选择一个接受人,请移除其他的接受人然后执行发送.";
+                        /* 仅仅设置一个,检查压入的人员个数.*/
+                        Paras ps = new Paras();
+                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND AccType=0";
+                        ps.Add("FK_Node", toNodeID);
+                        ps.Add("WorkID", this.WorkID);
+                        int num = DBAccess.RunSQLReturnValInt(ps, 0);
+                        if (num == 0)
+                            return "err@请指定下一步工作的处理人.";
+                        Selector sr = new Selector(toNodeID);
+                        if (sr.IsSimpleSelector == true)
+                        {
+                            if (num != 1)
+                                return "err@您只能选择一个接受人,请移除其他的接受人然后执行发送.";
+                        }
                     }
                 }
-
+               
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
                 string strs = objs.ToMsgOfHtml();
                 strs = strs.Replace("@", "<br>@");
@@ -3162,7 +3165,8 @@ namespace BP.WF.HttpHandler
 
             //岗位信息. 格式:  001,002,003,
             string stations = this.GetRequestVal("Stations");
-            stations = stations.Replace(";", ",");
+            if(DataType.IsNullOrEmpty(stations)==false)
+                stations = stations.Replace(";", ",");
 
             //权限组. 格式:  001,002,003,
             string groups = this.GetRequestVal("Groups");

@@ -9916,6 +9916,18 @@ namespace BP.WF
             WorkFlow mwf = new WorkFlow(workID);
             return mwf.DoUnShift();
         }
+
+        /// <summary>
+        /// 退回到分流
+        /// </summary>
+        /// <param name="workID">工作ID</param>
+        /// <param name="nodeID">退回到节点ID</param>
+        /// <param name="msg">消息</param>
+        /// <returns></returns>
+        public static string Node_ReturnWorkToFenLiu(Int64 workID, int nodeID,string msg,bool isK)
+        {
+
+        }
         /// <summary>
         /// 执行工作退回(退回指定的点)
         /// </summary>
@@ -9927,12 +9939,16 @@ namespace BP.WF
         /// <param name="returnToEmp">退回到人员</param>
         /// <param name="msg">退回原因</param>
         /// <param name="isBackToThisNode">退回后是否要原路返回？</param>
+        /// <param name="isKillEtcThread">是否删除所有的子线程，完全退回(对分流节点有效)？</param>
         /// <returns>执行结果，此结果要提示给用户。</returns>
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
-            string returnToEmp, string msg = "无", bool isBackToThisNode = false, string pageData = null)
+            string returnToEmp, string msg = "无", bool isBackToThisNode = false, string pageData = null, bool isKillEtcThread = false)
         {
             WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg, pageData);
-            return wr.DoIt();
+            if (isKillEtcThread == true)
+                return wr.DoItOfKillEtcThread();
+            else
+                return wr.DoIt();
         }
         /// <summary>
         /// 退回

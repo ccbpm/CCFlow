@@ -3755,37 +3755,7 @@ namespace BP.WF.HttpHandler
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
 
-                //备注:启动子流程的或者平级子流程的节点也可以退回，退回后是否结束子流程需要在FEE事件中处理 
-                //根据WorkID查询是否有启动的子流程 
-                // GenerWorkFlows gwfs = new GenerWorkFlows();
-                //int count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID);
-                //if (count != 0)
-                //    return "info@该流程已经启动子流程，不能执行退回";
-
-                //该流程为子流程，启动了平级子流程
-                //GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                //if (gwf.PWorkID != 0) 
-                //{
-                //    //存在平级子流程
-                //     gwfs = new GenerWorkFlows();
-                //     count = gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, gwf.PWorkID);
-                //     SubFlows subFlows = new SubFlows(); 
-                //     int subFlowCount = subFlows.Retrieve(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowModel,1);
-                //    if (subFlowCount != 0)//含有平级子流程
-                //    {
-                //        foreach(SubFlow subFlow in subFlows)
-                //        {
-                //            //根据FlowNo获取有没有发起流程
-                //            var subGwf = gwfs.GetEntityByKey(GenerWorkFlowAttr.FK_Flow,subFlow.SubFlowNo);
-                //            if(subGwf!=null)
-                //                return "info@该流程已经启动平级子流程，不能执行退回";
-                //        }
-                //    } 
-                //}
-
-
                 //如果只有一个退回节点，就需要判断是否启用了单节点退回规则.
-
                 if (dt.Rows.Count == 1)
                 {
                     Node nd = new Node(this.FK_Node);
@@ -3835,13 +3805,16 @@ namespace BP.WF.HttpHandler
             string reMesage = this.GetRequestVal("ReturnInfo");
 
             bool isBackBoolen = false;
-            string isBack = this.GetRequestVal("IsBack");
-            if (isBack == "1")
+            if (this.GetRequestVal("IsBack").Equals("1")==true)
                 isBackBoolen = true;
+
+            bool isKill = false;
+            if (this.GetRequestVal("IsKillEtcThread").Equals("1")==true)
+                isKill = true;
 
             string pageData = this.GetRequestVal("PageData");
 
-            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, toEmp, reMesage, isBackBoolen, pageData);
+            return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, toEmp, reMesage, isBackBoolen, pageData, isKill);
         }
         #endregion
 

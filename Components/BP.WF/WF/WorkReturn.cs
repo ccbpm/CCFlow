@@ -69,7 +69,7 @@ namespace BP.WF
         /// <param name="reutrnToEmp">退回到人</param>
         /// <param name="isBackTrack">是否需要原路返回？</param>
         /// <param name="returnInfo">退回原因</param>
-        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo,string pageData=null)
+        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo, string pageData = null)
         {
             this.HisNode = new Node(currNodeID);
 
@@ -154,7 +154,7 @@ namespace BP.WF
                 string rdt = dt.Rows[0][0].ToString();
 
                 ps.Clear();
-                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID OR FID="+dbStr+"FID ORDER BY RDT ";
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.WorkID);
@@ -207,7 +207,7 @@ namespace BP.WF
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
 
             //如果事件返回的信息不是null，就终止执行。
-            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork,null,atPara);
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null, atPara);
             if (msg != null)
                 return msg;
 
@@ -326,7 +326,7 @@ namespace BP.WF
             Work work = this.HisWork;
             work.OID = this.WorkID;
             //退回后事件
-            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, work,null, atPara);
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, work, null, atPara);
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
             // 返回退回信息.
@@ -398,8 +398,8 @@ namespace BP.WF
                 {
                     string[] param = str.Split('=');
                     if (param.Length == 2)
-                        rw.SetValByKey(param[0].Replace("TB_","").Replace("DDL_","").Replace("CB_",""), param[1]);
-                 }
+                        rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
+                }
             }
             rw.Insert();
 
@@ -428,6 +428,43 @@ namespace BP.WF
 
             //返回退回信息.
             return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].";
+        }
+        /// <summary>
+        /// 执行退回到分流节点，完全退回.
+        /// </summary>
+        /// <returns></returns>
+        public string DoItOfKillEtcThread()
+        {
+            //干流程的gwf.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.FID);
+            Node nd = new Node(gwf.FK_Node);
+            if (nd.IsFLHL == false)
+                throw new Exception("err@系统已经运行到合流节点，您不能在执行退回.");
+
+            //查询出来所有的子线程,并删除他.
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve(GenerWorkFlowAttr.FID, this.FID);
+            foreach (GenerWorkFlow mygwf in gwfs)
+            {
+                BP.WF.Dev2Interface.Node_FHL_KillSubFlow(this.HisNode.FK_Flow,
+                    this.FID, mygwf.WorkID);
+            }
+
+            //更新状态.
+            gwf.WFState = WFState.ReturnSta;
+            gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+            gwf.Update();
+
+
+            //更新他的待办.
+            GenerWorkerLists gwls = new GenerWorkerLists(this.FID, gwf.FK_Node);
+            foreach (GenerWorkerList item in gwls)
+            {
+                item.IsPassInt = 0;
+                item.Update();
+            }
+
+            return "退回成功.";
         }
         /// <summary>
         /// 执行退回.
@@ -1009,7 +1046,7 @@ namespace BP.WF
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
 
             //如果事件返回的信息不是null，就终止执行。
-            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork,null,
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null,
                 atPara);
             if (!String.IsNullOrEmpty(msg)) // 2019-08-28 zl。原来是 if(msg!=null)。返回空字符串表示执行成功，不应该终止。
                 return msg;
@@ -1065,7 +1102,7 @@ namespace BP.WF
 
             //退回到人.
             Emp empReturn = new Emp(this.ReturnToEmp);
-            gwf.TodoEmps = empReturn.No+","+ empReturn.Name+";";
+            gwf.TodoEmps = empReturn.No + "," + empReturn.Name + ";";
             gwf.TodoEmpsNum = 1;
             gwf.Update();
 
@@ -1094,7 +1131,7 @@ namespace BP.WF
             ps.Add("FlowEndNode", ReturnToNode.NodeID);
             ps.Add("OID", this.WorkID);
             DBAccess.RunSQL(ps);
-             
+
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
@@ -1149,7 +1186,7 @@ namespace BP.WF
             if (IsBackTrack == true)
             {
                 // 加入track.
-                this.AddToTrack(ActionType.ReturnAndBackWay,empReturn.No, empReturn.Name,
+                this.AddToTrack(ActionType.ReturnAndBackWay, empReturn.No, empReturn.Name,
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
             else
@@ -1295,7 +1332,7 @@ namespace BP.WF
 
                         infoLog += "\r\n*****************************************************************************************";
                         infoLog += "\r\n节点ID:" + subNd.NodeID + "  工作名称:" + subWK.EnDesc;
-                      //  infoLog += "\r\n处理人:" + subWK.Rec + " , " + wk.RecOfEmp.Name;
+                        //  infoLog += "\r\n处理人:" + subWK.Rec + " , " + wk.RecOfEmp.Name;
                         infoLog += "\r\n ------------------------------------------------- ";
 
                         foreach (Attr attr in wk.EnMap.Attrs)
@@ -1313,7 +1350,7 @@ namespace BP.WF
                 {
                     infoLog += "\r\n*****************************************************************************************";
                     infoLog += "\r\n节点ID:" + wk.NodeID + "  工作名称:" + wk.EnDesc;
-                   // infoLog += "\r\n处理人:" + wk.Rec + " , " + wk.RecOfEmp.Name;
+                    // infoLog += "\r\n处理人:" + wk.Rec + " , " + wk.RecOfEmp.Name;
                     infoLog += "\r\n ------------------------------------------------- ";
 
                     foreach (Attr attr in wk.EnMap.Attrs)

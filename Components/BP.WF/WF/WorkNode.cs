@@ -6683,6 +6683,8 @@ namespace BP.WF
 
                 if (this.IsStopFlow == true)
                 {
+					//设置缓存中的流程状态
+					this.HisGenerWorkFlow.WFState=WFState.Complete;
                     // 执行 自动 启动子流程.
                     CallAutoSubFlow(this.HisNode, 0); //启动本节点上的.
 

@@ -836,8 +836,8 @@ namespace BP.WF
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
-                        rpt.FlowStarter = emp.No;
-                        rpt.InsertAsOID(wk.OID);
+                        rpt.FlowStarter = emp.No;                     
+                        rpt.SaveAsOID((int)wk.OID);
                     }
 
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.

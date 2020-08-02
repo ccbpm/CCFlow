@@ -2198,16 +2198,43 @@ namespace BP.WF
             string empNames = "";
             string toNodeIDs = "";
 
+            /*
+             * for:计算中心.
+             * 1. 首先要查询出来到达的节点是否有历史数据?
+             * 2. 产生历史数据的有 子线程的退回，撤销发送.
+             */
+
+            GenerWorkFlows gwfThreads = new GenerWorkFlows();
+            gwfThreads.Retrieve(GenerWorkFlowAttr.FID, this.WorkID);
+
             string msg_str = "";
             foreach (Node nd in toNDs)
             {
+                Int64 workIDSubThread = 0;
+                bool isNew = true;
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                foreach (GenerWorkFlow gwfT in gwfThreads)
+                {
+                    if (gwfT.FK_Node == nd.NodeID)
+                    {
+                        gwf = gwfT; //设置.
+                        workIDSubThread = gwfT.WorkID;
+                        isNew = false;
+                        break;
+                    }
+                }
+                if (workIDSubThread == 0)
+                    workIDSubThread = DBAccess.GenerOID("WorkID");
+
                 //产生一个工作信息。
                 Work wk = nd.HisWork;
                 wk.Copy(this.HisWork);
                 wk.FID = this.HisWork.OID;
-                wk.OID = DBAccess.GenerOID("WorkID");
-                wk.DirectInsert();
-
+                wk.OID = workIDSubThread;
+                if (isNew == true)
+                    wk.DirectInsert(); //执行插入.
+                else
+                    wk.DirectUpdate(); //执行保存.
 
                 //获得它的工作者。
                 WorkNode town = new WorkNode(wk, nd);
@@ -2215,73 +2242,20 @@ namespace BP.WF
                 if (current_gwls.Count == 0)
                 {
                     msg += BP.WF.Glo.multilingual("@没有找到节点[{0}]的处理人员,所以此节点无法成功启动.", "WorkNode", "not_found_node_operator", nd.Name);
-                    wk.Delete();
+                    // wk.Delete();
                     continue;
                 }
 
+                #region 生成待办.
                 string operators = "";
                 int i = 0;
+                GenerWorkerList oneGWL = null; //获得这个变量，在gwf中使用.
                 foreach (GenerWorkerList wl in current_gwls)
                 {
+                    oneGWL = wl; //获得这个变量，在gwf中使用.
+
                     i += 1;
                     operators += wl.FK_Emp + ", " + wl.FK_EmpText + ";";
-                    // 产生工作的信息。
-                    GenerWorkFlow gwf = new GenerWorkFlow();
-                    gwf.WorkID = wk.OID;
-                    if (gwf.IsExits == false)
-                    {
-                        //干流、子线程关联字段
-                        gwf.FID = this.WorkID;
-
-                        //父流程关联字段
-                        gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
-                        gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
-                        gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
-
-                        //工程类项目关联字段
-                        gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
-                        gwf.PrjName = this.HisGenerWorkFlow.PrjName;
-
-                        //#warning 需要修改成标题生成规则。
-                        //#warning 让子流程的Titlte与父流程的一样.
-
-                        gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
-                        gwf.WFState = WFState.Runing;
-                        gwf.RDT = DataType.CurrentDataTime;
-                        gwf.Starter = this.Execer;
-                        gwf.StarterName = this.ExecerName;
-                        gwf.FK_Flow = nd.FK_Flow;
-                        gwf.FlowName = nd.FlowName;
-                        gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
-                        gwf.SysType = this.HisNode.HisFlow.SysType;
-
-                        gwf.FK_Node = nd.NodeID;
-                        gwf.NodeName = nd.Name;
-                        gwf.FK_Dept = wl.FK_Dept;
-                        gwf.DeptName = wl.FK_DeptT;
-                        gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
-                        gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
-                        gwf.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name);
-                        if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
-                        {
-                            //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
-                            string[] expFields = this.HisFlow.BuessFields.Split(',');
-                            string exp = "";
-                            Attrs attrs = this.rptGe.EnMap.Attrs;
-                            foreach (string item in expFields)
-                            {
-                                if (DataType.IsNullOrEmpty(item) == true)
-                                    continue;
-                                if (attrs.Contains(item) == false)
-                                    continue;
-
-                                Attr attr = attrs.GetAttrByKey(item);
-                                exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
-                            }
-                            gwf.BuessFields = exp;
-                        }
-                        gwf.DirectInsert();
-                    }
 
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET WorkID=" + dbStr + "WorkID1,FID=" + dbStr + "FID WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr + "WorkID2 AND FK_Node=" + dbStr + "FK_Node ";
@@ -2296,11 +2270,6 @@ namespace BP.WF
                     //设置当前的workid.
                     wl.WorkID = wk.OID;
 
-                    //记录变量.
-                    workIDs += wk.OID.ToString() + ",";
-                    empIDs += wl.FK_Emp + ",";
-                    empNames += wl.FK_EmpText + ",";
-                    toNodeIDs += gwf.FK_Node + ",";
 
                     //更新工作信息.
                     wk.Rec = wl.FK_Emp;
@@ -2321,9 +2290,69 @@ namespace BP.WF
                     if (wl.IsExits == false)
                         wl.Insert();
                 }
+                #endregion 生成待办.
 
+                #region 生成子线程的GWF.
+                gwf.WorkID = wk.OID;
+                //干流、子线程关联字段
+                gwf.FID = this.WorkID;
+
+                //父流程关联字段
+                gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
+                gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
+                gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+
+                //工程类项目关联字段
+                gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
+                gwf.PrjName = this.HisGenerWorkFlow.PrjName;
+
+                //#warning 需要修改成标题生成规则。
+                //#warning 让子流程的Titlte与父流程的一样.
+
+                gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
+                gwf.WFState = WFState.Runing;
+                gwf.RDT = DataType.CurrentDataTime;
+                gwf.Starter = this.Execer;
+                gwf.StarterName = this.ExecerName;
+                gwf.FK_Flow = nd.FK_Flow;
+                gwf.FlowName = nd.FlowName;
+                gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
+                gwf.SysType = this.HisNode.HisFlow.SysType;
+
+                gwf.FK_Node = nd.NodeID;
+                gwf.NodeName = nd.Name;
+                gwf.FK_Dept = oneGWL.FK_Dept;
+                gwf.DeptName = oneGWL.FK_DeptT;
+                gwf.TodoEmps = oneGWL.FK_Emp + "," + oneGWL.FK_EmpText + ";";
+                gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
+                gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+                if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                {
+                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                    string[] expFields = this.HisFlow.BuessFields.Split(',');
+                    string exp = "";
+                    Attrs attrs = this.rptGe.EnMap.Attrs;
+                    foreach (string item in expFields)
+                    {
+                        if (DataType.IsNullOrEmpty(item) == true)
+                            continue;
+                        if (attrs.Contains(item) == false)
+                            continue;
+
+                        Attr attr = attrs.GetAttrByKey(item);
+                        exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                    }
+                    gwf.BuessFields = exp; //表达式字段.
+                }
+
+                if (isNew == true)
+                    gwf.DirectInsert();
+                else
+                    gwf.DirectUpdate();
+                #endregion 生成子线程的GWF.
                 msg += BP.WF.Glo.multilingual("@节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", nd.Name, i.ToString(), operators);
             }
+
 
             //加入分流异表单，提示信息。
             this.addMsg("FenLiuUnSameSheet", msg);
@@ -3210,8 +3239,6 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.FK_Node, this.HisNode.NodeID);
             ps.Add(GenerWorkerListAttr.FK_Emp, this.Execer);
             DBAccess.RunSQL(ps);
-
-
 
             switch (this.HisNode.HisRunModel)
             {
@@ -6683,8 +6710,8 @@ namespace BP.WF
 
                 if (this.IsStopFlow == true)
                 {
-					//设置缓存中的流程状态
-					this.HisGenerWorkFlow.WFState=WFState.Complete;
+                    //设置缓存中的流程状态
+                    this.HisGenerWorkFlow.WFState = WFState.Complete;
                     // 执行 自动 启动子流程.
                     CallAutoSubFlow(this.HisNode, 0); //启动本节点上的.
 
@@ -7733,8 +7760,8 @@ namespace BP.WF
             this.HisGenerWorkFlow.SysType = this.HisNode.HisFlow.SysType;
             this.HisGenerWorkFlow.FK_Node = this.HisNode.NodeID;
             this.HisGenerWorkFlow.NodeName = this.HisNode.Name;
-            this.HisGenerWorkFlow.FK_Dept = WebUser.FK_Dept; 
-            this.HisGenerWorkFlow.DeptName = WebUser.FK_DeptName; 
+            this.HisGenerWorkFlow.FK_Dept = WebUser.FK_Dept;
+            this.HisGenerWorkFlow.DeptName = WebUser.FK_DeptName;
 
             //按照指定的字段计算
             if (this.HisFlow.SDTOfFlowRole == SDTOfFlowRole.BySpecDateField)

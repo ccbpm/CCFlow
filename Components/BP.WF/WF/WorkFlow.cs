@@ -150,11 +150,7 @@ namespace BP.WF
                 //调用结束前事件.
                 ExecEvent.DoFlow(EventListFlow.BeforeFlowDel, wn, null);
 
-                //设置产生的工作流程为.
-                gwf.WFState = BP.WF.WFState.Delete;
-                gwf.Update();
-
-                //记录日志 感谢 itdos and 888 , 提出了这个bug.
+                //记录日志 感谢 itdos and 888 , 提出了这个问题..
                 wn.AddToTrack(ActionType.DeleteFlowByFlag, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,
                         msg);
 
@@ -165,6 +161,11 @@ namespace BP.WF
                 //删除他的工作者，不让其有待办.
                 sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID;
                 DBAccess.RunSQL(sql);
+
+                //设置产生的工作流程为.
+                gwf.WFState = BP.WF.WFState.Delete;
+                gwf.Update();
+
 
                 //调用结束后事件.
                 ExecEvent.DoFlow(EventListFlow.AfterFlowDel, wn, null);

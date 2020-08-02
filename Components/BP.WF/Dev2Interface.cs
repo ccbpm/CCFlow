@@ -2699,7 +2699,6 @@ namespace BP.WF
             dt.Columns.Add("Rec", typeof(string)); // 被退回节点上的操作员编号.
             dt.Columns.Add("RecName", typeof(string)); // 被退回节点上的操作员名称.
             dt.Columns.Add("IsBackTracking", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
-            dt.Columns.Add("IsKillEtcThread", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
             dt.Columns.Add("AtPara", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
 
             Node nd = new Node(fk_node);
@@ -2731,7 +2730,7 @@ namespace BP.WF
                     dr["Rec"] = gwl.FK_Emp;
                     dr["RecName"] = gwl.FK_EmpText;
                     dr["IsBackTracking"] = "0";
-                    dr["IsKillEtcThread"] = "0";
+
                     dt.Rows.Add(dr);
                 }
                 return dt;
@@ -2784,11 +2783,6 @@ namespace BP.WF
                     else
                         dr["IsBackTracking"] = "0";
 
-                    if (ndFrom.IsKillEtcThread)
-                        dr["IsKillEtcThread"] = "1";
-                    else
-                        dr["IsKillEtcThread"] = "0";
-
                     dt.Rows.Add(dr);
                 } //结束循环.
 
@@ -2826,7 +2820,6 @@ namespace BP.WF
                             dt.Columns["rec"].ColumnName = "Rec";
                             dt.Columns["recname"].ColumnName = "RecName";
                             dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
-                            dt.Columns["iskilletcthread"].ColumnName = NodeAttr.IsKillEtcThread;
                         }
                         return dt;
                     }
@@ -2848,7 +2841,6 @@ namespace BP.WF
                         dt.Columns["REC"].ColumnName = "Rec";
                         dt.Columns["RECNAME"].ColumnName = "RecName";
                         dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
-                        dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                         dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
                     }
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -2858,7 +2850,6 @@ namespace BP.WF
                         dt.Columns["rec"].ColumnName = "Rec";
                         dt.Columns["recname"].ColumnName = "RecName";
                         dt.Columns["isbacktracking"].ColumnName = "IsBackTracking";
-                        dt.Columns["iskilletcthread"].ColumnName = NodeAttr.IsKillEtcThread;
 
                         dt.Columns["atpara"].ColumnName = "AtPara"; //参数.
                     }
@@ -2879,7 +2870,6 @@ namespace BP.WF
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
                             dt.Columns["ATPARA"].ColumnName = "AtPara"; //参数.
-                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                         }
                         return dt;
                     }
@@ -2901,7 +2891,6 @@ namespace BP.WF
                             dt.Columns["REC"].ColumnName = "Rec";
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
-                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                             dt.Columns["ATPARA"].ColumnName = "AtPara";
                         }
 
@@ -2941,7 +2930,6 @@ namespace BP.WF
                             dt.Columns["REC"].ColumnName = "Rec";
                             dt.Columns["RECNAME"].ColumnName = "RecName";
                             dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
-                            dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                             dt.Columns["ATPARA"].ColumnName = "AtPara";
                         }
                         return dt;
@@ -2983,10 +2971,6 @@ namespace BP.WF
                             else
                                 dr["IsBackTracking"] = "0";
 
-                            if (mynd.IsKillEtcThread) //是否可以原路返回.
-                                dr["IsKillEtcThread"] = "1";
-                            else
-                                dr["IsKillEtcThread"] = "0";
 
                             dt.Rows.Add(dr);
                         }
@@ -3020,10 +3004,7 @@ namespace BP.WF
                         else
                             dr["IsBackTracking"] = "0";
 
-                        if (toNode.IsKillEtcThread == true)
-                            dr["IsKillEtcThread"] = "1";
-                        else
-                            dr["IsKillEtcThread"] = "0";
+
 
                         dt.Rows.Add(dr);
                     }
@@ -3039,7 +3020,6 @@ namespace BP.WF
                 dt.Columns["REC"].ColumnName = "Rec";
                 dt.Columns["RECNAME"].ColumnName = "RecName";
                 dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
-                dt.Columns["ISKILLETCTHREAD"].ColumnName = NodeAttr.IsKillEtcThread;
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
 
@@ -9971,16 +9951,15 @@ namespace BP.WF
             else
                 info = wr.DoIt();
 
-            //检查退回的数据是否正确？ @yln
-
+            //检查退回的数据是否正确？
             string sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND IsPass=0";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 0)
+            if (dt.Rows.Count == 0 && fid == 0)
             {
                 /*说明数据错误了,回滚回来.*/
                 BP.WF.Dev2Interface.Flow_ReSend(gwf.WorkID, gwf.FK_Node,
                     WebUser.No, "退回错误的回滚.");
-                throw new Exception("err@退回出现系统错误，请联系管理员或者在执行一次退回.WorkID="+workID);
+                throw new Exception("err@退回出现系统错误，请联系管理员或者在执行一次退回.WorkID=" + workID);
             }
             return info;
         }
@@ -10038,7 +10017,7 @@ namespace BP.WF
         public static void Node_FHL_KillSubFlow(string fk_flow, Int64 fid, Int64 workid)
         {
             WorkFlow wkf = new WorkFlow(workid);
-            wkf.DoDeleteWorkFlowByReal(true);
+            wkf.DoDeleteWorkFlowByFlag("子线程退回.");
         }
         /// <summary>
         /// 合流点驳回子线程

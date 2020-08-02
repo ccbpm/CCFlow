@@ -1041,11 +1041,10 @@ namespace BP.WF
             }
             rpt.Row.Add("ReturnMsg", Msg);
 
-
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
 
-            //如果事件返回的信息不是null，就终止执行。
+            //如果事件返回的信息不是 null，就终止执行。
             string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null,
                 atPara);
             if (!String.IsNullOrEmpty(msg)) // 2019-08-28 zl。原来是 if(msg!=null)。返回空字符串表示执行成功，不应该终止。
@@ -1095,10 +1094,13 @@ namespace BP.WF
             gwf.HuiQianZhuChiRenName = "";
             gwf.Paras_ToNodes = "";
 
-            //获得所有的人员集合.
+            //获得所有的人员集合，退回到节点的.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID,
+             gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID,
                 GenerWorkerListAttr.WorkID, this.WorkID);
+
+            if (gwls.Count == 0)
+                throw new Exception("err@没有找到要退回到节点的数据,请与管理员联系[WorkID="+this.WorkID+ ",ReturnToNode.NodeID="+this.ReturnToNode.NodeID+"]");
 
             //退回到人.
             Emp empReturn = new Emp(this.ReturnToEmp);
@@ -1106,9 +1108,12 @@ namespace BP.WF
             gwf.TodoEmpsNum = 1;
             gwf.Update();
 
-            //更新待办状态.
+            //更新待办状态. 
+            var isHave = false;// 在计算中心项目上，没有找到要更新的gwl. 出现不应该的异常.
+            GenerWorkerList mygwl = null;
             foreach (GenerWorkerList item in gwls)
             {
+                mygwl = item;
                 if (item.FK_Emp.Equals(this.ReturnToEmp) == false)
                 {
                     item.Delete();
@@ -1121,7 +1126,26 @@ namespace BP.WF
                 item.RDT = DataType.CurrentDataTimess;
                 item.Sender = WebUser.No + "," + WebUser.Name;
                 item.Update();
+                isHave = true;
             }
+
+            //这里做了补偿的措施，否则就会出现异常数据. for:计算中心.
+            if (isHave ==false)
+            {
+                mygwl.FK_Dept = WebUser.FK_Dept;
+                mygwl.FK_DeptT = WebUser.FK_DeptName;
+
+                mygwl.FK_Emp = WebUser.No;
+                mygwl.FK_EmpText = WebUser.Name;
+
+                mygwl.IsPassInt = 0;
+                mygwl.IsRead = false;
+                mygwl.SDT = sdt;
+                mygwl.RDT = DataType.CurrentDataTimess;
+                mygwl.Sender = WebUser.No + "," + WebUser.Name;
+                mygwl.Insert();
+            }
+
 
             //更新流程报表数据.
             ps = new Paras();
@@ -1148,7 +1172,6 @@ namespace BP.WF
                 || this.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || this.HisNode.TodolistModel == TodolistModel.Teamup)
             {
-
                 // 为软通小杨屏蔽， 共享，顺序，协作模式的退回并原路返回的 问题. 
                 //rw.IsBackTracking = true; /*如果是共享，顺序，协作模式，都必须是退回并原路返回.*/
 

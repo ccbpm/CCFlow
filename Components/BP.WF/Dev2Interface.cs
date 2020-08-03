@@ -9941,6 +9941,15 @@ namespace BP.WF
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
             string returnToEmp, string msg = "无", bool isBackToThisNode = false, string pageData = null, bool isKillEtcThread = false)
         {
+            //检查退回的数据是否正确？
+            string sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND FK_Node=" + returnToNodeID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 0)
+            {
+                throw new Exception("err@被退回到的节点数据错误，请联系管理员.");
+            }
+
+
             //补偿处理退回错误. @yln
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
@@ -9952,8 +9961,8 @@ namespace BP.WF
                 info = wr.DoIt();
 
             //检查退回的数据是否正确？
-            string sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND IsPass=0";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND IsPass=0";
+            dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0 && fid == 0)
             {
                 /*说明数据错误了,回滚回来.*/

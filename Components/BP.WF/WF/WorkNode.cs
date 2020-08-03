@@ -2353,7 +2353,6 @@ namespace BP.WF
                 msg += BP.WF.Glo.multilingual("@节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", nd.Name, i.ToString(), operators);
             }
 
-
             //加入分流异表单，提示信息。
             this.addMsg("FenLiuUnSameSheet", msg);
 

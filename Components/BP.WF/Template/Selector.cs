@@ -418,7 +418,7 @@ namespace BP.WF.Template
             //    orderByDept = " ORDER BY Port_Emp.FK_Dept, Port_Emp.Idx";
 
             //部门
-            string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept ";
+            string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept order by";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
@@ -529,7 +529,7 @@ namespace BP.WF.Template
             if (nd.HisDeliveryWay == DeliveryWay.BySelectedForPrj)
             {
                 //部门.
-                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C,Port_DeptEmp D WHERE A.No=B.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "' ";
+                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C,Port_DeptEmp D WHERE A.No=B.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'ORDER BY a.Idx ";
                 sql += "  AND C.FK_Emp=D.FK_Emp ";
 
 
@@ -538,7 +538,7 @@ namespace BP.WF.Template
                 ds.Tables.Add(dt);
 
                 //人员.
-                sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b, WF_PrjEmp C WHERE a.FK_Dept=b.FK_Dept  AND A.No=C.FK_Emp  AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ";
+                sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b, WF_PrjEmp C WHERE a.FK_Dept=b.FK_Dept  AND A.No=C.FK_Emp  AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'  ORDER BY a.Idx ";
                 dtEmp = DBAccess.RunSQLReturnTable(sql);
                 ds.Tables.Add(dtEmp);
                 dtEmp.TableName = "Emps";
@@ -547,13 +547,13 @@ namespace BP.WF.Template
 
 
             //部门.
-            sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID + " ";
+            sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID + "ORDER BY a.Idx ";
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
-            sql = "SELECT distinct a.No, a.Name, d.FK_Dept FROM Port_Emp a, WF_NodeDept b,Port_DeptEmp d WHERE d.FK_Dept=b.FK_Dept AND a.No=d.FK_Emp AND B.FK_Node=" + nodeID + " ";
+            sql = "SELECT distinct a.No, a.Name, d.FK_Dept FROM Port_Emp a, WF_NodeDept b,Port_DeptEmp d WHERE d.FK_Dept=b.FK_Dept AND a.No=d.FK_Emp AND B.FK_Node=" + nodeID + " ORDER BY a.Idx";
             dtEmp = DBAccess.RunSQLReturnTable(sql);
             ds.Tables.Add(dtEmp);
             dtEmp.TableName = "Emps";

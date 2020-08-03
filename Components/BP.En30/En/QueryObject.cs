@@ -625,14 +625,15 @@ namespace BP.En
             Attr attr = this.HisMap.GetAttrByKey(attrKey);
             if (attr.IsRefAttr == true)
             {
-                //  Entity en = attr.HisFKEn;
                 if (this.HisDBType == DBType.Oracle)
                     return "T" + attr.Key.Replace("Text", "") + ".Name";
 
-                if (attr.IsFK==false)
-                    return  attr.Key.Replace("Text", "") + ".Name";
-
                 Entity en = attr.HisFKEn;
+
+                if (attr.IsFK==false)
+                    return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
+
+                
                 return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
             }
 

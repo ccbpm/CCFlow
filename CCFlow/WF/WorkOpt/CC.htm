@@ -191,7 +191,8 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("Emps", empStr);
             handler.AddPara("WorkID", GetQueryString("WorkID"));
-            var data = handler.DoMethodReturnString("CC_Send2020");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("CC_Send");
 
             window.location.href = window.location.href;
 
@@ -215,7 +216,14 @@
                 return;
             }
 
-            DoCC(frames["iframeSelectEmpsForm"].window.returnVal.No);
+            var nos = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
+            var names = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
+            var strs = "";
+            for (var i = 0; i < nos.length; i++) {
+                strs += nos[i] + "," + names[i] + ";";
+            }
+
+            DoCC(strs);
             return;
             $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
@@ -267,7 +275,7 @@
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
                     //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
-                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + ","+data[i].Name+"\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                 }
                 $("#SelectEmp").show().html(html);
 
@@ -285,7 +293,7 @@
         }
 
         //选择下拉数据
-        function getCon(no) {
+        function getCon(no,name) {
 
             $("#TB_Emps").val('');
 

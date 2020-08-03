@@ -547,13 +547,13 @@ namespace BP.WF.Template
 
 
             //部门.
-            sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID + "ORDER BY a.Idx ";
+            sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID + "   ORDER BY a.Idx ";
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
-            sql = "SELECT distinct a.No, a.Name, d.FK_Dept FROM Port_Emp a, WF_NodeDept b,Port_DeptEmp d WHERE d.FK_Dept=b.FK_Dept AND a.No=d.FK_Emp AND B.FK_Node=" + nodeID + " ORDER BY a.Idx";
+            sql = "SELECT distinct a.No, a.Name, d.FK_Dept FROM Port_Emp a, WF_NodeDept b,Port_DeptEmp d WHERE d.FK_Dept=b.FK_Dept AND a.No=d.FK_Emp AND B.FK_Node=" + nodeID + "  ORDER BY a.Idx";
             dtEmp = DBAccess.RunSQLReturnTable(sql);
             ds.Tables.Add(dtEmp);
             dtEmp.TableName = "Emps";

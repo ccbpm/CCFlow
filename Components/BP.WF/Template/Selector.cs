@@ -529,7 +529,7 @@ namespace BP.WF.Template
             if (nd.HisDeliveryWay == DeliveryWay.BySelectedForPrj)
             {
                 //部门.
-                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C,Port_DeptEmp D WHERE A.No=B.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "'ORDER BY a.Idx ";
+                sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b, WF_PrjEmp C,Port_DeptEmp D WHERE A.No=B.FK_Dept AND B.FK_Node=" + nodeID + " AND C.FK_Prj='" + en.GetValStrByKey("PrjNo") + "' ORDER BY a.Idx ";
                 sql += "  AND C.FK_Emp=D.FK_Emp ";
 
 

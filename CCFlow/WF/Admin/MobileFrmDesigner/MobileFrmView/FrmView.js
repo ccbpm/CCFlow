@@ -549,9 +549,9 @@ var FormUtils = {
 
         var inputHtml = "<label for=\"TB_" + attr.KeyOfEn + "\"><p>" + attr.Name + "</p></label>"
         if (attr.UIIsEnable == "0") {
-            inputHtml += "< input readonly='readonly' type =\"number\" name=\"TB_" + attr.KeyOfEn + "\" id=\"TB_" + attr.KeyOfEn + "\" placeholder=\"0.00\" />\";"
+            inputHtml += "<input readonly='readonly' type =\"number\" name=\"TB_" + attr.KeyOfEn + "\" id=\"TB_" + attr.KeyOfEn + "\" placeholder=\"0.00\" />\";"
         } else {
-            inputHtml += "< input type =\"number\" name=\"TB_" + attr.KeyOfEn + "\" id=\"TB_" + attr.KeyOfEn + "\" placeholder=\"0.00\" />\";"
+            inputHtml += "<input type =\"number\" name=\"TB_" + attr.KeyOfEn + "\" id=\"TB_" + attr.KeyOfEn + "\" placeholder=\"0.00\" />\";"
         }
             return inputHtml;
     },

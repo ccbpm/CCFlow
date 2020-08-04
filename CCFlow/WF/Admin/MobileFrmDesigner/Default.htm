@@ -95,17 +95,17 @@
 
         }
         //预览手机端
-        function Form_View(FK_MapData, FK_Flow) {
-            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + FK_MapData;
+        function Form_View() {
+            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID;
             OpenBootStrapModal(url, "EditFrame", "预览手机端表单", 300, 430, "icon-edit");
         }
         //复制顺序到节点
-        function Form_Copy(FK_MapData, FK_Flow) {
+        function Form_Copy() {
             $('#nodes').dialog('open');
             $('#btns').show();
         }
         //重置字段顺序
-        function From_ReSet(FK_MapData) {
+        function From_ReSet() {
             var reSet = confirm("是否确定要重置字段顺序？");
             if (reSet == false)
                 return;
@@ -180,7 +180,6 @@
         function BtnCopy() {
 
             var v = $('#pub1_lbNodes').val();
-            var FK_MapData = GetQueryString("FK_MapData");
             if (v == null || v.length == 0) {
                 alert('请选择将此排序复制到的节点！');
                 return false;
@@ -190,7 +189,7 @@
                 str += v[i] + ",";
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_MobileFrmDesigner");
-            handler.AddPara("FK_MapData", FK_MapData);
+            handler.AddPara("FK_MapData", frmID);
             handler.AddPara("NodeIDs", str);
             var data = handler.DoMethodReturnString("Default_Copy");
 
@@ -211,7 +210,7 @@
 
         $(function () {
 
-            var frmID = GetQueryString("FK_MapData");
+            frmID = GetQueryString("FK_MapData");
             if (frmID == null || frmID == undefined)
                 frmID = GetQueryString("FrmID");
 
@@ -341,7 +340,7 @@
                     //重新生成明细表表头
                     var table = "<table style='width:100%;'>";
                     table += "<tr>";
-                    table += "<td nowrap=''><a href=\"javascript:EditDtl('" + FK_MapData + "','" + group.CtrlID + "')\">" + group.CtrlID + "</a></td>";
+                    table += "<td nowrap=''><a href=\"javascript:EditDtl('" + frmID + "','" + group.CtrlID + "')\">" + group.CtrlID + "</a></td>";
                     table += "<td nowrap=''>" + group.Lab + "</td>";
                     //table += "<td nowrap=''>&nbsp;</td>";
                     // table += "<td valign='top' nowrap=''>&nbsp;&nbsp;<a href='./Default.htm?FK_Flow=" + FK_Flow + "&FK_MapData=" + group.CtrlID + "' target='_self' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-sheet'' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-sheet l-btn-icon-left'>从表字段排序</span></span></a>";
@@ -362,7 +361,7 @@
                     table += "<tr>";
                     table += "<td style='text-align:center'>1</td>";
                     table += "<td nowrap=''>" + group.OID + "</td>";
-                    table += "<td nowrap=''><a href=\"javascript:EditAthMent('" + FK_MapData + "','" + group.CtrlID + "')\">" + group.CtrlID + "</a></td>";
+                    table += "<td nowrap=''><a href=\"javascript:EditAthMent('" + frmID + "','" + group.CtrlID + "')\">" + group.CtrlID + "</a></td>";
 
                     table += "</tr>";
                     table += "</tbody></table>";
@@ -433,10 +432,10 @@
 
     <form id="form1">
 
-        <button onclick="From_ReSet()">智能重置顺序</button>
-        <button onclick="Form_View()">预览</button>
-        <button onclick="GroupFieldNew()">新建分组</button>
-        <button onclick="From_ReSet()">智能重置顺序</button>
+        <input type="button" onclick="From_ReSet()" value="智能重置顺序"/>
+        <input type="button" onclick="Form_View()" value="预览"/>
+        <input type="button" onclick="GroupFieldNew()" value="新建分组"/>
+        <input type="button" onclick="From_ReSet()" value="智能重置顺序"/>
 
         <table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%;border:none'>
             <!--内容显示-->

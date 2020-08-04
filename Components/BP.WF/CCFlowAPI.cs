@@ -742,33 +742,35 @@ namespace BP.WF
                                 }
 
                                 msgInfo = msgInfo.Replace("@", "<br>");
-
-                                string str = nd.ReturnAlert;
-                                if (str != "")
+                                if (!string.IsNullOrEmpty(msgInfo))
                                 {
-                                    str = str.Replace("~", "'");
-                                    str = str.Replace("@PWorkID", realWorkID.ToString());
-                                    str = str.Replace("@PNodeID", nd.NodeID.ToString());
-                                    str = str.Replace("@FK_Node", nd.NodeID.ToString());
+                                    string str = nd.ReturnAlert;
+                                    if (str != "")
+                                    {
+                                        str = str.Replace("~", "'");
+                                        str = str.Replace("@PWorkID", realWorkID.ToString());
+                                        str = str.Replace("@PNodeID", nd.NodeID.ToString());
+                                        str = str.Replace("@FK_Node", nd.NodeID.ToString());
 
-                                    str = str.Replace("@PFlowNo", fk_flow);
-                                    str = str.Replace("@FK_Flow", fk_flow);
-                                    str = str.Replace("@PWorkID", workID.ToString());
+                                        str = str.Replace("@PFlowNo", fk_flow);
+                                        str = str.Replace("@FK_Flow", fk_flow);
+                                        str = str.Replace("@PWorkID", workID.ToString());
 
-                                    str = str.Replace("@WorkID", workID.ToString());
-                                    str = str.Replace("@OID", workID.ToString());
+                                        str = str.Replace("@WorkID", workID.ToString());
+                                        str = str.Replace("@OID", workID.ToString());
 
-                                    DataRow drMsg = dtAlert.NewRow();
-                                    drMsg["Title"] = "退回信息";
-                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                    dtAlert.Rows.Add(drMsg);
-                                }
-                                else
-                                {
-                                    DataRow drMsg = dtAlert.NewRow();
-                                    drMsg["Title"] = "退回信息";
-                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                    dtAlert.Rows.Add(drMsg);
+                                        DataRow drMsg = dtAlert.NewRow();
+                                        drMsg["Title"] = "退回信息";
+                                        drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                        dtAlert.Rows.Add(drMsg);
+                                    }
+                                    else
+                                    {
+                                        DataRow drMsg = dtAlert.NewRow();
+                                        drMsg["Title"] = "退回信息";
+                                        drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                        dtAlert.Rows.Add(drMsg);
+                                    }
                                 }
                             }
                             break;
@@ -803,7 +805,10 @@ namespace BP.WF
                                 msg = msg.Replace("@", "<br>");
 
                                 drMsg["Msg"] = msg;
-                                dtAlert.Rows.Add(drMsg);
+                                if (!string.IsNullOrEmpty(msg))
+                                {
+                                    dtAlert.Rows.Add(drMsg);
+                                }
                             }
                             break;
                         default:

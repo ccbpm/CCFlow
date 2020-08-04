@@ -207,6 +207,8 @@
 
         var frmID = "";
         var dtGroups = null;
+        var mapAttrs = null;
+
 
         $(function () {
 
@@ -246,15 +248,36 @@
                     var refKey;
                     var insetToPK;
                     $("tr").mouseover(function () {
+
                         if (sta == 1) {
 
                             //当前选择的字段.
                             refKey = $(this).children('td').eq(1).html();
 
+                            var mapAttrFrom = GetMapAttr(refKey);
+                            if (mapAttrFrom == null)
+                                return;
+
                             //插入到的字段的下一个字段.
                             insetToPK = $(this).next('tr').children('td').eq(1).html();
-                            if (insetToPK != undefined || insetToPK.indexOf('<') == 0) {
-                                alert('移动位置错误.');
+
+                            var mapAttrTo = GetMapAttr(insetToPK);
+                            if (mapAttrTo != null) {
+                                var myPK = EnName + '_' + refKey;
+                                var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
+                                //获得主键值
+                                insetToPK = EnName + '_' + insetToPK;
+                                mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
+                                window.location.href = window.location.href;
+                                sta = 0; // 1.0 重置状态.
+                            }
+                            return;
+
+                            alert(insetToPK);
+
+                            if (insetToPK != undefined && insetToPK.indexOf('<') == 0) {
+
+                                alert('移动位置错误.' + insetToPK);
                                 window.location.href = window.location.href;
                                 return;
                             }
@@ -274,11 +297,7 @@
                                 return;
 
                             if (isGroup == false) {
-                                var myPK = EnName + '_' + refKey;
-                                var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
-                                //获得主键值
-                                insetToPK = EnName + '_' + insetToPK;
-                                mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
+
                             }
 
                             sta = 0;//重置状态
@@ -297,6 +316,26 @@
             }).disableSelection();
         });
 
+        function GetMapAttr(key) {
+            for (var i = 0; i < mapAttrs.length; i++) {
+
+                var attr = mapAttrs[i];
+                if (attr.KeyOfEn == key)
+                    return attr;
+            }
+            return false;
+        }
+
+        function GetGroup(key) {
+            for (var i = 0; i < groupFields.length; i++) {
+
+                var en = groupFields[i];
+                if (en.Lab == key)
+                    return en;
+            }
+            return null;
+        }
+
         function InitPage() {
 
             var FK_MapData = GetQueryString("FK_MapData");
@@ -312,7 +351,7 @@
             data = JSON.parse(data);
             var dtGroups = data.Sys_GroupFields; //分组数据
             var mapDtls = data.Sys_MapDtls;
-            var mapAttrs = data.Sys_MapAttrs;
+            mapAttrs = data.Sys_MapAttrs;
             var aths = data.Sys_FrmAttachments;
 
             //遍历分组.

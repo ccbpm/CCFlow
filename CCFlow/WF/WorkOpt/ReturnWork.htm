@@ -28,10 +28,10 @@
             background: transparent;
         }
 
-        body div {
-            text-align: left;
-            margin: 20px auto;
-        }
+            body div {
+                text-align: left;
+                margin: 20px auto;
+            }
 
         #Message {
             width: 100%;
@@ -61,6 +61,7 @@
 
             //初始化数据.
             var data = handler.DoMethodReturnString("Return_Init");
+
             if (data.indexOf('info@') == 0) {
 
                 //这种情况下，有可能是自动退回，自动退回就提示退回消息.
@@ -78,16 +79,17 @@
                 $("#DIV_Nodes").html(data);
                 $("#DIV_Doc").html("");
                 $("#btnReturn").css("display", "none");
-                $("#btnIsBackTracking").css("display", "none");
+
+                $("#btnIsBackTracking").css("display", "disabled");
+                $("#btnIsKillEtcThread").css("display", "disabled");
+
                 $("#btnClose").attr("onclick", "Close(1)");
                 return;
             }
 
             //对与非法的调用，系统会提示，比如：不应该退回而退回，已经发送到下一个节点还要执行退回等等.
             if (data.indexOf('err@') == 0) {
-
                 //console.error("退回窗口错误信息" + data);
-
                 data = data.replace('err@', '');
                 data = "<font color=red>" + data + "</font>";
                 $("#Msg").html(data);
@@ -97,6 +99,9 @@
 
             //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
             var node = new Entity("BP.WF.Node", pageData.FK_Node);
+            if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1")
+                $("#btnIsKillEtcThread").css("display", "visibility");
+
             if (node.ReturnCHEnable == 1) {
                 var mapAttrs = new Entities("BP.Sys.MapAttrs");
                 mapAttrs.Retrieve("FK_MapData", "BP.WF.ReturnWorks", "Idx");
@@ -139,7 +144,7 @@
                 if (nodeListHtml.indexOf(returnNode.No + '@') != -1)
                     return true;
 
-                nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
+                nodeListHtml += '<option data-IsKillEtcThread=' + returnNode.IsKillEtcThread + ' data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
             });
 
             //绑定退回到节点的数据.
@@ -150,19 +155,27 @@
             if (node.IsBackTracking == "0")
                 $('#btnIsBackTracking').css('display', 'none');
 
+            if (node.IsKillEtcThread == "0")
+                $('#btnIsKillEtcThread').css('display', 'none');
+
             $("section").show();
             $(".wait").hide();
 
             Common.MaxLengthError();
         });
-        //确定 退回 执行退回操作 
+        //确定 退回 执行退回操作
         // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
         function ReturnWork(isBack) {
 
             //判断退回并原路返回复选框是否被选中
-            if ($("#btnIsBackTracking").prop("checked")==true) 
+            if ($("#CB_IsBackTracking").prop("checked") == true)
                 isBack = 1;
-            
+
+            //是否全部（子线程）退回？
+            var IsKillEtcThread = 0;
+            if ($("#CB_IsKillEtcThread").prop("checked") == true)
+                IsKillEtcThread = 1;
+
             //获得选择退回的节点.
             var selectedNodeID = $('#DDL_Nodes').val();
             if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID == "") {
@@ -176,7 +189,6 @@
                 alert("请输入退回原因.");
                 return;
             }
-
 
             $('.foot input').attr('disabled', 'disabled');
             $('.foot input').css('background', 'gray');
@@ -197,6 +209,10 @@
             handler.AddPara("ReturnInfo", doc);
             handler.AddPara("IsBack", isBack);
 
+            //是否全部子线程退回？
+            handler.AddPara("IsKillEtcThread", IsKillEtcThread);
+            //  alert(IsKillEtcThread);
+
             //增加字段属性, 这部分，vue可以不翻译.
             var parasData = $("form").serialize();
             handler.AddPara("PageData", parasData);
@@ -206,9 +222,10 @@
             if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
                 window.parent.WindowCloseReloadPage(data);
             } else {
-                if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+                if (typeof WindowCloseReloadPage != 'undefined'
+                    && WindowCloseReloadPage instanceof Function)
                     WindowCloseReloadPage(data);
-			}
+            }
 
             //提示退回消息， 并关闭窗口，刷新父父窗口.
             data = data.replace(/null/g, '');
@@ -244,7 +261,7 @@
     <div style="padding:0 15px;">
         <div class="wait" style="text-align: center;" id="Msg">页面数据正在加载中，请稍候......</div>
         <div id="DIV_Nodes">
-            要退回到的节点:
+            要退回到:
             <select id="DDL_Nodes" name="DDL_Nodes" style="width: 60%;border:solid 1px #ccc" class="layui-select"></select>
         </div>
         <!--启用了退回考核规则的设置-->
@@ -263,12 +280,26 @@
         <div style="height:100px;">上传附件预留：该功能正在建设中</div>
     -->
     <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;" class="foot">
-        <div style="margin-top:6px;float:left;"><input type="checkbox" id="btnIsBackTracking" style="float:left;margin-top:3px;" /><label for="btnIsBackTracking" style="margin-left:6px;float:left;margin-right:20px;">退回后并发送给我</label></div>
+
+        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left;">
+            <label>
+                <input type="checkbox" id="CB_IsKillEtcThread" style="float:left;margin-top:3px;" />
+                全部子线程退回&nbsp;&nbsp;
+            </label>
+        </div>
+
+        <div id="btnIsBackTracking" style="margin-top:6px;float:left;">
+            <label>
+                <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
+                退回后并发送给我
+            </label>
+        </div>
+
         <button type="button" onclick="Close();" id="btnClose" class="layui-btn layui-btn-primary">
             <!--<img src="../Img/Btn/Close.png" />--> 关闭
         </button>
-        <button type="button"  onclick="ReturnWork(0);" id="btnReturn" class="layui-btn layui-btn-normal">
-            <!--<img src="../Img/Btn/Confirm.png" />--> 确定退回
+        <button type="button" onclick="ReturnWork(0);" id="btnReturn" class="layui-btn layui-btn-normal">
+            <!--<img src="../Img/Btn/Confirm.png" />--> 退回
         </button>
     </div>
 

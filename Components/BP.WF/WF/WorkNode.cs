@@ -8004,6 +8004,7 @@ namespace BP.WF
                 case ActionType.Order:
                 case ActionType.SubThreadForward:
                 case ActionType.FlowOver:
+                case ActionType.DeleteFlowByFlag:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {
@@ -8151,6 +8152,7 @@ namespace BP.WF
                 case ActionType.Order:
                 case ActionType.SubThreadForward:
                 case ActionType.FlowOver:
+                case ActionType.DeleteFlowByFlag:
                     //判断是否有焦点字段，如果有就把它记录到日志里。
                     if (this.HisNode.FocusField.Length > 1)
                     {

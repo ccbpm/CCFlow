@@ -145,6 +145,7 @@ namespace BP.WF
 
             /*找到发送到退回的时间点，把从这个时间点以来的数据都要删除掉.*/
             ps.Clear();
+            //@yln
             ps.SQL = "SELECT RDT,ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.Forward + " ORDER BY RDT desc ";
             ps.Add("NDFrom", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
@@ -154,7 +155,7 @@ namespace BP.WF
                 string rdt = dt.Rows[0][0].ToString();
 
                 ps.Clear();
-                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID ORDER BY RDT ";
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND NDFrom NOT IN(SELECT NDFrom FROM ND12Track WHERE   RDT <" + dbStr + "RDT And ActionType IN ("+(int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL+")) ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.WorkID);

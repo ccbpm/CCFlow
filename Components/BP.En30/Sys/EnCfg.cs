@@ -211,6 +211,10 @@ namespace BP.Sys
         /// 字段求和求平均设置
         /// </summary>
         public const string FieldSet = "FieldSet";
+        /// <summary>
+        /// 导入功能Url
+        /// </summary>
+        public const string ImpFuncUrl = "ImpFuncUrl";
     }
     /// <summary>
     /// EnCfgs
@@ -397,19 +401,24 @@ namespace BP.Sys
                 Map map = new Map("Sys_EnCfg", "实体配置");
 
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
-                map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, true, 0, 2000, 60);
-                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, true, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60);
+                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60);
 
-                map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, true, 0, 100, 60);
-                map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, true, 0, 100, 60);
-                map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, true, 0, 200, 60);
-                map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, true, 0, 2000, 60);
+                map.AddTBString(EnCfgAttr.FJSavePath, null, "保存路径", true, false, 0, 100, 60);
+                map.AddTBString(EnCfgAttr.FJWebPath, null, "附件Web路径", true, false, 0, 100, 60);
+                map.AddTBString(EnCfgAttr.Datan, null, "字段数据分析方式", true, false, 0, 200, 60);
+                map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
 
-                //字段颜色设置
-                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, true, 0, 500, 60);
-                //对字段求总和平均
-                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, true, 0, 500, 60);
+                //字段颜色设置.
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
+                //对字段求总和平均.
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段设置", true, false, 0, 500, 60);
+
+                map.AddTBString(EnCfgAttr.ImpFuncUrl, null, "导入功能Url", true, false, 0, 500, 60,true);
+                map.SetHelperAlert(EnCfgAttr.ImpFuncUrl, "如果为空，则使用通用的导入功能.");
+
                 map.AddTBAtParas(3000);  //参数属性.
+
                 #region 执行的方法.
 
                 RefMethod rm = new RefMethod();

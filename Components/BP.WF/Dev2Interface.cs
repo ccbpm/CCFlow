@@ -9946,10 +9946,7 @@ namespace BP.WF
             string sql = "SELECT WorkID FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Emp='" + returnToEmp + "' AND FK_Node=" + returnToNodeID;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
-            {
                 throw new Exception("err@被退回到的节点数据错误，请联系管理员.");
-            }
-
 
             //补偿处理退回错误. @yln
             GenerWorkFlow gwf = new GenerWorkFlow(workID);

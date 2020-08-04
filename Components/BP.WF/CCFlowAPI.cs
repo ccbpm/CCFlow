@@ -730,11 +730,12 @@ namespace BP.WF
                                 string msgInfo = "";
                                 foreach (BP.WF.ReturnWork rw in rws)
                                 {
-
-                                    msgInfo += "来自节点：" + rw.ReturnNodeName + "@退回人：" + rw.ReturnerName + "@退回日期：" + rw.RDT;
-                                    msgInfo += "@退回原因：" + rw.BeiZhuHtml;
-                                    msgInfo += "<hr/>";
-
+                                    if (WebUser.No == rw.ReturnToEmp)
+                                    {
+                                        msgInfo += "来自节点：" + rw.ReturnNodeName + "@退回人：" + rw.ReturnerName + "@退回日期：" + rw.RDT;
+                                        msgInfo += "@退回原因：" + rw.BeiZhuHtml;
+                                        msgInfo += "<hr/>";
+                                    }
                                     ////drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
                                     //msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
                                     //msgInfo += rw.BeiZhuHtml;
@@ -783,16 +784,19 @@ namespace BP.WF
                                 //  msg = "<h3>移交信息 </h3><hr/>";
                                 foreach (DataRow dr in dtshift.Rows)
                                 {
-                                    string empFromT = dr[TrackAttr.EmpFromT].ToString();
-                                    string empToT = dr[TrackAttr.EmpToT].ToString();
-                                    string msgShift = dr[TrackAttr.Msg].ToString();
-                                    string rdt = dr[TrackAttr.RDT].ToString();
-                                    if (msgShift == "undefined")
-                                        msgShift = "无";
+                                    if (WebUser.No == dr[TrackAttr.EmpTo].ToString())
+                                    {
+                                        string empFromT = dr[TrackAttr.EmpFromT].ToString();
+                                        string empToT = dr[TrackAttr.EmpToT].ToString();
+                                        string msgShift = dr[TrackAttr.Msg].ToString();
+                                        string rdt = dr[TrackAttr.RDT].ToString();
+                                        if (msgShift == "undefined")
+                                            msgShift = "无";
 
-                                    msg += "移交人：" + empFromT + "@接受人：" + empToT + "@移交日期：" + rdt;
-                                    msg += "@移交原因：" + msgShift;
-                                    msg += "<hr/>";
+                                        msg += "移交人：" + empFromT + "@接受人：" + empToT + "@移交日期：" + rdt;
+                                        msg += "@移交原因：" + msgShift;
+                                        msg += "<hr/>";
+                                    }
                                 }
 
                                 msg = msg.Replace("@", "<br>");

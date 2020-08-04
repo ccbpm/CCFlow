@@ -30,27 +30,18 @@
 
             var mapData = new Entity("BP.Sys.MapData", frmID);
 
+            var isSearchKey = mapData.GetPara("IsSearchKey") == "1" ? true : false;
+            document.getElementById("CB_Key_0").checked = isSearchKey;
 
-            //关键字查询.
-            document.getElementById("CB_Key").checked = true; //  (mapData.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+            document.getElementById("CB_Key_1").checked = isSearchKey == true ? false : true;
 
-            var js = mapData.AtPara.split("@");
-            var RptStringSearchKeys = null;
-            var RptSearchKeys = null;
-            var RptDTSearchWay = null;
-            var RptDTSearchKey = null;
-            for (var i = 0; i < js.length; i++) {
-                 if (js[i].indexOf("RptStringSearchKeys") != -1)
-                    RptStringSearchKeys = js[i].replace("RptStringSearchKeys=", "")
-                if (js[i].indexOf("RptSearchKeys") != -1)
-                    RptSearchKeys = js[i].replace("RptSearchKeys=", "")
-                if (js[i].indexOf("DTSearchWay") != -1)
-                    RptDTSearchWay = js[i].replace("DTSearchWay=", "")
-                if (js[i].indexOf("DTSearchKey") != -1)
-                    RptDTSearchKey = js[i].replace("DTSearchKey=", "")
-            }
+           
 
-
+            var RptStringSearchKeys = mapData.GetPara("RptStringSearchKeys");
+            var RptSearchKeys = mapData.GetPara("RptSearchKeys");
+            var RptDTSearchWay = mapData.GetPara("DTSearchWay");
+            var RptDTSearchKey = mapData.GetPara("DTSearchKey");
+           
 
             //绑定外键字段.
             var dateMapAttrs = [];
@@ -111,9 +102,8 @@
         function Save() {
 
             var mapData = new Entity("BP.Sys.MapData", frmID);
-
-            var checked = document.getElementById("CB_Key").checked ? 1 : 0;
-            mapData.SetPara("IsSearchKey", checked);
+            var IsSearchKey = document.getElementById("CB_Key_0").checked ? 1 : 0;
+            mapData.SetPara("IsSearchKey", IsSearchKey);
 
             mapData.SetPara("DTSearchWay", document.getElementById("DDL_DTSearchWay").value);
             mapData.SetPara("DTSearchKey", document.getElementById("DDL_DTSearchKey").value);
@@ -150,6 +140,15 @@
 
         }
 
+        function changeStringKeysState(val) {
+            if (val == 0) {
+                $("#StringKeys input[type=checkbox]").attr("disabled", 'disabled');
+                $("#StringKeys input[type=checkbox]").removeAttr("checked");
+            }
+            if (val == 1) {
+                $("#StringKeys input[type=checkbox]").removeAttr("disabled");
+            }
+        }
         
     </script>
     <base target="_self" />
@@ -167,12 +166,9 @@
             </tr>
             <tr>
                 <td>
-                    关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br />
-                    <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label>
-                    <br />
-                    按照选择字段模糊查询,不选择字段按照关键字查询
-                    <div id="StringKeys">
-                    </div>
+                    <label for="CB_Key_0"><input type="radio" name="CB_Key" id="CB_Key_0" value="0" onchange="changeStringKeysState(this.value)" />是否增加关键字查询</label><span style="margin-left:10px">----关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外))</span><br />
+                    <label for="CB_Key_1"><input type="radio" name="CB_Key" id="CB_Key_1" value="1" onchange="changeStringKeysState(this.value)" />是否增加特定字段的查询</label><span style="margin-left:10px">----选择特定字段，在报表中根据like模糊查询</span><br />
+                    <div id="StringKeys" style="margin-left:15px"> </div>
                     <br />
                     关键字搜索提示
                     <input id="TB_Alert" name="TB_Alert" type="text" value="" />,默认为:请输入关键字...

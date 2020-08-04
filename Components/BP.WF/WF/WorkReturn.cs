@@ -454,17 +454,21 @@ namespace BP.WF
             //更新状态.
             gwf.WFState = WFState.ReturnSta;
             gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
-            gwf.Update();
+            gwf.FK_Node = this.ReturnToNode.NodeID;
 
-
+            string todoEmps = "";
             //更新他的待办.
-            GenerWorkerLists gwls = new GenerWorkerLists(this.FID, gwf.FK_Node);
+            GenerWorkerLists gwls = new GenerWorkerLists(this.FID, this.ReturnToNode.NodeID);
             foreach (GenerWorkerList item in gwls)
             {
+                todoEmps += item.FK_Emp + "," + item.FK_EmpText + ";";
                 item.IsPassInt = 0;
                 item.Update();
             }
 
+            gwf.TodoEmps = todoEmps;
+            gwf.TodoEmpsNum = gwls.Count;
+            gwf.Update();
             return "退回成功.";
         }
         /// <summary>

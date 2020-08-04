@@ -779,6 +779,7 @@ namespace BP.WF
 
                             if (dtshift.Rows.Count >= 1)
                             {
+                                msg = "";
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "移交信息";
                                 //  msg = "<h3>移交信息 </h3><hr/>";

@@ -3579,7 +3579,7 @@ namespace BP.WF
                 string s = this.GetValStringByKey(FlowAttr.PTable);
                 if (DataType.IsNullOrEmpty(s))
                     s = "ND" + int.Parse(this.No) + "Rpt";
-                return s;
+                return s.Trim();
             }
             set
             {

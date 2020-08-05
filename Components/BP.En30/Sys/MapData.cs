@@ -798,7 +798,7 @@ namespace BP.Sys
                 string s = this.GetValStrByKey(MapDataAttr.PTable);
                 if (DataType.IsNullOrEmpty(s) == true)
                     return this.No;
-                return s;
+                return s.Trim();
             }
             set
             {

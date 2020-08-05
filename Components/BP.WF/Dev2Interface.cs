@@ -8674,12 +8674,11 @@ namespace BP.WF
             gwf.WorkID = workID;
             if (gwf.RetrieveFromDBSources() == 1)
             {
-                if (gwf.FK_Node != int.Parse(gwf.FK_Flow + "01"))
-                    throw new Exception("@该流程非Blank流程不能删除:" + gwf.Title);
+                //if (gwf.FK_Node != int.Parse(gwf.FK_Flow + "01"))
+                //    throw new Exception("@该流程非Blank流程不能删除:" + gwf.Title);
 
-                if (gwf.WFState != WFState.Blank)
-                    throw new Exception("@非Blank状态不能删除");
-
+                //if (gwf.WFState != WFState.Blank)
+                //    throw new Exception("@非Blank状态不能删除");
                 gwf.Delete();
             }
 

@@ -3471,6 +3471,7 @@ namespace BP.WF.HttpHandler
             gwf.NodeName = nd.Name;
             gwf.Sender =  WebUser.No+","+ WebUser.Name+";";
             gwf.SendDT = DataType.CurrentDataTimess;
+            gwf.SetPara("ThreadCount", 0);
             gwf.Update();
 
 

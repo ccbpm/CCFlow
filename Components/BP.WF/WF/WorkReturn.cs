@@ -465,7 +465,7 @@ namespace BP.WF
                 item.IsPassInt = 0;
                 item.Update();
             }
-
+            gwf.SetPara("ThreadCount", 0);
             gwf.TodoEmps = todoEmps;
             gwf.TodoEmpsNum = gwls.Count;
             gwf.Update();

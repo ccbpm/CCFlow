@@ -358,6 +358,7 @@ namespace BP.WF.HttpHandler
                 switch (ar.UIContralType)
                 {
                     case UIContralType.DDL:
+                    case UIContralType.RadioBtn: //yln
                         row["Type"] = "combo";
                         fcid = "DDL_" + ar.KeyOfEn;
                         if (vals.ContainsKey(fcid))
@@ -425,6 +426,7 @@ namespace BP.WF.HttpHandler
                                 }
                                 break;
                             case FieldTypeS.Enum:
+                                row["Type"] = "combo";
                                 dtNoName = GetNoNameDataTable(ar.KeyOfEn);
                                 dtNoName.Rows.Add("all", "全部");
 
@@ -749,7 +751,7 @@ namespace BP.WF.HttpHandler
 
             foreach (MapAttr attr in attrs)
             {
-                if (attr.UIContralType == UIContralType.DDL)
+                if (attr.UIContralType == UIContralType.DDL || attr.UIContralType== UIContralType.RadioBtn)
                 {
                     DataRow dr = dt.NewRow();
                     dr["Field"] = attr.KeyOfEn;
@@ -889,6 +891,7 @@ namespace BP.WF.HttpHandler
                 switch (ar.UIContralType)
                 {
                     case UIContralType.DDL:
+                    case UIContralType.RadioBtn:
                         row["Type"] = "combo";
                         fcid = "DDL_" + ar.KeyOfEn;
                         if (vals.ContainsKey(fcid))
@@ -1914,6 +1917,7 @@ namespace BP.WF.HttpHandler
                     //    }
                     //    break;
                     case UIContralType.DDL:
+                    case UIContralType.RadioBtn:
                         cid = "DDL_" + attr.Key;
 
                         if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))

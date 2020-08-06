@@ -367,8 +367,8 @@ namespace BP.WF.HttpHandler
             GroupFields gfs = new GroupFields();
             QueryObject qo = new QueryObject(gfs);
             qo.AddWhere(GroupFieldAttr.FrmID, FrmID);
-            qo.addAnd();
-            qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
+            //qo.addAnd();
+            //qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
             int num = qo.DoQuery();
 
             if (num == 0)

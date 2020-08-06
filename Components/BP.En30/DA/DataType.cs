@@ -670,7 +670,7 @@ namespace BP.DA
                     return ex.Message;
                 }
             }
-
+          
             //如果webResponse.StatusCode的值为HttpStatusCode.OK，表示成功，那你就可以接着读取接收到的内容了：
             // 获取接收到的流
             Stream stream = webResponse.GetResponseStream();

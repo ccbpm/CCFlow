@@ -718,6 +718,10 @@ namespace BP.WF
             //明细表的配置信息.
             DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
+
+            //启用附件，增加附件信息 yln
+            DataTable Sys_FrmAttachment = dtl.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
+            myds.Tables.Add(Sys_FrmAttachment);
             #endregion 加载从表表单模版信息.
 
             #region 把从表的- 外键表/枚举 加入 DataSet.

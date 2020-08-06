@@ -1623,7 +1623,7 @@ namespace BP.Sys
                     //增加分组
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
-                    group.FrmID = this.FK_MapData;
+                    group.FrmID = this.No; //yln
                     group.CtrlType = "Ath";
                     group.CtrlID = athDesc.MyPK;
                     group.Idx = 10;

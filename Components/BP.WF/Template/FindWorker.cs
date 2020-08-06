@@ -107,16 +107,7 @@ namespace BP.WF.Template
 
 
                 sql = BP.WF.Glo.DealExp(sql, this.currWn.rptGe, null);
-                if (sql.Contains("@"))
-                {
-                    if (BP.WF.Glo.SendHTOfTemp != null)
-                    {
-                        foreach (string key in BP.WF.Glo.SendHTOfTemp.Keys)
-                        {
-                            sql = sql.Replace("@" + key, BP.WF.Glo.SendHTOfTemp[key].ToString());
-                        }
-                    }
-                }
+               
 
                 if (sql.Contains("@GuestUser.No"))
                     sql = sql.Replace("@GuestUser.No", GuestUser.No);

@@ -5572,13 +5572,22 @@ namespace BP.WF
                 {
                     try
                     {
-                        /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                        if (Glo.SendHTOfTemp.ContainsKey(key) == false)
+                        bool isHave = false;
+                        if (SystemConfig.IsBSsystem == true) {
+                            foreach (string param in HttpContextHelper.RequestParamKeys)
+                            {
+                                if (string.IsNullOrEmpty(param) || param.Equals(key) == false)
+                                    continue;
+                                valPara = HttpContextHelper.RequestParams(key);
+                                isHave = true;
+                                break;
+                            }
+                        }
+                        if(isHave == false)
                         {
                             string expression = exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")";
                             throw new Exception(BP.WF.Glo.multilingual("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:{0}.", "WorkNode", "expression_setting_error", expression));
                         }
-                        valPara = Glo.SendHTOfTemp[key].ToString().Trim();
                     }
                     catch
                     {

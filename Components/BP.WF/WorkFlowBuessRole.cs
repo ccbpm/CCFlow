@@ -577,16 +577,7 @@ namespace BP.WF
                 sql = sql.Replace("@NodeID", toNode.NodeID.ToString());
 
                 sql = Glo.DealExp(sql, enParas, null);
-                if (sql.Contains("@"))
-                {
-                    if (Glo.SendHTOfTemp != null)
-                    {
-                        foreach (string key in Glo.SendHTOfTemp.Keys)
-                        {
-                            sql = sql.Replace("@" + key, Glo.SendHTOfTemp[key].ToString());
-                        }
-                    }
-                }
+                
 
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)

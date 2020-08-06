@@ -3985,7 +3985,7 @@ namespace BP.WF
 
             t.NDTo = toNodeID;
             t.NDToT = toNodeName;
-            //@yln
+            
             string[] empNos = toEmpID.Split(',');
             if (empNos.Length <= 100)
             {
@@ -4407,10 +4407,10 @@ namespace BP.WF
                     {
                         try
                         {
-                            /*如果不包含指定的关键的key, 就到公共变量里去找. */
-                            if (BP.WF.Glo.SendHTOfTemp.ContainsKey(key) == false)
+                            if (SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(key) == true)
+                                valPara = HttpContextHelper.RequestParams(key);
+                             else
                                 throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
-                            valPara = BP.WF.Glo.SendHTOfTemp[key].ToString().Trim();
                         }
                         catch
                         {
@@ -4686,13 +4686,6 @@ namespace BP.WF
 
                 if (exp.Contains("@") == false)
                     return exp;
-            }
-
-            // 处理Para的替换.
-            if (exp.Contains("@") && Glo.SendHTOfTemp != null)
-            {
-                foreach (string key in Glo.SendHTOfTemp.Keys)
-                    exp = exp.Replace("@" + key, Glo.SendHTOfTemp[key].ToString());
             }
 
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
@@ -5171,24 +5164,24 @@ namespace BP.WF
         /// <summary>
         /// 临时的发送传输变量.
         /// </summary>
-        public static Hashtable SendHTOfTemp
-        {
-            get
-            {
-                if (_SendHTOfTemp == null)
-                    _SendHTOfTemp = new Hashtable();
-                return _SendHTOfTemp[BP.Web.WebUser.No] as Hashtable;
-            }
-            set
-            {
-                if (value == null)
-                    return;
+        //public static Hashtable SendHTOfTemp
+        //{
+        //    //get
+        //    //{
+        //    //    if (_SendHTOfTemp == null)
+        //    //        _SendHTOfTemp = new Hashtable();
+        //    //    return _SendHTOfTemp[BP.Web.WebUser.No] as Hashtable;
+        //    //}
+        //    //set
+        //    //{
+        //    //    if (value == null)
+        //    //        return;
 
-                if (_SendHTOfTemp == null)
-                    _SendHTOfTemp = new Hashtable();
-                _SendHTOfTemp[BP.Web.WebUser.No] = value;
-            }
-        }
+        //    //    if (_SendHTOfTemp == null)
+        //    //        _SendHTOfTemp = new Hashtable();
+        //    //    _SendHTOfTemp[BP.Web.WebUser.No] = value;
+        //    //}
+        //}
         /// <summary>
         /// 报表属性集合
         /// </summary>

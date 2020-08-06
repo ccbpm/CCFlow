@@ -1531,10 +1531,10 @@ namespace BP.WF.Template
                     athDesc.Name = this.Name;
                     athDesc.IsVisable = false;
                     athDesc.DirectInsert();
-                    //增加分组
+                    //增加分组 yln
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
-                    group.FrmID = this.FK_MapData;
+                    group.FrmID = this.No;
                     group.CtrlType = "Ath";
                     group.CtrlID = athDesc.MyPK;
                     group.Idx = 10;

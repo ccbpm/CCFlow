@@ -6584,9 +6584,7 @@ namespace BP.WF
         public static SendReturnObjs Node_StartWork(string flowNo, Hashtable htWork, DataSet workDtls,
             int nextNodeID, string nextWorker, Int64 parentWorkID, string parentFlowNo)
         {
-            // 给全局变量赋值.
-            BP.WF.Glo.SendHTOfTemp = htWork;
-
+           
             Flow fl = new Flow(flowNo);
             Work wk = fl.NewWork();
             Int64 workID = wk.OID;
@@ -6960,8 +6958,7 @@ namespace BP.WF
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
             }
 
-            // 给全局变量赋值.
-            BP.WF.Glo.SendHTOfTemp = ht;
+           
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             if (DataType.IsNullOrEmpty(starter))
@@ -7166,9 +7163,7 @@ namespace BP.WF
         public static Int64 Node_CreateStartNodeWork(string flowNo, Hashtable htWork = null, DataSet workDtls = null,
             string flowStarter = null, string title = null, Int64 parentWorkID = 0, string parentFlowNo = null, int parentNDFrom = 0)
         {
-            // 给全局变量赋值.
-            BP.WF.Glo.SendHTOfTemp = htWork;
-
+          
             if (DataType.IsNullOrEmpty(flowStarter))
             {
                 flowStarter = WebUser.No;
@@ -7472,9 +7467,6 @@ namespace BP.WF
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable htWork, DataSet workDtls, int toNodeID,
             string toEmps, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title, Int64 fid, Int64 pworkid)
         {
-
-            //给临时的发送变量赋值，解决带有参数的转向。
-            Glo.SendHTOfTemp = htWork;
 
             int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
             Node nd = new Node(currNodeId);

@@ -956,7 +956,7 @@ namespace BP.WF
                     }
 
                     //写入到日志.
-                    this.AddToTrack(at, this.Execer, BP.WF.Glo.multilingual("多人接收(见信息栏)", "WorkNode", "multiple_receivers", new string[0]), town.HisNode.NodeID, town.HisNode.Name, info, this.ndFrom, null, emps);
+                    this.AddToTrack(at, emps, emps, town.HisNode.NodeID, town.HisNode.Name, BP.WF.Glo.multilingual("多人接收(见信息栏)", "WorkNode", "multiple_receivers", new string[0]), this.ndFrom, null, info);
                 }
             }
             #endregion 如果是非子线城前进.

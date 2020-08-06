@@ -10,11 +10,11 @@
     <meta content="no-cache" http-equiv="Pragma" />
     <meta http-equiv="Expires" content="0" />
     <meta content="width=device-width, initial-scale=1, user-scalable=1" name="viewport" />
-    <title>CCOA</title>
+    <title>资产数字化运营管理平台</title>
+    <link href="static/favicon.ico" type="image/jpg" rel="shortcut icon">
     <!--<script src="/js/static/jquery/jquery-1.12.4.min.js"></script>
     <script src="/js/static/jquery/jquery-migrate-1.4.1.min.js"></script>-->
     <script src="./static/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
-
     <script src="./static/jquery/jquery-migrate-1.4.1.min.js" type="text/javascript"></script>
     <script src="./static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="./static/select2/4.0/select2.js?V4.1-03261504" type="text/javascript"></script>
@@ -29,8 +29,8 @@
     <script src="./static/common/i18n/jeesite_zh_CN.js?V4.1-03261504" type="text/javascript"></script>
     <script src="./static/jquery-toastr/2.0/toastr.min.js?V4.1-03261504" type="text/javascript"></script>
     <script src="./static/jquery-plugins/jquery.slimscroll.js" type="text/javascript"></script>
-   <script src="./static/modules/sys/sysIndex.js?V4.1-03261504" type="text/javascript"></script>
-   <script src="static/global.min.js"></script>
+    <script src="./static/modules/sys/sysIndex.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="static/global.min.js"></script>
 
 
     <link href="./static/fonts/font-icons.min.css" rel="stylesheet" type="text/css" />
@@ -38,7 +38,8 @@
     <link href="./static/select2/4.0/select2.css" rel="stylesheet" type="text/css" />
     <link href="./static/icheck/1.0/minimal/grey.css" rel="stylesheet" type="text/css" />
     <link href="./static/adminlte/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-    <link href="./static/adminlte/css/skins/skin-blue-light.css" rel="stylesheet" type="text/css" />
+    <!--<link href="./static/adminlte/css/skins/skin-blue-light.css" rel="stylesheet" type="text/css" />-->
+    <link href="./static/adminlte/css/skins/skin-green-light.css" rel="stylesheet" type="text/css" />
     <link href="./static/modules/sys/sysIndex.css" rel="stylesheet" type="text/css" />
     <link href="./static/jquery-toastr/2.0/toastr.min.css" rel="stylesheet" type="text/css" />
     <link href="./static/common/jeesite.css" rel="stylesheet" type="text/css" />
@@ -48,7 +49,14 @@
     <script src="config.js" type="text/javascript"></script>
     <script src="../GPM/API.js"></script>
     <script src="GPMMenus.js" type="text/javascript"></script>
+    <style>
+    </style>
+    <link href="../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../WFStyle/skin/js/mp.mansory.min.js"></script>
+    <script src="../WF/Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <script type="text/javascript" language="javascript">
+
         //页面启动函数.
         $(function () {
 
@@ -61,15 +69,17 @@
             $("#UserName").append(webUser.Name);
             //  $("#userImg").src = "../DataUser/UserIcon/" + webUser.No + "Smaller.png";
 
+
             //赋值系统名称.
             document.title = appName;
             $("#myTitle").append(appNameOfSmaller);
+
 
             $("#appNameOfSmall").html(appNameOfSmall);
             $("#appNameOfSmaller").html(appNameOfSmaller);
 
             if (webUser.No == "admin") {
-                $("#exitBar").before("<li><a href='../WF/Admin/CCBPMDesigner/Default.htm' ><i class='icon-fire'></i>后台</a></li>");
+                $("#exitBar").append("<a href='../WF/Admin/Portal/Default.htm' ><i class='fa icon-fire'></i>后台</a>");
             }
 
             //初始化菜单.
@@ -84,16 +94,11 @@
             }
 
             data = JSON.parse(data);
+            
 
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(data);
 
-            //Tab页中增加主页面
-            //AddTab("散货", "/SanHuo/PrjList.htm");
-            // js.addTabPage($("#mainPage"), "散货", "/SanHuo/PrjList.htm");
-            // js.addTabPage($("#mainPage"), "主页", "/Portal/Welcome.htm");
-            // js.addTabPage($("#mainPage"), "主页", "/Portal/Welcome.htm");
-            // js.addTabPage($("#mainPage"), "主页", "/Portal/Welcome.htm");
 
             return;
         });
@@ -102,16 +107,37 @@
         function AddTab(title, url) {
             js.addTabPage($("#mainPage"), title, url);
         }
+        //发起时打开窗口
+        function WinOpenStartFlow(url, title) {
 
+
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                shadeClose: true, //点击遮罩区域是否关闭页面
+                shade: 0.3,  //遮罩透明度
+                title: title + ' : 发起申请',
+                area: ['80%', '80%'],
+                content: "../WF/" + url
+            });
+
+        }
+        function WinOpenIt(url) {
+            var W = document.body.clientWidth - 200;
+            var H = document.body.clientHeight - 100;
+            OpenBootStrapModal(url, "eudlgframe", "待办", W, H, "icon-property", false, function () { }, null, function () {
+                location.reload();
+            });
+        }
     </script>
     <!--<link rel="stylesheet" href="/js/static/common/common.css?V4.1-03261504">-->
 </head>
 <body class="hold-transition fixed noscroll2 sidebar-mini ">
     <div class="wrapper">
         <header class="main-header">
-            <nav class="navbar navbar-static-top">
-                <div class="logo" data-toggle="push-menu">
-                    <b>驰骋OA</b>
+            <nav style="background-color:#008AFF" class="navbar navbar-static-top">
+                <div style="background-color:#008AFF" class="logo" data-toggle="push-menu">
+                    <b>资产运营中心</b>
                     <small>&nbsp; &nbsp;<i class="fa fa-bars"></i></small>
                 </div>
 
@@ -119,7 +145,7 @@
                     <ul class="nav navbar-nav">
 
                         <li><a id="mainPage" class='addTabPage' data-href="/Portal/Welcome.htm" data-tab-id="welcome" target='IFRAME' title="主页" style="margin-top:-1px;"><i class="fa fa-home">主页</i></a></li>
-                        <li><a id="A1" class='addTabPage' data-href="/WF/Todolist.htm?GroupBy=ByDept" data-tab-id="todolist" target='IFRAME' title="待办" style="margin-top:-1px;"><i class="fa fa-home">待办</i></a></li>
+                        <li><a id="A1" class='addTabPage' data-href="/FlowSta/Todolist.htm?FlowSta=1" data-tab-id="todolist" target='IFRAME' title="待办" style="margin-top:-1px;"><i class="fa fa-home">待办</i></a></li>
                         <!--<li><a id="A2" class='addTabPage' data-href="/WF/Comm/Search.htm?EnsName=BP.TGK.Customers" data-tab-id="Customers" target='IFRAME' title="客户" style="margin-top:-1px;"><i class="fa fa-home">客户</i></a></li>-->
                         <!--<li><a id="A3" class='addTabPage' data-href="/SanHuo/PrjList.htm" data-tab-id="Prjs" target='IFRAME' title="项目" style="margin-top:-1px;"><i class="fa fa-home">项目</i></a></li>-->
                         <!--	<li><a href="javascript:" id="fullScreen" title="全屏"><i class="fa fa-arrows-alt"></i></a></li>
@@ -142,7 +168,7 @@
                                 </li>-->
                                 <!--<li class="divider"></li>-->
 
-                                <li>
+                                <li id="exitBar">
                                     <a href="Login.htm?DoType=logout">
                                         <i class="fa fa-sign-out"></i> 退出登录
                                     </a>
@@ -188,8 +214,8 @@
         <i class="fa fa-angle-double-up"></i>
     </a>
 
-    <div class="hide" id="desktopTabPage" data-title="待办" data-url="/WF/TodolistDataGrid.htm">
-        <div class="hide" id="desktopTabPage1" data-title="主页" data-url="/Portal/Welcome.htm">
+    <div class="hide" id="desktopTabPage" data-title="待办" data-url="../FlowSta/Todolist.htm?FlowSta=1">
+        <div class="hide" id="desktopTabPage1" data-title="主页" data-url="../Portal/Welcome.htm">
 
         </div>
 

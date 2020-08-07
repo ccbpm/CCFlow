@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                 return lsh;
 
             //生成一个新的流水号.
-            sql = "SELECT MAX(DocWordLSH) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
+            sql = "SELECT max(cast(DocWordLSH as UNSIGNED INTEGER)) AS No FROM " + ptable + " WHERE DocWordKey='" + word + "' AND DocWordYear='" + ny+"'";
             lsh = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (DataType.IsNullOrEmpty(lsh) == true)
                 return lsh = "1";

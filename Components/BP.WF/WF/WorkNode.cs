@@ -8534,11 +8534,6 @@ namespace BP.WF
             current_gwls = gwls;
 
             GenerWorkFlow gwf = new GenerWorkFlow(this.HisWork.FID);
-            //记录子线程到达合流节点数
-            int count = gwf.GetParaInt("ThreadCount");
-            gwf.SetPara("ThreadCount", count + 1);
-            //gwf.Emps = gwf.Emps+this.HisGenerWorkFlow.Emps;
-            gwf.Update();
             if (gwls.Count == 0)
             {
                 // 说明第一次到达河流节点。
@@ -8559,7 +8554,10 @@ namespace BP.WF
                 gwf.Update();
             }
 
-
+            //记录子线程到达合流节点数 yln
+            int count = gwf.GetParaInt("ThreadCount");
+            gwf.SetPara("ThreadCount", count + 1);
+            gwf.Update();
 
             string FK_Emp = "";
             string toEmpsStr = "";

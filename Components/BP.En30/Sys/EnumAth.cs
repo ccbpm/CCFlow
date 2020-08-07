@@ -84,7 +84,12 @@ namespace BP.Sys
         /// <summary>
         /// P3流程
         /// </summary>
-        P3WorkID
+        P3WorkID,
+        /// <summary>
+        /// 根流程的WorkID
+        /// </summary>
+        RootFlowWorkID
+
 
     }
     /// <summary>

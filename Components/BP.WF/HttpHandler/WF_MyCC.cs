@@ -1102,6 +1102,9 @@ namespace BP.WF.HttpHandler
                             string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
                             workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
                             break;
+                        case WhoIsPK.RootFlowWorkID:
+                            workID = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID);
+                            break;
                         default:
                             break;
                     }

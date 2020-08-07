@@ -1938,6 +1938,7 @@
                 rowData.FK_Node = GetQueryString("FK_Node");
                 rowData.FK_MapData = GetQueryString("FK_MapData");
                 rowData.FID = GetQueryString("FID");
+                rowData.PWorkID = GetQueryString("PWorkID");
                 rowData.RowIndex = index;//pop用到，传到后台
 
                 var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });

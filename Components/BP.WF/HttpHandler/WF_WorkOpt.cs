@@ -2366,6 +2366,8 @@ namespace BP.WF.HttpHandler
                     //    continue;
 
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as NodeWorkCheck;
+                    if (fwc.FWCSta != FrmWorkCheckSta.Enable)
+                        continue;
 
                     //历史审核信息现在存放在流程前进的节点中
                     switch (tk.HisActionType)

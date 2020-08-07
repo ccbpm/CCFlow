@@ -6277,9 +6277,15 @@ namespace BP.WF
                 ctrlWayId = pworkid.ToString();
             }
 
+            if (athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
+                ctrlWayId = BP.WF.Dev2Interface.GetRootWorkIDBySQL(workid, pworkid).ToString();
+
             if (athDesc.HisCtrlWay == AthCtrlWay.FID)
                 ctrlWayId = fid.ToString();
-            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID || athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID 
+                || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID 
+                || athDesc.HisCtrlWay == AthCtrlWay.PWorkID 
+                || athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
             {
 
                 //协作模式

@@ -2018,6 +2018,7 @@ namespace BP.WF.HttpHandler
                             /*如果设置了自定义方案，但是没有定义，从表属性，就需要去默认值. */
                         }
                     }
+                  
                 }
             }
 
@@ -2035,7 +2036,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, this.FID);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, this.FID,this.PWorkID);
             return ds;
         }
         /// <summary>
@@ -2105,6 +2106,7 @@ namespace BP.WF.HttpHandler
                             fk_mapDtl = no;
                         }
                     }
+                    
                 }
             }
             #endregion 处理权限方案。
@@ -2142,6 +2144,24 @@ namespace BP.WF.HttpHandler
                     dtl.RefPK = this.RefPKVal;
                     dtl.FID = this.FID;
                     break;
+                case DtlOpenType.ForPWorkID: // 按父流程ID来控制.
+                    dtl.RefPK = this.PWorkID.ToString();
+                    dtl.FID = this.FID;
+                    break;
+                case DtlOpenType.ForP2WorkID: // 按P2WorkID来控制.
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
+                    dtl.RefPK = gwf.PWorkID.ToString();
+                    dtl.FID = this.FID;
+                    break;
+                case DtlOpenType.ForP3WorkID: // 按P3WorkID来控制
+                    string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                    dtl.RefPK = DBAccess.RunSQLReturnVal(sqlId).ToString();
+                    dtl.FID = this.FID;
+                    break;
+                case DtlOpenType.RootFlowWorkID: // RootFlowWorkID.
+                    dtl.RefPK = BP.WF.Dev2Interface.GetRootWorkIDBySQL(long.Parse(this.RefPKVal), this.PWorkID).ToString();
+                    dtl.FID = this.FID;
+                    break;
             }
 
             #region 从表保存前处理事件.
@@ -2170,7 +2190,8 @@ namespace BP.WF.HttpHandler
 
 
             //一直找不到refpk  值为null .
-            dtl.RefPK = this.RefPKVal;
+            if(DataType.IsNullOrEmpty(dtl.RefPK) == true)
+                dtl.RefPK = this.RefPKVal;
             if (dtl.OID == 0)
             {
                 //dtl.OID = DBAccess.GenerOID();
@@ -3358,6 +3379,9 @@ namespace BP.WF.HttpHandler
                                 string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
                                 pkVal = pWorkID;
                             }
+                            if (athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
+                                pkVal = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID).ToString();
+                          
                         }
                     }
                 }
@@ -3391,6 +3415,8 @@ namespace BP.WF.HttpHandler
                             string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
                             pkVal = pWorkID;
                         }
+                        if (myathDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
+                            pkVal = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID).ToString();
                     }
 
                 }

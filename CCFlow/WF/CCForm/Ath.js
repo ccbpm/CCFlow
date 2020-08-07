@@ -20,6 +20,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
 
     AthParams.FK_MapData = athchment.FK_MapData;
 
+    debugger
     //2.上传的URL的设置
     var uploadUrl = "";
     if (plant == 'CCFlow')
@@ -30,7 +31,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
     uploadUrl += "&WorkID=" + pageData.WorkID;
     uploadUrl += "&FID=" + pageData.FID;
     uploadUrl += "&FK_Node=" + pageData.FK_Node;
-    uploadUrl += "&PWorkID=" + pageData.PWorkID;
+    uploadUrl += "&PWorkID=" +GetQueryString("PWorkID");
     uploadUrl += "&FK_MapData=" + AthParams.FK_MapData;
 
     //3.初始化附件列表
@@ -519,7 +520,7 @@ function GetFileStream(mypk, FK_FrmAttachment) {
 * @param fk_ath  附件的属性
 * @param MyPK 上传附件数据的信息主键
 */
-function Down2018(fk_frmattachment, MyPK) {
+function Down2018(fk_frmattachment, MyPK,fileName) {
    
     var url = "";
     if (plant == "CCFlow")
@@ -536,6 +537,12 @@ function Down2018(fk_frmattachment, MyPK) {
     link.setAttribute("download", "");
     link.href = url;
     link.click();
+
+    var x = new XMLHttpRequest();
+    x.open("GET", url, true);
+    x.responseType = 'blob';
+    x.onload = function (e) { download(x.response, fileName, "image/gif"); }
+    x.send();
 }
 
 /**
@@ -571,6 +578,8 @@ function DownZip(fk_frmattachment,PKVal) {
             str = basePath + str;
         }
         window.location.href = str;
+
+        
 
     }
 

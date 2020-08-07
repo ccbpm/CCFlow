@@ -6002,15 +6002,16 @@ namespace BP.WF
                 }
                 #endregion
 
-                if (dt == null)
+                if (dt == null )
                     throw new Exception(BP.WF.Glo.multilingual("err@您启动的子流程或者延续流程开始节点没有明确的设置接收人.", "WorkNode", "not_found_receiver"));
 
-                //组装到达的人员.
-                foreach (DataRow dr in dt.Rows)
-                    toEmpIDs += dr["No"].ToString();
+                //组装到达的人员. 延续子流程的第一个节点的发起人只有一个人
+                toEmpIDs = dt.Rows[0][0].ToString();
+                //foreach (DataRow dr in dt.Rows)
+                 //   toEmpIDs += dr["No"].ToString()+",";
             }
 
-            if (toEmpIDs == "")
+            if (DataType.IsNullOrEmpty(toEmpIDs) == true)
                 throw new Exception(BP.WF.Glo.multilingual("@延续子流程目前仅仅支持选择接收人方式.", "WorkNode", "not_found_receiver"));
 
             SubFlowYanXu subFlow = new SubFlowYanXu();
@@ -6044,13 +6045,9 @@ namespace BP.WF
             wk.Copy(this.HisWork);
             wk.Update();
 
-
-            //为接收人显示待办.
-            BP.WF.Dev2Interface.Node_SetDraft2Todolist(node.FK_Flow, workid);
-
             // 产生工作列表. 
-            GenerWorkerList gwl = new GenerWorkerList(workid, node.NodeID, toEmpIDs);
-            int count = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, node.NodeID, GenerWorkerListAttr.FK_Emp, toEmpIDs);
+            GenerWorkerList gwl = new GenerWorkerList();
+            int count = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, node.NodeID);
             if (count == 0)
             {
                 Emp emp = new Emp(toEmpIDs);
@@ -6072,10 +6069,14 @@ namespace BP.WF
 
                 gwl.IsPass = false;
                 gwl.Save();
+                
+                
             }
 
 
-
+            //为接收人显示待办.---暂时删除
+            BP.WF.Dev2Interface.Node_SetDraft2Todolist(node.FK_Flow, workid);
+          
             //设置变量.
             this.addMsg(SendReturnMsgFlag.VarToNodeID, node.NodeID.ToString(), workid.ToString(), SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);

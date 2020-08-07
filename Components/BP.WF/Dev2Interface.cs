@@ -8725,10 +8725,7 @@ namespace BP.WF
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);
 
-                gwf.TodoEmps = BP.Web.WebUser.No + "," + WebUser.Name + ";";
-                gwf.TodoEmpsNum = 1;
-                gwf.WFState = WFState.Runing;
-                gwf.Update();
+               
 
                 GenerWorkerList gwl = new GenerWorkerList();
                 int i = gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
@@ -8750,11 +8747,16 @@ namespace BP.WF
                 }
                 else
                 {
-                    gwl.FK_Emp = WebUser.No;
-                    gwl.FK_EmpText = WebUser.Name;
+                    //gwl.FK_Emp = WebUser.No;
+                    //gwl.FK_EmpText = WebUser.Name;
                     gwl.IsPassInt = 0;
                     gwl.Update();
                 }
+
+                gwf.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
+                gwf.TodoEmpsNum = 1;
+                gwf.WFState = WFState.Runing;
+                gwf.Update();
 
                 //重置标题
                 Flow_ReSetFlowTitle(fk_flow, gwf.FK_Node, gwf.WorkID);
@@ -11307,6 +11309,76 @@ namespace BP.WF
             //执行调度.
             BP.WF.DTS.DTS_GenerWorkFlowTimeSpan ts = new DTS.DTS_GenerWorkFlowTimeSpan();
             ts.Do();
+        }
+
+        /// <summary>
+        /// 根据WorkID获取根节点的WorkID
+        /// </summary>
+        /// <param name="workId"></param>
+        /// <returns></returns>
+        public static Int64 GetRootWorkIDBySQL(Int64 workId,Int64 pworkid)
+        {
+            if (pworkid == 0)
+                return workId;
+            GenerWorkFlow gwf = new GenerWorkFlow(pworkid);
+            if (gwf.PWorkID == 0)
+                return pworkid;
+            gwf = new GenerWorkFlow(gwf.PWorkID);
+            if (gwf.PWorkID == 0)
+                return gwf.WorkID;
+            return gwf.PWorkID;
+
+                string sql = "";
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    sql = ";WITH subqry AS";
+                    sql += " (";
+                    sql += " SELECT  gwf.WorkID, gwf.PWorkID FROM   WF_GenerWorkFlow  gwf  WHERE WorkID =" + workId;
+                    sql += " UNION ALL";
+                    sql += " SELECT  gwf.WorkID, gwf.PWorkID FROM WF_GenerWorkFlow  gwf, subqry";
+                    sql += " WHERE gwf.WorkID = subqry.PWorkID";
+                    sql += "  )";
+                    sql += " SELECT WorkID FROM subqry WHERE PWorkID = 0";
+                    break;
+                case DBType.Oracle:
+                    sql = "SELECT WorkID FROM(SELECT gwf.*";
+                    sql += " FROM WF_GENERWORKFLOW gwf";
+                    sql += " START WITH WorkID = " + workId;
+                    sql += " CONNECT BY PRIOR PWorkID = WorkID)";
+                    sql += " WHERE PWorkID = 0";
+                    break;
+                case DBType.MySQL:
+                    sql = "SELECT WorkID FROM ( ";
+                    sql += " SELECT gwf2.WorkID,gwf2.PWorkID";
+                    sql += " FROM(";
+                    sql += " SELECT";
+                    sql += " @r AS _WorkID,";
+                    sql += " (SELECT @r:= PWorkID FROM WF_GenerWorkFlow WHERE WorkID = _WorkID) AS PWorkID,";
+                    sql += " @l := @l + 1 AS lvl";
+                    sql += " FROM";
+                    sql += " (SELECT @r:= "+workId+", @l:= 0) vars,";
+                    sql += " WF_GenerWorkFlow h";
+                    sql += " WHERE @r != 0) T1";
+                    sql += " JOIN WF_GenerWorkFlow gwf2";
+                    sql += " ON T1._WorkID = gwf2.WorkID";
+                    sql += " ) X where PWorkID = 0";
+                    break;
+                case DBType.PostgreSQL:
+                    sql = "WITH RECURSIVE subqry AS (";
+                    sql += " SELECT WorkID, PWorkID FROM WF_GenerWorkFlow WHERE WorkID = " + workId;
+                    sql += " UNION ALL";
+                    sql += " SELECT gwf.WorkID,gwf.PWorkID FROM WF_GenerWorkFlow gwf, subqry WHERE gwf.WorkID = subqry.PWorkID";
+                    sql += " )";
+                    sql += " SELECT WorkID FROM subqry Where PWorkID = 0";
+                    break;
+                default:
+                    throw new Exception("err@其他的类型的数据库还没有处理");
+                    break;
+
+
+            }
+            return DBAccess.RunSQLReturnValInt(sql);
         }
 
         #endregion

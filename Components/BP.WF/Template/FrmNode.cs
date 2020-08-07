@@ -125,7 +125,12 @@ namespace BP.WF.Template
         /// <summary>
         /// 太爷爷流程ID是主键
         /// </summary>
-        P3WorkID
+        P3WorkID,
+        /// <summary>
+        /// 根流程的WorkID
+        /// </summary>
+        RootFlowWorkID
+
 
     }
     /// <summary>

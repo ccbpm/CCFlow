@@ -183,7 +183,11 @@ namespace BP.Sys
 
         ForP2WorkID,
 
-        ForP3WorkID
+        ForP3WorkID,
+        /// <summary>
+        /// 根流程的WorkID
+        /// </summary>
+        RootFlowWorkID
 
     }
     /// <summary>

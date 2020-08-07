@@ -654,11 +654,11 @@ namespace BP.WF
             {
                 foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    if (k == "OID" || k == "WorkID" || k == null)
+                    if (k == null|| k.Equals("OID") || k.Equals("WorkID") || paras.ContainsKey("PWorkID")==true)
                         continue;
 
                     if (paras.ContainsKey(k))
-                        paras[k] = HttpContextHelper.RequestParams(k);// BP.Sys.Glo.Request.QueryString[k];
+                        paras[k] = HttpContextHelper.RequestParams(k);
                     else
                         paras.Add(k, HttpContextHelper.RequestParams(k));
                 }
@@ -958,6 +958,7 @@ namespace BP.WF
                     PFlowNo = paras["PFlowNo"].ToString();
 
                 PNodeIDStr = paras["PNodeID"].ToString();
+                //如果是延续子流程产生的PWorkID
                 PWorkIDStr = paras["PWorkID"].ToString();
                 PFIDStr = "0";
                 if (paras.ContainsKey("PFID") == true)

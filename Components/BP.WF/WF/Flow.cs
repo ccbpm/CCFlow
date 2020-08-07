@@ -3596,7 +3596,6 @@ namespace BP.WF
                 string strs = this.GetValStringByKey(FlowAttr.HistoryFields);
                 if (DataType.IsNullOrEmpty(strs))
                     strs = "WFState,Title,FlowStartRDT,FlowEndNode";
-
                 return strs;
             }
         }

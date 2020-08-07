@@ -1068,9 +1068,8 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaString("ToNodes");
+               return this.GetParaString("ToNodes");
             }
-
             set
             {
                 this.SetPara("ToNodes", value);

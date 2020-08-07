@@ -2,14 +2,14 @@
 using System.Data;
 using BP.DA;
 using BP.WF;
-using BP.Port ;
+using BP.Port;
 using BP.Sys;
 using BP.En;
 using BP.WF.Template;
 
 namespace BP.WF
 {
-    
+
     /// <summary>
     /// 流程运行类型
     /// </summary>
@@ -54,7 +54,7 @@ namespace BP.WF
         /// <summary>
         /// 运行中
         /// </summary>
-        Runing=0,
+        Runing = 0,
         /// <summary>
         /// 已完成
         /// </summary>
@@ -100,9 +100,9 @@ namespace BP.WF
         /// </summary>
         Takeback
     }
-	/// <summary>
+    /// <summary>
     /// 流程实例
-	/// </summary>
+    /// </summary>
     public class GenerWorkFlowAttr
     {
         #region 基本属性
@@ -303,8 +303,8 @@ namespace BP.WF
     /// 流程实例
     /// </summary>
     public class GenerWorkFlow : Entity
-	{	
-		#region 基本属性
+    {
+        #region 基本属性
         /// <summary>
         /// 主键
         /// </summary>
@@ -365,21 +365,21 @@ namespace BP.WF
                 this.SetPara("BuessFields", value);
             }
         }
-        
+
         /// <summary>
         /// 工作流程编号
         /// </summary>
-        public string  FK_Flow
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowAttr.FK_Flow);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowAttr.FK_Flow,value);
-			}
-		}
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.FK_Flow);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.FK_Flow, value);
+            }
+        }
         /// <summary>
         /// BillNo
         /// </summary>
@@ -405,6 +405,14 @@ namespace BP.WF
             }
             set
             {
+                //检查数据正确性.
+                if (DataType.IsNullOrEmpty(value) == true)
+                    throw new Exception("err@设置的人员不能为空.");
+
+                //检查数据正确性.
+                if (value.Contains(",") == false || value.Contains(";") == false)
+                    throw new Exception("err@人员格式不正确，请联系管理员,格式为:No,Name;" + value);
+
                 //发送人.
                 this.SetValByKey(GenerWorkFlowAttr.Sender, value);
 
@@ -568,31 +576,31 @@ namespace BP.WF
         /// <summary>
         /// 发起人部门
         /// </summary>
-		public string  FK_Dept
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowAttr.FK_Dept);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowAttr.FK_Dept,value);
-			}
-		}
-		/// <summary>
-		/// 标题
-		/// </summary>
-		public string  Title
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowAttr.Title);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowAttr.Title,value);
-			}
-		}
+		public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.FK_Dept);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.Title);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.Title, value);
+            }
+        }
         /// <summary>
         /// 客户编号
         /// </summary>
@@ -635,22 +643,22 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.FK_NY, value);
             }
         }
-		/// <summary>
-		/// 实际开始时间
-		/// </summary>
-		public string  RDT
-		{
-			get
-			{
+        /// <summary>
+        /// 实际开始时间
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
                 //string rdt = this.GetParaString("");
-				return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
-			}
+                return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
+            }
             set
             {
                 this.SetValByKey(GenerWorkFlowAttr.RDT, value);
                 this.FK_NY = value.Substring(0, 7);
             }
-		}
+        }
         /// <summary>
         /// 计划开始时间
         /// SDTOfFlow 就是计划完成日期.
@@ -675,7 +683,7 @@ namespace BP.WF
         public string SDTOfNode
         {
             get
-            {   
+            {
                 return this.GetValStrByKey(GenerWorkFlowAttr.SDTOfNode);
             }
             set
@@ -712,20 +720,20 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.SDTOfFlowWarning, value);
             }
         }
-		/// <summary>
-		/// 流程ID
-		/// </summary>
+        /// <summary>
+        /// 流程ID
+        /// </summary>
         public Int64 WorkID
-		{
-			get
-			{
+        {
+            get
+            {
                 return this.GetValInt64ByKey(GenerWorkFlowAttr.WorkID);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowAttr.WorkID,value);
-			}
-		}
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.WorkID, value);
+            }
+        }
         /// <summary>
         /// 主线程ID
         /// </summary>
@@ -891,9 +899,9 @@ namespace BP.WF
                 this.SetValByKey(GenerWorkFlowAttr.NodeName, value);
             }
         }
-		/// <summary>
-		/// 当前工作到的节点
-		/// </summary>
+        /// <summary>
+        /// 当前工作到的节点
+        /// </summary>
         public int FK_Node
         {
             get
@@ -958,7 +966,7 @@ namespace BP.WF
             get
             {
                 BP.WF.WFState ws = (WFState)this.WFState;
-                switch(ws)
+                switch (ws)
                 {
                     case WF.WFState.Complete:
                         return "已完成";
@@ -973,7 +981,7 @@ namespace BP.WF
                     case WF.WFState.ReturnSta:
                         return "退回";
                     default:
-                        return "其他"+ws.ToString();
+                        return "其他" + ws.ToString();
                 }
             }
         }
@@ -991,7 +999,7 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.GUID, value);
             }
         }
-		#endregion
+        #endregion
 
         #region 扩展属性
         /// <summary>
@@ -1068,7 +1076,7 @@ namespace BP.WF
         {
             get
             {
-               return this.GetParaString("ToNodes");
+                return this.GetParaString("ToNodes");
             }
             set
             {
@@ -1082,7 +1090,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaBoolen("F_"+BP.Web.WebUser.No,false);
+                return this.GetParaBoolen("F_" + BP.Web.WebUser.No, false);
             }
             set
             {
@@ -1096,7 +1104,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaBoolen("C_"+BP.Web.WebUser.No,false);
+                return this.GetParaBoolen("C_" + BP.Web.WebUser.No, false);
             }
             set
             {
@@ -1110,9 +1118,9 @@ namespace BP.WF
         {
             get
             {
-                string str= this.GetParaString("LastTruckID");
+                string str = this.GetParaString("LastTruckID");
                 if (str == "")
-                    str =  this.WorkID.ToString();
+                    str = this.WorkID.ToString();
                 return str;
             }
             set
@@ -1120,7 +1128,7 @@ namespace BP.WF
                 this.SetPara("LastTruckID", value);
             }
         }
-       
+
         /// <summary>
         /// 加签信息
         /// </summary>
@@ -1257,8 +1265,8 @@ namespace BP.WF
 		/// 产生的工作流程
 		/// </summary>
 		public GenerWorkFlow()
-		{
-		}
+        {
+        }
         public GenerWorkFlow(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
@@ -1272,9 +1280,9 @@ namespace BP.WF
         public void DoRepair()
         {
         }
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -1317,15 +1325,15 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
 
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfNode, "节点应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow,null, "流程应完成时间", true, true);
-                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, null,"流程预警时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlow, null, "流程应完成时间", true, true);
+                map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, null, "流程预警时间", true, true);
 
                 //父子流程信息.
                 map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 3, 10);
                 map.AddTBInt(GenerWorkFlowAttr.PWorkID, 0, "父流程ID", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.PNodeID, 0, "父流程调用节点", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.PFID, 0, "父流程调用的PFID", true, true);
-                map.AddTBString(GenerWorkFlowAttr.PEmp, null, "子流程的调用人", true, false, 0,32, 10);
+                map.AddTBString(GenerWorkFlowAttr.PEmp, null, "子流程的调用人", true, false, 0, 32, 10);
 
                 //客户流程信息.
                 map.AddTBString(GenerWorkFlowAttr.GuestNo, null, "客户编号", true, false, 0, 100, 10);
@@ -1380,12 +1388,12 @@ namespace BP.WF
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
-		#region 重载基类方法
-		/// <summary>
-		/// 删除后,需要把工作者列表也要删除.
-		/// </summary>
+        #region 重载基类方法
+        /// <summary>
+        /// 删除后,需要把工作者列表也要删除.
+        /// </summary>
         protected override void afterDelete()
         {
             switch (SystemConfig.AppCenterDBType)
@@ -1400,11 +1408,11 @@ namespace BP.WF
                 case DBType.PostgreSQL:
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist A USING WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
                     break;
-                default:break;
+                default: break;
 
             }
 
-            WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID,this.FID);
+            WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID);
             wf.DoDeleteWorkFlowByReal(true); /* 删除下面的工作。*/
             base.afterDelete();
         }
@@ -1424,9 +1432,9 @@ namespace BP.WF
 
             return base.beforeInsert();
         }
-		#endregion 
+        #endregion
 
-		#region 执行诊断
+        #region 执行诊断
         /// <summary>
         /// 生成父子流程的甘特图
         /// </summary>
@@ -1442,17 +1450,17 @@ namespace BP.WF
         /// <returns>终止结果</returns>
         public string DoFix(string msg)
         {
-           return BP.WF.Dev2Interface.Flow_DoFix( this.WorkID, true, msg);
+            return BP.WF.Dev2Interface.Flow_DoFix(this.WorkID, true, msg);
         }
 
         public string DoRpt()
         {
             return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
-		/// <summary>
-		/// 执行修复
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// 执行修复
+        /// </summary>
+        /// <returns></returns>
         public string DoRepare()
         {
             if (this.DoSelfTestInfo() == "没有发现异常。")
@@ -1463,7 +1471,7 @@ namespace BP.WF
             if (dt.Rows.Count == 0)
             {
                 /*如果是开始工作节点，就删除它。*/
-                WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID );
+                WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID);
                 wf.DoDeleteWorkFlowByReal(true);
                 return "此流程是因为发起工作失败被系统删除。";
             }
@@ -1493,57 +1501,57 @@ namespace BP.WF
 
             return "此流程是因为[" + nd.Name + "]工作发送失败被回滚到当前位置，请转告[" + str + "]流程修复成功。";
         }
-		public string DoSelfTestInfo()
-		{
+        public string DoSelfTestInfo()
+        {
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.FK_Flow);
 
-			#region  查看一下当前的节点是否开始工作节点。
-			Node nd = new Node(this.FK_Node);
-			if (nd.IsStartNode)
-			{
-				/* 判断是否是退回的节点 */
-				Work wk = nd.HisWork;
-				wk.OID = this.WorkID;
-				wk.Retrieve();
-			}
-			#endregion
+            #region  查看一下当前的节点是否开始工作节点。
+            Node nd = new Node(this.FK_Node);
+            if (nd.IsStartNode)
+            {
+                /* 判断是否是退回的节点 */
+                Work wk = nd.HisWork;
+                wk.OID = this.WorkID;
+                wk.Retrieve();
+            }
+            #endregion
 
 
-			#region  查看一下是否有当前的工作节点信息。
-			bool isHave=false;
+            #region  查看一下是否有当前的工作节点信息。
+            bool isHave = false;
             foreach (GenerWorkerList wl in wls)
-			{
-				if (wl.FK_Node==this.FK_Node)
-					isHave=true;
-			}
+            {
+                if (wl.FK_Node == this.FK_Node)
+                    isHave = true;
+            }
 
-			if (isHave==false)
-			{
-				/*  */
-				return "已经不存在当前的工作节点信息，造成此流程的原因可能是没有捕获的系统异常，建议删除此流程或者交给系统自动修复它。";
-			}
-			#endregion
+            if (isHave == false)
+            {
+                /*  */
+                return "已经不存在当前的工作节点信息，造成此流程的原因可能是没有捕获的系统异常，建议删除此流程或者交给系统自动修复它。";
+            }
+            #endregion
 
-			return "没有发现异常。";
-		}
-		#endregion
-	}
-	/// <summary>
+            return "没有发现异常。";
+        }
+        #endregion
+    }
+    /// <summary>
     /// 流程实例s
-	/// </summary>
-	public class GenerWorkFlows : Entities
-	{
-		/// <summary>
-		/// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
-		/// </summary>
-		/// <param name="flowNo">流程编号</param>
-		/// <param name="empId">工作人员ID</param>
-		/// <returns></returns>
-		public static DataTable QuByFlowAndEmp(string flowNo, int empId)
-		{
-			string sql="SELECT a.WorkID FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='"+empId.ToString()+"' AND a.FK_Flow='"+flowNo+"'";
-			return DBAccess.RunSQLReturnTable(sql);
-		}
+    /// </summary>
+    public class GenerWorkFlows : Entities
+    {
+        /// <summary>
+        /// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="empId">工作人员ID</param>
+        /// <returns></returns>
+        public static DataTable QuByFlowAndEmp(string flowNo, int empId)
+        {
+            string sql = "SELECT a.WorkID FROM WF_GenerWorkFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='" + empId.ToString() + "' AND a.FK_Flow='" + flowNo + "'";
+            return DBAccess.RunSQLReturnTable(sql);
+        }
 
         /// <summary>
         /// 根据流程编号，标题模糊查询
@@ -1551,11 +1559,11 @@ namespace BP.WF
         /// <param name="flowNo"></param>
         /// <param name="likeKey"></param>
         /// <returns></returns>
-        public string QueryByLike(string flowNo,string likeKey)
+        public string QueryByLike(string flowNo, string likeKey)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere("FK_Flow", flowNo);
-            if(DataType.IsNullOrEmpty(likeKey) == false)
+            if (DataType.IsNullOrEmpty(likeKey) == false)
             {
                 qo.addAnd();
                 if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
@@ -1564,28 +1572,28 @@ namespace BP.WF
                     qo.AddWhere("Title", " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "Title" + "||'%'");
                 qo.MyParas.Add("Title", likeKey);
             }
-           
+
             qo.addOrderBy("WorkID");
             qo.DoQuery();
             return BP.Tools.Json.ToJson(this.ToDataTableField("WF_GenerWorkFlow"));
         }
 
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{			 
-				return new GenerWorkFlow();
-			}
-		}
-		/// <summary>
-		/// 流程实例集合
-		/// </summary>
-		public GenerWorkFlows(){}
-		#endregion
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new GenerWorkFlow();
+            }
+        }
+        /// <summary>
+        /// 流程实例集合
+        /// </summary>
+        public GenerWorkFlows() { }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List  
         /// <summary>
@@ -1610,6 +1618,6 @@ namespace BP.WF
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
-	
+    }
+
 }

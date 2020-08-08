@@ -534,6 +534,7 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     drAttr[MapAttrAttr.GroupID] = currGroupID;
+                    drAttr[MapAttrAttr.FK_MapData] = this.EnName+"s";
                 }
                 ds.Tables.Add(sys_MapAttrs);
                 #endregion 字段属性.

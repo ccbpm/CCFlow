@@ -962,7 +962,7 @@ namespace BP.WF.Template
                             return false;
                     case "=":  // 如果是 = 
                     case "dengyu":
-                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString()) == true)
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString().Replace("\"", "")) == true)
                             return true;
                         else
                             return false;

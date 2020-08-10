@@ -1959,6 +1959,55 @@
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Img\StyleOfClassic.png" />
     <Content Include="WF\Admin\Img\StyleOfSimple.png" />
+    <Content Include="WF\Admin\MobileFrmDesigner\Default.htm" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\Ath.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\DtlFrm.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\FrmDtl.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\FrmView.htm" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\FrmView.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\ajaxfileupload.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\action.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\DateFormat.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\LoadFormSelf.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\MapExt.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\MobForm.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\Progress.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\comment\QueryString.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\iscroll.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jqm-demosMain.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.datetimepicker.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.form.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.mobile-1.4.5.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.mobile-1.4.5.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.swipeButton-1.2.1.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.swipeButton.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mobiscroll.custom-2.5.0.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\feedback-page.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\feedback.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\mui.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\mui.indexedlist.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\mui.min.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\mui.picker.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\mui.picker.min.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\css\style.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\images\iconfont-tianjia.png" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\app.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\feedback-page.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\feedback.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.enterfocus.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.indexedlist.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.picker.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.picker.min.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\js\mui.view.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\pullToRefresh.css" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\pullToRefresh.js" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\pullToRefresh.mini.js" />
     <Content Include="WF\Admin\Multilingual\CCForm.htm" />
     <Content Include="WF\Admin\Multilingual\FlowName.htm" />
     <Content Include="WF\Admin\Multilingual\FlowSort.htm" />
@@ -2479,6 +2528,7 @@
     <Content Include="WF\Comm\Sys\Img\WS.png" />
     <Content Include="WF\Comm\Sys\ImpData.htm" />
     <Content Include="WF\Comm\Sys\JavaScriptImp.htm" />
+    <Content Include="WF\Comm\Sys\MultiTitle.htm" />
     <Content Include="WF\Comm\Sys\SearchSetting.htm" />
     <Content Include="WF\Comm\Sys\SearchSettingCols.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
@@ -8130,6 +8180,8 @@
     <Content Include="WF\Admin\Portal2020\lib\layui\font\iconfont.eot" />
     <Content Include="WF\Admin\Portal2020\lib\layui\font\iconfont.ttf" />
     <Content Include="WF\Admin\Portal2020\lib\layui\font\iconfont.woff" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\jquery.mobile-1.4.5.min.map" />
+    <Content Include="WF\Admin\MobileFrmDesigner\MobileFrmView\js\mui\fonts\mui.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.cs">
@@ -8266,12 +8318,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>2207</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:2206/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

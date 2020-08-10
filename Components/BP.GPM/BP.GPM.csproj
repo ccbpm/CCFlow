@@ -70,6 +70,7 @@
     <Compile Include="AD\Emp.cs" />
     <Compile Include="AD\Glo.cs" />
     <Compile Include="AD\Sync.cs" />
+    <Compile Include="GPM\DeptMenu.cs" />
     <Compile Include="GPM\EnumClass.cs" />
     <Compile Include="GPM\GroupDept.cs" />
     <Compile Include="GPM\GroupEmp.cs" />

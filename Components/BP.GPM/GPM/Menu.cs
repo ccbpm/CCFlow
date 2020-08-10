@@ -79,7 +79,7 @@ namespace BP.GPM
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                 {
                     uac.IsDelete = true;
                     uac.IsUpdate = true;
@@ -140,7 +140,7 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.MenuCtrlWay, (int)value);
             }
         }
-        
+
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -401,6 +401,14 @@ namespace BP.GPM
                 //可以访问的权限组.
                 map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.Port.Stations(),
                     StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", BP.Port.StationAttr.FK_StationType, "Name", EmpAttr.No);
+                //可以访问的权限组.(岗位)
+                map.AttrsOfOneVSM.Add(new DeptMenus(), new BP.Port.Depts(),
+                    DeptMenuAttr.FK_Menu, DeptMenuAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "绑定到部门-列表模式");
+
+                ////可以访问的权限组.(岗位)
+                //map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptMenus(), new BP.Port.Depts(),
+                //   DeptMenuAttr.FK_Menu,
+                //   DeptMenuAttr.FK_Dept, "绑定部门-树结构", DeptAttr.ParentNo, DeptAttr.Name, DeptAttr.No, "@WebUser.FK_Dept");
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),

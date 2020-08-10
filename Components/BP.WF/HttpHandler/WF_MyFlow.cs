@@ -1411,11 +1411,29 @@ namespace BP.WF.HttpHandler
                             foreach (SubFlowYanXu item in ygflows)
                             {
                                 dr = dtToNDs.NewRow();
-                                dr["No"] = item.SubFlowNo + "01";
-                                dr["Name"] = "启动:" + item.SubFlowName;
-                                dr["IsSelectEmps"] = "1";
-                                dr["IsSelected"] = "0";
-                                dtToNDs.Rows.Add(dr);
+                                //延续子流程跳转过了开始节点
+                                if (item.YanXuToNode != int.Parse(int.Parse(item.SubFlowNo) + "01"))
+                                {
+                                    dr["No"] = item.YanXuToNode;
+                                    dr["Name"] = "启动:" + item.SubFlowName;
+                                    Node subNode = new Node(item.YanXuToNode);
+                                    if(subNode.HisDeliveryWay == DeliveryWay.BySelected)
+                                        dr["IsSelectEmps"] = "1";
+                                    else
+                                        dr["IsSelectEmps"] = "0";
+                                    dr["IsSelected"] = "0";
+                                    dtToNDs.Rows.Add(dr);
+                                }
+                                else
+                                {
+                                 
+                                    dr["No"] = item.SubFlowNo + "01";
+                                    dr["Name"] = "启动:" + item.SubFlowName;
+                                    dr["IsSelectEmps"] = "1";
+                                    dr["IsSelected"] = "0";
+                                    dtToNDs.Rows.Add(dr);
+                                }
+                                
                             }
                         }
                         #endregion 增加到达延续子流程节点。

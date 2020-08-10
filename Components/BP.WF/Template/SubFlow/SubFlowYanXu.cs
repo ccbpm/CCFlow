@@ -121,6 +121,14 @@ namespace BP.WF.Template
                 return (SubFlowModel)this.GetValIntByKey(SubFlowAutoAttr.SubFlowModel);
             }
         }
+
+        public int YanXuToNode
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.YanXuToNode);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -167,6 +175,9 @@ namespace BP.WF.Template
                    "@3=按照SQL计算@4=按照参数计算");
 
                 map.AddTBString(SubFlowYanXuAttr.CondExp, null, "条件表达式", true, false, 0, 500, 150, true);
+
+                map.AddDDLSQL(SubFlowYanXuAttr.YanXuToNode, null, "延续到的节点",
+                    "SELECT NodeID AS No, Name FROM WF_Node WHERE RunModel IN(0,2,3) AND FK_Flow='@SubFlowNo'", true);
 
                 //@du.
                 map.AddDDLSysEnum(SubFlowYanXuAttr.YBFlowReturnRole, 0, "退回方式", true, true, SubFlowYanXuAttr.YBFlowReturnRole,

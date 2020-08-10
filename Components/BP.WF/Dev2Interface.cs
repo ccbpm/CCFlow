@@ -8924,7 +8924,7 @@ namespace BP.WF
                 wk.ResetDefaultVal();
 
                 #region 赋值.
-                Attrs attrs = wk.EnMap.Attrs;
+                //Attrs attrs = wk.EnMap.Attrs;
                 foreach (string str in htWork.Keys)
                 {
                     switch (str)
@@ -8940,7 +8940,7 @@ namespace BP.WF
                         default:
                             break;
                     }
-
+                   
                     if (wk.Row.ContainsKey(str))
                     {
                         wk.SetValByKey(str, htWork[str]);

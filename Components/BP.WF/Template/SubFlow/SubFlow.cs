@@ -58,6 +58,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string ReturnToNode = "ReturnToNode";
         /// <summary>
+        /// 延续到的节点
+        /// </summary>
+        public const string YanXuToNode = "YanXuToNode";
+        /// <summary>
         /// 子流程类型
         /// </summary>
         public const string SubFlowType = "SubFlowType";

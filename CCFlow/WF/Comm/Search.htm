@@ -37,7 +37,6 @@
     <link href="Style/Search.css" rel="stylesheet" />
     <base target="_self" />
     <style type="text/css">
-       
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -49,7 +48,7 @@
         var fields = [];
 
         //用户查询信息的主键
-        var urMyPK = webUser.No + "_" + ensName + "_SearchAttrs"; 
+        var urMyPK = webUser.No + "_" + ensName + "_SearchAttrs";
 
         //页面设置信息
         var cfg = new Entity("BP.Sys.EnCfg");
@@ -93,7 +92,7 @@
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.SetPKVal(urMyPK);
             ur.RetrieveFromDBSources();
-            
+
             //获取Url传的查询Key值
             var key = GetQueryString("Key");
             if (key != null && key != undefined && firstLoadTable == true) {
@@ -351,7 +350,7 @@
             var countNum = 5;
             if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "")
                 countNum = 4;
-            
+
             if (mapBase.DTSearchWay == "0") {
                 if (len == 0)
                     html += "<table style='width:30%;' >";
@@ -408,7 +407,7 @@
             }
 
             //数值型的查询增加
-            
+
             var val1 = "";
             var val2 = "";
             if (searchFieldsOfNum != null && searchFieldsOfNum != undefined && searchFieldsOfNum != "") {
@@ -424,26 +423,26 @@
                         continue;
                     fields.push(str[1]);
                     fieldV = ur.GetPara(str[1]);
-                    if (fieldV == null || fieldV == undefined || fieldV=="") {
+                    if (fieldV == null || fieldV == undefined || fieldV == "") {
                         val1 = "";
                         val2 = "";
                     } else {
                         val1 = fieldV.split(',')[0];
                         val2 = fieldV.split(',')[1];
                     }
-                       
+
 
 
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
-                    html += "<td align='left'><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1]+ "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
+                    html += "<td align='left'><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
                     html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' class='form-control' /></td>";
-                    count ++;
-                   if (count >=countNum) {
+                    count++;
+                    if (count >= countNum) {
                         count = 0;
                         html += "</tr>";
                         html += "<tr>";
                     }
-                   
+
                 }
             }
 
@@ -577,9 +576,9 @@
                     if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
                         ur.SetPara(field, "");
                     else
-                        ur.SetPara(field, $("#TB_" + field+"_0").val()+","+$("#TB_" + field+"_1").val());
+                        ur.SetPara(field, $("#TB_" + field + "_0").val() + "," + $("#TB_" + field + "_1").val());
                 }
-                
+
 
             }
 
@@ -632,7 +631,7 @@
 
             data = JSON.parse(data);
             //当前用户页面信息.
-            
+
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.SetPKVal(ur.MyPK);
             ur.RetrieveFromDBSources();
@@ -678,8 +677,8 @@
                 });
             }
 
-           
-             $("#JsResult").html("").html(_html);
+
+            $("#JsResult").html("").html(_html);
             return data;
         }
 
@@ -725,7 +724,7 @@
             if (cfg.GetPara("IsEnableFocusField") == "1")
                 focusField = cfg.GetPara("FocusField");
 
-           
+
 
             var firstColumns = new Array();
             var secondColumns = new Array();
@@ -736,7 +735,7 @@
                 field: '',
                 align: 'center',
                 width: 25,
-                rowspan: isThrHeader == true ? 3 : isSecHeader==true? 2:1,
+                rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
                 }
@@ -745,7 +744,7 @@
 
             //颜色设置
             var colorSet = cfg.ColorSet;
-           
+
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
 
@@ -767,18 +766,18 @@
                 //是否增加二级或者三级分组
                 if ((isSecHeader == true && keyRowSpan == 1)
                     || isThrHeader == true && keyRowSpan != 3)
-                    AddSecOrThrColumn(attr.KeyOfEn,keyRowSpan,secondColumns,threeColumns);
-                
+                    AddSecOrThrColumn(attr.KeyOfEn, keyRowSpan, secondColumns, threeColumns);
+
 
 
                 var field = attr.KeyOfEn;
-                
+
                 var width = attr.Width;
                 if (width < 60) {
                     width = 60;
                 }
                 if (field == "Title") {
-                     width = 230;
+                    width = 230;
                 }
                 var title = attr.Name;
                 if (attr.UIContralType == 1) {
@@ -839,11 +838,11 @@
                             return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\",1,\"" + rowstr + "\")'>" + value + "</a>";
                         }
 
-                       
-                       
 
-                         var fieldColor = [];
-                         if (colorSet.indexOf("@" + this.field + ":") != -1) {
+
+
+                        var fieldColor = [];
+                        if (colorSet.indexOf("@" + this.field + ":") != -1) {
                             fieldColor = getFieldColor(colorSet, this.field);
                         }
                         if (fieldColor.length == 0)
@@ -851,14 +850,14 @@
                         for (var i = 0; i < fieldColor.length; i++) {
                             var color = fieldColor[i];
                             if (color.From <= value && color.To >= value)
-                                return "<div style='width:20px;height:20px;text-align:center;background:" + color.Color + "'>"+value+"</div>";
+                                return "<div style='width:20px;height:20px;text-align:center;background:" + color.Color + "'>" + value + "</div>";
                         }
                     }
 
                 };
                 AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
             }
-            if (thrcolspan.field!=undefined)
+            if (thrcolspan.field != undefined)
                 threeColumns.push(thrcolspan);
             //获取屏幕的长宽
             var W = document.body.clientWidth - 40;
@@ -937,7 +936,7 @@
                         }
                         var rowstr = JSON.stringify(row);
                         rowstr = encodeURIComponent(rowstr);
-                        return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\",1,\"" + rowstr+"\")'>详情</a>";
+                        return "<a href='#' onclick='OpenEn(\"" + pkval + "\",\"" + paras + "\",1,\"" + rowstr + "\")'>详情</a>";
                     }
                 }
                 AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
@@ -949,15 +948,15 @@
                 columns[0] = secondColumns;
                 columns[1] = firstColumns;
             }
-               
+
             if (isThrHeader == true) {
                 columns[0] = threeColumns;
                 columns[1] = secondColumns;
                 columns[2] = firstColumns;
             }
-               
 
-           
+
+
 
             $('#dg').html("");
             $('#dg').bootstrapTable({
@@ -971,7 +970,7 @@
                 pageNumber: 1,
                 strictSearch: true,
                 showMultiSort: true, // 多列排序
-                rememberOrder:true,//记住每个列的排序
+                rememberOrder: true,//记住每个列的排序
                 onSort: function (name, order) {
                     pageIdx = 1;
                     SearchData(name, order);
@@ -1002,7 +1001,7 @@
                 }
 
             });
-             $("#dg").colResizable({
+            $("#dg").colResizable({
                 liveDrag: true,
                 gripInnerHtml: "<div class='grip'></div>",
                 draggingClass: "dragging",
@@ -1027,7 +1026,7 @@
         function AddColumn(column, firstColumns, secondColumns, threeColumns, columnIdx) {
             if (columnIdx == 1)
                 firstColumns.push(column);
-            if (columnIdx ==2)
+            if (columnIdx == 2)
                 secondColumns.push(column);
             if (columnIdx == 3)
                 threeColumns.push(column);
@@ -1048,7 +1047,7 @@
             //是否是隶属于三级表头下的字段
             if (thrMultiTitle.indexOf("," + keyOfEn + ",") != -1)
                 return 2;
-            return isThrHeader == true?3:2;
+            return isThrHeader == true ? 3 : 2;
 
         }
         /**
@@ -1107,14 +1106,14 @@
                             align: 'center',
                             colspan: colspan,
                         }
-                       
+
                         curTreGroup = filds[0];
                     } else {
                         if (isSecChange == true)
                             thrcolspan.colspan = thrcolspan.colspan + colspan;
                     }
-                        
-                   
+
+
                 }
             }
             //三级表头
@@ -1142,7 +1141,7 @@
                     if (curTreGroup != "" && curTreGroup != filds[0]) {
                         threeColumns.push(thrcolspan);
                     }
-                    thrcolspan={
+                    thrcolspan = {
                         title: filds[0],
                         field: '',
                         align: 'center',
@@ -1152,10 +1151,10 @@
                 } else {
                     thrcolspan.colspan = thrcolspan.colspan + 1;
                 }
-                   
-                
+
+
             }
-           
+
         }
         function getMutliFile(keyOfEn, multi) {
             var fields = multi.split(";");
@@ -1163,7 +1162,7 @@
                 var str = fields[i];
                 if (str == "")
                     continue;
-                if (str.indexOf(","+keyOfEn + ",") == -1)
+                if (str.indexOf("," + keyOfEn + ",") == -1)
                     continue;
                 var strs = str.substring(0, str.length - 1).split(",");
                 return strs;
@@ -1211,7 +1210,7 @@
             return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
 
-        function OpenEn(pk, paras, flag,row) {
+        function OpenEn(pk, paras, flag, row) {
 
             if (row != null && row != undefined && row != "")
                 row = JSON.parse(decodeURIComponent(row));
@@ -1254,7 +1253,7 @@
             //        url = url + "?1=1";
             //    if (url.indexOf('FrmID') != -1)
             //        url = url + "&WorkID=" + pk + "&OID=" + pk ;
-               
+
             //}
             //url中包含@符号需要进行替换
             if (url.indexOf("@") != -1) {
@@ -1273,28 +1272,28 @@
             if (openModel == 0) {
                 OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
                     if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
-                         SearchData();
-                         Paginator(pages);
+                        SearchData();
+                        Paginator(pages);
                     }
-                   
+
 
                 }, null, 'black');
             } else {
                 var windowObj = window.open(url);
                 if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
-                    var loop = setInterval(function() {
-                          if(windowObj.closed) {
-                             clearInterval(loop);
-                              SearchData();
-                              Paginator(pages);
+                    var loop = setInterval(function () {
+                        if (windowObj.closed) {
+                            clearInterval(loop);
+                            SearchData();
+                            Paginator(pages);
 
-                          }
+                        }
 
                     }, 1000);
                 }
             }
 
-            
+
         }
 
         /**
@@ -1336,10 +1335,11 @@
             return fieldColor;
         }
         function New() {
-            OpenEn("", "", 0,null);
+            OpenEn("", "", 0, null);
         }
 
         function Exp() {
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
             //查询集合
@@ -1353,11 +1353,17 @@
 
             window.open(data);
             return;
-
         }
 
+        ///导入.
         function Imp() {
+
+            var ensName = GetQueryString("EnsName");
+            var en = new Entity("BP.Sys.EnCfg", ensName);
             var url = "./Sys/ImpData.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+            if (en.ImpFuncUrl != '')
+                url = en.ImpFuncUrl;
+
             //获取屏幕的长宽
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight - 120;
@@ -1543,7 +1549,7 @@
 
 
     </script>
-  
+
 </head>
 <body id="SearchHtml" class="cs-search-html">
     <div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
@@ -1569,7 +1575,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div id="Msg">

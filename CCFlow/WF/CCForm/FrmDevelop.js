@@ -755,18 +755,16 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
     var eleIframe = $("<iframe class= 'Fdtl' ID = 'SubFlow_" + wf_node.NodeID + "' src = '" + src + "' frameborder=0  style='width:" + w + "px;"
         + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
-
     eleHtml.append(eleIframe);
     $(element).after(eleHtml);
     $(element).remove(); //移除SubFlow节点
-
 }
 
 
 //审核组件
 function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     //这个修改数据的位置
-    if (currentURL.indexOf("AdminFrm.htm") != -1) {
+    if (currentURL != undefined && currentURL.indexOf("AdminFrm.htm") != -1) {
         $(element).remove(); 
         return;
     }

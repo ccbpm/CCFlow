@@ -10773,8 +10773,13 @@ namespace BP.WF
             Nodes toNDs = nd.HisToNodes;
 
             Flow fl = nd.HisFlow;
+
+            //获得表单的数据，以方便计算方向条件.
             GERpt rpt = fl.HisGERpt;
-            rpt.OID = FID == 0 ? workid : FID;
+            if (FID == 0)
+                rpt.OID = workid;
+            else
+                rpt.OID = FID;
             rpt.Retrieve();
 
             //方向.

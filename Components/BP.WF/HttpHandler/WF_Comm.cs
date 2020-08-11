@@ -1012,7 +1012,8 @@ namespace BP.WF.HttpHandler
             // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
 
             string methodName = this.GetRequestVal("MethodName");
-
+            if (ens == null)
+                return "err@没有找到实体类";
             Type tp = ens.GetType();
             System.Reflection.MethodInfo mp = tp.GetMethod(methodName);
             if (mp == null)

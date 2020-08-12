@@ -1797,6 +1797,7 @@ namespace BP.CCBill
             FrmBill bill = new FrmBill(this.FrmID);
             GEEntitys rpts = new GEEntitys(this.FrmID);
             GEEntity en = new GEEntity(this.FrmID);
+    
 
             string noColName = ""; //编号(唯一值)
             string nameColName = ""; //名称
@@ -2081,10 +2082,42 @@ namespace BP.CCBill
                     if(depts.Count !=0)
                         en.SetValByKey(item.Key.Replace("BaseName", "BaseCode"), (depts[0] as Dept).No);
                     en.SetValByKey(item.Key, val);
+                    continue;
                 }
                 else
                 {
-                    en.SetValByKey(item.Key, val);
+                    if (item.Key.Equals("CI_SmallBusinessFormatCode"))
+                    {
+                        string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
+                        MapExt mapExt = new MapExt();
+                        mapExt.MyPK = mypk;
+                        if(mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
+                        {   
+                            string newVal = "," + val + ",";
+                            string keyVal = "";
+                            DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
+                            foreach(DataRow drr in dataTable.Rows)
+                            {
+                                if (drr["Name"] != null && newVal.Contains("," + drr["Name"].ToString() + ",") == true)
+                                    keyVal += drr["No"].ToString()+",";
+                            }
+                            keyVal = keyVal.Substring(0, keyVal.Length - 1);
+
+                            en.SetValByKey(item.Key, keyVal);
+                            en.SetValByKey(item.Key.Replace("Code", ""), val);
+                            en.SetValByKey(item.Key+"T", val);
+                        }
+                        else
+                        {
+                            en.SetValByKey(item.Key, val);
+                        }
+                    }
+                    else
+                    {
+                        en.SetValByKey(item.Key, val);
+                    }
+                   
+                  
                 }
                    
                 
@@ -2096,6 +2129,7 @@ namespace BP.CCBill
                 en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
 
             en.SetValByKey("BillState", (int)BillState.Editing);
+            en.SetValByKey("WFState", WFState.Complete);
             en.Update();
 
             GenerBill gb = new GenerBill();

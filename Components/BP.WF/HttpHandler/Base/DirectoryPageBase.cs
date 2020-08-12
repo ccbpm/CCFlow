@@ -113,8 +113,8 @@ namespace BP.WF.HttpHandler
                 //if (methodName.Contains("WebUser") == true)
                 //    isCanDealToken = false;
 
-                if (isCanDealToken == true)
-                    this.DealToken(myEn, myEn.DoType);
+                //if (isCanDealToken == true)
+                 //   this.DealToken(myEn, myEn.DoType);
             }
 
 
@@ -848,7 +848,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("RefOID"); // context.Request.QueryString["RefOID"];
-                if (DataType.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true || str.Equals("undefined"))
                     str = this.GetRequestVal("OID");  //context.Request.QueryString["OID"];
 
                 if (DataType.IsNullOrEmpty(str) == true)
@@ -1270,8 +1270,8 @@ namespace BP.WF.HttpHandler
                             string text = "";
                             if (attr.IsFKorEnum || attr.IsFK)
                                 text = dr[attr.Key + "Text"].ToString();
-                            //else if (attr.UIDDLShowType == BP.Web.Controls.DDLShowType.BindSQL)
-                            //    text = dr[attr.Key + "T"].ToString();
+                            else if (attrs.Contains(attr.Key+"T") == true)
+                                text = dr[attr.Key + "T"].ToString();
                             else
                                 text = dr[attr.Key].ToString();
 

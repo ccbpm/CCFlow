@@ -27,7 +27,8 @@ namespace BP.WF
             {
                 var model= (DirCondModel)this.GetValIntByKey(NodeAttr.CondModel);
                 if (this.TodolistModel == TodolistModel.Teamup 
-                    && model == DirCondModel.SendButtonSileSelect)
+                    && model == DirCondModel.SendButtonSileSelect
+                    && this.IsEndNode == false)
                     return DirCondModel.ByUserSelected;
                 return model;
             }
@@ -35,7 +36,8 @@ namespace BP.WF
             {
                 var model = (DirCondModel)value;
                 if (this.TodolistModel == TodolistModel.Teamup
-                  && model == DirCondModel.SendButtonSileSelect)
+                  && model == DirCondModel.SendButtonSileSelect
+                  && this.IsEndNode == false)
                     model=  DirCondModel.ByUserSelected;
                 this.SetValByKey(NodeAttr.CondModel, (int)model);
             }

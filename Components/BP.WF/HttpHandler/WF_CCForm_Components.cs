@@ -35,7 +35,6 @@ namespace BP.WF.HttpHandler
         {
             //创建实体.
             GEEntity en = new GEEntity(this.FrmID, this.OID);
-            
 
             //查询字段.
             string ptable = en.EnMap.PhysicsTable; //获得存储表.

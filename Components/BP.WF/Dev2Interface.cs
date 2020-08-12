@@ -8889,7 +8889,9 @@ namespace BP.WF
                 {
                     if (nd.IsEndNode == false && WebUser.IsAdmin == false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
-                            throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
+                            return;
+                    //这里取消了保存异常.
+                    //throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)

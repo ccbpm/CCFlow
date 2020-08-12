@@ -6098,8 +6098,8 @@ namespace BP.WF
 
             //设置消息.
             this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.", "WorkNode", "sub_wf_started", node.FlowName, toEmpIDs));
-            //this.addMsg(SendReturnMsgFlag.MsgOfText, "需要等待子流程完成后，该流程才能向下运动。");
-            this.addMsg("Msg2", BP.WF.Glo.multilingual("当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.", "WorkNode", "to_do_list_invisible"));
+            if(SystemConfig.CustomerNo.Equals("ASSET") == false)
+                this.addMsg("Msg2", BP.WF.Glo.multilingual("当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.", "WorkNode", "to_do_list_invisible"));
 
 
             //设置当前工作操作员不可见.

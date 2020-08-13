@@ -2374,7 +2374,15 @@ namespace BP.Sys
 
         public static string CheckPKFields(string frmID,string name)
         {
-            string sql = "SELECT KeyOfEn, Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' AND KeyOfEn IN('OID','No','MyPK','NodeID','WorkID') ";
+            string sql = "SELECT KeyOfEn, Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' ";
+            sql += "  AND ( ";
+            sql += "  KeyOfEn='OID'   ";
+            sql += "  OR KeyOfEn='No'   ";
+            sql += "  OR KeyOfEn='MyPK'   ";
+            sql += "  OR KeyOfEn='NodeID'   ";
+            sql += "  OR KeyOfEn='WorkID'   ";
+            sql += "  ) ";
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             if (dt.Rows.Count == 1)

@@ -2364,7 +2364,7 @@ namespace BP.Sys
             //  string sql = "SELECT ";
 
             //检查主键.
-            CheckPKFields(this.No);
+            CheckPKFields(this.No,this.Name);
 
             //清除缓存.
             this.ClearCash();

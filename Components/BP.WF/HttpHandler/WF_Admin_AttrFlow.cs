@@ -17,6 +17,30 @@ namespace BP.WF.HttpHandler
         {
         }
 
+        #region 修改轨迹.
+        public string EditTrackDtl_Init()
+        {
+            Track tk = new Track(this.FK_Flow, this.MyPK);
+            return tk.Msg;
+        }
+        public string EditTrackDtl_Save()
+        {
+            string msg = this.GetRequestVal("Msg");
+            string tackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string sql = "UPDATE " + tackTable + " SET Msg='" + msg + "' WHERE MyPK='" + this.MyPK + "'";
+            DBAccess.RunSQL(sql);
+            return "修改成功";
+        }
+        public string EditTrackDtl_Delete()
+        {
+            string tackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string sql = "DELETE FROM  " + tackTable + " WHERE MyPK='" + this.MyPK + "'";
+            DBAccess.RunSQL(sql);
+            return "删除成功.";
+        }
+        #endregion
+
+
         #region APICodeFEE_Init.
         /// <summary>
         /// 代码生成器.
@@ -390,8 +414,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-
-
         #region 前置导航save
         /// <summary>
         /// 前置导航save
@@ -475,8 +497,6 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
-
-
 
         #region 流程轨迹查看权限
         /// <summary>

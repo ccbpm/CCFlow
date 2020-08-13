@@ -2360,10 +2360,35 @@ namespace BP.Sys
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
+            //判断是否有多个主键字段?
+            //  string sql = "SELECT ";
+
+            //检查主键.
+            CheckPKFields(this.No);
+
             //清除缓存.
             this.ClearCash();
 
             return base.beforeUpdateInsertAction();
+        }
+
+        public static string CheckPKFields(string frmID,string name)
+        {
+            string sql = "SELECT KeyOfEn, Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' AND KeyOfEn IN('OID','No','MyPK','NodeID','WorkID') ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (dt.Rows.Count == 1)
+                return "数据正确.";
+
+            if (dt.Rows.Count == 0)
+                return "err@表单缺少主键."+ frmID+","+ name;
+
+            string msg = "err@FrmID=" + frmID +name+ "主键不明确.";
+            foreach (DataRow dr in dt.Rows)
+            {
+                msg += "@" + dr[0] + "," + dr[1].ToString();
+            }
+            return msg;
         }
         /// <summary>
         /// 更新版本

@@ -122,7 +122,6 @@ namespace BP.WF
                 return DBAccess.RunSQLReturnValInt(ps);
             }
         }
-
         /// <summary>
         /// 抄送数量
         /// </summary>
@@ -152,7 +151,6 @@ namespace BP.WF
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
-
         }
         /// <summary>
         /// 返回挂起流程数量
@@ -190,7 +188,6 @@ namespace BP.WF
                 }
             }
         }
-
         /// <summary>
         /// 获取草稿箱流程数量
         /// </summary>
@@ -2826,7 +2823,7 @@ namespace BP.WF
 
                     if (nd.TodolistModel == TodolistModel.Order)
                         sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                   else   //@yln
+                    else   //@yln
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
                     //sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" + (int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
 
@@ -6584,7 +6581,7 @@ namespace BP.WF
         public static SendReturnObjs Node_StartWork(string flowNo, Hashtable htWork, DataSet workDtls,
             int nextNodeID, string nextWorker, Int64 parentWorkID, string parentFlowNo)
         {
-           
+
             Flow fl = new Flow(flowNo);
             Work wk = fl.NewWork();
             Int64 workID = wk.OID;
@@ -6958,8 +6955,6 @@ namespace BP.WF
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
             }
 
-           
-
             string dbstr = SystemConfig.AppCenterDBVarStr;
             if (DataType.IsNullOrEmpty(starter))
                 starter = WebUser.No;
@@ -7163,7 +7158,7 @@ namespace BP.WF
         public static Int64 Node_CreateStartNodeWork(string flowNo, Hashtable htWork = null, DataSet workDtls = null,
             string flowStarter = null, string title = null, Int64 parentWorkID = 0, string parentFlowNo = null, int parentNDFrom = 0)
         {
-          
+
             if (DataType.IsNullOrEmpty(flowStarter))
             {
                 flowStarter = WebUser.No;
@@ -8725,7 +8720,7 @@ namespace BP.WF
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);
 
-               
+
 
                 GenerWorkerList gwl = new GenerWorkerList();
                 int i = gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
@@ -8889,7 +8884,7 @@ namespace BP.WF
                 {
                     if (nd.IsEndNode == false && WebUser.IsAdmin == false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
-                            return "没有执行保存.";
+                            return "当前人员，没有权限执行保存.";
                     //这里取消了保存异常.
                     //throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }
@@ -8942,7 +8937,7 @@ namespace BP.WF
                         default:
                             break;
                     }
-                   
+
                     if (wk.Row.ContainsKey(str))
                     {
                         wk.SetValByKey(str, htWork[str]);
@@ -10767,7 +10762,8 @@ namespace BP.WF
         /// <param name="ndFrom">节点从</param>
         /// <param name="workid">工作ID</param>
         /// <returns>返回可以到达的节点</returns>
-        public static Nodes WorkOpt_GetToNodes(string flowNo, int ndFrom, Int64 workid, Int64 FID)
+        public static Nodes WorkOpt_GetToNodes(string flowNo, int ndFrom, 
+            Int64 workid, Int64 FID)
         {
             Nodes nds = new Nodes();
 
@@ -11323,7 +11319,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="workId"></param>
         /// <returns></returns>
-        public static Int64 GetRootWorkIDBySQL(Int64 workId,Int64 pworkid)
+        public static Int64 GetRootWorkIDBySQL(Int64 workId, Int64 pworkid)
         {
             if (pworkid == 0)
                 return workId;
@@ -11335,7 +11331,7 @@ namespace BP.WF
                 return gwf.WorkID;
             return gwf.PWorkID;
 
-                string sql = "";
+            string sql = "";
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
@@ -11364,7 +11360,7 @@ namespace BP.WF
                     sql += " (SELECT @r:= PWorkID FROM WF_GenerWorkFlow WHERE WorkID = _WorkID) AS PWorkID,";
                     sql += " @l := @l + 1 AS lvl";
                     sql += " FROM";
-                    sql += " (SELECT @r:= "+workId+", @l:= 0) vars,";
+                    sql += " (SELECT @r:= " + workId + ", @l:= 0) vars,";
                     sql += " WF_GenerWorkFlow h";
                     sql += " WHERE @r != 0) T1";
                     sql += " JOIN WF_GenerWorkFlow gwf2";

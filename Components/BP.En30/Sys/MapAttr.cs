@@ -583,6 +583,8 @@ namespace BP.Sys
                     case "OID":
                     case "No":
                     case "MyPK":
+                    case "NodeID":
+                    case "WorkID":
                         return true;
                     default:
                         return false;

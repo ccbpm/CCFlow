@@ -14,9 +14,9 @@ namespace BP.En
         /// </summary>
         public const string OID = "OID";
     }
-	/// <summary>
-	/// 属性列表
-	/// </summary>
+    /// <summary>
+    /// 属性列表
+    /// </summary>
     public class EntityOIDMyFileAttr : EntityOIDAttr
     {
         /// <summary>
@@ -32,12 +32,12 @@ namespace BP.En
         /// </summary>
         public const string MyFileExt = "MyFileExt";
     }
-	/// <summary>
-	/// OID实体,只有一个实体这个实体只有一个主键属性。
-	/// </summary>
-	abstract public class EntityOID : Entity
-	{		 
-		#region 属性
+    /// <summary>
+    /// OID实体,只有一个实体这个实体只有一个主键属性。
+    /// </summary>
+    abstract public class EntityOID : Entity
+    {
+        #region 属性
         /// <summary>
         /// 是否是自动增长列
         /// </summary>
@@ -58,9 +58,9 @@ namespace BP.En
                 return "OID";
             }
         }
-		/// <summary>
-		/// OID, 如果是空的就返回 0 . 
-		/// </summary>
+        /// <summary>
+        /// OID, 如果是空的就返回 0 . 
+        /// </summary>
         public int OID
         {
             get
@@ -79,37 +79,37 @@ namespace BP.En
                 this.SetValByKey(EntityOIDAttr.OID, value);
             }
         }
-		#endregion
+        #endregion
 
-		#region 构造函数
-		/// <summary>
-		/// 构造一个空实例
-		/// </summary>
-		protected EntityOID()
-		{
-		}
-		/// <summary>
-		/// 根据OID构造实体
-		/// </summary>
-		/// <param name="oid">oid</param>
-		protected EntityOID(int oid)  
-		{
-			this.SetValByKey(EntityOIDAttr.OID,oid);
-			this.Retrieve();
-		}
-		#endregion
-	 
-		#region override 方法
-		public override int DirectInsert()
-		{
-            this.OID =DBAccess.GenerOID();
-			return base.DirectInsert ();
-		}
-		public void InsertAsNew()
-		{
-			this.OID=0;
-			this.Insert();
-		}
+        #region 构造函数
+        /// <summary>
+        /// 构造一个空实例
+        /// </summary>
+        protected EntityOID()
+        {
+        }
+        /// <summary>
+        /// 根据OID构造实体
+        /// </summary>
+        /// <param name="oid">oid</param>
+        protected EntityOID(int oid)
+        {
+            this.SetValByKey(EntityOIDAttr.OID, oid);
+            this.Retrieve();
+        }
+        #endregion
+
+        #region override 方法
+        public override int DirectInsert()
+        {
+            this.OID = DBAccess.GenerOID();
+            return base.DirectInsert();
+        }
+        public void InsertAsNew()
+        {
+            this.OID = 0;
+            this.Insert();
+        }
         public override bool IsExits
         {
             get
@@ -133,7 +133,7 @@ namespace BP.En
                             throw new Exception("没有设计到。" + this.EnMap.EnDBUrl.DBType);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     this.CheckPhysicsTable();
                     throw ex;
@@ -174,34 +174,34 @@ namespace BP.En
                 */
             }
         }
-		/// <summary>
-		/// 删除之前的操作。
-		/// </summary>
-		/// <returns></returns>
-		protected override bool beforeDelete() 
-		{
-			if (base.beforeDelete()==false)
-				return false;			
-			try 
-			{				
-				if (this.OID < 0 )
-					throw new Exception("@实体["+this.EnDesc+"]没有被实例化，不能Delete().");
-				return true;
-			} 
-			catch (Exception ex) 
-			{
-				throw new Exception("@["+this.EnDesc+"].beforeDelete err:"+ex.Message);
-			}
-		}
-		protected override bool beforeUpdateInsertAction()
-		{
-			return base.beforeUpdateInsertAction ();
-		}
+        /// <summary>
+        /// 删除之前的操作。
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeDelete()
+        {
+            if (base.beforeDelete() == false)
+                return false;
+            try
+            {
+                if (this.OID < 0)
+                    throw new Exception("@实体[" + this.EnDesc + "]没有被实例化，不能Delete().");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@[" + this.EnDesc + "].beforeDelete err:" + ex.Message);
+            }
+        }
+        protected override bool beforeUpdateInsertAction()
+        {
+            return base.beforeUpdateInsertAction();
+        }
 
-		/// <summary>
-		/// beforeInsert 之前的操作。
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// beforeInsert 之前的操作。
+        /// </summary>
+        /// <returns></returns>
         protected override bool beforeInsert()
         {
             if (this.OID == -999)
@@ -216,23 +216,23 @@ namespace BP.En
                 this.OID = DBAccess.GenerOID();
 
             return base.beforeInsert();
-         
-        }
-		/// <summary>
-		/// beforeUpdate
-		/// </summary>
-		/// <returns></returns>
-		protected override bool beforeUpdate()
-		{
-			if (base.beforeUpdate()==false)
-				return false;
 
-			/*
+        }
+        /// <summary>
+        /// beforeUpdate
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeUpdate()
+        {
+            if (base.beforeUpdate() == false)
+                return false;
+
+            /*
 			if (this.OID <= 0 )
 				throw new Exception("@实体["+this.EnDesc+"]没有被实例化，不能Update().");
 				*/
-			return true;
-		}
+            return true;
+        }
         protected virtual string SerialKey
         {
             get
@@ -240,13 +240,13 @@ namespace BP.En
                 return "OID";
             }
         }
-       
-		#endregion
 
-		#region public 方法
-		/// <summary>
-		/// 作为一个新的实体保存。
-		/// </summary>
+        #endregion
+
+        #region public 方法
+        /// <summary>
+        /// 作为一个新的实体保存。
+        /// </summary>
         public void SaveAsNew()
         {
             try
@@ -260,9 +260,9 @@ namespace BP.En
                 throw ex;
             }
         }
-		/// <summary>
-		/// 按照指定的OID Insert.
-		/// </summary>
+        /// <summary>
+        /// 按照指定的OID Insert.
+        /// </summary>
         public void InsertAsOID(int oid)
         {
             this.SetValByKey("OID", oid);
@@ -299,46 +299,50 @@ namespace BP.En
                 throw ex;
             }
         }
-		/// <summary>
-		/// 按照指定的OID 保存
-		/// </summary>
-		/// <param name="oid"></param>
-		public void SaveAsOID(int oid)
-		{
-			this.SetValByKey("OID",oid);
-			if (this.IsExits==false)
-				this.InsertAsOID(oid);
-			this.Update();
-		}
-		#endregion
-	}
-	abstract public class EntitiesOID : Entities
-	{
+        /// <summary>
+        /// 按照指定的OID 保存
+        /// </summary>
+        /// <param name="oid"></param>
+        public void SaveAsOID(int oid)
+        {
+            this.SetValByKey("OID", oid);
+            if (this.Update() == 0)
+                this.InsertAsOID(oid);
+
+            //         this.SetValByKey("OID",oid);
+           // if (this.IsExits==false)
+            //	this.InsertAsOID(oid);
+            //this.Update();
+        }
+        #endregion
+    }
+    abstract public class EntitiesOID : Entities
+    {
         /// <summary>
         /// 构造
         /// </summary>
 		public EntitiesOID()
-		{
+        {
 
-		}
-		 
-		#region 查询方法, 专用于与语言有关的实体
-		/// <summary>
-		/// 查询出来, 所有中文的实例 . 
-		/// </summary>
-		public void RetrieveAllCNEntities()
-		{
-			this.RetrieveByLanguageNo("CH") ; 
-		}
-		/// <summary>
-		/// 按语言查询。 
-		/// </summary>
-		public void RetrieveByLanguageNo(string LanguageNo )
-		{
-			QueryObject qo = new QueryObject(this);
-			qo.AddWhere( "LanguageNo", LanguageNo );
-			qo.DoQuery();
-		}
-		#endregion
-	}
+        }
+
+        #region 查询方法, 专用于与语言有关的实体
+        /// <summary>
+        /// 查询出来, 所有中文的实例 . 
+        /// </summary>
+        public void RetrieveAllCNEntities()
+        {
+            this.RetrieveByLanguageNo("CH");
+        }
+        /// <summary>
+        /// 按语言查询。 
+        /// </summary>
+        public void RetrieveByLanguageNo(string LanguageNo)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere("LanguageNo", LanguageNo);
+            qo.DoQuery();
+        }
+        #endregion
+    }
 }

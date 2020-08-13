@@ -212,8 +212,6 @@ namespace BP.En
                 attr.UIRefKeyText = this.UIRefKeyText;
                 attr.UIVisible = this.UIVisible;
 
-                
-
                 switch (this.MyFieldType)
                 {
                     case FieldType.Enum:

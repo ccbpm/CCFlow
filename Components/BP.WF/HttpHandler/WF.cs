@@ -2353,46 +2353,25 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Port_Init()
         {
-            if (this.DoWhat.Equals("Soap_Login") == true)
-            {
-                string oid=BP.WF.Glo.HttpPostConnect("http://140.143.236.168:8095/DataUser/LocalWS.asmx/CreateWorkID","flowNo=055&userNo=admin");
-                return oid;
-            }
-
-
-            #region 安全性校验.
-            //if (this.UserNo == null )
-            //    return "err@必要的参数没有传入，请参考接口规则。UserNo";
-
-            if (this.SID == null)
-                return "err@必要的参数没有传入，请参考接口规则。SID";
 
             if (this.DoWhat == null)
                 return "err@必要的参数没有传入，请参考接口规则。DoWhat";
+
+            #region 安全性校验. Token 模式.
+            #endregion 安全性校验. Token 模式.
+
+            #region 安全性校验. SID 模式.
+            if (this.SID == null)
+                return "err@必要的参数没有传入，请参考接口规则。SID";
 
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
                 return "err@非法的访问，请与管理员联系。SID=" + this.SID;
             else
                 BP.WF.Dev2Interface.Port_Login(this.UserNo);
-
-            //if (DataType.IsNullOrEmpty(WebUser.No) == true || BP.Web.WebUser.No.Equals(this.UserNo) == false)
-            //{
-            //    BP.WF.Dev2Interface.Port_SigOut();
-            //    try
-            //    {
-            //        BP.WF.Dev2Interface.Port_Login(this.UserNo);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return "err@安全校验出现错误:" + ex.Message;
-            //    }
-            //}
-            #endregion 安全性校验.
+            #endregion 安全性校验. SID 模式.
 
             if (this.DoWhat.Equals("PortLogin") == true)
-            {
                 return "登陆成功";
-            }
 
             #region 生成参数串.
             string paras = "";

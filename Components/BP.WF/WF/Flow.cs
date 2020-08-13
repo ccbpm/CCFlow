@@ -778,6 +778,7 @@ namespace BP.WF
                         rpt.SetValByKey(k, paras[k]);
                     }
 
+                    //两个表相同，就执行更新.
                     if (this.PTable.Equals(wk.EnMap.PhysicsTable) == true)
                     {
                         /*如果开始节点表与流程报表相等.*/
@@ -836,8 +837,8 @@ namespace BP.WF
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
-                        rpt.FlowStarter = emp.No;                     
-                        rpt.SaveAsOID((int)wk.OID);
+                        rpt.FlowStarter = emp.No;
+                        rpt.SaveAsOID((int)wk.OID); //执行保存.
                     }
 
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
@@ -847,7 +848,9 @@ namespace BP.WF
                 if (wk.OID != 0)
                 {
                     rpt.OID = wk.OID;
-                    rpt.RetrieveFromDBSources();
+                    int i= rpt.RetrieveFromDBSources();
+                    if (i == 0)
+                        throw new Exception("err@没有保存到流程表单数据,系统错误."+rpt.OID+",请联系管理员.");
 
                     rpt.FID = 0;
                     rpt.FlowStartRDT = DataType.CurrentDataTime;
@@ -1041,8 +1044,6 @@ namespace BP.WF
                 #endregion 获取web变量.
 
                 #region 特殊赋值.
-              
-
                 // 在执行copy后，有可能这两个字段会被冲掉。
                 if (CopyFormWorkID != null)
                 {
@@ -1089,7 +1090,7 @@ namespace BP.WF
 
                 }
 
-                if (rpt.EnMap.PhysicsTable != wk.EnMap.PhysicsTable)
+                if (rpt.EnMap.PhysicsTable.Equals(wk.EnMap.PhysicsTable)==false)
                     wk.Update(); //更新工作节点数据.
                 rpt.Update(); // 更新流程数据表.
                 #endregion 特殊赋值.
@@ -1119,10 +1120,7 @@ namespace BP.WF
                             }
                             catch (Exception ex)
                             {
-
                             }
-
-
 
                             MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;
 

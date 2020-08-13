@@ -1139,8 +1139,6 @@ namespace BP.WF.Template
                 Cond cond = this[0] as Cond;
                 return cond.IsPassed;
             }
-
-
             #endregion 首先计算简单的.
 
             #region 处理混合计算。

@@ -39,7 +39,7 @@ namespace BP.WF.HttpHandler
                 if (pkVal.Equals("0") == true)
                     pkVal = this.WorkID.ToString();
 
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID);
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID,true,this.FK_Node,this.FK_MapData);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -1976,15 +1976,18 @@ namespace BP.WF.HttpHandler
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
 
+            string dtlRefPKVal = ""; //从表的RefPK
             #region 如果是测试，就创建表.
             if (this.FK_Node == 999999 || this.GetRequestVal("IsTest") != null)
             {
                 GEDtl dtl = new GEDtl(mdtl.No);
                 dtl.CheckPhysicsTable();
+                dtlRefPKVal = "0";
             }
             #endregion 如果是测试，就创建表.
 
             string frmID = mdtl.FK_MapData;
+            
             if (this.FK_Node != 0 && this.FK_Node != 999999)
                 frmID = frmID.Replace("_" + this.FK_Node, "");
 
@@ -1993,13 +1996,12 @@ namespace BP.WF.HttpHandler
                 && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
-
+                BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.NodeID, frmID);
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.FoolTruck)
                 {
                     /*如果
                      * 1,传来节点ID, 不等于0.
                      * 2,不是节点表单.  就要判断是否是独立表单，如果是就要处理权限方案。*/
-                    BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode( nd.NodeID, frmID);
                     if (fn.FrmSln == FrmSln.Readonly)
                     {
                         mdtl.IsInsert = false;
@@ -2020,6 +2022,10 @@ namespace BP.WF.HttpHandler
                     }
                   
                 }
+                dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, frmID, mdtl);
+                if (dtlRefPKVal.Equals("0") == true)
+                    dtlRefPKVal = this.RefPKVal;
+
             }
 
             if (this.GetRequestVal("IsReadonly") == "1")
@@ -2036,7 +2042,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, this.FID,this.PWorkID);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, dtlRefPKVal);
             return ds;
         }
         /// <summary>
@@ -2086,6 +2092,7 @@ namespace BP.WF.HttpHandler
             string fk_mapDtl = this.FK_MapDtl;
             string RowIndex = this.GetRequestVal("RowIndex");
             MapDtl mdtl = new MapDtl(fk_mapDtl);
+            string dtlRefPKVal = this.RefPKVal;
 
             #region 处理权限方案。
             if (this.FK_Node != 0 && this.FK_Node != 999999)
@@ -2108,6 +2115,11 @@ namespace BP.WF.HttpHandler
                     }
                     
                 }
+
+                dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, mdtl);
+                if (dtlRefPKVal.Equals("0") == true)
+                    dtlRefPKVal = this.RefPKVal;
+
             }
             #endregion 处理权限方案。
         
@@ -2130,39 +2142,38 @@ namespace BP.WF.HttpHandler
             }
 
             //关联主赋值.
-            dtl.RefPK = this.RefPKVal;
-            switch (mdtl.DtlOpenType)
-            {
-                case DtlOpenType.ForEmp:  // 按人员来控制.
-                    dtl.RefPK = this.RefPKVal;
-                    break;
-                case DtlOpenType.ForWorkID: // 按工作ID来控制
-                    dtl.RefPK = this.RefPKVal;
-                    dtl.FID = long.Parse(this.RefPKVal);
-                    break;
-                case DtlOpenType.ForFID: // 按流程ID来控制.
-                    dtl.RefPK = this.RefPKVal;
-                    dtl.FID = this.FID;
-                    break;
-                case DtlOpenType.ForPWorkID: // 按父流程ID来控制.
-                    dtl.RefPK = this.PWorkID.ToString();
-                    dtl.FID = this.FID;
-                    break;
-                case DtlOpenType.ForP2WorkID: // 按P2WorkID来控制.
-                    GenerWorkFlow gwf = new GenerWorkFlow(this.PWorkID);
-                    dtl.RefPK = gwf.PWorkID.ToString();
-                    dtl.FID = this.FID;
-                    break;
-                case DtlOpenType.ForP3WorkID: // 按P3WorkID来控制
-                    string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                    dtl.RefPK = DBAccess.RunSQLReturnVal(sqlId).ToString();
-                    dtl.FID = this.FID;
-                    break;
-                case DtlOpenType.RootFlowWorkID: // RootFlowWorkID.
-                    dtl.RefPK = BP.WF.Dev2Interface.GetRootWorkIDBySQL(long.Parse(this.RefPKVal), this.PWorkID).ToString();
-                    dtl.FID = this.FID;
-                    break;
-            }
+            dtl.RefPK = dtlRefPKVal;
+            dtl.FID = this.FID;
+            //switch (mdtl.DtlOpenType)
+            //{
+            //    case DtlOpenType.ForEmp:  // 按人员来控制.
+            //        dtl.RefPK = dtlRefPKVal;
+            //        break;
+            //    case DtlOpenType.ForWorkID: // 按工作ID来控制
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //    case DtlOpenType.ForFID: // 按流程ID来控制.
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //    case DtlOpenType.ForPWorkID: // 按父流程ID来控制.
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //    case DtlOpenType.ForP2WorkID: // 按P2WorkID来控制.
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //    case DtlOpenType.ForP3WorkID: // 按P3WorkID来控制
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //    case DtlOpenType.RootFlowWorkID: // RootFlowWorkID.
+            //        dtl.RefPK = dtlRefPKVal;
+            //        dtl.FID = this.FID;
+            //        break;
+            //}
 
             #region 从表保存前处理事件.
             //获得主表事件.
@@ -3338,88 +3349,14 @@ namespace BP.WF.HttpHandler
             {
                 //判断表单方案。
                 FrmNode fn = new FrmNode( this.FK_Node, this.FK_MapData);
-                if (fn.FrmSln == FrmSln.Readonly)
-                    return "err@不允许上传附件.";
-
-                //是默认的方案的时候.
-                if (fn.FrmSln == FrmSln.Default)
-                {
-                    //判断当前方案设置的whoIsPk ，让附件集成 whoIsPK 的设置。
-                    if (fn.WhoIsPK == WhoIsPK.FID)
-                        pkVal = this.FID.ToString();
-
-                    if (fn.WhoIsPK == WhoIsPK.PWorkID)
-                        pkVal = this.PWorkID.ToString();
-                    if (fn.WhoIsPK == WhoIsPK.OID)
-                    {
-                        //如果是继承模式(AthUploadWay.Inherit)，上传附件使用本流程的WorkID,pkVal不做处理
-
-                        //如果是协作模式(AthUploadWay.Interwork),上传附件就是用控制呈现模式
-                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                        {
-                            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                                pkVal = this.FID.ToString();
-
-                            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                            {
-                                if (this.PWorkID != 0)
-                                    pkVal = this.PWorkID.ToString();
-                            }
-
-                            if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
-                            {
-                                //根据流程的PWorkID获取他的P2流程
-                                string pWorkID = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
-                                pkVal = pWorkID;
-                            }
-                            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
-                            {
-                                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                                //根据流程的PWorkID获取他的P2流程
-                                string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
-                                pkVal = pWorkID;
-                            }
-                            if (athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
-                                pkVal = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID).ToString();
-                          
-                        }
-                    }
-                }
-
-                //自定义方案.
                 if (fn.FrmSln == FrmSln.Self)
                 {
-                   
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
                     myathDesc.MyPK = attachPk + "_" + this.FK_Node;
                     if (myathDesc.RetrieveFromDBSources() != 0)
-                    {
-                        if (myathDesc.HisCtrlWay == AthCtrlWay.FID)
-                            pkVal = this.FID.ToString();
-
-                        if (myathDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                            if (this.PWorkID != 0)
-                                pkVal = this.PWorkID.ToString();
-
-
-                        if (myathDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
-                        {
-                            //根据流程的PWorkID获取他的爷爷流程
-                            string pWorkID = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PWorkID, 0).ToString();
-                            pkVal = pWorkID;
-                        }
-                        if (myathDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
-                        {
-                            string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                            //根据流程的PWorkID获取他的P2流程
-                            string pWorkID = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
-                            pkVal = pWorkID;
-                        }
-                        if (myathDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
-                            pkVal = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID).ToString();
-                    }
-
+                        athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
                 }
+                pkVal=BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, athDesc);
             }
 
 

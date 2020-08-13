@@ -666,7 +666,7 @@ namespace BP.WF
         /// <param name="atParas">参数</param>
         /// <param name="specDtlFrmID">指定明细表的参数，如果为空就标识主表数据，否则就是从表数据.</param>
         /// <returns>数据</returns>
-        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas, Int64 fid = 0,Int64 pworkid=0)
+        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas,string dtlRefPKVal)
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
@@ -845,7 +845,7 @@ namespace BP.WF
 
             #region  把从表的数据放入.
             GEDtls dtls = new GEDtls(dtl.No);
-            DataTable dtDtl = GetDtlInfo(dtl, dtls, pkval, fid, en,pworkid);
+            DataTable dtDtl = GetDtlInfo(dtl,dtls,en, dtlRefPKVal);
        
 
             // 为明细表设置默认值.
@@ -949,7 +949,7 @@ namespace BP.WF
 
             return myds;
         }
-        private static  DataTable GetDtlInfo(MapDtl dtl, GEDtls dtls, Int64 pkval, Int64 fid, GEEntity en,Int64 pworkid)
+        private static  DataTable GetDtlInfo(MapDtl dtl, GEDtls dtls,  GEEntity en,string dtlRefPKVal)
         {
             QueryObject qo = null;
             try
@@ -958,39 +958,20 @@ namespace BP.WF
                 switch (dtl.DtlOpenType)
                 {
                     case DtlOpenType.ForEmp:  // 按人员来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
+                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
                         qo.addAnd();
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
                         qo.addLeftBracket();
-                        qo.AddWhere(GEDtlAttr.RefPK, pkval.ToString());
+                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
                         qo.addOr();
-                        qo.AddWhere(GEDtlAttr.FID, pkval);
+                        qo.AddWhere(GEDtlAttr.FID, dtlRefPKVal);
                         qo.addRightBracket();
 
                         break;
-                    case DtlOpenType.ForFID: // 按流程ID来控制.
-                        if (fid == 0)
-                            qo.AddWhere(GEDtlAttr.FID, pkval);
-                        else
-                            qo.AddWhere(GEDtlAttr.FID, fid);
-                        break;
-                    case DtlOpenType.ForPWorkID: // 按父流程ID来控制.
-                        qo.AddWhere(GEDtlAttr.RefPK, pworkid);
-                        break;
-                    case DtlOpenType.ForP2WorkID: // 按P2WorkID来控制.
-                        GenerWorkFlow gwf = new GenerWorkFlow(pworkid);
-                        qo.AddWhere(GEDtlAttr.RefPK, gwf.PWorkID);
-                        break;
-                    case DtlOpenType.ForP3WorkID: // 按P3WorkID来控制
-                        string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
-                        qo.AddWhere(GEDtlAttr.RefPK, DBAccess.RunSQLReturnVal(sqlId).ToString());
-                       
-                        break;
-                    case DtlOpenType.RootFlowWorkID: // RootFlowWorkID.
-                        qo.AddWhere(GEDtlAttr.RefPK, BP.WF.Dev2Interface.GetRootWorkIDBySQL(pkval, pworkid).ToString());
-                       
+                    default:
+                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
                         break;
                 }
                 //条件过滤.
@@ -1011,7 +992,7 @@ namespace BP.WF
             catch (Exception ex)
             {
                 dtls.GetNewEntity.CheckPhysicsTable();
-                return GetDtlInfo(dtl, dtls, pkval, fid, en,pworkid);
+                return GetDtlInfo(dtl, dtls,en,dtlRefPKVal);
             }
  
         }

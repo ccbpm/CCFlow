@@ -6243,117 +6243,21 @@ namespace BP.WF
             }
         }
         public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment,
-            Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true)
+            Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true,int fk_node=0,string fk_mapData=null)
         {
             if (pkval == null)
                 pkval = "0"; //解决预览的时候的错误.
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
             //查询使用的workId
-            string ctrlWayId = "";
-            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID)
-            {
-                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
-                ctrlWayId = DBAccess.RunSQLReturnValInt(sql, 0).ToString();
-                if (ctrlWayId == null || ctrlWayId == "0")
-                    ctrlWayId = pkval;
-            }
+            string ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
 
-            if (athDesc.HisCtrlWay == AthCtrlWay.P2WorkID)
-            {
-                ctrlWayId = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0).ToString();
-                if (ctrlWayId == null || ctrlWayId == "0")
-                    ctrlWayId = pkval;
-            }
-            if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-            {
-                if (pworkid == 0)
-                {
-                    pworkid = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerworkFlow WHERE WorkID=" + pkval, 0);
-                    if (pworkid == 0)
-                        pworkid = int.Parse(pkval);
-                }
-
-                ctrlWayId = pworkid.ToString();
-            }
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
-                ctrlWayId = BP.WF.Dev2Interface.GetRootWorkIDBySQL(workid, pworkid).ToString();
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-                ctrlWayId = fid.ToString();
-            if (athDesc.HisCtrlWay == AthCtrlWay.P3WorkID 
-                || athDesc.HisCtrlWay == AthCtrlWay.P2WorkID 
-                || athDesc.HisCtrlWay == AthCtrlWay.PWorkID 
-                || athDesc.HisCtrlWay == AthCtrlWay.RootFlowWorkID)
-            {
-
-                //协作模式
-                if (pkval.Equals(ctrlWayId) == true || athDesc.AthUploadWay == AthUploadWay.Interwork)
-                {
-                    dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, ctrlWayId, FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                }
-                /* 继承模式 */
-                else if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                {
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                    qo.addOrderBy("RDT");
-                    qo.DoQuery();
-                }
-                return dbs;
-            }
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.FID)
-            {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(ctrlWayId));
-                else
-                    qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
-
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-
-                if (isContantSelf == false)
-                {
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
-                }
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
-
-
-            if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
-            {
-                /* 继承模式 */
-                BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                if (isContantSelf == false)
-                {
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
-                }
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
-
-
-
+            BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {
                 if (FK_FrmAttachment.Contains("AthMDtl"))
                 {
                     /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
@@ -6362,7 +6266,6 @@ namespace BP.WF
                 }
                 else
                 {
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
@@ -6377,9 +6280,23 @@ namespace BP.WF
                 }
                 return dbs;
             }
+        
+            /* 继承模式 */
+            if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
+            else
+                qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
 
-            throw new Exception("@没有判断的权限控制模式:" + athDesc.HisCtrlWay);
+            qo.addAnd();
+            qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
 
+            if (isContantSelf == false)
+            {
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+            }
+            qo.addOrderBy("RDT");
+            qo.DoQuery();
             return dbs;
         }
         /// <summary>

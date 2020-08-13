@@ -122,6 +122,7 @@ namespace BP.WF
                 return DBAccess.RunSQLReturnValInt(ps);
             }
         }
+
         /// <summary>
         /// 抄送数量
         /// </summary>
@@ -151,6 +152,7 @@ namespace BP.WF
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
+
         }
         /// <summary>
         /// 返回挂起流程数量
@@ -188,6 +190,7 @@ namespace BP.WF
                 }
             }
         }
+
         /// <summary>
         /// 获取草稿箱流程数量
         /// </summary>
@@ -564,14 +567,40 @@ namespace BP.WF
         #endregion 获取流程事例的轨迹图
 
         #region 获取流程事例的轨迹图
-
+        /// <summary>
+        /// 获取流程时间轴，包含了分合流流程，父子流程，延续子流程
+        /// </summary>
+        /// <param name="fk_flow"></param>
+        /// <param name="workid"></param>
+        /// <param name="fid"></param>
+        /// <returns></returns>
         public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
+           
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
+            string workids = "";
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
+            //if(fid ==0)
+            //    workids = GetParentChildWorkID(workid, "");
+            //else
+            //    workids = GetParentChildWorkID(fid, "");
+
+            //workids = workids.Substring(0, workids.Length - 1);
+
+            //if (workids.Contains(",") == true)
+            //{
+            //    sqlOfWhere1 = " WHERE (FID IN ("+ workids + ") OR WorkID IN (" + workids + "))  ";
+
+            //}
+            //else
+            //{
+            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
+            //    ps.Add("WorkID11", Int64.Parse(workids));
+            //    ps.Add("WorkID12", Int64.Parse(workids));
+            //}
             if (fid == 0)
             {
                 sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
@@ -579,7 +608,7 @@ namespace BP.WF
                 ps.Add("WorkID12", workid);
             }
             else
-            {
+            { //获取分合流的数据
                 sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
                 ps.Add("FID11", fid);
                 ps.Add("FID12", fid);
@@ -2823,7 +2852,7 @@ namespace BP.WF
 
                     if (nd.TodolistModel == TodolistModel.Order)
                         sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                    else   //@yln
+                   else   //@yln
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
                     //sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" + (int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
 
@@ -6230,7 +6259,7 @@ namespace BP.WF
             gwf.TodoEmps = todoEmpsExts;
 
             //发送人.
-            gwf.Sender = WebUser.No + "," + WebUser.Name+";";
+            gwf.Sender = WebUser.No + "," + WebUser.Name;
             gwf.SendDT = DataType.CurrentDataTime;
 
             gwf.Paras_ToNodes = "";
@@ -6581,7 +6610,7 @@ namespace BP.WF
         public static SendReturnObjs Node_StartWork(string flowNo, Hashtable htWork, DataSet workDtls,
             int nextNodeID, string nextWorker, Int64 parentWorkID, string parentFlowNo)
         {
-
+           
             Flow fl = new Flow(flowNo);
             Work wk = fl.NewWork();
             Int64 workID = wk.OID;
@@ -6955,6 +6984,8 @@ namespace BP.WF
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
             }
 
+           
+
             string dbstr = SystemConfig.AppCenterDBVarStr;
             if (DataType.IsNullOrEmpty(starter))
                 starter = WebUser.No;
@@ -7158,7 +7189,7 @@ namespace BP.WF
         public static Int64 Node_CreateStartNodeWork(string flowNo, Hashtable htWork = null, DataSet workDtls = null,
             string flowStarter = null, string title = null, Int64 parentWorkID = 0, string parentFlowNo = null, int parentNDFrom = 0)
         {
-
+          
             if (DataType.IsNullOrEmpty(flowStarter))
             {
                 flowStarter = WebUser.No;
@@ -8720,7 +8751,7 @@ namespace BP.WF
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);
 
-
+               
 
                 GenerWorkerList gwl = new GenerWorkerList();
                 int i = gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
@@ -8884,7 +8915,7 @@ namespace BP.WF
                 {
                     if (nd.IsEndNode == false && WebUser.IsAdmin == false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
-                            return "当前人员，没有权限执行保存.";
+                            return "没有执行保存.";
                     //这里取消了保存异常.
                     //throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }
@@ -8937,7 +8968,7 @@ namespace BP.WF
                         default:
                             break;
                     }
-
+                   
                     if (wk.Row.ContainsKey(str))
                     {
                         wk.SetValByKey(str, htWork[str]);
@@ -10762,8 +10793,7 @@ namespace BP.WF
         /// <param name="ndFrom">节点从</param>
         /// <param name="workid">工作ID</param>
         /// <returns>返回可以到达的节点</returns>
-        public static Nodes WorkOpt_GetToNodes(string flowNo, int ndFrom, 
-            Int64 workid, Int64 FID)
+        public static Nodes WorkOpt_GetToNodes(string flowNo, int ndFrom, Int64 workid, Int64 FID)
         {
             Nodes nds = new Nodes();
 
@@ -11319,7 +11349,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="workId"></param>
         /// <returns></returns>
-        public static Int64 GetRootWorkIDBySQL(Int64 workId, Int64 pworkid)
+        public static Int64 GetRootWorkIDBySQL(Int64 workId,Int64 pworkid)
         {
             if (pworkid == 0)
                 return workId;
@@ -11331,60 +11361,194 @@ namespace BP.WF
                 return gwf.WorkID;
             return gwf.PWorkID;
 
-            string sql = "";
-            switch (SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    sql = ";WITH subqry AS";
-                    sql += " (";
-                    sql += " SELECT  gwf.WorkID, gwf.PWorkID FROM   WF_GenerWorkFlow  gwf  WHERE WorkID =" + workId;
-                    sql += " UNION ALL";
-                    sql += " SELECT  gwf.WorkID, gwf.PWorkID FROM WF_GenerWorkFlow  gwf, subqry";
-                    sql += " WHERE gwf.WorkID = subqry.PWorkID";
-                    sql += "  )";
-                    sql += " SELECT WorkID FROM subqry WHERE PWorkID = 0";
-                    break;
-                case DBType.Oracle:
-                    sql = "SELECT WorkID FROM(SELECT gwf.*";
-                    sql += " FROM WF_GENERWORKFLOW gwf";
-                    sql += " START WITH WorkID = " + workId;
-                    sql += " CONNECT BY PRIOR PWorkID = WorkID)";
-                    sql += " WHERE PWorkID = 0";
-                    break;
-                case DBType.MySQL:
-                    sql = "SELECT WorkID FROM ( ";
-                    sql += " SELECT gwf2.WorkID,gwf2.PWorkID";
-                    sql += " FROM(";
-                    sql += " SELECT";
-                    sql += " @r AS _WorkID,";
-                    sql += " (SELECT @r:= PWorkID FROM WF_GenerWorkFlow WHERE WorkID = _WorkID) AS PWorkID,";
-                    sql += " @l := @l + 1 AS lvl";
-                    sql += " FROM";
-                    sql += " (SELECT @r:= " + workId + ", @l:= 0) vars,";
-                    sql += " WF_GenerWorkFlow h";
-                    sql += " WHERE @r != 0) T1";
-                    sql += " JOIN WF_GenerWorkFlow gwf2";
-                    sql += " ON T1._WorkID = gwf2.WorkID";
-                    sql += " ) X where PWorkID = 0";
-                    break;
-                case DBType.PostgreSQL:
-                    sql = "WITH RECURSIVE subqry AS (";
-                    sql += " SELECT WorkID, PWorkID FROM WF_GenerWorkFlow WHERE WorkID = " + workId;
-                    sql += " UNION ALL";
-                    sql += " SELECT gwf.WorkID,gwf.PWorkID FROM WF_GenerWorkFlow gwf, subqry WHERE gwf.WorkID = subqry.PWorkID";
-                    sql += " )";
-                    sql += " SELECT WorkID FROM subqry Where PWorkID = 0";
-                    break;
-                default:
-                    throw new Exception("err@其他的类型的数据库还没有处理");
-                    break;
-
-
-            }
-            return DBAccess.RunSQLReturnValInt(sql);
+      
         }
 
         #endregion
+
+        private static string GetParentChildWorkID(Int64 workid,string workids)
+        {
+            //加上当前workid
+            workids += workid + ",";
+            string sql = "";
+            //递归获取该流程的父级WorkID;
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+           
+           //获取子级
+            sql = "SELECT WORKID FROM WF_GenerWorkFlow Where PWorkID = " + workid;
+            string vals = DBAccess.RunSQLReturnStringIsNull(sql,"");
+            if (DataType.IsNullOrEmpty(vals) == true)
+                return workids;
+            else
+            {
+                string[] strs = vals.Split(',');
+                foreach (string str in strs)
+                     GetParentChildWorkID(Int64.Parse(str), workids);
+            }
+
+            //获取他的父级
+            sql = "SELECT PWORKID FROM WF_GenerWorkFlow Where WorkID = " + gwf.PWorkID;
+            Int64 pworkid = DBAccess.RunSQLReturnValInt(sql);
+            if (pworkid == 0)
+                return workids;
+             GetParentChildWorkID(pworkid, workids);
+
+            return workids;
+        }
+        /// <summary>
+        /// 求出WhoIsPK的
+        /// </summary>
+        /// <param name="workid"></param>
+        /// <param name="pworkid"></param>
+        /// <param name="fid"></param>值
+        /// <returns>PKVAl</returns>
+        public static string GetAthRefPKVal(Int64 workid,Int64 pworkid,Int64 fid,int fk_node,string fk_mapData,FrmAttachment athDesc)
+        {
+            Int64 pkval = 0;
+            if (fk_node == 0 || fk_node == 9999)
+                return "0";
+            AthCtrlWay athCtrlWay = athDesc.HisCtrlWay;
+            Node nd = new Node(fk_node);
+            //表单方案
+            FrmNode fn = new FrmNode(fk_node, fk_mapData);
+            //树形表单
+            if (nd.HisFormType == NodeFormType.SheetTree)
+                athCtrlWay = AthCtrlWay.WorkID;
+            //单表单
+            else if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                switch (fn.WhoIsPK)
+                {
+                    case WhoIsPK.OID:
+                        athCtrlWay = AthCtrlWay.WorkID;
+                        break;
+                    case WhoIsPK.FID:
+                        athCtrlWay = AthCtrlWay.FID;
+                        break;
+                    case WhoIsPK.PWorkID:
+                        athCtrlWay = AthCtrlWay.PWorkID;
+                        break;
+                    case WhoIsPK.P2WorkID:
+                        athCtrlWay = AthCtrlWay.P2WorkID;
+                        break;
+                    case WhoIsPK.P3WorkID:
+                        athCtrlWay = AthCtrlWay.P3WorkID;
+                        break;
+                    case WhoIsPK.RootFlowWorkID:
+                        athCtrlWay = AthCtrlWay.RootFlowWorkID;
+                        break;
+                    default:
+                        athCtrlWay = athDesc.HisCtrlWay;
+                        break;
+                }
+
+            }
+
+            //根据控制权限获取RefPK的值
+            if (athCtrlWay == AthCtrlWay.WorkID)
+                pkval = workid;
+
+            if (athCtrlWay == AthCtrlWay.FID)
+                pkval = fid;
+
+            if (athCtrlWay == AthCtrlWay.PWorkID)
+                if (pworkid != 0)
+                    pkval = pworkid;
+
+
+            if (athCtrlWay == AthCtrlWay.P2WorkID)
+            {
+                //根据流程的PWorkID获取他的爷爷流程
+                pkval = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0);
+            }
+            if (athCtrlWay == AthCtrlWay.P3WorkID)
+            {
+                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
+                //根据流程的PWorkID获取他的P2流程
+                pkval = DBAccess.RunSQLReturnValInt(sql, 0);
+            }
+            if (athCtrlWay == AthCtrlWay.RootFlowWorkID)
+                pkval = BP.WF.Dev2Interface.GetRootWorkIDBySQL(workid, pworkid);
+            return pkval.ToString();
+        }
+
+
+        public static string GetDtlRefPKVal(Int64 workid, Int64 pworkid, Int64 fid, int fk_node, string fk_mapData, MapDtl mapDtl)
+        {
+            Int64 pkval = 0;
+            if (fk_node == 0 || fk_node == 9999)
+                return "0";
+
+            DtlOpenType dtlOpenType = mapDtl.DtlOpenType;
+            Node nd = new Node(fk_node);
+            //表单方案
+            FrmNode fn = new FrmNode(fk_node, fk_mapData);
+            //树形表单
+            if (nd.HisFormType == NodeFormType.SheetTree)
+                dtlOpenType = DtlOpenType.ForWorkID;
+            //单表单
+            else if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                switch (fn.WhoIsPK)
+                {
+                    case WhoIsPK.OID:
+                        dtlOpenType = DtlOpenType.ForWorkID;
+                        break;
+                    case WhoIsPK.FID:
+                        dtlOpenType = DtlOpenType.ForFID;
+                        break;
+                    case WhoIsPK.PWorkID:
+                        dtlOpenType = DtlOpenType.ForWorkID;
+                        break;
+                    case WhoIsPK.P2WorkID:
+                        dtlOpenType = DtlOpenType.ForP2WorkID;
+                        break;
+                    case WhoIsPK.P3WorkID:
+                        dtlOpenType = DtlOpenType.ForP3WorkID;
+                        break;
+                    case WhoIsPK.RootFlowWorkID:
+                        dtlOpenType = DtlOpenType.RootFlowWorkID;
+                        break;
+                    default:
+                        dtlOpenType = mapDtl.DtlOpenType;
+                        break;
+                }
+
+            }
+
+            //根据控制权限获取RefPK的值
+            if (dtlOpenType == DtlOpenType.ForWorkID)
+                pkval = workid;
+            if (dtlOpenType == DtlOpenType.ForFID)
+                pkval = fid;
+
+            if (dtlOpenType == DtlOpenType.ForP2WorkID)
+                if (pworkid != 0)
+                    pkval = pworkid;
+
+
+            if (dtlOpenType == DtlOpenType.ForP2WorkID)
+            {
+                //根据流程的PWorkID获取他的爷爷流程
+                pkval = DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pworkid, 0);
+            }
+            if (dtlOpenType == DtlOpenType.ForP3WorkID)
+            {
+                string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + pworkid + ")";
+                //根据流程的PWorkID获取他的P2流程
+                pkval = DBAccess.RunSQLReturnValInt(sql, 0);
+            }
+            if (dtlOpenType == DtlOpenType.RootFlowWorkID)
+            {
+                if(fid!=0)
+                    pkval = BP.WF.Dev2Interface.GetRootWorkIDBySQL(fid, pworkid);
+                else
+                    pkval = BP.WF.Dev2Interface.GetRootWorkIDBySQL(workid, pworkid);
+            }
+               
+
+            return pkval.ToString();
+        }
     }
 
 }

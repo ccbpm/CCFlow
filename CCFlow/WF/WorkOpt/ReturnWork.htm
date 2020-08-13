@@ -100,7 +100,7 @@
 
             //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
             var node = new Entity("BP.WF.Node", pageData.FK_Node);
-            alert(node.IsKillEtcThread);
+            // alert(node.IsKillEtcThread);
 
             if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1")
                 $("#btnIsKillEtcThread").css("display", "visibility");
@@ -284,7 +284,7 @@
         <div style="height:100px;">上传附件预留：该功能正在建设中</div>
     -->
 
-    <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;" >
+    <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;">
 
         <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; visibility:hidden; ">
             <label>

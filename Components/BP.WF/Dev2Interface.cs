@@ -6230,7 +6230,7 @@ namespace BP.WF
             gwf.TodoEmps = todoEmpsExts;
 
             //发送人.
-            gwf.Sender = WebUser.No + "," + WebUser.Name;
+            gwf.Sender = WebUser.No + "," + WebUser.Name+";";
             gwf.SendDT = DataType.CurrentDataTime;
 
             gwf.Paras_ToNodes = "";

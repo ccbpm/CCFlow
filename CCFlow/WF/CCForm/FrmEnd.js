@@ -532,7 +532,7 @@ function AfterBindEn_DealMapExt(frmData) {
         var PopModel = mapAttr.GetPara("PopModel");
 
         if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
-            if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable==0 || $("#TB_" + mapAttr.KeyOfEn).length == 0)
+            if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable==0 || pageData.IsReadonly=="1" || $("#TB_" + mapAttr.KeyOfEn).length == 0)
                 continue;
             PopMapExt(mapAttr, mapExt, frmData);
             continue;
@@ -588,7 +588,7 @@ function AfterBindEn_DealMapExt(frmData) {
             case "MultipleChoiceSmall":
                 if (mapExt.DoWay == 0)
                     break;
-                if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                if ((mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1") && mapExt.Tag == 0) {
                     var oid = (pageData.WorkID || pageData.OID || "");
                     var ens = new Entities("BP.Sys.FrmEleDBs");
                     ens.Retrieve("FK_MapData", mapAttr.FK_MapData, "EleID", mapAttr.KeyOfEn, "RefPKVal", oid);
@@ -609,7 +609,7 @@ function AfterBindEn_DealMapExt(frmData) {
             case "SingleChoiceSmall":
                 if (mapExt.DoWay == 0)
                     break;
-                if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                if ((mapAttr.UIIsEnable == 0 || pageData.IsReadonly=="1") && mapExt.Tag == 0) {
                     var val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
                     $("#TB_" + mapAttr.KeyOfEn).val(val);
                     break;
@@ -618,7 +618,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
 
             case "MultipleChoiceSearch":
-                if (mapAttr.UIIsEnable == 0)
+                if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
                     break;
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;

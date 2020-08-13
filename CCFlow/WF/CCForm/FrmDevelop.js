@@ -372,6 +372,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
     //    figure_Develop_Btn(frmBtn);
 
     //}
+    //审核组件的判断
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
         if (nodeComponents != null) {
@@ -763,6 +764,8 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
 
 //审核组件
 function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
+    
+    var currentURL = window.location.href;
     //这个修改数据的位置
     if (currentURL != undefined && currentURL.indexOf("AdminFrm.htm") != -1) {
         $(element).remove(); 
@@ -770,8 +773,11 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     }
 
     var sta = wf_node.FWCSta;
-    if (sta == 0 || sta == undefined)
-        return $('');
+    if (sta == 0 || sta == undefined) {
+        $(element).remove();  //移除审核组件图片
+        return $('还未开始审核');
+    }
+       
 
     var node = frmData.WF_Node;
     if (node != undefined)
@@ -781,12 +787,18 @@ function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     if (frmNode != undefined)
         frmNode = frmNode[0];
 
-    if (node == null)
+    if (node == null) {
+        $(element).remove();
         return $('');
-    if (frmNode != null && node.FormType == 5 && frmNode.IsEnableFWC == 0)
+    }
+       
+    if (frmNode != null && node.FormType == 5 && frmNode.IsEnableFWC == 0) {
+        $(element).remove();
         return $('');
+    }
+       
 
-    var currentURL = window.location.href;
+   
 
     var url = "./WorkOpt/";
     if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
@@ -868,13 +880,13 @@ function figure_Develop_Map(MapID, UIIsEnable) {
 
     });
 }
-function setHandWriteSrc(HandWriteID, imagePath) {
-    imagePath = "../../" + imagePath.substring(imagePath.indexOf("DataUser"));
-    document.getElementById("Img" + HandWriteID).src = "";
-    $("#Img" + HandWriteID).attr("src", imagePath);
-    $("#TB_" + HandWriteID).val(imagePath);
-    $('#eudlg').dialog('close');
-}
+//function setHandWriteSrc(HandWriteID, imagePath) {
+//    imagePath = "../../" + imagePath.substring(imagePath.indexOf("DataUser"));
+//    document.getElementById("Img" + HandWriteID).src = "";
+//    $("#Img" + HandWriteID).attr("src", imagePath);
+//    $("#TB_" + HandWriteID).val(imagePath);
+//    $('#eudlg').dialog('close');
+//}
 
 function GetFieldAth(mapAttr) {
     //获取上传附件列表的信息及权限信息

@@ -680,6 +680,9 @@ function GenerWorkNode() {
     //装载表单数据与修改表单元素风格.
     LoadFrmDataAndChangeEleStyle(flowData);
 
+    AfterBindEn_DealMapExt(flowData);
+
+
     //初始化Sys_MapData
     var h = flowData.Sys_MapData[0].FrmH;
     var w = flowData.Sys_MapData[0].FrmW;

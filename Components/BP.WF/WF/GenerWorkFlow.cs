@@ -411,7 +411,7 @@ namespace BP.WF
 
                 //检查数据正确性.
                 if (value.Contains(",") == false || value.Contains(";") == false)
-                    throw new Exception("err@人员格式不正确，请联系管理员,格式为:No,Name;" + value);
+                    throw new Exception("err@设置的Sender人员格式不正确，请联系管理员,格式为:No,Name;" + value);
 
                 //发送人.
                 this.SetValByKey(GenerWorkFlowAttr.Sender, value);

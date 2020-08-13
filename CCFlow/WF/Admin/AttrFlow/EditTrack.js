@@ -178,7 +178,7 @@ function InitPage() {
         newRow += "<td >" + startTime + "</td>";
         newRow += "<td >" + endTime + "</td>";
         newRow += "<td >" + passTime + "</td>";
-        newRow += "<td ><a href=\"javascript:Edit('" + track.MyPK+"');\">修改</a></td>";
+        newRow += "<td ><a href=\"javascript:Edit('" + track.MyPK + "');\">修改</a></td>";
 
         newRow += "</tr>";
         $("tbody tr:last").after(newRow);
@@ -239,11 +239,16 @@ function InitPage() {
     }
 }
 
-function Edit(mypk)
-{
+function Edit(mypk) {
     var flowno = GetQueryString("FK_Flow");
-    var url = "/WF/Admin/AttrFlow/EditTrackDtl.htm?&MyPk=" + mypk + "&Fk_Flow=" + flowno;
-    window.OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200, "icon-edit", false);
+    var url = "EditTrackDtl.htm?&MyPk=" + mypk + "&Fk_Flow=" + flowno;
+
+    OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200, "icon-property", false, function () { }, null, function () {
+        location.reload();
+    });
+
+    // window.OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200,
+    //   "icon-edit", false);
 }
 
 function OpenFrm(nodeID) {

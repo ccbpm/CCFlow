@@ -1,88 +1,92 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>时间表</title>
+    <title>信息编辑</title>
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
-
-    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
-    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
-</head>
-<body>
     <script type="text/javascript">
-     
 
         $(function () {
 
-            var mypk = GetQueryString("MyPk");
-            var handler = new HttpHandler("BP.DOC.App_Page");
+            var mypk = GetQueryString("MyPK");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("EditTrack_Init");
-             if (data.indexOf("WorkCheck@") != -1) {
-            var val = data.replace('null', '').split("WorkCheck@");
-                 if (val.length == 2)
-                     data = val[1];
-                 else {
-                     data = "";
-                 }
-        }
+            var data = handler.DoMethodReturnString("EditTrackDtl_Init");
+            if (data.indexOf("WorkCheck@") != -1) {
+                var val = data.replace('null', '').split("WorkCheck@");
+                if (val.length == 2)
+                    data = val[1];
+                else {
+                    data = "";
+                }
+            }
 
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
                 return;
             }
-               
-            $("#Msg").val(data);
-      
+
+            $("#TB_Msg").val(data);
 
         });
 
-        function Save()
-        {
-           var mypk = GetQueryString("MyPk");
-            var handler = new HttpHandler("BP.DOC.App_Page");
+        function Delete() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var mypk = GetQueryString("MyPK");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
             handler.AddUrlData();
-            var msg = $("#Msg").val();
+            var data = handler.DoMethodReturnString("EditTrackDtl_Delete");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                return;
+            }
+            alert("删除成功.");
+            window.close(); //
+        }
+
+        function Save() {
+
+            var mypk = GetQueryString("MyPK");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            handler.AddUrlData();
+            var msg = $("#TB_Msg").val();
 
             if (msg == "" || msg == undefined || msg == null) {
                 alert("办理情况不能为空");
                 return;
             }
             handler.AddPara("Msg", msg);
-            var data = handler.DoMethodReturnString("EditTrack_Save");
-
+            var data = handler.DoMethodReturnString("EditTrackDtl_Save");
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
                 return;
             }
             alert("保存成功");
-               
-          
-
+            window.close(); //
         }
-
     </script>
+</head>
+<body>
 
-    <div class='container' style="padding-top:12px">
-        <table id="Table1" class="table table-hover" style="width:90%">
-            <tr>
-                <td>
-                    <input  type="text" id="Msg"/>
-                 
-
-                </td>
-            </tr>
-        </table>
-
-     <a href="javascript:Save();">保存</a>
-
-    </div>
+    <table id="Table1" style="width:90%;">
+        <tr>
+            <td>
+                <textarea type="text" id="TB_Msg" style="width:100%;">
+</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                <button onclick="Save()"> 保存</button>
+                <button onclick="Delete()"> 删除</button>
+            </th>
+        </tr>
+    </table>
 
 </body>
 </html>

@@ -5,6 +5,7 @@ using System.Data;
 using BP.Sys;
 using BP.En;
 using BP.Web;
+using System.Linq;
 
 namespace BP.En
 {
@@ -363,6 +364,19 @@ namespace BP.En
                         }
                         continue;
                     default:
+                        if (SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
+                        {
+                            if (attr.UIIsReadonly == true)
+                            {
+                                this.SetValByKey(attr.Key, HttpContextHelper.RequestParams(v.Replace("@", "")));
+                            }
+                            else
+                            {
+                                if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                    this.SetValByKey(attr.Key, HttpContextHelper.RequestParams(v.Replace("@", "")));
+                            }
+                            continue; 
+                        }
                         GloVar gloVar = new GloVar();
                         gloVar.PKVal = v;
                         int count = gloVar.RetrieveFromDBSources();

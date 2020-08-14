@@ -4952,8 +4952,6 @@ namespace BP.WF
             gwl.Update();
 
             return BP.WF.Glo.multilingual("您是最后一个会签该工作的处理人，已经提醒主持人({0}, {1})处理当前工作.", "WorkNode", "you_are_the_last_operator", gwl.FK_Emp, gwl.FK_EmpText);
-
-
         }
         /// <summary>
         /// 如果是协作.
@@ -5037,7 +5035,7 @@ namespace BP.WF
                 return true;
             }
 
-            throw new Exception("@不应该运行到这里，DealTeamUpNode。");
+            throw new Exception("@不应该运行到这里，DealTeamUpNode。当前登录人员["+WebUser.No+","+WebUser.Name+"],请确认人员信息.WorkID="+this.WorkID);
         }
         /// <summary>
         /// 如果是协作

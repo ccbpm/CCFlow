@@ -1509,6 +1509,14 @@ namespace BP.En
                             val = val + ", ISNULL(" + mainTable + attr.Field + ",1) " + attr.Key;
                         break;
                     case DataType.AppDate:
+                        if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                            val = val + "," + "CONVERT(varchar(100), "+mainTable + attr.Field+", 23)"  + " " + attr.Key;
+                        else
+                        {
+                            val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +
+                                                         "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
+                        }
+                        break;
                     case DataType.AppDateTime:
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                             val = val + "," + mainTable + attr.Field + " " + attr.Key;

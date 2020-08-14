@@ -43,7 +43,8 @@ namespace BP.En
                 if (_HisUAC == null)
                 {
                     _HisUAC = new UAC();
-                    if (BP.Web.WebUser.No == "admin")
+                    //if (BP.Web.WebUser.No == "admin")
+                    if (BP.Web.WebUser.IsAdmin)
                     {
                         _HisUAC.IsAdjunct = false;
                         _HisUAC.IsDelete = true;

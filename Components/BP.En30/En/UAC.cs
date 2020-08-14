@@ -75,15 +75,17 @@ namespace BP.En
         /// </summary>
         public UAC OpenForSysAdmin()
         {
-            if (BP.Web.WebUser.No.Equals("admin") == true)
+           // if (BP.Web.WebUser.No.Equals("admin") == true)
+            if (BP.Web.WebUser.IsAdmin)
                 this.OpenAll();
 
             return this;
         }
         public UAC OpenForAppAdmin()
         {
-            if (BP.Web.WebUser.No != null
-                && BP.Web.WebUser.No.Contains("admin") == true)
+            /*if (BP.Web.WebUser.No != null
+                && BP.Web.WebUser.No.Contains("admin") == true)*/
+            if (BP.Web.WebUser.IsAdmin)
             {
                 this.OpenAll();
             }
@@ -92,8 +94,9 @@ namespace BP.En
 
         public UAC OpenForAdmin()
         {
-            if (BP.Web.WebUser.No != null
-               && BP.Web.WebUser.IsAdmin == true)
+            /*if (BP.Web.WebUser.No != null
+               && BP.Web.WebUser.IsAdmin == true)*/
+            if (BP.Web.WebUser.IsAdmin)
             {
                 this.OpenAll();
             }

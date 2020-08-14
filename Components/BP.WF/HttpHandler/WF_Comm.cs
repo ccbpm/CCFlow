@@ -1896,6 +1896,7 @@ namespace BP.WF.HttpHandler
             dtM.Columns.Add("IsCanBatch");
             dtM.Columns.Add("RefAttrKey");
             dtM.Columns.Add("ClassMethodName");
+            dtM.Columns.Add("IsShowForEnsCondtion");
 
             RefMethods rms = map.HisRefMethods;
             foreach (RefMethod item in rms)
@@ -1926,6 +1927,7 @@ namespace BP.WF.HttpHandler
                 dr["IsCanBatch"] = item.IsCanBatch;
                 dr["GroupName"] = item.GroupName;
                 dr["ClassMethodName"] = item.ClassMethodName;
+                dr["IsShowForEnsCondtion"] = item.IsShowForEnsCondtion;
 
                 dtM.Rows.Add(dr); //增加到rows.
             }

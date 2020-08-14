@@ -106,20 +106,22 @@ function GenerDevelopFrm(wn, fk_mapData) {
             var defVal = mapAttr.DefVal;
             if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
                 bit = defVal.substring(defVal.indexOf(".") + 1).length;
-           
+
+            obj.attr("data-bit", bit);
+
             obj.bind('focus', function () {
-                removeplaceholder(this, bit);
+                removeplaceholder(this, $(this).attr("data-bit"));
             });
 
             obj.bind('blur', function () {
-                addplaceholder(this, bit);
+                addplaceholder(this, $(this).attr("data-bit"));
                 if (this.getAttribute("data-type") == "Money")
-                    numberFormat(this, bit);
+                    numberFormat(this, $(this).attr("data-bit"));
             });
 
            
             obj.bind('keyup', function () {
-                limitLength(this, bit);
+                limitLength(this, $(this).attr("data-bit"));
                 if (this.getAttribute("data-type") == "Int")
                     valitationAfter(this, 'int');
 

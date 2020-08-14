@@ -74,7 +74,7 @@
             if (workID == null || workID == undefined)
                 workID = 0;
 
-            if (workID == 0) {
+            if (workID == 0 || workID === "") {
 
                 var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                 handler.AddUrlData();
@@ -84,8 +84,10 @@
                     alert(workID);
                     return;
                 }
-
-                var url = window.location.href + "&WorkID=" + workID + "&OID=" + workID;
+                var url = window.location.href;
+                url = url.replace("&WorkID=", "");
+                url = url.replace("&OID=", "");
+                url = url + "&WorkID=" + workID + "&OID=" + workID;
                 window.location.href = url;
                 return;
             }

@@ -875,6 +875,20 @@
                         var html = "";
                         for (var k = 0; k < dtMs.length; k++) {
                             var dtm = dtMs[k];
+                            var isShowForEnsCondtion = dtm.IsShowForEnsCondtion;
+                            if (isShowForEnsCondtion != null && isShowForEnsCondtion != "") {
+                                var strs = isShowForEnsCondtion.split("@");
+                                var isShow = true;
+                                $.each(strs, function (i, obj) {
+                                    var items = obj.split("=");
+                                    if (row[items[0]] != items[1]) {
+                                        isShow = false;
+                                        return true;
+                                    }
+                                });
+                                if (isShow == false)
+                                    continue;
+                            }
                             var warning = dtm.Warning;
                             var refMethodType = parseInt(dtm.RefMethodType);
                             var url = dtm.Url + pkval;

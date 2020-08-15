@@ -4157,7 +4157,7 @@ namespace BP.WF
             if (num == 0)
             {
                 //如果没有更新到，就写入.
-                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null, null, null, null, fwcView);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, writeImg, optionName, null, null, null, null, null, fwcView);
             }
         }
 

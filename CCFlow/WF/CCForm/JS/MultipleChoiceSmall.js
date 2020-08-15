@@ -51,18 +51,15 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
             break;
         case 4:
             var tag4SQL = mapExt.Tag4;
-            tag4SQL = tag4SQL.replace('@WebUser.No', webUser.No);
-            tag4SQL = tag4SQL.replace('@WebUser.Name', webUser.Name);
-            tag4SQL = tag4SQL.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
-            tag4SQL = tag4SQL.replace('@WebUser.FK_Dept', webUser.FK_Dept);
 
+            tag4SQL = DealExp(tag4SQL, webUser);
             if (tag4SQL.indexOf('@') == 0) {
                 alert('约定的变量错误:' + tag4SQL + ", 没有替换下来.");
                 return;
             }
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
-            handler.AddPara("SQL", tag4SQL);
-            data = handler.DoMethodReturnString("RunSQL_Init");
+            tag4SQL = tag4SQL.replace(/~/g, "'");
+
+            data = DBAccess.RunSQLReturnTable(tag4SQL);
             break;
     }
 

@@ -11445,7 +11445,7 @@ namespace BP.WF
             AthCtrlWay athCtrlWay = athDesc.HisCtrlWay;
             Node nd = new Node(fk_node);
             //表单方案
-            FrmNode fn = new FrmNode(fk_node, athDesc.FK_MapData);
+            FrmNode fn = new FrmNode(fk_node, fk_mapData);
             //树形表单
             if (nd.HisFormType == NodeFormType.SheetTree)
                 athCtrlWay = AthCtrlWay.WorkID;

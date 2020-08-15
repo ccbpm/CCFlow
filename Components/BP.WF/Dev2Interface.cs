@@ -578,46 +578,78 @@ namespace BP.WF
         {
             #region 获取track数据.
            
-            string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
             string workids = "";
+            string sql = "";
+            DataTable dt = null;
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            //if(fid ==0)
-            //    workids = GetParentChildWorkID(workid, "");
-            //else
-            //    workids = GetParentChildWorkID(fid, "");
-
-            //workids = workids.Substring(0, workids.Length - 1);
-
-            //if (workids.Contains(",") == true)
-            //{
-            //    sqlOfWhere1 = " WHERE (FID IN ("+ workids + ") OR WorkID IN (" + workids + "))  ";
-
-            //}
-            //else
-            //{
-            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
-            //    ps.Add("WorkID11", Int64.Parse(workids));
-            //    ps.Add("WorkID12", Int64.Parse(workids));
-            //}
             if (fid == 0)
+                workids = GetParentChildWorkID(workid, "");
+            else
+                workids = GetParentChildWorkID(fid, "");
+
+            workids = workids.Substring(0, workids.Length - 1);
+            //包含父子流程
+            if (workids.Contains(",") == true)
             {
-                sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
-                ps.Add("WorkID11", workid);
-                ps.Add("WorkID12", workid);
+
             }
             else
-            { //获取分合流的数据
-                sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
-                ps.Add("FID11", fid);
-                ps.Add("FID12", fid);
+            {
+                sqlOfWhere1 = " WHERE FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12   ";
+                ps.Add("WorkID11", Int64.Parse(workids));
+                ps.Add("WorkID12", Int64.Parse(workids));
+
             }
 
-            string sql = "";
-            sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT ASC ";
+           if (workids.Contains(",") == true)
+            {
+                //根据workids获取对应的流程
+                sql = "SELECT FK_Flow From WF_GenerWorkFlow Where WorkID IN (" + workids + ") ORDER BY WorkID ASC";
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+                sqlOfWhere1 = " WHERE FID IN (" + workids + ") OR WorkID IN (" + workids + ")  ";
+                sql = "SELECT * From (";
+                int idx = 0;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (idx != 0)
+                        sql += " UNION ";
+                    sql += "SELECT MyPK, ActionType, ActionTypeText, FID, WorkID, NDFrom, NDFromT, NDTo, NDToT, EmpFrom, EmpFromT, EmpTo, EmpToT, RDT, WorkTimeSpan, Msg, NodeData, Exer, Tag FROM ND" + int.Parse(dr[0].ToString()) + "Track " + sqlOfWhere1;
+                    idx++;
+                }
+                sql += " )AS Track  ORDER BY RDT ASC ";
+
+
+            }
+            else
+            {
+                sqlOfWhere1 = " WHERE FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12   ";
+                ps.Add("WorkID11", Int64.Parse(workids));
+                ps.Add("WorkID12", Int64.Parse(workids));
+                sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT ASC ";
+                ps.SQL = sql;
+            }
+            //if (fid == 0)
+            //{
+            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
+            //    ps.Add("WorkID11", workid);
+            //    ps.Add("WorkID12", workid);
+            //}
+            //else
+            //{ //获取分合流的数据
+            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
+            //    ps.Add("FID11", fid);
+            //    ps.Add("FID12", fid);
+            //}
+
+            //string sql = "SELECT * From";
+            //sql += "(SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1;
+            //sql += "UNION SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND8Track " + sqlOfWhere1+")";
+            //sql += " AS Track  ORDER BY RDT ASC ";
             ps.SQL = sql;
-            DataTable dt = null;
+           
 
             try
             {
@@ -11383,15 +11415,18 @@ namespace BP.WF
             {
                 string[] strs = vals.Split(',');
                 foreach (string str in strs)
-                     GetParentChildWorkID(Int64.Parse(str), workids);
+                    workids =GetParentChildWorkID(Int64.Parse(str), workids);
             }
+
+            if (gwf.PWorkID == 0)
+                return workids;
 
             //获取他的父级
             sql = "SELECT PWORKID FROM WF_GenerWorkFlow Where WorkID = " + gwf.PWorkID;
             Int64 pworkid = DBAccess.RunSQLReturnValInt(sql);
             if (pworkid == 0)
                 return workids;
-             GetParentChildWorkID(pworkid, workids);
+            GetParentChildWorkID(pworkid, workids);
 
             return workids;
         }
@@ -11410,7 +11445,7 @@ namespace BP.WF
             AthCtrlWay athCtrlWay = athDesc.HisCtrlWay;
             Node nd = new Node(fk_node);
             //表单方案
-            FrmNode fn = new FrmNode(fk_node, fk_mapData);
+            FrmNode fn = new FrmNode(fk_node, athDesc.FK_MapData);
             //树形表单
             if (nd.HisFormType == NodeFormType.SheetTree)
                 athCtrlWay = AthCtrlWay.WorkID;

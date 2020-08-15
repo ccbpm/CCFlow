@@ -1510,7 +1510,12 @@ namespace BP.En
                         break;
                     case DataType.AppDate:
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
-                            val = val + "," + "CONVERT(varchar(100), "+mainTable + attr.Field+", 23)"  + " " + attr.Key;
+                        {
+                            if (SystemConfig.CustomerNo == "ASSET")
+                                val = val + "," + "CONVERT(varchar(100), getdate(), 23)" + " " + attr.Key;
+                            else
+                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                        }  
                         else
                         {
                             val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +

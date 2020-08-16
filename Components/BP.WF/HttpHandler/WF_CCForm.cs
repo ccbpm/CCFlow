@@ -1976,7 +1976,7 @@ namespace BP.WF.HttpHandler
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
 
-            string dtlRefPKVal = ""; //从表的RefPK
+            string dtlRefPKVal = this.RefPKVal; //从表的RefPK
             #region 如果是测试，就创建表.
             if (this.FK_Node == 999999 || this.GetRequestVal("IsTest") != null)
             {
@@ -1991,7 +1991,8 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0 && this.FK_Node != 999999)
                 frmID = frmID.Replace("_" + this.FK_Node, "");
 
-            if (this.FK_Node != 0 && mdtl.FK_MapData != "Temp"
+            if (this.FK_Node != 0 
+                && mdtl.FK_MapData.Equals("Temp")==false
                 && this.EnsName.Contains("ND" + this.FK_Node) == false
                 && this.FK_Node != 999999)
             {
@@ -2023,7 +2024,8 @@ namespace BP.WF.HttpHandler
                   
                 }
                 dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, frmID, mdtl);
-                if (dtlRefPKVal.Equals("0") == true)
+                if (dtlRefPKVal.Equals("0") == true 
+                    || DataType.IsNullOrEmpty(dtlRefPKVal))
                     dtlRefPKVal = this.RefPKVal;
 
             }

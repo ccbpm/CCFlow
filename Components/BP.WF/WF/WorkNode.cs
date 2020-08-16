@@ -4876,7 +4876,6 @@ namespace BP.WF
         /// <returns></returns>
         private string DealAlertZhuChiRen()
         {
-
             /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为 0 */
             //获得主持人信息.
             GenerWorkerList gwl = new GenerWorkerList();
@@ -4895,7 +4894,6 @@ namespace BP.WF
 
             //设置为未读.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
-
 
             //设置最后处理人.
             this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";

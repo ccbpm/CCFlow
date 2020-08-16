@@ -393,7 +393,7 @@ namespace BP.WF.Template
                 }
                 else
                 {
-                    sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='@WebUser.OrgNo'";
+                    sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='@WebUser.OrgNo' ORDER BY NO, IDX";
                     map.AddDDLSQL(FlowAttr.FK_FlowSort, null, "类别", sql, true);
                 }
 

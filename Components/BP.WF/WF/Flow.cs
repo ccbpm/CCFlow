@@ -849,8 +849,11 @@ namespace BP.WF
                 {
                     rpt.OID = wk.OID;
                     int i= rpt.RetrieveFromDBSources();
+
                     if (i == 0)
-                        throw new Exception("err@没有保存到流程表单数据,系统错误."+rpt.OID+",请联系管理员.");
+                        throw new Exception("err@没有保存到流程表单数据" + rpt.EnMap.PhysicsTable + ",表单表" + wk.EnMap.PhysicsTable + " 系统错误." + rpt.OID + ",请联系管理员.");
+
+
 
                     rpt.FID = 0;
                     rpt.FlowStartRDT = DataType.CurrentDataTime;
@@ -863,7 +866,9 @@ namespace BP.WF
 
                 //检查报表.
                 this.CheckRpt();
-                throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
+                int i = wk.DirectInsert();
+                if(i ==0)
+                    throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
             //在创建WorkID的时候调用的事件.

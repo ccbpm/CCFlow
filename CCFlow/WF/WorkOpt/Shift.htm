@@ -43,6 +43,7 @@
     <script type="text/javascript">
         var param = {};
         $(function () {
+
             //初始化页面移交页面
             param = {
                 FK_Node: GetQueryString('FK_Node'),
@@ -122,7 +123,7 @@
                 window.close();
 
             }, 3000);
-
+            window.close();
         }
 
         //取消移交
@@ -169,6 +170,12 @@
             <!--<input type="button" id="BtnSelectEmps" value='选择接受人' />
             移交原因:
             <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>-->
+            <br />
+            <br />
+            <br />
+            移交原因:
+            <br />
+            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
         </div>
     </div>
     <div style="position: fixed; bottom: 60px; right: 5px;">

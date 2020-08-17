@@ -2114,6 +2114,11 @@ namespace BP.CCBill
                     }
                     else
                     {
+                        if (item.IsNum)
+                        {
+                            if (DataType.IsNullOrEmpty(val) == true || val.Equals("null")==true)
+                                val = "0";
+                        }
                         en.SetValByKey(item.Key, val);
                     }
                    

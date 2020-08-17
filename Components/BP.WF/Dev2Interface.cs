@@ -9914,8 +9914,10 @@ namespace BP.WF
                 //把自己的待办更新到被移交人身上.
                 string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
                 int myNum=DBAccess.RunSQL(sql);
+
+                #region 判断是否是,admin的移交.
                 if (myNum == 0)
-                {
+                { 
                     //说明移交人是 admin，执行的.
                     GenerWorkerLists mygwls = new GenerWorkerLists();
                     mygwls.Retrieve(GenerWorkerListAttr.WorkID, workID,
@@ -9940,6 +9942,7 @@ namespace BP.WF
                         break;
                     }
                 }
+                #endregion 判断是否是,admin的移交.
 
                 //记录日志.
                 Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,

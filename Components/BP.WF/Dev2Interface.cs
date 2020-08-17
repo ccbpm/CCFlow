@@ -9912,7 +9912,7 @@ namespace BP.WF
                     return "err@移交失败，您所移交的人员(" + emp.No + " " + emp.Name + ")已经在代办列表里.";
 
                 //把自己的待办更新到被移交人身上.
-                string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
+                string sql = "UPDATE WF_GenerWorkerlist SET IsRead=0, FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
                 int myNum=DBAccess.RunSQL(sql);
 
                 #region 判断是否是,admin的移交.
@@ -9937,6 +9937,8 @@ namespace BP.WF
 
                         item.FK_Dept = WebUser.FK_Dept;
                         item.FK_DeptT = WebUser.FK_DeptName;
+
+                        item.IsRead = false;
 
                         item.Insert(); //执行插入.
                         break;

@@ -673,9 +673,11 @@ namespace BP.WF
                         {
                             if (currNode.CondModel != DirCondModel.SendButtonSileSelect)
                             {
-                                currNode.CondModel = DirCondModel.SendButtonSileSelect;
-                                currNode.Update();
-                                throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
+                                // 2020.08.17 这里注释掉了， 有可能是到达的节点是，按照弹出窗体计算的. 
+                                // 不做强制修改.
+                                //currNode.CondModel = DirCondModel.SendButtonSileSelect;
+                                //currNode.Update();
+                                //throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
                             }
 
                             throw new Exception("@请选择下一步骤工作(" + toNode.Name + ")接受人员。");

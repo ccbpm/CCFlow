@@ -1452,7 +1452,6 @@ namespace BP.WF.Template
             //是否是发送返回节点？
             nd.IsSendBackNode = this.IsSendBackNode;
 
-
             if (nd.IsSendBackNode == true)
             {
                 //强制设置按照连接线控制.

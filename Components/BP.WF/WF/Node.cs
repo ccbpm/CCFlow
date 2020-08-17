@@ -38,7 +38,7 @@ namespace BP.WF
                 if (this.TodolistModel == TodolistModel.Teamup
                   && model == DirCondModel.SendButtonSileSelect
                   && this.IsEndNode == false)
-                    model=  DirCondModel.ByUserSelected;
+                    model = DirCondModel.ByUserSelected;
                 this.SetValByKey(NodeAttr.CondModel, (int)model);
             }
         }

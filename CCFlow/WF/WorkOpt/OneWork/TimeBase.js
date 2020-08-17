@@ -162,6 +162,8 @@ function InitPage() {
             if (msg == "" || msg == undefined)
                 msg = "无";
 
+            alert(msg);
+
             doc += "<p>";
             doc += "<font color=green><br>" + msg + "</font><br>";
             doc += "</p>";

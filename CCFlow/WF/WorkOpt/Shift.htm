@@ -91,7 +91,9 @@
             var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
 
             if (empNos == "" || empNos == undefined || empNos == null)
+                 alert("移交人不能为空");
                 return;
+                
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
@@ -167,9 +169,9 @@
             <button id="BtnSelectEmps" type="button" class="layui-btn layui-btn-normal" style="float:left">
                 <!--<img src="../Img/Btn/AddLeader.png" />--> 选人
             </button>
-            <!--<input type="button" id="BtnSelectEmps" value='选择接受人' />
-            移交原因:
-            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>-->
+            <input type="button" id="BtnSelectEmps" value='移交原因' />
+            <!--移交原因:-->
+            <textarea name="Message" id="Message" style="vertical-align: top; width: 100%;"></textarea>
             <br />
             <br />
             <br />

@@ -763,6 +763,7 @@ namespace BP.WF
                     wk.SetValByKey(GERptAttr.FK_Dept, emp.FK_Dept);
                     wk.FID = 0;
 
+                    #region 写入work 数据.
                     try
                     {
                         wk.DirectInsert();
@@ -770,7 +771,11 @@ namespace BP.WF
                     catch (Exception ex)
                     {
                         wk.CheckPhysicsTable();
+                        //检查报表,执行插入数据. 2020.08.18增加.
+                        this.CheckRpt();
+                        wk.DirectInsert();  //执行插入.
                     }
+                    #endregion 写入work 数据.
 
                     //设置参数.
                     foreach (string k in paras.Keys)
@@ -849,11 +854,8 @@ namespace BP.WF
                 {
                     rpt.OID = wk.OID;
                     int i= rpt.RetrieveFromDBSources();
-
                     if (i == 0)
                         throw new Exception("err@没有保存到流程表单数据" + rpt.EnMap.PhysicsTable + ",表单表" + wk.EnMap.PhysicsTable + " 系统错误." + rpt.OID + ",请联系管理员.");
-
-
 
                     rpt.FID = 0;
                     rpt.FlowStartRDT = DataType.CurrentDataTime;

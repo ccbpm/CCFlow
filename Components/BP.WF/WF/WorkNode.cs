@@ -3272,7 +3272,7 @@ namespace BP.WF
                             break;
                         // throw new Exception("@流程设计错误:请检查流程获取详细信息, 普通节点下面不能连接分合流节点(" + toND.Name + ").");
                         case RunModel.SubThread: /*1-5 普通节to子线程点 */
-                            throw new Exception(BP.WF.Glo.multilingual("@流程设计错误: 普通节点下面不能连接子线程节点{0}", "WorkNode", "workflow_error_3", toND.Name));
+                            throw new Exception(BP.WF.Glo.multilingual("@流程设计错误: 普通节点下面["+this.HisNode.Name+"]不能连接子线程节点{0}", "WorkNode", "workflow_error_3", toND.Name));
                         default:
                             throw new Exception(BP.WF.Glo.multilingual("@没有判断的节点类型({0}).", "WorkNode", "node_type_does_not_exist", toND.Name));
                             break;

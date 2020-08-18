@@ -2313,8 +2313,8 @@ namespace BP.WF
                 gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
                 gwf.WFState = WFState.Runing;
                 gwf.RDT = DataType.CurrentDataTime;
-                gwf.Starter = this.Execer;
-                gwf.StarterName = this.ExecerName;
+                gwf.Starter = this.HisGenerWorkFlow.Starter;
+                gwf.StarterName = this.HisGenerWorkFlow.StarterName;
                 gwf.FK_Flow = nd.FK_Flow;
                 gwf.FlowName = nd.FlowName;
                 gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;

@@ -2257,6 +2257,8 @@ namespace BP.WF
 
                     i += 1;
                     operators += wl.FK_Emp + ", " + wl.FK_EmpText + ";";
+                    empIDs += wl.FK_Emp + ",";
+                    empNames += wl.FK_EmpText + ",";
 
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET WorkID=" + dbStr + "WorkID1,FID=" + dbStr + "FID WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr + "WorkID2 AND FK_Node=" + dbStr + "FK_Node ";

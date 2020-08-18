@@ -619,7 +619,7 @@ namespace BP.WF
                     sql += "SELECT MyPK, ActionType, ActionTypeText, FID, WorkID, NDFrom, NDFromT, NDTo, NDToT, EmpFrom, EmpFromT, EmpTo, EmpToT, RDT, WorkTimeSpan, Msg, NodeData, Exer, Tag FROM ND" + int.Parse(dr[0].ToString()) + "Track " + sqlOfWhere1;
                     idx++;
                 }
-                sql += " )AS Track  ORDER BY RDT ASC ";
+                sql += " )AS Track  ORDER BY RDT DESC ";
 
 
             }
@@ -628,7 +628,7 @@ namespace BP.WF
                 sqlOfWhere1 = " WHERE FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12   ";
                 ps.Add("WorkID11", Int64.Parse(workids));
                 ps.Add("WorkID12", Int64.Parse(workids));
-                sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT ASC ";
+                sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT DESC ";
                 ps.SQL = sql;
             }
             //if (fid == 0)
@@ -3271,47 +3271,24 @@ namespace BP.WF
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["STARTERNAME"].ColumnName = "StarterName";
                 dt.Columns["TITLE"].ColumnName = "Title";
-                //dt.Columns["WFSTA"].ColumnName = "WFSta";
+                
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["RDT"].ColumnName = "RDT";
-                //dt.Columns["BILLNO"].ColumnName = "BillNo";
-                //dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
-                //dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+               
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
-                //dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+               
                 dt.Columns["FID"].ColumnName = "FID";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
-                //dt.Columns["WFSTATE"].ColumnName = "WFState";
-                //dt.Columns["FK_NY"].ColumnName = "FK_NY";
-                //dt.Columns["MYNUM"].ColumnName = "MyNum";
+               
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
-                //dt.Columns["STARTER"].ColumnName = "Starter";
-                //dt.Columns["SENDER"].ColumnName = "Sender";
+                
                 dt.Columns["DEPTNAME"].ColumnName = "DeptName";
-                //dt.Columns["PRI"].ColumnName = "PRI";
-                //dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
-                //dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
-                //dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
-                //dt.Columns["PWORKID"].ColumnName = "PWorkID";
-                //dt.Columns["PNODEID"].ColumnName = "PNodeID";
-                //dt.Columns["PFID"].ColumnName = "PFID";
-                //dt.Columns["PEMP"].ColumnName = "PEmp";
-                //dt.Columns["GUESTNO"].ColumnName = "GuestNo";
-                //dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
-                //dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
-                //dt.Columns["TASKSTA"].ColumnName = "TaskSta";
-                //dt.Columns["ATPARA"].ColumnName = "AtPara";
-                //dt.Columns["EMPS"].ColumnName = "Emps";
-                //dt.Columns["GUID"].ColumnName = "GUID";
-                //dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
-                //dt.Columns["TSPAN"].ColumnName = "TSpan";
-                //dt.Columns["TODOSTA"].ColumnName = "TodoSta";
-                //dt.Columns["SYSTYPE"].ColumnName = "SysType";
+               
                 dt.Columns["CURRNODE"].ColumnName = "CurrNode";
                 dt.Columns["RUNTYPE"].ColumnName = "RunType";
-                //dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
-                //dt.Columns["CWORKID"].ColumnName = "CWorkID";
+               
 
             }
             return dt;

@@ -2250,6 +2250,7 @@ namespace BP.WF
                 string operators = "";
                 int i = 0;
                 GenerWorkerList oneGWL = null; //获得这个变量，在gwf中使用.
+                string todoEmps = "";
                 foreach (GenerWorkerList wl in current_gwls)
                 {
                     oneGWL = wl; //获得这个变量，在gwf中使用.
@@ -2323,7 +2324,7 @@ namespace BP.WF
                 gwf.NodeName = nd.Name;
                 gwf.FK_Dept = oneGWL.FK_Dept;
                 gwf.DeptName = oneGWL.FK_DeptT;
-                gwf.TodoEmps = oneGWL.FK_Emp + "," + oneGWL.FK_EmpText + ";";
+                gwf.TodoEmps = operators;
                 gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
                 gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
                 if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)

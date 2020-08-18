@@ -213,15 +213,32 @@ namespace BP.WF.HttpHandler
 
             //获取 WF_GenerWorkFlow
             GenerWorkFlow gwf = new GenerWorkFlow();
+
             gwf.WorkID = this.WorkID;
             gwf.RetrieveFromDBSources();
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
             if (gwf.WFState != WFState.Complete)
             {
+                
                 GenerWorkerLists gwls = new GenerWorkerLists();
-                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.Idx);
-
+                QueryObject qo = new QueryObject(gwls);
+                if (this.FID == 0)
+                {
+                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                    qo.addOr();
+                    qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
+                }
+                    
+                if (this.FID != 0)
+                {
+                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                    qo.addOr();
+                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
+                }
+                qo.addOrderBy(GenerWorkerListAttr.Idx);
+                qo.DoQuery();
+                
                 //warning 补偿式的更新.  做特殊的判断，当会签过了以后仍然能够看isPass=90的错误数据.
                 foreach (GenerWorkerList item in gwls)
                 {

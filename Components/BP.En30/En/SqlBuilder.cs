@@ -2545,10 +2545,21 @@ namespace BP.En
 
                             break;
                         case DataType.AppDate: // 如果是日期类型。
-                        case DataType.AppDateTime:
                             string da = en.GetValStrByKey(attr.Key);
-                            
-                            ps.Add(attr.Key, da);
+                            if (SystemConfig.CustomerNo == "ASSET" && DataType.IsNullOrEmpty(da) == true)
+                            {
+                                da = DataType.CurrentData;
+                            }
+                             ps.Add(attr.Key, da);
+
+                            break;
+                        case DataType.AppDateTime:
+                            string datime = en.GetValStrByKey(attr.Key);
+                            if (SystemConfig.CustomerNo == "ASSET" && DataType.IsNullOrEmpty(datime) == true)
+                            {
+                                da = DataType.CurrentDataTimess;
+                            }
+                            ps.Add(attr.Key, datime);
                             break;
                         default:
                             throw new Exception("@SqlBulider.update, 没有这个数据类型");

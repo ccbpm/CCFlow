@@ -3013,9 +3013,7 @@ namespace BP.WF
                         int i = gwls.Retrieve(GenerWorkerListAttr.FK_Node, item.ReturnTo,
                             GenerWorkerListAttr.WorkID, workid);
                         if (i == 0)
-                        {
                             continue;
-                        }
 
                         foreach (GenerWorkerList gwl in gwls)
                         {

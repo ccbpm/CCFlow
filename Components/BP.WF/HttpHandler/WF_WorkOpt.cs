@@ -3748,8 +3748,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 回滚.
 
-
-
         #region 工作退回.
         /// <summary>
         /// 获得可以退回的节点.
@@ -3773,9 +3771,13 @@ namespace BP.WF.HttpHandler
                         if (nd.ReturnOneNodeRole == 1 && DataType.IsNullOrEmpty(nd.ReturnField) == false)
                         {
                             /*从表单字段里取意见.*/
-                            Flow fl = new Flow(nd.FK_Flow);
-                            string sql = "SELECT " + nd.ReturnField + " FROM " + fl.PTable + " WHERE OID=" + this.WorkID;
-                            returnMsg = DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
+                            Work wk = nd.HisWork;
+                            wk.OID = this.WorkID;
+                            wk.RetrieveFromDBSources();
+                            if (wk.EnMap.Attrs.Contains(nd.ReturnField) == false)
+                                return "err@系统设置错误，您设置的单节点退回，退回信息字段拼写错误或者不存在"+nd.ReturnField;
+                            returnMsg = wk.GetValStrByKey(nd.ReturnField); 
+                            // DBAccess.RunSQLReturnStringIsNull(sql, "未填写意见");
                         }
 
                         if (nd.ReturnOneNodeRole == 2)

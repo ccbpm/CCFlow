@@ -771,7 +771,7 @@ namespace BP.WF
                     catch (Exception ex)
                     {
                         wk.CheckPhysicsTable();
-                        //检查报表,执行插入数据. 2020.08.18增加.
+                        //检查报表,执行插入数据. 2020.08.18 增加.
                         this.CheckRpt();
                         wk.DirectInsert();  //执行插入.
                     }

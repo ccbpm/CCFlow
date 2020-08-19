@@ -623,39 +623,20 @@ namespace BP.WF.HttpHandler
             if (url == null)
                 url = currND.FormUrl;
 
-            string urlExt = this.RequestParas;
-            //防止查询不到.
-            urlExt = urlExt.Replace("?WorkID=", "&WorkID=");
-            if (urlExt.Contains("&WorkID") == false)
-            {
-                urlExt += "&WorkID=" + this.WorkID;
-            }
-            else
-            {
-                urlExt = urlExt.Replace("&WorkID=0", "&WorkID=" + this.WorkID);
-                urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
-            }
+            string urlExt ="";
+           
+            urlExt += "WorkID=" + this.WorkID;
+            urlExt += "&NodeID=" + currND.NodeID;
+            urlExt += "&FK_Node=" + currND.NodeID;
+            urlExt += "&FID=" + this.FID;
+            urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
+            urlExt += "&SID=" + WebUser.SID;
+
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
             url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
 
-            if (urlExt.Contains("&NodeID") == false)
-                urlExt += "&NodeID=" + currND.NodeID;
-
-            if (urlExt.Contains("FK_Node") == false)
-                urlExt += "&FK_Node=" + currND.NodeID;
-
-            if (urlExt.Contains("&FID") == false)
-            {
-                //urlExt += "&FID=" + currWK.FID;
-                urlExt += "&FID=" + this.FID;
-            }
-
-            if (urlExt.Contains("&UserNo") == false)
-                urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
-
-            if (urlExt.Contains("&SID") == false)
-                urlExt += "&SID=" + WebUser.SID;
+            
 
             if (url.Contains("?") == true)
                 url += "&" + urlExt;
@@ -664,7 +645,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string str in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true || str.Equals("T")==true || str.Equals("t") == true)
                     continue;
                 if (url.Contains(str + "=") == true)
                     continue;

@@ -541,6 +541,8 @@ function AfterBindEn_DealMapExt(frmData) {
         //处理文本自动填充
         var TBModel = mapAttr.GetPara("TBFullCtrl");
         if (TBModel != undefined && TBModel != "" && TBModel != "None" && (mapExt.ExtType == "FullData")) {
+            if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
+                continue;
             var tbAuto = $("#TB_" + mapExt.AttrOfOper);
             if (tbAuto == null)
                 continue;
@@ -553,6 +555,8 @@ function AfterBindEn_DealMapExt(frmData) {
         //下拉框填充其他控件
         var DDLFull = mapAttr.GetPara("IsFullData");
         if (DDLFull != undefined && DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
+            if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
+                continue;
             //枚举类型
             if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 3) {
                 var ddlOper = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]');
@@ -635,6 +639,8 @@ function AfterBindEn_DealMapExt(frmData) {
                 MultipleInputSearch(mapExt, defaultVal); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
             case "BindFunction": //控件绑定函数
+                if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
+                    continue;
                 if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
                     if ($('#TB_' + mapExt.AttrOfOper).length == 1) {
                         var minDate = $('#TB_' + mapExt.AttrOfOper).attr("data-info");
@@ -766,6 +772,8 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
 
             case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
+                if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
+                    continue;
                 var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                 var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
                 if (ddlPerant == null || ddlChild == null)

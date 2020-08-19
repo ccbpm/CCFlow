@@ -62,7 +62,6 @@
         function BindModelOne(gwfs, gwls) {
 
             var strs = "<table style='width:100%;'>";
-            strs += "<caption>子线程信息</caption>";
             strs += "<tr>";
             strs += "<th>序</th>";
             strs += "<th>节点</th>";
@@ -86,10 +85,7 @@
                 strs += "<tr>";
                 strs += "<td class=Idx >" + idx + "</td>";
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
-
                 strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
-
-
                 var openStr = "";
                 if (gwl.IsPass == 1) {
 
@@ -107,28 +103,23 @@
                     strs += "<td>无</td>";
                 }
 
-                strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">表单</a></td>";
-
+                strs += "<td><a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + gwl.FK_Node + "')\">表单</a></td>";
 
                 if (node.ThreadKillRole == 1)
                     strs += "<td><a href=\"javascript:DoDelSubFlow('" + gwl.FK_Flow + "','" + gwl.WorkID + "')\"><img src='../Img/Btn/Delete.gif' border=0/>终止</a></td>";
 
                 strs += "<td>" + openStr + "</td>";
-
                 strs += "<tr>";
             }
 
             strs += "</table>";
-
             $("#Msg").html(strs);
-
         }
 
         function BindModelMore(gwfs, gwls) {
 
             //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
             var html = "<table style='width:100%;' >";
-            html += "<caption>子线程信息</caption>";
             html += "<tr>";
             html += "<th>标题</th>";
             html += "<th>停留节点</th>";
@@ -188,7 +179,7 @@
                 strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
 
                 var openStr = "";
-                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + GetQueryString("FK_Node") + "')\">表单</a>";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + gwl.FK_Node + "')\">表单</a>";
 
                 if (gwl.IsPass == 1) {
 
@@ -221,6 +212,11 @@
 
         function OpenFrm(workID, fid, flowNo, nodeID) {
 
+            var url = "../MyView.htm?FK_Flow=" + flowNo + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid;
+            window.open(url);
+            return;
+
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
             handler.AddUrlData();
 
@@ -244,8 +240,6 @@
 
                 if (data.indexOf('FromWorkOpt') == -1)
                     data = data + "&FromWorkOpt=1";
-
-                //alert(data);
 
                 //window.location.href = data;
                 window.open(data);

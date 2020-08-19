@@ -1,26 +1,25 @@
 ﻿
 var wf_node = null;
 $(function () {
+
     var barHtml = "";
     var data;
     //广西计算中心特意加的一个url参数，用来控制toolbar隐藏
     if (GetQueryString("hideAllBtn") === "1") return;
+
+    var handler = "";
     //MyCC
     if ($("#JS_CC").length == 1) {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
-        handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar");
-        //MyView
+        handler = "BP.WF.HttpHandler.WF_MyCC";
     } else if ($("#JS_MyView").length == 1) {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
-        handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar");
-        //MyFlow   
+        handler = "BP.WF.HttpHandler.WF_MyView";
     } else {
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-        handler.AddUrlData();
-        data = handler.DoMethodReturnString("InitToolBar");
+        handler = "BP.WF.HttpHandler.WF_MyFlow";
     }
+
+    var handler = new HttpHandler(handler);
+    handler.AddUrlData();
+    data = handler.DoMethodReturnString("InitToolBar");
 
     if (data.indexOf("err@") != -1) {
         alert(data);
@@ -89,6 +88,14 @@ $(function () {
     if ($('[name=TransferCustom]').length > 0) {
         $('[name=TransferCustom]').bind('click', function () {
             initModal("TransferCustom");
+            $('#returnWorkModal').modal().show();
+        });
+    }
+
+
+    if ($('[name=Thread]').length > 0) {
+        $('[name=Thread]').bind('click', function () {
+            initModal("Thread");
             $('#returnWorkModal').modal().show();
         });
     }
@@ -173,11 +180,9 @@ $(function () {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); $('#returnWorkModal').modal().show(); });
     }
 
-
     if ($('[name=Press]').length > 0) {
         $('[name=Press]').bind('click', function () { initModal("Press"); $('#returnWorkModal').modal().show(); });
     }
-
 
 });
 //添加保存动态
@@ -202,6 +207,7 @@ function setModalMax() {
 
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode, url) {
+
     if ("undefined" != typeof flowData && flowData != null && flowData != undefined) {
         var node = flowData.WF_Node[0];
         if (node.FormType == 12 || (node.FormType == 11 && flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0].FrmType == 8)) {
@@ -287,6 +293,12 @@ function initModal(modalType, toNode, url) {
                 $('#modalHeader').text("工作移交");
                 SetPageSize(80, 80);
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "Thread":
+            case "thread":
+                $('#modalHeader').text("子线程");
+                SetPageSize(80, 80);
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/ThreadDtl.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "shift":
                 $('#modalHeader').text("工作移交");

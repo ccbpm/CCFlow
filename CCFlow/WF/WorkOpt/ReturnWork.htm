@@ -97,13 +97,15 @@
                 return;
             }
 
-
             //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
             var node = new Entity("BP.WF.Node", pageData.FK_Node);
-            // alert(node.IsKillEtcThread);
 
-            if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1")
-                $("#btnIsKillEtcThread").css("display", "visibility");
+            if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1") {
+                //alert(node.IsKillEtcThread);
+              //  document.getElementById("btnIsKillEtcThread").style.display = 'none';
+                //  arget.style.display="none";
+                // $("#btnIsKillEtcThread").css("display", "none");
+            }
 
 
             if (node.ReturnCHEnable == 1) {
@@ -169,7 +171,7 @@
         });
         //确定 退回 执行退回操作
         // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
-        function ReturnWork(isBack) {
+        function Save(isBack) {
 
             //判断退回并原路返回复选框是否被选中
             if ($("#CB_IsBackTracking").prop("checked") == true)
@@ -286,24 +288,25 @@
 
     <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;">
 
-        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; visibility:hidden; ">
+        <div id="btnIsBackTracking" style="margin-top:6px;float:left; display:block;">
+            <label>
+                <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
+                退回后并发送给我&nbsp;&nbsp;
+            </label>
+        </div>
+
+        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; display:block;">
             <label>
                 <input type="checkbox" id="CB_IsKillEtcThread" style="float:left;margin-top:3px;" />
                 全部子线程退回&nbsp;&nbsp;
             </label>
         </div>
 
-        <div id="btnIsBackTracking" style="margin-top:6px;float:left; visibility:hidden;">
-            <label>
-                <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
-                退回后并发送给我
-            </label>
-        </div>
 
         <button type="button" onclick="Close();" id="btnClose" class="layui-btn layui-btn-primary">
             <!--<img src="../Img/Btn/Close.png" />--> 关闭
         </button>
-        <button type="button" onclick="ReturnWork(0);" id="btnReturn" class="layui-btn layui-btn-normal">
+        <button type="button" onclick="Save(0);" id="btnReturn" class="layui-btn layui-btn-normal">
             <!--<img src="../Img/Btn/Confirm.png" />--> 退回
         </button>
     </div>

@@ -8581,15 +8581,15 @@ namespace BP.WF
             foreach (GenerWorkerList wl in gwls)
             {
                 empNos += wl.FK_Emp + ",";
-                toEmpsStr += BP.WF.Glo.DealUserInfoShowModel(wl.FK_Emp, wl.FK_EmpText);
+                toEmpsStr += wl.FK_EmpText+",";
                 if (gwls.Count == 1)
-                    emps = toEmpsStr;
+                    emps = wl.FK_Emp+","+ wl.FK_EmpText;
                 else
-                    emps += "@" + toEmpsStr;
+                    emps += "@" + wl.FK_Emp + "," + wl.FK_EmpText;
             }
 
             ActionType at = ActionType.SubThreadForward;
-            this.AddToTrack(at, empNos, emps.Replace("@", ","), nd.NodeID, nd.Name, BP.WF.Glo.multilingual("子线程向合流节点发送", "WorkNode", "sub_thread"), this.HisNode);
+            this.AddToTrack(at, empNos, toEmpsStr, nd.NodeID, nd.Name, BP.WF.Glo.multilingual("子线程向合流节点发送", "WorkNode", "sub_thread"), this.HisNode);
 
             /* 
             * 更新它的节点 worklist 信息, 说明当前节点已经完成了.

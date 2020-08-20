@@ -95,7 +95,7 @@ namespace BP.Port
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
-
+                
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
 
@@ -104,6 +104,7 @@ namespace BP.Port
                 {
                     map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
                 }
+
 
                 this._enMap = map;
                 return this._enMap;

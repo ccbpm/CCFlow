@@ -947,16 +947,18 @@ namespace BP.WF
                     para[0] = this.HisWorkerLists.Count.ToString();
                     string info = BP.WF.Glo.multilingual("共({0})人接收:", "WorkNode", "total_receivers", para);
 
-                    string emps = "";
+                    string empNos = "";
+                    string empNames = "";
                     foreach (GenerWorkerList wl in this.HisWorkerLists)
                     {
                         info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + ":";
 
-                        emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
+                        empNos += wl.FK_Emp + ",";
+                        empNames += wl.FK_EmpText + ",";
                     }
 
                     //写入到日志.
-                    this.AddToTrack(at, emps, emps, town.HisNode.NodeID, town.HisNode.Name, BP.WF.Glo.multilingual("多人接收(见信息栏)", "WorkNode", "multiple_receivers", new string[0]), this.ndFrom, null, info);
+                    this.AddToTrack(at, empNos, empNames, town.HisNode.NodeID, town.HisNode.Name, BP.WF.Glo.multilingual("多人接收(见信息栏)", "WorkNode", "multiple_receivers", new string[0]), this.ndFrom, null, info);
                 }
             }
             #endregion 如果是非子线城前进.

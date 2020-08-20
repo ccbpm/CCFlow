@@ -57,6 +57,8 @@
             var sfTabls = data["SFTables"]; //外键表字段.
             var fields = data["Fields"]; //已经存在的字段，所有的字段.
 
+            //清空以前的数据、根据新的返回对象重新渲染table内容
+            $("#Table1 tr").remove();
             //增加处理.
             for (var i = 0; i < sfTabls.length; i++) {
 
@@ -109,7 +111,12 @@
                 newRow += "</td>";
                 newRow += "</tr>";
 
-                $("#Table1 tr:last").after(newRow);
+                
+                if ($("#Table1 tr").length==0) {
+                    $("#Table1 tbody").after(newRow);
+                } else {
+                    $("#Table1 tr:last").after(newRow);
+                }
             }
         }
 

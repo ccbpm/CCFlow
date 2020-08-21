@@ -306,7 +306,7 @@ namespace BP.Web.Controls
         /// <param name="text">标签列</param>
         /// <param name="selectVal">选中的值</param>
         /// <returns>返回是否选择成功</returns>
-        public bool Bind(DataTable dt, string val="No", string text="Name", string selectVal="")
+        public bool Bind(DataTable dt, string val = "No", string text = "Name", string selectVal = "")
         {
             this.Items.Clear();
             if (dt.Rows.Count == 0)
@@ -319,7 +319,7 @@ namespace BP.Web.Controls
             bool isHave = false;
             foreach (DataRow dr in dt.Rows)
             {
-                if (isHave==false && dr[val].ToString() == selectVal)
+                if (isHave == false && dr[val].ToString() == selectVal)
                 {
                     ListItem li = new ListItem(dr[text].ToString(), dr[val].ToString());
                     li.Selected = true;
@@ -670,7 +670,7 @@ namespace BP.Web.Controls
             this.SelfEnsRefKey = attr.UIRefKey;
             this.SelfEnsRefKeyText = attr.UIRefKeyText;
             this.SelfIsShowVal = false; ///不让显示编号
-            ///
+                                        ///
             this.Init += new System.EventHandler(this.TBInit);
         }
 
@@ -1286,7 +1286,7 @@ namespace BP.Web.Controls
             i--;
         }
 
-        public void BindEntities(Entities ens, string refKey, string refText, bool isShowSelect=false)
+        public void BindEntities(Entities ens, string refKey, string refText, bool isShowSelect = false)
         {
             this.Items.Clear();
 
@@ -1310,8 +1310,8 @@ namespace BP.Web.Controls
             }
 
             //为了避免IsBlank的判断出错增加.. 2016.12.28 by zhoupeng.
-            if (isShowSelect==true)
-               this.Items.Add(new ListItem("请选择", "" ));
+            if (isShowSelect == true)
+                this.Items.Add(new ListItem("请选择", ""));
 
             foreach (Entity en in ens)
             {
@@ -1406,7 +1406,7 @@ namespace BP.Web.Controls
                 if (en.No == selecVal)
                 {
                     isHave = true;
-                    ListItem li=  new ListItem(en.Name, en.No);
+                    ListItem li = new ListItem(en.Name, en.No);
                     li.Selected = true;
                     this.Items.Add(li);
                 }

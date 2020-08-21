@@ -2557,7 +2557,7 @@ namespace BP.En
                             string datime = en.GetValStrByKey(attr.Key);
                             if (SystemConfig.CustomerNo == "ASSET" && DataType.IsNullOrEmpty(datime) == true)
                             {
-                                da = DataType.CurrentDataTimess;
+                                datime = DataType.CurrentDataTimess;
                             }
                             ps.Add(attr.Key, datime);
                             break;

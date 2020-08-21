@@ -2040,6 +2040,8 @@ namespace BP.CCBill
                         en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
                     else
                         en.SetValByKey(item.Key.Replace("Code", ""), val);
+
+                    en.SetValByKey(item.Key + "T", val);
                     foreach (DataRow mydr in mydt.Rows)
                     {
                         if (mydr["Name"].ToString().Equals(val)== true)

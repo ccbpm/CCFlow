@@ -574,22 +574,16 @@ namespace BP.WF
         /// <param name="workid"></param>
         /// <param name="fid"></param>
         /// <returns></returns>
-        public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
+        public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid,string workids="")
         {
             #region 获取track数据.
            
             string sqlOfWhere1 = "";
-            string workids = "";
             string sql = "";
             DataTable dt = null;
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            if (fid == 0)
-                workids = GetParentChildWorkID(workid, "");
-            else
-                workids = GetParentChildWorkID(fid, "");
-
-            workids = workids.Substring(0, workids.Length - 1);
+           
             //包含父子流程
             if (workids.Contains(",") == true)
             {
@@ -3159,7 +3153,7 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType,a.WFState  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType,a.WFState  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.Starter=" + dbStr + "Starter  AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND   (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
                         if (isContainFuture == true)
                         {
 
@@ -3171,7 +3165,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode ,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND   (B.IsPass=1 or B.IsPass < -1) AND A.FK_Flow IN " + emp.AuthorFlows;
                         if (isContainFuture == true)
                             sql += futureSQL;
                         ps.SQL = sql;
@@ -3213,7 +3207,7 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1) AND  A.Starter=" + dbStr + "Starter ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND   (B.IsPass=1 or B.IsPass < -1) AND  A.Starter=" + dbStr + "Starter ";
                         if (isContainFuture == true)
                         {
                             sql += futureSQL;
@@ -3224,7 +3218,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < -1)";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND  (B.IsPass=1 or B.IsPass < -1)";
                         if (isContainFuture == true)
                         {
                             sql += futureSQL;
@@ -3237,7 +3231,7 @@ namespace BP.WF
                 {
                     if (isMyStarter == true)
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < -1 ) AND  A.Starter=" + dbStr + "Starter ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND  (B.IsPass=1 or B.IsPass < -1 ) AND  A.Starter=" + dbStr + "Starter ";
                         if (isContainFuture == true)
                         {
                             sql += futureSQL;
@@ -3249,7 +3243,7 @@ namespace BP.WF
                     }
                     else
                     {
-                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND (B.IsPass=1 or B.IsPass < -1 ) ";
+                        sql = "SELECT DISTINCT a.WorkID,a.StarterName,a.Title,a.DeptName,a.NodeName,a.RDT,a.FK_Node,a.FK_Flow,a.FID ,a.FlowName,a.TodoEmps ," + currNode + " AS CurrNode,0 AS RunType,a.WFState  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow=" + dbStr + "FK_Flow  AND A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND B.IsPass!=-2 AND (B.IsPass=1 or B.IsPass < -1 ) ";
                         if (isContainFuture == true)
                         {
                             sql += futureSQL;
@@ -11404,7 +11398,7 @@ namespace BP.WF
 
         #endregion
 
-        private static string GetParentChildWorkID(Int64 workid,string workids)
+        public static string GetParentChildWorkID(Int64 workid,string workids)
         {
             //加上当前workid
             workids += workid + ",";

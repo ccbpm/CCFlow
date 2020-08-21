@@ -150,8 +150,16 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
+            string workids = "";
+            if (this.FID == 0)
+                workids = BP.WF.Dev2Interface.GetParentChildWorkID(this.WorkID, "");
+            else
+                workids = BP.WF.Dev2Interface.GetParentChildWorkID(this.FID, "");
+
+            workids = workids.Substring(0, workids.Length - 1);
+
             //获取track.
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID, workids);
             ds.Tables.Add(dt);
 
 
@@ -213,29 +221,45 @@ namespace BP.WF.HttpHandler
 
             //获取 WF_GenerWorkFlow
             GenerWorkFlow gwf = new GenerWorkFlow();
-
             gwf.WorkID = this.WorkID;
             gwf.RetrieveFromDBSources();
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
+            
+
             if (gwf.WFState != WFState.Complete)
             {
-                
                 GenerWorkerLists gwls = new GenerWorkerLists();
                 QueryObject qo = new QueryObject(gwls);
-                if (this.FID == 0)
+                //获取待办， //现在父节点查看流程，需要看子流程是否存在待办
+                if (workids.Contains(",") == true && gwf.PWorkID == 0)
                 {
-                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                    workids = workids.Replace(gwf.WorkID + ",", "");
+                    workids = workids.Substring(0, workids.Length - 1);
+                    qo.AddWhere(GenerWorkerListAttr.WorkID, workids);
                     qo.addOr();
-                    qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
+                    qo.AddWhere(GenerWorkerListAttr.FID, workids);
+
                 }
-                    
-                if (this.FID != 0)
+                else
                 {
-                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-                    qo.addOr();
-                    qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
+                    if (this.FID == 0)
+                    {
+                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                        qo.addOr();
+                        qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
+                    }
+
+                    if (this.FID != 0)
+                    {
+                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                        qo.addOr();
+                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
+                    }
                 }
+
+                
+                
                 qo.addOrderBy(GenerWorkerListAttr.Idx);
                 qo.DoQuery();
                 

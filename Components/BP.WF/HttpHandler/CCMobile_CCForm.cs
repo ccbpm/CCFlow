@@ -149,6 +149,7 @@ namespace BP.WF.HttpHandler
             string sort = this.GetRequestVal("Sort");
             string fileSoruce = this.GetRequestVal("fileSource");
             string fileName = this.GetRequestVal("fileName");
+            string ext = this.GetRequestVal("Ext");
             
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
@@ -239,7 +240,7 @@ namespace BP.WF.HttpHandler
 
 
 
-                string realSaveTo = savePath + "\\" + guid + "." + fileName + ".jpg" ;
+                string realSaveTo = savePath + "\\" + guid + "." + fileName;
 
                 realSaveTo = realSaveTo.Replace("~", "-");
                 realSaveTo = realSaveTo.Replace("'", "-");

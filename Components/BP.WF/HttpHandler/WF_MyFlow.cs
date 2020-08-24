@@ -625,7 +625,11 @@ namespace BP.WF.HttpHandler
 
             string urlExt ="";
            
-            urlExt += "WorkID=" + this.WorkID;
+            //如果是分流点/分河流。且FID!=0
+            if((currND.HisRunModel == RunModel.FL || currND.HisRunModel == RunModel.FHL) && this.FID != 0)
+                urlExt += "WorkID=" + this.FID+"&SubWorkID="+this.WorkID;
+            else
+                urlExt += "WorkID=" + this.WorkID;
             urlExt += "&NodeID=" + currND.NodeID;
             urlExt += "&FK_Node=" + currND.NodeID;
             urlExt += "&FID=" + this.FID;
@@ -2525,7 +2529,13 @@ namespace BP.WF.HttpHandler
                 if (i == 0)
                     return "该流程的工作已删除,请联系管理员";
 
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID, this.PWorkID);
+                Int64 workid = this.WorkID;
+                //如果包含subWorkID
+                Int64 subWorkID = this.GetRequestValInt64("SubWorkID");
+                if (subWorkID != 0)
+                    workid = subWorkID;
+
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht, null, this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null, this.FID, this.PWorkID);
                 msg = objs.ToMsgOfHtml();
                 BP.WF.Glo.SessionMsg = msg;
 

@@ -4095,8 +4095,8 @@ namespace BP.WF
                 return;
             }
 
-
-            ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
+            string trackTable = "ND" + int.Parse(flowNo) + "Track";
+            ps.SQL = "UPDATE  " + trackTable + " SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
                      "RDT,NodeData=" + dbStr + "NodeData WHERE ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + dbStr + "NDFrom AND  NDTo=" + dbStr + "NDTo AND WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND EmpFrom=" + dbStr + "EmpFrom";
             ps.Add(TrackAttr.NDFromT, nodeName);
             ps.Add(TrackAttr.Msg, msg);
@@ -4109,6 +4109,12 @@ namespace BP.WF
             ps.Add(TrackAttr.NodeData, "@DeptNo=" + WebUser.FK_Dept + "@DeptName=" + WebUser.FK_DeptName);
 
             int num = DBAccess.RunSQL(ps);
+
+            if(num == 1 && DataType.IsNullOrEmpty(writeImg) == false && writeImg.Contains("data:image/png;base64,") == true)
+            {
+                string myPK =DBAccess.RunSQLReturnStringIsNull("SELECT MyPK From "+ trackTable + " Where ActionType=" + (int)ActionType.WorkCheck + " AND  NDFrom=" + currNodeID + " AND  NDTo=" + currNodeID + " AND WorkID=" + workid + " AND FID=" + fid + " AND EmpFrom='" + WebUser.No + "'","");
+                DBAccess.SaveBigTextToDB(writeImg, trackTable, "MyPK", myPK, "WriteDB");
+            }
 
             if (num > 1)
             {

@@ -38,6 +38,7 @@ function InitPageUserInfo() {
     $("#userInfo").html(html);
 
     var html = "<ul class='nav' id='side-menu'>";
+
     html += "<li>"
     html = "<ul style='border:solid 1px #C2D5E3;'>";
     html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2" + urlEnd + "' class='J_menuItem' >切换用户</a></li>";
@@ -49,7 +50,6 @@ function InitPageUserInfo() {
     html += "</ul>";
     html += "</li>";
     html += "</ul>";
-
     $("#Info").html(html);
 
 }

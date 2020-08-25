@@ -77,7 +77,7 @@
              var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
              httpHandler.AddUrlData();  //增加参数属性.
 
-            var data = httpHandler.DoMethodReturnString("Entitys_Init");
+            var data = httpHandler.DoMethodReturnString("Ens_Init");
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html(data);
                 return;

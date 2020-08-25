@@ -509,8 +509,6 @@ namespace BP.WF.HttpHandler
                 if (mydept.ParentNo.Equals(dept.ParentNo) == true)
                     return true;
             }
-
-          
             #endregion 按照部门控制.
 
 

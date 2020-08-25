@@ -2718,17 +2718,18 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
 
-        public string Entitys_Init()
+        public string Ens_Init()
         {
             //定义容器.
             DataSet ds = new DataSet();
 
             //查询出来从表数据.
             Entities dtls = ClassFactory.GetEns(this.EnsName);
+            dtls.RetrieveAll();
             Entity en = dtls.GetNewEntity;
-            QueryObject qo = new QueryObject(dtls);
-            qo.addOrderBy(en.PK);
-            qo.DoQuery();
+            //QueryObject qo = new QueryObject(dtls);
+            //qo.addOrderBy(en.PK);
+            //qo.DoQuery();
             ds.Tables.Add(dtls.ToDataTableField("Ens"));
 
             //实体.
@@ -2831,7 +2832,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-
 
         #region 实体集合的保存.
         /// <summary>
@@ -3029,6 +3029,7 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
+
         #region 获取批处理的方法.
         public string Refmethod_BatchInt()
         {

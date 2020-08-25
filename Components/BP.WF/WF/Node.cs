@@ -254,7 +254,9 @@ namespace BP.WF
             get
             {
                 Work wk = null;
-                if (this.FormType != NodeFormType.FoolTruck || this.WorkID == 0 || this.IsStartNode == true)
+                if (this.FormType != NodeFormType.FoolTruck 
+                    || this.WorkID == 0 
+                    || this.IsStartNode == true)
                 {
                     wk = new BP.WF.GEWork(this.NodeID, this.NodeFrmID);
                     wk.HisNode = this;

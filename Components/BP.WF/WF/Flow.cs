@@ -698,7 +698,8 @@ namespace BP.WF
             try
             {
                 //从报表里查询该数据是否存在？
-                if (this.IsGuestFlow == true && DataType.IsNullOrEmpty(GuestUser.No) == false)
+                if (this.IsGuestFlow == true 
+                    && DataType.IsNullOrEmpty(GuestUser.No) == false)
                 {
                     /*是客户参与的流程，并且具有客户登陆的信息。*/
                     ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState AND FK_Flow='"+this.No+"' ";
@@ -773,6 +774,9 @@ namespace BP.WF
                         wk.CheckPhysicsTable();
                         //检查报表,执行插入数据. 2020.08.18 增加.
                         this.CheckRpt();
+
+                        //if (wk.RetrieveFromDBSources()!=0)
+
                         wk.DirectInsert();  //执行插入.
                     }
                     #endregion 写入work 数据.

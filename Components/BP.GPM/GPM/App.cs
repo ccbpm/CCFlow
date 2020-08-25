@@ -518,7 +518,7 @@ namespace BP.GPM
             }
 
             App app = new App();
-            app.No = "CCFlowBPM";
+            app.No = "农芯BPM";
             app.Name = "BPM系统";
             app.FK_AppSort = "01";
             app.Insert();

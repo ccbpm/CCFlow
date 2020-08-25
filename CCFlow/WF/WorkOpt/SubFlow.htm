@@ -155,14 +155,14 @@
 
                     if (item.TodoEmps.indexOf("" + webUser.No + "," + webUser.Name + ";") >= 0) {
                         html += "<td  style='word-break:break-all;' title='" + item.Title + "'>";
-                        html += "<a href=\"javascript:OpenIt('../MyFlow.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+                        html += "<a href=\"javascript:OpenIt('../MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
                     } else {
                         if (sf.SFOpenType == 0) {
                             html += "<td  style='word-break:break-all;' title='" + item.Title + "'>";
                             html += "<a href=\"javascript:OpenIt('../WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&PWorkID=" + item.PWorkID + "&PFlowNo=" + item.PFlowNo + "&PNodeID=" + item.PNodeID + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
                         } else {
                             html += "<td style='word-break:break-all;' title='" + item.Title + "'>";
-                            html += "<a href=\"javascript:OpenIt('../WorkOpt/FoolFrmTrack.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+                            html += "<a href=\"javascript:OpenIt('../MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
                         }
                     }
                     //到达节点名称.

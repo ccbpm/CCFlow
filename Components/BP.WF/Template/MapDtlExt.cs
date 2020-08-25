@@ -1556,7 +1556,7 @@ namespace BP.WF.Template
                     attr.UIVisible = false;
                     attr.UIIsEnable = false;
                     attr.DirectInsert();
-                   
+                    string a = "13";
                 }
             }
 
@@ -1640,6 +1640,7 @@ namespace BP.WF.Template
             return DBAccess.RunSQLReturnValInt("SELECT COUNT(OID) from " + this.PTable + " WHERE " + f1 + "=" + val1 + " AND " + f2 + "='" + val2 + "'");
         }
         #endregion
+       
     }
     /// <summary>
     /// 明细s

@@ -289,9 +289,9 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("WF_BillTemplate", "单据模板");
-                
-                //map.Java_SetCodeStruct("6");
 
+                //map.Java_SetCodeStruct("6");
+                map.IsAutoGenerNo = true;
                 map.IndexField = BillTemplateAttr.FK_MapData;
 
                 map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, true, 1, 6, 20);

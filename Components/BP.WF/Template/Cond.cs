@@ -740,7 +740,7 @@ namespace BP.WF.Template
                     if (result >= 1)
                         return true;
 
-                    throw new Exception("@您设置的sql返回值，不符合ccflow的要求，必须是0或大于等于1。");
+                    throw new Exception("@您设置的sql返回值，不符合农芯BPM的要求，必须是0或大于等于1。");
                     #endregion
                 }
 

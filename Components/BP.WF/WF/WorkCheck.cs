@@ -111,7 +111,7 @@ namespace BP.WF
                         }
                     }
 
-                    qo.addOrderBy(TrackAttr.RDT);
+                    qo.addOrderByDesc(TrackAttr.RDT);
 
                     string sql = qo.SQL;
                     sql = sql.Replace("WF_Track", "ND" + int.Parse(this.FlowNo) + "Track");

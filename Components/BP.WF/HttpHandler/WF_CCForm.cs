@@ -3317,6 +3317,7 @@ namespace BP.WF.HttpHandler
             string attachPk = this.GetRequestVal("AttachPK");
             string paras = this.GetRequestVal("parasData");
             string sort = this.GetRequestVal("Sort");
+
             //获取sort
             if (DataType.IsNullOrEmpty(sort))
             {
@@ -3345,7 +3346,6 @@ namespace BP.WF.HttpHandler
                     en.RetrieveFromDBSources();
                 }
             }
-
             //求主键. 如果该表单挂接到流程上.
             if (this.FK_Node != 0)
             {
@@ -3436,6 +3436,7 @@ namespace BP.WF.HttpHandler
                     realSaveTo = realSaveTo.Replace("~", "-");
                     realSaveTo = realSaveTo.Replace("'", "-");
                     realSaveTo = realSaveTo.Replace("*", "-");
+
                     if (fileEncrypt == true)
                     {
 

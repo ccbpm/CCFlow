@@ -118,11 +118,10 @@
             //求从表个数
             var mapDtls = new Entities("BP.Sys.MapDtls");
             mapDtls.Retrieve("FK_MapData", frmID, "FK_Node", 0);
-
+            var err = "";
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.Tag = editor.getValue();
-
             if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;

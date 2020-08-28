@@ -1918,6 +1918,14 @@ namespace BP.CCBill
                             successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的更新成功</span><br/>";
                             continue;
                         }
+                        else
+                        {
+                            //给实体赋值
+                            errInfo += SetEntityAttrValForASSET(no, dr, attrs, myen, dt, 0, bill);
+                            count++;
+                            successInfo += "&nbsp;&nbsp;<span>" + noColName + "为" + no + "," + nameColName + "为" + name + "的导入成功</span><br/>";
+                            continue;
+                        }
 
                     }
                     else
@@ -2134,7 +2142,7 @@ namespace BP.CCBill
 
             if (DataType.IsNullOrEmpty(en.GetValStrByKey("Title")) == true && DataType.IsNullOrEmpty(fbill.TitleRole) == false)
                 en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
-
+            en.SetValByKey("Rec", WebUser.No);
             en.SetValByKey("BillState", (int)BillState.Editing);
             en.SetValByKey("WFState", WFState.Complete);
             en.Update();

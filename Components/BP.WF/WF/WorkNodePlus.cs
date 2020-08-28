@@ -510,7 +510,7 @@ namespace BP.WF
             {
                 string ptable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
 
-                var mysql = "";//@yln
+                var mysql = "";
                 if (wn.HisNode.HisRunModel == RunModel.SubThread)
                     mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
                 else

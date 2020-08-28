@@ -8571,7 +8571,7 @@ namespace BP.WF
                 gwf.Update();
             }
 
-            //记录子线程到达合流节点数 yln
+            //记录子线程到达合流节点数
             int count = gwf.GetParaInt("ThreadCount");
             gwf.SetPara("ThreadCount", count + 1);
             gwf.Update();

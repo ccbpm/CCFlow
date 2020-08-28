@@ -2818,7 +2818,7 @@ namespace BP.WF
                     if (ndFrom.NodeID == fk_node)
                         continue;
 
-                    // @yln.
+                   
                     string mysql = "SELECT  a.FK_Emp as Rec, a.FK_EmpText as RecName FROM WF_GenerWorkerlist a WHERE a.FK_Node=" + ndFrom.NodeID + " AND  (a.WorkID=" + workid + " AND a.FID=" + fid + " )  ORDER BY RDT DESC ";
                     DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                     if (mydt.Rows.Count == 0)
@@ -2878,7 +2878,7 @@ namespace BP.WF
 
                     if (nd.TodolistModel == TodolistModel.Order)
                         sql = "SELECT A.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + ") OR (a.FK_Node=" + fk_node + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                   else   //@yln
+                   else  
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking, a.AtPara FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " AND a.AtPara NOT LIKE '%@IsHuiQian=1%' ORDER BY a.RDT DESC";
                     //sql = "SELECT A.NDFrom AS No, A.NDFromT AS Name, A.EmpFrom AS Rec, A.EmpFromT AS RecName, B.IsBackTracking, A.Msg FROM ND" + int.Parse(nd.FK_Flow) + "Track A, WF_Node B WHERE A.NDFrom=B.NodeID AND A.WorkID = " + workid + " AND A.ActionType in(" + (int)ActionType.Start + "," + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND A.NDFrom != " + fk_node + " ORDER BY A.RDT DESC";
 
@@ -10007,7 +10007,7 @@ namespace BP.WF
             if (dt.Rows.Count == 0)
                 throw new Exception("err@被退回到的节点数据错误，请联系管理员.");
 
-            //补偿处理退回错误. @yln
+            //补偿处理退回错误.
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
             string info = "";

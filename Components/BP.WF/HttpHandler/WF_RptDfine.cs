@@ -358,7 +358,7 @@ namespace BP.WF.HttpHandler
                 switch (ar.UIContralType)
                 {
                     case UIContralType.DDL:
-                    case UIContralType.RadioBtn: //yln
+                    case UIContralType.RadioBtn: 
                         row["Type"] = "combo";
                         fcid = "DDL_" + ar.KeyOfEn;
                         if (vals.ContainsKey(fcid))

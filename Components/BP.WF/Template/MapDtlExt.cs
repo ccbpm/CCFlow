@@ -1531,7 +1531,7 @@ namespace BP.WF.Template
                     athDesc.Name = this.Name;
                     athDesc.IsVisable = false;
                     athDesc.DirectInsert();
-                    //增加分组 yln
+                    //增加分组
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
                     group.FrmID = this.No;

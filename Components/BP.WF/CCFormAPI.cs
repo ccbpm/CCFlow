@@ -719,7 +719,7 @@ namespace BP.WF
             DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
 
-            //启用附件，增加附件信息 yln
+            //启用附件，增加附件信息
             DataTable Sys_FrmAttachment = dtl.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
             myds.Tables.Add(Sys_FrmAttachment);
             #endregion 加载从表表单模版信息.

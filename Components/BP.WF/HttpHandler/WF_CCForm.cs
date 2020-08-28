@@ -1993,7 +1993,6 @@ namespace BP.WF.HttpHandler
 
             if (this.FK_Node != 0 
                 && mdtl.FK_MapData.Equals("Temp")==false
-                && this.EnsName.Contains("ND" + this.FK_Node) == false
                 && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);

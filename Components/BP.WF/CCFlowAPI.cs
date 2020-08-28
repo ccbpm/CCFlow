@@ -120,6 +120,10 @@ namespace BP.WF
                         }
                     }
                 }
+                else
+                {
+                    frmNode.IsEnableLoadData = true;
+                }
                 #endregion 处理表单权限控制方案: 如果是绑定单个表单的时候. 
 
                 //把流程信息表发送过去.

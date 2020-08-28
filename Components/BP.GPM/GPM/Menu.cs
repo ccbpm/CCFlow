@@ -405,8 +405,8 @@ namespace BP.GPM
                 map.AttrsOfOneVSM.Add(new DeptMenus(), new BP.Port.Depts(),
                     DeptMenuAttr.FK_Menu, DeptMenuAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "绑定到部门-列表模式");
 
-                map.AttrsOfOneVSM.AddBranches(new GroupDepts(), new Depts(),
-                   GroupEmpAttr.FK_Group, GroupDeptAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
+                map.AttrsOfOneVSM.AddBranches(new DeptMenus(), new Depts(),
+                   DeptMenuAttr.FK_Menu, DeptMenuAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),

@@ -1563,7 +1563,7 @@ namespace BP.WF.HttpHandler
             }
 
 
-            return null; 
+            return "/DataUser/Temp/" + filename; 
         }
 
         /// <summary>

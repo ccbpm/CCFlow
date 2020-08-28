@@ -496,6 +496,7 @@
     <Compile Include="Template\WorkflowDefintionManager.cs" />
     <Compile Include="Template\PushMsg.cs" />
     <Compile Include="WF\Auth.cs" />
+    <Compile Include="WF\ShiftWork.cs" />
     <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="WF.cs" />
     <Compile Include="WFEnum.cs" />

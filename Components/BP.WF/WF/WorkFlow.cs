@@ -1975,83 +1975,10 @@ namespace BP.WF
                 //Glo.SendMsg(wl.FK_Emp, title, mailDoc);
             }
 
-
             // 记录日志..
             WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             wn.AddToTrack(ActionType.UnHungUp, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, "解除挂起,已经通知给:" + emps);
             return null;
-        }
-        /// <summary>
-        /// 撤消移交
-        /// </summary>
-        /// <returns></returns>
-        public string DoUnShift()
-        {
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
-            if (wls.Count == 0)
-                return "移交失败没有当前的工作。";
-
-            Node nd = new Node(gwf.FK_Node);
-            Work wk1 = nd.HisWork;
-            wk1.OID = this.WorkID;
-            wk1.Retrieve();
-
-            // 记录日志.
-            WorkNode wn = new WorkNode(wk1, nd);
-            wn.AddToTrack(ActionType.UnShift, WebUser.No, WebUser.Name, nd.NodeID, nd.Name, "撤消移交");
-
-            //删除撤销信息.
-            DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
-
-            //更新流程主表字段信息
-            gwf.WFState = WFState.Runing;
-            gwf.Update();
-
-            if (wls.Count == 1)
-            {
-                GenerWorkerList wl = (GenerWorkerList)wls[0];
-                wl.FK_Emp = WebUser.No;
-                wl.FK_EmpText = WebUser.Name;
-                wl.IsEnable = true;
-                wl.IsPass = false;
-                wl.Update();
-                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
-            }
-
-            GenerWorkerList mywl = null;
-            foreach (GenerWorkerList wl in wls)
-            {
-                if (wl.FK_Emp == WebUser.No)
-                {
-                    wl.FK_Emp = WebUser.No;
-                    wl.FK_EmpText = WebUser.Name;
-                    wl.IsEnable = true;
-                    wl.IsPass = false;
-                    wl.Update();
-                    mywl = wl;
-                }
-                else
-                {
-                    wl.Delete();
-                }
-            }
-            if (mywl != null)
-                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + mywl.FK_Node + "&FID=" + mywl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
-
-            GenerWorkerList wk = (GenerWorkerList)wls[0];
-            GenerWorkerList wkNew = new GenerWorkerList();
-            wkNew.Copy(wk);
-            wkNew.FK_Emp = WebUser.No;
-            wkNew.FK_EmpText = WebUser.Name;
-            wkNew.IsEnable = true;
-            wkNew.IsPass = false;
-            wkNew.Insert();
-
-
-
-            return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
         }
         #endregion
     }

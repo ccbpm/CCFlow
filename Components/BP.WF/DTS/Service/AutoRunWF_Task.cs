@@ -21,10 +21,9 @@ namespace BP.WF.DTS
         /// </summary>
         public AutoRunWF_Task()
         {
-            this.Title = "自动启动流程，使用扫描WF_Task表的模式.";
-            this.Help = "自动启动任务方式的流程, WF_Task";
+            this.Title = "自动启动流程，使用扫描 WF_Task 表的模式.";
+            this.Help = "自动启动任务方式的流程,WF_Task.";
             this.GroupName = "流程自动执行定时任务";
-
         }
         /// <summary>
         /// 设置执行变量

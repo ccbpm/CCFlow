@@ -2527,7 +2527,7 @@ namespace BP.WF.HttpHandler
                 gwf.WorkID = this.WorkID;
                 int i = gwf.RetrieveFromDBSources();
                 if (i == 0)
-                    return "该流程的工作已删除,请联系管理员";
+                    return "该流程的工作已删除,请联系管理员.WorkID="+this.WorkID;
 
                 Int64 workid = this.WorkID;
                 //如果包含subWorkID

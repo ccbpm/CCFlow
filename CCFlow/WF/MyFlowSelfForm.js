@@ -42,13 +42,7 @@ function SaveSelfFrom() {
        }, false);
      */
     return frm.contentWindow.postMessage({ Save:"Save" }, "*");
-   
 }
-
-
-
-
-
 
 //20160106 by 柳辉
 //获取页面参数
@@ -113,8 +107,6 @@ function OpenCC() {
         return true;
     return false;
 }
-
-
 
 //以下是软通写的
 //初始化网页URL参数
@@ -301,8 +293,6 @@ $(function () {
 })
 
 
-
-
 var flowData;
 
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
@@ -322,7 +312,6 @@ function GenerWorkNode() {
     }
 
     jsonStr = data;
-   
 
     try {
 
@@ -406,9 +395,6 @@ function GenerWorkNode() {
 
     //Common.MaxLengthError();
 
-
-
-
     //增加审核组件附件上传的功能
     if ($("#uploaddiv").length > 0) {
         var explorer = window.navigator.userAgent;
@@ -417,7 +403,6 @@ function GenerWorkNode() {
         else
             AddUploafFileHtm("uploaddiv", $("#uploaddiv").attr("data-info"));
     }
-
 }
 
 
@@ -457,8 +442,6 @@ function figure_Template_MsgAlert(msgAlert, i) {
 }
 
 var workNodeData = {};
-
-
 
 var colVisibleJsonStr = ''
 var jsonStr = '';

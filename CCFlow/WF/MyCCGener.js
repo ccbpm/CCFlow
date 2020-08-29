@@ -461,7 +461,8 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(flowData, mapAttr, defVal) {
-
+    if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly=="1")
+        return "";
     var operations = '';
     var data = flowData[mapAttr.KeyOfEn];
     if (data == undefined)

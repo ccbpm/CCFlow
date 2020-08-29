@@ -758,10 +758,7 @@ namespace BP.WF.HttpHandler
                 urlExt += "&FK_Node=" + currND.NodeID;
 
             if (urlExt.Contains("&FID") == false )
-            {
-                //urlExt += "&FID=" + currWK.FID;
                 urlExt += "&FID=" + this.FID;
-            }
 
             if (urlExt.Contains("&UserNo") == false)
                 urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
@@ -776,7 +773,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string str in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(str) == true)
+                if (DataType.IsNullOrEmpty(str) == true || str.ToLower().Equals("t")==true)
                     continue;
                 if (url.Contains(str + "=") == true)
                     continue;
@@ -788,61 +785,7 @@ namespace BP.WF.HttpHandler
             return url;
         }
 
-        /// <summary>
-        /// 获取主表的方法.
-        /// </summary>
-        /// <returns></returns>
-        private Hashtable GetMainTableHT()
-        {
-            Hashtable htMain = new Hashtable();
-            foreach (string key in HttpContextHelper.RequestParamKeys)
-            {
-                if (key == null)
-                    continue;
-
-                if (key.Contains("TB_"))
-                {
-
-                    string val = HttpContextHelper.RequestParams(key);
-
-                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                    {
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-
-                    }
-                    else
-                    {
-                        htMain.Remove(key.Replace("TB_", ""));
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-
-                    }
-                    continue;
-                }
-
-                if (key.Contains("DDL_"))
-                {
-                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("CB_"))
-                {
-                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("RB_"))
-                {
-                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-            }
-            return htMain;
-        }
-
-
+     
         #region 表单树操作
         /// <summary>
         /// 获取表单树数据
@@ -1239,7 +1182,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GenerWorkNode()
         {
-            string json = string.Empty;
             try
             {
                 DataSet ds = new DataSet();
@@ -1276,16 +1218,6 @@ namespace BP.WF.HttpHandler
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
                     this.FID, BP.Web.WebUser.No,this.WorkID, "1", true);
-
-                //Node nd = new Node(this.FK_Node);
-                //if (nd.HisFormType == NodeFormType.SheetTree)
-                //{
-                //    /*把树形表单的表单信息加载到ds里面.*/
-                //}
-                //把他转化小写,适应多个数据库.
-                //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
-                // ds.Tables.Add(wf_generWorkFlowDt);
-                // ds.WriteXml("c:\\xx.xml");
 
                 #region 如果是移动应用就考虑多表单的问题.
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)

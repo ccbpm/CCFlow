@@ -274,31 +274,17 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-                //string rawUrl = HttpContextHelper.RequestRawUrl;
-                //rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
-                //string[] paras = rawUrl.Split('&');
-                //foreach (string para in paras)
-                //{
-                //    if (para == null
-                //        || para == ""
-                //        || para.Contains("=") == false)
-                //        continue;
-
-                //    if (para == "1=1")
-                //        continue;
-
-                //    urlExt += "&" + para;
-                //}
-
+              
                 // 适配framework和core（注：net core的rawurl中不含form data）
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    if (key != "1") // 过滤url中1=1的情形
-                    {
-                        string value = HttpContextHelper.RequestParams(key);
-                        if (!String.IsNullOrEmpty(value))
-                            urlExt += string.Format("&{0}={1}", key, value);
-                    }
+                    if (key.Equals("1") == true || key.Equals("t") == true || key.Equals("T") == true) // 过滤url中1=1的情形
+                        continue;
+                   
+                    string value = HttpContextHelper.RequestParams(key);
+                    if (!String.IsNullOrEmpty(value))
+                        urlExt += string.Format("&{0}={1}", key, value);
+                   
                 }
                 return urlExt;
             }

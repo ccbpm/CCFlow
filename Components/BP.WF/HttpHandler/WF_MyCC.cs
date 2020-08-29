@@ -532,10 +532,7 @@ namespace BP.WF.HttpHandler
                 urlExt += "&FK_Node=" + currND.NodeID;
 
             if (urlExt.Contains("&FID") == false && currWK != null)
-            {
-                //urlExt += "&FID=" + currWK.FID;
                 urlExt += "&FID=" + this.FID;
-            }
 
             if (urlExt.Contains("&UserNo") == false)
                 urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
@@ -1076,93 +1073,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GenerWorkNode()
         {
-            string json = string.Empty;
-            try
-            {
-                DataSet ds = new DataSet();
-
-                Int64 workID = this.WorkID;
-                if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
-                {
-                    //获取绑定的表单
-                    FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
-                    switch (frmnode.WhoIsPK)
-                    {
-                        case WhoIsPK.FID:
-                            workID = this.FID;
-                            break;
-                        case WhoIsPK.PWorkID:
-                            workID = this.PWorkID;
-                            break;
-                        case WhoIsPK.P2WorkID:
-                            GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
-                            workID = gwff.PWorkID;
-                            break;
-                        case WhoIsPK.P3WorkID:
-                            string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                            workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
-                            break;
-                        case WhoIsPK.RootFlowWorkID:
-                            workID = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
-                    this.FID, BP.Web.WebUser.No,this.WorkID, "1", true);
-
-                //Node nd = new Node(this.FK_Node);
-                //if (nd.HisFormType == NodeFormType.SheetTree)
-                //{
-                //    /*把树形表单的表单信息加载到ds里面.*/
-                //}
-                //把他转化小写,适应多个数据库.
-                //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
-                // ds.Tables.Add(wf_generWorkFlowDt);
-                // ds.WriteXml("c:\\xx.xml");
-
-                #region 如果是移动应用就考虑多表单的问题.
-                if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
-                {
-                    /*如果是表单树并且是，移动模式.*/
-                    FrmNodes fns = new FrmNodes();
-                    QueryObject qo = new QueryObject(fns);
-
-                    qo.AddWhere(FrmNodeAttr.FK_Node, currND.NodeID);
-                    qo.addAnd();
-                    qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)FrmEnableRole.Disable);
-                    qo.addOrderBy("Idx");
-                    qo.DoQuery();
-
-
-                    //把节点与表单的关联管理放入到系统.
-                    ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
-                }
-                #endregion 如果是移动应用就考虑多表单的问题.
-
-                if (WebUser.SysLang.Equals("CH") == true)
-                    return BP.Tools.Json.ToJson(ds);
-
-                #region 处理多语言.
-                if (WebUser.SysLang.Equals("CH") == false)
-                {
-                    Langues langs = new Langues();
-                    langs.Retrieve(LangueAttr.Model, LangueModel.CCForm,
-                        LangueAttr.Sort, "Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
-                }
-                #endregion 处理多语言.
-
-                return BP.Tools.Json.ToJson(ds);
-
-
-            }
-            catch (Exception ex)
-            {
-                Log.DefaultLogWriteLineError(ex);
-                return "err@" + ex.Message;
-            }
+            WF_MyView myView = new WF_MyView();
+            return myView.GenerWorkNode();
         }
 
 

@@ -522,7 +522,8 @@ function returnWorkWindowClose(data) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(flowData, mapAttr, defVal) {
-
+    if (mapAttr.UIIsEnable == "0")
+        return "";
     var operations = '';
     var data = flowData[mapAttr.KeyOfEn];
     if (data == undefined)
@@ -976,41 +977,56 @@ function checkBlanks() {
         }
 
         var keyofen = $(obj).data().keyofen;
-        var ele = $('[id$=_' + keyofen + ']');
-        if (ele.length == 0)
+        if (keyofen == undefined)
             return;
-
-        $.each(ele, function (i, obj) {
-            var eleM = $(obj);
-            switch (eleM[0].tagName.toUpperCase()) {
-                case "INPUT":
-                    if (eleM.attr('type') == "text") {
-                        if (eleM.val() == "") {
-                            checkBlankResult = false;
-                            eleM.addClass('errorInput');
-                        } else {
-                            eleM.removeClass('errorInput');
-                        }
-                    }
-                    break;
-                case "SELECT":
-                    if (eleM.val() == "" || eleM.children('option:checked').text() == "*请选择") {
-                        checkBlankResult = false;
-                        eleM.addClass('errorInput');
-                    } else {
-                        eleM.removeClass('errorInput');
-                    }
-                    break;
-                case "TEXTAREA":
-                    if (eleM.val() == "") {
-                        checkBlankResult = false;
-                        eleM.addClass('errorInput');
-                    } else {
-                        eleM.removeClass('errorInput');
-                    }
-                    break;
+        var ele = $("#TB_" + keyofen);
+        if (ele.length == 0)
+            ele = $("#DDL_" + keyofen);
+        if (ele.length == 0)
+            ele = $("#CB_" + keyofen);
+        if (ele.length == 0) {
+            var val = $("input[name='RB_" + keyofen + "']:checked").val();
+            if (val == -1 || val == undefined) {
+                $("input[name$='RB_" + keyofen + "']").parent().parent().addClass('errorInput');
+            } else {
+                $("input[name$='RB_" + keyofen + "']").parent().parent().removeClass('errorInput');
             }
-        });
+            return;
+        }
+
+
+        switch (ele[0].tagName.toUpperCase()) {
+            case "INPUT":
+                if (ele.attr('type') == "text") {
+                    if (ele.val() == "") {
+                        checkBlankResult = false;
+                        ele.addClass('errorInput');
+                    } else {
+                        ele.removeClass('errorInput');
+                    }
+                }
+
+
+                break;
+            case "SELECT":
+                if (ele.val() == "" || ele.val() == -1 || ele.children('option:checked').text() == "*请选择") {
+                    checkBlankResult = false;
+                    ele.addClass('errorInput');
+                } else {
+                    ele.removeClass('errorInput');
+                }
+                break;
+            case "TEXTAREA":
+                if (ele.val() == "") {
+                    checkBlankResult = false;
+                    ele.addClass('errorInput');
+                } else {
+                    ele.removeClass('errorInput');
+                }
+                break;
+        }
+
+
 
     });
 
@@ -1246,28 +1262,16 @@ function GenerWorkNode() {
     $('#lastOptMsg').width(w + 15);
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
-    if (node.FormType == 11) {
-        //获得配置信息.
-        var frmNode = flowData["WF_FrmNode"];
-        if (frmNode) {
-            frmNode = frmNode[0];
-            if (frmNode.FrmSln == 1) {
-                /*只读的方案.*/
-                SetFrmReadonly();
-            }
-
-            if (frmNode.FrmSln != 1)
-                //处理下拉框级联等扩展信息
-                AfterBindEn_DealMapExt(flowData);
+    var frmNode = flowData["WF_FrmNode"];
+    if (node.FormType == 11 && frmNode != null && frmNode != undefined) {
+        frmNode = frmNode[0];
+        if (frmNode.FrmSln == 1) {
+            /*只读的方案.*/
+            SetFrmReadonly();
+            pageData.IsReadonly = 1;
         }
-    } else {
-        //处理下拉框级联等扩展信息
-        if (pageData.IsReadonly == null || pageData.IsReadonly == "0") {
-            AfterBindEn_DealMapExt(flowData);
-        }
-
     }
-
+    AfterBindEn_DealMapExt(flowData);
 
 
     var marginLeft = $('#topContentDiv').css('margin-left');

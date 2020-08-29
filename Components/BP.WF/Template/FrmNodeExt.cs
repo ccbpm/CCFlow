@@ -258,6 +258,11 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "批量设置";
+                rm.ClassMethodName = this.ToString() + ".DoBatchSetting()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -265,6 +270,11 @@ namespace BP.WF.Template
         }
         #endregion
 
+        public string DoBatchSetting()
+        {
+            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+
+        }
         /// <summary>
         /// 设计表单
         /// </summary>

@@ -49,7 +49,7 @@ namespace BP.WF
         {
             get
             {
-                return (QiangBanSendAfterRole)this.GetValIntByKey(NodeAttr.QiangBanSendAfterRole);
+                return (QiangBanSendAfterRole)this.GetParaInt(NodeAttr.QiangBanSendAfterRole);
             }
         }
         /// <summary>

@@ -546,7 +546,7 @@ function GenerWorkNode() {
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyCC");
     handler.AddUrlData(urlParam);
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 

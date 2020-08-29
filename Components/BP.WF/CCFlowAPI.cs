@@ -610,7 +610,7 @@ namespace BP.WF
 
                     if (lgType.Equals("1") == true)
                         continue; //枚举值就continue;
-
+                    //@liuqiang, 
                     string uiIsEnable = dr["UIIsEnable"].ToString();
                     if (uiIsEnable.Equals("0") == true && lgType.Equals("2") == true)
                         continue; //如果是外键，并且是不可以编辑的状态.

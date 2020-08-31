@@ -14,8 +14,8 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
     <style>
-        #Btn_Save{
-            background-image: url(../../Img/Btn/Save.png)!important;
+        #Btn_Save {
+            background-image: url(../../Img/Btn/Save.png) !important;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -37,8 +37,9 @@
             //将获取的值绑定到radio
             if (delRole == undefined)
                 delRole = 0;
-            
-            $('input:radio[name="GenerWorkerListDelRole"]').eq(delRole).attr('checked', 'true');
+
+            $("#RB_GenerWorkerListDelRole_" + delRole).attr('checked', 'true');
+            // $('input:radio[id="GenerWorkerListDelRole"]').eq(delRole).attr('checked', 'true');
             $("#Msg").html("");
         });
 
@@ -48,8 +49,11 @@
             var node = new Entity("BP.WF.Node", fk_node);
             var role = $("input[name='GenerWorkerListDelRole']:checked").val();
             node.SetPara("GenerWorkerListDelRole", role);
-            if(node.Update());
-                alert("保存成功！");
+            node.Update();
+
+            //if(node.Update());
+            //alert("保存成功！");
+
             window.location.href = window.location.href;
         }
 
@@ -78,19 +82,48 @@
                 <li>正常处理待办工作，不对其他人员的待办做删除处理。</li>
             </ul>
         </fieldset>
+
+
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_GenerWorkerListDelRole_1" name="GenerWorkerListDelRole" value="1"
-                       onClick="rb_onchange(1)" /><label for="RB_GenerWorkerListDelRole_1">删除同部门的人员(包括兼职部门)</label>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_1"
+                       name="GenerWorkerListDelRole" value="1"
+                       onClick="rb_onchange(1)" /><label for="RB_GenerWorkerListDelRole_1">删除同部门的人员(包括主部门+兼职部门)</label>
             </legend>
             <ul style="color: Gray">
-                <li>如果当前节点是协作模式的节点。</li>
                 <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                <li>删除的范围是与当前处理人是同一个部门，包括兼职部门。</li>
             </ul>
         </fieldset>
+
         <fieldset>
             <legend>
-                <input type="radio" ID="RB_GenerWorkerListDelRole_2" name="GenerWorkerListDelRole" value="2"
+                <input type="radio" ID="RB_GenerWorkerListDelRole_3"
+                       name="GenerWorkerListDelRole" value="3"
+                       onClick="rb_onchange(3)" /><label for="RB_GenerWorkerListDelRole_3">删除主部门的人员</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                <li>删除的范围是与当前处理人是同一个<font color="red"><b>主部门</b></font>。</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_4" name="GenerWorkerListDelRole" value="4"
+                       onClick="rb_onchange(4)" /><label for="RB_GenerWorkerListDelRole_4">删除兼职部门的人员</label>
+            </legend>
+            <ul style="color: Gray">
+                <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                <li>删除的范围是与当前处理人是同一个<font color="red"><b>兼职部门</b></font>。</li>
+            </ul>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>
+                <input type="radio" ID="RB_GenerWorkerListDelRole_2"
+                       name="GenerWorkerListDelRole" value="2"
                        onClick="rb_onchange(2)" /><label for="RB_GenerWorkerListDelRole_2"> 删除同岗位的人员 </label>
             </legend>
             <ul style="color: Gray">
@@ -98,6 +131,7 @@
                 <li>当前工作完成后，该节点绑定的岗位集合，当前操作员的岗位集合，与剩余每个人员的岗位集合对比如果有交集，该人员就被删除。</li>
             </ul>
         </fieldset>
+
 
         <fieldset>
             <legend>应用背景</legend>
@@ -107,12 +141,8 @@
                 <li>比如：一个节点上有资产岗、财务岗、审法岗三个不同的岗位上的人员一起协作.</li>
                 <li>每个岗位上的人有可能大于等于2，需求是只要有一个人审批，这个岗位上的另外一个人的待办自动消失.</li>
                 <li>比如财务岗上有3个人可以审批，分别是zhangsan,lisi,wangwu,其中一个lisi审批完毕后，其余两个人就不审批了.</li>
-
             </ul>
-
         </fieldset>
-
-
 
     </form>
 

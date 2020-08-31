@@ -654,7 +654,7 @@ namespace BP.WF
             {
                 foreach (string k in HttpContextHelper.RequestParamKeys)
                 {
-                    if (k == null|| k.Equals("OID") || k.Equals("WorkID") || paras.ContainsKey("PWorkID")==true)
+                    if (k == null || k.Equals("OID") || k.Equals("WorkID") || paras.ContainsKey("PWorkID") == true)
                         continue;
 
                     if (paras.ContainsKey(k))
@@ -698,11 +698,11 @@ namespace BP.WF
             try
             {
                 //从报表里查询该数据是否存在？
-                if (this.IsGuestFlow == true 
+                if (this.IsGuestFlow == true
                     && DataType.IsNullOrEmpty(GuestUser.No) == false)
                 {
                     /*是客户参与的流程，并且具有客户登陆的信息。*/
-                    ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState AND FK_Flow='"+this.No+"' ";
+                    ps.SQL = "SELECT OID,FlowEndNode FROM " + this.PTable + " WHERE GuestNo=" + dbstr + "GuestNo AND WFState=" + dbstr + "WFState AND FK_Flow='" + this.No + "' ";
                     ps.Add(GERptAttr.GuestNo, GuestUser.No);
                     ps.Add(GERptAttr.WFState, (int)WFState.Blank);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -741,7 +741,7 @@ namespace BP.WF
                         if (gwf.WorkID == 0)
                         {
                             gwf.Delete();
-                            return NewWork(emp,paras);
+                            return NewWork(emp, paras);
                         }
 
                         gwf.Retrieve();
@@ -857,7 +857,7 @@ namespace BP.WF
                 if (wk.OID != 0)
                 {
                     rpt.OID = wk.OID;
-                    int i= rpt.RetrieveFromDBSources();
+                    int i = rpt.RetrieveFromDBSources();
                     if (i == 0)
                         throw new Exception("err@没有保存到流程表单数据" + rpt.EnMap.PhysicsTable + ",表单表" + wk.EnMap.PhysicsTable + " 系统错误." + rpt.OID + ",请联系管理员.");
 
@@ -873,7 +873,7 @@ namespace BP.WF
                 //检查报表.
                 this.CheckRpt();
                 int i = wk.DirectInsert();
-                if(i ==0)
+                if (i == 0)
                     throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
@@ -902,7 +902,7 @@ namespace BP.WF
             #endregion copy数据.
 
             #region 处理删除草稿的需求。
-            if ( isDelDraft==true)
+            if (isDelDraft == true)
             {
                 //重新设置默认值.
                 wk.ResetDefaultValAllAttr();
@@ -1101,7 +1101,7 @@ namespace BP.WF
 
                 }
 
-                if (rpt.EnMap.PhysicsTable.Equals(wk.EnMap.PhysicsTable)==false)
+                if (rpt.EnMap.PhysicsTable.Equals(wk.EnMap.PhysicsTable) == false)
                     wk.Update(); //更新工作节点数据.
                 rpt.Update(); // 更新流程数据表.
                 #endregion 特殊赋值.
@@ -1356,7 +1356,7 @@ namespace BP.WF
                 gwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
-         
+
             return wk;
         }
         #endregion 创建新工作.
@@ -1968,7 +1968,7 @@ namespace BP.WF
                 #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
 
                 //如果协作模式的节点，方向条件规则是下拉框的，修改为按线的.
-                sql="UPDATE WF_Node SET CondModel = 2 WHERE CondModel = 1 AND TodolistModel = 1";
+                sql = "UPDATE WF_Node SET CondModel = 2 WHERE CondModel = 1 AND TodolistModel = 1";
                 DBAccess.RunSQL(sql);
 
 
@@ -2751,7 +2751,7 @@ namespace BP.WF
                         rpt.Copy(wk);
                         if (nd.NodeID == int.Parse(this.No + "01"))
                             startWork = wk;
-                        
+
                         endWK = wk;
                     }
                     catch (Exception ex)
@@ -4171,7 +4171,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
 
                 map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10);
-              //  map.AddTBString(FlowAttr.Domain, null, "Domain", true, true, 0, 50, 10);
+                //  map.AddTBString(FlowAttr.Domain, null, "Domain", true, true, 0, 50, 10);
 
                 //参数.
                 map.AddTBAtParas(1000);
@@ -4226,8 +4226,11 @@ namespace BP.WF
         /// <returns></returns>
         public string DoDelData()
         {
+            if (WebUser.No.Equals("admin") == false)
+                return "err@只有超级管理员才能执行.";
+
             #region 删除独立表单的数据.
-            string mysql = "SELECT OID FROM " + this.PTable;
+            string mysql = "SELECT OID FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'";
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, this.No);
             string strs = "";
@@ -4240,7 +4243,7 @@ namespace BP.WF
                 try
                 {
                     MapData md = new MapData(nd.FK_Frm);
-                    DBAccess.RunSQL("DELETE FROM " + md.PTable + " WHERE OID in (" + mysql + ")");
+                    DBAccess.RunSQL("DELETE FROM " + md.PTable + " WHERE OID IN (" + mysql + ")");
                 }
                 catch
                 {
@@ -4248,8 +4251,8 @@ namespace BP.WF
             }
             #endregion 删除独立表单的数据.
 
-            string sql = "  WHERE FK_Node in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-            string sql1 = " WHERE NodeID in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            string sql = "  WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            string sql1 = " WHERE NodeID IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             // DBAccess.RunSQL("DELETE FROM WF_CHOfFlow WHERE FK_Flow='" + this.No + "'");
 
@@ -4266,10 +4269,10 @@ namespace BP.WF
             // DBAccess.RunSQL("DELETE FROM WF_FileManager " + sql);
             DBAccess.RunSQL("DELETE FROM WF_RememberMe " + sql);
 
-            if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Track"))
+            if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Track") == true)
                 DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.No) + "Track ");
 
-            if (DBAccess.IsExitsObject(this.PTable))
+            if (DBAccess.IsExitsObject(this.PTable) == true)
                 DBAccess.RunSQL("DELETE FROM " + this.PTable);
 
             DBAccess.RunSQL("DELETE FROM WF_CH WHERE FK_Flow='" + this.No + "'");
@@ -4311,7 +4314,7 @@ namespace BP.WF
                 {
                 }
             }
-            return "删除成功...";
+            return "流程数据删除成功...";
         }
         /// <summary>
         /// 装载流程模板

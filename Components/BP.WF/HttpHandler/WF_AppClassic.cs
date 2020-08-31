@@ -292,8 +292,6 @@ namespace BP.WF.HttpHandler
                         int i = emp.RetrieveFromDBSources();
                         if (i == 0)
                             return "err@用户名或者密码错误.";
-
-
                     }
                     else
                     {

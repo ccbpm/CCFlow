@@ -205,13 +205,13 @@ namespace BP.WF.HttpHandler
         {
             var appNo = this.GetRequestVal("AppNo");
 
-            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql1 += " FROM V_GPM_EmpMenu ";
             sql1 += " WHERE FK_Emp = '" + WebUser.No + "' ";
             sql1 += " AND MenuType = '3' ";
             sql1 += " AND FK_App = '" + appNo + "' ";
             sql1 += " UNION ";  //加入不需要权限控制的菜单.
-            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
+            sql1 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Icon,Idx";
             sql1 += " FROM GPM_Menu ";
             sql1 += " WHERE MenuCtrlWay=1 ";
             sql1 += " AND MenuType = '3' ";
@@ -219,13 +219,13 @@ namespace BP.WF.HttpHandler
             var dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '4' ";
             sql2 += " AND FK_App = '" + appNo + "' ";
             sql2 += " UNION ";  //加入不需要权限控制的菜单.
-            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            sql2 += "SELECT No,Name, No as FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
             sql2 += " WHERE MenuCtrlWay=1 ";
             sql2 += " AND MenuType = '4' ";

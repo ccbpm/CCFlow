@@ -412,14 +412,31 @@ namespace BP.WF
             if (nd.GenerWorkerListDelRole == 0)
                 return;
 
-            //按照部门删除,同部门下的人员.
-            if (nd.GenerWorkerListDelRole == 1)
+            //按照部门删除,同部门下的人员+兼职部门.
+            if (nd.GenerWorkerListDelRole == 1 || 
+                nd.GenerWorkerListDelRole == 3 ||
+                nd.GenerWorkerListDelRole == 4)
             {
-                //定义本部门的人员.
+                //定义本部门的人员. 主部门+兼职部门.
                 string sqlUnion = "";
-                sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
-                sqlUnion += " UNION ";
-                sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                if (nd.GenerWorkerListDelRole == 1)
+                {
+                    sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                    sqlUnion += " UNION ";
+                    sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                }
+
+                //主部门的人员.
+                if (nd.GenerWorkerListDelRole == 3)
+                {
+                    sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                }
+
+                //兼职部门的人员.
+                if (nd.GenerWorkerListDelRole == 4)
+                {
+                    sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                }
 
                 //获得要删除的人员.
                 string sql = " SELECT FK_Emp FROM WF_GenerWorkerlist WHERE ";

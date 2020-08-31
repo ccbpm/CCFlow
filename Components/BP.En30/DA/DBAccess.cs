@@ -2153,6 +2153,10 @@ namespace BP.DA
         /// <returns></returns>
         private static int RunSQL_200705_MySQL(string sql, Paras paras)
         {
+            if (sql.ToLower().Contains("delete") && sql.ToLower().Contains("filecopy"))
+                throw new Exception("err@非法的删除数据操作,请联系管理员.");
+
+
             MySqlConnection connOfMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
             if (connOfMySQL.State != System.Data.ConnectionState.Open)
             {

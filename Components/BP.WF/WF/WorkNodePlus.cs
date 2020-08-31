@@ -433,9 +433,14 @@ namespace BP.WF
                 }
 
                 //兼职部门的人员.
-                if (nd.GenerWorkerListDelRole == 4)
+                
+
+                if (nd.GenerWorkerListDelRole == 4  )
                 {
-                    sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                    
+                    
+
+                    sqlUnion += " SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
                 }
 
                 //获得要删除的人员.

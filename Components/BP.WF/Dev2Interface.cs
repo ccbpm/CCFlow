@@ -4624,16 +4624,13 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static string Flow_DoDeleteFlowByReal(Int64 workID, bool isDelSubFlow = false)
         {
-            //if (WebUser.IsAdmin==false)
-            //    throw 
-
             try
             {
                 WorkFlow.DeleteFlowByReal(workID, isDelSubFlow);
             }
             catch (Exception ex)
             {
-                throw new Exception("err@删除前错误，" + ex.StackTrace);
+                return "err@删除错误，" + ex.StackTrace;
             }
             return "删除成功";
         }

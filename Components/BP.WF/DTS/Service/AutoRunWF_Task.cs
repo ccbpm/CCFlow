@@ -21,9 +21,10 @@ namespace BP.WF.DTS
         /// </summary>
         public AutoRunWF_Task()
         {
-            this.Title = "自动启动流程，使用扫描 WF_Task 表的模式.";
-            this.Help = "自动启动任务方式的流程,WF_Task.";
+            this.Title = "自动启动流程，使用扫描WF_Task表的模式.";
+            this.Help = "自动启动任务方式的流程, WF_Task";
             this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量
@@ -136,8 +137,14 @@ namespace BP.WF.DTS
                         BP.Web.WebUser.SignInOfGener(empadmin);
                     }
 
-                    Work wk = fl.NewWork();
-                    workID = wk.OID;
+                    //创建workid.
+                    workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, Web.WebUser.No);
+
+                    Node nd = new Node(int.Parse(fk_flow + "01"));
+                    Work wk = nd.HisWork;
+                    wk.OID = workID;
+                    wk.RetrieveFromDBSources();
+
                     string[] strs = paras.Split('@');
                     foreach (string str in strs)
                     {

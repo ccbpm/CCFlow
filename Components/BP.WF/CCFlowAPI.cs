@@ -249,7 +249,7 @@ namespace BP.WF
                     && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
 
-                    #region 处理字段分组排序.
+                    #region 处理字段分组排序. groupfields
                     //查询所有的分组, 如果是查看表单的方式，就不应该把当前的表单显示出来.
                     string myFrmIDs = "";
                     if (fromWorkOpt.Equals("1") == true)
@@ -269,29 +269,29 @@ namespace BP.WF
 
                     //按照时间的顺序查找出来 ids .
                     string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
-                    myFrmIDs = myFrmIDs.Replace("'", "");
+                    string orderMyFrmIDs = myFrmIDs.Replace("'", "");
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
-                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "',FrmID) , Idx";
+                        sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "',FrmID) , Idx";
                     }
 
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     {
-                        sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + myFrmIDs + "'), Idx";
+                        sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + orderMyFrmIDs + "'), Idx";
                     }
 
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
-                        sqlOrder += " ORDER BY INSTR('" + myFrmIDs + "', FrmID ), Idx";
+                        sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "', FrmID ), Idx";
                     }
                     if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                     {
-                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
+                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
                     }
 
                     if (SystemConfig.AppCenterDBType == DBType.DM)
                     {
-                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + myFrmIDs + "'), Idx";
+                        sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
                     }
 
                     DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
@@ -320,7 +320,9 @@ namespace BP.WF
                     DataTable dtGF = gfsNew.ToDataTableField("Sys_GroupField");
                     myds.Tables.Remove("Sys_GroupField");
                     myds.Tables.Add(dtGF);
-                    #endregion 处理字段分组排序.
+                    #endregion 处理字段分组排序. groupfields
+
+                    
 
                     #region 处理 mapattrs
                     //求当前表单的字段集合.
@@ -493,7 +495,7 @@ namespace BP.WF
 
                     //把附件放里面
                     myFrmIDs = wk.HisPassedFrmIDs + ",'ND" + nd.NodeID + "'";
-                    FrmAttachment frmAtchs = new FrmAttachment();
+                    FrmAttachments frmAtchs = new FrmAttachments();
                     qo = new QueryObject(frmAtchs);
                     qo.AddWhere(FrmAttachmentAttr.FK_MapData, " IN ", "(" + myFrmIDs + ")");
                     qo.addAnd();

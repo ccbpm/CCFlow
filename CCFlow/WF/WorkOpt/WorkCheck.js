@@ -125,7 +125,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     _Html += "<tr>";
     if (showNodeName == 1) {
         //显示审核节点的信息/有可能是会签节点
-        _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>";
+        _Html += "<td " + (track.IsDoc ? ("id='tdnode_" + track.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:20%;border:1px solid #D6DDE6;'>";
         var nodeName = track.NodeName;
         nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
         _Html += nodeName;
@@ -139,7 +139,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //可编辑的审核意见
     if (isEditWorkCheck == true) {
 
-        _Html += "<td style='width:100%;border-bottom-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
+        _Html += "<td style='width:80%;border-bottom-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
 
         //是否启用附件上传
         if (frmWorkCheck.FWCAth == 1) {

@@ -393,8 +393,10 @@
                         realVal = decodeURI(param[1]);
                         $('#TB_' + param[0]).val(realVal);
                         $('#DDL_' + param[0]).val(realVal);
-                        $('#DDL_' + param[0]).combotree('setValue', realVal);
-                        $('#DDL_' + param[0]).combotree('select', realVal);
+                        if ($('#DDL_' + param[0]).hasClass("easyui-combotree") == true) {
+                            $('#DDL_' + param[0]).combotree('setValue', realVal);
+                            $('#DDL_' + param[0]).combotree('select', realVal);
+                        }
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
                             if (obj != null)

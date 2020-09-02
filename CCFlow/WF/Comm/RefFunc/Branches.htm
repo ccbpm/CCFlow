@@ -210,9 +210,8 @@
                     }
 
                     var en = new Entity(GetQueryString("Dot2DotEnName"));
-                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                    en[GetQueryString("AttrOfMInMM")] = node.id;
-                    en.Delete();
+                   
+                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), node.id);
                     //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
                 },
                 onNodeSelected: function (event, node) {
@@ -379,12 +378,14 @@
         function deleteCheckNodes(selectNodes, flag) {
             for (var i = 0; i < selectNodes.length; i++) {
                 var en = new Entity(GetQueryString("Dot2DotEnName"));
+               
                 en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                var text = "";
                 if (flag == 0)
-                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                    text = selectNodes[i].id;
                 else
-                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
-                en.Delete();
+                    text = $('#tree').treeview('getNode', selectNodes[i]).id;
+                en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"),text);
             }
         }
         function CheckAll() {

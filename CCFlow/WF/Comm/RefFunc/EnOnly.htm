@@ -63,12 +63,13 @@
     </style>
     <!--杨玉慧 -->
     <script type="text/javascript">
-
         var frmData;
         var mapData;
         var mainData;
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
+        var pageData = {};
+        pageData.isReadonly = isReadonly;
         var pkVal = "";
         var webUser = new WebUser();
         $(function () {

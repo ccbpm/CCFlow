@@ -748,6 +748,19 @@ namespace BP.Sys
                 return str;
             }
         }
+        /// <summary>
+        /// 二级管理员岗位编号---北京农林
+        /// </summary>
+        public static string GetSysStation
+        {
+            get
+            {
+                string str = AppSettings["SysStation"];
+                if (DataType.IsNullOrEmpty(str))
+                    return "";
+                return str;
+            }
+        }
         #endregion
 
 

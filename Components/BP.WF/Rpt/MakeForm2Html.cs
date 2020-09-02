@@ -1111,22 +1111,69 @@ namespace BP.WF
 
                         foreach (MapAttr item in attrsOfDtls)
                         {
+
                             if (item.KeyOfEn == "OID" || item.UIVisible == false)
                                 continue;
+                            string text = "";
+                            switch (item.LGType)
+                            {
+                                case FieldTypeS.Normal:  // 输出普通类型字段.
+                                    if (item.MyDataType == 1 && (int)item.UIContralType == DataType.AppString)
+                                    {
+
+                                        if (attrs.Contains(item.KeyOfEn + "Text") == true)
+                                            text = dtl.GetValRefTextByKey(item.KeyOfEn);
+                                        if (DataType.IsNullOrEmpty(text))
+                                            if (attrs.Contains(item.KeyOfEn + "T") == true)
+                                                text = dtl.GetValStrByKey(item.KeyOfEn + "T");
+                                    }
+                                    else
+                                    {
+                                       
+                                        text = dtl.GetValStrByKey(item.KeyOfEn);
+                                        
+                                        if (item.IsRichText == true)
+                                        {
+                                            text = text.Replace("white-space: nowrap;", "");
+                                        }
+                                    }
+
+                                    break;
+                                case FieldTypeS.Enum:
+                                    if (item.UIContralType == UIContralType.CheckBok)
+                                    {
+                                        string s = en.GetValStrByKey(item.KeyOfEn) + ",";
+                                        SysEnums enums = new SysEnums(item.UIBindKey);
+                                        foreach (SysEnum se in enums)
+                                        {
+                                            if (s.IndexOf(se.IntKey + ",") != -1)
+                                                text += se.Lab + " ";
+                                        }
+
+                                    }
+                                    else
+                                        text = dtl.GetValRefTextByKey(item.KeyOfEn);
+                                    break;
+                                case FieldTypeS.FK:
+                                    text = dtl.GetValRefTextByKey(item.KeyOfEn);
+                                    break;
+                                default:
+                                    break;
+                            }
 
                             if (item.UIContralType == UIContralType.DDL)
                             {
-                                sb.Append("<td>" + dtl.GetValRefTextByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("<td>" + text + "</td>");
                                 continue;
                             }
 
                             if (item.IsNum)
                             {
-                                sb.Append("<td style='text-align:right' >" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                                sb.Append("<td style='text-align:right' >" + text+ "</td>");
                                 continue;
                             }
 
-                            sb.Append("<td>" + dtl.GetValStrByKey(item.KeyOfEn) + "</td>");
+                            sb.Append("<td>" + text + "</td>");
                         }
                         sb.Append("</tr>");
                     }
@@ -1145,7 +1192,10 @@ namespace BP.WF
                 {
                     if (DataType.IsNullOrEmpty(gf.CtrlID) == true)
                         continue;
-                    FrmAttachment ath = new FrmAttachment(gf.CtrlID);
+                    FrmAttachment ath = new FrmAttachment();
+                    ath.MyPK = gf.CtrlID;
+                    if (ath.RetrieveFromDBSources() == 0)
+                        continue;
                     if (ath.IsVisable == false)
                         continue;
 

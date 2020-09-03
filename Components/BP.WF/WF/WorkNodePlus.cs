@@ -412,6 +412,8 @@ namespace BP.WF
             if (nd.GenerWorkerListDelRole == 0)
                 return;
 
+            Paras ps = new Paras();
+            string str = SystemConfig.AppCenterDBVarStr;
             //按照部门删除,同部门下的人员+兼职部门.
             if (nd.GenerWorkerListDelRole == 1 || 
                 nd.GenerWorkerListDelRole == 3 ||
@@ -476,7 +478,6 @@ namespace BP.WF
                 sql += " WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=0 ";
                 sql += " AND FK_Emp IN (" + stationEmp + ")";
                 //获得要删除的数据.
-
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {

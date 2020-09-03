@@ -5159,7 +5159,7 @@ namespace BP.WF
                 case DeliveryWay.ByDeptAndStation:
 
 
-                    string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmp B, WF_NodeStation C, " + Glo.EmpStation + " D";
+                    string sql = "SELECT COUNT(A.FK_Node) as Num FROM WF_NodeDept A, Port_DeptEmpStation B, WF_NodeStation C, " + Glo.EmpStation + " D";
                     sql += " WHERE A.FK_Dept= B.FK_Dept AND  A.FK_Node=" + dbstr + "FK_Node AND B.FK_Emp=" + dbstr + "FK_Emp AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp=" + dbstr + "FK_Emp";
                     ps.SQL = sql;
                     ps.Add("FK_Node", nd.NodeID);

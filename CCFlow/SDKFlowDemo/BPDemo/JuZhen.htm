@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>输出Table演示</title>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var frmID = GetQueryString("FK_MapData");
+            if (frmID == null)
+                frmID = "ND101";
+
+            //加载表单字段。
+            var ens = new Entities("BP.Port.Depts");
+            ens.RetrieveAll();
+
+            var cols = 5; //列数.
+            var colIdx = -1;
+
+            var html = "<table style='width:100%;' >";
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                colIdx++;
+                if (colIdx == 0)
+                    html += "<tr>";
+                html += "<td>" + en.Name + "</td>";
+
+                if (colIdx == cols-1) {
+                    html += "</tr>";
+                    colIdx = -1;
+                }
+            }
+
+            //处理输出余下的部分.
+            if (colIdx != -1)
+            {
+                while (true) {
+                    html += "<td></td>";
+                    colIdx++;
+                    if (colIdx == cols-1)
+                        html += "</tr>";
+                    break;
+                }
+            }
+
+            html += "</table>";
+            $("#docs").append(html);
+        });
+
+    </script>
+</head>
+<body>
+
+    <h3>矩阵输出...</h3>
+
+    <div id="docs"></div>
+
+
+</body>
+</html>

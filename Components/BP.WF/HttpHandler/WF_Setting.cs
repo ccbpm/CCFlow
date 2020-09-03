@@ -329,6 +329,34 @@ namespace BP.WF.HttpHandler
 
             return "设置成功";
         }
+        public string UpdateEmpNo()
+        {
+            try
+            {
+                BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
+                emp.RetrieveFromDBSources();
 
+                emp.SetValByKey(EmpAttr.Tel, this.GetRequestVal("Tel"));
+                emp.SetValByKey(EmpAttr.Name, this.GetRequestVal("Name"));
+                emp.SetValByKey(EmpAttr.Email, this.GetRequestVal("Email"));
+                emp.Update();
+
+                String dbstr = SystemConfig.AppCenterDBVarStr;
+                Paras ps = new Paras();
+                ps.SQL = "UPDATE WF_Emp Set Tel=" + dbstr + "Tel,Name=" + dbstr + "Name,Email=" + dbstr + "Email where No=" + dbstr + "No";
+                ps.Add("Tel", this.GetRequestVal("Tel"));
+                ps.Add("Name", this.GetRequestVal("Name"));
+                ps.Add("Email", this.GetRequestVal("Email"));
+                ps.Add("No", WebUser.No);
+                BP.DA.DBAccess.RunSQL(ps);
+
+                return "修改成功。";
+            }
+            catch (Exception ex)
+            {
+                return "修改失败。";
+            }
+
+        }
     }
 }

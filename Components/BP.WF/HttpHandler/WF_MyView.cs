@@ -229,16 +229,16 @@ namespace BP.WF.HttpHandler
                         int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
                         if (myNode != 0)
                         {
-                            GetTask gt = new GetTask(myNode);
-                            if (gt.Can_I_Do_It())
-                            {
-                                dr = dt.NewRow();
-                                dr["No"] = "TackBack";
-                                dr["Name"] = "取回审批";
-                                dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
-                                dt.Rows.Add(dr);
+                            //GetTask gt = new GetTask(myNode);
+                            //if (gt.Can_I_Do_It())
+                            //{
+                            //    dr = dt.NewRow();
+                            //    dr["No"] = "TackBack";
+                            //    dr["Name"] = "取回审批";
+                            //    dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
+                            //    dt.Rows.Add(dr);
 
-                            }
+                            //}
                         }
 
 
@@ -276,11 +276,11 @@ namespace BP.WF.HttpHandler
                         //催办
                         if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No) == true)
                         {
-                            dr = dt.NewRow();
-                            dr["No"] = "Press";
-                            dr["Name"] = "催办";
-                            dr["Oper"] = "Press();";
-                            dt.Rows.Add(dr);
+                            //dr = dt.NewRow();
+                            //dr["No"] = "Press";
+                            //dr["Name"] = "催办";
+                            //dr["Oper"] = "Press();";
+                            //dt.Rows.Add(dr);
                         }
 
                         break;
@@ -289,11 +289,11 @@ namespace BP.WF.HttpHandler
                         /*恢复使用流程*/
                         if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true)
                         {
-                            dr = dt.NewRow();
-                            dr["No"] = "Rollback";
-                            dr["Name"] = "回滚";
-                            dr["Oper"] = "Rollback();";
-                            dt.Rows.Add(dr);
+                            //dr = dt.NewRow();
+                            //dr["No"] = "Rollback";
+                            //dr["Name"] = "回滚";
+                            //dr["Oper"] = "Rollback();";
+                            //dt.Rows.Add(dr);
                         }
 
                         break;

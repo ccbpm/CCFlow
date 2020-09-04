@@ -1121,10 +1121,10 @@ namespace BP.WF
                                     if (item.MyDataType == 1 && (int)item.UIContralType == DataType.AppString)
                                     {
 
-                                        if (attrs.Contains(item.KeyOfEn + "Text") == true)
+                                        if (attrsOfDtls.Contains(item.MyPK + "Text") == true)
                                             text = dtl.GetValRefTextByKey(item.KeyOfEn);
                                         if (DataType.IsNullOrEmpty(text))
-                                            if (attrs.Contains(item.KeyOfEn + "T") == true)
+                                            if (attrsOfDtls.Contains(item.MyPK + "T") == true)
                                                 text = dtl.GetValStrByKey(item.KeyOfEn + "T");
                                     }
                                     else

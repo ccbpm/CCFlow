@@ -27,8 +27,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 18)
             continue;
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if (mapAttr.DefValType == 0 &&  (val == "0" || val == "0.0000"))
-            val = "";
+        //if (mapAttr.DefValType == 0 &&  (val == "0" || val == "0.0000"))
+         //   val = "";
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 
         //为树形结构的外键或者外部数据源

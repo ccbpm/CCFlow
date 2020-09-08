@@ -2151,6 +2151,8 @@ namespace BP.CCBill
             en.SetValByKey("WFState", WFState.Complete);
             en.Update();
 
+            en.RunSQL("UPDATE "+en.EnMap.FK_MapData+ " set WFState=3 WHERE OID="+ en.OID+"");
+
             GenerBill gb = new GenerBill();
             gb.WorkID = en.OID;
             if (gb.RetrieveFromDBSources() == 0)

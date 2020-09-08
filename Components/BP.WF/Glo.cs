@@ -6280,7 +6280,14 @@ namespace BP.WF
                 }
                 return dbs;
             }
-        
+            else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+            {
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+                    
             /* 继承模式 */
             if (athDesc.AthUploadWay == AthUploadWay.Interwork)
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);

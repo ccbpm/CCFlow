@@ -2148,7 +2148,6 @@ namespace BP.CCBill
                 en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
             en.SetValByKey("Rec", WebUser.No);
             en.SetValByKey("BillState", (int)BillState.Editing);
-            en.SetValByKey("WFState", WFState.Complete);
             en.Update();
 
             en.RunSQL("UPDATE "+en.EnMap.FK_MapData+ " set WFState=3 WHERE OID="+ en.OID+"");

@@ -2112,7 +2112,7 @@ namespace BP.CCBill
                             DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
                             foreach (DataRow drr in dataTable.Rows)
                             {
-                                if (drr["Name"] != null && newVal.Contains("," + drr["Name"].ToString() + ",") == true)
+                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true|| newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
                                     keyVal += drr["No"].ToString() + ",";
                             }
                             keyVal = keyVal.Length > 0 ? keyVal.Substring(0, keyVal.Length - 1) : "";

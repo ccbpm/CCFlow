@@ -1512,8 +1512,8 @@ namespace BP.En
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                         {
                             if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
-                                                        "CONVERT(varchar(100),  getdate(), 23)') " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23)," +
+                                                        "CONVERT(varchar(100),  getdate(), 23)) " + attr.Key;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
                         }  
@@ -1527,8 +1527,8 @@ namespace BP.En
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                         {
                             if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
-                                                          "CONVERT(varchar(100), getdate(), 20)') " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20)," +
+                                                          "CONVERT(varchar(100), getdate(), 20)) " + attr.Key;
 
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;

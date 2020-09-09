@@ -6097,8 +6097,17 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarToNodeID, node.NodeID.ToString(), workid.ToString(), SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);
 
+            //显示人员名称
+            string[] toEmpNos = toEmpIDs.Split(',');
+            string toEmpNames = "";
+            for (int i = 0; i < toEmpNos.Length; i++)
+            {
+                Emp toEmp = new Emp(toEmpNos[i]);
+                toEmpNames += toEmp.Name + ",";
+            }
+            toEmpNames = toEmpNames.TrimEnd(',');
             //设置消息.
-            this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.", "WorkNode", "sub_wf_started", node.FlowName, toEmpIDs));
+            this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.", "WorkNode", "sub_wf_started", node.FlowName, toEmpNames));
             if(SystemConfig.CustomerNo.Equals("ASSET") == false)
                 this.addMsg("Msg2", BP.WF.Glo.multilingual("当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.", "WorkNode", "to_do_list_invisible"));
 

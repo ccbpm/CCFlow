@@ -84,7 +84,7 @@ namespace BP.WF.HttpHandler
                             continue;
 
                         string val = this.GetValFromFrmByKey("TB_" + attr.Key + "_" + pkval, null);
-                        item.SetValByKey(attr.Key, val);
+                        item.SetValByKey(attr.Key, HttpUtility.UrlDecode(val, Encoding.UTF8));
                         continue;
                     }
 

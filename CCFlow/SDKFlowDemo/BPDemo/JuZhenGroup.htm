@@ -22,6 +22,7 @@
             ens.RetrieveAll();
 
             var cols = 5; //列数.
+            var sortField = "FK_Dept"; //关联字段.
             var html = "<table style='width:100%;' >";
 
             //遍历分组.
@@ -29,7 +30,7 @@
                 var group = groups[iGroup];
 
                 //判断该类别下的实体是否存在? 如果不存在就不输出.
-                if (IsHaveEns(ens, group.No) == false)
+                if (IsHaveEns(ens, group.No,sortField) == false)
                     continue;
 
                 html += "<tr>";
@@ -40,7 +41,7 @@
                 for (var i = 0; i < ens.length; i++) {
                     var en = ens[i]; //获得子集.
 
-                    if (en.FK_Dept != group.No)
+                    if (en[sortField] != group.No)
                         continue; //过滤.
 
                     colIdx++;
@@ -71,15 +72,21 @@
             }
 
             html += "</table>";
+
+            if ($("#docs") == null)
+            {
+                alert('没有找到标签id=docs的 div.');
+            }
+
             $("#docs").append(html);
         });
 
         //是否包含.
-        function IsHaveEns(ens, groupNo)
+        function IsHaveEns(ens, groupNo,sortField)
         {
             for (var myidx = 0; myidx < ens.length; myidx++) {
                 var en = ens[myidx];
-                if (en.FK_Dept == groupNo)
+                if (en[sortField] == groupNo)
                     return true;
             }
             return false;

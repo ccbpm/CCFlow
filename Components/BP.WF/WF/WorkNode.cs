@@ -8671,6 +8671,7 @@ namespace BP.WF
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
 
+                gwf.Emps = gwf.Emps + "@" + this.HisGenerWorkFlow.Emps;
                 gwf.SetPara("ThreadCount", 0);
                 gwf.Update();
                 info = BP.WF.Glo.multilingual("@下一步合流节点[{0}]工作成功启动.", "WorkNode", "start_next_combined_node_work_success", nd.Name);
@@ -8683,6 +8684,9 @@ namespace BP.WF
                 ps.Add("FK_Node", nd.NodeID);
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
+
+                gwf.Emps = gwf.Emps + "@" + this.HisGenerWorkFlow.Emps;
+                gwf.Update();
             }
 
             this.HisGenerWorkFlow.FK_Node = nd.NodeID;

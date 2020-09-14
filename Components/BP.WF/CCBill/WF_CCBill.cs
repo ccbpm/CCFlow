@@ -2011,60 +2011,85 @@ namespace BP.CCBill
                 //外键处理.
                 if (item.MyFieldType == FieldType.FK)
                 {
-                    Entity attrEn = item.HisFKEn;
-                    int i = attrEn.Retrieve("Name", val);
-                    if (i == 0)
+                    if (item.Key == "PS_DepartCode")
                     {
-                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                        string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
+                        if (!string.IsNullOrWhiteSpace(keyNo))
+                        {
+                            en.SetValByKey("PS_DepartName", val);
+                            en.SetValByKey(item.Key, keyNo);
+                        }
                         continue;
                     }
-
-                    if (i != 1)
-                    {
-                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
-                        continue;
-                    }
-
-                    //把编号值给他.
-                    en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
-                    if (item.Key.EndsWith("BaseCode") == true)
-                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
                     else
-                        en.SetValByKey(item.Key.Replace("Code", ""), val);
+                    {
+                        Entity attrEn = item.HisFKEn;
+                        int i = attrEn.Retrieve("Name", val);
+                        if (i == 0)
+                        {
+                            errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
+                            continue;
+                        }
+
+                        if (i != 1)
+                        {
+                            errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
+                            continue;
+                        }
+
+                        //把编号值给他.
+                        en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                        if (item.Key.EndsWith("BaseCode") == true)
+                            en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                        else
+                            en.SetValByKey(item.Key.Replace("Code", ""), val);
+                    }
                     continue;
                 }
                 //外部数据源
                 if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString && item.UIContralType == UIContralType.DDL)
                 {
-                    string uiBindKey = item.UIBindKey;
-                    if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
-                    DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
-                    if (mydt.Rows.Count == 0)
-                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],对应的外键没有获取到外键列表";
-                    bool isHave = false;
-
-                    //给赋值名称
-                    if (item.Key.EndsWith("BaseCode") == true)
-                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
-                    else
-                        en.SetValByKey(item.Key.Replace("Code", ""), val);
-
-                    en.SetValByKey(item.Key + "T", val);
-                    foreach (DataRow mydr in mydt.Rows)
+                    if (item.Key == "PS_DepartCode")
                     {
-                        if (mydr["Name"].ToString().Equals(val) == true)
+                        string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
+                        if (!string.IsNullOrWhiteSpace(keyNo))
                         {
-                            en.SetValByKey(item.Key, mydr["No"].ToString());
-                            isHave = true;
-                            break;
+                            en.SetValByKey("PS_DepartName", val);
+                            en.SetValByKey(item.Key, keyNo);
                         }
+                        continue;
                     }
+                    else
+                    {
+                        string uiBindKey = item.UIBindKey;
+                        if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
+                        DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                        if (mydt.Rows.Count == 0)
+                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],对应的外键没有获取到外键列表";
+                        bool isHave = false;
 
-                    if (isHave == false)
-                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],没有获取到" + val + "对应的Code值";
+                        //给赋值名称
+                        if (item.Key.EndsWith("BaseCode") == true)
+                            en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                        else
+                            en.SetValByKey(item.Key.Replace("Code", ""), val);
 
+                        en.SetValByKey(item.Key + "T", val);
+                        foreach (DataRow mydr in mydt.Rows)
+                        {
+                            if (mydr["Name"].ToString().Equals(val) == true)
+                            {
+                                en.SetValByKey(item.Key, mydr["No"].ToString());
+                                isHave = true;
+                                break;
+                            }
+                        }
 
+                        if (isHave == false)
+                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],没有获取到" + val + "对应的Code值";
+
+                    }
                     continue;
                 }
 
@@ -2086,9 +2111,16 @@ namespace BP.CCBill
 
                 }
 
-               
-
-
+                if (item.Key == "PS_DepartCode")
+                {
+                    string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
+                    if (!string.IsNullOrWhiteSpace(keyNo))
+                    {
+                        en.SetValByKey("PS_DepartName", val);
+                        en.SetValByKey(item.Key, keyNo);
+                    }
+                    continue;
+                }
                 if (item.Key.EndsWith("BaseName") == true)
                 {
                     Depts depts = new Depts();
@@ -2100,7 +2132,7 @@ namespace BP.CCBill
                 }
                 else
                 {
-                    if (item.Key.Equals("CI_SmallBusinessFormatCode") || item.Key.Equals("PS_PostCode"))
+                    if (item.Key=="CI_SmallBusinessFormatCode")
                     {
                         string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
                         MapExt mapExt = new MapExt();
@@ -2112,7 +2144,7 @@ namespace BP.CCBill
                             DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
                             foreach (DataRow drr in dataTable.Rows)
                             {
-                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true|| newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
+                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true || newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
                                     keyVal += drr["No"].ToString() + ",";
                             }
                             keyVal = keyVal.Length > 0 ? keyVal.Substring(0, keyVal.Length - 1) : "";
@@ -2125,6 +2157,32 @@ namespace BP.CCBill
                         {
                             en.SetValByKey(item.Key, val);
                         }
+                    }
+                    else if (item.Key=="PS_PostCode")
+                    {
+                        string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
+                        MapExt mapExt = new MapExt();
+                        mapExt.MyPK = mypk;
+                        if (mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
+                        {
+                            string newVal = "," + val + ",";
+                            string keyVal = "";
+                            DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
+                            foreach (DataRow drr in dataTable.Rows)
+                            {
+                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true || newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
+                                    keyVal += drr["No"].ToString() + ",";
+                            }
+                            keyVal = keyVal.Length > 0 ? keyVal.Substring(0, keyVal.Length - 1) : "";
+
+                            en.SetValByKey(item.Key, keyVal);
+                            en.SetValByKey("PS_PostName", val);
+                        }
+                        else
+                        {
+                            en.SetValByKey(item.Key, val);
+                        }
+                        continue;
                     }
                     else
                     {
@@ -2148,7 +2206,7 @@ namespace BP.CCBill
                 en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
             en.SetValByKey("Rec", WebUser.No);
             en.SetValByKey("BillState", (int)BillState.Editing);
-            en.Update();
+            en.DirectUpdate();
 
             en.RunSQL("UPDATE "+en.EnMap.FK_MapData+ " set WFState=3 WHERE OID="+ en.OID+"");
 

@@ -2017,6 +2017,7 @@ namespace BP.CCBill
                         if (!string.IsNullOrWhiteSpace(keyNo))
                         {
                             en.SetValByKey("PS_DepartName", val);
+                            en.SetValByKey("PS_DepartCodeT", val);
                             en.SetValByKey(item.Key, keyNo);
                         }
                         continue;
@@ -2055,6 +2056,7 @@ namespace BP.CCBill
                         if (!string.IsNullOrWhiteSpace(keyNo))
                         {
                             en.SetValByKey("PS_DepartName", val);
+                            en.SetValByKey("PS_DepartCodeT", val);
                             en.SetValByKey(item.Key, keyNo);
                         }
                         continue;
@@ -2117,6 +2119,7 @@ namespace BP.CCBill
                     if (!string.IsNullOrWhiteSpace(keyNo))
                     {
                         en.SetValByKey("PS_DepartName", val);
+                        en.SetValByKey("PS_DepartCodeT", val);
                         en.SetValByKey(item.Key, keyNo);
                     }
                     continue;
@@ -2177,6 +2180,7 @@ namespace BP.CCBill
 
                             en.SetValByKey(item.Key, keyVal);
                             en.SetValByKey("PS_PostName", val);
+                            en.SetValByKey("PS_PostCodeT", val);
                         }
                         else
                         {

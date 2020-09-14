@@ -8275,6 +8275,8 @@ namespace BP.WF
             {
                 this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
             }
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            this.HisGenerWorkFlow.Emps = gwf.Emps;
             this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
             this.HisGenerWorkFlow.Update();
 

@@ -64,11 +64,44 @@ namespace BP.WF.HttpHandler
         //保存从表数据
         public string Dtl_SaveRow()
         {
+            string fk_mapDtl = this.FK_MapDtl;
+            MapDtl mdtl = new MapDtl(fk_mapDtl);
+            string dtlRefPKVal = this.RefPKVal;
+
+            #region 处理权限方案。
+            if (this.FK_Node != 0 && this.FK_Node != 999999)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.NodeID, mdtl.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = fk_mapDtl + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            mdtl = mdtlSln;
+                            fk_mapDtl = no;
+                        }
+                    }
+
+                }
+
+                dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, mdtl);
+                if (dtlRefPKVal.Equals("0") == true)
+                    dtlRefPKVal = this.RefPKVal;
+
+            }
+            #endregion 处理权限方案。
+
+
             #region  查询出来从表数据.
-            GEDtls dtls = new GEDtls(this.EnsName);
+            GEDtls dtls = new GEDtls(fk_mapDtl);
             GEDtl dtl = dtls.GetNewEntity as GEDtl;
-            dtls.Retrieve("RefPK", this.GetRequestVal("RefPKVal"));
-            MapDtl mdtl = new MapDtl(this.EnsName);
+            dtls.Retrieve("RefPK", dtlRefPKVal);
             Map map = dtl.EnMap;
             foreach (GEDtl item in dtls)
             {

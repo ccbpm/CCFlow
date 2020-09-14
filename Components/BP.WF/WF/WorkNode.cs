@@ -8685,6 +8685,13 @@ namespace BP.WF
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
 
+                ps = new Paras();
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
+                ps.Add("FK_Node", nd.NodeID);
+                ps.Add("NodeName", nd.Name);
+                ps.Add("WorkID", this.HisWork.FID);
+                DBAccess.RunSQL(ps);
+
                 gwf.Emps = gwf.Emps + "@" + this.HisGenerWorkFlow.Emps;
                 gwf.Update();
             }

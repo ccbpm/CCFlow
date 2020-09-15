@@ -445,9 +445,9 @@
                     //是否显示checkbox
                     var cbox = "";
                     if (mapAttr.IsEnableInAPP == "1")
-                        cbox = "<label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.KeyOfEn + "' checked=true />是否显示</label>";
+                        cbox = "<label><input type='checkbox'  onclick='IsView(this);' name='CB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.KeyOfEn + "' checked=true />是否显示</label>";
                     else
-                        cbox = "<label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "'  value='" + mapAttr.KeyOfEn + "' />是否显示</label>";
+                        cbox = "<label><input type='checkbox' onclick='IsView(this);' name='CB_" + mapAttr.KeyOfEn + "'  value='" + mapAttr.KeyOfEn + "' />是否显示</label>";
 
                     //字段行tr
                     tr = "<tr>";
@@ -462,6 +462,20 @@
                     $("#sort").append(tr);
                 }
             }
+        }
+
+        function IsView(ctrl) {
+
+            var field = ctrl.name.replace('CB_', '');
+
+            var key = GetQueryString("FK_MapData") + "_" + field;
+            var en = new Entity("BP.Sys.MapAttr", key);
+
+            if (ctrl.checked == true)
+                en.IsEnableInAPP = 1;
+            else
+                en.IsEnableInAPP = 0;
+            en.Update();
         }
     </script>
 

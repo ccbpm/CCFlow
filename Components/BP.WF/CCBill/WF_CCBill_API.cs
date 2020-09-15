@@ -192,7 +192,7 @@ namespace BP.CCBill
                         stations = stations.Replace(",", "','");
                         stations = "'" + stations + "'";
                         string sql = "SELECT * From Port_DeptEmpStation DES,Port_Emp E WHERE  E.No = DES.FK_Emp AND E.No='" + userNo + "' AND DES.FK_Station IN(" + stations + ")";
-                        if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
+                        if (DBAccess.RunSQLReturnCOUNT(sql) >= 1)
                             isTrue = 1;
                     }
 
@@ -210,7 +210,7 @@ namespace BP.CCBill
                         depts = depts.Replace(",", "','");
                         depts = "'" + depts + "'";
                         string sql = "SELECT * From Port_DeptEmp D,Port_Emp E WHERE  E.No = D.FK_Emp AND E.No='" + userNo + "' AND D.FK_Dept IN(" + depts + ")";
-                        if (DBAccess.RunSQLReturnCOUNT(sql) > 1)
+                        if (DBAccess.RunSQLReturnCOUNT(sql) >= 1)
                             isTrue = 1;
                     }
                    

@@ -626,7 +626,7 @@ namespace BP.WF
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
-                #region 发送邮件
+                #region 发送邮件.
                 if (this.PushModel.Contains("Email") == true && DataType.IsNullOrEmpty(this.Email) == false)
                 {
                     string emailStrs = this.Email;

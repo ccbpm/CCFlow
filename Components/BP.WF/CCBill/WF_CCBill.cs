@@ -2171,6 +2171,7 @@ namespace BP.CCBill
                             string newVal = "," + val + ",";
                             string keyVal = "";
                             DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
+                            dataTable = DBAccess.RunSQLReturnTable("select * FROM PORT_STATION WHERE FK_StationType IN(SELECT NO FROM Port_StationType WHERE NAME LIKE '农发总部%')");
                             foreach (DataRow drr in dataTable.Rows)
                             {
                                 if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true || newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))

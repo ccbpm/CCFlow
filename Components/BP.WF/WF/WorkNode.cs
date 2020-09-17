@@ -6098,7 +6098,7 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);
 
             //显示人员名称
-            string[] toEmpNos = toEmpIDs.Split(',');
+            string[] toEmpNos = toEmpIDs.TrimEnd(',').Split(',');
             string toEmpNames = "";
             for (int i = 0; i < toEmpNos.Length; i++)
             {

@@ -8275,8 +8275,6 @@ namespace BP.WF
             {
                 this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
             }
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            this.HisGenerWorkFlow.Emps = gwf.Emps;
             this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
             this.HisGenerWorkFlow.Update();
 
@@ -8377,8 +8375,8 @@ namespace BP.WF
             }
             // 给他们赋值.
             this.rptGe.FlowEmps = flowEmps;
-
-            this.HisGenerWorkFlow.Emps = emps;
+            if (this.HisGenerWorkFlow.Emps.Contains("@" + WebUser.No + ",") == false)
+                this.HisGenerWorkFlow.Emps = this.HisGenerWorkFlow.Emps+"@"+ WebUser.No + "," + WebUser.Name + "@";
         }
         /// <summary>
         /// 处理自动运行 - 预先设置未来的运行节点.

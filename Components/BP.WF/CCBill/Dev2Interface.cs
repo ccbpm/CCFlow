@@ -42,12 +42,15 @@ namespace BP.CCBill
                     return gb.WorkID;
             }
 
+            BP.Port.Emp emp = new Port.Emp(userNo); 
+            
+
             FrmBill fb = new FrmBill(frmID);
 
             gb.WorkID = DBAccess.GenerOID("CCBill");
             gb.BillState = BillState.None; //初始化状态.
-            gb.Starter = BP.Web.WebUser.No;
-            gb.StarterName = BP.Web.WebUser.Name;
+            gb.Starter = emp.No;
+            gb.StarterName = emp.Name;
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
 
@@ -91,7 +94,7 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
-            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
+            rpt.SetValByKey("FK_Dept", emp.FK_Dept);
             rpt.SetValByKey("RDT", gb.RDT);
             rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", gb.BillNo);

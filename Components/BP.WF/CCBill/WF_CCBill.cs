@@ -1061,7 +1061,7 @@ namespace BP.CCBill
                     qo.addOrderBy("PS_DepartCode");
                 //如果是基地，按照基地名称排序
                 else if (this.FrmID == "Bill_JDGSRYSJ")
-                    qo.addOrderBy("PS_DepartCode");
+                    qo.addOrderBy("PS_BaseCode");
                 else
                     qo.addOrderBy("OID");
 
@@ -1501,7 +1501,7 @@ namespace BP.CCBill
                 qo.addOrderBy("PS_DepartCode");
             //如果是基地，按照基地名称排序
             else if (this.FrmID == "Bill_JDGSRYSJ")
-                qo.addOrderBy("PS_DepartCode");
+                qo.addOrderBy("PS_BaseCode");
             else
                 qo.addOrderBy("OID");
             return qo.DoQueryToTable();

@@ -670,6 +670,7 @@ namespace BP.WF
                 json += " \"sendTo\": \"" + this.SendToEmpNo + "\",";
                 json += " \"tel\": \"" + this.Mobile + "\",";
                 json += " \"title\":\"" + this.Title + "\",";
+                json += " \"msgFlag\":\"" + this.MsgFlag.Replace("WKAlt", "") + "\",";
                 json += " \"content\":\"" + this.MobileInfo + " \",";
                 json += " \"openUrl\":\"" + this.OpenURL + " \"}";
 
@@ -699,7 +700,7 @@ namespace BP.WF
                 //微信
                 if (this.PushModel.Contains("WeiXin") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo + "&msgConten=" + this.MobileInfo;
+                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo;
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                 }

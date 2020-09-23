@@ -731,7 +731,7 @@ namespace BP.CCBill
             #region 关键字字段.
             string keyWord = ur.SearchKey;
 
-            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1&&!string.IsNullOrWhiteSpace(keyWord))
             {
                 Attr attrPK = new Attr();
                 foreach (Attr attr in attrs)

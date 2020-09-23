@@ -751,13 +751,10 @@ namespace BP.WF
 
             //子线程退回应该是单线退回到干流程
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
 
-            //查询退回到的工作人员列表.
-            //GenerWorkerLists gwls = new GenerWorkerLists();
-            //gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-            //    GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+           
 
             string toEmp = "";
             string toEmpName = "";

@@ -1052,20 +1052,12 @@ namespace BP.CCBill
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);
             else
             {
-
-                //如果是总部，按照部门部门排序
-                if (this.FrmID == "Bill_ZongBuHuaMingCe")
-                    qo.addOrderBy("PS_DepartCode");
-                //如果是区域，按照区域公司排序
-                else if (this.FrmID == "Bill_QuYuRenYuanShanJu")
-                    qo.addOrderBy("PS_DepartCode");
-                //如果是基地，按照基地名称排序
-                else if (this.FrmID == "Bill_JDGSRYSJ")
-                    qo.addOrderBy("PS_BaseCode");
+                string hidenOrderBy = frmBill.GetParaString("HidenOrderBy");
+                //是否有排序字段
+                if(!DataType.IsNullOrEmpty(hidenOrderBy))
+                    qo.DoQuery("OID", this.PageSize, this.PageIdx, hidenOrderBy,false);
                 else
-                    qo.addOrderBy("OID");
-
-                qo.DoQuery("OID", this.PageSize, this.PageIdx);
+                    qo.DoQuery("OID", this.PageSize, this.PageIdx);
             }
 
             DataTable mydt = rpts.ToDataTableField();

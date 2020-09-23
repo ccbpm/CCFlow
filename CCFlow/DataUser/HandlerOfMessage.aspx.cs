@@ -1,11 +1,17 @@
-﻿
+﻿using BP.DA;
 using BP.GPM.DTalk.DINGTalk;
 using BP.GPM.WeiXin;
 using BP.Sys;
 using BP.Web;
+using BP.WF;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 
 namespace CCFlow.DataUser
@@ -15,16 +21,19 @@ namespace CCFlow.DataUser
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            byte[] data;
+            string txt;
+            Dictionary<string, object> dictionary = null;
             string doType = this.Request.QueryString["DoType"]; //消息类型标记,在节点事件上配置的标记.
             switch (doType)
             {
                 case "SendToCCMSG":
-                    byte[] data = new byte[this.Request.InputStream.Length];
+                    data = new byte[this.Request.InputStream.Length];
                     this.Request.InputStream.Read(data, 0, data.Length); //获得传入来的数据.
-                    string txt = System.Text.Encoding.UTF8.GetString(data);  //编码.
+                    txt = System.Text.Encoding.UTF8.GetString(data);  //编码.
 
                     //转成json.
-                    Dictionary<string, object> dictionary = null;
+
                     dictionary = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(txt);
 
                     //获得里面的参数.
@@ -41,17 +50,52 @@ namespace CCFlow.DataUser
                 case "SendToWeiXin":
                     try
                     {
+                        data = new byte[this.Request.InputStream.Length];
+                        this.Request.InputStream.Read(data, 0, data.Length); //获得传入来的数据.
+                        txt = System.Text.Encoding.UTF8.GetString(data);  //编码.
+
+                        dictionary = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(txt);
+
+                        //获取参数信息
+                        string msgContent = dictionary["content"].ToString();
+                        string msgFlg = dictionary["msgFlag"].ToString();
+                        int fk_node = 0;
+                        Int64 workid = 0;
+                        if (DataType.IsNullOrEmpty(msgFlg) == false)
+                        {
+                            fk_node = int.Parse(msgFlg.Split('_')[0]);
+                            workid = Int64.Parse(msgFlg.Split('_')[1]);
+                        }
                         string agentId = SystemConfig.WX_AgentID ?? null;
                         if (agentId != null)
                         {
                             string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
                             NewsArticles newArticle = new NewsArticles();
-                            newArticle.description = this.Request.QueryString["msgConten"];
-
                             newArticle.title = "您有一条待办消息";
-                            string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
-                                + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                            string New_Url = "";
+                            if (msgContent.StartsWith("http:") == true)
+                            {
+                                byte[] bytes = UTF8Encoding.UTF8.GetBytes(msgContent);
+                                msgContent = Convert.ToBase64String(bytes);
+                                
+
+                                New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
+                                 + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=URL_" + msgContent + ",WorkID_" + workid + ",FK_Node_" + fk_node + "#wechat_redirect";
+                                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                                string str = "\t\n您好:";
+                                str += "\t\n    工作{" + gwf.Title + "}有一条新消息 .";
+                                str += "\t\n    发起人" + gwf.StarterName;
+                                str += "\t\n    发起时间" + gwf.SendDT;
+                                newArticle.description = str;
+                            }
+                            else
+                            {
+                                newArticle.description = msgContent;
+                                New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
+                                + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=MyView,WorkID_" + workid + ",FK_Node_" + fk_node + "#wechat_redirect";
+                            }
+
                             newArticle.url = New_Url;
 
                             //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg

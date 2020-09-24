@@ -980,9 +980,18 @@ namespace BP.WF
                                             text += se.Lab + " ";
                                     }
 
-                                } 
+                                }
                                 else
-                                    text = en.GetValRefTextByKey(attr.KeyOfEn);
+                                {
+                                    //@yln
+                                    text = en.GetValStrByKey(attr.KeyOfEn);
+                                    if (DataType.IsNullOrEmpty(text))
+                                        text = "";
+                                    else
+                                        text = en.GetValRefTextByKey(attr.KeyOfEn);
+
+                                }
+                                    
                                 break;
                             case FieldTypeS.FK:
                                 text = en.GetValRefTextByKey(attr.KeyOfEn);
@@ -1142,7 +1151,7 @@ namespace BP.WF
                                 case FieldTypeS.Enum:
                                     if (item.UIContralType == UIContralType.CheckBok)
                                     {
-                                        string s = en.GetValStrByKey(item.KeyOfEn) + ",";
+                                        string s = dtl.GetValStrByKey(item.KeyOfEn) + ",";
                                         SysEnums enums = new SysEnums(item.UIBindKey);
                                         foreach (SysEnum se in enums)
                                         {
@@ -1152,7 +1161,16 @@ namespace BP.WF
 
                                     }
                                     else
-                                        text = dtl.GetValRefTextByKey(item.KeyOfEn);
+                                    {
+                                        //@yln
+                                        text = dtl.GetValStrByKey(item.KeyOfEn);
+                                        if (DataType.IsNullOrEmpty(text))
+                                            text = "";
+                                        else
+                                            text = dtl.GetValRefTextByKey(item.KeyOfEn);
+
+                                    }
+                                       
                                     break;
                                 case FieldTypeS.FK:
                                     text = dtl.GetValRefTextByKey(item.KeyOfEn);

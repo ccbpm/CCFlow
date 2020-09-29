@@ -1287,7 +1287,7 @@ namespace BP.WF
                 sql += " AND A.FK_Node=" + fk_node;
             }
 
-            sql += "  ORDER  A.RDT DESC ";
+            sql += "  ORDER by A.RDT DESC ";
 
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

@@ -171,7 +171,7 @@ namespace BP.WF.HttpHandler
                 QueryObject qo = new QueryObject(attrOfFrms);
                 qo.AddWhere(MapAttrAttr.FK_MapData, nd.NodeFrmID);
                 qo.addAnd();
-                qo.AddWhereNotIn(MapAttrAttr.KeyOfEn, "'OID','FID','BillNo','RDT','Rec'");
+                qo.AddWhereNotIn(MapAttrAttr.KeyOfEn, "'OID','FID','BillNo','RDT','Rec','Title'");
                 qo.addOrderBy("Idx");
                 qo.DoQuery();
                 

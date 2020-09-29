@@ -307,6 +307,8 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
 
+           
+
             foreach (MapAttr attr in attrs)
             {
                 row = dt.NewRow();
@@ -455,7 +457,24 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region //增加第一页数据
-            GEEntitys ges = new GEEntitys(rptNo);
+            GEEntitys ges;
+            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                MapAttrs attrsOfSystem = new MapAttrs("ND"+ int.Parse(this.FK_Flow)+"Rpt");
+                ges = new GEEntitys(nd.NodeFrmID);
+                GEEntity en = ges.GetNewEntity as GEEntity;
+                foreach (MapAttr mapAttr in attrsOfSystem)
+                    en.EnMap.AddAttr(mapAttr.HisAttr);
+                Cash.SQL_Cash.Remove(nd.NodeFrmID);
+            }
+            else
+            {
+                ges = new GEEntitys(rptNo);
+            }
+           
+           
+
             QueryObject qo = new QueryObject(ges);
 
             switch (this.SearchType)
@@ -528,7 +547,23 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
             MapAttrs attrs = new MapAttrs(rptNo);
-            GEEntitys ges = new GEEntitys(rptNo);
+            GEEntitys ges;
+            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                MapAttrs attrsOfSystem = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
+                ges = new GEEntitys(nd.NodeFrmID);
+                GEEntity en = ges.GetNewEntity as GEEntity;
+                foreach (MapAttr mapAttr in attrsOfSystem)
+                    en.EnMap.AddAttr(mapAttr.HisAttr);
+                Cash.SQL_Cash.Remove(nd.NodeFrmID);
+            }
+            else
+            {
+                ges = new GEEntitys(rptNo);
+            }
+
+
             QueryObject qo = new QueryObject(ges);
 
             switch (this.SearchType)
@@ -596,8 +631,22 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
-            //MapAttrs attrs = new MapAttrs(rptNo);
-            GEEntitys ges = new GEEntitys(rptNo);
+            GEEntitys ges;
+            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                MapAttrs attrsOfSystem = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
+                ges = new GEEntitys(nd.NodeFrmID);
+                GEEntity en = ges.GetNewEntity as GEEntity;
+                foreach (MapAttr mapAttr in attrsOfSystem)
+                    en.EnMap.AddAttr(mapAttr.HisAttr);
+                Cash.SQL_Cash.Remove(nd.NodeFrmID);
+            }
+            else
+            {
+                ges = new GEEntitys(rptNo);
+            }
+
             QueryObject qo = new QueryObject(ges);
 
             string title = "数据导出";

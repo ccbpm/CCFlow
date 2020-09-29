@@ -72,11 +72,25 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
             string rptNo = this.GetRequestVal("RptNo");
-
-            //所有的字段.
+            MapAttrs mattrs = new MapAttrs();
             string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            MapAttrs mattrs = new MapAttrs(fk_mapdata);
-            ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
+            //判断该流程的开始节点的表单方案
+            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                mattrs = new MapAttrs();
+                mattrs.Retrieve(MapAttrAttr.FK_MapData, nd.NodeFrmID, "Idx");
+                ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
+            }
+            else
+            {
+                mattrs = new MapAttrs(fk_mapdata);
+                ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
+            }
+
+            
+           
+           
 
             //判断rptNo是否存在于mapdata中
             MapData md = new MapData();
@@ -147,8 +161,23 @@ namespace BP.WF.HttpHandler
             mrattrsOfRpt.Delete(MapAttrAttr.FK_MapData, rptNo);
 
             //所有的字段.
+            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
             string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
             MapAttrs allAttrs = new MapAttrs(fk_mapdata);
+
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                MapAttrs attrOfFrms = new MapAttrs();
+                QueryObject qo = new QueryObject(attrOfFrms);
+                qo.AddWhere(MapAttrAttr.FK_MapData, nd.NodeFrmID);
+                qo.addAnd();
+                qo.AddWhereNotIn(MapAttrAttr.KeyOfEn, "'OID','FID','BillNo','RDT','Rec'");
+                qo.addOrderBy("Idx");
+                qo.DoQuery();
+                
+                allAttrs.AddEntities(attrOfFrms);
+            }
+           
 
             foreach (MapAttr attr in allAttrs)
             {
@@ -335,6 +364,7 @@ namespace BP.WF.HttpHandler
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo,"Idx");
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
+          
             #region 检查是否有日期字段.
             bool isHave = false;
             foreach (MapAttr mattr in attrs)

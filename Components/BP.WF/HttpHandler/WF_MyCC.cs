@@ -430,7 +430,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //string url = "MyCCFoolTruck.htm";
-                string url = "MyCCGener.htm";
+                string url = "MyViewGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -447,7 +447,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //string url = "MyCCFoolTruck.htm";
-                string url = "MyCCWebOffice.htm";
+                string url = "MyViewGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -463,9 +463,9 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyCCGener.htm";
+                string url = "MyViewGener.htm";
                 if (this.IsMobile)
-                    url = "MyCCGener.htm";
+                    url = "MyViewGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -484,7 +484,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyCCSelfForm.htm";
+                string url = "MyViewGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -495,7 +495,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 内置表单类型的判断.
 
-            string myurl = "MyCCGener.htm";
+            string myurl = "MyViewGener.htm";
 
             //处理连接.
             myurl = this.MyCC_Init_DealUrl(currND, currWK, myurl);

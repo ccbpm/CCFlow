@@ -18,7 +18,7 @@ namespace CCFlow.DataUser
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消对下行的注释。
-    // [System.Web.Script.Services.ScriptService]
+    [System.Web.Script.Services.ScriptService]
     public class LocalWS : System.Web.Services.WebService
     {
         /// <summary>
@@ -285,7 +285,43 @@ namespace CCFlow.DataUser
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
             return gwf.ToJson();
         }
+        [WebMethod]
+        //微信小程序授权接口
+        public string WeChatLogin(string userID, string userName, string userHeadURL)
+        {
+            DataTable dt=new DataTable();
+            //查询当前授权用户是否存在人员表中
+            string sql = "SELECT * FROM Port_Emp WHERE openid='" + userID+"'";
+            dt= DBAccess.RunSQLReturnTable(sql);
+            //如果存在此微信用户的openid
+            if (dt.Rows.Count > 0)
+            {
+                //将微信登录名转换为拼音
+                string userNo = BP.DA.DataType.ParseStringToPinyin(userName);
+                //调用登录接口
+                BP.WF.Dev2Interface.Port_Login(userNo);
+                return BP.Tools.Json.ToJson(dt);
+            }
+            else
+            {
+                //将新授权的微信用户插入到Port_Emp表里
+                BP.WF.Port.Emp emp = new BP.WF.Port.Emp();
+                //将微信登录名转换为拼音
+                string userNo= BP.DA.DataType.ParseStringToPinyin(userName);
+                emp.No = userNo;
+                emp.Name = userName;
+                emp.Pass = "123";
+                emp.openID = userID;
+                emp.avatarUrl = userHeadURL;
+                emp.Insert();
 
+                //调用登录接口
+                BP.WF.Dev2Interface.Port_Login(userName);
+
+                dt = DBAccess.RunSQLReturnTable(sql);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
 
     }
 }

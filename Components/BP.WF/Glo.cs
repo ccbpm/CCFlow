@@ -6283,6 +6283,8 @@ namespace BP.WF
             else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
             {
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
                 return dbs;

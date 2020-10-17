@@ -219,25 +219,13 @@ namespace BP.WF.HttpHandler
         public string DB_GenerReturnWorks()
         {
             /* 如果工作节点退回了*/
+            /* 如果工作节点退回了*/
             BP.WF.ReturnWorks rws = new BP.WF.ReturnWorks();
             rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node, BP.WF.ReturnWorkAttr.WorkID, this.WorkID, BP.WF.ReturnWorkAttr.RDT);
             StringBuilder append = new StringBuilder();
             append.Append("[");
-            if (rws.Count != 0)
-            {
-                foreach (BP.WF.ReturnWork rw in rws)
-                {
-                    append.Append("{");
-                    append.Append("ReturnNodeName:'" + rw.ReturnNodeName + "',");
-                    append.Append("ReturnerName:'" + rw.ReturnerName + "',");
-                    append.Append("RDT:'" + rw.RDT + "',");
-                    append.Append("NoteHtml:'" + rw.BeiZhuHtml + "'");
-                    append.Append("},");
-                }
-                append.Remove(append.Length - 1, 1);
-            }
-            append.Append("]");
-            return BP.Tools.Entitis2Json.Instance.ReplaceIllgalChart(append.ToString());
+
+            return BP.Tools.Json.ToJson(rws.ToDataTableField());
         }
 
         public string Start_Init()

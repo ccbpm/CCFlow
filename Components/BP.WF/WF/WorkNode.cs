@@ -1138,6 +1138,8 @@ namespace BP.WF
 
             #region 计算到达的节点.
             this.ndFrom = this.HisNode;
+            string Executor = "";//实际执行人
+            string ExecutorName = "";//实际执行人名称
             while (true)
             {
                 //上一步的工作节点.
@@ -1151,10 +1153,15 @@ namespace BP.WF
                         this.HisWorkFlow.HisGenerWorkFlow.NodeName = mynd.Name;
                         this.HisGenerWorkFlow.FK_Node = mynd.NodeID;
                         this.HisGenerWorkFlow.NodeName = mynd.Name;
+                       
                         this.HisGenerWorkFlow.Update();
-
+                        if(DataType.IsNullOrEmpty(Executor) == false)
+                        {
+                            this.Execer = Executor;
+                            this.ExecerName = ExecutorName;
+                        }
                         String msg = this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "流程已经走到最后一个节点，流程成功结束。",
-                                mynd, this.rptGe);
+                                mynd, this.rptGe,0, Executor, ExecutorName);
                         this.addMsg(SendReturnMsgFlag.End, msg);
                         this.IsStopFlow = true;
                     }
@@ -1217,8 +1224,8 @@ namespace BP.WF
                     skipWork = toWn.HisWork;
 
                 dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接收人.
-                string Executor = "";//实际执行人
-                string ExecutorName = "";//实际执行人名称
+                Executor = "";//实际执行人
+                ExecutorName = "";//实际执行人名称
                 Emp emp = new Emp();
                 if (dt == null || dt.Rows.Count == 0)
                 {
@@ -1526,10 +1533,15 @@ namespace BP.WF
                     ccMsg1 = "@没有选择抄送人。";
                 if (cclist.Count > 0)
                 {
-                    ps.SQL = "UPDATE WF_CCList SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT  WHERE  WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ";
+                    CC ccEn = new CC(node.NodeID);
+                    string ccTitle = ccEn.CCTitle.Clone() as string;
+                    ccTitle = BP.WF.Glo.DealExp(ccTitle, this.rptGe, null);
+
+                    ps.SQL = "UPDATE WF_CCList SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT,Title="+SystemConfig.AppCenterDBVarStr+"CCTitle WHERE  WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ";
                     ps.Add(CCListAttr.RDT, DataType.CurrentDataTime); //设置完成日期.
                     ps.Add(CCListAttr.WorkID, this.WorkID);
                     ps.Add(CCListAttr.FK_Node, node.NodeID);
+                    ps.Add(CCAttr.CCTitle, ccTitle);
                     DBAccess.RunSQL(ps);
 
                     ccMsg1 = "@消息手动抄送给";

@@ -1232,7 +1232,7 @@ namespace BP.WF
         /// <param name="at"></param>
         /// <param name="stopMsg"></param>
         /// <returns></returns>
-        public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt, int stopFlowType = 0)
+        public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt, int stopFlowType = 0,string empNo="",string empName="")
         {
             if (null == currNode)
                 return "err@当前节点为空..";
@@ -1316,7 +1316,13 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //加入轨迹.
-            wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, stopMsg);
+            if(DataType.IsNullOrEmpty(empNo) == true)
+            {
+                empNo = WebUser.No;
+                empName = WebUser.Name;
+            }
+          
+            wn.AddToTrack(at, empNo, empName, wn.HisNode.NodeID, wn.HisNode.Name, stopMsg);
 
             //执行流程结束.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);

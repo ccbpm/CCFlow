@@ -40,7 +40,7 @@ namespace BP.GPM.WeiXin
             if (string.IsNullOrWhiteSpace(SystemConfig.WX_CorpID))
                 return "err@没有配置企业号相关信息";
             //获取部门列表
-            DeptList DeptMentList = new DeptList();
+            DeptEntityList DeptMentList = new DeptEntityList();
             DeptMentList.RetrieveAll();
             if (DeptMentList.errcode == 0)
                 return "err@获得数据期间出现错误.";
@@ -77,7 +77,7 @@ namespace BP.GPM.WeiXin
                 dept.Insert();
 
                 //获取部门下的人员
-                UserList users = new UserList(deptMent.id);
+                UserEntityList users = new UserEntityList(deptMent.id);
                 if (users.errcode == 0)
                     continue;
 

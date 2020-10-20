@@ -25,32 +25,6 @@ namespace BP.GPM.WeiXin
         /// </summary>
         public List<UserEntity> userlist { get; set; }
         #endregion 属性.
-
-        /// <summary>
-        /// 初始化部门信息
-        /// </summary>
-        public UserList()
-        {
-        }
-        /// <summary>
-        /// 部门ID
-        /// </summary>
-        /// <param name="deptID"></param>
-        public UserList(string deptID)
-        {
-            //获取token.
-            string access_token = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
-            string url = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=" + access_token + "&department_id=" + deptID + "&status=0";
-
-            //获得信息.
-            string str = DataType.ReadURLContext(url);
-            UserList userList = BP.Tools.FormatToJson.ParseFromJson<UserList>(str);
-
-            //赋值.
-            this.errcode = userList.errcode;
-            this.errmsg = userList.errmsg;
-            this.userlist = userList.userlist;
-        }
     }
     /// <summary>
     /// 部门人员详情

@@ -62,6 +62,38 @@ function GenerDevelopFrm(wn, fk_mapData) {
         if (mapAttr.UIContralType == 17)
             $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", "请单击进行编辑");
 
+		if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+            var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+            var eleHtml = "";
+            //如果是富文本就使用百度 UEditor
+            if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1") {
+                //只读状态直接 div 展示富文本内容
+                defValue = defValue.replace(/white-space: nowrap;/g, "");
+                var eleHtml= "<div class='richText' style='width:99%;margin-right:2px'>" + defValue + "</div>";
+                var element = $("#TB_" + mapAttr.KeyOfEn);
+                element.after(eleHtml);
+                element.remove(); //移除节点
+            } else {
+                //设置一个默认高度
+                if (mapAttr.UIHeight < 180) {
+                    mapAttr.UIHeight = 180;
+                }
+
+                document.BindEditorMapAttr.push(mapAttr); //存到全局备用
+
+                //设置编辑器的默认样式
+                var styleText = "text-align:left;font-size:12px;";
+                styleText += "width:100%;";
+                var height = parseInt(mapAttr.UIHeight) - 54;
+
+                styleText += "height:" + height + "px;";
+                //注意这里 name 属性是可以用来绑定表单提交时的字段名字的 id 是特殊约定的.
+                eleHtml += "<script class='EditorClass' id='editor_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                var element = $("#TB_" + mapAttr.KeyOfEn);
+                element.after(eleHtml);
+                element.remove(); //移除节点
+            }
+        }
         //如果是时间控件
         if (mapAttr.MyDataType == 6 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {
             var frmDate = mapAttr.IsSupperText;

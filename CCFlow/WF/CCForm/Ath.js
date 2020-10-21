@@ -10,7 +10,7 @@ AthParams.AthInfo = {};
 * @param athchment 附件属性
 * @param athDivID 生成的附件信息追加的位置
 */
-function AthTable_Init(athchment, athDivID, refPKVal) {
+function AthTable_Init(athchment, athDivID, refPKVal, FormType) {
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
     if (refPKVal == null || refPKVal == undefined || refPKVal == 0)
@@ -20,7 +20,6 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
 
     AthParams.FK_MapData = athchment.FK_MapData;
 
-    debugger
     //2.上传的URL的设置
     var uploadUrl = "";
     if (plant == 'CCFlow')
@@ -31,11 +30,11 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
     uploadUrl += "&WorkID=" + pageData.WorkID;
     uploadUrl += "&FID=" + pageData.FID;
     uploadUrl += "&FK_Node=" + pageData.FK_Node;
-    uploadUrl += "&PWorkID=" +GetQueryString("PWorkID");
+    uploadUrl += "&PWorkID=" + pageData.PWorkID;
     uploadUrl += "&FK_MapData=" + AthParams.FK_MapData;
 
     //3.初始化附件列表
-    InitAthPage(athDivID, uploadUrl);
+    InitAthPage(athDivID, uploadUrl, FormType);
 
     //4.调用附件上传的功能
 
@@ -48,7 +47,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
         "beforeUpload": beforeUploadFun,//在上传前执行的函数
         "onUpload": function (opt, data) {
             uploadTools.uploadError(opt);//显示上传错误
-            InitAthPage(athDivID);
+            InitAthPage(athDivID, null, FormType);
         },
         autoCommit: true,//文件是否自动上传
         "fileType": AthParams.realFileExts,//文件类型限制，默认不限制，注意写的是文件后缀
@@ -90,7 +89,7 @@ function beforeUploadFun(opt) {
 * 初始化附件列表信息
 * @param athDivID 生成的附件信息追加的位置
 */
-function InitAthPage(athDivID, uploadUrl) {
+function InitAthPage(athDivID, uploadUrl, FormType) {
     AthParams.PKVal = athRefPKVal;
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
@@ -100,6 +99,8 @@ function InitAthPage(athDivID, uploadUrl) {
     //alert("RefOID=" + AthParams.PKVal);
     handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_", ""));
     handler.AddPara("FK_MapData", AthParams.FK_MapData);
+    if (FormType != null && FormType!=undefined)
+        handler.AddPara("FormType", FormType)
     var data = handler.DoMethodReturnString("Ath_Init");
 
     if (data.indexOf('err@') == 0) {

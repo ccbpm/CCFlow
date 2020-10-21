@@ -316,7 +316,8 @@ function GenerFoolFrm(wn) {
     //表格附件
     $.each(flowData.Sys_FrmAttachment, function (idex, ath) {
         if ($("#Div_" + ath.MyPK).length == 1)
-            AthTable_Init(ath, "Div_" + ath.MyPK);
+            
+            AthTable_Init(ath, "Div_" + ath.MyPK,null, flowData.WF_Node[0].FormType);
     });
    
     //字段附件

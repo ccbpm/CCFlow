@@ -6251,6 +6251,8 @@ namespace BP.WF
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
             //查询使用的workId
             string ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
+            if (ctrlWayId.Equals("0") == true)
+                ctrlWayId = pkval;
 
             BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)

@@ -39,7 +39,7 @@ namespace BP.WF
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
-
+                nd.FID = fid;
                 Work wk = nd.HisWork;
                 wk.OID = workID;
                 wk.RetrieveFromDBSources();
@@ -581,7 +581,11 @@ namespace BP.WF
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
-                    GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
+                    GERpt rpt = null;
+                    if (fid!=0)
+                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", fid);
+                    else
+                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
                     rpt.Copy(wk);
 
                     DataTable rptdt = rpt.ToDataTableField("MainTable");

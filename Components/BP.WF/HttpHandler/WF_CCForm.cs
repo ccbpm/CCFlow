@@ -39,6 +39,7 @@ namespace BP.WF.HttpHandler
                 if (pkVal.Equals("0") == true)
                     pkVal = this.WorkID.ToString();
 
+                
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID,true,this.FK_Node,this.FK_MapData);
 
                 #region 如果图片显示.(先不考虑.)
@@ -4575,16 +4576,15 @@ namespace BP.WF.HttpHandler
         public BP.Sys.FrmAttachment GenerAthDescOfFoolTruck()
         {
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
-            sln.FrmSln = -1;
+
             string fromFrm = this.GetRequestVal("FromFrm");
-            sln.MyPK = fromFrm + "_" + this.FK_Node + "_" + this.FK_Flow;
-            int result = sln.RetrieveFromDBSources();
+            FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
             athDesc.MyPK = this.FK_FrmAttachment;
             athDesc.RetrieveFromDBSources();
 
             /*没有查询到解决方案, 就是只读方案 */
-            if (result == 0 || sln.FrmSln == 1)
+            if (fn.FrmSln == FrmSln.Readonly)
             {
                 athDesc.IsUpload = false;
                 athDesc.IsDownload = true;
@@ -4592,11 +4592,11 @@ namespace BP.WF.HttpHandler
                 return athDesc;
             }
             //默认方案
-            if (sln.FrmSln == 0)
+            if (fn.FrmSln == FrmSln.Default)
                 return athDesc;
 
             //如果是自定义方案,就查询自定义方案信息.
-            if (sln.FrmSln == 2)
+            if (fn.FrmSln == FrmSln.Self)
             {
                 BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
                 athDescNode.MyPK = this.FK_FrmAttachment + "_" + this.FK_Node;
@@ -4605,6 +4605,7 @@ namespace BP.WF.HttpHandler
                     //没有设定附件权限，保持原来的附件权限模式
                     return athDesc;
                 }
+                athDescNode.MyPK = athDesc.MyPK;
                 return athDescNode;
             }
 
@@ -4619,7 +4620,7 @@ namespace BP.WF.HttpHandler
             #region 为累加表单做的特殊判断.
             if (this.GetRequestValInt("FormType") == 10)
             {
-                if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
+                //if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
                     return GenerAthDescOfFoolTruck(); //如果当前表单的ID。
             }
             #endregion

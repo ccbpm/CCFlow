@@ -272,7 +272,7 @@ namespace BP.WF
                 /* 求出来走过的表单集合 */
                 string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track A, WF_Node B ";
                 sql += " WHERE A.NDFrom=B.NodeID  ";
-                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
+                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.ForwardFL + " OR ActionType=" + (int)ActionType.ForwardHL + " OR ActionType=" + (int)ActionType.SubThreadForward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
                 sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
                 sql += "  AND NDFrom!=" + this.NodeID + " "; //排除当前的表单.
 
@@ -284,8 +284,10 @@ namespace BP.WF
 
                 //if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
-
-                sql += "  AND (A.WorkID=" + this.WorkID + ") ";
+                if(this.FID == 0)
+                    sql += "  AND (A.WorkID=" + this.WorkID + " OR A.FID="+this.WorkID+") ";
+                else
+                    sql += "  AND (A.WorkID=" + this.WorkID + " OR A.WorkID=" + this.FID + " ) ";
                 sql += " ORDER BY A.RDT ";
 
                 // 获得已经走过的节点IDs.
@@ -1586,6 +1588,7 @@ namespace BP.WF
         /// 工作ID
         /// </summary>
         public Int64 WorkID = 0;
+        public Int64 FID = 0;
         /// <summary>
         /// 节点表单ID
         /// </summary>

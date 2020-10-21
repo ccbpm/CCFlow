@@ -9106,8 +9106,19 @@ namespace BP.WF
                     wk.Update();
                 }
 
+                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false)
+                {
+                    GERpt rpt = null;
+                    if (fid != 0)
+                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", fid);
+                    else
+                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
+                    rpt.Copy(wk);
+                    rpt.Update();
+                }
+
                 #region 处理保存后事件
-                bool isHaveSaveAfter = false;
+                    bool isHaveSaveAfter = false;
                 try
                 {
                     //处理表单保存后.
@@ -11331,11 +11342,10 @@ namespace BP.WF
             Node nd = new Node(fk_node);
             //表单方案
             FrmNode fn = new FrmNode(fk_node, fk_mapData);
-            //树形表单
-            if (nd.HisFormType == NodeFormType.SheetTree)
-                athCtrlWay = AthCtrlWay.WorkID;
+            
+           
             //单表单
-            else if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.SheetTree)
             {
                 switch (fn.WhoIsPK)
                 {

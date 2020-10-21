@@ -541,8 +541,8 @@ namespace BP.WF.HttpHandler
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
             if (gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
             {
-                WF_MyFlow handler = new WF_MyFlow();
-                return handler.MyFlow_Init();
+                //WF_MyFlow handler = new WF_MyFlow();
+                //return handler.MyFlow_Init();
             }
 
             //是否是工作参与人?

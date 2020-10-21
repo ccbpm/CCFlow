@@ -599,6 +599,19 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formArrResult = [];
     var haseExistStr = ",";
     var mcheckboxs = "";
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree');
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+        if (data != null) {
+            formArrResult.push(name + '=' + data.id);
+            formArrResult.push(name.replace("DDL_", "TB_") + 'T=' + data.text);
+            haseExistStr += name.replace("DDL_", "TB_") + "T" + ",";
+        }
+    });
     $.each(formArr, function (i, ele) {
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             //如果ID获取不到值，Name获取到值为复选框多选
@@ -703,18 +716,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
-    //获取树形结构的表单值
-    var combotrees = $(".easyui-combotree");
-    $.each(combotrees, function (i, combotree) {
-        var name = $(combotree).attr('id');
-        var tree = $('#' + name).combotree('tree');
-        //获取当前选中的节点
-        var data = tree.tree('getSelected');
-        if (data != null) {
-            formArrResult.push(name + '=' + data.id);
-            formArrResult.push(name.replace("DDL_", "TB_") + 'T=' + data.text);
-        }
-    });
+   
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {

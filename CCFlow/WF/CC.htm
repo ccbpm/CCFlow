@@ -338,16 +338,18 @@
             var num = pageStartN;
             //随机串.
             var timeKey = Math.random();
-             var listbox = '';
+            var listbox = '';
+            
             $('#Table1').html("");
             for (var idx = 0; idx < groupNames.length; idx++) {
                 var showRealCount = 0;
-               
+                var groupBox = '';
+                var groublist = '';
                 var groupName = groupNames[idx];
                 if (groupName == "" || groupName == null)
                     continue;
 
-                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=8 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+                groupBox= "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=8 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
                 //增加处理.
                 for (var i = 0; i < data.length; i++) {
 
@@ -356,42 +358,34 @@
                     if (dt.FlowName != groupName) {
                         continue;
                     }
-                    //当参数flowNos不为空时，流程编码存在于flowNos时显示
-                   /* if (flowNos != null && flowNos.indexOf(data[i].FK_Flow) == -1)
-                        continue;*/
-
+                  
                     realCount++;
 
                     var newRow = "";
                     
 
                     var mystrs = "";
-                //    AtPara atap = new AtPara(paras);
-
-                    //if (paras.c)
-
-                    
+              
                     num++;
 
                     if (is1 == true) {
-                        listbox += "<tr  id='" + groupName + num + "' >";
+                        groublist += "<tr  id='" + groupName + num + "' >";
                         is1 = false;
                     }
                     else {
-                        listbox += "<tr   id='" + groupName + num + "' >";
+                        groublist += "<tr   id='" + groupName + num + "' >";
                         is1 = true;
                     }
-                     listbox += "<td>" + num + "</td>"; //序号.
+                    groublist += "<td>" + num + "</td>"; //序号.
 
                     var url = "";
                     batchUrl = './WFRpt.htm?FK_Flow=' + dt.FK_Flow + '&FK_Node=' + dt.FK_Node + '&WorkID=' + dt.WorkID + '&FID=' + dt.FID + "&CCSta=1";
                     url = '../WF/WorkOpt/CCCheckNote.htm?WorkID=' + dt.WorkID + '&FK_Flow=' + dt.FK_Flow + '&FID=0&FK_Node=' + dt.FK_Node;
 
-                   // listbox += "<td>" + url + "</td>"; //标题
 
 
-                    listbox += "<td>" + dt.FlowName + "</td>"; //节点名称
-                    listbox += "<td>" + dt.NodeName + "</td>"; //节点名
+                    groublist += "<td>" + dt.FlowName + "</td>"; //节点名称
+                    groublist += "<td>" + dt.NodeName + "</td>"; //节点名
                      var sta = "";
                     switch (dt.WFSta) {
                     case 0:
@@ -405,17 +399,19 @@
                         break;
                     }
 
-                    listbox += "<td>" + sta + "</td>";
+                    groublist += "<td>" + sta + "</td>";
 
-                    listbox += "<td>" + dt.Rec + "</td>"; 
-                    listbox += "<td><a    href=\"javascript:OpenFrm('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.Sta + "')\" >" + dt.Title + "</a></td>"; 
-                    listbox += "<td>" + dt.Doc + "</td>"; 
+                    groublist += "<td>" + dt.Rec + "</td>"; 
+                    groublist += "<td><a    href=\"javascript:OpenFrm('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.Sta + "')\" >" + dt.Title + "</a></td>"; 
+                    groublist += "<td>" + dt.Doc + "</td>"; 
 
-                    listbox += "<td>" +dt.RDT + "</td>";
-                    listbox += "<td><a href=\"javascript:OpenTrack('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.CCSta + "')\" >轨迹</a></td>";
+                    groublist += "<td>" +dt.RDT + "</td>";
+                    groublist += "<td><a href=\"javascript:OpenTrack('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.CCSta + "')\" >轨迹</a></td>";
 
-                    listbox += "</tr>";
+                    groublist += "</tr>";
                 }
+                if (groublist != "")
+                    listbox += groupBox + groublist;
                
 
             }

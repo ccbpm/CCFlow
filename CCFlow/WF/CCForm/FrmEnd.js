@@ -27,7 +27,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         if (mapAttr.UIContralType == 18)
             continue;
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        //if (mapAttr.DefValType == 0 &&  (val == "0" || val == "0.0000"))
+        //if (mapAttr.DefValType == 0 && mapAttr.LGType!=1 &&  (val == "0" || val == "0.0000"))
          //   val = "";
         frmAttrData.push({ "KeyOfEn": mapAttr.KeyOfEn, "Val": val });
 

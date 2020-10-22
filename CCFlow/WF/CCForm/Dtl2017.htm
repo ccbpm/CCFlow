@@ -2670,8 +2670,12 @@
 
             }
 
+            
             if (mapAttr.UIIsInput == 0)
-                operations = "<option value=''>- 请选择 -</option>" + operations;
+                if (mapAttr.LGType == 1)
+                    operations = "<option value='-1'>- 请选择 -</option>" + operations;
+                else
+                    operations = "<option value=''>- 请选择 -</option>" + operations;
 
             $.each(data, function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";

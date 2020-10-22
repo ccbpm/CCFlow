@@ -59,7 +59,7 @@
                 <div class="col-md-4 col-sm-4 pull-left">
                     <div class="form-inline">
                         <div class="form-group">
-                            <input type='text' placeholder="请输入流程名称..." id='TB_Key' class="form-control" style="width:300px;" />
+                            <input type='text' placeholder="请输入流程名称,标题..." id='TB_Key' class="form-control" style="width:300px;" />
                         </div>
                         <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
                     </div>
@@ -287,7 +287,7 @@
             //3.流程编号为空和查询组件不为空时
             if (flowNos == null && TB_Key != "")
                 sourceData = $.grep(data, function (n, i) {
-                    return (data[i].FlowName.indexOf(TB_Key) != -1);
+                    return (data[i].FlowName.indexOf(TB_Key) != -1 || data[i].Title.indexOf(TB_Key)!=-1);
                 });
             //4.流程编号为不空和查询组件不为空时
             if (flowNos != null && TB_Key != "")

@@ -214,7 +214,8 @@ namespace BP.WF.HttpHandler
                 {
                     attr.FK_MapData = rptNo;
                     attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
-                    attr.DirectInsert();
+                    if(attr.RetrieveFromDBSources() == 0)
+                        attr.DirectInsert();
                 }
             }
 

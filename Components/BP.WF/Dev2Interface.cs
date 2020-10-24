@@ -3794,7 +3794,7 @@ namespace BP.WF
                 msgDoc += " <hr>打开工作: " + url;
             }
             if (DataType.IsNullOrEmpty(msgFlag) == true)
-                msgFlag = "WKAlt" + nodeID + "_" + workID;
+                msgFlag = "WKAlt" + nodeID + "_" + workID+"_"+flowNo;
 
             string atParas = "@FK_Flow=" + flowNo + "@WorkID=" + workID + "@NodeID=" + nodeID + "@FK_Node=" + nodeID;
             BP.WF.SMS.SendMsg(userNo, title, msgDoc, msgFlag, msgType, atParas, workID, pushModel, url);

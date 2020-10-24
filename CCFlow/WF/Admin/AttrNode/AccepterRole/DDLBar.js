@@ -188,12 +188,12 @@ function SaveRole() {
 }
 //清除缓存，本组织的.
 function AccepterRole_ClearStartFlowsCash() {
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_AccepterRole");
     var data = handler.DoMethodReturnString("AccepterRole_ClearStartFlowsCash");
 }
 //清除缓存，所有本组织的.
 function AccepterRole_ClearAllOrgStartFlowsCash() {
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_AccepterRole");
     var data = handler.DoMethodReturnString("AccepterRole_ClearAllOrgStartFlowsCash");
 }
 

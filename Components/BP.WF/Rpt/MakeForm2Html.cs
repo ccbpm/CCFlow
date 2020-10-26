@@ -790,40 +790,67 @@ namespace BP.WF
             if (formType == NodeFormType.FoolTruck && DataType.IsNullOrEmpty(FK_Node) == false)
             {
                 Node nd = new Node(FK_Node);
+                nd.WorkID = workid;
                 Work wk = nd.HisWork;
                 wk.OID = workid;
                 wk.RetrieveFromDBSources();
 
-                /* 求出来走过的表单集合 */
-                string sql = "SELECT NDFrom FROM ND" + int.Parse(flowNo) + "Track A, WF_Node B ";
-                sql += " WHERE A.NDFrom=B.NodeID  ";
-                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
-                sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
-                sql += "  AND NDFrom!=" + Int32.Parse(FK_Node.Replace("ND", "")) + " "; //排除当前的表单.
-
-
-                sql += "  AND (A.WorkID=" + workid + ") ";
-                sql += " ORDER BY A.RDT ";
-
-                // 获得已经走过的节点IDs.
-                DataTable dtNodeIDs = DBAccess.RunSQLReturnTable(sql);
-                string frmIDs = "";
-                if (dtNodeIDs.Rows.Count > 0)
-                {
-                    //把所有的节点字段.
-                    foreach (DataRow dr in dtNodeIDs.Rows)
-                    {
-                        if (frmIDs.Contains("ND" + dr[0].ToString()) == true)
-                            continue;
-                        frmIDs += "'ND" + dr[0].ToString() + "',";
-                    }
-                }
-                frmIDs = frmIDs.Substring(0, frmIDs.Length - 1);
+                string frmIDs = wk.HisPassedFrmIDs;
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
-                if (gwf.WFState == WFState.Complete)
+                if (gwf.WFState != WFState.Complete)
                     frmIDs = frmIDs + ",'" + FK_Node + "'";
+                GroupFields gfss = new GroupFields();
+                gfss.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
+
+                //按照时间的顺序查找出来 ids .
+                string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + frmIDs + ")";
+                string orderMyFrmIDs = frmIDs.Replace("'", "");
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "',FrmID) , Idx";
+                }
+
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                {
+                    sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + orderMyFrmIDs + "'), Idx";
+                }
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                {
+                    sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "', FrmID ), Idx";
+                }
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
+                }
+
+                if (SystemConfig.AppCenterDBType == DBType.DM)
+                {
+                    sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
+                }
+
+                DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
+
+                //创建容器,把排序的分组放入这个容器.
                 gfs = new GroupFields();
-                gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
+
+                //遍历查询出来的分组.
+                //只能增加一个审核分组
+                GroupField FWCG = null;
+                foreach (DataRow dr in dtOrder.Rows)
+                {
+                    string pkOID = dr[0].ToString();
+                    GroupField mygf = gfss.GetEntityByKey(pkOID) as GroupField;
+                    if (mygf.CtrlType.Equals("FWC"))
+                    {
+                        FWCG = mygf;
+                        continue;
+                    }
+
+                    gfs.AddEntity(mygf); //把分组字段加入里面去.
+                }
+                if (FWCG != null)
+                    gfs.AddEntity(FWCG);
 
                 mapAttrs = new MapAttrs();
                 mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")");

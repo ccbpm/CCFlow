@@ -2200,6 +2200,8 @@
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
+                    if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1" )
+                        continue;
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
 

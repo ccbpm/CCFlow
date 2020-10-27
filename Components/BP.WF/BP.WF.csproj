@@ -107,8 +107,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP, Version=32.4.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
-      <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP, Version=32.4.5.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\WebSiteGroup\packages\FluentFTP.32.4.5\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppClass.cs" />
+    <Compile Include="Data\AutoRpt.cs" />
+    <Compile Include="Data\AutoRptDtl.cs" />
     <Compile Include="Data\CHNode.cs" />
     <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
+    <Compile Include="DTS\Service\Auto_Rpt_Dtl_DTS.cs" />
     <Compile Include="DTS\Service\GenerAllEmpsStartFlows.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="DTS\CheckErr\Tool_RepairTodoList.cs" />

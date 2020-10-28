@@ -549,6 +549,15 @@ namespace BP.En
                 this._orderBy = " ORDER BY " + attr;
             }
         }
+        /// <summary>
+        /// 追加自定义的排序方式
+        /// </summary>
+        /// <param name="orderByContent"></param>
+        public void addOrderByOfSelf(string orderByContent)
+        {
+            if (this._orderBy.IndexOf("ORDER BY") == -1)
+                this._orderBy += " ORDER BY " +orderByContent;
+        }
 
         /// <summary>
         /// 

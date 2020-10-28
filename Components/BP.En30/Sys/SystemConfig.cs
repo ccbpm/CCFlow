@@ -316,7 +316,6 @@ namespace BP.Sys
                 _CS_AppSettings = value;
             }
         }
-
         /// <summary>
         /// 封装了AppSettings
         /// </summary>

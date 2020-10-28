@@ -853,7 +853,7 @@ namespace BP.WF
                     gfs.AddEntity(FWCG);
 
                 mapAttrs = new MapAttrs();
-                mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")");
+                mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")", "GroupID, Idx");
             }
             else
             {
@@ -1007,18 +1007,9 @@ namespace BP.WF
                                             text += se.Lab + " ";
                                     }
 
-                                }
+                                } 
                                 else
-                                {
-                                    //@yln
-                                    text = en.GetValStrByKey(attr.KeyOfEn);
-                                    if (DataType.IsNullOrEmpty(text))
-                                        text = "";
-                                    else
-                                        text = en.GetValRefTextByKey(attr.KeyOfEn);
-
-                                }
-                                    
+                                    text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 break;
                             case FieldTypeS.FK:
                                 text = en.GetValRefTextByKey(attr.KeyOfEn);
@@ -1157,10 +1148,10 @@ namespace BP.WF
                                     if (item.MyDataType == 1 && (int)item.UIContralType == DataType.AppString)
                                     {
 
-                                        if (attrsOfDtls.Contains(item.MyPK + "Text") == true)
+                                        if (attrs.Contains(item.KeyOfEn + "Text") == true)
                                             text = dtl.GetValRefTextByKey(item.KeyOfEn);
                                         if (DataType.IsNullOrEmpty(text))
-                                            if (attrsOfDtls.Contains(item.MyPK + "T") == true)
+                                            if (attrs.Contains(item.KeyOfEn + "T") == true)
                                                 text = dtl.GetValStrByKey(item.KeyOfEn + "T");
                                     }
                                     else
@@ -1178,7 +1169,7 @@ namespace BP.WF
                                 case FieldTypeS.Enum:
                                     if (item.UIContralType == UIContralType.CheckBok)
                                     {
-                                        string s = dtl.GetValStrByKey(item.KeyOfEn) + ",";
+                                        string s = en.GetValStrByKey(item.KeyOfEn) + ",";
                                         SysEnums enums = new SysEnums(item.UIBindKey);
                                         foreach (SysEnum se in enums)
                                         {
@@ -1188,16 +1179,7 @@ namespace BP.WF
 
                                     }
                                     else
-                                    {
-                                        //@yln
-                                        text = dtl.GetValStrByKey(item.KeyOfEn);
-                                        if (DataType.IsNullOrEmpty(text))
-                                            text = "";
-                                        else
-                                            text = dtl.GetValRefTextByKey(item.KeyOfEn);
-
-                                    }
-                                       
+                                        text = dtl.GetValRefTextByKey(item.KeyOfEn);
                                     break;
                                 case FieldTypeS.FK:
                                     text = dtl.GetValRefTextByKey(item.KeyOfEn);
@@ -1402,7 +1384,7 @@ namespace BP.WF
                     if (bl)
                     {
                         String tTable = "ND" + int.Parse(flowNo) + "Track";
-                        sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + workid;
+                        sql = "SELECT a." + BP.Sys.Glo.UserNo + ", a.SignType FROM Port_Emp a, " + tTable + " b WHERE a." + Glo.UserNo + "=b.EmpFrom AND B.WorkID=" + workid;
 
                         dtTrack = DBAccess.RunSQLReturnTable(sql);
                         dtTrack.TableName = "SignType";
@@ -1941,7 +1923,8 @@ namespace BP.WF
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
 
-        public static string MakeFormToPDF(string frmId, string frmName, Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
+        public static string MakeFormToPDF(string frmId, string frmName, Node node, 
+            Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
         {
 
             string resultMsg = "";

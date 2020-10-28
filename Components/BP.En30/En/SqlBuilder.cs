@@ -2570,7 +2570,7 @@ namespace BP.En
             {
                 Attr attr = en.EnMap.GetAttrByKey(errKey);
                 errKey = "@attrKey=" + attr.Key + ",AttrVal=" + en.Row[attr.Key] + ",DataType=" + attr.MyDataTypeStr;
-                throw new Exception("生成参数期间错误:" + errKey + "@错误信息:" + ex.Message);
+                throw new Exception("生成参数期间错误:" +en.ToString()+","+en.EnMap.PhysicsTable+","+ errKey + "@错误信息:" + ex.Message);
             }
 
             if (keys != null)

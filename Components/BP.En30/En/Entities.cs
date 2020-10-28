@@ -1092,7 +1092,7 @@ namespace BP.En
         /// <param name="key"></param>
         /// <param name="vals"></param>
         /// <returns></returns>
-        public virtual int RetrieveIn(string key, string vals)
+        public virtual int RetrieveIn(string key, string vals, string ordery=null)
         {
             QueryObject qo = new QueryObject(this);
 
@@ -1100,6 +1100,9 @@ namespace BP.En
                 qo.AddWhere(key, " IN ", "(" + vals + ")");
             else
                 qo.AddWhere(key, " IN ", vals);
+
+            if (ordery != null)
+                qo.addOrderBy(ordery);
 
             return qo.DoQuery();
         }

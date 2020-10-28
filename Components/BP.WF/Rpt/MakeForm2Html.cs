@@ -1384,7 +1384,7 @@ namespace BP.WF
                     if (bl)
                     {
                         String tTable = "ND" + int.Parse(flowNo) + "Track";
-                        sql = "SELECT a." + BP.Sys.Glo.UserNo + ", a.SignType FROM Port_Emp a, " + tTable + " b WHERE a." + Glo.UserNo + "=b.EmpFrom AND B.WorkID=" + workid;
+                        sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a." + Glo.UserNo + "=b.EmpFrom AND B.WorkID=" + workid;
 
                         dtTrack = DBAccess.RunSQLReturnTable(sql);
                         dtTrack.TableName = "SignType";

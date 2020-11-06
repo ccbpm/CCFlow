@@ -6214,6 +6214,48 @@ namespace BP.WF
         #region 其他方法。
 
         /// <summary>
+        /// 对数字添加”,“号，可以处理负数以及带有小数的情况（给金钱添加千分号）
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public static string FormatMoney(string money)
+        {
+            //处理带有负号情况
+            int negNumber = money.IndexOf("-");
+            string prefix = string.Empty;
+            if (negNumber != -1)
+            {
+                prefix = "-";
+                money = money.Substring(1);
+            }
+            //处理有小数位情况
+            int decNumber = money.IndexOf(".");
+            string postfix = string.Empty;
+            if (decNumber != -1)
+            {
+                postfix = money.Substring(decNumber);
+                money = money.Substring(0, decNumber - 1);
+            }
+            //开始添加”,“号
+            if (money.Length > 3)
+            {
+                string str1 = money.Substring(0, money.Length - 3);
+                string str2 = money.Substring(money.Length - 3, 3);
+                if (str1.Length > 3)
+                {
+                    return prefix + FormatMoney(str1) + "," + str2 + postfix;
+                }
+                else
+                {
+                    return prefix + str1 + "," + str2 + postfix;
+                }
+            }
+            else
+            {
+                return prefix + money + postfix;
+            }
+        }
+        /// <summary>
         /// 删除临时文件
         /// </summary>
         public static void DeleteTempFiles()

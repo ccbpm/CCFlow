@@ -1,4 +1,4 @@
-﻿using System;
+﻿husing System;
 using System.IO;
 using System.Drawing;
 using System.Data;
@@ -797,8 +797,8 @@ namespace BP.WF
 
                 string frmIDs = wk.HisPassedFrmIDs;
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
-                if (gwf.WFState != WFState.Complete)
-                    frmIDs = frmIDs + ",'" + FK_Node + "'";
+                //if (gwf.WFState != WFState.Complete)
+                frmIDs = frmIDs + ",'" + FK_Node + "'";
                 GroupFields gfss = new GroupFields();
                 gfss.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
 

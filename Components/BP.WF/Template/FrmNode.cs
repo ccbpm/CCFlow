@@ -65,6 +65,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsEnableFWC = "IsEnableFWC";
         /// <summary>
+        /// 是否启用父子流程
+        /// </summary>
+        public const string SFSta = "SFSta";
+        /// <summary>
         /// 谁是主键？
         /// </summary>
         public const string WhoIsPK = "WhoIsPK";
@@ -294,6 +298,18 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmNodeAttr.IsEnableFWC, (int)value);
+            }
+        }
+
+        public FrmSubFlowSta SFSta
+        {
+            get
+            {
+                return (FrmSubFlowSta)this.GetValIntByKey(FrmNodeAttr.SFSta);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.SFSta, (int)value);
             }
         }
         /// <summary>
@@ -679,6 +695,7 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
                 map.AddTBInt(FrmNodeAttr.IsCloseEtcFrm, 0, "打开时是否关闭其它的页面？", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableFWC, 0, "是否启用审核组件？", true, false);
+                map.AddTBInt(FrmNodeAttr.SFSta, 0, "是否启用父子流程组件？", true, false);
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);

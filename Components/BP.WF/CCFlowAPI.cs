@@ -187,7 +187,7 @@ namespace BP.WF
                     fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                     fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
                 }
-
+                bool isHaveSubFlow = false;
                 #region 没有审核组件分组就增加上审核组件分组. 
                 if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == true ||
                     (nd.HisFormType == NodeFormType.RefOneFrmTree
@@ -238,6 +238,36 @@ namespace BP.WF
                     }
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
+
+                #region 增加父子流程组件
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
+                {
+                    DataTable gf = myds.Tables["Sys_GroupField"];
+
+                    if (isHaveSubFlow == false)
+                    {
+                        DataRow dr = gf.NewRow();
+
+                        nd.WorkID = workID; //为获取表单ID提供参数.
+                        dr[GroupFieldAttr.OID] = 120;
+                        dr[GroupFieldAttr.FrmID] = nd.NodeFrmID;
+                        dr[GroupFieldAttr.CtrlType] = "SubFlow";
+                        dr[GroupFieldAttr.CtrlID] = "SubFlowND" + nd.NodeID;
+                        dr[GroupFieldAttr.Idx] = 120;
+                        dr[GroupFieldAttr.Lab] = "父子流程";
+                        gf.Rows.Add(dr);
+
+                        myds.Tables.Remove("Sys_GroupField");
+                        myds.Tables.Add(gf);
+
+                        //更新,为了让其自动增加审核分组.
+                        BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(nd.NodeID);
+                        refFnc.Update();
+                    }
+                }
+
+
+                #endregion 增加父子流程组件
 
                 //把审核组件信息，放入ds.
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));

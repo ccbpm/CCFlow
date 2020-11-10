@@ -67,6 +67,18 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(NodeWorkCheckAttr.CheckField);
             }
         }
+
+        public FrmSubFlowSta SFSta
+        {
+            get
+            {
+                return (FrmSubFlowSta)this.GetValIntByKey(FrmSubFlowAttr.SFSta);
+            }
+            set
+            {
+                this.SetValByKey(FrmSubFlowAttr.SFSta, (int)value);
+            }
+        }
         #endregion
 
         #region 基本属性
@@ -149,6 +161,9 @@ namespace BP.WF.Template
                 //签批字段
                 map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
                     Glo.SQLOfCheckField, true);
+
+                map.AddDDLSysEnum(FrmNodeAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
+              true, true, FrmNodeAttr.SFSta, "@0=禁用@1=启用@2=只读");
 
                 //单据编号对应字段
                 map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",
@@ -324,6 +339,8 @@ namespace BP.WF.Template
             node.RetrieveFromDBSources();
             node.FrmWorkCheckSta = this.IsEnableFWC;
             node.Update();
+            FrmSubFlow frmSubFlow = new FrmSubFlow(this.FK_Node);
+            frmSubFlow.SFSta = this.SFSta;
             base.afterInsertUpdateAction();
         }
 

@@ -107,10 +107,89 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.Columns[0].ColumnName = "NodeID";
             dt.Columns[1].ColumnName = "Name";
-
             return BP.Tools.Json.ToJson(dt);
         }
+        #region 方向条件-审核组件
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
 
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            //把其他的条件都删除掉.
+            //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Url);
+
+            Cond cond = new Cond();
+            //cond.Delete(CondAttr.NodeID, fk_mainNode,
+            //  CondAttr.ToNodeID, toNodeID,
+            //   CondAttr.CondType, (int)condTypeEnum);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.WorkCheck;
+
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            //if (CondOrAnd != null)
+            //    cond.CondOrAnd = CondOrAnd;
+            cond.FK_Flow = this.FK_Flow;
+            cond.CondType = condTypeEnum;
+            cond.Save();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
 
         #region 方向条件URL
         /// <summary>
@@ -194,6 +273,83 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region WebApi
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            if (DataType.IsNullOrEmpty(fk_mainNode) == true)
+                fk_mainNode = this.GetRequestVal("FK_Node");
+
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.WebApi;
+
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            cond.FK_Flow = this.FK_Flow;
+            cond.CondType = condTypeEnum;
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWebApi_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion WebApi
+
         #region 方向条件 Frm 模版
         /// <summary>
         /// 初始化
@@ -203,10 +359,9 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");
 
-            Node nd = new Node(int.Parse(fk_mainNode));
+            Node nd = new Node(this.FK_Node);
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
@@ -214,12 +369,12 @@ namespace BP.WF.HttpHandler
 
             //增加条件集合.
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, int.Parse(fk_mainNode),
+            conds.Retrieve(CondAttr.FK_Node, this.FK_Node,
                 CondAttr.ToNodeID, int.Parse(toNodeID), CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
 
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
-            string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";
+            string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";
 
             //增加字段集合.
             string sql = "";
@@ -325,34 +480,27 @@ namespace BP.WF.HttpHandler
             int num = qo.DoQuery();
             #endregion
 
-            /* 执行同步*/
-            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
-
-            //@sly
-            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond A WHERE  CondType=1 ) ";
-            BP.DA.DBAccess.RunSQLs(sqls);
-
             //string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.NodeForm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
             switch (condTypeEnum)
             {
                 case CondType.Flow:
                 case CondType.Node:
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
+                    //DBAccess.RunSQL(sql);
                     break;
                 case CondType.Dir:
                     // cond.MyPK = cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
+                    //DBAccess.RunSQL(sql);
                     break;
                 case CondType.SubFlow: //启动子流程.
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
-                    //BP.DA.DBAccess.RunSQL(sql);
+                    //DBAccess.RunSQL(sql);
                     break;
                 default:
                     throw new Exception("未设计的情况。" + condTypeEnum.ToString());
@@ -469,16 +617,16 @@ namespace BP.WF.HttpHandler
             {
                 case CondType.Flow:
                 case CondType.Node:
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.Insert();
                     break;
                 case CondType.Dir:
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     break;
                 case CondType.SubFlow: //启动子流程.
-                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     break;
@@ -566,6 +714,28 @@ namespace BP.WF.HttpHandler
                 dr["No"] = "like";
                 dr["Name"] = " LIKE 包含";
                 dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "dayu";
+                dr["Name"] = ">大于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "xiaoyudengyu";
+                dr["Name"] = " <= 小于等于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "dayudengyu";
+                dr["Name"] = " >= 大于等于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "xiaoyu";
+                dr["Name"] = "<小于";
+                dtOper.Rows.Add(dr);
+
+
 
                 dr = dtOper.NewRow();
                 dr["No"] = "budengyu";

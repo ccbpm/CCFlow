@@ -1553,8 +1553,8 @@ namespace BP.WF.HttpHandler
                             continue;
 
                         cell.SetCellFormula(string.Format("SUM({0}:{1})",
-                                                          GetCellName(c, titleRowIndex + 1),
-                                                          GetCellName(c, titleRowIndex + dt.Rows.Count)));
+                        GetCellName(c, titleRowIndex + 1),
+                        GetCellName(c, titleRowIndex + dt.Rows.Count)));
                     }
                 }
 

@@ -10,52 +10,14 @@ using BP.Web;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 条件数据源
-    /// </summary>
-    public enum ConnDataFrom
-    {
-        /// <summary>
-        /// 表单数据
-        /// </summary>
-        NodeForm = 0,
-        /// <summary>
-        /// 独立表单
-        /// </summary>
-        StandAloneFrm = 1,
-        /// <summary>
-        /// 岗位数据
-        /// </summary>
-        Stas = 2,
-        /// <summary>
-        /// Depts
-        /// </summary>
-        Depts = 3,
-        /// <summary>
-        /// 按sql计算.
-        /// </summary>
-        SQL = 4,
-        /// <summary>
-        /// 按sql模版计算.
-        /// </summary>
-        SQLTemplate = 5,
-        /// <summary>
-        /// 按参数
-        /// </summary>
-        Paras = 6,
-        /// <summary>
-        /// 按Url.
-        /// </summary>
-        Url = 7,
-        /// <summary>
-        /// 操作符
-        /// </summary>
-        CondOperator = 100
-    }
-    /// <summary>
     /// 条件属性
     /// </summary>
     public class CondAttr
     {
+        /// <summary>
+        /// 关联的流程编号
+        /// </summary>
+        public const string RefFlowNo = "RefFlowNo";
         /// <summary>
         /// 数据来源
         /// </summary>
@@ -123,50 +85,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string SpecOperPara = "SpecOperPara";
         #endregion 属性。
-    }
-    /// <summary>
-    /// 条件类型
-    /// </summary>
-    public enum CondType
-    {
-        /// <summary>
-        /// 节点完成条件
-        /// </summary>
-        Node = 0,
-        /// <summary>
-        /// 流程完成条件
-        /// </summary>
-        Flow = 1,
-        /// <summary>
-        /// 方向条件
-        /// </summary>
-        Dir = 2,
-        /// <summary>
-        /// 启动子流程
-        /// </summary>
-        SubFlow = 3
-    }
-    /// <summary>
-    /// 指定操作员方式
-    /// </summary>
-    public enum SpecOperWay
-    {
-        /// <summary>
-        /// 当前的人员
-        /// </summary>
-        CurrOper,
-        /// <summary>
-        /// 指定节点人员
-        /// </summary>
-        SpecNodeOper,
-        /// <summary>
-        /// 指定表单人员
-        /// </summary>
-        SpecSheetField,
-        /// <summary>
-        /// 指定人员编号
-        /// </summary>
-        SpenEmpNo
     }
     /// <summary>
     /// 条件
@@ -282,6 +200,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 隶属流程编号，用于备份删除.
+        /// </summary>
+        public string RefFlowNo
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.RefFlowNo);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.RefFlowNo, value);
+            }
+        }
+        /// <summary>
         /// 备注
         /// </summary>
         public string Note
@@ -341,24 +273,9 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            //@sly 设置他的主键。
+            //设置他的主键。
             this.MyPK = DBAccess.GenerGUID();
-
             return base.beforeInsert();
-        }
-
-        /// <summary>
-        /// 在更新与插入之前要做得操作。
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeUpdateInsertAction()
-        {
-            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=0");
-            // this.RunSQL("UPDATE WF_Node SET IsCCNode=1 WHERE NodeID IN (SELECT NodeID FROM WF_Cond WHERE CondType=" + (int)CondType.Node + ")");
-
-            //@sly
-            //this.RunSQL("UPDATE WF_Node SET IsCCFlow=1 WHERE NodeID IN (SELECT FK_Node FROM WF_Cond WHERE CondType=" + (int)CondType.Flow + ")");
-            return base.beforeUpdateInsertAction();
         }
 
         #region 实现基本的方方法
@@ -715,7 +632,7 @@ namespace BP.WF.Template
 
                     //@于庆海.
                     BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-                    emp.No = this.SpecOper;
+                    emp.NoOfSAAS = this.SpecOper;
                     if (emp.RetrieveFromDBSources() == 1)
                     {
                         BP.GPM.DeptEmp de = new GPM.DeptEmp();
@@ -823,7 +740,7 @@ namespace BP.WF.Template
                     if (result >= 1)
                         return true;
 
-                    throw new Exception("@您设置的sql返回值，不符合ccflow的要求，必须是0或大于等于1。");
+                    throw new Exception("@您设置的sql返回值，不符合农芯BPM的要求，必须是0或大于等于1。");
                     #endregion
                 }
 
@@ -834,7 +751,7 @@ namespace BP.WF.Template
                     if (url.Contains("?") == false)
                         url = url + "?1=2";
 
-                    url = url.Replace("@SDKFromServHost", BP.Sys.SystemConfig.AppSettings["SDKFromServHost"]);
+                    url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
                     url = BP.WF.Glo.DealExp(url, this.en, "");
 
                     #region 加入必要的参数.
@@ -961,6 +878,53 @@ namespace BP.WF.Template
                     #endregion
                 }
 
+                if (this.HisDataFrom == ConnDataFrom.WebApi)
+                {
+                    #region WebApi接口
+                    //返回值
+                    string postData = "";
+                    string apiUrl = this.OperatorValueStr;
+                    if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                        apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+
+                    //如果有参数
+                    if (apiUrl.Contains("?"))
+                    {
+                        //api接口地址
+                        string apiHost = apiUrl.Split('?')[0];
+                        //api参数
+                        string apiParams = apiUrl.Split('?')[1];
+                        //参数替换
+                        apiParams = BP.WF.Glo.DealExp(apiParams, nd.HisWork);
+                        //执行POST
+                        postData = BP.WF.Glo.HttpPostConnect(apiHost, apiParams);
+
+                        if (postData == "true")
+                            return true;
+                        else
+                            return false;
+                    }
+                    else
+                    {//如果没有参数，执行GET
+                        postData = BP.WF.Glo.HttpGet(apiUrl);
+                        if (postData == "true")
+                            return true;
+                        else
+                            return false;
+                    }
+                    #endregion WebApi接口
+                }
+                #region 审核组件的立场
+                if(this.HisDataFrom == ConnDataFrom.WorkCheck)
+                {
+                    //获取当前节点的审核组件信息
+                    string tag = BP.WF.Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                    if (tag.Contains("@FWCView="+this.OperatorValue) == true)
+                        return true;
+                    return false;
+                }
+                #endregion 审核组件的立场
+
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {
                     Hashtable ht = en.Row;
@@ -981,6 +945,10 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.StandAloneFrm)
                 {
                     MapAttr attr = new MapAttr(this.FK_Attr);
+                    attr.MyPK = this.FK_Attr;
+                    if (attr.RetrieveFromDBSources() == 0)
+                        throw new Exception("err@到达【"+this.ToNodeID+"】方向条件设置错误,原来做方向条件的字段:"+this.FK_Attr+",已经不存在了.");
+
                     GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
                     return CheckIsPass(myen);
                 }
@@ -1004,7 +972,7 @@ namespace BP.WF.Template
                             return false;
                     case "=":  // 如果是 = 
                     case "dengyu":
-                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString()) == true)
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString().Replace("\"", "")) == true)
                             return true;
                         else
                             return false;
@@ -1070,13 +1038,18 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
+
+                //用于整体流程的删除，导入，导出.
+                map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
+
+
                 //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
 
                 //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas岗位数据,3=Depts,4=按sql计算.
                 //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
                 map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
-                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 5, 20);
+                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 4, 20);
 
                 //对于启动子流程规则有效.
                 map.AddTBString(CondAttr.SubFlowNo, null, "子流程编号", true, true, 0, 5, 20);
@@ -1091,7 +1064,6 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
 
-
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
                 map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
 
@@ -1105,6 +1077,30 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+
+            if ( DataType.IsNullOrEmpty( this.RefFlowNo)==true)
+            {
+                if (this.CondType== CondType.Dir
+                    || this.CondType == CondType.Node 
+                    || this.CondType== CondType.SubFlow)
+                {
+                    Node nd = new Node(this.FK_Node);
+                    this.RefFlowNo = nd.FK_Flow;
+                }
+
+                if (this.CondType == CondType.Flow)
+                {
+                    this.RefFlowNo = this.FK_Flow;
+                    if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
+                        throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
+                }
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
     }
     /// <summary>
     /// 条件s
@@ -1132,7 +1128,7 @@ namespace BP.WF.Template
         /// <param name="runModel">模式</param>
         /// <returns></returns>
         public bool GenerResult(GERpt en = null)
-        {
+        {   
             if (this.Count == 0)
                 throw new Exception("err@没有要计算的条件，无法计算.");
 
@@ -1153,8 +1149,6 @@ namespace BP.WF.Template
                 Cond cond = this[0] as Cond;
                 return cond.IsPassed;
             }
-
-
             #endregion 首先计算简单的.
 
             #region 处理混合计算。
@@ -1181,11 +1175,11 @@ namespace BP.WF.Template
                     sql = " SELECT TOP 1 No FROM WF_Emp WHERE " + exp;
                     break;
                 case DBType.MySQL:
-                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "   limit 1 ";
+                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
-                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "   rownum <=1 ";
+                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "    rownum <=1 ";
                     break;
                 default:
                     throw new Exception("err@没有做的数据库类型判断.");

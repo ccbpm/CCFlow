@@ -4620,6 +4620,7 @@ namespace BP.WF
             if (en != null)
             {
                 Row row = en.Row;
+
                 //特殊判断.
                 if (row.ContainsKey("OID") == true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
@@ -6235,6 +6236,10 @@ namespace BP.WF
             {
                 postfix = money.Substring(decNumber);
                 money = money.Substring(0, decNumber - 1);
+            }
+            else
+            {
+                postfix = ".00";
             }
             //开始添加”,“号
             if (money.Length > 3)

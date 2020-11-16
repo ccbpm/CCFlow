@@ -1571,7 +1571,7 @@ namespace BP.WF
                     {
                         ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
                         if (pushMsg != null) //抄送的WorkID=0,目的不让其删除.
-                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel, 0, null, atParas);
+                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID+"_"+node.FK_Flow, BP.Web.WebUser.No, "", pushMsg.SMSPushModel, 0, null, atParas);
                     }
                 }
             }

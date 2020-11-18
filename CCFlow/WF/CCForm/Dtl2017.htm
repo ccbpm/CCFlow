@@ -8,18 +8,20 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
-
-    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
+    <script type="text/javascript" src="../Scripts/jquery-1.11.0.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
     <script type="text/javascript" src="../Scripts/easyUI145/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>-->
 
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!--<script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
     <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />-->
     <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
@@ -93,7 +95,7 @@
             InitPage();
 
             BindMapExt();
-           
+
 
             //var bodyHeight = $(document).height();
             //var headHeight = $("#dtlDiv div table thead").height();
@@ -771,7 +773,7 @@
                 var IsExp = sys_MapDtl.IsImp;//导出
                 var th = $("<th style='width:100px;'" + rowspan + "></th>");
                 var imgStr = "";
-                if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") 
+                if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1")
                     imgStr = '<img title="保存" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
                 if (IsExp == 1) {
 
@@ -781,7 +783,7 @@
 
                     imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
                 }
-                imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Search.gif" onclick="window.open(\'' + window.location.href + '\')" />'
+                imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Full.png" onclick="WindowOpenDtl(\'' + window.location.href + '\')" />'
                 var delTh = $($(th).append(imgStr));
 
                 var delThData;
@@ -810,7 +812,7 @@
 
                 //可删除或者可新增时，有操作列
                 //if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
-                    threadTr.append(delTh);
+                threadTr.append(delTh);
                 //}
 
                 //添加删除列
@@ -2200,8 +2202,8 @@
                 //处理Pop弹出框
                 var PopModel = mapAttr.GetPara("PopModel");
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
-                    if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1" )
-                        continue;
+				  if (mapAttr.UIVisible == 0 || mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1" )
+				                        continue;
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
 
@@ -2864,6 +2866,18 @@
             if (tr && $(tr).find("[name=DDL_" + ctrlID + ']').length > 0) {
                 return $(tr).find("[name=DDL_" + ctrlID + ']').val(val);
             }
+        }
+
+
+
+        function WindowOpenDtl(url) {
+            var self = window.open(url);
+            var loop = setInterval(function () {
+                if (self.closed) {
+                    clearInterval(loop);
+                    window.location.href = url;
+                }
+            }, 1);
         }
 
      

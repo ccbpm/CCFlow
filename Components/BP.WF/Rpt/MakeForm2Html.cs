@@ -991,7 +991,7 @@ namespace BP.WF
                                     {
                                         //判断如果是金额类型的数据,加上千分号
                                         if (attr.MyDataType == 8)
-                                            text = Glo.FormatMoney(en.GetValStrByKey(attr.KeyOfEn));
+                                            text = String.Format("{0:N}", en.GetValDoubleByKey(attr.KeyOfEn));
                                         else
                                             text = en.GetValStrByKey(attr.KeyOfEn);
                                     }
@@ -1048,6 +1048,8 @@ namespace BP.WF
                             else
                                 text = "[&#10004]" + attr.Name;
                         }
+
+                       
 
                         //线性展示并且colspan=3
                         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeightInt < 30))

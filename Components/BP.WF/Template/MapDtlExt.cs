@@ -938,7 +938,7 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", true, true);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
-                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", false, true);
+                map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true, MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.

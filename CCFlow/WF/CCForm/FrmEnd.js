@@ -1141,6 +1141,8 @@ function calculator(o) {
         "calculate": o.Doc
     };
     $.each(targets, function (i, o) {
+		if(o.indexOf("@")==-1)
+            return true;
         var target = o.replace("@", "");
         var element = "$(':input[name=TB_" + target + "]')";
         expression.judgement.push(element + ".length==0");

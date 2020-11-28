@@ -1151,7 +1151,8 @@ function calculator(o) {
     });
     (function (targets, expression, resultTarget, pk, expDefined) {
         $.each(targets, function (i, o) {
-
+			if(o.indexOf("@")==-1)
+				return true;
             var target = o.replace("@", "");
 
             $(":input[name=TB_" + target + "]").bind("change", function () {

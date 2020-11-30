@@ -8,11 +8,15 @@ function GenerFreeFrm(wn) {
     $('#CCForm').html('');
 
     //循环FrmRB
-    for (var i in flowData.Sys_FrmRB) {
-        var frmLab = flowData.Sys_FrmRB[i];
-        var label = figure_Template_RB(frmLab);
-        $('#CCForm').append(label);
-    }
+	if(flowData.Sys_FrmRB&&  flowData.Sys_FrmRB!=undefined){
+		for (var i in flowData.Sys_FrmRB) {
+			var frmLab = flowData.Sys_FrmRB[i];
+			var label = figure_Template_RB(frmLab);
+			$('#CCForm').append(label);
+		}
+	}
+
+    
 
     //循环MapAttr
     for (var mapAtrrIndex in flowData.Sys_MapAttr) {
@@ -27,19 +31,25 @@ function GenerFreeFrm(wn) {
     }
 
     //循环FrmLab
-    for (var i in flowData.Sys_FrmLab) {
-        var frmLab = flowData.Sys_FrmLab[i];
-        var label = figure_Template_Label(frmLab);
-        $('#CCForm').append(label);
-    }
+	if(flowData.Sys_FrmLab&&  flowData.Sys_FrmLab!=undefined){
+		for (var i in flowData.Sys_FrmLab) {
+			var frmLab = flowData.Sys_FrmLab[i];
+			var label = figure_Template_Label(frmLab);
+			$('#CCForm').append(label);
+		}
+	}
+    
     
 
     //循环FrmBtn
-    for (var i in flowData.Sys_FrmBtn) {
-        var frmBtn = flowData.Sys_FrmBtn[i];
-        var btn = figure_Template_Btn(frmBtn);
-        $('#CCForm').append(btn);
-    }
+	if(flowData.Sys_FrmBtn&&  flowData.Sys_FrmBtn!=undefined){
+		 for (var i in flowData.Sys_FrmBtn) {
+			var frmBtn = flowData.Sys_FrmBtn[i];
+			var btn = figure_Template_Btn(frmBtn);
+			$('#CCForm').append(btn);
+		}
+	}
+   
 
     //循环Image
     for (var i in flowData.Sys_FrmImg) {

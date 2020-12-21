@@ -1013,7 +1013,7 @@ namespace BP.WF.HttpHandler
 
             string methodName = this.GetRequestVal("MethodName");
             if (ens == null)
-                return "err@没有找到实体类";
+                return "err@实体类";
             Type tp = ens.GetType();
             System.Reflection.MethodInfo mp = tp.GetMethod(methodName);
             if (mp == null)
@@ -2433,14 +2433,17 @@ namespace BP.WF.HttpHandler
             {
                 mapAttrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
                 attrs = new Attrs();
-                foreach (MapAttr attr in mapAttrs)
+                Attr attr = null;
+                foreach (MapAttr mapAttr in mapAttrs)
                 {
-                    string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                    string searchVisable = mapAttr.atPara.GetValStrByKey("SearchVisable");
                     if (searchVisable == "0")
                         continue;
-                    if ((count != 0 && DataType.IsNullOrEmpty(searchVisable)) || (count == 0 && attr.UIVisible == false))
+                    if ((count != 0 && DataType.IsNullOrEmpty(searchVisable)) || (count == 0 && mapAttr.UIVisible == false))
                         continue;
-                    attrs.Add(attr.HisAttr);
+                    attr = mapAttr.HisAttr;
+                    attr.UIVisible = true;
+                    attrs.Add(attr);
                    
                 }
                 

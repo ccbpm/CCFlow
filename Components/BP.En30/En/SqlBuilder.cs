@@ -1519,8 +1519,12 @@ namespace BP.En
                         }  
                         else
                         {
-                            val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +
+                            if (SystemConfig.CustomerNo == "ASSET")
+                                val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +
                                                          "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
+                            else
+                                val = val + ",ISNULL(" + mainTable + attr.Field + ",'" +
+                                                        attr.DefaultVal.ToString() + "') " + attr.Key;
                         }
                         break;
                     case DataType.AppDateTime:
@@ -1535,8 +1539,12 @@ namespace BP.En
                         }
                         else
                         {
-                            val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
+                            if (SystemConfig.CustomerNo == "ASSET")
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
                                                           "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 20)') " + attr.Key;
+                            else
+                                val = val + ",ISNULL(" + mainTable + attr.Field + ",'" +
+                                                        attr.DefaultVal.ToString() + "') " + attr.Key;
                         }
                         break;
                     default:

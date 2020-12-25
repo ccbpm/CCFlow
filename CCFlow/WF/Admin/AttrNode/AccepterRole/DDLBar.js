@@ -263,8 +263,16 @@ function BindDeptTree() {
     var nodeID = GetQueryString("FK_Node");
     var rootNo = 0;
     var webUser = new WebUser();
-    if (webUser.CCBPMRunModel != 0)
-        rootNo = webUser.OrgNo;
+
+    //本组织的根节点编号
+    if (webUser.CCBPMRunModel != 0) {
+        var ens = new Entities("BP.WF.Port.Depts");
+        ens.Retrieve("OrgNo", webUser.OrgNo, "ParentNo", "0");
+        ens.Retrieve("OrgNo", webUser.OrgNo, "ParentNo", ens[0].No);
+        rootNo = ens[0].No;
+    }
+    //if (webUser.CCBPMRunModel != 0)
+    //    rootNo = webUser.OrgNo;
 
     var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
@@ -276,7 +284,15 @@ function BindDeptTree() {
 function BindDeptTreeGroup() {
 
     var nodeID = GetQueryString("FK_Node");
-    var rootNo = "14819";
+    var rootNo = "0";
+    var webUser = new WebUser();
+
+    //总部的根节点编号
+    if (webUser.CCBPMRunModel != 0) {
+        var ens = new Entities("BP.WF.Port.Depts");
+        ens.Retrieve("OrgNo", webUser.OrgNo, "ParentNo", "0");
+        rootNo = ens[0].No;
+    }
 
     //var webUser = new WebUser();
     //if (webUser.CCBPMRunModel != 0)

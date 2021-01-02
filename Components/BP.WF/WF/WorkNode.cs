@@ -8083,7 +8083,9 @@ namespace BP.WF
                         {
                             t.Msg += "WorkCheck@" + dt.Rows[0][0].ToString();
                             t.WriteDB = dt.Rows[0][1].ToString();
-                        }
+                        }else{
+							t.Msg += "WorkCheck@";
+						}
 
 
 
@@ -8229,7 +8231,9 @@ namespace BP.WF
                         {
                             t.Msg += "WorkCheck@" + dt.Rows[0][0].ToString();
                             t.WriteDB = dt.Rows[0][1].ToString();
-                        }
+                        }else{
+							t.Msg += "WorkCheck@";
+						}
 
                         //string sql = "SELECT Msg From ND" + int.Parse(this.HisNode.FK_Flow) + "Track Where WorkID=" + t.WorkID + " AND FID=" + t.FID + " AND ActionType=" + (int)ActionType.WorkCheck + " AND NDFrom=" + this.HisNode.NodeID + " AND EmpFrom='" + WebUser.No + "'";
                         //t.Msg += "WorkCheck@" + DBAccess.RunSQLReturnStringIsNull(sql, "");

@@ -38,6 +38,10 @@ namespace BP.WF.Template
             {
                 return (DeliveryWay)this.GetValIntByKey(NodeAttr.DeliveryWay);
             }
+            set
+            {
+                this.SetValByKey(NodeAttr.DeliveryWay, value);
+            }
         }
         public string DeliveryParas
         {
@@ -93,9 +97,10 @@ namespace BP.WF.Template
         /// 节点
         /// </summary>
         /// <param name="_oid">节点ID</param>	
-        public NodeSimple(int _oid)
+        public NodeSimple(int nodeID)
         {
-          
+            this.NodeID = nodeID;
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法

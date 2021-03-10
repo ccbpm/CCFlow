@@ -837,6 +837,7 @@ namespace BP.Sys
                 return this.KeyOfEn;
             }
         }
+      
         public int MyDataType
         {
             get
@@ -1529,7 +1530,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string file = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
             //若文件夹不存在，则创建
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) == false)
@@ -1541,7 +1542,7 @@ namespace BP.Sys
         //删除大块文本信息
         public string DeleteBigNoteHtmlText()
         {
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string file = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
 
             if (System.IO.File.Exists(file) == true)
                 System.IO.File.Delete(file);
@@ -1558,7 +1559,7 @@ namespace BP.Sys
         public string ReadBigNoteHtmlText()
         {
             string doc = "";
-            string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
+            string file = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + this.FK_MapData + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {

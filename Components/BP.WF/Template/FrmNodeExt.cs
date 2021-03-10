@@ -162,8 +162,8 @@ namespace BP.WF.Template
                 map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
                     Glo.SQLOfCheckField, true);
 
-                map.AddDDLSysEnum(FrmNodeAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
-              true, true, FrmNodeAttr.SFSta, "@0=禁用@1=启用@2=只读");
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
+                true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
 
                 //单据编号对应字段
                 map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",
@@ -277,6 +277,7 @@ namespace BP.WF.Template
                 rm.Title = "批量设置";
                 rm.ClassMethodName = this.ToString() + ".DoBatchSetting()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "表单组件";
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -287,7 +288,8 @@ namespace BP.WF.Template
 
         public string DoBatchSetting()
         {
-            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+            //return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/FrmSln/BatchEditSln.htm?NodeID=" + this.FK_Node;
 
         }
         /// <summary>

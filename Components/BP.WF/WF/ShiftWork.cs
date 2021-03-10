@@ -40,14 +40,14 @@ namespace BP.WF
 
                 //检查被移交人是否在当前的待办列表里否？
                 GenerWorkerList gwl = new GenerWorkerList();
-                i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
+                i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.UserID,
                     GenerWorkerListAttr.FK_Node, nd.NodeID,
                     GenerWorkerListAttr.WorkID, workID);
                 if (i == 1)
-                    return "err@移交失败，您所移交的人员(" + emp.No + " " + emp.Name + ")已经在代办列表里.";
+                    return "err@移交失败，您所移交的人员(" + emp.UserID + " " + emp.Name + ")已经在代办列表里.";
 
                 //把自己的待办更新到被移交人身上.
-                string sql = "UPDATE WF_GenerWorkerlist SET IsRead=0, FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
+                string sql = "UPDATE WF_GenerWorkerlist SET IsRead=0, FK_Emp='" + emp.UserID + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
                 int myNum = DBAccess.RunSQL(sql);
 
                 #region 判断是否是,admin的移交.
@@ -86,14 +86,14 @@ namespace BP.WF
                     WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
                 //移交后事件
-                string atPara1 = "@SendToEmpIDs=" + emp.No;
+                string atPara1 = "@SendToEmpIDs=" + emp.UserID;
                 string info = "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
 
                 //处理移交后发送的消息事件,发送消息.
                 PushMsgs pms1 = new PushMsgs();
                 pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
                 foreach (PushMsg pm in pms1)
-                    pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.No);
+                    pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.UserID);
 
                 gwf.WFState = WFState.Shift;
                 gwf.TodoEmpsNum = 1;
@@ -109,7 +109,7 @@ namespace BP.WF
 
             foreach (GenerWorkerList item in gwls)
             {
-                item.FK_Emp = emp.No;
+                item.FK_Emp = emp.UserID;
                 item.FK_EmpText = emp.Name;
                 item.IsEnable = true;
                 item.Insert();
@@ -125,9 +125,9 @@ namespace BP.WF
             Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
-            string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.No + " , " + emp.Name;
+            string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.UserID + " , " + emp.Name;
             //移交后事件
-            string atPara = "@SendToEmpIDs=" + emp.No;
+            string atPara = "@SendToEmpIDs=" + emp.UserID;
             WorkNode wn = new WorkNode(work, nd);
             inf1o += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, wn, null, atPara);
             return inf1o;
@@ -174,12 +174,12 @@ namespace BP.WF
                     /*如果是队列模式，或者是协作模式, 就直接把自己的gwl 信息更新到被移交人身上. */
 
                     //检查被移交人是否在当前的待办列表里否？
-                    i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
+                    i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.UserID,
                         GenerWorkerListAttr.FK_Node, nd.NodeID,
                         GenerWorkerListAttr.WorkID, workID);
                     if (i == 1)
                     {
-                        info += "err@移交失败，您所移交的人员(" + emp.No + " " + emp.Name + ")已经在代办列表里.";
+                        info += "err@移交失败，您所移交的人员(" + emp.UserID + " " + emp.Name + ")已经在代办列表里.";
                         continue;
                     }
 
@@ -188,7 +188,7 @@ namespace BP.WF
 
                     //写入移交数据.
                     gwl = (GenerWorkerList)gwls[0];
-                    gwl.FK_Emp = emp.No;
+                    gwl.FK_Emp = emp.UserID;
                     gwl.FK_EmpText = emp.Name;
                     gwl.IsPassInt = 0;
                     gwl.Insert();
@@ -198,23 +198,23 @@ namespace BP.WF
                         WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
                     //移交后事件
-                    string atPara1 = "@SendToEmpIDs=" + emp.No;
+                    string atPara1 = "@SendToEmpIDs=" + emp.UserID;
                     info += "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
 
                     //处理移交后发送的消息事件,发送消息.
                     PushMsgs pms1 = new PushMsgs();
                     pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
                     foreach (PushMsg pm in pms1)
-                        pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.No);
+                        pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.UserID);
                 
-                    info += "info@成功移交给:" + emp.No + "," + emp.Name;
+                    info += "info@成功移交给:" + emp.UserID + "," + emp.Name;
                     continue;
                 }
 
                 //非协作模式.
                 //写入移交数据.
                 gwl = (GenerWorkerList)gwls[0];
-                gwl.FK_Emp = emp.No;
+                gwl.FK_Emp = emp.UserID;
                 gwl.FK_EmpText = emp.Name;
                 gwl.IsPassInt = 0;
                 gwl.Insert();

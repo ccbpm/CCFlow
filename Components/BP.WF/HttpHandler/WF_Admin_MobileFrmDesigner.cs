@@ -173,7 +173,7 @@ namespace BP.WF.HttpHandler
                     if (GetGroupID(fbtn.MyPK, groups) == 0)
                     {
                         group = new GroupField();
-                        group.Lab = fbtn.Text;
+                        group.Lab = fbtn.Lab;
                         group.FrmID = fbtn.FK_MapData;
                         group.CtrlType = GroupCtrlType.Btn;
                         group.CtrlID = fbtn.MyPK;

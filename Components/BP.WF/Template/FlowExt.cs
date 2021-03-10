@@ -376,7 +376,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_Flow", "流程");
+                Map map = new Map("WF_Flow", "流程模版");
 
                 #region 基本属性。
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
@@ -411,15 +411,14 @@ namespace BP.WF.Template
                 // add 2013-02-05.
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
                 map.SetHelperUrl(FlowAttr.TitleRole, "http://ccbpm.mydoc.io/?v=5404&t=17040");
-
-                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, true);
-
+                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, false);
                 string msg = "设置帮助";
                 msg += "\r\n 1. 如果为空表示只在开始节点生成标题.";
                 msg += "\r\n 2. * 表示在任意节点可生成标题.";
                 msg += "\r\n 3. 要在指定的节点重新生成标题用逗号分开,比如: 102,105,109";
-
                 map.SetHelperAlert(FlowAttr.TitleRoleNodes, msg);
+
+
 
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
@@ -430,13 +429,15 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
                 // FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 
-                map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
-                map.SetHelperUrl(FlowAttr.IsGuestFlow, "http://ccbpm.mydoc.io/?v=5404&t=17039");
+                //map.AddBoolean(FlowAttr.GuestFlowRole, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
+                map.AddDDLSysEnum(FlowAttr.GuestFlowRole, (int)GuestFlowRole.None, "外部用户参与流程规则",
+                 true, true, "GuestFlowRole", "@0=不参与@1=开始节点参与@2=中间节点参与");
+
+                map.SetHelperUrl(FlowAttr.GuestFlowRole, "http://ccbpm.mydoc.io/?v=5404&t=17039");
 
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
                   true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
-
 
                 //map.AddDDLSysEnum(FlowAttr.SDTOfFlow, (int)TimelineRole.ByNodeSet, "时效性规则",
                 // true, true, FlowAttr.SDTOfFlow, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
@@ -452,7 +453,7 @@ namespace BP.WF.Template
             true, true, FlowAttr.FlowDeleteRole,
             "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
 
-                //子流程结束时，让父流程自动运行到下一步
+                //子流程结束时，让父流程自动运行到下一步。
                 map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true);
 
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
@@ -490,8 +491,11 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsStartInMobile, true, "是否可以在手机里启用？(如果发起表单特别复杂就不要在手机里启用了)", true, true, true);
                 map.SetHelperAlert(FlowAttr.IsStartInMobile, "用于控制手机端流程发起列表.");
 
-                map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
+                map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据防止篡改(MD5数据加密防篡改)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
+
+                map.AddBoolean(FlowAttr.IsJM, false, "是否是数据加密流程(把所有字段加密存储)", true, true, true);
+                map.SetHelperUrl(FlowAttr.IsJM, "http://ccbpm.mydoc.io/?v=5404&t=17028");
 
                 // 数据存储.
                 map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow, "数据存储", true, true, FlowAttr.DataStoreModel, "@0=数据轨迹模式@1=数据合并模式");
@@ -520,8 +524,8 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
 
                 //表单URL. //@liuqiang 把他翻译到java里面去.
-                map.AddDDLSysEnum(FlowAttr.FlowFrmType, 0, "流程全局表单类型", true, false, FlowAttr.FlowFrmType,
-                    "@0=完整版-2019年更早版本@1=开发者表单@2=傻瓜表单@3=自定义(嵌入)表单@4=SDK表单");
+                map.AddDDLSysEnum(FlowAttr.FlowFrmModel, 0, "流程全局表单类型", true, false, FlowAttr.FlowFrmModel,
+                    "@0=完整版-2019年更早版本@1=绑定表单库的表单@2=表单树模式@3=自定义(嵌入)表单@4=SDK表单");
                 map.AddTBString(FlowAttr.FrmUrl, null, "表单Url", true, false, 0, 150, 10, true);
                 map.SetHelperAlert(FlowAttr.FrmUrl, "对嵌入式表单,SDK表单的url的表单,嵌入式表单有效,用与整体流程的设置.");
                 #endregion 表单数据.
@@ -556,12 +560,16 @@ namespace BP.WF.Template
 
 
                 #endregion 数据同步方案
+
                 #region 轨迹信息
                 map.AddBoolean(FlowAttr.IsFrmEnable, true, "是否显示表单", true, true, false);
                 map.AddBoolean(FlowAttr.IsTruckEnable, true, "是否显示轨迹图", true, true, false);
                 map.AddBoolean(FlowAttr.IsTimeBaseEnable, true, "是否显示时间轴", true, true, false);
                 map.AddBoolean(FlowAttr.IsTableEnable, true, "是否显示时间表", true, true, false);
                 map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
+
+                map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
+                map.AddDDLSysEnum(FlowAttr.TrackOrderBy, 0, "排序方式", true, true, FlowAttr.TrackOrderBy,"@0=按照时间先后顺序@1=倒序(新发生的在前面)");
                 #endregion 轨迹信息
 
                 #region 开发者信息.
@@ -581,6 +589,8 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+           
+
                 rm = new RefMethod();
                 rm.Title = "发起限制规则";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Limit.png";
@@ -588,15 +598,15 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "发起前置导航";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
-                rm.ClassMethodName = this.ToString() + ".DoStartGuide()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "发起前置导航";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
+                //rm.ClassMethodName = this.ToString() + ".DoStartGuide()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "发起前置导航(实验中)";
+                rm.Title = "发起前置导航";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
                 rm.ClassMethodName = this.ToString() + ".DoStartGuideV2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -614,14 +624,6 @@ namespace BP.WF.Template
                 rm.Title = "流程消息"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoMessage";
                 rm.Icon = "../../WF/Img/Message24.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "流程计划时间计算规则"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoSDTOfFlow";
-                //rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -650,7 +652,12 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
-
+                rm = new RefMethod();
+                rm.Title = "批量发起";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";
+                rm.ClassMethodName = this.ToString() + ".DoBatchStart()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "独立表单树";
@@ -660,6 +667,15 @@ namespace BP.WF.Template
                 #endregion 流程设置.
 
                 #region 时限规则
+
+                rm = new RefMethod();
+                rm.Title = "计划时间计算规则";
+                rm.GroupName = "时限规则";
+                rm.ClassMethodName = this.ToString() + ".DoSDTOfFlow";
+                //rm.Icon = "../../WF/Img/Event.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.GroupName = "时限规则";
                 rm.Title = "时限规则";
@@ -706,6 +722,16 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "模拟测试";
+                rm.Title = "测试容器"; // "设计检查报告";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                rm.ClassMethodName = this.ToString() + ".TestingContainer";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+
 
                 #endregion 模拟测试.
 
@@ -790,7 +816,14 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 rm.Warning = "您确定要根据新的规则重新产生标题吗？";
                 rm.GroupName = "流程维护";
+
+                //设置相关字段.
+                rm.RefAttrKey = FlowAttr.TitleRoleNodes;
+                rm.RefAttrLinkLabel = "重新生成流程标题";
+                rm.Target = "_blank";
                 map.AddRefMethod(rm);
+                 
+
 
                 rm = new RefMethod();
                 rm.Title = "重生成FlowEmps字段";
@@ -866,9 +899,6 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("Worker", null, "接受人编号", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoSetTodoEmps";
                 map.AddRefMethod(rm);
-
-
-
 
 
                 rm = new RefMethod();
@@ -998,7 +1028,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
+                // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "轨迹查看权限";
@@ -1290,7 +1320,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSDTOfFlow()
         {
-            return "../../Admin/AttrFlow/SDTOfFlow.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrFlow/SDTOfFlow/Default.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 节点标签
@@ -1308,7 +1338,14 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/DTSBTable.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
-
+        /// <summary>
+        /// 批量发起
+        /// </summary>
+        /// <returns></returns>
+        public string DoBatchStart()
+        {
+            return "../../Admin/AttrFlow/BatchStart.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+        }
         /// <summary>
         /// 批量修改节点属性
         /// </summary>
@@ -1406,6 +1443,7 @@ namespace BP.WF.Template
 
                 gwf.Title = rpt.Title;
                 gwf.WFState = WFState.ReturnSta; /*设置为退回的状态*/
+                gwf.TaskSta = TaskSta.None;/**取消共享模式*/
                 gwf.FK_Dept = rpt.FK_Dept;
 
                 Dept dept = new Dept(empStarter.FK_Dept);
@@ -1425,7 +1463,7 @@ namespace BP.WF.Template
 
                 #endregion 创建流程引擎主表数据
                 string ndTrack = "ND" + int.Parse(this.No) + "Track";
-                string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL;
+                string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver+"," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL+","+(int)ActionType.Skip;
                 string sql = "SELECT  * FROM " + ndTrack + " WHERE   ActionType IN (" + actionType + ")  and WorkID=" + workid + " ORDER BY RDT DESC, NDFrom ";
                 System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
@@ -1667,7 +1705,6 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
             return fl.DoAutoStartIt();
         }
-
         /// <summary>
         /// 强制设置接受人
         /// </summary>
@@ -1683,7 +1720,7 @@ namespace BP.WF.Template
                 return "workid=" + workid + "不正确.";
 
             BP.Port.Emp emp = new Emp();
-            emp.No = worker;
+            emp.UserID = worker;
             if (emp.RetrieveFromDBSources() == 0)
                 return "人员编号不正确" + worker + ".";
 
@@ -1694,7 +1731,7 @@ namespace BP.WF.Template
 
             gwf.FK_Node = nodeID;
             gwf.NodeName = nd.Name;
-            gwf.TodoEmps = emp.No + "," + emp.Name + ";";
+            gwf.TodoEmps = emp.UserID + "," + emp.Name + ";";
             gwf.TodoEmpsNum = 1;
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.Update();
@@ -1704,7 +1741,7 @@ namespace BP.WF.Template
             GenerWorkerList gwl = new GenerWorkerList();
             gwl.FK_Node = nodeID;
             gwl.WorkID = workid;
-            gwl.FK_Emp = emp.No;
+            gwl.FK_Emp = emp.UserID;
             if (gwl.RetrieveFromDBSources() == 0)
             {
                 DateTime dt = DateTime.Now;
@@ -1766,9 +1803,9 @@ namespace BP.WF.Template
             if (DataType.IsNullOrEmpty(this.No) == true)
                 throw new Exception("传入的流程编号为空，请检查流程");
             string flowID = int.Parse(this.No).ToString() + "01";
-            return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
+            //return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
+            return "../../Admin/AttrFlow/AutoStart/Default.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
-        
         /// <summary>
         /// 执行运行
         /// </summary>
@@ -1785,7 +1822,10 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-
+        public string TestingContainer()
+        {
+            return "../../Admin/TestingContainer/TestFlow2020.htm?FK_Flow=" + this.No + "&Lang=CH";
+        }
         public string DoCheck2018Url()
         {
             return "../../Admin/Testing/FlowCheckError.htm?FK_Flow=" + this.No + "&Lang=CH";
@@ -1796,7 +1836,7 @@ namespace BP.WF.Template
         /// <returns>返回URL</returns>
         public string DoLimit()
         {
-            return "../../Admin/AttrFlow/Limit.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/Limit/Default.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 设置发起前置导航
@@ -1866,6 +1906,9 @@ namespace BP.WF.Template
         }
         protected override bool beforeUpdate()
         {
+            //检查设计流程权限,集团模式下，不是自己创建的流程，不能设计流程.
+            BP.WF.Template.TemplateGlo.CheckPower(this.No);
+
             //更新流程版本
             Flow.UpdateVer(this.No);
 
@@ -2011,21 +2054,46 @@ namespace BP.WF.Template
 
             #region 为systype设置，当前所在节点的第2级别目录。
             FlowSort fs = new FlowSort(fl.FK_FlowSort);
-            if (fs.ParentNo == "99" || fs.ParentNo == "0")
+            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                this.SysType = fl.FK_FlowSort;
+                if (fs.ParentNo.Equals(WebUser.OrgNo) == true)
+                    this.SysType = fl.FK_FlowSort;
+                else
+                {
+                    FlowSort fsP = new FlowSort(fs.ParentNo);
+                    if (fs.ParentNo.Equals(WebUser.OrgNo) == true)
+                    {
+                        this.SysType = fsP.No;
+                    }
+                    else
+                    {
+                        FlowSort fsPP = new FlowSort(fsP.ParentNo);
+                        this.SysType = fsPP.No;
+                    }
+                }
             }
             else
             {
-                FlowSort fsP = new FlowSort(fs.ParentNo);
-                if (fsP.ParentNo == "99" || fsP.ParentNo == "0")
+                if (fs.ParentNo.Equals( "99") || fs.ParentNo.Equals("0") )
                 {
-                    this.SysType = fsP.No;
+                    this.SysType = fl.FK_FlowSort;
                 }
                 else
                 {
-                    FlowSort fsPP = new FlowSort(fsP.ParentNo);
-                    this.SysType = fsPP.No;
+                    FlowSort fsP = new FlowSort(fs.ParentNo);
+                    fsP.No = fs.ParentNo;
+
+                    if (fsP.ParentNo == "99" || fsP.ParentNo == "0")
+                    {
+                        this.SysType = fsP.No;
+                    }
+                    else
+                    {
+                        FlowSort fsPP = new FlowSort();
+                        fsPP.No = fsP.ParentNo;
+                        if (fsPP.RetrieveFromDBSources() == 1)
+                            this.SysType = fsPP.No;
+                    }
                 }
             }
             #endregion 为systype设置，当前所在节点的第2级别目录。

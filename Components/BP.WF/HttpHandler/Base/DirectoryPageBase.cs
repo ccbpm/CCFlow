@@ -81,7 +81,7 @@ namespace BP.WF.HttpHandler
                 throw new Exception("err@token失效，请重新登录。" + url + "");
 
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = data;
+            emp.UserID = data;
             if (emp.RetrieveFromDBSources() == 0)
                 throw new Exception("err@根据token获取用户名错误:" + token + ",获取数据为:" + data);
 
@@ -98,13 +98,15 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
-
             //deal token
             if (WebUser.No == null)
             {
                 bool isCanDealToken = true;
 
                 if (myEn.DoType.Contains("Login") == true)
+                    isCanDealToken = false;
+
+                if (myEn.DoType.Contains("Index") == true)
                     isCanDealToken = false;
 
                 if (myEn.ToString().Contains("Admin") == true)
@@ -116,8 +118,6 @@ namespace BP.WF.HttpHandler
                 //if (isCanDealToken == true)
                  //   this.DealToken(myEn, myEn.DoType);
             }
-
-
 
             //string token=myEn.ToString
             try
@@ -160,19 +160,20 @@ namespace BP.WF.HttpHandler
             if (this.DoType.Contains(">") == true)
                 return "err@非法的脚本植入.";
 
-            return "err@子类[" + this.ToString() + "]没有重写该[" + this.DoType + "]方法，请确认该方法是否缺少或者是非public类型的.";
+            return "err@子类[" + this.ToString() + "]没有重写该[" + this.RequestParasOfAll + "]方法，请确认该方法是否缺少或者是非public类型的.";
         }
         #endregion 执行方法.
 
         #region 公共方法.
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
         public string GetRequestVal(string key)
         {
-            string val = HttpContextHelper.RequestParams(key);
+            string val = HttpContextHelper.Current.Request.QueryString[key];
+            if (val == null)
+            {
+                val = HttpContextHelper.RequestParams(key);
+                if (val == null)
+                    return null;
+            }
             return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         /// <summary>
@@ -1256,7 +1257,7 @@ namespace BP.WF.HttpHandler
                             string text = "";
                             if (attr.IsFKorEnum || attr.IsFK)
                                 text = dr[attr.Key + "Text"].ToString();
-                            else if (attrs.Contains(attr.Key+"T") == true)
+                            else if (dt.Columns.Contains(attr.Key+"T") == true)
                                 text = dr[attr.Key + "T"].ToString();
                             else
                                 text = dr[attr.Key].ToString();

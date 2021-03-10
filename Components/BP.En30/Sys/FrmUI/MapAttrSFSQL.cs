@@ -103,12 +103,12 @@ namespace BP.Sys.FrmUI
                 //默认值.
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
 
-                //map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
+                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 300, 20);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
-                map.AddBoolean(MapAttrAttr.UIVisible, true, "可见", true, true);
+                map.AddBoolean(MapAttrAttr.UIVisible, true, "可见", true, false);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
 
                // map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
@@ -118,7 +118,7 @@ namespace BP.Sys.FrmUI
 
                 #region 傻瓜表单。
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
-                   "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                   "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
                 map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",

@@ -442,7 +442,9 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.RDT, value);
+                //this.SetValByKey(GenerWorkerListAttr.RDT, value);
+                this.SetValByKey(GenerWorkerListAttr.RDT, DataType.CurrentDataTimess);
+
             }
         }
         /// <summary>

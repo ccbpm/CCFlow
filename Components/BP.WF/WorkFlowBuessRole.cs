@@ -44,7 +44,7 @@ namespace BP.WF
             }
 
 
-            titleRole = titleRole.Replace("@WebUser.No", emp.No);
+            titleRole = titleRole.Replace("@WebUser.No", emp.UserID);
             titleRole = titleRole.Replace("@WebUser.Name", emp.Name);
             titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             titleRole = titleRole.Replace("@WebUser.FK_DeptName", emp.FK_DeptText);
@@ -577,7 +577,7 @@ namespace BP.WF
                 sql = sql.Replace("@NodeID", toNode.NodeID.ToString());
 
                 sql = Glo.DealExp(sql, enParas, null);
-                
+
 
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
@@ -595,7 +595,7 @@ namespace BP.WF
                 if (toNode.HisRunModel != RunModel.SubThread)
                     throw new Exception("@您设置的节点接收人方式为：按绑定部门计算,该部门一人处理标识该工作结束(子线程)，但是当前节点非子线程节点。");
 
-                sql = "SELECT No, Name,FK_Dept AS GroupMark FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + toNode.NodeID + ")";
+                sql = "SELECT " + BP.Sys.Glo.UserNo + ", Name,FK_Dept AS GroupMark FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + toNode.NodeID + ")";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
                     throw new Exception("@没有找到可接受的工作人员,接受人方式为, ‘按绑定部门计算,该部门一人处理标识该工作结束(子线程)’ @技术信息：执行的SQL没有发现人员:" + sql);
@@ -671,7 +671,7 @@ namespace BP.WF
                     {
                         if (toNode.HisDeliveryWay == DeliveryWay.BySelected)
                         {
-                            if (currNode.CondModel != DirCondModel.SendButtonSileSelect)
+                            if (currNode.CondModel != DirCondModel.ByPopSelect)
                             {
                                 // 2020.08.17 这里注释掉了， 有可能是到达的节点是，按照弹出窗体计算的. 
                                 // 不做强制修改.
@@ -968,7 +968,7 @@ namespace BP.WF
                 if (flowAppType == FlowAppType.Normal)
                 {
                     ps = new Paras();
-                    ps.SQL = "SELECT  A.No, A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
+                    ps.SQL = "SELECT  A." + BP.Sys.Glo.UserNo + ", A.Name  FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + dbStr + "FK_Node";
                     ps.Add("FK_Node", toNode.NodeID);
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count > 0 && toNode.HisWhenNoWorker == false)
@@ -979,8 +979,8 @@ namespace BP.WF
 
                 if (flowAppType == FlowAppType.PRJ)
                 {
-                    sql = " SELECT A.No,A.Name FROM Port_Emp A, WF_NodeDept B, Prj_EmpPrjStation C, WF_NodeStation D ";
-                    sql += "  WHERE A.FK_Dept=B.FK_Dept AND A.No=C.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=D.FK_Node ";
+                    sql = " SELECT A." + BP.Sys.Glo.UserNo + ",A.Name FROM Port_Emp A, WF_NodeDept B, Prj_EmpPrjStation C, WF_NodeStation D ";
+                    sql += "  WHERE A.FK_Dept=B.FK_Dept AND A." + BP.Sys.Glo.UserNoWhitOutAS + "=C.FK_Emp AND C.FK_Station=D.FK_Station AND B.FK_Node=D.FK_Node ";
                     sql += "  AND C.FK_Prj=" + dbStr + "FK_Prj  AND D.FK_Node=" + dbStr + "FK_Node";
 
                     ps = new Paras();
@@ -992,17 +992,17 @@ namespace BP.WF
                     if (dt.Rows.Count == 0)
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
-                        sql = "SELECT NO FROM Port_Emp WHERE NO IN ";
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + " IN ";
 
 
-                        sql += "(SELECT No FROM Port_Emp WHERE FK_Dept IN ";
+                        sql += "(SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE FK_Dept IN ";
 
 
                         sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";
                         sql += ")";
-                        sql += "AND NO IN ";
+                        sql += "AND " + BP.Sys.Glo.UserNoWhitOutAS + " IN ";
                         sql += "(";
-                        sql += "SELECT FK_Emp FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN ";
+                        sql += "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station IN ";
                         sql += "( SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node2)";
                         sql += ")";
                         sql += " ORDER BY No";
@@ -1042,7 +1042,7 @@ namespace BP.WF
             #region 本集团组织 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
             {
-                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.OrgNo=" + dbStr + "OrgNo  ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
@@ -1059,7 +1059,7 @@ namespace BP.WF
             #region 本部门 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
             {
-                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept  ORDER BY A.FK_Emp";
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept  ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", toNode.NodeID);
                 ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
@@ -1077,15 +1077,26 @@ namespace BP.WF
             #region 仅按岗位计算
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
-                sql = "SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
-                ps.Add("FK_Node", toNode.NodeID);
-                ps.SQL = sql;
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND A.OrgNo=" + dbStr + "OrgNo AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
+                    ps.Add("FK_Node", toNode.NodeID);
+                    ps.SQL = sql;
+                }
+                else
+                {
+                    sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                    ps.Add("FK_Node", toNode.NodeID);
+                    ps.SQL = sql;
+                }
+
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按岗位计算，没有找到人员。");
             }
             #endregion
 
@@ -1094,10 +1105,17 @@ namespace BP.WF
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
 
-                ps = new Paras();
-                sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
-                ps.Add("FK_Emp", WebUser.No);
-                dt = DBAccess.RunSQLReturnTable(ps);
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    dt = DBAccess.RunSQLReturnTable("SELECT UserID as No, Name FROM Port_Emp WHERE UserID='" + BP.Web.WebUser.No + "' AND OrgNo='" + BP.Web.WebUser.OrgNo + "'");
+                }
+                else
+                {
+                    ps = new Paras();
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
+                    ps.Add("FK_Emp", WebUser.No);
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                }
 
 
 
@@ -1154,7 +1172,7 @@ namespace BP.WF
                 if (flowAppType == FlowAppType.Normal || flowAppType == FlowAppType.DocFlow)
                 {
                     // 如果当前的节点不是开始节点， 从轨迹里面查询。
-                    sql = "SELECT DISTINCT FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN "
+                    sql = "SELECT DISTINCT FK_Emp  FROM Port_DeptEmpStation WHERE FK_Station IN "
                        + "(SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + toNode.NodeID + ") "
                        + "AND FK_Emp IN (SELECT FK_Emp FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FK_Node IN (" + DataType.PraseAtToInSql(toNode.GroupStaNDs, true) + ") )";
 
@@ -1182,7 +1200,7 @@ namespace BP.WF
                     if (dt.Rows.Count == 0)
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。*/
-                        sql = "SELECT DISTINCT FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN "
+                        sql = "SELECT DISTINCT FK_Emp  FROM Port_DeptEmpStation WHERE FK_Station IN "
                          + "(SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node ) "
                          + "AND FK_Emp IN (SELECT FK_Emp FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FK_Node IN (" + DataType.PraseAtToInSql(toNode.GroupStaNDs, true) + ") )";
                         sql += " ORDER BY FK_Emp ";
@@ -1251,9 +1269,9 @@ namespace BP.WF
                     {
                         /* 如果项目组里没有工作人员就提交到公共部门里去找。 */
 
-                        sql = "SELECT No FROM Port_Emp WHERE NO IN "
-                      + "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
-                      + " AND  NO IN "
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + " IN "
+                      + "(SELECT  FK_Emp  FROM Port_DeptEmpStation WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node))"
+                      + " AND  " + BP.Sys.Glo.UserNoWhitOutAS + " IN "
                       + "(SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
                         sql += " ORDER BY No ";
 
@@ -1394,18 +1412,18 @@ namespace BP.WF
                 if (nextStations.Count == 0)
                     throw new Exception("@节点没有岗位:" + toNode.NodeID + "  " + toNode.Name);
 
-                sql = "SELECT No FROM Port_Emp WHERE No IN ";
-                sql += "(SELECT  FK_Emp  FROM " + BP.WF.Glo.EmpStation + " WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node ) )";
-                sql += " AND No IN ";
+                sql = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + " IN ";
+                sql += "(SELECT  FK_Emp  FROM Port_DeptEmpStation  WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node ) )";
+                sql += " AND " + BP.Sys.Glo.UserNoWhitOutAS + " IN ";
 
                 if (deptNo == "1")
                 {
-                    sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE No!=" + dbStr + "FK_Emp ) ";
+                    sql += "(SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " as FK_Emp FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + "!=" + dbStr + "FK_Emp ) ";
                 }
                 else
                 {
                     BP.Port.Dept deptP = new BP.Port.Dept(deptNo);
-                    sql += "(SELECT No as FK_Emp FROM Port_Emp WHERE No!=" + dbStr + "FK_Emp AND FK_Dept = '" + deptP.ParentNo + "')";
+                    sql += "(SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " as FK_Emp FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + "!=" + dbStr + "FK_Emp AND FK_Dept = '" + deptP.ParentNo + "')";
                 }
 
                 ps = new Paras();
@@ -1584,7 +1602,7 @@ namespace BP.WF
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
-            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "\\EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
+            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
             {
                 ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());

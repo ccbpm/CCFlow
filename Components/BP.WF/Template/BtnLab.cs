@@ -950,6 +950,17 @@ namespace BP.WF.Template
             }
         }
 
+        /// <summary>
+        /// 公文显示的位置
+        /// </summary>
+        public int OfficeBtnLocal
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.OfficeBtnLocal);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -1005,6 +1016,12 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(BtnAttr.OfficeBtnEnable, 0, "文件状态", true, true, BtnAttr.OfficeBtnEnable,
                 "@@0=不可用@1=可编辑@2=不可编辑", false);
 
+                map.AddDDLSysEnum(BtnAttr.OfficeFileType, 0, "文件类型", true, true, BtnAttr.OfficeFileType,
+           "@0=word文件@1=WPS文件", false);
+
+                map.AddDDLSysEnum(BtnAttr.OfficeBtnLocal, 0, "按钮位置", true, true, BtnAttr.OfficeBtnLocal,
+        "@0=工具栏上@1=表单标签(divID=GovDocFile)", false);
+
 
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
                 map.AddTBInt(BtnAttr.ReturnRole, 1, "是否启用", true, true);
@@ -1037,6 +1054,8 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintDocEnable, false, "是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintDocMyView, false, "在查看器栏是否启用", true, true);
+                map.AddBoolean(BtnAttr.PrintDocMyCC, false, "在抄送栏是否启用", true, true);
 
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);

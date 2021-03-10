@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace BP.WF
 {
+    /// <summary>
+    /// 默认值
+    /// </summary>
     public class GloDefVal
     {
         public static string SQL

@@ -15,9 +15,17 @@ namespace BP.WF.Data
     public class FastInputAttr : EntityNoNameAttr
     {
         /// <summary>
+        /// 表单ID.
+        /// </summary>
+        public const string EnsName = "EnsName";
+        /// <summary>
+        /// 字段
+        /// </summary>
+        public const string AttrKey = "AttrKey";
+        /// <summary>
         /// 类型
         /// </summary>
-        public const string ContrastKey = "ContrastKey";
+        public const string CfgKey = "CfgKey";
         /// <summary>
         /// Vals
         /// </summary>
@@ -38,17 +46,45 @@ namespace BP.WF.Data
     {
         #region 基本属性
         /// <summary>
-        /// 字段
+        /// 表单ID
         /// </summary>
-        public string ContrastKey
+        public string EnsName
         {
             get
             {
-                return this.GetValStringByKey(FastInputAttr.ContrastKey);
+                return this.GetValStringByKey(FastInputAttr.EnsName);
             }
             set
             {
-                this.SetValByKey(FastInputAttr.ContrastKey, value);
+                this.SetValByKey(FastInputAttr.EnsName, value);
+            }
+        }
+        /// <summary>
+        /// 属性
+        /// </summary>
+        public string AttrKey
+        {
+            get
+            {
+                return this.GetValStringByKey(FastInputAttr.AttrKey);
+            }
+            set
+            {
+                this.SetValByKey(FastInputAttr.AttrKey, value);
+            }
+        }
+        /// <summary>
+        /// 配置的变量
+        /// </summary>
+        public string CfgKey
+        {
+            get
+            {
+                return "CYY"; 
+            }
+            set
+            {
+                this.SetValByKey(FastInputAttr.CfgKey, value);
             }
         }
         /// <summary>
@@ -89,8 +125,7 @@ namespace BP.WF.Data
         /// 常用语
         /// </summary>
         /// <param name="no"></param>
-        public FastInput(string mypk)
-            : base(mypk)
+        public FastInput(string mypk) : base(mypk)
         {
         }
         /// <summary>
@@ -100,10 +135,8 @@ namespace BP.WF.Data
        
         protected override bool beforeUpdateInsertAction()
         {
-            if (this.MyPK.Equals(""))
-            {
+            if (DataType.IsNullOrEmpty(this.MyPK) == true)
                 this.MyPK = DBAccess.GenerGUID();
-            }
 
             return base.beforeUpdateInsertAction();
         }
@@ -119,13 +152,30 @@ namespace BP.WF.Data
 
                 Map map = new Map("Sys_UserRegedit", "常用语");
 
-                map.AddMyPK();
 
-                //该表单对应的表单ID
-                map.AddTBString(FastInputAttr.ContrastKey, null, "类型CYY", true, false, 0, 20, 20);
-                map.AddTBString(FastInputAttr.FK_Emp, null, "人员编号", true, false, 0, 100, 4);
+                /*
+                 * 常用语分为两个模式: 流程的常用语，与表单字段的常用语. 
+                 * 这两个模式都存储在同一个表里.
+                 * 
+                 * 流程的常用语存储格式为: 
+                 *  CfgKey=Flow,  EnsName=Flow,  AttrKey=WorkCheck,FlowBBS,WorkReturn 三种类型.
+                 *  
+                 * 表单的常用语为存储格式为:
+                 *  CfgKey=Frm,  EnsName=myformID, AttrKey=myFieldName, 
+                 * 
+                 */
+
+                //该表单对应的表单ID ， 
+                //CfgKey=Flow, EnsName=Flow 是流程的常用语.   Filed
+
+                map.AddMyPK();
+                map.AddTBString(FastInputAttr.CfgKey, null, "类型Flow,Frm", true, false, 0, 20, 20);
+
+                map.AddTBString(FastInputAttr.EnsName, null, "表单ID", true, false, 0, 100, 4);
+                map.AddTBString(FastInputAttr.AttrKey, null, "字段", true, false, 0, 100, 4);
+                map.AddTBString(FastInputAttr.FK_Emp, null, "人员", true, false, 0, 100, 4);
+
                 map.AddTBString(FastInputAttr.Vals, null, "值", true, false, 0, 500, 500);
-                //map.AddTBInt(FastInputAttr.Idx, 0, "Idx", true, false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -139,20 +189,25 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoUp()
         {
-              this.DoOrderUp(FastInputAttr.ContrastKey, "CYY",
+              this.DoOrderUp(FastInputAttr.CfgKey, "CYY", 
+                  FastInputAttr.EnsName,this.EnsName, 
+                  FastInputAttr.AttrKey, this.AttrKey,
                 FastInputAttr.FK_Emp, WebUser.No, "Idx") ;
 
             return "移动成功.";
         }
-
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <returns></returns>
         public string DoDown()
         {
-            this.DoOrderDown(FastInputAttr.ContrastKey, "CYY",
+            this.DoOrderDown(FastInputAttr.CfgKey, "CYY",
+                FastInputAttr.EnsName, this.EnsName,
+                FastInputAttr.AttrKey, this.AttrKey,
               FastInputAttr.FK_Emp, WebUser.No, "Idx");
             return "移动成功.";
         }
-       
-
     }
 	/// <summary>
     /// 常用语s
@@ -183,7 +238,7 @@ namespace BP.WF.Data
         public override int RetrieveAll()
         {
 
-            int val= this.Retrieve(FastInputAttr.ContrastKey, "CYY",
+            int val= this.Retrieve(FastInputAttr.CfgKey, "CYY",
                 FastInputAttr.FK_Emp, BP.Web.WebUser.No);
 
             if (val==0)
@@ -218,7 +273,7 @@ namespace BP.WF.Data
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
-                val = this.Retrieve(FastInputAttr.ContrastKey, "CYY",
+                val = this.Retrieve(FastInputAttr.CfgKey, "CYY",
                 FastInputAttr.FK_Emp, BP.Web.WebUser.No);
             }
             return val;

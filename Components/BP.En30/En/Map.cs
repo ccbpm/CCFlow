@@ -160,6 +160,7 @@ namespace BP.En
             Attr attr = this.GetAttrByKey(key);
             attr.HelperUrl = url;
         }
+
         /// <summary>
         /// 增加帮助
         /// </summary>
@@ -199,15 +200,16 @@ namespace BP.En
         public string XmlFile = null;
         #endregion 与xml 文件操作有关系
 
-        private Boolean _IsAllowRepeatNo;
-        public Boolean IsAllowRepeatNo
+        /// <summary>
+        /// 是否数据加密
+        /// </summary>
+        public bool IsJM = false;
+        private bool _IsAllowRepeatNo;
+        public bool IsAllowRepeatNo
         {
             get { return _IsAllowRepeatNo; }
             set { _IsAllowRepeatNo = value; }
         }
-
-
-
         #region chuli
         /// <summary>
         /// 查询语句(为了避免过多的资源浪费,一次性生成多次使用)
@@ -412,10 +414,10 @@ namespace BP.En
                 throw new Exception("@[" + this.EnDesc + "] 获取属性key 值不能为空.");
 
             if (this.ToString().Contains("."))
-                throw new Exception("@[" +this.ToString() +","+ this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
+                throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
             else
             {
-                throw new Exception("@[" + this.ToString() +","+ this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
+                throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "," + this.PhysicsTable + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
             }
         }
         /// <summary>
@@ -436,7 +438,7 @@ namespace BP.En
                 throw new Exception("@[" + this.EnDesc + "] 获取属性key 值不能为空.");
 
             if (this.ToString().Contains("."))
-                throw new Exception("@[" +this.ToString()+"," + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
+                throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
             else
                 throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "," + this.ToString() + "] 没有找到 key=[" + key + "]的属性，请检查Sys_MapAttr表是否有该数据,用SQL执行: SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "' AND KeyOfEn='" + key + "' 是否可以查询到数据，如果没有可能该字段属性丢失。");
         }
@@ -455,7 +457,7 @@ namespace BP.En
                 }
             }
             if (desc == null)
-                throw new Exception("@[" + this.ToString() +","+ this.EnDesc + "] 获取属性 desc  值不能为空.");
+                throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "] 获取属性 desc  值不能为空.");
 
             throw new Exception("@[" + this.ToString() + "," + this.EnDesc + "] 没有找到 desc=[" + desc + "]的属性，请检查Map文件。此问题出错的原因之一是，在设置系统中的一个实体的属性关联这个实体，你在给实体设置信息时没有按照规则书写reftext, refvalue。请核实。");
         }
@@ -614,7 +616,7 @@ namespace BP.En
                 if (this._HisCfgAttrs == null)
                 {
                     this._HisCfgAttrs = new Attrs();
-                    if (Web.WebUser.No.Equals("admin")==true)
+                    if (Web.WebUser.No.Equals("admin") == true)
                     {
 
                         this._HisCfgAttrs.AddDDLSysEnum("UIRowStyleGlo", 2, "表格数据行风格(应用全局)", true, false, "UIRowStyleGlo",
@@ -1621,7 +1623,7 @@ namespace BP.En
             attr.Key = key;
             attr.Field = key;
 
-            if ( typeof(int) == defaultVal.GetType())
+            if (typeof(int) == defaultVal.GetType())
             {
                 attr.DefaultVal = defaultVal;
                 attr.MyDataType = DataType.AppInt;
@@ -1799,11 +1801,11 @@ namespace BP.En
         #region string 有关系的操作。
 
         #region 关于
-        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType,   string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
+        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
         {
-            AddTBString(key, field, defaultVal, _FieldType,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, null);
+            AddTBString(key, field, defaultVal, _FieldType, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, null);
         }
-        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType,   string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
+        protected void AddTBString(string key, string field, object defaultVal, FieldType _FieldType, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
         {
             Attr attr = new Attr();
             attr.Key = key;
@@ -1828,7 +1830,7 @@ namespace BP.En
         /// <summary>
         /// 同步两个实体属性.
         /// </summary>
-        public void AddAttrsFromMapData(string FK_MapData=null)
+        public void AddAttrsFromMapData(string FK_MapData = null)
         {
             if (DataType.IsNullOrEmpty(this.FK_MapData) && DataType.IsNullOrEmpty(FK_MapData))
                 throw new Exception("@您没有为map的 FK_MapData 赋值.");
@@ -1892,7 +1894,7 @@ namespace BP.En
             if (isPk)
                 AddTBStringPK(key, key, desc, true, false, 0, 1000, 100);
             else
-                AddTBString(key, key, defaultVal.ToString(), FieldType.Normal,  desc, true, false, 0, 1000, 100, false);
+                AddTBString(key, key, defaultVal.ToString(), FieldType.Normal, desc, true, false, 0, 1000, 100, false);
         }
         /// <summary>
         /// 增加一个textbox 类型的属性。
@@ -1909,19 +1911,19 @@ namespace BP.En
         /// <param name="tbWith">宽度</param> 
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, key, defaultVal, FieldType.Normal, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBString(string key, string field, object defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
-            AddTBString(key, field, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, field, defaultVal, FieldType.Normal, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine);
+            AddTBString(key, key, defaultVal, FieldType.Normal, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine);
         }
         public void AddTBString(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, bool isUILine, string helpUrl)
         {
-            AddTBString(key, key, defaultVal, FieldType.Normal,  desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, helpUrl);
+            AddTBString(key, key, defaultVal, FieldType.Normal, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, isUILine, helpUrl);
         }
         /// <summary>
         /// 附件集合
@@ -2031,12 +2033,12 @@ namespace BP.En
         public void AddTBStringPK(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
             this.PKs = key;
-            AddTBString(key, key, defaultVal, FieldType.PK,  desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, key, defaultVal, FieldType.PK, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         public void AddTBStringPK(string key, string field, object defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith)
         {
             this.PKs = key;
-            AddTBString(key, field, defaultVal, FieldType.PK,   desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
+            AddTBString(key, field, defaultVal, FieldType.PK, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, false);
         }
         #endregion
 

@@ -143,6 +143,11 @@ namespace BP.WF.Template
         }
         #endregion
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
+            return base.beforeUpdateInsertAction();
+        }
         /// <summary>
         /// 处理pk 
         /// </summary>

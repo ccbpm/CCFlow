@@ -21,7 +21,6 @@ namespace BP.WF.DTS
             this.Title = "修复数据库";
             this.Help = "把最新的版本的与当前的数据表结构，做一个自动修复, 修复内容：缺少列，缺少列注释，列注释不完整或者有变化。";
             this.Help += "<br>因为表单设计器的错误，丢失了字段，通过它也可以自动修复。";
-            this.Help += "<br><a href='/'>进入流程设计器</a>";
         }
         /// <summary>
         /// 设置执行变量
@@ -52,6 +51,7 @@ namespace BP.WF.DTS
         {
             string rpt =BP.Pub.PubClass.DBRpt(DBCheckLevel.High);
 
+
             //// 手动升级. 2011-07-08 补充节点字段分组.
             //string sql = "DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeSheet'";
             //DBAccess.RunSQL(sql);
@@ -73,7 +73,6 @@ namespace BP.WF.DTS
                 }
                 catch(Exception ex)
                 {
-
                 }
 
                 MapAttr attr = new MapAttr();

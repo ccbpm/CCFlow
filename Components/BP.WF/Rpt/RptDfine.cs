@@ -37,7 +37,6 @@ namespace BP.WF.Rpt
     /// </summary>
     public class RptDfine : EntityNoName
     {
-
         #region 属性
         /// <summary>
         /// 本部门流程查询权限定义
@@ -417,22 +416,133 @@ namespace BP.WF.Rpt
         {
             return "../../Admin/RptDfine/S8_RptExportTemplate.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No)+"Rpt" + rptMark;
         }
+        public static string PublicFiels = ",OID,FK_Dept,FlowStarter,Title,FlowStartRDT,FlowEmps,WFState,WFSta,";
+        public void InitBaseAttr(MapData md)
+        {
+            // string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
+
+            //必须的字段.
+            /// string keys = ",OID,FK_Dept,FlowStarter,Title,FlowStartRDT,FlowEmps,";
+
+            //string keys = ",OID,Title,WFSta,";
+
+            //查询出来所有的字段.
+            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
+            attrs.Delete(MapAttrAttr.FK_MapData, md.No); // 删除已经有的字段。
+            foreach (MapAttr attr in attrs)
+            {
+                if (PublicFiels.Contains("," + attr.KeyOfEn + ",") == false)
+                    continue;
+
+                attr.FK_MapData = md.No;
+                attr.UIIsEnable = false;
+                attr.Idx = 0;
+
+                #region 判断特殊的字段.
+                switch (attr.KeyOfEn)
+                {
+                    case GERptAttr.WFSta:
+                        attr.UIBindKey = "WFSta";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.Enum;
+                        attr.UIVisible = false;
+                        attr.DefVal = "0";
+                        attr.MaxLen = 100;
+                        attr.UIVisible = true;
+                        attr.Update();
+                        break;
+                    case GERptAttr.FK_Dept:
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.UIVisible = false;
+                        attr.DefVal = "";
+                        attr.MaxLen = 100;
+                        attr.UIVisible = false;
+                        attr.Update();
+                        break;
+                    case GERptAttr.FK_NY:
+                        attr.UIBindKey = "BP.Pub.NYs";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.FK;
+                        attr.UIVisible = true;
+                        attr.UIIsEnable = false;
+                        //attr.GroupID = groupID;
+                        attr.Update();
+                        break;
+                    case GERptAttr.Title:
+                        attr.UIWidth = 120;
+                        attr.UIVisible = true;
+                        attr.Idx = 0;
+                        break;
+                    case GERptAttr.FlowStarter:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        break;
+                    case GERptAttr.FlowEmps:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        break;
+                    case GERptAttr.WFState:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.MyDataType = BP.DA.DataType.AppInt;
+                        break;
+                    case GERptAttr.FlowEndNode:
+                        //attr.LGType = FieldTypeS.FK;
+                        //attr.UIBindKey = "BP.WF.Template.NodeExts";
+                        //attr.UIContralType = UIContralType.DDL;
+                        break;
+                    case "FK_Emp":
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+
+                attr.Insert();
+            }
+        }
         /// <summary>
         /// 重置设置.
         /// </summary>
-        public string DoReset(string rptMark, string rptName)
+        public string DoReset(string rptMark)
         {
             MapData md = new MapData();
             md.No = "ND" + int.Parse(this.No) + "Rpt" + rptMark;
             if (md.RetrieveFromDBSources() == 0)
             {
-                md.Name = rptName;
+                if (rptMark.Equals("My"))
+                  md.Name = "我发起的流程";
+
+                if (rptMark.Equals("MyJoin"))
+                    md.Name = "我审批的流程";
+
+                if (rptMark.Equals("MyDept"))
+                    md.Name = "本部门发起的流程";
+
+                if (rptMark.Equals("Adminer"))
+                    md.Name = "高级查询";
+
                 md.Insert();
             }
 
-            md.RptIsSearchKey = true; //按关键查询.
-            md.RptDTSearchWay = DTSearchWay.None; //按日期查询.
-            md.RptDTSearchKey = "";
+            md.IsSearchKey = true; //按关键查询.
+            md.DTSearchWay = DTSearchWay.None; //按日期查询.
+            md.DTSearchKey = "";
 
             //设置查询条件.
             switch (rptMark)
@@ -453,66 +563,12 @@ namespace BP.WF.Rpt
             md.PTable = fl.PTable;
             md.Update();
 
-            string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
+            this.InitBaseAttr(md);
 
-            //string keys = ",OID,Title,WFSta,";
+            //删除该数据的Search 的缓存.
+            string sql = "DELETE FROM Sys_UserRegedit WHERE MyPK LIKE '%ND"+int.Parse(this.No)+"Rpt%'";
+            DBAccess.RunSQL(sql);
 
-            //查询出来所有的字段.
-            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
-            attrs.Delete(MapAttrAttr.FK_MapData, md.No); // 删除已经有的字段。
-            foreach (MapAttr attr in attrs)
-            {
-                if (keys.Contains("," + attr.KeyOfEn + ",") == false)
-                    continue;
-
-                attr.FK_MapData = md.No;
-                attr.UIIsEnable = false;
-
-                #region 判断特殊的字段.
-                switch (attr.KeyOfEn)
-                {
-                    case GERptAttr.FK_Dept:
-                        attr.UIBindKey = "BP.Port.Depts";
-                        attr.UIContralType = UIContralType.DDL;
-                        attr.LGType = FieldTypeS.FK;
-                        attr.UIVisible = true;
-                        attr.DefVal = "";
-                        attr.MaxLen = 100;
-                        attr.Update();
-                        break;
-                    case GERptAttr.FK_NY:
-                        attr.UIBindKey = "BP.Pub.NYs";
-                        attr.UIContralType = UIContralType.DDL;
-                        attr.LGType = FieldTypeS.FK;
-                        attr.UIVisible = true;
-                        attr.UIIsEnable = false;
-                        //attr.GroupID = groupID;
-                        attr.Update();
-                        break;
-                    case GERptAttr.Title:
-                        attr.UIWidth = 120;
-                        break;
-                    case GERptAttr.FlowStarter:
-                        attr.UIIsEnable = false;
-                        //attr.LGType = FieldTypeS.FK;
-                        //attr.UIBindKey = "BP.Port.Emps";
-                        //attr.UIContralType = UIContralType.DDL;
-                        //attr.UIWidth = 120;
-                        break;
-                    case GERptAttr.FlowEndNode:
-                        //attr.LGType = FieldTypeS.FK;
-                        //attr.UIBindKey = "BP.WF.Template.NodeExts";
-                        //attr.UIContralType = UIContralType.DDL;
-                        break;
-                    case "FK_Emp":
-                        break;
-                    default:
-                        break;
-                }
-                #endregion
-
-                attr.Insert();
-            }
             return "标记为: "+rptMark + "的报表，重置成功...";
         }
         #endregion
@@ -556,7 +612,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoReset_MyStartFlow()
         {
-            return DoReset("My","我发起的流程");
+            return DoReset("My");
         }
         /// <summary>
         /// 查询
@@ -616,7 +672,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoReset_MyJoinFlow()
         {
-            return DoReset("MyJoin", "我审批的流程");
+            return DoReset("MyJoin");
         }
         /// <summary>
         /// 查询
@@ -672,7 +728,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoReset_MyDeptFlow()
         {
-            return DoReset("MyDept", "本部门发起的流程");
+            return DoReset("MyDept");
         }
         /// <summary>
         /// 查询
@@ -732,7 +788,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoReset_AdminerFlow()
         {
-            return DoReset("Adminer", "本部门发起的流程");
+            return DoReset("Adminer");
         }
         /// <summary>
         /// 查询

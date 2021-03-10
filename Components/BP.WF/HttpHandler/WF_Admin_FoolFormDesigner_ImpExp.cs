@@ -305,6 +305,9 @@ namespace BP.WF.HttpHandler
                 //设置为只读模式.
                 if (isSetReadonly == true)
                     MapData.SetFrmIsReadonly(this.FK_MapData);
+            
+                //清空缓存
+                MapData mymd = new MapData(this.FK_MapData);
 
                 // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
                 if (this.FK_MapData.Contains("ND") == true)
@@ -312,9 +315,12 @@ namespace BP.WF.HttpHandler
                     string fk_node = this.FK_MapData.Replace("ND", "");
                     Node nd = new Node(int.Parse(fk_node));
                     nd.RepareMap(nd.HisFlow);
+
+                    //设置节点ID.
+                    mymd.Name = nd.Name;
+                    mymd.Update();
                 }
-                //清空缓存
-                MapData mymd = new MapData(this.FK_MapData);
+
                 mymd.RepairMap();
                 if (mymd.HisEntityType == (int)EntityType.FrmBill)
                 {
@@ -486,7 +492,7 @@ namespace BP.WF.HttpHandler
                     lab = new FrmLab();
                     lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
-                    lab.Text = ma.Name;
+                    lab.Lab = ma.Name;
                     lab.X = 40;
                     lab.Y = maxEnd;
                     lab.Insert();
@@ -500,7 +506,7 @@ namespace BP.WF.HttpHandler
                     lab = new FrmLab();
                     lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = this.FK_MapData;
-                    lab.Text = ma.Name;
+                    lab.Lab = ma.Name;
                     lab.X = 350;
                     lab.Y = maxEnd;
                     lab.Insert();

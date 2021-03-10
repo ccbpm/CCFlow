@@ -79,7 +79,7 @@ namespace BP.WF.DTS
                     BP.Web.WebUser.SignInOfGener(emp);
                 }
 
-                BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
+                BP.WF.Node nd = new BP.WF.Node();
                 nd.NodeID = fk_node;
                 nd.Retrieve();
 

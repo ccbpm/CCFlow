@@ -410,8 +410,6 @@ namespace BP.DA
                 }
                 throw ex;
             }
-
-
         }
         /// <summary>
         /// 保存文件到数据库
@@ -470,7 +468,7 @@ namespace BP.DA
             string fileSaveField)
         {
             if (DataType.IsNullOrEmpty(pkVal) == true)
-                return "";
+                return "err@GetBigTextFromDB,没有获得数据.";
             //对于特殊的数据库进行判断.
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.PostgreSQL
@@ -965,9 +963,22 @@ namespace BP.DA
         /// 生成 GenerGUID
         /// </summary>
         /// <returns></returns>
-        public static string GenerGUID()
+        public static string GenerGUID(int length = 0, string ptable = null, string colName = null)
         {
-            return Guid.NewGuid().ToString();
+            if (length == 0)
+                return Guid.NewGuid().ToString();
+
+            if (ptable == null)
+                return Guid.NewGuid().ToString().Substring(0, length);
+
+            while (true)
+            {
+                string str = Guid.NewGuid().ToString().Substring(0, length);
+                string sql = "SELECT COUNT(" + colName + ") as Num FROM " + ptable+" WHERE "+colName+" ='"+str+"'";
+                if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                    return str;
+            }
+            return null;
         }
         /// <summary>
         /// 锁定OID
@@ -1162,6 +1173,7 @@ namespace BP.DA
         #endregion
 
         #region 取得连接对象 ，CS、BS共用属性【关键属性】
+
         /// <summary>
         /// AppCenterDBType
         /// </summary>
@@ -1427,7 +1439,8 @@ namespace BP.DA
 
                 string sql = "ALTER TABLE " + table + " DROP COLUMN " + columnName;
                 DBAccess.RunSQL(sql);
-            }catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
 
             }
@@ -1676,7 +1689,7 @@ namespace BP.DA
         /// </summary>
         /// <param name="sqlOfScriptFilePath">文件路径</param>
         /// <param name="isCutDoubleJianHao"> 是否排除双减号 </param>
-        public static void RunSQLScript(string sqlOfScriptFilePath, bool isCutDoubleJianHao=true)
+        public static void RunSQLScript(string sqlOfScriptFilePath, bool isCutDoubleJianHao = true)
         {
             string str = DataType.ReadTextFile(sqlOfScriptFilePath);
             string[] strs = str.Split(';');
@@ -1721,11 +1734,11 @@ namespace BP.DA
         }
         public static string DealSQL(string sql)
         {
-           return MidStrEx( sql, "/*", "*/");
-         
-         //sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
-         //  String presult = p.matcher(sql).replaceAll("$1");
-         //  return presult;
+            return MidStrEx(sql, "/*", "*/");
+
+            //sql.CompareTo("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+            //  String presult = p.matcher(sql).replaceAll("$1");
+            //  return presult;
         }
         public static string MidStrEx(string sourse, string startstr, string endstr)
         {
@@ -1741,7 +1754,7 @@ namespace BP.DA
                 int i = 0;
                 while (startindex != -1)
                 {
-                    if (i==0)
+                    if (i == 0)
                     {
                         endindex = sourse.IndexOf(endstr);
                         if (startindex != 0)
@@ -1749,7 +1762,8 @@ namespace BP.DA
                             endindex = endindex - startindex;
                         }
                         tmpstr = sourse.Remove(startindex, endindex + endstr.Length);
-                    }else
+                    }
+                    else
                     {
                         endindex = tmpstr.IndexOf(endstr);
                         if (startindex != 0)
@@ -1762,24 +1776,24 @@ namespace BP.DA
 
                     if (endindex == -1)
                         return result;
-                   // tmpstr = tmpstr.Substring(endindex + endstr.Length);
+                    // tmpstr = tmpstr.Substring(endindex + endstr.Length);
                     startindex = tmpstr.IndexOf(startstr);
                     i++;
                 }
                 //result = tmpstr.Remove(endindex);
-                
+
             }
             catch (Exception ex)
             {
                 Log.DefaultLogWriteLineInfo("MidStrEx Err:" + ex.Message);
             }
             return tmpstr;
-        }    
-    /// <summary>
-    /// 运行SQLs
-    /// </summary>
-    /// <param name="sql"></param>
-    public static void RunSQLs(string sql)
+        }
+        /// <summary>
+        /// 运行SQLs
+        /// </summary>
+        /// <param name="sql"></param>
+        public static void RunSQLs(string sql)
         {
             if (DataType.IsNullOrEmpty(sql))
                 return;
@@ -2153,10 +2167,6 @@ namespace BP.DA
         /// <returns></returns>
         private static int RunSQL_200705_MySQL(string sql, Paras paras)
         {
-            if (sql.ToLower().Contains("delete") && sql.ToLower().Contains("filecopy"))
-                throw new Exception("err@非法的删除数据操作,请联系管理员.");
-
-
             MySqlConnection connOfMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
             if (connOfMySQL.State != System.Data.ConnectionState.Open)
             {
@@ -3424,7 +3434,7 @@ namespace BP.DA
         public static bool IsExits(string sql)
         {
             if (sql.ToUpper().Contains("SELECT") == false)
-                throw new Exception("@非法的查询语句" + sql);
+                throw new Exception("@非法的查询语句:" + sql);
 
             if (RunSQLReturnVal(sql) == null)
                 return false;
@@ -3524,7 +3534,7 @@ namespace BP.DA
                 case DBType.Oracle:
                     sql = "Select count(*) as nm From user_objects Where object_type='VIEW' and object_name=:v";
                     DataTable Oracledt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
-                    if (Oracledt.Rows[0]["nm"] =="1")
+                    if (Oracledt.Rows[0]["nm"] == "1")
                         return true;
                     else
                         return false;

@@ -1256,7 +1256,7 @@ namespace BP.Sys
             md.Retrieve();
 
             md.FK_FormTree = fk_frmTree;
-            md.FK_FrmSort = fk_frmTree;
+          //  md.FK_FrmSort = fk_frmTree;
             md.Name = copyFrmName;
             md.Update();
 

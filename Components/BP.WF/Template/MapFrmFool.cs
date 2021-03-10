@@ -230,7 +230,14 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
-                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
+                rm.ClassMethodName = this.ToString() + ".MobileFrmDesigner";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "隐藏字段";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
+                rm.ClassMethodName = this.ToString() + ".FrmHiddenField";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -447,7 +454,7 @@ namespace BP.WF.Template
 
                 MapData map = new MapData(this.No);
                 //避免显示在表单库中
-                map.FK_FrmSort = "";
+               // map.FK_FrmSort = "";
                 map.FK_FormTree = "";
                 map.DirectUpdate();
             }
@@ -469,6 +476,14 @@ namespace BP.WF.Template
         public string DoBill()
         {
             return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+        }
+        /// <summary>
+        /// 隐藏字段.
+        /// </summary>
+        /// <returns></returns>
+        public string FrmHiddenField()
+        {
+            return "../../Admin/CCFormDesigner/DialogCtr/FrmHiddenField.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 单据打印
@@ -729,9 +744,9 @@ namespace BP.WF.Template
         /// 排序字段顺序
         /// </summary>
         /// <returns></returns>
-        public string DoSortingMapAttrs()
+        public string MobileFrmDesigner()
         {
-            return "../../Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=&FK_MapData=" +
+            return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>

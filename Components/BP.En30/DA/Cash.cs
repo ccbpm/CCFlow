@@ -75,7 +75,7 @@ namespace BP.DA
                 if (cfile.Contains(":"))
                     file = cfile;
                 else
-                    file = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + cfile;
+                    file = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + cfile;
 
                 try
                 {

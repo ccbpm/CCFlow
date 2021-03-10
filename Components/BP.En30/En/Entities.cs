@@ -286,6 +286,8 @@ namespace BP.En
         /// <returns>返回添加到的地方</returns>
         public virtual int AddEntity(Entity entity)
         {
+            if (entity == null)
+                throw new Exception("加入的 AddEntity 不能为空。");
             return this.InnerList.Add(entity);
         }
         public virtual int AddEntity(Entity entity, int idx)
@@ -1092,7 +1094,7 @@ namespace BP.En
         /// <param name="key"></param>
         /// <param name="vals"></param>
         /// <returns></returns>
-        public virtual int RetrieveIn(string key, string vals, string ordery=null)
+        public virtual int RetrieveIn(string key, string vals, string orderby=null)
         {
             QueryObject qo = new QueryObject(this);
 
@@ -1101,8 +1103,8 @@ namespace BP.En
             else
                 qo.AddWhere(key, " IN ", vals);
 
-            if (ordery != null)
-                qo.addOrderBy(ordery);
+            if (orderby != null)
+                qo.addOrderBy(orderby);
 
             return qo.DoQuery();
         }
@@ -1420,6 +1422,9 @@ namespace BP.En
             for (int i = 0; i < this.Count; i++)
             {
                 Entity myen = this[i];
+                if (myen == null)
+                    continue;
+
                 DataRow dr = dt.NewRow();
                 foreach (Attr attr in attrs)
                 {
@@ -1432,7 +1437,11 @@ namespace BP.En
                         continue;
                     }
 
-                    var val = myen.GetValByKey(attr.Key);
+                    if (myen.Row.ContainsKey(attr.Key) == false)
+                        continue;
+
+                    var val = myen.Row[attr.Key];
+                   // var val = myen myen.GetValByKey(attr.Key);
                     if (val == null)
                         continue;
 

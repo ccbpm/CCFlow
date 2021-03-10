@@ -21,6 +21,44 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
+        public string NewFlow2020_Save_del()
+        {
+            try
+            {
+                string FlowName = this.GetRequestVal("FlowName");
+                string flowSort = this.GetRequestVal("FlowSort").Trim();
+
+                int flowFrmModelval = this.GetRequestValInt("FlowFrmModel");
+                //   string FrmUrl = this.GetRequestVal("FrmUrl");
+                // string FlowVersion = this.GetRequestVal("FlowVersion");
+
+                string flowNo = BP.WF.Template.TemplateGlo.NewFlow(flowSort, FlowName,
+                        Template.DataStoreModel.SpecTable, null, null);
+
+                Flow fl = new Flow(flowNo);
+                if (flowFrmModelval == 1)
+                {
+                    //设置默认的模式.
+                    fl.FlowFrmModel = FlowFrmModel.TraditionModel;
+                    fl.FrmUrl = "ND" + int.Parse(flowNo) + "01";
+                }
+                else
+                {
+                    fl.FlowFrmModel = (FlowFrmModel)flowFrmModelval;
+                }
+                fl.DirectUpdate();
+
+                //清空WF_Emp 的StartFlows ,让其重新计算.
+                // DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
+                return flowNo;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+            return "创建成功.";
+        }
         /// <summary>
         /// 选择器
         /// </summary>
@@ -133,7 +171,7 @@ namespace BP.WF.HttpHandler
             sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' OR Name IS Null) ";
             DBAccess.RunSQL(sql);
 
-           // BP.WF.Template.Cond
+            // BP.WF.Template.Cond
             //Node nd = new Node();
             //nd.NodeID = this.FK_Node;
             //nd.RetrieveFromDBSources();
@@ -184,9 +222,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_Save()
         {
-            
+
             if (BP.Web.WebUser.IsAdmin == false)
-                return "err@当前您【"+WebUser.No+","+WebUser.Name+"】不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
+                return "err@当前您【" + WebUser.No + "," + WebUser.Name + "】不是管理员,请重新登录.造成这种原因是您在测试容器没有正常退回造成的.";
 
             string sql = "";
             try
@@ -209,7 +247,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     sBuilder.Append("DELETE FROM WF_Direction WHERE MyPK='" + strs[0] + "';");
-                    
+
                     sBuilder.Append("INSERT INTO WF_Direction (MyPK,FK_Flow,Node,ToNode) VALUES ('" + strs[0] + "','" + strs[1] + "','" + strs[2] + "','" + strs[3] + "');");
                 }
                 DBAccess.RunSQLs(sBuilder.ToString());
@@ -264,7 +302,7 @@ namespace BP.WF.HttpHandler
                     string[] strs = item.Split(',');
                     string nodeID = strs[0]; //获得nodeID.
 
-                    
+
                     sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "' WHERE NodeID=" + strs[0] + ";");
                 }
 
@@ -584,21 +622,21 @@ namespace BP.WF.HttpHandler
             if (DBAccess.IsExitsObject("WF_Flow") == false)
                 return "url@../DBInstall.htm";
 
-            //是否需要自动登录
+            //是否需要自动登录。 这里都把cookeis的数据获取来了.
             string userNo = this.GetRequestVal("UserNo");
             string sid = this.GetRequestVal("SID");
 
-            if (!String.IsNullOrEmpty(sid) && !String.IsNullOrEmpty(userNo))
+            if (String.IsNullOrEmpty(sid) == false && String.IsNullOrEmpty(userNo) == false)
             {
-                /*  */
+                /*  如果都有值，就需要他登录。 */
                 try
                 {
                     string str = BP.WF.Glo.UpdataCCFlowVer();
                     BP.WF.Dev2Interface.Port_LoginBySID(sid);
                     if (this.FK_Flow == null)
-                        return "url@Default.htm?UserNo=" + userNo + "&Key=" + DateTime.Now.ToBinary();
+                        return "url@Default.htm?UserNo=" + userNo + "&OrgNo=" + WebUser.OrgNo + "&Key=" + DateTime.Now.ToBinary() + "&SID=" + sid;
                     else
-                        return "url@Designer.htm?UserNo=" + userNo + "&FK_Flow=" + this.FK_Flow + "&Key=" + DateTime.Now.ToBinary();
+                        return "url@Designer.htm?UserNo=" + userNo + "&OrgNo=" + WebUser.OrgNo + "&FK_Flow=" + this.FK_Flow + "&Key=" + DateTime.Now.ToBinary() + "&SID=" + sid;
                 }
                 catch (Exception ex)
                 {
@@ -639,7 +677,7 @@ namespace BP.WF.HttpHandler
         public string Login_Submit()
         {
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = this.GetRequestVal("TB_No").Trim();
+            emp.UserID = this.GetRequestVal("TB_No").Trim();
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 
@@ -650,11 +688,11 @@ namespace BP.WF.HttpHandler
             //如果是单机版本，仅仅admin登录.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                if (emp.No.Equals("admin") == false)
+                if (emp.UserID.Equals("admin") == false)
                     return "err@非admin不能登录.";
 
                 //让其登录.
-                BP.WF.Dev2Interface.Port_Login(emp.No);
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
                 //只有一个组织的情况.
                 if (DBAccess.IsView("Port_Emp") == false)
@@ -668,7 +706,7 @@ namespace BP.WF.HttpHandler
                 //设置SID.
                 WebUser.SID = emp.SID; //设置SID.
 
-                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID;
             }
 
             //获得当前管理员管理的组织数量.
@@ -681,10 +719,10 @@ namespace BP.WF.HttpHandler
             {
                 //查询他管理多少组织.
                 adminers = new OrgAdminers();
-                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
+                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
                 if (adminers.Count == 0)
                 {
-                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();                   
+                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();
                     int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
                     if (i == 0)
                         return "err@非管理员或二级管理员用户，不能登录后台.";
@@ -696,32 +734,28 @@ namespace BP.WF.HttpHandler
                         oa.OrgNo = org.No;
                         oa.Save();
                     }
-                    adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.No);
+                    adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
                 }
-
-                //     if (adminers.Count==0)
-                //       WebUser.FK_Dept = WebUser.OrgNo; //FK_Dept.
             }
 
             //设置他的组织，信息.
-            WebUser.No = emp.No; //登录帐号.
+            WebUser.No = emp.UserID; //登录帐号.
             WebUser.FK_Dept = emp.FK_Dept;
             WebUser.FK_DeptName = emp.FK_DeptText;
 
             WebUser.SID = DBAccess.GenerGUID(); //设置SID.
 
             //执行登录.
-            BP.WF.Dev2Interface.Port_Login(emp.No);
+            BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.SID, emp.OrgNo);
 
             //执行更新到用户表信息.
             // WebUser.UpdateSIDAndOrgNoSQL();
 
             //判断是否是多个组织的情况.
-            if (Glo.CCBPMRunModel == CCBPMRunModel.Single || adminers.Count == 1)
-                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
+            if (adminers.Count == 1)
+                return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
-            return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
-
+            return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID;
             // return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
         }
         /// <summary>
@@ -914,7 +948,7 @@ namespace BP.WF.HttpHandler
 
             BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
 
-            ht.Add("No", emp.No);
+            ht.Add("No", emp.UserID);
             ht.Add("Name", emp.Name);
             ht.Add("FK_Dept", emp.FK_Dept);
             ht.Add("SID", emp.SID);
@@ -1003,7 +1037,7 @@ namespace BP.WF.HttpHandler
         {
             string sql = "SELECT * FROM ( ";
 
-            sql += "  SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo ='" + WebUser.OrgNo + "' OR No=1 ";
+            sql += "  SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo ='" + WebUser.OrgNo + "' OR No='1' ";
             sql += "  UNION ";
             sql += "  SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow WHERE OrgNo ='" + WebUser.OrgNo + "' ";
             sql += " ) A ";
@@ -1064,8 +1098,8 @@ namespace BP.WF.HttpHandler
             }
 
 
-            DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-            DataRow newRootRow = dt.Select("NO='F" + WebUser.OrgNo + "'")[0];
+            DataRow[] rootRow = dt.Select("No='F" + WebUser.OrgNo + "'");
+            DataRow newRootRow = rootRow.Length > 0 ? rootRow[0] : dt.NewRow();
 
             newRootRow["PARENTNO"] = "F0";
             DataTable newDt = dt.Clone();
@@ -1212,12 +1246,12 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  or No = 1  ORDER BY Idx ASC ; ";
+                sqls = "SELECT No \"No\", ParentNo \"ParentNo\",Name \"Name\", Idx \"Idx\", 1 \"IsParent\", 'FORMTYPE' \"TType\" FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  or No = '1'  ORDER BY Idx ASC ; ";
                 sqls += "SELECT No \"No\", FK_FormTree as \"ParentNo\", Name \"Name\",Idx \"Idx\", 0 \"IsParent\", 'FORM' \"TType\" FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
             else
             {
-                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  OR No = 1  ORDER BY Idx ASC ; ";
+                sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo ='" + WebUser.OrgNo + "'  OR No = '1'  ORDER BY Idx ASC ; ";
                 sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE OrgNo ='" + WebUser.OrgNo + "' AND AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             }
 
@@ -1270,7 +1304,7 @@ namespace BP.WF.HttpHandler
             /* if (WebUser.No.Equals("admin") == false)
              {*/
             DataRow[] rootRows = dtForm.Select("No='" + WebUser.OrgNo + "'");
-            DataRow newRootRow = rootRows[0];
+            DataRow newRootRow = rootRows.Length > 0 ? rootRows[0] : dtForm.NewRow();
 
             newRootRow["ParentNo"] = "0";
             DataTable newDt = dtForm.Clone();
@@ -1539,7 +1573,7 @@ namespace BP.WF.HttpHandler
         /// 创建一个新流程模版2019版本.
         /// </summary>
         /// <returns></returns>
-        public string Defualt_NewFlow()
+        public string Defualt_NewFlow_Del()
         {
             try
             {
@@ -1551,7 +1585,7 @@ namespace BP.WF.HttpHandler
                 int DataStoreModel = this.GetRequestValInt("DataStoreModel");
                 string PTable = this.GetRequestVal("PTable");
                 string FlowMark = this.GetRequestVal("FlowMark");
-                int flowFrmType = this.GetRequestValInt("FlowFrmType");
+                int FlowFrmModel = this.GetRequestValInt("FlowFrmModel");
                 string FrmUrl = this.GetRequestVal("FrmUrl");
                 string FlowVersion = this.GetRequestVal("FlowVersion");
 
@@ -1564,7 +1598,7 @@ namespace BP.WF.HttpHandler
                 //如果是简洁版.
                 if (runModel == 1)
                 {
-                    fl.FlowFrmType = (BP.WF.FlowFrmType)flowFrmType;
+                    fl.FlowFrmModel = (BP.WF.FlowFrmModel)FlowFrmModel;
                     fl.Update(); //更新表单类型.
 
                     //预制权限数据.

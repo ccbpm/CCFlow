@@ -30,28 +30,28 @@ namespace BP.WF
     /// <summary>
     /// 流程表单类型
     /// </summary>
-    public enum FlowFrmType
+    public enum FlowFrmModel
     {
         /// <summary>
         /// 完整版-2019年更早版本
         /// </summary>
         Ver2019Earlier = 0,
         /// <summary>
-        /// 开发者表单
+        /// 传统(经典-推荐)模式(绑定表单库的表单)
         /// </summary>
-        DeveloperFrm= 1,
+        TraditionModel = 1,
         /// <summary>
-        /// 傻瓜表单
+        /// 表单树模式
         /// </summary>
-        FoolFrm=2,
+        FrmTreeModel = 2,
         /// <summary>
-        /// 自定义表单
+        /// 嵌入模式
         /// </summary>
-        SelfFrm = 3,
+        EmbeddedModel = 3,
         /// <summary>
-        /// SDK表单
+        /// SDK自定义表单模式
         /// </summary>
-        SDKFrm = 4,
+        SDKFrm = 4
     }
     /// <summary>
     /// 子流程结束处理规则
@@ -94,7 +94,7 @@ namespace BP.WF
         /// <summary>
         /// 仅有一个组长
         /// </summary>
-        OnlyOne =0,
+        OnlyOne = 0,
         /// <summary>
         /// 最后一个组长为主
         /// </summary>
@@ -110,17 +110,22 @@ namespace BP.WF
     public enum DirCondModel
     {
         /// <summary>
-        /// 按照用户设置的方向条件计算
+        /// 由连接线控制
         /// </summary>
-        ByLineCond=0,
+        ByLineCond = 0,
         /// <summary>
-        /// 按照用户选择计算
+        /// 发送后手工选择到达节点与接受人（用于子线程节点）
         /// </summary>
-        ByUserSelected=1,
+        ByPopSelect = 1,
         /// <summary>
-        /// 发送按钮旁下拉框选择
+        /// 下拉框模式
         /// </summary>
-        SendButtonSileSelect=2
+        ByDDLSelected = 2,
+        /// <summary>
+        /// 按照按钮选择
+        /// </summary>
+        ByButtonSelected = 3
+
     }
     /// <summary>
     /// 抢办发送后执行规则
@@ -227,7 +232,11 @@ namespace BP.WF
         /// <summary>
         /// 按本组织部门用户计算
         /// </summary>
-        TeamDeptOnly = 12
+        TeamDeptOnly = 12,
+        /// <summary>
+        /// 按照岗位智能计算
+        /// </summary>
+        ByStationAI = 13
     }
     /// <summary>
     /// 流程删除规则
@@ -273,24 +282,24 @@ namespace BP.WF
         /// <summary>
         /// 写入Sys_SMS表
         /// </summary>
-        ToSMSTable=0,
+        ToSMSTable = 0,
         /// <summary>
         /// 写入WebServices.
         /// WS地址: \DataUser\PortalInterface.asmx 的 WriteShortMessage
         /// </summary>
-        ToWebservices=1,
+        ToWebservices = 1,
         /// <summary>
         /// 写入丁丁
         /// </summary>
-        ToDingDing=2,
+        ToDingDing = 2,
         /// <summary>
         /// 写入微信.
         /// </summary>
-        ToWeiXin=3,
+        ToWeiXin = 3,
         /// <summary>
         /// 写入CCIM
         /// </summary>
-        CCIM=4
+        CCIM = 4
     }
     /// <summary>
     /// 加签模式
@@ -300,11 +309,11 @@ namespace BP.WF
         /// <summary>
         /// 加签后直接发送
         /// </summary>
-        AfterDealSend=5,
+        AfterDealSend = 5,
         /// <summary>
         /// 加签后由我直接发送
         /// </summary>
-        AfterDealSendByWorker=6
+        AfterDealSendByWorker = 6
     }
     /// <summary>
     /// 删除流程规则
@@ -367,15 +376,15 @@ namespace BP.WF
         /// <summary>
         /// 发起
         /// </summary>
-        Start=0,
+        Start = 0,
         /// <summary>
         /// 前进(发送)
         /// </summary>
-        Forward=1,
+        Forward = 1,
         /// <summary>
         /// 退回
         /// </summary>
-        Return=2,
+        Return = 2,
         /// <summary>
         /// 退回并原路返回.
         /// </summary>
@@ -383,103 +392,103 @@ namespace BP.WF
         /// <summary>
         /// 移交
         /// </summary>
-        Shift=3,
+        Shift = 3,
         /// <summary>
         /// 撤消移交
         /// </summary>
-        UnShift=4,
+        UnShift = 4,
         /// <summary>
         /// 撤消发送
         /// </summary>
-        UnSend=5,
+        UnSend = 5,
         /// <summary>
         /// 分流前进
         /// </summary>
-        ForwardFL=6,
+        ForwardFL = 6,
         /// <summary>
         /// 合流前进
         /// </summary>
-        ForwardHL=7,
+        ForwardHL = 7,
         /// <summary>
         /// 流程正常结束
         /// </summary>
-        FlowOver=8,
+        FlowOver = 8,
         /// <summary>
         /// 调用起子流程
         /// </summary>
-        CallChildenFlow=9,
+        CallChildenFlow = 9,
         /// <summary>
         /// 启动子流程
         /// </summary>
-        StartChildenFlow=10,
+        StartChildenFlow = 10,
         /// <summary>
         /// 子线程前进
         /// </summary>
-        SubThreadForward=11,
+        SubThreadForward = 11,
         /// <summary>
         /// 取回
         /// </summary>
-        Tackback=12,
+        Tackback = 12,
         /// <summary>
         /// 恢复已完成的流程
         /// </summary>
-        RebackOverFlow=13,
+        RebackOverFlow = 13,
         /// <summary>
         /// 强制终止流程 For lijian:2012-10-24.
         /// </summary>
-        FlowOverByCoercion=14,
+        FlowOverByCoercion = 14,
         /// <summary>
         /// 挂起
         /// </summary>
-        HungUp=15,
+        HungUp = 15,
         /// <summary>
         /// 取消挂起
         /// </summary>
-        UnHungUp=16,
+        UnHungUp = 16,
         /// <summary>
         /// 强制移交
         /// </summary>
-        ShiftByCoercion=17,
+        ShiftByCoercion = 17,
         /// <summary>
         /// 催办
         /// </summary>
-        Press=18,
+        Press = 18,
         /// <summary>
         /// 逻辑删除流程(撤销流程)
         /// </summary>
-        DeleteFlowByFlag=19,
+        DeleteFlowByFlag = 19,
         /// <summary>
         /// 恢复删除流程(撤销流程)
         /// </summary>
-        UnDeleteFlowByFlag=20,
+        UnDeleteFlowByFlag = 20,
         /// <summary>
         /// 抄送
         /// </summary>
-        CC=21,
+        CC = 21,
         /// <summary>
         /// 工作审核(日志)
         /// </summary>
-        WorkCheck=22,
+        WorkCheck = 22,
         /// <summary>
         /// 删除子线程
         /// </summary>
-        DeleteSubThread=23,
+        DeleteSubThread = 23,
         /// <summary>
         /// 请求加签
         /// </summary>
-        AskforHelp=24,
+        AskforHelp = 24,
         /// <summary>
         /// 加签向下发送
         /// </summary>
-        ForwardAskfor=25,
+        ForwardAskfor = 25,
         /// <summary>
         /// 自动条转的方式向下发送
         /// </summary>
-        Skip=26,
+        Skip = 26,
         /// <summary>
         /// 队列发送
         /// </summary>
-        Order=27,
+        Order = 27,
         /// <summary>
         /// 协作发送
         /// </summary>
@@ -487,15 +496,15 @@ namespace BP.WF
         /// <summary>
         /// 流程评论
         /// </summary>
-        FlowBBS=29,
+        FlowBBS = 29,
         /// <summary>
         /// 执行会签
         /// </summary>
-        HuiQian=30,
+        HuiQian = 30,
         /// <summary>
         /// 信息
         /// </summary>
-        Info=100
+        Info = 100
     }
     /// <summary>
     /// 挂起方式
@@ -603,23 +612,23 @@ namespace BP.WF
         /// <summary>
         /// 抢办(谁抢到谁来办理,办理完后其他人就不能办理.)
         /// </summary>
-        QiangBan=0,
+        QiangBan = 0,
         /// <summary>
         /// 协作(没有处理顺序，接受的人都要去处理,由最后一个人发送到下一个节点)
         /// </summary>
-        Teamup=1,
+        Teamup = 1,
         /// <summary>
         /// 队列(按照顺序处理，有最后一个人发送到下一个节点)
         /// </summary>
-        Order=2,
+        Order = 2,
         /// <summary>
         /// 共享模式(需要申请，申请后才能执行)
         /// </summary>
-        Sharing=3,
+        Sharing = 3,
         /// <summary>
         /// 协作组长模式
         /// </summary>
-        TeamupGroupLeader=4
+        TeamupGroupLeader = 4
     }
     /// <summary>
     /// 阻塞模式
@@ -629,31 +638,31 @@ namespace BP.WF
         /// <summary>
         /// 不阻塞
         /// </summary>
-        None,
+        None = 0,
         /// <summary>
         /// 当前节点的有未完成的子线程
         /// </summary>
-        CurrNodeAll,
+        CurrNodeAll = 1,
         /// <summary>
         /// 按照约定的格式阻塞.
         /// </summary>
-        SpecSubFlow,
+        SpecSubFlow = 2,
         /// <summary>
         /// 按照配置的sql阻塞,返回大于等于1表示阻塞,否则不阻塞.
         /// </summary>
-        BySQL,
+        BySQL = 3,
         /// <summary>
         /// 按照表达式阻塞，表达式类似方向条件的表达式.
         /// </summary>
-        ByExp,
+        ByExp = 4,
         /// <summary>
         /// 为父流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
-        SpecSubFlowNode,
+        SpecSubFlowNode = 5,
         /// <summary>
         /// 为平级子流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
-        SameLevelSubFlow
+        SameLevelSubFlow = 6
     }
     /// <summary>
     /// 节点工作批处理
@@ -667,7 +676,7 @@ namespace BP.WF
         /// <summary>
         /// 批量审批
         /// </summary>
-        Ordinary,
+        WorkCheckModel,
         /// <summary>
         /// 分组批量审核
         /// </summary>
@@ -823,43 +832,43 @@ namespace BP.WF
         /// <summary>
         /// 不限制
         /// </summary>
-        None=0,
+        None = 0,
         /// <summary>
         /// 一人一天一次
         /// </summary>
-        Day=1,
+        Day = 1,
         /// <summary>
         /// 一人一周一次
         /// </summary>
-        Week=2,
+        Week = 2,
         /// <summary>
         /// 一人一月一次
         /// </summary>
-        Month=3,
+        Month = 3,
         /// <summary>
         /// 一人一季度一次
         /// </summary>
-        JD=4,
+        JD = 4,
         /// <summary>
         /// 一人一年一次
         /// </summary>
-        Year=5,
+        Year = 5,
         /// <summary>
         /// 发起的列不能重复,(多个列可以用逗号分开)
         /// </summary>
-        ColNotExit=6,
+        ColNotExit = 6,
         /// <summary>
         /// 设置的SQL数据源为空,或者返回结果为零时可以启动.
         /// </summary>
-        ResultIsZero=7,
+        ResultIsZero = 7,
         /// <summary>
         /// 设置的SQL数据源为空,或者返回结果为零时不可以启动.
         /// </summary>
-        ResultIsNotZero=8,
+        ResultIsNotZero = 8,
         /// <summary>
         /// 为子流程时仅仅只能被调用1次.
         /// </summary>
-        OnlyOneSubFlow=9
+        OnlyOneSubFlow = 9
     }
     /// <summary>
     /// 装在前提示
@@ -929,9 +938,14 @@ namespace BP.WF
         /// </summary>
         SpecUrl,
         /// <summary>
+        /// 发送后关闭
+        /// </summary>
+        TurntoClose,
+        /// <summary>
         /// 按条件转向
         /// </summary>
         TurnToByCond
+
     }
     /// <summary>
     /// 投递方式
@@ -1021,7 +1035,7 @@ namespace BP.WF
         /// <summary>
         /// 按照岗位计算-范围内的
         /// </summary>
-        ByStationForPrj=20,
+        ByStationForPrj = 20,
         /// <summary>
         /// 按照选择模式计算.
         /// </summary>
@@ -1067,7 +1081,30 @@ namespace BP.WF
         /// </summary>
         ByCCFlowBPM = 100
     }
-   
+    /// <summary>
+    /// 自动发起
+    /// </summary>
+    public enum AutoStart
+    {
+        /// <summary>
+        /// 手工启动（默认）
+        /// </summary>
+         None = 0,
+        /// <summary>
+        /// 按照指定的人员
+        /// </summary>
+         ByDesignee = 1,
+        /// <summary>
+        /// 数据集按时启动
+        /// </summary>
+         ByTineData = 2,
+        /// <summary>
+        /// 触发试启动
+        /// </summary>
+         ByTrigger = 3
+    }
+ 
+
     /// <summary>
     /// 节点工作退回规则
     /// </summary>
@@ -1230,15 +1267,15 @@ namespace BP.WF
         /// <summary>
         /// 加签
         /// </summary>
-        Askfor=8,
+        Askfor = 8,
         /// <summary>
         /// 冻结
         /// </summary>
-        Fix=9,        
+        Fix = 9,
         /// <summary>
         /// 加签回复状态
         /// </summary>
-        AskForReplay=10
+        AskForReplay = 10
     }
     /// <summary>
     /// 节点工作类型
@@ -1369,15 +1406,15 @@ namespace BP.WF
         /// <summary>
         /// 公文表单
         /// </summary>
-        WebOffice=7,
+        WebOffice = 7,
         /// <summary>
         /// Excel表单
         /// </summary>
-        ExcelForm=8,
+        ExcelForm = 8,
         /// <summary>
         /// Word表单
         /// </summary>
-        WordForm=9,
+        WordForm = 9,
         /// <summary>
         /// 累加表单
         /// </summary>
@@ -1394,7 +1431,7 @@ namespace BP.WF
         /// 禁用(对多表单流程有效)
         /// </summary>
         DisableIt = 100,
-       
+
     }
     /// <summary>
     /// 工作类型
@@ -1485,6 +1522,26 @@ namespace BP.WF
         /// <summary>
         /// 按照工作量考核
         /// </summary>
-        ByWorkNum
+        ByWorkNum,
+        /// <summary>
+        /// 是否是考核质量点
+        /// </summary>
+        IsQuality
+    }
+
+    public enum GuestFlowRole
+    {
+        /// <summary>
+        /// 不参与
+        /// </summary>
+        None,
+        /// <summary>
+        /// 开始节点参与
+        /// </summary>
+        StartNodeJoin,
+        /// <summary>
+        /// 中间节点参与
+        /// </summary>
+        MiddleNodeJoin
     }
 }

@@ -727,7 +727,7 @@ namespace BP.WF.HttpHandler
             string srole = "";
             if (nd.HisBatchRole == BatchRole.None)
                 srole = "0";
-            else if (nd.HisBatchRole == BatchRole.Ordinary)
+            else if (nd.HisBatchRole == BatchRole.WorkCheckModel)
                 srole = "1";
             else
                 srole = "2";
@@ -735,42 +735,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 批量发起规则设置save
-        public string BatchStartFields_Save()
-        {
-            int nodeID = int.Parse(this.FK_Node.ToString());
-            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
-            BP.WF.Node nd = new BP.WF.Node(nodeID);
-
-            //给变量赋值.
-            //批处理的类型
-            int selectval = int.Parse(this.GetRequestVal("DDL_BRole"));
-            switch (selectval)
-            {
-                case 0:
-                    nd.HisBatchRole = BP.WF.BatchRole.None;
-                    break;
-                case 1:
-                    nd.HisBatchRole = BP.WF.BatchRole.Ordinary;
-                    break;
-                default:
-                    nd.HisBatchRole = BP.WF.BatchRole.Group;
-                    break;
-            }
-            //批处理的数量
-            nd.BatchListCount = int.Parse(this.GetRequestVal("TB_BatchListCount"));
-            //批处理的参数 
-            string sbatchparas = "";
-            if (this.GetRequestVal("CheckBoxIDs") != null)
-            {
-                sbatchparas = this.GetRequestVal("CheckBoxIDs");
-            }
-            nd.BatchParas = sbatchparas;
-            nd.Update();
-
-            return "保存成功.";
-        }
-        #endregion
 
         #region 发送阻塞模式
         public string BlockModel_Save()

@@ -82,9 +82,10 @@ namespace BP.WF
                 return null;
             if (objs == null)
                 objs = wn.HisMsgObjs;
-
-            if (objs == null)
-                objs = wn.HisMsgObjs;
+             
+            //如果执行了节点发送成功时间. 
+            if (doType.Equals(EventListNode.SendSuccess) == true)
+                WorkNodePlus.SendDraftSubFlow(wn); //执行自动发送子流程草稿.
 
             //写入消息之前，删除所有的消息.
             if (BP.WF.Glo.IsEnableSysMessage == true)

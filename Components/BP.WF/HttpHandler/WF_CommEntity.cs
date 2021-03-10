@@ -555,9 +555,11 @@ namespace BP.WF.HttpHandler
                     if (lgType.Equals("2")==false)
                         continue;
 
-                    string UIIsEnable = dr["UIVisible"].ToString();
+                    string UIVisible = dr["UIVisible"].ToString();
+                    string uiIsEnable = dr["UIIsEnable"].ToString();
 
-                    if (UIIsEnable.Equals("0") == true)
+
+                    if (UIVisible.Equals("0") == true || uiIsEnable.Equals("0") == true)
                         continue;
 
                     if (DataType.IsNullOrEmpty(uiBindKey) == true)
@@ -808,7 +810,6 @@ namespace BP.WF.HttpHandler
                 dtM.Columns.Add("RefAttrKey");
                 //判断Func是否有参数
                 dtM.Columns.Add("FunPara");
-               
 
                 RefMethods rms = map.HisRefMethods;
                 foreach (RefMethod item in rms)
@@ -1036,12 +1037,13 @@ namespace BP.WF.HttpHandler
             string emp1s = BP.Sys.Glo.DealClassEntityName("BP.Port.Emps");
             string emp2s = BP.Sys.Glo.DealClassEntityName("BP.GPM.Emps");
 
-            if ((ensOfM.Equals(emp1s) == true ||ensOfM.Equals(emp2s) ==true) && defaultGroupAttrKey.Equals("FK_Dept") == true)
+            if ((ensOfM.Equals(emp1s) == true ||ensOfM.Equals(emp2s) ==true) 
+                && defaultGroupAttrKey.Equals("FK_Dept") == true)
             {
-                string sql = "Select  E.No , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='"+key+"'";
+                string sql = "Select  E." + BP.Sys.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='" + key+"'";
                 
                 sql += " union ";
-                sql += "select  E.No , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
+                sql += "select  E."+ BP.Sys.Glo.UserNo+ " , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
                 DataTable dtt = DBAccess.RunSQLReturnTable(sql);
                 DataTable dt = dtt.Clone();
                 string emps = "";
@@ -1126,7 +1128,8 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
-        /// 初始化
+        /// 初始化		dt.Rows[3]	error CS0103: 当前上下文中不存在名称“dt”	
+
         /// </summary>
         /// <returns></returns>
         public string BranchesAndLeaf_Init()
@@ -1258,38 +1261,71 @@ namespace BP.WF.HttpHandler
             bool saveType = this.GetRequestValBoolen("SaveType");
             Entities dot2Dots = ClassFactory.GetEns(dot2DotEnsName);
             DataTable dtSelected = null;
-            if (saveType == true)
+            Entity dot2Dot = dot2Dots.GetNewEntity;
+            //选择的值保存在一个字段中
+            string para = this.GetRequestVal("Para");
+            string paraVal = this.GetRequestVal("ParaVal");
+
+            string para1 = this.GetRequestVal("Para1");
+            string paraVal1 = this.GetRequestVal("ParaVal1");
+
+            string pkval = this.PKVal;
+            //是SAAS版并且Dot2DotEnName含有FK_Emp字段
+            bool isHaveSAASEmp = SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && dot2Dot.EnMap.Attrs.Contains("FK_Emp") == true ? true : false;
+            if (isHaveSAASEmp == true)
             {
-                //选择的值保存在一个字段中
-                string para = this.GetRequestVal("Para");
-                string paraVal = this.GetRequestVal("ParaVal");
-
-                string para1 = this.GetRequestVal("Para1");
-                string paraVal1 = this.GetRequestVal("ParaVal1");
-
-                string pkval = this.PKVal;
-
-                if (DataType.IsNullOrEmpty(para) == true)
-                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
-                else if (DataType.IsNullOrEmpty(para1) == true)
+                string sql = "Select A.*,B.Name AS FK_EmpText From " + dot2Dot.EnMap.PhysicsTable + " A,Port_Emp B Where A.FK_Emp=B.UserID AND B.OrgNo='" + WebUser.OrgNo + "'";
+                if (saveType == true)
                 {
-                    pkval = pkval.Replace("_" + paraVal, "");
-                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal);
+                    if (DataType.IsNullOrEmpty(para) == true)
+                        sql += " AND " + vsM.AttrOfOneInMM + "='" + this.PKVal + "'";
+                    if (DataType.IsNullOrEmpty(para1) == true)
+                    {
+                        pkval = pkval.Replace("_" + paraVal, "");
+                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND "+para+"='"+paraVal+"'";
+                    }
+
+                    else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
+                    {
+                        pkval = pkval.Replace("_" + paraVal, "");
+                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "' AND " + para1 + "='" + paraVal1 + "'";
+                    }
                 }
-                   
-                else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
+                else
                 {
-                    pkval = pkval.Replace("_" + paraVal, "");
-                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal, para1, paraVal1);
+                    sql += " AND " + vsM.AttrOfOneInMM + "='" + this.PKVal + "'";
                 }
-                    
-               
+                dtSelected = DBAccess.RunSQLReturnTable(sql);
+                dtSelected.TableName = "DBMMs";
+
             }
             else
             {
-                dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+                if (saveType == true)
+                {
+                    if (DataType.IsNullOrEmpty(para) == true)
+                        dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+                    else if (DataType.IsNullOrEmpty(para1) == true)
+                    {
+                        pkval = pkval.Replace("_" + paraVal, "");
+                        dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal);
+                    }
+
+                    else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
+                    {
+                        pkval = pkval.Replace("_" + paraVal, "");
+                        dot2Dots.Retrieve(vsM.AttrOfOneInMM, pkval, para, paraVal, para1, paraVal1);
+                    }
+
+
+                }
+                else
+                {
+                    dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+                }
+                dtSelected = dot2Dots.ToDataTableField("DBMMs");
             }
-            dtSelected = dot2Dots.ToDataTableField("DBMMs");
+            
            
 
             string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
@@ -1305,15 +1341,17 @@ namespace BP.WF.HttpHandler
 
             if(DataType.IsNullOrEmpty(vsM.ExtShowCols)==false && vsM.ExtShowCols.Contains("@"+ defaultGroupAttrKey + "=") == true)
             {
-               if(dtSelected.Columns.Contains(defaultGroupAttrKey)== false)
+               if(dtSelected.Columns.Contains(defaultGroupAttrKey+"Text")== false)
                 {
-                    dtSelected.Columns.Add(defaultGroupAttrKey, typeof(string));
+                    dtSelected.Columns.Add(defaultGroupAttrKey + "Text", typeof(string));
                 }
                foreach(DataRow dr in dtSelected.Rows)
                {
                     enMen.PKVal = dr["No"].ToString();
+                    if (isHaveSAASEmp == true)
+                        enMen.PKVal = WebUser.OrgNo + "_" + enMen.PKVal;
                     enMen.RetrieveFromDBSources();
-                    dr[defaultGroupAttrKey] = enMen.Row[defaultGroupAttrKey+"Text"];
+                    dr[defaultGroupAttrKey + "Text"] = enMen.Row[defaultGroupAttrKey+"Text"];
                }
             }
 

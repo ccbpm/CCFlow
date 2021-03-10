@@ -180,7 +180,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true);
-
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 //默认值.
@@ -194,7 +193,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
                 map.SetHelperAlert(MapAttrAttr.MaxLen, "定义该字段的字节长度.");
-
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
@@ -217,18 +215,13 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
                 map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
-
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
-                map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
-                //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
-
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
+
                 //单元格数量 2013-07-24 增加
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数量", true, true, "ColSpanAttrDT",
-                    "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨5个单元格@6=跨6个单元格");
+                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨5个单元格@6=跨6个单元格");
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
@@ -236,7 +229,7 @@ namespace BP.Sys.FrmUI
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
                 map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
-
+            
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
@@ -249,16 +242,18 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
+
+
+                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
+                map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+
                 #endregion 傻瓜表单
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
 
-                rm = new RefMethod();
-                rm.Title = "正则表达式";
-                rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "文本框自动完成";
@@ -266,11 +261,6 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "事件绑函数";
-                rm.ClassMethodName = this.ToString() + ".BindFunction()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
            
                 rm = new RefMethod();
@@ -285,18 +275,24 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
               //  map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "字段重命名";
-                rm.ClassMethodName = this.ToString() + ".DoRenameField()";
-                rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
-                map.AddRefMethod(rm);
-
+            
 
                 rm = new RefMethod();
                 rm.Title = "Pop返回值";
                 rm.ClassMethodName = this.ToString() + ".DoPop2019()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "正则表达式";
+                rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -340,6 +336,16 @@ namespace BP.Sys.FrmUI
                 #endregion 输入多选
 
                 #region 高级设置.
+                rm = new RefMethod();
+                rm.Title = "字段重命名";
+                rm.ClassMethodName = this.ToString() + ".DoRenameField()";
+                rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
@@ -573,13 +579,13 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoMultipleChoiceSmall()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
         }
 
 
         public string DSingleChoiceSmall()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/SingleChoiceSmall.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/SingleChoiceSmall/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
 
         }
         /// <summary>

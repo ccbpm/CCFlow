@@ -105,7 +105,7 @@ namespace BP.GPM.WeiXin
 
             userLog.LogFlag = "系统定位1";
             userLog.Docs = str1;
-            userLog.RDT = DataType.CurrentDataTime;
+            userLog.RDT = DataType.CurrentDataTimess;
             userLog.Insert();
             string Signature = Sha1Signature(str1);
             ht.Add("signature", Signature);
@@ -114,7 +114,7 @@ namespace BP.GPM.WeiXin
 
             userLog.LogFlag = "生成签名";
             userLog.Docs = Signature;
-            userLog.RDT = DataType.CurrentDataTime;
+            userLog.RDT = DataType.CurrentDataTimess;
             userLog.Insert();
 
             return BP.Tools.Json.ToJson(ht);

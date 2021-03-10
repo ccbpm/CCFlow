@@ -326,7 +326,7 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     //执行导入.
-                    flow = BP.WF.Flow.DoLoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
+                    flow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(sortNo, tempfile, ImpFlowTempleteModel.AsNewFlow);
                     flow.DoCheck(); //要执行一次检查.
 
                     dtInfo = this.ImpAddInfo(dtInfo, str, "执行成功:新流程编号:" + flow.No + " - " + flow.Name, "成功.");

@@ -26,6 +26,33 @@ namespace BP.GPM.WeiXin
         /// </summary>
         public List<DeptEntity> department { get; set; }
         #endregion 部门属性.
+
+        public DeptList()
+        {
+        }
+        /// <summary>
+        /// 查询所有的部门
+        /// </summary>
+        /// <returns></returns>
+        public int RetrieveAll()
+        {
+            string access_token = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
+            string url = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=" + access_token;
+
+            //读取数据.
+            string str = DataType.ReadURLContext(url, 9999, null);
+            DeptList departMentList = BP.Tools.FormatToJson.ParseFromJson<DeptList>(str);
+
+            if (departMentList.errcode != 0)
+                throw new Exception("err@获得部门信息错误:code" + departMentList.errcode + ",Msg=" + departMentList.errmsg);
+
+
+            this.errcode = departMentList.errcode;
+            this.errmsg = departMentList.errmsg;
+            this.department = departMentList.department;
+
+            return this.department.Count;
+        }
     }
     /// <summary>
     /// 部门信息
@@ -51,50 +78,12 @@ namespace BP.GPM.WeiXin
         public string order { get; set; }
         #endregion 属性.
 
-        
-    }
-    public class DeptEntityList
-    {
-        #region 部门属性.
         /// <summary>
-        /// 返回码
+        /// 构造函数
         /// </summary>
-        public int errcode { get; set; }
-        /// <summary>
-        /// 对返回码的文本描述内容
-        /// </summary>
-        public string errmsg { get; set; }
-        /// <summary>
-        /// 部门列表数据
-        /// </summary>
-        public List<DeptEntity> department { get; set; }
-        #endregion 部门属性.
-
-        public DeptEntityList()
+        /// <param name="id"></param>
+        public DeptEntity(string id)
         {
-        }
-        /// <summary>
-        /// 查询所有的部门
-        /// </summary>
-        /// <returns></returns>
-        public int RetrieveAll()
-        {
-            string access_token = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
-            string url = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=" + access_token;
-
-            //读取数据.
-            string str = DataType.ReadURLContext(url, 9999, null);
-            DeptList departMentList = BP.Tools.FormatToJson.ParseFromJson<DeptList>(str);
-
-            if (departMentList.errcode != 0)
-                throw new Exception("err@获得部门信息错误:code" + departMentList.errcode + ",Msg=" + departMentList.errmsg);
-
-
-            this.errcode = departMentList.errcode;
-            this.errmsg = departMentList.errmsg;
-            this.department = departMentList.department;
-
-            return this.department.Count;
         }
     }
 }

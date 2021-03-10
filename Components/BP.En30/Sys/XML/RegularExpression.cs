@@ -106,7 +106,7 @@ namespace BP.Sys.XML
 		{
 			get
 			{
-                return SystemConfig.PathOfData + "\\XML\\RegularExpression.xml";
+                return SystemConfig.PathOfData + "XML\\RegularExpression.xml";
 			}
 		}
 		/// <summary>

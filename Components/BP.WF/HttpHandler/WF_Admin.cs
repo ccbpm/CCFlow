@@ -51,10 +51,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Encrypto_Exe()
         {
-             DecryptAndEncryptionHelper.decode decode = new DecryptAndEncryptionHelper.decode();
-             string mstr = this.GetRequestVal("mstr").Trim();
-             string encryptoStr = decode.encrypto_exe(mstr);
-             return encryptoStr;
+            DecryptAndEncryptionHelper.decode decode = new DecryptAndEncryptionHelper.decode();
+            string mstr = this.GetRequestVal("mstr").Trim();
+            string encryptoStr = decode.encrypto_exe(mstr);
+            return encryptoStr;
         }
 
         /// <summary>
@@ -124,15 +124,13 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     DataRow dr = dtEmps.NewRow();
-                    dr["No"] = emp.No;
+                    dr["No"] = emp.UserID;
                     dr["Name"] = emp.Name;
                     dr["FK_DeptText"] = emp.FK_DeptText;
                     dtEmps.Rows.Add(dr);
                 }
                 return BP.Tools.Json.ToJson(dtEmps);
             }
-
-
 
             //fl.DoCheck();
 
@@ -159,14 +157,19 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
-                  
+
                     case DeliveryWay.ByDept:
                         sql = "SELECT No,Name FROM Port_Emp where FK_Dept in (select FK_Dept from WF_NodeDept where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("");
                         break;
 
                     case DeliveryWay.ByBindEmp:
-                        sql = "select No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+                        //sql = "SELECT No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+                        if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
+                            sql = "SELECT UserID,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.UserID=B.FK_Emp AND B.FK_Node=" +nodeid;
+                        else
+                            sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid ;
+
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
@@ -184,18 +187,29 @@ namespace BP.WF.HttpHandler
                               + "        pdes.FK_Emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
-                        sql = "SELECT No as FK_Emp FROM Port_Emp ";
-                        dt = DBAccess.RunSQLReturnTable(sql);
-                        if (dt.Rows.Count > 300)
+
+                        sql = "SELECT COUNT(*) as Num  FROM Port_Emp ";
+
+                        if (DBAccess.RunSQLReturnValInt(sql) > 300)
                         {
-                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                                sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
-
-                            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
-
-                            if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                sql = "SELECT  No as FK_Emp FROM Port_Emp   limit 0,300 ";
+                            switch (SystemConfig.AppCenterDBType)
+                            {
+                                case DBType.MSSQL:
+                                    sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
+                                    break;
+                                case DBType.Oracle:
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
+                                    break;
+                                case DBType.MySQL:
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 ";
+                                    break;
+                                default:
+                                    return "err@没有判断的数据库类型.";
+                            }
+                        }
+                        else
+                        {
+                            sql = "SELECT No as FK_Emp FROM Port_Emp ";
                         }
                         break;
                     case DeliveryWay.BySQL:
@@ -208,7 +222,7 @@ namespace BP.WF.HttpHandler
 
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
-                    return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
+                    return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。" + sql;
 
                 if (dt.Rows.Count > 2000)
                     return "err@可以发起开始节点的人员太多，会导致系统崩溃变慢，您需要在流程属性里设置可以发起的测试用户.";
@@ -232,13 +246,12 @@ namespace BP.WF.HttpHandler
 
                     DataRow drNew = dtMyEmps.NewRow();
 
-                    drNew["No"] = emp.No;
+                    drNew["No"] = emp.UserID;
                     drNew["Name"] = emp.Name;
                     drNew["FK_DeptText"] = emp.FK_DeptText;
 
                     dtMyEmps.Rows.Add(drNew);
                 }
-
 
                 //检查物理表,避免错误.
                 Nodes nds = new Nodes(this.FK_Flow);
@@ -246,7 +259,6 @@ namespace BP.WF.HttpHandler
                 {
                     mynd.HisWork.CheckPhysicsTable();
                 }
-
 
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);
@@ -337,7 +349,7 @@ namespace BP.WF.HttpHandler
             string password = this.GetValFromFrmByKey("TB_PW");
 
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = userNo;
+            emp.UserID = userNo;
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 

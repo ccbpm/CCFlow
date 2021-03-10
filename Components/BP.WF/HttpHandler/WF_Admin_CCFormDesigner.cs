@@ -15,7 +15,6 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.DirectoryPageBase
     {
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 构造函数
@@ -191,7 +190,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(sort) == true)
                     sort = this.GetRequestVal("DDL_FrmTree");
 
-                md.FK_FrmSort = sort;
+            //    md.FK_FrmSort = sort;
                 md.FK_FormTree = sort;
 
                 md.AppType = "0";//独立表单
@@ -295,8 +294,6 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
-
-
         public string GoToFrmDesigner_Init()
         {
             //根据不同的表单类型转入不同的表单设计器上去.

@@ -352,14 +352,14 @@ namespace BP.WF.Template
         /// 批处理
         /// </summary>
         public const string BatchRole = "BatchRole";
-        /// <summary>
-        /// 批处理参数
-        /// </summary>
-        public const string BatchParas = "BatchParas";
-        /// <summary>
-        /// 批处理总数
-        /// </summary>
-        public const string BatchListCount = "BatchListCount";
+        ///// <summary>
+        ///// 批处理参数 @hongyan
+        ///// </summary>
+        //public const string BatchParas = "BatchParas";
+        ///// <summary>
+        ///// 批处理总数
+        ///// </summary>
+        //public const string BatchListCount = "BatchListCount";
         /// <summary>
         /// 自动跳转规则-1
         /// </summary>
@@ -392,6 +392,10 @@ namespace BP.WF.Template
         /// 子流程运行到该节点时，让父流程自动运行到下一步
         /// </summary>
         public const string IsToParentNextNode = "IsToParentNextNode";
+        /// <summary>
+        /// 是否发送草稿子流程？
+        /// </summary>
+        public const string IsSendDraftSubFlow = "IsSendDraftSubFlow";
         /// <summary>
         /// 该节点是否是游离状态
         /// </summary>

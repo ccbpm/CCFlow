@@ -774,16 +774,13 @@ namespace BP.WF.Data
                 rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "移交";
                 rm.ClassMethodName = this.ToString() + ".DoFlowShift";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
                 rm.ClassMethodName = this.ToString() + ".DoRollback";
-
-                //rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-                // rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
 
                 rm.HisAttrs.AddDDLSQL("NodeID", "0", "回滚到节点",
                    "SELECT NodeID+'' as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
@@ -868,8 +865,16 @@ namespace BP.WF.Data
         //,string isOK, int wfstate, string fk_emp
         public string DoTest(string toEmpNo, string toNodeID)
         {
-            return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, int.Parse(toNodeID),
-                toEmpNo, BP.Web.WebUser.Name + ":调整.");
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, int.Parse(toNodeID),
+                    toEmpNo, BP.Web.WebUser.Name + ":调整.");
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+
         }
         public string RepairDataIt()
         {
@@ -1079,7 +1084,6 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string Rollback()
         {
-
             return "../../WorkOpt/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>

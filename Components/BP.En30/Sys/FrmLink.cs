@@ -14,7 +14,7 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
-        public const string Text = "Text";
+        public const string Lab = "Lab";
         /// <summary>
         /// 主表
         /// </summary>
@@ -186,15 +186,15 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
-        public string Text
+        public string Lab
         {
             get
             {
-                return this.GetValStrByKey(FrmLinkAttr.Text);
+                return this.GetValStrByKey(FrmLinkAttr.Lab);
             }
             set
             {
-                this.SetValByKey(FrmLinkAttr.Text, value);
+                this.SetValByKey(FrmLinkAttr.Lab, value);
             }
         }
         public string Target
@@ -263,7 +263,7 @@ namespace BP.Sys
                 map.AddMyPK();
 
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
-                map.AddTBString(FrmLinkAttr.Text, "New Link", "Label", true, false, 0, 500, 20);
+                map.AddTBString(FrmLinkAttr.Lab, "New Link", "Label", true, false, 0, 500, 20);
 
                 map.AddTBString(FrmLinkAttr.URLExt, null, "URLExt", true, false, 0, 500, 20);
 

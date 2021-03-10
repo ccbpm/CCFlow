@@ -173,6 +173,7 @@ namespace BP.Port
         /// </summary>
         public Depts()
         {
+
         }
         /// <summary>
         /// 部门集合

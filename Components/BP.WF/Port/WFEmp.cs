@@ -13,24 +13,7 @@ using System.IO;
 
 namespace BP.WF.Port
 {
-    /// <summary>
-    /// 授权方式
-    /// </summary>
-    public enum AuthorWay
-    {
-        /// <summary>
-        /// 不授权
-        /// </summary>
-        None,
-        /// <summary>
-        /// 全部授权
-        /// </summary>
-        All,
-        /// <summary>
-        /// 指定流程授权
-        /// </summary>
-        SpecFlows
-    }
+
     public enum AlertWay
     {
         /// <summary>
@@ -70,22 +53,6 @@ namespace BP.WF.Port
         public const string Name = "Name";
         public const string LoginData = "LoginData";
         public const string Tel = "Tel";
-        /// <summary>
-        /// 授权人
-        /// </summary>
-        public const string Author = "Author";
-        /// <summary>
-        /// 授权日期
-        /// </summary>
-        public const string AuthorDate = "AuthorDate";
-        /// <summary>
-        /// 是否处于授权状态
-        /// </summary>
-        public const string AuthorWay = "AuthorWay";
-        /// <summary>
-        /// 授权自动收回日期
-        /// </summary>
-        public const string AuthorToDate = "AuthorToDate";
         public const string Email = "Email";
         public const string AlertWay = "AlertWay";
         public const string Stas = "Stas";
@@ -95,10 +62,6 @@ namespace BP.WF.Port
         public const string Style = "Style";
         public const string Msg = "Msg";
         public const string UseSta = "UseSta";
-        /// <summary>
-        /// 授权的人员
-        /// </summary>
-        public const string AuthorFlows = "AuthorFlows";
         /// <summary>
         /// 可以发起的流程
         /// </summary>
@@ -115,6 +78,31 @@ namespace BP.WF.Port
     public class WFEmp : EntityNoName
     {
         #region 基本属性
+        /// <summary>
+		/// 编号
+		/// </summary>
+		public new string No
+        {
+            get
+            {
+                return this.GetValStringByKey(EntityNoNameAttr.No);
+            }
+            set
+            {
+                if (BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                {
+                    string val = value;
+                    if (val.Contains(BP.Web.WebUser.OrgNo+"_")==false)
+                        val = BP.Web.WebUser.OrgNo + "_" + value;
+
+                    this.SetValByKey(EntityNoNameAttr.No, val);
+                    return;
+                }
+
+                this.SetValByKey(EntityNoNameAttr.No, value);
+
+            }
+        }
         public string HisAlertWayT
         {
             get
@@ -175,7 +163,7 @@ namespace BP.WF.Port
                 this.SetValByKey(WFEmpAttr.Style, value);
             }
         }
-         
+
         /// <summary>
         /// 电话
         /// </summary>
@@ -201,7 +189,7 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.Idx, value);
             }
         }
-      
+
         public string Email
         {
             get
@@ -213,64 +201,7 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.Email, value);
             }
         }
-        public string Author
-        {
-            get
-            {
-                return this.GetValStrByKey(WFEmpAttr.Author);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.Author, value);
-            }
-        }
-        public string AuthorDate
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.AuthorDate);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.AuthorDate, value);
-            }
-        }
-        public string AuthorToDate
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.AuthorToDate);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.AuthorToDate, value);
-            }
-        }
-        /// <summary>
-        /// 授权的流程
-        /// </summary>
-        public string AuthorFlows
-        {
-            get
-            {
-                string s = this.GetValStringByKey(WFEmpAttr.AuthorFlows);
-                s = s.Replace(",", "','");
-                return "('" + s + "')";
-            }
-            set
-            {
-                //授权流程为空时的bug  解决
-                if (!DataType.IsNullOrEmpty(value))
-                {
-                    SetValByKey(WFEmpAttr.AuthorFlows, value.Substring(1));
-                }
-                else
-                {
-                    SetValByKey(WFEmpAttr.AuthorFlows, "");
-                }
-                //SetValByKey(WFEmpAttr.AuthorFlows, value.Substring(1));
-            }
-        }
+
         /// <summary>
         /// 发起流程.
         /// </summary>
@@ -299,52 +230,6 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.SPass, value);
             }
         }
-
-        /// <summary>
-        /// 授权方式
-        /// </summary>
-        public AuthorWay HisAuthorWay
-        {
-            get
-            {
-                return (AuthorWay)this.AuthorWay;
-            }
-        }
-        /// <summary>
-        /// 授权方式
-        /// </summary>
-        public int AuthorWay
-        {
-            get
-            {
-                return this.GetValIntByKey(WFEmpAttr.AuthorWay);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.AuthorWay, value);
-            }
-        }
-        public bool AuthorIsOK
-        {
-            get
-            {
-                int b = this.GetValIntByKey(WFEmpAttr.AuthorWay);
-                if (b == 0)
-                    return false; //不授权.
-
-                // if (DataType.IsNullOrEmpty(this.Author) == true)
-                //  return false;
-
-                if (this.AuthorToDate.Length < 4)
-                    return true; /*没有填写时间,当做无期限*/
-
-                DateTime dt = DataType.ParseSysDateTime2DateTime(this.AuthorToDate);
-                if (dt < DateTime.Now)
-                    return false;
-
-                return true;
-            }
-        }
         #endregion
 
         #region 构造函数
@@ -358,7 +243,12 @@ namespace BP.WF.Port
         /// <param name="no"></param>
         public WFEmp(string no)
         {
-            this.No = no;
+
+            if (BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                this.No = WebUser.OrgNo + "_" + no;
+            else
+                this.No = no;
+
             try
             {
                 if (this.RetrieveFromDBSources() == 0)
@@ -387,27 +277,19 @@ namespace BP.WF.Port
 
                 map.AddTBStringPK(WFEmpAttr.No, null, "No", true, true, 1, 50, 36);
                 map.AddTBString(WFEmpAttr.Name, null, "Name", true, false, 0, 50, 20);
+
                 map.AddTBInt(WFEmpAttr.UseSta, 1, "用户状态0禁用,1正常.", true, true);
 
                 map.AddTBString(WFEmpAttr.Tel, null, "Tel", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.FK_Dept, null, "FK_Dept", true, true, 0, 100, 36);
                 map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
-
                 map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true, WFEmpAttr.AlertWay);
-                map.AddTBString(WFEmpAttr.Author, null, "授权人", true, true, 0, 50, 20);
-                map.AddTBString(WFEmpAttr.AuthorDate, null, "授权日期", true, true, 0, 50, 20);
-
-                //0不授权， 1完全授权，2，指定流程范围授权. 
-                map.AddTBInt(WFEmpAttr.AuthorWay, 0, "授权方式", true, true);
-                map.AddTBDate(WFEmpAttr.AuthorToDate, null, "授权到日期", true, true);
-
-                map.AddTBString(WFEmpAttr.AuthorFlows, null, "可以执行的授权流程", true, true, 0, 3900, 0);
 
                 map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "Deptss", true, true, 0, 100, 36);
 
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
-                map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 4000, 20);
+                map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 30, 20);
 
                 //map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
 
@@ -462,26 +344,7 @@ namespace BP.WF.Port
             return base.beforeInsert();
         }
         #endregion
-
-        public static void DTSData()
-        {
-            string sql = "select No from Port_Emp where No not in (select No from WF_Emp)";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
-            {
-                BP.Port.Emp emp1 = new BP.Port.Emp(dr["No"].ToString());
-                BP.WF.Port.WFEmp empWF = new BP.WF.Port.WFEmp();
-                empWF.Copy(emp1);
-                try
-                {
-                    empWF.UseSta = 1;
-                    empWF.DirectInsert();
-                }
-                catch
-                {
-                }
-            }
-        }
+       
         public void DoUp()
         {
             this.DoOrderUp("FK_Dept", this.FK_Dept, "Idx");
@@ -515,7 +378,6 @@ namespace BP.WF.Port
                 return new WFEmp();
             }
         }
-
         public override int RetrieveAll()
         {
             return base.RetrieveAll("FK_Dept", "Idx");

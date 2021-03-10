@@ -96,9 +96,13 @@ namespace BP.En
 		/// </summary>
 		Fixed=16,
         /// <summary>
+        /// 公文正文组件
+        /// </summary>
+        GovDocFile = 110,
+        /// <summary>
         /// 发文字号
         /// </summary>
-        DocWord=17,
+        DocWord =17,
         /// <summary>
         /// 收文字号
         /// </summary>

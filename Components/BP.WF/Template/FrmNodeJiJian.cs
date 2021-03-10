@@ -153,7 +153,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "字段权限";
                 rm.ClassMethodName = this.ToString() + ".DoFields()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -177,7 +177,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "从其他节点Copy权限设置";
                 rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();

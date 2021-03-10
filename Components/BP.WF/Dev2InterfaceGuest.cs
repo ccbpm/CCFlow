@@ -56,7 +56,6 @@ namespace BP.WF
         {
             //if (BP.Web.WebUser.No != "Guest")
             //    throw new Exception("@必须是Guest登陆才能发起.");
-
             
 
             string dbstr = SystemConfig.AppCenterDBVarStr;

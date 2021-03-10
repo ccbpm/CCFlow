@@ -150,8 +150,16 @@ namespace BP.Sys
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
+        protected override bool beforeInsert()
+        {
+            this.MyPK = DBAccess.GenerGUID();
+            this.RDT = DataType.CurrentDataTime;
+            if (SystemConfig.IsBSsystem)
+                this.IP = Web.HttpContextHelper.Request.ServerVariables["REMOTE_ADDR"].ToString();
+            return base.beforeInsert();
+        }
         #region 重写
         public override Entities GetNewEntities
         {

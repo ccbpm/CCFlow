@@ -371,7 +371,9 @@ namespace BP.GPM
                 map.AddTBString(MenuAttr.Tag2, null, "Tag2", true, false, 0, 500, 20, true);
                 map.AddTBString(MenuAttr.Tag3, null, "Tag3", true, false, 0, 500, 20, true);
                 map.AddTBString(EntityNoMyFileAttr.WebPath, "/WF/Img/FileType/IE.gif", "图标", true, false, 0, 200, 20, true);
-                //  map.AddMyFile("图标");  //附件.
+                
+                //2020.12.4 增加了附件字段.
+                map.AddMyFile("图标");  //附件.
 
                 map.AddSearchAttr(MenuAttr.FK_App);
                 map.AddSearchAttr(MenuAttr.MenuType);

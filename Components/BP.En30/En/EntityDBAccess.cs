@@ -239,11 +239,28 @@ namespace BP.En
         }
 		private static void fullDate(DataTable dt, Entity en, Attrs attrs )
 		{
+            //判断是否加密.
+            if (en.EnMap.IsJM == false)
+            {
+                foreach (Attr attr in attrs)
+                {
+                    en.Row.SetValByKey(attr.Key, dt.Rows[0][attr.Key]);
+                }
+                return;
+            }
+            
+            //执行解密. @yln.
             foreach (Attr attr in attrs)
             {
-                en.Row.SetValByKey(attr.Key, dt.Rows[0][attr.Key]);
+                var val = dt.Rows[0][attr.Key];
+
+                if (attr.IsPK == false && attr.MyDataType == DataType.AppString)
+                    val = val;
+
+                en.Row.SetValByKey(attr.Key, val);
             }
-		}
+
+        }
         public static int Retrieve(Entities ens, string sql)
         {
             try

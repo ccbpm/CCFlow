@@ -78,7 +78,7 @@ namespace BP.WF.Template
             if (this.CCIsDepts == true)
             {
                 /*如果抄送到部门. */
-                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
+                    sql = "SELECT A." + BP.Sys.Glo.UserNo + ", A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
 
                 mydt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow mydr in mydt.Rows)
@@ -93,7 +93,7 @@ namespace BP.WF.Template
             if (this.CCIsEmps == true)
             {
                 /*如果抄送到人员. */
-                sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCEmp B WHERE A.No=B.FK_Emp AND B.FK_Node=" + this.NodeID;
+                sql = "SELECT A." +BP.Sys.Glo.UserNo + ", A.Name FROM Port_Emp A, WF_CCEmp B WHERE A." + BP.Sys.Glo.UserNo + "=B.FK_Emp AND B.FK_Node=" + this.NodeID;
                 mydt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow mydr in mydt.Rows)
                 {
@@ -228,7 +228,7 @@ namespace BP.WF.Template
                         if (DataType.IsNullOrEmpty(empNo) == true)
                             continue;
                         Emp emp = new Emp();
-                        emp.No = empNo;
+                        emp.UserID = empNo;
                         if (emp.RetrieveFromDBSources() == 1)
                         {
                             DataRow dr = dt.NewRow();
@@ -309,7 +309,7 @@ namespace BP.WF.Template
             {
                 string s = this.GetValStringByKey(CCAttr.CCDoc);
                 if (DataType.IsNullOrEmpty(s))
-                    s = "@Title";
+                    s = "{@Title}";
                 return s;
             }
             set
@@ -471,6 +471,9 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 4, 10);
                 map.AddDDLSysEnum(NodeAttr.CCWriteTo, 0, "抄送数据写入规则", true, true, NodeAttr.CCWriteTo,"@0=写入抄送列表@1=写入待办@2=写入待办与抄送列表");
+                map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //增加帮助.
+
+
                 map.AddBoolean(CCAttr.CCIsAttr, false, "按表单字段抄送", true, true, true);
                 map.AddTBString(CCAttr.CCFormAttr, null, "抄送人员字段", true, false, 0, 100, 10, true);
                 

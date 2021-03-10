@@ -22,6 +22,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string SubFlowName = "SubFlowName";
         /// <summary>
+        /// 子流程状态
+        /// </summary>
+        public const string SubFlowSta = "SubFlowSta";
+        /// <summary>
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";

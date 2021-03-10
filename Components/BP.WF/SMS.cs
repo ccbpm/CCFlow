@@ -176,7 +176,7 @@ namespace BP.WF
         /// <param name="msgType">类型</param>
         /// <param name="paras">扩展参数</param>
         public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-            string msgType, string paras,Int64 workid, string pushModel= null,string openUrl= null)
+            string msgType, string paras, Int64 workid, string pushModel = null, string openUrl = null)
         {
 
             SMS sms = new SMS();
@@ -200,7 +200,11 @@ namespace BP.WF
 
             sms.WorkID = workid;
 
-            if(DataType.IsNullOrEmpty(openUrl) == false)
+            ///如果没有设置模式，就设置邮件.
+            if (pushModel == null)
+                pushModel = "Email";
+
+            if (DataType.IsNullOrEmpty(openUrl) == false)
                 sms.SetPara("OpenUrl", openUrl);
             if (DataType.IsNullOrEmpty(pushModel) == false)
                 sms.SetPara("PushModel", pushModel);
@@ -553,68 +557,86 @@ namespace BP.WF
         /// <returns></returns>
         public static async Task<bool> SendEmailNowAsync(string mail, string mailTitle, string mailDoc)
         {
+            //if (1 == 1)
+            //    return;
+
             return await Task.Run(() =>
             {
-                #warning 以下方法发送邮件导致出现错误,导致iis死机，为了临时解决此问题，目前先注释掉了.
-                return true; 
+                try
+                {
+                    System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
+                    //邮件地址.
+                    string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+                    if (emailAddr == null)
+                        emailAddr = "ccbpmtester@tom.com";
 
-                System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
+                    string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+                    if (emailPassword == null)
+                        emailPassword = "ccbpm123";
 
-                //邮件地址.
-                string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
-                if (emailAddr == null)
-                    emailAddr = "ccbpmtester@tom.com";
+                    mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
-                if (emailPassword == null)
-                    emailPassword = "ccbpm123";
+                    string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                    myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
-                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                    myEmail.To.Add(mail);
+                    myEmail.Subject = mailTitle;
+                    myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+                    myEmail.IsBodyHtml = true;
+                    myEmail.Body = mailDoc;
+                    myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
+                    myEmail.IsBodyHtml = true;//是否是HTML邮件
+                    myEmail.Priority = MailPriority.High; // 邮件优先级
 
+                    SmtpClient client = new SmtpClient();
+                    client.UseDefaultCredentials = true;
+                    if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
+                        client.EnableSsl = true;  //经过ssl加密.
+                    else
+                        client.EnableSsl = false;
 
-                myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
+                    client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
+                    client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+                    client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
 
-                myEmail.To.Add(mail);
-                myEmail.Subject = mailTitle;
-                myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+                    object userState = myEmail;
+                    client.SendAsync(myEmail, userState);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("err@" + mail + "邮箱有误");
+                    return true;
+                }
 
-                myEmail.IsBodyHtml = true;
-
-                mailDoc = DataType.ParseText2Html(mailDoc);
-
-                myEmail.Body = mailDoc;
-                myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
-                myEmail.IsBodyHtml = true;//是否是HTML邮件
-                myEmail.Priority = MailPriority.High; // 邮件优先级
-
-                SmtpClient client = new SmtpClient();
-
-                //是否启用ssl? 
-                bool isEnableSSL = false;
-                string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
-                if (emailEnableSSL == null || emailEnableSSL == "0")
-                    isEnableSSL = false;
-                else
-                    isEnableSSL = true;
-
-                client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
-
-                //上述写你的邮箱和密码
-                client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-                client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
-
-                // 经过ssl加密. 
-                if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
-                    client.EnableSsl = true;  //经过ssl加密.
-                else
-                    client.EnableSsl = false; //经过ssl加密.
-
-                object userState = myEmail;
-                client.SendAsync(myEmail, userState);
                 return true;
-
             });
+        }
+        /// <summary>
+        /// SAAS发送.
+        /// </summary>
+        public void SendMsgToSAAS()
+        {
+            //获取设置.
+            string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
+            if (DataType.IsNullOrEmpty(messageUrl) == true)
+                return;
+
+            string httpUrl = messageUrl + "?Sender=" + BP.Web.WebUser.No + "&OrgNo=" + WebUser.OrgNo + "&ToUserIDs=" + this.SendToEmpNo + "&Title=" + this.Title + "&Docs=" + this.GetValDocText();
+
+            string json = "{";
+            json += " \"Sender\": \"" + WebUser.No + "\",";
+            json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
+            json += " \"SendTo\": \"" + this.SendToEmpNo + "\",";
+            json += " \"Tel\": \"" + this.Mobile + "\",";
+            json += " \"Title\":\"" + this.Title + "\",";
+            json += " \"MsgFlg\":\"" + this.MsgFlag + "\",";
+            json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
+            json += " \"Doc\":\"" + this.Doc + " \",";
+            json += " \"Url\":\"" + this.OpenURL + " \"}";
+
+            //注册到url里面去.
+            BP.WF.Glo.HttpPostConnect(httpUrl, json);
         }
         /// <summary>
         /// 插入之后执行的方法.
@@ -623,10 +645,17 @@ namespace BP.WF
         {
             try
             {
+                //如果是SAAS模式.
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    SendMsgToSAAS();
+                    return;
+                }
+
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
-                #region 发送邮件.
+                #region 发送邮件
                 if (this.PushModel.Contains("Email") == true && DataType.IsNullOrEmpty(this.Email) == false)
                 {
                     string emailStrs = this.Email;
@@ -641,15 +670,13 @@ namespace BP.WF
                         {
                             if (DataType.IsNullOrEmpty(email) == true)
                                 continue;
-
                             SendEmailNowAsync(email, this.Title, this.DocOfEmail);
                         }
                     }
                     else
                     {   //单个邮箱
-                        SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
+                        //SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
                     }
-
                 }
                 #endregion 发送邮件
 
@@ -685,7 +712,7 @@ namespace BP.WF
                 //短信
                 if (this.PushModel.Contains("SMS") == true)
                 {
-                    httpUrl = messageUrl + "?DoType=SendToWebServices";
+                    httpUrl = messageUrl + "?DoType=SMS";
                     BP.WF.Glo.HttpPostConnect(httpUrl, json);
                     //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,this.Title, this.OpenURL);
                 }

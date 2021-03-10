@@ -50,23 +50,6 @@ namespace BP.WF
         /// </summary>
         public const string CCToName = "CCToName";
         /// <summary>
-        /// 抄送给到部门
-        /// </summary>
-        public const string CCToDept = "CCToDept";
-        /// <summary>
-        /// 抄送给部门名称
-        /// </summary>
-        public const string CCToDeptName = "CCToDeptName";
-        /// <summary>
-        /// 抄送到组织编号
-        /// </summary>
-        public const string CCToOrgNo = "CCToOrgNo";
-        /// <summary>
-        /// 抄送给组织名称
-        /// </summary>
-        public const string CCToOrgName = "CCToOrgName";
-
-        /// <summary>
         /// 审核时间（回复时间）
         /// </summary>
         public const string CDT = "CDT";
@@ -108,7 +91,6 @@ namespace BP.WF
         public const string OrgNo = "OrgNo";
         #endregion
     }
-   
     /// <summary>
     /// 抄送
     /// </summary>
@@ -180,40 +162,15 @@ namespace BP.WF
                 this.SetValByKey(CCListAttr.CCTo, value);
             }
         }
-        /// <summary>
-        /// 抄送部门
-        /// </summary>
-        public string CCToDept
+        public string OrgNo
         {
             get
             {
-                return this.GetValStringByKey(CCListAttr.CCToDept);
+                return this.GetValStringByKey(CCListAttr.OrgNo);
             }
             set
             {
-                this.SetValByKey(CCListAttr.CCToDept, value);
-            }
-        }
-        public string CCToOrgNo
-        {
-            get
-            {
-                return this.GetValStringByKey(CCListAttr.CCToOrgNo);
-            }
-            set
-            {
-                this.SetValByKey(CCListAttr.CCToOrgNo, value);
-            }
-        }
-        public string CCToOrgName
-        {
-            get
-            {
-                return this.GetValStringByKey(CCListAttr.CCToOrgName);
-            }
-            set
-            {
-                this.SetValByKey(CCListAttr.CCToOrgName, value);
+                this.SetValByKey(CCListAttr.OrgNo, value);
             }
         }
         /// <summary>
@@ -231,37 +188,6 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(CCListAttr.CCToName, value);
-            }
-        }
-
-        /// <summary>
-        /// 抄送给部门名称
-        /// </summary>
-        public string CCToDeptName
-        {
-            get
-            {
-                string s = this.GetValStringByKey(CCListAttr.CCToDeptName);
-                if (DataType.IsNullOrEmpty(s))
-                    return "无";
-                return s;
-            }
-            set
-            {
-                this.SetValByKey(CCListAttr.CCToDeptName, value);
-            }
-        }
-        /// <summary>
-        /// 抄送给部门名称
-        /// </summary>
-        public string CCToDeptNameHtml
-        {
-            get
-            {
-                string s = this.GetValStringByKey(CCListAttr.CCToDeptName);
-                if (DataType.IsNullOrEmpty(s))
-                    return "无";
-                return DataType.ParseText2Html(s);
             }
         }
         /// <summary>
@@ -292,17 +218,7 @@ namespace BP.WF
                 this.SetValByKey(CCListAttr.FK_Node, value);
             }
         }
-        //public int NDFrom
-        //{
-        //    get
-        //    {
-        //        return this.GetValIntByKey(CCListAttr.NDFrom);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(CCListAttr.NDFrom, value);
-        //    }
-        //}
+       
         public Int64 WorkID
         {
             get
@@ -481,20 +397,6 @@ namespace BP.WF
             get { return this.GetValBooleanByKey(CCListAttr.InEmpWorks); }
             set { this.SetValByKey(CCListAttr.InEmpWorks, value); }
         }
-        /// <summary>
-        /// 组织编码
-        /// </summary>
-        public string OrgNo
-        {
-            get
-            {
-                return this.GetValStringByKey(CCListAttr.OrgNo);
-            }
-            set
-            {
-                this.SetValByKey(CCListAttr.OrgNo, value);
-            }
-        }
         #endregion
 
         #region 构造函数
@@ -539,11 +441,10 @@ namespace BP.WF
                 map.AddTBString(CCListAttr.CCTo, null, "抄送给", true, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToName, null, "抄送给(人员名称)", true, false, 0, 50, 10, true);
 
-                map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
-                map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
+                //map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
+                //map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
 
-                map.AddTBString(CCListAttr.CCToOrgNo, null, "抄送到组织", true, false, 0, 50, 10, true);
-                map.AddTBString(CCListAttr.CCToOrgName, null, "抄送给组织名称", true, false, 0, 600, 10, true);
+                map.AddTBString(CCListAttr.OrgNo, null, "组织", true, false, 0, 50, 10, true);
 
                 map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
                 map.AddTBDateTime(CCListAttr.ReadDT, null, "阅读时间", true, false);
@@ -563,6 +464,12 @@ namespace BP.WF
             }
         }
         #endregion
+
+        protected override bool beforeInsert()
+        {
+            this.OrgNo = BP.Web.WebUser.OrgNo;
+            return base.beforeInsert();
+        }
     }
     /// <summary>
     /// 抄送

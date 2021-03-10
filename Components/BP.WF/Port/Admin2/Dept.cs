@@ -15,6 +15,7 @@ namespace BP.WF.Port.Admin2
     /// </summary>
     public class DeptAttr : BP.Port.DeptAttr
     {
+
     }
     /// <summary>
     /// 部门
@@ -132,7 +133,7 @@ namespace BP.WF.Port.Admin2
 
             //检查是否有该用户.
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = adminer;
+            emp.UserID = adminer;
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户编号错误:" + adminer;
 
@@ -160,13 +161,13 @@ namespace BP.WF.Port.Admin2
                 org.ParentName = parentDept.Name;
 
                 //设置管理员信息.
-                org.Adminer = emp.No;
+                org.Adminer = emp.UserID;
                 org.AdminerName = emp.Name;
                 org.DirectInsert();
 
                 //增加到管理员.
                 OrgAdminer oa = new OrgAdminer();
-                oa.FK_Emp = emp.No;
+                oa.FK_Emp = emp.UserID;
                 oa.OrgNo = this.No;
                 oa.DirectDelete();
                 oa.DirectInsert();
@@ -210,7 +211,7 @@ namespace BP.WF.Port.Admin2
                             DataSet ds = fl.GetFlow(fileName);
                             ds.WriteXml(fileName);
 
-                            var flowNew = BP.WF.Flow.DoLoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
+                            var flowNew = BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
                             flowNew.OrgNo = this.No;
                             flowNew.DirectUpdate();
                         }
@@ -247,7 +248,7 @@ namespace BP.WF.Port.Admin2
 
                     //查询出来模版，开始执行clone.
                     BP.Sys.MapDatas mds = new BP.Sys.MapDatas();
-                    mds.Retrieve(BP.Sys.MapDataAttr.FK_FrmSort, sort.No);
+                    mds.Retrieve(BP.Sys.MapDataAttr.FK_FormTree, sort.No);
                     foreach (BP.Sys.MapData frm in mds)
                     {
                         try
@@ -329,7 +330,7 @@ namespace BP.WF.Port.Admin2
 
             //检查是否有该用户.
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = adminer;
+            emp.UserID = adminer;
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户编号错误:" + adminer;
 
@@ -357,13 +358,13 @@ namespace BP.WF.Port.Admin2
             org.ParentName = parentDept.Name;
 
             //设置管理员信息.
-            org.Adminer = emp.No;
+            org.Adminer = emp.UserID;
             org.AdminerName = emp.Name;
             org.Insert();
 
             //增加到管理员.
             OrgAdminer oa = new OrgAdminer();
-            oa.FK_Emp = emp.No;
+            oa.FK_Emp = emp.UserID;
             oa.OrgNo = this.No;
             oa.Insert();
 

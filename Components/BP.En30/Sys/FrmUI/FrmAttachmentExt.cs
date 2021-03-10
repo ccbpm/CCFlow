@@ -21,7 +21,7 @@ namespace BP.Sys.FrmUI
                 UAC uac = new UAC();
                 uac.IsView = true;
                 uac.IsInsert = false;
-                if (BP.Web.WebUser.No.Equals("admin") 
+                if (BP.Web.WebUser.No.Equals("admin")
                     || BP.Web.WebUser.IsAdmin == true)
                 {
                     uac.IsUpdate = true;
@@ -298,7 +298,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(FrmAttachmentAttr.Exts, value);
             }
         }
-       
+
         /// <summary>
         /// 附件标识
         /// </summary>
@@ -308,7 +308,7 @@ namespace BP.Sys.FrmUI
             {
                 return this.GetValStringByKey(FrmAttachmentAttr.NoOfObj);
             }
-           
+
         }
         /// <summary>
         /// Y
@@ -541,16 +541,14 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBInt(FrmAttachmentAttr.NumOfUpload, 0, "最小上传数量", true, false);
                 map.SetHelperAlert("NumOfUpload", "如果为0则标识必须上传. \t\n用户上传的附件数量低于指定的数量就不让保存.");
-               
+
                 map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 99, "最大上传数量", true, false);
                 map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 10240, "附件最大限制(KB)", true, false);
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
                   "@0=不用校验@1=不能为空@2=每个类别下不能为空");
 
-                //for tianye group 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
-
 
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他，也可以设置一个SQL，比如select Name FROM Port_Dept  \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
@@ -644,11 +642,56 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "重命名标记";
+                rm.ClassMethodName = this.ToString() + ".ResetAthName";
+                rm.HisAttrs.AddTBString("F", null, "命名后的标记", true, false, 0, 100, 50);
+                rm.RefMethodType = RefMethodType.Func;
+                string msg = "说明：";
+                msg += "\t\n 1. 每个附件都有一个标记比如，Ath1,Ath2, FJ. ";
+                msg += "\t\n 2. 这个标记在一个表单中不能重复，这个标记也叫附件的小名。";
+                msg += "\t\n 3. 在父子流程，或者多表单流程中，这个标记可以用于继承附件的展示。";
+                msg += "\t\n 4. 比如：一个父流程的附件组件的标记为Ath1, 一个子流程的表单的附件表单要看到这个附件信息，就需要把两个小名保持一致。";
+                rm.Warning = msg;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 重命名表单标记.
+        /// </summary>
+        /// <param name="fname"></param>
+        /// <returns></returns>
+        public string ResetAthName(string fname)
+        {
+            //检查一下是否有重名的？
+            FrmAttachments ens = new FrmAttachments();
+            ens.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData);
+            foreach (FrmAttachment item in ens)
+            {
+                if (item.NoOfObj.Equals(fname) == true)
+                    return "err@修改失败，该表单中已经存在该标记了.";
+            }
+
+            //修改模版.
+            string myPKNew = this.FK_MapData + "_" + fname;
+            string sql = "UPDATE Sys_FrmAttachment SET MyPK='"+ myPKNew + "', NoOfObj='"+fname+"' WHERE MyPK='"+this.MyPK+"' ";
+            DBAccess.RunSQL(sql);
+
+            //修改分组信息，不然就丢失了.
+            sql = "UPDATE Sys_GroupField SET CtrlID='" + myPKNew + "'  WHERE CtrlID='" + this.MyPK + "' ";
+            DBAccess.RunSQL(sql);
+
+            //修改：数据库.
+            sql = "UPDATE Sys_FrmAttachmentDB SET NoOfObj='"+ fname + "',FK_FrmAttachment='"+ myPKNew + "'  WHERE FK_FrmAttachment='" + this.MyPK+"'";
+            DBAccess.RunSQL(sql);
+
+            return "执行成功: 您需要关闭表单设计器，然后重新进入。";
+        }
 
         public string DtlOfAth()
         {
@@ -670,7 +713,7 @@ namespace BP.Sys.FrmUI
             }
             catch (Exception ex)
             {
-                return "err@连接失败:" + ex.Message+" ,配置信息请参考,系统配置文件.";
+                return "err@连接失败:" + ex.Message + " ,配置信息请参考,系统配置文件.";
             }
         }
         /// <summary>
@@ -714,8 +757,21 @@ namespace BP.Sys.FrmUI
                 this.AthUploadWay = AthUploadWay.Interwork;
 
 
+            //如果是pworkid. 就不让其删除或者上传. 
+            if (this.HisCtrlWay == AthCtrlWay.PWorkID
+                || this.HisCtrlWay == AthCtrlWay.PWorkID
+                || this.HisCtrlWay == AthCtrlWay.P2WorkID
+                || this.HisCtrlWay == AthCtrlWay.P3WorkID
+                || this.HisCtrlWay == AthCtrlWay.RootFlowWorkID
+                )
+            {
+                this.SetValByKey(FrmAttachmentAttr.DeleteWay, 0);
+                this.SetValByKey(FrmAttachmentAttr.IsUpload, 0);
+            }
+
+
             #region 处理分组.
-                //更新相关的分组信息.
+            //更新相关的分组信息.
             if (this.IsVisable == true && this.FK_Node == 0)
             {
                 GroupField gf = new GroupField();
@@ -775,6 +831,7 @@ namespace BP.Sys.FrmUI
                 gf.Lab = this.Name;
                 gf.Idx = 0;
                 gf.Insert(); //插入.
+
             }
             base.afterInsert();
         }
@@ -786,8 +843,13 @@ namespace BP.Sys.FrmUI
             ath.RetrieveFromDBSources();
             ath.IsToHeLiuHZ = this.IsToHeLiuHZ;
             ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
+
+            //强制设置,保存到ftp服务器上.
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                ath.AthSaveWay = AthSaveWay.FTPServer;
+
             ath.Update();
-          
+
 
             //判断是否是字段附件
             MapAttr mapAttr = new MapAttr();
@@ -809,8 +871,8 @@ namespace BP.Sys.FrmUI
         /// </summary>
         protected override void afterDelete()
         {
-            GroupFields gfs= new GroupFields();
-            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK+"%");
+            GroupFields gfs = new GroupFields();
+            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK + "%");
             gfs.Delete();
             //gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
@@ -819,9 +881,9 @@ namespace BP.Sys.FrmUI
             attr.MyPK = this.MyPK;
             if (attr.RetrieveFromDBSources() != 0)
             {
-                attr.Delete();  
+                attr.Delete();
             }
-            
+
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);

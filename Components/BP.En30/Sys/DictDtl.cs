@@ -33,7 +33,7 @@ namespace BP.Sys
         /// <summary>
         /// 列选择
         /// </summary>
-        //public const string OrgNo = "OrgNo";
+        public const string OrgNo = "OrgNo";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -161,7 +161,7 @@ namespace BP.Sys
                 map.AddTBString(DictDtlAttr.ParentNo, null, "父节点ID", true, false, 0, 200, 20);
 
                 //用户注销组织的时候，方便删除数据.
-                //map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+                map.AddTBString(DictDtlAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
                 map.AddTBInt(DictDtlAttr.Idx, 0, "顺序号", false, false);
                 this._enMap = map;
                 return this._enMap;

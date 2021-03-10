@@ -244,7 +244,7 @@ namespace BP.WF.DTS
                         ds.ReadXml(f);
 
                         MapData md = MapData.ImpMapData(ds);
-                        md.FK_FrmSort = fs.No;
+                        md.FK_FormTree = fs.No;
                         md.Update();
                     }
                     catch (Exception ex)
@@ -296,7 +296,7 @@ namespace BP.WF.DTS
                 foreach (string filePath in fls)
                 {
                     msg += "\t\n@开始调度流程模板文件:" + filePath;
-                    Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
+                    Flow myflow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
                     msg += "\t\n@流程:" + myflow.Name + "装载成功。";
 
                     System.IO.FileInfo info = new System.IO.FileInfo(filePath);

@@ -46,14 +46,15 @@ namespace BP.CCBill
 
             gb.WorkID = DBAccess.GenerOID("CCBill");
             gb.BillState = BillState.None; //初始化状态.
-            gb.Starter = WebUser.No;
-            gb.StarterName = WebUser.Name;
+            gb.Starter = BP.Web.WebUser.No;
+            gb.StarterName = BP.Web.WebUser.Name;
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
 
             if (DataType.IsNullOrEmpty(billNo) == false)
                 gb.BillNo = billNo ; //BillNo
-
+            gb.FK_Dept = BP.Web.WebUser.FK_Dept;
+            gb.DeptName = BP.Web.WebUser.FK_DeptName;
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
             gb.RDT = DataType.CurrentDataTime;
             gb.NDStep = 1;
@@ -97,7 +98,6 @@ namespace BP.CCBill
             rpt.SetValByKey("BillNo", gb.BillNo);
             rpt.OID = gb.WorkID;
             rpt.InsertAsOID(gb.WorkID);
-
 
             return gb.WorkID;
         }

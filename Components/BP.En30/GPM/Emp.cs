@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Text.RegularExpressions;
 using BP.DA;
 using BP.En;
 using BP.Port;
@@ -331,7 +332,6 @@ namespace BP.GPM
             return SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
 
-
         public string DoEmpDepts()
         {
             return SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
@@ -354,6 +354,13 @@ namespace BP.GPM
             //增加拼音，以方便查找.
             if (DataType.IsNullOrEmpty(this.Name) == true)
                 throw new Exception("err@名称不能为空.");
+
+            //邮箱格式
+            Regex r = new Regex("^\\s*([A-Za-z0-9_-]+(\\.\\w+)*@(\\w+\\.)+\\w{2,5})\\s*$");
+
+            if (r.IsMatch(this.Email) == false)
+                throw new Exception("邮箱格式不正确.");
+
 
             string pinyinQP = DataType.ParseStringToPinyin(this.Name).ToLower();
             string pinyinJX = DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
@@ -390,9 +397,6 @@ namespace BP.GPM
                 stas += "@" + dept.NameOfPath + "|" + sta.Name;
                 depts += "@" + dept.NameOfPath;
             }
-
-          
-
             return base.beforeUpdateInsertAction();
         }
 
@@ -408,6 +412,13 @@ namespace BP.GPM
             else
                 sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
             DBAccess.RunSQL(sql);
+
+            DeptEmp deptEmp = new DeptEmp();
+            deptEmp.FK_Dept = this.FK_Dept;
+            deptEmp.FK_Emp = this.No;
+            deptEmp.MyPK = this.FK_Dept + "_" + this.No;
+            if (deptEmp.IsExit("MyPK", deptEmp.MyPK) == false)
+                deptEmp.Insert();
 
             //修改Port_Emp中的缓存
             BP.Port.Emp emp = new BP.Port.Emp(this.No);

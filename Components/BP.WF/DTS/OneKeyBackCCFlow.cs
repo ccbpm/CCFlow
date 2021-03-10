@@ -160,7 +160,7 @@ namespace BP.WF.DTS
             mds.RetrieveAllFromDBSource();
             foreach (MapData md in mds)
             {
-                if (md.FK_FrmSort.Length < 2)
+                if (md.FK_FormTree.Length < 2)
                     continue;
 
                 SysFormTree fs = new SysFormTree();

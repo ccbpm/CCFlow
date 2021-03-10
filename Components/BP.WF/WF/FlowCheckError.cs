@@ -572,7 +572,7 @@ namespace BP.WF
                 //子线程节点
                 if (nd.HisNodeWorkType == NodeWorkType.SubThreadWork)
                 {
-                    if (nd.CondModel == DirCondModel.ByUserSelected)
+                    if (nd.CondModel != DirCondModel.ByLineCond)
                     {
                         Nodes toNodes = nd.HisToNodes;
                         if (toNodes.Count == 1)
@@ -1028,7 +1028,7 @@ namespace BP.WF
                 attr.FK_MapData = md.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.KeyOfEn = GERptAttr.FlowDaySpan; 
-                attr.Name = "跨度(天)";
+                attr.Name = "流程时长(天)";
                 attr.MyDataType = DataType.AppFloat;
                 attr.UIContralType = UIContralType.TB;
                 attr.LGType = FieldTypeS.Normal;

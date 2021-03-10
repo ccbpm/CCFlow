@@ -96,7 +96,7 @@ namespace BP.WF.DTS
                     string filePath = fl.GenerFlowXmlTemplete();
 
                     //作为一个新的流程编号，导入该流程树的子节点下.
-                    BP.WF.Flow.DoLoadFlowTemplate(incNo,filePath, ImpFlowTempleteModel.AsNewFlow);
+                    BP.WF.Template.TemplateGlo.LoadFlowTemplate(incNo,filePath, ImpFlowTempleteModel.AsNewFlow);
 
                     infos += "@模版:" + fl.Name + " 标记:" + fl.FlowMark+" 已经发布到子公司:"+incName;
                 }

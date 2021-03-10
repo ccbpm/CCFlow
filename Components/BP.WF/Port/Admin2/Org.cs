@@ -240,13 +240,13 @@ namespace BP.WF.Port.Admin2
 
 
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = adminer;
+            emp.UserID = adminer;
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@管理员编号错误.";
 
             string old = this.Adminer;
 
-            this.Adminer = emp.No;
+            this.Adminer = emp.UserID;
             this.AdminerName = emp.Name;
             this.Update();
 
@@ -257,7 +257,7 @@ namespace BP.WF.Port.Admin2
             oa.Delete(OrgAdminerAttr.FK_Emp, old, OrgAdminerAttr.OrgNo, this.No);
 
             //插入到管理员.
-            oa.FK_Emp = emp.No;
+            oa.FK_Emp = emp.UserID;
             oa.Save();
 
             //检查超级管理员是否存在？
@@ -306,6 +306,7 @@ namespace BP.WF.Port.Admin2
             if (fs.RetrieveFromDBSources() == 1)
             {
                 fs.OrgNo = this.No;
+                fs.Name = "流程树";
                 fs.DirectUpdate();
             }
             else
@@ -317,6 +318,7 @@ namespace BP.WF.Port.Admin2
                 //设置流程树权限.
                 fs.No = this.No;
                 fs.Name = this.Name;
+                fs.Name = "流程树";
                 fs.ParentNo = root.No;
                 fs.OrgNo = this.No;
                 fs.Idx = 999;
@@ -335,7 +337,6 @@ namespace BP.WF.Port.Admin2
                 en.OrgNo = this.No;
                 en.Domain = "ShouWen";
                 en.DirectUpdate();
-
 
                 en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
                 en.Name = "业务流程";
@@ -361,6 +362,7 @@ namespace BP.WF.Port.Admin2
             if (ft.RetrieveFromDBSources() == 0)
             {
                 ft.Name = this.Name;
+                ft.Name = "表单树";
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
@@ -382,6 +384,7 @@ namespace BP.WF.Port.Admin2
             else
             {
                 ft.Name = this.Name;
+                ft.Name = "表单树"; //必须这个命名，否则找不到。
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
@@ -416,7 +419,7 @@ namespace BP.WF.Port.Admin2
                 subDept.Update();
 
                 //递归调用.
-                SetSubDeptOrgNo(no);
+                SetSubDeptOrgNo(subDept.No);
             }
         }
         /// <summary>

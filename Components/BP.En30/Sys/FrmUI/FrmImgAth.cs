@@ -252,9 +252,26 @@ namespace BP.Sys.FrmUI
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
-            MapAttr attr = new MapAttr(this.FK_MapData,imgAth.CtrlID);
-            attr.GroupID = this.GroupID;
-            attr.DirectUpdate();
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.FK_MapData + "_" + imgAth.CtrlID;
+            if (attr.RetrieveFromDBSources() == 0)
+            {
+                attr.FK_MapData = this.FK_MapData;
+                attr.Name = this.Name;
+                attr.KeyOfEn = imgAth.CtrlID;
+                attr.MyDataType = DataType.AppString;
+                attr.UIContralType = UIContralType.FrmImgAth;
+                attr.GroupID = this.GroupID;
+                attr.IsEnableInAPP = true;
+                attr.UIVisible = true;
+                attr.DirectInsert();
+            }
+            else
+            {
+                attr.GroupID = this.GroupID;
+                attr.DirectUpdate();
+            }
+           
 
             base.afterInsertUpdateAction();
         }

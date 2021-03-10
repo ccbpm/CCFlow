@@ -60,21 +60,21 @@ namespace BP.WF.HttpHandler
             string pass = this.GetRequestVal("TB_PW");
 
             BP.Port.Emp emp = new Emp();
-            emp.No = userNo;
+            emp.UserID = userNo;
             if (emp.RetrieveFromDBSources() == 0)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr +"userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr +"userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (no == null)
                         return "err@用户名或者密码错误.";
 
-                    emp.No = no;
+                    emp.UserID = no;
                     int i = emp.RetrieveFromDBSources();
                     if (i == 0)
                         return "err@用户名或者密码错误.";
@@ -89,7 +89,7 @@ namespace BP.WF.HttpHandler
                 return "err@用户名或者密码错误.";
 
             //调用登录方法.
-            BP.WF.Dev2Interface.Port_Login(emp.No);
+            BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
             return "登录成功.";
         }
@@ -110,7 +110,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath = SystemConfig.PathOfWebApp + "/DataUser/UserIcon/";
+            string userPath = SystemConfig.PathOfWebApp + "DataUser/UserIcon/";
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {
@@ -219,12 +219,11 @@ namespace BP.WF.HttpHandler
         public string DB_GenerReturnWorks()
         {
             /* 如果工作节点退回了*/
-            /* 如果工作节点退回了*/
             BP.WF.ReturnWorks rws = new BP.WF.ReturnWorks();
             rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node, BP.WF.ReturnWorkAttr.WorkID, this.WorkID, BP.WF.ReturnWorkAttr.RDT);
             StringBuilder append = new StringBuilder();
             append.Append("[");
-
+            
             return BP.Tools.Json.ToJson(rws.ToDataTableField());
         }
 

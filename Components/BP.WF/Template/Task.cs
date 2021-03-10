@@ -189,8 +189,8 @@ namespace BP.WF.Template
 	/// <summary>
 	/// 任务
 	/// </summary>
-	public class Tasks: Entities
-	{
+	public class Tasks: EntitiesMyPK
+    {
 		#region 方法
 		/// <summary>
 		/// 得到它的 Entity 

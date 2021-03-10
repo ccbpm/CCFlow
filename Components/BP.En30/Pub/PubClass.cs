@@ -99,7 +99,7 @@ namespace BP.Pub
             int currX = 0;
             int currY = 0;
             FrmLab lab = new FrmLab();
-            lab.Text = md.Name;
+            lab.Lab = md.Name;
             lab.FontSize = 20;
             lab.X = 200;
             currY += 30;
@@ -130,7 +130,7 @@ namespace BP.Pub
                 lab = new FrmLab();
                 lab.X = 0;
                 lab.Y = currY;
-                lab.Text = gf.Lab;
+                lab.Lab = gf.Lab;
                 lab.FK_MapData = fk_mapdata;
                 lab.FontWeight = "Bold";
                 lab.MyPK = "Lab" + keyID + i.ToString();
@@ -170,7 +170,7 @@ namespace BP.Pub
                         lab = new FrmLab();
                         lab.X = lin.X1 + padingLeft;
                         lab.Y = currY;
-                        lab.Text = attr.Name;
+                        lab.Lab = attr.Name;
                         lab.FK_MapData = fk_mapdata;
                         lab.MyPK = "Lab" + keyID + i.ToString() + idx;
                         lab.Insert();
@@ -197,7 +197,7 @@ namespace BP.Pub
                         lab = new FrmLab();
                         lab.X = tableW / 2 + padingLeft;
                         lab.Y = currY;
-                        lab.Text = attr.Name;
+                        lab.Lab = attr.Name;
                         lab.FK_MapData = fk_mapdata;
                         lab.MyPK = "Lab" + keyID + i.ToString() + idx;
                         lab.Insert();

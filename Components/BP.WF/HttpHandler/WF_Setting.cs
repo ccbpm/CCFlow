@@ -20,6 +20,15 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Setting : DirectoryPageBase
     {
+        public string UpdateEmpNo()
+        {
+            BP.Port.Emp emp = new Emp(WebUser.No);
+            emp.Email = this.GetRequestVal("Email");
+            emp.Tel = this.GetRequestVal("Tel");
+            emp.Name = this.GetRequestVal("Name");
+            emp.Update();
+            return "修改成功.";
+        }
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -55,7 +64,7 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", WebUser.Name);
 
             BP.Port.Emp emp = new Emp();
-            emp.No = WebUser.No;
+            emp.UserID = WebUser.No;
             emp.Retrieve();
 
             //部门名称.
@@ -100,7 +109,6 @@ namespace BP.WF.HttpHandler
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
             ht.Add("Tel", emp.Tel);
             ht.Add("Email", emp.Email);
-            ht.Add("Author", wfemp.Author);
 
             return BP.Tools.Json.ToJson(ht);
         }
@@ -115,21 +123,16 @@ namespace BP.WF.HttpHandler
             ht.Remove(BP.WF.Port.WFEmpAttr.StartFlows); //移除这一列不然无法形成json.
             return emp.ToJson();
         }
-        public string Author_Save()
-        {
-            BP.WF.Port.WFEmp emp = new Port.WFEmp(BP.Web.WebUser.No);
-            emp.Author = this.GetRequestVal("Author");
-            emp.AuthorDate = this.GetRequestVal("AuthorDate");
-            emp.AuthorWay = this.GetRequestValInt("AuthorWay");
-            emp.Update();
-            return "保存成功";
-        }
 
         #region 图片签名.
         public string Siganture_Init()
         {
             if (BP.Web.WebUser.NoOfRel == null)
                 return "err@登录信息丢失";
+
+            //首先判断是否存在，如果不存在就生成一个.
+            BP.WF.DTS.GenerSiganture.GenerIt(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+
 
             Hashtable ht = new Hashtable();
             ht.Add("No", BP.Web.WebUser.No);
@@ -146,7 +149,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + empNo + ".jpg";
+                string tempFile = SystemConfig.PathOfWebApp + "DataUser/Siganture/" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -187,7 +190,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/UserIcon/" + empNo + ".png";
+                string tempFile = SystemConfig.PathOfWebApp + "DataUser/UserIcon/" + empNo + ".png";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -217,7 +220,16 @@ namespace BP.WF.HttpHandler
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            //@hongyan.
+            if (dt.Rows.Count == 0)
+            {
+                string sql = "SELECT a.No,a.Name,B.NameOfPath, '1' as CurrentDept FROM ";
+                sql += " Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No  AND A.No='"+BP.Web.WebUser.No+"'";
+                dt = DBAccess.RunSQLReturnTable(sql);
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle 
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -265,7 +277,14 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string sql = "UPDATE Port_Emp Set fk_dept='" + deptNo + "' WHERE no='" + WebUser.No + "'";
+                string sql = "";
+
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE UserID='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
+                else
+                    sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE No='" + WebUser.No + "'";
+
+
                 DBAccess.RunSQL(sql);
                 BP.WF.Dev2Interface.Port_Login(WebUser.No);
             }
@@ -329,34 +348,6 @@ namespace BP.WF.HttpHandler
 
             return "设置成功";
         }
-        public string UpdateEmpNo()
-        {
-            try
-            {
-                BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
-                emp.RetrieveFromDBSources();
 
-                emp.SetValByKey(EmpAttr.Tel, this.GetRequestVal("Tel"));
-                emp.SetValByKey(EmpAttr.Name, this.GetRequestVal("Name"));
-                emp.SetValByKey(EmpAttr.Email, this.GetRequestVal("Email"));
-                emp.Update();
-
-                String dbstr = SystemConfig.AppCenterDBVarStr;
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp Set Tel=" + dbstr + "Tel,Name=" + dbstr + "Name,Email=" + dbstr + "Email where No=" + dbstr + "No";
-                ps.Add("Tel", this.GetRequestVal("Tel"));
-                ps.Add("Name", this.GetRequestVal("Name"));
-                ps.Add("Email", this.GetRequestVal("Email"));
-                ps.Add("No", WebUser.No);
-                BP.DA.DBAccess.RunSQL(ps);
-
-                return "修改成功。";
-            }
-            catch (Exception ex)
-            {
-                return "修改失败。";
-            }
-
-        }
     }
 }

@@ -68,10 +68,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string FlowType = "FlowType";
         /// <summary>
-        /// 平均用天
-        /// </summary>
-        public const string AvgDay = "AvgDay";
-        /// <summary>
         /// 流程运行类型
         /// </summary>
         public const string FlowRunWay = "FlowRunWay";
@@ -144,7 +140,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程表单类型
         /// </summary>
-        public const string FlowFrmType = "FlowFrmType";
+        public const string FlowFrmModel = "FlowFrmModel";
         /// <summary>
         /// 流程数据存储模式
         /// </summary>
@@ -174,9 +170,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string HistoryFields = "HistoryFields";
         /// <summary>
-        /// 是否是客户参与流程
+        /// 外部客户参与流程规则
         /// </summary>
-        public const string IsGuestFlow = "IsGuestFlow";
+        public const string GuestFlowRole = "GuestFlowRole";
         /// <summary>
         /// 单据编号格式
         /// </summary>
@@ -205,6 +201,10 @@ namespace BP.WF.Template
         /// 是否是MD5
         /// </summary>
         public const string IsMD5 = "IsMD5";
+        /// <summary>
+        /// 是否是数据加密
+        /// </summary>
+        public const string IsJM = "IsJM";
         public const string CCStas = "CCStas";
         public const string Note = "Note";
         /// <summary>
@@ -220,6 +220,10 @@ namespace BP.WF.Template
         public const string IsTimeBaseEnable = "IsTimeBaseEnable";
         public const string IsTableEnable = "IsTableEnable";
         public const string IsOPEnable = "IsOPEnable";
+        /// <summary>
+        /// 排序方式
+        /// </summary>
+        public const string TrackOrderBy = "TrackOrderBy";
         #endregion 基本属性
 
         #region 发起限制规则.
@@ -313,6 +317,10 @@ namespace BP.WF.Template
         /// OrgNo
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        public const string RDT = "RDT";
         #endregion 父子流程
 
         #region 数据同步方式.
@@ -439,7 +447,59 @@ namespace BP.WF.Template
         /// <summary>
         /// 按照设置的天数
         /// </summary>
-        ByDays
+        ByDays,
+        /// <summary>
+        /// 按照时间规则计算
+        /// </summary>
+        TimeDT,
+        /// <summary>
+        /// 为子流程时的规则
+        /// </summary>
+        ChildFlowDT,
+        /// <summary>
+        /// 按照发起字段不能重复规则
+        /// </summary>
+        AttrNonredundant
+    }
+    //方向条件控制
+    public enum CondModel
+    {
+        /// <summary>
+        /// 主观选择：下拉框模式
+        /// </summary>
+         DropDown = 0,
+        /// <summary>
+        /// 主观选择：按钮模式
+        /// </summary>
+         Radio = 1,
+        /// <summary>
+        /// 由连接线控制
+        /// </summary>
+         Line = 2,
+        /// <summary>
+        /// 发送后手工选择到达节点与接受人
+        /// </summary>
+         ManuallySelect = 3
+    }
+    ///自动发起
+    public enum AutoStart
+    {
+        /// <summary>
+        /// 手工启动（默认）
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 按照指定的人员
+        /// </summary>
+        ByDesignee = 1,
+        /// <summary>
+        /// 数据集按时启动
+        /// </summary>
+        ByTineData = 2,
+        /// <summary>
+        /// 触发试启动
+        /// </summary>
+        ByTrigger = 3
     }
     /// <summary>
     /// 流程发起导航方式
@@ -455,7 +515,7 @@ namespace BP.WF.Template
         /// </summary>
         BySQLOne = 1,
         /// <summary>
-        /// 按系统的URL-(子父流程)多条模式
+        /// 按系统的URL-(子父流程)多条模式.
         /// </summary>
         SubFlowGuide = 2,
         /// <summary>
@@ -477,15 +537,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 按自定义的Url
         /// </summary>
-        BySelfUrl = 10,        
+        BySelfUrl = 10,
         /// <summary>
         /// 按照用户选择的表单.
         /// </summary>
-        ByFrms=11,
+        ByFrms = 8,
         /// <summary>
         /// 父子流程模式
         /// </summary>
-        ByParentFlowModel=12
+        ByParentFlowModel = 9
     }
     /// <summary>
     /// 数据同步方案

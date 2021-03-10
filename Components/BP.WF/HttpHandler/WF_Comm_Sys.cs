@@ -354,7 +354,7 @@ namespace BP.WF.HttpHandler
             string expFileName = "all-wcprops,dir-prop-base,entries";
             string expDirName = ".svn";
 
-            string pathDir = SystemConfig.PathOfData + "\\JSLib\\";
+            string pathDir = SystemConfig.PathOfData + "JSLib\\";
 
             string html = "";
             html += "<fieldset>";
@@ -383,7 +383,7 @@ namespace BP.WF.HttpHandler
             }
             html += "</fieldset>";
 
-            pathDir = SystemConfig.PathOfDataUser + "\\JSLib\\";
+            pathDir = SystemConfig.PathOfDataUser + "JSLib\\";
             html += "<fieldset>";
             html += "<legend>" + "用户自定义函数. 位置:" + pathDir + "</legend>";
 

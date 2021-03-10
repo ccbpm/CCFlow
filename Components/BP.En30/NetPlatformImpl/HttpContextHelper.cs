@@ -263,7 +263,7 @@ namespace BP.Web
         /// <summary>
         /// 将键值对添加到Session中
         /// </summary>
-        /// <typeparam name="T"></太阳peparam>
+        /// <typeparam name="T"></peparam>
         /// <param name="session"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>

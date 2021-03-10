@@ -39,7 +39,7 @@ namespace BP.WF
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
-                nd.FID = fid;
+
                 Work wk = nd.HisWork;
                 wk.OID = workID;
                 wk.RetrieveFromDBSources();
@@ -74,12 +74,13 @@ namespace BP.WF
 
                 //这两个变量在累加表单用到.
                 FrmNode frmNode = new FrmNode();
+                Flow flow = new Flow(fk_flow);
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree
-                    || nd.HisFormType == NodeFormType.FoolTruck)
+                    || nd.HisFormType == NodeFormType.FoolTruck
+                    || flow.FlowDevModel == FlowDevModel.JiJian)
                 {
-                    frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,
-                    FrmNodeAttr.FK_Node, nd.NodeID);
+                    frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID,FrmNodeAttr.FK_Node, nd.NodeID);
 
                     if (DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.FrmSln != 0)
                     {
@@ -187,10 +188,11 @@ namespace BP.WF
                     fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
                     fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
                 }
+
                 bool isHaveSubFlow = false;
                 #region 没有审核组件分组就增加上审核组件分组. 
                 if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == true ||
-                    (nd.HisFormType == NodeFormType.RefOneFrmTree
+                    ((nd.HisFormType == NodeFormType.RefOneFrmTree || flow.FlowDevModel == FlowDevModel.JiJian)
                     && DataType.IsNullOrEmpty(frmNode.MyPK) == false))
                 {
                     bool isHaveFWC = false;
@@ -213,6 +215,9 @@ namespace BP.WF
 
                             if (cType.Equals("FWC") == true)
                                 isHave = true;
+                            if (cType.Equals("SubFlow") == true)
+                                isHaveSubFlow = true;
+
                         }
 
                         if (isHave == false)
@@ -238,12 +243,11 @@ namespace BP.WF
                     }
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
-
                 #region 增加父子流程组件
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree &&DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
                 {
                     DataTable gf = myds.Tables["Sys_GroupField"];
-
+                   
                     if (isHaveSubFlow == false)
                     {
                         DataRow dr = gf.NewRow();
@@ -265,8 +269,8 @@ namespace BP.WF
                         refFnc.Update();
                     }
                 }
-
-
+                   
+               
                 #endregion 增加父子流程组件
 
                 //把审核组件信息，放入ds.
@@ -557,8 +561,8 @@ namespace BP.WF
                 #region 把主从表数据放入里面.
                 //.工作数据放里面去, 放进去前执行一次装载前填充事件.
 
-                //重设默认值.
-                if (isView == false)
+                //重设默认值. @yln
+                if (isView == false && (DataType.IsNullOrEmpty(frmNode.MyPK) == true || (DataType.IsNullOrEmpty(frmNode.MyPK)==false && frmNode.FrmSln != FrmSln.Readonly)))
                     wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
                 //URL参数替换
@@ -611,11 +615,7 @@ namespace BP.WF
                 if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
-                    GERpt rpt = null;
-                    if (fid!=0)
-                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", fid);
-                    else
-                        rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
+                    GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
                     rpt.Copy(wk);
 
                     DataTable rptdt = rpt.ToDataTableField("MainTable");
@@ -875,6 +875,12 @@ namespace BP.WF
                             dtMain.Rows[0][frmNode.BillNoField] = wk.GetValStringByKey("BillNo");
                         }
                     }
+
+                    if (fnc.FWCSta != FrmWorkCheckSta.Disable)
+                    {
+                        
+                    }
+
                 }
                 #endregion 增加流程节点表单绑定信息.
 

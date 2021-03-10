@@ -35,6 +35,20 @@ namespace BP.Sys
     {
         #region 实现基本的方方法
         /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(SysEnumMainAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumMainAttr.OrgNo, value);
+            }
+        }
+        /// <summary>
         /// 配置的值
         /// </summary>
         public string CfgVal
@@ -134,12 +148,7 @@ namespace BP.Sys
             }
             return base.beforeDelete();
         }
-        /// <summary>
-        /// 插入之前处理.
-        /// </summary>
-        protected override void afterInsert()
-        {
-        }
+        
         /// <summary>
         /// Map
         /// </summary>
@@ -173,6 +182,16 @@ namespace BP.Sys
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+
+
+            return base.beforeUpdateInsertAction();
         }
         #endregion
 

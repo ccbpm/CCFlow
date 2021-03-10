@@ -234,7 +234,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.Port.Emp emp = new Emp(userNo);
 
-                BP.WF.Dev2Interface.Port_Login(emp.No);
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
                 return ".";
             }
             catch (Exception ex)
@@ -260,7 +260,7 @@ namespace BP.WF.HttpHandler
                     pass = this.GetRequestVal("TB_Pass");
 
                 BP.Port.Emp emp = new Emp();
-                emp.No = userNo;
+                emp.UserID = userNo;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
@@ -292,6 +292,8 @@ namespace BP.WF.HttpHandler
                         int i = emp.RetrieveFromDBSources();
                         if (i == 0)
                             return "err@用户名或者密码错误.";
+
+
                     }
                     else
                     {
@@ -303,12 +305,12 @@ namespace BP.WF.HttpHandler
                     return "err@用户名或者密码错误.";
 
                 //调用登录方法.
-                BP.WF.Dev2Interface.Port_Login(emp.No);
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
                 if (DBAccess.IsView("Port_Emp") == false)
                 {
                     string sid = DBAccess.GenerGUID();
-                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
+                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.UserID + "'");
                     WebUser.SID = sid;
                     emp.SID = sid;
                 }

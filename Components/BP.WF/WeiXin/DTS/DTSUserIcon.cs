@@ -55,14 +55,14 @@ namespace BP.GPM.WeiXin
                 Directory.CreateDirectory(savePath);
 
             //获得部门信息.
-            DeptEntityList deptList = new DeptEntityList();
+            DeptList deptList = new DeptList();
             deptList.RetrieveAll(); //查询所有的部门信息.
 
             //遍历部门.
             foreach (DeptEntity deptMent in deptList.department)
             {
                 //获得部门下的人员信息.
-                UserEntityList ul = new UserEntityList(deptMent.id);
+                UserList ul = new UserList(deptMent.id);
                 if (ul.errcode != 0)
                     continue;
 

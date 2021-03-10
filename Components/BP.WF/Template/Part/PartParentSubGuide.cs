@@ -219,7 +219,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 配件
         /// </summary>
-        /// <param name="_oid">配件ID</param>	
+        /// <param name="mypk">mypk</param>	
         public PartParentSubGuide(string mypk)
         {
             this.MyPK = mypk;

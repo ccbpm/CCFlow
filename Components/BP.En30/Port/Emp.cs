@@ -16,6 +16,12 @@ namespace BP.Port
     {
         #region 基本属性
         /// <summary>
+        /// UserID
+        /// </summary>
+        public const string UserID = "UserID";
+        public const string OrgNo = "OrgNo";
+
+        /// <summary>
         /// 部门
         /// </summary>
         public const string FK_Dept = "FK_Dept";
@@ -31,10 +37,12 @@ namespace BP.Port
         /// 手机号
         /// </summary>
         public const string Tel = "Tel";
-		 /// <summary>
+        /// <summary>
         /// 邮箱
         /// </summary>
         public const string Email = "Email";
+		
+
         #endregion
     }
     /// <summary>
@@ -43,6 +51,53 @@ namespace BP.Port
     public class Emp : EntityNoName
     {
         #region 扩展属性
+        public new string No
+        {
+            get
+            {
+                return this.GetValStringByKey(EntityNoNameAttr.No);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.No, value);
+            }
+        }
+        /// <summary>
+        /// 用户ID:SAAS模式下UserID是可以重复的.
+        /// </summary>
+        public string UserID
+        {
+            get
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    return this.GetValStringByKey(EmpAttr.UserID);
+
+                return this.GetValStringByKey(EmpAttr.No);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.UserID, value);
+
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    this.SetValByKey(EmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
+                else
+                    this.SetValByKey(EmpAttr.No, value);
+            }
+        }
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(EmpAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.OrgNo, value);
+            }
+        }
         /// <summary>
         /// 主要的部门。
         /// </summary>
@@ -56,7 +111,7 @@ namespace BP.Port
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("@获取操作员" + this.No + "部门[" + this.FK_Dept + "]出现错误,可能是系统管理员没有给他维护部门.@" + ex.Message);
+                    throw new Exception("@获取操作员" + this.UserID + "部门[" + this.FK_Dept + "]出现错误,可能是系统管理员没有给他维护部门.@" + ex.Message);
                 }
             }
         }
@@ -121,7 +176,7 @@ namespace BP.Port
                 this.SetValByKey(EmpAttr.Tel, value);
             }
         }
-		public string Email
+        public string Email
         {
             get
             {
@@ -226,16 +281,25 @@ namespace BP.Port
         /// <summary>
         /// 操作员
         /// </summary>
-        /// <param name="no">编号</param>
-        public Emp(string no)
+        /// <param name="userID">编号</param>
+        public Emp(string userID)
         {
-            if (no == null || no.Length == 0)
+            if (userID == null || userID.Length == 0)
                 throw new Exception("@要查询的操作员编号为空。");
 
-            this.No = no.Trim();
-           
-                this.Retrieve();
-            
+            userID = userID.Trim();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                if (userID.Equals("admin") == true)
+                    this.SetValByKey("No", userID);
+                else
+                    this.SetValByKey("No", BP.Web.WebUser.OrgNo + "_" + userID);
+            }
+            else
+            {
+                this.SetValByKey("No", userID);
+            }
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法
@@ -258,18 +322,30 @@ namespace BP.Port
                 /* 关于字段属性的增加 .. */
                 //map.IsEnableVer = true;
 
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 20, 30);
+                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 50, 30);
+
+
+                //如果是集团模式或者是SAAS模式.
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                {
+                    map.AddTBString(EmpAttr.UserID, null, "用户ID", true, false, 0, 50, 30);
+                    map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 30);
+                }
+
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
-				map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
+                map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
+				
+
+
+
                 // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.FK_Dept);
-
 
 
                 this._enMap = map;
@@ -301,8 +377,8 @@ namespace BP.Port
         /// <returns></returns>
         public override int Retrieve()
         {
-            
-                return base.Retrieve();
+
+            return base.Retrieve();
         }
         /// <summary>
         /// 查询.
@@ -310,9 +386,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveFromDBSources()
         {
-            
-                return base.RetrieveFromDBSources();
-             
+
+            return base.RetrieveFromDBSources();
+
         }
         #endregion
 
@@ -335,7 +411,7 @@ namespace BP.Port
         /// <returns></returns>
         public string ChangePass(string oldpass, string pass1, string pass2)
         {
-            if (BP.Web.WebUser.No != this.No)
+            if (BP.Web.WebUser.No.Equals(this.UserID) == false)
                 return "err@sss";
             return "执行成功.";
         }
@@ -369,9 +445,9 @@ namespace BP.Port
         /// </summary>
         public Emps(string deptNo)
         {
-          
-                this.Retrieve(EmpAttr.FK_Dept, deptNo);
-             
+
+            this.Retrieve(EmpAttr.FK_Dept, deptNo);
+
         }
         #endregion 构造方法
 
@@ -390,9 +466,9 @@ namespace BP.Port
             //if (BP.Web.WebUser.No != "admin")
             //    throw new Exception("@您没有查询的权限.");
 
-            
-                return base.RetrieveAll();
-             
+
+            return base.RetrieveAll();
+
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -400,9 +476,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAllFromDBSource()
         {
-            
-                return base.RetrieveAllFromDBSource();
-             
+
+            return base.RetrieveAllFromDBSource();
+
         }
         #endregion 重写查询.
 

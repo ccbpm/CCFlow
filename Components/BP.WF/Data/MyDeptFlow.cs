@@ -722,7 +722,7 @@ namespace BP.WF.Data
                 map.AddTBString(MyDeptFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 80);
 
                 map.AddDDLSysEnum(MyDeptFlowAttr.WFSta, 0, "状态", true, false, MyDeptFlowAttr.WFSta);
-                map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
+             //   map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
                 map.AddTBStringDoc(MyDeptFlowAttr.FlowNote, null, "备注", true, false,true);
                
@@ -735,17 +735,23 @@ namespace BP.WF.Data
                 map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 30, 10);
 
 
+                #region 查询条件.
+                map.DTSearchKey = MyFlowAttr.RDT;
+                map.DTSearchLable = "发起日期";
+                map.DTSearchWay = DTSearchWay.ByDate;
+
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptFlowAttr.WFSta);
-                map.AddSearchAttr(MyDeptFlowAttr.TSpan,4000);
+                //map.AddSearchAttr(MyDeptFlowAttr.TSpan,4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
-
 
                 //增加隐藏的查询条件.
                 AttrOfSearch search = new AttrOfSearch(MyDeptFlowAttr.FK_Dept, "部门",
                     MyDeptFlowAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept, 0, true);
 
                 map.AttrsOfSearch.Add(search);
+                #endregion 查询条件.
+
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";  

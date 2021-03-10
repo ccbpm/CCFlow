@@ -177,6 +177,7 @@ namespace BP.GPM
                     this.No = DBAccess.GenerGUID();
                 }
             }
+
             return base.beforeInsert();
         }
 

@@ -58,17 +58,17 @@ namespace BP.WF.DTS
             if (dt.Rows.Count == 0)
                 return "无任务";
 
-            #region 自动启动流程B
+            #region 自动启动流程 whoExIt. 
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
                 Int64 fid = Int64.Parse(dr["FID"].ToString());
-                string FK_Emp = dr["FK_Emp"].ToString();
+                string empNo = dr["FK_Emp"].ToString();
                 int paras = int.Parse(dr["FK_Node"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();
 
-                if (BP.Web.WebUser.No.Equals(FK_Emp) == false)
-                    BP.WF.Dev2Interface.Port_Login(FK_Emp);
+                if (BP.Web.WebUser.No.Equals(empNo) == false)
+                    BP.WF.Dev2Interface.Port_Login(empNo);
 
                 try
                 {

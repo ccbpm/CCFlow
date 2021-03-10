@@ -309,6 +309,10 @@ namespace BP.Sys
             {
                 return (AthSaveWay)this.GetValIntByKey(FrmAttachmentAttr.AthSaveWay);
             }
+            set
+            {
+                this.SetPara(FrmAttachmentAttr.AthSaveWay, (int)value);
+            }
         }
         #endregion 参数属性.
 
@@ -875,7 +879,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true);
 
                 //hzm新增列
-                map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
+                map.AddTBInt(FrmAttachmentAttr.DeleteWay, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", false, false);
 

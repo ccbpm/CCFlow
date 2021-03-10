@@ -18,6 +18,47 @@ namespace BP.WF
     public class WorkNodePlus
     {
         /// <summary>
+        /// 发送草稿实例 2020.10.27 fro 铁路局.
+        /// </summary>
+        public static void SendDraftSubFlow(WorkNode wn)
+        {
+            //如果不允许发送草稿子流程.
+            if (wn.HisNode.IsSendDraftSubFlow == false)
+                return;
+
+            //查询出来该流程实例下的所有草稿子流程.
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, wn.WorkID, GenerWorkFlowAttr.WFState, 1);
+
+            //子流程配置信息.
+            SubFlowHandGuide sf = null;
+
+            //开始发送子流程.
+            foreach (GenerWorkFlow gwfSubFlow in gwfs)
+            {
+                //获得配置信息.
+                if (sf == null || sf.FK_Flow != gwfSubFlow.FK_Flow)
+                {
+                    string pkval = wn.HisGenerWorkFlow.FK_Flow + "_" + gwfSubFlow.FK_Flow + "_0";
+                    sf = new SubFlowHandGuide();
+                    sf.MyPK = pkval;
+                    sf.RetrieveFromDBSources();
+                }
+
+                //把草稿移交给当前人员. - 更新控制表.
+                gwfSubFlow.Starter = WebUser.No;
+                gwfSubFlow.StarterName = WebUser.Name;
+                gwfSubFlow.Update();
+                //把草稿移交给当前人员. - 更新工作人员列表.
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET FK_Emp='"+WebUser.No+"',FK_EmpText='"+BP.Web.WebUser.Name+"' WHERE WorkID="+gwfSubFlow.WorkID);
+                //更新track表.
+                //DBAccess.RunSQL("UPDATE ND"+int.Parse(gwfSubFlow.FK_Flow) +"Track SET FK_Emp='" + WebUser.No + "',FK_EmpText='" + WebUser.Name + "' WHERE WorkID=" + gwfSubFlow.WorkID);
+
+                //启动子流程. 并把两个字段，写入子流程.
+                BP.WF.Dev2Interface.Node_SendWork(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID, null, null);
+            }
+        }
+        /// <summary>
         /// 生成单据
         /// </summary>
         /// <param name="wn"></param>
@@ -412,10 +453,8 @@ namespace BP.WF
             if (nd.GenerWorkerListDelRole == 0)
                 return;
 
-            Paras ps = new Paras();
-            string str = SystemConfig.AppCenterDBVarStr;
             //按照部门删除,同部门下的人员+兼职部门.
-            if (nd.GenerWorkerListDelRole == 1 || 
+            if (nd.GenerWorkerListDelRole == 1 ||
                 nd.GenerWorkerListDelRole == 3 ||
                 nd.GenerWorkerListDelRole == 4)
             {
@@ -423,26 +462,21 @@ namespace BP.WF
                 string sqlUnion = "";
                 if (nd.GenerWorkerListDelRole == 1)
                 {
-                    sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                    sqlUnion += " SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " as FK_Emp FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
                     sqlUnion += " UNION ";
-                    sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                    sqlUnion += " SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
                 }
 
                 //主部门的人员.
                 if (nd.GenerWorkerListDelRole == 3)
                 {
-                    sqlUnion += " SELECT No FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                    sqlUnion += " SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
                 }
 
                 //兼职部门的人员.
-                
-
-                if (nd.GenerWorkerListDelRole == 4  )
+                if (nd.GenerWorkerListDelRole == 4)
                 {
-                    
-                    
-
-                    sqlUnion += " SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+                    sqlUnion += " SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
                 }
 
                 //获得要删除的人员.
@@ -455,7 +489,7 @@ namespace BP.WF
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     string empNo = dt.Rows[i][0].ToString();
-                    if (empNo == WebUser.No)
+                    if (empNo.Equals(WebUser.No) == true)
                         continue;
                     sql = "UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + empNo + "'";
                     DBAccess.RunSQL(sql);
@@ -478,6 +512,7 @@ namespace BP.WF
                 sql += " WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=0 ";
                 sql += " AND FK_Emp IN (" + stationEmp + ")";
                 //获得要删除的数据.
+
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -503,7 +538,7 @@ namespace BP.WF
                 sql += " FROM WF_ReturnWork  ";
                 sql += " WHERE WorkID=" + wn.WorkID + " ORDER BY RDT DESC";
                 DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-                if (mydt.Rows.Count != 0 && mydt.Rows[0][3].ToString().Equals("1")==true)
+                if (mydt.Rows.Count != 0 && mydt.Rows[0][3].ToString().Equals("1") == true)
                 {
                     wn.JumpToNode = new Node(int.Parse(mydt.Rows[0]["ReturnNode"].ToString()));
                     wn.JumpToEmp = mydt.Rows[0]["Returner"].ToString();

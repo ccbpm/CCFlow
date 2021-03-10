@@ -140,11 +140,11 @@ namespace BP.Sys.FrmUI
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
-                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
-                   "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数", true, true, "ColSpanAttrDT",
+                   "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label文本单元格数", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行

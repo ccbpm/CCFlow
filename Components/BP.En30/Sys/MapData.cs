@@ -55,10 +55,6 @@ namespace BP.Sys
         /// </summary>
         public const string DesignerTool11 = "DesignerTool";
         /// <summary>
-        /// 表单类别
-        /// </summary>
-        public const string FK_FrmSort = "FK_FrmSort";
-        /// <summary>
         /// 表单树类别
         /// </summary>
         public const string FK_FormTree = "FK_FormTree";
@@ -127,15 +123,15 @@ namespace BP.Sys
         /// <summary>
         /// 是否关键字查询
         /// </summary>
-        public const string RptIsSearchKey = "RptIsSearchKey";
+        public const string IsSearchKey = "IsSearchKey";
         /// <summary>
         /// 时间段查询方式
         /// </summary>
-        public const string RptDTSearchWay = "RptDTSearchWay";
+        public const string DTSearchWay = "DTSearchWay";
         /// <summary>
         /// 时间字段
         /// </summary>
-        public const string RptDTSearchKey = "RptDTSearchKey";
+        public const string DTSearchKey = "DTSearchKey";
         /// <summary>
         /// 查询外键枚举字段
         /// </summary>
@@ -226,6 +222,10 @@ namespace BP.Sys
 
         #region 参数属性.
         public const string EnsName = "EnsName";
+        /// <summary>
+        /// 是否是加密
+        /// </summary>
+        public const string IsJM = "IsJM";
         #endregion 参数属性.
     }
     /// <summary>
@@ -233,7 +233,6 @@ namespace BP.Sys
     /// </summary>
     public class MapData : EntityNoName
     {
-
         #region entity 相关属性(参数属性)
         /// <summary>
         /// 属性ens
@@ -247,6 +246,20 @@ namespace BP.Sys
             set
             {
                 this.SetPara(MapDataAttr.EnsName, value);
+            }
+        }
+        /// <summary>
+        /// 是不是加密，为铁路局增加.
+        /// </summary>
+        public bool IsJM
+        {
+            get
+            {
+                return this.GetParaBoolen(MapDataAttr.IsJM);
+            }
+            set
+            {
+                this.SetPara(MapDataAttr.IsJM, value);
             }
         }
         #endregion entity 相关操作.
@@ -302,43 +315,29 @@ namespace BP.Sys
         /// <summary>
         /// 是否关键字查询
         /// </summary>
-        public bool RptIsSearchKey
+        public bool IsSearchKey
         {
             get
             {
-                return this.GetParaBoolen(MapDataAttr.RptIsSearchKey, true);
+                return this.GetParaBoolen(MapDataAttr.IsSearchKey, true);
             }
             set
             {
-                this.SetPara(MapDataAttr.RptIsSearchKey, value);
+                this.SetPara(MapDataAttr.IsSearchKey, value);
             }
         }
         /// <summary>
         /// 时间段查询方式
         /// </summary>
-        public DTSearchWay RptDTSearchWay
+        public DTSearchWay DTSearchWay
         {
             get
             {
-                return (DTSearchWay)this.GetParaInt(MapDataAttr.RptDTSearchWay);
+                return (DTSearchWay)this.GetParaInt(MapDataAttr.DTSearchWay);
             }
             set
             {
-                this.SetPara(MapDataAttr.RptDTSearchWay, (int)value);
-            }
-        }
-        /// <summary>
-        /// 时间字段
-        /// </summary>
-        public string RptDTSearchKey
-        {
-            get
-            {
-                return this.GetParaString(MapDataAttr.RptDTSearchKey);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.RptDTSearchKey, value);
+                this.SetPara(MapDataAttr.DTSearchWay, (int)value);
             }
         }
         /// <summary>
@@ -353,6 +352,20 @@ namespace BP.Sys
             set
             {
                 this.SetPara(MapDataAttr.RptSearchKeys, value);
+            }
+        }
+        /// <summary>
+        /// 查询key.
+        /// </summary>
+        public string DTSearchKey
+        {
+            get
+            {
+                return this.GetParaString(MapDataAttr.DTSearchKey);
+            }
+            set
+            {
+                this.SetPara(MapDataAttr.DTSearchKey, value);
             }
         }
         #endregion 报表属性(参数方式存储).
@@ -526,7 +539,19 @@ namespace BP.Sys
                     }
                     else
                     {
-                        obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1 ", SysEnumAttr.IntKey);
+                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        {
+                            QueryObject qo = new QueryObject(obj);
+                            qo.AddWhereInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1 ");
+                            qo.addAnd();
+                            qo.AddWhere(SysEnumAttr.OrgNo, BP.Web.WebUser.OrgNo);
+                            qo.addOrderBy(SysEnumAttr.IntKey);
+                            qo.DoQuery();
+                        }
+                        else
+                        {
+                            obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1 ", SysEnumAttr.IntKey);
+                        }
                     }
                     this.SetRefObject("SysEnums", obj);
 
@@ -750,13 +775,13 @@ namespace BP.Sys
         /// <returns></returns>
         public string GenerHisFrm()
         {
-            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
+            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
 
             //替换高度宽度.
             body = body.Replace("@FrmH", this.FrmH.ToString());
             body = body.Replace("@FrmW", this.FrmW.ToString());
 
-            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
+            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
             string myLabs = "";
             FrmLabs labs = new FrmLabs(this.No);
             foreach (FrmLab lab in labs)
@@ -765,7 +790,7 @@ namespace BP.Sys
 
                 labTxt = labTxt.Replace("@MyPK", lab.MyPK);
 
-                labTxt = labTxt.Replace("@Label", lab.Text);
+                labTxt = labTxt.Replace("@Label", lab.Lab);
                 labTxt = labTxt.Replace("@X", lab.X.ToString());
                 labTxt = labTxt.Replace("@Y", lab.Y.ToString());
 
@@ -919,20 +944,7 @@ namespace BP.Sys
                 this.SetPara("IsHaveCA", value);
             }
         }
-        /// <summary>
-        /// 类别，可以为空.
-        /// </summary>
-        public string FK_FrmSort
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.FK_FrmSort);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FK_FrmSort, value);
-            }
-        }
+     
         /// <summary>
         /// 数据源
         /// </summary>
@@ -1100,7 +1112,20 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.TableCol, value);
             }
         }
-
+        /// <summary>
+        /// 实体表单类型.@0=独立表单@1=单据@2=编号名称实体@3=树结构实体
+        /// </summary>
+        public int EntityType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.EntityType);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.EntityType, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -1128,10 +1153,13 @@ namespace BP.Sys
             }
 
             #region 查询条件.
-            map.IsShowSearchKey = this.RptIsSearchKey; //是否启用关键字查询.
+            map.IsShowSearchKey = this.IsSearchKey; //是否启用关键字查询.
             // 按日期查询.
-            map.DTSearchWay = this.RptDTSearchWay; //日期查询方式.
-            map.DTSearchKey = this.RptDTSearchKey; //日期字段.
+            map.DTSearchWay = this.DTSearchWay; //日期查询方式.
+            map.DTSearchKey = this.DTSearchKey; //日期字段.
+
+            //是否是加密 @yln.
+            map.IsJM = this.IsJM;
 
             //加入外键查询字段.
             string[] keys = this.RptSearchKeys.Split('*');
@@ -1279,9 +1307,8 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.Tag, null, "Tag", true, false, 0, 500, 20);
 
                 // 可以为空这个字段。
-                map.AddTBString(MapDataAttr.FK_FrmSort, null, "表单类别", true, false, 0, 500, 20);
+                //map.AddTBString(MapDataAttr.FK_FrmSort, null, "表单类别", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.FK_FormTree, null, "表单树类别", true, false, 0, 500, 20);
-
 
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapDataAttr.FrmType);
@@ -1604,18 +1631,10 @@ namespace BP.Sys
             // 定义在最后执行的sql.
             string endDoSQL = "";
 
-            //检查是否存在OID字段.
-            MapData mdOld = new MapData();
-            mdOld.No = specFrmID;
-            mdOld.RetrieveFromDBSources();
-
-            //现在表单的类型
-            FrmType frmType = mdOld.HisFrmType;
-
-            //业务类型
-            int entityType = mdOld.HisEntityType;
-
-            mdOld.Delete();
+			MapData mdOld = new MapData();
+			mdOld.No= specFrmID;
+			mdOld.Delete();
+            
 
             // 求出dataset的map.
             string oldMapID = "";
@@ -1633,6 +1652,19 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(oldMapID) == true)
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
+
+			//检查是否存在OID字段.
+            mdOld.No = oldMapID;
+            int count =  mdOld.RetrieveFromDBSources();
+
+            //现在表单的类型
+            FrmType frmType = mdOld.HisFrmType;
+
+            //业务类型
+            int entityType = mdOld.HisEntityType;
+
+            //mdOld.Delete();
+
             string timeKey = DateTime.Now.ToString("MMddHHmmss");
 
             #region 表单元素
@@ -1683,28 +1715,32 @@ namespace BP.Sys
                                 md.PTable = md.No;
 
                             //表单类别编号不为空，则用原表单类别编号
-                            if (DataType.IsNullOrEmpty(mdOld.FK_FormTree) == false)
+                            if (DataType.IsNullOrEmpty(md.FK_FormTree) == true)
                                 md.FK_FormTree = mdOld.FK_FormTree;
 
-                            //表单类别编号不为空，则用原表单类别编号
-                            if (DataType.IsNullOrEmpty(mdOld.FK_FrmSort) == false)
-                                md.FK_FrmSort = mdOld.FK_FrmSort;
-
+                            ////表单类别编号不为空，则用原表单类别编号
+                            //if (DataType.IsNullOrEmpty(mdOld.f) == false)
+                            //    md.FK_FrmSort = mdOld.FK_FrmSort;
+							
                             if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
                                 md.PTable = mdOld.PTable;
                             if (DataType.IsNullOrEmpty(mdOld.Name) == false)
                                 md.Name = mdOld.Name;
 
-                            md.HisFrmType = mdOld.HisFrmType;
-                            if (frmType == FrmType.Develop)
-                                md.HisFrmType = FrmType.Develop;
+							if(count!=0){
+								 md.HisFrmType = mdOld.HisFrmType;
+								if (frmType == FrmType.Develop)
+									md.HisFrmType = FrmType.Develop;
 
-                            if (entityType != md.HisEntityType)
-                                md.HisEntityType = entityType;
+								if (entityType != md.HisEntityType)
+									md.HisEntityType = entityType;
+							}
+                           
 
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
-                            md.DirectInsert();
+							if(md.DirectUpdate()==0)
+								md.DirectInsert();
                             Cash2019.UpdateRow(md.ToString(), md.No.ToString(), md.Row);
 
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
@@ -1961,11 +1997,11 @@ namespace BP.Sys
                                 if (en.UIContralType == UIContralType.BigText)
                                 {
                                     //判断原文件是否存在
-                                    string file = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
+                                    string file = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
                                     //若文件存在，则复制                                  
                                     if (System.IO.File.Exists(file) == true)
                                     {
-                                        string newFile = SystemConfig.PathOfDataUser + "\\CCForm\\BigNoteHtmlText\\" + specFrmID + ".htm";
+                                        string newFile = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + specFrmID + ".htm";
                                         if (System.IO.File.Exists(newFile) == true)
                                             System.IO.File.Delete(newFile);
                                         System.IO.File.Copy(file, newFile);
@@ -2012,9 +2048,20 @@ namespace BP.Sys
                                 string val = dr[dc.ColumnName] as string;
                                 se.SetValByKey(dc.ColumnName, val);
                             }
-                            se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
-                            if (se.IsExits)
-                                continue;
+                            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            {
+                                se.OrgNo = BP.Web.WebUser.OrgNo;
+                                se.RefPK = se.OrgNo + "_" + se.EnumKey;
+                                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey + "_" + se.OrgNo;
+                                if (se.IsExits)
+                                    continue;
+                            }
+                            else
+                            {
+                                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                                if (se.IsExits)
+                                    continue;
+                            }
                             se.Insert();
                         }
                         break;
@@ -2029,8 +2076,19 @@ namespace BP.Sys
                                     continue;
                                 sem.SetValByKey(dc.ColumnName, val);
                             }
-                            if (sem.IsExits)
-                                continue;
+
+                            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            {
+                                sem.OrgNo = BP.Web.WebUser.OrgNo;
+                                sem.No = sem.OrgNo + "_" + sem.EnumKey;
+                                if (sem.IsExits)
+                                    continue;
+                            }
+                            else
+                            {
+                                if (sem.IsExits)
+                                    continue;
+                            }
                             sem.Insert();
                         }
                         break;
@@ -2060,7 +2118,6 @@ namespace BP.Sys
 
             if (mdNew.No.IndexOf("ND") == 0)
             {
-                mdNew.FK_FrmSort = "";
                 mdNew.FK_FormTree = "";
             }
 
@@ -2364,7 +2421,7 @@ namespace BP.Sys
             //  string sql = "SELECT ";
 
             //检查主键.
-            CheckPKFields(this.No,this.Name);
+            CheckPKFields(this.No, this.Name);
 
             //清除缓存.
             this.ClearCash();
@@ -2372,7 +2429,7 @@ namespace BP.Sys
             return base.beforeUpdateInsertAction();
         }
 
-        public static string CheckPKFields(string frmID,string name)
+        public static string CheckPKFields(string frmID, string name)
         {
             string sql = "SELECT KeyOfEn, Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "' ";
             sql += "  AND ( ";
@@ -2389,9 +2446,9 @@ namespace BP.Sys
                 return "数据正确.";
 
             if (dt.Rows.Count == 0)
-                return "err@表单缺少主键."+ frmID+","+ name;
+                return "err@表单缺少主键." + frmID + "," + name;
 
-            string msg = "err@FrmID=" + frmID +name+ "主键不明确.";
+            string msg = "err@FrmID=" + frmID + name + "主键不明确.";
             foreach (DataRow dr in dt.Rows)
             {
                 msg += "@" + dr[0] + "," + dr[1].ToString();

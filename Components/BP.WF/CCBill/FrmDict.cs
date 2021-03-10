@@ -30,13 +30,9 @@ namespace BP.CCBill
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin") == true)
-                {
-                    uac.IsDelete = false;
-                    uac.IsUpdate = true;
-                    return uac;
-                }
-                uac.Readonly();
+                uac.OpenForAppAdmin();
+                uac.IsDelete = false;
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -116,9 +112,8 @@ namespace BP.CCBill
                 this.SetValByKey(FrmDictAttr.BtnNewModel, value);
             }
         }
-
         /// <summary>
-        /// 单据格式
+        /// 单据格式(流水号4)
         /// </summary>
         public string BillNoFormat
         {
@@ -216,14 +211,12 @@ namespace BP.CCBill
                 map.AddTBString(FrmBillAttr.SortColumns, null, "排序字段", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.ColorSet, null, "颜色设置", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
-
                 #endregion 实体表单.
 
                 #region MyBill - 按钮权限.
                 map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
                    "@0=表格模式@1=卡片模式@2=不可用", true);
-
 
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
@@ -257,15 +250,14 @@ namespace BP.CCBill
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
-                map.AddTBString(FrmDictAttr.BtnImpExcel, "导入Excel文件", "导入Excel文件", true, false, 0, 50, 20);
+                map.AddTBString(FrmDictAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmDictAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
+                map.AddTBString(FrmDictAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnGroupEnable, true, "是否可用？", true, true);
-
                 #endregion 查询按钮权限.
 
                 #region 设计者信息.
@@ -678,11 +670,11 @@ namespace BP.CCBill
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
                 attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.MaxLen = 100;
                 attr.Idx = -1;
                 attr.Insert();
             }
-            if (attrs.Contains(this.No + "OrgNo") == false)
+            if (attrs.Contains(this.No + "_OrgNo") == false)
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
@@ -716,7 +708,6 @@ namespace BP.CCBill
                 sf.SelectStatement = "SELECT BillNo AS No, Title as Name FROM " + this.PTable;
                 sf.Insert();
             }
-
             #endregion 注册到外键表
         }
 
@@ -772,7 +763,6 @@ namespace BP.CCBill
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSubmit";
         }
-
         /// <summary>
         /// 新增权限规则
         /// </summary>
@@ -789,7 +779,6 @@ namespace BP.CCBill
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnDelete";
         }
-
         /// <summary>
         /// 查询权限
         /// </summary>
@@ -798,8 +787,6 @@ namespace BP.CCBill
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSearch";
         }
-
-
         /// <summary>
         /// 数据查询权限规则
         /// </summary>
@@ -808,7 +795,6 @@ namespace BP.CCBill
         {
             return "../../CCBill/Admin/SearchDataRole.htm?s=34&FrmID=" + this.No;
         }
-
         #endregion 权限控制.
 
         public string DoMethod()

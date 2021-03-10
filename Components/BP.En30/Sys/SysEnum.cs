@@ -211,6 +211,8 @@ namespace BP.Sys
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
+                map.AddTBString(SysEnumAttr.RefPK, null, "RefPK", true, false, 0, 50, 8);
+                
 
                 this._enMap = map;
                 return this._enMap;
@@ -218,18 +220,21 @@ namespace BP.Sys
         }
         #endregion
 
-
-        protected override bool beforeUpdateInsertAction()
+        public void ResetPK()
         {
             if (this.Lang == null && this.Lang == "")
                 this.Lang = BP.Web.WebUser.SysLang;
 
-            this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey + "_" + BP.Web.WebUser.OrgNo; //关联的主键.
 
-            if (SystemConfig.CCBPMRunModel !=CCBPMRunModel.Single)
-                this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
-                                                              //  else
-                                                              //    this.RefPK = this.OrgNo + "_" + this.EnumKey; //关联的主键.
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
+                this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            ResetPK();
 
             return base.beforeUpdateInsertAction();
         }
@@ -385,7 +390,6 @@ namespace BP.Sys
                     {
                         DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK = CONCAT (EnumKey,'_', Lang,'_',CAST(IntKey AS CHAR(5)))");
                     }
-
                 }
                 catch
                 {
@@ -460,7 +464,8 @@ namespace BP.Sys
                     se.Lab = string.Join("=", kvsValues);
                     se.EnumKey = EnumKey;
                     se.Lang = BP.Web.WebUser.SysLang;
-                    se.Insert();
+                    se.MyPK = EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                    se.DirectInsert();
                     this.AddEntity(se);
                 }
             }
@@ -480,9 +485,36 @@ namespace BP.Sys
             }
 
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
-            qo.addAnd();
-            qo.AddWhere(SysEnumAttr.Lang, Web.WebUser.SysLang);
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                if (enumKey.Contains(BP.Web.WebUser.OrgNo + "_"))
+                {
+                    /* 看看xml配置里面是否有?*/
+                    qo.AddWhere(SysEnumAttr.RefPK, enumKey);
+                    qo.addOrderBy(SysEnumAttr.IntKey);
+                    if (qo.DoQuery() == 0)
+                        return false;
+
+                    Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
+                    return true;
+                }
+
+                qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
+                qo.addOrderBy(SysEnumAttr.IntKey);
+                if (qo.DoQuery() == 0)
+                    return false;
+
+                Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
+                return true;
+            }
+            else
+            {
+                qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
+                qo.addAnd();
+                qo.AddWhere(SysEnumAttr.Lang, Web.WebUser.SysLang);
+            }
+
             qo.addOrderBy(SysEnumAttr.IntKey);
             if (qo.DoQuery() == 0)
             {

@@ -32,16 +32,18 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Designer_Init()
         {
-            string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+            //获取htmlfrom 信息.
+            string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData,
+                "HtmlTemplateFile");
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
             string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
             filePath = filePath + this.FK_MapData + ".htm";
+
             //写入到html 中
             DataType.WriteFile(filePath, htmlCode);
             return htmlCode;
-
         }
         /// <summary>
         /// 保存表单
@@ -51,40 +53,43 @@ namespace BP.WF.HttpHandler
         {
             //获取html代码
             string htmlCode = this.GetRequestVal("HtmlCode");
-            if (DataType.IsNullOrEmpty(htmlCode) == false)
+            if (DataType.IsNullOrEmpty(htmlCode) == true)
+                return "err@表单内容不能为空.";
+
+            if (htmlCode.Contains("err@") == true)
+                return "err@错误" + htmlCode;
+
+            htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
+            //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
+            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+            if (Directory.Exists(filePath) == false)
+                Directory.CreateDirectory(filePath);
+
+            filePath = filePath + this.FK_MapData + ".htm";
+            //写入到html 中
+            DataType.WriteFile(filePath, htmlCode);
+
+            //保存类型。
+            MapData md = new MapData(this.FK_MapData);
+            if (md.HisFrmType != FrmType.Develop)
             {
-                htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
-                //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
-                if (Directory.Exists(filePath) == false)
-                    Directory.CreateDirectory(filePath);
-
-                filePath = filePath + this.FK_MapData + ".htm";
-                //写入到html 中
-                DataType.WriteFile(filePath, htmlCode);
-
-                //保存类型。
-                MapData md = new MapData(this.FK_MapData);
-                if (md.HisFrmType != FrmType.Develop)
-                {
-                    md.HisFrmType = FrmType.Develop;
-                    md.Update();
-                }
-                // HtmlTemplateFile 保存到数据库中
-                DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
-
-                //检查数据完整性
-                GEEntity en = new GEEntity(this.FK_MapData);
-                en.CheckPhysicsTable();
-                return "保存成功";
+                md.HisFrmType = FrmType.Develop;
+                md.Update();
             }
-            return "保存成功.";
+            // HtmlTemplateFile 保存到数据库中
+            DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
+
+            //检查数据完整性
+            GEEntity en = new GEEntity(this.FK_MapData);
+            en.CheckPhysicsTable();
+            return "保存成功";
+
         }
         #endregion
 
         public string Fields_Init()
         {
-            string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No", 
+            string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No",
                 this.FrmID, "HtmlTemplateFile");
             return html;
         }

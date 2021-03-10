@@ -575,7 +575,7 @@ namespace BP.WF.Template
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值为空.");
                             //指定它
                             BP.Port.Emp emp = new BP.Port.Emp();
-                            emp.No = empNo;
+                            emp.UserID = empNo;
                             if (emp.RetrieveFromDBSources() == 0)
                                 throw new Exception("@指定的节点字段(" + this.TagVal1 + ")的值(" + empNo + ")是非法的人员编号...");
                             empDept = emp.FK_Dept;
@@ -613,13 +613,13 @@ namespace BP.WF.Template
             switch (way)
             {
                 case "0": //按职务找.
-                    sql = "SELECT B.No,B.Name FROM Port_DeptEmp A, Port_Emp B WHERE A.FK_Dept='"+deptNo+"'  AND A.FK_Duty='"+objVal+"' AND B.No=A.FK_Emp";
+                    sql = "SELECT B." + BP.Sys.Glo.UserNo + ",B.Name FROM Port_DeptEmp A, Port_Emp B WHERE A.FK_Dept='" + deptNo+"'  AND A.FK_Duty='"+objVal+ "' AND B." + BP.Sys.Glo.UserNoWhitOutAS + "=A.FK_Emp";
                     break;
                 case "1": //按岗位找.
-                    sql = "SELECT B.No,B.Name FROM Port_DeptEmpStation A, Port_Emp B WHERE A.FK_Dept='" + deptNo + "'  AND A.FK_Station='" + objVal + "' AND B.No=A.FK_Emp";
+                    sql = "SELECT B." + BP.Sys.Glo.UserNo + ",B.Name FROM Port_DeptEmpStation A, Port_Emp B WHERE A.FK_Dept='" + deptNo + "'  AND A.FK_Station='" + objVal + "' AND B." + BP.Sys.Glo.UserNoWhitOutAS + "=A.FK_Emp";
                     break;
                 case "2": //所有该部门的人员.
-                    sql = "SELECT B.No,B.Name FROM Port_DeptEmp A, Port_Emp B WHERE A.FK_Dept='" + deptNo + "' AND B.No=A.FK_Emp";
+                    sql = "SELECT B." + BP.Sys.Glo.UserNo + ",B.Name FROM Port_DeptEmp A, Port_Emp B WHERE A.FK_Dept='" + deptNo + "' AND B." + BP.Sys.Glo.UserNoWhitOutAS + "=A.FK_Emp";
                     break;
                 default:
                     break;

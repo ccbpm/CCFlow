@@ -790,8 +790,16 @@ namespace BP.WF.Template
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
 
-            string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DBAccess.GenerGUID();
-            string openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+            string sid = DBAccess.GenerGUID() + "_" + workid + "_{EmpStr}_" + currNode.NodeID;
+
+            string openWorkURl = "";
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                openWorkURl = hostUrl + "/App/Portal/GuideWeiXin.aspx?DoType=OpenWork&WorkID=" + workid+"&FK_Flow="+currNode.FK_Flow ;
+            else
+                openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+
+
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion

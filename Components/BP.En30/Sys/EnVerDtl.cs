@@ -36,6 +36,7 @@ namespace BP.Sys
         {
             get
             {
+                
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
                 return uac;

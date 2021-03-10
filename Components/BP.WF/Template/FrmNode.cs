@@ -65,10 +65,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsEnableFWC = "IsEnableFWC";
         /// <summary>
-        /// 是否启用父子流程
-        /// </summary>
-        public const string SFSta = "SFSta";
-        /// <summary>
         /// 谁是主键？
         /// </summary>
         public const string WhoIsPK = "WhoIsPK";
@@ -100,6 +96,10 @@ namespace BP.WF.Template
         /// 表单显示的名字
         /// </summary>
         public const string FrmNameShow = "FrmNameShow";
+        /// <summary>
+        /// 父子流程组件
+        /// </summary>
+        public const string SFSta = "SFSta";
     }
     /// <summary>
     /// 谁是主键？
@@ -442,6 +442,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 显示的名字
+        /// </summary>
+        public string FrmNameShow
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmNodeAttr.FrmNameShow);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.FrmNameShow, value);
+            }
+        }
+        /// <summary>
         /// 对应的解决方案
         /// 0=默认方案.节点编号 1=自定义方案, 1=不可编辑.
         /// </summary>
@@ -657,6 +671,10 @@ namespace BP.WF.Template
         /// <param name="fk_frm">表单</param>
         public FrmNode(int fk_node, string fk_frm)
         {
+            //设置属性.
+            this.FK_Node = fk_node;
+            this.FK_Frm = fk_frm;
+
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
 
             if (i == 0)
@@ -667,6 +685,8 @@ namespace BP.WF.Template
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                     this.IsEnableFWC = node.FrmWorkCheckSta;
+
+                this.FK_Flow = node.FK_Flow;
                 return;
             }
         }

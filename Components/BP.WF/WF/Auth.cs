@@ -10,6 +10,24 @@ using BP.Sys;
 namespace BP.WF
 {
     /// <summary>
+    /// 授权方式
+    /// </summary>
+    public enum AuthorWay
+    {
+        /// <summary>
+        /// 不授权
+        /// </summary>
+        None=2,
+        /// <summary>
+        /// 全部授权
+        /// </summary>
+        All=0,
+        /// <summary>
+        /// 指定流程授权
+        /// </summary>
+        SpecFlows=1
+    }
+    /// <summary>
     /// 授权属性
     /// </summary>
     public class AuthAttr
@@ -41,11 +59,11 @@ namespace BP.WF
         /// <summary>
         /// 人员编号.
         /// </summary>
-        public const string EmpNo = "EmpNo";
+        public const string AutherToEmpNo = "AutherToEmpNo";
         /// <summary>
         /// 人员名称
         /// </summary>
-        public const string EmpName = "EmpName";
+        public const string AutherToEmpName = "AutherToEmpName";
         /// <summary>
         /// 记录日期
         /// </summary>
@@ -97,15 +115,40 @@ namespace BP.WF
                 this.SetValByKey(AuthAttr.Auther, value);
             }
         }
-        public string EmpNo
+        public string AutherToEmpNo
         {
             get
             {
-                return this.GetValStringByKey(AuthAttr.EmpNo);
+                return this.GetValStringByKey(AuthAttr.AutherToEmpNo);
             }
             set
             {
-                this.SetValByKey(AuthAttr.EmpNo, value);
+                this.SetValByKey(AuthAttr.AutherToEmpNo, value);
+            }
+        }
+        public string AutherToEmpName
+        {
+            get
+            {
+                return this.GetValStringByKey(AuthAttr.AutherToEmpName);
+            }
+            set
+            {
+                this.SetValByKey(AuthAttr.AutherToEmpName, value);
+            }
+        }
+        /// <summary>
+        /// 授权类型
+        /// </summary>
+        public AuthorWay AuthType
+        {
+            get
+            {
+                return (AuthorWay)this.GetValIntByKey(AuthAttr.AuthType);
+            }
+            set
+            {
+                this.SetValByKey(AuthAttr.AuthType, (int)value);
             }
         }
         #endregion
@@ -132,10 +175,10 @@ namespace BP.WF
                 map.AddMyPK();
 
                 map.AddTBString(AuthAttr.Auther, null, "授权人", true, false, 0, 100, 10);
-                map.AddTBInt(AuthAttr.AuthType, 0, "类型(0=全部流程1=指定流程)", true, false);
+                map.AddTBInt(AuthAttr.AuthType, 0, "类型(0=全部流程1=指定流程2=取消)", true, false);
 
-                map.AddTBString(AuthAttr.EmpNo, null, "委托给人员编号", true, false, 0, 100, 10);
-                map.AddTBString(AuthAttr.EmpName, null, "委托给人员名称", true, false, 0, 100, 10);
+                map.AddTBString(AuthAttr.AutherToEmpNo, null, "授权给谁?", true, false, 0, 100, 10);
+                map.AddTBString(AuthAttr.AutherToEmpName, null, "授权给谁?", true, false, 0, 100, 10);
 
                 map.AddTBString(AuthAttr.FlowNo, null, "流程编号", true, false, 0, 100, 10);
                 map.AddTBString(AuthAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
@@ -151,14 +194,8 @@ namespace BP.WF
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            //this.MyPK = this.Auther + "_" + this.AuthType + "_" + this.AutherToEmpNo;
             return base.beforeInsert();
-        }
-        public void doDel(string Auther, string EmpNo, string TakeBackDT)
-        {
-            this.MyPK = DBAccess.GenerGUID();
-            var sql = "delete FROM WF_Auth where Auther = '" + Auther + "' and EmpNo = '" + EmpNo + "' and TakeBackDT = '" + TakeBackDT + "'";
-            DBAccess.RunSQL(sql);
         }
     }
     /// <summary>

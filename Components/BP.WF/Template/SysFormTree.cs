@@ -212,10 +212,14 @@ namespace BP.WF.Template
             {
                 return new SysFormTree();
             }
-
         }
         public override int RetrieveAll()
         {
+            if (SystemConfig.CCBPMRunModel== CCBPMRunModel.SAAS 
+                || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                return this.Retrieve(SysFormTreeAttr.OrgNo,BP.Web.WebUser.OrgNo);
+
+
             int i = base.RetrieveAll();
             if (i == 0)
             {
@@ -230,6 +234,7 @@ namespace BP.WF.Template
                 fs.Insert();
                 i = base.RetrieveAll();
             }
+
             return i;
         }
 

@@ -277,7 +277,21 @@ namespace BP.WF.Template
             this.MyPK = DBAccess.GenerGUID();
             return base.beforeInsert();
         }
-
+       /// <summary>
+       /// 清除数据缓存
+       /// </summary>
+        protected override void afterInsertUpdateAction()
+        {
+            Flow flow = new Flow(this.FK_Flow);
+            flow.ClearAutoNumCash(true);
+            base.afterInsertUpdateAction();
+        }
+        protected override void afterDelete()
+        {
+            Flow flow = new Flow(this.FK_Flow);
+            flow.ClearAutoNumCash(true);
+            base.afterDelete();
+        }
         #region 实现基本的方方法
         /// <summary>
         /// 属性
@@ -632,7 +646,7 @@ namespace BP.WF.Template
 
                     //@于庆海.
                     BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-                    emp.No = this.SpecOper;
+                    emp.UserID = this.SpecOper;
                     if (emp.RetrieveFromDBSources() == 1)
                     {
                         BP.GPM.DeptEmp de = new GPM.DeptEmp();
@@ -914,6 +928,16 @@ namespace BP.WF.Template
                     }
                     #endregion WebApi接口
                 }
+                #region 审核组件的立场
+                if(this.HisDataFrom == ConnDataFrom.WorkCheck)
+                {
+                    //获取当前节点的审核组件信息
+                    string tag = BP.WF.Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                    if (tag.Contains("@FWCView="+this.OperatorValue) == true)
+                        return true;
+                    return false;
+                }
+                #endregion 审核组件的立场
 
                 if (this.HisDataFrom == ConnDataFrom.Paras)
                 {

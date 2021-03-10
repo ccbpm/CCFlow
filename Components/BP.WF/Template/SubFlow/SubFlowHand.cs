@@ -12,8 +12,6 @@ namespace BP.WF.Template
     /// </summary>
     public class SubFlowHandAttr : SubFlowAttr
     {
-
-
     }
     /// <summary>
     /// 手工启动子流程.
@@ -218,6 +216,9 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
+            "@0=禁用@1=启用@2=只读");
+
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
@@ -248,11 +249,25 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
 
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
+
+                map.AddBoolean(SubFlowHandGuideAttr.IsSubFlowGuide, false, "是否启用子流程批量发起前置导航", false, true, true);
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "批量发起前置导航";
+                rm.ClassMethodName = this.ToString() + ".DoSetGuide";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+
+                map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        public string DoSetGuide()
+        {
+            return "EnOnly.htm?EnName=BP.WF.Template.SubFlowHandGuide&MyPK="+this.MyPK;
+        }
 
         protected override bool beforeInsert()
         {

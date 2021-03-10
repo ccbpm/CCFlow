@@ -13,6 +13,46 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
+        public static string EntityJiaMi(string val, bool isJM=false)
+        {
+            if (isJM == false)
+                return val;
+
+            return val;
+
+        }
+        public static string EntityJieMi(string val, bool isJM = false)
+        {
+            if (isJM == false)
+                return val;
+
+            return val;
+
+        }
+
+        /// <summary>
+        /// 获得真实UserNo,如果是SAAS模式.
+        /// </summary>
+        public static string UserNo
+        {
+            get
+            {
+                string empNo = "No";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    empNo = "UserID as No";
+                return empNo;
+            }
+        }
+        public static string UserNoWhitOutAS
+        {
+            get
+            {
+                string empNo = "No";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    empNo = "UserID";
+                return empNo;
+            }
+        }
         /// <summary>
         /// 处理命名空间.
         /// </summary>

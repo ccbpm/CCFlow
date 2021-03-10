@@ -14,7 +14,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// Text
         /// </summary>
-        public const string Text = "Text";
+        public const string Lab = "Lab";
         /// <summary>
         /// 主表
         /// </summary>
@@ -186,15 +186,15 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// Text
         /// </summary>
-        public string Text
+        public string Lab
         {
             get
             {
-                return this.GetValStrByKey(FrmLinkAttr.Text);
+                return this.GetValStrByKey(FrmLinkAttr.Lab);
             }
             set
             {
-                this.SetValByKey(FrmLinkAttr.Text, value);
+                this.SetValByKey(FrmLinkAttr.Lab, value);
             }
         }
         public string Target
@@ -275,7 +275,7 @@ namespace BP.Sys.FrmUI
                 //连接目标.
                 map.AddMyPK();
                 map.AddTBString(FrmLinkAttr.Target, "_blank", "连接目标(_blank,_parent,_self)", true, false, 0, 20, 20);
-                map.AddTBString(FrmLinkAttr.Text, "New Link", "标签", true, false, 0, 500, 20, true);
+                map.AddTBString(FrmLinkAttr.Lab, "New Link", "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.URLExt, null, "URL", true, false, 0, 500, 20, true);
                 map.AddTBString(FrmLinkAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 

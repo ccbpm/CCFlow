@@ -26,7 +26,7 @@ namespace BP.En
         /// <param name="val">外键值</param>
         /// <returns>返回实体集合</returns>
         public Entities GetEntitiesAttrFromAutoNumCash(Entities ens,
-            string refKey, object refVal, string refKey2 = null, object refVal2 = null)
+            string refKey, object refVal, string refKey2 = null, object refVal2 = null, string orderBy = null)
         {
             //获得段类名.
             string clsName = ens.ClassIDOfShort;
@@ -40,10 +40,20 @@ namespace BP.En
             if (count == -1)
             {
                 if (refKey2 == null)
-                    ens.Retrieve(refKey, refVal);
+                {
+                    if (DataType.IsNullOrEmpty(orderBy) == false)
+                        ens.Retrieve(refKey, refVal, orderBy);
+                    else
+                        ens.Retrieve(refKey, refVal);
+                }
                 else
-                    ens.Retrieve(refKey, refVal, refKey2, refVal2);
+                {
+                    if (DataType.IsNullOrEmpty(orderBy) == false)
+                        ens.Retrieve(refKey, refVal, refKey2, refVal2, orderBy);
+                    else
+                        ens.Retrieve(refKey, refVal, refKey2, refVal2);
 
+                }
                 this.SetPara(clsName + "_AutoNum", ens.Count); //设置他的数量.
                 this.DirectUpdate();
                 this.SetRefObject(clsName, ens);
@@ -75,19 +85,21 @@ namespace BP.En
         /// 清除缓存记录
         /// 把值设置为 -1,执行的时候，让其重新获取.
         /// </summary>
-        public void ClearAutoNumCash(bool isUpdata = true)
+        public void ClearAutoNumCash(bool isUpdata = true, string clearKey = null)
         {
             bool isHave = false;
             foreach (string key in this.atPara.HisHT.Keys)
             {
                 if (DataType.IsNullOrEmpty(key) == true)
                     continue;
-
+                if (DataType.IsNullOrEmpty(clearKey) == false && key.Equals(clearKey) == false)
+                    continue;
                 if (key.EndsWith("_AutoNum") == true)
                 {
                     if (this.GetParaInt(key) != -1)
                     {
                         this.SetPara(key, -1);
+                        this.SetRefObject(key.Replace("_AutoNum", ""), null);
                         isHave = true;
                     }
                 }
@@ -965,6 +977,7 @@ namespace BP.En
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
         }
+
         protected void DoOrderUp(string groupKeyAttr, object gVal1, string gKey2, object gVal2, string idxAttr)
         {
             //  string pkval = this.PKVal as string;
@@ -1037,6 +1050,47 @@ namespace BP.En
             DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
         }
         /// <summary>
+        /// 上移
+        /// </summary>
+        /// <param name="groupKeyAttr"></param>
+        /// <param name="gVal1"></param>
+        /// <param name="gKey2"></param>
+        /// <param name="gVal2"></param>
+        /// <param name="gKey3"></param>
+        /// <param name="gVal3"></param>
+        /// <param name="idxAttr"></param>
+        protected void DoOrderUp(string groupKeyAttr, object gVal1, string gKey2, object gVal2,
+            string gKey3, object gVal3, string gKey4, object gVal4, string idxAttr)
+        {
+            //  string pkval = this.PKVal as string;
+            string pkval = this.PKVal.ToString();
+            string pk = this.PK;
+            string table = this.EnMap.PhysicsTable;
+
+            string sql = "SELECT " + pk + "," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + gVal1 + "' AND " + gKey2 + "='" + gVal2 + "' AND " + gKey3 + "='" + gVal3 + "' AND " + gKey4 + "='" + gVal4 + "') ORDER BY " + idxAttr;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int idx = 0;
+            string beforeNo = "";
+            string myNo = "";
+            bool isMeet = false;
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                myNo = dr[pk].ToString();
+
+                if (myNo.Equals(pkval) == true)
+                    isMeet = true;
+
+                if (isMeet == false)
+                    beforeNo = myNo;
+
+                DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'");
+            }
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + beforeNo + "'");
+            DBAccess.RunSQL("UPDATE " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + pkval + "'");
+        }
+        /// <summary>
         /// 插队
         /// </summary>
         /// <param name="idxAttr">Idx列</param>
@@ -1061,7 +1115,7 @@ namespace BP.En
             sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, " + groupKey + "='" + groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
             DBAccess.RunSQL(sql);
 
-         //   sql = "SELECT "+ pk + " FROM "+ptable+ " WHERE "+ groupKey+"='"++"'  ORDER BY Idx ";
+            //   sql = "SELECT "+ pk + " FROM "+ptable+ " WHERE "+ groupKey+"='"++"'  ORDER BY Idx ";
 
 
         }
@@ -1230,6 +1284,52 @@ namespace BP.En
 
             DBAccess.RunSQLs(sqls);
         }
+        /// <summary>
+        /// 下移
+        /// </summary>
+        /// <param name="groupKeyAttr">字段1</param>
+        /// <param name="val1">值1</param>
+        /// <param name="gKeyAttr2">字段2</param>
+        /// <param name="gKeyVal2">值2</param>
+        /// <param name="gKeyAttr3">字段3</param>
+        /// <param name="gKeyVal3">值3</param>
+        /// <param name="idxAttr">排序字段</param>
+        protected void DoOrderDown(string groupKeyAttr, object val1, string gKeyAttr2,
+            object gKeyVal2, string gKeyAttr3, object gKeyVal3, string gKeyAttr4, object gKeyVal4, string idxAttr)
+        {
+            string pkval = this.PKVal.ToString();
+            string pk = this.PK;
+            string table = this.EnMap.PhysicsTable;
+
+            string sql = "SELECT " + pk + " ," + idxAttr + " FROM " + table + " WHERE (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' AND " + gKeyAttr3 + "='" + gKeyVal3 + "' AND " + gKeyAttr4 + "='" + gKeyVal4 + "' ) order by " + idxAttr;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int idx = 0;
+            string nextNo = "";
+            string myNo = "";
+            bool isMeet = false;
+
+            string sqls = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                myNo = dr[pk].ToString();
+                if (isMeet == true)
+                {
+                    nextNo = myNo;
+                    isMeet = false;
+                }
+                idx++;
+
+                if (myNo == pkval)
+                    isMeet = true;
+
+                sqls += "@UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "' AND  (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "' ) ";
+            }
+
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "'  AND " + gKeyAttr3 + "='" + gKeyVal3 + "'  AND " + gKeyAttr4 + "='" + gKeyVal4 + "' )";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "' AND (" + groupKeyAttr + "='" + val1 + "' AND " + gKeyAttr2 + "='" + gKeyVal2 + "'  AND " + gKeyAttr3 + "='" + gKeyVal3 + "'   AND " + gKeyAttr4 + "='" + gKeyVal4 + "' )";
+
+            DBAccess.RunSQLs(sqls);
+        }
         #endregion 排序操作
 
         #region 直接操作
@@ -1265,22 +1365,23 @@ namespace BP.En
         {
             try
             {
+                var paras = SqlBuilder.GenerParas(this, null);
+
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        return this.RunSQL(this.SQLCash.Insert, SqlBuilder.GenerParas(this, null));
+                        return this.RunSQL(this.SQLCash.Insert, paras);
                     case DBType.Access:
-                        return this.RunSQL(this.SQLCash.Insert, SqlBuilder.GenerParas(this, null));
+                        return this.RunSQL(this.SQLCash.Insert, paras);
                         break;
                     case DBType.MySQL:
                     case DBType.Informix:
                     default:
-                        return this.RunSQL(this.SQLCash.Insert.Replace("[", "").Replace("]", ""), SqlBuilder.GenerParas(this, null));
+                        return this.RunSQL(this.SQLCash.Insert.Replace("[", "").Replace("]", ""), paras);
                 }
             }
             catch (Exception ex)
             {
-
                 this.CheckPhysicsTable();
 
                 //执行字段扩充检查.
@@ -2033,10 +2134,25 @@ namespace BP.En
         /// <param name="obj"></param>
         public void SetRefObject(string key, object obj)
         {
-            if (obj == null)
+            //if (obj == null)
+            //return;
+            if (this.Row.ContainsKey("_" + key) == false)
+            {
+                this.Row.Add("_" + key, obj);
                 return;
+            }
 
-            this.Row.SetValByKey("_" + key, obj);
+            if (obj == null)
+            {
+                this.Row["_" + key] = obj;
+                return;
+            }
+
+            if (obj.GetType() == typeof(TypeCode))
+                this.Row["_" + key] = (int)obj;
+            else
+                this.Row["_" + key] = obj;
+            //this.Row.SetValByKey("_" + key, obj);
         }
         #endregion
 
@@ -2296,7 +2412,9 @@ namespace BP.En
         /// <returns></returns>
         public bool verifyData()
         {
-            return true;
+            //如果启用验证就执行验证.
+            if (SystemConfig.GetValByKeyBoolen("IsEnableVerifyData", false) == false)
+                return true;
 
             string str = "";
             Attrs attrs = this.EnMap.Attrs;
@@ -2332,29 +2450,9 @@ namespace BP.En
                         }
                     }
                 }
-
-                //else if (attr.MyDataType == DataType.AppDateTime)
-                //{
-                //    if (this.GetValStringByKey(attr.Key).Trim().Length != 16)
-                //    {
-                //        //str+="@["+ attr.Desc +"]输入日期时间格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+DataType.SysDataTimeFormat+"要求。";
-                //    }
-                //}
-                //else if (attr.MyDataType == DataType.AppDate)
-                //{
-                //    if (this.GetValStringByKey(attr.Key).Trim().Length != 10)
-                //    {
-                //        //str+="@["+ attr.Desc +"]输入日期格式错误，输入的字段值["+this.GetValStringByKey(attr.Key)+"]不符合系统格式"+DataType.SysDataFormat+"要求。";
-                //    }
-                //}
             }
-
             if (str == "")
                 return true;
-
-
-
-            // throw new Exception("@在保存[" + this.EnDesc + "],PK[" + this.PK + "=" + this.PKVal + "]时出现信息录入不整错误：" + str);
 
             if (SystemConfig.IsDebug)
                 throw new Exception("@在保存[" + this.EnDesc + "],主键[" + this.PK + "=" + this.PKVal + "]时出现信息录入不整错误：" + str);
@@ -2818,7 +2916,7 @@ namespace BP.En
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {
-                if (attr.MyDataType == DataType.AppDate 
+                if (attr.MyDataType == DataType.AppDate
                     || attr.MyDataType == DataType.AppDateTime)
                 {
                     DateTime dt = this.GetValDateTime(attr.Key);
@@ -3591,7 +3689,10 @@ namespace BP.En
                 {
                     if (dr["FName"].ToString().Equals(attr.Key) == true)
                     {
-                        dbLen = int.Parse(dr["FLen"].ToString());
+                        if (DataType.IsNumStr(dr["FLen"].ToString()))
+                            dbLen = int.Parse(dr["FLen"].ToString());
+                        else
+                            dbLen = -1;
                         break;
                     }
                 }
@@ -4040,7 +4141,6 @@ namespace BP.En
 
                 //if (fields.Contains(attr.Key.ToUpper() + ",") == true)
                 //    continue;
-
                 //if (fields.Contains(","+attr.Key.ToUpper()) == true)
                 //    continue;
 
@@ -4124,6 +4224,7 @@ namespace BP.En
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
                     Log.DefaultLogWriteLineError("@没有检测到字段eunm" + attr.Key);
+
                 if (val.IndexOf("CHAR") != -1)
                 {
                     /*如果它是 varchar 字段*/

@@ -531,10 +531,11 @@ namespace BP.DA
         public static void WriteFile(string file, string Doc)
         {
             System.IO.StreamWriter sr;
-            if (System.IO.File.Exists(file))
-                System.IO.File.Delete(file);
+           
             try
             {
+                if (System.IO.File.Exists(file))
+                    System.IO.File.Delete(file);
                 //sr = new System.IO.StreamWriter(file, false, System.Text.Encoding.GetEncoding("GB2312"));
                 sr = new System.IO.StreamWriter(file, false, System.Text.Encoding.UTF8);
             }
@@ -670,7 +671,7 @@ namespace BP.DA
                     return ex.Message;
                 }
             }
-          
+
             //如果webResponse.StatusCode的值为HttpStatusCode.OK，表示成功，那你就可以接着读取接收到的内容了：
             // 获取接收到的流
             Stream stream = webResponse.GetResponseStream();
@@ -1740,7 +1741,6 @@ namespace BP.DA
                     return "";
             }
         }
-
         /// <summary>
         /// 当前的日期时间
         /// </summary>
@@ -2222,6 +2222,27 @@ namespace BP.DA
                 default:
                     return false;
             }
+        }
+        public static bool IsMobile(string input)
+        {
+            if (input.Length == 11 && input.Substring(0,1).Equals("1") )
+                return true;
+
+            if (input.Length < 11)
+                return false;
+
+            //电信手机号码正则
+            string dianxin = @"^1[3578][01379]\d{8}$";
+            Regex regexDX = new Regex(dianxin);
+            //联通手机号码正则
+            string liantong = @"^1[34578][01256]\d{8}";
+            Regex regexLT = new Regex(dianxin);
+            //移动手机号码正则
+            string yidong = @"^(1[012345678]\d{8}|1[345678][012356789]\d{8})$";
+            Regex regexYD = new Regex(dianxin);
+            if (regexDX.IsMatch(input) || regexLT.IsMatch(input) || regexYD.IsMatch(input))
+                return true;
+            return false;
         }
         /// <summary>
         /// 判断是否是数值类型@hongyan

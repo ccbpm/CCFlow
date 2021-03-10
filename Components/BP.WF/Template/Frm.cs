@@ -55,17 +55,6 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmAttr.PTable, value);
             }
         }
-        public string FK_Flow11
-        {
-            get
-            {
-                return this.GetValStringByKey(FrmAttr.FK_Flow);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttr.FK_Flow, value);
-            }
-        }
         public string URL
         {
             get
@@ -116,7 +105,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapData", "表单库");
+                Map map = new Map("Sys_MapData", "表单");
                 map.CodeStruct = "4";
 
                 map.AddTBStringPK(FrmAttr.No, null, null, true, true, 1, 200, 4);
@@ -134,7 +123,7 @@ namespace BP.WF.Template
                 map.AddTBString(FrmAttr.URL, null, "Url", true, false, 0, 50, 10);
 
                 //表单类别.
-                map.AddTBString(MapDataAttr.FK_FrmSort, "01", "表单类别", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.FK_FormTree, "01", "表单类别", true, false, 0, 500, 20);
 
                 map.AddTBInt(BP.Sys.MapDataAttr.FrmW, 900, "表单宽度", true, false);
                 map.AddTBInt(BP.Sys.MapDataAttr.FrmH, 1200, "表单高度", true, false);

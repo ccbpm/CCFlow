@@ -9,97 +9,6 @@ using BP.WF.Template;
 
 namespace BP.WF
 {
-
-    /// <summary>
-    /// 流程运行类型
-    /// </summary>
-    public enum TransferCustomType
-    {
-        /// <summary>
-        /// 按照流程定义的模式执行(自动模式)
-        /// </summary>s
-        ByCCBPMDefine,
-        /// <summary>
-        /// 按照工作人员的设置执行(人工干涉模式,人工定义模式.)
-        /// </summary>
-        ByWorkerSet
-    }
-    /// <summary>
-    /// 时间段
-    /// </summary>
-    public enum TSpan
-    {
-        /// <summary>
-        /// 本周
-        /// </summary>
-        ThisWeek,
-        /// <summary>
-        /// 上周
-        /// </summary>
-        NextWeek,
-        /// <summary>
-        /// 上上周
-        /// </summary>
-        TowWeekAgo,
-        /// <summary>
-        /// 更早
-        /// </summary>
-        More
-    }
-    /// <summary>
-    /// 流程状态(简)
-    /// </summary>
-    public enum WFSta
-    {
-        /// <summary>
-        /// 运行中
-        /// </summary>
-        Runing = 0,
-        /// <summary>
-        /// 已完成
-        /// </summary>
-        Complete,
-        /// <summary>
-        /// 其他
-        /// </summary>
-        Etc
-    }
-    /// <summary>
-    /// 会签任务状态
-    /// </summary>
-    public enum HuiQianTaskSta
-    {
-        /// <summary>
-        /// 无
-        /// </summary>
-        None,
-        /// <summary>
-        /// 会签中
-        /// </summary>
-        HuiQianing,
-        /// <summary>
-        /// 会签完成
-        /// </summary>
-        HuiQianOver
-    }
-    /// <summary>
-    /// 任务状态
-    /// </summary>
-    public enum TaskSta
-    {
-        /// <summary>
-        /// 无
-        /// </summary>
-        None,
-        /// <summary>
-        /// 共享
-        /// </summary>
-        Sharing,
-        /// <summary>
-        /// 已经取走
-        /// </summary>
-        Takeback
-    }
     /// <summary>
     /// 流程实例
     /// </summary>
@@ -1267,18 +1176,30 @@ namespace BP.WF
 		public GenerWorkFlow()
         {
         }
+        /// <summary>
+        /// 按照WorkID查询.
+        /// </summary>
+        /// <param name="workId"></param>
         public GenerWorkFlow(Int64 workId)
         {
+            //this.WorkID = workId
+            //this.Retrieve();
+
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(GenerWorkFlowAttr.WorkID, workId);
             if (qo.DoQuery() == 0)
                 throw new Exception("工作 GenerWorkFlow [" + workId + "]不存在。");
         }
         /// <summary>
-        /// 执行修复
+        /// 按照GUID查询.
         /// </summary>
-        public void DoRepair()
+        /// <param name="guid"></param>
+        public GenerWorkFlow(string guid)
         {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(GenerWorkFlowAttr.GUID, guid);
+            if (qo.DoQuery() == 0)
+                throw new Exception("工作 GenerWorkFlow [" + guid + "]不存在。");
         }
         /// <summary>
         /// 重写基类方法
@@ -1309,11 +1230,9 @@ namespace BP.WF
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
 
-
                 map.AddTBString(GenerWorkFlowAttr.Starter, null, "发起人", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.Sender, null, "发送人", true, false, 0, 200, 10);
-
 
                 map.AddTBDateTime(GenerWorkFlowAttr.RDT, "记录日期", true, true);
                 map.AddTBDateTime(GenerWorkFlowAttr.SendDT, "流程活动时间", true, true);
@@ -1429,6 +1348,9 @@ namespace BP.WF
             //加入组织no.
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
+
+            //生成GUID.
+            this.GUID = BP.DA.DBAccess.GenerGUID();
 
             return base.beforeInsert();
         }

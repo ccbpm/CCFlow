@@ -41,7 +41,7 @@ namespace BP.WF
             DBAccess.RunSQLs(sqls);
 
             // 删除垃圾数据. 
-            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT No FROM Port_Emp)");
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " FROM Port_Emp )");
             DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
 
             DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
@@ -852,7 +852,7 @@ namespace BP.WF
 
             if (_Multilingual_Cache.ContainsKey(className) == false)
             {
-                DataSet ds = DataType.CXmlFileToDataSet(SystemConfig.PathOfData + "\\lang\\xml\\" + className + ".xml");
+                DataSet ds = DataType.CXmlFileToDataSet(SystemConfig.PathOfData + "lang\\xml\\" + className + ".xml");
                 DataTable dt = ds.Tables[0];
 
                 _Multilingual_Cache.Add(className, dt);
@@ -1146,17 +1146,17 @@ namespace BP.WF
             string sqlscript = "";
             //MSSQL_GPM_VIEW 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
 
             //Oracle 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
                 throw new Exception("err@没有判断的数据库类型:" + SystemConfig.AppCenterDBType.ToString());
@@ -1179,7 +1179,7 @@ namespace BP.WF
             sql += " AND  FK_Attr NOT IN (SELECT MYPK FROM sys_mapattr ) AND LENGTH(FK_Attr) >0";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count>=1)
+            if (dt.Rows.Count >= 1)
                 err += "err@在配置如下流程的条件的时候，字段被删除，会导致流程运行错误:" + BP.Tools.Json.ToJson(dt);
 
             return err;
@@ -1190,13 +1190,16 @@ namespace BP.WF
         /// 当前版本号-为了升级使用.
         /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20200603;
+        public static int Ver = 20201130;
         /// <summary>
         /// 执行升级
         /// </summary>
         /// <returns></returns>
         public static string UpdataCCFlowVer()
         {
+            if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                return "info@SAAS模式需要手工升级.";
+
             //string checkErr = CheckFlows();
             //if (DataType.IsNullOrEmpty(checkErr) == false)
             //    return checkErr;
@@ -1221,13 +1224,6 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID is null");
             }
 
-            MapAttr attr = new MapAttr();
-            attr.CheckPhysicsTable();
-
-            FlowExt fe = new FlowExt();
-            fe.CheckPhysicsTable();
-
-
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
 
@@ -1240,6 +1236,12 @@ namespace BP.WF
             //检查BPM.
             if (!SystemConfig.OrganizationIsView)
                 CheckGPM();
+
+            MapAttr attr = new MapAttr();
+            attr.CheckPhysicsTable();
+
+            FlowExt fe = new FlowExt();
+            fe.CheckPhysicsTable();
 
             #region 升级优化集团版的应用. 2020.04.03
 
@@ -1262,6 +1264,26 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_NodeToolbar SET IsMyCC = 1 Where ShowWhere = 2");
 
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
+            }
+            //--2020.11.30 FrmLab中Text字段在人大金仓是关键字
+            if (DBAccess.IsExitsTableCol("Sys_FrmLab", "Text") == true)
+            {
+                DBAccess.RunSQL("ALTER TABLE Sys_FrmLab ADD Lab NVARCHAR(100) DEFAULT  NULL");
+                DBAccess.RunSQL("UPDATE Sys_FrmLab SET Lab=Text WHERE Lab='' AND  Text!='' ");
+                DBAccess.DropTableColumn("Sys_FrmLab", "Text");
+            }
+
+            if (DBAccess.IsExitsTableCol("Sys_FrmBtn", "Lab") == false)
+            {
+                DBAccess.RunSQL("ALTER TABLE Sys_FrmBtn ADD Lab NVARCHAR(100) DEFAULT  NULL");
+                DBAccess.RunSQL("UPDATE Sys_FrmBtn SET Lab=Text ");
+                DBAccess.DropTableColumn("Sys_FrmBtn", "Text");
+            }
+            if (DBAccess.IsExitsTableCol("Sys_FrmLink", "Lab") == false)
+            {
+                DBAccess.RunSQL("ALTER TABLE Sys_FrmLink ADD Lab NVARCHAR(100) DEFAULT  NULL");
+                DBAccess.RunSQL("UPDATE Sys_FrmLink SET Lab=Text ");
+                DBAccess.DropTableColumn("Sys_FrmLink", "Text");
             }
 
             //检查frmTrack.
@@ -1316,7 +1338,6 @@ namespace BP.WF
             //修复数据表.
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
-
 
             //if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
             //    DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
@@ -1411,7 +1432,7 @@ namespace BP.WF
 
 
                     //获得类型.
-                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID,-1);
+                    int OrAndType = DBAccess.RunSQLReturnValInt("SELECT  CondOrAnd  FROM wf_cond WHERE FK_Node=" + nodeID, -1);
                     if (OrAndType == -1)
                         continue;
 
@@ -1516,11 +1537,11 @@ namespace BP.WF
 
                 sql = "CREATE VIEW V_WF_AuthTodolist ";
                 sql += " AS ";
-                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID,C.EmpNo,  C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title ";
+                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID,C.AutherToEmpNo,  C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title ";
                 sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
                 sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=1 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2";
                 sql += "    UNION  ";
-                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID, C.EmpNo, C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title";
+                sql += " SELECT B.FK_Emp Auther,B.FK_EmpText AuthName,A.PWorkID,A.FK_Node,A.FID,A.WorkID, C.AutherToEmpNo, C.TakeBackDT, A.FK_Flow, A.FlowName,A.Title";
                 sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Auth C";
                 sql += " WHERE A.WorkID=B.WorkID AND C.AuthType=2 AND B.FK_Emp=C.Auther AND B.IsPass=0 AND B.IsEnable=1 AND A.FK_Node = B.FK_Node AND A.WFState >=2 AND A.FK_Flow=C.FlowNo";
                 DBAccess.RunSQL(sql);
@@ -2137,17 +2158,17 @@ namespace BP.WF
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
-                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_Ora.sql";
+                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_Ora.sql";
                         break;
                     case DBType.MSSQL:
                     case DBType.Informix:
-                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_SQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_SQL.sql";
                         break;
                     case DBType.MySQL:
-                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_MySQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_MySQL.sql";
                         break;
                     case DBType.PostgreSQL:
-                        sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitView_PostgreSQL.sql";
+                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_PostgreSQL.sql";
                         break;
                     default:
                         break;
@@ -2265,15 +2286,14 @@ namespace BP.WF
                 #endregion
 
                 #region 执行admin登陆. 2012-12-25 新版本.
-                Emp emp = new Emp();
-                emp.No = "admin";
+                Emp emp = new Emp("admin");
                 if (emp.RetrieveFromDBSources() == 1)
                 {
                     BP.Web.WebUser.SignInOfGener(emp);
                 }
                 else
                 {
-                    emp.No = "admin";
+                    emp.SetValByKey("No", "admin");
                     emp.Name = "admin";
                     emp.FK_Dept = "01";
                     emp.Pass = "123";
@@ -2374,7 +2394,7 @@ namespace BP.WF
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
             string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
 
-            string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
+            string sqlScript = SystemConfig.PathOfData + "UpdataCCFlowVer.sql";
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
             string myVer = fi.LastWriteTime.ToString("yyyyMMddHH");
 
@@ -2604,7 +2624,7 @@ namespace BP.WF
             BP.GPM.Emp empGPM = new BP.GPM.Emp();
             empGPM.CheckPhysicsTable();
 
-            sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
+            sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
             DBAccess.RunSQLScript(sqlscript);
 
             BP.Port.Emp empAdmin = new Emp("admin");
@@ -2771,28 +2791,28 @@ namespace BP.WF
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
                     break;
                 case DBType.MSSQL:
                 case DBType.Informix:
-                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
                     break;
                 case DBType.MySQL:
-                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
                     break;
                 case DBType.PostgreSQL:
-                    sqlscript = SystemConfig.CCFlowAppPath + "\\WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
                     break;
                 default:
                     break;
             }
-            DBAccess.RunSQLScript(sqlscript,false);
+            DBAccess.RunSQLScript(sqlscript, false);
             #endregion 创建视图与数据
 
             #region 5, 初始化数据.
             if (isInstallFlowDemo)
             {
-                sqlscript = SystemConfig.PathOfData + "\\Install\\SQLScript\\InitPublicData.sql";
+                sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
                 DBAccess.RunSQLScript(sqlscript);
             }
             // else
@@ -2817,10 +2837,10 @@ namespace BP.WF
                     i++;
                     BP.WF.Port.WFEmp wfEmp = new BP.WF.Port.WFEmp();
                     wfEmp.Copy(emp);
-                    wfEmp.No = emp.No;
+                    wfEmp.No = emp.UserID;
 
                     if (wfEmp.Email.Length == 0)
-                        wfEmp.Email = emp.No + "@ccflow.org";
+                        wfEmp.Email = emp.UserID + "@ccflow.org";
 
                     if (wfEmp.Tel.Length == 0)
                         wfEmp.Tel = "82374939-6" + i.ToString().PadLeft(2, '0');
@@ -2838,11 +2858,11 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
-                
+
                 DataTable dtStudent = DBAccess.RunSQLReturnTable("SELECT No FROM Demo_Student");
                 foreach (DataRow dr in dtStudent.Rows)
                 {
@@ -2906,7 +2926,7 @@ namespace BP.WF
                 s1.Update();
 
                 //加载一个模版,不然用户不知道如何新建流程.
-                Flow.DoLoadFlowTemplate(s1.No, SystemConfig.PathOfData + "\\Install\\QingJiaFlowDemoInit.xml",
+                BP.WF.Template.TemplateGlo.LoadFlowTemplate(s1.No, SystemConfig.PathOfData + "Install\\QingJiaFlowDemoInit.xml",
                     ImpFlowTempleteModel.AsTempleteFlowNo);
                 Flow fl = new Flow("001");
                 fl.DoCheck(); //做一下检查.
@@ -3739,18 +3759,6 @@ namespace BP.WF
 
         #region web.config 属性.
         /// <summary>
-        /// 根据配置的信息不同，从不同的表里获取人员岗位信息。
-        /// </summary>
-        public static string EmpStation
-        {
-            get
-            {
-
-                return "Port_DeptEmpStation";
-
-            }
-        }
-        /// <summary>
         /// 是否admin
         /// </summary>
         public static bool IsAdmin
@@ -3867,10 +3875,10 @@ namespace BP.WF
             }
 
             Emp emp = new Emp(empNo);
-            backHtml += " **** 开始使用:" + Glo.GenerUserImgSmallerHtml(emp.No, emp.Name) + "登录模拟执行工作流程";
+            backHtml += " **** 开始使用:" + Glo.GenerUserImgSmallerHtml(emp.UserID, emp.Name) + "登录模拟执行工作流程";
             BP.WF.Dev2Interface.Port_Login(empNo);
 
-            workid = BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, ht, null, emp.No, null);
+            workid = BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, ht, null, emp.UserID, null);
             SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ht);
             backHtml += objs.ToMsgOfHtml().Replace("@", "<br>@");  //记录消息.
 
@@ -3898,7 +3906,7 @@ namespace BP.WF
             Emp emp = new Emp(empNo);
             //html = "";
             backHtml += "empNo" + beginEmp;
-            backHtml += "<br> **** 让:" + Glo.GenerUserImgSmallerHtml(emp.No, emp.Name) + "执行模拟登录. ";
+            backHtml += "<br> **** 让:" + Glo.GenerUserImgSmallerHtml(emp.UserID, emp.Name) + "执行模拟登录. ";
             // 让其登录.
             BP.WF.Dev2Interface.Port_Login(empNo);
 
@@ -3985,7 +3993,7 @@ namespace BP.WF
 
             t.NDTo = toNodeID;
             t.NDToT = toNodeName;
-            
+
             string[] empNos = toEmpID.Split(',');
             if (empNos.Length <= 100)
             {
@@ -3996,10 +4004,10 @@ namespace BP.WF
             {
                 string[] empNames = toEmpName.Split('、');
                 //获取
-                t.EmpTo = string.Join(",", empNos.Take(100))+"..."+ empNos[empNos.Length-1];
-                t.EmpToT = string.Join("'、", empNames.Take(100))+"..." + empNames[empNames.Length - 1];
+                t.EmpTo = string.Join(",", empNos.Take(100)) + "..." + empNos[empNos.Length - 1];
+                t.EmpToT = string.Join("'、", empNames.Take(100)) + "..." + empNames[empNames.Length - 1];
             }
-           
+
             t.Msg = note;
 
             //参数.
@@ -4409,7 +4417,7 @@ namespace BP.WF
                         {
                             if (SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(key) == true)
                                 valPara = HttpContextHelper.RequestParams(key);
-                             else
+                            else
                                 throw new Exception("@判断条件时错误,请确认参数是否拼写错误,没有找到对应的表达式:" + exp + " Key=(" + key + ") oper=(" + oper + ")Val=(" + val + ")");
                         }
                         catch
@@ -4620,7 +4628,6 @@ namespace BP.WF
             if (en != null)
             {
                 Row row = en.Row;
-
                 //特殊判断.
                 if (row.ContainsKey("OID") == true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
@@ -4728,7 +4735,7 @@ namespace BP.WF
                     case WorkAttr.MD5:
                     case WorkAttr.Rec:
                     case GERptAttr.Title:
-                   // case GERptAttr.Emps:
+                    // case GERptAttr.Emps:
                     case GERptAttr.FK_Dept:
                     //case GERptAttr.PRI:
                     case GERptAttr.FID:
@@ -4799,7 +4806,7 @@ namespace BP.WF
 
                 #region 检查数据是否完整。
                 BP.Port.Emp emp = new BP.Port.Emp();
-                emp.No = executer;
+                emp.UserID = executer;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     err += "@账号:" + starter + ",不存在。";
@@ -4811,7 +4818,7 @@ namespace BP.WF
                     continue;
                 }
 
-                emp.No = starter;
+                emp.UserID = starter;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     err += "@账号:" + executer + ",不存在。";
@@ -4968,7 +4975,7 @@ namespace BP.WF
                 #region 检查数据是否完整。
                 //发起人发起。
                 BP.Port.Emp emp = new BP.Port.Emp();
-                emp.No = executer;
+                emp.UserID = executer;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     err += "@账号:" + starter + ",不存在。";
@@ -4982,7 +4989,7 @@ namespace BP.WF
                 }
 
                 emp = new BP.Port.Emp();
-                emp.No = starter;
+                emp.UserID = starter;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     err += "@账号:" + starter + ",不存在。";
@@ -5141,26 +5148,56 @@ namespace BP.WF
             {
                 if (string.IsNullOrEmpty(value) == true)
                     return;
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-                ps.Add("v", value);
-                ps.Add("FK_Emp", WebUser.No);
 
-                int i = DBAccess.RunSQL(ps);
-                if (i == 0)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
+                    string mypk = WebUser.OrgNo + "_" + WebUser.No;
+
+                    Paras myps = new Paras();
+                    myps.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "Msg WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
+                    myps.Add("Msg", value);
+                    myps.Add("No", mypk);
+                    if (DBAccess.RunSQL(myps) != 0)
+                        return;
+
                     /*如果没有更新到.*/
-                    BP.WF.Port.WFEmp emp = new Port.WFEmp();
-                    emp.No = BP.Web.WebUser.No;
-                    emp.Name = BP.Web.WebUser.Name;
-                    emp.FK_Dept = BP.Web.WebUser.FK_Dept;
-                    emp.Email = new BP.GPM.Emp(WebUser.No).Email;
-                    emp.Insert();
-                    DBAccess.RunSQL(ps);
+                    BP.WF.Port.WFEmp myemp = new Port.WFEmp();
+                    //myemp.No = mypk;
+
+                    myemp.SetValByKey("No", mypk);
+
+                    myemp.Name = BP.Web.WebUser.Name;
+                    myemp.FK_Dept = BP.Web.WebUser.FK_Dept;
+
+                    //SAAS 需要判断.
+                    //BP.Port.Emp emp = new BP.Port.Emp();
+                    //emp.Email = DBAccess.RunSQLReturnString("SELECT Eamil FROM Port_Emp WHERE "); // new BP.GPM.Emp(WebUser.No).Email;
+                    myemp.Insert();
+                    DBAccess.RunSQL(myps);
+                    return;
                 }
+
+
+                Paras ps = new Paras();
+                ps.SQL = "UPDATE WF_Emp SET Msg=" + SystemConfig.AppCenterDBVarStr + "v WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
+                ps.Add("v", value);
+                ps.Add("No", WebUser.No);
+                if (DBAccess.RunSQL(ps) == 1)
+                    return;
+
+                /*如果没有更新到.*/
+                BP.WF.Port.WFEmp emp = new Port.WFEmp();
+                emp.No = BP.Web.WebUser.No;
+                emp.Name = BP.Web.WebUser.Name;
+                emp.FK_Dept = BP.Web.WebUser.FK_Dept;
+
+                //SAAS 需要判断.
+                //BP.Port.Emp emp = new BP.Port.Emp();
+                //emp.Email = DBAccess.RunSQLReturnString("SELECT Eamil FROM Port_Emp WHERE "); // new BP.GPM.Emp(WebUser.No).Email;
+                emp.Insert();
+                DBAccess.RunSQL(ps);
             }
         }
- 
         private static Hashtable _SendHTOfTemp = null;
         /// <summary>
         /// 临时的发送传输变量.
@@ -5217,7 +5254,7 @@ namespace BP.WF
                     _AttrsOfRpt.AddTBString(GERptAttr.FlowEnder, null, "结束人", true, false, 0, 10, 10);
                     _AttrsOfRpt.AddTBString(GERptAttr.FlowEnderRDT, null, "最后处理时间", true, false, 0, 10, 10);
                     _AttrsOfRpt.AddTBInt(GERptAttr.FlowEndNode, 0, "停留节点", true, false);
-                    _AttrsOfRpt.AddTBDecimal(GERptAttr.FlowDaySpan, 0, "跨度(天)", true, false);
+                    _AttrsOfRpt.AddTBDecimal(GERptAttr.FlowDaySpan, 0, "流程时长(天)", true, false);
                     //_AttrsOfRpt.AddTBString(GERptAttr.FK_NY, null, "隶属月份", true, false, 0, 10, 10);
                 }
                 return _AttrsOfRpt;
@@ -5361,7 +5398,7 @@ namespace BP.WF
             ps.Add("FK_Emp", WebUser.No);
 
             string s = DBAccess.RunSQLReturnStringIsNull(ps, "1");
-            if (s == null || s.Equals("1")==true)
+            if (s == null || s.Equals("1") == true)
                 return true;
             return false;
         }
@@ -5464,14 +5501,14 @@ namespace BP.WF
         {
             switch (BP.WF.Glo.UserInfoShowModel)
             {
-                case UserInfoShowModel.UserIDOnly:                  
-                    return  no ;
+                case UserInfoShowModel.UserIDOnly:
+                    return no;
                 case UserInfoShowModel.UserIDUserName:
-                   // return "(" + no + "," + name + ")";
-                    return no + ","+name;
+                    // return "(" + no + "," + name + ")";
+                    return no + "," + name;
                 case UserInfoShowModel.UserNameOnly:
                     //return "(" + name + ")";
-                    return  name;
+                    return name;
                 default:
                     throw new Exception("@没有判断的格式类型.");
                     break;
@@ -6215,52 +6252,6 @@ namespace BP.WF
         #region 其他方法。
 
         /// <summary>
-        /// 对数字添加”,“号，可以处理负数以及带有小数的情况（给金钱添加千分号）
-        /// </summary>
-        /// <param name="version"></param>
-        /// <returns></returns>
-        public static string FormatMoney(string money)
-        {
-            //处理带有负号情况
-            int negNumber = money.IndexOf("-");
-            string prefix = string.Empty;
-            if (negNumber != -1)
-            {
-                prefix = "-";
-                money = money.Substring(1);
-            }
-            //处理有小数位情况
-            int decNumber = money.IndexOf(".");
-            string postfix = string.Empty;
-            if (decNumber != -1)
-            {
-                postfix = money.Substring(decNumber);
-                money = money.Substring(0, decNumber - 1);
-            }
-            else
-            {
-                postfix = ".00";
-            }
-            //开始添加”,“号
-            if (money.Length > 3)
-            {
-                string str1 = money.Substring(0, money.Length - 3);
-                string str2 = money.Substring(money.Length - 3, 3);
-                if (str1.Length > 3)
-                {
-                    return prefix + FormatMoney(str1) + "," + str2 + postfix;
-                }
-                else
-                {
-                    return prefix + str1 + "," + str2 + postfix;
-                }
-            }
-            else
-            {
-                return prefix + money + postfix;
-            }
-        }
-        /// <summary>
         /// 删除临时文件
         /// </summary>
         public static void DeleteTempFiles()
@@ -6290,16 +6281,22 @@ namespace BP.WF
             }
         }
         public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment,
-            Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true,int fk_node=0,string fk_mapData=null)
+            Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true, int fk_node = 0, string fk_mapData = null)
         {
             if (pkval == null)
                 pkval = "0"; //解决预览的时候的错误.
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
             //查询使用的workId
-            string ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
-            if (ctrlWayId.Equals("0") == true)
+            string ctrlWayId = "";
+            if (FK_FrmAttachment.Contains("AthMDtl") == true)
                 ctrlWayId = pkval;
+            else
+                ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
+
+            //如果是空的，就返回空数据结构. @lizhen.
+            if (ctrlWayId.Equals("0") == true)
+                return dbs;
 
             BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
@@ -6329,16 +6326,7 @@ namespace BP.WF
                 }
                 return dbs;
             }
-            else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
-            {
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-                qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-                qo.addOrderBy("RDT");
-                qo.DoQuery();
-                return dbs;
-            }
-                    
+
             /* 继承模式 */
             if (athDesc.AthUploadWay == AthUploadWay.Interwork)
                 qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
@@ -6470,207 +6458,212 @@ namespace BP.WF
             string sql = "";
             string ptable = flow.PTable;
 
-            #region 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
-            DateTime dtNow = DateTime.Now;
-            if (role == StartLimitRole.Day)
+            try
             {
-                /* 仅允许一天发起一次 */
-                sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentData + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                #region 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
+                DateTime dtNow = DateTime.Now;
+                if (role == StartLimitRole.Day)
                 {
-                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
-                        return true;
-
-                    //判断时间是否在设置的发起范围内. 配置的格式为 @11:00-12:00@15:00-13:45
-                    string[] strs = flow.StartLimitPara.Split('@');
-                    foreach (string str in strs)
+                    /* 仅允许一天发起一次 */
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentData + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
-                        if (string.IsNullOrEmpty(str))
-                            continue;
-                        string[] timeStrs = str.Split('-');
-                        string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
-                        string tTo = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && DataType.ParseSysDateTime2DateTime(tTo) >= dtNow)
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                             return true;
+
+                        //判断时间是否在设置的发起范围内. 配置的格式为 @11:00-12:00@15:00-13:45
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
+                            string tTo = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && DataType.ParseSysDateTime2DateTime(tTo) >= dtNow)
+                                return true;
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                        return false;
                 }
-                else
-                    return false;
-            }
 
-            if (role == StartLimitRole.Week)
-            {
-                /*
-                 * 1, 找出周1 与周日分别是第几日.
-                 * 2, 按照这个范围去查询,如果查询到结果，就说明已经启动了。
-                 */
-                sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT >= '" + DataType.WeekOfMonday(dtNow) + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                if (role == StartLimitRole.Week)
                 {
-                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
-                        return true; /*如果没有时间的限制.*/
-
-                    //判断时间是否在设置的发起范围内. 
-                    // 配置的格式为 @Sunday,11:00-12:00@Monday,15:00-13:45, 意思是.周日，周一的指定的时间点范围内可以启动流程.
-
-                    string[] strs = flow.StartLimitPara.Split('@');
-                    foreach (string str in strs)
+                    /*
+                     * 1, 找出周1 与周日分别是第几日.
+                     * 2, 按照这个范围去查询,如果查询到结果，就说明已经启动了。
+                     */
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT >= '" + DataType.WeekOfMonday(dtNow) + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
-                        if (string.IsNullOrEmpty(str))
-                            continue;
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true; /*如果没有时间的限制.*/
 
-                        string weekStr = DateTime.Now.DayOfWeek.ToString().ToLower();
-                        if (str.ToLower().Contains(weekStr) == false)
-                            continue; // 判断是否当前的周.
+                        //判断时间是否在设置的发起范围内. 
+                        // 配置的格式为 @Sunday,11:00-12:00@Monday,15:00-13:45, 意思是.周日，周一的指定的时间点范围内可以启动流程.
 
-                        string[] timeStrs = str.Split(',');
-                        string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
-                        string tTo = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
-                            return true;
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+
+                            string weekStr = DateTime.Now.DayOfWeek.ToString().ToLower();
+                            if (str.ToLower().Contains(weekStr) == false)
+                                continue; // 判断是否当前的周.
+
+                            string[] timeStrs = str.Split(',');
+                            string tFrom = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[0].Trim();
+                            string tTo = DateTime.Now.ToString("yyyy-MM-dd") + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                        return false;
                 }
-                else
-                    return false;
-            }
 
-            // #warning 没有考虑到周的如何处理.
+                // #warning 没有考虑到周的如何处理.
 
-            if (role == StartLimitRole.Month)
-            {
-                sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentYearMonth + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                if (role == StartLimitRole.Month)
                 {
-                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
-                        return true;
-
-                    //判断时间是否在设置的发起范围内. 配置格式: @-01 12:00-13:11@-15 12:00-13:11 , 意思是：在每月的1号,15号 12:00-13:11可以启动流程.
-                    string[] strs = flow.StartLimitPara.Split('@');
-                    foreach (string str in strs)
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentYearMonth + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
-                        if (string.IsNullOrEmpty(str))
-                            continue;
-                        string[] timeStrs = str.Split('-');
-                        string tFrom = DateTime.Now.ToString("yyyy-MM-") + " " + timeStrs[0].Trim();
-                        string tTo = DateTime.Now.ToString("yyyy-MM-") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                             return true;
+
+                        //判断时间是否在设置的发起范围内. 配置格式: @-01 12:00-13:11@-15 12:00-13:11 , 意思是：在每月的1号,15号 12:00-13:11可以启动流程.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DateTime.Now.ToString("yyyy-MM-") + " " + timeStrs[0].Trim();
+                            string tTo = DateTime.Now.ToString("yyyy-MM-") + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                        return false;
                 }
-                else
-                    return false;
-            }
 
-            if (role == StartLimitRole.JD)
-            {
-                sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentAPOfJD + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                if (role == StartLimitRole.JD)
                 {
-                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
-                        return true;
-
-                    //判断时间是否在设置的发起范围内.
-                    string[] strs = flow.StartLimitPara.Split('@');
-                    foreach (string str in strs)
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentAPOfJD + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
-                        if (string.IsNullOrEmpty(str))
-                            continue;
-                        string[] timeStrs = str.Split('-');
-                        string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
-                        string tTo = DateTime.Now.ToString("yyyy-") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                             return true;
+
+                        //判断时间是否在设置的发起范围内.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
+                            string tTo = DateTime.Now.ToString("yyyy-") + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                        return false;
                 }
-                else
-                    return false;
-            }
 
-            if (role == StartLimitRole.Year)
-            {
-                sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY LIKE '" + DataType.CurrentYear + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                if (role == StartLimitRole.Year)
                 {
-                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
-                        return true;
-
-                    //判断时间是否在设置的发起范围内.
-                    string[] strs = flow.StartLimitPara.Split('@');
-                    foreach (string str in strs)
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY LIKE '" + DataType.CurrentYear + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
-                        if (string.IsNullOrEmpty(str))
-                            continue;
-                        string[] timeStrs = str.Split('-');
-                        string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
-                        string tTo = DateTime.Now.ToString("yyyy-") + " " + timeStrs[1].Trim();
-                        if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                             return true;
+
+                        //判断时间是否在设置的发起范围内.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DateTime.Now.ToString("yyyy-") + " " + timeStrs[0].Trim();
+                            string tTo = DateTime.Now.ToString("yyyy-") + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                        return false;
                 }
-                else
-                    return false;
-            }
-            #endregion 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
+                #endregion 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
 
 
-            //为子流程的时候，该子流程只能被调用一次.
-            if (role == StartLimitRole.OnlyOneSubFlow)
-            {
-
-                if (SystemConfig.IsBSsystem == true)
+                //为子流程的时候，该子流程只能被调用一次.
+                if (role == StartLimitRole.OnlyOneSubFlow)
                 {
 
-                    string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
-                    string pworkid = HttpContextHelper.RequestParams("PWorkID");
+                    if (SystemConfig.IsBSsystem == true)
+                    {
 
-                    if (pworkid == null)
-                        return true;
+                        string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
+                        string pworkid = HttpContextHelper.RequestParams("PWorkID");
 
-                    sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkid + " AND FK_Flow='" + flow.No + "'";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
-                        return true;
+                        if (pworkid == null)
+                            return true;
 
-                    //  string title = dt.Rows[0]["Title"].ToString();
-                    string starter = dt.Rows[0]["Starter"].ToString();
-                    string rdt = dt.Rows[0]["RDT"].ToString();
-                    return false;
-                    //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
+                        sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkid + " AND FK_Flow='" + flow.No + "'";
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
+                            return true;
+
+                        //  string title = dt.Rows[0]["Title"].ToString();
+                        string starter = dt.Rows[0]["Starter"].ToString();
+                        string rdt = dt.Rows[0]["RDT"].ToString();
+                        return false;
+                        //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
+                    }
                 }
-            }
 
-            // 配置的sql,执行后,返回结果是 0 .
-            if (role == StartLimitRole.ResultIsZero)
+                // 配置的sql,执行后,返回结果是 0 .
+                if (role == StartLimitRole.ResultIsZero)
+                {
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                        return true;
+                    else
+                        return false;
+                }
+
+                // 配置的sql,执行后,返回结果是 <> 0 .
+                if (role == StartLimitRole.ResultIsNotZero)
+                {
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
+                        return true;
+
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
+                        return true;
+                    else
+                        return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
             {
-                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
-                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                    return true;
-                else
-                    return false;
+                throw new Exception("err@发起限制规则[" + role.ToString() + "]出现错误:" + ex.Message);
             }
-
-            // 配置的sql,执行后,返回结果是 <> 0 .
-            if (role == StartLimitRole.ResultIsNotZero)
-            {
-                if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
-                    return true;
-
-                sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
-                if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
-                    return true;
-                else
-                    return false;
-            }
-
-            return true;
         }
-
-       
 
         /// <summary>
         /// 复制表单权限-从一个节点到另一个节点.
@@ -6910,9 +6903,50 @@ namespace BP.WF
             }
             StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
             //读取返回消息
-            string data= sr.ReadToEnd();
+            string data = sr.ReadToEnd();
             sr.Close();
             return data;
+        }
+        public static string FormatMoney(string money)
+        {
+            //处理带有负号情况
+            int negNumber = money.IndexOf("-");
+            string prefix = string.Empty;
+            if (negNumber != -1)
+            {
+                prefix = "-";
+                money = money.Substring(1);
+            }
+            //处理有小数位情况
+            int decNumber = money.IndexOf(".");
+            string postfix = string.Empty;
+            if (decNumber != -1)
+            {
+                postfix = money.Substring(decNumber);
+                money = money.Substring(0, decNumber - 1);
+            }
+            else
+            {
+                postfix = ".00";
+            }
+            //开始添加”,“号
+            if (money.Length > 3)
+            {
+                string str1 = money.Substring(0, money.Length - 3);
+                string str2 = money.Substring(money.Length - 3, 3);
+                if (str1.Length > 3)
+                {
+                    return prefix + FormatMoney(str1) + "," + str2 + postfix;
+                }
+                else
+                {
+                    return prefix + str1 + "," + str2 + postfix;
+                }
+            }
+            else
+            {
+                return prefix + money + postfix;
+            }
         }
     }
     #endregion http请求

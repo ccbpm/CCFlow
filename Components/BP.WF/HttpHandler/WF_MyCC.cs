@@ -313,16 +313,16 @@ namespace BP.WF.HttpHandler
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
                 else
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyFlowTreeReadOnly.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyFlowTreeReadOnly.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
 
                 string[] strs = this.RequestParas.Split('&');
@@ -430,7 +430,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //string url = "MyCCFoolTruck.htm";
-                string url = "MyViewGener.htm";
+                string url = "MyCCGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -447,7 +447,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //string url = "MyCCFoolTruck.htm";
-                string url = "MyViewGener.htm";
+                string url = "MyCCWebOffice.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -463,9 +463,9 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyViewGener.htm";
+                string url = "MyCCGener.htm";
                 if (this.IsMobile)
-                    url = "MyViewGener.htm";
+                    url = "MyCCGener.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -484,7 +484,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyViewGener.htm";
+                string url = "MyCCSelfForm.htm";
 
                 //处理连接.
                 url = this.MyCC_Init_DealUrl(currND, currWK, url);
@@ -495,7 +495,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 内置表单类型的判断.
 
-            string myurl = "MyViewGener.htm";
+            string myurl = "MyCCGener.htm";
 
             //处理连接.
             myurl = this.MyCC_Init_DealUrl(currND, currWK, myurl);
@@ -589,10 +589,18 @@ namespace BP.WF.HttpHandler
                     dr["No"] = "ReadAndClose";
                     dr["Name"] = "阅件完毕";
                     dr["Oper"] = "ReadAndClose();";
-                    
                 }
                 
                 dt.Rows.Add(dr);
+
+
+                //加载轨迹.
+                dr = dt.NewRow();
+                dr["No"] = "Track";
+                dr["Name"] = "轨迹";
+                dr["Oper"] = "";
+                dt.Rows.Add(dr);
+
                 #region 加载流程抄送 - 按钮
 
 
@@ -626,7 +634,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
                 /* 公文标签 */
-                if (btnLab.OfficeBtnEnable ==true)
+                if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
                 {
                     dr = dt.NewRow();
                     dr["No"] = "DocWord";

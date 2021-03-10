@@ -17,6 +17,8 @@ using ICSharpCode.SharpZipLib.Zip;
 using LitJson;
 using BP.NetPlatformImpl;
 using BP.Sys;
+using System.Net;
+using System.Drawing;
 
 namespace BP.WF.HttpHandler
 {
@@ -26,6 +28,10 @@ namespace BP.WF.HttpHandler
     public class WF_CCForm : DirectoryPageBase
     {
         #region 多附件.
+        /// <summary>
+        /// 获得数据
+        /// </summary>
+        /// <returns></returns>
         public string Ath_Init()
         {
             try
@@ -39,8 +45,8 @@ namespace BP.WF.HttpHandler
                 if (pkVal.Equals("0") == true)
                     pkVal = this.WorkID.ToString();
 
-                
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID,true,this.FK_Node,this.FK_MapData);
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal, 
+                    this.FK_FrmAttachment, this.WorkID, this.FID, this.PWorkID,true,this.FK_Node,this.FK_MapData);
 
                 #region 如果图片显示.(先不考虑.)
                 if (athDesc.FileShowWay == FileShowWay.Pict)
@@ -2522,9 +2528,6 @@ namespace BP.WF.HttpHandler
                     if (file.Contains(this.WorkID + "_" + this.KeyOfEn) == true)
                         System.IO.File.Delete(file);
                 }
-
-
-
                 string pic_Path = tempPath + tempName;
 
                 string imgData = this.GetValFromFrmByKey("imageData");
@@ -2545,6 +2548,29 @@ namespace BP.WF.HttpHandler
                 return "err@" + e.Message;
             }
         }
+        /// <summary>
+        /// 图片转二进制流
+        /// </summary>
+        /// <returns></returns>
+        public string ImageDatabytes()
+        {
+            string FilePath = SystemConfig.PathOfDataUser + GetRequestVal("src");
+            if (!File.Exists(FilePath))
+                return "";
+            Bitmap myBitmap = new Bitmap(Image.FromFile(FilePath));
+
+            using (MemoryStream curImageStream = new MemoryStream())
+            {
+                myBitmap.Save(curImageStream, System.Drawing.Imaging.ImageFormat.Png);
+                curImageStream.Flush();
+
+                byte[] bmpBytes = curImageStream.ToArray();
+                //如果转字符串的话
+                string BmpStr = Convert.ToBase64String(bmpBytes);
+                return BmpStr;
+            }
+        }
+        
         #endregion
 
         /// <summary>
@@ -3346,8 +3372,9 @@ namespace BP.WF.HttpHandler
                     en.RetrieveFromDBSources();
                 }
             }
+           
             //求主键. 如果该表单挂接到流程上.
-            if (this.FK_Node != 0)
+            if (this.FK_Node != 0 && athDesc.NoOfObj.Contains("AthMDtl")==false)
             {
                 //判断表单方案。
                 FrmNode fn = new FrmNode( this.FK_Node, this.FK_MapData);
@@ -4576,15 +4603,16 @@ namespace BP.WF.HttpHandler
         public BP.Sys.FrmAttachment GenerAthDescOfFoolTruck()
         {
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
-
+            sln.FrmSln = -1;
             string fromFrm = this.GetRequestVal("FromFrm");
-            FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
+            sln.MyPK = fromFrm + "_" + this.FK_Node + "_" + this.FK_Flow;
+            int result = sln.RetrieveFromDBSources();
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
             athDesc.MyPK = this.FK_FrmAttachment;
             athDesc.RetrieveFromDBSources();
 
             /*没有查询到解决方案, 就是只读方案 */
-            if (fn.FrmSln == FrmSln.Readonly)
+            if (result == 0 || sln.FrmSln == 1)
             {
                 athDesc.IsUpload = false;
                 athDesc.IsDownload = true;
@@ -4592,11 +4620,11 @@ namespace BP.WF.HttpHandler
                 return athDesc;
             }
             //默认方案
-            if (fn.FrmSln == FrmSln.Default)
+            if (sln.FrmSln == 0)
                 return athDesc;
 
             //如果是自定义方案,就查询自定义方案信息.
-            if (fn.FrmSln == FrmSln.Self)
+            if (sln.FrmSln == 2)
             {
                 BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
                 athDescNode.MyPK = this.FK_FrmAttachment + "_" + this.FK_Node;
@@ -4605,7 +4633,6 @@ namespace BP.WF.HttpHandler
                     //没有设定附件权限，保持原来的附件权限模式
                     return athDesc;
                 }
-                athDescNode.MyPK = athDesc.MyPK;
                 return athDescNode;
             }
 
@@ -4620,7 +4647,7 @@ namespace BP.WF.HttpHandler
             #region 为累加表单做的特殊判断.
             if (this.GetRequestValInt("FormType") == 10)
             {
-                //if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
+                if (this.FK_FrmAttachment.Contains(this.FK_MapData) == false)
                     return GenerAthDescOfFoolTruck(); //如果当前表单的ID。
             }
             #endregion

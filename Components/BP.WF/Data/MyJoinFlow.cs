@@ -2,15 +2,15 @@
 using System.Data;
 using BP.DA;
 using BP.WF;
-using BP.Port ;
+using BP.Port;
 using BP.Sys;
 using BP.En;
 
 namespace BP.WF.Data
 {
-	/// <summary>
+    /// <summary>
     /// 我参与的流程
-	/// </summary>
+    /// </summary>
     public class MyFlowAttr
     {
         #region 基本属性
@@ -30,10 +30,6 @@ namespace BP.WF.Data
         /// 流程状态(简单)
         /// </summary>
         public const string WFSta = "WFSta";
-        /// <summary>
-        /// 时间段
-        /// </summary>
-        public const string TSpan = "TSpan";
         /// <summary>
         /// 标题
         /// </summary>
@@ -164,12 +160,12 @@ namespace BP.WF.Data
         public const string GUID = "GUID";
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 我参与的流程
-	/// </summary>
-	public class MyJoinFlow : Entity
-	{	
-		#region 基本属性
+    /// </summary>
+    public class MyJoinFlow : Entity
+    {
+        #region 基本属性
         public override UAC HisUAC
         {
             get
@@ -205,20 +201,20 @@ namespace BP.WF.Data
                 SetValByKey(MyFlowAttr.FlowNote, value);
             }
         }
-		/// <summary>
-		/// 工作流程编号
-		/// </summary>
-		public string  FK_Flow
-		{
-			get
-			{
-				return this.GetValStrByKey(MyFlowAttr.FK_Flow);
-			}
-			set
-			{
-				SetValByKey(MyFlowAttr.FK_Flow,value);
-			}
-		}
+        /// <summary>
+        /// 工作流程编号
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStrByKey(MyFlowAttr.FK_Flow);
+            }
+            set
+            {
+                SetValByKey(MyFlowAttr.FK_Flow, value);
+            }
+        }
         /// <summary>
         /// BillNo
         /// </summary>
@@ -334,31 +330,31 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-		public string  FK_Dept
-		{
-			get
-			{
-				return this.GetValStrByKey(MyFlowAttr.FK_Dept);
-			}
-			set
-			{
-				SetValByKey(MyFlowAttr.FK_Dept,value);
-			}
-		}
-		/// <summary>
-		/// 标题
-		/// </summary>
-		public string  Title
-		{
-			get
-			{
-				return this.GetValStrByKey(MyFlowAttr.Title);
-			}
-			set
-			{
-				SetValByKey(MyFlowAttr.Title,value);
-			}
-		}
+		public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStrByKey(MyFlowAttr.FK_Dept);
+            }
+            set
+            {
+                SetValByKey(MyFlowAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStrByKey(MyFlowAttr.Title);
+            }
+            set
+            {
+                SetValByKey(MyFlowAttr.Title, value);
+            }
+        }
         /// <summary>
         /// 客户编号
         /// </summary>
@@ -387,20 +383,20 @@ namespace BP.WF.Data
                 SetValByKey(MyFlowAttr.GuestName, value);
             }
         }
-		/// <summary>
-		/// 产生时间
-		/// </summary>
-		public string  RDT
-		{
-			get
-			{
-				return this.GetValStrByKey(MyFlowAttr.RDT);
-			}
-			set
-			{
-				SetValByKey(MyFlowAttr.RDT,value);
-			}
-		}
+        /// <summary>
+        /// 产生时间
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
+                return this.GetValStrByKey(MyFlowAttr.RDT);
+            }
+            set
+            {
+                SetValByKey(MyFlowAttr.RDT, value);
+            }
+        }
         /// <summary>
         /// 节点应完成时间
         /// </summary>
@@ -429,20 +425,20 @@ namespace BP.WF.Data
                 SetValByKey(MyFlowAttr.SDTOfFlow, value);
             }
         }
-		/// <summary>
-		/// 流程ID
-		/// </summary>
+        /// <summary>
+        /// 流程ID
+        /// </summary>
         public Int64 WorkID
-		{
-			get
-			{
+        {
+            get
+            {
                 return this.GetValInt64ByKey(MyFlowAttr.WorkID);
-			}
-			set
-			{
-				SetValByKey(MyFlowAttr.WorkID,value);
-			}
-		}
+            }
+            set
+            {
+                SetValByKey(MyFlowAttr.WorkID, value);
+            }
+        }
         /// <summary>
         /// 主线程ID
         /// </summary>
@@ -569,9 +565,9 @@ namespace BP.WF.Data
                 this.SetValByKey(MyFlowAttr.NodeName, value);
             }
         }
-		/// <summary>
-		/// 当前工作到的节点
-		/// </summary>
+        /// <summary>
+        /// 当前工作到的节点
+        /// </summary>
         public int FK_Node
         {
             get
@@ -623,7 +619,7 @@ namespace BP.WF.Data
             get
             {
                 BP.WF.WFState ws = (WFState)this.WFState;
-                switch(ws)
+                switch (ws)
                 {
                     case WF.WFState.Complete:
                         return "已完成";
@@ -652,7 +648,7 @@ namespace BP.WF.Data
                 SetValByKey(MyFlowAttr.GUID, value);
             }
         }
-		#endregion
+        #endregion
 
         #region 参数属性.
         public string Paras_ToNodes
@@ -691,8 +687,8 @@ namespace BP.WF.Data
 		/// 产生的工作流程
 		/// </summary>
 		public MyJoinFlow()
-		{
-		}
+        {
+        }
         public MyJoinFlow(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
@@ -704,11 +700,11 @@ namespace BP.WF.Data
         /// 执行修复
         /// </summary>
         public void DoRepair()
-        { 
+        {
         }
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -730,7 +726,7 @@ namespace BP.WF.Data
 
                 map.AddTBDateTime(MyFlowAttr.RDT, "发起日期", true, true);
                 map.AddDDLSysEnum(MyFlowAttr.WFSta, 0, "状态", true, false, MyFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
-                map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
+                //map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
                 map.AddTBString(MyFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 100, true);
                 map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, true);
 
@@ -740,20 +736,14 @@ namespace BP.WF.Data
 
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
-                
-                 
-                map.DTSearchKey = MyFlowAttr.RDT;
-                map.DTSearchLable = "发起日期";
-                map.DTSearchWay = DTSearchWay.ByDate;
+
 
                 map.DTSearchKey = GenerWorkFlowAttr.SDTOfNode;
                 map.DTSearchLable = "节点应完成时间";
                 map.DTSearchWay = DTSearchWay.ByDate;
-             
 
-             //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
+                //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
-                map.AddSearchAttr(MyFlowAttr.TSpan, 4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
                 //map.IsShowSearchKey = false;
 
@@ -783,7 +773,7 @@ namespace BP.WF.Data
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
         #region 执行诊断
         public string DoTrack()
@@ -806,7 +796,7 @@ namespace BP.WF.Data
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "/WF/WFRpt.htm?CurrTab=Frm&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
 
             Node nd = new Node(this.FK_Node);
@@ -814,29 +804,29 @@ namespace BP.WF.Data
             return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
-         
-	}
-	/// <summary>
+
+    }
+    /// <summary>
     /// 我参与的流程s
-	/// </summary>
-	public class MyJoinFlows : Entities
-	{
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{			 
-				return new MyJoinFlow();
-			}
-		}
-		/// <summary>
-		/// 我参与的流程集合
-		/// </summary>
-		public MyJoinFlows(){}
-		#endregion
+    /// </summary>
+    public class MyJoinFlows : Entities
+    {
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new MyJoinFlow();
+            }
+        }
+        /// <summary>
+        /// 我参与的流程集合
+        /// </summary>
+        public MyJoinFlows() { }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -861,6 +851,6 @@ namespace BP.WF.Data
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
-	
+    }
+
 }

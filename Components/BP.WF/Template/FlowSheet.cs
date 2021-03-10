@@ -318,8 +318,10 @@ namespace BP.WF.Template
 
 
 
-                map.AddBoolean(FlowAttr.IsGuestFlow, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
-                map.SetHelperUrl(FlowAttr.IsGuestFlow, "http://ccbpm.mydoc.io/?v=5404&t=17039");
+                map.AddBoolean(FlowAttr.GuestFlowRole, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
+                map.AddDDLSysEnum(FlowAttr.GuestFlowRole, (int)GuestFlowRole.None, "外部用户参与流程规则",
+                 true, true, "GuestFlowRole", "@0=不参与@1=开始节点参与@2=中间节点参与");
+
                 //批量发起 add 2013-12-27. 
                 map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
                 map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
@@ -524,7 +526,7 @@ namespace BP.WF.Template
                     gwl.FK_DeptT = emp.FK_DeptText;
 
 
-                    todoEmps += emp.No + "," + emp.Name + ";";
+                    todoEmps += emp.UserID + "," + emp.Name + ";";
                     num++; 
 
 

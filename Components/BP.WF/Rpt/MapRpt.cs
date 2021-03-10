@@ -275,21 +275,11 @@ namespace BP.WF.Rpt
             get
             {
                string str= this.GetValStrByKey(MapRptAttr.FK_Flow);
-               if (DataType.IsNullOrEmpty(str) == true)
-               {
-                   str = this.No.Replace("ND", "");
-                   str = str.Replace("MyRpt", "");
-                   str = str.PadLeft(3, '0');
-                   this.SetValByKey(MapRptAttr.FK_Flow, str);
-
-
-                   this.Update(MapRptAttr.FK_Flow, str);
-               }
                return str;
             }
             set
             {
-                this.SetValByKey(MapRptAttr.FK_Flow, value);
+                this.SetValByKey(MapRptAttr.FK_Flow,value);
             }
         }
         /// <summary>
@@ -366,10 +356,11 @@ namespace BP.WF.Rpt
         /// 报表设计
         /// </summary>
         /// <param name="no">映射编号</param>
-        public MapRpt(string no)
+        public MapRpt(string no, string flowNo)
         {
             this.No = no;
             this.Retrieve();
+            this.FK_Flow = flowNo;
         }
         /// <summary>
         /// EnMap
@@ -433,39 +424,6 @@ namespace BP.WF.Rpt
             {
                 MapAttrs mattrs = new MapAttrs(this.No);
                 return mattrs;
-            }
-        }
-        protected override bool beforeInsert()
-        {
-            this.ResetIt();
-            return base.beforeInsert();
-        }
-
-        /// <summary>
-        /// 重置设置.
-        /// </summary>
-        public void ResetIt()
-        {
-            MapData md = new MapData(this.No);
-            md.RptIsSearchKey = true;
-            md.RptDTSearchWay = DTSearchWay.None;
-            md.RptDTSearchKey = "";
-            md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*";
-
-            Flow fl = new Flow(this.FK_Flow);
-            this.PTable = fl.PTable;
-            this.Update();
-
-            string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
-            MapAttrs attrs = new MapAttrs("ND"+int.Parse(this.FK_Flow)+"Rpt" );
-
-            attrs.Delete(MapAttrAttr.FK_MapData, this.No); // 删除已经有的字段。
-            foreach (MapAttr attr in attrs)
-            {
-                if (keys.Contains("'" + attr.KeyOfEn + "'") == false)
-                    continue;
-                attr.FK_MapData = this.No;
-                attr.Insert();
             }
         }
         /// <summary>

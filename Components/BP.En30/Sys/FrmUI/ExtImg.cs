@@ -146,7 +146,11 @@ namespace BP.Sys.FrmUI
                 attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
 
                 attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); 
-                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y)); 
+                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y));
+
+                //@hongyan .
+                attr.SetValByKey(MapAttrAttr.UIWidth, this.GetValStrByKey(MapAttrAttr.UIWidth));
+                attr.SetValByKey(MapAttrAttr.UIHeight, this.GetValStrByKey(MapAttrAttr.UIHeight));
                 attr.Update();
             }
 

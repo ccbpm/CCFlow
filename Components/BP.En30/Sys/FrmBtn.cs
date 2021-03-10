@@ -100,7 +100,7 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
-        public const string Text = "Text";
+        public const string Lab = "Lab";
         /// <summary>
         /// 主表
         /// </summary>
@@ -307,15 +307,15 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
-        public string Text
+        public string Lab
         {
             get
             {
-                return this.GetValStrByKey(FrmBtnAttr.Text);
+                return this.GetValStrByKey(FrmBtnAttr.Lab);
             }
             set
             {
-                this.SetValByKey(FrmBtnAttr.Text, value);
+                this.SetValByKey(FrmBtnAttr.Lab, value);
             }
         }
         public string TextHtml
@@ -325,7 +325,7 @@ namespace BP.Sys
                 //if (this.EventType)
                 //    return "<b>" + this.GetValStrByKey(FrmBtnAttr.Text).Replace("@","<br>") + "</b>";
                 //else
-                    return this.GetValStrByKey(FrmBtnAttr.Text).Replace("@", "<br>");
+                    return this.GetValStrByKey(FrmBtnAttr.Lab).Replace("@", "<br>");
             }
         }
         #endregion
@@ -361,7 +361,7 @@ namespace BP.Sys
 
                 map.AddMyPK();
                 map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
-                map.AddTBString(FrmBtnAttr.Text, null, "标签", true, false, 0, 3900, 20);
+                map.AddTBString(FrmBtnAttr.Lab, null, "标签", true, false, 0, 3900, 20);
 
                 map.AddTBFloat(FrmBtnAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmBtnAttr.Y, 5, "Y", false, false);

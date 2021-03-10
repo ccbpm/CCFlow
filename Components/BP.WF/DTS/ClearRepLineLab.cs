@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             labs.RetrieveAllFromDBSource();
             foreach (FrmLab item in labs)
             {
-                sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' and x=" + item.X + " and y=" + item.Y + " and Text='" + item.Text + "'";
+                sql = "DELETE FROM " + item.EnMap.PhysicsTable + " WHERE FK_MapData='" + item.FK_MapData + "' and x=" + item.X + " and y=" + item.Y + " and Lab='" + item.Lab + "'";
                 DBAccess.RunSQL(sql);
                 item.MyPK = DBAccess.GenerOIDByGUID().ToString();
                 item.Insert();

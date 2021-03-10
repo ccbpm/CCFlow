@@ -372,7 +372,7 @@ namespace BP.Pub
                 {
                     if (strs[1].Trim() == "ImgAth")
                     {
-                        string path1 = SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + en.PKVal + ".png";
+                        string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
                         StringBuilder mypict = new StringBuilder();
                         //获取要插入的图片
@@ -414,7 +414,7 @@ namespace BP.Pub
                         case "RMBDX":
                             return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
-                            string path1 =SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                            string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
@@ -435,7 +435,7 @@ namespace BP.Pub
                             mypict.AppendLine();
                             return mypict.ToString();
                         case "Siganture":
-                            string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder pict = new StringBuilder();
                             //获取要插入的图片
@@ -473,7 +473,7 @@ namespace BP.Pub
             string html = "";
 
             //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
-           string sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + this.HisGEEntity.PKVal;
+            string sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + this.HisGEEntity.PKVal;
             DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
 
             foreach (DataRow dr in dtTrack.Rows)
@@ -586,7 +586,7 @@ namespace BP.Pub
                             return recName;
                         case "Msg":
                         case "Note":
-                            string text=dr["Msg"].ToString();
+                            string text = dr["Msg"].ToString();
                             text = text.Replace("\\", "\\\\");
                             text = this.GetCode(text);
                             //return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(dr["Msg"].ToString()));
@@ -621,6 +621,12 @@ namespace BP.Pub
                 case "Msg":
                 case "Note":
                     return row["Msg"].ToString();
+                case "Siganture":
+                    string empNo= row["EmpFrom"].ToString(); //记录人.
+                    //审核人的签名. @yln
+
+
+                    return "";
                 default:
                     return row[key] as string;
             }
@@ -657,7 +663,7 @@ namespace BP.Pub
                     string StrNohtml = System.Text.RegularExpressions.Regex.Replace(contentHtml, "<[^>]+>", "");
                     StrNohtml = System.Text.RegularExpressions.Regex.Replace(StrNohtml, "&[^;]+;", "");
 
-                    return this.GetCode(StrNohtml); 
+                    return this.GetCode(StrNohtml);
 
 
                     string htmlpath = SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
@@ -790,7 +796,7 @@ namespace BP.Pub
                         case "NYR":
                             return DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                         case "RMB":
-                            decimal md= Math.Round( decimal.Parse(val) ,2);
+                            decimal md = Math.Round(decimal.Parse(val), 2);
                             return md.ToString();
                         case "RMBDX":
                             return this.GetCode(DataType.ParseFloatToCash(float.Parse(val)));
@@ -878,7 +884,7 @@ namespace BP.Pub
                 {
                     if (strs[2].Trim() == "ImgAth")
                     {
-                        string path1 = SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[1].Trim() + "_" + en.PKVal + ".png";
+                        string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[1].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
                         StringBuilder mypict = new StringBuilder();
                         //获取要插入的图片
@@ -921,7 +927,7 @@ namespace BP.Pub
                         case "RMBDX":
                             return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
-                            string path1 = SystemConfig.PathOfDataUser + "\\ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                            string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
@@ -942,7 +948,7 @@ namespace BP.Pub
                             mypict.AppendLine();
                             return mypict.ToString();
                         case "Siganture":
-                            string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder pict = new StringBuilder();
                             //获取要插入的图片
@@ -988,6 +994,8 @@ namespace BP.Pub
         /// 轨迹表（用于输出打印审核轨迹,审核信息.）
         /// </summary>
         public DataTable dtTrack = null;
+        public DataTable subFlows = null;
+   
         /// <summary>
         /// 单据生成 
         /// </summary>
@@ -995,10 +1003,10 @@ namespace BP.Pub
         /// <param name="path">生成路径</param>
         /// <param name="file">生成文件</param>
         /// <param name="isOpen">要打开的url用于生成二维码</param>
-        public void MakeDoc(string templateRtfFile, string path, string file,  string billUrl=null)
+        public void MakeDoc(string templateRtfFile, string path, string file, string billUrl = null)
         {
             templateRtfFile = templateRtfFile.Replace(".rtf.rtf", ".rtf");
-            
+
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
 
@@ -1039,7 +1047,7 @@ namespace BP.Pub
 
                     try
                     {
-                        if(para.Contains("Editor"))
+                        if (para.Contains("Editor"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains("ImgAth"))
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
@@ -1091,7 +1099,7 @@ namespace BP.Pub
                         }
                     }
                     catch (Exception ex)
-                    { 
+                    {
                         error += "@替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
                         if (SystemConfig.IsDebug)
                             throw new Exception(error);
@@ -1117,7 +1125,7 @@ namespace BP.Pub
                     if (pos_rowKey != -1)
                     {
                         row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
-                       
+
                         row_end = str.Substring(pos_rowKey).IndexOf("\\row");
                     }
 
@@ -1223,22 +1231,99 @@ namespace BP.Pub
                 #region 审核组件组合信息，added by liuxc,2016-12-16
 
                 //节点单个审核人
-		       if (dtTrack != null && str.Contains("<WorkCheckBegin>")== false && str.Contains("<WorkCheckEnd>") ==false){
-                   foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
-	                {
+                if (dtTrack != null && str.Contains("<WorkCheckBegin>") == false && str.Contains("<WorkCheckEnd>") == false)
+                {
+                    foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+                    {
                         int acType = int.Parse(row["ACTIONTYPE"].ToString());
-	                    if (acType != 22)
-	                        continue;
-	                    str = str.Replace(
-							    "<WorkCheck.Msg." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "Msg")));
-	                    str = str.Replace(
-							    "<WorkCheck.Rec." + row["NDFrom"] + ">", this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT")));
-	                    str = str.Replace(
-							    "<WorkCheck.RDT." + row["NDFrom"] + ">",this.GetCode(this.GetValueCheckWorkByKey(row, "RDT")));
-	                
-	                
-	                }
-		       }
+                        if (acType != 22)
+                            continue;
+
+                        //节点从.
+                        string nfFrom = row["NDFrom"].ToString();
+
+                        string wkKey = "<WorkCheck.Msg." + nfFrom + ">";
+                        string wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "Msg"));
+                        str = str.Replace(wkKey, wkVal);
+
+                        wkKey = "<WorkCheck.Rec." + nfFrom + ">";
+                        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT"));
+                        str = str.Replace(wkKey, wkVal);
+
+                        wkKey = "<WorkCheck.RDT." + nfFrom + ">";
+                        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "RDT"));
+                        str = str.Replace(wkKey, wkVal);
+
+                        //审核人的签名. 2020.11.28 by zhoupeng @yln
+                        wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
+                        if (str.Contains(wkKey) == true)
+                        {
+                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "Siganture"));
+                            String filePath = SystemConfig.PathOfDataUser + "\\Siganture\\" + wkVal + ".jpg";
+                            //定义rtf中图片字符串.
+                            StringBuilder mypict = new StringBuilder();
+                            //获取要插入的图片
+                            System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
+
+                            //将要插入的图片转换为16进制字符串
+                            string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            //生成rtf中图片字符串
+                            mypict.AppendLine();
+                            mypict.Append(@"{\pict");
+                            mypict.Append(@"\jpegblip");
+                            mypict.Append(@"\picscalex100");
+                            mypict.Append(@"\picscaley100");
+                            mypict.Append(@"\picwgoal" + imgAth.Width * 15);
+                            mypict.Append(@"\pichgoal" + imgAth.Height * 15);
+                            mypict.Append(imgHexStringImgAth + "}");
+                            mypict.AppendLine();
+                            str = str.Replace(wkKey, mypict.ToString()); ;
+                        }
+
+                        //审核人的手写签名. 2020.11.28 by zhoupeng  @yln
+                        wkKey = "<WorkCheck.WriteDB." + nfFrom + ">";
+                        if (str.Contains(wkKey) == true)
+                        {
+                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "WriteDB"));
+                          
+                            //定义rtf中图片字符串.
+                            StringBuilder mypict = new StringBuilder();
+                         
+                            //将要插入的图片转换为16进制字符串
+                            byte[] buffer = Convert.FromBase64String(wkVal);
+                            StringBuilder imgs = new StringBuilder();
+                            for (int i = 0; i < buffer.Length; i++)
+                            {
+                                if ((i % 32) == 0)
+                                {
+                                    imgs.AppendLine();
+                                }
+                                //else if ((i % 8) == 0)
+                                //{
+                                //    imgs.Append(" ");
+                                //}
+                                byte num2 = buffer[i];
+                                int num3 = (num2 & 240) >> 4;
+                                int num4 = num2 & 15;
+                                imgs.Append("0123456789abcdef"[num3]);
+                                imgs.Append("0123456789abcdef"[num4]);
+                            }
+                            //生成rtf中图片字符串
+                            mypict.AppendLine();
+                            mypict.Append(@"{\pict");
+                            mypict.Append(@"\jpegblip");
+                            mypict.Append(@"\picscalex100");
+                            mypict.Append(@"\picscaley100");
+                            mypict.Append(@"\picwgoal" + 45*15);
+                            mypict.Append(@"\pichgoal" + 40*15);
+                            mypict.Append(imgs.ToString() + "}");
+                            mypict.AppendLine();
+                            str = str.Replace(wkKey, mypict.ToString()); ;
+                        }
+
+                      
+                    }
+                }
 
                 if (dtTrack != null && str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
                 {
@@ -1254,7 +1339,7 @@ namespace BP.Pub
 
                     foreach (string para in paras)
                     {
-                        if (string.IsNullOrWhiteSpace(para) || para.Contains("WorkCheckList.")==false)
+                        if (string.IsNullOrWhiteSpace(para) || para.Contains("WorkCheckList.") == false)
                             continue;
 
                         ps = para.Split('.');
@@ -1340,7 +1425,7 @@ namespace BP.Pub
                 {  // 异常可能与单据的配置有关系。
                     try
                     {
-                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "\\CyclostyleFile\\" + templateRtfFile;
+                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + templateRtfFile;
                         str = Cash.GetBillStr(templateRtfFile, false);
                         msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题";
                     }

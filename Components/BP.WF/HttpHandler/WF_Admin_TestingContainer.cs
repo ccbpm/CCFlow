@@ -41,7 +41,12 @@ namespace BP.WF.HttpHandler
         {
             string userNo = this.GetRequestVal("UserNo");
             if (WebUser.No.Equals(userNo) == false)
-                BP.WF.Dev2Interface.Port_Login(userNo);
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    BP.WF.Dev2Interface.Port_Login(userNo);
+                else
+                    BP.WF.Dev2Interface.Port_Login(userNo, null, BP.Web.WebUser.OrgNo);
+            }
 
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             return workid.ToString();
@@ -122,10 +127,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_LetAdminerLogin()
         {
-            string adminer = this.GetRequestVal("Adminer");
-            string SID = this.GetRequestVal("SID");
+            //string adminer = this.GetRequestVal("Adminer");
+            string SID = this.GetRequestVal("AdminerSID");
             BP.WF.Dev2Interface.Port_LoginBySID(SID);
-
             return "登录成功.";
             //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
             //return workid.ToString();
@@ -137,18 +141,31 @@ namespace BP.WF.HttpHandler
         public string SelectOneUser_ChangUser()
         {
 
-            string adminer = this.GetRequestVal("Adminer");
-            string SID = this.GetRequestVal("SID");
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                string adminer = this.GetRequestVal("Adminer");
+                string SID = this.GetRequestVal("SID");
+                try
+                {
+                    BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
+                    return "登录成功.";
+                }
+                catch (Exception ex)
+                {
+                    return "err@" + ex.Message;
+                }
+            }
 
             try
             {
-                BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
+                BP.WF.Dev2Interface.Port_Login(this.FK_Emp, null, this.OrgNo);
                 return "登录成功.";
             }
             catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
+
         }
 
         #region TestFlow2020_Init
@@ -158,25 +175,32 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow2020_StartIt()
         {
+            //此SID是管理员的SID.
             string sid = this.GetRequestVal("SID");
-           /* if (WebUser.IsAdmin == false)
-                return "err@非管理员无法测试,关闭后重新登录。";
-*/
+            /* if (WebUser.IsAdmin == false)
+                 return "err@非管理员无法测试,关闭后重新登录。";
+ */
+
             FlowExt fl = new FlowExt(this.FK_Flow);
             fl.Tester = this.GetRequestVal("UserNo");
             fl.Update();
 
-            //用户编号.
+            //要测试的用户编号.
             string userNo = this.GetRequestVal("UserNo");
 
+            //  Emp emp = new Emp(userNo);
+            //  sid = emp.GetValStringByKey(EmpAttr.SID);
             //判断是否可以测试该流程？ 
-            BP.Port.Emp myEmp = new BP.Port.Emp();
+            /*  BP.Port.Emp myEmp = new BP.Port.Emp();
             int i = myEmp.Retrieve("SID", sid);
             if (i == 0 && 1 == 2)
-                throw new Exception("err@非法的SID:" + sid);
+                throw new Exception("err@非法的SID:" + sid);*/
 
             //组织url发起该流程.
-            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&SID=" + sid + "&UserNo=" + userNo;
+            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&UserNo=" + userNo;
+            url += "&OrgNo=" + WebUser.OrgNo;
+            url += "&Adminer=" + WebUser.No;
+            url += "&AdminerSID=" + sid;
             return url;
         }
         /// <summary>
@@ -193,12 +217,15 @@ namespace BP.WF.HttpHandler
 
             FlowExt fl = new FlowExt(this.FK_Flow);
 
-            if (1 == 2 && BP.Web.WebUser.No.Equals("admin") && fl.Tester.Length <= 1)
-            {
-                string msg = "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
-                msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
-                return msg;
-            }
+            //if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            //{
+            //    if (BP.Web.WebUser.No.Equals("admin") && fl.Tester.Length <= 3)
+            //    {
+            //        string msg = "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
+            //        msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
+            //        return msg;
+            //    }
+            //}
 
             #region 检查.
             int nodeid = int.Parse(this.FK_Flow + "01");
@@ -238,19 +265,18 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     DataRow dr = dtEmps.NewRow();
-                    dr["No"] = emp.No;
+                    dr["No"] = emp.UserID;
                     dr["Name"] = emp.Name;
                     dr["FK_DeptText"] = emp.FK_DeptText;
                     dtEmps.Rows.Add(dr);
                 }
 
-                if (dtEmps.Rows.Count > 1)
+                if (dtEmps.Rows.Count >= 1)
                     return BP.Tools.Json.ToJson(dtEmps);
             }
             #endregion 测试人员.
 
             //fl.DoCheck();
-
             try
             {
                 #region 从设置里获取-测试人员.
@@ -259,27 +285,36 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept ON  Port_Emp.FK_Dept=Port_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         else
-                            sql = "SELECT Port_Emp.No FROM Port_Emp WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "' LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        {
+                            // 查询当前组织下所有的该岗位的人员. 
+                            sql = "SELECT a." + BP.Sys.Glo.UserNo + " as No FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C ";
+                            sql += " WHERE A.OrgNo='" + WebUser.OrgNo + "' AND C.FK_Node=" + nd.NodeID;
+                            sql += " AND A.No=B.FK_Emp AND B.FK_Station=C.FK_Station ";
+
+                            //   sql = "SELECT Port_Emp." + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                            //  sql+=" LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                            // sql += " LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        }
 
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
                     case DeliveryWay.ByTeamOrgOnly: //按照组织智能计算。
                     case DeliveryWay.ByTeamDeptOnly: //按照组织智能计算。
-                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
-                        sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                        sql = "SELECT A." + BP.Sys.Glo.UserNo + ",A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
+                        sql += " WHERE A." + BP.Sys.Glo.UserNo + "=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID + " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                         break;
                     case DeliveryWay.ByTeamOnly: //仅按用户组计算. 
 
-                        sql = "SELECT A.No,A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
+                        sql = "SELECT A." + BP.Sys.Glo.UserNo + ",A.Name FROM Port_Emp A, WF_NodeTeam B, Port_TeamEmp C ";
                         sql += " WHERE A.No=C.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nd.NodeID;
                         break;
                     case DeliveryWay.ByDept:
-                        sql = "SELECT No,Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;
                         break;
                     case DeliveryWay.ByBindEmp:
-                        sql = "SELECT No,Name from Port_Emp WHERE No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name from Port_Emp WHERE " + BP.Sys.Glo.UserNo + " in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
@@ -299,18 +334,22 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                            sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No ";
+                        {
+                            sql = "SELECT A.No, A.Name, B.Name as FK_DeptText FROM  Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No";
+                            //sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No";
+
+                        }
                         else
-                            sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C.No ";
+                            sql = "SELECT c." + BP.Sys.Glo.UserNo + ", c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " ";
 
                         break;
                     case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.
 
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             throw new Exception("err@非集团版本，不能设置启用此模式.");
-                        
-                        sql = " SELECT A.No,A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
-                        sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '"+this.FK_Flow+"' AND A.FK_Dept = c.No ";
+
+                        sql = " SELECT A." + BP.Sys.Glo.UserNo + ",A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
+                        sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '" + this.FK_Flow + "' AND A.FK_Dept = c.No ";
 
                         break;
                     case DeliveryWay.BySQL:
@@ -323,7 +362,7 @@ namespace BP.WF.HttpHandler
 
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
-                    return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
+                    return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。执行的SQL:" + sql;
 
                 if (dt.Rows.Count > 2000)
                     return "err@可以发起开始节点的人员太多，会导致系统崩溃变慢，您需要在流程属性里设置可以发起的测试用户.";
@@ -344,18 +383,32 @@ namespace BP.WF.HttpHandler
 
                     emps += "," + myemp + ",";
 
-                    BP.Port.Emp emp = new Emp(myemp);
+                    //查询数据。
+                    BP.Port.Emp emp = new Emp();
+
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    {
+                        emp.No = this.OrgNo + "_" + myemp;
+                        emp.RetrieveFromDBSources();
+                    }
+                    else
+                    {
+                        emp.No = myemp;
+                        emp.RetrieveFromDBSources();
+                    }
+
+                    //if (emp.RetrieveFromDBSources())
 
                     DataRow drNew = dtMyEmps.NewRow();
 
-                    drNew["No"] = emp.No;
+                    drNew["No"] = emp.UserID;
                     drNew["Name"] = emp.Name;
                     drNew["FK_DeptText"] = emp.FK_DeptText;
 
                     dtMyEmps.Rows.Add(drNew);
                 }
 
-                if(SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
                     dtMyEmps.Columns["NO"].ColumnName = "No";
                     dtMyEmps.Columns["NAME"].ColumnName = "Name";
@@ -376,7 +429,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员 系统错误提示:" + ex.Message;
+                return "err@您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，方法：TestFlow2020_Init。系统错误提示:" + ex.Message;
             }
         }
         #endregion

@@ -68,7 +68,11 @@ namespace BP.DA
         /// <summary>
         /// 达梦
         /// </summary>
-        DM
+        DM=7,
+        /// <summary>
+        /// 人大金仓
+        /// </summary>
+        KingBase=8
     }
     /// <summary>
     /// 保管位置

@@ -53,7 +53,6 @@ namespace BP.WF.DTS
             AutoRpts rpts = new AutoRpts();
             rpts.RetrieveAllFromDBSource();
 
-
             int nowInt = int.Parse(DateTime.Now.ToString("HHmm"));
             //比如: 2009
             string strHours = DateTime.Now.ToString("yyyy-MM-dd HH:");
@@ -99,7 +98,8 @@ namespace BP.WF.DTS
                 #endregion 组织内容.
 
                 #region 求出可以发起的人员,并执行发送.
-                DataTable dtEmp = DBAccess.RunSQLReturnTable(rpt.ToEmpOfSQLs);
+                string empOfSQLs = BP.WF.Glo.DealExp(rpt.ToEmpOfSQLs, null);
+                DataTable dtEmp = DBAccess.RunSQLReturnTable(empOfSQLs);
                 foreach (DataRow dr in dtEmp.Rows)
                 {
                     //执行登录.
@@ -118,18 +118,32 @@ namespace BP.WF.DTS
 
                         string url = dtl.UrlExp.Clone().ToString();
                         BP.WF.Glo.DealExp(url, null);
-                        docs += "<br> <a href='"+ url + "'> 打开连接</a>";
+                        docs += " <a href='" + url + "'> 打开连接</a>";
                     }
 
-                    //执行发送邮件.
-                    //BP.WF.Dev2Interface.Port_SendMessage()
+                    string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+                    if (agentId != null)
+                    {
+                        string accessToken = GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
+
+                        BP.GPM.Emp emp = new BP.GPM.Emp(empNo);
+                        BP.GPM.WeiXin.MsgText msgText = new GPM.WeiXin.MsgText();
+                        msgText.content = docs;
+                        msgText.Access_Token = accessToken;
+                        msgText.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                        msgText.touser = emp.No;
+                        msgText.safe = "0";
+
+                        //执行发送
+                        BP.GPM.WeiXin.Glo.PostMsgOfText(msgText);
+                    }
                 }
                 #endregion 求出可以发起的人员.并执行发送
 
                 //更新时间点.
                 if (rpt.Dots.Length > 3999)
                     rpt.Dots = rpt.Dots.Substring(200);
-                rpt.Dots = rpt.Dots + "," + strHours+",";
+                rpt.Dots = rpt.Dots + "," + strHours + ",";
                 rpt.Update();
             }
 

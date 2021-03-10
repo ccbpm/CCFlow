@@ -13,6 +13,20 @@ namespace BP.WF.Template
     {
         #region 公共属性
         /// <summary>
+        /// 审核组件状态
+        /// </summary>
+        public FrmWorkCheckSta FWCSta
+        {
+            get
+            {
+                return (FrmWorkCheckSta)this.GetValIntByKey(NodeWorkCheckAttr.FWCSta, 0);
+            }
+            set
+            {
+                this.SetValByKey(NodeWorkCheckAttr.FWCSta, (int)value);
+            }
+        }
+        /// <summary>
         /// 节点属性.
         /// </summary>
         public string No
@@ -156,6 +170,7 @@ namespace BP.WF.Template
             #region 审核组件.
             NodeWorkCheck fwc = new NodeWorkCheck(this.NodeID);
             fwc.Copy(this);
+
             if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
                 gf.Delete(GroupFieldAttr.FrmID, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);

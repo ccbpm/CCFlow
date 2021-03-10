@@ -95,43 +95,43 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否关键字查询
         /// </summary>
-        public bool RptIsSearchKey
+        public bool IsSearchKey
         {
             get
             {
-                return this.GetParaBoolen(MapDataAttr.RptIsSearchKey, true);
+                return this.GetParaBoolen(MapDataAttr.IsSearchKey, true);
             }
             set
             {
-                this.SetPara(MapDataAttr.RptIsSearchKey, value);
+                this.SetPara(MapDataAttr.IsSearchKey, value);
             }
         }
         /// <summary>
         /// 时间段查询方式
         /// </summary>
-        public DTSearchWay RptDTSearchWay
+        public DTSearchWay DTSearchWay
         {
             get
             {
-                return (DTSearchWay)this.GetParaInt(MapDataAttr.RptDTSearchWay);
+                return (DTSearchWay)this.GetParaInt(MapDataAttr.DTSearchWay);
             }
             set
             {
-                this.SetPara(MapDataAttr.RptDTSearchWay, (int)value);
+                this.SetPara(MapDataAttr.DTSearchWay, (int)value);
             }
         }
         /// <summary>
         /// 时间字段
         /// </summary>
-        public string RptDTSearchKey
+        public string DTSearchKey
         {
             get
             {
-                return this.GetParaString(MapDataAttr.RptDTSearchKey);
+                return this.GetParaString(MapDataAttr.DTSearchKey);
             }
             set
             {
-                this.SetPara(MapDataAttr.RptDTSearchKey, value);
+                this.SetPara(MapDataAttr.DTSearchKey, value);
             }
         }
         /// <summary>
@@ -274,20 +274,7 @@ namespace BP.WF.Template
                 this.SetPara("IsHaveCA", value);
             }
         }
-        /// <summary>
-        /// 类别，可以为空.
-        /// </summary>
-        public string FK_FrmSort
-        {
-            get
-            {
-                return this.GetValStrByKey(MapDataAttr.FK_FrmSort);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FK_FrmSort, value);
-            }
-        }
+        
         /// <summary>
         /// 类别，可以为空.
         /// </summary>

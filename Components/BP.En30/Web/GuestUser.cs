@@ -55,7 +55,7 @@ namespace BP.Web
 
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
-            em.No = "Guest";
+            em.UserID = "Guest";
             if (em.RetrieveFromDBSources() == 0)
             {
                 em.Name = "客人";

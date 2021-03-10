@@ -125,7 +125,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return SystemConfig.PathOfWebApp + "\\DataUser\\XML\\AdminMenu.xml";
+                return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu.xml";
             }
         }
         /// <summary>

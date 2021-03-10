@@ -12,7 +12,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Rpt;
 using BP.WF.Template;
-
+using BP.WF.Data;
 
 namespace BP.WF.HttpHandler
 {
@@ -213,280 +213,235 @@ namespace BP.WF.HttpHandler
 
         #region MyStartFlow.htm 我发起的流程.
 
-        public string FlowSearch_Init()
+        /// <summary>
+        /// 获取单流程查询条件
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSearch_InitToolBar()
         {
             if (string.IsNullOrWhiteSpace(this.FK_Flow))
                 return "err@参数FK_Flow不能为空";
 
-            string pageSize = GetRequestVal("pageSize");
-            string fcid = string.Empty;
             DataSet ds = new DataSet();
-            Dictionary<string, string> vals = null;
+
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
 
-            //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
+            #region 用户查询条件信息 不存在注册
+            UserRegedit ur = new UserRegedit();
+            ur.AutoMyPK = false;
+            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+            string selectFields = "," + GERptAttr.Title + "," + GERptAttr.FlowStarter + "," + GERptAttr.FlowStartRDT + "," + GERptAttr.FK_Dept + "," + GERptAttr.WFState + ",";
+            if (ur.RetrieveFromDBSources() == 0)
+            {
+                ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+                ur.FK_Emp = WebUser.No;
+                ur.CfgKey = rptNo + "_SearchAttrs";
+                ur.SetPara("SelectFields", selectFields);
+                ur.Insert();
+            }
+            if (DataType.IsNullOrEmpty(ur.GetParaString("SelectFields")) == true)
+            {
+                ur.SetPara("SelectFields", selectFields);
+                ur.Update();
+            }
+            #endregion 用户查询条件
+
+            //报表信息
             MapData md = new MapData();
             md.No = rptNo;
             if (md.RetrieveFromDBSources() == 0)
             {
                 /*如果没有找到，就让其重置一下.*/
                 BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
-
-                if (this.SearchType == "My")
-                    rd.DoReset(this.SearchType, "我发起的流程");
-
-                if (this.SearchType == "MyJoin")
-                    rd.DoReset(this.SearchType, "我审批的流程");
-
-                if (this.SearchType == "MyDept")
-                    rd.DoReset(this.SearchType, "本部门发起的流程");
-
-                if (this.SearchType == "Adminer")
-                    rd.DoReset(this.SearchType, "高级查询");
-
+                rd.DoReset(this.SearchType);
                 md.RetrieveFromDBSources();
             }
 
-            MapAttr ar = null;
+            #region  关键字 时间查询条件
+            md.SetPara("DTSearchWay", (int)md.DTSearchWay);
+            md.SetPara("DTSearchKey", md.DTSearchKey);
+            md.SetPara("IsSearchKey", md.IsSearchKey);
+            md.SetPara("StringSearchKeys", md.GetParaString("StringSearchKeys"));
+            md.SetPara("SearchKey", ur.SearchKey);
 
-            string cfgfix = "_SearchAttrs";
-            UserRegedit ur = new UserRegedit();
-            ur.AutoMyPK = false;
-            ur.MyPK = WebUser.No + rptNo + cfgfix;
-
-            if (ur.RetrieveFromDBSources() == 0)
+            if (md.DTSearchWay != DTSearchWay.None)
             {
-                ur.MyPK = WebUser.No + rptNo + cfgfix;
-                ur.FK_Emp = WebUser.No;
-                ur.CfgKey = rptNo + cfgfix;
+                MapAttr mapAttr = new MapAttr(rptNo, md.DTSearchKey);
+                md.SetPara("DTSearchLable", mapAttr.Name);
 
-                ur.Insert();
-            }
-
-            vals = ur.GetVals();
-            md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
-            md.SetPara("RptDTSearchKey", md.RptDTSearchKey);
-            md.SetPara("RptIsSearchKey", md.RptIsSearchKey);
-            md.SetPara("RptStringSearchKeys", md.GetParaString("RptStringSearchKeys"));
-
-            md.SetPara("T_SearchKey", ur.SearchKey);
-
-            if (md.RptDTSearchWay != DTSearchWay.None)
-            {
-                ar = new MapAttr(rptNo, md.RptDTSearchKey);
-                md.SetPara("T_DateLabel", ar.Name);
-
-                if (md.RptDTSearchWay == DTSearchWay.ByDate)
+                if (md.DTSearchWay == DTSearchWay.ByDate)
                 {
-                    md.SetPara("T_DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
-                    md.SetPara("T_DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
+                    md.SetPara("DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
+                    md.SetPara("DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
                 }
                 else
                 {
-                    md.SetPara("T_DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
-                    md.SetPara("T_DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
+                    md.SetPara("DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
+                    md.SetPara("DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
                 }
             }
+            #endregion 关键字时间查询条件
+
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
             string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns\" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
-                    md.SetPara("T_RptExportToTmp", "1");
+                    md.SetPara("RptExportToTmp", "1");
             }
 
-            #region //增加显示列信息
-            DataRow row = null;
-            DataTable dt = new DataTable("Sys_MapAttr");
-            dt.Columns.Add("No", typeof(string));
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("Width", typeof(int));
-            dt.Columns.Add("UIContralType", typeof(int));
+            #region 外键枚举的查询条件
+            MapAttrs attrs = new MapAttrs(rptNo);
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Field");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Width");
+            dt.Columns.Add("UIContralType");
+            dt.TableName = "Attrs";
 
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
-
-           
-
-            foreach (MapAttr attr in attrs)
-            {
-                row = dt.NewRow();
-                row["No"] = attr.KeyOfEn;
-                row["Name"] = attr.Name;
-                row["Width"] = attr.UIWidthInt;
-                row["UIContralType"] = attr.UIContralType;
-
-                if (attr.HisAttr.IsFKorEnum)
-                    row["No"] = attr.KeyOfEn + "Text";
-
-                dt.Rows.Add(row);
-            }
-
-            ds.Tables.Add(dt);
-            #endregion
-
-            #region //增加枚举/外键字段信息
-            attrs = new MapAttrs(rptNo);
-            dt = new DataTable("FilterCtrls");
-            dt.Columns.Add("Id", typeof(string));
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("Type", typeof(string));
-            dt.Columns.Add("DataType", typeof(int));
-            dt.Columns.Add("DefaultValue", typeof(string));
-            dt.Columns.Add("ValueField", typeof(string));
-            dt.Columns.Add("TextField", typeof(string));
-            dt.Columns.Add("ParentField", typeof(string));
-            dt.Columns.Add("W", typeof(string));
             string[] ctrls = md.RptSearchKeys.Split('*');
-            DataTable dtNoName = null;
-
+            MapAttr attr;
             foreach (string ctrl in ctrls)
             {
                 //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示context.Request.QueryString[ctrl]
                 if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
-                ar = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
-                if (ar == null)
+                attr = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
+                if (attr == null)
                     continue;
-
-                row = dt.NewRow();
-                row["Id"] = ctrl;
-                row["Name"] = ar.Name;
-                row["DataType"] = ar.MyDataType;
-                row["W"] = ar.UIWidth; //宽度.
-
-                switch (ar.UIContralType)
+                DataRow dr = dt.NewRow();
+                //如果外键是FK_NY的时候解析成时间类型
+                if (attr.KeyOfEn.Equals("FK_NY") == true)
                 {
-                    case UIContralType.DDL:
-                    case UIContralType.RadioBtn: 
-                        row["Type"] = "combo";
-                        fcid = "DDL_" + ar.KeyOfEn;
-                        if (vals.ContainsKey(fcid))
-                        {
-                            if (vals[fcid] == "mvals")
-                            {
-                                AtPara ap = new AtPara(ur.MVals);
-                                row["DefaultValue"] = ap.GetValStrByKey(ar.KeyOfEn);
-                            }
-                            else
-                            {
-                                row["DefaultValue"] = vals[fcid];
-                            }
-                        }
+                    
+                    dr["Field"] = attr.KeyOfEn;
+                    dr["Name"] = attr.HisAttr.Desc;
+                    dr["Width"] = attr.UIWidth; //下拉框显示的宽度.
+                    dr["UIContralType"] = "";
+                    dt.Rows.Add(dr);
+                    continue;
+                }
+                dr["Field"] = attr.KeyOfEn;
+                dr["Name"] = attr.HisAttr.Desc;
+                dr["Width"] = attr.UIWidth; //下拉框显示的宽度.
+                dr["UIContralType"] = attr.HisAttr.UIContralType;
+                dt.Rows.Add(dr);
 
-                        switch (ar.LGType)
-                        {
-                            case FieldTypeS.FK:
-                                Entities ens = ar.HisAttr.HisFKEns;
-                                ens.RetrieveAll();
-                                EntitiesTree treeEns = ens as EntitiesTree;
+                Attr ar = attr.HisAttr;
+                //判读该字段是否是枚举
+                if (ar.IsEnum == true)
+                {
+                    SysEnums ses = new SysEnums(attr.UIBindKey);
+                    DataTable dtEnum = ses.ToDataTableField();
+                    dtEnum.TableName = attr.KeyOfEn;
+                    ds.Tables.Add(dtEnum);
+                    continue;
+                }
+                //判断是否是外键
+                if (ar.IsFK == true)
+                {
+                    Entities ensFK = ar.HisFKEns;
+                    ensFK.RetrieveAll();
 
-                                if (treeEns != null)
-                                {
-                                    row["Type"] = "combotree";
-                                    dtNoName = ens.ToDataTableField();
-                                    dtNoName.TableName = ar.KeyOfEn;
-                                    ds.Tables.Add(dtNoName);
-
-                                    row["ValueField"] = "No";
-                                    row["TextField"] = "Name";
-                                    row["ParentField"] = "ParentNo";
-                                }
-                                else
-                                {
-                                    EntitiesTree treeSimpEns = ens as EntitiesTree;
-
-                                    if (treeSimpEns != null)
-                                    {
-                                        row["Type"] = "combotree";
-                                        dtNoName = ens.ToDataTableField();
-                                        dtNoName.TableName = ar.KeyOfEn;
-                                        ds.Tables.Add(dtNoName);
-
-                                        row["ValueField"] = "No";
-                                        row["TextField"] = "Name";
-                                        row["ParentField"] = "ParentNo";
-                                    }
-                                    else
-                                    {
-                                        dtNoName = GetNoNameDataTable(ar.KeyOfEn);
-                                        dtNoName.Rows.Add("all", "全部");
-
-                                        foreach (Entity en in ens)
-                                        {
-                                            dtNoName.Rows.Add(en.GetValStringByKey(ar.HisAttr.UIRefKeyValue),
-                                                    en.GetValStringByKey(ar.HisAttr.UIRefKeyText));
-                                        }
-
-                                        ds.Tables.Add(dtNoName);
-
-                                        row["ValueField"] = "No";
-                                        row["TextField"] = "Name";
-                                    }
-                                }
-                                break;
-                            case FieldTypeS.Enum:
-                                row["Type"] = "combo";
-                                dtNoName = GetNoNameDataTable(ar.KeyOfEn);
-                                dtNoName.Rows.Add("all", "全部");
-
-                                SysEnums enums = new SysEnums(ar.UIBindKey);
-
-                                foreach (SysEnum en in enums)
-                                    dtNoName.Rows.Add(en.IntKey.ToString(), en.Lab);
-
-                                ds.Tables.Add(dtNoName);
-
-                                row["ValueField"] = "No";
-                                row["TextField"] = "Name";
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
+                    DataTable dtEn = ensFK.ToDataTableField();
+                    dtEn.TableName = ar.Key;
+                    ds.Tables.Add(dtEn);
+                    continue;
                 }
 
-                dt.Rows.Add(row);
+                if (DataType.IsNullOrEmpty(ar.UIBindKey) == false
+                    && ds.Tables.Contains(ar.Key) == false)
+                {
+                    //@lizhen.
+                    EntitiesNoName ens = attr.HisEntitiesNoName;
+                    ds.Tables.Add(ens.ToDataTableField(ar.Key));
+                }
             }
 
             ds.Tables.Add(dt);
-            #endregion
 
-            #region //增加第一页数据
-            GEEntitys ges;
-            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                MapAttrs attrsOfSystem = new MapAttrs("ND"+ int.Parse(this.FK_Flow)+"Rpt");
-                ges = new GEEntitys(nd.NodeFrmID);
-                GEEntity en = ges.GetNewEntity as GEEntity;
-                foreach (MapAttr mapAttr in attrsOfSystem)
-                    en.EnMap.AddAttr(mapAttr.HisAttr);
-                Cash.SQL_Cash.Remove(nd.NodeFrmID);
-            }
-            else
-            {
-                ges = new GEEntitys(rptNo);
-            }
-           
-           
+            #endregion 外键枚举的查询条件
 
-            QueryObject qo = new QueryObject(ges);
+            return BP.Tools.Json.ToJson(ds);
+
+        }
+        /// <summary>
+        /// 单流程查询显示的列
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSearch_MapAttrs()
+        {
+
+            DataSet ds = new DataSet();
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+
+            //查询出单流程的所有字段
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
+
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+
+            //默认显示的系统字段 标题、创建人、创建时间、部门、状态.
+            MapAttrs mattrsOfSystem = new MapAttrs();
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.Title));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowStarter));
+            //  mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowStartRDT));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FK_Dept));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.WFState));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowEmps));
+
+            ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
+
+            //系统字段字符串
+            string sysFields = BP.WF.Glo.FlowFields;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Field");
+            dt.TableName = "Sys_Fields";
+            DataRow dr = dt.NewRow();
+            dr["Field"] = sysFields;
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 单流程查询数据集合
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSearch_Data()
+        {
+            //表单编号
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+
+            //当前用户查询信息表
+            UserRegedit ur = new UserRegedit(WebUser.No, rptNo + "_SearchAttrs");
+
+            //表单属性
+            MapData mapData = new MapData(rptNo);
+
+            //流程表单对应的所有字段
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
+
+            //流程表单对应的流程数据
+            GEEntitys ens = new GEEntitys(rptNo);
+            QueryObject qo = new QueryObject(ens);
 
             switch (this.SearchType)
             {
                 case "My": //我发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    qo.AddWhere(GERptAttr.FlowStarter, WebUser.No);
                     break;
-                case "MyDept": //我部门发起的.
-                    //只查本部门及兼职部门
-                    if (md.GetParaBoolen("IsSearchNextLeavel") == false)
+                case "MyDept": //我部门发起的.  
+                    if (mapData.GetParaBoolen("IsSearchNextLeavel") == false)
                     {
-                        qo.AddWhereInSQL(BP.WF.Data.GERptAttr.FK_Dept, "SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "'");
+                        //只查本部门及兼职部门
+                        qo.AddWhereInSQL(GERptAttr.FK_Dept, "SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "'");
                     }
                     else
                     {
@@ -494,12 +449,12 @@ namespace BP.WF.HttpHandler
                         string sql = "SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "'";
                         sql += " UNION ";
                         sql += "SELECT No AS FK_Dept From Port_Dept Where ParentNo IN(SELECT FK_Dept From Port_DeptEmp Where FK_Emp='" + WebUser.No + "')";
-                        qo.AddWhereInSQL(BP.WF.Data.GERptAttr.FK_Dept, sql);
+                        qo.AddWhereInSQL(GERptAttr.FK_Dept, sql);
 
                     }
                     break;
                 case "MyJoin": //我参与的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    qo.AddWhere(GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
                 case "Adminer":
                     break;
@@ -507,99 +462,273 @@ namespace BP.WF.HttpHandler
                     return "err@" + this.SearchType + "标记错误.";
             }
 
-            qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
+            #region 关键字查询
+            string searchKey = ""; //关键字查询
+            if (mapData.IsSearchKey)
+                searchKey = ur.SearchKey;
+
+            if (mapData.IsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
+            {
+                int i = 0;
+
+                foreach (MapAttr myattr in attrs)
+                {
+                    Attr attr = myattr.HisAttr;
+                    switch (attr.MyFieldType)
+                    {
+                        case FieldType.Enum:
+                        case FieldType.FK:
+                        case FieldType.PKFK:
+                            continue;
+                        default:
+                            break;
+                    }
+
+                    if (attr.MyDataType != DataType.AppString)
+                        continue;
+
+                    if (attr.MyFieldType == FieldType.RefText)
+                        continue;
+
+                    if (attr.Key == "FK_Dept")
+                        continue;
+
+                    i++;
+
+                    if (i == 1)
+                    {
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        continue;
+                    }
+
+                    qo.addOr();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    else
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                }
+
+                qo.MyParas.Add("SKey", searchKey);
+                qo.addRightBracket();
+            }
+            else if (DataType.IsNullOrEmpty(mapData.GetParaString("StringSearchKeys")) == false)
+            {
+                string field = "";//字段名
+                string fieldValue = "";//字段值
+                int idx = 0;
+
+                //获取查询的字段
+                string[] searchFields = mapData.GetParaString("StringSearchKeys").Split('*');
+                foreach (String str in searchFields)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    //字段名
+                    string[] items = str.Split(',');
+                    if (items.Length == 2 && DataType.IsNullOrEmpty(items[0]) == true)
+                        continue;
+                    field = items[0];
+                    //字段名对应的字段值
+                    fieldValue = ur.GetParaString(field);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    idx++;
+                    if (idx == 1)
+                    {
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        else
+                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.MyParas.Add(field, fieldValue);
+                        continue;
+                    }
+                    qo.addAnd();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    else
+                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                    qo.MyParas.Add(field, fieldValue);
+
+
+                }
+                if (idx != 0)
+                    qo.addRightBracket();
+            }
+
+            #endregion 关键字查询
+
+            #region Url传参条件
+            string val = "";
+            List<string> keys = new List<string>();
+            foreach (MapAttr attr in attrs)
+            {
+                if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.KeyOfEn)))
+                    continue;
+                qo.addAnd();
+                qo.addLeftBracket();
+                val = HttpContextHelper.RequestParams(attr.KeyOfEn);
+
+                switch (attr.MyDataType)
+                {
+                    case DataType.AppBoolean:
+                        qo.AddWhere(attr.KeyOfEn, Convert.ToBoolean(int.Parse(val)));
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                    case DataType.AppString:
+                        qo.AddWhere(attr.KeyOfEn, val);
+                        break;
+                    case DataType.AppDouble:
+                    case DataType.AppFloat:
+                    case DataType.AppMoney:
+                        qo.AddWhere(attr.KeyOfEn, double.Parse(val));
+                        break;
+                    case DataType.AppInt:
+                        qo.AddWhere(attr.KeyOfEn, int.Parse(val));
+                        break;
+                    default:
+                        break;
+                }
+
+                qo.addRightBracket();
+
+                if (keys.Contains(attr.KeyOfEn) == false)
+                    keys.Add(attr.KeyOfEn);
+            }
+            #endregion
+
+            #region 过滤条件
+            Dictionary<string, string> kvs = ur.GetVals();
+            foreach (MapAttr attr1 in attrs)
+            {
+                Attr attr = attr1.HisAttr;
+                //此处做判断，如果在URL中已经传了参数，则不算SearchAttrs中的设置
+                if (keys.Contains(attr.Key))
+                    continue;
+
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+                if (attr.Key.Equals("FK_NY"))
+                {
+                    string fieldValue = ur.GetParaString(attr.Key);
+                    if (DataType.IsNullOrEmpty(fieldValue) == true)
+                        continue;
+                    qo.addAnd();
+                    qo.AddWhere(attr.Key, " = ", fieldValue);
+                    continue;
+                }
+
+                string selectVal = string.Empty;
+                string cid = string.Empty;
+
+                switch (attr.UIContralType)
+                {
+
+                    case UIContralType.DDL:
+                    case UIContralType.RadioBtn:
+                        cid = "DDL_" + attr.Key;
+
+                        if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                            continue;
+
+                        selectVal = kvs[cid];
+
+                        if (selectVal == "all" || selectVal == "-1")
+                            continue;
+
+                        qo.addAnd();
+
+                        qo.addLeftBracket();
+
+
+                        string deptName = BP.Sys.Glo.DealClassEntityName("BP.Port.Depts");
+
+                        if (attr.UIBindKey.Equals(deptName) == true)  //判断特殊情况。
+                            qo.AddWhere(attr.Key, " LIKE ", selectVal + "%");
+                        else
+                            qo.AddWhere(attr.Key, selectVal);
+
+                        qo.addRightBracket();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            #endregion
+
+            #region 日期处理
+            if (mapData.DTSearchWay != DTSearchWay.None)
+            {
+                string dtKey = mapData.DTSearchKey;
+                string dtFrom = ur.GetValStringByKey(UserRegeditAttr.DTFrom).Trim();
+                string dtTo = ur.GetValStringByKey(UserRegeditAttr.DTTo).Trim();
+
+                if (DataType.IsNullOrEmpty(dtFrom) == true)
+                {
+                    if (mapData.DTSearchWay == DTSearchWay.ByDate)
+                        dtFrom = "1900-01-01";
+                    else
+                        dtFrom = "1900-01-01 00:00";
+                }
+
+                if (DataType.IsNullOrEmpty(dtTo) == true)
+                {
+                    if (mapData.DTSearchWay == DTSearchWay.ByDate)
+                        dtTo = "2999-01-01";
+                    else
+                        dtTo = "2999-12-31 23:59";
+                }
+
+                if (mapData.DTSearchWay == DTSearchWay.ByDate)
+                {
+
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = dtKey + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = dtKey + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+
+                if (mapData.DTSearchWay == DTSearchWay.ByDateTime)
+                {
+
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = dtKey + " >= '" + dtFrom + " 00:00'";
+                    qo.addAnd();
+                    qo.SQL = dtKey + " <= '" + dtTo + " 23:59'";
+                    qo.addRightBracket();
+                }
+            }
+            #endregion 日期处理
 
             qo.AddWhere(" AND  WFState > 1 ");
             qo.AddWhere(" AND FID = 0 ");
-
-            md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);
-            ds.Tables.Add(ges.ToDataTableField("MainData"));
-            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
-            #endregion
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
-        }
-
-
-        public string FlowSearch_Done()
-        {
-            string vals = this.GetRequestVal("vals");
-            string searchKey = GetRequestVal("key");
-            string dtFrom = GetRequestVal("dtFrom");
-            string dtTo = GetRequestVal("dtTo");
-            string mvals = GetRequestVal("mvals");
-            string pageSize = GetRequestVal("pageSize");
-            int pageIdx = int.Parse(GetRequestVal("pageIdx"));
-
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
-            UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
-            ur.RetrieveFromDBSources();
-
-            ur.SearchKey = searchKey;
-            ur.DTFrom_Data = dtFrom;
-            ur.DTTo_Data = dtTo;
-            ur.Vals = vals;
-            ur.MVals = mvals;
+            if (DataType.IsNullOrEmpty(ur.OrderBy) == false)
+                if (ur.OrderWay.ToUpper().Equals("DESC") == true)
+                    qo.addOrderByDesc(ur.OrderBy);
+                else
+                    qo.addOrderBy(ur.OrderBy);
+            ur.SetPara("Count", qo.GetCount());
             ur.Update();
+            qo.DoQuery("OID", this.PageSize, this.PageIdx);
 
-            DataSet ds = new DataSet();
-            MapData md = new MapData(rptNo);
-            MapAttrs attrs = new MapAttrs(rptNo);
-            GEEntitys ges;
-            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                MapAttrs attrsOfSystem = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
-                ges = new GEEntitys(nd.NodeFrmID);
-                GEEntity en = ges.GetNewEntity as GEEntity;
-                foreach (MapAttr mapAttr in attrsOfSystem)
-                    en.EnMap.AddAttr(mapAttr.HisAttr);
-                Cash.SQL_Cash.Remove(nd.NodeFrmID);
-            }
-            else
-            {
-                ges = new GEEntitys(rptNo);
-            }
+            return BP.Tools.Json.ToJson(ens.ToDataTableField("FlowSearch_Data"));
 
-
-            QueryObject qo = new QueryObject(ges);
-
-            switch (this.SearchType)
-            {
-                case "My": //我发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
-                    break;
-                case "MyDept": //我部门发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
-                    break;
-                case "MyJoin": //我参与的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
-                    break;
-                case "Adminer":
-                    break;
-                default:
-                    return "err@" + this.SearchType + "标记错误.";
-            }
-
-
-            qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
-            qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
-
-
-            md.SetPara("T_total", qo.GetCount());
-            if (DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
-                qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx, ur.OrderBy, ur.OrderWay);
-            else
-                qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);
-
-
-            ds.Tables.Add(ges.ToDataTableField("MainData"));
-            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
         }
+
+
         /// <summary>
         /// 导出
         /// </summary>
@@ -631,22 +760,8 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
-            GEEntitys ges;
-            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                MapAttrs attrsOfSystem = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
-                ges = new GEEntitys(nd.NodeFrmID);
-                GEEntity en = ges.GetNewEntity as GEEntity;
-                foreach (MapAttr mapAttr in attrsOfSystem)
-                    en.EnMap.AddAttr(mapAttr.HisAttr);
-                Cash.SQL_Cash.Remove(nd.NodeFrmID);
-            }
-            else
-            {
-                ges = new GEEntitys(rptNo);
-            }
-
+            //MapAttrs attrs = new MapAttrs(rptNo);
+            GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
 
             string title = "数据导出";
@@ -699,7 +814,7 @@ namespace BP.WF.HttpHandler
             Dictionary<string, string> vals = null;
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.GroupType;
 
-            //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
+            //报表信息，包含是否显示关键字查询IsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式DTSearchWay，时间字段DTSearchKey
             MapData md = new MapData();
             md.No = rptNo;
             if (md.RetrieveFromDBSources() == 0)
@@ -707,17 +822,8 @@ namespace BP.WF.HttpHandler
                 /*如果没有找到，就让其重置一下.*/
                 BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
 
-                if (this.GroupType == "My")
-                    rd.DoReset(this.GroupType, "我发起的流程");
+                rd.DoReset(this.GroupType);
 
-                if (this.GroupType == "MyJoin")
-                    rd.DoReset(this.GroupType, "我审批的流程");
-
-                if (this.GroupType == "MyDept")
-                    rd.DoReset(this.GroupType, "本部门发起的流程");
-
-                if (this.GroupType == "Adminer")
-                    rd.DoReset(this.GroupType, "高级查询");
 
                 md.RetrieveFromDBSources();
             }
@@ -757,17 +863,17 @@ namespace BP.WF.HttpHandler
 
 
             vals = ur.GetVals();
-            md.SetPara("RptDTSearchWay", (int)md.RptDTSearchWay);
-            md.SetPara("RptDTSearchKey", md.RptDTSearchKey);
-            md.SetPara("RptIsSearchKey", md.RptIsSearchKey);
+            md.SetPara("DTSearchWay", (int)md.DTSearchWay);
+            md.SetPara("DTSearchKey", md.DTSearchKey);
+            md.SetPara("IsSearchKey", md.IsSearchKey);
             md.SetPara("T_SearchKey", ur.SearchKey);
 
-            if (md.RptDTSearchWay != DTSearchWay.None)
+            if (md.DTSearchWay != DTSearchWay.None)
             {
-                ar = new MapAttr(rptNo, md.RptDTSearchKey);
+                ar = new MapAttr(rptNo, md.DTSearchKey);
                 md.SetPara("T_DateLabel", ar.Name);
 
-                if (md.RptDTSearchWay == DTSearchWay.ByDate)
+                if (md.DTSearchWay == DTSearchWay.ByDate)
                 {
                     md.SetPara("T_DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
                     md.SetPara("T_DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
@@ -800,7 +906,7 @@ namespace BP.WF.HttpHandler
 
             foreach (MapAttr attr in attrs)
             {
-                if (attr.UIContralType == UIContralType.DDL || attr.UIContralType== UIContralType.RadioBtn)
+                if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
                 {
                     DataRow dr = dt.NewRow();
                     dr["Field"] = attr.KeyOfEn;
@@ -1525,7 +1631,7 @@ namespace BP.WF.HttpHandler
                 if (isExist == false)
                     continue;
 
-                if (val.Equals("mvals") ==true)
+                if (val.Equals("mvals") == true)
                 {
                     //如果用户多项选择了，就要找到它的选择项目.
 
@@ -1647,7 +1753,7 @@ namespace BP.WF.HttpHandler
                 if (isExist == false)
                     continue;
 
-                if ( val == "mvals")
+                if (val == "mvals")
                 {
                     //如果用户多项选择了，就要找到它的选择项目.
 
@@ -1763,12 +1869,12 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
 
             #region 关键字查询
-            if (md.RptIsSearchKey)
+            if (md.IsSearchKey)
                 searchKey = ur.SearchKey;
 
 
             bool isFirst = true;
-            if (md.RptIsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
+            if (md.IsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
             {
                 int i = 0;
 
@@ -1817,14 +1923,14 @@ namespace BP.WF.HttpHandler
                 qo.MyParas.Add("SKey", searchKey);
                 qo.addRightBracket();
             }
-            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
+            else if (DataType.IsNullOrEmpty(md.GetParaString("StringSearchKeys")) == false)
             {
                 string field = "";//字段名
                 string fieldValue = "";//字段值
                 int idx = 0;
 
                 //获取查询的字段
-                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                string[] searchFields = md.GetParaString("StringSearchKeys").Split('*');
                 foreach (String str in searchFields)
                 {
                     if (DataType.IsNullOrEmpty(str) == true)
@@ -1877,7 +1983,7 @@ namespace BP.WF.HttpHandler
             {
                 if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.Key)))
                     continue;
-                if(isFirst == false)
+                if (isFirst == false)
                     qo.addAnd();
                 if (isFirst == true)
                     isFirst = false;
@@ -2026,7 +2132,7 @@ namespace BP.WF.HttpHandler
 
                         string deptName = BP.Sys.Glo.DealClassEntityName("BP.Port.Depts");
 
-                        if (attr.UIBindKey.Equals(deptName)==true)  //判断特殊情况。
+                        if (attr.UIBindKey.Equals(deptName) == true)  //判断特殊情况。
                             qo.AddWhere(attr.Key, " LIKE ", selectVal + "%");
                         else
                             qo.AddWhere(attr.Key, selectVal);
@@ -2053,15 +2159,15 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 日期处理
-            if (md.RptDTSearchWay != DTSearchWay.None)
+            if (md.DTSearchWay != DTSearchWay.None)
             {
-                string dtKey = md.RptDTSearchKey;
+                string dtKey = md.DTSearchKey;
                 string dtFrom = ur.GetValStringByKey(UserRegeditAttr.DTFrom).Trim();
                 string dtTo = ur.GetValStringByKey(UserRegeditAttr.DTTo).Trim();
 
                 if (DataType.IsNullOrEmpty(dtFrom) == true)
                 {
-                    if (md.RptDTSearchWay == DTSearchWay.ByDate)
+                    if (md.DTSearchWay == DTSearchWay.ByDate)
                         dtFrom = "1900-01-01";
                     else
                         dtFrom = "1900-01-01 00:00";
@@ -2069,13 +2175,13 @@ namespace BP.WF.HttpHandler
 
                 if (DataType.IsNullOrEmpty(dtTo) == true)
                 {
-                    if (md.RptDTSearchWay == DTSearchWay.ByDate)
+                    if (md.DTSearchWay == DTSearchWay.ByDate)
                         dtTo = "2999-01-01";
                     else
                         dtTo = "2999-12-31 23:59";
                 }
 
-                if (md.RptDTSearchWay == DTSearchWay.ByDate)
+                if (md.DTSearchWay == DTSearchWay.ByDate)
                 {
                     if (isFirst == false)
                         qo.addAnd();
@@ -2089,7 +2195,7 @@ namespace BP.WF.HttpHandler
                     qo.addRightBracket();
                 }
 
-                if (md.RptDTSearchWay == DTSearchWay.ByDateTime)
+                if (md.DTSearchWay == DTSearchWay.ByDateTime)
                 {
                     if (isFirst == false)
                         qo.addAnd();

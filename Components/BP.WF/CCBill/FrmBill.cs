@@ -13,12 +13,16 @@ using System.Collections.Generic;
 
 namespace BP.CCBill
 {
-   
+
     /// <summary>
     /// 实体表单 - Attr
     /// </summary>
     public class FrmBillAttr : FrmAttr
     {
+        /// <summary>
+        /// 单据关联的实体
+        /// </summary>
+        public const string RefDict = "RefDict";
     }
     /// <summary>
     /// 单据属性
@@ -31,13 +35,9 @@ namespace BP.CCBill
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true)
-                {
-                    uac.IsDelete = false;
-                    uac.IsUpdate = true;
-                    return uac;
-                }
-                uac.Readonly();
+                uac.OpenForAppAdmin();
+                uac.IsDelete = false;
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -137,8 +137,8 @@ namespace BP.CCBill
                 this.SetValByKey(FrmBillAttr.BillNoFormat, value);
             }
         }
-        
-         public string SortColumns
+
+        public string SortColumns
         {
             get
             {
@@ -159,6 +159,18 @@ namespace BP.CCBill
             set
             {
                 this.SetValByKey(FrmBillAttr.FieldSet, value);
+            }
+        }
+
+        public string RefDict
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmBillAttr.RefDict);
+            }
+            set
+            {
+                this.SetValByKey(FrmBillAttr.RefDict, value);
             }
         }
         #endregion
@@ -188,7 +200,7 @@ namespace BP.CCBill
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_MapData", "单据属性");
-                
+
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
@@ -196,7 +208,18 @@ namespace BP.CCBill
                 //map.AddDDLSysEnum(MapDataAttr.FrmModel, 0, "单据模板", true, true, "BillFrmModel", "@0=系统预置@1=用户新增");
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20, true);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+
+
+                if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
+                {
+                    string sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='"+BP.Web.WebUser.OrgNo+ "' AND No!='" + BP.Web.WebUser.OrgNo + "'";
+                    map.AddDDLSQL(MapDataAttr.FK_FormTree, null, "表单类别", sql, true);
+                    //map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                }
+                else
+                {
+                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                }
 
 
                 map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "傻瓜表单显示方式",
@@ -222,14 +245,14 @@ namespace BP.CCBill
                 map.AddTBString(FrmBillAttr.SortColumns, null, "排序字段", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.ColorSet, null, "颜色设置", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
+                map.AddTBString(FrmBillAttr.RefDict, null, "单据关联的实体", false, true, 0, 190, 20, true);
                 #endregion 单据属性.
-
 
                 #region 按钮权限.
                 map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
                   "@0=表格模式@1=卡片模式@2=不可用", true);
-               
+
 
                 map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
@@ -272,10 +295,11 @@ namespace BP.CCBill
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
-                map.AddTBString(FrmBillAttr.BtnImpExcel, "导入Excel文件", "导入Excel文件", true, false, 0, 50, 20);
+
+                map.AddTBString(FrmBillAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnExpExcel, "导出Excel文件", "导出Excel文件", true, false, 0, 50, 20);
+                map.AddTBString(FrmBillAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
                 map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
@@ -617,7 +641,7 @@ namespace BP.CCBill
 
         public string DoRpt_Setting()
         {
-            return "../Sys/SearchSetting.htm?EnsName=" + this.No+"&SettingType=1";
+            return "../Sys/SearchSetting.htm?EnsName=" + this.No + "&SettingType=1";
         }
         #endregion 报表定义.
 
@@ -797,7 +821,7 @@ namespace BP.CCBill
                 MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "RDT";  
+                attr.KeyOfEn = "RDT";
                 attr.Name = "创建时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;

@@ -57,10 +57,6 @@ namespace BP.WF.Data
         /// </summary>
         public const string NodeName = "NodeName";
         /// <summary>
-        /// 发起人工作部门
-        /// </summary>
-        public const string WorkerDept = "WorkerDept";
-        /// <summary>
         /// 标题
         /// </summary>
         public const string Title = "Title";
@@ -272,20 +268,6 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(DelayAttr.NodeName, value);
-            }
-        }
-        /// <summary>
-        /// 工作人部门
-        /// </summary>
-        public string WorkerDept
-        {
-            get
-            {
-                return this.GetValStringByKey(DelayAttr.WorkerDept);
-            }
-            set
-            {
-                this.SetValByKey(DelayAttr.WorkerDept, value);
             }
         }
         /// <summary>
@@ -534,7 +516,7 @@ namespace BP.WF.Data
               //  map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 40);
                 map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 40);
 
-                map.AddTBInt(DelayAttr.WorkerDept, 0, "工作人员部门", false, true);
+             //   map.AddTBInt(DelayAttr.WorkerDept, 0, "工作人员部门", false, true);
                 map.AddTBString(DelayAttr.RDT, null, "接受日期", true, true, 0, 50, 30);
                 map.AddTBString(DelayAttr.SDT, null, "应完成日期", true, true, 0, 50, 50);
                 map.AddTBInt(DelayAttr.FID, 0, "FID", false, false);

@@ -117,7 +117,7 @@ namespace BP.WF
                 }
                 x = link.X + wtX;
                 sb.Append("\t\n<DIV name=u2 style='position:absolute;left:" + x + "px;top:" + link.Y + "px;text-align:left;' >");
-                sb.Append("\t\n<span style='color:" + link.FontColorHtml + ";font-family: " + link.FontName + ";font-size: " + link.FontSize + "px;' > <a href=\"" + url + "\" target='" + link.Target + "'> " + link.Text + "</a></span>");
+                sb.Append("\t\n<span style='color:" + link.FontColorHtml + ";font-family: " + link.FontName + ";font-size: " + link.FontSize + "px;' > <a href=\"" + url + "\" target='" + link.Target + "'> " + link.Lab + "</a></span>");
                 sb.Append("\t\n</DIV>");
             }
 
@@ -155,9 +155,9 @@ namespace BP.WF
 
                     sb.Append("\t\n<div id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
                     if (DataType.IsNullOrEmpty(img.LinkURL) == false)
-                        sb.Append("\t\n<a href='" + img.LinkURL + "' target=" + img.LinkTarget + " ><img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' /></a>");
+                        sb.Append("\t\n<a href='" + img.LinkURL + "' target=" + img.LinkTarget + " ><img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.UIWidth + "px;height:" + img.UIHeight + "px;' /></a>");
                     else
-                        sb.Append("\t\n<img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                        sb.Append("\t\n<img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.UIWidth + "px;height:" + img.UIHeight + "px;' />");
                     sb.Append("\t\n</div>");
                     continue;
                 }
@@ -177,7 +177,7 @@ namespace BP.WF
                     }
 
                     sb.Append("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                    sb.Append("\t\n<img src='" + frmEleDB.Tag2 + "' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                    sb.Append("\t\n<img src='" + frmEleDB.Tag2 + "' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.UIWidth + "px;height:" + img.UIHeight + "px;' />");
                     sb.Append("\t\n</DIV>");
 
                     continue;
@@ -241,7 +241,7 @@ namespace BP.WF
                         }
                         //判断本部门下是否有此人
                         //sql = "SELECT fk_station from port_deptEmpStation where fk_dept='" + fk_dept + "' and fk_emp='" + WebUser.No + "'";
-                        sql = string.Format(" select FK_Station from Port_DeptStation where FK_Dept ='{0}' and FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " where FK_Emp='{1}')", fk_dept, WebUser.No);
+                        sql = string.Format(" select FK_Station from Port_DeptStation where FK_Dept ='{0}' and FK_Station in (select FK_Station from Port_DeptEmpStation where FK_Emp='{1}')", fk_dept, WebUser.No);
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         foreach (DataRow dr in dt.Rows)
                         {
@@ -259,7 +259,7 @@ namespace BP.WF
                         myPK = myPK + "_" + en.GetValStrByKey("OID") + "_" + img.MyPK;
 
                         FrmEleDB imgDb = new FrmEleDB(myPK);
-
+                      
                         //判断是否存在
                         if (imgDb == null || DataType.IsNullOrEmpty(imgDb.FK_MapData))
                         {
@@ -273,7 +273,7 @@ namespace BP.WF
                         //添加控件
                         x = img.X + wtX;
                         sb.Append("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                        sb.Append("\t\n<img src='" + imgSrc + "' onerror=\"javascript:this.src='" + appPath + "DataUser/Seal/Def.png'\" style=\"padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;\" />");
+                        sb.Append("\t\n<img src='" + imgSrc + "' onerror=\"javascript:this.src='" + appPath + "DataUser/Seal/Def.png'\" style=\"padding: 0px;margin: 0px;border-width: 0px;width:" + img.UIWidth + "px;height:" + img.UIHeight + "px;\" />");
                         sb.Append("\t\n</DIV>");
                     }
                     else
@@ -289,7 +289,7 @@ namespace BP.WF
                         {
                             FrmEleDBs imgdbs = new FrmEleDBs();
                             imgdbs.Retrieve(FrmEleDBAttr.EleID, en.GetValStrByKey("OID"));
-                            if (imgdbs.Count > 0)
+                            if (imgdbs.Count  > 0)
                             {
                                 foreach (FrmEleDB single in imgdbs)
                                 {
@@ -320,7 +320,7 @@ namespace BP.WF
                             //如果没有查到记录，控件不显示。说明没有走盖章的一步
                             x = img.X + wtX;
                             sb.Append("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
-                            sb.Append("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
+                            sb.Append("\t\n<img src='" + imgSrc + "' onerror='javascript:this.src='" + appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png';' style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.UIWidth + "px;height:" + img.UIHeight + "px;' />");
                             sb.Append("\t\n</DIV>");
                         }
                     }
@@ -341,20 +341,21 @@ namespace BP.WF
                 switch (btn.HisBtnEventType)
                 {
                     case BtnEventType.Disable:
-                        sb.Append("<input type=button class=Btn value='" + btn.Text.Replace("&nbsp;", " ") + "' disabled='disabled'/>");
+                        sb.Append("<input type=button class=Btn value='" + btn.Lab.Replace("&nbsp;", " ") + "' disabled='disabled'/>");
                         break;
                     case BtnEventType.RunExe:
                     case BtnEventType.RunJS:
-                        sb.Append("<input type=button class=Btn value=\"" + btn.Text.Replace("&nbsp;", " ") + "\" enable=true onclick=\"" + doDoc + "\" />");
+                        sb.Append("<input type=button class=Btn value=\"" + btn.Lab.Replace("&nbsp;", " ") + "\" enable=true onclick=\"" + doDoc + "\" />");
                         break;
                     default:
-                        sb.Append("<input type=button value='" + btn.Text + "' />");
+                        sb.Append("<input type=button value='" + btn.Lab + "' />");
                         break;
                 }
                 sb.Append("\t\n</span>");
                 sb.Append("\t\n</DIV>");
             }
             #endregion 输出竖线与标签
+
             #region  输出 rb.
             BP.Sys.FrmRBs myrbs = mapData.FrmRBs;
             MapAttr attrRB = new MapAttr();
@@ -373,7 +374,6 @@ namespace BP.WF
                 sb.Append("</DIV>");
             }
             #endregion  输出 rb.
-
 
             #region 输出数据控件.
             int fSize = 0;
@@ -488,7 +488,7 @@ namespace BP.WF
                 sb.Append("</DIV>");
             }
 
-
+            
 
             #endregion 输出数据控件.
 
@@ -790,68 +790,45 @@ namespace BP.WF
             if (formType == NodeFormType.FoolTruck && DataType.IsNullOrEmpty(FK_Node) == false)
             {
                 Node nd = new Node(FK_Node);
-                nd.WorkID = workid;
                 Work wk = nd.HisWork;
                 wk.OID = workid;
                 wk.RetrieveFromDBSources();
 
-                string frmIDs = wk.HisPassedFrmIDs;
-                GenerWorkFlow gwf = new GenerWorkFlow(workid);
-                //if (gwf.WFState != WFState.Complete)
-				if(frmIDs.Contains(FK_Node)==false)
-					frmIDs = frmIDs + ",'" + FK_Node + "'";
-                GroupFields gfss = new GroupFields();
-                gfss.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
+                /* 求出来走过的表单集合 */
+                string sql = "SELECT NDFrom FROM ND" + int.Parse(flowNo) + "Track A, WF_Node B ";
+                sql += " WHERE A.NDFrom=B.NodeID  ";
+                sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
+                sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
+                sql += "  AND NDFrom!=" + Int32.Parse(FK_Node.Replace("ND", "")) + " "; //排除当前的表单.
 
-                //按照时间的顺序查找出来 ids .
-                string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + frmIDs + ")";
-                string orderMyFrmIDs = frmIDs.Replace("'", "");
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+
+                sql += "  AND (A.WorkID=" + workid + ") ";
+                sql += " ORDER BY A.RDT ";
+
+                // 获得已经走过的节点IDs.
+                DataTable dtNodeIDs = DBAccess.RunSQLReturnTable(sql);
+                string frmIDs = "";
+                if (dtNodeIDs.Rows.Count > 0)
                 {
-                    sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "',FrmID) , Idx";
-                }
-
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                {
-                    sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + orderMyFrmIDs + "'), Idx";
-                }
-
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                {
-                    sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "', FrmID ), Idx";
-                }
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                {
-                    sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
-                }
-
-                if (SystemConfig.AppCenterDBType == DBType.DM)
-                {
-                    sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
-                }
-
-                DataTable dtOrder = DBAccess.RunSQLReturnTable(sqlOrder);
-
-                //创建容器,把排序的分组放入这个容器.
-                gfs = new GroupFields();
-
-                //遍历查询出来的分组.
-                //只能增加一个审核分组
-                GroupField FWCG = null;
-                foreach (DataRow dr in dtOrder.Rows)
-                {
-                    string pkOID = dr[0].ToString();
-                    GroupField mygf = gfss.GetEntityByKey(pkOID) as GroupField;
-                    if (mygf.CtrlType.Equals("FWC"))
+                    //把所有的节点字段.
+                    foreach (DataRow dr in dtNodeIDs.Rows)
                     {
-                        FWCG = mygf;
-                        continue;
+                        if (frmIDs.Contains("ND" + dr[0].ToString()) == true)
+                            continue;
+                        frmIDs += "'ND" + dr[0].ToString() + "',";
                     }
-
-                    gfs.AddEntity(mygf); //把分组字段加入里面去.
                 }
-                if (FWCG != null)
-                    gfs.AddEntity(FWCG);
+
+                if (frmIDs == "")
+                    frmIDs = "'" + mapData.No + "'";
+                else
+                    frmIDs = frmIDs.Substring(0, frmIDs.Length - 1);
+
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                if (gwf.WFState == WFState.Complete)
+                    frmIDs = frmIDs + ",'" + FK_Node + "'";
+                gfs = new GroupFields();
+                gfs.RetrieveIn(GroupFieldAttr.FrmID, "(" + frmIDs + ")");
 
                 mapAttrs = new MapAttrs();
                 mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")", "GroupID, Idx");
@@ -919,8 +896,8 @@ namespace BP.WF
 
             if (DataType.IsNullOrEmpty(FK_Node) == false && DataType.IsNullOrEmpty(flowNo) == false)
             {
-                Node nd = new Node(Int32.Parse(FK_Node.Replace("ND", "")));
-                if (frmID.StartsWith("ND") == true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                Node nd = new Node(Int32.Parse(FK_Node.Replace("ND","")));
+                if (frmID.StartsWith("ND")==true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
                     GroupField gf = gfs.GetEntityByKey(GroupFieldAttr.CtrlType, "FWC") as GroupField;
                     if (gf == null)
@@ -985,15 +962,11 @@ namespace BP.WF
                                     {
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
                                         String src = SystemConfig.HostURL + "/DataUser/Siganture/";
-                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
+                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\""+src+ "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
                                     }
                                     else
                                     {
-                                        //判断如果是金额类型的数据,加上千分号
-                                        if (attr.MyDataType == 8)
-                                            text = String.Format("{0:N}", en.GetValDoubleByKey(attr.KeyOfEn));
-                                        else
-                                            text = en.GetValStrByKey(attr.KeyOfEn);
+                                        text = en.GetValStrByKey(attr.KeyOfEn);
                                     }
                                     if (attr.IsRichText == true)
                                     {
@@ -1003,17 +976,16 @@ namespace BP.WF
 
                                 break;
                             case FieldTypeS.Enum:
-                                if (attr.UIContralType == UIContralType.CheckBok)
+                                if(attr.UIContralType == UIContralType.CheckBok)
                                 {
-                                    string s = en.GetValStrByKey(attr.KeyOfEn) + ",";
+                                    string s = en.GetValStrByKey(attr.KeyOfEn)+",";
                                     SysEnums enums = new SysEnums(attr.UIBindKey);
-                                    foreach (SysEnum se in enums)
-                                    {
+                                    foreach(SysEnum se in enums){
                                         if (s.IndexOf(se.IntKey + ",") != -1)
                                             text += se.Lab + " ";
                                     }
 
-                                }
+                                } 
                                 else
                                     text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 break;
@@ -1048,8 +1020,6 @@ namespace BP.WF
                             else
                                 text = "[&#10004]" + attr.Name;
                         }
-
-                       
 
                         //线性展示并且colspan=3
                         if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeightInt < 30))
@@ -1139,7 +1109,7 @@ namespace BP.WF
 
                     //#region 输出数据.
                     GEDtls dtls = new GEDtls(gf.CtrlID);
-                    dtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
+                    dtls.Retrieve(GEDtlAttr.RefPK, workid,"OID");
                     foreach (GEDtl dtl in dtls)
                     {
                         sb.Append("<tr>");
@@ -1164,9 +1134,9 @@ namespace BP.WF
                                     }
                                     else
                                     {
-
+                                       
                                         text = dtl.GetValStrByKey(item.KeyOfEn);
-
+                                        
                                         if (item.IsRichText == true)
                                         {
                                             text = text.Replace("white-space: nowrap;", "");
@@ -1204,7 +1174,7 @@ namespace BP.WF
 
                             if (item.IsNum)
                             {
-                                sb.Append("<td style='text-align:right' >" + text + "</td>");
+                                sb.Append("<td style='text-align:right' >" + text+ "</td>");
                                 continue;
                             }
 
@@ -1392,7 +1362,7 @@ namespace BP.WF
                     if (bl)
                     {
                         String tTable = "ND" + int.Parse(flowNo) + "Track";
-                        sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + workid;
+                        sql = "SELECT a." + BP.Sys.Glo.UserNo + ", a.SignType FROM Port_Emp a, " + tTable + " b WHERE a." + Glo.UserNo + "=b.EmpFrom AND B.WorkID=" + workid;
 
                         dtTrack = DBAccess.RunSQLReturnTable(sql);
                         dtTrack.TableName = "SignType";
@@ -1470,7 +1440,7 @@ namespace BP.WF
                             if (singType == "1")
                             {
                                 String src = SystemConfig.HostURL + "/DataUser/Siganture/";
-                                empStrs = "<img src='" + src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
+                                empStrs = "<img src='"+src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
                             }
 
                         }
@@ -1490,7 +1460,7 @@ namespace BP.WF
         }
 
 
-        private static string GetDtlHtmlByID(MapDtl dtl, Int64 workid, float width)
+        private static  string GetDtlHtmlByID(MapDtl dtl,Int64 workid,float width)
         {
             StringBuilder sb = new System.Text.StringBuilder();
             MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
@@ -1503,23 +1473,25 @@ namespace BP.WF
                     continue;
                 columNum++;
             }
-            int columWidth = (int)width * (100 / columNum);
+            if (columNum == 0)
+                return "";
+            int columWidth = (int)width*(100/columNum);
 
             sb.Append("<table style='wdith:100%' >");
             sb.Append("<tr>");
-
+           
             foreach (MapAttr item in attrsOfDtls)
             {
                 if (item.KeyOfEn == "OID")
                     continue;
                 if (item.UIVisible == false)
                     continue;
-                sb.Append("<th class='DtlTh' style='width:" + columWidth + "px'>" + item.Name + "</th>");
+                sb.Append("<th class='DtlTh' style='width:"+ columWidth + "px'>" + item.Name + "</th>");
             }
             sb.Append("</tr>");
             //#endregion 输出标题.
 
-
+            
             //#region 输出数据.
             GEDtls gedtls = new GEDtls(dtl.No);
             gedtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
@@ -1553,7 +1525,7 @@ namespace BP.WF
 
             sb.Append("</table>");
 
-
+         
             sb.Append("</span>");
             return sb.ToString();
         }
@@ -1637,7 +1609,7 @@ namespace BP.WF
                                 //把文件copy到,
                                 System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
                             }
-                            sb.Append("<td>" + item.FileName + "</td>");
+                            sb.Append("<td>"+item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1645,7 +1617,7 @@ namespace BP.WF
                         }
                     }
                     sb.Append("<td>" + item.FileSize + "KB</td>");
-                    sb.Append("<td>" + item.RDT + "</td>");
+                    sb.Append("<td>" + item.RDT+ "</td>");
                     sb.Append("<td>" + item.RecName + "</td>");
                     sb.Append("</tr>");
 
@@ -1660,8 +1632,11 @@ namespace BP.WF
         /// <summary>
         /// 树形表单转成PDF.
         /// </summary>
-        public static string MakeCCFormToPDF(Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath, string htmlString = null)
+        public static string MakeCCFormToPDF(Node node, Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath,string htmlString=null)
         {
+            //设置文件名,防止下载错误.
+            fileNameFormat = workid.ToString();
+
             //根据节点信息获取表单方案
             MapData md = new MapData("ND" + node.NodeID);
             string resultMsg = "";
@@ -1728,7 +1703,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("err@html转PDF错误:PDF的路径" + pdfPath + "可能抛的异常" + ex.Message);
+                    throw new Exception("err@html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
                 }
 
                 //生成压缩文件
@@ -1846,7 +1821,7 @@ namespace BP.WF
 
         }
 
-        public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false, string htmlString = null)
+        public static string MakeBillToPDF(string frmId, Int64 workid, string basePath, bool urlIsHostUrl = false,string htmlString=null)
         {
             string resultMsg = "";
 
@@ -1931,7 +1906,7 @@ namespace BP.WF
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
 
-        public static string MakeFormToPDF(string frmId, string frmName, Node node,
+        public static string MakeFormToPDF(string frmId, string frmName, Node node, 
             Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
         {
 
@@ -2180,7 +2155,7 @@ namespace BP.WF
         public static string CCFlowAppPath = "/";
 
         public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo, string fileNameFormat,
-           bool urlIsHostUrl, string path, string indexFile, string nodeID, string basePath, string htmlString = null)
+           bool urlIsHostUrl, string path, string indexFile, string nodeID, string basePath,string htmlString=null)
         {
             try
             {
@@ -2250,8 +2225,7 @@ namespace BP.WF
                         docs1 = docs1.Replace("@Title", gwf.Title);
                     DataType.WriteFile(indexFile, pageHtml);
                     return indexFile;
-                }
-                else if (mapData.HisFrmType == FrmType.Develop)
+                }else if(mapData.HisFrmType == FrmType.Develop)
                 {
                     string ddocs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
 
@@ -2271,17 +2245,17 @@ namespace BP.WF
                     {
                         if (ath.IsVisable == false)
                             continue;
-                        string html = GetAthHtmlByID(ath, workid, path);
+                        string html = GetAthHtmlByID(ath, workid,path);
                         htmlString = htmlString.Replace("@Ath_" + ath.MyPK, html);
                     }
 
-                    htmlString = htmlString.Replace("../../DataUser", SystemConfig.HostURLOfBS + "/DataUser");
+                    htmlString = htmlString.Replace("../../DataUser", SystemConfig.HostURLOfBS+ "/DataUser");
                     htmlString = htmlString.Replace("../DataUser", SystemConfig.HostURLOfBS + "/DataUser");
                     ddocs = ddocs.Replace("@Docs", htmlString);
 
                     ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");
                     ddocs = ddocs.Replace("@Title", mapData.Name);
-
+                   
                     DataType.WriteFile(indexFile, ddocs);
                     return indexFile;
                 }
@@ -2297,8 +2271,6 @@ namespace BP.WF
                     if (rdt.Length > 10)
                         rdt = rdt.Substring(0, 10);
                 }
-
-
                 //先判断节点中水印的设置
                 string words = "";
                 Node nd = null;
@@ -2406,17 +2378,13 @@ namespace BP.WF
 
         public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
-            Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
             try
             {
 
-                string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
-                //Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
-
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-
-                Log.DebugWriteInfo("@ProcessStartInfo");
 
                 startInfo.FileName = pdfFileExe;//设定需要执行的命令  
                 startInfo.Arguments = " --disable-external-links " + htmFile + " " + pdf;//“/C”表示执行完命令后马上退出  
@@ -2425,17 +2393,17 @@ namespace BP.WF
                 startInfo.RedirectStandardOutput = true; //重定向输出  
                 startInfo.CreateNoWindow = true;//不创建窗口  
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                Log.DebugWriteInfo("@ProcessWindowStyle");
 
                 Process p = Process.Start(startInfo);
                 p.WaitForExit();
                 p.Close();
 
-                Log.DebugWriteInfo("@Close");
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile=" + htmFile);
+                process.Dispose();
+
+                Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
                 throw ex;
             }
         }

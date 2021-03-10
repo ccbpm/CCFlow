@@ -81,6 +81,8 @@ namespace BP.WF.Template
         /// 打印单据是否启用
         /// </summary>
         public const string PrintDocEnable = "PrintDocEnable";
+        public const string PrintDocMyView = "PrintDocMyView";
+	    public const string PrintDocMyCC = "PrintDocMyCC";
         /// <summary>
         /// 移交是否启用
         /// </summary>
@@ -341,7 +343,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string NextRole = "NextRole";
 
-
         #region 公文2019
         /// <summary>
         /// 公文标签
@@ -351,6 +352,14 @@ namespace BP.WF.Template
         /// 公文标签接受人
         /// </summary>
         public const string OfficeBtnEnable = "OfficeBtnEnable";
+        /// <summary>
+        /// 文件类型.
+        /// </summary>
+        public const string OfficeFileType = "OfficeFileType";
+        /// <summary>
+        /// 显示位置
+        /// </summary>
+        public const string OfficeBtnLocal = "OfficeBtnLocal";
         #endregion 公文2019
 
 

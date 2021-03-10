@@ -556,7 +556,7 @@ namespace BP.En
         public void addOrderByOfSelf(string orderByContent)
         {
             if (this._orderBy.IndexOf("ORDER BY") == -1)
-                this._orderBy += " ORDER BY " +orderByContent;
+                this._orderBy += " ORDER BY " + orderByContent;
         }
 
         /// <summary>
@@ -639,10 +639,10 @@ namespace BP.En
 
                 Entity en = attr.HisFKEn;
 
-                if (attr.IsFK==false)
+                if (attr.IsFK == false)
                     return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
 
-                
+
                 return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
             }
 
@@ -1099,7 +1099,7 @@ namespace BP.En
                 if (DataType.IsNullOrEmpty(orderBy))
                     orderBy = pk;
 
-                this._orderBy = orderBy  + isDescStr;
+                this._orderBy = orderBy + isDescStr;
             }
 
             if (this._orderBy.Contains("ORDER BY") == false)
@@ -1513,46 +1513,75 @@ namespace BP.En
         /// <returns>初始化后的ens</returns>
         public static Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
-            if (fullAttrs != null)
+            bool isUpper = false;
+            if (SystemConfig.AppCenterDBType == DBType.Oracle
+            || SystemConfig.AppCenterDBType == DBType.KingBase)
+                isUpper = true;
+
+            if (fullAttrs == null)
             {
-                foreach (DataRow dr in dt.Rows)
+                Map enMap = ens.GetNewEntity.EnMap;
+                Attrs attrs = enMap.Attrs;
+                try
                 {
-                    Entity enF = ens.GetNewEntity;
-                    foreach (string str in fullAttrs)
-                        enF.Row.SetValByKey(str, dr[str]);
-                    ens.AddEntity(enF);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Entity en = ens.GetNewEntity;
+                        foreach (Attr attr in attrs)
+                        {
+                            if (isUpper == true)
+                            {
+                                if (SystemConfig.AppCenterDBType == DBType.KingBase
+                                    && attr.MyFieldType == FieldType.RefText)
+                                    en.SetValByKey(attr.Key, dr[attr.Key]);
+                                else
+                                    en.SetValByKey(attr.Key, dr[attr.Key.ToUpper()]);
+                            }
+
+                            else
+                                en.SetValByKey(attr.Key, dr[attr.Key]);
+                        }
+                        ens.AddEntity(en);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    // warning 不应该出现的错误. 2011-12-03 add
+                    String cols = "";
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        cols += " , " + dc.ColumnName;
+                    }
+                    throw new Exception("Columns=" + cols + "@Ens=" + ens.ToString() + " @异常信息:" + ex.Message);
+                }
+
                 return ens;
             }
 
-            Row row = ens.GetNewEntity.Row;
-
-            //首先检查row的可以一定要包含 dataCols.
-            foreach (DataColumn dc in dt.Columns)
-            {
-                if (row.ContainsKey(dc.ColumnName) == false)
-                    row.Add(dc.ColumnName, "");
-            }
-
-            //装载数据.
             foreach (DataRow dr in dt.Rows)
             {
-                //克隆一个新的Row.
-                Hashtable ht = row.Clone() as Hashtable;
+                Entity en = ens.GetNewEntity;
+                foreach (String str in fullAttrs)
+                {
+                    if (isUpper == true)
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.KingBase
+                            && dt.Columns.Contains(str) == true)
+                            en.SetValByKey(str, dr[str]);
+                        else
+                            en.SetValByKey(str, dr[str.ToUpper()]);
+                    }
 
-                //给他赋值.
-                foreach (DataColumn dc in dt.Columns)
-                    ht[dc.ColumnName] = dr[dc.ColumnName];
+                    else
+                        en.SetValByKey(str, dr[str]);
 
-                Entity enNew = ens.GetNewEntity;
-                Row myRow = new Row();
-                foreach (string key in ht.Keys)
-                    myRow.Add(key, ht[key]);
-
-                enNew.Row = myRow;
-                ens.AddEntity(enNew);
+                }
+                ens.AddEntity(en);
             }
+
             return ens;
+
         }
     }
 }

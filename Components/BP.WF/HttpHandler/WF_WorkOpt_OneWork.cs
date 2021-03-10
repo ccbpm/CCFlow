@@ -29,14 +29,12 @@ namespace BP.WF.HttpHandler
             DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(this.WorkID);
             return BP.Tools.Json.ToJson(ds);
         }
-
         /// <summary>
         /// 构造函数
         /// </summary>
         public WF_WorkOpt_OneWork()
         {
         }
-
         /// <summary>
         /// 时间轴
         /// </summary>
@@ -257,9 +255,6 @@ namespace BP.WF.HttpHandler
                         qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
                     }
                 }
-
-                
-                
                 qo.addOrderBy(GenerWorkerListAttr.Idx);
                 qo.DoQuery();
                 
@@ -441,7 +436,7 @@ namespace BP.WF.HttpHandler
             #region  PowerModel权限的解析
             string psql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
              + " UNION "
-             + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+             + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_DeptEmpStation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
             psql = "SELECT PowerFlag From(" + psql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
             string powers = DBAccess.RunSQLReturnStringIsNull(psql, "");
@@ -683,7 +678,10 @@ namespace BP.WF.HttpHandler
         {
             string re = "[";
 
+
             OneWorkXmls xmls = new OneWorkXmls();
+            if ( System.IO.File.Exists( xmls.File)==false)
+                System.IO.File.Copy(SystemConfig.PathOfData + "Xml\\OneWorkCopy.xml", xmls.File, true);
             xmls.RetrieveAll();
 
             int nodeID = this.FK_Node;
@@ -903,6 +901,28 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 获得最后一个人的审批意见
+        /// </summary>
+        /// <returns></returns>
+        public string SubFlowGuid_GenerLastOneCheckNote()
+        {
+            string table="ND"+int.Parse(this.FK_Flow )+"Track";
+            string sql = "SELECT Msg, WriteDB FROM "+table+" WHERE WorkID="+this.WorkID+ " AND ActionType=1 ORDER BY RDT DESC ";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            string info = dt.Rows[0][0].ToString();
+            if (info.Contains("WorkCheck@") == true)
+                info = info.Substring( info.IndexOf("WorkCheck@") + 10 );
+
+            Hashtable ht = new Hashtable();
+            ht.Add("Msg", info);
+            ht.Add("WriteDB", dt.Rows[0][1]);
+
+            return BP.Tools.Json.ToJson(ht);
+
         }
         public string Chart_Init()
         {
@@ -1367,10 +1387,6 @@ namespace BP.WF.HttpHandler
             return count;
         }
 
-        public string Runing_OpenFrm_Del20200626()
-        {
-            BP.WF.HttpHandler.WF wf = new WF();
-            return wf.Runing_OpenFrm_Del20200626();
-        }
+        
     }
 }

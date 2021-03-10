@@ -124,28 +124,28 @@ namespace BP.GPM
             #endregion 注册枚举类型
 
             #region 3, 执行基本的 sql
-            string sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
+            string sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\Port_Inc_CH_BPM.sql";
             DBAccess.RunSQLScript(sqlscript);
             #endregion 修复
 
             #region 5, 初始化数据。
             if (DBAccess.IsExitsObject("GPM_AppSort") == true)
             {
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\InitPublicData.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\InitPublicData.sql";
                 DBAccess.RunSQLScript(sqlscript);
             }
             #endregion 初始化数据
 
             #region 6, 创建视图。
-            sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
+            sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
 
             //Oracle 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sqlscript = SystemConfig.PathOfWebApp + "\\GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
 
             DBAccess.RunSQLScriptGo(sqlscript);
             #endregion 创建视图

@@ -111,9 +111,6 @@
     <Reference Include="DmProvider">
       <HintPath>..\..\RefDLL\DmProvider.dll</HintPath>
     </Reference>
-    <Reference Include="FreeSql, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FreeSql.1.0.0\lib\net45\FreeSql.dll</HintPath>
-    </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
@@ -133,9 +130,6 @@
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="SafeObjectPool, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SafeObjectPool.2.2.1\lib\net45\SafeObjectPool.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -254,6 +248,7 @@
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
     <Compile Include="Sys\FrmUI\FrmLink.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrGovDocFile.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
@@ -302,9 +297,9 @@
     <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
     <Compile Include="Sys\GEEntityMyPK.cs" />
     <Compile Include="Sys\FormEventBaseDtl.cs" />
+    <Compile Include="Sys\UserLog.cs" />
     <Compile Include="Sys\XML\ChMulTone.cs" />
     <Compile Include="Sys\MapDataTemplate.cs" />
-    <Compile Include="Sys\UserLog.cs" />
     <Compile Include="Sys\XML\ActiveAttr.cs">
       <SubType>Code</SubType>
     </Compile>

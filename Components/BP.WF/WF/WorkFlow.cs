@@ -436,7 +436,7 @@ namespace BP.WF
             #endregion
 
             #region 写入删除日志.
-            wn.AddToTrack(ActionType.DeleteSubThread, empOfWorker.No, empOfWorker.Name,
+            wn.AddToTrack(ActionType.DeleteSubThread, empOfWorker.UserID, empOfWorker.Name,
              wn.HisNode.NodeID,
              wn.HisNode.Name, "子线程被:" + BP.Web.WebUser.Name + "删除.");
             #endregion 写入删除日志.
@@ -1175,7 +1175,7 @@ namespace BP.WF
                     throw new Exception("@没有找到调起子流程的工作人员.");
 
                 Emp emp = new Emp();
-                emp.No = pEmp;
+                emp.UserID = pEmp;
                 if (emp.RetrieveFromDBSources() == 0)
                     throw new Exception("@吊起子流程上的人员编号(" + pEmp + ")已不存在,无法启动父流程.");
 
@@ -1185,7 +1185,7 @@ namespace BP.WF
 
 
                 //让父流程的userNo登录.
-                BP.WF.Dev2Interface.Port_Login(emp.No);
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
                
                 if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(pGWF.WorkID, WebUser.No) == false)
@@ -1198,7 +1198,7 @@ namespace BP.WF
 
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, null, null, 0, null,
-                    emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText, null, this.HisGenerWorkFlow.FID, this.HisGenerWorkFlow.PWorkID);
+                    emp.UserID, emp.Name, emp.FK_Dept, emp.FK_DeptText, null, this.HisGenerWorkFlow.FID, this.HisGenerWorkFlow.PWorkID);
 
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
@@ -1316,12 +1316,11 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //加入轨迹.
-            if(DataType.IsNullOrEmpty(empNo) == true)
+            if (DataType.IsNullOrEmpty(empNo) == true)
             {
                 empNo = WebUser.No;
                 empName = WebUser.Name;
             }
-          
             wn.AddToTrack(at, empNo, empName, wn.HisNode.NodeID, wn.HisNode.Name, stopMsg);
 
             //执行流程结束.
@@ -1732,12 +1731,12 @@ namespace BP.WF
         {
             bool isCan = false;
             // 判断岗位对应关系是不是能够执行.
-            string sql = "SELECT a.FK_Node FROM WF_NodeStation a,  " + BP.WF.Glo.EmpStation + " b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " AND b.FK_Emp='" + empId + "' )";
+            string sql = "SELECT a.FK_Node FROM WF_NodeStation a,  Port_DeptEmpStation b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " AND b.FK_Emp='" + empId + "' )";
             isCan = DBAccess.IsExits(sql);
             if (isCan)
                 return true;
             // 判断他的主要工作岗位能不能执行它.
-            sql = "select FK_Node from WF_NodeStation WHERE FK_Node=" + nodeId + " AND ( FK_Station in (select FK_Station from " + BP.WF.Glo.EmpStation + " WHERE FK_Emp='" + empId + "') ) ";
+            sql = "select FK_Node from WF_NodeStation WHERE FK_Node=" + nodeId + " AND ( FK_Station in (select FK_Station from Port_DeptEmpStation WHERE FK_Emp='" + empId + "') ) ";
             return DBAccess.IsExits(sql);
         }
         /// <summary>
@@ -1761,7 +1760,7 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable CanDoWorkEmps(int nodeId)
         {
-            string sql = "select a.FK_Node, b.EmpID from WF_NodeStation  a,  " + BP.WF.Glo.EmpStation + " b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " )";
+            string sql = "select a.FK_Node, b.EmpID from WF_NodeStation  a,  Port_DeptEmpStation b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " )";
             return DBAccess.RunSQLReturnTable(sql);
         }
         /// <summary>

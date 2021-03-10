@@ -197,7 +197,7 @@ namespace BP.En
                 string v = attr.DefaultValOfReal as string;
 
                 //先判断是否设置了字段权限
-                if (dt != null)
+                if (dt!=null && dt.Rows.Count != 0)
                 {
                     string mypk = fk_mapdata + "_" + fk_node + "_" + attr.Key;
                     foreach (DataRow dr in dt.Rows)

@@ -53,7 +53,8 @@ namespace BP.WF.Data
         {
             get
             {
-                return this.GetValStringByKey(AutoRptDtlAttr.SQLExp);
+                string str = this.GetValStringByKey(AutoRptDtlAttr.SQLExp);
+                return BP.WF.Glo.DealExp(str, null);
             }
             set
             {
@@ -64,7 +65,8 @@ namespace BP.WF.Data
         {
             get
             {
-                return this.GetValStringByKey(AutoRptDtlAttr.UrlExp);
+                string str = this.GetValStringByKey(AutoRptDtlAttr.UrlExp);
+                return BP.WF.Glo.DealExp(str, null);
             }
             set
             {

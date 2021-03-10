@@ -219,7 +219,7 @@ namespace BP.CCBill
             try
             {
 
-                DataType.ReadURLContext(doc, 99999);
+                DataType.ReadURLContext(doc,99999);
                 if (func.MsgSuccess.Equals(""))
                     func.MsgSuccess = "执行成功.";
 
@@ -337,7 +337,7 @@ namespace BP.CCBill
             }
 
             //执行保存前事件
-            ExecEvent.DoFrm(md, EventListFrm.SaveBefore, rpt, null);
+            ExecEvent.DoFrm(md,EventListFrm.SaveBefore, rpt, null);
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Editing);
@@ -346,7 +346,7 @@ namespace BP.CCBill
             string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
 
             //执行保存后事件
-            ExecEvent.DoFrm(md, EventListFrm.SaveAfter, rpt, null);
+            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, rpt, null);
             return str;
         }
 
@@ -369,7 +369,7 @@ namespace BP.CCBill
             }
 
             //执行保存前事件
-            ExecEvent.DoFrm(md, EventListFrm.SaveBefore, rpt, null);
+            ExecEvent.DoFrm(md,EventListFrm.SaveBefore, rpt, null);
 
             rpt.OID = this.WorkID;
             rpt.SetValByKey("BillState", (int)BillState.Over);
@@ -378,7 +378,7 @@ namespace BP.CCBill
             string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
 
             //执行保存后事件
-            ExecEvent.DoFrm(md, EventListFrm.SaveAfter, rpt, null);
+            ExecEvent.DoFrm(md,EventListFrm.SaveAfter, rpt, null);
             return str;
         }
 
@@ -392,47 +392,26 @@ namespace BP.CCBill
         }
         private Hashtable GetMainTableHT()
         {
-            Hashtable htMain = new Hashtable();
+			Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null || key == "")
+                if (key == null)
                     continue;
-                string mykey = key.Replace("TB_", "");
-                mykey = key.Replace("DDL_", "");
-                mykey = key.Replace("CB_", "");
-                mykey = key.Replace("RB_", "");
 
+                string myKey = key;
+                string val = HttpContextHelper.RequestParams(key);
+                myKey = myKey.Replace("TB_", "");
+                myKey = myKey.Replace("DDL_", "");
+                myKey = myKey.Replace("CB_", "");
+                myKey = myKey.Replace("RB_", "");
+                val = HttpUtility.UrlDecode(val, Encoding.UTF8);
 
-                if (key.Contains("TB_"))
-                {
-
-                    string val = HttpContextHelper.RequestParams(key);
-                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                    {
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-                    }
-                    continue;
-                }
-
-                if (key.Contains("DDL_"))
-                {
-                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("CB_"))
-                {
-                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("RB_"))
-                {
-                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
+                if (htMain.ContainsKey(myKey) == true)
+                    htMain[myKey] = val;
+                else
+                    htMain.Add(myKey, val);
             }
+            
             return htMain;
         }
 
@@ -718,7 +697,7 @@ namespace BP.CCBill
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + "_" + this.FrmID + "_SearchAttrs";
+            ur.MyPK = WebUser.No + this.FrmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
@@ -731,7 +710,7 @@ namespace BP.CCBill
             #region 关键字字段.
             string keyWord = ur.SearchKey;
 
-            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1&&!string.IsNullOrWhiteSpace(keyWord))
+            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
             {
                 Attr attrPK = new Attr();
                 foreach (Attr attr in attrs)
@@ -793,14 +772,14 @@ namespace BP.CCBill
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
             }
-            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
+            else if (DataType.IsNullOrEmpty(md.GetParaString("StringSearchKeys")) == false)
             {
                 string field = "";//字段名
                 string fieldValue = "";//字段值
                 int idx = 0;
 
                 //获取查询的字段
-                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                string[] searchFields = md.GetParaString("StringSearchKeys").Split('*');
                 foreach (String str in searchFields)
                 {
                     if (DataType.IsNullOrEmpty(str) == true)
@@ -985,7 +964,7 @@ namespace BP.CCBill
                     //qo.AddWhere("Starter", "=", WebUser.No);
                 }
             }
-
+           
 
 
             //获得行数.
@@ -1051,14 +1030,7 @@ namespace BP.CCBill
             if (DataType.IsNullOrEmpty(ur.OrderBy) == false && DataType.IsNullOrEmpty(ur.OrderWay) == false)
                 qo.DoQuery("OID", this.PageSize, this.PageIdx, ur.OrderBy, ur.OrderWay);
             else
-            {
-                string hidenOrderBy = frmBill.GetParaString("HidenOrderBy");
-                //是否有排序字段
-                if(!DataType.IsNullOrEmpty(hidenOrderBy))
-                    qo.DoQuery("OID", this.PageSize, this.PageIdx, hidenOrderBy,false);
-                else
-                    qo.DoQuery("OID", this.PageSize, this.PageIdx);
-            }
+                qo.DoQuery("OID", this.PageSize, this.PageIdx);
 
             DataTable mydt = rpts.ToDataTableField();
             mydt.TableName = "DT";
@@ -1216,7 +1188,7 @@ namespace BP.CCBill
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + "_" + this.FrmID + "_SearchAttrs";
+            ur.MyPK = WebUser.No  + this.FrmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
@@ -1291,14 +1263,14 @@ namespace BP.CCBill
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
             }
-            else if (DataType.IsNullOrEmpty(md.GetParaString("RptStringSearchKeys")) == false)
+            else if (DataType.IsNullOrEmpty(md.GetParaString("StringSearchKeys")) == false)
             {
                 string field = "";//字段名
                 string fieldValue = "";//字段值
                 int idx = 0;
 
                 //获取查询的字段
-                string[] searchFields = md.GetParaString("RptStringSearchKeys").Split('*');
+                string[] searchFields = md.GetParaString("StringSearchKeys").Split('*');
                 foreach (String str in searchFields)
                 {
                     if (DataType.IsNullOrEmpty(str) == true)
@@ -1485,17 +1457,7 @@ namespace BP.CCBill
             }
 
             #endregion 查询语句
-            //如果是总部，按照部门部门排序
-            if (this.FrmID == "Bill_ZongBuHuaMingCe")
-                qo.addOrderBy("PS_DepartCode");
-            //如果是区域，按照区域公司排序
-            else if (this.FrmID == "Bill_QuYuRenYuanShanJu")
-                qo.addOrderBy("PS_DepartCode");
-            //如果是基地，按照基地名称排序
-            else if (this.FrmID == "Bill_JDGSRYSJ")
-                qo.addOrderBy("PS_BaseCode");
-            else
-                qo.addOrderBy("OID");
+            qo.addOrderBy("OID");
             return qo.DoQueryToTable();
 
         }
@@ -1539,7 +1501,7 @@ namespace BP.CCBill
             GEEntitys rpts = new GEEntitys(this.FrmID);
             GEEntity en = new GEEntity(this.FrmID);
 
-
+           
 
             string noColName = ""; //编号(针对实体表单).
             string nameColName = ""; //名称(针对实体表单).
@@ -1573,14 +1535,14 @@ namespace BP.CCBill
                         return "err@导入的excel不包含编号列";
                     string no = "";
                     if (dt.Columns.Contains(noColName) == true)
-                        no = dr[noColName].ToString();
+                        no= dr[noColName].ToString();
                     string name = "";
-                    if (dt.Columns.Contains(nameColName) == true)
+                    if(dt.Columns.Contains(nameColName) == true)
                         name = dr[nameColName].ToString();
                     myen.OID = 0;
 
                     //判断是否是自增序列，序列的格式
-                    if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
+                    if (DataType.IsNullOrEmpty(codeStruct)==false && DataType.IsNullOrEmpty(no)==false)
                         no = no.PadLeft(System.Int32.Parse(codeStruct), '0');
 
                     myen.SetValByKey("BillNo", no);
@@ -1592,7 +1554,7 @@ namespace BP.CCBill
                             continue;
                         }
                     }
-
+                    
 
                     //给实体赋值
                     errInfo += SetEntityAttrVal(no, dr, attrs, myen, dt, 0, bill);
@@ -1646,17 +1608,17 @@ namespace BP.CCBill
             return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
         }
 
-        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType, FrmBill fbill)
+        private string SetEntityAttrVal(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType,FrmBill fbill)
         {
-
+          
             //单据数据不存在
             if (saveType == 0)
             {
                 Int64 oid = 0;
-                if (fbill.EntityType == EntityType.FrmDict)
+                if(fbill.EntityType == EntityType.FrmDict)
                     oid = BP.CCBill.Dev2Interface.CreateBlankDictID(fbill.No, WebUser.No, null);
                 if (fbill.EntityType == EntityType.FrmBill)
-                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No, WebUser.No, null);
+                    oid = BP.CCBill.Dev2Interface.CreateBlankBillID(fbill.No,WebUser.No,null);
                 en.OID = oid;
                 en.RetrieveFromDBSources();
             }
@@ -1735,10 +1697,10 @@ namespace BP.CCBill
                 en.SetValByKey(item.Key, myval);
             }
             if (DataType.IsNullOrEmpty(en.GetValStrByKey("BillNo")) == true && DataType.IsNullOrEmpty(fbill.BillNoFormat) == false)
-                en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat, en.OID, en, fbill.No));
+                en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat,en.OID,en,fbill.No));
 
             if (DataType.IsNullOrEmpty(en.GetValStrByKey("Title")) == true && DataType.IsNullOrEmpty(fbill.TitleRole) == false)
-                en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
+                en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole,en));
 
             en.SetValByKey("BillState", (int)BillState.Editing);
             en.Update();
@@ -1766,7 +1728,7 @@ namespace BP.CCBill
             else
             {
                 gb.BillState = BillState.Editing;
-                if (en.Row.ContainsKey("Title") == true)
+                if (en.Row.ContainsKey("Title")==true)
                     gb.Title = en.GetValStringByKey("Title");
                 if (en.Row.ContainsKey("BillNo") == true)
                     gb.BillNo = en.GetValStringByKey("BillNo");
@@ -1814,7 +1776,7 @@ namespace BP.CCBill
             FrmBill bill = new FrmBill(this.FrmID);
             GEEntitys rpts = new GEEntitys(this.FrmID);
             GEEntity en = new GEEntity(this.FrmID);
-
+    
 
             string noColName = ""; //编号(唯一值)
             string nameColName = ""; //名称
@@ -1828,25 +1790,25 @@ namespace BP.CCBill
                 noColName = "合同编号";
                 isContractBill = true;
             }
-
+                
             else if (dt.Columns.Contains("身份证号") == true)
             {
                 noColName = "身份证号";
                 isPersonBill = true;
             }
-
+                
             else
             {
-
+                
                 Attr attr = map.GetAttrByKey("BillNo");
                 noColName = attr.Desc;
                 attr = map.GetAttrByKey("Title");
                 nameColName = attr.Desc;
             }
 
-
-            string codeStruct = bill.EnMap.CodeStruct;
-
+           
+           string codeStruct = bill.EnMap.CodeStruct;
+          
 
             //定义属性.
             Attrs attrs = map.Attrs;
@@ -1875,8 +1837,8 @@ namespace BP.CCBill
                     if (dt.Columns.Contains(nameColName) == true)
                         name = dr[nameColName].ToString();
                     myen.OID = 0;
-
-                    if (isContractBill == false && isPersonBill == false)
+                    
+                    if(isContractBill == false && isPersonBill == false)
                     {
                         //判断是否是自增序列，序列的格式
                         if (DataType.IsNullOrEmpty(codeStruct) == false && DataType.IsNullOrEmpty(no) == false)
@@ -1892,7 +1854,7 @@ namespace BP.CCBill
                             }
                         }
                     }
-
+                    
 
 
                     //给实体赋值
@@ -1975,7 +1937,7 @@ namespace BP.CCBill
         }
         private string SetEntityAttrValForASSET(string no, DataRow dr, Attrs attrs, GEEntity en, DataTable dt, int saveType, FrmBill fbill)
         {
-
+            
             //单据数据不存在
             if (saveType == 0)
             {
@@ -1987,9 +1949,8 @@ namespace BP.CCBill
                 en.OID = oid;
                 en.RetrieveFromDBSources();
             }
+
             string errInfo = "";
-
-
             //按照属性赋值.
             foreach (Attr item in attrs)
             {
@@ -2024,95 +1985,68 @@ namespace BP.CCBill
                     continue;
                 }
 
-
+               
                 //外键处理.
                 if (item.MyFieldType == FieldType.FK)
                 {
-                    if (item.Key == "PS_DepartCode")
+                    Entity attrEn = item.HisFKEn;
+                    int i = attrEn.Retrieve("Name", val);
+                    if (i == 0)
                     {
-                        string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
-                        if (!string.IsNullOrWhiteSpace(keyNo))
-                        {
-                            en.SetValByKey("PS_DepartName", val);
-                            en.SetValByKey("PS_DepartCodeT", val);
-                            en.SetValByKey(item.Key, keyNo);
-                        }
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
                         continue;
                     }
-                    else
+
+                    if (i != 1)
                     {
-                        Entity attrEn = item.HisFKEn;
-                        int i = attrEn.Retrieve("Name", val);
-                        if (i == 0)
-                        {
-                            errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]不存在.";
-                            continue;
-                        }
-
-                        if (i != 1)
-                        {
-                            errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
-                            continue;
-                        }
-
-                        //把编号值给他.
-                        en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
-                        if (item.Key.EndsWith("BaseCode") == true)
-                            en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
-                        else
-                            en.SetValByKey(item.Key.Replace("Code", ""), val);
+                        errInfo += "err@外键[" + item.Key + "][" + item.Desc + "]，值[" + val + "]重复..";
+                        continue;
                     }
+
+                    //把编号值给他.
+                    en.SetValByKey(item.Key, attrEn.GetValByKey("No"));
+                    if(item.Key.EndsWith("BaseCode") == true)
+                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
+                    else
+                        en.SetValByKey(item.Key.Replace("Code", ""), val);
                     continue;
                 }
                 //外部数据源
                 if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString && item.UIContralType == UIContralType.DDL)
                 {
-                    if (item.Key == "PS_DepartCode")
-                    {
-                        string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
-                        if (!string.IsNullOrWhiteSpace(keyNo))
-                        {
-                            en.SetValByKey("PS_DepartName", val);
-                            en.SetValByKey("PS_DepartCodeT", val);
-                            en.SetValByKey(item.Key, keyNo);
-                        }
-                        continue;
-                    }
+                    string uiBindKey = item.UIBindKey;
+                    if(DataType.IsNullOrEmpty(uiBindKey) == true)
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
+                    DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
+                    if(mydt.Rows.Count == 0 )
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],对应的外键没有获取到外键列表";
+                    bool isHave = false;
+
+                    //给赋值名称
+                    if (item.Key.EndsWith("BaseCode") == true)
+                        en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
                     else
+                        en.SetValByKey(item.Key.Replace("Code", ""), val);
+
+                    en.SetValByKey(item.Key + "T", val);
+                    foreach (DataRow mydr in mydt.Rows)
                     {
-                        string uiBindKey = item.UIBindKey;
-                        if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "]，绑定的外键为空";
-                        DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
-                        if (mydt.Rows.Count == 0)
-                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],对应的外键没有获取到外键列表";
-                        bool isHave = false;
-
-                        //给赋值名称
-                        if (item.Key.EndsWith("BaseCode") == true)
-                            en.SetValByKey(item.Key.Replace("BaseCode", "BaseName"), val);
-                        else
-                            en.SetValByKey(item.Key.Replace("Code", ""), val);
-
-                        en.SetValByKey(item.Key + "T", val);
-                        foreach (DataRow mydr in mydt.Rows)
+                        if (mydr["Name"].ToString().Equals(val)== true)
                         {
-                            if (mydr["Name"].ToString().Equals(val) == true)
-                            {
-                                en.SetValByKey(item.Key, mydr["No"].ToString());
-                                isHave = true;
-                                break;
-                            }
+                            en.SetValByKey(item.Key, mydr["No"].ToString());
+                            isHave = true;
+                            break;
                         }
-
-                        if (isHave == false)
-                            errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],没有获取到" + val + "对应的Code值";
-
                     }
+                    
+                    if(isHave == false)
+                        errInfo += "err@外部数据源[" + item.Key + "][" + item.Desc + "],没有获取到"+val+"对应的Code值";
+                 
+                       
                     continue;
                 }
 
-                //boolen类型的处理..
+                    //boolen类型的处理..
                 if (item.MyDataType == DataType.AppBoolean)
                 {
                     if (val == "是" || val == "有")
@@ -2121,105 +2055,66 @@ namespace BP.CCBill
                         en.SetValByKey(item.Key, 0);
                     continue;
                 }
-                if (item.MyDataType == DataType.AppDate)
+                if(item.MyDataType== DataType.AppDate)
                 {
-                    if (DataType.IsNullOrEmpty(val) == false)
+                    if(DataType.IsNullOrEmpty(val) == false)
                     {
 
                     }
 
                 }
 
-                if (item.Key == "PS_DepartCode")
-                {
-                    string keyNo = BP.DA.DBAccess.RunSQLReturnString("select No from Port_Dept where Name='" + val + "' and parentNo='1002001'");
-                    if (!string.IsNullOrWhiteSpace(keyNo))
-                    {
-                        en.SetValByKey("PS_DepartName", val);
-                        en.SetValByKey("PS_DepartCodeT", val);
-                        en.SetValByKey(item.Key, keyNo);
-                    }
-                    continue;
-                }
                 if (item.Key.EndsWith("BaseName") == true)
                 {
                     Depts depts = new Depts();
                     depts.Retrieve(DeptAttr.Name, val);
-                    if (depts.Count != 0)
+                    if(depts.Count !=0)
                         en.SetValByKey(item.Key.Replace("BaseName", "BaseCode"), (depts[0] as Dept).No);
                     en.SetValByKey(item.Key, val);
                     continue;
                 }
                 else
                 {
-                    if (item.Key=="CI_SmallBusinessFormatCode")
+                    if (item.Key.Equals("CI_SmallBusinessFormatCode"))
                     {
                         string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
                         MapExt mapExt = new MapExt();
                         mapExt.MyPK = mypk;
-                        if (mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
-                        {
+                        if(mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
+                        {   
                             string newVal = "," + val + ",";
                             string keyVal = "";
                             DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
-                            foreach (DataRow drr in dataTable.Rows)
+                            foreach(DataRow drr in dataTable.Rows)
                             {
-                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true || newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
-                                    keyVal += drr["No"].ToString() + ",";
+                                if (drr["Name"] != null && newVal.Contains("," + drr["Name"].ToString() + ",") == true)
+                                    keyVal += drr["No"].ToString()+",";
                             }
-                            keyVal = keyVal.Length > 0 ? keyVal.Substring(0, keyVal.Length - 1) : "";
+                            keyVal = keyVal.Substring(0, keyVal.Length - 1);
 
                             en.SetValByKey(item.Key, keyVal);
                             en.SetValByKey(item.Key.Replace("Code", ""), val);
-                            en.SetValByKey(item.Key + "T", val);
+                            en.SetValByKey(item.Key+"T", val);
                         }
                         else
                         {
                             en.SetValByKey(item.Key, val);
                         }
-                    }
-                    else if (item.Key=="PS_PostCode")
-                    {
-                        string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
-                        MapExt mapExt = new MapExt();
-                        mapExt.MyPK = mypk;
-                        if (mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
-                        {
-                            string newVal = "," + val + ",";
-                            string keyVal = "";
-                            DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(mapExt.Tag3);
-                            dataTable = DBAccess.RunSQLReturnTable("select * FROM PORT_STATION WHERE FK_StationType IN(SELECT NO FROM Port_StationType WHERE NAME LIKE '农发总部%')");
-                            foreach (DataRow drr in dataTable.Rows)
-                            {
-                                if (drr["Name"] != null && (newVal.Contains("," + drr["Name"].ToString() + ",") == true || newVal.Contains("," + drr["Name"].ToString() + "，") == true || newVal.Contains("，" + drr["Name"].ToString() + ",") == true || newVal.Contains("，" + drr["Name"].ToString() + "，") == true))
-                                    keyVal += drr["No"].ToString() + ",";
-                            }
-                            keyVal = keyVal.Length > 0 ? keyVal.Substring(0, keyVal.Length - 1) : "";
-
-                            en.SetValByKey(item.Key, keyVal);
-                            en.SetValByKey("PS_PostName", val);
-                            en.SetValByKey("PS_PostCodeT", val);
-                        }
-                        else
-                        {
-                            en.SetValByKey(item.Key, val);
-                        }
-                        continue;
                     }
                     else
                     {
                         if (item.IsNum)
                         {
-                            if (DataType.IsNullOrEmpty(val) == true || val.Equals("null") == true)
+                            if (DataType.IsNullOrEmpty(val) == true || val.Equals("null")==true)
                                 val = "0";
                         }
                         en.SetValByKey(item.Key, val);
                     }
-
-
+                   
+                  
                 }
-
-
+                   
+                
             }
             if (DataType.IsNullOrEmpty(en.GetValStrByKey("BillNo")) == true && DataType.IsNullOrEmpty(fbill.BillNoFormat) == false)
                 en.SetValByKey("BillNo", Dev2Interface.GenerBillNo(fbill.BillNoFormat, en.OID, en, fbill.No));
@@ -2228,9 +2123,8 @@ namespace BP.CCBill
                 en.SetValByKey("Title", Dev2Interface.GenerTitle(fbill.TitleRole, en));
             en.SetValByKey("Rec", WebUser.No);
             en.SetValByKey("BillState", (int)BillState.Editing);
-            en.DirectUpdate();
-
-            en.RunSQL("UPDATE "+en.EnMap.FK_MapData+ " set WFState=3 WHERE OID="+ en.OID+"");
+            en.SetValByKey("WFState", WFState.Complete);
+            en.Update();
 
             GenerBill gb = new GenerBill();
             gb.WorkID = en.OID;
@@ -2299,7 +2193,7 @@ namespace BP.CCBill
         #endregion 获得demo信息.
 
         #region 处理SQL文中注释信息.
-
+     
         public static string MidStrEx(string sourse, string startstr, string endstr)
         {
             int startindex, endindex;
@@ -2349,5 +2243,189 @@ namespace BP.CCBill
             return tmpstr;
         }
         #endregion 处理SQL文中注释信息..
+
+        #region 实体单据查询启动指定子流程显示的字段
+        public string DictFlow_MapAttrs()
+        {
+            DataSet ds = new DataSet();
+            string fk_mapData = "ND" + int.Parse(this.FK_Flow) + "01";
+
+            //查询出单流程的所有字段
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, fk_mapData, MapAttrAttr.Idx);
+
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+            MapAttrs mattrsOfSystem1 = new MapAttrs();
+            //判断表单中是否存在默认值@WebUser.No,@WebUser.FK_Dept,@RDT
+            bool isHaveNo = false;
+            bool isHaveRDT = false;
+            bool isHaveTitle = false;
+
+            //系统字段字符串
+            string sysFields = "";
+            foreach (MapAttr mapAttr in attrs)
+            {
+
+                if (mapAttr.KeyOfEn.Equals(GERptAttr.Rec) || mapAttr.KeyOfEn.Equals(GERptAttr.RDT) || mapAttr.KeyOfEn.Equals(GERptAttr.CDT))
+                    continue;
+                if (mapAttr.KeyOfEn.Equals(GERptAttr.Title) == true)
+                {
+                    mattrsOfSystem1.AddEntity(mapAttr);
+                    isHaveTitle = true;
+                    continue;
+                }
+
+                switch (mapAttr.DefValReal)
+                {
+
+                    case "@WebUser.No":
+                    case "@WebUser.Name":
+                        sysFields += "," + mapAttr.KeyOfEn;
+                        isHaveNo = true;
+                        mattrsOfSystem1.AddEntity(mapAttr);
+
+                        break;
+                 
+                    case "@RDT":
+                        mattrsOfSystem1.AddEntity(mapAttr);
+                        isHaveRDT = true;
+                        sysFields += "," + mapAttr.KeyOfEn;
+                        break;
+                    default: break;
+                }
+            }
+
+
+            //默认显示的系统字段 标题、发起人、发起时间、当前所在节点、状态 , 系统字段需要在RPT中查找
+            string fields = "(";
+            if (isHaveTitle == false)
+                fields += "'" + GERptAttr.Title + "',";
+            if (isHaveNo == false)
+                fields += "'" + GERptAttr.FlowStarter + "',";
+        
+            if (isHaveRDT == false)
+                fields += "'" + GERptAttr.FlowStartRDT + "',";
+            fields += "'" + GERptAttr.WFState + "','"+GERptAttr.FlowEndNode+"')";
+            MapAttrs mattrsOfSystem = new MapAttrs();
+            QueryObject qo = new QueryObject(mattrsOfSystem);
+            qo.AddWhere(MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow) + "Rpt");
+            qo.addAnd();
+            qo.AddWhereIn(MapAttrAttr.KeyOfEn, fields);
+            //qo.addOrderBy(MapAttrAttr.Idx);
+            //qo.addOrderByOfSelf("CHARINDEX(" + MapAttrAttr.KeyOfEn + ",'" + fields.Replace("'", "") + "')");
+            qo.DoQuery();
+            mattrsOfSystem.AddEntities(mattrsOfSystem1);
+
+            ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
+
+            //系统字段字符串
+            fields = fields.Replace("(", "").Replace(")", "").Replace("'", "") + ",";
+            sysFields += ",OID,FID,RDT,CDT,Rec,FK_Dept,MyNum,FK_NY,Emps,Title," + fields;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Field");
+            dt.TableName = "Sys_Fields";
+            DataRow dr = dt.NewRow();
+            dr["Field"] = sysFields;
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+
+            //用户查询注册信息中记录使用到的流程业务表中的字段
+            UserRegedit ur = new UserRegedit(WebUser.No, "ND" + int.Parse(this.FK_Flow) + "Rpt_SearchAttrs");
+            ur.SetPara("RptField", "," + fields);
+            ur.Update();
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion
+        #region 实体单据启动多个子流程的查询
+        public string DictFlow_Search()
+        {
+            //实体单据的信息
+            string frmID = this.GetRequestVal("FrmID");
+            string frmOID = this.GetRequestVal("FrmOID");
+
+            //表单编号
+            string fk_mapData = "ND" + int.Parse(this.FK_Flow) + "01";
+
+            //当前用户查询信息表
+            UserRegedit ur = new UserRegedit(WebUser.No, "ND" + int.Parse(this.FK_Flow) + "Rpt_SearchAttrs");
+
+            //表单属性
+            MapData mapData = new MapData(fk_mapData);
+
+            //流程的系统字段
+            string rptFields = ur.GetParaString("RptField");
+            rptFields = rptFields.Substring(1, rptFields.Length - 1);
+            rptFields = "('" + rptFields.Replace(",", "','") + "'" + ",'" + GERptAttr.FlowStarter + "','" + GERptAttr.FK_Dept + "','" + GERptAttr.FlowEmps + "','" + GERptAttr.FlowEndNode + "','"+GERptAttr.PWorkID+"','"+GERptAttr.PFlowNo+"')";
+            MapAttrs mattrsOfSystem = new MapAttrs();
+            QueryObject qo = new QueryObject(mattrsOfSystem);
+            qo.AddWhere(MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow) + "Rpt");
+            qo.addAnd();
+            qo.AddWhereIn(MapAttrAttr.KeyOfEn, rptFields);
+            qo.DoQuery();
+
+            //流程表单对应的所有字段
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, fk_mapData, MapAttrAttr.Idx);
+            attrs.AddEntities(mattrsOfSystem);
+
+            //流程表单对应的流程数据
+            GEEntitys ens = new GEEntitys(fk_mapData);
+            GEEntity en = ens.GetNewEntity as GEEntity;
+            foreach (MapAttr mapAttr in mattrsOfSystem)
+                en.EnMap.AddAttr(mapAttr.HisAttr);
+            Cash.SQL_Cash.Remove(fk_mapData);
+
+            qo = new QueryObject(ens);
+            qo.AddWhere(GERptAttr.PWorkID, frmOID);
+            qo.addAnd();
+            qo.AddWhere(GERptAttr.PFlowNo, frmID);
+            qo.AddWhere(" AND  WFState > 1 ");
+            //qo.addAnd();
+            qo.AddWhere(" AND FID = 0 ");
+            if (DataType.IsNullOrEmpty(ur.OrderBy) == false)
+                if (ur.OrderWay.ToUpper().Equals("DESC") == true)
+                    qo.addOrderByDesc(ur.OrderBy);
+                else
+                    qo.addOrderBy(ur.OrderBy);
+            ur.Update();
+            qo.DoQuery();
+
+            return BP.Tools.Json.ToJson(ens.ToDataTableField("FlowSearch_Data"));
+        }
+        #endregion  实体单据启动多个子流程的查询
+
+        public string RefDict_CreateBillWorkID()
+        {
+            Int64 refOID = GetRequestValInt64("RefOID");
+            string refDict = GetRequestVal("RefDict");
+            //获取关联实体表单的数据信息
+            GERpt refRpt = new GERpt(refDict, refOID);
+            string billNo = this.GetRequestVal("BillNo");
+            Int64 workID = BP.CCBill.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null, billNo);
+
+            GenerBill gb = new GenerBill(workID);
+            gb.BillState = BillState.Draft;
+            gb.Update();
+            //获取当前单据表单的数据信息
+            GERpt rpt = new GERpt(this.FrmID, workID);
+            rpt.Copy(refRpt);
+            rpt.SetValByKey("BillState", (int)gb.BillState);
+            rpt.Update();
+            return workID.ToString();
+
+        }
+        #region 外部流程网页授权URL
+        public string DictFlow_Qcode()
+        {
+            string state = "FlowNo_" + this.FK_Flow + "|OrgNo_" + WebUser.OrgNo + "|FrmID_" + this.FrmID + "|FrmOID_" + this.GetRequestVal("FrmOID");
+            //回调url
+            string redirect_uri = HttpUtility.UrlEncode("http://www.ccbpm.cn/WF/CCBill/DictFlowStart.htm");
+            //授权链接
+            string oatuth2 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+SystemConfig.AppID+"&redirect_uri="+redirect_uri+ "&response_type=code&scope=snsapi_userinfo&&state="+ state+"#wechat_redirect";
+            return oatuth2;
+        }
+        #endregion 外部流程网页授权URL
     }
 }

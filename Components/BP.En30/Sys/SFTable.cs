@@ -184,6 +184,10 @@ namespace BP.Sys
         /// 加入日期
         /// </summary>
         public const string RDT = "RDT";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion 链接到其他系统获取数据的属性。
     }
     /// <summary>
@@ -348,7 +352,19 @@ namespace BP.Sys
                     sql += ", " + this.ParentValue + " ParentNo";
 
                 sql += " FROM " + this.SrcTable;
-                return src.RunSQLReturnTable(sql);
+                DataTable dt = src.RunSQLReturnTable(sql);
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dt.Columns["NO"].ColumnName = "No";
+                    dt.Columns["NAME"].ColumnName = "Name";
+                }
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    dt.Columns["no"].ColumnName = "No";
+                    dt.Columns["name"].ColumnName = "Name";
+
+                }
+                return dt;
             }
             #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
 
@@ -412,6 +428,18 @@ namespace BP.Sys
                     throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
 
                 DataTable dt = src.RunSQLReturnTable(runObj);
+
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dt.Columns["NO"].ColumnName = "No";
+                    dt.Columns["NAME"].ColumnName = "Name";
+                }
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                {
+                    dt.Columns["no"].ColumnName = "No";
+                    dt.Columns["name"].ColumnName = "Name";   
+
+                }
                 return dt;
             }
             #endregion
@@ -647,6 +675,20 @@ namespace BP.Sys
         #endregion
 
         #region 链接到其他系统获取数据的属性
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(SFTableAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(SFTableAttr.OrgNo, value);
+            }
+        }
         /// <summary>
         /// 数据源
         /// </summary>
@@ -1048,6 +1090,9 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
 
+
+                map.AddTBString(SFTableAttr.OrgNo, null, "组织编号", false, false, 0, 100, 20);
+
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
 
@@ -1133,29 +1178,16 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
 
             #region  如果是 系统字典表.
-            if (this.SrcType == Sys.SrcType.SysDict &&
-                (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc))
+            if (this.SrcType == Sys.SrcType.SysDict && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                //创建dict.
-                //Dict dict = new Dict();
-                //dict.TableID = this.No;
-                //dict.TableName = this.Name;
-                //dict.OrgNo = WebUser.OrgNo;
-                //dict.DictType = this.GetValIntByKey(SFTableAttr.CodeStruct);
-                //if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                //{
-                //    dict.MyPK = this.No;
-                //}
-                //else
-                //{
-                //    dict.MyPK = WebUser.OrgNo + "_" + this.No;
-                //}
-                //dict.Insert();
-
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
                     DictDtl dtl = new DictDtl();
@@ -1253,6 +1285,7 @@ namespace BP.Sys
                     sql += "ParentNo varchar(3900)  NULL";
                     sql += ")";
                 }
+
                 this.RunSQL(sql);
 
                 //初始化数据.

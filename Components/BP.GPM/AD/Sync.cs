@@ -390,13 +390,13 @@ namespace BP.GPM.AD
             if (entry.Name.IndexOf("OU=") == 0)
             {
 
-                BP.GPM.AD.Dept dept = new Dept();
-                dept.Name = entry.Name.Replace("OU=", "");
-
-
-                dept.No = entry.Guid.ToString();
-                dept.ParentNo = entry.Parent.Guid.ToString();
-                dept.Idx = idxDept++;
+                BP.GPM.AD.Dept dept = new Dept
+                {
+                    Name = entry.Name.Replace("OU=", ""),
+                    No = entry.Guid.ToString(),
+                    ParentNo = entry.Parent.Guid.ToString(),
+                    Idx = idxDept++
+                };
                 dept.Insert();
 
                 foreach (DirectoryEntry item in entry.Children)

@@ -51,6 +51,10 @@ namespace BP.WF.Template
         /// </summary>
         WebApi = 8,
         /// <summary>
+        /// 按照审核组件立场
+        /// </summary>
+        WorkCheck=9,
+        /// <summary>
         /// 操作符
         /// </summary>
         CondOperator = 100

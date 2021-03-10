@@ -25,6 +25,7 @@ namespace BP.WF.DTS
             this.Title = "自动启动流程";
             this.Help = "在流程属性上配置的信息,自动发起流程,按照时间规则....";
             this.GroupName = "流程自动执行定时任务";
+
         }
         /// <summary>
         /// 设置执行变量
@@ -58,7 +59,7 @@ namespace BP.WF.DTS
                 if (fl.HisFlowRunWay == BP.WF.FlowRunWay.HandWork)
                     continue;
 
-                if (DateTime.Now.ToString("HH:mm") == fl.Tag)
+                if (DateTime.Now.ToString("HH:mm") == fl.Tag && fl.HisFlowRunWay== FlowRunWay.SpecEmp )
                     continue;
 
                 if (fl.RunObj == null || fl.RunObj == "")
@@ -95,7 +96,7 @@ namespace BP.WF.DTS
                         string fk_emp = RunObj.Substring(0, RunObj.IndexOf('@'));
 
                         BP.Port.Emp emp = new BP.Port.Emp();
-                        emp.No = fk_emp;
+                        emp.UserID = fk_emp;
                         if (emp.RetrieveFromDBSources() == 0)
                         {
                             Log.DebugWriteError("启动自动启动流程错误：发起人(" + fk_emp + ")不存在。");
@@ -105,7 +106,7 @@ namespace BP.WF.DTS
                         try
                         {
                             //让 userNo 登录.
-                            BP.WF.Dev2Interface.Port_Login(emp.No);
+                            BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
                             //创建空白工作, 发起开始节点.
                             Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
@@ -222,10 +223,10 @@ namespace BP.WF.DTS
                 {
                     BP.Web.WebUser.Exit();
                     BP.Port.Emp emp = new BP.Port.Emp();
-                    emp.No = starter;
+                    emp.UserID = starter;
                     if (emp.RetrieveFromDBSources() == 0)
                     {
-                        Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + emp.No + "不存在。");
+                        Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + starter + "不存在。");
                         continue;
                     }
                     WebUser.SignInOfGener(emp);

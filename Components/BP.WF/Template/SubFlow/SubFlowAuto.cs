@@ -297,6 +297,9 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
+             "@0=禁用@1=启用@2=只读");
+
                 map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", true, true,
                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
 

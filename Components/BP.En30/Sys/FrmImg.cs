@@ -51,14 +51,6 @@ namespace BP.Sys
         /// </summary>
         public const string Y = "Y";
         /// <summary>
-        /// W
-        /// </summary>
-        public const string W = "W";
-        /// <summary>
-        /// H
-        /// </summary>
-        public const string H = "H";
-        /// <summary>
         /// URL
         /// </summary>
         public const string ImgURL = "ImgURL";
@@ -294,34 +286,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// H
-        /// </summary>
-        public float H
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.H);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAttr.H, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.W);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAttr.W, value);
-            }
-        }
-        /// <summary>
         /// FK_MapData
         /// </summary>
         public string FK_MapData
@@ -333,6 +297,31 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmImgAttr.FK_MapData, value);
+            }
+        }
+        public float UIWidth
+        {
+            get
+            {
+                return this.GetValFloatByKey(MapAttrAttr.UIWidth);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIWidth, value);
+            }
+        }
+        /// <summary>
+        /// X
+        /// </summary>
+        public float UIHeight
+        {
+            get
+            {
+                return this.GetValFloatByKey(MapAttrAttr.UIHeight);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIHeight, value);
             }
         }
         #endregion
@@ -372,11 +361,11 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 
-                map.AddTBFloat(FrmImgAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmImgAttr.Y, 5, "Y", false, false);
+                map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
+                map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
 
-                map.AddTBFloat(FrmImgAttr.H, 200, "H", true, false);
-                map.AddTBFloat(FrmImgAttr.W, 160, "W", false, false);
+                map.AddTBFloat(MapAttrAttr.UIWidth, 200, "H", true, false);
+                map.AddTBFloat(MapAttrAttr.UIHeight, 160, "H", true, false);
 
                 map.AddTBString(FrmImgAttr.ImgURL, null, "ImgURL", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.ImgPath, null, "ImgPath", true, false, 0, 200, 20);

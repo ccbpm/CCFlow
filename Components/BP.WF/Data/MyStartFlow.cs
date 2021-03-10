@@ -694,16 +694,8 @@ namespace BP.WF.Data
         }
         public MyStartFlow(Int64 workId)
         {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(MyStartFlowAttr.WorkID, workId);
-            if (qo.DoQuery() == 0)
-                throw new Exception("工作 MyStartFlow [" + workId + "]不存在。");
-        }
-        /// <summary>
-        /// 执行修复
-        /// </summary>
-        public void DoRepair()
-        {
+            this.WorkID = workId;
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法
@@ -736,24 +728,20 @@ namespace BP.WF.Data
 
 
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 100, true);
-                map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
+                // map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
                 //隐藏字段.
                 map.AddTBInt(MyStartFlowAttr.WFState, 0, "状态", false, false);
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
-                //  map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
-
-                //map.AddSearchAttr(MyStartFlowAttr.TSpan,4000);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 map.DTSearchWay = DTSearchWay.ByDate;
                 map.DTSearchLable = "发起日期";
-                map.DTSearchKey = MyStartFlowAttr.RDT; 
-
+                map.DTSearchKey = MyStartFlowAttr.RDT;
 
                 //我发起的流程.
                 AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
@@ -796,15 +784,13 @@ namespace BP.WF.Data
 
         public string DoPrintFrm()
         {
-            return "../../WorkOpt/Packup.htm?FileType=zip,pdf&WorkID="+this.WorkID+"&FK_Flow="+this.FK_Flow+"&NodeID="+this.FK_Node+"&FK_Node="+this.FK_Node;
-           // http://localhost:8787/WF/WorkOpt/Packup.htm?FileType=zip,pdf&WorkID=6129&FK_Flow=116&NodeID=11603&FK_Node=11603
+            return "../../WorkOpt/Packup.htm?FileType=zip,pdf&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&NodeID=" + this.FK_Node + "&FK_Node=" + this.FK_Node;
         }
 
         #region 执行诊断
         public string DoTrack()
         {
-            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "/WF/WFRpt.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../MyFlowView.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -820,7 +806,7 @@ namespace BP.WF.Data
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "/WF/WFRpt.htm?CurrTab=Frm&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
 
             Node nd = new Node(this.FK_Node);
@@ -835,19 +821,7 @@ namespace BP.WF.Data
     /// </summary>
     public class MyStartFlows : Entities
     {
-        /// <summary>
-        /// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="empId">工作人员ID</param>
-        /// <returns></returns>
-        public static DataTable QuByFlowAndEmp(string flowNo, int empId)
-        {
-            string sql = "SELECT A.WorkID FROM WF_MyStartFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='" + empId.ToString() + "' AND a.FK_Flow='" + flowNo + "'";
-            return DBAccess.RunSQLReturnTable(sql);
-        }
-
-        #region 方法
+        #region 方法.
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

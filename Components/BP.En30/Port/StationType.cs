@@ -145,6 +145,10 @@ namespace BP.Port
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
+            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            if (BP.Sys.SystemConfig.GroupStationModel == 1)
+                return base.RetrieveAll();
+
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
         }
@@ -157,22 +161,15 @@ namespace BP.Port
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll();
 
+            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            if (BP.Sys.SystemConfig.GroupStationModel == 1)
+                return base.RetrieveAll();
+
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
-        public string GetStationTypes(string orgNo)
-        {
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || orgNo.Equals("0"))
-            {
-                this.RetrieveAll();
-                return this.ToJson();
-            }
-            this.Retrieve(StationTypeAttr.OrgNo, orgNo);
-                
-
-            return this.ToJson();
-        }
+       
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

@@ -176,7 +176,7 @@ namespace BP.WF.Template
 				map.AddTBInt(MapFrmExcelAttr.Idx, 100, "顺序号", false, false);
 				#endregion 设计者信息.
 
-				map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\");
+				map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\");
 
 				//查询条件.
 				map.AddSearchAttr(MapFrmExcelAttr.DBSrc);
@@ -311,7 +311,7 @@ namespace BP.WF.Template
 				rm.Title = "手机端表单";
 				rm.GroupName = "高级设置";
 				rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
-				rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
+				rm.ClassMethodName = this.ToString() + ".MobileFrmDesigner";
 				rm.RefMethodType = RefMethodType.RightFrameOpen;
 				map.AddRefMethod(rm);
 
@@ -491,9 +491,9 @@ namespace BP.WF.Template
 		/// 排序字段顺序
 		/// </summary>
 		/// <returns></returns>
-		public string DoSortingMapAttrs()
+		public string MobileFrmDesigner()
 		{
-			return "../../Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=&FK_MapData=" +
+			return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=&FK_MapData=" +
 				   this.No + "&t=" + DataType.CurrentDataTime;
 		}
 		/// <summary>

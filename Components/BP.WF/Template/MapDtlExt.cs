@@ -1290,7 +1290,7 @@ namespace BP.WF.Template
                         lab = new FrmLab();
                         lab.MyPK = DBAccess.GenerGUID();
                         lab.FK_MapData = attr.FK_MapData;
-                        lab.Text = attr.Name;
+                        lab.Lab = attr.Name;
                         lab.FontName = "Arial";
                         lab.X = 40;
                         lab.Y = maxEnd;
@@ -1305,7 +1305,7 @@ namespace BP.WF.Template
                         lab = new FrmLab();
                         lab.MyPK = DBAccess.GenerGUID();
                         lab.FK_MapData = attr.FK_MapData;
-                        lab.Text = attr.Name;
+                        lab.Lab = attr.Name;
                         lab.FontName = "Arial";
                         lab.X = 350;
                         lab.Y = maxEnd;
@@ -1328,7 +1328,7 @@ namespace BP.WF.Template
                     FrmLab lab = new FrmLab();
                     lab.MyPK = DBAccess.GenerGUID();
                     lab.FK_MapData = dtl.FK_MapData;
-                    lab.Text = dtl.Name;
+                    lab.Lab = dtl.Name;
                     lab.FontName = "Arial";
                     lab.X = 40;
                     lab.Y = maxEnd;
@@ -1386,14 +1386,14 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValFloatByKey(FrmImgAttr.W);
+                return this.GetValFloatByKey(MapDtlAttr.W);
             }
         }
         public float H
         {
             get
             {
-                return this.GetValFloatByKey(FrmImgAttr.H);
+                return this.GetValFloatByKey(MapDtlAttr.H);
             }
         }
         public float FrmW

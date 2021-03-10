@@ -64,7 +64,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string tempFile = SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg";
+                string tempFile = SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
 
-            HttpContextHelper.UploadFile(f, SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + this.FK_Emp + ".jpg");
+            HttpContextHelper.UploadFile(f, SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg");
             return "上传成功！";
         }
         #endregion
@@ -93,28 +93,30 @@ namespace BP.WF.HttpHandler
         {
         
             BP.GPM.Depts depts = new GPM.Depts();
+			string parentNo = this.GetRequestVal("ParentNo");
             //QueryObject qo = new QueryObject(depts);
             //qo.addOrderBy(GPM.DeptAttr.Idx);
             //qo.DoQuery();
-            if (WebUser.No.Equals("admin") == false)
-            {
-                QueryObject qo = new QueryObject(depts);
-                qo.addOrderBy(GPM.DeptAttr.Idx);
-                qo.DoQuery();
+            //if (WebUser.No.Equals("admin") == false)
+            //{
+			QueryObject qo = new QueryObject(depts);
+			if(DataType.IsNullOrEmpty(parentNo)==false)
+				qo.AddWhere(GPM.DeptAttr.ParentNo,parentNo);
+			qo.addOrderBy(GPM.DeptAttr.Idx);
+			qo.DoQuery();
 
-                return depts.ToJson();
-            }
+			return depts.ToJson();
+            //}
 
-            depts.RetrieveAll();
+            //depts.RetrieveAll();
 
-            return depts.ToJson();
+            //return depts.ToJson();
         }
 
         /// <summary>
         /// 获取该部门的所有人员
         /// </summary>
-        /// <returns></returns>
-        /// 
+        /// <returns></returns>        
         public string LoadDatagridDeptEmp_Init()
         {
             string deptNo = this.GetRequestVal("deptNo");

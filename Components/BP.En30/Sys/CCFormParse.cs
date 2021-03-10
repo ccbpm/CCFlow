@@ -119,8 +119,8 @@ namespace BP.Sys
             dtl.FK_MapData = fk_mapdata;
             dtl.X = x;
             dtl.Y = y;
-            dtl.W = w;
-            dtl.H = h;
+            dtl.SetValByKey(MapAttrAttr.UIWidth, w);
+            dtl.SetValByKey(MapAttrAttr.UIHeight, h);
             dtl.Update();
         }
         
@@ -368,7 +368,7 @@ namespace BP.Sys
                 switch (type)
                 {
                     case "SingleText":
-                        lab.Text = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
+                        lab.Lab = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
                         break;
                     case "Color":
                         // lab.FontColor = val == null ? "#FF000000" : val.ToString();
@@ -401,11 +401,11 @@ namespace BP.Sys
                 }
             }
 
-            if (lab.Text == null || lab.Text == "")
+            if (lab.Lab == null || lab.Lab == "")
             {
                 /*如果没有取到标签， 从这里获取，系统有一个. */
                 JsonData primitives = control["primitives"][0];
-                lab.Text = primitives["str"].ToString().Trim();
+                lab.Lab = primitives["str"].ToString().Trim();
                 lab.FontName = primitives["font"].ToString().Trim();
                 lab.FontSize = int.Parse(primitives["size"].ToString().Trim());
             }
@@ -531,11 +531,11 @@ namespace BP.Sys
             }
             link.FontStyle = fontStyle.ToString();
 
-            if (link.Text == null || link.Text == "")
+            if (link.Lab == null || link.Lab == "")
             {
                 /*如果没有取到标签， 从这里获取，系统有一个. */
                 JsonData primitives = control["primitives"][0];
-                link.Text = primitives["str"].ToString().Trim();
+                link.Lab = primitives["str"].ToString().Trim();
                 link.FontName = primitives["font"].ToString().Trim();
                 link.FontSize = int.Parse(primitives["size"].ToString().Trim());
             }
@@ -570,8 +570,8 @@ namespace BP.Sys
             decimal imgWidth = maxX - minX;
             decimal imgHeight = maxY - minY;
 
-            img.W = float.Parse( imgWidth.ToString("0.00"));
-            img.H = float.Parse(imgHeight.ToString("0.00"));
+            img.UIWidth = float.Parse( imgWidth.ToString("0.00"));
+            img.UIHeight = float.Parse(imgHeight.ToString("0.00"));
 
             StringBuilder fontStyle = new StringBuilder();
             for (int iProperty = 0; iProperty < properties.Count; iProperty++)

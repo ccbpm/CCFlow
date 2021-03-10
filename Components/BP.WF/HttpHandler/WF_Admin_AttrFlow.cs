@@ -423,72 +423,70 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                Flow en = new Flow();
-                en.No = this.FK_Flow;
-                en.Retrieve();
+                //Flow en = new Flow();
+                //en.No = this.FK_Flow;
+                //en.Retrieve();
 
-                int val = this.GetRequestValInt("RB_StartGuideWay");
+                //int val = this.GetRequestValInt("RB_StartGuideWay");
 
-                en.SetValByKey(BP.WF.Template.FlowAttr.StartGuideWay, val);
+                //en.SetValByKey(BP.WF.Template.FlowAttr.StartGuideWay, val);
 
-                if (en.StartGuideWay == Template.StartGuideWay.None)
-                {
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
-                }
+                //if (en.StartGuideWay == Template.StartGuideWay.None)
+                //{
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
+                //}
 
-                if (en.StartGuideWay == Template.StartGuideWay.ByHistoryUrl)
-                {
-                    en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
-                    en.StartGuidePara2 = "";
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
-                }
+                //if (en.StartGuideWay == Template.StartGuideWay.ByHistoryUrl)
+                //{
+                //    en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
+                //    en.StartGuidePara2 = "";
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
+                //}
 
-                if (en.StartGuideWay == Template.StartGuideWay.BySelfUrl)
-                {
-                    en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
-                    en.StartGuidePara2 = "";
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
-                }
+                //if (en.StartGuideWay == Template.StartGuideWay.BySelfUrl)
+                //{
+                //    en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
+                //    en.StartGuidePara2 = "";
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySelfUrl;
+                //}
 
-                //单条模式.
-                if (en.StartGuideWay == Template.StartGuideWay.BySQLOne)
-                {
-                    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
-                    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
+                ////单条模式.
+                //if (en.StartGuideWay == Template.StartGuideWay.BySQLOne)
+                //{
+                //    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
+                //    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
 
-                    //@李国文.
-                    en.StartGuidePara3 = this.GetRequestVal("TB_BySQLOne3");  //单行赋值语句.
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
-                }
-                //多条模式
-                if (en.StartGuideWay == Template.StartGuideWay.BySQLMulti)
-                {
-                    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLMulti1");  //查询语句.
-                    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLMulti2");  //列表语句.
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLMulti;
-                }
-                //多条-子父流程-合卷审批.
-                if (en.StartGuideWay == Template.StartGuideWay.SubFlowGuide)
-                {
-                    en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
-                    en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
-                    en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
-                }
+                //    //@李国文.
+                //    en.StartGuidePara3 = this.GetRequestVal("TB_BySQLOne3");  //单行赋值语句.
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
+                //}
+                ////多条模式
+                //if (en.StartGuideWay == Template.StartGuideWay.BySQLMulti)
+                //{
+                //    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLMulti1");  //查询语句.
+                //    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLMulti2");  //列表语句.
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLMulti;
+                //}
+                ////多条-子父流程-合卷审批.
+                //if (en.StartGuideWay == Template.StartGuideWay.SubFlowGuide)
+                //{
+                //    en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
+                //    en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
+                //    en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
+                //}
 
+                //BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+                //if (fns.Count >= 2)
+                //{
+                //    if (en.StartGuideWay == Template.StartGuideWay.ByFrms)
+                //        en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
+                //}
 
+                ////右侧的超链接.
+                //en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
+                //en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
 
-                BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
-                if (fns.Count >= 2)
-                {
-                    if (en.StartGuideWay == Template.StartGuideWay.ByFrms)
-                        en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
-                }
-
-                //右侧的超链接.
-                en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
-                en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
-
-                en.Update();
+               // en.Update();
                 return "保存成功";
             }
             catch (Exception ex)
@@ -559,7 +557,7 @@ namespace BP.WF.HttpHandler
                 flowNo = this.GetRequestVal("SpecFlowNo");
 
             //执行导入
-            BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
+            BP.WF.Flow flow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
             flow.DoCheck(); //要执行一次检查.
 
             Hashtable ht = new Hashtable();
@@ -584,7 +582,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把文件放入ds.
-            string path = SystemConfig.PathOfWebApp + "\\WF\\Admin\\ClientBin\\NodeIcon\\";
+            string path = SystemConfig.PathOfWebApp + "WF\\Admin\\ClientBin\\NodeIcon\\";
             string[] strs = System.IO.Directory.GetFiles(path);
             DataTable dtIcon = new System.Data.DataTable();
             dtIcon.Columns.Add("No");
@@ -689,7 +687,6 @@ namespace BP.WF.HttpHandler
             //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
 
-            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
             // smsstr = smsstr.Replace("@RDT",);
             //短信内容模版.
             msg.SMSDoc_Real = smsstr;
@@ -722,6 +719,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
+
         #region 欢迎页面初始化.
         /// <summary>
         /// 欢迎页面初始化-获得数量.
@@ -854,5 +852,19 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 欢迎页面初始化.
+
+
+        #region 泳道图.
+        /// <summary>
+        /// 泳道图
+        /// </summary>
+        /// <returns></returns>
+        public string Lane_Init()
+        {
+            BP.WF.Template.Lanes ens = new Lanes(this.FK_Flow);
+            return ens.ToJson();
+        }
+        #endregion 泳道图.
+
     }
 }

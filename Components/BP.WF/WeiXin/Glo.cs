@@ -22,19 +22,13 @@ namespace BP.GPM.WeiXin
         {
             return null;
 
-            /*
             string url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + msgText.Access_Token;
             try
             {
                 StringBuilder append_Json = new StringBuilder();
                 append_Json.Append("{");
                 append_Json.Append("\"msgtype\":\"text\"");
-                //按人员
-                if (!string.IsNullOrEmpty(msgText.touser)) append_Json.Append(",\"touser\":\"" + msgText.touser + "\"");
-                //按部门
-                if (!string.IsNullOrEmpty(msgText.toparty)) append_Json.Append(",\"toparty\":\"" + msgText.toparty + "\"");
-                //标签
-                if (!string.IsNullOrEmpty(msgText.totag)) append_Json.Append(",\"totag\":\"" + msgText.totag + "\"");
+                append_Json.Append(",\"touser\":\"" + msgText.touser + "\"");
                 append_Json.Append(",\"agentid\":\"" + msgText.agentid + "\"");
                 append_Json.Append(",\"text\":{");
                 append_Json.Append("\"content\":\"" + msgText.content + "\"");
@@ -49,7 +43,6 @@ namespace BP.GPM.WeiXin
             {
             }
             return null;
-             * */
         }
 
         /// <summary>

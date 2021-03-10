@@ -134,10 +134,7 @@ namespace BP.WF.Data
         /// 备注
         /// </summary>
         public const string FlowNote = "FlowNote";
-        /// <summary>
-        /// 我部门
-        /// </summary>
-        public const string WorkerDept = "WorkerDept";
+    
         /// <summary>
         /// 待办人员
         /// </summary>
@@ -688,8 +685,9 @@ namespace BP.WF.Data
                 map.AddTBStringDoc(MonitorAttr.FlowNote, null, "备注", true, false,true);
               
                 map.AddTBInt(MonitorAttr.FK_Node, 0, "FK_Node", false, false);
-                map.AddTBString(MonitorAttr.WorkerDept, null, "工作人员部门编号", 
-                    false, false, 0, 30, 10);
+
+                //map.AddTBString(MonitorAttr.WorkerDept, null, "工作人员部门编号", 
+                //    false, false, 0, 30, 10);
 
                 //查询条件.
                 map.AddSearchAttr(MonitorAttr.FK_Dept);

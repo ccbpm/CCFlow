@@ -86,7 +86,7 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Station","岗位");
+                Map map = new Map("Port_Station", "岗位");
                 map.CodeStruct = "3";
                 map.IsAutoGenerNo = true;
 
@@ -95,7 +95,7 @@ namespace BP.Port
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
                 map.AddSearchAttr(StationAttr.FK_StationType);
-                
+
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
 
@@ -141,6 +141,10 @@ namespace BP.Port
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
+            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            if (BP.Sys.SystemConfig.GroupStationModel == 1)
+                return base.RetrieveAll();
+
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
         }
@@ -151,6 +155,10 @@ namespace BP.Port
         public override int RetrieveAll()
         {
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAll();
+
+            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            if (BP.Sys.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
 
             //按照orgNo查询.

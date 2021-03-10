@@ -14,7 +14,7 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
-        public const string Text = "Text";
+        public const string Lab = "Lab";
         /// <summary>
         /// 主表
         /// </summary>
@@ -215,15 +215,26 @@ namespace BP.Sys
         /// <summary>
         /// Text
         /// </summary>
+        public string Lab
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmLabAttr.Lab);
+            }
+            set
+            {
+                this.SetValByKey(FrmLabAttr.Lab, value);
+            }
+        }
         public string Text
         {
             get
             {
-                return this.GetValStrByKey(FrmLabAttr.Text);
+                return this.GetValStrByKey(FrmLabAttr.Lab);
             }
             set
             {
-                this.SetValByKey(FrmLabAttr.Text, value);
+                this.SetValByKey(FrmLabAttr.Lab, value);
             }
         }
         public string TextHtml
@@ -231,9 +242,9 @@ namespace BP.Sys
             get
             {
                 if (this.IsBold)
-                    return "<b>" + this.GetValStrByKey(FrmLabAttr.Text).Replace("@","<br>") + "</b>";
+                    return "<b>" + this.GetValStrByKey(FrmLabAttr.Lab).Replace("@","<br>") + "</b>";
                 else
-                    return this.GetValStrByKey(FrmLabAttr.Text).Replace("@", "<br>");
+                    return this.GetValStrByKey(FrmLabAttr.Lab).Replace("@", "<br>");
             }
         }
         #endregion
@@ -271,7 +282,7 @@ namespace BP.Sys
 
                 map.AddMyPK();
                 map.AddTBString(FrmLabAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
-                map.AddTBString(FrmLabAttr.Text, "New Label", "Label", true, false, 0, 3900, 20);
+                map.AddTBString(FrmLabAttr.Lab, "New Label", "Label", true, false, 0, 3900, 20);
 
                 map.AddTBFloat(FrmLabAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmLabAttr.Y, 5, "Y", false, false);
@@ -299,7 +310,7 @@ namespace BP.Sys
         /// <returns></returns>
         public bool IsExitGenerPK()
         {
-            string sql = "SELECT COUNT(*) FROM " + this.EnMap.PhysicsTable + " WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y + "  and Text='" + this.Text+"'";
+            string sql = "SELECT COUNT(*) FROM " + this.EnMap.PhysicsTable + " WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y + "  and Lab='" + this.Lab+"'";
             if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 return false;
             return true;

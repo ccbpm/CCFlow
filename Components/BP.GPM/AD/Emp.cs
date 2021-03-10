@@ -40,6 +40,7 @@ namespace BP.GPM.AD
         /// </summary>
         public const string PinYin = "PinYin";
         #endregion
+
         /// <summary>
         /// 签字类型
         /// </summary>

@@ -316,6 +316,7 @@ namespace BP.Sys
                 _CS_AppSettings = value;
             }
         }
+
         /// <summary>
         /// 封装了AppSettings
         /// </summary>
@@ -830,6 +831,18 @@ namespace BP.Sys
                 return AppSettings["CustomerName"];
             }
         }
+        /// <summary>
+        /// 集团模式下的岗位体系
+        /// @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+        /// </summary>
+        public static int GroupStationModel
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyInt("GroupStationModel", 0);
+            }
+        }
+        
         /// <summary>
         /// 客户名称
         /// </summary>

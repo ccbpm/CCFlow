@@ -23,7 +23,7 @@ namespace BP.WF.DTS
         {
             this.Title = "装载流程演示模板";
             this.Help = "为了帮助各位爱好者学习与掌握ccflow, 特提供一些流程模板与表单模板以方便学习。";
-            this.Help += "@这些模板的位于" + SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\";
+            this.Help += "@这些模板的位于" + SystemConfig.PathOfWebApp + "SDKFlowDemo\\FlowDemo\\";
             this.GroupName = "流程维护";
         }
         /// <summary>
@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             root.ParentNo = "0";
             root.Insert();
 
-            string frmPath = SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Form\\";
+            string frmPath = SystemConfig.PathOfWebApp + "SDKFlowDemo\\FlowDemo\\Form\\";
             DirectoryInfo dirInfo = new DirectoryInfo(frmPath);
             DirectoryInfo[] dirs = dirInfo.GetDirectories();
             int i = 0;
@@ -97,7 +97,7 @@ namespace BP.WF.DTS
                     try
                     {
                         MapData md = MapData.ImpMapData(ds);
-                        md.FK_FrmSort = fs.No;
+                      //  md.FK_FrmSort = fs.No;
                         md.FK_FormTree = fs.No;
                         md.AppType = "0";
                         md.Update();
@@ -115,7 +115,7 @@ namespace BP.WF.DTS
             #region 处理流程.
             FlowSorts sorts = new FlowSorts();
             sorts.ClearTable();
-            dirInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Flow\\");
+            dirInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "SDKFlowDemo\\FlowDemo\\Flow\\");
             dirs = dirInfo.GetDirectories();
 
             FlowSort fsRoot = new FlowSort();
@@ -144,7 +144,7 @@ namespace BP.WF.DTS
                     msg += "\t\n@开始调度流程模板文件:" + filePath;
                     Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
 
-                    Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsNewFlow);
+                    Flow myflow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsNewFlow);
                     msg += "\t\n@流程:[" + myflow.Name + "]装载成功。";
 
                     System.IO.FileInfo info = new System.IO.FileInfo(filePath);
@@ -156,7 +156,7 @@ namespace BP.WF.DTS
 
 
                 //调度它的下一级目录.
-                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Flow\\" + dir.Name);
+                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "SDKFlowDemo\\FlowDemo\\Flow\\" + dir.Name);
                 DirectoryInfo[] myDirs = dirSubInfo.GetDirectories();
                 foreach (DirectoryInfo mydir in myDirs)
                 {
@@ -177,7 +177,7 @@ namespace BP.WF.DTS
                         msg += "\t\n@开始调度流程模板文件:" + filePath;
                         Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
 
-                        Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(subFlowSort.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
+                        Flow myflow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(subFlowSort.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
                         msg += "\t\n@流程:" + myflow.Name + "装载成功。";
 
                         System.IO.FileInfo info = new System.IO.FileInfo(filePath);

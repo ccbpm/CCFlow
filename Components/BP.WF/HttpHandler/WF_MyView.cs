@@ -24,7 +24,23 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_MyView()
         {
+
         }
+
+        #region 表单查看.
+        /// <summary>
+        /// 表单数据
+        /// </summary>
+        /// <returns></returns>
+        public string MyFrm_Init_Data()
+        {
+            //string sql = "SELECT FrmDB FROM ND" + int.Parse(this.FK_Flow)+ "Track WHERE MyPK='" + this.MyPK + "'";
+            // return DBAccess.RunSQLReturnStringIsNull(sql,"err@没有获得数据.");
+            return DBAccess.GetBigTextFromDB("ND" + int.Parse(this.FK_Flow) + "Track", "MyPK", this.MyPK, "FrmDB");
+        }
+        
+        #endregion 表单查看.
+
 
         #region  运行变量
         /// <summary>
@@ -206,7 +222,7 @@ namespace BP.WF.HttpHandler
                 #region 根据流程权限控制规则获取可以操作的按钮功能
                 string sql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
                     + " UNION "
-                    + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+                    + "SELECT A.PowerFlag,B."+ BP.Sys.Glo.UserNo+ ",B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
                 sql = "SELECT PowerFlag From(" + sql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
                 string powers = DBAccess.RunSQLReturnStringIsNull(sql, "");
@@ -229,16 +245,16 @@ namespace BP.WF.HttpHandler
                         int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
                         if (myNode != 0)
                         {
-                            //GetTask gt = new GetTask(myNode);
-                            //if (gt.Can_I_Do_It())
-                            //{
-                            //    dr = dt.NewRow();
-                            //    dr["No"] = "TackBack";
-                            //    dr["Name"] = "取回审批";
-                            //    dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
-                            //    dt.Rows.Add(dr);
+                            GetTask gt = new GetTask(myNode);
+                            if (gt.Can_I_Do_It())
+                            {
+                                dr = dt.NewRow();
+                                dr["No"] = "TackBack";
+                                dr["Name"] = "取回审批";
+                                dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
+                                dt.Rows.Add(dr);
 
-                            //}
+                            }
                         }
 
 
@@ -276,11 +292,11 @@ namespace BP.WF.HttpHandler
                         //催办
                         if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No) == true)
                         {
-                            //dr = dt.NewRow();
-                            //dr["No"] = "Press";
-                            //dr["Name"] = "催办";
-                            //dr["Oper"] = "Press();";
-                            //dt.Rows.Add(dr);
+                            dr = dt.NewRow();
+                            dr["No"] = "Press";
+                            dr["Name"] = "催办";
+                            dr["Oper"] = "Press();";
+                            dt.Rows.Add(dr);
                         }
 
                         break;
@@ -289,11 +305,11 @@ namespace BP.WF.HttpHandler
                         /*恢复使用流程*/
                         if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true)
                         {
-                            //dr = dt.NewRow();
-                            //dr["No"] = "Rollback";
-                            //dr["Name"] = "回滚";
-                            //dr["Oper"] = "Rollback();";
-                            //dt.Rows.Add(dr);
+                            dr = dt.NewRow();
+                            dr["No"] = "Rollback";
+                            dr["Name"] = "回滚";
+                            dr["Oper"] = "";
+                            dt.Rows.Add(dr);
                         }
 
                         break;
@@ -345,7 +361,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
                 /* 公文标签 */
-                if (btnLab.OfficeBtnEnable == true)
+                if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
                 {
                     dr = dt.NewRow();
                     dr["No"] = "DocWord";
@@ -389,6 +405,86 @@ namespace BP.WF.HttpHandler
             }
             return BP.Tools.Json.ToJson(dt);
         }
+
+        public string MyFrm_InitToolBar()
+        {
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Oper");
+
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+            string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
+            string toolbar = "";
+            try
+            {
+                DataRow dr = dt.NewRow();
+                dr["No"] = "Close";
+                dr["Name"] = "关闭";
+                dr["Oper"] = "Close();";
+                dt.Rows.Add(dr);
+
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+                #region 根据流程权限控制规则获取可以操作的按钮功能
+               
+                dr = dt.NewRow();
+                dr["No"] = "Track";
+                dr["Name"] = "轨迹";
+                dr["Oper"] = "";
+                dt.Rows.Add(dr);
+                #endregion 根据流程权限控制规则获取可以操作的按钮功能
+
+                #region 加载流程查看器 - 按钮
+
+                /* 打包下载zip */
+                if (btnLab.PrintZipMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_zip";
+                    dr["Name"] = btnLab.PrintZipLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载html */
+                if (btnLab.PrintHtmlMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_html";
+                    dr["Name"] = btnLab.PrintHtmlLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                /* 打包下载pdf */
+                if (btnLab.PrintPDFMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PackUp_pdf";
+                    dr["Name"] = btnLab.PrintPDFLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                /* 公文标签 */
+                if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "DocWord";
+                    dr["Name"] = btnLab.OfficeBtnLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                #endregion 加载流程查看器 - 按钮
+            }
+            catch (Exception ex)
+            {
+                Log.DefaultLogWriteLineError(ex);
+                toolbar = "err@" + ex.Message;
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+
 
         /// <summary>
         /// 撤销
@@ -541,8 +637,8 @@ namespace BP.WF.HttpHandler
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
             if (gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
             {
-                //WF_MyFlow handler = new WF_MyFlow();
-                //return handler.MyFlow_Init();
+                WF_MyFlow handler = new WF_MyFlow();
+                return handler.MyFlow_Init();
             }
 
             //是否是工作参与人?
@@ -1046,10 +1142,10 @@ namespace BP.WF.HttpHandler
 
                     //设置他的表单显示名字. 2019.09.30
                     string frmName = md.Name;
-                    Entity fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No);
+                    FrmNode fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No) as FrmNode;
                     if (fn != null)
                     {
-                        string str = fn.GetValStrByKey(FrmNodeAttr.FrmNameShow);
+                        string str = fn.FrmNameShow;
                         if (DataType.IsNullOrEmpty(str) == false)
                             frmName = str;
                     }

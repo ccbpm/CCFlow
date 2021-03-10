@@ -651,6 +651,14 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeWorkCheckAttr.CheckField, value);
             }
         }
+
+        public int FWCMsgShow
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCMsgShow);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -799,7 +807,8 @@ namespace BP.WF.Template
 
                // map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
-                map.AddTBString(NodeWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 20, 200, 200,true);
+                map.AddTBString(NodeWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 0, 200, 200,true);
+                map.SetHelperAlert(NodeWorkCheckAttr.FWCView, "比如:同意,不同意,酌情处理, 多个立场用逗号分开,此立场可以作为方向条件.");
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 

@@ -22,7 +22,7 @@ namespace BP.WF.DTS
         public GenerSiganture()
         {
             this.Title = "为没有设置数字签名的用户设置默认的数字签名";
-            this.Help = "此功能需要用户对 "+ SystemConfig.PathOfDataUser + "\\Siganture\\ 有读写权限，否则会执行失败。";
+            this.Help = "此功能需要用户对 "+ SystemConfig.PathOfDataUser + "Siganture\\ 有读写权限，否则会执行失败。";
         }
         /// <summary>
         /// 设置执行变量
@@ -46,6 +46,36 @@ namespace BP.WF.DTS
             }
         }
         /// <summary>
+        /// 生成一个
+        /// </summary>
+        /// <param name="empID">人员ID</param>
+        /// <param name="empName">人员名称</param>
+        public static void GenerIt(string empID, string empName)
+        {
+            string path = SystemConfig.PathOfDataUser + "Siganture\\T.JPG";
+            string fontName = "宋体";
+
+            string pathMe = SystemConfig.PathOfDataUser + "Siganture\\" + empID + ".JPG";
+            if (System.IO.File.Exists(pathMe))
+                return;
+
+            File.Copy(SystemConfig.PathOfDataUser + "Siganture\\Templete.JPG",
+                path, true);
+
+            System.Drawing.Image img = System.Drawing.Image.FromFile(path);
+            Font font = new Font(fontName, 15);
+            Graphics g = Graphics.FromImage(img);
+            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat(StringFormatFlags.DirectionVertical);//文本
+            g.DrawString(empName, font, drawBrush, 3, 3);
+            img.Save(pathMe);
+            img.Dispose();
+            g.Dispose();
+
+            File.Copy(pathMe,
+            SystemConfig.PathOfDataUser + "Siganture\\" + empName + ".JPG", true);
+        }
+        /// <summary>
         /// 执行
         /// </summary>
         /// <returns>返回执行结果</returns>
@@ -55,37 +85,15 @@ namespace BP.WF.DTS
             {
                 BP.Port.Emps emps = new Emps();
                 emps.RetrieveAllFromDBSource();
-                string path = SystemConfig.PathOfDataUser + "\\Siganture\\T.JPG";
-                string fontName = "宋体";
-                string empOKs = "";
-                string empErrs = "";
                 foreach (Emp emp in emps)
                 {
-                    string pathMe = SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.No + ".JPG";
-                    if (System.IO.File.Exists(pathMe))
-                        continue;
-
-                    File.Copy(SystemConfig.PathOfDataUser + "\\Siganture\\Templete.JPG",
-                        path, true);
-
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(path);
-                    Font font = new Font(fontName, 15);
-                    Graphics g = Graphics.FromImage(img);
-                    System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-                    System.Drawing.StringFormat drawFormat = new System.Drawing.StringFormat(StringFormatFlags.DirectionVertical);//文本
-                    g.DrawString(emp.Name, font, drawBrush, 3, 3);
-                    img.Save(pathMe);
-                    img.Dispose();
-                    g.Dispose();
-
-                    File.Copy(pathMe,
-                    SystemConfig.PathOfDataUser + "\\Siganture\\" + emp.Name + ".JPG", true);
+                    GenerIt(emp.No, emp.Name);
                 }
                 return "执行成功...";
             }
             catch(Exception ex)
             {
-                return "执行失败，请确认对 " + SystemConfig.PathOfDataUser + "\\Siganture\\ 目录有访问权限？异常信息:"+ex.Message;
+                return "执行失败，请确认对 " + SystemConfig.PathOfDataUser + "Siganture\\ 目录有访问权限？异常信息:"+ex.Message;
             }
         }
     }

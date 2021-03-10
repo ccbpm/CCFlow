@@ -47,15 +47,27 @@ namespace BP.WF.HttpHandler
             string whereStr = "";
             string whereStrPuls = "";
 
+
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
                 whereStr += " WHERE OrgNo = '" + WebUser.OrgNo + "'";
                 whereStrPuls += " AND OrgNo = '" + WebUser.OrgNo + "'";
+
             }
 
             Hashtable ht = new Hashtable();
             ht.Add("FlowNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow " + whereStr)); //流程数
-            ht.Add("NodeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node " + whereStr)); //节点数据
+
+
+            //获得节点的数量 @hongyan.
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                ht.Add("NodeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node " + whereStr)); //节点数据
+            else
+            {
+                string mysql = "SELECT COUNT(B.NodeID) as Num FROM WF_Flow A, WF_Node B WHERE A.No=B.FK_Flow AND A.OrgNo='"+WebUser.OrgNo+"' ";
+                ht.Add("NodeNum", DBAccess.RunSQLReturnValInt(mysql)); //节点数据.
+            }
+
 
             //表单数.
             ht.Add("FromNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM Sys_MapData  WHERE FK_FormTree !=''" + whereStrPuls + " AND FK_FormTree IS NOT NULL ")); //表单数

@@ -59,7 +59,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" +HttpContextHelper.RequestRawUrl );
+            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + HttpContextHelper.RequestRawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -72,25 +72,11 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
             string rptNo = this.GetRequestVal("RptNo");
-            MapAttrs mattrs = new MapAttrs();
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            //判断该流程的开始节点的表单方案
-            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                mattrs = new MapAttrs();
-                mattrs.Retrieve(MapAttrAttr.FK_MapData, nd.NodeFrmID, "Idx");
-                ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
-            }
-            else
-            {
-                mattrs = new MapAttrs(fk_mapdata);
-                ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
-            }
 
-            
-           
-           
+            //所有的字段.
+            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            MapAttrs mattrs = new MapAttrs(fk_mapdata);
+            ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
             //判断rptNo是否存在于mapdata中
             MapData md = new MapData();
@@ -156,69 +142,116 @@ namespace BP.WF.HttpHandler
             if (rptNo.Contains("MyDept") == true && fields.Contains(",FK_Dept,") == false)
                 fields += "FK_Dept,";
 
-            //构造一个空的集合.
+            //字段组合.
+            fields += BP.WF.Rpt.RptDfine.PublicFiels;
+
+            //构造一个空的集合，如果有数据，就把旧数据删除掉.
             MapAttrs mrattrsOfRpt = new MapAttrs();
             mrattrsOfRpt.Delete(MapAttrAttr.FK_MapData, rptNo);
 
             //所有的字段.
-            Node nd = new Node(int.Parse(this.FK_Flow) + "01");
             string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
             MapAttrs allAttrs = new MapAttrs(fk_mapdata);
 
-            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
-            {
-                MapAttrs attrOfFrms = new MapAttrs();
-                QueryObject qo = new QueryObject(attrOfFrms);
-                qo.AddWhere(MapAttrAttr.FK_MapData, nd.NodeFrmID);
-                qo.addAnd();
-                qo.AddWhereNotIn(MapAttrAttr.KeyOfEn, "'OID','FID','BillNo','RDT','Rec','Title'");
-                qo.addOrderBy("Idx");
-                qo.DoQuery();
-                
-                allAttrs.AddEntities(attrOfFrms);
-            }
-           
-
             foreach (MapAttr attr in allAttrs)
             {
-                attr.UIVisible = true;
-
-                #region 处理特殊字段.
-                if (attr.KeyOfEn.Equals("FK_NY")==true)
-                {
-                    attr.LGType = BP.En.FieldTypeS.FK;
-                    attr.UIBindKey = "BP.Pub.NYs";
-                    attr.UIContralType = BP.En.UIContralType.DDL;
-                }
-
-                if (attr.KeyOfEn.Equals("FK_Dept")==true)
-                {
-                    attr.LGType = BP.En.FieldTypeS.FK;
-                    attr.UIBindKey = "BP.Port.Depts";
-                    attr.UIContralType = BP.En.UIContralType.DDL;
-                }
-                #endregion 处理特殊字段.
-
-                //增加上必要的字段.
-                if (attr.KeyOfEn.Equals("Title") || attr.KeyOfEn.Equals("WorkID")
-                    || attr.KeyOfEn.Equals("OID") )
-                {
-                    attr.FK_MapData = rptNo;
-                    attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
-                    attr.DirectInsert();
+                //如果包含了指定的字段，就执行插入操作.
+                if (fields.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
+
+                attr.FK_MapData = rptNo;
+                attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
+
+                #region 判断特殊的字段.
+                switch (attr.KeyOfEn)
+                {
+                    case GERptAttr.WFSta:
+                        attr.UIBindKey = "WFSta";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.Enum;
+                        attr.UIVisible = false;
+                        attr.DefVal = "0";
+                        attr.MaxLen = 100;
+                        attr.UIVisible = true;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.FK_Dept:
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.UIVisible = false;
+                        attr.DefVal = "";
+                        attr.MaxLen = 100;
+                        attr.UIVisible = false;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.FK_NY:
+                        attr.UIBindKey = "BP.Pub.NYs";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.FK;
+                        attr.UIVisible = true;
+                        attr.UIIsEnable = false;
+                        //attr.GroupID = groupID;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.Title:
+                        attr.UIWidth = 120;
+                        attr.UIVisible = true;
+                        attr.Idx = 0;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.FlowStarter:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.FlowEmps:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.WFState:
+                        attr.UIIsEnable = false;
+                        attr.UIVisible = false;
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.TB;
+                        attr.LGType = FieldTypeS.Normal;
+                        attr.MyDataType = BP.DA.DataType.AppInt;
+                        attr.Insert();
+                        continue;
+                    case GERptAttr.FlowEndNode:
+                        //attr.LGType = FieldTypeS.FK;
+                        //attr.UIBindKey = "BP.WF.Template.NodeExts";
+                        //attr.UIContralType = UIContralType.DDL;
+                        break;
+                    case "FK_Emp":
+                        break;
+                    default:
+                        break;
                 }
+                #endregion
+
+
+                attr.UIVisible = true;
 
                 //如果包含了指定的字段，就执行插入操作.
                 if (fields.Contains("," + attr.KeyOfEn + ",") == true)
                 {
                     attr.FK_MapData = rptNo;
                     attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
-                    if(attr.RetrieveFromDBSources() == 0)
-                        attr.DirectInsert();
+                    attr.DirectInsert();
                 }
             }
-
             return "保存成功.";
         }
         #endregion
@@ -283,9 +316,14 @@ namespace BP.WF.HttpHandler
 
             string rptNo = this.GetRequestVal("RptNo");
 
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET Idx=10000 WHERE FK_MapData='" + rptNo + "'");
+
             string[] strs = orders.Split('@');
-            foreach (string item in strs)
+            //重新对table排序
+            for (int i = 0; i < strs.Length; i++)
             {
+                string item = strs[i];
+
                 if (DataType.IsNullOrEmpty(item) == true)
                     continue;
 
@@ -293,15 +331,28 @@ namespace BP.WF.HttpHandler
 
                 string mypk = rptNo + "_" + vals[0];
 
-                MapAttr attr = new MapAttr();
-                attr.MyPK = mypk;
-                attr.Retrieve();
-
-                attr.Name = vals[1];
-                attr.Idx = int.Parse(vals[2]);
-
-                attr.Update(); //执行更新.
+                // 更新顺序.
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET Idx=" + i + " WHERE No='" + mypk + "'");
             }
+
+            //foreach (string item in strs)
+            //{
+            //    if (DataType.IsNullOrEmpty(item) == true)
+            //        continue;
+
+            //    string[] vals = item.Split(',');
+
+            //    string mypk = rptNo + "_" + vals[0];
+
+            //    MapAttr attr = new MapAttr();
+            //    attr.MyPK = mypk;
+            //    attr.Retrieve();
+
+            //    attr.Name = vals[1];
+            //    attr.Idx = int.Parse(vals[2]);
+
+            //    attr.Update(); //执行更新.
+            //}
 
             MapAttr myattr = new MapAttr();
             myattr.MyPK = rptNo + "_OID";
@@ -362,10 +413,9 @@ namespace BP.WF.HttpHandler
 
             //查询出来枚举与外键类型的字段集合.
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo,"Idx");
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, "Idx");
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
-          
             #region 检查是否有日期字段.
             bool isHave = false;
             foreach (MapAttr mattr in attrs)
@@ -423,17 +473,17 @@ namespace BP.WF.HttpHandler
 
             string IsSearchKey = this.GetRequestVal("IsSearchKey");
             if (IsSearchKey == "0")
-                md.RptIsSearchKey = false;
+                md.IsSearchKey = false;
             else
-                md.RptIsSearchKey = true;
-            md.SetPara("RptStringSearchKeys", this.GetRequestVal("RptStringSearchKeys"));
+                md.IsSearchKey = true;
+            md.SetPara("StringSearchKeys", this.GetRequestVal("StringSearchKeys"));
             //查询方式.
             int DTSearchWay = this.GetRequestValInt("DTSearchWay");
-            md.RptDTSearchWay = (DTSearchWay)DTSearchWay;
+            md.DTSearchWay = (DTSearchWay)DTSearchWay;
 
             //日期字段.
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
-            md.RptDTSearchKey = DTSearchKey;
+            md.DTSearchKey = DTSearchKey;
 
             //是否查询自己部门发起
             md.SetPara("IsSearchNextLeavel", this.GetRequestValBoolen("IsSearchNextLeavel"));

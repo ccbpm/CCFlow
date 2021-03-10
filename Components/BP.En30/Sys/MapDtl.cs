@@ -1450,18 +1450,19 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValFloatByKey(FrmImgAttr.W);
+                return this.GetValFloatByKey(MapDtlAttr.W);
             }
             set
             {
                 this.SetValByKey(MapDtlAttr.W, value);
             }
+
         }
         public float H
         {
             get
             {
-                return this.GetValFloatByKey(FrmImgAttr.H);
+                return this.GetValFloatByKey(MapDtlAttr.H);
             }
             set
             {
@@ -1623,7 +1624,7 @@ namespace BP.Sys
                     //增加分组
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
-                    group.FrmID = this.No; //yln
+                    group.FrmID = this.No; 
                     group.CtrlType = "Ath";
                     group.CtrlID = athDesc.MyPK;
                     group.Idx = 10;
@@ -1723,7 +1724,6 @@ namespace BP.Sys
                 md.PTable = this.PTable;
                 //避免在表单库中显示
                 md.FK_FormTree = "";
-                md.FK_FrmSort = "";
                 md.Update(); //需要更新到缓存.
             }
 
@@ -1775,7 +1775,6 @@ namespace BP.Sys
             //执行清空缓存到的AutoNum.
             MapData md = new MapData(this.FK_MapData);
             md.ClearAutoNumCash(true); //更新缓存.
-
            
             return base.beforeDelete();
         }

@@ -50,12 +50,11 @@ namespace BP.WF.DTS
         /// <returns></returns>
         public override object Do()
         {
-
-            //执行自动任务.
+            //执行自动任务,机器执行的节点.
             AutoRun_WhoExeIt myen = new AutoRun_WhoExeIt();
             myen.Do();
 
-            //扫描触发式自动发起流程表......
+            //扫描触发式自动发起流程表.
             //自动发起流程.
             AutoRunWF_Task wf_task = new AutoRunWF_Task();
             wf_task.Do();
@@ -64,7 +63,7 @@ namespace BP.WF.DTS
             AutoRunStratFlows fls = new AutoRunStratFlows();
             fls.Do();
 
-            //扫描消息表,想外发送消息....
+            //扫描消息表,想外发送消息.
             DoSendMsg();
 
             //扫描逾期流程数据，处理逾期流程.
@@ -78,6 +77,10 @@ namespace BP.WF.DTS
             //更新WF_GenerWorkerFlow.TodoSta状态.
             DTS_GenerWorkFlowTodoSta en3 = new DTS_GenerWorkFlowTodoSta();
             en3.Do();
+
+            //执行自动任务.
+            Auto_Rpt_Dtl_DTS dtRpts = new Auto_Rpt_Dtl_DTS();
+            dtRpts.Do();
 
             return "执行完成...";
         }
@@ -337,7 +340,7 @@ namespace BP.WF.DTS
                             Emp empShift = new Emp(doOutTime);
                             try
                             {
-                                BP.WF.Dev2Interface.Node_Shift( workid,   empShift.No,
+                                BP.WF.Dev2Interface.Node_Shift( workid,   empShift.UserID,
                                     "流程节点已经逾期,系统自动移交");
 
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
@@ -415,7 +418,7 @@ namespace BP.WF.DTS
                             {
                                 Emp myemp = new Emp(doOutTime);
 
-                                bool boo = BP.WF.Dev2Interface.WriteToSMS(myemp.No, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
+                                bool boo = BP.WF.Dev2Interface.WriteToSMS(myemp.UserID, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
                                     "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息",workid);
                                 if (boo)
                                     msg = "'" + title + "'逾期消息已经发送给:'" + myemp.Name + "'";

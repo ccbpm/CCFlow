@@ -516,7 +516,7 @@ namespace BP.WF
                 map.AddTBString(TrackAttr.EmpToT, null, "到人员(名称)", true, false, 0, 2000, 100);
 
                 map.AddTBString(TrackAttr.RDT, null, "日期", true, false, 0, 20, 100);
-                map.AddTBFloat(TrackAttr.WorkTimeSpan, 0, "时间跨度(天)", true, false);
+                map.AddTBFloat(TrackAttr.WorkTimeSpan, 0, "时间流程时长(天)", true, false);
                 map.AddTBStringDoc(TrackAttr.Msg, null, "消息", true, false);
                 map.AddTBStringDoc(TrackAttr.NodeData, null, "节点数据(日志信息)", true, false);
                 map.AddTBString(TrackAttr.Tag, null, "参数", true, false, 0, 300, 3000);
@@ -561,21 +561,20 @@ namespace BP.WF
             DBAccess.DropTablePK(ptable);
 
             // 删除主键.
-            DBAccess.DropTablePK("WF_Track");
+            //DBAccess.DropTablePK("WF_Track");
 
             //创建表.
             Track tk = new Track();
             try
             {
                 tk.CheckPhysicsTable();
+                // 删除主键.
+                DBAccess.DropTablePK("WF_Track");
             }
             catch (Exception ex)
             {
                 Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
             }
-
-            // 删除主键.
-            DBAccess.DropTablePK("WF_Track");
 
             string sqlRename = "";
             switch (SystemConfig.AppCenterDBType)

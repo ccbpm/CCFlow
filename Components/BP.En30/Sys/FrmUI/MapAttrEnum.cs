@@ -111,8 +111,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
+                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20,true);
+
+
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
+                map.AddTBString(MapAttrAttr.UIBindKey, null, "枚举ID", true, true, 0, 100, 20);
 
                 string sql = "";
                 switch (SystemConfig.AppCenterDBType)
@@ -138,7 +141,7 @@ namespace BP.Sys.FrmUI
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' ";
 
                 //默认值.
-                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）", sql, true);
+                map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值(选中)", sql, true);
 
                 //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
 
@@ -151,23 +154,19 @@ namespace BP.Sys.FrmUI
                 //map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 
                 // "@0=普通@1=枚举@2=外键@3=打开系统页面");
 
-                map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-                map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
-                map.AddTBString(MapAttrAttr.UIBindKey, null, "枚举ID", true, true, 0, 100, 20);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见?", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑?", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
-                //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+           
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
                 //单元格数量 2013-07-24 增加。
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
-                   "@0=跨0个单元格@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
+                   "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
                 map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
@@ -179,13 +178,17 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
+                map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
+                //CCS样式
+                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
-                rm.Title = "设置联动";
+                rm.Title = "级联下拉框";
                 rm.ClassMethodName = this.ToString() + ".DoActiveDDL()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -203,18 +206,17 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "高级JS设置";
-                rm.ClassMethodName = this.ToString() + ".DoRadioBtns()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
                 rm.Title = "事件绑函数";
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "选项联动控件";
+                rm.ClassMethodName = this.ToString() + ".DoRadioBtns()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //     rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
 
                 #endregion 执行的方法.
 

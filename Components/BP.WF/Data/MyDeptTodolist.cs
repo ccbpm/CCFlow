@@ -135,10 +135,6 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowNote = "FlowNote";
         /// <summary>
-        /// 我部门
-        /// </summary>
-        public const string WorkerDept = "WorkerDept";
-        /// <summary>
         /// 待办人员
         /// </summary>
         public const string TodoEmps = "TodoEmps";
@@ -686,11 +682,11 @@ namespace BP.WF.Data
                 //map.AddTBString(MyDeptTodolistAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10);
 
                 map.AddTBStringDoc(MyDeptTodolistAttr.FlowNote, null, "备注", true, false,true);
+              //  MyDeptTodolistAttr.WorkerDept
+                ////作为隐藏字段.
+                //map.AddTBString(MyDeptTodolistAttr.WorkerDept, null, "工作人员部门编号", 
+                //    false, false, 0, 30, 10);
 
-                //作为隐藏字段.
-                map.AddTBString(MyDeptTodolistAttr.WorkerDept, null, "工作人员部门编号", 
-                    false, false, 0, 30, 10);
-               
                 map.AddDDLEntities(MyDeptTodolistAttr.FK_Emp, null, "当前处理人", new BP.WF.Data.MyDeptEmps(), false);
                 map.AddTBIntPK(MyDeptTodolistAttr.WorkID, 0, "工作ID", true, true);
 
@@ -698,10 +694,10 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Emp);
 
-                //增加隐藏的查询条件.
-                AttrOfSearch search = new AttrOfSearch(MyDeptTodolistAttr.WorkerDept, "部门",
-                    MyDeptTodolistAttr.WorkerDept, "=", BP.Web.WebUser.FK_Dept, 0, true);
-                map.AttrsOfSearch.Add(search);
+                ////增加隐藏的查询条件.
+                //AttrOfSearch search = new AttrOfSearch(MyDeptTodolistAttr.WorkerDept, "部门",
+                //    MyDeptTodolistAttr.WorkerDept, "=", BP.Web.WebUser.FK_Dept, 0, true);
+                //map.AttrsOfSearch.Add(search);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "轨迹";  

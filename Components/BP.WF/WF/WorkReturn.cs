@@ -73,7 +73,7 @@ namespace BP.WF
         {
             this.HisNode = new Node(currNodeID);
 
-            //如果退回的节点为0,就求出可以退回的唯一节点. 
+            //如果退回的节点为0,就求出可以退回的唯一节点.
             if (returnToNodeID == 0)
             {
                 DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(currNodeID, workID, fid);
@@ -247,7 +247,7 @@ namespace BP.WF
             ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
             ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
 
-            ps.Add(GenerWorkFlowAttr.TodoEmps, returnToEmp.No + "," + returnToEmp.Name + ";");
+            ps.Add(GenerWorkFlowAttr.TodoEmps, returnToEmp.UserID + "," + returnToEmp.Name + ";");
 
             ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
 
@@ -304,7 +304,7 @@ namespace BP.WF
             rw.Insert();
 
             // 加入track.
-            this.AddToTrack(ActionType.Return, returnToEmp.No, returnToEmp.Name,
+            this.AddToTrack(ActionType.Return, returnToEmp.UserID, returnToEmp.Name,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
             try
@@ -338,7 +338,7 @@ namespace BP.WF
             }
             else
             {
-                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + returnToEmp.No + "," + returnToEmp.Name + ").\n\r" + text;
+                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + returnToEmp.UserID + "," + returnToEmp.Name + ").\n\r" + text;
             }
         }
         /// <summary>
@@ -750,11 +750,14 @@ namespace BP.WF
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
 
             //子线程退回应该是单线退回到干流程
+            //GenerWorkerLists gwls = new GenerWorkerLists();
+            //gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
+
+
+            //查询退回到的工作人员列表.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
-
-
-           
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+                GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
             string toEmp = "";
             string toEmpName = "";
@@ -1106,7 +1109,7 @@ namespace BP.WF
 
             //退回到人.
             Emp empReturn = new Emp(this.ReturnToEmp);
-            gwf.TodoEmps = empReturn.No + "," + empReturn.Name + ";";
+            gwf.TodoEmps = empReturn.UserID + "," + empReturn.Name + ";";
             gwf.TodoEmpsNum = 1;
             gwf.Update();
 
@@ -1211,13 +1214,13 @@ namespace BP.WF
             if (IsBackTrack == true)
             {
                 // 加入track.
-                this.AddToTrack(ActionType.ReturnAndBackWay, empReturn.No, empReturn.Name,
+                this.AddToTrack(ActionType.ReturnAndBackWay, empReturn.UserID, empReturn.Name,
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
             else
             {
                 // 加入track.
-                this.AddToTrack(ActionType.Return, empReturn.No, empReturn.Name,
+                this.AddToTrack(ActionType.Return, empReturn.UserID, empReturn.Name,
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
 
@@ -1252,7 +1255,7 @@ namespace BP.WF
             }
             else
             {
-                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + empReturn.No + "," + empReturn.Name + ").\n\r" + text;
+                return "工作已经被您退回到(" + this.ReturnToNode.Name + "),退回给(" + empReturn.UserID + "," + empReturn.Name + ").\n\r" + text;
             }
         }
         /// <summary>
@@ -1298,7 +1301,7 @@ namespace BP.WF
         private string infoLog = "";
         private void ReorderLog(Node fromND, Node toND, ReturnWork rw)
         {
-            string filePath = SystemConfig.PathOfDataUser + "\\ReturnLog\\" + this.HisNode.FK_Flow + "\\";
+            string filePath = SystemConfig.PathOfDataUser + "ReturnLog\\" + this.HisNode.FK_Flow + "\\";
             if (System.IO.Directory.Exists(filePath) == false)
                 System.IO.Directory.CreateDirectory(filePath);
 

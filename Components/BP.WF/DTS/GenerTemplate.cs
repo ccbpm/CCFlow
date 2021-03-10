@@ -98,7 +98,7 @@ namespace BP.WF.DTS
                 System.IO.Directory.CreateDirectory(pathDir);
 
                 MapDatas mds = new MapDatas();
-                mds.Retrieve(MapDataAttr.FK_FrmSort, sort.No);
+                mds.Retrieve(MapDataAttr.FK_FormTree, sort.No);
                 foreach (MapData md in mds)
                 {
                     System.Data.DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);

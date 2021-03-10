@@ -73,11 +73,13 @@ namespace BP.WF.HttpHandler
 
                 #region  //2019.11.08 增加如果是极简版, 就设置初始化参数.
                 Flow fl = new Flow(this.FK_Flow);
-                if (fl.FlowFrmType != FlowFrmType.Ver2019Earlier)
+                if (fl.FlowFrmModel != FlowFrmModel.Ver2019Earlier)
                 {
                     FrmNode fm = new FrmNode();
                     fm.FK_Flow = this.FK_Flow;
                     fm.FK_Frm = "ND" + int.Parse(this.FK_Flow + "01");
+                    if (fl.FlowDevModel == FlowDevModel.JiJian)
+                        fm.IsEnableFWC = FrmWorkCheckSta.Enable;
                     fm.FK_Node = node.NodeID;
                     fm.FrmSln = FrmSln.Readonly;
                     fm.Insert();

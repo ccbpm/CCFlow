@@ -107,10 +107,89 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.Columns[0].ColumnName = "NodeID";
             dt.Columns[1].ColumnName = "Name";
-
             return BP.Tools.Json.ToJson(dt);
         }
+        #region 方向条件-审核组件
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
 
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            //把其他的条件都删除掉.
+            //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condTypeEnum + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Url);
+
+            Cond cond = new Cond();
+            //cond.Delete(CondAttr.NodeID, fk_mainNode,
+            //  CondAttr.ToNodeID, toNodeID,
+            //   CondAttr.CondType, (int)condTypeEnum);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.WorkCheck;
+
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            //if (CondOrAnd != null)
+            //    cond.CondOrAnd = CondOrAnd;
+            cond.FK_Flow = this.FK_Flow;
+            cond.CondType = condTypeEnum;
+            cond.Save();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByWorkCheck_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.FK_Node, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
 
         #region 方向条件URL
         /// <summary>
@@ -202,7 +281,7 @@ namespace BP.WF.HttpHandler
         public string CondByWebApi_Init()
         {
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
-            if (DataType.IsNullOrEmpty(fk_mainNode)==true)
+            if (DataType.IsNullOrEmpty(fk_mainNode) == true)
                 fk_mainNode = this.GetRequestVal("FK_Node");
 
             string toNodeID = this.GetRequestVal("ToNodeID");
@@ -282,7 +361,7 @@ namespace BP.WF.HttpHandler
 
             string toNodeID = this.GetRequestVal("ToNodeID");
 
-            Node nd = new Node( this.FK_Node);
+            Node nd = new Node(this.FK_Node);
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 

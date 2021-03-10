@@ -1512,8 +1512,8 @@ namespace BP.En
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                         {
                             if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23)," +
-                                                        "CONVERT(varchar(100),  getdate(), 23)) " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
+                                                        "CONVERT(varchar(100),  getdate(), 23)') " + attr.Key;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
                         }  
@@ -1523,16 +1523,17 @@ namespace BP.En
                                 val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +
                                                          "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
                             else
-                                val = val + ",ISNULL(" + mainTable + attr.Field + ",'" +
-                                                        attr.DefaultVal.ToString() + "') " + attr.Key;
+                                val = val + ",ISNULL(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
+
+                            
                         }
                         break;
                     case DataType.AppDateTime:
                         if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                         {
                             if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20)," +
-                                                          "CONVERT(varchar(100), getdate(), 20)) " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
+                                                          "CONVERT(varchar(100), getdate(), 20)') " + attr.Key;
 
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
@@ -1543,8 +1544,7 @@ namespace BP.En
                                 val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
                                                           "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 20)') " + attr.Key;
                             else
-                                val = val + ",ISNULL(" + mainTable + attr.Field + ",'" +
-                                                        attr.DefaultVal.ToString() + "') " + attr.Key;
+                                val = val + ",ISNULL(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
                         }
                         break;
                     default:
@@ -2473,10 +2473,18 @@ namespace BP.En
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
+                            var val = en.GetValStrByKey(attr.Key).Replace('\'', '~');
+
+                            //@yln 对存储的数据进行加密.
+                            if ( en.EnMap.IsJM  && attr.IsPK==false && DataType.IsNullOrEmpty(val)==false  )
+                            {
+
+                            }
+
                             if (attr.MaxLength >= 4000)
-                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'), true);
+                                ps.Add(attr.Key, val, true);
                             else
-                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
+                                ps.Add(attr.Key, val);
 
                             break;
                         case DataType.AppBoolean:
@@ -2533,14 +2541,14 @@ namespace BP.En
                             }
                             break;
                         case DataType.AppMoney:
-                            object val = en.Row.GetValByKey(attr.Key);
-                            if (val == null || val == DBNull.Value)
+                            object val1 = en.Row.GetValByKey(attr.Key);
+                            if (val1 == null || val1 == DBNull.Value)
                             {
                                 str = "0";
                             }
                             else
                             {
-                                str = val.ToString();
+                                str = val1.ToString();
                                 str = str.Replace("￥", "");
                                 str = str.Replace(",", "");
                             }
@@ -2578,7 +2586,7 @@ namespace BP.En
             {
                 Attr attr = en.EnMap.GetAttrByKey(errKey);
                 errKey = "@attrKey=" + attr.Key + ",AttrVal=" + en.Row[attr.Key] + ",DataType=" + attr.MyDataTypeStr;
-                throw new Exception("生成参数期间错误:" +en.ToString()+","+en.EnMap.PhysicsTable+","+ errKey + "@错误信息:" + ex.Message);
+                throw new Exception("生成参数期间错误:"+en.ToString()+","+en.EnMap.PhysicsTable+";" + errKey + "@错误信息:" + ex.Message);
             }
 
             if (keys != null)

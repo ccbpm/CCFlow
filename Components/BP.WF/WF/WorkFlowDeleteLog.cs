@@ -273,7 +273,7 @@ namespace BP.WF
                 map.AddDDLEntities(GenerWorkFlowAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddTBDateTime(GERptAttr.FlowEnderRDT, null, "最后处理时间", true, true);
                 map.AddTBInt(GERptAttr.FlowEndNode, 0, "停留节点", true, true);
-                map.AddTBFloat(GERptAttr.FlowDaySpan, 0, "跨度(天)", true, true);
+                map.AddTBFloat(GERptAttr.FlowDaySpan, 0, "流程时长(天)", true, true);
                 map.AddTBString(GERptAttr.FlowEmps, null, "参与人", false, false, 0, 100, 100);
 
                 //删除信息.

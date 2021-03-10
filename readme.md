@@ -1,7 +1,11 @@
 ﻿
 ## 特别声明
 
-  ccflow 项目已加入 [dotNET China](https://gitee.com/dotnetchina) 组织.
+1.  ccflow 项目已加入 [dotNET China](https://gitee.com/dotnetchina) 组织.
+
+2. java版本jflow与.net版本的JFlow 的在线文档统一发布到.
+    http://doc.ccbpm.cn
+
 
 
 ## 资源下载

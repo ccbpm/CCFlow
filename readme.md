@@ -1,4 +1,10 @@
-﻿# 资源下载
+﻿
+# 特别声明
+
+  ccflow 项目已加入 [dotNET China](https://gitee.com/dotnetchina) 组织.
+
+
+# 资源下载
 
 0. http://demo.ccflow.org 在线演示.
 1. http://ccflow.org 官方网站

@@ -14,7 +14,7 @@
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="./Comm/Gener.js" type="text/javascript"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         function WinOpenIt(url) {
             window.open(url);
@@ -42,8 +42,8 @@
         //页面启动函数.
         $(function () {
             flowNo = GetQueryString("FK_Flow");
-          //  var flow = new Entity("BP.WF.Flow", flowNo);
-           // $("#SearchLab").html(flow.Name);
+            //  var flow = new Entity("BP.WF.Flow", flowNo);
+            // $("#SearchLab").html(flow.Name);
             InitPage();
         });
         function InitPage() {

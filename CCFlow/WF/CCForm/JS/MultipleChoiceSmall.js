@@ -17,12 +17,11 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
             var tag1 = mapExt.Tag1;
             tag1 = tag1.replace(/;/g, ',');
 
-
             $.each(tag1.split(","), function (i, o) {
                 data.push({ No: i, Name: o })
             });
             break;
-        case 2:
+        case 2: //枚举.
             var enums = new Entities("BP.Sys.SysEnums");
             enums.Retrieve("EnumKey", mapExt.Tag2);
             if (mapExt.Tag == "1" || mapExt.Tag == "2")
@@ -35,18 +34,29 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
                 });
             //data = enums;
             break;
-        case 3:
+        case 3: //外键表.
             if (frmData != null && frmData != undefined) {
 
                 data = frmData[mapExt.Tag3];
                 if (data == undefined) {
                     var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
                     data = en.DoMethodReturnJSON("GenerDataOfJson");
+                    if (data.length > 400)
+                    {
+                        alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                        return;
+                    }
+
                     frmData[mapExt.Tag3] = data;
                 }
             } else {
                 var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
                 data = en.DoMethodReturnJSON("GenerDataOfJson");
+
+                if (data.length > 400) {
+                    alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                    return;
+                }
             }
             break;
         case 4:
@@ -60,6 +70,13 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
             tag4SQL = tag4SQL.replace(/~/g, "'");
 
             data = DBAccess.RunSQLReturnTable(tag4SQL);
+            if (data.length > 400) {
+                alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                return;
+            }
+            break;
+        default:
+            alert("未判断的模式");
             break;
     }
 
@@ -286,7 +303,7 @@ function DeptEmpModelAdv0(mapExt) {
 }
 
 
-function MultipleInputSearch(mapExt, defaultVal, tbID) {
+function MultipleInputSearch(mapExt, defaultVal, tbID,oid) {
     if (tbID == null || tbID == undefined) {
         tbID = "TB_" + mapExt.AttrOfOper;
     }
@@ -294,6 +311,8 @@ function MultipleInputSearch(mapExt, defaultVal, tbID) {
     var width = tb.width();
     var height = tb.height();
     tb.hide();
+    if (oid == null || oid == undefined)
+        oid = GetPKVal();
     //获取当前元素是否在P标签内
     var parent;
     var container;
@@ -321,9 +340,6 @@ function MultipleInputSearch(mapExt, defaultVal, tbID) {
         tb.before(container);
     }
 
-
-
-
     container.attr("id", mapExt.AttrOfOper + "_comboTree");
 
     container.addClass("select-tree-wrap");
@@ -339,11 +355,16 @@ function MultipleInputSearch(mapExt, defaultVal, tbID) {
 
     var isShowSignature = mapExt.Tag == "1" ? true : false;
     var valArray = [];
-    if (defaultVal != null && defaultVal != undefined) {
+    var frmEleDBs = getVals(mapExt.FK_MapData,mapExt.AttrOfOper,oid);
+    $.each(frmEleDBs,function(i,item){
+        //valArray.push(item.Tag2);
+        valArray.push({No:item.Tag1,Name:item.Tag2});
+    });
+   /* if (defaultVal != null && defaultVal != undefined) {
         defaultVal = defaultVal.replace(new RegExp("[[]", "gm"), "").replace(/]/g, ",");
         defaultVal = defaultVal.substr(0, defaultVal.length - 1);
         valArray = defaultVal.split(",");
-    }
+    }*/
 
     $('#' + mapExt.AttrOfOper + "_comboTree").comboTree({
         source: dbSrc,
@@ -354,6 +375,8 @@ function MultipleInputSearch(mapExt, defaultVal, tbID) {
         selectedlength: 30,//最多可选
         keyOfEn: mapExt.AttrOfOper,
         selected: valArray,
-        isShowSignature: isShowSignature
+        isShowSignature: isShowSignature,
+        refPK:oid,
+        FK_MapData:mapExt.FK_MapData
     });
 }

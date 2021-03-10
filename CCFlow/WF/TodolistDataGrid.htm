@@ -40,91 +40,91 @@
     </style>
 </head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-	<div class="ibox-content">
-        <div class="row search-padding">
-			<div class="col-md-4 col-sm-4 pull-left">
-				<div class="form-inline">
-					<div class="form-group">
-						<input type='text' placeholder="请输入标题关键词" id='TB_Key' class="form-control" style=" width:300px;" />
-					</div>
-					<button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i> 查询</button>
-				</div>
-			</div>
-		</div>	
-		<table class="table  table-striped">
-			<thead>
-				<tr id="tablet">
-				</tr>
-			</thead>
-			<tbody id="Table1"></tbody>
-		</table>
-		 <!-- 显示分页信息 -->
-        <div class="row" style="text-align: left;">
-            <ul class="pagination" id="page_nav">
-            </ul>
-            <ul class="pagination controls" id="page_info">
-            </ul>
-            <div style="clear: both;"></div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <div class="row search-padding">
+                <div class="col-md-4 col-sm-4 pull-left">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type='text' placeholder="请输入标题关键词" id='TB_Key' class="form-control" style=" width:300px;" />
+                        </div>
+                        <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i> 查询</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table  table-striped">
+                <thead>
+                    <tr id="tablet">
+                    </tr>
+                </thead>
+                <tbody id="Table1"></tbody>
+            </table>
+            <!-- 显示分页信息 -->
+            <div class="row" style="text-align: left;">
+                <ul class="pagination" id="page_nav">
+                </ul>
+                <ul class="pagination controls" id="page_info">
+                </ul>
+                <div style="clear: both;"></div>
+            </div>
         </div>
-	</div>		
-</div>
-	<script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
+    </div>
+    <script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js" type="text/javascript"></script>
     <script src="Scripts/QueryString.js" type="text/javascript"></script>
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
     <script type="text/javascript">
-    
+
         function GroupBarClick(groupName) {
 
-				var alt = document.getElementById('Img' + groupName).alert;
-				var sta = 'block';
-				if(alt == 'Max') {
-					sta = 'block';
-					alt = 'Min';
-					classname='fa fa-minus-square';
-				} else {
-					sta = 'none';
-					alt = 'Max';
-					classname='fa  fa-plus-square';
-				}
+            var alt = document.getElementById('Img' + groupName).alert;
+            var sta = 'block';
+            if (alt == 'Max') {
+                sta = 'block';
+                alt = 'Min';
+                classname = 'fa fa-minus-square';
+            } else {
+                sta = 'none';
+                alt = 'Max';
+                classname = 'fa  fa-plus-square';
+            }
 
-				document.getElementById('Img' + groupName).className =classname;
-				document.getElementById('Img' + groupName).alert = alt;
+            document.getElementById('Img' + groupName).className = classname;
+            document.getElementById('Img' + groupName).alert = alt;
 
-				var i = 0;
-				for(i = 0; i <= 600; i++) {
+            var i = 0;
+            for (i = 0; i <= 600; i++) {
 
-					var row = document.getElementById(groupName + i);
+                var row = document.getElementById(groupName + i);
 
-					if(row == null || row == undefined || row.style == null)
-						continue;
+                if (row == null || row == undefined || row.style == null)
+                    continue;
 
-					if(sta == 'block') {
-						row.style.display = '';
-					} else {
-						row.style.display = sta;
-					}
-				}
-			}
+                if (sta == 'block') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = sta;
+                }
+            }
+        }
 
-			function WinOpenIt(url) {
+        function WinOpenIt(url) {
 
-			    window.open(url);
-			    return;
+            window.open(url);
+            return;
 
             layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: '待办', 
-				  area:['96%','90%'],
-				  content: url
-				}); 
-            
+                skin: 'layer-class',
+                type: 2,
+                title: '待办',
+                area: ['96%', '90%'],
+                content: url
+            });
+
         }
 
         var pageCount = 1;//总页数
@@ -167,7 +167,7 @@
                 realCount = 0;
                 for (var i = 0; i < data.length; i++) {
                     if (flowNos.indexOf(data[i].FK_Flow) != -1)
-                        realCount++; 
+                        realCount++;
                 }
             }
 
@@ -247,7 +247,7 @@
         //初始化数据.
         var showGroup = "";
         function InitPage() {
-             var flowNos = GetQueryString("FlowNos");
+            var flowNos = GetQueryString("FlowNos");
             //获取当前时间
             var cdt = getNowFormatDate();
             var timeKey = Math.random();
@@ -256,7 +256,7 @@
 
             //设置表头.
             var groupBy = GetQueryString("GroupBy");
-            if (groupBy == "" || groupBy == null)  groupBy = "ByFlow";
+            if (groupBy == "" || groupBy == null) groupBy = "ByFlow";
 
             var nodeIDt = GetQueryString("FK_Node");
 
@@ -288,8 +288,8 @@
 
             $("#tablet").html(tablet);
 
-           
-          
+
+
 
             //生成分组的字符串.
             var str = "";
@@ -297,7 +297,7 @@
             var is1 = false;
             $('#Table1').html("");
 
-             //循环数组.
+            //循环数组.
             for (var idx = 0; idx < groupNames.length; idx++) {
                 var showRealCount = 0;
                 var listbox = '';
@@ -306,8 +306,8 @@
                 if (groupName == "" || groupName == null)
                     continue;
 
-                listbox+="<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=9 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
-            //增加处理.
+                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=9 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+                //增加处理.
                 for (var i = 0; i < data.length; i++) {
                     var work = data[i];
                     if (groupBy == "ByNode" || groupBy == "NodeName") {
@@ -414,7 +414,7 @@
                 if (showRealCount != 0)
                     $('#Table1').append(listbox);
             }
-           
+
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {
@@ -455,12 +455,12 @@
                     pageIdx = page;
                     InitPage(page);
                     $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                            "页,总共" + total + "条记录。</li>");
+                        "页,总共" + total + "条记录。</li>");
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
             $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                            "页,总共" + total + "条记录。</li>");
+                "页,总共" + total + "条记录。</li>");
 
         }
         function GetState(wfState) {
@@ -502,23 +502,23 @@
             if (strDate >= 0 && strDate <= 9) {
                 strDate = "0" + strDate;
             }
-           var hour = date.getHours();
+            var hour = date.getHours();
             if (hour >= 1 && hour <= 9) {
                 hour = "0" + hour;
             }
-             var minute = date.getMinutes();
+            var minute = date.getMinutes();
             if (minute >= 1 && minute <= 9) {
                 minute = "0" + minute;
             }
             //当前时间=年份-月份-日 小时：分钟
             var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + hour + seperator2 + minute;
+                + " " + hour + seperator2 + minute;
 
             return cdt;
         }
 
-        
+
     </script>
-    
+
 </body>
 </html>

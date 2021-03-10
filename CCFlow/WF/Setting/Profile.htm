@@ -95,7 +95,7 @@
                 dataType: 'html',
                 url: url,
                 onSubmit: function (param) {
-                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
                 },
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {
@@ -106,51 +106,55 @@
                     window.location.href = "Default.htm";
                 }
             });
-
         }
     </script>
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div class="usercenter">
-                    设置/修改</div>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            手机</label>
-                        <div class="col-sm-8">
-                            <input name="TB_Tel" type="text" value="" id="_TB_Tel" class="form-control" />
-                        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="usercenter">
+                        设置/修改
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            Email</label>
-                        <div class="col-sm-8">
-                            <input name="TB_Email" type="text" value="" id="_TB_Email" class="form-control" />
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                手机
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="TB_Tel" type="text" value="" id="_TB_Tel" class="form-control" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">
-                            头像上传</label>
-                        <div class="col-sm-1">
-                            <img id="sigimg" width="70" border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                Email
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="TB_Email" type="text" value="" id="_TB_Email" class="form-control" />
+                            </div>
                         </div>
-                        <div class="col-sm-2">
-                            <input type="file" name="File_Upload" id="File_Upload" />
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">
+                                头像上传
+                            </label>
+                            <div class="col-sm-1">
+                                <img id="sigimg" width="70" border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="file" name="File_Upload" id="File_Upload" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-8">
-                            <button class="btn btn-info" type="button" id="ctl24" onclick="Upload()">
-                                保存</button>
-                            <a class="btn btn-white" href="Default.htm">返回</a>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-8">
+                                <button class="btn btn-info" type="button" id="ctl24" onclick="Upload()">
+                                    保存
+                                </button>
+                                <a class="btn btn-white" href="Default.htm">返回</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </form>
 </body>
 </html>

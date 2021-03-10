@@ -7,18 +7,34 @@
 */
 var isEqualsDomain = false;  //调用ccbpm.js的页面和ccbpm.js域是否相同
 var ccbpmPath = GetPath();
+//var ccbpmPath = remotePath;
 var paramData = {};
+var writeImg = "";//审核写字板
+var FWCVer=0;
 $(function () {
     if (window.location.href.indexOf(ccbpmPath) == -1)
         isEqualsDomain = true;
     //引入关联的js
     jQuery.getScript(ccbpmPath + "/WF/Scripts/config.js", function () {
-        jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
-            jQuery.getScript(ccbpmPath + "/WF/Scripts/QueryString.js", function () {
+        jQuery.getScript(ccbpmPath + "/WF/Scripts/QueryString.js", function () {
+            jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
+                if ($('#ccbpmJS').length != 0) {
+                    var url = $('#ccbpmJS')[0].src;
+                    var SID = getQueryStringByNameFromUrl(url, "SID");
+                    //用户登陆
+                    if (SID != null && SID != undefined) {
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                        handler.AddPara("SID", SID);
+                        handler.AddPara("DoWhat", "PortLogin");
 
-            });
+                        var data = handler.DoMethodReturnString("Port_Init");
+                    }
+                }
+                
+            })
         });
     });
+
 
 });
 
@@ -33,19 +49,20 @@ $(window).load(function () {
         IsReadonly: GetQueryString("IsReadonly")
     }
 
-    //表单树形结构
-   // if ($("#tabs").length == 1) {
-   //     return;
-   // }
+
     
-    if ($("#ToolBar").length == 1) {
+    if ($("#ToolBar").length == 1 || $("#Toolbar").length == 1) {
         if ($('#ccbpmJS').length == 1) {
             var url = $('#ccbpmJS')[0].src;
             var type = getQueryStringByNameFromUrl(url, "type");
             if (type == "CC")
                 loadScript(ccbpmPath + "/WF/Toolbar.js", function () { }, "JS_CC");
-            if (type == "MyView")
+            else if (type == "MyView")
                 loadScript(ccbpmPath + "/WF/Toolbar.js", function () { }, "JS_MyView");
+            else if (type == "MyFrm")
+                loadScript(ccbpmPath + "/WF/Toolbar.js", function () { }, "JS_MyFrm");
+            else if (type = "MyGener")
+                loadScript(ccbpmPath + "/WF/Toolbar.js");
         } else {
             loadScript(ccbpmPath + "/WF/Toolbar.js");
         }
@@ -53,7 +70,7 @@ $(window).load(function () {
     }
         
     if ($("#WorkCheck").length == 1)
-       loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
+        loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
     if ($("#FlowBBS").length == 1)
         loadScript(ccbpmPath + "/WF/WorkOpt/FlowBBS.js");
     if ($("#JobSchedule").length == 1)

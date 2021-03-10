@@ -12,8 +12,8 @@
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="./JS/layer/layer.js" type="text/javascript"></script>
-    <link href="./JS/layer/layer.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
@@ -37,9 +37,13 @@
     <link href="Style/Search.css" rel="stylesheet" />
     <base target="_self" />
     <style type="text/css">
+        
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
+
+        var firstLoadTable = false;
+        var isCond = 0;
 
         //定义公共个变量.
         var webUser = new WebUser();
@@ -84,20 +88,27 @@
         var isSecHeader = false;//是否是二级表头
         var thrMultiTitle = cfg.GetPara("MultiTitle1"); //三级表头的内容
         var secMultiTitle = cfg.GetPara("MultiTitle");//二级表头的内容
-
-        var firstLoadTable = true;
+        var firstLoadTable = false;
 
         //获取用户的查询信息
         function GetUserRegedit() {
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.SetPKVal(urMyPK);
             ur.RetrieveFromDBSources();
+            if (firstLoadTable != undefined && firstLoadTable == true) {
+                //获取Url传的查询Key值
+                var key = GetQueryString("Key");
+                if (key != null && key != undefined && firstLoadTable == true)
+                    ur.SearchKey = key;
 
-            //获取Url传的查询Key值
-            var key = GetQueryString("Key");
-            if (key != null && key != undefined && firstLoadTable == true) {
-                ur.SearchKey = key;
-                ur.Update();
+                var dtFrom = GetQueryString("DTFrom");
+                if (dtFrom != null && dtFrom != undefined && firstLoadTable == true)
+                    ur.DTFrom = dtFrom;
+                var dtTo = GetQueryString("DTTo");
+                if (dtTo != null && dtTo != undefined && firstLoadTable == true)
+                    ur.DTTo = dtTo;
+
+
             }
             return ur;
         }
@@ -129,6 +140,25 @@
                 secMultiTitle = "";
             if (isThrHeader == false && secMultiTitle != "")
                 isSecHeader = true;
+
+            firstLoadTable = true;
+            //清空Seach记录查询
+            if (isCond == 1) {
+                ur.MyPK = urMyPK;
+                if (key != null && key != undefined)
+                    ur.SearchKey = $("#TB_Key").val();
+                else
+                    ur.SearchKey = "";
+
+                ur.AtPara = "";
+                ur.DTFrom = "";
+                ur.DTTo = "";
+                ur.FK_Emp = webUser.No;
+                ur.CfgKey = "SearchAttrs";
+                ur.Vals = "";
+                ur.FK_MapData = ensName;
+                ur.Save();
+            }
 
             //初始化工具栏.
             InitToolbar();
@@ -207,6 +237,7 @@
                 var strs = searchFields.split("@");
                 var str;
                 var fieldV = "";
+                var urlParamV = "";
                 for (var i = 0; i < strs.length; i++) {
                     if (strs[i] == "")
                         continue;
@@ -218,6 +249,13 @@
                     fieldV = ur.GetPara(str[1]);
                     if (fieldV == null || fieldV == undefined)
                         fieldV = "";
+
+                    if (firstLoadTable == true) {
+                        urlParamV = GetQueryString(str[1]);
+                        if (urlParamV != null && urlParamV != undefined && urlParamV != "")
+                            fieldV = urlParamV;
+                    }
+
 
                     html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":&nbsp;&nbsp</label>"
                     html += "<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
@@ -243,6 +281,11 @@
                     if (fieldV == null || fieldV == undefined)
                         fieldV = "";
 
+                    if (firstLoadTable == true) {
+                        urlParamV = GetQueryString(str[1]);
+                        if (urlParamV != null && urlParamV != undefined && urlParamV != "")
+                            fieldV = urlParamV;
+                    }
                     html += "<label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":&nbsp;&nbsp</label>"
                     html += "&nbsp;&nbsp;<label>>=</label>&nbsp;&nbsp<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
                     html += "&nbsp;&nbsp;<label><=</label>&nbsp;&nbsp<input style='width:140px;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' />";
@@ -309,6 +352,12 @@
 
                     }
                 }
+                if (firstLoadTable == true) {
+                    var urlParamV = GetQueryString(attr.Field);
+                    if (urlParamV != null && urlParamV != undefined && urlParamV != "")
+                        selectVal = urlParamV;
+                }
+
 
                 $("#DDL_" + attr.Field).val(selectVal);
             }
@@ -330,7 +379,8 @@
             if (mapBase.IsImp.toString().toLowerCase() == "true")
                 html += '<a href="#" class="btn btn-default btn-sm" id="imp_btn" onclick="Imp()">导入</a>';
 
-            if (new WebUser().No == "admin")
+            var webUser = new WebUser();
+            if (webUser.No == "admin")
                 html += '<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
 
             $("#toolbar").append(html);
@@ -1248,7 +1298,7 @@
             }
 
             url = cfg.UrlExt;
-            var urlOpenType = cfg.GetPara("SearchUrlOpenType");
+            var urlOpenType = cfg.SearchUrlOpenType;
 
             if (urlOpenType == 0 || urlOpenType == undefined)
                 url = "./RefFunc/En.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk + currUrl;
@@ -1262,30 +1312,30 @@
             if (urlOpenType == 3)
                 url = "../CCForm/FrmGener.htm?FK_MapData=" + GetQueryString("EnsName") + "&PKVal=" + pk + currUrl;
 
-            //if (urlOpenType == 9) {
-            //    if (url.indexOf('?') == -1)
-            //        url = url + "?1=1";
-            //    if (url.indexOf('FrmID') != -1)
-            //        url = url + "&WorkID=" + pk + "&OID=" + pk ;
+            if (urlOpenType == 9) {
+                if (url.indexOf('?') == -1)
+                    url = url + "?1=1";
+                if (url.indexOf('FrmID') != -1)
+                    url = url + "&WorkID=" + pk + "&OID=" + pk;
+            }
 
-            //}
             //url中包含@符号需要进行替换
             if (url.indexOf("@") != -1) {
                 url = DealJsonExp(row, url);
             }
 
-            var windowW = cfg.GetPara("WinCardW");
+            var windowW = cfg.WinCardW;
             if (windowW == "" || windowW == undefined)
                 windowW = 900;
 
-            var windowH = cfg.GetPara("WinCardH");
+            var windowH = cfg.WinCardH;
             if (windowH == "" || windowH == undefined)
                 windowH = 500;
 
-            var openModel = cfg.GetPara("OpenModel");
+            var openModel = cfg.OpenModel;
             if (openModel == 0) {
                 OpenBootStrapModal(url, "eudlgframe", mapBase.EnDesc + ' : 详细', windowW, windowH, "icon-property", null, null, null, function () {
-                    if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
+                    if (flag == 0 || cfg.IsRefreshParentPage == 1) {
                         SearchData();
                         Paginator(pages);
                     }
@@ -1294,7 +1344,7 @@
                 }, null, 'black');
             } else {
                 var windowObj = window.open(url);
-                if (flag == 0 || cfg.GetPara("IsRefreshParentPage") == 1) {
+                if (flag == 0 || cfg.IsRefreshParentPage == 1) {
                     var loop = setInterval(function () {
                         if (windowObj.closed) {
                             clearInterval(loop);
@@ -1389,6 +1439,16 @@
         function Setting() {
 
             var url1 = "./Sys/SearchSetting.htm?EnsName=" + GetQueryString("EnsName") + "&m=" + Math.random();
+
+            //先判断是否有该笔数据.
+            var ensName = GetQueryString("EnsName");
+            var en = new Entity("BP.Sys.EnCfg");
+            en.SetPKVal(ensName);
+            var i = en.RetrieveFromDBSources();
+            if (i == 0) {
+                en.No = ensName;
+                en.Insert();
+            }
 
             var url = "./RefFunc/En.htm?EnName=BP.Sys.EnCfg&No=" + GetQueryString("EnsName") + "&m=" + Math.random();
 
@@ -1566,34 +1626,34 @@
 
 </head>
 <body id="SearchHtml" class="cs-search-html">
-<div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
-    <div class="ibox-content">
-        <div class="row cs-shadow-box">
-            <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
-                <div id="toolbar" style="width: 100%">
-                </div>
-            </div>
-        </div>
-        <div class="row cs-shadow-box">
-            <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
-            </table>
-            <!-- 显示分页信息 -->
-            <div>
-                <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
-                    <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
-                </div>
-                <div class="row cs-pagination" style="float:right;width:35%">
-                    <ul class="pagination" id="page_nav"></ul>
-                    <ul class="pagination controls" id="page_info"></ul>
-                    <div style="clear: both;">
+    <div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
+        <div class="ibox-content">
+            <div class="row cs-shadow-box">
+                <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
+                    <div id="toolbar" style="width: 100%">
                     </div>
                 </div>
             </div>
+            <div class="row cs-shadow-box">
+                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
+                </table>
+                <!-- 显示分页信息 -->
+                <div>
+                    <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
+                        <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
+                    </div>
+                    <div class="row cs-pagination" style="float:right;width:35%">
+                        <ul class="pagination" id="page_nav"></ul>
+                        <ul class="pagination controls" id="page_info"></ul>
+                        <div style="clear: both;">
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        <div id="Msg">
         </div>
     </div>
-    <div id="Msg">
-    </div>
-</div>
 </body>
 </html>

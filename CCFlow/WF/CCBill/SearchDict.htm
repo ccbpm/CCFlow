@@ -13,8 +13,8 @@
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../Comm/JS/layer/layer.js" type="text/javascript"></script>
-    <link href="../Comm/JS/layer/layer.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
@@ -25,7 +25,7 @@
     <!--bootstrap列拖拽-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/colResizable-1.6.min.js"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/extensions/resizable/bootstrap-table-resizable.js"></script>
-     
+
     <!--公共JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
@@ -74,7 +74,7 @@
 
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
             pageSize = ur.GetPara("PageSize");
@@ -144,7 +144,7 @@
 
             var count = 0;//计算是否换行
 
-            var stringSearchKeys = GetPara(atPara, "RptStringSearchKeys");
+            var stringSearchKeys = GetPara(atPara, "StringSearchKeys");
             if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
                 var strs = stringSearchKeys.split("*");
                 var fieldV = ""
@@ -312,7 +312,7 @@
             //保存查询条件.
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
             if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length == 0)
@@ -389,7 +389,7 @@
             data = JSON.parse(data);
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
 
@@ -433,7 +433,7 @@
 
             if (pageIdx == "" || pageIdx == undefined)
                 pageIdx = "1";
-        
+
             var mapdata = SearchData();
             var attrs = mapdata["Attrs"];
 
@@ -452,7 +452,7 @@
             //颜色设置
             var colorSet = frmDict.ColorSet;
 
-            var fieldColumns ={
+            var fieldColumns = {
                 field: "ck",
                 fixed: false,
                 checkbox: true,
@@ -462,7 +462,7 @@
 
             };
             AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
-            fieldColumns ={
+            fieldColumns = {
                 title: '序',
                 field: '',
                 align: 'center',
@@ -506,7 +506,7 @@
                     sortable = sortColumns.indexOf(field) != -1 ? true : false;
 
                 if (field == "BillState") {
-                    fieldColumns ={
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
@@ -522,7 +522,7 @@
                 }
 
                 if (field == "Title") {
-                    fieldColumns ={
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
@@ -541,8 +541,8 @@
                 if (attr.UIContralType == 1 || attr.UIContralType == 3) {
                     if (width == null || width == "" || width == undefined)
                         width = 180;
-                  
-                    fieldColumns ={
+
+                    fieldColumns = {
                         field: field,
                         title: title,
                         fixed: false,
@@ -567,7 +567,7 @@
                     continue;
                 }
                 if (attr.UIContralType == 2) {
-                    fieldColumns ={
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
@@ -586,7 +586,7 @@
 
                 if (width == null || width == "" || width == undefined)
                     width = 100;
-                fieldColumns ={
+                fieldColumns = {
                     field: field,
                     title: title,
                     width: attr.Width,
@@ -881,7 +881,7 @@
         function changePageSie() {
             pageSize = $("#DDL_PageSize").val();
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
             ur.SetPara("PageSize", pageSize);
             ur.Update();
@@ -1027,24 +1027,30 @@
 
             var url = "";
             url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
-            if (rowOpenModel == 0)
-                window.open(url);
-            if (rowOpenModel == 1)
-                window.location.href = url;
-            if (rowOpenModel == 2) {
-                var W = document.body.clientWidth - 40;
-                var H = document.body.clientHeight - 40;
+            if (top.layui && top.layui.index) {
+                url = "/WF/CCBill/" + url;
+                top.layui.index.openTabsPage(url, frmDict.Name)
+            } else {
+                if (rowOpenModel == 0)
+                    window.open(url);
+                if (rowOpenModel == 1)
+                    window.location.href = url;
+                if (rowOpenModel == 2) {
+                    var W = document.body.clientWidth - 40;
+                    var H = document.body.clientHeight - 40;
 
-                OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, null, null, "black");
-            }
-            if (rowOpenModel == 3) {
-                var W = document.body.clientWidth - 40;
-                var H = document.body.clientHeight - 40;
-                OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, function () {
-                    window.location.href = window.location.href;
-                }, null, "black");
-            }
+                    OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, null, null, "black");
+                }
+                if (rowOpenModel == 3) {
+                    var W = document.body.clientWidth - 40;
+                    var H = document.body.clientHeight - 40;
+                    OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, function () {
+                        window.location.href = window.location.href;
+                    }, null, "black");
+                }
 
+            }
+            
             return;
 
 

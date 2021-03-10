@@ -16,7 +16,7 @@
     <script src="Scripts/QueryString.js" type="text/javascript"></script>
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../App/layuiadmin/layui/lay/modules/layer.js" type="text/javascript"></script>
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <!-- 处理多语言 -->
     <!--<script src="Data/lang/load.js" type="text/javascript"></script>
@@ -36,7 +36,7 @@
             var nowDate = getNowFormatDate();
             var sql = "SELECT Auther,AuthName, FK_Flow,FlowName, COUNT(FK_Flow) as Num   FROM V_WF_AuthTodolist ";
             sql += "WHERE EmpNo = '" + webUser.No + "'";
-            sql  += " AND TakeBackDT >= '" + nowDate +"'";
+            sql += " AND TakeBackDT >= '" + nowDate + "'";
             sql += "     GROUP BY Auther, AuthName, FK_Flow, FlowName  ";
             var dt = DBAccess.RunSQLReturnTable(sql);
             var html = "";
@@ -52,7 +52,7 @@
             //绑定流程.
             //InitDocs(GetQueryString("FK_Flow"));
         }
-        function InitDocs(author,flowNo) {
+        function InitDocs(author, flowNo) {
             var nowDate = getNowFormatDate();
             $("#Help").hide();
             $('#docs').html("");
@@ -69,12 +69,12 @@
             html += "<th>授权给</th>";
             html += "<th>流程</th>";
             html += "<th>收回日期</th>";
-            
+
             html += "</tr></thead>";
 
             var sql = "SELECT *   FROM V_WF_AuthTodolist ";
             sql += "WHERE EmpNo = '" + webUser.No + "' and Auther ='" + author + "' and FK_Flow ='" + flowNo + "'";
-             sql  += "  AND TakeBackDT >= '" + nowDate +"'";
+            sql += "  AND TakeBackDT >= '" + nowDate + "'";
             var data = DBAccess.RunSQLReturnTable(sql);
             for (var i = 0; i < data.length; i++) {
 
@@ -94,7 +94,7 @@
 
             $('#docs').html(html);
         }
-        function winOpen(url,author) {
+        function winOpen(url, author) {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("No", author);
             var data = handler.DoMethodReturnString("AuthorList_LoginAs");
@@ -104,8 +104,8 @@
                 return;
             }
             window.open(url);
-           
-        
+
+
         }
         function LogAs(fk_emp, empName) {
 

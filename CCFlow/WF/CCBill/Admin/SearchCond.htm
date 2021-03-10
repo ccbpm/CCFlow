@@ -37,10 +37,10 @@
 
            
 
-            var RptStringSearchKeys = mapData.GetPara("RptStringSearchKeys");
+            var StringSearchKeys = mapData.GetPara("StringSearchKeys");
             var RptSearchKeys = mapData.GetPara("RptSearchKeys");
-            var RptDTSearchWay = mapData.GetPara("DTSearchWay");
-            var RptDTSearchKey = mapData.GetPara("DTSearchKey");
+            var DTSearchWay = mapData.GetPara("DTSearchWay");
+            var DTSearchKey = mapData.GetPara("DTSearchKey");
            
 
             //绑定外键字段.
@@ -62,8 +62,8 @@
                 if (attr.MyDataType == 1 && attr.UIContralType == 0) {
                     count++;
                     flag = false;
-                    if (RptStringSearchKeys) {
-                        flag = (RptStringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
+                    if (StringSearchKeys) {
+                        flag = (StringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
                     }
 
                     $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='"+attr.Name+"'/><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>&nbsp;&nbsp;&nbsp;");
@@ -86,11 +86,11 @@
                 $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
             }
 
-            $("#DDL_DTSearchWay").val(RptDTSearchWay);
+            $("#DDL_DTSearchWay").val(DTSearchWay);
 
             //绑定日期下拉框.
             if (dateMapAttrs != null) {
-                GenerBindDDL("DDL_DTSearchKey", dateMapAttrs, "KeyOfEn", "Name", RptDTSearchKey);
+                GenerBindDDL("DDL_DTSearchKey", dateMapAttrs, "KeyOfEn", "Name", DTSearchKey);
             }
             var hidenField = mapData.GetPara("HidenField");
             while (hidenField.indexOf("[%]") != -1)
@@ -132,7 +132,7 @@
                     fields += "*" + item.id+","+item.getAttribute("data-name");
                 }
             }
-            mapData.SetPara("RptStringSearchKeys", fields + "*");
+            mapData.SetPara("StringSearchKeys", fields + "*");
 
             mapData.Update();
 

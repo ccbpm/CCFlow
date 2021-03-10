@@ -73,6 +73,7 @@
         var param = {};
         var webUser;
         var huiQianType = GetQueryString("HuiQianType");
+        var isFrameCross = GetQueryString("isFrameCross");
         $(function () {
             webUser = new WebUser();
             Help();
@@ -324,17 +325,24 @@
             if (data.indexOf('close@') == 0) {
 
                 alert(data.replace('close@', ''));
+                if (isFrameCross == 0) {
+                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                        window.parent.returnWorkWindowClose("");
+                        window.parent.close();
 
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                    window.parent.returnWorkWindowClose("");
-                    window.parent.close();
+                    } else {
+
+                        $('body').append($('<div>' + "已取消操作" + '</div>'));
+
+                        window.close();
+                    }
 
                 } else {
-
-                    $('body').append($('<div>' + "已取消操作" + '</div>'));
-
-                    window.close();
+                    ChildrenPostMessage("", "returnWorkWindowClose");
+					window.parent.close();
                 }
+
+               
                 return;
             }
 

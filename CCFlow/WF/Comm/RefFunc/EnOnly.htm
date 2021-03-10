@@ -63,13 +63,12 @@
     </style>
     <!--杨玉慧 -->
     <script type="text/javascript">
+
         var frmData;
         var mapData;
         var mainData;
         var dtM; //方法集合.
         var isReadonly = GetQueryString("isReadonly");
-        var pageData = {};
-        pageData.isReadonly = isReadonly;
         var pkVal = "";
         var webUser = new WebUser();
         $(function () {
@@ -135,6 +134,7 @@
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
             //修改页面样式
+            debugger
             if ($("ul.tabs").length != 0) {
                 var li = $("<li style='float:right !important;z-index:999; top:0px' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
                 li.append($("#Btns").children());
@@ -144,7 +144,7 @@
                 $("#Btns").remove();
 
             } else {
-                $("#CCFormTabs").parent().parent().parent().css("cssText", "top:35px !important");
+                $("#CCFormTabs").css("top", "35px");
             }
 
 
@@ -293,20 +293,32 @@
 
                     if (uiBindKey.toLowerCase().indexOf("select") == -1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
-                        var webUser = new WebUser();
+                         var pushData;
+                        if(mapAttr.UIIsEnable=="1"){
+                            var webUser = new WebUser();
+                            var ens = new Entities(uiBindKey);
+                            ens.RetrieveAll();
+                            if (webUser.No == "admin")
+                                pushData = findChildren(ens, "0");
+                            else
+                                pushData = findChildren(ens, webUser.FK_Dept);
+                        }else{
+                            pushData=[];
+                            var selectText = frmData.MainTable[0][mapAttr.KeyOfEn + "Text"];
+                            if (defValue == null)
+                                defValue="";
+                            if (selectText == null || selectText == "") {
+                                selectText = defValue;
+                            }
+                            
+                            pushData.push({ "id": defValue, "text": selectText, "children": [] });
+                            if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0 && defValue!="")  
+                                $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
 
-
-                        var ens = new Entities(uiBindKey);
-                        ens.RetrieveAll();
-
-                        var pushData;
-                        if (webUser.No == "admin")
-                            pushData = findChildren(ens, "0");
-                        else
-                            pushData = findChildren(ens, webUser.FK_Dept);
+                        }
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
                         if (mapAttr.UIIsEnable == 0)
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
+                           $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
                         var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
@@ -394,9 +406,15 @@
                         $('#TB_' + param[0]).val(realVal);
                         $('#DDL_' + param[0]).val(realVal);
                         if ($('#DDL_' + param[0]).hasClass("easyui-combotree") == true) {
+                            if ($("option[value='" + realVal + "']", '#DDL_' + param[0]).length == 0) {
+                                var pushData = [];
+                                pushData.push({ "id": realVal, "text": realVal, "children": [] });
+                                $('#DDL_' + param[0]).combotree('loadData', pushData);
+                            }
                             $('#DDL_' + param[0]).combotree('setValue', realVal);
-                            $('#DDL_' + param[0]).combotree('select', realVal);
+
                         }
+                      
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
                             if (obj != null)
@@ -986,6 +1004,18 @@
 
                 }
 
+                //获取树形结构的表单值
+                var combotrees = $(".easyui-combotree");
+                $.each(combotrees, function (i, combotree) {
+                    var name = $(combotree).attr('id');
+                    var tree = $('#' + name).combotree('tree');
+                    //获取当前选中的节点
+                    var data = tree.tree('getSelected');
+                    if (data != null) {
+                        en[name] = data.id;
+                    }
+                });
+
                 var info = en.Insert();
                 if (info.toString().indexOf("err@") != -1) {
                     return;
@@ -1021,6 +1051,17 @@
             en.CopyForm();
             en.pkval = pkval;
             en.SetPKVal(pkval);
+            //获取树形结构的表单值
+            var combotrees = $(".easyui-combotree");
+            $.each(combotrees, function (i, combotree) {
+                var name = $(combotree).attr('id');
+                var tree = $('#' + name).combotree('tree');
+                //获取当前选中的节点
+                var data = tree.tree('getSelected');
+                if (data != null) {
+                    en[name] = data.id;
+                }
+            });
 
             var info = en.Update();
             if (info == 0) {

@@ -126,14 +126,14 @@
             }
 
             var html = "";
-            if (md.RptIsSearchKey == "1")
+            if (md.IsSearchKey == "1")
                 html += "<label for='TB_Key'>关键字:</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + searchUR.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
 
-            if (md.RptDTSearchWay != "0") {
+            if (md.DTSearchWay != "0") {
 
                 html += md.T_DateLabel;
 
-                if (md.RptDTSearchWay == "1") {
+                if (md.DTSearchWay == "1") {
                     html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + md.T_DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />";
                     html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + md.T_DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
                 } else {

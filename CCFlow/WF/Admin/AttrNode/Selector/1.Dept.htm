@@ -36,8 +36,8 @@
             <fieldset v-show="orgModel===1">
                 <legend>设置（组织管理员）</legend>
                 <ul>
-                    <li><a href="#" @click="BindDeptTreeGroup()">设置集团部门</a> </li>
-                    <li><a href="#" @click="BindDeptTreeGroupLazy()">设置集团部门(懒加载)</a> </li>
+                    <li v-show="isShow"><a href="#" @click="BindDeptTreeGroup()">设置集团部门</a> </li>
+                    <li v-show="isShow"><a href="#" @click="BindDeptTreeGroupLazy()">设置集团部门(懒加载)</a> </li>
                     <li><a href="#" @click="BindDeptTree()">设置本组织部门</a> </li>
                     <li><a href="#" @click="BindDeptTreeLazy()">设置本组织部门(懒加载)</a> </li>
                 </ul>
@@ -72,7 +72,8 @@
                 orgModel: 0,
                 depts: [],
                 webuser: null,
-                deliverWay: SelectorModel.Dept
+                deliverWay: SelectorModel.Dept,
+                isShow:true
             },
             methods: {
                 OpenNew: function () {
@@ -158,6 +159,7 @@
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
                 var orgNo = this.webuser.No == "admin" ? null : this.webuser.OrgNo
                 this.depts = getDepts(orgNo);
+                this.isShow = this.webuser.CCBPMRunModel == 2 ? false : true;
 
             }
         });

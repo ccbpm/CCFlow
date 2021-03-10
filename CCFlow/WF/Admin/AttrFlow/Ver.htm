@@ -98,8 +98,10 @@
 
         function changeOrOpenTab(flowName, flowNo) {
             //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+            var webUser = new WebUser();
             var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
-                + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+                + "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" +.webUser.OrgNo;
+
             window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
                 "icon-flow1");
         }
@@ -180,7 +182,7 @@
         <input id="Btn_New" type="button" value="新建版本" onclick="NewVer();" />
         <input id="Btn_Help" type="button" value="帮助" onclick="More();" />
     </div>
-    
+
 
     <div style="position:relative;" id="Msg"></div>
 

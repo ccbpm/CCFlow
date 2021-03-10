@@ -14,8 +14,8 @@
     <!--jquery-->
     <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../Comm/JS/layer/layer.js" type="text/javascript"></script>
-    <link href="../Comm/JS/layer/layer.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <!--bootstrap-table-->
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"
@@ -88,7 +88,7 @@
 
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
             ur.OrderBy = "";
             ur.OrderWay = "";
@@ -102,7 +102,7 @@
             if (pageSize == "" || pageSize == undefined)
                 pageSize = "10";
 
-            
+
             //显示查询数据
             BindTable();
 
@@ -156,17 +156,17 @@
 
             var html = "";
 
-            
+
 
             html += "<tr>";
             var atPara = mapData[0].AtPara;
 
             var count = 0;//计算是否换行
 
-            var stringSearchKeys = GetPara(atPara, "RptStringSearchKeys");
+            var stringSearchKeys = GetPara(atPara, "StringSearchKeys");
             if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
                 var strs = stringSearchKeys.split("*");
-                var fieldV=""
+                var fieldV = ""
                 $.each(strs, function (i, str) {
                     if (str != "") {
                         var item = str.split(",");
@@ -174,10 +174,10 @@
                         if (fieldV == null || fieldV == undefined)
                             fieldV = "";
                         if (item.length == 2) {
-                            
+
                             fields.push(item[0]);
-                             html +="<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_"+item[0]+"'>" + item[1] + ":&nbsp;&nbsp</label></td>"
-                             html += "<td align='left'><input style='width:100%;' type=text id='TB_"+item[0]+"'  name='TB_"+item[0]+"' value='" + fieldV + "' class='form-control' /></td>";
+                            html += "<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + item[0] + "'>" + item[1] + ":&nbsp;&nbsp</label></td>"
+                            html += "<td align='left'><input style='width:100%;' type=text id='TB_" + item[0] + "'  name='TB_" + item[0] + "' value='" + fieldV + "' class='form-control' /></td>";
                             count++;
                             if (count == 4) {
                                 html += "</tr>";
@@ -187,13 +187,13 @@
                         }
                     }
                 });
-               
 
-            }else if (GetPara(atPara, "IsSearchKey") == "1") {
+
+            } else if (GetPara(atPara, "IsSearchKey") == "1") {
 
                 var keyLabel = GetPara(atPara, "DTSearchLabel");
                 var keyLabel = "关键字";
-                html +="<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":&nbsp;&nbsp</label></td>"
+                html += "<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":&nbsp;&nbsp</label></td>"
                 html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
                 count++;
             }
@@ -213,7 +213,7 @@
                     html += "<td align='left' style='width:160px'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:160px;' class='form-control Wdate' /></td>";
                     html += "<td align='right'><label>到&nbsp;&nbsp;</label></td><td align='left'><input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:160px;' class='form-control Wdate' /></td>";
                 }
-                count = count+2
+                count = count + 2
                 if (count == 4 || count > 4) {
                     html += "</tr>";
                     html += "<tr>";
@@ -221,7 +221,7 @@
                 }
             }
 
-           
+
             //增加外键
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
@@ -240,7 +240,7 @@
                     count = 0;
                 }
             }
-            
+
 
             //增加按钮.
             html += '<td align="left" colspan=2 style="padding-top:4px"><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
@@ -254,7 +254,7 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
-            
+
 
             //权限判断按钮.
             if (parseInt(powerData.IsInsert) == 1)
@@ -298,7 +298,7 @@
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
 
-                if ((selectVal == undefined || selectVal == "") && attr.Field!="FK_Dept")
+                if ((selectVal == undefined || selectVal == "") && attr.Field != "FK_Dept")
                     $("#DDL_" + attr.Field).val("all");
                 else
                     $("#DDL_" + attr.Field).val(selectVal);
@@ -311,7 +311,7 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            if (mapAttr.Field!="FK_Dept")
+            if (mapAttr.Field != "FK_Dept")
                 operations += "<option value='all' >全部</option>";
 
             var ens = frmData[mapAttr.Field];
@@ -337,10 +337,10 @@
             //保存查询条件.
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
-            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length==0)
+            if ($("#TB_Key") != null && $("#TB_Key").val() != "" && fields.length == 0)
                 ur.SearchKey = $("#TB_Key").val();
             else
                 ur.SearchKey = "";
@@ -370,7 +370,7 @@
                     if ($("#TB_" + field + "_0").val() == "" && $("#TB_" + field + "_1").val() == "")
                         ur.SetPara(field, "");
                     else
-                        ur.SetPara(field, $("#TB_" + field+"_0").val()+","+$("#TB_" + field+"_1").val());
+                        ur.SetPara(field, $("#TB_" + field + "_0").val() + "," + $("#TB_" + field + "_1").val());
                 }
             }
 
@@ -408,7 +408,7 @@
             }
             ur.Update();
 
-           
+
 
             //查询集合
             var data = handler.DoMethodReturnString("Search_Init");
@@ -420,7 +420,7 @@
             data = JSON.parse(data);
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
 
@@ -434,7 +434,7 @@
 
             if (firstLoadTable) {
                 $('#dg').bootstrapTable("load", data["DT"]);
-                return ;
+                return;
             }
 
             //设置查询总数居的合计、平均等信息
@@ -465,7 +465,7 @@
 
             if (pageIdx == "" || pageIdx == undefined)
                 pageIdx = "1";
-            
+
 
             var mapdata = SearchData();
             var attrs = mapdata["Attrs"];
@@ -476,13 +476,13 @@
             }
 
             var keyOfEn = "";
-           
+
             var firstColumns = new Array();
             var secondColumns = new Array();
             var threeColumns = new Array();
 
             var sortColumns = frmBill.SortColumns; //排序字段
-            var fieldColumns={
+            var fieldColumns = {
                 title: '序',
                 field: '',
                 align: 'center',
@@ -584,7 +584,7 @@
                             var val = row[this.field + "Text"];
                             if (val == undefined || val == null)
                                 val = row[this.field + "T"];
-                           
+
                             if (val == undefined || val == null)
                                 return value;
                             else
@@ -595,7 +595,7 @@
                     continue;
                 }
                 if (attr.UIContralType == 2) {
-                    fieldColumns ={
+                    fieldColumns = {
                         field: field,
                         title: title,
                         width: attr.Width,
@@ -615,7 +615,7 @@
                 if (width == null || width == "" || width == undefined)
                     width = 100;
 
-                fieldColumns ={
+                fieldColumns = {
                     field: field,
                     title: title,
                     width: attr.Width,
@@ -665,7 +665,7 @@
 
                     if (IsDelete == true)
                         _Html += '<a href="javaScript:void(0);" onclick="Delete(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-trash"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//删除
-                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\'' + frmID + '\','+row["BillState"]+')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
+                    _Html += '<a href="javaScript:void(0);" onclick="OpenIt(' + row["OID"] + ',\'' + frmID + '\',' + row["BillState"] + ')"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//查看
                     _Html += '<a href="javaScript:void(0);" onclick="CopyBill(' + row["OID"] + ',\'' + frmID + '\')"><i class="glyphicon glyphicon-random"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;';//复制
                     return _Html;
                 }
@@ -730,7 +730,7 @@
                             paras += "&" + attr.KeyOfEn + "=" + row[attr.KeyOfEn];
                     }
 
-                    OpenIt(pkval, frmID,row["BillState"]);
+                    OpenIt(pkval, frmID, row["BillState"]);
                 }
 
             });
@@ -820,7 +820,8 @@
                         field: '',
                         align: 'center',
                         colspan: colspan,
-                        rowspan: secRowSpan
+                        rowspan: secRowSpan,
+                        width: (colspan + 2) * 100
                     });
                 } else {
                     isSecChange = false;
@@ -839,6 +840,7 @@
                             field: '',
                             align: 'center',
                             colspan: colspan,
+                            width: (colspan + 2) * 100
                         }
 
                         curTreGroup = filds[0];
@@ -863,6 +865,7 @@
                         field: '',
                         align: 'center',
                         colspan: secfilds.length - 1,
+                        width: (secfilds.length + 2) * 100,
                         rowspan: secRowSpan
                     });
                 }
@@ -943,12 +946,12 @@
                 onPageClicked: function (event, originalEvent, type, page) {
                     pageIdx = page;
                     SearchData();
-                    $('#page_info').html("").append("<li class='disabled controls'>" +selects+"当前第" + pageIdx + "页，总共" + pages +
+                    $('#page_info').html("").append("<li class='disabled controls'>" + selects + "当前第" + pageIdx + "页，总共" + pages +
                         "页,总共" + count + "条记录。</li>");
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
-            $('#page_info').html("").append("<li class='disabled controls'>" +selects+"当前第" + pageIdx + "页，总共" + pages +
+            $('#page_info').html("").append("<li class='disabled controls'>" + selects + "当前第" + pageIdx + "页，总共" + pages +
                 "页,总共" + count + "条记录。</li>");
 
             $("#DDL_PageSize").val(pageSize);
@@ -959,7 +962,7 @@
         function changePageSie() {
             pageSize = $("#DDL_PageSize").val();
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No+ frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
             ur.SetPara("PageSize", pageSize);
             ur.Update();
@@ -991,8 +994,19 @@
 
 
         function New() {
-
             var frmID = GetQueryString("FrmID");
+            //选择实体表单然后填写单据
+            if (frmBill.RefDict != null && frmBill.RefDict != undefined && frmBill.RefDict != "") {
+                //关联实体表单，选择表单填写信息
+                var W = document.body.clientWidth - 40;
+                var H = document.body.clientHeight - 40;
+                var url = "RefDict.htm?FrmID=" + frmBill.RefDict + "&FK_MapData=" + frmBill.RefDict + "&BillID=" + frmID;
+                OpenBootStrapModal(url, "eudlgframe", frmBill.Name, W, H, "icon-property", null, null, null, function () {
+                    window.location.href = window.location.href;
+                }, null, "black");
+                return;
+            }
+           
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
             var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
@@ -1073,8 +1087,8 @@
 
         function OpenIt(workid, frmID, billstate) {
             var IsReadonly = "0";
-            if (billstate != null && billstate != undefined && billstate ==100)
-                IsReadonly="1"
+            if (billstate != null && billstate != undefined && billstate == 100)
+                IsReadonly = "1"
             //RowOpenModel  0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭
             var rowOpenModel = parseInt(frmBill.RowOpenModel);
             var url = "";

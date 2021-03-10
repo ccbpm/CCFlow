@@ -20,39 +20,40 @@
             if (frmType == null || frmType == "")
                 frmType = 0;
 
-            //{
-            //    alert("FrmType参数没有传递过来.");
-            //    return;
-            //}
-
             //实体类型.
             entityType = GetQueryString("EntityType");
             if (entityType == null || entityType == undefined)
                 entityType = 0;
 
+            //if (entityType == 1 || entityType == 2) {
+
+            var option2 = document.createElement("option");
+            $(option2).val('8');
+            $(option2).text('开发者表单');
+            $('#DDL_FrmType').append(option2);
+
+
+            //先创建好select里面的option元素
+            var option = document.createElement("option");
+            $(option).val('0');
+            $(option).text('傻瓜表单');
+            $('#DDL_FrmType').append(option);
+
+            var option1 = document.createElement("option");
+            $(option1).val('1');
+            $(option1).text('自由表单');
+            $('#DDL_FrmType').append(option1);
+
+            //$("#DDL_FrmType").it;
+            //  }
+
+            var webUser = new WebUser();
+
+            var dd = webUser.CCBPMRunModel;
+
             //创建表单类型.
-            if (entityType == 0) {
+            if (entityType == 0 && webUser.CCBPMRunModel != 2) {
                 GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
-            }
-
-            if (entityType == 1 || entityType == 2) {
-
-                //先创建好select里面的option元素
-                var option = document.createElement("option");
-                $(option).val('0');
-                $(option).text('傻瓜表单');
-                $('#DDL_FrmType').append(option);
-
-                var option1 = document.createElement("option");
-                $(option1).val('1');
-                $(option1).text('自由表单');
-                $('#DDL_FrmType').append(option1);
-
-                var option2 = document.createElement("option");
-                $(option2).val('8');
-                $(option2).text('开发者表单');
-                $('#DDL_FrmType').append(option2);
-                //$("#DDL_FrmType").it;
             }
 
             var caption = "";
@@ -66,11 +67,8 @@
                 caption.innerHTML = "创建实体台账: 比如:学生台账、供应商、销售网点等,具有编号名称类型的数据.";
             }
 
-            //http://localhost:2207/WF/Admin/CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=2&FK_FrmSort=1133
-
             //创建数据源.
             // GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
-
             // var sort = GetQueryString("FK_FrmSort");
             // $("#HD_FK_FormTree").val(sort);
             //创建表单树.
@@ -89,7 +87,7 @@
 
             var tables = data["Tables"];
             for (var i = 0; i < tables.length; i++) {
-                
+
             }
             GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
             return;

@@ -7,22 +7,33 @@ var isCanSend = true; //是否可以发送？
 var isChange = false;
 var frmWorkCheck;
 
-//var FWCVer = null;
 
 var checkParam = {
     FK_Flow: GetQueryString("FK_Flow"),
     FK_Node: GetQueryString("FK_Node"),
     WorkID: GetQueryString("WorkID"),
     FID: GetQueryString("FID"),
-    IsReadonly: GetQueryString("IsReadOnly") != null && GetQueryString("IsReadOnly") != undefined && GetQueryString("IsReadOnly") == "1" ? true : false,
+    IsReadonly: IsReadOnly(),
     IsCC: GetQueryString("IsCC")
 };
 
+//是否只读?
+function IsReadOnly() {
+    //如果是MyFlowView 或者是MyCC 就把该控件设置为只读的.
+    var url = window.location.href;
+    if (url.indexOf('MyViewGener') != -1 || url.indexOf('MyCC') != -1 || url.indexOf('MyFrm') != -1) {
+        return true;
+    }
+    var val = GetQueryString("IsReadOnly") != null && GetQueryString("IsReadOnly") != undefined && GetQueryString("IsReadOnly") == "1" ? true : false;
+    return val;
+}
+ 
+
 //审核组件页面初始化
-$(function () {
+$(function() {
     var FWCVer = null;
     if (FWCVer == null) {
-        var node = new Entity("BP.WF.Node",checkParam.FK_Node);
+        var node = new Entity("BP.WF.Node", checkParam.FK_Node);
         if (node != null && (node.FWCVer == 0 || node.FWCVer == "" || node.FWCVer == undefined))
             FWCVer = 0;
         else
@@ -33,7 +44,7 @@ $(function () {
 
     //当前节点审核组件信息
     frmWorkCheck = checkData.WF_FrmWorkCheck[0];
-
+    
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
     var SignType = checkData.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
@@ -43,8 +54,8 @@ $(function () {
     //轨迹数据
     if (tracks.length != 0) {
         _Html += '<table style="width:100%">';
-        $.each(tracks, function (idx, item) {
-            _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType, 1, true);
+        $.each(tracks, function(idx, item) {
+            _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType, 1, true, FWCVer);
         });
         _Html += "</table>";
 
@@ -58,7 +69,7 @@ $(function () {
 
     if ($("#WorkCheck_Doc").length > 0) {
         if (frmWorkCheck.FWCIsFullInfo == 1 && frmWorkCheck.FWCDefInfo && frmWorkCheck.FWCDefInfo.length > 0) {
-            SaveWorkCheck();
+            SaveWorkCheck(0);
         }
     }
 
@@ -93,8 +104,9 @@ function WorkCheck_Init(FWCVer) {
     return JSON.parse(data);
 
 }
-
-function GetWorkCheck_Node(checkData, keyOfEn, checkField,FWCVer) {
+var map = {}; //求出来要输出的1 人1意见的最后数据.
+//签批组件专用方法.
+function GetWorkCheck_Node(checkData, keyOfEn, checkField, FWCVer) {
     //当前节点审核组件信息
     var frmWorkCheck = checkData.WF_FrmWorkCheck[0];
     var isShowCheck = false;
@@ -104,7 +116,6 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField,FWCVer) {
         isShowCheck = true;
     }
 
-
     var tracks = checkData.Tracks;
     var aths = checkData.Aths;
     var SignType = checkData.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
@@ -112,17 +123,65 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField,FWCVer) {
         return "";
     var _Html = '<table style="width:100%">';
 
-    for (var i = 0; i < tracks.length; i++) {
-        var track = tracks[i];
+    /*
+ * 如果一个人有两个意见，在一个节点上，就需要显示最后一个意见.
+ * 创建一个 Hasthable. Key=操作员的ID (EmpFrom),  Val = MyPK 的值.
+ * 
+ *  第一遍遍历，获取到这个 ht 
+ * 
+ */
+    var tracksArr = unique(tracks);
+    for (var i = 0; i < tracksArr.length; i++) {
+        var track = tracksArr[i];
         if ($("#TB_" + keyOfEn).length != 0 && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
             continue;
-        _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck,FWCVer);
+        _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
+        //var empNo = track.EmpFrom;
+        /*if (ht.包含  key = EmpNo ) //如果ht 有这个empNo.
+          ht.Add(empNo, track.MyPK);
+        else*/
+
+        /* if (i == 0) {
+             map[empNo] = track.MyPk;
+         }
+         //如果遍历map
+         for (var prop in map) {
+             //map.hasOwnProperty(prop) && 
+             if (prop == empNo)
+                 continue;
+ 
+             map[empNo] = track.MyPk;
+             break;
+         }
+     }
+     // 根据ht 输出数据。
+     for (var i = 0; i < tracks.length; i++) {
+         var track = tracks[i];
+         if ($("#TB_" + keyOfEn).length != 0 && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
+             continue;
+         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
+         var mypk = track.MyPk;
+ 
+         *//* if (ht 包含 myp == false)
+         continue;*//*
+       // 如果遍历map
+       for (var prop in map) {
+           //map.hasOwnProperty(prop) && 
+           if (map[prop] == mypk || (mypk == null && map[prop] == null)) {
+               _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
+               break;
+           } else {
+               continue;
+           }
+       }*/
     }
+
     _Html += "</table>";
     return _Html;
 
 }
-function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isShowCheck,FWCVer) {
+function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isShowCheck, FWCVer) {
+    debugger
     var _Html = "";
     //解析节点上传的附件
     var subaths = GetSubAths(track.NodeID, aths);
@@ -161,7 +220,12 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         if (frmWorkCheck.FWCAth == 1) {
             _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel + "' onmouseover='UploadFileChange(this)'></div>";
         }
-        _Html += "<div style='float:right'><a onmouseover = 'AddCommUseWord(\"" + checkParam.FK_Node + "\",\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
+        debugger
+        if ("undefined" == typeof IsShowWorkCheckUsefulExpres) {
+            IsShowWorkCheckUsefulExpres = true;
+        }
+        if (IsShowWorkCheckUsefulExpres == true)
+            _Html += "<div style='float:right'><a onmouseover = 'UsefulExpresFlow(\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
 
         _Html += "<div style='float:left;width:100%;'>";
         var msg = track.Msg;
@@ -170,7 +234,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         else
             msg = msg.replace(/<BR>/g, '\t\n');
 
-        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='color:blue;width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";'>";
+        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='color:blue;width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck(0)' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";'>";
         _Html += msg;
         _Html += "</textarea>";
         _Html += "<br>";
@@ -201,11 +265,11 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 if (str[i] == "")
                     continue;
                 var check = "";
-                if (fwcView != "" && idx == parseInt(fwcView))
+                if (fwcView != "" && str[i] == fwcView)
                     check = "checked = checked";
                 else if (fwcView == "" && idx == 0)
                     check = "checked = checked";
-                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck(0)' value='" + idx + "'/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
                 idx++;
             }
         }
@@ -244,11 +308,11 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 if (str[i] == "")
                     continue;
                 var check = "";
-                if (fwcView != "" && idx == parseInt(fwcView))
+                if (fwcView != "" && str[i] == fwcView)
                     check = "checked = checked";
                 else if (fwcView == "" && idx == 0)
                     check = "checked = checked";
-                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck()' value='" + idx + "' disabled/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
+                _Html += "<input type='radio' id='RB_FWCView_" + idx + "' name ='RB_FWCView' " + check + " onclick='SaveWorkCheck(0)' value='" + idx + "' disabled/>" + str[i] + "&nbsp;&nbsp;&nbsp;";
                 idx++;
             }
         }
@@ -273,8 +337,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //输出签名,没有签名的要求.
     if (SignType == null || SignType == undefined) {
 
-
-
         //签名，日期.
         //_Html += "<tr>";
         if (track.RDT == "")
@@ -287,8 +349,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         else if (frmWorkCheck.SigantureEnabel == "1")
             _Html += GetUserSiganture(track.EmpFrom, track.EmpFromT);
         else if (frmWorkCheck.SigantureEnabel == "2")
-            _Html += GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT);
-
+            _Html += GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT, track.EmpFrom);
         var rdt = track.RDT.substring(0, 16);
         if (rdt == "") {
             var dt = new Date();
@@ -334,7 +395,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
 
                 _Html += "<tr>";
                 _Html += "<td style='text-align:left;height:35px;line-height:35px;'>" + track.DeptName + "<div style='float:right'>签名:"
-                    + GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT);
+                    + GetUserHandWriting(track, isEditWorkCheck, track.EmpFromT, track.EmpFrom);
                 + "日期:" + (track.IsDoc ? "<span id='rdt'>" : "") + rdt + (track.IsDoc ? "</span>" : "") + "</div></td>";
                 _Html += "</tr>";
                 //  alert('电子签名的逻辑尚未编写.');
@@ -377,47 +438,47 @@ function SetDocVal() {
 
 
 
-function SaveWorkCheck() {
-
-    if ($("#WorkCheck_Doc").length == 0){//审核组件只读
+function SaveWorkCheck(type) {
+    var ToNodeName=  $("#DDL_ToNode option:selected").text()
+    if ($("#WorkCheck_Doc").length == 0 || ToNodeName == "旁签辅签") {//审核组件只读
         isCanSend = true;
-        return ;
+        return;
     }
-
-
-    if (frmWorkCheck.SigantureEnabel == "2" && writeImg == "") {
-        alert("请点击签字版签名");
-        isCanSend = false;
-        return ;
-    }
-
     var doc = $("#WorkCheck_Doc").val();
-    if (doc == "") {
+    if (doc == "" && frmWorkCheck.SigantureEnabel == "2" && writeImg == "") {
         alert("请填写审核意见");
         isCanSend = false;
         return;
     }
     doc = doc.replace(/'/g, '');
-
-    if (checkParam.IsReadonly == true){
-        isCanSend = true;
-        return ;
+    if (doc == "" && type != 0 && frmWorkCheck.SigantureEnabel == "2" && writeImg == "") {
+        alert("请点击签字版签名");
+        isCanSend = false;
+        return;
     }
-    if (checkParam.WorkID == null || checkParam.WorkID == undefined || checkParam.WorkID == 0){
+    if (checkParam.IsReadonly == true) {
         isCanSend = true;
-        return ;
+        return;
+    }
+    if (checkParam.WorkID == null || checkParam.WorkID == undefined || checkParam.WorkID == 0) {
+        isCanSend = true;
+        return;
     }
 
 
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
     handler.AddJson(checkParam);
+    handler.AddPara("HandlerName", GetQueryString("HttpHandlerName"));
     handler.AddPara("Doc", doc);
     if (writeImg == null && writeImg == undefined)
         writeImg = "";
     else
         writeImg = writeImg.replace(/[+]/g, "~");
     handler.AddPara("WriteImg", writeImg);
+    if ($("input[name='RB_FWCView']").length != 0) {
+        handler.AddPara("FWCView", $("input[name='RB_FWCView']:checked")[0].nextSibling.nodeValue);
+    }
     var data = handler.DoMethodReturnString("WorkCheck_Save");
 
     if (data.indexOf('err@') != -1) {
@@ -429,7 +490,7 @@ function SaveWorkCheck() {
     if (data.length > 0) {
         $("#rdt").text(data);
     }
-    isCanSend =true;
+    isCanSend = true;
     return;
 }
 
@@ -484,16 +545,28 @@ function GetUserSiganture(userNo, userName) {
     return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo + "' />";
 }
 
-var writeImg = "";
+
 //签字版
-function GetUserHandWriting(track, isEditWorkCheck, userName) {
+function GetUserHandWriting(track, isEditWorkCheck, userName, userNo) {
+    //debugger;
     if (isEditWorkCheck == false) {
         if (track.WritImg == null || track.WritImg == "")
             return userName;
         return "<img src='" + track.WritImg.replace(/' '/, '') + "'  style='height:40px;' border=0  />";
     }
     writeImg = track.WritImg;
-    return "<img id='Img_WorkCheck' src='" + track.WritImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:40px;'  />";
+    var src = track.WritImg;
+    if (writeImg == "" || writeImg == null) {
+        src = "Siganture\\" + userNo + ".jpg";
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+        handler.AddPara("src", src);
+        var data = handler.DoMethodReturnString("ImageDatabytes");
+        if (data != "" && data.indexOf("err@") == -1)
+            writeImg = "data:image/png;base64," + data;
+        //将二进制流存入缓存中
+        window.localStorage.setItem("writeImg", writeImg);
+    }
+    return "<img id='Img_WorkCheck' src='" + writeImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnSiganture.jpg'\"  style='border:0px;height:40px;'  />";
 }
 
 function openHandWriting() {
@@ -510,7 +583,7 @@ function GetSubAths(nodeID, aths) {
     var subAths = [];
 
     //1.获取节点上传的附件
-    $.each(aths, function () {
+    $.each(aths, function() {
         if (this.NodeID == nodeID) {
             subAths.push(this);
         }
@@ -518,7 +591,7 @@ function GetSubAths(nodeID, aths) {
 
     //2.解析上传的附件
     var _Html = '';
-    $.each(subAths, function () {
+    $.each(subAths, function() {
         _Html += GetAthHtml(this);
     });
 
@@ -572,9 +645,9 @@ function AddUploadify(divid, fwcShowModel) {
             'height': 18,
             'multi': true,
             'queueSizeLimit': 999,
-            'onDialogOpen': function (a, b) {
+            'onDialogOpen': function(a, b) {
             },
-            'onQueueComplete': function (queueData) {
+            'onQueueComplete': function(queueData) {
                 isChange = true;
 
                 GetNewUploadedAths(queueData.files, fwcShowModel);
@@ -654,13 +727,13 @@ function UploadChange(fwcShowModel) {
         processData: false,
         // 告诉jQuery不要去设置Content-Type请求头
         contentType: false,
-        beforeSend: function () {
+        beforeSend: function() {
             console.log("正在进行，请稍候");
         },
-        success: function (responseStr) {
+        success: function(responseStr) {
             GetNewUploadedAths(fileObj, fwcShowModel)
         },
-        error: function (responseStr) {
+        error: function(responseStr) {
             if (responseStr.indexOf('err@') != -1)
                 alert(responseStr);
         }
@@ -705,7 +778,7 @@ function GetNewUploadedAths(files, fwcShowModel) {
 
     $("#aths_" + checkParam.FK_Node).parent().removeAttr("style");
 
-    $.each(naths, function () {
+    $.each(naths, function() {
         $("#aths_" + checkParam.FK_Node).append(GetAthHtml(this));
     });
 
@@ -731,6 +804,20 @@ function WorkCheck_CheckPass() {
     isCanSend = true;
     //签名成功后，就需要把图片显示出来.
 
+}
+function unique(arr) {
+    var tracksArr = arr;
+    for (var i = 0, len = tracksArr.length; i < len; i++) {
+        for (var j = i + 1, len = tracksArr.length; j < len; j++) {
+            if (tracksArr[i].EmpFrom === tracksArr[j].EmpFrom) {
+                tracksArr.splice(j, 1);
+                j--;        // 每删除一个数j的值就减1
+                len--;      // j值减小时len也要相应减1（减少循环次数，节省性能）   
+                // console.log(j,len)
+            }
+        }
+    }
+    return tracksArr;
 }
 
 

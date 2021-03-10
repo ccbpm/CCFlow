@@ -31,6 +31,7 @@
             var fk_flow = GetQueryString("FK_Flow");
             var doWhat = GetQueryString("DoWhat");
             var userNo = GetQueryString("UserNo");
+            var sid = GetQueryString("SID");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             //debugger;
@@ -39,8 +40,9 @@
 
             if (data.indexOf('err@') == 0) {
 
+
                 if (data.indexOf('访问规则') > 0) {
-                    document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                    $("#Msg").html('<font color=red>' + data + '</font>');
                     return;
                 }
 
@@ -51,7 +53,10 @@
                     return;
                 }
 
-                document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
+                var msg = "<font color=red>" + data + "</font>";
+                msg += "<br/><a href='javascript:SetTester()'>设置发起的测试人员</a>";
+
+                $("#Msg").html('<font color=red>' + msg + '</font>');
                 return;
             }
 
@@ -104,12 +109,18 @@
         //发起流程。
         function StartIt(empNo) {
 
+            // var webUser = new WebUser();
+            //  alert(webUser.SID);
+            //  return;
+
+            var sid = GetQueryString("SID");
+
             $("#Btn_Reset").val("正在以[" + empNo + "]启动流程,请稍候....");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("UserNo", empNo);
-            handler.AddPara("SID", SID);
+            handler.AddPara("SID", sid);
             var data = handler.DoMethodReturnString("TestFlow2020_StartIt");
 
             if (data.indexOf('访问规则') > 0) {
@@ -131,13 +142,26 @@
 
             $("#Btn_Reset").val("正在加载请稍候....");
 
-
             var en = new Entity("BP.WF.Template.FlowExt", GetQueryString("FK_Flow"));
             en.Tester = "";
             en.Update();
             window.location.href = window.location.href;
         }
 
+        //设置可以发起的测试人员.
+        function SetTester() {
+
+            var webUser = new WebUser();
+            var msg = "请输入测试人员的帐号，多个人员用逗号分开";
+            msg += "\t\n 比如:zhangsan,lisi";
+            msg += "\t\n 帐号就是登录该系统的编号，如果输入的帐号没有发起该流程的权限，系统就会提示错误。";
+            var emps = window.prompt(msg, webUser.No);
+
+            var en = new Entity("BP.WF.Template.FlowExt", GetQueryString("FK_Flow"));
+            en.Tester = emps;
+            en.Update();
+            window.location.href = window.location.href;
+        }
 
         function ToParaTest() {
             var url = "TestCase.htm?FK_Flow=" + GetQueryString("FK_Flow");
@@ -149,7 +173,8 @@
 <body onkeypress="Esc()">
 
     <center>
-        <div style="float:left; padding-left:70px;">
+
+        <div style="float:left; padding-left:70px;" id="titleH4">
             <h4><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />能发起该流程的人员列表(<font color=red><a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');">提示</a></font>)  </h4>
         </div>
 

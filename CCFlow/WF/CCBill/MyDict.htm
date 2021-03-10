@@ -61,6 +61,13 @@
 
         var frmBill = null;
         var webUser = new WebUser();
+        var isReadonly = GetQueryString("IsReadonly");
+        if (isReadonly == null || isReadonly == undefined || isReadonly == "")
+            isReadonly = "0";
+        var pageFrom = GetQueryString("PageFrom");
+        var isShowDelete = false;
+        if (pageFrom == null || pageFrom == undefined || pageFrom == "" || pageFrom != "FrmSearch")
+            isShowDelete = true;
  
         //初始化函数
         $(function () {
@@ -71,7 +78,7 @@
 
             //判断是否有WorkID.
             var workID = GetQueryString("WorkID");
-            if (workID == null || workID == undefined)
+            if (workID == null || workID == undefined || workID=="0")
                 workID = 0;
 
             if (workID == 0 || workID === "") {
@@ -80,13 +87,14 @@
                 handler.AddUrlData();
                 var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
 
-                if (workID.indexOf('err@') != 0) {
+                if (workID.indexOf('err@')>-1) {
                     alert(workID);
                     return;
                 }
                 var url = window.location.href;
-                url = url.replace("&WorkID=", "");
-                url = url.replace("&OID=", "");
+                url = url.replace("&WorkID=", "&WorkIDXX=");
+                url = url.replace("&OID=", "&OIDXX=");
+
                 url = url + "&WorkID=" + workID + "&OID=" + workID;
                 window.location.href = url;
                 return;
@@ -117,14 +125,14 @@
             //$("#Title").html(html);
 
             //当前是归档状态.
-            if (power.IsInsert == 1) {
+            if (power.IsInsert == 1 && isReadonly==0) {
                 var btnNew = frmBill.BtnNewLable;
                 if (btnNew == null || btnNew == "" || btnNew == undefined)
                     btnNew = "新增";
                 toolBar += "<input type=button value='" + btnNew + "' onclick='NewIt();' />";
             }
 
-            if (power.IsSave == 1) {
+            if (power.IsSave == 1 && isReadonly == 0) {
                 var btnSave = frmBill.BtnSaveLable;
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
@@ -137,7 +145,7 @@
             //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
             //}
 
-            if (power.IsSubmit == 1) {
+            if (power.IsSubmit == 1 && isReadonly == 0) {
                 var btnSubmit = frmBill.BtnSubmitLable;
                 if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
                     btnSubmit = "提交";
@@ -154,7 +162,7 @@
             if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
 
             //是初始化状态.
-            if (power.IsDelete == 1)
+            if (power.IsDelete == 1 && isReadonly == 0 && isShowDelete)
                 toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
 
             if (frmBill.BtnSearchEnable == 1)
@@ -178,6 +186,14 @@
             if (frmBill.BtnExpZipEnable == 1)
                 toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
 
+            //获取表单关联的流程
+            var dictFlows = new Entities("BP.CCBill.Template.DictFlows");
+            dictFlows.Retrieve("FrmID", frmID);
+            $.each(dictFlows, function (i, dictFlow) {
+                toolBar += "<input type='button' value='" + dictFlow.Label + "'  onclick='OpenDictFlow(\""+dictFlow.FrmID+"\",\""+dictFlow.FlowNo+"\");' />";
+            });
+           
+
             //获得当前的集合.
             var fms = new Entities("BP.CCBill.Template.Methods", "FrmID", frmID);
            
@@ -197,6 +213,17 @@
             }
 
             $("#toolbar").html(toolBar);
+        }
+
+        /**
+         * 打开关联的流程
+         * @param frmId 实体表单的ID
+         * @param flowNo 关联流程的编号
+         * @param frmOID 当前实体的OID
+         */
+        function OpenDictFlow(frmId, flowNo) {
+            var url = "./DictFlow.htm?FrmID=" + frmId + "&FlowNo=" + flowNo + "&FrmOID=" + GetQueryString("WorkID") + "&IsReadonly=" + GetQueryString("IsReadonly");
+            window.location.href = url;
         }
 
         function OpenSetting() {

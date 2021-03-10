@@ -64,6 +64,8 @@
                 html += "<td>" + en.SubFlowModelText + "</td>";
                 html += "<td>" + en.SendModelText + "</td>";
 
+                html += "<td>" + en.SubFlowStaText + "</td>";
+
                 //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
                 html += "<td><a href=\"javascript:SetCond('" + en.MyPK + "');\" >设置条件</a></td>";
@@ -118,7 +120,7 @@
         //设置子流程启动条件.
         function SetCond(pk) {
             var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
-            var url = "../../Cond2020/List.htm?CondType=3&FK_Flow=" + en.FK_Flow + "&FK_Node=" + en.FK_Node + "&ToNodeID=" + en.FK_Node + "&SubFlowNo=" + en.SubFlowNo;
+            var url = "../../Cond2020/List.htm?CondType=3&FK_Flow=" + en.FK_Flow + "&FK_MainNode="+ en.FK_Node +"&FK_Node=" + en.FK_Node + "&ToNodeID=" + en.FK_Node + "&SubFlowNo=" + en.SubFlowNo;
             window.location.href = url;
             return;
 
@@ -154,7 +156,7 @@
     <div style="right:30px; position:absolute; z-index:100; top:-4px">
         <input id="Btn_New" type="button" value="增加集团子流程" onclick="AddGroup()" />
         <input id="Btn_New2" type="button" value="增加本组织子流程" onclick="AddOrg()" />
-        <input id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
+        <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
     </div>
     <table id="Table1" style="width: 100%">
         <caption>
@@ -177,6 +179,11 @@
             <th>
                 发送模式
             </th>
+
+            <th>
+                状态
+            </th>
+
             <th>
                 编辑
             </th>

@@ -103,7 +103,7 @@ function ImpFrmTemplate() {
     var flowNo = GetQueryString("FK_Flow");
     var nodeID = GetQueryString("FK_Node");
 
-    var url = "../FoolFormDesigner/ImpExp/Imp.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&DoType=FunList&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    var url = "../FoolFormDesigner/ImpExp/Imp/Default.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&DoType=FunList&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.open(url);
 }
 

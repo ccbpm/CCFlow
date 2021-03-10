@@ -25,7 +25,6 @@ function InitPage() {
 
     //日志列表.
     var tracks = data["Track"];
-
     //工作列表.
     var timeDay = "";
     var checkStr = "";
@@ -59,6 +58,10 @@ function InitPage() {
         }
     }
 
+    //获得执行者.
+    var gwf = new Entity("BP.WF.GenerWorkFlow", gwf.WorkID);
+    var Executor = gwf.GetPara("Auth");
+
     //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
     for (var i = 0; i < tracks.length; i++) {
         var Msg = "";
@@ -67,8 +70,8 @@ function InitPage() {
         var passTime = "";
         var actionType = "";
         var track = tracks[i];
-        if (track.FID != 0)
-            continue;
+        // if (track.FID != 0)
+        //    continue;
 
         if (track.ActionType == ActionType.FlowBBS)
             continue;
@@ -79,11 +82,9 @@ function InitPage() {
         var isShowCheckMsg = true;
         if (fwc.FWCMsgShow == "1" && track.NDFrom == GetQueryString("FK_Node") && webUser.No != track.EmpTo) {
             continue;
-            //isShowCheckMsg = false;
         }
 
         //内容.
-
         actionType = track.ActionTypeText;
         var at = track.ActionType;
 
@@ -93,7 +94,6 @@ function InitPage() {
         //        }
 
         if (at == ActionType.Forward || at == ActionType.FlowOver || at == ActionType.TeampUp) {
-
 
             //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
             if (fwc.FWCVer == 0) {
@@ -169,12 +169,28 @@ function InitPage() {
 
         //newRow += "<td >" + '' + "</td>";
 
-        newRow += "<td >" + msg + "</td>";
+
+        if (Executor != null && Executor.indexOf(track.EmpFromT) >= 0)
+            newRow += "<td >&nbsp&nbsp&nbsp已办理（<lable style='color:#DE893B'>" + Executor.replace("给" + track.EmpFromT, "") + "</lable>）</td>";
+        else
+            newRow += "<td >&nbsp&nbsp&nbsp已办理</td>";
         newRow += "<td >" + track.ActionTypeText + "</td>";
         newRow += "<td >" + track.EmpFromT + "</td>";
         newRow += "<td >" + startTime + "</td>";
         newRow += "<td >" + endTime + "</td>";
         newRow += "<td >" + passTime + "</td>";
+
+        //是否是发送动作,如果是就显示打开表单按钮.
+        var isSend = false;
+        if (at == ActionType.Forward || at == ActionType.SubFlowForward || at == ActionType.ForwardFL) {
+            isSend = true;
+        }
+
+        if (isSend == true)
+            newRow += "<td ><a href=\"javascript:OpenFrm('" + track.MyPK + "','" + track.NDFrom + "');\">打开</a></td>";
+        else
+            newRow += "<td></td>";
+
         newRow += "</tr>";
         $("tbody tr:last").after(newRow);
 
@@ -236,8 +252,13 @@ function InitPage() {
     }
 }
 
-function OpenFrm(nodeID) {
+//打开表单.
+function OpenFrm(myPK, nodeID) {
 
+    var url = "../../MyFrm.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
+    url += "&MyPK=" + myPK;
+    window.open(url);
+    //    window.location.url = url;
 }
 
 //生成左边的icon.

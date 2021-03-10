@@ -1,76 +1,29 @@
-﻿$(function () {
-
-    jQuery.getScript(basePath + "/WF/Admin/Admin.js")
-        .done(function () {
-            /* 耶，没有问题，这里可以干点什么 */
-             //alert('ok');
-        })
-        .fail(function () {
-            /* 靠，马上执行挽救操作 */
-            //alert('err');
-        });
-    InitPage();
-});
-//初始化数据.
-function InitPage() {
-
-    var fk_node = GetQueryString("FK_Node");
-    var node = new Entity("BP.WF.Node", fk_node);
-
-    //调用公共类库的方法:执行批量主表赋值
-    GenerFullAllCtrlsVal(node);
-
-    $("#TB_Alert").val(node.BlockAlert);
-    switch (parseInt(node.BlockModel)) {
-        case 0:
-            break;
-        case 1:
-            break;
-        case 2:
-            $("#TB_SpecSubFlow").val(node.BlockExp);
-            break;
-        case 3:
-            $("#TB_SpecSubFlowNode").val(node.BlockExp);
-            break;
-        case 4:
-            $("#TB_Exp").val(node.BlockExp);
-            break;
-        case 5:
-            $("#TB_SQL").val(node.BlockExp);
-            break;
-        case 6:
-            $("#TB_SameLevelSubFlow").val(node.BlockExp);
-            break;
-        default:
-            break;
-    }
-    return;
-}
+﻿
 function InitBar(optionKey) {
 
     var html = "发送阻塞规则:";
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+阻塞规则</option>";
-    html += "<option value=" + BlockModel.None + ">不阻塞</option>";
-    html += "<option value=" + BlockModel.IncompleteBlock + ">当前节点有未完成的子流程时 </option>";
-    html += "<option value=" + BlockModel.AppointmentBlock + ">按约定格式阻塞未完成子流程</option>";
-    html += "<option value=" + BlockModel.ByParentBlock + ">是否启用为父流程时，子流程未运行到指定的节点 </option>";
-    html += "<option value=" + BlockModel.ByChildBlock + ">是否启用为平级子流程时，子流程未运行到指定的节点</option>";
+    var groups = GetDBGroup();
+    var dtls = GetDBDtl();
+    
+    for (var i = 0; i < groups.length; i++) {
 
-    html += "<option value=" + BlockModel.BySQLBlock + " >  按照SQL阻塞</option>";
-    html += "<option value=" + BlockModel.ByExpressionBlock +"> 按照表达式阻塞</option>";
-    html += "<option value=" + BlockModel.ByOtherBlock + ">  其他选项设置 </option>";
+        var group = groups[i];
+        html += "<option value=null  disabled='disabled'>+" + group.Name + "</option>";
+
+        for (var idx = 0; idx < dtls.length; idx++) {
+            var dtl = dtls[idx];
+            if (dtl.GroupNo != group.No)
+                continue;
+            html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
+        }
+    }
 
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    //   html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
 
-    //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
-
-    //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
-    
     html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='高级设置' />";
 
 
@@ -78,7 +31,30 @@ function InitBar(optionKey) {
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
 
+function GetDBGroup() {
 
+    var json = [
+
+        { "No": "A", "Name": "通用规则" },
+        { "No": "B", "Name": "父子流程规则" }
+    ];
+    return json;
+}
+
+function GetDBDtl() {
+
+    var json = [
+
+        { "No": 0, "Name": "不阻塞", "GroupNo": "A", "Url": "0.None.htm" },
+        { "No": 1, "Name": "当前节点的有未完成的子线程", "GroupNo": "B", "Url": "1.CurrNodeAll.htm" },
+        { "No": 2, "Name": "按约定格式阻塞未完成子流程", "GroupNo": "B", "Url": "2.SpecSubFlow.htm" },
+        { "No": 3, "Name": "按照SQL阻塞", "GroupNo": "A", "Url": "3.BySQL.htm" },
+        { "No": 4, "Name": "按照表达式阻塞", "GroupNo": "A", "Url": "4.ByExp.htm" },
+        { "No": 5, "Name": "是否启用为父流程时，子流程未运行到指定的节点", "GroupNo": "B", "Url": "5.SpecSubFlowNode.htm" },
+        { "No": 6, "Name": "是否启用为平级子流程时，子流程未运行到指定的节点", "GroupNo": "B", "Url": "6.SameLevelSubFlow.htm" },
+    ];
+    return json;
+}
 
 function HelpOnline() {
     var url = "http://ccbpm.mydoc.io";
@@ -102,31 +78,13 @@ function AdvSetting() {
     OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
 }
 function GetUrl(optionKey) {
-    switch (parseInt(optionKey)) {
-        case BlockModel.None:
-            url = "0.None.htm";
-            break;
-        case BlockModel.IncompleteBlock:
-            url = "1.IncompleteBlock.htm";
-            break;
-        case BlockModel.AppointmentBlock:
-            url = "2.AppointmentBlock.htm";
-            break;
-        case BlockModel.ByParentBlock:
-            url = "3.ByParentBlock.htm";
-            break;
-        case BlockModel.ByChildBlock:
-            url = "4.ByChildBlock.htm";
-            break;
-        case BlockModel.BySQLBlock:
-            url = "5.BySQLBlock.htm";
-            break;
-        case BlockModel.ByExpressionBlock:
-            url = "6.ByExpressionBlock.htm";
-            break;
-        case BlockModel.ByOtherBlock:
-            url = "7.ByOtherBlock.htm";
-            break;
+
+    var json = GetDBDtl();
+    for (var i = 0; i < json.length; i++) {
+        var en = json[i];
+        if (en.No == optionKey)
+            return en.Url;
     }
-    return url;
+    
+    return "0.None.htm";
 }

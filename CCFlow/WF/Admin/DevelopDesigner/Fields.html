@@ -28,7 +28,6 @@
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
 </head>
 <body>
-
     <center>
         <table id="App" style="width:90%;" class="table mt-3">
             <tr>
@@ -49,11 +48,10 @@
                 <td> <a href="#" @click="Delete(value.MyPK);">删除</a></td>
             </tr>
         </table>
-
          
         <div style=" text-align:left; float:left" >
             <fieldset style=" float:left">
-                <legend>帮助 </legend>
+                <legend id="help">帮助 </legend>
                 <ul style=" float:left">
                     <li> 1.该表格列的是模版设置里有，但是没有显示到html了里面的字段. </li>
                     <li> 2.您可以插入到您指定的位置. </li>
@@ -275,6 +273,11 @@
                 if (uiContralType == 16) {
                     title = '系统定位组件属性';
                     url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                  if (uiContralType == 110) {
+                    title = '公文正文组件属性';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 17) {

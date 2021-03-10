@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>表单</title>
+    <title>手机表单</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
 
     <!--<script src="../../../WorkOpt/WorkCheck.js" type="text/javascript"></script>-->
 
-    <script src="./../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="./../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <!-- 表单组件 -->
     <script src="Ath.js" type="text/javascript"></script>
     <script src="FrmDtl.js" type="text/javascript"></script>
@@ -392,7 +392,7 @@
                 var oldBack = $.back;
                 $.back = function () {
 
-                    alert('ss');
+                 //   alert('ss');
                     return;
                     if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
                         //viewApi.back();
@@ -508,7 +508,7 @@
     <div id="main" class="mui-page">
         <!--页面标题栏开始-->
         <div class="mui-navbar-inner mui-bar mui-bar-nav">
-            <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript:alert('预览不可后退');"></a>
+            <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript: window.history.back();"></a>
             <!--<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
                 <span class="mui-icon mui-icon-left-nav"></span>
             </button>-->

@@ -81,7 +81,7 @@
             $('#Btn_Auto').bind('click', function () { BindPop(); $('#selectEmpsModal').modal().show(); });//选择授权人按钮
 
             var FK_FlowSorts = new Entities("BP.WF.Template.FlowSorts");
-            FK_FlowSorts.Retrieve("Name","流程树");
+            FK_FlowSorts.Retrieve("Name", "流程树");
             var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F" + FK_FlowSorts[0].No + "&IsSelectMore=1&treeFlowName=" + treeFlowName;
 
             //设置流程字段的显示与隐藏
@@ -108,6 +108,18 @@
                 $('#iframeSelectEmpsForm').attr('src', staUrl);
                 $('#selectEmpsModal').modal().show();
             });
+            //判断是否是修改授权
+            if (GetQueryString("UpdateInfo") == "1") {
+                //隐藏选人按钮
+                $("#Btn_Auto").hide();
+                //设置被授权人
+                $("#TB_No").val(GetQueryString("AutherToEmpNo"));
+                $("#TB_EmpName").val(GetQueryString("AutherToEmpName"));
+                //加载授权收回时间
+                $("#TB_DT").val(GetQueryString("TakeBackDT"))
+                //更改保存按钮为修改
+                $("#Btn_Save").val("修改");
+            }
 
         });
 
@@ -145,26 +157,19 @@
         function Save() {
 
             var en = new Entity("BP.WF.Auth");
-
+            en.MyPK = webUser.No + "_" + $("#DDL_AuthorWay").val() + "_" + $("#TB_No").val();
+            var i = en.RetrieveFromDBSources();
             en.Auther = webUser.No;
             en.AuthType = $("#DDL_AuthorWay").val();
             en.TakeBackDT = $("#TB_DT").val();
 
-            en.EmpNo = $("#TB_No").val();
-            en.EmpName = $("#TB_EmpName").val();
-            if (en.EmpName == "") {
+            en.AutherToEmpNo = $("#TB_No").val();
+            en.AutherToEmpName = $("#TB_EmpName").val();
+            if (en.AutherToEmpName == "") {
                 alert("请选择要授权的人员！");
                 return;
             }
-            //判断是否已有全部流程授权
-            var sql = "SELECT EmpNo, FlowName FROM WF_Auth WHERE AuthType = 1 and Auther = '" + webUser.No + "' and EmpNo = '" + en.EmpNo + "' and TakeBackDT >= '" + en.TakeBackDT + "'";
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddPara("SQL", sql);
-            var dt = handler.DoMethodReturnString("RunSQL_Init");
-            if (dt.length != 0) {
-                alert("已按全部流程授权！");
-                return;
-            }
+
 
             en.RDT = getNowFormatDate();
             if (en.AuthType == 2) {
@@ -175,11 +180,16 @@
                     var flowName = flows[j].Name;
                     en.FlowNo = flowNo;
                     en.FlowName = flowName;
-                    en.Insert();
+                    if (i == 0)
+                        en.Insert();
+                    else
+                        en.Update();
                 }
             } else {
-
-                en.Insert();
+                if (i == 0)
+                    en.Insert();
+                else
+                    en.Update();
             }
             window.location.href = 'Author.htm';
 
@@ -267,7 +277,7 @@
                            id="TB_DT" onfocus="WdatePicker({minDate:'%y-%M-%d',dateFmt:'yyyy-MM-dd'});" />
                 </td>
                 <td>
-                    在日期范围内，可以处理授权人的数据。
+                    在日期范围内，可以处理授权人的数据，<font color="red">如果日期为空则无收回日期，一直有效。</font>
                 </td>
             </tr>
             <tr>
@@ -275,13 +285,13 @@
                     授权方式:
                 </td>
                 <td>
-                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
-                        <option selected="selected" value="0">不授权</option>
-                        <option value="1">全部流程授权</option>
+                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay" disabled="disabled">
+                        <option value="0">不授权</option>
+                        <option selected="selected" value="1">全部流程授权</option>
                         <option value="2">指定流程授权</option>
                     </select>
                 </td>
-                <td></td>
+                <td> 目前仅仅支持全部流程授权. </td>
             </tr>
 
             <tr id="flowID">

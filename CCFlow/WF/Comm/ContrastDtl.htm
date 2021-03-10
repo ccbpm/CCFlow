@@ -2,19 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>详细数据</title>
-    <link href="Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script language="JavaScript" src="JScript.js"></script>
-
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <!--引入公共的JS-->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="Gener.js" type="text/javascript"></script>
-
-    <script language="javascript" type="text/javascript" >
+    <style type="text/css">
+        .layui-table-tool{
+            background-color:white;
+        }
+    </style>
+    <script language="javascript" type="text/javascript">
 
         //页面启动函数.
         $(function () {
@@ -47,23 +47,18 @@
 
             document.title = title;
 
-            $('#mainDiv').panel({ title: title + ",数据:" + Group_Dtls.length + "条。; &nbsp;&nbsp;&nbsp;&nbsp;<a href=javascript:Exp(); >导出到Excel</a>" });
 
 
-
-            //获取标题
-            var keyOfEn = "";
-
-            var columns = new Array(); ;
+            var columns = new Array();;
             for (var i = 0; i < Sys_MapAttrs.length; i++) {
                 var attr = Sys_MapAttrs[i];
 
                 if (attr.UIVisible == 0
-                || attr.KeyOfEn == "OID"
-                || attr.KeyOfEn == "WorkID"
-                || attr.KeyOfEn == "NodeID"
-                || attr.KeyOfEn == "MyNum"
-                || attr.KeyOfEn == "MyPK") {
+                    || attr.KeyOfEn == "OID"
+                    || attr.KeyOfEn == "WorkID"
+                    || attr.KeyOfEn == "NodeID"
+                    || attr.KeyOfEn == "MyNum"
+                    || attr.KeyOfEn == "MyPK") {
                     keyOfEn = attr.KeyOfEn
                     continue;
                 }
@@ -93,45 +88,32 @@
                     });
             }
 
-            //显示行
-            $('#Table1').datagrid({
-                data: maindata["Group_Dtls"],
-                columns: [columns],
-                fitColumns: false,
-                fit: true,
-                rownumbers: true,
-                striped: true,
-                singleSelect: false,
-                pagination: false
+            layui.use(['table', 'form'], function () {
+                var table = layui.table;
+
+                table.render({
+                    elem: '#searchTable'
+                    , data: Group_Dtls
+                    , cellMinWidth: 80
+                    , toolbar: 'true' //开启头部工具栏，并为其绑定左侧模板
+                    , defaultToolbar: ['exports']
+                    , title: '用户数据表'
+                    , cols: [columns]
+                    , page: false
+                    , cellMinWidth: 60
+                    , height: $(document).height() - $("#toolBar").height() - 100
+                   
+                });
             });
+
         }
 
-        //导出
-        function Exp() {
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddUrlData();  //增加参数.
-            //查询集合
-            var data = handler.DoMethodReturnString("GroupDtl_Exp");
-            var url = "";
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-            }
-            data = basePath+ data;
-
-            window.open(data);
-            return;
-        }
-     </script>
+      
+    </script>
 </head>
-<body  class="easyui-layout">
-    <div id="mainDiv" data-options="region:'center',title:'学生',halign: 'center' ">
-            <div class="easyui-layout"  data-options="fit:true">
-                <table id="Table1"></table>
-            </div>
+<body>
+    <div class="layui-card" style="margin:10px">
+        <table class="layui-hide" id="searchTable" lay-filter="searchTable"></table>
     </div>
-
-
-<div id="Msg"></div>
-
 </body>
 </html>

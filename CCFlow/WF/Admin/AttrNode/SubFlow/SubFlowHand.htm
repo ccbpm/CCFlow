@@ -52,6 +52,9 @@
                 html += "<td>" + en.SubFlowName + "</td>";
                 html += "<td>" + en.SubFlowModelText + "</td>";
 
+                html += "<td>" + en.SubFlowStaText + "</td>";
+
+
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
                 html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >删除</a></td>";
                 html += "<td>";
@@ -105,9 +108,10 @@
         //编辑.
         function Edit(pk) {
 
-            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
+            // var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
+            var url = "../../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 600, 400, true);
+            OpenEasyUiDialogExt(url, '编辑', 800, 400, true);
             //window.location.href = url;
 
         }
@@ -121,12 +125,13 @@
     <div style="right:30px; position:absolute; z-index:100; top:-4px">
         <input id="Btn_New" type="button" value="增加子流程" onclick="AddGroup()" />
 
-        <input id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
+        <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
     </div>
     <table id="Table1" style="width: 100%">
         <caption>
             <img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
             手动子流程
+            - <a href="javascript:ShowHidden('img')">运行效果</a>
         </caption>
         <tr>
             <th>
@@ -140,6 +145,9 @@
             </th>
             <th>
                 模式
+            </th>
+            <th>
+                状态
             </th>
             <th>
                 编辑
@@ -160,8 +168,8 @@
 
     <div style="position:relative;" id="Msg">
     </div>
-    <fieldset>
-        <legend>运行效果</legend>
+    
+    <fieldset id="img" style="display: none">
         <img src="SubFlowHand-1.png" />
     </fieldset>
 </body>

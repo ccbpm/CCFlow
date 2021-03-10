@@ -19,6 +19,8 @@
         //页面启动函数.
         $(function () {
 
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
@@ -41,10 +43,11 @@
             html += "<th>下达时间</th>";
             html += "<th>处理时间</th>";
 
-
             html += "<th>是否读取？</th>";
 
             html += "<th>状态</th>";
+            html += "<th>IsPass</th>";
+
             html += "<th>操作</th>";
             html += "</tr>";
 
@@ -71,10 +74,19 @@
                     html += "<td>" + en.CDT + "</td>";
                 }
                 html += "<td>" + en.IsRead + "</td>";
+                html += "<td>" + en.IsPass + "</td>";
 
-                if (en.IsPass == 0) {
+                if (en.IsPass == 0 && en.FK_Node == gwf.FK_Node) {
                     html += "<td><b><font color=green>待办</font></b></td>";
                     html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
+                } else if (en.IsPass == 0 && en.FID != 0) {
+                    html += "<td><b><font color=green>待办</font></b></td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
+
+                } else if (en.IsPass == -2) {
+
+                    html += "<td>等待</td>";
+                    html += "<td> - </td>";
                 } else {
                     html += "<td>已处理</td>";
                     html += "<td> - </td>";
@@ -123,8 +135,23 @@
             handler.AddPara("WorkID", workid);
             handler.AddPara("FID", fid);
 
-            //  handler.AddPara("Adminer", adminer);
-            handler.AddPara("SID", SID);
+            var adminer = GetQueryString("Adminer");
+            handler.AddPara("Adminer", adminer);
+
+            var adminerSID = GetQueryString("AdminerSID");
+            handler.AddPara("AdminerSID", adminerSID);
+
+            var orgNo = GetQueryString("OrgNo");
+
+            var webUser = new WebUser();
+
+            if (orgNo != webUser.OrgNo)
+            {
+                alert(" 系统错误: " + orgNo + " curr:" + webUser.OrgNo+", 出现了组织结构编号不一致.");
+                return;
+            }
+
+            handler.AddPara("OrgNo", orgNo);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
             if (data.indexOf('err@') == 0) {
@@ -135,7 +162,7 @@
             window.parent.InitPageUserInfo();
         }
 
-       
+
         function OpenRpt() {
             var url = "../../WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;
             WinOpen(url);

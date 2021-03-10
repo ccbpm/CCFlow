@@ -3,8 +3,8 @@
 <head>
     <title>按照绑定的人员来设置人员选择范围.</title>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -14,8 +14,11 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript">
+        var webUser = new WebUser();
         //初始化页面
         $(function () {
+            if (webUser.CCBPMRunModel == 2)
+                $("#isShow").hide();
             InitBar(SelectorModel.Emp);
             var ens = new Entities("BP.WF.Template.NodeEmps");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
@@ -41,19 +44,25 @@
             var nodeID = GetQueryString("FK_Node");
             url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
             var rootNo = 0;
-            var webUser = new WebUser();
+            
             if (type == 0) {
                 if (webUser.CCBPMRunModel != 0)
                     rootNo = webUser.OrgNo;
                 url += "&RootNo=" + rootNo;
             }
             if (type == 1) {
-                if (webUser.CCBPMRunModel != 0) {
+                if (webUser.CCBPMRunModel == 2)
+                    rootNo = webUser.OrgNo;
+                if (webUser.CCBPMRunModel == 1) {
                     var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
                     orgs.RetrieveCond("No", "=", "ParentNo");
-                    if (orgs.length != 0)
+                    if (orgs.length != 0) {
                         rootNo = orgs[0].No;
+                    }
+
                 }
+
+
                 url += "&RootNo=" + rootNo;
             }
             OpenEasyUiDialogExt(url, '设置人员', 800, 500, true);
@@ -80,7 +89,7 @@
             <li>
                 <a href="javascript:void(0)" onclick="OpenDialog(0)">设置/更改本组织处理人</a>
             </li>
-            <li>
+            <li id="isShow">
                 <a href="javascript:void(0)" onclick="OpenDialog(1)">设置/更改集团处理人</a>
             </li>
             <li>说明：绑定的所有的人员，都是可以选择的范围.</li>

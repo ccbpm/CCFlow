@@ -61,60 +61,58 @@
             handler.AddPara("JSDoc", jsDocVal);
             var data = handler.DoMethodReturnString("InitScript_Save"); //执行方法，返回执行结果.
 
-
             alert(data);
             return;
         }
 
         function Delete() {
+
+            if (window.confirm('您确定要删除/清空吗？') == false)
+                return;
+
             var frmID = GetQueryString("FK_MapData");
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("InitScript_Delete"); //执行方法，返回执行结果.
 
-
-            alert(data);
+            window.location.href = window.location.href;
             return;
         }
     </script>
 </head>
 <body onload="Load()">
 
-    <!--<form id="cc">
-
-        <h2> 该功能在重构过程中，您可以直接打开datauser\JSLibData\+FrmID+'_Self.js' 修改.</h2>
-
-        <textarea id="">
-
-        </textarea>
-
-        <input type="button" />
-
-    </form>-->
-
     <form id="cc">
-        <fieldset>
-            <legend>自动计算</legend>
-            <table id="table" style="width: 100%;">
-                <tr>
-                    <td colspan="3">
-                        JS 脚本
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="width: 100%;">
-                        <textarea rows="20" name="code" id="code" style="width:100%;"> </textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                        <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
+        <table id="table" style="width: 100%;">
+            <tr>
+                <td colspan="1">
+                    <h3>JS脚本，该数据将要保存到\DataUser\JSLab\*.js下。</h3>
+                </td>
+                <td colspan="2">
+                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3" style="width: 100%;">
+                    <textarea rows="20" name="code" id="code" style="width:100%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <fieldset id="help">
+                        <legend>帮助</legend>
+                        <ul>
+                            <li> xxx </li>
+                        </ul>
+                    </fieldset>
+
+                </td>
+            </tr>
+        </table>
+       
     </form>
 
 </body>

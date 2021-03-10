@@ -523,7 +523,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm")
             handler.AddPara("EnsName", GetQueryString("EnsName"));
             handler.AddPara("Paras", "@OrderBy="+PK);
-            var data = handler.DoMethodReturnJSON("Entities_Init");
+            var data = handler.DoMethodReturnJSON("Ens_Init");
             $('#mytable').bootstrapTable("load", data);
             $("#new_btn").attr('disabled', false);
             InsertFlag = 0;

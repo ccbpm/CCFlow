@@ -115,7 +115,7 @@
             </tr>
         </table>
         <fieldset>
-            <legend>帮助.</legend>
+            <legend>SQL帮助.</legend>
             <ul>
                 <li>必须返回一行数据的 SQL或者数据源. </li>
                 <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
@@ -126,6 +126,15 @@
                 </li>
                 <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
             </ul>
+
+            <legend>URL帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的的json格式的数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>实例：  <font color="green"> /App/Handler.ashx?DoType=EmpFull&Key=@Key </font></li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+
         </fieldset>
     </form>
 </body>

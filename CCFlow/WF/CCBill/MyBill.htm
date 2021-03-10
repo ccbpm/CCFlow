@@ -76,6 +76,14 @@
         var frmBill = null;
         var generBill = null;
         var webUser = new WebUser();
+        var isReadonly = GetQueryString("IsReadonly");
+        if (isReadonly == null || isReadonly == undefined || isReadonly == "")
+            isReadonly = "0";
+        var pageFrom = GetQueryString("PageFrom");
+        var isShowDelete = false;
+        if (pageFrom == null || pageFrom == undefined || pageFrom == "" || pageFrom !="FrmSearch")
+            isShowDelete = true;
+
         //初始化函数
         $(function () {
             if ("undefined" == typeof UserICon) {
@@ -149,10 +157,10 @@
             power = JSON.parse(power);
 
             //当前是归档状态.
-            if (generBill.BillState == 2 && power.IsInsert == 1)
+            if (generBill.BillState == 2 && power.IsInsert == 1 && isReadonly==0)
                 toolBar += "<input type=button value='新建' onclick='NewIt();' />";
 
-            if (power.IsSave == 1 && generBill.BillState !=100) {
+            if (power.IsSave == 1 && generBill.BillState != 100 && isReadonly == 0) {
                 var btnSave = generBill.BtnSaveLable;
                 if (btnSave == null || btnSave == "" || btnSave == undefined)
                     btnSave = "保存";
@@ -166,7 +174,7 @@
             //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
             //}
 
-            if (power.IsSubmit == 1 && generBill.BillState != 100) {
+            if (power.IsSubmit == 1 && generBill.BillState != 100 && isReadonly == 0) {
                 var btnSubmit = generBill.BtnSubmitLable;
                 if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
                     btnSubmit = "提交";
@@ -185,7 +193,7 @@
             //if (generBill.BillState == 0 && power.IsSave == 1)
             //    toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
 
-            if (generBill.BillState == 1 || generBill.BillState == 2)
+            if ((generBill.BillState == 1 || generBill.BillState == 2) && isReadonly == 0 && isShowDelete)
                 toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
 
             if (frmBill.BtnSearchEnable == 1)

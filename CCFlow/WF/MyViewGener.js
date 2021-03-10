@@ -379,9 +379,7 @@ function returnWorkWindowClose(data) {
 
     OptSuc(data);
 }
-
-
-
+ 
 
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
@@ -469,29 +467,7 @@ function isExistArray(arrys, no) {
     return -1;
 }
 
-/***
- * 
- * 撤销
- */
-function UnSend() {
 
-    if (window.confirm('您确定要撤销本次发送吗？') == false)
-        return;
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
-    handler.AddUrlData();
-    var data = handler.DoMethodReturnString("MyView_UnSend");
-    if (data.indexOf('err@') == 0) {
-        data = data.replace('err@', '');
-        data = data.replace('err@', '');
-        alert(data);
-        return;
-    }
-
-    var url = 'MyFlow.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&WorkID=' + GetQueryString("WorkID") + '&FID=' + GetQueryString("FID");
-    window.location.href = url;
-    return;
-}
 
 /**
  * 催办
@@ -590,7 +566,8 @@ function GenerWorkNode() {
     //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
     if (node.FormType == 5) {
-        GenerTreeFrm(flowData); /*树形表单*/
+        if (typeof GenerTreeFrm != 'undefined' && GenerTreeFrm instanceof Function)
+            GenerTreeFrm(flowData); /*树形表单*/
         return;
     }
 
@@ -693,7 +670,7 @@ function GenerWorkNode() {
         ////加载JS文件
         var s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js?t="+Math.random();
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
     }
@@ -707,7 +684,7 @@ function GenerWorkNode() {
 
         var s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + ".js";
+        s.src = "../DataUser/JSLibData/" + enName + ".js?t=" + Math.random();
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
     }
@@ -736,35 +713,12 @@ function GenerWorkNode() {
         imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
     });
 
-
-    //给富文本创建编辑器
-    if (document.BindEditorMapAttr) {
-        var EditorDivs = $(".EditorClass");
-        $.each(EditorDivs, function (i, EditorDiv) {
-            var editorId = $(EditorDiv).attr("id");
-            //给富文本 创建编辑器
-            var editor = document.activeEditor = UM.getEditor(editorId, {
-                'autoHeightEnabled': false,
-                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-                'initialFrameWidth': '100%'
-            });
-            var height = document.BindEditorMapAttr[i].UIHeight;
-            $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
-            //$(".edui-container").css("height", height);
-
-            if (editor) {
-
-                editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
-                editor.MinLen = document.BindEditorMapAttr[i].MinLen;
-                editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
-                editor.BindFieldName = document.BindEditorMapAttr[i].Name;
-
-                //调整样式,让必选的红色 * 随后垂直居中
-                $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
-            }
-        })
+    //公文解析
+    if ($("#GovDocFile").length > 0) {
+        Skip.addJs(ccbpmPath + "/WF/CCForm/Components/GovDocFile.js");
+        LoadGovDocFile();
     }
-    //给富文本创建编辑器
+
 }
 
 
@@ -818,7 +772,6 @@ function WinOpen(url, winName) {
     newWindow.focus();
     return;
 }
-
 
 function SetHegiht() {
 

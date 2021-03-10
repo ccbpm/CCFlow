@@ -764,7 +764,65 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID, tableCol) {
     return html;
 }
 
+function Gener_Btn(mapAttr) {
+
+    var eleHtml = $('<div></div>');
+    var btnId = mapAttr.KeyOfEn;
+    if (btnId == null || btnId == "")
+        btnId = mapAttr.MyPK;
+
+    var doc = mapAttr.Tag;
+    doc = doc.replace("~", "'");
+    var eventType = mapAttr.UIIsEnable;
+    var onclick = "";
+    var style = ""
+    if (eventType == 0) { //禁用
+        onclick = "disabled='disabled' style='background:gray;'";
+    }
+
+    if (eventType == 1) { //运行URL
+
+        var attrs = frmData.Sys_MapAttr;
+
+        for (var i = 0; i < attrs.length; i++) {
+            var attr = attrs[i];
+
+            if (doc.indexOf('@' + attr.KeyOfEn) > 0) {
+                doc = doc.replace('@' + attr.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
+            }
+        }
+
+        var OID = GetQueryString("OID");
+        if (OID == undefined || OID == "");
+        OID = GetQueryString("OID");
+        var FK_Node = GetQueryString("FK_Node");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var webUser = new WebUser();
+        var userNo = webUser.No;
+        var SID = webUser.SID;
+        if (SID == undefined)
+            SID = "";
+        if (doc.indexOf("?") == -1)
+            doc = doc + "?1=1";
+        doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        onclick = "onclick='window.open(\"" + doc + ")'";
+    }
+
+    ////运行URL
+    if (eventType == 2) {
+        if (doc.indexOf("(") == -1)
+            doc = doc + "()";
+        onclick = "onclick='" + doc + "'";
+    }
+    return "<input id='" + btnId + "' type='button' value='" + mapAttr.Name + "'  class='btn' " + onclick + ">";
+}
+
 function InitMapAttrOfCtrl(mapAttr) {
+
+    //如果是按钮.
+    if (mapAttr.UIContralType == 18)
+        return Gener_Btn(mapAttr);
+
 
     var str = '';
     var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
@@ -2040,6 +2098,7 @@ function GetLab(frmData, attr) {
     }
     //图片
     if (contralType == 11) {
+
         //获取图片控件的信息
         var frmImg = new Entity("BP.Sys.FrmUI.ExtImg");
         frmImg.SetPKVal(attr.MyPK);
@@ -2078,6 +2137,9 @@ function GetLab(frmData, attr) {
     }
     //图片附件
     if (contralType == 12) {
+
+        //alert(contralType);
+
         //获取图片控件的信息
         var frmImgs = $.grep(frmData.Sys_FrmImgAth, function (item, i) {
             return item.MyPK == attr.MyPK;
@@ -2121,54 +2183,7 @@ function GetLab(frmData, attr) {
 
     //按钮
     if (contralType == 18) {
-        //获取按钮控件的信息
-        var frmBtns = $.grep(frmData.Sys_FrmBtn, function (item, i) {
-            return item.MyPK == attr.MyPK;
-        });
-        if (frmBtns.length == 0) {
-            alert("主键为" + attr.MyPK + "名称为" + attr.Name + "的按钮信息丢失，请联系管理员");
-            return "";
-        }
-
-        var frmBtn = frmBtns[0];
-        var eleHtml = $('<div></div>');
-        var btnId = frmBtn.BtnID;
-        if (btnId == null || btnId == "")
-            btnId = frmBtn.MyPK;
-
-        var doc = frmBtn.EventContext;
-        doc = doc.replace("~", "'");
-        var eventType = frmBtn.EventType;
-        var onclick = "";
-        if (eventType == 0) {//禁用
-            onclick = "disabled='disabled' style='background:gray;'";
-        } else if (eventType == 1) {//运行URL
-            $.each(frmData.Sys_MapAttr, function (i, obj) {
-                if (doc.indexOf('@' + obj.KeyOfEn) > 0) {
-                    doc = doc.replace('@' + obj.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
-                }
-            });
-            var OID = GetQueryString("OID");
-            if (OID == undefined || OID == "");
-            OID = GetQueryString("OID");
-            var FK_Node = GetQueryString("FK_Node");
-            var FK_Flow = GetQueryString("FK_Flow");
-            var webUser = new WebUser();
-            var userNo = webUser.No;
-            var SID = webUser.SID;
-            if (SID == undefined)
-                SID = "";
-            if (doc.indexOf("?") == -1)
-                doc = doc + "?1=1";
-            doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
-            onclick = "onclick='window.open(\"" + doc + ")'";
-
-        } else {//运行JS
-            if (doc.indexOf("(") == -1)
-                doc = doc + "()";
-            onclick = "onclick='" + doc + "'";
-        }
-        return "<input id='" + btnId + "' type='button' value='" + frmBtn.Text + "'  class='btn' " + onclick + ">";
+        return "";
     }
     return lab;
 }

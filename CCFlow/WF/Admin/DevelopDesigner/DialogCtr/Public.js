@@ -137,6 +137,9 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
     if (dataType == "FlowBBS")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='评论组件'/>";
 
+    if (dataType == "GovDocFile")
+        _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='公文正文组件'/>";
+
     if (dataType == "DocWord")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='发文字号'/>";
 
@@ -215,8 +218,12 @@ function GetDataType(mapAttr) {
         if (mapAttr.UIContralType == 16)//评论组件
             return "Fixed";
 
+        if (mapAttr.UIContralType == 110) //公文正文组件.
+            return "GovDocFile";
+
         if (mapAttr.UIContralType == 17) //发文字号
             return "DocWord";
+        
 
         if (mapAttr.UIContralType == 170) //收文字号
             return "DocWordReceive";

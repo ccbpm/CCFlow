@@ -25,6 +25,9 @@
             //获取节点属性.
             var flowNo = GetQueryString("FK_Flow");
 
+            //更新节点表单类型.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
             $("#Msg").html("正在加载请稍后....");
 
             var parts = new Entities("BP.WF.Template.Parts");
@@ -49,7 +52,6 @@
                 strs += "</tr>";
             }
             strs += "</table>";
-
             $("#Msg").html(strs);
 
         });
@@ -76,7 +78,10 @@
             part.MyPK = myPK;
             part.SetPKVal(myPK);
             if (part.RetrieveFromDBSources() != 0) {
-                alert('该流程编号已经存在');
+                part.PartType = "ParentSubFlowGuide";
+                part.Update();
+                alert('该流程编号已经存在,当前列表.' + myPK);
+                window.location.href = window.location.href;
                 return;
             }
 
@@ -91,6 +96,7 @@
             }
 
             part.FK_Flow = GetQueryString("FK_Flow");
+            part.PartType = "ParentSubFlowGuide";
             part.Tag0 = flowNo;
             part.Tag1 = flowName;
             part.Insert();
@@ -112,6 +118,8 @@
             var flowNo = GetQueryString("FK_Flow");
             var flow = new Entity("BP.WF.Flow", flowNo);
             flow.StartGuideWay = StartGuideWay.ByParentFlowModel;
+
+            flow.StartGuidePara1 = $("#TB_StartGuidePara1").val();
             flow.Update();
 
             window.location.href = window.location.href;
@@ -122,16 +130,25 @@
 <body>
     <div id="bar">
     </div>
+
+
     <fieldset>
-        <legend> 父子流程前置导航 - 帮助</legend>
+        <legend> 前置导航支持多个父流程启动。</legend>
+        <br />
+        <div id="Msg"></div>
+
+        <!--<input type="text" id="TB_StartGuidePara1" name="TB_StartGuidePara1" />-->
+        <!--<textarea id="TB_StartGuidePara1" name="TB_StartGuidePara1" rows="3" style="width: 98%;height: 51px"></textarea>-->
+
+    </fieldset>
+
+    <fieldset>
+        <legend id="help"></legend>
         <ul>
             <li>发起该流程之前，需要选择一个已经发起的流程实例作为父流程。</li>
             <li>启动该流程的时候，需要启动 /WF/WorkOpt/StartGuideParentFlowModel.htm 的页面，让用户选择一个父流程。</li>
         </ul>
-    </fieldset>
-
-    <fieldset>
-        <legend> 应用场景</legend>
+        <legend > 应用场景</legend>
         <ul>
             <li>在执行财务报销的时候，要选择一个出差申请父流程，并把申请信息带入到报销单里面。</li>
             <li>在执行采购入库的时候，要选择一个采购申请单作为父流程。</li>

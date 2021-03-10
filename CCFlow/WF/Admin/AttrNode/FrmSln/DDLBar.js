@@ -20,7 +20,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FormSlnType.FreeForm + ">&nbsp;&nbsp;自由表单</option>";
     html += "<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
     html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
-    html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+   // html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
 
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";

@@ -128,12 +128,12 @@
       this.data = data;
 
       if (data && data.list.length) {
-        //if (picked && data.list.length == 1) {
-        //  this.pick(data, 0);
-        //} else {
+        if (picked && data.list.length == 1) {
+          this.pick(data, 0);
+        } else {
           this.widget = new Widget(this, data);
           CodeMirror.signal(data, "shown");
-        //}
+        }
       }
     }
   };

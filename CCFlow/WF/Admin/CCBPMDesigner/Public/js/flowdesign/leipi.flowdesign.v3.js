@@ -35,7 +35,7 @@
             fontSize: '12px',
             border: '0',
             /*borderLeft:'5px solid #fff',*/
-            padding: '5px 40px 5px 20px'
+            padding: '5px 30px 5px 20px'
         },
         itemHoverStyle: {
             border: '0',
@@ -177,8 +177,15 @@
                         if (e.which == 3) { //右键绑定
                             _canvas.find('#leipi_active_id').val(row.id);
                             contextmenu.bindings = defaults.processMenus;
+
                             var nodeID = document.getElementById("leipi_active_id");
                             var node = new Entity("BP.WF.Node", nodeID.value);
+                            //如果是第一个节点，把接收人规则文字换成可启动流程的人员
+                            if (nodeID.value.substr(nodeID.value.length - 2) == "01")
+                                $('#pmNodeAccepterRole span').text("设置发起人");
+                            else
+                                $('#pmNodeAccepterRole span').text("设置接受人");
+
 
                             if (node.RunModel == 0) {
                                 $('#pmfun span').text("普通:" + nodeID.value);
@@ -195,6 +202,17 @@
                             if (node.RunModel == 4) {
                                 $('#pmfun span').text("子线程:" + nodeID.value);
                             }
+
+                            if (node.FWCSta == 0) {
+                                $('#pmWorkCheck span').text("审核组件-禁用");
+                            }
+                            if (node.FWCSta == 1) {
+                                $('#pmWorkCheck span').text("审核组件-启用");
+                            }
+                            if (node.FWCSta == 2) {
+                                $('#pmWorkCheck span').text("审核组件-只读");
+                            }
+
                             $(this).contextMenu('processMenu', contextmenu);
                             ////$(this).contextMenu('processMenu3', contextmenu);
                             //$(this).mouseenter(function () {
@@ -304,8 +322,12 @@
 
 
                 var flowNo = GetQueryString("FK_Flow");
-
-                var url = "../Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
+                var url = "";
+                if (window.location.href.indexOf("/WF/Admin/CCBPMDesigner") == -1)
+                    url = "/WF/Admin/";
+                else
+                    url = "../";
+                url += "Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
                 $("#LineModal").hide();
                 $(".modal-backdrop").hide();
                 OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, 880, 500, "icon-property", true, null, null, null, function () {
@@ -434,6 +456,10 @@
                             var nodeID = document.getElementById("leipi_active_id");
                             var node = new Entity("BP.WF.Node", nodeID.value);
 
+
+                            $('#pmAttribute span').text("节点属性");
+
+
                             if (node.RunModel == 0) {
                                 $('#pmfun span').text("普通" + nodeID.value);
                             }
@@ -452,6 +478,16 @@
 
                             if (node.RunModel == 4) {
                                 $('#pmfun span').text("子线程");
+                            }
+
+                            if (node.FWCSta == 0) {
+                                $('#pmWorkCheck span').text("审核组件-禁用");
+                            }
+                            if (node.FWCSta == 1) {
+                                $('#pmWorkCheck span').text("审核组件-启用");
+                            }
+                            if (node.FWCSta == 2) {
+                                $('#pmWorkCheck span').text("审核组件-只读");
                             }
 
                             $(this).contextMenu('processMenu', contextmenu);

@@ -14,26 +14,34 @@
 
 function InitBar(optionKey) {
 
-    var html = "<b>设置Pop返回值模式</b>:";
+    var html = "<b>选择Pop模式</b>:";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value='None' >无,不设置(默认).</option>";
-    html += "<option value='PopBranchesAndLeaf' >树干叶子模式</option>";
+    html += "<option value=null  disabled='disabled'>+树形模式</option>";
+    html += "<option value='PopBranchesAndLeaf' >&nbsp;&nbsp;&nbsp;&nbsp;树干叶子模式</option>";
     //html += "<option value='PopBranchesAndLeafLazyLoad' >树干叶子模式-懒加载</option>";
-    html += "<option value='PopBranches' >树干模式(简单)</option>";
+    html += "<option value='PopBranches' >&nbsp;&nbsp;&nbsp;&nbsp;树干模式(简单)</option>";
     //html += "<option value='PopBranchesLazyLoad' >树干模式(简单)-懒加载</option>";
-    html += "<option value='PopGroupList' >分组列表平铺</option>";
-    html += "<option value='PopTableList' >单实体平铺</option>";
-    html += "<option value='PopBindSFTable' >绑定外键(字典表)表</option>";
-    html += "<option value='PopBindEnum' >绑定枚举</option>";
-    html += "<option value='PopTableSearch' >表格条件查询</option>";
-    html += "<option value='PopSelfUrl' >自定义URL</option>";
+
+    html += "<option value=null  disabled='disabled'>+分组模式</option>";
+    html += "<option value='PopGroupList' >&nbsp;&nbsp;&nbsp;&nbsp;分组列表平铺</option>";
+    html += "<option value='PopTableList' >&nbsp;&nbsp;&nbsp;&nbsp;单实体平铺</option>";
+    html += "<option value='PopBindSFTable' >&nbsp;&nbsp;&nbsp;&nbsp;绑定外键(字典表)表</option>";
+    html += "<option value='PopBindEnum' >&nbsp;&nbsp;&nbsp;&nbsp;绑定枚举</option>";
+
+    html += "<option value=null  disabled='disabled'>+其他模式</option>";
+    html += "<option value='PopTableSearch' >&nbsp;&nbsp;&nbsp;&nbsp;表格条件查询</option>";
+    html += "<option value='PopSelfUrl' >&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
+    html += "<option value='None' >&nbsp;&nbsp;&nbsp;&nbsp;无,不设置(默认).</option>";
+
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Adv' type=button onclick=Adv('" + optionKey+"') value='通用' />";
     //    html += "<input type='button' value='删除' id='Btn_Delete' name='Btn_Delete' onclick='return Delete()' />"
-    html += "<input  id='Btn_FullData' type=button onclick='FullData()' value='填充设置' />";
+    html += "<input  id='Btn_FullData' type=button onclick='FullData()' value='填充' />";
+
     //html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
 
     document.getElementById("bar").innerHTML = html;
@@ -41,12 +49,30 @@ function InitBar(optionKey) {
 
 }
 
+//高级设置.
+function Adv(PopModel)
+{
+    //这里弹窗设置最好
+    var keyOfEn = GetQueryString("KeyOfEn");
+    var optionKey = $("#changBar").val();
+    var myPK = optionKey + "_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+
+    var url = "Adv.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn + "&PopModel=" + PopModel;
+    OpenEasyUiDialogExt(url, "通用设置", 500, 300, false);
+    //window.location.href = url;
+
+    //WinOpen(url);
+
+   
+
+}
+
 function FullData() {
+
     var keyOfEn = GetQueryString("KeyOfEn");
     var optionKey = $("#changBar").val();
     var myPK = optionKey + "_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
     var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn;
-
     window.location.href = url;
 
 }

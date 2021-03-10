@@ -913,7 +913,7 @@ function figure_Template_Label(frmLab) {
 
     f.properties.push(new BuilderProperty('基本属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Text));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLab.Lab));
     f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, frmLab.FontSize));
     f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLab.FontName));
     f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
@@ -921,7 +921,7 @@ function figure_Template_Label(frmLab) {
     f.properties.push(new BuilderProperty('字体加粗', 'primitives.0.fontWeight', BuilderProperty.TYPE_TEXT_FONTWEIGHT, frmLab.FontWeight));
     f.properties.push(new BuilderProperty('字体颜色', 'primitives.0.style.fillStyle', BuilderProperty.TYPE_COLOR, fontColor));
     //var t2 = new Text(labelText, frmLab.X +  FigureDefaults.radiusSize / 2, frmLab.Y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
-    var labelText = frmLab.Text.replace(new RegExp(/@/g), "\n");
+    var labelText = frmLab.Lab.replace(new RegExp(/@/g), "\n");
     labelText = labelText.replace(new RegExp(/&nbsp;/g), " ");
     var x = (frmLab.FontSize * getXByteLen(labelText)) / 4 + frmLab.X;
 
@@ -962,7 +962,7 @@ function figure_Template_Btn(frmBtn) {
 
     f.properties.push(new BuilderProperty('控件属性', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('按钮标签', 'primitives.1.str', BuilderProperty.TYPE_SINGLE_TEXT, frmBtn.Text));
+    f.properties.push(new BuilderProperty('按钮标签', 'primitives.1.str', BuilderProperty.TYPE_SINGLE_TEXT, frmBtn.Lab));
     f.properties.push(new BuilderProperty('按钮事件', 'ButtonEvent', BuilderProperty.CCFormEnum, frmBtn.EventType));
     f.properties.push(new BuilderProperty('事件内容', 'BtnEventDoc', BuilderProperty.TYPE_TEXT, frmBtn.EventContext));
 
@@ -1014,11 +1014,11 @@ function figure_Template_Btn(frmBtn) {
     f.addPrimitive(p);
 
 
-    var t2 = new Text(frmBtn.Text, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text(frmBtn.Lab, x + FigureDefaults.segmentSize / 2, y + FigureDefaults.segmentShortSize / 2 + FigureDefaults.corner, FigureDefaults.textFont, FigureDefaults.textSize);
     //修改偏移的问题
     // x = t2.getNormalWidth() / 2 + frmBtn.X;
     //y = t2.getNormalHeight() / 2 + frmBtn.Y;
-    //t2 = new Text(frmBtn.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
+    //t2 = new Text(frmBtn.Lab, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
 
     t2.style.fillStyle = FigureDefaults.textColor;
 
@@ -1123,7 +1123,7 @@ function figure_Template_HyperLink(frmLin) {
 
     f.properties.push(new BuilderProperty('基本属性-HyperLink', 'group', BuilderProperty.TYPE_GROUP_LABEL));
     f.properties.push(new BuilderProperty(BuilderProperty.SEPARATOR));
-    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLin.Text));
+    f.properties.push(new BuilderProperty('文本', 'primitives.0.str', BuilderProperty.TYPE_SINGLE_TEXT, frmLin.Lab));
     f.properties.push(new BuilderProperty('字体大小', 'primitives.0.size', BuilderProperty.TYPE_TEXT_FONT_SIZE, frmLin.FontSize));
     f.properties.push(new BuilderProperty('字体', 'primitives.0.font', BuilderProperty.TYPE_TEXT_FONT_FAMILY, frmLin.FontName));
     //f.properties.push(new BuilderProperty('对齐', 'primitives.0.align', BuilderProperty.TYPE_TEXT_FONT_ALIGNMENT));
@@ -1139,13 +1139,13 @@ function figure_Template_HyperLink(frmLin) {
     var x = frmLin.X;
     var y = frmLin.Y;
 
-    var t2 = new Text(frmLin.Text, x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text(frmLin.Lab, x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
 
     //修改偏移的问题
     x = t2.getNormalWidth() / 2 + x;
     y = t2.getNormalHeight() / 2 + y;
 
-    t2 = new Text(frmLin.Text, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
+    t2 = new Text(frmLin.Lab, x, y, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = "#0000ff";
     t2.underlined = true;
 

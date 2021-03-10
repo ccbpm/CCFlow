@@ -26,7 +26,7 @@
                 <li>
                     <a href="javascript:void(0)" @click="OpenDialog(0)">设置/更改本组织处理人</a>
                 </li>
-                <li>
+                <li v-show="isShow">
                     <a href="javascript:void(0)" @click="OpenDialog(1)">设置/更改集团处理人</a>
                 </li>
                 <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
@@ -54,7 +54,9 @@
             el: '#App',
             data: {
                 emps: [],
-                deliverWay:DeliveryWay.ByBindEmp
+                deliverWay: DeliveryWay.ByBindEmp,
+                isShow: true,
+                webUser: {},
             },
             methods: {
                 OpenDialog: function (type) {
@@ -63,18 +65,22 @@
                     var nodeID = GetQueryString("FK_Node");
                     url += '&NodeID=' + nodeID + '&PKVal=' + nodeID + "&M=" + Math.random();
                     var rootNo = 0;
-                    var webUser = new WebUser();
+                    //var webUser = new WebUser();
                     if (type == 0) {
-                        if (webUser.CCBPMRunModel != 0)
-                            rootNo = webUser.OrgNo;
+                        if (this.webUser.CCBPMRunModel != 0)
+                            rootNo = this.webUser.OrgNo;
                         url += "&RootNo=" + rootNo;
                     }
                     if (type == 1) {
-                        if (webUser.CCBPMRunModel != 0) {
+                        if (this.webUser.CCBPMRunModel == 2)
+                            rootNo = this.webUser.OrgNo;
+                        if (this.webUser.CCBPMRunModel == 1) {
                             var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
-                            orgs.RetrieveCond("No", "=", "ParentNo");
-                            if (orgs.length != 0)
+                            orgs.RetrieveCond("No", "=","ParentNo");
+                            if (orgs.length != 0) {
                                 rootNo = orgs[0].No;
+                            }
+                                
                         }
                         url += "&RootNo=" + rootNo;
                     }
@@ -85,6 +91,8 @@
             },
             created() {
                 InitBar(this.deliverWay);
+                this.webUser = new WebUser();
+                this.isShow = this.webUser.CCBPMRunModel == 2 ? false : true;
                 this.emps = getEmps();
             }
         });

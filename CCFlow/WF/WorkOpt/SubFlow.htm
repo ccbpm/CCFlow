@@ -46,9 +46,7 @@
             //查询出来所有子流程的数据.
             var sf = new Entity("BP.WF.Template.FrmSubFlow", GetQueryString("FK_Node"));
             var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-            if (sf.SFDefInfo.trim().Length == 0)
-                return;
-
+          
             var html = "";
 
             html += "<table width='100%'>";

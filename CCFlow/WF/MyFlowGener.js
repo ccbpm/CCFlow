@@ -34,8 +34,6 @@ $(function () {
 
     initPageParam(); //初始化参数
 
-    //InitToolBar(); //工具栏.ajax
-
     GenerWorkNode(); //表单数据.ajax
 
 
@@ -482,41 +480,6 @@ function Save(saveType) {
 
 }
 
-//调用后，就关闭刷新按钮.
-function returnWorkWindowClose(data) {
-
-    if (data == "" || data == "取消") {
-        $('#returnWorkModal').modal('hide');
-        setToobarEnable();
-        return;
-    }
-
-    $('#returnWorkModal').modal('hide');
-    //通过下发送按钮旁的下拉框选择下一个节点
-    if (data != null && data != undefined && data.indexOf('SaveOK@') == 0) {
-        //说明保存人员成功,开始调用发送按钮.
-        var toNode = 0;
-        //含有发送节点 且接收
-        if ($('#DDL_ToNode').length > 0) {
-            var selectToNode = $('#DDL_ToNode  option:selected').data();
-            toNode = selectToNode.No;
-        }
-
-        execSend(toNode);
-        //$('[name=Send]:visible').click();
-        return;
-    } else {//可以重新打开接收人窗口
-        winSelectAccepter = null;
-    }
-
-    if (data != null && data != undefined && (data.indexOf('err@') == 0 || data == "取消")) {//发送时发生错误
-        $('#Message').html(data);
-        $('#MessageDiv').modal().show();
-        return;
-    }
-
-    OptSuc(data);
-}
 
 
 
@@ -716,7 +679,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         }
     });
 
-   
+    
 
     if (!isCotainTextArea) {
         formArrResult = $.grep(formArrResult, function (value) {
@@ -1197,16 +1160,17 @@ function GenerWorkNode() {
 
     if (node.FormType == 0 || node.FormType == 10) {
         $("#glyphicon").show();//显示换肤按钮
+        Skip.addJs("./MyFlowFool2017.js?ver=1");
         GenerFoolFrm(flowData); //傻瓜表单.
     }
 
     if (node.FormType == 1) {
-        Skip.addJs("./MyFlowFree2017.js");
+        Skip.addJs("./MyFlowFree2017.js?ver=1");
         GenerFreeFrm(flowData);  //自由表单.
     }
 
     if (node.FormType == 12) {
-        Skip.addJs("./CCForm/FrmDevelop.js");
+        Skip.addJs("./CCForm/FrmDevelop.js?ver=1");
         $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
     }
@@ -1215,15 +1179,18 @@ function GenerWorkNode() {
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     if (node.FormType == 11) {
         if (flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0] != undefined)
-            if (flowData.WF_FrmNode[0].FrmType == 0)
+            if (flowData.WF_FrmNode[0].FrmType == 0) {
+                Skip.addJs("./MyFlowFool2017.js?ver=1");
                 GenerFoolFrm(flowData); //傻瓜表单.
+            }
+                
         if (flowData.WF_FrmNode[0].FrmType == 1) {
-            Skip.addJs("./MyFlowFree2017.js");
+            Skip.addJs("./MyFlowFree2017.js?ver=1");
             GenerFreeFrm(flowData);
         }
 
         if (flowData.WF_FrmNode[0].FrmType == 8) {
-            Skip.addJs("./CCForm/FrmDevelop.js");
+            Skip.addJs("./CCForm/FrmDevelop.js?ver=1");
             $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             GenerDevelopFrm(flowData, flowData.WF_FrmNode[0].FK_Frm);
         }
@@ -1300,9 +1267,9 @@ function GenerWorkNode() {
 
     //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;
-    loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js");
-    loadScript("../DataUser/JSLibData/" + enName + "_Self.js");
-    loadScript("../DataUser/JSLibData/" + enName + ".js");
+    loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js?t="+Math.random());
+    loadScript("../DataUser/JSLibData/" + enName + "_Self.js?t="+ Math.random());
+    loadScript("../DataUser/JSLibData/" + enName + ".js?t="+ Math.random());
 
     //星级评分事件
     var scoreDiv = $(".score-star");
@@ -1359,6 +1326,13 @@ function GenerWorkNode() {
         })
     }
     //给富文本创建编辑器
+
+    //公文解析
+    if ($("#GovDocFile").length > 0) {
+        Skip.addJs(ccbpmPath + "/WF/CCForm/Components/GovDocFile.js");
+        LoadGovDocFile();
+    }
+
 }
 
 //图片附件编辑
@@ -1521,16 +1495,12 @@ document.BindEditorMapAttr = [];
 */
 
 
-
-
 /* 打开公文表单 */
 function OpenOffice(isEdit) {
     var url = "./WorkOpt/DocWord.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
     WinOpen(url);
     return;
 }
-
-
 
 // 检查审核组件,是否加盖了电子签章？
 function CheckFWC() {

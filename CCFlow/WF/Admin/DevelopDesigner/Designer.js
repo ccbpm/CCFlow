@@ -46,7 +46,7 @@ UE.plugins['impfrm'] = function () {
     var frmID = pageParam.fk_mapdata;
     var W = document.body.clientWidth - 120;
     var H = document.body.clientHeight - 80;
-    var url = "../FoolFormDesigner/ImpExp/Imp.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmID=" + GetQueryString("FK_MapData") + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+    var url = "../FoolFormDesigner/ImpExp/Imp/Default.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmID=" + GetQueryString("FK_MapData") + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
     me.commands[thePlugins] = {
         execCommand: function (method, dataType) {
             var dialog = new UE.ui.Dialog({
@@ -67,7 +67,7 @@ UE.plugins['impfrm'] = function () {
 UE.plugins['frmmobile'] = function () {
     var me = this, thePlugins = 'frmmobile';
     var frmID = pageParam.fk_mapdata;
-    var W = 600;
+    var W = 400;
     var H = 600;
     var url = '../MobileFrmDesigner/Default.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
     me.commands[thePlugins] = {
@@ -135,8 +135,10 @@ UE.plugins['text'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                var mapAttr = new Entity("BP.Sys.MapAttr");
+                mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
                 mapAttr.Delete();
+
                 var mapExt = new Entities("BP.Sys.MapExts");
                 mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
 
@@ -432,6 +434,13 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     if (shap == 'Map') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=' + mypk;
         CCForm_ShowDialog(url, '地图组件', null, null, shap, mypk, anchorEl);
+        return;
+    }
+
+
+    if (shap == 'GovDocFile') {
+        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=' + fk_mapdata + "_" + mypk;
+        CCForm_ShowDialog(url, '公文正文组件', null, null, shap, mypk, anchorEl);
         return;
     }
 
@@ -748,7 +757,8 @@ UE.plugins['enum'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                var mapAttr = new Entity("BP.Sys.MapAttr");
+                mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
                 mapAttr.Delete();
                 var mapExt = new Entities("BP.Sys.MapExts");
                 mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
@@ -857,7 +867,8 @@ UE.plugins['textarea'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                var mapAttr = new Entity("BP.Sys.MapAttr", );
+                mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
                 mapAttr.Delete();
                 var mapExt = new Entities("BP.Sys.MapExts");
                 mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
@@ -977,7 +988,8 @@ UE.plugins['select'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + keyOfEn);
+                var mapAttr = new Entity("BP.Sys.MapAttr");
+                mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
                 mapAttr.Delete();
                 var mapExt = new Entities("BP.Sys.MapExts");
                 mapExt.Delete("FK_MapData", pageParam.fk_mapdata, "AttrOfOper", keyOfEn);
@@ -1240,6 +1252,7 @@ UE.plugins['dtl'] = function () {
                     return false;
                 }
                 var mapDtl = new Entity("BP.Sys.MapDtl", no);
+                mapDtl.No = no;
                 mapDtl.Delete();
 
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
@@ -1333,7 +1346,8 @@ UE.plugins['ath'] = function () {
                     alert('附件属性没有获取到，请联系管理员');
                     return false;
                 }
-                var ath = new Entity("BP.Sys.FrmAttachment", mypk);
+                var ath = new Entity("BP.Sys.FrmAttachment");
+                ath.MyPK = mypk;
                 ath.Delete();
 
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
@@ -1428,6 +1442,10 @@ UE.plugins['component'] = function () {
                 ExtImgAth();
             }
 
+            if (dataType == "GovDocFile") {  //公文正文组件
+                ExtGovDocFile();
+            }
+
             if (dataType == "DocWord") {  //发文字号
                 ExtDocWord();
             }
@@ -1503,26 +1521,26 @@ UE.plugins['component'] = function () {
 
                 if (dataType == "AthImg") {
                     var imgAth = new Entity("BP.Sys.FrmImgAth", mypk);
+                    imgAth.MyPK = mypk;
                     imgAth.Delete();
                 }
                 if (dataType == "Img") {
                     var en = new Entity("BP.Sys.FrmUI.ExtImg", mypk);
+                    en.MyPK = mypk;
                     en.Delete();
                 }
                 if (dataType == "IFrame") {
-                    var en = new Entity("BP.Sys.FrmUI.MapFrameExt", mypk);
+                    var en = new Entity("BP.Sys.FrmUI.MapFrameExt");
+                    en.MyPK = mypk;
                     en.Delete();
                 }
-                if (dataType == "Map") {
-                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
-                    mapAttr.Delete();
-                }
-                if (dataType == "Score") {
-                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
+                if (dataType == "Map" || dataType == "Score" || dataType == "HandWriting" ) {
+                    var mapAttr = new Entity("BP.Sys.MapAttr");
+                    mapAttr.MyPK = mypk;
                     mapAttr.Delete();
                 }
 
-                if (dataType == "DocWord" || dataType == "DocWordReceive"  ) {
+                if (dataType == "GovDocFile"  || dataType == "DocWord" || dataType == "DocWordReceive"  ) {
                     var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + mypk);
                     mapAttr.Delete();
                 }
@@ -1535,11 +1553,7 @@ UE.plugins['component'] = function () {
                     var frmBtn = new Entity("BP.Sys.FrmUI.FrmBtn", pageParam.fk_mapdata + "_" + mypk);
                     frmBtn.Delete();
                 }
-
-                if (dataType == "HandWriting") {
-                    var mapAttr = new Entity("BP.Sys.MapAttr", mypk);
-                    mapAttr.Delete();
-                }
+               
                 if (dataType == "SubFlow") {
                     var nodeID = GetQueryString("FK_Node");
                     var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
@@ -1587,6 +1601,11 @@ UE.plugins['component'] = function () {
             if (dataType == "Score")
                 _html = popup.formatHtml(
                     '<nobr>评分控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+
+            if (dataType == "GovDocFile")
+                _html = popup.formatHtml(
+                    '<nobr>公文正文组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
+
 
             if (dataType == "DocWord")
                 _html = popup.formatHtml(
@@ -1941,6 +1960,38 @@ function ExtImgAth() {
         leipiEditor.execCommand('insertHtml', _html);
     });
 }
+
+
+//公文正文组件
+function ExtGovDocFile() {
+    var en = new Entity("BP.Sys.MapAttr");
+    en.SetPKVal(pageParam.fk_mapdata + "_GovDocFile");
+    if (en.RetrieveFromDBSources() == 1) {
+        alert("该表单 GovDocFile 字段已经存在。");
+        return;
+    }
+
+    var mypk = pageParam.fk_mapdata + "_GovDocFile";
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 110; //公文正文.
+    mapAttr.MyPK = mypk;
+    mapAttr.FK_MapData = pageParam.fk_mapdata;
+    mapAttr.KeyOfEn = "GovDocFile";
+    mapAttr.Name = "公文正文组价";
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 1; // 
+    mapAttr.UIWidth = 150;
+    mapAttr.UIHeight = 170;
+    mapAttr.Insert(); //插入字段.
+    mapAttr.Retrieve();
+    var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
+    OpenEasyUiDialog(url, "eudlgframe", '公文正文组件', 800, 500, "icon-edit", true, null, null, null, function () {
+        var _Html = "<input type='text'  id='TB_GovDocFile' name='TB_GovDocFile' data-key='GovDocFile' data-name='公文正文组件' data-type='GovDocFile'   leipiplugins='component' style='width:98%'  placeholder='公文正文组件'/>";
+        leipiEditor.execCommand('insertHtml', _Html);
+    });
+}
+
 
 //发文字号
 function ExtDocWord() {
@@ -2338,6 +2389,11 @@ function Save() {
                         mapAttr.UIContralType = 15; //评论组件
                     }
 
+                    if (dataType == "GovDocFile") {
+                        dataType = 1;
+                        mapAttr.UIContralType = 110;//公文正文组件.
+                    }
+
                     if (dataType == "DocWord") {
                         dataType = 1;
                         mapAttr.UIContralType = 17;//发文字号
@@ -2500,11 +2556,13 @@ function Save() {
                 leipiEditor.execCommand('insertHtml', _html);
             }
         }
-        
     }
-   
 
+    //获得内容.
     formeditor = leipiEditor.getContent();
+
+    $("#Btn_Save").val("正在保存....");
+
     //保存表单的html信息
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
@@ -2515,8 +2573,7 @@ function Save() {
         alert(data);
         return;
     }
-    //$("#Btn_Save").val("保存成功.....");
-    //  alert("保存成功!");
+
     $("#Btn_Save").val("保存");
 }
 

@@ -46,8 +46,10 @@ function InitBar(optionKey) {
         html += "<option value=" + FrmComponents.BigText + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
 
     html += "<option value=null  disabled='disabled'>+流程组件</option>";
+    html += "<option value=" + FrmComponents.GovDocFile + ">&nbsp;&nbsp;&nbsp;&nbsp;公文正文组件</option>";
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
     html += "<option value=" + FrmComponents.FlowBBS + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
+    html += "<option value=" + FrmComponents.GovDocFile + ">&nbsp;&nbsp;&nbsp;&nbsp;公文正文组件</option>";
     html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;发文字号</option>";
     html += "<option value=" + FrmComponents.DocWordReceive + ">&nbsp;&nbsp;&nbsp;&nbsp;收文字号</option>";
     html += "<option value=" + FrmComponents.JobSchedule + ">&nbsp;&nbsp;&nbsp;&nbsp;流程进度图</option>";
@@ -123,6 +125,9 @@ function changeOption() {
             break;
         case FrmComponents.Fiexed:
             roleName = "16.Fiexed.htm";
+            break;
+        case FrmComponents.GovDocFile: //公文正文组件.
+            roleName = "110.GovDocFile.htm";
             break;
         case FrmComponents.DocWord:
             roleName = "17.DocWord.htm";
@@ -282,6 +287,38 @@ function ExtMap() {
     }
 }
 
+
+//公文正文组件
+function ExtGovDocFile() {
+
+    var en = new Entity("BP.Sys.MapAttr");
+    en.SetPKVal(fk_mapData + "_GovDocFile");
+    if (en.RetrieveFromDBSources() == 1) {
+        alert("该表单 GovDocFile 字段已经存在.");
+        return "";
+    }
+
+    var mypk = fk_mapData + "_GovDocFile";
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 17; //发文字号.
+    mapAttr.MyPK = mypk;
+    mapAttr.FK_MapData = fk_mapData;
+    mapAttr.KeyOfEn = "GovDocFile";
+    mapAttr.Name = "公文正文组件";
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 1; //
+    mapAttr.UIWidth = 150;
+    mapAttr.UIHeight = 23;
+    mapAttr.Insert(); //插入字段.
+    if (frmType != 8)
+        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
+    if (frmType == 8) {
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
+    }
+}
+
+
 //公文发文字号
 function ExtDocWord() {
 
@@ -307,8 +344,9 @@ function ExtDocWord() {
     mapAttr.Insert(); //插入字段.
     if (frmType != 8)
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDocWord&MyPK=" + mapAttr.MyPK;
+
     if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17);
     }
 }
 
@@ -753,6 +791,7 @@ function ExtBtn() {
         alert('名称：[' + name + "]已经存在.");
         return "";
     }
+
     mapAttr.FK_MapData = frmID;
     mapAttr.KeyOfEn = id;
     mapAttr.Name = name;
@@ -764,18 +803,13 @@ function ExtBtn() {
     mapAttr.TextColSpan = 1; //
     mapAttr.IsEnableInAPP = 0;
     mapAttr.Insert(); //插入字段.
-
     mapAttr.Retrieve();
-
-    var en = new Entity("BP.Sys.FrmUI.FrmBtn");
-    en.MyPK = mapAttr.MyPK;
-    en.FK_MapData = frmID;
-    en.BtnID = id;
-    en.Text = name;
-    en.GroupID = mapAttr.GroupID; //设置分组列.
-    en.Insert(); //插入到数据库.
-    if (frmType != 8)
+     
+    if (frmType != 8) {
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + en.MyPK;
+        return;
+    }
+
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 18)
     }

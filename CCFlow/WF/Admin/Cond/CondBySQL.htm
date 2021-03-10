@@ -11,7 +11,7 @@
     <script src="../../Scripts/CodeMirror/mode/sql/sql.js"></script>
     <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../LoadSql.js"></script>
+    <script src="../../Scripts/LoadSql.js"></script>
 
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -90,7 +90,7 @@
                 alert('请输入备注说明.');
                 return;
             }
- 
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("CondType", condType);
             handler.AddPara("FK_Flow", fk_flow);
@@ -160,10 +160,10 @@
             newWindow.focus();
 
         }
-         //返回.
+        //返回.
         function Back() {
             var url = window.location.href;
-            if (condOrAnd==null)
+            if (condOrAnd == null)
                 url = url.replace('CondBySQL.htm', 'List.htm');
             else
                 url = url.replace('CondBySQL.htm', '../Cond2020/DirList.htm');

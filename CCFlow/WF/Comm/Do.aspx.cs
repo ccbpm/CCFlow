@@ -71,9 +71,8 @@ namespace CCFlow.Web.Comm
 			switch (this.DoType)
 			{
                 case "SearchExp":
-                    this.SearchExp();
+                //    this.SearchExp();
                     break;
-				 
 				case "DownFile":
 					Entity enF = BP.En.ClassFactory.GetEn(this.EnName);
 					enF.PKVal = this.Request.QueryString["PK"];
@@ -99,43 +98,9 @@ namespace CCFlow.Web.Comm
 				default:
 					break;
 			}
-
 			this.WinClose();
 		}
-
-        public void SearchExp()
-        {
-            BP.WF.HttpHandler.WF_Comm comm = new BP.WF.HttpHandler.WF_Comm();
-            DataSet ds = comm.Search_Search();
-
-            DataTable dt = ds.Tables["DT"];
-
-            Entities ens = ClassFactory.GetEns(this.EnsName);
-            Entity en = ens.GetNewEntity;
-            Map map = en.EnMapInTime;
-            foreach (Attr  item in map.Attrs)
-            {
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    try
-                    {
-                        if (item.Key == dc.ColumnName)
-                            dc.ColumnName = item.Desc;
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
-
-            string name = map.EnDesc + ".xls";
-
-            string filename = Request.PhysicalApplicationPath + @"\Temp\" +DBAccess.GenerGUID() + ".xls";
-            CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(dt, filename, name,
-                                                              BP.Web.WebUser.Name, true, true, true);
-        }
-
+     
 		#region Web 窗体设计器生成的代码
 		override protected void OnInit(EventArgs e)
 		{

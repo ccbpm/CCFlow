@@ -36,7 +36,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("RadioBtns_Init");
-            $('#lb_EnName').text(pageData.KeyOfEn);
 
             if (data != undefined && data.indexOf('err@') == 0) {
                 console.error(data);
@@ -83,8 +82,8 @@
 
                 mapAttrHtml += '<tr>';
                 mapAttrHtml += '<td>' + myIdx + '</td>';
-                mapAttrHtml += '<td>' + attr.KeyOfEn + '</td>';
-                mapAttrHtml += '<td>' + attr.Name + '</td>';
+                mapAttrHtml += '<td alt=' + attr.keyOfEn + ' >' + attr.Name + '</td>';
+                //mapAttrHtml += '<td>' + attr.Name + '</td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td>';
@@ -291,7 +290,7 @@
                     }
                 });
 
-                 //为附件组件绑定DATA
+                //为附件组件绑定DATA
                 $.each(initData.FrmAttachments, function (i, ath) {
                     var keyOfEn = ath.MyPK;
                     if (viewStaObj[keyOfEn] != undefined) {
@@ -314,7 +313,7 @@
                     $('#' + keyOfEn + '0').attr('checked', true);
                 });
 
-                 //为附件组件绑定DATA
+                //为附件组件绑定DATA
                 $.each(initData.FrmAttachments, function (i, ath) {
                     var keyOfEn = ath.MyPK;
                     $('#' + keyOfEn + '0').attr('checked', true);
@@ -325,6 +324,8 @@
         //执行保存
         function Save() {
 
+            $("#Btn_Save").text("正在保存请稍后...");
+
             //保存当前打开表单信息
             SaveCurrentConfig();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
@@ -334,7 +335,8 @@
             handler.AddPara("KeyOfEn", pageData.KeyOfEn);
             var data = handler.DoMethodReturnString("RadioBtns_Save");
 
-            alert(data)
+            window.location.href = window.location.href;
+
         }
 
         function SaveAndClose() {
@@ -366,175 +368,163 @@
     </script>
 </head>
 <body>
-    <div style="right:10px; position:absolute; z-index:100; top:-3px">
-        <button onclick="Save()" id="Btn_Save">
-            <img src="../../../Img/Btn/Save.png" /> 保存
+
+    <h3>
+        选项联动控件
+        <button onclick="Save()" type="button" id="Btn_Save">
+            保存
         </button>
+    </h3>
 
-        <!--<input type="button" id="Btn_Save" value="保存"  />-->
-        <!--<input type="button" value="保存并关闭" onclick="SaveAndClose()" />
-        <input type="button" value="关闭" onclick="Close()" />-->
 
-    </div>
-    <table style="width: 100%;">
-        <caption>
-            <label id="lb_EnName">
-            </label>
-            字段的高级设置
-            <a style="margin-right:180px;" href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />帮助:</a>
-        </caption>
-        <tr>
-            <td valign="top">
-                <fieldset>
-                    <legend>是否启用？</legend>
-                    <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
-                    <label for="RB_IsEnableJS_1">
-                        启用
-                    </label>
-                    <input type="radio" value="0" id="RB_IsEnableJS_0" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
-                    <label for="RB_IsEnableJS_0">
-                        禁用
-                    </label>
-                    <ul>
-                        <li>禁用当前的配置就不生效.</li>
-                    </ul>
-                </fieldset>
-                <fieldset>
-                    <legend>列表值 </legend>
-                    <ul id="ulListValues" style="margin: 0; border: 0; padding: 0;">
-                    </ul>
+    <fieldset>
+        <legend>是否启用？</legend>
+        <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
+        <label for="RB_IsEnableJS_1">
+            启用
+        </label>
+        <input type="radio" value="0" id="RB_IsEnableJS_0" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
+        <label for="RB_IsEnableJS_0">
+            禁用
+        </label>
+        <ul>
+            <li>禁用当前的配置就不生效.</li>
+        </ul>
 
-                    <br />
 
-                    <ul>
-                        <li>需要为每个选择项设置显示与隐藏的内容，设置js,top的提示信息.</li>
-                    </ul>
+        <legend>列表值 </legend>
+        <ul id="ulListValues" style="margin: 0; border: 0; padding: 0;">
+        </ul>
 
-                </fieldset>
-                <fieldset>
-                    <legend>执行JS脚本(可以为空)</legend>
-                    <div id="JS">
-                        <textarea rows="3" cols="50" id="TB_Script"></textarea>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>Tip 提示信息(可以为空)</legend>
-                    <div id="Tip">
-                        <textarea rows="3" cols="50" id="TB_Tip"></textarea>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>联动其他的控件使其属性该表(可见，只读) 注意:<font color=red>被联动的控件在傻瓜表单模式下要占三行</font></legend>
-                    <form id="formFields">
-                        <div id="Fields">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            #
-                                        </th>
-                                        <th>
-                                            字段
-                                        </th>
-                                        <th>
-                                            字段名
-                                        </th>
-                                        <th>
-                                            不设置
-                                        </th>
-                                        <th>
-                                            可以编辑
-                                        </th>
-                                        <th>
-                                            可见？
-                                        </th>
-                                        <th>
-                                            不可见
-                                        </th>
-                                        <th>
-                                            设置值
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <br />
-                        <legend>联动<font color=red>从表控件</font>使其属性该表(可见) </legend>
-                        <div id="mapDtls">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            #
-                                        </th>
-                                        <th>
-                                            从表ID
-                                        </th>
-                                        <th>
-                                            从表名
-                                        </th>
-                                        <th>
-                                            不设置
-                                        </th>
-                                        <th>
-                                            可以编辑
-                                        </th>
-                                        <th>
-                                            可见？
-                                        </th>
-                                        <th>
-                                            不可见
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <br />
-                        <legend>联动<font color=red>附件控件</font>使其属性该表(可见) </legend>
-                        <div id="aths">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            #
-                                        </th>
-                                        <th>
-                                            附件组件ID
-                                        </th>
-                                        <th>
-                                            附件组件名
-                                        </th>
-                                        <th>
-                                            不设置
-                                        </th>
-                                        <th>
-                                            可以编辑
-                                        </th>
-                                        <th>
-                                            可见？
-                                        </th>
-                                        <th>
-                                            不可见
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>
-                </fieldset>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-            </td>
-        </tr>
-    </table>
+        <br />
+
+        <legend>联动其他的控件使其属性该表(可见，只读) </legend>
+        <form id="formFields">
+            <div id="Fields">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                字段
+                            </th>
+
+                            <th>
+                                不设置
+                            </th>
+                            <th>
+                                可编辑
+                            </th>
+                            <th>
+                                可见？
+                            </th>
+                            <th>
+                                不可见
+                            </th>
+                            <th>
+                                设置值
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                注意:<font color=red>被联动的控件在傻瓜表单模式下要占三行</font>
+            </div>
+            <br />
+
+            <legend>联动<font color=red>从表控件</font>使其属性该表(可见) </legend>
+
+            <div id="mapDtls">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                从表ID
+                            </th>
+                            <th>
+                                从表名
+                            </th>
+                            <th>
+                                不设置
+                            </th>
+                            <th>
+                                可以编辑
+                            </th>
+                            <th>
+                                可见？
+                            </th>
+                            <th>
+                                不可见
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <legend>联动<font color=red>附件控件</font>使其属性该表(可见) </legend>
+
+            <div id="aths">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                附件组件ID
+                            </th>
+                            <th>
+                                附件组件名
+                            </th>
+                            <th>
+                                不设置
+                            </th>
+                            <th>
+                                可以编辑
+                            </th>
+                            <th>
+                                可见？
+                            </th>
+                            <th>
+                                不可见
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>高级设置</legend>
+
+        <ul>
+            <li>需要为每个选择项设置显示与隐藏的内容，设置js,top的提示信息.</li>
+        </ul>
+
+
+        <legend>执行JS脚本(可以为空)</legend>
+
+        <div id="JS">
+            <textarea rows="3" cols="50" id="TB_Script"></textarea>
+        </div>
+
+        <legend>Tip 提示信息(可以为空)</legend>
+        <div id="Tip">
+            <textarea rows="3" cols="50" id="TB_Tip"></textarea>
+        </div>
+    </fieldset>
 
 
     <div id='sqlexp' style='color: Gray; display: none'>

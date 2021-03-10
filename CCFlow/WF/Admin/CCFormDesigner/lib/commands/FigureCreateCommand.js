@@ -157,7 +157,7 @@ FigureCreateCommand.prototype = {
         var btn = new Entity("BP.Sys.FrmBtn");
         btn.MyPK = createdFigure.CCForm_MyPK;
         btn.FK_MapData = CCForm_FK_MapData;
-        btn.Text = "Btn";
+        btn.Lab = "Btn";
         btn.EventType = 2;
         btn.EventContext = "";
         btn.X = x;
@@ -172,7 +172,7 @@ FigureCreateCommand.prototype = {
         frmLink.MyPK = createdFigure.CCForm_MyPK;
         frmLink.FK_MapData = CCForm_FK_MapData;
         frmLink.Target = "_blank";
-        frmLink.Text = '我的超链接';
+        frmLink.Lab = '我的超链接';
         frmLink.X = x;
         frmLink.Y = y;
         frmLink.Insert();

@@ -2,6 +2,7 @@
 
 //检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
+
     //首位可以是字母以及下划线。 
     //首位之后可以是字母，数字以及下划线。下划线后不能接下划线
 
@@ -535,6 +536,9 @@ function GenerFullAllCtrlsVal(data) {
 
                     // textbox
                     tb = document.getElementById('TBPara_' + suffix);
+                    if (tb == null)
+                        tb = document.getElementById('TB_' + suffix);
+
                     if (tb != null) {
 
                         val = val.replace(new RegExp("~", "gm"), "'");
@@ -544,6 +548,9 @@ function GenerFullAllCtrlsVal(data) {
 
                     //下拉框.
                     ddl = document.getElementById('DDLPara_' + suffix);
+                    if (ddl == null)
+                        ddl = document.getElementById('DDL_' + suffix);
+
                     if (ddl != null) {
 
                         if (ddl.options.length == 0)
@@ -564,6 +571,9 @@ function GenerFullAllCtrlsVal(data) {
 
                     //checkbox.
                     cb = document.getElementById('CBPara_' + suffix);
+                    if (cb == null)
+                        cb = document.getElementById('CB_' + suffix);
+
                     if (cb != null) {
                         if (val == "1" || val == 1)
                             cb.checked = true;
@@ -574,6 +584,9 @@ function GenerFullAllCtrlsVal(data) {
 
                     // RadioButton. 单选按钮.
                     rb = document.getElementById('RBPara_' + suffix + "_" + val);
+                    if (rb == null)
+                        rb = document.getElementById('RB_' + suffix + "_" + val);
+
                     if (rb != null) {
                         rb.checked = true;
                         return true;
@@ -993,16 +1006,29 @@ var Entity = (function () {
                         return 0; //插入失败.
                     }
 
+
                     data = JSON.parse(data);
                     result = data;
 
-                    var self = this;
+                    //alert(result.No);
+                    //alert(data.No);
+                    // setData(result);
+                    // return;
+
+                    //var self = this;
                     $.each(data, function (n, o) {
                         if (typeof self[n] !== "function") {
                             jsonString[n] = o;
                             self[n] = o;
                         }
                     });
+
+                    //alert(result.No);
+                    //alert(data.No);
+                    //alert(" self "+self.No);
+
+                    //alert(result.No);
+                    //alert(this.No);
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -2742,7 +2768,7 @@ function DealExp(expStr, webUser) {
         } else if (obj == "select") {
             NodeValue = decodeURI(objs[i].value);
         }
-        var key = "@"+NodeID.substring(NodeID.indexOf("_") + 1);
+        var key = "@" + NodeID.substring(NodeID.indexOf("_") + 1);
         expStr = expStr.replace(new RegExp(key, 'g'), NodeValue);
     }
 
@@ -2788,7 +2814,20 @@ function GetPara(atPara, key) {
 
 }
 
+//用户处理日志
+function UserLogInsert(logType, logMsg, userNo) {
+    if (userNo == null || userNo == undefined) {
+        if (loadWebUser == null)
+            loadWebUser = new WebUser();
+        userNo = loadWebUser.No;
+    }
+    var userLog = new Entity("BP.Sys.UserLog");
+    userLog.FK_Emp = userNo;
+    userLog.LogFlag = logType;
+    userLog.Docs = logMsg;
+    userLog.Insert();
 
+}
 
 function SFTaleHandler(url) {
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
@@ -2850,25 +2889,15 @@ function validate(s) {
     }
     return true;
 }
+
 var loadWebUser = null;
-var url = window.location.href.toLowerCase();
-if (url.indexOf('login.htm') == -1 && url.indexOf('dbinstall.htm') == -1) {
-    loadWebUser = new WebUser();
-}
+
 //初始化页面
 $(function () {
     var ver = IEVersion();
-    if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
-
+    if (ver == 6 || ver == 7 || ver == 8 || ver == 9) {
         jQuery.getScript(basePath + "/WF/Scripts/jquery.XDomainRequest.js")
-            .done(function () {
-                /* 耶，没有问题，这里可以干点什么 */
-                //alert('ok');
-            })
-            .fail(function () {
-                /* 靠，马上执行挽救操作 */
-                //alert('err');
-            });
+    }
     //   debugger;
     if (plant == "CCFlow") {
         // CCFlow
@@ -2877,32 +2906,53 @@ $(function () {
         // JFlow
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
-    //判断登录权限.
 
-    if (url.indexOf('login.htm') == -1
-        && url.indexOf('dbinstall.htm') == -1
-        && url.indexOf('registeradminer.htm') == -1
-        && url.indexOf('registerorg.htm') == -1
-        && url.indexOf('reqpassword.htm') == -1
-        && url.indexOf('reguser.htm') == -1
-        && url.indexOf('port.htm') == -1) {
+    var url = window.location.href.toLowerCase();
 
-        if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {
-            dynamicHandler = "";
-            alert("登录信息丢失,请重新登录.");
-            return;
-        }
+    //var i = url.lastIndexOf('.');
+    //  alert(i);
 
-        //要排除的目录.
-        if (url.indexOf("/admin/TestingContainer/") == -1)
-            return;
+    //不需要权限信息..
+    if (url.indexOf('login.htm') != -1
+        || url.indexOf('dbinstall.htm') != -1
+        || url.indexOf('default.htm') != -1
+        || url.indexOf('index.htm') != -1
+        || url.indexOf('registerbywebsite.htm') != -1
+        || url.indexOf('reqpassword.htm') != -1
+        || url.indexOf('reguser.htm') != -1
+        || url.indexOf('port.htm') != -1
+        || url.indexOf('ccbpm.cn/') != -1
+        || url.lastIndexOf('/') == 0
+        || url.lastIndexOf('.') == -1
+        || url.lastIndexOf('.') >= 4
+        || url.indexOf('loginwebsite.htm') != -1) {
+        return;
+    }
 
-        //如果进入了管理员目录.
-        if (url.indexOf("/admin/") != -1 && loadWebUser.IsAdmin != 1) {
-            dynamicHandler = "";
-            alert("管理员登录信息丢失,请重新登录,当前用户[" + loadWebUser.No + "]不能操作管理员目录功能.");
-            return;
-        }
+    loadWebUser = new WebUser();
+
+    if (loadWebUser != null && (loadWebUser.No == "" || loadWebUser.No == undefined || loadWebUser.No == null)) {
+        dynamicHandler = "";
+        alert("登录信息丢失,请重新登录.");
+        return;
+    }
+    //要排除的目录.
+    if (url.indexOf("/admin/TestingContainer/") == -1)
+        return;
+    //如果进入了管理员目录.
+    if (url.indexOf("/admin/") != -1 && loadWebUser.IsAdmin != 1) {
+        dynamicHandler = "";
+        alert("管理员登录信息丢失,请重新登录,当前用户[" + loadWebUser.No + "]不能操作管理员目录功能.");
+        return;
     }
 
 });
+
+/**
+ * 子页面跨域调用父页面方法
+ * @param {any} info
+ * @param {any} action
+ */
+function ChildrenPostMessage(info, action) {
+    parent.postMessage({ action: action, info: info }, "*");
+}

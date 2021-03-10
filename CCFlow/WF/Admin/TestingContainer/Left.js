@@ -39,20 +39,33 @@ function InitPageUserInfo() {
 
     var html = "<ul class='nav' id='side-menu'>";
 
+    if (urlEnd.indexOf("Adminer") == -1)
+        urlEnd += "&Adminer=" + GetQueryString("Adminer");
+    if (urlEnd.indexOf("AdminerSID") == -1)
+        urlEnd += "&AdminerSID=" + GetQueryString("AdminerSID");
+    if (urlEnd.indexOf("OrgNo") == -1)
+        urlEnd += "&OrgNo=" + GetQueryString("OrgNo");
+
     html += "<li>"
     html = "<ul style='border:solid 1px #C2D5E3;'>";
     html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2" + urlEnd + "' class='J_menuItem' >切换用户</a></li>";
     html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2" + urlEnd + "' class='J_menuItem' >数据库信息</a></li>";
     html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2" + urlEnd + "' class='J_menuItem' >轨迹图</a></li>";
     html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
-    html += "<li style='padding:5px;'><a href='javascript:LetAdminerLoginLeft();' >安全退出 </a></li>";
-    html += "<li style='padding:5px;'><a href='javascript:ToLogin();' >登录到前台</a></li>";
+    html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
+
+    var runModel = GetQueryString("RunModel");
+    if (runModel != 2) {
+        html += "<li style='padding:5px;'><a href='javascript:ToLogin();'  >登录到前台</a></li>";
+    }
+
     html += "</ul>";
     html += "</li>";
     html += "</ul>";
     $("#Info").html(html);
 
 }
+
 function ToLogin() {
 
     if (window.confirm('您确定要退出吗？') == false)
@@ -100,7 +113,10 @@ function Restart() {
         window.close();
     }
 
-    urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + adminerSID;
+    urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo;
+    urlEnd += "&Adminer=" + GetQueryString("Adminer") + "&AdminerSID=" + GetQueryString("AdminerSID");
+
+
     InitPageUserInfo();
     document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
 }
@@ -116,11 +132,12 @@ function SelectOneUser() {
     $("#J_iframe").attr('src', url);
 
 }
+
 //如果关闭的时候，就让admin登录.
 function LetAdminerLoginLeft() {
 
-    //if (window.confirm('您确定要退出到管理员[]吗？') == false)
-    //    return;
+    if (window.confirm('您确定要退出到管理员吗？') == false)
+        return;
 
     LetAdminerLogin();
     //window.parent.window.close();

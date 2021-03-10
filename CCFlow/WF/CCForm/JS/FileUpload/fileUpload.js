@@ -16,12 +16,14 @@ $.fn.extend({
                 opt[key] = value;
             }
         });
+        debugger
         uploadTools.initWithLayout(opt);//初始化布局
         uploadTools.initWithDrag(opt);//初始化拖拽
         uploadTools.initWithSelectFile(opt);//初始化选择文件按钮
         uploadTools.initWithUpload(opt);//初始化上传
         uploadTools.initWithCleanFile(opt);
         uploadFileList.initFileList(opt);
+		AthParams.Opt = opt;
     }
 });
 /**
@@ -354,7 +356,7 @@ var uploadTools = {
             uploadTools.disableCleanFile(opt);//禁用清除文件
             if (IsIELower10 == false) {
                 var fileList = uploadFileList.getFileList(opt);
-
+                debugger
                 var formData = new FormData();
                 var fileNumber = uploadTools.getFileNumber(opt);
                 if (fileNumber <= 0) {
@@ -378,7 +380,7 @@ var uploadTools = {
                         formData.append(opt.otherData[j].name, opt.otherData[j].value);
                     }
                 }
-
+                AthParams.Opt = opt;
                 formData.append("filelSavePath", opt.filelSavePath);
                 $.ajax({
                     type: "post",
@@ -398,55 +400,7 @@ var uploadTools = {
             } else {
 
                 UploadChange(uploadUrl, opt.FK_FrmAttachment);
-                //var fileObj = $("#fileUploadContent_file").val();
-                //if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
-                //    alert("请选择上传的文件.");
-                //    return;
-                //}
-
-            
-
-                ////form表单序列话
-                //var parasData = $("form").serialize();
-                ////form表单序列化时调用了encodeURLComponent方法将数据编码了
-                //parasData = decodeURIComponent(parasData, true);
-                //parasData = decodeURIComponent(parasData, true);
-                //parasData = parasData.replace(/&/g, '@');
-                //parasData = parasData.replace(/TB_/g, '');
-                //parasData = parasData.replace(/RB_/g, '');
-                //parasData = parasData.replace(/CB_/g, '');
-                //parasData = parasData.replace(/DDL_/g, '');
-                
-                //    $("#Ath_Form").ajaxSubmit({
-                //        url: uploadUrl,
-                //        type: 'POST',
-                //        dataType: 'json',
-                //        headers: { "ClientCallMode": "ajax" },
-                //        success: function (data) {
-                           
-                //            if (data != null && data.indexOf("err@") != -1) {
-                //                alert(data.replace("err@", ""));
-                //                return;
-                //            }
-                //            if (typeof AfterAthUploadOver === 'function')
-                //                AfterAthUploadOver(FK_MapData, PKVal, data.substring(0,data.length-1));
-                //            window.location.href = window.location.href; 
-                //        },
-                //        error: function (xhr, status, err) {
-                //            if (xhr.responseText != null && xhr.responseText.indexOf("err@") != -1) {
-                //                alert(xhr.responseText);
-                //                return;
-                //            }
-                //            if (typeof AfterAthUploadOver === 'function')
-                //                AfterAthUploadOver(FK_MapData, PKVal, xhr.responseText.substring(0, xhr.responseText.length - 1));
-                //            window.location.href = window.location.href; 
-                //        },
-                //        resetForm: true
-
-                //    });
-                   
-               
-                
+          
                
             }
             
@@ -498,6 +452,7 @@ var uploadTools = {
             },500);
         }
     },
+
     /**
      * 禁用文件上传
      */
@@ -623,7 +578,8 @@ var uploadEvent = {
     }
 }
 
-var uploadFileList={
+var uploadFileList = {
+   
     "initFileList":function(opt){
         opt.fileList = new Array();
     },

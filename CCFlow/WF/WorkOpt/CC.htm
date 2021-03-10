@@ -35,6 +35,7 @@
         #Message {
             width: 100%;
         }
+
         #SelectEmp {
             position: relative;
             width: 300px;
@@ -81,6 +82,7 @@
     </style>
     <script type="text/javascript">
         var param = {};
+        var isFrameCross = GetQueryString("isFrameCross");
         $(function () {
 
             // 如果您要把该页面转入其他页面，请按照如下方式处理.
@@ -139,7 +141,6 @@
             $(".Msg").hide();
 
 
-
             //查询出来抄送的信息.
             var ccs = new Entities("BP.WF.CCLists");
             ccs.Retrieve("FK_Node", GetQueryString("FK_Node"), "WorkID", GetQueryString("WorkID"));
@@ -158,9 +159,10 @@
                 row += "<tr>";
                 // row += "<td>" + i + "</td>";
                 row += "<td>" + cc.CCTo + "," + cc.CCToName + "</td>";
-                row += "<td  title='" + cc.CCToDeptName + "' >" + cc.CCToDeptName + "</td>";
 
-                row += "<td><a href=\"javascript:DeleteIt('" + cc.MyPK + "'," + i + ");\" >移除</a></td>";
+                //   row += "<td  title='" + cc.CCToDeptName + "' >" + cc.CCToDeptName + "</td>";
+
+                row += "<td style='width:100px;'><a href=\"javascript:DeleteIt('" + cc.MyPK + "'," + i + ");\" >移除</a></td>";
 
                 row += "</tr>";
 
@@ -202,7 +204,7 @@
 
         //取消移交
         function CloseAll() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+            if (window.parent != null) {
                 window.parent.close();
             }
             window.close();
@@ -275,7 +277,7 @@
                 var html = "";
                 for (var i = 0; i < data.length; i++) {
                     //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
-                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + ","+data[i].Name+"\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "," + data[i].Name + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                 }
                 $("#SelectEmp").show().html(html);
 
@@ -293,7 +295,7 @@
         }
 
         //选择下拉数据
-        function getCon(no,name) {
+        function getCon(no, name) {
 
             $("#TB_Emps").val('');
 
@@ -313,7 +315,7 @@
 <body>
 
     <div id="labInfo" style="margin-left:20px">
-        
+
         <div style="float:left;margin-top:4px">
             <input type="text" id="TB_Emps" name="TB_Emps"
                    title="查张三,您可输入: zs或zhangs或zhangsan"
@@ -339,7 +341,7 @@
             <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
         </div>
     </div>
-    <br/>
+    <br />
 
     <table class="table table-striped" id="Table1" style="width:98%;padding:5px; margin:10px;">
         <!-- <caption>下一步接受人员列表</caption>-->
@@ -347,15 +349,15 @@
             <tr id="title" class="Sum">
                 <!--<td style="width:40px; font-weight:bolder">#</td>-->
                 <!--<th>编号 </th>-->
-                <td style="width:30%; font-weight:bolder">姓名</td>
-                <td style="width:40%; font-weight:bolder">所在部门</td>
-                <td style="width:60px; font-weight:bolder" colspan="3">操作</td>
+                <td style="width:90%; font-weight:bolder">姓名</td>
+                <!--<td style="width:40%; font-weight:bolder">所在部门</td>-->
+                <td style="width:60px; font-weight:bolder" colspan="1">操作</td>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <div id="HelpInfo" >
+    <div id="HelpInfo">
         <ul>
             <li>1、此处只是添加被抄送人不执行抄送动作，只有在发送成功后执行抄送动作并在提示信息中显示抄送成功的信息</li>
             <li>2、抄送就是把当前的工作抄送给其他人查阅，但是对方没有审批审核的权限。</li>

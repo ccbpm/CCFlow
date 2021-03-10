@@ -44,19 +44,19 @@
             var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
             var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
             //关键字查询.
-            document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+            document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@IsSearchKey=1@") != -1);
 
             var js = md.AtPara.split("@");
             var RptSearchKeys = null;
-            var RptDTSearchWay = null;
-            var RptDTSearchKey = null;
+            var DTSearchWay = null;
+            var DTSearchKey = null;
             for (var i = 0; i < js.length; i++) {
                 if (js[i].indexOf("RptSearchKeys") != -1)
                     RptSearchKeys = js[i].replace("RptSearchKeys=", "")
-                if (js[i].indexOf("RptDTSearchWay") != -1)
-                    RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
-                if (js[i].indexOf("RptDTSearchKey") != -1)
-                    RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
+                if (js[i].indexOf("DTSearchWay") != -1)
+                    DTSearchWay = js[i].replace("DTSearchWay=", "")
+                if (js[i].indexOf("DTSearchKey") != -1)
+                    DTSearchKey = js[i].replace("DTSearchKey=", "")
             }
             //绑定外键字段.
             for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
@@ -72,11 +72,11 @@
                 $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
             }
 
-            $("#DDL_DTSearchWay").val(RptDTSearchWay);
+            $("#DDL_DTSearchWay").val(DTSearchWay);
 
             //绑定日期下拉框.
             if (Sys_MapAttrOfDate != null) {
-                GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", RptDTSearchKey);
+                GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", DTSearchKey);
             }
 
             return;

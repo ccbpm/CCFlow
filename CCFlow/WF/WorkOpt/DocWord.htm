@@ -71,7 +71,7 @@
         }
         function GetDocName() {
             var DocName = "公文模板";
-            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称lz
+            //获取公文模板名称，默认选择上传的第一个，重新选择后用url的DocName获得模板名称
             var ens = new Entities("BP.WF.Template.DocTemplates");
             ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
             if (GetQueryString("DocName") == null)
@@ -88,18 +88,18 @@
             paras += "FK_Flow=" + GetQueryString("FK_Flow") + ",";
             paras += "TempNo=" + GetQueryString("TempNo") + ",";
             paras += "FK_Node=" + GetQueryString("FK_Node") + ",";
-
+            
             var webUser = new WebUser();
             paras += "UserNo=" + webUser.No + ",";
             paras += "SID=" + webUser.SID + ",";
-
+            
             //是否可以编辑(只读)
             var isEdit = "True";
             if (isEdit == "True")
                 paras += "IsReadonly=0,";
             else
                 paras += "IsReadonly=1,";
-
+            
             var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
             
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;

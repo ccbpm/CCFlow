@@ -31,6 +31,7 @@
     <script type="text/javascript">
         var mapExt = null;
         var rootNo;
+        var webUser = new WebUser();
         $(function () {
 
             //global
@@ -45,6 +46,11 @@
 
             //跟节点编号.
             rootNo = GetQueryString("RootNo");
+            if (rootNo == "@WebUser.FK_Dept")
+                rootNo = webUser.FK_Dept;
+            if (webUser.CCBPMRunModel == 2)
+                rootNo = webUser.OrgNo;
+
             if (rootNo == null || rootNo == undefined || rootNo == "")
                 rootNo = "0";
 

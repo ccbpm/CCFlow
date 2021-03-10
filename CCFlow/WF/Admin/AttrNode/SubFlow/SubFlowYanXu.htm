@@ -63,6 +63,9 @@
                 html += "<td>" + en.SubFlowName + "</td>";
                 html += "<td>" + en.SubFlowModelText + "</td>";
 
+                html += "<td>" + en.SubFlowStaText + "</td>";
+
+
                 //  html += "<td>" + en.YGWorkWayText + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "');\" >编辑</a></td>";
                 html += "<td><a href=\"javascript:Delete('" + en.MyPK + "');\" >删除</a></td>";
@@ -135,7 +138,7 @@
     <div style="right:30px; position:absolute; z-index:100;top:-4px ">
         <input id="Btn_New" type="button" value="增加集团子流程" onclick="AddGroup()" />
         <input id="Btn_New2" type="button" value="增加本组织子流程" onclick="AddOrg()" />
-        <input id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
+        <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
     </div>
     <table id="Table1" style="width: 100%">
         <caption>
@@ -154,6 +157,9 @@
             </th>
             <th>
                 运行模式
+            </th>
+            <th>
+                状态
             </th>
             <th>
                 编辑
@@ -181,7 +187,7 @@
 
     <fieldset>
         <legend>运行效果</legend>
-        <img src="SubFlowYanXu-1.png" style="width:70%"  />
+        <img src="SubFlowYanXu-1.png" style="width:70%" />
     </fieldset>
 </body>
 </html>

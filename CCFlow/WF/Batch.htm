@@ -1,47 +1,41 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋工作流</title>
-     <meta charset="UTF-8"/>
+    <title>批处理</title>
+    <meta charset="UTF-8" />
     <!-- 引用通用的js文件. -->
-   <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-   <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet"/>
-   <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-   <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-   <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-   <script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
+    <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="Scripts/QueryString.js" type="text/javascript"></script>
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
 
-
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-            InitPage();
-        });
-
-        function InitPage() {
 
             var fk_node = GetQueryString("FK_Node");
 
             //URL参数FK_Node 不为空时
-            if(fk_node!=null && fk_node !=undefined && fk_node!=""){
-              var node = new Entity("BP.WF.Node",fk_node);
-              if(node.BatchRole == 0){ // 改节点不能批量审批
-                 $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
-                 return ;
-              }
-              window.location.href = "BatchList.htm?FK_Node="+fk_node+"&Type=1"; //跳转到批量审批处理列表
-
-              return ;
+            if (fk_node != null && fk_node != undefined && fk_node != "") {
+                var node = new Entity("BP.WF.Node", fk_node);
+                if (node.BatchRole == 0) { // 改节点不能批量审批
+                    $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
+                    return;
+                }
+                window.location.href = "./WorkOpt/BatchList.htm?FK_Node=" + fk_node + "&Type=1"; //跳转到批量审批处理列表
+                return;
             }
 
-            //获取当前用户批处理的流程及对应的节点
+
+            //节点为空的时候，列出节点列表,  获取当前用户批处理的流程及对应的节点
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             var data = handler.DoMethodReturnString("Batch_Init");
             if (data.indexOf("err@") != -1) {
                 alert(data);
@@ -54,22 +48,55 @@
                 return;
             }
 
+            if (data.length == 0) {
+                $("#lists").append("<center><h3>没有要批处理的工作.</h3></center>");
+                return;
+            }
+
             var listbox = "<ul>";
             //循环显示批处理的流程节点数量
             for (var idx = 0; idx < data.length; idx++) {
-             listbox +="<li style='list-style-type:square; color:#959595;'><a href='BatchList.htm?FK_Node=" + data[idx].NodeID
-                    + "&Type=0'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + data[idx].FlowName + " --> " +data[idx].Name + "(" +data[idx].NUM + ")" + "</a></li><br/>";
+
+                var en = data[idx];
+
+                var url = "";
+                url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + en.NodeID;
+
+                //审核组件模式.
+                if (en.BatchRole == 1)
+                    url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + en.NodeID;
+
+                //审核分组模式.
+                if (en.BatchRole == 2)
+                    url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + en.NodeID;
+
+                //自定义url模式.
+                if (en.BatchRole == 3)
+                    url = "javascript:ToSelfUrl('" + en.NodeID + "');";
+
+                listbox += "<li style='list-style-type:square; color:#959595;'><a href='" + url + "'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + en.FlowName + " --> " + en.Name + "(" + en.NUM + ")" + "</a></li><br/>";
             }
-            listbox+='</ul>';
+            listbox += '</ul>';
             $("#lists").append(listbox);
-            
+        });
+
+        function ToSelfUrl(nodeID)
+        {
+            var node = Entity("BP.WF.Node", nodeID);
+            var url = node.BatchSelfUrl;
+            window.location.href = url;
         }
-       
+
     </script>
 </head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-	<div class="row c" id="lists"></div>
-</div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <fieldset>
+            <legend> 请选择要批处理的节点 </legend>
+            <div class="row c" id="lists" style="  padding-left:70px;"></div>
+        </fieldset>
+
+    </div>
 </body>
 </html>

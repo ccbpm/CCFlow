@@ -8,7 +8,7 @@
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-    <link href="Comm/JS/layer/layer.css" rel="stylesheet" />
+    <link href="Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <style>
         /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
         td {
@@ -23,66 +23,66 @@
             font-size: 13px;
         }
 
-        .pagination .controls {
-            float: left;
-            border: 0;
-            padding: 7px 0 0 15px;
-            color: #777;
-        }
+            .pagination .controls {
+                float: left;
+                border: 0;
+                padding: 7px 0 0 15px;
+                color: #777;
+            }
     </style>
 </head>
 
 <body class="gray-bg">
-	<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="wrapper wrapper-content animated fadeInRight">
 
-	<div class="ibox-content">
-		<div class="row search-padding">
-			<div class="col-md-8 col-sm-8">
-				<div id="TSpan"></div>
-			</div>
-			<div class="col-md-4 col-sm-4 pull-right">
-				<div class="form-inline">
-					<div class="form-group">
-						<input type='text' placeholder="请输入关键词" id='TB_Key' class="form-control" />
-					</div>
-					<button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i> 查询</button>
-				</div>
-			</div>
-		</div>	
-		<div class="row search-padding">	
-			<div class="col-md-12 col-sm-12">
-				<div id="Flows"> </div>
-			</div>
-		</div>
+        <div class="ibox-content">
+            <div class="row search-padding">
+                <div class="col-md-8 col-sm-8">
+                    <div id="TSpan"></div>
+                </div>
+                <div class="col-md-4 col-sm-4 pull-right">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type='text' placeholder="请输入关键词" id='TB_Key' class="form-control" />
+                        </div>
+                        <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i> 查询</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row search-padding">
+                <div class="col-md-12 col-sm-12">
+                    <div id="Flows"> </div>
+                </div>
+            </div>
 
-		<table style="table-layout:fixed" class="table table-striped">
-			<thead id="Table2">
-			<tr >
-				<th width='4%'>序号</th>
-				<th width='23%'>标题</th>
-				<th width='5%'>发起人</th>
-				<th width='10%'>发起日期</th>
-				<th width='15%'>停留节点</th>
-				<th width='20%'>审批人</th>
-				<th width='10%'>应完成日期</th>
-				<th width='10%'>状态</th>
-				<th width='5%'>操作</th>
-			</tr>
-			</thead>
-			<tbody id="Table1"></tbody>
-		</table>
-         <!-- 显示分页信息 -->
-        <div class="row" style="text-align: left;">
-            <ul class="pagination" id="page_nav">
-            </ul>
-            <ul class="pagination controls" id="page_info">
-            </ul>
-            <div style="clear: both;"></div>
+            <table style="table-layout:fixed" class="table table-striped">
+                <thead id="Table2">
+                    <tr>
+                        <th width='4%'>序号</th>
+                        <th width='23%'>标题</th>
+                        <th width='5%'>发起人</th>
+                        <th width='10%'>发起日期</th>
+                        <th width='15%'>停留节点</th>
+                        <th width='20%'>审批人</th>
+                        <th width='10%'>应完成日期</th>
+                        <th width='10%'>状态</th>
+                        <th width='5%'>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="Table1"></tbody>
+            </table>
+            <!-- 显示分页信息 -->
+            <div class="row" style="text-align: left;">
+                <ul class="pagination" id="page_nav">
+                </ul>
+                <ul class="pagination controls" id="page_info">
+                </ul>
+                <div style="clear: both;"></div>
+            </div>
         </div>
-	</div>
-</div> 
+    </div>
 
-<script type="text/javascript" src="Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="Scripts/QueryString.js"></script>
     <script type="text/javascript" src="Scripts/QueryString.js"></script>
     <script type="text/javascript" src="Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -90,7 +90,7 @@
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="Scripts/config.js"></script>
     <script type="text/javascript" src="Comm/Gener.js"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="Scripts/layui/layui/lay/modules/layer.js"></script>
     <script type="text/javascript">
 
         var webUser = null;
@@ -104,9 +104,9 @@
         var _tspan = GetQueryString("TSpan");
         var _flowNo = GetQueryString("FK_Flow");
         var pageInfo;
-        var keyWord="";
+        var keyWord = "";
         var IsSearchClick = false;//是否点的查询 : fasle 不是 true 是
-		var	 IsPageClick = false;//是否是点的页数 : false 不是 true 是
+        var IsPageClick = false;//是否是点的页数 : false 不是 true 是
         $(function () {
             InitPage();//初始化查询列表、
             InitData();//初始化数据
@@ -121,7 +121,7 @@
                 return;
 
             var url = "";
-            if(IsSearchClick == true && IsPageClick == false){
+            if (IsSearchClick == true && IsPageClick == false) {
                 pageIdx = 1;
 
             }
@@ -129,7 +129,7 @@
                 _tspan = "-1";
             }
 
-            
+
             if (_flowNo == undefined || _flowNo == null || _flowNo == "" || _flowNo == "null") {
                 _flowNo = "";
             }
@@ -156,9 +156,9 @@
             var data = JSON.parse(data);
 
             flowData = data['WF_GenerWorkFlow']; // 流程实例列表
-            
+
             pageInfo = data['PageInfo'];//分页信息
-            //时间段列表. 
+            //时间段列表.
             var tSpans = data['TSpan'];
             if (_tspan == "-1")
                 html = "<button onclick=\"TSpan('');\" class=\"btn btn-info\" type=\"button\">全部</button> ";
@@ -199,13 +199,13 @@
         }
 
         function InitData() {
-            
+
             if (flowData.length <= 0) {
-                alert('未查询出来数据');
+                //   alert('未查询出来数据');
                 return;
             }
             //获取总条数，总页数，当前页第一条索引
-            $.each(pageInfo, function(j,pi) {
+            $.each(pageInfo, function (j, pi) {
                 total = pi["totalNum"];
                 pageCount = pi["totalPage"];
                 startIndex = pi["startIndex"];
@@ -306,7 +306,7 @@
             }
             $("#Table1").html(htmlbox);
             $("#List").append(_Html);
-            $("#Msg").html(""); 
+            $("#Msg").html("");
         }
 
 
@@ -342,16 +342,16 @@
                     InitData();
                     mouseShow();
                     $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                            "页,总共" + total + "条记录。</li>");
+                        "页,总共" + total + "条记录。</li>");
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
             $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                            "页,总共" + total + "条记录。</li>");
+                "页,总共" + total + "条记录。</li>");
 
         }
 
-        function GenerOper(workID, wfState,flowNo,nodeID,fid,isCanDo) {
+        function GenerOper(workID, wfState, flowNo, nodeID, fid, isCanDo) {
 
             if (wfState == 3)
                 return "";
@@ -363,12 +363,12 @@
                 return "<a href=''>轨迹</a>";
 
             if (wfState == 2)
-                return "<a href=\"javascript:UnSend('"+flowNo+"','"+nodeID+"','"+workID+"','"+fid+"');\" >撤销</a>";
+                return "<a href=\"javascript:UnSend('" + flowNo + "','" + nodeID + "','" + workID + "','" + fid + "');\" >撤销</a>";
 
 
-            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo+"&FK_Node="+nodeID;
+            var url = "WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
 
-            return "<a href=\"javascript:WinOpen('"+url+"');\" >轨迹</a>";
+            return "<a href=\"javascript:WinOpen('" + url + "');\" >轨迹</a>";
         }
 
         function UnSend(flowNo, nodeID, workid, fid) {
@@ -406,7 +406,7 @@
 
         function GetWFState(wfState, isCanDo) {
 
-            if (isCanDo == true && wfState!=3)
+            if (isCanDo == true && wfState != 3)
                 return "待办";
 
             if (wfState == 5) {
@@ -427,7 +427,7 @@
             if (wfState == 3)
                 icon = "./Img/WFState/Complete.png";  //已经完成.
             else if (wfState == 2)
-                icon = "./Img/WFState/Runing.png"; //运行中. 
+                icon = "./Img/WFState/Runing.png"; //运行中.
             else if (wfState == 5)
                 icon = "./Img/WFState/ReturnSta.png"; //退回.
             else
@@ -454,20 +454,20 @@
                         Paginator(pageCount, pageIdx); //分页
                         InitHomeCount();
                     }
-                }, 1);   
+                }, 1);
                 return;
 
             } else {
                 url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
             }
-           
+
             layer.open({
-				  skin: 'layer-class',	
-				  type: 2, 
-				  title: '我的流程', 
-				  area:['96%','90%'],
-				  content: url
-				});
+                skin: 'layer-class',
+                type: 2,
+                title: '我的流程',
+                area: ['96%', '90%'],
+                content: url
+            });
         }
 
         function TSpan(tspan) {
@@ -486,7 +486,7 @@
                     window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + tspan;
             }
         }
-        
+
 
         function Flows(flowNo) {
             var tspan = GetQueryString("TSpan");
@@ -513,7 +513,7 @@
         //关键字查询
         function SearchKey() {
             IsSearchClick = true;//点击了查询
-			IsPageClick = false;//重置点击页面
+            IsPageClick = false;//重置点击页面
             keyWord = $("#TB_Key").val();
             InitPage(keyWord);
             InitData();
@@ -521,21 +521,21 @@
         }
         //鼠标悬浮显示
         function mouseShow() {
-             $("td").on("mouseover",function() {
+            $("td").on("mouseover", function () {
                 if (this.offsetWidth < this.scrollWidth) {
                     var that = this;
                     var text = $(this).text();
-                   layer.tips("<span style='color:#000'>"+text+"</span>", that,{
-                        tips:[1,'#FFF'],
+                    layer.tips("<span style='color:#000'>" + text + "</span>", that, {
+                        tips: [1, '#FFF'],
                         time: 0
-                   });
+                    });
                 }
             });
-            $("td").on("mouseout",function(){
-            layer.closeAll("tips");//关闭所有tips，避免和iframe冲突
+            $("td").on("mouseout", function () {
+                layer.closeAll("tips");//关闭所有tips，避免和iframe冲突
             });
         }
-    </script>        
-        
+    </script>
+
 </body>
 </html>

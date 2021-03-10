@@ -17,9 +17,9 @@
             border: 1px solid #031f5d;
             background-color: #fff;
             color: #031f5d;
-            background-image: url(../../../Img/Btn/Save.png); 
-            background-repeat: no-repeat; 
-            background-size: 13px 13px !important; 
+            background-image: url(../../../Img/Btn/Save.png);
+            background-repeat: no-repeat;
+            background-size: 13px 13px !important;
             background-position: 1px 6px !important;
         }
     </style>
@@ -37,6 +37,9 @@
         });
 
         function Save() {
+
+            $("#Btn_Save").val("正在保存...");
+
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             if (document.getElementById("CB_IsSSS").checked)
@@ -53,9 +56,11 @@
                 node.IsExpSender = 0;
             node.Update();
 
-            alert("高级设置成功");
 
-            window.close();
+            $("#Btn_Save").val("保存");
+
+            // alert("高级设置成功");
+            //window.close();
         }
 
     </script>
@@ -64,7 +69,6 @@
 
 
     <fieldset>
-        <legend><font color="green">高级设置</font></legend>
 
         <legend>
             <input type="checkbox" value="0" id="CB_IsSSS" checked="true" name="IsSSS" />
@@ -84,7 +88,6 @@
             <li>比如:A,发送到B,B节点上有张三，李四，王五可以处理，这次你把工作分配给李四，如果设置了记忆，那么ccbpm就在下次发送的时候，自动投递给李四，当然您也可以重新分配。</li>
         </ul>
 
-
         <legend>
             <input type="checkbox" value="0" id="CB_IsExpSender" checked="true" name="IsExpSender" />
             <label for="CB_IsExpSender">本节点接收人不允许包含上一步发送人？ </label>
@@ -97,7 +100,7 @@
 
     <div style="float:right;margin-right:20px;">
         <input style='' type="button" id="Btn_Save" value="保存" onclick="Save()" />
-        <input style='background-image: url(../../../Img/Btn/Close.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;' type="button" id="Btn_Close" value="关闭" onclick="javascript: window.close();" />
+        <!--<input style='background-image: url(../../../Img/Btn/Close.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;' type="button" id="Btn_Close" value="关闭" onclick="javascript: window.close();" />-->
     </div>
 
 </body>

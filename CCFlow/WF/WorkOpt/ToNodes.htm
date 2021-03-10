@@ -23,6 +23,7 @@
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
         }
+        var isFrameCross = GetQueryString("isFrameCross");
         //初始化数据
         $(function () {
             WorkID = GetQueryString("WorkID");
@@ -203,11 +204,15 @@
                 alert(data);
                 return;
             }
-            if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
-                window.parent.WindowCloseReloadPage(data);
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+                    window.parent.WindowCloseReloadPage(data);
+                } else {
+                    if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+                        WindowCloseReloadPage(data);
+                }
             } else {
-                if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
-                    WindowCloseReloadPage(data);
+                ChildrenPostMessage(data, "WindowCloseReloadPage");
             }
 
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
@@ -281,21 +286,26 @@
 
         //取消移交
         function CloseAll() {
-            // 取得父页面URL，用于判断是否是来自测试流程
-            var pareUrl = window.top.document.referrer;
-            // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
-            if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
-                // 测试流程时，发送成功刷新测试容器页面右侧
-                window.parent.parent.refreshRight();
-            }
+            if (isFrameCross == 0) {
+                // 取得父页面URL，用于判断是否是来自测试流程
+                var pareUrl = window.top.document.referrer;
+                if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
+                    // 测试流程时，发送成功刷新测试容器页面右侧
+                    window.parent.parent.refreshRight();
+                }
 
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.close();
-                if (window.parent.parent != null && window.parent.parent != undefined
-                    && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
-                    window.parent.parent.close();
-                window.parent.returnWorkWindowClose();
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.close();
+                    if (window.parent.parent != null && window.parent.parent != undefined
+                        && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
+                        window.parent.parent.close();
+                    window.parent.returnWorkWindowClose();
+                }
+            } else {
+				window.parent.parent.close();
+                ChildrenPostMessage('', "returnWorkWindowClose");
             }
+          
 
             window.close();
         }
@@ -303,11 +313,15 @@
 
         //取消或者返回
         function Cancel() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose();
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose();
+                } else {
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
+                    window.close();
+                }
             } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
-                window.close();
+                ChildrenPostMessage('', "returnWorkWindowClose");
             }
         }
     </script>

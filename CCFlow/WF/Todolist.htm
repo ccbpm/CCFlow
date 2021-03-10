@@ -35,16 +35,18 @@
     <script src="Scripts/QueryString.js" type="text/javascript"></script>
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-    
+    <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
+
     <!-- 处理多语言 -->
     <script src="Data/lang/load.js" type="text/javascript"></script>
     <script src="Data/lang/js/zh-cn.js"></script>
     <script src="Data/lang/lang.js" type="text/javascript"></script>
     <!--<script src="AppClassic/comm.js" type="text/javascript"></script>-->
     <script type="text/javascript">
-        
+
         var webUser = null;
+        var keyword = null;
+        var data = null;
 
         //页面启动函数.
         $(function () {
@@ -64,24 +66,12 @@
                 return;
             }
 
-            InitPage();
-        });
-
-        //初始化数据.
-        function InitPage() {
-            
             document.title = window.lang.daiban;
-            //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
-            var flowNos = GetQueryString("FlowNos");
 
-            //获取当前时间
-            var cdt = getNowFormatDate();
-            var timeKey = Math.random();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Todolist_Init");
-
+            data = handler.DoMethodReturnString("Todolist_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -89,16 +79,44 @@
 
             data = eval('(' + data + ')');
 
+
+            BindTable();
+        });
+
+        function SearchIt() {
+
+            if (keyword == null)
+                keyword = "";
+
+            keyword = window.prompt('请输入关键字', keyword);
+
+            if (keyword == null || keyword == undefined)
+                keyword = null;
+
+            BindTable();
+        }
+
+        //初始化数据.
+        function BindTable() {
+
+            //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
+            var flowNos = GetQueryString("FlowNos");
+
+            //获取当前时间.
+            var cdt = getNowFormatDate();
+            var timeKey = Math.random();
+
             //设置表头.
             var groupBy = GetQueryString("GroupBy");
-            if (groupBy == "" || groupBy == null) groupBy = "ByFlow";
+            if (groupBy == "" || groupBy == null)
+                groupBy = "ByNode";
 
             var nodeIDt = GetQueryString("FK_Node");
 
             var tablet = "";
             tablet += "<th style='width:40px;'>#</th>";
             // title += "<th >优先级</th>";
-            tablet += "<th>" + window.lang.biaoti + "</th>";
+            tablet += "<th><div style='float:left' >" + window.lang.biaoti + "</div> <div style='float:right' ><img src='./Img/Search.png' style='width:24px;' onclick='SearchIt();' />&nbsp;&nbsp;&nbsp;</div></th>";
 
             if (groupBy == "ByNode") {
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
@@ -124,16 +142,16 @@
 
             $("#tablet").html(tablet);
 
-
             //生成分组的字符串.
             var str = "";
             var listbox = '';
             for (var i = 0; i < data.length; i++) {
 
                 if (groupBy == "ByNode" || groupBy == "NodeName") {
-                    if (str.indexOf('@' + data[i].NodeName + "@") == -1) {
+
+                    if (str.indexOf('@' + data[i].NodeName + "_" + data[i].FK_Node + "@") == -1) {
                         if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
-                            str += "@" + data[i].NodeName + "@";
+                            str += "@" + data[i].NodeName + "_" + data[i].FK_Node + "@";
                     }
                 }
 
@@ -142,7 +160,6 @@
                         if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
                             str += "@" + data[i].FlowName + "@";
                     }
-
                 }
 
                 if (groupBy == "ByStarter") {
@@ -158,15 +175,48 @@
             var is1 = false;
             var realCount = 0;
 
+            //获取所有的流程信息
+            var flows = new Entities("BP.WF.GenerWorkFlows");
+
             //循环数组.
             for (var idx = 0; idx < strs.length; idx++) {
 
-                var groupName = strs[idx];
-
-                if (groupName == "" || groupName == null)
+                var str = strs[idx];
+                if (str == "" || str == null)
                     continue;
 
-                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=9 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+                var nodeID = 0;
+
+                var groupName = str;
+
+               // if (groupBy == "ByFlow")
+                   // flows.Retrieve("FlowName", groupName);
+                if (groupBy == "ByNode") {
+                    groupName = str.substring(0, str.indexOf("_"));
+                    nodeID = str.substring(str.indexOf("_")+1, 100);
+                  //  alert(nodeID);
+                  //  flows.Retrieve("NodeName", groupName);
+                }
+
+                listbox += "<tr   >";
+                listbox += "<th colspan=8 class='table-title' onclick=\"GroupBarClick('" + groupName + "')\"> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> ";
+                var showBatch = false;
+                //for (var j = 0; j < flows.length; j++) {
+                //      var AtPara = flows[j].AtPara;
+                //      if (AtPara.indexOf("IsCanBatch=1")!=-1)
+                //          showBatch = true;
+                //  }
+
+                if (groupBy == "ByNode")
+                    showBatch = true;
+
+                if (showBatch ) {
+                   // var fk_node = strs[idx].substring(strs[idx].indexOf("_") + 1);
+                    listbox += "<th colspan=1 class='table-title' onclick=\"javascript:Batch('" + nodeID + "')\" >批处理</th> ";
+                }
+
+                listbox += "<th colspan=2 class='table-title'></th> ";
+                listbox += "</tr>";
 
                 //增加处理.
                 for (var i = 0; i < data.length; i++) {
@@ -196,6 +246,15 @@
 
                     var newRow = "";
                     var title = work.Title;
+
+                    if (keyword != null) {
+
+                        if (title.indexOf(keyword) == -1)
+                            continue;
+
+                        title = title.replace(keyword, '<font color=red><b>' + keyword + '</b></font>');
+                    }
+
                     var isRead = work.IsRead;
                     var flowNo = work.FK_Flow;
                     var flowName = work.FlowName;
@@ -211,8 +270,7 @@
                         paras = "";
 
                     var mystrs = "";
-                //    AtPara atap = new AtPara(paras);
-
+                    //    AtPara atap = new AtPara(paras);
                     //if (paras.c)
 
                     paras = paras.replace("'", "\\'");
@@ -225,14 +283,20 @@
                     }
                     paras = "1" + paras;
 
+                    //处理授权信息.
+                    if (work.FK_Emp != webUser.No) {
+                        paras += "&Auther=" + work.FK_Emp;
+                        title = "<img src='./Img/zhuichiren.png' />" + title;
+                    }
+
                     num++;
 
                     if (is1 == true) {
-                        listbox += "<tr  id='" + groupName + num + "' >";
+                        listbox += "<tr id='" + groupName + num + "' >";
                         is1 = false;
                     }
                     else {
-                        listbox += "<tr   id='" + groupName + num + "' >";
+                        listbox += "<tr id='" + groupName + num + "' >";
                         is1 = true;
                     }
 
@@ -241,12 +305,12 @@
                     var url = "";
                     if (paras.indexOf("&IsCC=1") >= 0
                         || paras.indexOf("&IsAuto=1") >= 0) {
-                        
+
                         var batchUrl = './WFRpt.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID + '&WorkID=' + workID + '&FID=' + fid;
                         url = "<a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>";
-                      
+
                     } else {
-                          if (isRead == 0)
+                        if (isRead == 0)
                             url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
                         else
                             url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
@@ -308,17 +372,32 @@
             $('#Table1').html(listbox);
             $("#Table2").html(window.lang.heji + ": " + realCount + " " + (realCount > 1 ? window.lang.records : window.lang.record));
 
-            
-            if (webUser.IsAuthorize == "0" && Hide_IsTodoList == true)
-                $("#Table2").append(", <a href='AuthorList.htm' >查看授权待办</a>");
+
 
             var div = window.parent.document.getElementById("Todolist_EmpWorks");
             if (div != null) {
                 div.innerHTML = realCount;
             }
         }
-        function GetState(wfState) {
+        function Batch(fk_node) {
+            var node = new Entity("BP.WF.Node", fk_node);
+            var url = "";
+            url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + fk_node;
 
+            //审核组件模式.
+            if (node.BatchRole == 1)
+                url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + fk_node;
+
+            //审核分组模式.
+            if (node.BatchRole == 2)
+                url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + fk_node;
+
+            //自定义url模式.
+            if (node.BatchRole == 3)
+                url = node.BatchSelfUrl;
+            window.location.href = url;
+        }
+        function GetState(wfState) {
 
             switch (parseInt(wfState)) {
                 case 1:
@@ -362,13 +441,13 @@
             if (hour >= 1 && hour <= 9) {
                 hour = "0" + hour;
             }
-             var minute = date.getMinutes();
+            var minute = date.getMinutes();
             if (minute >= 1 && minute <= 9) {
                 minute = "0" + minute;
             }
             //当前时间=年份-月份-日 小时：分钟
             var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + hour + seperator2 + minute;
+                + " " + hour + seperator2 + minute;
 
             return cdt;
         }
@@ -381,13 +460,13 @@
             return date3;
         }
         function GetPRI(PRI) {
-           switch (parseInt(PRI)) {
+            switch (parseInt(PRI)) {
                 case 0:
                     return "<img title='低' src='Img/PRI/0.png' />";
                 case 1:
                     return "<img title='中' src='Img/PRI/1.png' />";
                     break;
-                case 2: 
+                case 2:
                     return "<img title='高' src='Img/PRI/2.png' />";
                     break;
             }

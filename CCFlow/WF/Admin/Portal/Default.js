@@ -54,7 +54,7 @@ $(function () {
         $("#Login2App").html("");
     }
 
-     
+
 });
 
 function closeTab(title) {
@@ -383,32 +383,31 @@ function RefreshFlowJson() {
 
     $(".mymask").show();
 
-    addTab(node.id, node.text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+    var webUser = new WebUser();
+
+    addTab(node.id, node.text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&OrgNo=" + webUser.OrgNo + "&Flow_V=0", node.iconCls);
     //延时3秒, 为什么要延迟？
     setTimeout(DesignerLoaded, 1000);
 }
 
 //打开流程到流程图
 function OpenFlowToCanvas(node, id, text) {
+
+    var sid = GetQueryString("SID");
+    var webUser = new WebUser();
+
     $(".mymask").show();
-    if (node.attributes.DTYPE == "2") {//BPMN模式
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2", node.iconCls);
-    } else if (node.attributes.DTYPE == "1") {//CCBPM
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
-    } else {
-        //if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
-        var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
-        attrs.DTYPE = "1";
-        attrs.Url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
-        $('#flowTree').tree('update', {
-            target: node.target,
-            attributes: attrs
-        });
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
-        //        } else {
-        //            addTab(id, text, "DesignerSL.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
-        //        }
-    }
+
+    var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&Flow_V=1";
+    var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
+    attrs.DTYPE = "1";
+    attrs.Url = url;
+    $('#flowTree').tree('update', {
+        target: node.target,
+        attributes: attrs
+    });
+    addTab(id, text, url, node.iconCls);
+
     //延时3秒
     setTimeout(DesignerLoaded, 1000);
 }
@@ -419,67 +418,53 @@ function newFlow() {
 
     var currSort = $('#flowTree').tree('getSelected');
     var currSortId = "99";
-    if (currSort && currSort.attributes["ISPARENT"] != 0) { //edit by qin 2016/2/16
-        currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
+    if (currSort && currSort.attributes["ISPARENT"] != 0) {
+        currSortId = $('#flowTree').tree('getSelected').id;
     }
 
     var flowSort = currSortId.replace("F", "");
 
     var dgId = "iframDg";
-    if (runModelType == 0)
-        url = "../CCBPMDesigner/NewFlow.htm?sort=" + flowSort + "&s=" + Math.random();
-    else
-        url = "../CCBPMDesigner/NewFlow.htm?sort=" + flowSort + "&RunModel=1&s=" + Math.random();
+    //if (runModelType == 0)
+    //    url = "../CCBPMDesigner/NewFlow2020.htm?sort=" + flowSort + "&s=" + Math.random();
+    //else
+    //    url = "../CCBPMDesigner/NewFlow2020.htm?sort=" + flowSort + "&RunModel=1&s=" + Math.random();
 
-    OpenEasyUiDialog(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
+    if (runModelType == 0)
+        url = "../CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + flowSort + "&s=" + Math.random();
+    else
+        url = "../CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + flowSort + "&RunModel=1&s=" + Math.random();
+
+    OpenEasyUiDialog(url, dgId, '新建流程', 850, 550, 'icon-new', true, function () {
 
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
 
-        if (newFlowInfo.FlowName == null || newFlowInfo.FlowName.length == 0
-            || newFlowInfo.TreeFlowSort == null || newFlowInfo.TreeFlowSort.length == 0) {
+        if (newFlowInfo.FlowName == null || newFlowInfo.FlowName == "") {
 
-            alert('信息填写不完整:' + newFlowInfo.FlowName + newFlowInfo.FlowSort);
-            //$.messager.alert('错误', '信息填写不完整', 'error');
+            alert('信息填写不完整:' + newFlowInfo.FlowName);
+
             return false;
         }
+        //$(".mymask").show();
 
-        var flowFrmType = newFlowInfo.FlowFrmType;
-        if (newFlowInfo.RunModel == 1) {
+        //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+        //handler.AddJson(newFlowInfo);
+        //var data = handler.DoMethodReturnString("NewFlow2020_Save");
 
-            if (flowFrmType == 3 || flowFrmType == 4) {
-                if (newFlowInfo.FrmUrl == "" || newFlowInfo.FrmUrl == null
-                    || newFlowInfo.FrmUrl == undefined) {
-                    alert('请输入url');
-                    return false;
-                }
-            }
-        }
-
-        //判断流程标记是否存在  19.10.22 
-        if (newFlowInfo.FlowMark != "") {
-            var flows = new Entities("BP.WF.Flows");
-            flows.Retrieve("FlowMark", newFlowInfo.FlowMark);
-            if (flows.length > 0) {
-                alert('该流程标记[' + newFlowInfo.FlowMark + ']已经存在系统中');
-                return false;
-            }
-        }
-
-        //var html = $("#ShowMsg").html();
-        //$("#ShowMsg").html(html + " ccbpm 正在创建流程请稍后....");
-        //$("#ShowMsg").css({ "width": "320px" });
         $(".mymask").show();
 
-        newFlowInfo.FlowSort = flowSort;
 
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-        handler.AddJson(newFlowInfo);
-        var data = handler.DoMethodReturnString("Defualt_NewFlow");
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
+        handler.AddPara("SortNo", newFlowInfo.FlowSort);
+        handler.AddPara("FlowName", newFlowInfo.FlowName);
+        handler.AddPara("FlowDevModel", newFlowInfo.FlowFrmModel);
+        handler.AddPara("FrmUrl", newFlowInfo.FrmUrl);
+        handler.AddPara("FrmID", newFlowInfo.FrmID);
+        var data = handler.DoMethodReturnString("FlowDevModel_Save");
 
         $(".mymask").hide();
-        //$("#ShowMsg").html(html);
-        //$("#ShowMsg").css({ "width": "32px" });
+
         if (data.indexOf('err@') == 0) {
             alert(data);
             return;
@@ -517,11 +502,6 @@ function newFlow() {
 
         //在右侧流程设计区域打开新建的流程
         RefreshFlowJson();
-
-        //打开流程.
-        //OpenFlowToCanvas(nodeData, flowNo, nodeData.text);
-
-
     }, null);
 }
 
@@ -579,7 +559,7 @@ function newFlowSort(isSub) {
         });
     }
     $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
-    
+
 }
 
 //修改流程类别
@@ -1006,15 +986,15 @@ function newFrm(frmType) {
             //在表单类别上单击，则传递表单类别
             var pnode = $('#formTree').tree('getParent', node.target);
             //if (pnode != null) {
-                url += "&FK_FrmSort=" + node.id;
+            url += "&FK_FrmSort=" + node.id;
 
-                while (pnode && pnode.attributes) {
-                    if (pnode.attributes.TType == "SRC") {
-                        url += "&Src=" + pnode.id;
-                        break;
-                    }
-                    pnode = $('#formTree').tree('getParent', pnode.target);
+            while (pnode && pnode.attributes) {
+                if (pnode.attributes.TType == "SRC") {
+                    url += "&Src=" + pnode.id;
+                    break;
                 }
+                pnode = $('#formTree').tree('getParent', pnode.target);
+            }
             //}
         }
     }
@@ -1249,7 +1229,7 @@ function CopyFrm() {
         return;
     }
 
-   
+
     var frmName = window.prompt('新的表单名称', node.text);
     if (frmName == null || frmName == "") {
         alert("表单名称不能为空");
@@ -1301,7 +1281,7 @@ if (webUser.No == "") {
     alert("登录信息丢失, 请重新登录.");
     window.location.href = "./Login.htm";
 }
-    
+
 
 $(function () {
 

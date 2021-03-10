@@ -19,10 +19,14 @@
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+
+    <!-- 加载通用的配置文件. -->
+    <script type="text/javascript" src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script type="text/javascript" src="../../DataUser/JSLibData/ReturnWork.js"></script>
+
     <script src="../InitMapAttr.js"></script>
-    <link href="../style/skin/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
         body {
             background: transparent;
@@ -38,8 +42,40 @@
         }
     </style>
     <script type="text/javascript">
+
+        function isExitsVariable(variableName) {
+            try {
+                if (typeof (eval(variableName)) == "undefined") {
+                    console.log("已声明变量,但未初始化");
+                    return false;
+                } else {
+                    console.log("已声明变量,且已经初始化");
+                    return true;
+                }
+            } catch (e) {
+                console.log("未声明变量");
+            }
+            return false;
+        }
+
         var pageData = {};
+
+        // ?
+        var isFrameCross = GetQueryString("isFrameCross");
+
+        var _ReturnWin_IsBackTracking_Selected = false;
         $(function () {
+
+            try {
+                _ReturnWin_IsBackTracking_Selected = ReturnWin_IsBackTracking_Selected;
+            } catch (e) {
+                _ReturnWin_IsBackTracking_Selected = false;
+            }
+
+            ////是否选择. 退回并原路返回. 强制设置，退回并原路返回.
+            if (_ReturnWin_IsBackTracking_Selected == true) {
+                document.getElementById("CB_IsBackTracking").checked = ReturnWin_IsBackTracking_Selected;
+            }
 
             //初始化页面退回信息.
             pageData = {
@@ -47,7 +83,8 @@
                 WorkID: GetQueryString('WorkID'),
                 FID: GetQueryString('FID'),
                 Message: GetQueryString('Info'),
-                FK_Flow: GetQueryString("FK_Flow")
+                FK_Flow: GetQueryString("FK_Flow"),
+                WorkIDs:GetQueryString("WorkIDs")
             };
 
             //如果有退回信息字段，就让其绑定到，退回原因的文本框里.
@@ -80,8 +117,8 @@
                 $("#DIV_Doc").html("");
                 $("#btnReturn").css("display", "none");
 
-                $("#btnIsBackTracking").css("display", "disabled");
-                $("#btnIsKillEtcThread").css("display", "disabled");
+                // $("#btnIsBackTracking").css("display", "block");
+                //$("#btnIsKillEtcThread").css("display", "block");
 
                 $("#btnClose").attr("onclick", "Close(1)");
                 return;
@@ -102,7 +139,7 @@
 
             if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1") {
                 //alert(node.IsKillEtcThread);
-              //  document.getElementById("btnIsKillEtcThread").style.display = 'none';
+                //  document.getElementById("btnIsKillEtcThread").style.display = 'none';
                 //  arget.style.display="none";
                 // $("#btnIsKillEtcThread").css("display", "none");
             }
@@ -159,15 +196,24 @@
             //获取当前节点属性,是否可以执行退回并原路返回的按钮？
             var node = new Entity("BP.WF.Node", pageData.FK_Node)
             if (node.IsBackTracking == "0")
-                $('#btnIsBackTracking').css('display', 'none');
+                $('#btnIsBackTracking').css('display', 'block');
 
             if (node.IsKillEtcThread == "0")
-                $('#btnIsKillEtcThread').css('display', 'none');
+                $('#btnIsKillEtcThread').css('display', 'block');
 
             $("section").show();
             $(".wait").hide();
 
             Common.MaxLengthError();
+
+
+            //临时处理sls 的需求, 退回任意节点 \datauser\JsLab\ReturnWork.js 代码.
+            try {
+                LoaclOperation();
+            } catch (e) {
+
+            }
+
         });
         //确定 退回 执行退回操作
         // isBack=0 是退回按钮调用， =1是退回并原路返回按钮调用.
@@ -207,12 +253,25 @@
 
             //调动退回接口.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            var doMethod = "DoReturnWork";
+
+            if (pageData.WorkIDs != null && pageData.WorkIDs != undefined && pageData.WorkIDs != "") {
+                handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Batch");
+                handler.AddPara("WorkIDs", pageData.WorkIDs);
+                doMethod = "Batch_Return";
+            }
+                
             handler.AddPara("FK_Flow", pageData.FK_Flow);
             handler.AddPara("WorkID", pageData.WorkID);
             handler.AddPara("FID", pageData.FID);
             handler.AddPara("FK_Node", pageData.FK_Node);
             handler.AddPara("ReturnToNode", selectedNodeID);
             handler.AddPara("ReturnInfo", doc);
+
+            //如果强制设置了退回并原路返回.
+            if (_ReturnWin_IsBackTracking_Selected != undefined && _ReturnWin_IsBackTracking_Selected == true)
+                isBack = 1;
+
             handler.AddPara("IsBack", isBack);
 
             //是否全部子线程退回？
@@ -224,40 +283,64 @@
             handler.AddPara("PageData", parasData);
 
             //调用退回方法.
-            var data = handler.DoMethodReturnString("DoReturnWork"); //执行方法.
-            if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
-                window.parent.WindowCloseReloadPage(data);
+           
+            var data = handler.DoMethodReturnString(doMethod); //执行方法.
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+                    window.parent.WindowCloseReloadPage(data);
+                } else {
+                    if (typeof WindowCloseReloadPage != 'undefined'
+                        && WindowCloseReloadPage instanceof Function)
+                        WindowCloseReloadPage(data);
+                }
             } else {
-                if (typeof WindowCloseReloadPage != 'undefined'
-                    && WindowCloseReloadPage instanceof Function)
-                    WindowCloseReloadPage(data);
+                ChildrenPostMessage(data, "WindowCloseReloadPage");
             }
+
 
             //提示退回消息， 并关闭窗口，刷新父父窗口.
             data = data.replace(/null/g, '');
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose(data);
-            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
-                window.opener.returnWorkWindowClose(data);
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose(data);
+                } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                    window.opener.returnWorkWindowClose(data);
+                } else {
+                    $("#DIV_Nodes").hide();
+                    $("#DIV_Doc").hide();
+                    $("#btnReturn").attr('disabled', true);
+                    $('body').append($('<div>' + data + '</div>'));
+                    $('#btnOk').attr('disabled', true);
+                }
             } else {
-                $('body').append($('<div>' + data + '</div>'));
-                $('#btnOk').attr('disabled', true);
+                ChildrenPostMessage(data, "returnWorkWindowClose");
             }
+
 
             $(".foot").hide();
         }
 
         //取消退回
         function Close(flag) {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("取消");
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose("取消");
+                    if (flag == 1)
+                        window.parent.close();
+                }
+                else if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
+                    window.parent.CloseBootstrapDialog("");
+                }
+                else {
+                   $('body').append($('<div>' + "已取消操作" + '</div>'));
+                    window.close();
+                }
+            } else {
+                ChildrenPostMessage("取消", "returnWorkWindowClose");
                 if (flag == 1)
                     window.parent.close();
             }
-            else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
-                window.close();
-            }
+
         }
 
 
@@ -288,14 +371,14 @@
 
     <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;">
 
-        <div id="btnIsBackTracking" style="margin-top:6px;float:left; display:block;">
+        <div id="btnIsBackTracking" style="margin-top:6px;float:left; display:none;">
             <label>
                 <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
                 退回后并发送给我&nbsp;&nbsp;
             </label>
         </div>
 
-        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; display:block;">
+        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; display:none;">
             <label>
                 <input type="checkbox" id="CB_IsKillEtcThread" style="float:left;margin-top:3px;" />
                 全部子线程退回&nbsp;&nbsp;

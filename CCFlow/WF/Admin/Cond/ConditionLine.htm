@@ -102,7 +102,7 @@
 
         //转向规则. 方向条件控制规则
         function OpenTurnToRole(ele) {
-            var url = "CondModel.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
+            var url = "CondModel/Default.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
             OpenUrlInRightFrame(ele, url);
         }
 

@@ -104,9 +104,8 @@
             html += "<table class='table table-hover table-condensed' style='width:100%;'>";
             html += "<caption><img style='margin-bottom:8px;' align='middle' src='../../Img/Event.png' />权限控制</caption>";
             html += "<tr>";
-            html += "<th>序号</th>";
-            html += "<th>编号</th>";
-            html += "<th>权限</th>";
+            html += "<th>#</th>";
+            html += "<th>编号/权限</th>";
             html += "<th>岗位(双击设置)</th>";
             html += "<th>人员(双击设置)</th>";
             html += "</tr>";
@@ -114,8 +113,7 @@
                 var model = models[i];
                 html += "<tr>";
                 html += "<td>" + (i + 1) + "</td>";
-                html += "<td>" + model.PowerFlag + "</td>";
-                html += "<td>" + model.PowerFlagName + "</td>";
+                html += "<td>" + model.PowerFlag +" "+ model.PowerFlagName + "</td>";
                 //岗位
                 html += "<td width='40%'><div id='portSta_" +model.PowerFlag + "_mtags' data-power=" + model.PowerFlag + " style='width:100%'  class='mtags'></div></td>";
                 //人员

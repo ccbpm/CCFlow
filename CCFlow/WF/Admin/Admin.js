@@ -22,6 +22,7 @@
  */
 
 $(document).ready(function () {
+
     //动态添加新风格 
     SetNewCSS();
 
@@ -45,6 +46,7 @@ $(document).ready(function () {
 })
 
 function AddBtnIcon() {
+
     //保存按钮icon
     if ($("#Btn_Save").height() > 25)
         $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
@@ -110,7 +112,9 @@ function SetNewCSS() {
     //帮助ul风格
     div = document.createElement('div');
     $(div).attr('class', 'cs-help');
-    $('ul').wrap(div);
+    var ulID = $('ul').attr('id');
+    if (ulID!="ul1")
+        $('ul').wrap(div);
 
     $.each($("legend"), function (i, obj) {
 

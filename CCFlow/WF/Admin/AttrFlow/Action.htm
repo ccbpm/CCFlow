@@ -45,7 +45,7 @@
             var flowNo = GetQueryString("FK_Flow");
 
             var ens = new Entities("BP.Sys.FrmEvents");
-            ens.Retrieve("FK_Flow", flowNo);
+            ens.Retrieve("FK_Flow", flowNo,"EventSource",1);
 
             //修改流程事件
             var flow = new Entity("BP.WF.Flow", flowNo)

@@ -58,22 +58,33 @@
             <div class="row search-padding">
                 <div class="col-md-4 col-sm-4 pull-left">
                     <div class="form-inline">
-                        <div class="form-group">
-                            <input type='text' placeholder="请输入流程名称,标题..." id='TB_Key' class="form-control" style="width:300px;" />
-                        </div>
-                        <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
+                        <table>
+                            <tr>
+                                <td><input type='text' placeholder="请输入流程名称,标题..." id='TB_Key' class="form-control" style="width:300px;" /> </td>
+                                <td>
+                                    <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
+                                </td>
+                                <td style="padding-left:22px;">
+                                    <button class="btn btn-success" style="padding-left:22px;" type="button" onclick="javascript:More();"><i class="fa fa-adjust"></i>更多...</button>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<div class="form-group">
+
+                        </div>-->
+
                     </div>
                 </div>
             </div>
             <table class="table  table-striped">
                 <thead>
                     <tr>
-                        <th>
+                        <th style="width:30px;">
                             #
                         </th>
-                        <th>
+                        <!--<th>
                             流程
-                        </th>
+                        </th>-->
                         <th>
                             节点
                         </th>
@@ -83,17 +94,11 @@
                         <th>
                             抄送人
                         </th>
-                        <th>
+                        <th style="width:60%;">
                             标题
                         </th>
                         <th>
-                            内容
-                        </th>
-                        <th>
                             日期
-                        </th>
-                        <th>
-                            操作
                         </th>
                     </tr>
                 </thead>
@@ -118,9 +123,12 @@
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
-
     <script language="javascript" type="text/javascript">
 
+        function More() {
+            var url = "./Comm/Search.htm?EnsName=BP.WF.Data.CCListExts";
+            window.location.href = url;
+        }
         function GroupBarClick(groupName) {
 
             var alt = document.getElementById('Img' + groupName).alert;
@@ -172,20 +180,13 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(flowNo, nodeID, workid, fid, sta) {
+        function OpenCC(flowNo, nodeID, workid, fid, sta) {
             var url = "./MyCC.htm?WorkID=" + workid + "&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&FID=" + fid + "&CCSta=1";
             window.open(url);
             return;
         }
-
-        //打开轨迹
-        function OpenTrack(flowNo,nodeID, workID, fid, ccSta) {
-
-            var batchUrl = './WFRpt.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID + '&WorkID=' + workID + '&FID=' + fid + "&CCSta=1";
-
-            WinOpenFull(batchUrl);
-        }
-           function GroupBarClick(groupName) {
+ 
+        function GroupBarClick(groupName) {
 
             var alt = document.getElementById('Img' + groupName).alert;
             var sta = 'block';
@@ -256,6 +257,7 @@
             var TB_Key = $("#TB_Key").val();
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData();
             var data = handler.DoMethodReturnString("CC_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -272,7 +274,6 @@
                 }
             }
 
-
             var sourceData;
             //获取总的查询信息
 
@@ -287,7 +288,7 @@
             //3.流程编号为空和查询组件不为空时
             if (flowNos == null && TB_Key != "")
                 sourceData = $.grep(data, function (n, i) {
-                    return (data[i].FlowName.indexOf(TB_Key) != -1 || data[i].Title.indexOf(TB_Key)!=-1);
+                    return (data[i].FlowName.indexOf(TB_Key) != -1 || data[i].Title.indexOf(TB_Key) != -1);
                 });
             //4.流程编号为不空和查询组件不为空时
             if (flowNos != null && TB_Key != "")
@@ -339,7 +340,7 @@
             //随机串.
             var timeKey = Math.random();
             var listbox = '';
-            
+
             $('#Table1').html("");
             for (var idx = 0; idx < groupNames.length; idx++) {
                 var showRealCount = 0;
@@ -349,23 +350,21 @@
                 if (groupName == "" || groupName == null)
                     continue;
 
-                groupBox= "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=8 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
+                groupBox = "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=6 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
                 //增加处理.
                 for (var i = 0; i < data.length; i++) {
 
                     var dt = data[i];
-                    
+
                     if (dt.FlowName != groupName) {
                         continue;
                     }
-                  
+
                     realCount++;
 
                     var newRow = "";
-                    
-
                     var mystrs = "";
-              
+
                     num++;
 
                     if (is1 == true) {
@@ -378,44 +377,36 @@
                     }
                     groublist += "<td>" + num + "</td>"; //序号.
 
-                    var url = "";
-                    batchUrl = './WFRpt.htm?FK_Flow=' + dt.FK_Flow + '&FK_Node=' + dt.FK_Node + '&WorkID=' + dt.WorkID + '&FID=' + dt.FID + "&CCSta=1";
-                    url = '../WF/WorkOpt/CCCheckNote.htm?WorkID=' + dt.WorkID + '&FK_Flow=' + dt.FK_Flow + '&FID=0&FK_Node=' + dt.FK_Node;
-
-
-
-                    groublist += "<td>" + dt.FlowName + "</td>"; //节点名称
+                    //   groublist += "<td>" + dt.FlowName + "</td>"; //节点名称
                     groublist += "<td>" + dt.NodeName + "</td>"; //节点名
-                     var sta = "";
-                    switch (dt.WFSta) {
-                    case 0:
-                        sta = "<font color=green>运行中</font>";
-                        break;
-                    case 1:
-                        sta = "已完成"
-                        break;
-                    default:
-                        sta = "其他";
-                        break;
+                    var sta = "";
+                    switch (dt.Sta) {
+                        case 0:
+                            sta = "<font color=green><img src='./Img/Mail_UnRead.png' />未读</font>";
+                            break;
+                        case 1:
+                            sta = "<font color=green><img src='./Img/Mail_Read.png' />已读</font>";
+                            break;
+                        default:
+                            sta = "已回复";
+                            break;
                     }
 
                     groublist += "<td>" + sta + "</td>";
 
-                    groublist += "<td>" + dt.Rec + "</td>"; 
-                    groublist += "<td><a    href=\"javascript:OpenFrm('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.Sta + "')\" >" + dt.Title + "</a></td>"; 
-                    groublist += "<td>" + dt.Doc + "</td>"; 
+                    groublist += "<td>" + dt.Rec + "</td>";
+                    groublist += "<td><a  href=\"javascript:OpenCC('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.Sta + "')\" >" + dt.Title + "</a></td>";
+                    //  groublist += "<td>" + dt.Doc + "</td>";
 
-                    groublist += "<td>" +dt.RDT + "</td>";
-                    groublist += "<td><a href=\"javascript:OpenTrack('" + dt.FK_Flow + "','" + dt.FK_Node + "','" + dt.WorkID + "','" + dt.FID + "','" + dt.CCSta + "')\" >轨迹</a></td>";
-
+                    groublist += "<td>" + dt.RDT + "</td>";
                     groublist += "</tr>";
                 }
                 if (groublist != "")
                     listbox += groupBox + groublist;
-               
+
 
             }
-             $("#Table1").html(listbox);
+            $("#Table1").html(listbox);
 
         }
 

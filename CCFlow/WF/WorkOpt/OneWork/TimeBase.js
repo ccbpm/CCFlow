@@ -55,11 +55,39 @@ function InitPage() {
     }
 
     //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
+    var isHaveThread = false; //是否有子线程
+    var firstTrack;
+    var isHaveSubFlow = false; //是否有子流程
+    var threadTrMyPK = "";
     for (var i = 0; i < tracks.length; i++) {
 
         var track = tracks[i];
-        if (track.FID != 0)
+        if (track.FID != 0) {
+            if (isHaveThread == false)
+                firstTrack = track;
+            isHaveThread = true;
+            if(track.ActionType != ActionType.WorkCheck)
+            threadTrMyPK += track.MyPK + ",";
             continue;
+        }
+        var at = track.ActionType;
+        if (at == ActionType.ForwardFL)
+            continue;
+        //增加一个子线程的节点
+        if (isHaveThread == true) {
+            var newRow = "";
+            firstTrack.EmpFrom = "";
+            firstTrack.EmpFromT = "";
+            newRow = "<tr  title='子线程前进 ' >";
+            newRow += "<td class='TDTime' >" + GenerLeftIcon(firstTrack) + "</td>";
+            newRow += "<td class='TDBase' ></td>";
+            newRow += "<td class='TDDoc' ><img src = '../../Img/Action/ForwardFL.png' width = '10px;' class='ImgOfAC' alt = '子线程前进' />子线程前进<p><a href='javaScript:OpenSubThreadTime(" + firstTrack.FID + ",\"" + threadTrMyPK+"\")'>查看子线程时间轴</a></p></td>";
+            newRow += "</tr>";
+
+            $("#Table1 tr:last").after(newRow);
+        }
+        isHaveThread = false;  
+        threadTrMyPK = "";
 
         if (track.ActionType == ActionType.FlowBBS)
             continue;
@@ -81,8 +109,9 @@ function InitPage() {
         //内容.
         var doc = "";
         doc += img + track.NDFromT + " - " + track.ActionTypeText;
-        var at = track.ActionType;
+       
 
+        
         if (at == ActionType.Return) {
             doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
             doc += "<p><span>退回意见如下</span>  </p>";
@@ -94,7 +123,7 @@ function InitPage() {
 
             //判断是否隐藏
             if (Hide_IsOpenFrm == true) {
-                doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid+"','" + track.NDFrom + "')\">查看表单</a></span></p>";
+                doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid + "','" + track.NDFrom + "','" + track.MyPK+"')\">查看表单</a></span></p>";
             }
 
             //说明审核组件采用的是2019版本
@@ -287,9 +316,11 @@ function InitPage() {
         window.resizeTo(w, h);
     }
 }
+ 
+//子线程，子流程的时间轴轨迹
+function OpenSubThreadTime(workID,mypks) {
 
-function OpenFrm(nodeID) {
-
+    OpenBootStrapModal("./TimeSubThread.htm?MyPks="+mypks+"&FK_Flow="+GetQueryString("FK_Flow")+"&FK_Node="+GetQueryString("FK_Node"), "SubThread", "子线程", 500, 600);
 }
 
 //生成左边的icon.

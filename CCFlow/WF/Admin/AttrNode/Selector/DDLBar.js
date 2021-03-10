@@ -32,6 +32,7 @@ function InitBar(key) {
     html += "<option value=null  disabled='disabled'>+按组织结构限定范围</option>";
 
     html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
+    html += "<option value=" + SelectorModel.ByStationAI + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位智能计算</option>";
     html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
     html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
     html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL计算</option>";
@@ -55,7 +56,7 @@ function InitBar(key) {
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
     html += "<input  id='Btn_Back' type=button onclick='Back()' value='返回' />";
     //    html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
-    //   html += "<input type=button onclick='Help()' value='我需要帮助' />";
+    //   html += "<input type=button onclick='Help()' value='帮助' />";
     html += "</div>";
 
     document.getElementById("bar").innerHTML = html;
@@ -200,6 +201,9 @@ function GenerUrlByOptionKey(optionKey) {
             break;
         case SelectorModel.TeamDeptOnly:
             roleName = "12.TeamDeptOnly.htm";
+            break;
+        case SelectorModel.ByStationAI:
+            roleName = "13.ByStationAI.htm";
             break;
         default:
 

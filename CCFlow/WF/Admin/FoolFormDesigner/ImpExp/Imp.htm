@@ -2,9 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link href="../../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <style type="text/css">
         .style1 {
             width: 105px;
@@ -30,6 +33,9 @@
             #ulNodeFrmImp li {
                 width: 100%;
                 padding: 0px;
+            }
+            .tab-pane{
+                margin:30px;
             }
     </style>
     <title>表单导入</title>
@@ -110,30 +116,7 @@
             root.state = "open";
             root.children = createJsonToTree(treedata, rootdata.No, data);
 
-
-            //            $.grep(treedata, function (item) {
-            //                //选出一级节点
-            //                return item.ParentNo == rootdata.No;
-            //            }).forEach(function (folder) {
-            //                //构建node开始
-            //                var node = {};
-            //                node.text = folder.Name;
-            //                node.state = "closed";
-            //                node.children = [];
-            //                $.grep(data["Sys_MapData"], function (map) {
-            //                    //选出当前节点的二级节点
-            //                    return map.FK_FormTree == folder.No;
-
-            //                }).forEach(function (frm) {
-            //                    node.children.push({
-            //                        text: frm.Name,
-            //                        id: frm.No
-            //                    });
-            //                });
-            //                //构建node结束
-            //                root.children.push(node);
-            //            });
-
+            
             $('#ulLib').tree({
                 data: [root],
                 onSelect: function (node) {
@@ -162,41 +145,7 @@
             tableHtml += "</table>";
             $("#srclayout").html(tableHtml);
 
-            //05.从其他流程导入
-            //            var treedata = data["WF_FlowSort"],
-            //                        rootdata = $.grep(treedata, function (item) {
-            //                            return item.ParentNo == "0";
-            //                        })[0];
-            //
-
-            //            //构建树节点数据
-            //            var root = {};
-            //            root.text = rootdata.Name;
-            //            root.state = "open";
-            //            root.children = [];
-
-            //            $.grep(treedata, function (item) {
-            //                //选出一级节点
-            //                return item.ParentNo == rootdata.No;
-            //            }).forEach(function (folder) {
-            //                //构建node开始
-            //                var node = {};
-            //                node.text = folder.Name;
-            //                node.state = "closed";
-            //                node.children = [];
-            //                $.grep(data["WF_Flow"], function (map) {
-            //                    //选出当前节点的二级节点
-            //                    return map.FK_FlowSort == folder.No;
-
-            //                }).forEach(function (frm) {
-            //                    node.children.push({
-            //                        text: frm.Name,
-            //                        id: frm.No
-            //                    });
-            //                });
-            //                //构建node结束
-            //                root.children.push(node);
-            //            });
+            
             var treedata1 = data["WF_FlowSort"];
             var rootdata1 = $.grep(treedata1, function (item) {
                 return item.ParentNo == "0";
@@ -208,7 +157,6 @@
             root1.text = rootdata1.Name;
             root1.state = "open";
             root1.children = createJsonToTree(treedata1, rootdata1.No, data, "Flow");
-
             $('#ul1').tree({
                 data: [root1],
                 onSelect: function (node) {
@@ -294,18 +242,6 @@
         }
     </script>
     <script type="text/javascript">
-        function addTab(title, url) {
-            if ($('#tt').tabs('exists', title)) {
-                $('#tt').tabs('select', title);
-            } else {
-                var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
-                $('#tt').tabs('add', {
-                    title: title,
-                    content: content,
-                    closable: true
-                });
-            }
-        }
 
         //从一个节点导入.
         function CopyFromNodeFrm() {
@@ -716,25 +652,31 @@
     <form id="formCC" method="post" enctype="multipart/form-data">
         <div id="Msg">
         </div>
-        <div id="tt" class="easyui-tabs" style="width: 100%; height: auto; padding: 0px;">
-            <div title="从本机导入" style="">
-                <div style="text-align: left; padding: 15px;">
-                    <fieldset>
-                        <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
-                        <ul>
-                            <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
-                        </ul>
-                        <label style="padding-left: 8px;">
-                        </label>
-                        <br />
-                        <br />
-                        <input type="file" id="localXmlFile" name="localXmlFile" />
-                        <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
-                    </fieldset>
-                </div>
+        <ul style="margin-left:10px" class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#menu1">从本机导入</a></li>
+            <li><a data-toggle="tab" href="#menu2">从节点表单导入</a></li>
+            <li><a data-toggle="tab" href="#menu3">从其他流程导入</a></li>
+            <li><a data-toggle="tab" href="#menu4">从表单库导入</a></li>
+            <li><a data-toggle="tab" href="#menu5">从外部数据源导入</a></li>
+            <li><a data-toggle="tab" href="#menu6">导出表单模板</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="menu1" class="tab-pane fade in active">
+                <fieldset>
+                    <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
+                    <ul>
+                        <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
+                    </ul>
+                    <label style="padding-left: 8px;">
+                    </label>
+                    <br />
+                    <br />
+                    <input type="file" id="localXmlFile" name="localXmlFile" />
+                    <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
+                </fieldset>
             </div>
 
-            <div title="从节点表单导入" id="divUlNodeFrmImp" style="padding: 15px; text-align: left">
+            <div id="menu2" class="tab-pane fade  ">
                 <fieldset>
                     <legend>请选择一个节点表单</legend>
                     <!-- 节点表单列表 -->
@@ -749,42 +691,36 @@
                     <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
                 </fieldset>
             </div>
-            <div title="从其他流程导入" id="div1" style="padding: 15px; text-align: left">
+
+            <div id="menu3" class="tab-pane fade  ">
                 <ul id="ul1" style="height: auto;">
                 </ul>
                 <input type="hidden" value="" id="HD_FlowID" name="HD_FlowID" />
                 <input type="button" value="从其他流程导入" id="Btn_Flows" onclick="SaveImpOtherFlow()"
                        style="margin: 25px;" disabled="disabled" />
             </div>
-            <div title="从表单库导入" id="divUlFrmTreeImp" style="padding: 15px; text-align: left">
+
+            <div id="menu4" class="tab-pane fade  ">
                 <ul id="ulLib" style="height: auto;">
                 </ul>
                 <input type="hidden" value="" id="selFrmNode" name="selFrmNode" />
                 <input type="button" value="表单库导入" id="btnFrmLib" onclick="SaveImpFromLib()" style="margin: 25px;"
                        disabled="disabled" />
             </div>
-            <div title="从外部数据源导入" style="padding: 15px; text-align: left">
-                <div class="easyui-layout" style="height: 280px;">
-                    <fieldset style="height: 90%;">
-                        <legend id="help">导入字段生成表单</legend>
-                        <ul>
-                            <li>你可以选择多个数据源。</li>
-                            <li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
-                            <li>在自由表单里，双列排序，在傻瓜表单里，按照顺序排序。</li>
-                        </ul>
-                        <label style="padding-left: 8px;">
-                        </label>
-                        <input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
-                    </fieldset>
-                    <!--<div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单',fit:true" style="padding: 5px;">
-                        <div id="srclayout">
-                        </div>
-                    </div>-->
-                </div>
-                <input type="hidden" id="hid_FK_SFDBSrc" name="hid_FK_SFDBSrc" value=" " />
-                <input type="hidden" id="hid_STable" name="hid_STable" value=" " />
+            <div id="menu5" class="tab-pane fade  ">
+                <fieldset style="height: 90%;">
+                    <legend id="help">导入字段生成表单</legend>
+                    <ul>
+                        <li>你可以选择多个数据源。</li>
+                        <li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
+                        <li>在自由表单里，双列排序，在傻瓜表单里，按照顺序排序。</li>
+                    </ul>
+                    <label style="padding-left: 8px;">
+                    </label>
+                    <input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
+                </fieldset>
             </div>
-            <div title="导出表单模板" style="">
+            <div id="menu6" class="tab-pane fade in active">
                 <div style="text-align: left; padding: 15px;">
                     <fieldset>
                         <legend>下载到本机 </legend>
@@ -796,6 +732,8 @@
                 </div>
             </div>
         </div>
+
+        
         <input type="hidden" name="hid_FK_MapData" value=" " />
         <input type="hidden" name="hid_FK_SFDBSrc" value=" " />
         <input type="hidden" name="hid_STable" value=" " />

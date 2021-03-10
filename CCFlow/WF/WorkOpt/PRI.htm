@@ -12,6 +12,7 @@
         var workid = GetQueryString("WorkID");
         var PRIEnable = GetQueryString("PRIEnable");
         var fid = GetQueryString("FID");
+        var isFrameCross = GetQueryString("isFrameCross");
         var webUser = new WebUser();
         var gwf;
         var pri;
@@ -33,13 +34,23 @@
             gwf.PRI = PRI;
             gwf.Update();
             alert("保存成功");
-            window.parent.returnWorkWindowClose("");
+            if (isFrameCross == 0) 
+                window.parent.returnWorkWindowClose("");
+            else
+                ChildrenPostMessage("", "returnWorkWindowClose");
         }
 
         function Cancel() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-               window.parent.returnWorkWindowClose("取消");
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.returnWorkWindowClose("取消");
+                }
+
+            } else {
+                ChildrenPostMessage("取消", "returnWorkWindowClose");
             }
+
+           
         }
     </script>
 

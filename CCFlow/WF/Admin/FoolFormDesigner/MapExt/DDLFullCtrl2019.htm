@@ -23,11 +23,11 @@
             var isEnable = en.GetPara("IsFullData");
 
             if (isEnable == "" || isEnable == 0 || isEnable == undefined) {
-                $("#Btn_FullData").hide();
+              //  $("#Btn_FullData").hide();
                 $("#RB_IsEnableJS_0").attr("checked", true);
             } else {
 
-                $("#Btn_FullData").show();
+               // $("#Btn_FullData").show();
                 $("#RB_IsEnableJS_1").attr("checked", true);
             }
             //设置那个单选按钮可以被选择。
@@ -66,6 +66,9 @@
                         </legend>
                         <ul>
                             <li>启用后需要您配置数据填充模式.</li>
+                            <li>
+                                <input type="button" value="设置填充" id="Btn_FullData" onclick="Set();" />
+                            </li>
                         </ul>
                     </fieldset>
                 </td>
@@ -74,7 +77,6 @@
             <tr>
                 <td>
                     <input type="button" value="保存" onclick="Save();" />
-                    <input type="button" value="设置填充" id="Btn_FullData" onclick="Set();" />
                     <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />帮助:</a>
                 </td>
             </tr>

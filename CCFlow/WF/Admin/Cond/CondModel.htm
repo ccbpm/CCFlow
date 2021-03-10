@@ -30,8 +30,17 @@
                 $('#RB_CondModel_0').attr('checked', 'true');
             if (node.CondModel == 1)
                 $('#RB_CondModel_1').attr('checked', 'true');
-            if (node.CondModel == 2)
+            if (node.CondModel == 2) {
                 $('#RB_CondModel_2').attr('checked', 'true');
+                var condModel2 = node.GetPara("CondModel2");
+                if (condModel2 == 0)
+                    $('#RB_CondModel_2_0').attr('checked', 'true');
+                if (condModel2 == 1)
+                    $('#RB_CondModel_2_1').attr('checked', 'true');
+            }
+            if (node.GetPara("IsShowReturnNodeInToolbar") == 1)
+                $('#CB_IsShowReturnNodeInToolbar').attr('checked', 'true');
+
 
             $("#Msg").html("");
         });
@@ -44,6 +53,14 @@
             var node = new Entity("BP.WF.Node", fk_node);
             var val = $("input[name='CondModel']:checked").val();
             node.CondModel = val;
+            if (val == 2) {
+                var condModel2 = $("input[name='RB_CondModel_2']:checked").val();
+                node.SetPara("CondModel2", condModel2);
+            }
+            if ($("#CB_IsShowReturnNodeInToolbar").is(':checked') == true)
+                node.SetPara("IsShowReturnNodeInToolbar", 1);
+            else
+                node.SetPara("IsShowReturnNodeInToolbar", 0);
             node.Update();
 
             window.location.href = window.location.href;
@@ -53,8 +70,8 @@
 <body>
     <form id="cc">
         <div id="bar" class="cs-tr cs-bar">
-           
-                <input type="button" ID="Btn_Save" value="保存" onclick="Save()" />
+
+            <input type="button" ID="Btn_Save" value="保存" onclick="Save()" />
         </div>
         <br />
 
@@ -62,8 +79,19 @@
             <legend>
                 <input type="radio" ID="RB_CondModel_2" name="CondModel" runat="server" value="2" /><label for="RB_CondModel_2"> 发送按钮旁下拉框选择-(默认模式) </label>
             </legend>
+
             <ul>
-                <li>用户发送的时候，在发送按钮旁边有一个下拉框，该下拉框是ccbpm为您计算出来的可以发送到的节点。 </li>
+                <li style="font-weight: bold;font-size: 15px;">
+                    显示方式:
+                    <label><input type="radio" id="RB_CondModel_2_0" value="0" name="RB_CondModel_2" checked="checked"   />下拉框显示</label>
+                    <label><input type="radio" id="RB_CondModel_2_1" value="1" name="RB_CondModel_2" />按钮显示</label>
+                </li>
+                <li style="font-weight: bold;font-size: 15px;">
+                    <label><input type="checkbox" id="CB_IsShowReturnNodeInToolbar"/>退回节点是否现在工具栏</label>
+                </li>
+                <li>
+                    用户发送的时候，在发送按钮旁边有一个下拉框，该下拉框是ccbpm为您计算出来的可以发送到的节点。
+                </li>
                 <li>是有操作者来决定要发送到那个节点上去. </li>
                 <li>如果您选择的节点的接收人规则是由上一步发送人员来选择的，系统就会弹出接受人按钮. </li>
                 <li> <img calss="HelpImg" src="CondModel1.png" onclick="WinOpen('CondModel1.png')" style="width:100%;" /> </li>
@@ -76,6 +104,7 @@
             </legend>
 
             <ul>
+
                 <li>该模式需要为每一跟连接线设置方向条件.</li>
                 <li>ccbpm在发送的时候会检查这些条件，如果条件成立就转向这个节点. </li>
                 <li>该模式是让ccbpm自动为您计算要发送到的节点. </li>

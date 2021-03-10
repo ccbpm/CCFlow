@@ -427,6 +427,11 @@ function GenerFrm() {
     }
     //给富文本 创建编辑器
     if (document.BindEditorMapAttr) {
+        $('head').append('<link href="../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">');
+        Skip.addJs("../Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random());
+        Skip.addJs("../Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random());
+        Skip.addJs("../Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random());
+        Skip.addJs("../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
         var EditorDivs = $(".EditorClass");
         $.each(EditorDivs, function (i, EditorDiv) {
             var editorId = $(EditorDiv).attr("id");

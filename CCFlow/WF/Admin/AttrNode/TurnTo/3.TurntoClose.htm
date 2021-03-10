@@ -18,15 +18,12 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-
-            $("#Msg").html("正在加载,请稍后......");
-            
-            $("#Msg").html("");
+                InitBar(TurnToDeal.TurntoClose);
         });
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.TurnToDeal = TurntoWay.TurntoClose;
+            node.TurnToDeal = TurnToDeal.TurntoClose;
             node.Update();
             alert("保存完毕");
             window.location.href = window.location.href;

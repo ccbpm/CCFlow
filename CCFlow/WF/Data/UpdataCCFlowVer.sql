@@ -5,6 +5,9 @@
 update WF_Direction set mypk=replace(mypk, '_0','') ;
 
 
+
+DELETE FROM sys_enum where enumkey='SearchUrlOpenType';
+
 DELETE FROM Sys_MapAttr WHERE KeyOfEn='MyNum';
 
 UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS NULL ) AND MyDataType=7;
@@ -12,6 +15,7 @@ UPDATE Sys_MapAttr SET IsSupperText=1 WHERE (IsSupperText=0 OR IsSupperText IS N
 UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%';
 
 DELETE FROM Sys_Enum WHERE EnumKey ='ShowWhere';
+DELETE FROM Sys_Enum WHERE EnumKey ='OpenModel';
 
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
@@ -72,6 +76,13 @@ UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6;
 UPDATE SYS_MAPATTR SET UIWidth=145 WHERE MYDATATYPE=7;
 
 
+-- 2020.10.27 为enCfg设置页面设置分组;
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.EnCfg';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.EnCfg','@No=基础信息,基础信息权限信息.@BtnsShowLeft=工具栏按钮@SearchUrlOpenType=双击弹窗@');
+
+
+
+
 -- 2016.11.18 升级维护附件属性.;
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.FrmAttachmentExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.FrmAttachmentExt',
@@ -91,6 +102,14 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FrmNodeComponent','
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapFrmFool';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=基础属性,基础属性.@Designer=设计者信息,设计者的单位信息，人员信息，可以上传到表单云.');
 
+
+-- 字段属性 String ; 
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrString';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrString','@MyPK=基础,基础属性，数据属性.@ColSpan=外观,傻瓜表单属性，外观.');
+-- 枚举;
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrEnum';
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrEnum';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrEnum','@MyPK=基础,基础属性，数据属性.@ColSpan=外观,傻瓜表单属性，外观.');
 
 -- 2018.07.24 @FlowDTSWay=流程数据与业务数据同步; 
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';

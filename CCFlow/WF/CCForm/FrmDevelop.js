@@ -57,12 +57,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
         $('#RB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#DDL_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
         $('#CB_' + mapAttr.KeyOfEn).addClass(mapAttr.CSS);
-        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15)
-            $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
-        if (mapAttr.UIContralType == 17)
-            $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", "请单击进行编辑");
 
-		if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+        if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
             var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
             var eleHtml = "";
             //如果是富文本就使用百度 UEditor
@@ -94,6 +90,11 @@ function GenerDevelopFrm(wn, fk_mapData) {
                 element.remove(); //移除节点
             }
         }
+        if (mapAttr.UIContralType == 14 || mapAttr.UIContralType == 15)
+            $('#TB_' + mapAttr.KeyOfEn).removeAttr("placeholder");
+        if (mapAttr.UIContralType == 17)
+            $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", "请单击进行编辑");
+
         //如果是时间控件
         if (mapAttr.MyDataType == 6 && (mapAttr.UIIsEnable != 0 && pageData.IsReadonly != "1")) {
             var frmDate = mapAttr.IsSupperText;
@@ -139,21 +140,23 @@ function GenerDevelopFrm(wn, fk_mapData) {
             if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
                 bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
+             if(bit == null || bit==undefined||bit=="")
+                bit = 0;
             obj.attr("data-bit", bit);
 
             obj.bind('focus', function () {
-                removeplaceholder(this, $(this).attr("data-bit"));
+                removeplaceholder(this,  parseInt($(this).attr("data-bit")));
             });
 
             obj.bind('blur', function () {
-                addplaceholder(this, $(this).attr("data-bit"));
+                addplaceholder(this,  parseInt($(this).attr("data-bit")));
                 if (this.getAttribute("data-type") == "Money")
-                    numberFormat(this, $(this).attr("data-bit"));
+                    numberFormat(this,  parseInt($(this).attr("data-bit")));
             });
 
            
             obj.bind('keyup', function () {
-                limitLength(this, $(this).attr("data-bit"));
+                limitLength(this,  parseInt($(this).attr("data-bit")));
                 if (this.getAttribute("data-type") == "Int")
                     valitationAfter(this, 'int');
 
@@ -425,12 +428,19 @@ function GenerDevelopFrm(wn, fk_mapData) {
             //    if (element.getAttribute("data-type") == "SubFlow")
             //        figure_Develop_FigureSubFlowDtl(nodeComponents, element);
             //    //如果有审核组件，增加审核组件的HTML
-            //    if (element.getAttribute("data-type") == "WorkCheck")
+            //    //if (element.getAttribute("data-type") == "WorkCheck")
                     
             //})
 
         }
     }
+
+    if ($("#SubFlow").length == 1) {
+        Skip.addJs(ccbpmPath + "/WF/WorkOpt/SubFlow.js");
+        var html = SubFlow_Init(frmData.WF_Node[0]);
+        $("#SubFlow").html(html);
+    }
+
 
 
 }
@@ -755,40 +765,11 @@ function figure_Develop_IFrame(element, frame) {
 
 //子流程
 function figure_Develop_FigureSubFlowDtl(wf_node, element) {
+    Skip.addJs(ccbpmPath + "/WF/WorkOpt/SubFlow.js");
+    var html = SubFlow_Init(node);
 
-    //@这里需要处理, 对于流程表单.
-    if (sta == 0 || sta == "0" || sta == undefined)
-        return $('');
+    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' >" + html+"</div>");
 
-    var sta = wf_node.SFSta;
-    var w = wf_node.SF_W;
-
-    var src = "./WorkOpt/SubFlow.htm?s=2";
-    if (currentURL.indexOf("FrmGener.htm") != -1 || currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
-        src = "../WorkOpt/SubFlow.htm?s=2";
-    else if (currentURL.indexOf("AdminFrm.htm") != -1)
-        src = "../../WorkOpt/SubFlow.htm?s=2";
-    var paras = '';
-
-    paras += "&FID=" + pageData.FID;
-    paras += "&OID=" + pageData.OID;
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.OID;
-    if (sta == 2 || pageData.IsReadonly == 1)//只读
-    {
-        src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-
-    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' ></div>");
-
-    var eleIframe = $("<iframe class= 'Fdtl' ID = 'SubFlow_" + wf_node.NodeID + "' src = '" + src + "' frameborder=0  style='width:" + w + "px;"
-        + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
 
     eleHtml.append(eleIframe);
     $(element).after(eleHtml);

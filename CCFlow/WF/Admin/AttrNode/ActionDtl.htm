@@ -24,16 +24,18 @@
     <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
     <script src="../Admin.js"></script>
-    <script src="../../LoadSql.js"></script>
+    <script src="../../Scripts/LoadSql.js"></script>
     <style>
-        #Btn_Save{
-            background-image: url(../../Img/Btn/Save.png)!important; 
+        #Btn_Save {
+            background-image: url(../../Img/Btn/Save.png) !important;
         }
-         #Btn_Back{
-            background-image: url(../../Img/Btn/Back.png)!important; 
+
+        #Btn_Back {
+            background-image: url(../../Img/Btn/Back.png) !important;
         }
-          #Btn_Help{
-            background-image: url(../../Img/Btn/Help.png)!important; 
+
+        #Btn_Help {
+            background-image: url(../../Img/Btn/Help.png) !important;
         }
     </style>
     <script type="text/javascript">
@@ -123,9 +125,9 @@
                 $("#DDL_Doc").hide();
             }
 
-            if ($(o).val() == "8") 
+            if ($(o).val() == "8")
                 $("#sp_webapi").show();
-            else 
+            else
                 $("#sp_webapi").hide();
         }
 
@@ -210,6 +212,19 @@
                     </td>
                 </tr>
             </table>
+
+            <br />
+
+            <fieldset>
+                <legend id="help">说明</legend>
+                <ul>
+                    <li>执行的结果如果返回的err@ 系统就会认为您要抛出异常了.</li>
+                    <li>返回其他的信息的时候系统就会提示出来.</li>
+
+                    <li>执行的内容,支持ccbpm的表达式.比如: UPDATE XXX SET xxxx=@MyFiledName </li>
+
+                </ul>
+            </fieldset>
         </div>
 
 

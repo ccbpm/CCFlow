@@ -38,7 +38,7 @@
             <fieldset v-show="orgModel===1">
                 <legend>设置（组织管理员）</legend>
                 <ul>
-                    <li><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
+                    <li  v-show="isShow"><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
                     <li><a href="#" @click="SetOrgStations()">设置本组织岗位</a> </li>
                 </ul>
             </fieldset>
@@ -76,7 +76,8 @@
                 orgModel: 0,
                 stas: [],
                 webuser: null,
-                deliverWay: SelectorModel.Station
+                deliverWay: SelectorModel.Station,
+                isShow: true
             },
             methods: {
                 OpenDot2DotStations: function () {
@@ -106,6 +107,7 @@
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+                this.isShow = this.webuser.CCBPMRunModel == 2 ? false : true;
             }
         });
 
@@ -126,6 +128,6 @@
             alert("保存成功.");
         }
     </script>
-    
+
 </body>
 </html>

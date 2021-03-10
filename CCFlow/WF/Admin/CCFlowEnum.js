@@ -98,6 +98,8 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelfUrl = 44,
         //按API/URL
         DeliveryWay.ByAPIUrl = 45,
+        //按照部门人员选择器
+        DeliveryWay.ByDeptAndEmpField = 46,
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
 }
@@ -118,7 +120,8 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.AccepterOfDeptStationOfCurrentOper = 9,
         SelectorModel.TeamOrgOnly = 10,
         SelectorModel.TeamOnly = 11,
-        SelectorModel.TeamDeptOnly = 12
+        SelectorModel.TeamDeptOnly = 12,
+        SelectorModel.ByStationAI = 13
 
 
 }
@@ -130,53 +133,344 @@ if (typeof BlockModel == "undefined") {
     /// </summary>
     BlockModel.None = 0,
         /// <summary>
-        /// 当前节点有未完成的子流程时
+        /// 当前节点的有未完成的子线程
         /// </summary>
-        BlockModel.IncompleteBlock = 1,
+        BlockModel.CurrNodeAll = 1,
         /// <summary>
-        /// 按约定格式阻塞未完成子流程
+        /// 按照约定的格式阻塞.
         /// </summary>
-        BlockModel.AppointmentBlock = 2,
+        BlockModel.SpecSubFlow = 2,
         /// <summary>
-        /// 是否启用为父流程时，子流程未运行到指定的节点
+        /// 按照配置的sql阻塞,返回大于等于1表示阻塞,否则不阻塞.
         /// </summary>
-        BlockModel.ByParentBlock = 3,
+        BlockModel.BySQL = 3,
         /// <summary>
-        /// 是否启用为平级子流程时，子流程未运行到指定的节点
+        /// 按照表达式阻塞，表达式类似方向条件的表达式.
         /// </summary>
-        BlockModel.ByChildBlock = 4,
+        BlockModel.ByExp = 4,
         /// <summary>
-        /// 按照SQL阻塞
+        /// 为父流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
-        BlockModel.BySQLBlock = 5,
+        BlockModel.SpecSubFlowNode = 5,
         /// <summary>
-        /// 按照表达式阻塞
+        /// 为平级子流程时，指定的子流程未运行到指定节点，则阻塞
         /// </summary>
-        BlockModel.ByExpressionBlock = 6,
+        BlockModel.SameLevelSubFlow = 6,
         /// <summary>
         /// 其他选项设置
         /// </summary>
-        BlockModel.ByOtherBlock = 7 
+        BlockModel.ByOtherBlock = 7
 }
+//流程设计模式.
+if (typeof FlowDevModel == "undefined") {
+    var FlowDevModel = {}
+    /// <summary>
+    /// 专业模式
+    /// </summary>
+    FlowDevModel.Prefessional = 0,
+        /// <summary>
+        /// 极简模式
+        /// </summary>
+        FlowDevModel.JiJian = 1,
+        /// <summary>
+        /// 累加模式
+        /// </summary>
+        FlowDevModel.FoolTruck = 2,
+        /// <summary>
+        /// 绑定单表单
+        /// </summary>
+        FlowDevModel.RefOneFrmTree = 3,
+        /// <summary>
+        /// 绑定多表单
+        /// </summary>
+        FlowDevModel.FrmTree = 4,
+        /// <summary>
+        /// SDK表单
+        /// </summary>
+        FlowDevModel.SDKFrm = 5,
+        /// <summary>
+        /// 嵌入式表单
+        /// </summary>
+        FlowDevModel.SelfFrm = 6,
+        /// <summary>
+        /// 物联网流程
+        /// </summary>
+        FlowDevModel.InternetOfThings = 7,
+        /// <summary>
+        /// 决策树流程
+        /// </summary>
+        FlowDevModel.Tree = 8
+}
+//多人处理规则.
+if (typeof TodolistModel == "undefined") {
+    var TodolistModel = {}
+    /// <summary>
+    /// 抢办(谁抢到谁来办理,办理完后其他人就不能办理.)
+    /// </summary>
+    TodolistModel.QiangBan = 0,
+        /// <summary>
+        /// 协作(没有处理顺序，接受的人都要去处理,由最后一个人发送到下一个节点)
+        /// </summary>
+        TodolistModel.Teamup = 1,
+        /// <summary>
+        ///  队列(按照顺序处理，有最后一个人发送到下一个节点)
+        /// </summary>
+        TodolistModel.Order = 2,
+        /// <summary>
+        /// 共享模式(需要申请，申请后才能执行)
+        /// </summary>
+        TodolistModel.Sharing = 3,
+        /// <summary>
+        /// 协作组长模式
+        /// </summary>
+        TodolistModel.TeamupGroupLeader = 4
+
+}
+//考核规则.
+if (typeof CHWay == "undefined") {
+    var CHWay = {}
+    /// <summary>
+    /// 不考核
+    /// </summary>
+    CHWay.None = 0,
+        /// <summary>
+        /// 按照时效考核
+        /// </summary>
+        CHWay.ByTime = 1,
+        /// <summary>
+        /// 按工作量考核
+        /// </summary>
+        CHWay.ByWorkNum = 2,
+        /// <summary>
+        /// 是否是考核质量点
+        /// </summary>
+        CHWay.IsQuality = 3
+
+}
+//超时处理规则.
+if (typeof OvertimeRole == "undefined") {
+    var OvertimeRole = {}
+    /// <summary>
+    /// 不设置
+    /// </summary>
+    OvertimeRole.None = 0,
+        /// <summary>
+        /// 自动向下运动
+        /// </summary>
+        OvertimeRole.AutoDown = 1,
+        /// <summary>
+        /// 跳转到指定节点
+        /// </summary>
+        OvertimeRole.JumpToNode = 2,
+        /// <summary>
+        /// 移交给指定的人员
+        /// </summary>
+        OvertimeRole.TurnToEmp = 3,
+        /// <summary>
+        /// 给指定的人员发送消息
+        /// </summary>
+        OvertimeRole.SendMessageToEmp = 4,
+        /// <summary>
+        /// 删除流程
+        /// </summary>
+        OvertimeRole.DeleteFlow = 5,
+        /// <summary>
+        /// 执行SQL
+        /// </summary>
+        OvertimeRole.RunSql = 6
+}
+
+//批处理规则
+if (typeof BatchRole == "undefined") {
+    var BatchRole = {}
+    /// <summary>
+    /// 不处理
+    /// </summary>
+    BatchRole.None = 0,
+        /// <summary>
+        /// 审核组件模式
+        /// </summary>
+        BatchRole.WorkCheckModel = 1,
+        /// <summary>
+        /// 审核字段分组模式
+        /// </summary>
+        BatchRole.Group = 2
+}
+
 //发送后转向
-if (typeof TurntoWay == "undefined") {
-    var TurntoWay = {}
+if (typeof TurnToDeal == "undefined") {
+    var TurnToDeal = {}
     /// <summary>
     /// 提示CCFlow默认信息
     /// </summary>
-    TurntoWay.TurntoDefault = 0,
+    TurnToDeal.CCFlowMsg = 0,
         /// <summary>
         /// 提示指定信息
         /// </summary>
-        TurntoWay.TurntoMessage = 1,
+        TurnToDeal.SpecMsg = 1,
         /// <summary>
         /// 转向指定的URL
         /// </summary>
-        TurntoWay.TurntoUrl = 2,
+        TurnToDeal.SpecUrl = 2,
         /// <summary>
-        /// 发送完成立即关闭
+        /// 发送后关闭
         /// </summary>
-        TurntoWay.TurntoClose = 3
+        TurnToDeal.TurntoClose = 3,
+        /// <summary>
+        /// 按条件转向
+        /// </summary>
+        TurnToDeal.TurnToByCond = 4
+}
+
+//导入
+if (typeof Imp == "undefined") {
+    var Imp = {}
+    /// <summary>
+    /// 本地导入
+    /// </summary>
+    Imp.localhostImp = 0,
+        /// <summary>
+        /// 节点表单导入
+        /// </summary>
+        Imp.NodeFrmImp = 1,
+        /// <summary>
+        /// 其他流程导入
+        /// </summary>
+        Imp.FlowFrmImp = 2,
+        /// <summary>
+        /// 表单库导入
+        /// </summary>
+        Imp.FrmLibraryImp = 4,
+        /// <summary>
+        /// 外部数据源导入
+        /// </summary>
+        Imp.ExternalDataSourseImp = 5,
+        /// <summary>
+        /// 导出表单模板
+        /// </summary>
+        Imp.ExportFrm = 6
+}
+//方向条件控制
+if (typeof DirCondModel == "undefined") {
+    var DirCondModel = {}
+    /// <summary>
+    /// 按照方向条件计算的
+    /// </summary>
+    DirCondModel.ByLineCond = 0,
+        /// <summary>
+        /// 主观选择：下拉框模式
+        /// </summary>
+        DirCondModel.ByDDLSelected = 2,
+        /// <summary>
+        /// 由连接线控制
+        /// </summary>
+        DirCondModel.ByPopSelect = 1,
+        /// <summary>
+        /// 主观选择： 按钮模式
+        /// </summary>
+        DirCondModel.ByButtonSelected = 3
+}
+
+//流程计划时间
+if (typeof SDTOfFlow == "undefined") {
+    var SDTOfFlow = {}
+    /// <summary>
+    /// 不使用
+    /// </summary>
+    SDTOfFlow.None = 0,
+        /// <summary>
+        /// 按照节点表单的日期计算
+        /// </summary>
+        SDTOfFlow.NodeFrmDT = 1,
+        /// <summary>
+        /// 按照sql计算
+        /// </summary>
+        SDTOfFlow.SQLDT = 2,
+        /// <summary>
+        /// 按照所有节点的时间之和计算
+        /// </summary>
+        SDTOfFlow.NodeSumDT = 3,
+        /// <summary>
+        /// 按照规定的天数计算
+        /// </summary>
+        SDTOfFlow.DaysDT = 4
+    ///// <summary>
+    ///// 按照时间规则计算
+    ///// </summary>
+    //SDTOfFlow.TimeDT = 5,
+    ///// <summary>
+    ///// 为子流程时的规则
+    ///// </summary>
+    //SDTOfFlow.ChildFlowDT = 6,
+    ///// <summary>
+    ///// 按照发起字段不能重复规则
+    ///// </summary>
+    //SDTOfFlow.AttrNonredundant = 7
+
+}
+//发起限制规则
+if (typeof StartLimitRole == "undefined") {
+    var StartLimitRole = {}
+    /// <summary>
+    /// 不限制
+    /// </summary>
+    StartLimitRole.None = 0,
+        /// <summary>
+        /// 一人一天一次
+        /// </summary>
+        StartLimitRole.Day = 1,
+        /// <summary>
+        /// 一人一周一次
+        /// </summary>
+        StartLimitRole.Week = 2,
+        /// <summary>
+        /// 一人一月一次
+        /// </summary>
+        StartLimitRole.Month = 3,
+        /// <summary>
+        /// 一人一季度一次
+        /// </summary>
+        StartLimitRole.JD = 4,
+        /// <summary>
+        /// 一人一年一次
+        /// </summary>
+        StartLimitRole.Year = 5,
+        /// <summary>
+        /// 发起的列不能重复,(多个列可以用逗号分开)
+        /// </summary>
+        StartLimitRole.ColNotExit = 6,
+        /// <summary>
+        /// 设置的SQL数据源为空,或者返回结果为零时可以启动.
+        /// </summary>
+        StartLimitRole.ResultIsZero = 7,
+        /// <summary>
+        /// 设置的SQL数据源为空,或者返回结果为零时不可以启动.
+        /// </summary>
+        StartLimitRole.ResultIsNotZero = 8,
+        /// <summary>
+        /// 为子流程时仅仅只能被调用1次.
+        /// </summary>
+        StartLimitRole.OnlyOneSubFlow = 9
+}
+//自动发起
+if (typeof AutoStart == "undefined") {
+    var AutoStart = {}
+    /// <summary>
+    /// 手工启动（默认）
+    /// </summary>
+    AutoStart.None = 0,
+        /// <summary>
+        /// 按照指定的人员
+        /// </summary>
+        AutoStart.ByDesignee = 1,
+        /// <summary>
+        /// 数据集按时启动
+        /// </summary>
+        AutoStart.ByTineData = 2,
+        /// <summary>
+        /// 触发试启动
+        /// </summary>
+        AutoStart.ByTrigger = 3
 }
 //前置导航
 if (typeof StartGuideWay == "undefined") {
@@ -218,7 +512,11 @@ if (typeof StartGuideWay == "undefined") {
         /// <summary>
         /// 父子流程模式
         /// </summary>
-        StartGuideWay.ByParentFlowModel = 9
+        StartGuideWay.ByParentFlowModel = 9,
+        /// <summary>
+        /// 子流程实例列表模式-多条
+        /// </summary>
+        StartGuideWay.ByChildFlowModel = 10
 }
 
 

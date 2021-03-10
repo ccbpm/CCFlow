@@ -370,7 +370,7 @@
 
                 checkedStr = "";
 
-                return "<input  " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><span for='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</span>";
+                return "<label style='font-weight:50;' ><input  " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " />" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.

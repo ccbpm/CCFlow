@@ -890,7 +890,7 @@ function figure_Template_Label(frmLab) {
 
     var eleHtml = "<label></label>";
     eleHtml = $(eleHtml);
-    var text = frmLab.Text.replace(/@/g, "<br>");
+    var text = frmLab.Lab.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y + 'px').css('left', frmLab.X + 'px').css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
@@ -904,7 +904,7 @@ function figure_Template_Label_old(frmLab) {
     var eleHtml = '';
     eleHtml = '<label></label>'
     eleHtml = $(eleHtml);
-    var text = frmLab.Text.replace(/@/g, "<br>");
+    var text = frmLab.Lab.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize + 'px')
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
@@ -919,7 +919,7 @@ function figure_Template_Btn(frmBtn) {
     if (btnId == null || btnId == "")
         btnId = frmBtn.MyPK;
     var btnHtml = $("<input id='" + btnId + "' type='button' value='' >");
-    btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
+    btnHtml.val(frmBtn.Lab).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
     doc = doc.replace("~", "'");
     var eventType = frmBtn.EventType;
@@ -1014,7 +1014,7 @@ function figure_Template_HyperLink(frmLin) {
     eleHtml = $(eleHtml);
 
     var a = $("<a></a>");
-    a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Text);
+    a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Lab);
     eleHtml.append(a);
     eleHtml.css('position', 'absolute')
         .css('top', frmLin.Y + 'px')

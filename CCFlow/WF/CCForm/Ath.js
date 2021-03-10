@@ -10,7 +10,7 @@ AthParams.AthInfo = {};
 * @param athchment 附件属性
 * @param athDivID 生成的附件信息追加的位置
 */
-function AthTable_Init(athchment, athDivID, refPKVal, FormType) {
+function AthTable_Init(athchment, athDivID, refPKVal) {
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
     if (refPKVal == null || refPKVal == undefined || refPKVal == 0)
@@ -20,6 +20,7 @@ function AthTable_Init(athchment, athDivID, refPKVal, FormType) {
 
     AthParams.FK_MapData = athchment.FK_MapData;
 
+    debugger
     //2.上传的URL的设置
     var uploadUrl = "";
     if (plant == 'CCFlow')
@@ -30,11 +31,11 @@ function AthTable_Init(athchment, athDivID, refPKVal, FormType) {
     uploadUrl += "&WorkID=" + pageData.WorkID;
     uploadUrl += "&FID=" + pageData.FID;
     uploadUrl += "&FK_Node=" + pageData.FK_Node;
-    uploadUrl += "&PWorkID=" + pageData.PWorkID;
+    uploadUrl += "&PWorkID=" +GetQueryString("PWorkID");
     uploadUrl += "&FK_MapData=" + AthParams.FK_MapData;
 
     //3.初始化附件列表
-    InitAthPage(athDivID, uploadUrl, FormType);
+    InitAthPage(athDivID, uploadUrl);
 
     //4.调用附件上传的功能
 
@@ -47,7 +48,7 @@ function AthTable_Init(athchment, athDivID, refPKVal, FormType) {
         "beforeUpload": beforeUploadFun,//在上传前执行的函数
         "onUpload": function (opt, data) {
             uploadTools.uploadError(opt);//显示上传错误
-            InitAthPage(athDivID, null, FormType);
+            InitAthPage(athDivID);
         },
         autoCommit: true,//文件是否自动上传
         "fileType": AthParams.realFileExts,//文件类型限制，默认不限制，注意写的是文件后缀
@@ -89,7 +90,7 @@ function beforeUploadFun(opt) {
 * 初始化附件列表信息
 * @param athDivID 生成的附件信息追加的位置
 */
-function InitAthPage(athDivID, uploadUrl, FormType) {
+function InitAthPage(athDivID, uploadUrl) {
     AthParams.PKVal = athRefPKVal;
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
@@ -99,8 +100,6 @@ function InitAthPage(athDivID, uploadUrl, FormType) {
     //alert("RefOID=" + AthParams.PKVal);
     handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_", ""));
     handler.AddPara("FK_MapData", AthParams.FK_MapData);
-    if (FormType != null && FormType!=undefined)
-        handler.AddPara("FormType", FormType)
     var data = handler.DoMethodReturnString("Ath_Init");
 
     if (data.indexOf('err@') == 0) {
@@ -314,10 +313,10 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                 _html += "<a href=\"javascript:Down2018('" + athDesc.MyPK + "','" + db.MyPK + "')\">下载</a>";
             if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','"+db.FileName+"')\">删除</a>";
                 var webuser = new WebUser();
                 if (athDesc.DeleteWay == 2 && db.Rec == webuser.No)//删除自己上传的
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName +"')\">删除</a>";
             }
             _html += "</td>";
             _html += "</tr>";
@@ -533,6 +532,7 @@ function Down2018(fk_frmattachment, MyPK,fileName) {
     }
     if (IEVersion() <11) {
         window.open(url);
+		return;
     }
     var link = document.createElement('a');
     link.setAttribute("download", "");
@@ -590,12 +590,29 @@ function DownZip(fk_frmattachment,PKVal) {
 * 删除附件
 * @param delPKVal
 */
-function Del(delPKVal,fk_framAttachment) {
+function Del(delPKVal, fk_framAttachment, name) {
     if (window.confirm('您确定要删除吗？ ') == false)
         return;
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddPara("DelPKVal", delPKVal);
-    handler.DoMethodReturnString("AttachmentUpload_Del");
+    var data = handler.DoMethodReturnString("AttachmentUpload_Del");
+    if (data.indexOf("err@") != -1) {
+        alert(data);
+        console.log(data);
+        return;
+    }
+    debugger
+    var opt = AthParams.Opt;
+    var fileListArray = uploadFileList.getFileList(opt);
+    var newFileListArray = [];
+    for (var i = 0; i < fileListArray.length; i++) {
+        if (fileListArray[i].name == name)
+            continue;
+        newFileListArray.push(fileListArray[i]);
+    }
+    
+    uploadFileList.setFileList(newFileListArray, opt);
+    //获取
     InitAthPage("Div_" + fk_framAttachment);
     
 }

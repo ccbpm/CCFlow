@@ -117,7 +117,7 @@ table > td {
     color: #15398b;
 }
 
-.fixed-table-border {
+/**.fixed-table-border {
     display: none;
 }
 
@@ -129,7 +129,7 @@ table > td {
 .fixed-table-container {
     height: auto !important;
     padding-bottom: 0 !important;
-}
+}*/
 .Wdate {
     border: 1px solid #e5e6e7;
     height: 28px;
@@ -160,6 +160,6 @@ td {
     -webkit-text-overflow: ellipsis;
 }
 
-.table {
+/*.table {
     width: auto !important;
-}
+}*/

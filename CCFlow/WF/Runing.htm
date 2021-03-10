@@ -59,7 +59,8 @@
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
-    <script src="Style/skin/layui/layer.js" type="text/javascript"></script>
+
+    <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
     <script src="../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script language="javascript" type="text/javascript">
 
@@ -118,7 +119,7 @@
 
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo, fid) {
-            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID+"&FID="+fid;
+            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
             window.open(url);
             return;
         }

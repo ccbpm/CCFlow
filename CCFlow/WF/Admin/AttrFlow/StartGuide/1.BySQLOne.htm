@@ -10,8 +10,7 @@
     <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../../LoadSql.js"></script>
-
+    <script src="../../../Scripts/LoadSql.js"></script>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -51,8 +50,7 @@
             data.StartGuideWay = StartGuideWay.BySQLOne;
             data.CopyURL();  //从url里面copy数据.
             data.CopyForm(); //从from里面copy数据.
-            if (data.Update() == 0)
-                data.Insert();
+            data.Update();
 
             window.location.href = window.location.href;
         }

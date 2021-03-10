@@ -38,7 +38,7 @@ body {
 
 
 .select-tree-wrap {
-    width: 400px;
+    width: 800px;
     min-height: 36px;
     border: 1px solid #ccc;
 }
@@ -175,7 +175,7 @@ body {
     .drop-down-wrap .select-tree-list {
         padding: 0;
         margin: 0;
-        max-height: 400px;
+        max-height: 800px;
         overflow-x: scroll;
     }
 

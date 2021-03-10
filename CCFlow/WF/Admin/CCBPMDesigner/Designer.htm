@@ -43,6 +43,11 @@
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
     <script src="Designer2018.js" type="text/javascript"></script>
+    <!--layer-->
+    <link href="../../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/lay/modules/layer.js"></script>
+    <script src="../../Scripts/layui/layui/layui.js"></script>
+   
     <style>
         body {
             background-color: #f7f6f9;
@@ -202,14 +207,17 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
+                <div style="float:left;margin-left:15px;margin-top:5px">
+                    <label id="flowDevModelText"></label>
+                </div>
                 <div class="pull-right">
+
                     <button class="btn btn-white" type="button" onclick="ShowNewFlowGif()">
                         <image src="../../Img/Btn/New.png" width="14px" height="14px">&nbsp;新建</image>
                     </button>
                     <button class="btn btn-white" type="button" id="Btn_Save">
                         <image src="../../Img/Btn/Save.png" width="14px" height="14px">&nbsp;保存</image>
                     </button>
-
                     <!--<button class="btn btn-white" type="button" id="Btn_SaveToColud">
                         保存到云
                     </button>-->
@@ -234,7 +242,7 @@
                         admin测试运行
                     </button>-->
 
-                    <button class="btn btn-white" type="button" id="Btn_Frm" onclick="Frm()">
+                    <button class="btn btn-white" type="button" id="Btn_Frm" onclick="EidtFrm()">
                         <image src="../../Img/Btn/Design.png" width="14px" height="14px">&nbsp;设计表单</image>
                     </button>
 
@@ -290,10 +298,10 @@
             </p>
         </div>
         <div class="modal-footer">
-            <button data-dismiss="modal" aria-hidden="true" onclick="SaveNodeName();" >
+            <button data-dismiss="modal" aria-hidden="true" onclick="SaveNodeName();">
                 保存
             </button>
-            <button  onclick="SaveAndUpdateNodeName();" btn-primary=btn-primary  data-dismiss="modal" aria-hidden="true">
+            <button onclick="SaveAndUpdateNodeName();" btn-primary=btn-primary data-dismiss="modal" aria-hidden="true">
                 保存&更新节点表单名称
             </button>
         </div>
@@ -408,8 +416,8 @@
     <div id="processMenu" style="display: none;">
         <ul id="mainul">
             <li id="pmAttribute"><i class="icon-cog"></i>&nbsp;<span class="_label">节点属性</span></li>
-            <li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>
-            <li id="pmFrmD"><i class="icon-comment"></i>&nbsp;<span class="_label">设计表单</span></li>
+            <!--<li id="pmFrmSln"><i class="icon-th"></i>&nbsp;<span class="_label">表单方案</span></li>-->
+            <!--<li id="pmFrmD"><i class="icon-comment"></i>&nbsp;<span class="_label">设计表单</span></li>-->
             <!--<li id="pmFrmPower"><i class="icon-comment"></i>&nbsp;<span class="_label">表单权限</span></li>-->
 
             <li id="pmfun"><i class="icon-wrench"></i>&nbsp;<span class="_label">节点类型</span><i class="icon-chevron-right"></i></li>
@@ -420,6 +428,18 @@
             <li id="Li1"><i class="icon-plus"></i>&nbsp;<span class="_label" onclick="ShowGif()">增加连接线</span></li>
         </ul>
     </div>
+
+    <div id="fwcMenu" style="padding: 3px;position: absolute; background: #fff;display: none;font-family: verdana, helvetica, arial, sans-serif;
+        font-size: 14px;z-index: 501;border-color:black;border-width:4px;">
+
+        <ul id="mainul3" style="margin: 35px 4px; border:1px solid black;padding: 10px 10px;line-height: 30px;">
+            <li id="FWC_Disable"><i class="icon-tag"></i>&nbsp;<span class="_label">禁用</span></li>
+            <li id="FWC_Enable"><i class="icon-tags"></i>&nbsp;<span class="_label">启用</span></li>
+            <li id="FWC_ReadOnly"><i class="icon-tags"></i>&nbsp;<span class="_label">只读</span></li>
+            <li id="FWC_Batch"><i class="icon-tags"></i>&nbsp;<span class="_label">批量设置</span></li>
+        </ul>
+    </div>
+
     <div id="nodeMenu" style="padding: 3px;
         position: absolute;
         background: #fff;
@@ -477,6 +497,11 @@
         /****给弹出框URL写的样式*/
         .ui-icon-closethick {
             background-position: 0;
+        }
+
+        #fwcMenu li:hover {
+            background-color: #2980b9;
+            cursor: pointer;
         }
 
         .ui-widget-header .ui-icon {

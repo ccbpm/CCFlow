@@ -1,69 +1,51 @@
-﻿$(function () {
-
-    jQuery.getScript(basePath + "/WF/Admin/Admin.js")
-        .done(function () {
-            /* 耶，没有问题，这里可以干点什么 */
-             //alert('ok');
-        })
-        .fail(function () {
-            /* 靠，马上执行挽救操作 */
-            //alert('err');
-        });
-    InitPage();
-});
-//初始化数据.
-function InitPage() {
-
-    var fk_node = GetQueryString("FK_Node");
-    var node = new Entity("BP.WF.Node", fk_node);
-    InitBar(parseInt(node.TurnToDeal));
-   
-    //调用公共类库的方法:执行批量主表赋值
-    GenerFullAllCtrlsVal(node);
-   
-    switch (parseInt(node.TurnToDeal)) {
-        case 0:
-            break;
-        case 1:
-            $("#TB_SpecMsg").val(node.TurnToDealDoc);
-            break;
-        case 2:
-            $("#TB_SpecURL").val(node.TurnToDealDoc);
-            break;
-        case 3:
-            break;
-        default:
-            break;
-    }
-    return;
-}
+﻿
 function InitBar(optionKey) {
 
     var html = "发送后转向:";
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+转向规则</option>";
-    html += "<option value=" + TurntoWay.TurntoDefault + ">提示CCFlow默认信息</option>";
-    html += "<option value=" + TurntoWay.TurntoMessage + ">提示指定信息 </option>";
-    html += "<option value=" + TurntoWay.TurntoUrl + ">转向指定的URL</option>";
-    html += "<option value=" + TurntoWay.TurntoClose + ">发送完成立即关闭 </option>";
+    var groups = GetDBGroup();
+    var dtls = GetDBDtl();
+
+    for (var i = 0; i < groups.length; i++) {
+
+        var group = groups[i];
+        html += "<option value=null  disabled='disabled'>+" + group.Name + "</option>";
+
+        for (var idx = 0; idx < dtls.length; idx++) {
+            var dtl = dtls[idx];
+            if (dtl.GroupNo != group.No)
+                continue;
+            html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
+        }
+    }
     html += "</select >";
-
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    //   html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
-
-    //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
-
-    //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
-    
-    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='高级设置' />";
-
-
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
 
+function GetDBGroup() {
 
+    var json = [
+
+        { "No": "A", "Name": "转向规则" },
+    ];
+    return json;
+}
+
+function GetDBDtl() {
+
+    var json = [
+
+        { "No": 0, "Name": "提示CCFlow默认信息", "GroupNo": "A", "Url": "0.CCFlowMsg.htm" },
+        { "No": 1, "Name": "提示指定信息", "GroupNo": "A", "Url": "1.SpecMsg.htm" },
+        { "No": 2, "Name": "转向指定的URL", "GroupNo": "A", "Url": "2.SpecUrl.htm" },
+        { "No": 3, "Name": "发送完成立即关闭", "GroupNo": "A", "Url": "3.TurntoClose.htm" },
+        { "No": 4, "Name": "按设置的方向条件转向", "GroupNo": "A", "Url": "4.TurnToByCond.htm" },
+    ];
+    return json;
+}
 
 function HelpOnline() {
     var url = "http://ccbpm.mydoc.io";
@@ -86,19 +68,12 @@ function AdvSetting() {
     OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
 }
 function GetUrl(optionKey) {
-    switch (parseInt(optionKey)) {
-        case TurntoWay.TurntoDefault:
-            url = "0.TurntoDefault.htm";
-            break;
-        case TurntoWay.TurntoMessage:
-            url = "1.TurntoMessage.htm";
-            break;
-        case TurntoWay.TurntoUrl:
-            url = "2.TurntoUrl.htm";
-            break;
-        case TurntoWay.TurntoClose:
-            url = "3.TurntoClose.htm";
-            
+    var json = GetDBDtl();
+    for (var i = 0; i < json.length; i++) {
+        var en = json[i];
+        if (en.No == optionKey)
+            return en.Url;
     }
-    return url;
+
+    return "0.CCFlowMsg.htm";
 }

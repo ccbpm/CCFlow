@@ -11,14 +11,14 @@
     <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../../LoadSql.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
     <!--引用样式. -->
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    
+
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -28,7 +28,7 @@
         $(function () {
 
             var frmID = GetQueryString("FK_MapData");
-            
+
             //定义主键值.
             var pkval = "PageLoadFull_" + frmID;
 
@@ -53,7 +53,7 @@
                 var mapDtl = mapDtls[i];
 
                 html += "<tr>";
-                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name +"</th>";
+                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name + "</th>";
                 html += "<td><font color=green>" + GenerFields(mapDtl.No) + "</font></td>";
                 html += "</tr>";
 
@@ -116,7 +116,7 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.SetPKVal(pkval);
             mapExt.Tag = editor.getValue();
-            
+
             if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
                 alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
                 return;

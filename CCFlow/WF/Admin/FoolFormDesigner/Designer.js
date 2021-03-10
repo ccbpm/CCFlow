@@ -1,7 +1,22 @@
 ﻿var webUser;
 var pageData = {};
+var workModel = GetQueryString("WorkModel");
+if (workModel == null || workModel == undefined)
+    workModel = 0;
 //页面启动函数.
 $(function () {
+
+    //导入关联表单按钮
+    $("#RefDict").hide();
+
+    //单据属性按钮
+    if (workModel == 0 || workModel == 1)
+        $("#FrmillBtn").hide();
+
+    if (workModel == 3)
+        $("#RefDict").show();
+
+    $("#state").css("left", ($("#Btn_Save").position().left - 150 - 34) + "px");
 
     $(".wrapper-dropdown-2").on("mousedown", function (e) {
         var v_id = $(e.target).attr("id");
@@ -26,8 +41,12 @@ $(function () {
 
     $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-    if (GetQueryString("FK_Node") == "0")
+    var nodeID = GetQueryString("FK_Node");
+    if (nodeID == null || nodeID == undefined)
+        nodeID = 0;
+    if (nodeID == 0)
         $("#FrmNodeComponent").hide();
+
     //初始化groupID.
     var fk_mapData = GetQueryString("FK_MapData");
     var isF = GetQueryString("IsFirst"); //是否第一次加载?
@@ -113,7 +132,7 @@ $(function () {
 
     // alert(html);
     tbody.append($(html));
-   
+
     $(".NewChild").hide();
     //contentTable
     $('#contentTable').children().remove();
@@ -153,7 +172,7 @@ $(function () {
                     var nowKey = ddl.val();
                     if (nowKey == undefined || nowKey == "")
                         continue;
-                    
+
                     setEnable(mapAttr.FK_MapData, mapAttr.KeyOfEn, nowKey);
 
                 }
@@ -170,7 +189,7 @@ $(function () {
         }
     }
 
-    
+
     $("#Msg").html("");
     ResizeWindow();
 
@@ -198,8 +217,22 @@ function InitThreeColMapAttr(Sys_MapAttr, tableCol) {
         if (attr.UIVisible == 0)
             continue;
         rowSpan = attr.RowSpan;
+        if (rowSpan == 0) {
+            rowSpan = 1;
+            attr.RowSpan = 1;
+        }
         colSpan = attr.ColSpan;
+        if (colSpan == 0) {
+            colSpan = 1;
+            attr.ColSpan = 1;
+        }
+
         textColSpan = attr.TextColSpan;
+        if (textColSpan == 0) {
+            textColSpan = 1;
+            attr.TextColSpan = 1;
+        }
+
 
         colWidth = 33 * parseInt(colSpan) + "%";
         textWidth = 33 * parseInt(textColSpan) + "%";
@@ -281,8 +314,6 @@ function InitThreeColMapAttr(Sys_MapAttr, tableCol) {
             } else {
                 isDropTR = false;
             }
-
-
             continue;
         }
 
@@ -299,14 +330,11 @@ function InitThreeColMapAttr(Sys_MapAttr, tableCol) {
             } else {
                 isDropTR = false;
             }
-
-
             continue;
         }
     }
     return html;
 }
-
 
 
 //解析表单字段 MapAttr.(表单4列/6列)
@@ -663,11 +691,22 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             eleHtml += "</span></div>";
             return eleHtml;
         }
+
+        //   if (mapAttr.Name == '保存')
+        //alert(mapAttr.UIContralType);
+
+        //超链接
+        if (mapAttr.UIContralType == 9) {
+            var btn = "<a id='Link_" + mapAttr.KeyOfEn + "' href='" + mapAttr.Tag2 + "' target='" + mapAttr.Tag1+"' name='Link_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</a>";
+            return btn; 
+        }
+
         //按钮
         if (mapAttr.UIContralType == 18) {
-            "<input type='button'  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + mapAttr.Name + "' style='width:98%' onclick=''/>";
-            return;
+            var btn = "<input type='button'  id='Btn_" + mapAttr.KeyOfEn + "' name='Btn_" + mapAttr.KeyOfEn + "' value='" + mapAttr.Name + "' onclick=''/>";
+            return btn;
         }
+
         //工作进度图
         if (mapAttr.UIContralType == 50) {
             return "<img  src='./Img/JobSchedule.png'  style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";
@@ -687,7 +726,6 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             var uiHeight = mapAttr.UIHeight;
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/></div>";
         }
-
 
         return "<div id='DIV_" + mapAttr.KeyOfEn + "'> <input class='form-control' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
     }
@@ -757,7 +795,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
 
             var rbHtmls = "";
             var ses = GetSysEnums(mapAttr.UIBindKey);
-             
+
             //显示方式,默认为横向展示.
             var RBShowModel = 0;
             if (mapAttr.AtPara.indexOf('@RBShowModel=0') > 0)

@@ -23,14 +23,7 @@
             margin: 10px;
         }
     </style>
-    <script type="text/javascript">
-
-        /* 打开表单. */
-        function OpenFrm(nodeID) {
-             var url = "MyView.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.url = url;
-        }
-    </script>
+    
 </head>
 <body>
         
@@ -61,11 +54,11 @@
                             执行环节
                         </th>
                         <!--<th style='background-color:#F2F2F2;'>
-                            执行部门
-                        </th>-->
+        执行部门
+    </th>-->
                         <th style='background-color:#F2F2F2; width:180px'>
                             办理情况
-                        </th >
+                        </th>
                         <th style='background-color:#F2F2F2;'>
                             状态
                         </th>
@@ -80,6 +73,9 @@
                         </th>
                         <th style='background-color:#F2F2F2;'>
                             历时
+                        </th>
+                        <th style='background-color:#F2F2F2;'>
+                            表单
                         </th>
                     </tr>
                 </thead>

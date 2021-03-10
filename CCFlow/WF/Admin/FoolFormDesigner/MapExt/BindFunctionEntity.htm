@@ -112,7 +112,7 @@
             </tr>
         </table>
 
-       
+
 
         <fieldset>
             <legend> 帮助</legend>
@@ -121,23 +121,22 @@
                 <li>2. 该函数可以写入到 \DataUser\JSLibData\FrmID_Self.js 里面 </li>
                 <li>3. 如果该函数是一个通用的函数，可以写入到CCFormRef.js </li>
             </ul>
+     
+            <legend>函数方法载体</legend>
+            <ul>
+                <li>如果是公共的方法，请写入到:\DataUser\JSLabData\CCFormRef.js</li>
+                <li>如果是个性化的方法，请写入到:\DataUser\JSLabData\<b><font color=red>@FrmID</font></b>_Self.js， @FrmID 是当前表单的ID. </li>
+                <li><b>以上两个js文件在系统会自动装载到表单里面去.</b></li>
+                <li>在这个方法里面，您可以使用JQuery的语法，操作其他的字段.</li>
+                <li>比如：根据请假天数从，到两个日期字段计算请假天数. 请参考:<font color="red">\DataUser\JSLabData\DemoGenerFunctions.js</font>里面的方法. </li>
+                <li>编写脚本的时候对于文本框可以使用$("#TB_QingJiaRiQiCong") 获取文本框对象. </li>
+                <li>下拉框$("#DDL_QingJiaLeiXing").val() 获取对象</li>
+                <li>Boolean类型的数据通过$("#CB_HunFou")来获取对象.</li>
+                <li>Radionbutton类型的数据通过$("#RB_QingJiaLeiXing") 来获取对象.</li>
+            </ul>
         </fieldset>
-    </form>
 
-    <fieldset>
-        <legend>函数方法载体</legend>
-        <ul>
-            <li>如果是公共的方法，请写入到:\DataUser\JSLabData\CCFormRef.js</li>
-            <li>如果是个性化的方法，请写入到:\DataUser\JSLabData\<b><font color=red>@FrmID</font></b>_Self.js， @FrmID 是当前表单的ID. </li>
-            <li><b>以上两个js文件在系统会自动装载到表单里面去.</b></li>
-            <li>在这个方法里面，您可以使用JQuery的语法，操作其他的字段.</li>
-            <li>比如：根据请假天数从，到两个日期字段计算请假天数. 请参考:<font color="red">\DataUser\JSLabData\DemoGenerFunctions.js</font>里面的方法. </li>
-            <li>编写脚本的时候对于文本框可以使用$("#TB_QingJiaRiQiCong") 获取文本框对象. </li>
-            <li>下拉框$("#DDL_QingJiaLeiXing").val() 获取对象</li>
-            <li>Boolean类型的数据通过$("#CB_HunFou")来获取对象.</li>
-            <li>Radionbutton类型的数据通过$("#RB_QingJiaLeiXing") 来获取对象.</li>
-        </ul>
-    </fieldset>
+    </form>
 
 </body>
 </html>

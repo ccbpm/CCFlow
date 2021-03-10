@@ -19,11 +19,22 @@
         var frmID;
         var fk_flow;
         var fk_Node;
+        var isShowNDRpt = false;
         $(function () {
 
             var frmID = GetQueryString("FK_MapData");
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");
+
+            //判断节点表单类型,如果是树节点，就显示写入NDxxRpt列.
+            var isShowNDRpt = false;
+            var node = new Entity("BP.WF.Node", nodeID);
+            if (node.FormType == 5 || node.FormType == 6)
+                isShowNDRpt = true;
+
+            if (isShowNDRpt == false) {
+                $("#HDRpt").hide();
+            }
 
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
@@ -66,21 +77,22 @@
                         html += "<td colspan=2> - </td>";
                     } else {
                         html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
-                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','"+en.KeyOfEn+"')>默认值<a/></td>";
+                        html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','" + en.KeyOfEn + "')>默认值<a/></td>";
                     }
                     html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
                     if (en.UIContralType == 14) {
                         html += "<td> - </td>";
                     } else {
 
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可用</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可编辑</div></label></td>";
                     }
                     if (en.UIContralType >= 4) {
                         html += "<td colspan=3> - </td>";
                     } else {
                         html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
                         html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                        if (isShowNDRpt == true)
+                            html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
 
                     }
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
@@ -104,14 +116,14 @@
                 $("#" + ff.KeyOfEn + "_RegularExp").val(ff.RegularExp); //设置默认值.
 
                 SetCheckBox(ff, "UIVisible", ff.UIVisible, '可见');
-                SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可用');
+                SetCheckBox(ff, "UIIsEnable", ff.UIIsEnable, '可编辑');
                 SetCheckBox(ff, "IsSigan", ff.IsSigan, '签名');
                 SetCheckBox(ff, "IsNotNull", ff.IsNotNull, '必填');
                 SetCheckBox(ff, "IsWriteToFlowTable", ff.IsWriteToFlowTable, '写入NDxxRpt');
                 SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
             }
 
-           
+
 
         });
         function AddDefVal(no, id) {
@@ -121,7 +133,7 @@
         function ShowHidden(ctrlID, inputID) {
             var ens = new Entities("BP.Sys.GloVars");
             ens.Retrieve("GroupKey", "DefVal");
-            
+
             //var sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
             //var dts = DBAccess.RunSQLReturnTable(sql);
             html = "<div id='state' style='padding-top:20px; padding-left:60px; width:360px; height:400px; position: absolute; z-index: 10; background-color: #F5F5F5; border: 2px outset black; display: none; color: Gray; top:100px;left:500px;>";
@@ -129,7 +141,7 @@
             html += " <ol style='padding:10px;'>";
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
-                html += " <li><a href=\"javascript:AddDefVal('" + en.No + "','"+inputID+"')\"> " + en.Name + " </a> </li>";
+                html += " <li><a href=\"javascript:AddDefVal('" + en.No + "','" + inputID + "')\"> " + en.Name + " </a> </li>";
             }
             html += " </ol>";
             html += "</div>";
@@ -169,6 +181,8 @@
 
         //保存字段方案
         function Save() {
+
+            $("#Btn_Save").text("正在保存..");
 
             var frmID = GetQueryString("FK_MapData");
             var nodeID = parseInt(GetQueryString("FK_Node"));
@@ -260,10 +274,11 @@
                 ff.Insert();
             }
 
+            $("#Btn_Save").text(" 保 存 ");
+
             window.location.href = window.location.href;
+
         }
-
-
 
         function replaceTrim(val) {//去除空格
             return val.replace(/[ ]/g, "");
@@ -321,7 +336,7 @@
             </th>
             <th>
                 字段
-            </th >
+            </th>
             <th>
                 名称
             </th>
@@ -342,7 +357,7 @@
             </th>
             <th>
                 <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
-                    可用
+                    可编辑
                 </label>
             </th>
             <th>
@@ -355,10 +370,10 @@
                     必填
                 </label>
             </th>
-            <th>
+            <th id="HDRpt">
                 <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
                        type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
-                    写入流程数据表
+                    其他
                 </label>
             </th>
             <!--<th>
@@ -371,7 +386,7 @@
     </table>
     <br />
     <center>
-        <button onclick='Save();' type='button'>
+        <button onclick='Save();' id="Btn_Save" type='button'>
             &nbsp;&nbsp;&nbsp;&nbsp;保&nbsp;&nbsp;&nbsp;&nbsp;存&nbsp;&nbsp;&nbsp;&nbsp;
         </button>
     </center>

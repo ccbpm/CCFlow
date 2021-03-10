@@ -44,7 +44,7 @@
 
             var ens = new Entities("BP.Sys.MapExts");
             ens.Retrieve("FK_MapData", GetQueryString("FK_MapData"),
-            "ExtType", "BindFunction", "AttrOfOper", GetQueryString("KeyOfEn"));
+                "ExtType", "BindFunction", "AttrOfOper", GetQueryString("KeyOfEn"));
 
             for (var i = 0; i < ens.length; i++) {
 
@@ -65,7 +65,8 @@
 
 
         function PushWayText(EventListNode, PushWay) {
-            var ret = { "onblur": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
+            var ret = {
+                "onblur": ["不发送", "发送给当前节点的所有处理人", "向指定的字段发送", "其他节点的处理人"],
                 "onchange": ["不发送", "发送给下一个节点的所有接受人", "向指定的字段发送", "其他节点的处理人"],
                 "onclick": ["不发送", "发送给被退回的节点处理人", "向指定的字段发送", "其他节点的处理人"],
                 "ondblclick": ["不发送", "撤销工作后通知的节点接受人", "向指定的字段发送", "其他节点的处理人"],
@@ -111,10 +112,14 @@
             url += '&tk=' + Math.random();
             window.location.href = url;
         }
+        function Edit()
+        {
+            var url = "InitScript.htm?s=34&FK_MapData=" + GetQueryString('FK_MapData') + "&ExtType=PageLoadFull&RefNo=";
+            window.location.href = url;
+        }
     </script>
     <style type="text/css">
-        li
-        {
+        li {
             padding: 3px 0;
         }
     </style>
@@ -123,6 +128,7 @@
     <form method="post" id="form1">
         <div style="right:10px; position:absolute; z-index:100; top:-3px">
             <input type="button" value="新建" id="Btn_Save" onclick="ShowHidden('state')" />
+            <input type="button" value="JS编程" id="Btn_Edit" onclick="Edit();" />
         </div>
         <div style="margin: 8px">
             <table id="Table1" style="width: 100%">
@@ -131,9 +137,7 @@
                         控件绑定function
                         <a href="http://ccbpm.mydoc.io" target="_blank"> <img src="../../../Img/Btn/Help.gif" />帮助</a>
                     </div>
-                    <div style="float: right">
-                        
-                    </div>
+
                 </caption>
                 <tr>
                     <th>

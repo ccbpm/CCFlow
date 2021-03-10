@@ -45,7 +45,9 @@
         #Message {
             width: 100%;
         }
-
+        #viewModal{
+            max-width:1000px;
+        }
         #SelectEmp {
             position: relative;
             width: 300px;
@@ -84,7 +86,12 @@
         var param = {};
         var isSigleSelect = false;
         var selectEmp = "";
+        var selectEmpNo = "";
         var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
+        var isFrameCross = GetQueryString("isFrameCross");
+        if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross=="null")
+            isFrameCross = 0;
+        var pageFrom = GetQueryString("PageFrom");
         //判断读秒关闭的参数是否存在
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
@@ -155,15 +162,16 @@
             $('#Btn_SelectEmps').bind('click', function () {
 
                 $('#SelectEmpsModal').modal().show();
+
             });
             $(".Msg").hide();
-
-
 
             var int = setInterval("clock()", 1000);
 
         });
 
+        //是否单项选择.
+        var IsSimpleSelector = 0;
 
         function BindTable(sas) {
 
@@ -175,7 +183,10 @@
                 isSigleSelect = true;
             }
 
+            IsSimpleSelector = sa.IsSimpleSelector;
+
             selectEmp = "";
+            selectEmpNo = "";
             for (var i = 0; i < sas.length; i++) {
                 var sa = sas[i];
                 var row = "";
@@ -196,6 +207,7 @@
 
                 $("#Table1 tbody").append(row);
                 selectEmp += sa.EmpName + ",";
+                selectEmpNo+=sa.FK_Emp+","
             }
         }
 
@@ -291,19 +303,19 @@
         }
 
         function SendIt() {
-
+           
             var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             httphandler.AddUrlData(); //FK_Flow,FK_Node,WorkID,FID,ToNode 等参数.
 
             $("#Btn_Send").attr("disabled", "disabled"); //把发送按钮设置不可用.
-            $("#Btn_Send").val("<center>正在发送请稍候...</center>");
+            $("#Btn_Send").text("正在发送请稍候...");
             $("#Btn_Close").attr("disabled", "disabled"); //关闭按钮设置不可以用.
             $("#Btn_SelectEmps").attr("disabled", "disabled"); //选择人按钮不可以用.
 
             var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
-
+            
             if (data.indexOf('err@') == 0) {  //如果发送失败.
-               
+
                 DealErrMsg(data);
                 if (msgTech == "") {
                     $(".Msg").show();
@@ -312,16 +324,18 @@
                 }
 
                 $("#Btn_Send").attr("disabled", false);
-                $("#Btn_Send").val("执行发送");
+                $("#Btn_Send").text("发送");
                 $("#Btn_Close").attr("disabled", false);
                 $("#Btn_SelectEmps").attr("disabled", false);
                 return;
             }
-            if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
-                window.parent.WindowCloseReloadPage(data);
-            } else {
-                if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
-                    WindowCloseReloadPage(data);
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
+                    window.parent.WindowCloseReloadPage(data);
+                } else {
+                    if (typeof WindowCloseReloadPage != 'undefined' && WindowCloseReloadPage instanceof Function)
+                        WindowCloseReloadPage(data);
+                }
             }
 
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
@@ -404,40 +418,66 @@
 
         //取消移交
         function CloseAll() {
-            // 取得父页面URL，用于判断是否是来自测试流程
-            var pareUrl = window.top.document.referrer;
-            // alert(pareUrl+"***"+pareUrl.indexOf("test") ==-1 +"&&&&"+ pareUrl.indexOf("Test") ==-1);
-            if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
-                // 测试流程时，发送成功刷新测试容器页面右侧
-                window.parent.parent.refreshRight();
-            }
+           
+            if (isFrameCross == 0) {
+                // 取得父页面URL，用于判断是否是来自测试流程
+                var pareUrl = window.top.document.referrer;
+                if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
+                    // 测试流程时，发送成功刷新测试容器页面右侧
+                    window.parent.parent.refreshRight();
+                }
 
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.close();
-                if (window.parent.parent != null && window.parent.parent != undefined
-                    && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
-                    window.parent.parent.close();
-                window.parent.returnWorkWindowClose();
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    window.parent.close();
+                    if (window.parent.parent != null && window.parent.parent != undefined
+                        && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1)
+                        window.parent.parent.close();
+                    window.parent.returnWorkWindowClose();
+                }
+            } else {
+                window.parent.parent.close();
+                ChildrenPostMessage('', 'returnWorkWindowClose');
             }
+            
 
             window.close();
         }
 
+       
+
         //关闭model.
         function CloseModel() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+            if (isFrameCross == 0) {
+                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                    //获取接收人,作用于toNodes.htm页面
+                    if (selectEmp != "" && IsSend == "0") {
+                        if (pageFrom != null && pageFrom != undefined && pageFrom == "WorkCheckModel") {
+                            window.parent.returnWorkWindowClose(selectEmpNo);
+                        } else {
+                            selectEmp = selectEmp.substring(0, selectEmp.length - 1);
+                            window.parent.returnWorkWindowClose(selectEmp);
+                        }
+                       
+                    } else {
+                        window.parent.returnWorkWindowClose("");
+                    }
+
+                } else {
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
+                    window.close();
+                }
+            } else {
                 //获取接收人,作用于toNodes.htm页面
                 if (selectEmp != "" && IsSend == "0") {
                     selectEmp = selectEmp.substring(0, selectEmp.length - 1);
-                    window.parent.returnWorkWindowClose(selectEmp);
+                    ChildrenPostMessage(selectEmp, 'returnWorkWindowClose');
                 } else {
-                    window.parent.returnWorkWindowClose();
+                    ChildrenPostMessage('', 'returnWorkWindowClose');
                 }
 
-            } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
-                window.close();
+               
             }
+          
         }
 
         //设置选中的人员
@@ -547,6 +587,8 @@
             OpenEasyUiDialogExtCloseFunc(url, '设置人员', 780, 380, null);
 
         }
+
+  
     </script>
 
 </head>
@@ -555,7 +597,7 @@
         <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......
     </div>
     <div class="divFieldly" style="text-align: left;padding-left:25px; display:none;">
-        
+
     </div>
     <div class="divTech" style="text-align: left;padding-left:25px; display:none;">
     </div>
@@ -590,7 +632,7 @@
                 <img src="../Img/Btn/Close.png" /> 关闭
             </button>
 
-            <a href="javascript:Help()">帮助?</a>
+            <!--<a href="javascript:Help()">帮助?</a>-->
             <!--<div id="HelpInfo">
                 <ul>
                     <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
@@ -610,7 +652,9 @@
                 <td style="width:40px; font-weight:bolder">#</td>
                 <!--<th>编号 </th>-->
                 <td style="width:30%; font-weight:bolder">姓名</td>
-                <td style="width:40%; font-weight:bolder">所在部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>
+                <!--<td style="width:40%; font-weight:bolder">部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>-->
+                <td style="width:40%; font-weight:bolder">部门</td>
+
                 <td style="width:60px; font-weight:bolder" colspan="3">操作</td>
             </tr>
         </thead>

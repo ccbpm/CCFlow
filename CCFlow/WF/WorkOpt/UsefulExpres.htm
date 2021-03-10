@@ -28,6 +28,7 @@
             border-right: 1px solid #ddd;
             border-bottom-color: transparent;
         }
+
         button {
             background: #fff;
             color: #000;
@@ -36,14 +37,14 @@
             margin: 5px 3px 5px 3px;
             padding: 4px 15px;
         }
-        button:hover {
-            background: #f5f5f5;
-            color: #000;
-            
-        }
+
+            button:hover {
+                background: #f5f5f5;
+                color: #000;
+            }
     </style>
     <script type="text/javascript">
-        var nodeID = "ND"+GetQueryString("FK_Node");
+        var nodeID = "ND" + GetQueryString("FK_Node");
         var groupKey = GetQueryString("GroupKey");
         if (groupKey == "WorkCheck")
             groupKey = "CYY";
@@ -62,9 +63,9 @@
             var dataInfo = {}
             var mainData = [];
             //获得数据
-           
+
             $.each(ens, function (i, item) {
-                if(item!="")
+                if (item != "")
                     mainData.push({ "MYPK": item.MyPK, "CURVALUE": item.Vals });
             })
             dataInfo.rows = mainData;
@@ -76,14 +77,15 @@
             $("#newsGrid").html("");
             $('#newsGrid').bootstrapTable('load', []);
             var data = GetSearchData();
-          
-          
+
+
             $('#newsGrid').bootstrapTable({
                 columns: [
-                { checkbox: true, width: 1,
-                  cellStyle: {css: { "width": "1px" } }
-                },
-                { field: 'CURVALUE', title: '', align: 'left' }
+                    {
+                        checkbox: true, width: 1,
+                        cellStyle: { css: { "width": "1px" } }
+                    },
+                    { field: 'CURVALUE', title: '', align: 'left' }
                 ],
                 idField: 'MYPK',
                 selectOnCheck: false,
@@ -94,24 +96,25 @@
                 width: 'auto',
                 height: 'auto',
                 striped: true,
-                showHeader:false,
-                showFooter:false,
-                sidePagination:'server',//在服务器分页
-               
-             });
-             $('#newsGrid').bootstrapTable('load', data);
+                showHeader: false,
+                showFooter: false,
+                sidePagination: 'server',//在服务器分页
+
+            });
+            $('#newsGrid').bootstrapTable('load', data);
         }
         var insEdit = true;
         //添加数据
         function btnOpenWindow() {
             insEdit = true;
-           
+
             $('#TextArea').val('');
             $('#myModal').modal('show');
             $('#TextArea').focus();
         }
         function AddWorks() {
             var params;
+            var isPass = true;
             if (insEdit) {//添加
                 var text = $('#TextArea').val();
                 text = replaceTrim(text);
@@ -121,15 +124,28 @@
                     $('#TextArea').focus();
                     return;
                 }
-               
-                var en = new Entity("BP.WF.Data.FastInput")
-                en.ContrastKey = groupKey;
-                en.FK_Emp = webUser.No;
-                en.Vals = text;
-                en.Insert();
+                var ens = new Entities("BP.WF.Data.FastInputs");
+                ens.Retrieve("FK_Emp", webUser.No);
+                for (var i = 0; i < ens.length; i++) {
+                    var en = ens[i];
+                    if (en.Vals == text) {
+                        alert("此用语已经存在！");
+                        isPass = false;
+                        $('#myModal').modal('hide');
+                        return;
+                    }
+                }
+                if (isPass) {
+                    var en = new Entity("BP.WF.Data.FastInput")
+                    en.ContrastKey = groupKey;
+                    en.FK_Emp = webUser.No;
+                    en.Vals = text;
+                    en.Insert();
+
+                }
                 $('#myModal').modal('hide');
                 LoadGridData();
-                    
+
             } else {//编辑
                 var text = $('#TextArea').val();
                 var mypk = $('#MyPK').val();
@@ -147,7 +163,7 @@
                     return;
                 }
 
-                var en = new Entity("BP.WF.Data.FastInput",mypk)
+                var en = new Entity("BP.WF.Data.FastInput", mypk)
                 en.Vals = text;
                 en.Update();
                 $('#myModal').modal('hide');
@@ -183,7 +199,7 @@
         }
         //删除
         function btnDelete() {
-            
+
             var rows = $('#newsGrid').bootstrapTable('getAllSelections');
             if (rows.length >= 1) {
                 if (confirm('确定要删除这' + rows.length + '条数据吗？') == false)
@@ -193,7 +209,7 @@
                     var en = new Entity("BP.WF.Data.FastInput", item.MYPK);
                     en.Delete();
                 });
-               
+
                 LoadGridData();
             }
             else {
@@ -202,7 +218,7 @@
         }
         //关闭主窗体
         function btnClose() {
-            window.parent.$('#bootStrapdlg').modal('hide'); ;
+            window.parent.$('#bootStrapdlg').modal('hide');;
         }
         //返回数据
         function btnOk() {
@@ -212,13 +228,13 @@
                 return;
             }
             var str = '';
-         
+
             $.each(rows, function (n, value) {
                 str += value.CURVALUE + ",";
             });
 
             str = str.substr(0, str.length - 1);
-            
+
             str = str.replace(/{/g, "｛");
             str = str.replace(/}/g, "｝");
             str = str.replace(/\[/g, "【");
@@ -232,8 +248,8 @@
             }
 
 
-            window.parent.ChangeWorkCheck(elementID,str);
-          
+            window.parent.ChangeWorkCheck(elementID, str);
+
 
         }
     </script>
@@ -243,9 +259,9 @@
         <!--button按钮-->
         <div>
             <div id="tools" style="text-align: left; float: left;margin:3px 5px">
-                <button type="button" id="btnAdd" onclick='btnOpenWindow()'><img src="../Img/Btn/addDT.png" width="22" height="22"/>添加数据 </button>
-                <button  type="button" id="btnEdit" onclick='btnEdit()'><img src="../Img/Btn/Edit.png" width="18" height="18"/> 编辑</button>
-                <button  type="button" id="btnDel" onclick='btnDelete()'><img src="../Img/Btn/Delete.png" /> 删除</button>
+                <button type="button" id="btnAdd" onclick='btnOpenWindow()'><img src="../Img/Btn/addDT.png" width="22" height="22" />添加数据 </button>
+                <button type="button" id="btnEdit" onclick='btnEdit()'><img src="../Img/Btn/Edit.png" width="18" height="18" /> 编辑</button>
+                <button type="button" id="btnDel" onclick='btnDelete()'><img src="../Img/Btn/Delete.png" /> 删除</button>
             </div>
 
         </div>
@@ -282,9 +298,9 @@
                     <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px; overflow: hidden;"></textarea>
                 </div>
                 <div class="modal-footer">
-                    
-                    <button type="button"  data-dismiss="modal"><img src="../Img/Btn/cancel_dafalut.png"/> 取消</button>
-                    <button type="button"  onclick="AddWorks()"><img src="../Img/Btn/Save.png" /> 保存</button>
+
+                    <button type="button" data-dismiss="modal"><img src="../Img/Btn/cancel_dafalut.png" /> 取消</button>
+                    <button type="button" onclick="AddWorks()"><img src="../Img/Btn/Save.png" /> 保存</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->

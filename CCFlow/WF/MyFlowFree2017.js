@@ -8,15 +8,11 @@ function GenerFreeFrm(wn) {
     $('#CCForm').html('');
 
     //循环FrmRB
-	if(flowData.Sys_FrmRB&&  flowData.Sys_FrmRB!=undefined){
-		for (var i in flowData.Sys_FrmRB) {
-			var frmLab = flowData.Sys_FrmRB[i];
-			var label = figure_Template_RB(frmLab);
-			$('#CCForm').append(label);
-		}
-	}
-
-    
+    for (var i in flowData.Sys_FrmRB) {
+        var frmLab = flowData.Sys_FrmRB[i];
+        var label = figure_Template_RB(frmLab);
+        $('#CCForm').append(label);
+    }
 
     //循环MapAttr
     for (var mapAtrrIndex in flowData.Sys_MapAttr) {
@@ -31,25 +27,19 @@ function GenerFreeFrm(wn) {
     }
 
     //循环FrmLab
-	if(flowData.Sys_FrmLab&&  flowData.Sys_FrmLab!=undefined){
-		for (var i in flowData.Sys_FrmLab) {
-			var frmLab = flowData.Sys_FrmLab[i];
-			var label = figure_Template_Label(frmLab);
-			$('#CCForm').append(label);
-		}
-	}
-    
+    for (var i in flowData.Sys_FrmLab) {
+        var frmLab = flowData.Sys_FrmLab[i];
+        var label = figure_Template_Label(frmLab);
+        $('#CCForm').append(label);
+    }
     
 
     //循环FrmBtn
-	if(flowData.Sys_FrmBtn&&  flowData.Sys_FrmBtn!=undefined){
-		 for (var i in flowData.Sys_FrmBtn) {
-			var frmBtn = flowData.Sys_FrmBtn[i];
-			var btn = figure_Template_Btn(frmBtn);
-			$('#CCForm').append(btn);
-		}
-	}
-   
+    for (var i in flowData.Sys_FrmBtn) {
+        var frmBtn = flowData.Sys_FrmBtn[i];
+        var btn = figure_Template_Btn(frmBtn);
+        $('#CCForm').append(btn);
+    }
 
     //循环Image
     for (var i in flowData.Sys_FrmImg) {
@@ -562,7 +552,7 @@ function figure_Template_Label(frmLab) {
     eleHtml = "<label id='" + frmLab.MyPK + "' ></label>";
 
     eleHtml = $(eleHtml);
-    var text = frmLab.Text == null ? "" : frmLab.Text.replace(/@/g, "<br>");
+    var text = frmLab.Lab == null ? "" : frmLab.Lab.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y -5).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColor));
@@ -577,7 +567,7 @@ function figure_Template_Btn(frmBtn) {
     if (btnId == null || btnId == "")
         btnId = frmBtn.MyPK;
     var btnHtml = $("<input id='" + btnId + "' type='button' value='' >");
-    btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
+    btnHtml.val(frmBtn.Lab).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
     doc = (doc == null ? "" : doc.replace(/~/g, "'"));
     var eventType = frmBtn.EventType;
@@ -681,7 +671,7 @@ function figure_Template_HyperLink(frmLin) {
     eleHtml = $(eleHtml);
 
     var a = $("<a></a>");
-    a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Text);
+    a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Lab);
     eleHtml.append(a);
     eleHtml.css('position', 'absolute')
         .css('top', frmLin.Y)

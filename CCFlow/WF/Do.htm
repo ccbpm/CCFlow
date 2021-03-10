@@ -21,6 +21,7 @@
             return flag;
         }
         $(function () {
+
             var params = document.location.search.substr(1);
             params = params.replace("DoType", "ActionType");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
@@ -53,8 +54,8 @@
                 window.location.href = data;
                 return;
             }
-            $("#Msg").html(data);
 
+            $("#Msg").html(data);
         });
 
     </script>

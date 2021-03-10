@@ -42,7 +42,7 @@
         document.title = "测试容器:" + flow.Name;
 
         //var adminer = GetQueryString("Adminer"); //管理员.
-        var adminerSID = GetQueryString("SID"); //管理员SID.
+        var adminerSID = GetQueryString("AdminerSID"); //管理员SID.
         var userNo = GetQueryString("UserNo"); //要登录的用户
 
         //访问后台，获得一个工作ID.
@@ -50,6 +50,7 @@
         handler.AddUrlData();
         var workID = handler.DoMethodReturnString("Default_Init");
         if (workID.indexOf('err@') == 0) {
+
             var url = 'error.htm?err=' + workID;
 
             confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
@@ -57,7 +58,9 @@
             window.close();
         }
 
-        var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + adminerSID;
+        var orgNo = GetQueryString("OrgNo");
+        var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&AdminerSID=" + adminerSID + "&OrgNo=" + orgNo;
+        urlEnd += "&Adminer=" + GetQueryString("Adminer");
 
         //负责人：@qfl
         $(function () {
@@ -73,12 +76,17 @@
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
             // var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("SID"); //管理员SID.
+            var sid = GetQueryString("AdminerSID"); //管理员SID.
+
+            if (sid == null || sid == "null")
+            {
+                alert("系统错误，丢失了登录信息SID,请重新登录。");
+                return;
+            }
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddUrlData();
-            handler.AddPara("SID", sid);
+            handler.AddPara("AdminerSID", sid);
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
             window.close();
         }
@@ -100,10 +108,32 @@
             min-width: 100%;
             min-height: 500px;
         }
-        #userInfo caption{background-color:#fff!important;text-align:center;border:none!important;height: 45px;text-indent:0!important;color:#000;border-bottom:solid 1px #ccc!important;}
-        .navbar-default table{margin:0!important;border:none!important;}
-        .navbar-default table td{padding:5px 15px;border:none!important;}
-        #Info ul{border:none!important;padding:10px;box-sizing:border-box;}
+
+        #userInfo caption {
+            background-color: #fff !important;
+            text-align: center;
+            border: none !important;
+            height: 45px;
+            text-indent: 0 !important;
+            color: #000;
+            border-bottom: solid 1px #ccc !important;
+        }
+
+        .navbar-default table {
+            margin: 0 !important;
+            border: none !important;
+        }
+
+            .navbar-default table td {
+                padding: 5px 15px;
+                border: none !important;
+            }
+
+        #Info ul {
+            border: none !important;
+            padding: 10px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">

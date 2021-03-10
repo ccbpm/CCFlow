@@ -23,7 +23,9 @@ etpl.config({
     * 因此，UEditor提供了针对不同页面的编辑器可单独配置的根路径，具体来说，在需要实例化编辑器的页面最顶部写上如下代码即可。当然，需要令此处的URL等于对应的配置。
     * window.UMEDITOR_HOME_URL = "/xxxx/xxxx/";
     */
-	 window.UMEDITOR_HOME_URL = "/WF/Comm/umeditor1.2.3-utf8/";
+
+    window.UMEDITOR_HOME_URL = basePath+"/WF/Comm/umeditor1.2.3-utf8/";
+
     var URL = window.UMEDITOR_HOME_URL || (function () {
 
         function PathStack() {
@@ -143,11 +145,16 @@ etpl.config({
     if (plant == "CCFlow") {
         // CCFlow
         var handlerUrl = basePath+"/WF/Comm/Handler.ashx";
-        richurl = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
+        richurl = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile';
+        richurl +='&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
+
     } else {
         // JFlow
         var handlerUrl = basePath + "/WF/Comm/Sys/ProcessRequest.do";
         richurl = handlerUrl + '?DoType=RichUploadFile&Directory=' + directory;
+        richurl += "&DoMethod=RichUploadFile";
+        richurl += "&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys";
+
     }
 
 
@@ -159,8 +166,8 @@ etpl.config({
 
         //图片上传配置区
         , imageUrl: richurl            //图片上传提交地址
-        , imagePath: URL + "asp/"                     //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
-        , imageFieldName: "upfile"                   //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+        , imagePath: URL + "asp/"      //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
+        , imageFieldName: "upfile"     //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
 
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义

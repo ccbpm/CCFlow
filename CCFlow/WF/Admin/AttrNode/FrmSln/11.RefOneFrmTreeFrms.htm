@@ -58,7 +58,10 @@
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
                 html += "<td>" + en.PTable + "</td>";
-                html += "<td>" + en.OrgName + "</td>";
+                if (en.OrgName == null || en.OrgName == undefined || en.OrgName == "")
+                    html += "<td>—</td>";
+                else
+                    html += "<td>" + en.OrgName + "</td>";
                 html += "<td><a href=\"javascript:Save('" + en.No + "')\">绑定</a></td>";
                 html += "</tr>";
             }

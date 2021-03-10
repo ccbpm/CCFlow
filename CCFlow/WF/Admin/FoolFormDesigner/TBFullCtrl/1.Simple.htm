@@ -11,7 +11,7 @@
     <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../../LoadSql.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -49,9 +49,9 @@
             editor.setValue($("#TB_SQL").val());
             //设置按钮是否可以用?
             if (i == 0) {
-                $("#Btn_FullData").attr("disabled", true);
+                $("#Btn_FullData").hide();
             } else {
-                $("#Btn_FullData").removeAttr("disabled");
+                $("#Btn_FullData").show();
             }
         });
 
@@ -75,14 +75,21 @@
             mapExt.ExtType = "FullData";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
-            var sql = $("#TB_Tag4").val();
+
+
             mapExt.Tag4 = editor.getValue(); //设置主表的SQL.
+            if (mapExt.Tag4.indexOf('@Key') == -1) {
+                alert('保存错误：您必须有@Key变量，请参考帮助文件。');
+                return;
+            }
+
             if (mapExt.Update() == 0)
                 mapExt.Insert();
             window.location.href = window.location.href;
         }
     </script>
     <style type="text/css">
+
         .style1 {
             height: 21px;
         }
@@ -101,7 +108,7 @@
     </div>
     <form id="cc">
         <table id="table" style="width: 100%;">
-            
+
             <tr>
                 <td>
                     数据源类型
@@ -117,7 +124,7 @@
             <tr>
                 <td colspan="2">
                     数据源: <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> 帮助: </a>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -128,15 +135,24 @@
             <tr>
                 <td colspan="2" style="width: 100%;">
                     <div id='sqlexp' style='color: Gray; display: none'>
-                        <ul>
-                            <li>填充SQL帮助:</li>
-                            <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-                            <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                            <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                            <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
-                            <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
-                        </ul>
                         <fieldset>
+                            <legend>填充SQL帮助:</legend>
+                            <ul>
+                                <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                                <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                                <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                                <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
+                                <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
+                            </ul>
+
+                            <legend>填充Url帮助:</legend>
+                            <ul>
+                                <li>1. 设置URL，返回的必须是json格式。</li>
+                                <li>2. 比如: /App/Handler.ashx?DoType=Emps&Key=@Key </li>
+                                <li>3. @Key 是输入的关键字 </li>
+                            </ul>
+
+
                             <legend>主表运行效果</legend>
                             <img src="1.Simple.png" style="width:90%;" />
                         </fieldset>

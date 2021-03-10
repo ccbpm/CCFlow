@@ -56,7 +56,7 @@ function ShowFlowBBS(data) {
     }
     _Html += "</div>";
     //只读状态并且当前登陆人的的抄送列表还未发生评论
-    if (paramData.IsReadonly == "1" && isHaveMySelf == false && GetQueryString("CCSta") == "1") {
+    if (pageData.IsReadonly == "1" && isHaveMySelf == false && GetQueryString("CCSta") == "1") {
         
 
         _Html += "</select>";
@@ -65,7 +65,7 @@ function ShowFlowBBS(data) {
         _Html += "<textarea rows='5' id='FlowBBS_Doc' name='FlowBBS_Doc' cols='60'></textarea>";
         _Html += "<br/>";
        
-        _Html += "<a onclick='AddCommUseWord(\"" + paramData.FK_Node + "\",\"Comment\",\"FlowBBS_Doc\");'><span>常用短语</span> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
+        _Html += "<a onclick='AddCommUseWord(\"" + pageData.FK_Node + "\",\"Comment\",\"FlowBBS_Doc\");'><span>常用短语</span> <img alt='编辑常用评论语言.' src='../../WF/Img/Btn/Edit.gif' /></a>";
         _Html += "<input type='button' id='Btn_BBSSave' name='Btn_BBsSave' value='发送'style='float:right' onclick='BBSSubmit();' />";
         _Html += "</div>";
 

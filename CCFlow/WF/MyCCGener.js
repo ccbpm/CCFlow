@@ -799,6 +799,11 @@ function GenerWorkNode() {
         imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
     });
 
+    //公文解析
+    if ($("#GovDocFile").length > 0) {
+        Skip.addJs(ccbpmPath + "/WF/CCForm/Components/GovDocFile.js");
+        LoadGovDocFile();
+    }
 
     //给富文本创建编辑器
     if (document.BindEditorMapAttr) {

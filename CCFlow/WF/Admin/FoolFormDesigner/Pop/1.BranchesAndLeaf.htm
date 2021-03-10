@@ -10,9 +10,12 @@
     <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
-    <script src="../../../LoadSql.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -55,11 +58,11 @@
 
             //设置按钮是否可以用?
             if (i == 0) {
-                $("#Btn_Delete").attr("disabled", true);
-                $("#Btn_FullData").attr("disabled", true);
+                $("#Btn_Delete").hide();
+                $("#Btn_FullData").hide()
             } else {
-                $("#Btn_Delete").removeAttr("disabled");
-                $("#Btn_FullData").removeAttr("disabled");
+                $("#Btn_Delete").show();
+                $("#Btn_FullData").show();
             }
         });
         function Save() {
@@ -122,6 +125,7 @@
         .style1 {
             height: 21px;
         }
+
         #bar {
             text-align: left;
         }
@@ -137,7 +141,7 @@
     <form id="cc">
         <table id="Table1" style="width: 99%;">
 
-            <tr>
+            <!--<tr>
                 <td>
                     <a href="javascript:ShowHidden('h_title')">标题</a>
                     <div id="h_title" style="color: Gray; display: none">
@@ -164,21 +168,6 @@
             </tr>
             <tr>
                 <td>
-                    <a href="javascript:ShowHidden('HSearch')">搜索提示</a>
-                    <div id="HSearch" style="color: Gray; display: none">
-                        <ul>
-                            <li>显示在搜索文本框的背景文字，比如:</li>
-                            <li>请输入付款人名称,进行搜索.</li>
-                            <li>输入人员编号,名称，名称全拼,简拼关键字搜索.</li>
-                        </ul>
-                    </div>
-                </td>
-                <td>
-                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>
                     高级设置
                 </td>
                 <td>
@@ -198,7 +187,23 @@
                         多选
                     </label>
                 </td>
+            </tr>-->
+            <tr>
+                <td>
+                    <a href="javascript:ShowHidden('HSearch')">搜索提示</a>
+                    <div id="HSearch" style="color: Gray; display: none">
+                        <ul>
+                            <li>显示在搜索文本框的背景文字，比如:</li>
+                            <li>请输入付款人名称,进行搜索.</li>
+                            <li>输入人员编号,名称，名称全拼,简拼关键字搜索.</li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
+                </td>
             </tr>
+
             <tr>
                 <td colspan="2">
                     <a href="javascript:ShowHidden('PopValSearchCond')">搜索数据源</a>
@@ -268,26 +273,26 @@
             </tr>
             <!-- 填充其他数据控件的数据源 -->
             <!--<tr>
-                <th colspan="4">
-                    <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
-                    <div id="tabsT" style="color: Gray; display: none">
-                        <ul>
-                            <li>该数据源可以为空</li>
-                            <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
-                            <li>当使用SQL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
-                            <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian
-                                FROM port_emp WHERE No='@Key'</li>
-                            <li>当使用URL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
-                            <li>例如：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Key是选择的主键</li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
-                </td>
-            </tr>-->
+        <th colspan="4">
+            <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
+            <div id="tabsT" style="color: Gray; display: none">
+                <ul>
+                    <li>该数据源可以为空</li>
+                    <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
+                    <li>当使用SQL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
+                    <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian
+                        FROM port_emp WHERE No='@Key'</li>
+                    <li>当使用URL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
+                    <li>例如：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Key是选择的主键</li>
+                </ul>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+        </td>
+    </tr>-->
             <!-- 数据列名与中文意思对照  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
             <tr>
                 <td colspan="2">

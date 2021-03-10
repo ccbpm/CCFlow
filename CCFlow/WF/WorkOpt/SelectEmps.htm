@@ -23,10 +23,9 @@
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <link href="../style/skin/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <style type="text/css">
-        #TB_Doc
-        {
+        #TB_Doc {
             height: 132px;
             width: 433px;
         }
@@ -62,6 +61,7 @@
 
         var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore') == "1" ? true : false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
         var returnVal = {};
+        var isFirst = true;
 
         //初始化树  接收人
         function InitTreeData() {
@@ -217,6 +217,16 @@
             }).bind("loaded.jstree", function (event, data) {
                 data.instance.open_node();
 
+            }).bind("select_node.jstree", function (e, data) { //点击事件
+                //触发toggle_node 事件 就行了
+                if (isFirst == true)
+                    isFirst = false;
+                else
+                    $('#OrgJSTree').jstree("toggle_node", data.node);
+
+            }).on("loaded.jstree", function (event, data) {
+                if (typeof data.instance.clear_state === "function")
+                    data.instance.clear_state(); // <<< 这句清除jstree保存的选中状态
             });
         }
         //弹出树
@@ -239,7 +249,7 @@
                     alert("已到第一级机构");
                     return;
                 }
-                 var webUser = new WebUser();
+                var webUser = new WebUser();
                 // SAAS模式下，限制只可以看到OrgNo级别
                 if (webUser.CCBPMRunModel != 0 && pageData.ParentDept == 100) {
                     alert("已到第一级机构");
@@ -294,6 +304,7 @@
             for (var property in nameArrs[0]) {
                 returnVal[property] = returnVal[property].join(",");
             }
+
         }
 
         function Search() {
@@ -302,13 +313,13 @@
                 return;
             //根据输入的部门编号或者名称获取部门信息
             var ens = new Entities("BP.Port.Depts");
-            ens.RetrieveCond("No,Name", "like", '%'+keyVal+'%');
-           
+            ens.RetrieveCond("No,Name", "like", '%' + keyVal + '%');
+
             //查询到的部门节点就展开
             var $jstree = $('#OrgJSTree').jstree(true);
             for (var i = 0; i < ens.length; i++) {
                 $jstree.open_node($jstree.get_node(ens[i].No));
-                
+
             }
 
         }

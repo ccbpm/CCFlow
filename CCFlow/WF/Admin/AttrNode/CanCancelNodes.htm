@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>驰骋工作流</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <script src="../Admin.js"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
@@ -49,6 +54,7 @@
 
 
             for (var i = 0; i < nds.length; i++) {
+
                 nd = nds[i];
 
                 if (nd.NodeID == GetQueryString("FK_Node"))
@@ -66,13 +72,13 @@
                 $("#table1 tr:last").after(newRow);
 
             }
-           
+
             $("#table1 tr:last").after(newBtn);
             return;
         }
 
 
-        function Btn_Save_Click() {
+        function Save() {
 
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
 
@@ -95,16 +101,20 @@
 </head>
 <body>
     <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100;top:-3px ">
-            <input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()' />
+        <div style="right:30px; position:absolute; z-index:100;margin:10px ">
+            <input type='button' value='保存' class='Btn' onclick='Save()' />
         </div>
-        <table width='100%' id="table1">
-            <caption><img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />为'<span id="titl"></span>', 设置可撤销的节点</caption>
-            <tr>
-            </tr>
-        </table>
         <fieldset>
-            <legend>&nbsp;特别说明:&nbsp;</legend>
+            <legend>设置可撤销的节点</legend>
+            <br />
+            <table width='100%' id="table1">
+                <tr>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend id="help"></legend>
             <ul>
                 <li>只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。 </li>
                 <li>设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</li>
